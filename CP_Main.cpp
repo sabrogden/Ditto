@@ -96,6 +96,7 @@ BOOL CCP_MainApp::InitInstance()
 	}
 	
 	AfxOleInit();
+	AfxInitRichEdit();
 
 	m_cfIgnoreClipboard = ::RegisterClipboardFormat("Clipboard Viewer Ignore");
 

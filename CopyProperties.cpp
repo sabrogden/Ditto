@@ -26,7 +26,6 @@ CCopyProperties::CCopyProperties(long lCopyID, CWnd* pParent /*=NULL*/)
 	m_bHideOnKillFocus = false;
 	m_lGroupChangedTo = -1;
 	//{{AFX_DATA_INIT(CCopyProperties)
-	m_eDisplayText = _T("");
 	m_eDate = _T("");
 	m_bNeverAutoDelete = FALSE;
 	//}}AFX_DATA_INIT
@@ -37,17 +36,15 @@ void CCopyProperties::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CCopyProperties)
+	DDX_Control(pDX, IDC_RICHEDIT1, m_RichEdit);
 	DDX_Control(pDX, IDC_COMBO1, m_GroupCombo);
 	DDX_Control(pDX, IDC_HOTKEY, m_HotKey);
 	DDX_Control(pDX, IDC_COPY_DATA, m_lCopyData);
-	DDX_Text(pDX, IDC_EDIT_DISPLAY_TEXT, m_eDisplayText);
-	DDV_MaxChars(pDX, m_eDisplayText, 250);
 	DDX_Text(pDX, IDC_DATE, m_eDate);
 	DDX_Check(pDX, IDC_NEVER_AUTO_DELETE, m_bNeverAutoDelete);
 	//}}AFX_DATA_MAP
 	DDX_Control(pDX, IDC_PARSE_EDIT, m_ParseEdit);
 	DDX_Control(pDX, IDC_PARSE_BUTTON, m_ParseButton);
-	DDX_Control(pDX, IDC_EDIT_DISPLAY_TEXT, m_DisplayTextEdit);
 }
 
 
@@ -75,7 +72,7 @@ BOOL CCopyProperties::OnInitDialog()
 		CTime time(m_MainTable.m_lDate);
 		m_eDate = time.Format("%m/%d/%Y %I:%M %p");
 
-		m_eDisplayText = m_MainTable.m_strText;
+		m_RichEdit.SetText(m_MainTable.m_strText);
 
 		if(m_MainTable.m_lDontAutoDelete)
 		{
@@ -118,7 +115,7 @@ BOOL CCopyProperties::OnInitDialog()
 	if( theApp.m_bShowCopyProperties )
 		m_HotKey.SetFocus();
 	else
-		m_DisplayTextEdit.SetFocus();
+		m_RichEdit.SetFocus();
 
 	return FALSE;
 }
@@ -181,14 +178,16 @@ void CCopyProperties::OnOK()
 		bUpdate = true;
 	}
 
-	if(m_eDisplayText != m_MainTable.m_strText)
+	CString csDisplayText;
+	csDisplayText = m_RichEdit.GetText();
+	if(csDisplayText != m_MainTable.m_strText)
 	{
 		if(!bUpdate)
 			m_MainTable.Edit();
 
 		m_bChangedText = true;
 
-		m_MainTable.m_strText = m_eDisplayText;
+		m_MainTable.m_strText = csDisplayText;
 
 		bUpdate = true;
 	}

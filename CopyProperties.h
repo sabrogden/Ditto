@@ -9,6 +9,7 @@
 //
 
 #include "GroupCombo.h"
+#include "RichEditCtrlEx.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CCopyProperties dialog
@@ -22,10 +23,10 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CCopyProperties)
 	enum { IDD = IDD_COPY_PROPERTIES };
+	CRichEditCtrlEx	m_RichEdit;
 	CGroupCombo	m_GroupCombo;
 	CHotKeyCtrl	m_HotKey;
 	CListBox	m_lCopyData;
-	CString	m_eDisplayText;
 	CString	m_eDate;
 	BOOL	m_bNeverAutoDelete;
 	//}}AFX_DATA
