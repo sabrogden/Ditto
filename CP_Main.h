@@ -44,6 +44,8 @@ public:
 	bool	m_bAppRunning;
 	bool	m_bAppExiting;
 
+	bool	m_bExitServerThread;
+
 // MainFrame
 	HWND m_MainhWnd;
 	CMainFrame*	m_pMainFrame;
@@ -149,6 +151,7 @@ public:
 	SOCKET	m_sSocket;
 	CRITICAL_SECTION m_CriticalSection;
 	CPopup	 *m_pcpSendRecieveError;
+	void	StartStopServerThread();
 
 
 	long	m_lClipsSent;

@@ -1080,6 +1080,17 @@ long CGetSetOptions::GetPort()
 	return GetProfileLong("SendRecvPort", 23443);
 }
 
+BOOL CGetSetOptions::GetDisableRecieve()
+{
+	return GetProfileLong("DisableRecieve", FALSE);
+}
+
+void CGetSetOptions::SetDisableRecieve(BOOL bVal)
+{
+	SetProfileLong("DisableRecieve", bVal);
+}
+
+
 /*------------------------------------------------------------------*\
 CHotKey - a single system-wide hotkey
 \*------------------------------------------------------------------*/

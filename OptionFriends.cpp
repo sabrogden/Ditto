@@ -34,6 +34,7 @@ void COptionFriends::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionFriends)
+	DDX_Control(pDX, IDC_CHECK_DISABLE_FRIENDS, m_bDisableRecieve);
 	DDX_Control(pDX, IDC_CHECK_LOG_SEND_RECIEVE, m_SendRecieve);
 	DDX_Control(pDX, IDC_LIST, m_List);
 	DDX_Text(pDX, IDC_EDIT_PLACE_ON_CLIPBOARD, m_PlaceOnClipboard);
@@ -45,6 +46,7 @@ BEGIN_MESSAGE_MAP(COptionFriends, CPropertyPage)
 	//{{AFX_MSG_MAP(COptionFriends)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST, OnDblclkList)
 	ON_NOTIFY(LVN_KEYDOWN, IDC_LIST, OnKeydownList)
+	ON_BN_CLICKED(IDC_CHECK_DISABLE_FRIENDS, OnCheckDisableFriends)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -64,6 +66,8 @@ BOOL COptionFriends::OnInitDialog()
 	InsertItems();
 
 	m_SendRecieve.SetCheck(CGetSetOptions::GetLogSendReceiveErrors());
+
+	m_bDisableRecieve.SetCheck(CGetSetOptions::GetDisableRecieve());
 
 	m_PlaceOnClipboard = g_Opt.m_csIPListToPutOnClipboard;
 
@@ -94,6 +98,10 @@ BOOL COptionFriends::OnApply()
 	}
 
 	CGetSetOptions::SetLogSendReceiveErrors(m_SendRecieve.GetCheck());
+
+
+	CGetSetOptions::SetDisableRecieve(m_bDisableRecieve.GetCheck());
+	theApp.StartStopServerThread();
 
 	UpdateData();
 
@@ -247,4 +255,12 @@ void COptionFriends::OnKeydownList(NMHDR* pNMHDR, LRESULT* pResult)
 	
 	
 	*pResult = 0;
+}
+
+void COptionFriends::OnCheckDisableFriends() 
+{
+	if(m_bDisableRecieve.GetCheck() == BST_CHECKED)
+		GetDlgItem(IDC_EDIT_PLACE_ON_CLIPBOARD)->EnableWindow(FALSE);
+	else
+		GetDlgItem(IDC_EDIT_PLACE_ON_CLIPBOARD)->EnableWindow(TRUE);
 }

@@ -23,6 +23,7 @@ public:
 // Dialog Data
 	//{{AFX_DATA(COptionFriends)
 	enum { IDD = IDD_OPTIONS_FRIENDS };
+	CButton	m_bDisableRecieve;
 	CButton	m_SendRecieve;
 	CListCtrl	m_List;
 	CString	m_PlaceOnClipboard;
@@ -51,6 +52,7 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDblclkList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnKeydownList(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnCheckDisableFriends();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

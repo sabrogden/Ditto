@@ -296,8 +296,9 @@ public:
 	static long		m_lPort;
 	static void		SetPort(long lPort);
 	static long		GetPort();
-	
 
+	static BOOL		GetDisableRecieve();
+	static void		SetDisableRecieve(BOOL bVal);
 
 	/*
 	BOOL IsAutoRun();

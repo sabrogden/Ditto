@@ -65,6 +65,8 @@ CCP_MainApp::CCP_MainApp()
 	m_lClipsRecieved = 0;
 	m_oldtStartUp = COleDateTime::GetCurrentTime();
 
+	m_bExitServerThread = false;
+
 	::InitializeCriticalSection(&m_CriticalSection);
 }
 
@@ -157,11 +159,21 @@ void CCP_MainApp::AfterMainCreate()
 	// CopyThread initialization
 	StartCopyThread();
 	
-	AfxBeginThread(MTServerThread, m_MainhWnd);
+	StartStopServerThread();
 
 	m_bAppRunning = true;
 
 	m_pcpSendRecieveError = NULL;
+}
+
+void CCP_MainApp::StartStopServerThread()
+{
+	if(CGetSetOptions::GetDisableRecieve() == FALSE)
+	{
+		AfxBeginThread(MTServerThread, m_MainhWnd);
+	}
+	else
+		m_bExitServerThread = true;
 }
 
 void CCP_MainApp::BeforeMainClose()

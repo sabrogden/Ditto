@@ -620,22 +620,24 @@ BEGIN
     EDITTEXT        IDC_NAME,7,11,172,12,ES_AUTOHSCROLL
 END
 
-IDD_OPTIONS_FRIENDS DIALOG DISCARDABLE  0, 0, 300, 214
+IDD_OPTIONS_FRIENDS DIALOG DISCARDABLE  0, 0, 310, 227
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Friends"
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | WS_BORDER | 
-                    WS_TABSTOP,7,82,286,116
+                    WS_TABSTOP,7,93,296,116
     LTEXT           "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer.",
-                    IDC_STATIC,7,52,278,24
-    EDITTEXT        IDC_EDIT_PLACE_ON_CLIPBOARD,83,31,210,13,ES_AUTOHSCROLL
-    LTEXT           "IP/Computer Names seperated by commas",IDC_STATIC,7,29,
+                    IDC_STATIC,7,63,278,24
+    EDITTEXT        IDC_EDIT_PLACE_ON_CLIPBOARD,93,34,210,13,ES_AUTOHSCROLL
+    LTEXT           "IP/Computer Names seperated by commas",IDC_STATIC,7,32,
                     70,17
     LTEXT           "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time.",
-                    IDC_STATIC,7,7,286,18
+                    IDC_STATIC,7,10,296,18
     CONTROL         "Log Send Receive Commands",IDC_CHECK_LOG_SEND_RECIEVE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,199,176,12
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,212,176,12
+    CONTROL         "Disable Recieving Clips",IDC_CHECK_DISABLE_FRIENDS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,93,48,90,10
 END
 
 IDD_FRIEND_DETAILS DIALOG DISCARDABLE  0, 0, 203, 79
@@ -808,9 +810,9 @@ BEGIN
     IDD_OPTIONS_FRIENDS, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 293
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 211
+        RIGHTMARGIN, 303
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 224
     END
 
     IDD_FRIEND_DETAILS, DIALOG

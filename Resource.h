@@ -109,6 +109,7 @@
 #define IDC_HOTKEY2                     2025
 #define IDC_EDIT_PLACE_ON_CLIPBOARD     2025
 #define IDC_HOTKEY3                     2026
+#define IDC_CHECK_DISABLE_FRIENDS       2026
 #define IDC_HOTKEY4                     2027
 #define IDC_HOTKEY5                     2028
 #define IDC_HOTKEY6                     2029
@@ -189,7 +190,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        151
 #define _APS_NEXT_COMMAND_VALUE         32840
-#define _APS_NEXT_CONTROL_VALUE         2026
+#define _APS_NEXT_CONTROL_VALUE         2027
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

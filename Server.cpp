@@ -18,7 +18,14 @@ static char THIS_FILE[]=__FILE__;
 
 UINT  MTServerThread(LPVOID pParam)
 {		
+	static bool bRunning = false;
+	if(bRunning)
+		return 0;
+	bRunning = true;
+
 	LogSendRecieveInfo("Start of ServerThread");
+
+	theApp.m_bExitServerThread = false;
 
 	WSADATA wsaData;
 	sockaddr_in local;
@@ -55,7 +62,7 @@ UINT  MTServerThread(LPVOID pParam)
 
 	while(true)
 	{
-		if(theApp.m_bAppExiting)
+		if(theApp.m_bAppExiting || theApp.m_bExitServerThread)
 			break;
 
 		socket = accept(theApp.m_sSocket, (struct sockaddr*)&from,&fromlen);
@@ -64,6 +71,8 @@ UINT  MTServerThread(LPVOID pParam)
 	}	
 
 	LogSendRecieveInfo("End of Server Thread");
+
+	bRunning = false;
 
 	return 0;
 }
