@@ -792,7 +792,7 @@ BOOL CProcessPaste::DoPaste()
 		// (the element is already in the db and its lDate is updated by MarkAsPasted())
 		if( GetClipIDs().GetSize() == 1 )
 		{
-			m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", 8));
+			m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
 			m_pOle->SetClipboard();
 		}
 		else // we are pasting a new aggregate text
@@ -801,7 +801,7 @@ BOOL CProcessPaste::DoPaste()
 				m_pOle->SetClipboard();
 			else
 			{
-				m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", 8));
+				m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
 				m_pOle->SetClipboard();
 			}
 		}
