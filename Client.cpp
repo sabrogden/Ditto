@@ -308,16 +308,20 @@ BOOL CClient::SendItem(CClip *pClip)
 BOOL CClient::SendData(SendInfo *pInfo, MyEnums::eSendType type)
 {
 	pInfo->m_Type = type;
-	long lSize = send(m_Connection, (char *)pInfo, sizeof(SendInfo), 0);
-	if(lSize != sizeof(SendInfo))
-	{
-		ASSERT(FALSE);
-	}
 
-	if(lSize == SOCKET_ERROR)
+	long lBytesRead = 0;
+	long lExpected = sizeof(SendInfo);
+
+	while(lBytesRead < lExpected)
 	{
-		LogSendRecieveInfo(StrF("lSize == SOCKET_ERROR, %d", WSAGetLastError()));
-		return FALSE;
+		long lSize = send(m_Connection, ((char *)pInfo) + lBytesRead, lExpected - lBytesRead, 0);
+	
+		if(lSize == SOCKET_ERROR || lSize == 0)
+		{
+			LogSendRecieveInfo(StrF("lSize == SOCKET_ERROR, %d", WSAGetLastError()));
+			return FALSE;
+		}
+		lBytesRead += lSize;
 	}
 
 	return TRUE;
