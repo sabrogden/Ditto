@@ -95,7 +95,7 @@ BOOL Recv(SOCKET sock, SendInfo *pInfo)
 		lOffset += lReceiveCount;
 	}
 
-	if(pInfo->m_nSize != lWanted)
+	if(pInfo->m_nSize != lOffset)
 	{
 		LogSendRecieveInfo(StrF("------ERROR Incoming struct size %d Expected Size %d", pInfo->m_nSize, lWanted));
 		return FALSE;
