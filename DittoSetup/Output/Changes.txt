@@ -1,3 +1,37 @@
+2.4.0.2 02-27-05
+	[ENHANCMENTS]
+	- Added option to 'Find as you Type'
+	- Added option to always display ditto so the entire window is visible
+	- Added option to not show clips that are in Groups in the main list
+	
+2.4.0.1 02-08-05
+	[ENHANCMENTS]
+	- Clips are encrypted when sending accross the network
+		- Ditto must be updated on both sides for the network transfer to work
+	- Added the ability to draw RTF text in the clip list
+	- Added option to send Paste to active Window
+	- Can specify a sound to play when Ditto saves a clip from the clipboard
+	- Added shortcut key Shift - Enter to put only CF_TEXT on the clipboard and send a paste
+	- Can use the windows keys in shortcuts
+
+2.4  -  11-30-04
+	[ENHANCMENTS]
+	- Added Help file (Right-Click -> Help)
+	- If CF_DIB (bitmaps) is saved a thumbnail of the image will be displayed in the list and in the description (option to display image or not, Options -> Quick Paste)
+	- Added option to not start up the server thread (Options -> Friends -> Disable Receiving Clips)
+	- Set the font of the list control (Options -> Quick Paste, Right-Click -> Quick Options)
+	- Properties window is resizable
+	- When searching Spaces are treated as OR unless in quotes
+	- Added a move to group dialog (Right-Click -> Groups -> Move To Group)
+	- Added menu option to paste CF_TEXT(Paint Text) only (Right-Click -> Paste Plain Text Only)
+	- Check if ditto window is in a valid monitor when showing ditto
+
+	[BUG FIXES]
+	- Fixed memory leak due to improper termination of MTServerThread.
+	- Fixed "corrupted QuickPaste position when closing while minimized".
+	- Fixed auto internet update, it was being checked properly.
+	- Fixed bug if you used global hot keys to paste the last item in the list it would not paste.
+
 2.3  -  7-2-04
 	- Keep multiple Computers' clipboards in sync (Friends Tab)
 	- Send copied data automatically to other machines (Friends Tab)
