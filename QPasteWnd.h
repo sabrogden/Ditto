@@ -11,6 +11,7 @@
 #include "ComboBoxSearch.h"
 #include "WndEx.h"
 #include "GroupStatic.h"
+#include "GroupTree.h"
 
 #ifdef AFTER_98
 	#include "AlphaBlend.h"
@@ -62,8 +63,10 @@ public:
 	CString			m_strSQLSearch;
 	CGroupStatic	m_stGroup;
 	CFont			GroupFont;
-
 	CString			m_Title;
+	CGroupTree		m_GroupTree;
+	CBitmapButton	m_ShowGroupsFolderBottom;
+	CBitmapButton	m_ShowGroupsFolderTop;
 
 	void RefreshNc( bool bRepaintImmediately = false );
 	void UpdateStatus( bool bRepaintImmediately = false );  // regenerates the status (caption) text
@@ -133,6 +136,9 @@ protected:
 	afx_msg void OnMenuQuickoptionsDoubleclickingoncaptionRollupwindow();
 	afx_msg void OnMenuQuickoptionsDoubleclickingoncaptionTogglesshowdescription();
 	afx_msg void OnMenuQuickoptionsPromptfornewgroupnames();
+	afx_msg void OnShowGroupsBottom();
+	afx_msg void OnShowGroupsTop();
+	afx_msg void OnMenuViewgroups();
 	//}}AFX_MSG
 	afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);
@@ -143,6 +149,7 @@ protected:
 	afx_msg LRESULT OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListSelect_Index(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnRefreshView(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnGroupTreeMessage(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);

@@ -276,6 +276,10 @@ SOURCE=.\GroupName.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\GroupTree.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\InternetUpdate.cpp
 # End Source File
 # Begin Source File
@@ -393,6 +397,10 @@ SOURCE=.\GroupName.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\GroupTree.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\HyperLink.h
 # End Source File
 # Begin Source File
@@ -486,6 +494,14 @@ SOURCE=.\TypesTable.h
 # Begin Source File
 
 SOURCE=.\res\bitmap1.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\bmp00001.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\closed_f.bmp
 # End Source File
 # Begin Source File
 

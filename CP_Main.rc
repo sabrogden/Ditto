@@ -76,6 +76,12 @@ IDR_CP_MAITYPE          ICON    DISCARDABLE     "res\\CP_MainDoc.ico"
 //
 
 IDR_MAINFRAME           BITMAP  MOVEABLE PURE   "res\\Toolbar.bmp"
+IDB_CLOSED_FOLDER       BITMAP  DISCARDABLE     "res\\bitmap1.bmp"
+IDB_CLOSED_FOLDER_PRESSED BITMAP  DISCARDABLE     "res\\closed_f.bmp"
+IDB_CLOSED_FOLDER_FOCUSED BITMAP  DISCARDABLE     "res\\bmp00001.bmp"
+IDB_OPEN_FOLDER         BITMAP  DISCARDABLE     "res\\bmp00002.bmp"
+IDB_OPEN_FOLDER_FOCUSED BITMAP  DISCARDABLE     "res\\open_fol.bmp"
+IDB_OPEN_FOLDER_PRESSED BITMAP  DISCARDABLE     "res\\bmp00003.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -248,6 +254,7 @@ BEGIN
 
         END
         MENUITEM "View Full Description\tF3",   ID_MENU_VIEWFULLDESCRIPTION
+        MENUITEM "View Groups\tCtrl-G",         ID_MENU_VIEWGROUPS
         MENUITEM SEPARATOR
         MENUITEM "Delete Entry\tDel",           ID_MENU_DELETE
         MENUITEM SEPARATOR

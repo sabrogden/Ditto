@@ -712,6 +712,16 @@ DWORD dID;
 				ShowFullDescription();
 				return TRUE;
 			}
+		case VK_BACK:
+			theApp.EnterGroupID( theApp.m_GroupParentID );
+			return TRUE;
+		case VK_SPACE:
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
+				return TRUE;
+			}
+			break;
 		} // end switch(vk)
 
 		break; // end case WM_KEYDOWN

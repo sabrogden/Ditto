@@ -56,6 +56,8 @@ CCP_MainApp::CCP_MainApp()
 
 	m_pDatabase = NULL;
 	// Place all significant initialization in InitInstance
+
+	m_bAsynchronousRefreshView = true;
 }
 
 CCP_MainApp::~CCP_MainApp()
@@ -306,7 +308,10 @@ void CCP_MainApp::RefreshView()
 	if( m_bShowingQuickPaste )
 	{
 		ASSERT( QPasteWnd() );
-		QPasteWnd()->PostMessage(WM_REFRESH_VIEW);
+		if(m_bAsynchronousRefreshView)
+			QPasteWnd()->PostMessage(WM_REFRESH_VIEW);
+		else
+			QPasteWnd()->SendMessage(WM_REFRESH_VIEW);
 	}
 }
 
@@ -411,6 +416,12 @@ BOOL bResult = FALSE;
 		m_GroupID = 0;
 		m_GroupParentID = 0;
 		m_GroupText = "History";
+		bResult = TRUE;
+		break;
+	case -1: // All Groups "ID"
+		m_GroupID = -1;
+		m_GroupParentID = 0;
+		m_GroupText = "Groups";
 		bResult = TRUE;
 		break;
 	default: // Normal Group

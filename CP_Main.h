@@ -127,6 +127,7 @@ public:
 	CDaoDatabase* EnsureOpenDB(CString csName = "");
 	BOOL CloseDB();
 
+	bool	m_bAsynchronousRefreshView;
 
 // Overrides
 	// ClassWizard generated virtual function overrides
