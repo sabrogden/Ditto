@@ -1,0 +1,37 @@
+<?xml version='1.0'?>
+<project version='5'>
+	<step action='Group' type='0'>
+		<name>Project steps</name>
+	</step>
+	<step action='CVS' type='0'>
+		<Command>checkout</Command>
+		<Compress>3</Compress>
+		<Database>/cvsroot/ditto-cp</Database>
+		<Exe>%CVS_EXE%</Exe>
+		<Files>ditto</Files>
+		<Host>cvs.sourceforge.net:</Host>
+		<LocalPath>%BASE_DIR%</LocalPath>
+		<Method>pserver</Method>
+		<Quiet type='11'>-1</Quiet>
+		<ShowCmd>%SHOWCMD%</ShowCmd>
+		<Username>anonymous</Username>
+		<description>Retrieve the latest ditto code</description>
+		<indent type='3'>1</indent>
+		<name>checkout Ditto</name>
+	</step>
+	<step action='Make VC6' type='0'>
+		<Attr type='11'>-1</Attr>
+		<Config>Win32 Release</Config>
+		<FileVer type='11'>-1</FileVer>
+		<Filename>C:\Ditto_Build\ditto\CP_Main.dsw</Filename>
+		<FixLibDep type='11'>-1</FixLibDep>
+		<indent type='3'>1</indent>
+		<name>Build Ditto</name>
+	</step>
+	<step action='Inno Setup' type='0'>
+		<Filename>C:\Ditto_Build\ditto\DittoSetup\DittoSetup.iss</Filename>
+		<ISPPCompat type='11'>-1</ISPPCompat>
+		<indent type='3'>1</indent>
+		<name>Make the Ditto Setup</name>
+	</step>
+</project>
