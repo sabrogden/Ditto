@@ -255,6 +255,7 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		{
 			m_TrayIcon.HideIcon();
 			KillTimer(nIDEvent);
+			break;
 		}
 	case KILL_DB_TIMER:
 		{
@@ -264,11 +265,13 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 				AfxDaoTerm();
 				KillTimer(KILL_DB_TIMER);
 			}
+			break;
 		}
 	case REMOVE_OLD_ENTRIES_TIMER:
 		{
 			RemoveOldEntries();
 			KillTimer(REMOVE_OLD_ENTRIES_TIMER);
+			break;
 		}
 	case CHECK_FOR_UPDATE:
 		{
@@ -279,6 +282,7 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 			}
 
 			KillTimer(CHECK_FOR_UPDATE);
+			break;
 		}
 	case CLOSE_APP:
 		{
@@ -287,6 +291,7 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 				PostMessage(WM_CLOSE, 0, 0);
 				KillTimer(CLOSE_APP);
 			}
+			break;
 		}
 	case TIMER_CHECK_TOP_LEVEL_VIEWER:
 		{
@@ -298,6 +303,7 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 				if(m_lReconectCount > 10)
 					KillTimer(TIMER_CHECK_TOP_LEVEL_VIEWER);
 			}
+			break;
 		}
 	}
 
