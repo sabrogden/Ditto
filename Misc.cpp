@@ -397,6 +397,7 @@ CString GetFilePath(CString csFileName)
 	CGetSetOptions
 \*------------------------------------------------------------------*/
 
+long CGetSetOptions::m_nLinesPerRow;
 BOOL CGetSetOptions::m_bUseCtrlNumAccel;
 BOOL CGetSetOptions::m_bAllowDuplicates;
 BOOL CGetSetOptions::m_bUpdateTimeOnPaste;
@@ -410,6 +411,7 @@ CGetSetOptions g_Opt;
 
 CGetSetOptions::CGetSetOptions()
 {
+	m_nLinesPerRow = GetLinesPerRow();
 	m_bUseCtrlNumAccel = GetUseCtrlNumForFirstTenHotKeys();
 	m_bAllowDuplicates = GetAllowDuplicates();
 	m_bUpdateTimeOnPaste = GetUpdateTimeOnPaste();
@@ -553,6 +555,7 @@ long CGetSetOptions::GetTransparencyPercent()
 
 BOOL CGetSetOptions::SetLinesPerRow(long lLines)
 {
+	m_nLinesPerRow = lLines;
 	return SetProfileLong("LinesPerRow", lLines);
 }
 
@@ -1620,13 +1623,18 @@ CRect rect(0,0,0,0);
 	if( ::IsWindow(m_hWndPosRelativeTo) )
 		::GetWindowRect(m_hWndPosRelativeTo, &rel);
 
-	rect.left = rel.left;
+	// move the rect to the relative origin
+	rect.bottom = rect.Height() + rel.top;
 	rect.top = rel.top;
+	rect.right = rect.Width() + rel.left;
+	rect.left = rel.left;
 
+	// adjust the y position
 	rect.OffsetRect( 0, pos.y - (m_bCenterY? rect.Height()/2: (m_bTop? 0: rect.Height())) );
 	if( rect.bottom > m_ScreenMaxY )
 		rect.OffsetRect( 0, m_ScreenMaxY - rect.bottom );
 
+	// adjust the x position
 	rect.OffsetRect( pos.x - (m_bCenterX? rect.Width()/2: (m_bLeft? 0: rect.Width())), 0 );
 	if( rect.right > m_ScreenMaxX )
 		rect.OffsetRect( m_ScreenMaxX - rect.right, 0 );

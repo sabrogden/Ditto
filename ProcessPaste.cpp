@@ -166,6 +166,7 @@ CString sql;
 // deletes the given item
 BOOL DeleteID( long lID, bool bDisband )
 {
+BOOL bIsGroup;
 long lDataID = 0;
 int i = 0;
 COleVariant varKey( (long) 0 ); // VT_I4
@@ -185,12 +186,13 @@ COleVariant varKey( (long) 0 ); // VT_I4
 		}
 
 		lDataID = recs.m_lDataID;
+		bIsGroup = recs.m_bIsGroup;
 
 		// must delete this record first so that DeleteDataID can properly
 		//  determine if any other Clip is using the same Data.
 		recs.Delete(); 
 
-		if( recs.m_bIsGroup )
+		if( bIsGroup )
 			DeleteGroupID( lID, bDisband );
 		else
 			DeleteDataID( lDataID );

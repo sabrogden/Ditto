@@ -41,7 +41,7 @@ public:
 	//}}AFX_VIRTUAL
 
 public:
-	CString GetDisplayText();
+	CString GetDisplayText( int nMaxLines );
 	void AddNew(); // assigns the new autoincr ID to m_lID
 	void OnQuery();
 

@@ -88,7 +88,7 @@ void CMainTable::Requery()
 /////////////////////////////////////////////////////////////////////////////
 // CMainTable member functions
 
-CString CMainTable::GetDisplayText()
+CString CMainTable::GetDisplayText( int nMaxLines )
 {
 CString text = m_strText;
 	// assign tabs to 2 spaces (rather than the default 8)
@@ -102,8 +102,10 @@ CString text = m_strText;
 CString token;
 CStringArray tokens;
 CTokenizer tokenizer(text,"\r\n");
-	while( tokenizer.Next( token ) )
+	for( int nLines=0; nLines < nMaxLines && tokenizer.Next(token); nLines++ )
+	{
 		tokens.Add( token );
+	}
 
 	// remove each line's indent
 char chFirst;

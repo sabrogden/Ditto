@@ -710,7 +710,6 @@ DWORD dID;
 			{
 				ShowFullDescription();
 				return TRUE;
-				break;
 			}
 		} // end switch(vk)
 

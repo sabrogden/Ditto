@@ -126,6 +126,7 @@ public:
 	static BOOL SetTransparencyPercent(long lPercent);
 	static long GetTransparencyPercent();
 
+	static long m_nLinesPerRow;
 	static BOOL SetLinesPerRow(long lLines);
 	static long GetLinesPerRow();
 

@@ -1068,15 +1068,18 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 				NewGroup( true );
 			else
 				NewGroup( false );
-			break;
+			return TRUE;
 
 		case VK_BACK:
 			theApp.EnterGroupID( theApp.m_GroupParentID );
-			break;
+			return TRUE;
 
 		case VK_SPACE:
 			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
 				theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
+				return TRUE;
+			}
 			break;
 
 		case VK_ESCAPE:
@@ -1131,15 +1134,15 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 			{
 				OnCancelFilter();
 			}
-			break;
+			return TRUE;
 
 		case VK_HOME:
 			theApp.EnterGroupID( 0 );  // History
-			break;
+			return TRUE;
 
 		case VK_END:
 			theApp.EnterGroupID( -1 ); // All Groups
-			break; 
+			return TRUE;
 
 		} // end switch( pMsg->wParam )
 
@@ -1224,7 +1227,7 @@ void CQPasteWnd::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 					cs += "!";
 
 				// pipe is the "end of symbols" marker
-				cs += "|" + m_Recset.GetDisplayText();
+				cs += "|" + m_Recset.GetDisplayText( g_Opt.m_nLinesPerRow );
 
 				lstrcpyn(pItem->pszText, cs, pItem->cchTextMax);
 				pItem->pszText[pItem->cchTextMax-1] = '\0';
