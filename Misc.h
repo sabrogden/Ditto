@@ -188,27 +188,27 @@ public:
 	static BOOL		GetCheckForUpdates();
 	static BOOL		SetCheckForUpdates(BOOL bCheck);
 
-	static BOOL	m_bUseCtrlNumAccel;
+	static BOOL		m_bUseCtrlNumAccel;
 	static void		SetUseCtrlNumForFirstTenHotKeys(BOOL bVal);
 	static BOOL		GetUseCtrlNumForFirstTenHotKeys();
 
-	static BOOL	m_bAllowDuplicates;
+	static BOOL		m_bAllowDuplicates;
 	static void		SetAllowDuplicates(BOOL bVal);
 	static BOOL		GetAllowDuplicates();
 
-	static BOOL	m_bUpdateTimeOnPaste;
+	static BOOL		m_bUpdateTimeOnPaste;
 	static void		SetUpdateTimeOnPaste(BOOL bVal);
 	static BOOL		GetUpdateTimeOnPaste();
 
-	static BOOL	m_bSaveMultiPaste;
+	static BOOL		m_bSaveMultiPaste;
 	static void		SetSaveMultiPaste(BOOL bVal);
 	static BOOL		GetSaveMultiPaste();
 
-	static BOOL	m_bShowPersistent;
+	static BOOL		m_bShowPersistent;
 	static void		SetShowPersistent(BOOL bVal);
 	static BOOL		GetShowPersistent();
 
-	static BOOL	m_bHistoryStartTop;
+	static BOOL		m_bHistoryStartTop;
 	static void		SetHistoryStartTop(BOOL bVal);
 	static BOOL		GetHistoryStartTop();
 
@@ -244,6 +244,10 @@ public:
 	static void		SetPrompForNewGroupName(BOOL bOption);
 	static BOOL		GetPrompForNewGroupName();
 
+	static BOOL		m_bSendPasteOnFirstTenHotKeys;
+	static void		SetSendPasteOnFirstTenHotKeys(BOOL bOption);
+	static BOOL		GetSendPasteOnFirstTenHotKeys();
+
 
 	/*
 	BOOL IsAutoRun();
@@ -267,8 +271,9 @@ public:
 	ATOM	m_Atom;
 	DWORD	m_Key; //704 is ctrl-tilda
 	bool	m_bIsRegistered;
+	bool	m_bUnRegisterOnShowDitto;
 	
-	CHotKey( CString name, DWORD defKey = 0 );
+	CHotKey( CString name, DWORD defKey = 0, bool bUnregOnShowDitto = false );
 	~CHotKey();
 
 	bool	IsRegistered() { return m_bIsRegistered; }
@@ -291,7 +296,7 @@ public:
 	UINT GetModifier() { return GetModifier(m_Key); }
 
 	bool Register();
-	bool Unregister();
+	bool Unregister(bool bOnShowingDitto = false);
 };
 
 
@@ -316,8 +321,8 @@ public:
 	void LoadAllKeys();
 	void SaveAllKeys();
 
-	void RegisterAll( bool bMsgOnError = false );
-	void UnregisterAll( bool bMsgOnError = false );
+	void RegisterAll(bool bMsgOnError = false);
+	void UnregisterAll(bool bMsgOnError = false, bool bOnShowDitto = false);
 
 	void GetKeys( ARRAY& keys );
 	void SetKeys( ARRAY& keys, bool bSave = false ); // caution! this alters hotkeys based upon corresponding indexes

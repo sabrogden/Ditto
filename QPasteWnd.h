@@ -67,8 +67,9 @@ public:
 	CGroupTree		m_GroupTree;
 	CBitmapButton	m_ShowGroupsFolderBottom;
 	CBitmapButton	m_ShowGroupsFolderTop;
+	CBitmapButton	m_BackButton;
 	bool			m_bAllowRepaintImmediately;
-
+	
 	void RefreshNc( bool bRepaintImmediately = false );
 	void UpdateStatus( bool bRepaintImmediately = false );  // regenerates the status (caption) text
 	BOOL FillList(CString csSQLSearch = "");
@@ -140,6 +141,10 @@ protected:
 	afx_msg void OnShowGroupsBottom();
 	afx_msg void OnShowGroupsTop();
 	afx_msg void OnMenuViewgroups();
+	afx_msg void OnMenuQuickpropertiesSettoneverautodelete();
+	afx_msg void OnMenuQuickpropertiesAutodelete();
+	afx_msg void OnMenuQuickpropertiesRemovehotkey();
+	afx_msg void OnUpdateMenuGroupsMovetothegroupBlank(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);
@@ -166,6 +171,7 @@ public:
 	afx_msg void OnSortDescending();
 	afx_msg void OnMenuNewGroup();
 	afx_msg void OnMenuNewGroupSelection();
+	afx_msg void OnBackButton();
 };
 
 

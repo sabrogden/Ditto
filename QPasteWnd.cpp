@@ -23,6 +23,7 @@ static char THIS_FILE[] = __FILE__;
 #define ID_GROUP_TEXT			0x204
 #define ID_SHOW_GROUPS_BOTTOM	0x205
 #define ID_SHOW_GROUPS_TOP		0x206
+#define ID_BACK_BUTTON			0x207
 
 
 #define QPASTE_WIDTH			200
@@ -89,7 +90,11 @@ ON_COMMAND(ID_MENU_QUICKOPTIONS_PROMPTFORNEWGROUPNAMES, OnMenuQuickoptionsPrompt
 ON_BN_CLICKED(ID_SHOW_GROUPS_BOTTOM, OnShowGroupsBottom)
 ON_BN_CLICKED(ID_SHOW_GROUPS_TOP, OnShowGroupsTop)
 ON_COMMAND(ID_MENU_VIEWGROUPS, OnMenuViewgroups)
-//}}AFX_MSG_MAP
+	ON_COMMAND(ID_MENU_QUICKPROPERTIES_SETTONEVERAUTODELETE, OnMenuQuickpropertiesSettoneverautodelete)
+	ON_COMMAND(ID_MENU_QUICKPROPERTIES_AUTODELETE, OnMenuQuickpropertiesAutodelete)
+	ON_COMMAND(ID_MENU_QUICKPROPERTIES_REMOVEHOTKEY, OnMenuQuickpropertiesRemovehotkey)
+	ON_UPDATE_COMMAND_UI(ID_MENU_GROUPS_MOVETOTHEGROUP_BLANK, OnUpdateMenuGroupsMovetothegroupBlank)
+	//}}AFX_MSG_MAP
 ON_MESSAGE(NM_SELECT, OnListSelect)
 ON_MESSAGE(NM_END, OnListEnd)
 ON_MESSAGE(CB_SEARCH, OnSearch)
@@ -113,6 +118,7 @@ ON_COMMAND(ID_SORT_DESCENDING, OnSortDescending)
 ON_COMMAND(ID_MENU_NEWGROUP, OnMenuNewGroup)
 ON_COMMAND(ID_MENU_NEWGROUPSELECTION, OnMenuNewGroupSelection)
 ON_MESSAGE(NM_GROUP_TREE_MESSAGE, OnGroupTreeMessage)
+ON_COMMAND(ID_BACK_BUTTON, OnBackButton)
 END_MESSAGE_MAP()
 
 
@@ -158,6 +164,10 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_ShowGroupsFolderTop.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SHOW_GROUPS_TOP);
 	m_ShowGroupsFolderTop.LoadBitmaps(IDB_OPEN_FOLDER, IDB_OPEN_FOLDER_PRESSED, IDB_OPEN_FOLDER_FOCUSED);
 	m_ShowGroupsFolderTop.ShowWindow(SW_SHOW);
+
+	m_BackButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_BACK_BUTTON);
+	m_BackButton.LoadBitmaps(IDB_BACK, IDB_BACK_PRESSED, IDB_BACK_FOCUSED);
+	m_BackButton.ShowWindow(SW_SHOW);
 	
 	m_btCancel.Create("&C", WS_CHILD|BS_PUSHBUTTON|WS_TABSTOP/*|BS_FLAT*/, CRect(0, 0, 0, 0), this, ID_CANCEL);
 	
@@ -222,12 +232,17 @@ void CQPasteWnd::MoveControls()
 	{
 		m_stGroup.ShowWindow(SW_SHOW);
 		m_ShowGroupsFolderTop.ShowWindow(SW_SHOW);
-		m_stGroup.MoveWindow(22, 0, cx, 16);
-		m_ShowGroupsFolderTop.MoveWindow(0, 0, 18, 16);
+		m_BackButton.ShowWindow(SW_SHOW);
+
+		m_BackButton.MoveWindow(0, 0, 18, 16);
+		m_ShowGroupsFolderTop.MoveWindow(22, 0, 18, 16);
+		m_stGroup.MoveWindow(44, 0, cx, 16);
+		
 		lTopOfListBox = 16;	
 	}
 	else
 	{
+		m_BackButton.ShowWindow(SW_HIDE);
 		m_stGroup.ShowWindow(SW_HIDE);
 		m_ShowGroupsFolderTop.ShowWindow(SW_HIDE);
 	}
@@ -275,14 +290,24 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 	if (nState == WA_INACTIVE)
 	{
 		TRACE("WA_INACTIVE\n");
-		if( !g_Opt.m_bShowPersistent )
+		if(!g_Opt.m_bShowPersistent)
+		{
 			HideQPasteWindow();
+		}
+		//re register the global hot keys for the last ten
+		if(theApp.m_bAppExiting == false)
+			g_HotKeys.RegisterAll();
 	}
 	else if (nState == WA_ACTIVE || nState == WA_CLICKACTIVE)
 	{
 		TRACE("WA_ACTIVE\n");
-		if( !theApp.m_bShowingQuickPaste )
+		if(!theApp.m_bShowingQuickPaste)
+		{
 			ShowQPasteWindow();
+		}
+
+		//Unregister the global hot keys for the last ten copies
+		g_HotKeys.UnregisterAll(false, true);
 	}
 }
 
@@ -290,6 +315,7 @@ BOOL CQPasteWnd::HideQPasteWindow()
 {
 	if( !theApp.m_bShowingQuickPaste || m_cbSearch.GetShowingDropDown() )
 		return FALSE;
+
 	//Reset the flag
 	theApp.m_bShowingQuickPaste = false;
 	theApp.ReleaseFocus();
@@ -705,7 +731,7 @@ void CQPasteWnd::OnRclickQuickPaste(NMHDR* pNMHDR, LRESULT* pResult)
 		cmSubMenu = cmPopUp.GetSubMenu(0);
 		if(!cmSubMenu)
 			return;
-		
+
 		SetMenuChecks(cmSubMenu);
 		
 		m_lstHeader.m_Popup.Hide();
@@ -1132,7 +1158,75 @@ void CQPasteWnd::OnMenuViewgroups()
 	OnShowGroupsTop();
 }
 
+void CQPasteWnd::OnMenuQuickpropertiesSettoneverautodelete() 
+{
+	CWaitCursor wait;
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData( IDs );
+    
+	int count = IDs.GetSize();
 
+	for(int i = 0; i < count; i++)
+	{
+		try
+		{
+			CMainTable recset;
+			recset.Open("SELECT * FROM Main WHERE lID = %d", IDs[i]);
+			recset.Edit();
+			recset.m_lDontAutoDelete = (long)CTime::GetCurrentTime().GetTime();
+			recset.Update();
+		}
+		CATCHDAO
+	}
+
+	m_lstHeader.RefreshVisibleRows();
+}
+
+void CQPasteWnd::OnMenuQuickpropertiesAutodelete() 
+{
+	CWaitCursor wait;
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData( IDs );
+    
+	int count = IDs.GetSize();
+
+	for(int i = 0; i < count; i++)
+	{
+		try
+		{
+			CMainTable recset;
+			recset.Open("SELECT * FROM Main WHERE lID = %d", IDs[i]);
+			recset.Edit();
+			recset.m_lDontAutoDelete = 0;
+			recset.Update();
+		}
+		CATCHDAO
+	}
+	m_lstHeader.RefreshVisibleRows();
+}
+
+void CQPasteWnd::OnMenuQuickpropertiesRemovehotkey() 
+{
+	CWaitCursor wait;
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData( IDs );
+    
+	int count = IDs.GetSize();
+
+	for(int i = 0; i < count; i++)
+	{
+		try
+		{
+			CMainTable recset;
+			recset.Open("SELECT * FROM Main WHERE lID = %d", IDs[i]);
+			recset.Edit();
+			recset.m_lShortCut = 0;
+			recset.Update();
+		}
+		CATCHDAO
+	}	
+	m_lstHeader.RefreshVisibleRows();
+}
 ///////////////////////////////////////////////////////////////////////
 //END END Menu Stuff
 ///////////////////////////////////////////////////////////////////////
@@ -1617,6 +1711,8 @@ void CQPasteWnd::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 
 void CQPasteWnd::OnShowGroupsTop()
 {
+	OnShowGroupsBottom();
+	return;
 	m_GroupTree.m_bHide = false;
 	m_bHideWnd = false;
 	
@@ -1689,4 +1785,15 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
 	m_bHideWnd = true;
 	
 	return TRUE;
+}
+
+void CQPasteWnd::OnBackButton()
+{
+	theApp.EnterGroupID(theApp.m_GroupParentID);
+}
+
+void CQPasteWnd::OnUpdateMenuGroupsMovetothegroupBlank(CCmdUI* pCmdUI) 
+{
+	// TODO: Add your command update UI handler code here
+	
 }

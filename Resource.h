@@ -18,6 +18,9 @@
 #define IDB_OPEN_FOLDER                 144
 #define IDB_OPEN_FOLDER_FOCUSED         145
 #define IDB_OPEN_FOLDER_PRESSED         146
+#define IDB_BACK                        147
+#define IDB_BACK_PRESSED                148
+#define IDB_BACK_FOCUSED                149
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT                      1003
@@ -65,6 +68,7 @@
 #define IDC_PARSE_EDIT                  1041
 #define IDC_CHECK1                      1042
 #define IDC_HISTORY_START_TOP           1042
+#define IDC_CHECK_SEND_PASTE            1042
 #define IDD_OPTIONS_KEYSTROKES          2001
 #define IDC_HOTKEY                      2002
 #define IDC_DISPLAY_IN_SYSTEMTRAY       2003
@@ -90,6 +94,16 @@
 #define IDC_DESC_SHOW_LEADING_WHITESPACE 2021
 #define IDC_NAME                        2022
 #define IDC_COMBO1                      2023
+#define IDC_HOTKEY1                     2024
+#define IDC_HOTKEY2                     2025
+#define IDC_HOTKEY3                     2026
+#define IDC_HOTKEY4                     2027
+#define IDC_HOTKEY5                     2028
+#define IDC_HOTKEY6                     2029
+#define IDC_HOTKEY7                     2030
+#define IDC_HOTKEY8                     2031
+#define IDC_HOTKEY9                     2032
+#define IDC_HOTKEY10                    2033
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -136,15 +150,19 @@
 #define ID_MENU_QUICKOPTIONS_DOUBLECLICKINGONCAPTION_TOGGLESALWAYSSHOWDESCRIPTION 32816
 #define ID_MENU_QUICKOPTIONS_PROMPTFORNEWGROUPNAMES 32817
 #define ID_MENU_VIEWGROUPS              32819
+#define ID_MENU_QUICKPROPERTIES_SETTONEVERAUTODELETE 32820
+#define ID_MENU_QUICKPROPERTIES_AUTODELETE 32821
+#define ID_MENU_QUICKPROPERTIES_REMOVEHOTKEY 32822
+#define ID_MENU_GROUPS_MOVETOTHEGROUP_BLANK 32823
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        142
-#define _APS_NEXT_COMMAND_VALUE         32820
-#define _APS_NEXT_CONTROL_VALUE         2024
+#define _APS_NEXT_RESOURCE_VALUE        148
+#define _APS_NEXT_COMMAND_VALUE         32824
+#define _APS_NEXT_CONTROL_VALUE         2025
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -417,6 +417,7 @@ BOOL CGetSetOptions::m_bDescShowLeadingWhiteSpace;
 BOOL CGetSetOptions::m_bAllwaysShowDescription;
 long CGetSetOptions::m_bDoubleClickingOnCaptionDoes;
 BOOL CGetSetOptions::m_bPrompForNewGroupName;
+BOOL CGetSetOptions::m_bSendPasteOnFirstTenHotKeys;
 
 CGetSetOptions g_Opt;
 
@@ -434,6 +435,7 @@ CGetSetOptions::CGetSetOptions()
 	m_bAllwaysShowDescription = GetAllwaysShowDescription();
 	m_bDoubleClickingOnCaptionDoes = GetDoubleClickingOnCaptionDoes();
 	m_bPrompForNewGroupName = GetPrompForNewGroupName();
+	m_bSendPasteOnFirstTenHotKeys = GetSendPasteOnFirstTenHotKeys();
 }
 
 CGetSetOptions::~CGetSetOptions()
@@ -902,12 +904,15 @@ long CGetSetOptions::GetDoubleClickingOnCaptionDoes()				{	return GetProfileLong
 void CGetSetOptions::SetPrompForNewGroupName(BOOL bOption)	{	SetProfileLong("PrompForNewGroupName", bOption); m_bPrompForNewGroupName = bOption; }
 BOOL CGetSetOptions::GetPrompForNewGroupName()				{	return GetProfileLong("PrompForNewGroupName", TRUE); }
 
+void CGetSetOptions::SetSendPasteOnFirstTenHotKeys(BOOL bOption)	{	SetProfileLong("SendPasteOnFirstTenHotKeys", bOption); m_bSendPasteOnFirstTenHotKeys = bOption; }
+BOOL CGetSetOptions::GetSendPasteOnFirstTenHotKeys()				{	return GetProfileLong("SendPasteOnFirstTenHotKeys", TRUE); }
 
 /*------------------------------------------------------------------*\
 CHotKey - a single system-wide hotkey
 \*------------------------------------------------------------------*/
 
-CHotKey::CHotKey( CString name, DWORD defKey ) : m_Name(name), m_bIsRegistered(false)
+CHotKey::CHotKey( CString name, DWORD defKey, bool bUnregOnShowDitto ) 
+: m_Name(name), m_bIsRegistered(false), m_bUnRegisterOnShowDitto(bUnregOnShowDitto)
 {
 	m_Atom = ::GlobalAddAtom( m_Name );
 	ASSERT( m_Atom );
@@ -974,22 +979,31 @@ bool CHotKey::Register()
 {
 	if( m_Key )
 	{
-		ASSERT( g_HotKeys.m_hWnd );
-		m_bIsRegistered = ::RegisterHotKey(	g_HotKeys.m_hWnd,
-			m_Atom,
-			GetModifier(),
-			LOBYTE(m_Key) ) == TRUE;
+		if(m_bIsRegistered == false)
+		{
+			ASSERT( g_HotKeys.m_hWnd );
+			m_bIsRegistered = ::RegisterHotKey(	g_HotKeys.m_hWnd,
+				m_Atom,
+				GetModifier(),
+				LOBYTE(m_Key) ) == TRUE;
+		}
 	}
 	else
 		m_bIsRegistered = true;
 	
 	return m_bIsRegistered;
 }
-bool CHotKey::Unregister()
+bool CHotKey::Unregister(bool bOnShowingDitto)
 {
 	if( !m_bIsRegistered )
 		return true;
 	
+	if(bOnShowingDitto)
+	{
+		if(m_bUnRegisterOnShowDitto == false)
+			return true;
+	}
+
 	if(m_Key)
 	{
 		ASSERT(g_HotKeys.m_hWnd);
@@ -1087,7 +1101,7 @@ void CHotKeys::RegisterAll( bool bMsgOnError )
 	}
 }
 
-void CHotKeys::UnregisterAll( bool bMsgOnError )
+void CHotKeys::UnregisterAll(bool bMsgOnError, bool bOnShowDitto)
 {
 	CString str;
 	CHotKey* pHotKey;
@@ -1095,7 +1109,7 @@ void CHotKeys::UnregisterAll( bool bMsgOnError )
 	for( int i=0; i < count; i++ )
 	{
 		pHotKey = ElementAt(i);
-		if( !pHotKey->Unregister() )
+		if(!pHotKey->Unregister(bOnShowDitto))
 		{
 			str =  "Error Unregistering ";
 			str += pHotKey->GetName();
@@ -1149,7 +1163,7 @@ bool CHotKeys::FindFirstConflict( ARRAY& keys, int* pX, int* pY )
 	if( bConflict )
 	{
 		if( pX )
-			*pX = i;
+			*pX = i-1;
 		if( pY )
 			*pY = j;
 	}

@@ -56,6 +56,8 @@ public:
 	CSystemTray m_TrayIcon;
 	ULONG m_ulCopyGap;
 
+	void DoFirstTenPositionsPaste(int nPos);
+
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CMainFrame)

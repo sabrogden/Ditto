@@ -222,6 +222,7 @@ void CCopyProperties::OnOK()
 				m_MainTable.Edit();
 		
 			m_MainTable.m_lParentID = nParentID;
+			m_MainTable.m_lDontAutoDelete = (long)CTime::GetCurrentTime().GetTime();
 
 			m_lGroupChangedTo = nParentID;
 

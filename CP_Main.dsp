@@ -521,6 +521,10 @@ SOURCE=.\res\Ditto.ico
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\open_fol.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\Toolbar.bmp
 # End Source File
 # End Group

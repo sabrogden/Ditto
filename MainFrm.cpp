@@ -171,12 +171,12 @@ void CMainFrame::OnFirstExit()
 
 LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 {
-	if( wParam == theApp.m_pDittoHotKey->m_Atom )
+	if(wParam == theApp.m_pDittoHotKey->m_Atom)
 	{
 		theApp.TargetActiveWindow();
 		QuickPaste.ShowQPasteWnd(this);
 	}
-	else if( wParam == theApp.m_pCopyHotKey->m_Atom )
+	else if(wParam == theApp.m_pCopyHotKey->m_Atom)
 	{
 		theApp.TargetActiveWindow();
 
@@ -189,8 +189,94 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 		keybd_event('C', 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 		keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 	}
+	else if(wParam == theApp.m_pPosOne->m_Atom)
+	{
+		DoFirstTenPositionsPaste(1);
+	}
+	else if(wParam == theApp.m_pPosTwo->m_Atom)
+	{
+		DoFirstTenPositionsPaste(2);
+	}
+	else if(wParam == theApp.m_pPosThree->m_Atom)
+	{
+		DoFirstTenPositionsPaste(3);
+	}	
+	else if(wParam == theApp.m_pPosFour->m_Atom)
+	{
+		DoFirstTenPositionsPaste(4);
+	}
+	else if(wParam == theApp.m_pPosFive->m_Atom)
+	{
+		DoFirstTenPositionsPaste(5);
+	}
+	else if(wParam == theApp.m_pPosSix->m_Atom)
+	{
+		DoFirstTenPositionsPaste(6);
+	}
+	else if(wParam == theApp.m_pPosSeven->m_Atom)
+	{
+		DoFirstTenPositionsPaste(7);
+	}
+	else if(wParam == theApp.m_pPosEight->m_Atom)
+	{
+		DoFirstTenPositionsPaste(8);
+	}
+	else if(wParam == theApp.m_pPosNine->m_Atom)
+	{
+		DoFirstTenPositionsPaste(9);
+	}
+	else if(wParam == theApp.m_pPosTen->m_Atom)
+	{
+		DoFirstTenPositionsPaste(10);
+	}
 
 	return TRUE;
+}
+
+void CMainFrame::DoFirstTenPositionsPaste(int nPos)
+{
+	try
+	{
+		CMainTable Recset;
+		Recset.m_strSort = "bIsGroup DESC, lDate DESC";
+		Recset.m_strFilter = "((bIsGroup = TRUE AND lParentID = 0) OR bIsGroup = FALSE)";
+
+		Recset.Open("");
+
+		if(!Recset.IsEOF())
+		{
+			Recset.MoveLast();
+
+			if(Recset.GetRecordCount() > nPos)
+			{
+				Recset.SetAbsolutePosition(nPos-1);
+				if(Recset.m_bIsGroup == FALSE)
+				{	
+					//Don't move these to the top
+					BOOL bItWas = g_Opt.m_bUpdateTimeOnPaste;
+					g_Opt.m_bUpdateTimeOnPaste = FALSE;
+
+					CProcessPaste paste;
+					paste.GetClipIDs().Add(Recset.m_lID);
+					paste.m_bActivateTarget = false;
+					paste.m_bSendPaste = g_Opt.m_bSendPasteOnFirstTenHotKeys ? true : false;
+					paste.DoPaste();
+					theApp.OnPasteCompleted();
+
+					g_Opt.m_bUpdateTimeOnPaste = bItWas;
+				}
+			}
+		}
+	}
+	catch(CDaoException* e)
+	{
+		AfxMessageBox(e->m_pErrorInfo->m_strDescription);
+		ASSERT(0);
+		e->Delete();
+	}
+
+	
+
 }
 
 void CMainFrame::OnTimer(UINT nIDEvent) 

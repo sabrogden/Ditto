@@ -154,3 +154,11 @@ void CQuickPaste::HideQPasteWnd()
 			m_pwndPaste->ShowWindow(SW_HIDE);
 	}
 }
+
+BOOL CQuickPaste::IsWindowVisibleEx()
+{
+	if(m_pwndPaste)
+		return IsWindowVisible(m_pwndPaste->m_hWnd);
+
+	return FALSE;
+}

@@ -123,6 +123,17 @@ void CCP_MainApp::AfterMainCreate()
 	// create hotkeys here.  They are automatically deleted on exit
 	m_pDittoHotKey = new CHotKey("DittoHotKey",704); //704 is ctrl-tilda
 	m_pCopyHotKey = new CHotKey("CopyHotKey");
+	m_pPosOne = new CHotKey("Position1", 0, true);
+	m_pPosTwo = new CHotKey("Position2", 0, true);
+	m_pPosThree = new CHotKey("Position3", 0, true);
+	m_pPosFour = new CHotKey("Position4", 0, true);
+	m_pPosFive = new CHotKey("Position5", 0, true);
+	m_pPosSix = new CHotKey("Position6", 0, true);
+	m_pPosSeven = new CHotKey("Position7", 0, true);
+	m_pPosEight = new CHotKey("Position8", 0, true);
+	m_pPosNine = new CHotKey("Position9", 0, true);
+	m_pPosTen = new CHotKey("Position10", 0, true);
+
 	g_HotKeys.RegisterAll();
 
 	// CopyThread initialization
@@ -205,9 +216,9 @@ bool CCP_MainApp::ReleaseFocus()
 }
 
 // sends Ctrl-V to the TargetWnd
-void CCP_MainApp::SendPaste()
+void CCP_MainApp::SendPaste(bool bActivateTarget)
 {
-	if( !ActivateTarget() )
+	if(bActivateTarget && !ActivateTarget())
 	{
 		SetStatus("SendPaste FAILED!",TRUE);
 		return;

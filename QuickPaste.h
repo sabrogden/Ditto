@@ -21,6 +21,7 @@ public:
 	void ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos = FALSE);
 	void HideQPasteWnd();
 	BOOL CloseQPasteWnd();
+	BOOL IsWindowVisibleEx();
 
 //protected:
 	CQPasteWnd *m_pwndPaste;

@@ -54,6 +54,17 @@ public:
 	CHotKey*	m_pDittoHotKey; // activate ditto's qpaste window
 	CHotKey*	m_pCopyHotKey;  // named copy
 
+	CHotKey*	m_pPosOne;
+	CHotKey*	m_pPosTwo;
+	CHotKey*	m_pPosThree;
+	CHotKey*	m_pPosFour;
+	CHotKey*	m_pPosFive;
+	CHotKey*	m_pPosSix;
+	CHotKey*	m_pPosSeven;
+	CHotKey*	m_pPosEight;
+	CHotKey*	m_pPosNine;
+	CHotKey*	m_pPosTen;
+
 // Focus Tracking
 	HWND	m_hTargetWnd;
 //	HWND	m_hTargetFocus;
@@ -61,7 +72,7 @@ public:
 	bool ActivateTarget();
 	bool ReleaseFocus(); // activate the target only if we are the active window
 	CString GetTargetName() { return GetWndText( m_hTargetWnd ); }
-	void SendPaste(); // Activates the Target and sends Ctrl-V
+	void SendPaste(bool bActivateTarget); // Activates the Target and sends Ctrl-V
 
 	CLIPFORMAT m_cfIgnoreClipboard; // used by CClip::LoadFromClipboard
 

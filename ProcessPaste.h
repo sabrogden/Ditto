@@ -113,6 +113,7 @@ class CProcessPaste
 public:
 	COleClipSource*	m_pOle;
 	bool m_bSendPaste;
+	bool m_bActivateTarget;
 
 	CProcessPaste();
 	~CProcessPaste();

@@ -783,6 +783,7 @@ CProcessPaste::CProcessPaste()
 {
 	m_pOle = new COleClipSource;
 	m_bSendPaste = true;
+	m_bActivateTarget = true;
 }
 
 CProcessPaste::~CProcessPaste()
@@ -811,7 +812,7 @@ BOOL CProcessPaste::DoPaste()
 		m_pOle = NULL; // m_pOle should not be accessed past this point
 		
 		if(m_bSendPaste)
-			theApp.SendPaste();
+			theApp.SendPaste(m_bActivateTarget);
 		
 		return TRUE;
 	}

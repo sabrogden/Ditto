@@ -19,7 +19,6 @@ IMPLEMENT_DYNCREATE(COptionsKeyBoard, CPropertyPage)
 COptionsKeyBoard::COptionsKeyBoard() : CPropertyPage(COptionsKeyBoard::IDD)
 {
 	//{{AFX_DATA_INIT(COptionsKeyBoard)
-		// NOTE: the ClassWizard will add member initialization here
 	//}}AFX_DATA_INIT
 }
 
@@ -31,6 +30,17 @@ void COptionsKeyBoard::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionsKeyBoard)
+	DDX_Control(pDX, IDC_CHECK_SEND_PASTE, m_btSendPaste);
+	DDX_Control(pDX, IDC_HOTKEY9, m_Nine);
+	DDX_Control(pDX, IDC_HOTKEY8, m_Eight);
+	DDX_Control(pDX, IDC_HOTKEY7, m_Seven);
+	DDX_Control(pDX, IDC_HOTKEY6, m_Six);
+	DDX_Control(pDX, IDC_HOTKEY5, m_Five);
+	DDX_Control(pDX, IDC_HOTKEY4, m_Four);
+	DDX_Control(pDX, IDC_HOTKEY3, m_Three);
+	DDX_Control(pDX, IDC_HOTKEY2, m_Two);
+	DDX_Control(pDX, IDC_HOTKEY10, m_Ten);
+	DDX_Control(pDX, IDC_HOTKEY1, m_One);
 	DDX_Control(pDX, IDC_NAMED_COPY, m_NamedCopy);
 	DDX_Control(pDX, IDC_HOTKEY, m_HotKey);
 	//}}AFX_DATA_MAP
@@ -53,8 +63,21 @@ BOOL COptionsKeyBoard::OnInitDialog()
 	theApp.m_pDittoHotKey->CopyToCtrl( m_HotKey );
 	theApp.m_pCopyHotKey->CopyToCtrl( m_NamedCopy );
 
+	theApp.m_pPosOne->CopyToCtrl( m_One );
+	theApp.m_pPosTwo->CopyToCtrl( m_Two );
+	theApp.m_pPosThree->CopyToCtrl( m_Three );
+	theApp.m_pPosFour->CopyToCtrl( m_Four );
+	theApp.m_pPosFive->CopyToCtrl( m_Five );
+	theApp.m_pPosSix->CopyToCtrl( m_Six );
+	theApp.m_pPosSeven->CopyToCtrl( m_Seven );
+	theApp.m_pPosEight->CopyToCtrl( m_Eight );
+	theApp.m_pPosNine->CopyToCtrl( m_Nine );
+	theApp.m_pPosTen->CopyToCtrl( m_Ten );
+
 	//Unregister hotkeys and Reregister them on cancel or ok
 	g_HotKeys.UnregisterAll();
+
+	m_btSendPaste.SetCheck(g_Opt.m_bSendPasteOnFirstTenHotKeys);
 
 	m_HotKey.SetFocus();
 
@@ -73,16 +96,32 @@ BOOL COptionsKeyBoard::OnWizardFinish()
 
 BOOL COptionsKeyBoard::OnApply()
 {
-int x,y;
-CString str;
-ARRAY keys;
-
+	CGetSetOptions::SetSendPasteOnFirstTenHotKeys(m_btSendPaste.GetCheck());
+					
+	int x,y;
+	CString str;
+	ARRAY keys;
+	
 	g_HotKeys.GetKeys( keys ); // save old keys just in case new ones are invalid
+	
+	theApp.m_pDittoHotKey->CopyFromCtrl(m_HotKey);
+	theApp.m_pCopyHotKey->CopyFromCtrl(m_NamedCopy);
+	
+	theApp.m_pPosOne->CopyFromCtrl(m_One);
+	theApp.m_pPosTwo->CopyFromCtrl(m_Two);
+	theApp.m_pPosThree->CopyFromCtrl(m_Three);
+	theApp.m_pPosFour->CopyFromCtrl(m_Four);
+	theApp.m_pPosFive->CopyFromCtrl(m_Five);
+	theApp.m_pPosSix->CopyFromCtrl(m_Six);
+	theApp.m_pPosSeven->CopyFromCtrl(m_Seven);
+	theApp.m_pPosEight->CopyFromCtrl(m_Eight);
+	theApp.m_pPosNine->CopyFromCtrl(m_Nine);
+	theApp.m_pPosTen->CopyFromCtrl(m_Ten);
 
-	theApp.m_pDittoHotKey->CopyFromCtrl( m_HotKey );
-	theApp.m_pCopyHotKey->CopyFromCtrl( m_NamedCopy );
-
-	if( g_HotKeys.FindFirstConflict(keys,&x,&y) )
+	ARRAY NewKeys;
+	g_HotKeys.GetKeys(NewKeys);
+	
+	if( g_HotKeys.FindFirstConflict(NewKeys, &x, &y) )
 	{
 		str =  g_HotKeys.ElementAt(x)->GetName();
 		str += " and ";
@@ -92,10 +131,10 @@ ARRAY keys;
 		g_HotKeys.SetKeys( keys ); // restore the original values
 		return FALSE;
 	}
-
+	
 	g_HotKeys.SaveAllKeys();
 	g_HotKeys.RegisterAll(true);
-		
+	
 	return CPropertyPage::OnApply();
 }
 
