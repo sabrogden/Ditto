@@ -1,0 +1,731 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\CP_Main.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#include ""afxprint.rc""       // printing/print preview resources\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\Ditto.ico"
+IDR_CP_MAITYPE          ICON    DISCARDABLE     "res\\CP_MainDoc.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP  MOVEABLE PURE   "res\\Toolbar.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR DISCARDABLE  16, 15
+BEGIN
+    BUTTON      ID_FILE_NEW
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_SAVE
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_FILE_PRINT
+    SEPARATOR
+    BUTTON      ID_APP_ABOUT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About CP_Main...",           ID_APP_ABOUT
+    END
+END
+
+IDR_MENU MENU DISCARDABLE 
+BEGIN
+    POPUP "First"
+    BEGIN
+        MENUITEM "Reconnect To Clipboard Chain", 
+                                                ID_FIRST_RECONNECTTOCLIPBOARDCHAIN
+
+        MENUITEM "Options",                     ID_FIRST_OPTION
+        MENUITEM "Show Quick Paste",            ID_FIRST_SHOWQUICKPASTE
+        MENUITEM SEPARATOR
+        MENUITEM "Exit",                        ID_FIRST_EXIT
+    END
+END
+
+IDR_QUICK_PASTE MENU DISCARDABLE 
+BEGIN
+    POPUP "Menu"
+    BEGIN
+        POPUP "Lines Per Row"
+        BEGIN
+            MENUITEM "1",                           ID_MENU_LINESPERROW_1
+            MENUITEM "2",                           ID_MENU_LINESPERROW_2
+            MENUITEM "3",                           ID_MENU_LINESPERROW_3
+            MENUITEM "4",                           ID_MENU_LINESPERROW_4
+            MENUITEM "5",                           ID_MENU_LINESPERROW_5
+        END
+        POPUP "Transparency"
+        BEGIN
+            MENUITEM "None",                        ID_MENU_TRANSPARENCY_NONE
+
+            MENUITEM "5 %",                         ID_MENU_TRANSPARENCY_5
+            MENUITEM "10 %",                        ID_MENU_TRANSPARENCY_10
+            MENUITEM "15 %",                        ID_MENU_TRANSPARENCY_15
+            MENUITEM "20 %",                        ID_MENU_TRANSPARENCY_20
+            MENUITEM "25 %",                        ID_MENU_TRANSPARENCY_25
+            MENUITEM "30 %",                        ID_MENU_TRANSPARENCY_30
+            MENUITEM "40 %",                        ID_MENU_TRANSPARENCY_40
+        END
+        POPUP "Positioning"
+        BEGIN
+            MENUITEM "At Caret",                    ID_MENU_POSITIONING_ATCARET
+
+            MENUITEM "At Cursor",                   ID_MENU_POSITIONING_ATCURSOR
+
+            MENUITEM "At Previous Position",        ID_MENU_POSITIONING_ATPREVIOUSPOSITION
+
+        END
+        POPUP "First Ten Hot Keys"
+        BEGIN
+            MENUITEM "Use Ctrl - Num",              ID_MENU_FIRSTTENHOTKEYS_USECTRLNUM
+
+            MENUITEM "Show Hot Key Text",           ID_MENU_FIRSTTENHOTKEYS_SHOWHOTKEYTEXT
+
+        END
+        MENUITEM "Reconnect To Clipboard Chain", 
+                                                ID_MENU_RECONNECTTOCLIPBOARDCHAIN
+
+        MENUITEM SEPARATOR
+        MENUITEM "Properties\tAlt-Enter",       ID_MENU_PROPERTIES
+        MENUITEM SEPARATOR
+        MENUITEM "Options",                     ID_MENU_OPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Delete Copy Entry",           ID_MENU_DELETE
+        MENUITEM SEPARATOR
+        MENUITEM "Exit Program",                ID_MENU_EXITPROGRAM
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 235, 55
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About CP_Main"
+FONT 8, "MS Sans Serif"
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "CP_Main Version 1.0",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2002",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "OK",IDOK,178,7,50,14,WS_GROUP
+END
+
+IDD_OPTIONS_UTILITIES DIALOG DISCARDABLE  0, 0, 241, 137
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Database"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "Compact Database",IDC_COMPACT_DB,14,18,107,14
+    PUSHBUTTON      "Repair Database",IDC_REPAIR,14,37,107,14
+    EDITTEXT        IDC_PATH,14,67,198,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "....",IDC_GET_PATH,214,67,14,12
+    LTEXT           "Database Path:",IDC_STATIC,14,56,50,8
+END
+
+IDD_OPTIONS_TYPES DIALOG DISCARDABLE  0, 0, 230, 172
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Supported Types"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LISTBOX         IDC_LIST1,7,7,129,158,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    LBS_EXTENDEDSEL | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "&Add",IDC_ADD,147,10,38,14
+    PUSHBUTTON      "&Delete",IDC_DELETE,147,30,38,14
+END
+
+IDD_OPTIONS_QUICK_PASTE DIALOG DISCARDABLE  0, 0, 256, 138
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Quick Paste"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,29,122,10
+    EDITTEXT        IDC_TRANS_PERC,140,28,19,12,ES_AUTOHSCROLL
+    LTEXT           "%",IDC_STATIC,162,31,8,8
+    LTEXT           "Text Lines per Row",IDC_STATIC,18,44,62,8
+    EDITTEXT        IDC_LINES_ROW,82,42,19,12,ES_AUTOHSCROLL
+    GROUPBOX        "Positioning",IDC_STATIC,11,57,196,41
+    CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,22,
+                    66,41,10
+    CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,22,
+                    76,45,10
+    CONTROL         "At Previous Position",IDC_AT_PREVIOUS,"Button",
+                    BS_AUTORADIOBUTTON,22,86,79,10
+    CONTROL         "Use Ctrl - Num for first ten copy hot keys",
+                    IDC_CTRL_CLICK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,
+                    7,142,10
+    CONTROL         "Show text for first ten copy hot keys",
+                    IDC_SHOW_TEXT_FOR_FIRST_TEN_HOT_KEYS,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,18,17,128,10
+    LTEXT           "** befere text  = text has a hot key assigned to it.",
+                    IDC_STATIC,18,105,153,8
+    LTEXT           "* before text = text will never be auto deleted.",
+                    IDC_STATIC,18,116,143,8
+END
+
+IDD_OPTIONS_KEYSTROKES DIALOG DISCARDABLE  0, 0, 186, 90
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Keyboard Shortcuts"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Activate Ditto",IDC_STATIC,19,22,44,8
+    CONTROL         "HotKey1",IDC_HOTKEY,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,71,19,80,14
+    CONTROL         "HotKey1",IDC_NAMED_COPY,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,72,39,80,14
+    LTEXT           "Named Copy",IDC_STATIC,19,42,42,8
+END
+
+IDD_OPTIONS_GENERAL DIALOG DISCARDABLE  0, 0, 256, 166
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "General"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Display Icon in System Tray",IDC_DISPLAY_IN_SYSTEMTRAY,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,28,103,10
+    CONTROL         "Start Ditto on System Startup",IDC_START_ON_STARTUP,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,15,107,10
+    CONTROL         "Maximum Number of Saved Copies",IDC_MAXIMUM,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,23,41,126,10
+    CONTROL         "Paste Entries Expire after",IDC_EXPIRE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,23,54,95,10
+    EDITTEXT        IDC_EXPIRE_AFTER,118,53,19,12,ES_AUTOHSCROLL
+    LTEXT           "Days",IDC_STATIC,142,56,26,8
+    EDITTEXT        IDC_MAX_SAVED_COPIES,149,41,19,12,ES_AUTOHSCROLL
+    CONTROL         "Compact and Repair Database on Exit",IDC_COMPACT_REPAIR,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,67,137,10
+    PUSHBUTTON      "Compact and Repair",IDC_BT_COMPACT_AND_REPAIR,161,66,69,
+                    11
+    CONTROL         "Automatically check for updates online",
+                    IDC_CHECK_UPDATES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    23,106,137,10
+    PUSHBUTTON      "Check Now",IDC_CHECK_FOR_UPDATES,161,106,50,11
+    CONTROL         "Set Database Path",IDC_SET_DB_PATH,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,23,79,76,10
+    EDITTEXT        IDC_PATH,23,89,198,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "....",IDC_GET_PATH,222,89,14,12
+END
+
+IDD_SELECT_DB DIALOG DISCARDABLE  0, 0, 276, 46
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "Select Database"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,101,25,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,170,25,50,14
+    EDITTEXT        IDC_PATH,7,7,244,13,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_SELECT,254,7,15,12
+    PUSHBUTTON      "Use Default",IDC_USE_DEFAULT,27,25,50,14
+END
+
+IDD_OPTIONS_STATS DIALOG DISCARDABLE  0, 0, 272, 163
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Stats"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_TRIP_COPIES,157,34,25,13,ES_AUTOHSCROLL
+    LTEXT           "Copies",IDC_STATIC,131,36,22,8
+    EDITTEXT        IDC_TRIP_PASTES,157,50,25,13,ES_AUTOHSCROLL
+    LTEXT           "Pastes",IDC_STATIC,131,51,22,8
+    PUSHBUTTON      "Reset",IDC_RESET_COUNTS,193,34,32,12
+    GROUPBOX        "Trip Odometer",IDC_STATIC,128,7,105,60
+    EDITTEXT        IDC_ALL_COPIES,41,34,25,13,ES_AUTOHSCROLL
+    LTEXT           "Copies",IDC_STATIC,15,36,22,8
+    EDITTEXT        IDC_ALL_PASTES,41,50,25,13,ES_AUTOHSCROLL
+    LTEXT           "Pastes",IDC_STATIC,15,51,22,8
+    GROUPBOX        "Odometer",IDC_STATIC,7,7,110,60
+    EDITTEXT        IDC_TRIP_DATE,132,17,97,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_ALL_DATE,13,17,97,12,ES_AUTOHSCROLL
+    LTEXT           "Saved Copies",IDC_STATIC,15,78,45,8
+    EDITTEXT        IDC_SAVED_COPIES,76,77,41,13,ES_AUTOHSCROLL
+    LTEXT           "Saved Copy Data",IDC_STATIC,15,96,57,8
+    EDITTEXT        IDC_SAVED_COPY_DATA,76,94,41,13,ES_AUTOHSCROLL
+    PUSHBUTTON      "Remove All",IDC_REMOVE_ALL,122,77,44,13
+    LTEXT           "Database Size",IDC_STATIC,15,111,47,13,SS_CENTERIMAGE
+    EDITTEXT        IDC_DATABASE_SIZE,76,111,41,13,ES_AUTOHSCROLL
+END
+
+IDD_ADD_TYPE DIALOG DISCARDABLE  0, 0, 276, 230
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Add Supported Type"
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "Cancel",IDCANCEL,219,209,50,14
+    LISTBOX         IDC_LIST1,7,15,113,174,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    LBS_EXTENDEDSEL | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_EDIT1,135,15,91,14,ES_AUTOHSCROLL
+    LISTBOX         IDC_LIST2,135,43,97,146,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    LBS_EXTENDEDSEL | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Add",IDC_ADD_1,7,191,31,11
+    PUSHBUTTON      "Add",IDC_ADD_2,231,15,31,11
+    PUSHBUTTON      "Add",IDC_ADD_3,130,191,31,11
+    LTEXT           "Custom Type",IDC_STATIC,135,7,42,8
+    LTEXT           "Currently on the Clipboard",IDC_STATIC,135,35,82,8
+    LTEXT           "Main Types",IDC_STATIC,7,7,38,8
+END
+
+IDD_COPY_PROPERTIES DIALOG DISCARDABLE  0, 0, 244, 211
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Copy Properties"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "HotKey1",IDC_HOTKEY,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,37,7,82,13
+    CONTROL         "&Never Auto Delete",IDC_NEVER_AUTO_DELETE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,37,23,75,10
+    EDITTEXT        IDC_EDIT_DISPLAY_TEXT,7,44,230,56,ES_MULTILINE | 
+                    ES_AUTOHSCROLL | ES_WANTRETURN
+    LISTBOX         IDC_COPY_DATA,7,111,230,75,LBS_SORT | 
+                    LBS_NOINTEGRALHEIGHT | LBS_EXTENDEDSEL | WS_VSCROLL | 
+                    WS_TABSTOP
+    PUSHBUTTON      "Delete",IDC_DELETE_COPY_DATA,7,188,24,12
+    DEFPUSHBUTTON   "OK",IDOK,133,190,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,187,190,50,14
+    EDITTEXT        IDC_DATE,149,7,88,13,ES_AUTOHSCROLL | NOT WS_TABSTOP
+    LTEXT           "Item Title",IDC_STATIC,7,35,46,8
+    LTEXT           "Date",IDC_STATIC,128,7,16,13,SS_CENTERIMAGE
+    LTEXT           "Hot Key",IDC_STATIC,7,7,28,13,SS_CENTERIMAGE
+    LTEXT           "Copy Formats",IDC_STATIC,7,102,46,8
+END
+
+IDD_ABOUT DIALOG DISCARDABLE  0, 0, 292, 124
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LISTBOX         IDC_LIST,7,16,271,86,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "E-mail Scott Brogden",IDC_HYPER_LINK,7,109,67,8
+END
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,4
+ PRODUCTVERSION 1,0,0,4
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "\0"
+            VALUE "FileDescription", "CP_Main MFC Application\0"
+            VALUE "FileVersion", "1, 0, 0, 4\0"
+            VALUE "InternalName", "CP_Main\0"
+            VALUE "LegalCopyright", "Copyright (C) 2002\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "CP_Main.EXE\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "CP_Main Application\0"
+            VALUE "ProductVersion", "1, 0, 0, 4\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_OPTIONS_UTILITIES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 234
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 130
+    END
+
+    IDD_OPTIONS_TYPES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 223
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 165
+    END
+
+    IDD_OPTIONS_QUICK_PASTE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 249
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 131
+    END
+
+    IDD_OPTIONS_KEYSTROKES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 83
+    END
+
+    IDD_OPTIONS_GENERAL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 249
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 158
+    END
+
+    IDD_SELECT_DB, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 269
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 39
+    END
+
+    IDD_OPTIONS_STATS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 265
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 156
+    END
+
+    IDD_ADD_TYPE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 269
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 223
+    END
+
+    IDD_COPY_PROPERTIES, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 237
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 204
+    END
+
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 285
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 117
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    IDR_MAINFRAME           "CP_Main\n\nCP_Mai\n\n\nCPMain.Document\nCP_Mai Document"
+END
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "CP_Main"
+    AFX_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Open an existing document\nOpen"
+    ID_FILE_CLOSE           "Close the active document\nClose"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+    ID_FILE_PAGE_SETUP      "Change the printing options\nPage Setup"
+    ID_FILE_PRINT_SETUP     "Change the printer and printing options\nPrint Setup"
+    ID_FILE_PRINT           "Print the active document\nPrint"
+    ID_FILE_PRINT_PREVIEW   "Display full pages\nPrint Preview"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_MRU_FILE1       "Open this document"
+    ID_FILE_MRU_FILE2       "Open this document"
+    ID_FILE_MRU_FILE3       "Open this document"
+    ID_FILE_MRU_FILE4       "Open this document"
+    ID_FILE_MRU_FILE5       "Open this document"
+    ID_FILE_MRU_FILE6       "Open this document"
+    ID_FILE_MRU_FILE7       "Open this document"
+    ID_FILE_MRU_FILE8       "Open this document"
+    ID_FILE_MRU_FILE9       "Open this document"
+    ID_FILE_MRU_FILE10      "Open this document"
+    ID_FILE_MRU_FILE11      "Open this document"
+    ID_FILE_MRU_FILE12      "Open this document"
+    ID_FILE_MRU_FILE13      "Open this document"
+    ID_FILE_MRU_FILE14      "Open this document"
+    ID_FILE_MRU_FILE15      "Open this document"
+    ID_FILE_MRU_FILE16      "Open this document"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
+    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
+    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_TOOLBAR         "Show or hide the toolbar\nToggle ToolBar"
+    ID_VIEW_STATUS_BAR      "Show or hide the status bar\nToggle StatusBar"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "Change the window size"
+    AFX_IDS_SCMOVE          "Change the window position"
+    AFX_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    AFX_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    AFX_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    AFX_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "Restore the window to normal size"
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_PREVIEW_CLOSE   "Close print preview mode\nCancel Preview"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\CP_Main.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#include "afxprint.rc"       // printing/print preview resources
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
