@@ -122,7 +122,15 @@ bool CFormatSQL::AddToSQL(CString cs, eSpecialTypes &eNOTValue, eSpecialTypes &e
 	CString csThisSQL;
 	cs.TrimLeft();
 	cs.TrimRight();
-	csThisSQL.Format("%s%sLIKE \'*%s*\'", m_csVariable, GetKeyWordString(eNOTValue), cs);
+
+	if(cs.Find("*") < 0 && cs.Find("?") < 0)
+	{
+		csThisSQL.Format("%s%sLIKE \'*%s*\'", m_csVariable, GetKeyWordString(eNOTValue), cs);
+	}
+	else
+	{
+		csThisSQL.Format("%s%sLIKE \'%s\'", m_csVariable, GetKeyWordString(eNOTValue), cs);
+	}
 
 	if(m_csWhere.GetLength() > 0)
 	{
