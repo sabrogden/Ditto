@@ -197,7 +197,7 @@ void CCP_MainApp::StartCopyThread()
 	// - pTypes = the supported types to use
 	m_CopyThread.Init( CCopyConfig( m_MainhWnd, true, true, pTypes ) );
 
-	ASSERT( m_CopyThread.CreateThread(CREATE_SUSPENDED) );
+	VERIFY( m_CopyThread.CreateThread(CREATE_SUSPENDED) );
 	m_CopyThread.ResumeThread();
 }
 
