@@ -116,6 +116,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_PASTEPLAINTEXTONLY, OnMenuPasteplaintextonly)
 	ON_COMMAND(ID_MENU_HELP, OnMenuHelp)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_FONT, OnMenuQuickoptionsFont)
+	ON_COMMAND(ID_MENU_QUICKOPTIONS_SHOWTHUMBNAILS, OnMenuQuickoptionsShowthumbnails)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(NM_SELECT, OnListSelect)
 	ON_MESSAGE(NM_END, OnListEnd)
@@ -898,9 +899,10 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 	}
 	
 	if(CGetSetOptions::m_bPrompForNewGroupName)
-	{
 		pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_PROMPTFORNEWGROUPNAMES, MF_CHECKED);
-	}
+
+	if(g_Opt.m_bDrawThumbnail)
+		pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_SHOWTHUMBNAILS, MF_CHECKED);
 
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIENDONE, 0);
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TWO, 1);
@@ -1417,6 +1419,13 @@ void CQPasteWnd::OnMenuQuickoptionsFont()
 	
 	m_bHideWnd = true;
 }
+
+void CQPasteWnd::OnMenuQuickoptionsShowthumbnails() 
+{
+	CGetSetOptions::SetDrawThumbnail(!g_Opt.m_bDrawThumbnail);
+	m_lstHeader.RefreshVisibleRows();
+}
+
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -2066,3 +2075,4 @@ LRESULT CQPasteWnd::OnGetClipData(WPARAM wParam, LPARAM lParam)
 
 	return bRet;
 }
+

@@ -25,6 +25,7 @@ public:
 // Dialog Data
 	//{{AFX_DATA(COptionsQuickPaste)
 	enum { IDD = IDD_OPTIONS_QUICK_PASTE };
+	CButton	m_btShowThumbnails;
 	CButton	m_btDefaultButton;
 	CButton	m_btFont;
 	CButton	m_btShowText;

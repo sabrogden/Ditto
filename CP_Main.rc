@@ -262,6 +262,8 @@ BEGIN
 
             MENUITEM "Select Font",                 ID_MENU_QUICKOPTIONS_FONT
 
+            MENUITEM "Show Thumbnails",             ID_MENU_QUICKOPTIONS_SHOWTHUMBNAILS
+
         END
         POPUP "Sent To"
         BEGIN
@@ -410,19 +412,21 @@ BEGIN
     CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,67,122,10
     EDITTEXT        IDC_TRANS_PERC,140,66,19,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "Font",IDC_BUTTON_FONT,18,81,143,17
-    PUSHBUTTON      "Default Font",IDC_BUTTON_DEFAULT_FAULT,164,84,48,12
+    PUSHBUTTON      "Font",IDC_BUTTON_FONT,18,91,143,17
+    PUSHBUTTON      "Default Font",IDC_BUTTON_DEFAULT_FAULT,164,94,48,12
     CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,29,
-                    111,41,10
+                    119,41,10
     CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,29,
-                    121,45,10
+                    129,45,10
     CONTROL         "At Previous Position",IDC_AT_PREVIOUS,"Button",
-                    BS_AUTORADIOBUTTON,29,131,79,10
+                    BS_AUTORADIOBUTTON,29,139,79,10
     LTEXT           "%",IDC_STATIC,162,69,8,8
-    GROUPBOX        "Popup Positioning",IDC_STATIC,18,102,116,41
+    GROUPBOX        "Popup Positioning",IDC_STATIC,18,110,116,41
     LTEXT           "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group",
-                    IDC_STATIC,24,159,103,36
-    GROUPBOX        "List Item Prefix Legend",IDC_STATIC,18,149,116,50
+                    IDC_STATIC,24,167,103,36
+    GROUPBOX        "List Item Prefix Legend",IDC_STATIC,18,157,116,50
+    CONTROL         "Show thumbnails (for CF_DIB types)",IDC_SHOW_THUMBNAILS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,79,129,10
 END
 
 IDD_OPTIONS_KEYSTROKES DIALOG DISCARDABLE  0, 0, 302, 206
