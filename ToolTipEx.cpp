@@ -71,9 +71,11 @@ BOOL CToolTipEx::Show(CPoint point)
 	CRect rect = GetBoundsRect();
 
 	CRect rcScreen;
-	int nMonitor = GetMonitorFromRect(&rect);
-	GetMonitorRect(nMonitor, &rcScreen);
+	
 	CRect crRectToScreen(point, CPoint(point.x + rect.right, point.y + rect.bottom));
+
+	int nMonitor = GetMonitorFromRect(&crRectToScreen);
+	GetMonitorRect(nMonitor, &rcScreen);
 		
 	if(crRectToScreen.right > rcScreen.right)
 	{
@@ -173,10 +175,10 @@ BOOL CToolTipEx::OnMsg(MSG* pMsg)
 		{
 			if(IsWindowVisible())
 			{
+				Hide();
 				WPARAM vk = pMsg->wParam;
 				if(vk == VK_ESCAPE)
 				{
-					Hide();
 					return TRUE;
 				}
 			}
