@@ -37,6 +37,7 @@ void COptionsQuickPaste::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_TRANSPARENCY, m_btEnableTransparency);
 	DDX_Control(pDX, IDC_CTRL_CLICK, m_btUseCtrlNum);
 	DDX_Control(pDX, IDC_HISTORY_START_TOP, m_btHistoryStartTop);
+	DDX_Control(pDX, IDC_DESC_SHOW_LEADING_WHITESPACE, m_btDescShowLeadingWhiteSpace);
 	//}}AFX_DATA_MAP
 }
 
@@ -66,6 +67,7 @@ BOOL COptionsQuickPaste::OnInitDialog()
 	else if(CGetSetOptions::GetQuickPastePosition() == POS_AT_PREVIOUS)
 		CheckDlgButton(IDC_AT_PREVIOUS, BST_CHECKED);
 
+	m_btDescShowLeadingWhiteSpace.SetCheck(g_Opt.m_bDescShowLeadingWhiteSpace);
 	m_btHistoryStartTop.SetCheck(g_Opt.m_bHistoryStartTop);
 	m_btUseCtrlNum.SetCheck(CGetSetOptions::GetUseCtrlNumForFirstTenHotKeys());
 
@@ -87,6 +89,7 @@ BOOL COptionsQuickPaste::OnApply()
 	else if(IsDlgButtonChecked(IDC_AT_PREVIOUS))
 		CGetSetOptions::SetQuickPastePosition(POS_AT_PREVIOUS);
 
+	g_Opt.SetDescShowLeadingWhiteSpace( m_btDescShowLeadingWhiteSpace.GetCheck() );
 	g_Opt.SetHistoryStartTop( m_btHistoryStartTop.GetCheck() );
 	CGetSetOptions::SetUseCtrlNumForFirstTenHotKeys(m_btUseCtrlNum.GetCheck());
 	CGetSetOptions::SetShowTextForFirstTenHotKeys(m_btShowText.GetCheck());

@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "cp_main.h"
 #include "OptionsStats.h"
+#include "ProcessPaste.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -120,28 +121,18 @@ void COptionsStats::OnRemoveAll()
 {
 	if(MessageBox("This will remove all Copy Entries!\n\nContinue?", "Warning", MB_YESNO) == IDYES)
 	{
-		CMainTable MainTable;
-		if(MainTable.DeleteAll())
+		if( DeleteAllIDs() )
 		{
-			CDataTable DataTable;
-			if(DataTable.DeleteAll())
-			{
-				if(CompactDatabase())
-				{
-					RepairDatabase();
+			m_eSavedCopies.Empty();
+			m_eSavedCopyData.Empty();
 
-					m_eSavedCopies.Empty();
-					m_eSavedCopyData.Empty();
+			struct _stat buf;
+			int nResult;
+			nResult = _stat(GetDBName(), &buf);
+			if(nResult == 0)
+				m_eDatabaseSize.Format("%d KB", (buf.st_size/1024));
 
-					struct _stat buf;
-					int nResult;
-					nResult = _stat(GetDBName(), &buf);
-					if(nResult == 0)
-						m_eDatabaseSize.Format("%d KB", (buf.st_size/1024));
-
-					UpdateData(FALSE);
-				}
-			}
+			UpdateData(FALSE);
 		}
 	}
 }

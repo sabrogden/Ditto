@@ -16,7 +16,7 @@ public:
 // Field/Param Data
 	//{{AFX_FIELD(CDataTable, CDaoRecordset)
 	long	m_lID;
-	long	m_lParentID;
+	long	m_lDataID;
 	CString	m_strClipBoardFormat;
 	CLongBinary	m_ooData;
 	//}}AFX_FIELD
@@ -31,21 +31,24 @@ public:
 	virtual void Open(int nOpenType = AFX_DAO_USE_DEFAULT_TYPE, LPCTSTR lpszSql = NULL, int nOptions = 0);
 	//}}AFX_VIRTUAL
 public:
+	void AddNew(); // assigns the new autoincr ID to m_lID
+
 	// caller owns the returned HGLOBAL
 	// takes m_ooData's HGLOBAL (do NOT update recset after calling this)
 	HGLOBAL TakeData();
 	// this takes ownership of hgData, freeing m_ooData if necessary
 	BOOL ReplaceData( HGLOBAL hgData, UINT len );
 
-	// copies hgData into m_ooData using ::GlobalSize(hgData) for the size
-	BOOL SetData(HGLOBAL hgData); 
+	// copies hgData into m_ooData
+	// if size < 0, ::GlobalSize(hgData) is used
+	BOOL SetData(HGLOBAL hgData, UINT size = -1); 
 	HGLOBAL LoadData(); // allocates a new copy of the data
 
 	BOOL DeleteAll();
 	void Open(LPCTSTR lpszFormat,...);
 	BOOL DataEqual(HGLOBAL hgData);
 
-	static bool DeleteParent( long lParentID );
+	void CopyRec( CDataTable& src );
 
 // Implementation
 #ifdef _DEBUG

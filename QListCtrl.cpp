@@ -42,11 +42,10 @@ CQListCtrl::CQListCtrl()
 	lf.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
 	lstrcpy(lf.lfFaceName, "Small Font");
 
-	m_SmallFont = CreateFontIndirect(&lf);
+	m_SmallFont = ::CreateFontIndirect(&lf);
 
 	m_bShowTextForFirstTenHotKeys = true;
 	m_bStartTop = true;
-//	m_Accelerator = NULL; //!!!!!
 }
 
 CQListCtrl::~CQListCtrl()
@@ -56,6 +55,9 @@ CQListCtrl::~CQListCtrl()
 
 	if(m_pwchTip != NULL)
 		delete m_pwchTip;
+
+	if( m_SmallFont )
+		::DeleteObject( m_SmallFont );
 
 	DestroyAndCreateAccelerator(FALSE);
 }
@@ -118,9 +120,9 @@ END_MESSAGE_MAP()
 
 void CQListCtrl::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-	LV_KEYDOWN* pLVKeyDow = (LV_KEYDOWN*)pNMHDR;
+	LV_KEYDOWN* pLVKeyDown = (LV_KEYDOWN*)pNMHDR;
 	
-	switch (pLVKeyDow->wVKey)
+	switch (pLVKeyDown->wVKey)
 	{
 	case VK_RETURN:
 		{
@@ -343,10 +345,10 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		CPen *pOldPen = NULL;
 		COLORREF OldColor = -1;
 		int nOldBKMode = -1;
-		
-        // Draw the background of the list item.  Colors are selected 
-        // according to the item's state.
-        if(rItem.state & LVIS_SELECTED)
+
+		// Draw the background of the list item.  Colors are selected 
+		// according to the item's state.
+		if(rItem.state & LVIS_SELECTED)
 		{
             if(bListHasFocus)
 			{
@@ -386,6 +388,15 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		GetItemText(nItem, 0, lpszText, g_Opt.m_bDescTextSize);
 		csText.ReleaseBuffer();
 
+		// extract symbols
+		CString strSymbols;
+		int nSymEnd = csText.Find('|');
+		if( nSymEnd >= 0 )
+		{
+			strSymbols = csText.Left(nSymEnd);
+			csText = csText.Mid(nSymEnd+1);
+		}
+
 		// set firstTenNum to the first ten number (1-10) corresponding to
 		//  the current nItem.
 		// -1 means that nItem is not in the FirstTen block.
@@ -396,8 +407,42 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			rcText.left += 12;
 		}
 
-		pDC->DrawText(lpszText, rcText, DT_VCENTER | DT_EXPANDTABS);
-		
+		// if we are inside a group, don't display the "in group" flag
+		if( theApp.m_GroupID > 0 )
+		{
+		int nFlag = strSymbols.Find("!");
+			if( nFlag >= 0 )
+				strSymbols.Delete(nFlag);
+		}
+
+		// draw the symbol box
+		if( strSymbols.GetLength() > 0 )
+		{
+			strSymbols = " " + strSymbols + " "; // leave space for box
+			// add spaces to leave room for the symbols
+		CRect rectSym(rcText.left, rcText.top+1, rcText.left, rcText.top+1);
+		CRect rectSpace(0,0,0,0);
+			//Get text bounds
+			pDC->DrawText(" ", &rectSpace, DT_VCENTER | DT_EXPANDTABS | DT_CALCRECT);
+			pDC->DrawText(strSymbols, &rectSym, DT_VCENTER | DT_EXPANDTABS | DT_CALCRECT);
+			VERIFY( rectSpace.Width() > 0 );
+
+		int numSpaces = rectSym.Width() / rectSpace.Width();
+			numSpaces++;
+			csText = CString(' ',numSpaces) + csText;
+
+			// draw the symbols
+//			pDC->FillSolidRect( rectSym, GetSysColor(COLOR_INFOBK) );
+			pDC->FillSolidRect( rectSym, RGB(0,255,255) );
+	        pDC->Draw3dRect(rectSym, GetSysColor(COLOR_3DLIGHT), GetSysColor(COLOR_3DDKSHADOW));
+//		COLORREF crOld = pDC->SetTextColor(GetSysColor(COLOR_INFOTEXT));
+		COLORREF crOld = pDC->SetTextColor(0);
+			pDC->DrawText(strSymbols, rectSym, DT_VCENTER | DT_EXPANDTABS);
+			pDC->SetTextColor(crOld);
+		}
+
+		pDC->DrawText(csText, rcText, DT_VCENTER | DT_EXPANDTABS);
+
         // Draw a focus rect around the item if necessary.
         if(bListHasFocus && (rItem.state & LVIS_FOCUSED))
 			pDC->DrawFocusRect(rcItem);
@@ -431,6 +476,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			pDC->SelectObject(hOldFont);
 		}
 
+		// restore the previous values
 		if(pOldPen)
 			pDC->SelectObject(pOldPen);
 
@@ -572,7 +618,7 @@ int CQListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	EnableToolTips();
 
 	m_Popup.Init();
-//	m_Popup.Init( GetToolTips()->m_hWnd );
+//	m_Popup.SetTTWnd( GetToolTips()->m_hWnd );
 //	m_Popup.m_TI.hwnd = m_hWnd;
     
 	return 0;
@@ -580,20 +626,7 @@ int CQListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg) 
 {
-	/* !!!!!
-	//if(m_Accelerator)
-	//{
-	//	m_CheckingAccelerator = true;
-	//	if(TranslateAccelerator(m_hWnd, m_Accelerator, pMsg) != 0)
-	//	{
-	//		m_CheckingAccelerator = false;
-	//		return TRUE;
-	//	}
-	//	m_CheckingAccelerator = false;
-	//}
-	*/
-
-	DWORD dID;
+DWORD dID;
 	if(m_Accels.OnMsg(pMsg, dID))
 		if(GetParent()->SendMessage(NM_SELECT_DB_ID, dID, 0) )
 			return TRUE;
@@ -637,6 +670,30 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 
 		switch( vk )
 		{
+		case 'X': // Ctrl-X = Cut (prepare for moving the items into a Group)
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				theApp.IC_Cut(); // uses selection
+				return TRUE;
+			}
+			break;
+
+		case 'C': // Ctrl-C = Copy (prepare for copying the items into a Group)
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				theApp.IC_Copy(); // uses selection
+				return TRUE;
+			}
+			break;
+
+		case 'V': // Ctrl-V = Paste (actually performs the copy or move of items into the current Group)
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				theApp.IC_Paste();
+				return TRUE;
+			}
+			break;
+
 		case 'A': // Ctrl-A = Select All
 			if(GetKeyState(VK_CONTROL) & 0x8000)
 			{
@@ -652,7 +709,7 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 		case VK_F3:
 			{
 				ShowFullDescription();
-			
+				return TRUE;
 				break;
 			}
 		} // end switch(vk)
@@ -669,7 +726,7 @@ void CQListCtrl::ShowFullDescription()
 	CRect rc;
 	GetItemRect(nItem, rc, LVIR_BOUNDS);
 	ClientToScreen(rc);
-	m_Popup.m_Pos = CPoint(rc.left, rc.bottom);
+	m_Popup.m_Pos = CPoint(rc.left, rc.bottom); // rc.top??
 	CString cs;
 	GetToolTipText(nItem, cs);
 	m_Popup.Show( cs );
@@ -737,38 +794,9 @@ void CQListCtrl::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 void CQListCtrl::DestroyAndCreateAccelerator(BOOL bCreate)
 {
-// !!!!!!
-	//if(m_Accelerator)
-	//{
-	//	DestroyAcceleratorTable(m_Accelerator);
-	//	m_Accelerator = NULL;
-	//}
-	//
-	//if(bCreate)
-	//	m_Accelerator = CMainTable::LoadAcceleratorKeys();
-
-//	m_Accels.Clear();
-
 	if( bCreate )
 		CMainTable::LoadAcceleratorKeys( m_Accels );
 }
-
-/* !!!!!
-//BOOL CQListCtrl::OnCommand(WPARAM wParam, LPARAM lParam) 
-//{
-//	//return 1 if from accelerator
-//	if((HIWORD(wParam) == 1) && (m_CheckingAccelerator))
-//	{
-//		USHORT usPasteID = LOWORD(wParam);
-//
-//		GetParent()->SendMessage(NM_SELECT_DB_ID, usPasteID, 0);
-//
-//		return TRUE;
-//	}
-//	
-//	return CListCtrl::OnCommand(wParam, lParam);
-//}
-*/
 
 void CQListCtrl::OnKillFocus(CWnd* pNewWnd)
 {

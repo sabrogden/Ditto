@@ -90,7 +90,7 @@ BOOL CCopyProperties::OnInitDialog()
 		m_HotKey.SetRules(HKCOMB_A, 0);
 
 		CString cs;
-		cs.Format("SELECT * FROM Data WHERE lParentID = %d", m_MainTable.m_lID);
+		cs.Format("SELECT * FROM Data WHERE lDataID = %d", m_MainTable.m_lDataID);
 
 		m_DataTable.Open(AFX_DAO_USE_DEFAULT_TYPE, cs ,NULL);
 
@@ -200,37 +200,14 @@ void CCopyProperties::OnOK()
 		bUpdate = true;
 	}
 
-	if(m_bDeletedData)
-	{
-		m_DeletedData.SortAscending();
-		
-		long lNewTotalSize = 0;
-
-		//Go through the data table and find the deleted items
-		m_DataTable.MoveFirst();
-		while(!m_DataTable.IsEOF())
-		{
-			if(m_DeletedData.Find(m_DataTable.m_lID))
-				m_DataTable.Delete();
-			else
-				lNewTotalSize += m_DataTable.m_ooData.m_dwDataLength;
-
-			m_DataTable.MoveNext();
-		}
-
-		if(lNewTotalSize > 0)
-		{
-			if(!bUpdate)
-				m_MainTable.Edit();
-
-			m_MainTable.m_lTotalCopySize = lNewTotalSize;
-			bUpdate = true;
-		}
-	}
-
 	if(bUpdate)
 		m_MainTable.Update();
 	
+	if(m_bDeletedData)
+	{
+		DeleteFormats( m_MainTable.m_lDataID, m_DeletedData );
+	}
+
 	m_bHandleKillFocus = true;
 
 	CDialog::OnOK();
@@ -268,11 +245,7 @@ void CCopyProperties::OnCancel()
 
 void CCopyProperties::OnBnClickedParseButton()
 {
-//RECT rcScreen;
-//	SystemParametersInfo (SPI_GETWORKAREA, 0, &rcScreen, 0);
-CPoint pos(0,0);
-	ClientToScreen(&pos);
-CPopup status( pos );
+CPopup status(0,0,m_hWnd);
 	status.Show("Parsing...");
 
 CString delims;
@@ -340,7 +313,7 @@ int count = tokens.GetSize();
 			continue;
 		clip.AddFormat( CF_TEXT, (void*) (LPCTSTR) tokens[i], len+1 );
 		clip.m_Time = lDate;
-		clip.AddToDB();
+		clip.AddToDB( false ); // false = don't check for duplicates
 		clip.Clear();
 		lDate++; // make sure they are sequential
 	}

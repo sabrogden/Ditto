@@ -84,9 +84,9 @@ ARRAY keys;
 
 	if( g_HotKeys.FindFirstConflict(keys,&x,&y) )
 	{
-		str =  g_HotKeys.GetAt(x)->GetName();
+		str =  g_HotKeys.ElementAt(x)->GetName();
 		str += " and ";
-		str += g_HotKeys.GetAt(y)->GetName();
+		str += g_HotKeys.ElementAt(y)->GetName();
 		str += " cannot be the same.";
 		MessageBox(str);
 		g_HotKeys.SetKeys( keys ); // restore the original values

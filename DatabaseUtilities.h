@@ -11,6 +11,14 @@
 
 #define DEFAULT_DB_NAME "DittoDB.mdb"
 
+#define CATCHDAO \
+	catch(CDaoException* e) \
+	{                       \
+		e->ReportError();   \
+		ASSERT(0);          \
+		e->Delete();        \
+	}
+
 class CDaoTableDefEx : public CDaoTableDef
 {
 public:
@@ -74,23 +82,30 @@ public:
 			ASSERT(FALSE);
 		}
 
-	return FALSE;
-		
+		return FALSE;
 	}
-
-
 	
 };
 
-BOOL DoCleanups();
+BOOL CreateBackup(CString csPath);
 CString GetDBName();
-BOOL CompactDatabase();
 CString GetDefaultDBName();
-BOOL RepairDatabase();
+
 BOOL CheckDBExists(CString csDBPath);
-BOOL RemoveOldEntries();
+BOOL ValidDB(CString csPath, BOOL bUpgrade=TRUE);
 BOOL CreateDB(CString csPath);
-BOOL ValidDB(CString csPath);
+BOOL Upgrade_mText(CDaoDatabase& db);
+BOOL Upgrade_Groups(CDaoDatabase& db);
+BOOL Upgrade_ShareData(CDaoDatabase& db);
+
+BOOL CompactDatabase();
+BOOL RepairDatabase();
+BOOL RemoveOldEntries();
+
 BOOL EnsureDirectory(CString csPath);
+BOOL ExecuteSQL(CString csSQL, BOOL bReportError = TRUE, CDaoException** ppEx = NULL);
+int GetFieldPos(CDaoRecordset& recs, LPCTSTR fieldName);
+void VerifyFieldPos(CDaoRecordset& recs, LPCTSTR fieldName, int index);
+CString GetFieldList(CDaoRecordset& recs);
 
 #endif // !defined(AFX_DATABASEUTILITES_H__039F53EB_228F_4640_8009_3D2B1FF435D4__INCLUDED_)

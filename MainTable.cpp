@@ -28,7 +28,12 @@ CMainTable::CMainTable(CDaoDatabase* pdb)
 	m_lDontAutoDelete = 0;
 	m_lTotalCopySize = 0;
 
-	m_nFieldCount = m_nFields = 6;
+	m_bIsGroup = FALSE;
+	m_lParentID = 0;
+	m_dOrder = 0;
+	m_lDataID = 0;
+
+	m_nFieldCount = m_nFields = 10;
 	//}}AFX_FIELD_INIT
 	m_nDefaultType = dbOpenDynaset;
 	m_bBindFields = true;
@@ -57,11 +62,18 @@ void CMainTable::DoFieldExchange(CDaoFieldExchange* pFX)
 	DFX_Long(pFX, _T("[lShortCut]"), m_lShortCut);
 	DFX_Long(pFX, _T("[lDontAutoDelete]"), m_lDontAutoDelete);
 	DFX_Long(pFX, _T("[lTotalCopySize]"), m_lTotalCopySize);
+	// GROUPS
+	DFX_Bool(pFX, _T("[bIsGroup]"), m_bIsGroup);
+	DFX_Long(pFX, _T("[lParentID]"), m_lParentID);
+	DFX_Double(pFX, _T("[dOrder]"), m_dOrder);
+	// sharing data
+	DFX_Long(pFX, _T("[lDataID]"), m_lDataID);
 	//}}AFX_FIELD_MAP
 }
 
 void CMainTable::Open(int nOpenType , LPCTSTR lpszSql , int nOptions)
 {
+	m_pDatabase = theApp.EnsureOpenDB();
 	OnQuery();
 	CDaoRecordset::Open(nOpenType, lpszSql, nOptions);
 }
@@ -76,8 +88,58 @@ void CMainTable::Requery()
 /////////////////////////////////////////////////////////////////////////////
 // CMainTable member functions
 
+CString CMainTable::GetDisplayText()
+{
+CString text = m_strText;
+	// assign tabs to 2 spaces (rather than the default 8)
+	text.Replace("\t", "  ");
+
+	if( g_Opt.m_bDescShowLeadingWhiteSpace )
+		return text;
+	// else, remove the leading indent from every line.
+
+	// get the lines
+CString token;
+CStringArray tokens;
+CTokenizer tokenizer(text,"\r\n");
+	while( tokenizer.Next( token ) )
+		tokens.Add( token );
+
+	// remove each line's indent
+char chFirst;
+CString line;
+int count = tokens.GetSize();
+	text = "";
+	for( int i=0; i < count; i++ )
+	{
+		line = tokens.ElementAt(i);
+		chFirst = line.GetAt(0);
+		if( chFirst == ' ' || chFirst == '\t' )
+		{
+			text += "» "; // show indication that the line is modified
+			text += line.TrimLeft();
+		}
+		else
+			text += line;
+		text += "\n";
+	}
+
+	return text;
+}
+
+// assigns the new autoincr ID to m_lID
+void CMainTable::AddNew()
+{
+	CDaoRecordset::AddNew();
+	// get the new, automatically assigned ID
+COleVariant varID;
+	GetFieldValue("lID", varID);
+	m_lID = varID.lVal;
+}
+
 void CMainTable::OnQuery()
-{}
+{
+}
 
 bool CMainTable::SetBindFields(bool bVal)
 {
@@ -91,6 +153,35 @@ bool bOld = m_bBindFields;
 		m_nFields = 0;
 
 	return bOld;
+}
+
+// copies the current source record to this current record
+void CMainTable::CopyRec(CMainTable& source)
+{
+//	m_lID = source.m_lID;
+	m_lDate = source.m_lDate;
+	m_strText = source.m_strText;
+//	m_lShortCut = source.m_lShortCut; // don't copy the shortcut
+	m_lDontAutoDelete = source.m_lDontAutoDelete;
+	m_lTotalCopySize = source.m_lTotalCopySize;
+	m_lDataID = source.m_lDataID;
+
+	m_bIsGroup = source.m_bIsGroup;
+	m_lParentID = source.m_lParentID;
+	m_dOrder = source.m_dOrder;
+}
+
+// makes a new copy of the current record and moves to the copy record
+void CMainTable::NewCopyRec()
+{
+	if( IsBOF() || IsEOF() )
+		return;
+
+CMainTable temp;
+	temp.CopyRec( *this ); // temporary copy
+	AddNew(); // overridden to fetch the autoincr lID
+	CopyRec( temp );
+	Update();
 }
 
 // only deletes from Main

@@ -64,6 +64,7 @@ class CClip
 {
 public:
 	long			m_ID; // 0 if it hasn't yet been saved or is unknown
+	long			m_DataID;
 	CClipFormats	m_Formats; // actual format data
 
 	// statistics assigned by LoadFromClipboard
@@ -85,22 +86,18 @@ public:
 	bool SetDescFromType();
 
 	// Immediately save this clip to the db (empties m_Formats due to AddToDataTable).
-	bool AddToDB();
+	bool AddToDB( bool bCheckForDuplicates = true );
 	bool AddToMainTable(); // assigns m_ID
 	bool AddToDataTable(); // Empties m_Formats as it saves them to the Data Table.
 
 	// if a duplicate exists, set recset to the duplicate and return true
 	bool FindDuplicate( CMainTable& recset, BOOL bCheckLastOnly = FALSE );
-	int  CompareFormatDataTo( long lID );
+	int  CompareFormatDataTo( long lDataID );
 
 	// changes m_Time to be later than the latest clip entry in the db
 	void MakeLatestTime();
 
 // STATICS
-	// deletes from both Main and Data Tables
-	static BOOL Delete( ARRAY& IDs );
-	static BOOL DeleteAll();
-
 	// Allocates a Global containing the requested Clip's Format Data
 	static HGLOBAL LoadFormat( long lID, UINT cfType );
 	// Fills "formats" with the Data of all Formats in the db for the given Clip ID

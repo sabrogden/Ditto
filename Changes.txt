@@ -1,7 +1,57 @@
+03 Sept 22
+----------
++ Shared Data: Data can now be shared amongst multiple Clips.
+  + DittoDB.mdb: Main.lDataID, Data.lDataID
+  * SQL statements, e.g. INNER JOIN through Main.lID
+  
++ Groups:
+  + DittoDB.mdb: Main.bIsGroup, Main.lParentID, Main.dOrder
+  * CCP_MainApp:
+    + long    m_GroupDefaultID; // new clips are saved to this group
+    + long    m_GroupID;        // current group
+    + long    m_GroupParentID;  // current group's parent
+    + CString m_GroupText;      // current group's description
+    +	BOOL EnterGroupID( long lID );
+    + long GetValidGroupID(); // returns a valid id (not negative)
+    + void SetGroupDefaultID( long lID ); // sets a valid id
+
++ Internal Clipboard for cut/copy/paste items between Groups
+  CCP_MainApp:
+  + bool      m_IC_bCopy; // true to copy the items, false to move them
+  + CClipIDs  m_IC_IDs;   // buffer
+  + void IC_Cut( ARRAY* pIDs = NULL ); // if NULL, use current QPaste selection
+  + void IC_Copy( ARRAY* pIDs = NULL ); // if NULL, use current QPaste selection
+  + void IC_Paste();
+
++ Persistent QPasteWnd focus item
+  + CCP_MainApp: long m_FocusID; // the ID given focus by CQPasteWnd::FillList
+	* CQPasteWnd::FillList
+
++ Item Description: Show Leading WhiteSpace
+  + CString CMainTable::GetDisplayText()
+  * void CQPasteWnd::OnGetToolTipText()
+  * CGetSetOptions:
+    + static BOOL    m_bDescShowLeadingWhiteSpace;
+    + static void SetDescShowLeadingWhiteSpace(BOOL bVal);
+    + static BOOL GetDescShowLeadingWhiteSpace();
+
++ QListCtrl Keys:
+  +        F7: Create a New Group
+  +   Ctrl-F7: Create a New Group of Selected Elements
+  + Backspace: Go to parent group
+  +     Enter: Enter group or paste if clip
+  +  Alt-Home: Go to History Group
+  +   Alt-End: List all top level Groups
+  +    Ctrl-X: Move selection (establishes the source)
+  +    Ctrl-C: Copy selection (establishes the source)
+  +    Ctrl-V: Paste selection (Move or Copy)
+
+
 03 Sept 14
 ----------
-+ View caption on all sides(top, right, bottom, left)
-+ Roll up window by button on caption or by auto roll up(looses focus then it will rool up)
++ View caption on all sides (top, right, bottom, left)
++ Roll up window by button on caption or by auto roll up (rolls up when it looses focus)
+
 
 03 Sept 10
 ----------

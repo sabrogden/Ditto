@@ -45,6 +45,15 @@ CCP_MainApp::CCP_MainApp()
 	m_bShowCopyProperties = false;
 	m_bRemoveOldEntriesPending = false;
 
+	m_IC_bCopy = false;
+
+	m_GroupDefaultID = 0;
+	m_GroupID = 0;
+	m_GroupParentID = 0;
+	m_GroupText = "History";
+
+	m_FocusID = -1; // -1 == keep previous position, 0 == go to latest ID
+
 	m_pDatabase = NULL;
 	// Place all significant initialization in InitInstance
 }
@@ -83,8 +92,8 @@ BOOL CCP_MainApp::InitInstance()
 
 	AfxOleInit();
 
-	if(DoCleanups() == FALSE)
-		return TRUE;
+//	if(DoCleanups() == FALSE)
+//		return TRUE;
 
 	CMainFrame* pFrame = new CMainFrame;
 	m_pMainWnd = m_pMainFrame = pFrame;
@@ -320,17 +329,160 @@ void CCP_MainApp::OnCopyCompleted(long lLastID, int count)
 	CGetSetOptions::SetTripCopyCount( -count );
 	CGetSetOptions::SetTotalCopyCount( -count );
 
+	// if we are in the History group, focus on the latest copy
+	if( m_GroupID == 0 )
+		m_FocusID = 0;
+
 	RefreshView();
 	ShowCopyProperties( lLastID );
 }
 
-void CCP_MainApp::SetStatus( const char* status, bool bRepaintImmediately )
+// Internal Clipboard for cut/copy/paste items between Groups
+
+// if NULL, this uses the current QPaste selection
+void CCP_MainApp::IC_Cut( ARRAY* pIDs )
 {
-	if(status != NULL)
+	if( pIDs == NULL )
 	{
-		m_Status = status;
+		if( QPasteWnd() )
+			QPasteWnd()->m_lstHeader.GetSelectionItemData( m_IC_IDs );
+		else
+			m_IC_IDs.SetSize(0);
+	}
+	else
+		m_IC_IDs.Copy( *pIDs );
+
+	m_IC_bCopy = false;
+
+	if( QPasteWnd() )
+		QPasteWnd()->UpdateStatus();
+}
+
+// if NULL, this uses the current QPaste selection
+void CCP_MainApp::IC_Copy( ARRAY* pIDs )
+{
+	if( pIDs == NULL )
+	{
+		if( QPasteWnd() )
+			QPasteWnd()->m_lstHeader.GetSelectionItemData( m_IC_IDs );
+		else
+			m_IC_IDs.SetSize(0);
+	}
+	else
+		m_IC_IDs.Copy( *pIDs );
+
+	m_IC_bCopy = true;
+
+	if( QPasteWnd() )
+		QPasteWnd()->UpdateStatus();
+}
+
+void CCP_MainApp::IC_Paste()
+{
+	if( m_IC_IDs.GetSize() <= 0 )
+		return;
+
+	if( m_IC_bCopy )
+		m_IC_IDs.CopyTo( GetValidGroupID() );
+	else // Move
+		m_IC_IDs.MoveTo( GetValidGroupID() );
+
+	// don't process the same items twice.
+	m_IC_IDs.SetSize(0);
+	RefreshView();
+}
+
+// Groups
+
+BOOL CCP_MainApp::EnterGroupID( long lID )
+{
+BOOL bResult = FALSE;
+
+	if( m_GroupID == lID )
+		return TRUE;
+
+	// if we are switching to the parent, focus on the previous group
+	if( m_GroupParentID == lID && m_GroupID > 0 )
+		m_FocusID = m_GroupID;
+
+	switch( lID )
+	{
+	case 0:  // History Group "ID"
+		m_GroupID = 0;
+		m_GroupParentID = 0;
+		m_GroupText = "History";
+		bResult = TRUE;
+		break;
+	case -1: // All Groups "ID"
+		m_GroupID = -1;
+		m_GroupParentID = 0;
+		m_GroupText = "Groups";
+		bResult = TRUE;
+		break;
+	default: // Normal Group
+		try
+		{
+		CMainTable recs;
+		COleVariant varKey( lID, VT_I4 );
+
+			recs.Open( dbOpenTable, "Main" );
+			recs.SetCurrentIndex("lID");
+
+			// Find first record whose [lID] field == lID
+			if( recs.Seek(_T("="), &varKey) && recs.m_bIsGroup )
+			{
+				m_GroupID = recs.m_lID;
+				m_GroupParentID = recs.m_lParentID;
+				if( m_GroupParentID == 0 )
+                    m_GroupParentID = -1; // back out into "all top-level groups" list.
+				m_GroupText = recs.m_strText;
+				bResult = TRUE;
+			}
+
+			recs.Close();
+		}
+		CATCHDAO
+		break;
 	}
 
+	if( bResult )
+	{
+		theApp.RefreshView();
+		if( QPasteWnd() )
+			QPasteWnd()->UpdateStatus( true );
+	}
+
+	return bResult;
+}
+
+// returns a usable group id (not negative)
+long CCP_MainApp::GetValidGroupID()
+{
+	if( m_GroupID <= 0 )
+		return 0;
+	return m_GroupID;
+}
+
+// sets a valid id
+void CCP_MainApp::SetGroupDefaultID( long lID )
+{
+	if( m_GroupDefaultID == lID )
+		return;
+
+	if( lID <= 0 )
+		m_GroupDefaultID = 0;
+	else
+		m_GroupDefaultID = lID;
+
+	if( QPasteWnd() )
+		QPasteWnd()->UpdateStatus();
+}
+
+// Window States
+
+void CCP_MainApp::SetStatus( const char* status, bool bRepaintImmediately )
+{
+	m_Status = status;
 	if( QPasteWnd() )
 		QPasteWnd()->UpdateStatus( bRepaintImmediately );
 }
@@ -385,19 +537,23 @@ int CCP_MainApp::ExitInstance()
 
 CDaoDatabase* CCP_MainApp::EnsureOpenDB(CString csName)
 {
-	if(!m_pDatabase)
-		m_pDatabase = new CDaoDatabase;
-
-	if(!m_pDatabase->IsOpen())
+	try
 	{
-		if(csName == "")
-			m_pDatabase->Open(GetDBName());
-		else
-			m_pDatabase->Open(csName);
-	}
+		if(!m_pDatabase)
+			m_pDatabase = new CDaoDatabase;
 
-	if(m_pMainWnd)
-		((CMainFrame *)m_pMainWnd)->ResetKillDBTimer();
+		if(!m_pDatabase->IsOpen())
+		{
+			if(csName == "")
+				m_pDatabase->Open(GetDBName());
+			else
+				m_pDatabase->Open(csName);
+		}
+
+		if(m_pMainWnd)
+			((CMainFrame *)m_pMainWnd)->ResetKillDBTimer();
+	}
+	CATCHDAO
 
 	return m_pDatabase;
 }

@@ -58,7 +58,7 @@ public:
 	CButton			m_btCancel;
 	bool			m_bHideWnd;
 	CMainTable		m_Recset;
-	bool			m_bAscending;
+	CString			m_strSQLSearch;
 
 	CString			m_Title;
 
@@ -70,6 +70,13 @@ public:
 	void MoveControls();
 
 	void DeleteSelectedRows();
+
+	BOOL OpenID( long lID );
+	BOOL OpenSelection();
+	BOOL OpenIndex( long nItem );
+	BOOL NewGroup( bool bGroupSelection = true );
+	// moves the caret to the given ID, selects it, and ensures it is visible.
+	BOOL SetListID( long lID );
 
 	CString LoadDescription( int nItem );
 	bool SaveDescription( int nItem, CString text );
@@ -142,6 +149,8 @@ public:
 	afx_msg void OnMenuAllwaysontop();
 	afx_msg void OnSortAscending();
 	afx_msg void OnSortDescending();
+	afx_msg void OnMenuNewGroup();
+	afx_msg void OnMenuNewGroupSelection();
 };
 
 

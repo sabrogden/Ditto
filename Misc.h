@@ -10,14 +10,6 @@
 
 #define DELETE_PTR(ptr) {  if(ptr) {delete ptr; ptr = NULL;}  }
 
-#define CATCHDAO \
-	catch(CDaoException* e) \
-	{                       \
-		e->ReportError();   \
-		ASSERT(0);          \
-		e->Delete();        \
-	}
-
 #include "DatabaseUtilities.h"
 
 // Debugging
@@ -63,6 +55,8 @@ HGLOBAL NewGlobalH( HGLOBAL hSource, UINT nLen );
 int CompareGlobalHP( HGLOBAL hLeft, LPVOID pBuf, ULONG ulBufLen );
 int CompareGlobalHH( HGLOBAL hLeft, HGLOBAL hRight, ULONG ulBufLen );
 
+int GetScreenWidth();
+int GetScreenHeight();
 void GetMonitorRect(int iMonitor, LPRECT lpDestRect);
 int GetMonitorFromRect(LPRECT lpMonitorRect);
 
@@ -228,6 +222,9 @@ public:
 	static void		SetDescTextSize(long lSize);
 	static long		GetDescTextSize();
 
+	static BOOL		m_bDescShowLeadingWhiteSpace;
+	static void		SetDescShowLeadingWhiteSpace(BOOL bVal);
+	static BOOL		GetDescShowLeadingWhiteSpace();
 
 	/*
 	BOOL IsAutoRun();
@@ -402,19 +399,41 @@ public:
 	TOOLINFO m_TI; // struct specifying info about tool in ToolTip control
 
 	bool m_bIsShowing;
+
+	bool m_bTop;  // true if m_Pos.x is the top, false if the bottom
+	bool m_bLeft; // true if m_Pos.y is the left, false if the right
+	bool m_bCenterY; // true if m_Pos is the y center, false if corner
+	bool m_bCenterX; // true if m_Pos is the x center, false if corner
+	HWND m_hWndPosRelativeTo;
 	CPoint m_Pos;
 
+	int m_ScreenMaxX;
+	int m_ScreenMaxY;
+
+	HWND m_hWndInsertAfter;
+
+	bool m_bAllowShow; // used by SafeShow to determine whether to show or not
+
 	CPopup();
-	CPopup( CPoint& pos, HWND hTTWnd = NULL );
+	CPopup( int x, int y, HWND hWndPosRelativeTo = NULL, HWND hWndInsertAfter = HWND_TOP );
 	~CPopup();
 
-	void Init( HWND hTTWnd = NULL, TOOLINFO* pTI = NULL );
+	void Init();
+	void SetTTWnd( HWND hTTWnd = NULL, TOOLINFO* pTI = NULL );
 	void CreateToolTip();
 
 	void SetTimeout( int timeout );
 
-	void Show( CString text, CPoint& pos );
+	void AdjustPos( CPoint& pos );
+	void SetPos( CPoint& pos );
+	void SetPosInfo( bool bTop, bool bCenterY, bool bLeft, bool bCenterX );
+
+	void SendToolTipText( CString text );
+
+	void Show( CString text, CPoint pos, bool bAdjustPos = true );
 	void Show( CString text );
+	void AllowShow( CString text ); // only shows if m_bAllowShow is true
+
 	void Hide();
 };
 

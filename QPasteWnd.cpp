@@ -31,12 +31,12 @@ CQPasteWnd::CQPasteWnd()
 {	
 	m_Title = QPASTE_TITLE;
 	m_bHideWnd = true;
-	m_bAscending = false;
+	m_strSQLSearch = "";
 }
 
 CQPasteWnd::~CQPasteWnd()
 {
-	
+
 }
 
 
@@ -98,6 +98,8 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_ALLWAYSONTOP, OnMenuAllwaysontop)
 	ON_COMMAND(ID_SORT_ASCENDING, OnSortAscending)
 	ON_COMMAND(ID_SORT_DESCENDING, OnSortDescending)
+	ON_COMMAND(ID_MENU_NEWGROUP, OnMenuNewGroup)
+	ON_COMMAND(ID_MENU_NEWGROUPSELECTION, OnMenuNewGroupSelection)
 END_MESSAGE_MAP()
 
 
@@ -187,7 +189,7 @@ void CQPasteWnd::MoveControls()
 
 	int nWidth = cx;
 
-	if(m_Recset.m_strFilter.IsEmpty() == FALSE)
+	if( m_strSQLSearch.IsEmpty() == FALSE )
 	{
 		m_btCancel.MoveWindow(cx - 20, cy - 20, 20, 20);
 		nWidth -= 19;
@@ -239,6 +241,11 @@ BOOL CQPasteWnd::HideQPasteWindow()
 		m_Recset.Close();
 
 	m_lstHeader.DestroyAndCreateAccelerator(FALSE);
+
+	// save the caret position
+int nCaretPos = m_lstHeader.GetCaret();
+	if( nCaretPos >= 0 )
+		theApp.m_FocusID = m_lstHeader.GetItemData( nCaretPos );
 
 	//Save the size
 	CRect rect;
@@ -314,13 +321,80 @@ bool CQPasteWnd::Add(const CString &csHeader, const CString &csText, int nID)
 	return true;
 }
 
-LRESULT CQPasteWnd::OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam)
+BOOL CQPasteWnd::OpenID( long lID )
 {
-	CProcessPaste paste;
-	paste.GetClipIDs().Add(wParam);
+	if( theApp.EnterGroupID(lID) )
+		return TRUE;
+
+	// else, it is a clip, so paste it
+CProcessPaste paste;
+	paste.GetClipIDs().Add( lID );
 	paste.DoPaste();
 	theApp.OnPasteCompleted();
+	return TRUE;
+}
 
+BOOL CQPasteWnd::OpenSelection()
+{
+ARRAY IDs;
+	m_lstHeader.GetSelectionItemData( IDs );
+    
+int count = IDs.GetSize();
+
+	if( count <= 0 )
+		return FALSE;
+
+	if( count == 1 )
+		return OpenID( IDs[0] );
+	// else count > 1
+
+CProcessPaste paste;
+	paste.GetClipIDs().Copy( IDs );
+	paste.DoPaste();
+	theApp.OnPasteCompleted();
+	return TRUE;
+}
+
+BOOL CQPasteWnd::OpenIndex( long nItem )
+{
+	return OpenID( m_lstHeader.GetItemData(nItem) );
+}
+
+BOOL CQPasteWnd::NewGroup( bool bGroupSelection )
+{
+long lID = NewGroupID( theApp.GetValidGroupID() );
+
+	if( lID <= 0 )
+		return FALSE;
+
+	if( !bGroupSelection )
+	{
+		theApp.m_FocusID = lID; // focus on the new group
+		FillList();
+		return TRUE;
+	}
+
+CClipIDs IDs;
+	m_lstHeader.GetSelectionItemData( IDs );
+	IDs.MoveTo( lID );
+	theApp.EnterGroupID( lID );
+	return TRUE;
+}
+
+BOOL CQPasteWnd::SetListID( long lID )
+{
+int index;
+	if( !m_Recset.FindFirst( StrF("lID = %d",lID) ) )
+		return FALSE;
+	index = m_Recset.GetAbsolutePosition();
+	m_lstHeader.SetListPos( index );
+	return TRUE;
+}
+
+
+LRESULT CQPasteWnd::OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam)
+{
+	OpenID( wParam );
 	return TRUE;
 }
 
@@ -328,37 +402,21 @@ LRESULT CQPasteWnd::OnListSelect_Index(WPARAM wParam, LPARAM lParam)
 {
 	if( (int) wParam >= m_lstHeader.GetItemCount() )
 		return FALSE;
-
-	CProcessPaste paste;
-	paste.GetClipIDs().Add( m_lstHeader.GetItemData(wParam) );
-	paste.DoPaste();
-	theApp.OnPasteCompleted();
-
+	OpenIndex( wParam );
 	return TRUE;
 }
 
 LRESULT CQPasteWnd::OnListSelect(WPARAM wParam, LPARAM lParam)
 {
-	int nCount = (int) wParam;
-	long *pItems = (long*) lParam;
-
-	if(nCount <= 0)
-		return TRUE;
-
-	CProcessPaste paste;
-	m_lstHeader.GetSelectionItemData( paste.GetClipIDs() );
-
-	paste.DoPaste();
-
-	theApp.OnPasteCompleted();
-
+int nCount = (int) wParam;
+long *pItems = (long*) lParam;
+	OpenSelection();
 	return TRUE;
 }
 
 LRESULT CQPasteWnd::OnListEnd(WPARAM wParam, LPARAM lParam)
 {
 	HideQPasteWindow();
-
 	return 0;
 }
 
@@ -369,7 +427,9 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 	while( ::PeekMessage( &msg, m_hWnd, WM_REFRESH_VIEW, WM_REFRESH_VIEW, PM_REMOVE ) )
 	{}
 	if( theApp.m_bShowingQuickPaste )
+	{
 		FillList();
+	}
 	return TRUE;
 }
 
@@ -407,6 +467,23 @@ CString prev;
 	else
 		title += " - ";
 
+	// asterisk means we are in the default group
+	if( theApp.m_GroupID == theApp.m_GroupDefaultID )
+		title += "*";
+
+	title += theApp.m_GroupText;
+	title += " - ";
+
+	if( theApp.m_IC_IDs.GetSize() > 0 )
+	{
+		if( theApp.m_IC_bCopy )
+			title += "Copying";
+		else
+			title += "Moving";
+
+		title += " - ";
+	}
+
 	if( ::IsWindow(theApp.m_hTargetWnd) )
 		title += theApp.GetTargetName();
 	else
@@ -423,15 +500,32 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 {
 //	if(m_Recset.IsOpen())
 //		m_Recset.Close();
+CString strFilter;
 
-	// currently, we only have a History Group, so assign it directly.
-	m_lstHeader.m_bStartTop = g_Opt.m_bHistoryStartTop;
-	m_bAscending = !g_Opt.m_bHistoryStartTop;
+	// History Group
+	if( theApp.m_GroupID == 0 )
+	{
+		m_lstHeader.m_bStartTop = g_Opt.m_bHistoryStartTop;
+		if( g_Opt.m_bHistoryStartTop )
+			m_Recset.m_strSort = "lDate DESC";
+		else
+			m_Recset.m_strSort = "lDate ASC";
+	}
+	else // it's some other group
+	{
+		m_lstHeader.m_bStartTop = true;
+		m_Recset.m_strSort = "bIsGroup ASC, mText ASC";
 
-	if( m_bAscending )
-		m_Recset.m_strSort = "lDate ASC";
-	else
-		m_Recset.m_strSort = "lDate DESC";
+		if( theApp.m_GroupID > 0 )
+			strFilter.Format( "lParentID = %d", theApp.m_GroupID );
+		else // All top-level groups
+			strFilter = "bIsGroup = TRUE AND lParentID = 0";
+	}
+
+	// maintain the previous position if theApp.m_FocusID == -1
+	int nCaretPos = m_lstHeader.GetCaret();
+	if( theApp.m_FocusID == -1 && nCaretPos >= 0 )
+		theApp.m_FocusID = m_lstHeader.GetItemData( nCaretPos );
 
 	m_lstHeader.DeleteAllItems();
 
@@ -441,30 +535,35 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 	CString csSQL;
 	if(csSQLSearch == "")
 	{
-		m_Recset.m_strFilter = "";
-		if(m_Recset.IsOpen())
-			m_Recset.Requery();		
+		m_strSQLSearch = "";
 	}
 	else
 	{
 		//Replace all single ' with a double '
 		csSQLSearch.Replace("'", "''");
 
-		//Can't query of strings that have '|' in them
+		//Can't query using strings that have '|' in them
 		//this should be removed later
 		if(csSQLSearch.Find("|") >= 0)
 			return FALSE;
 
-		m_Recset.m_strFilter.Format("strText LIKE \'*%s*\'", csSQLSearch);
-		if(m_Recset.IsOpen())
-			m_Recset.Requery();
+		m_strSQLSearch.Format("mText LIKE \'*%s*\'", csSQLSearch);
+
+		if( strFilter.IsEmpty() )
+			strFilter = m_strSQLSearch;
+		else
+			strFilter += " AND " + m_strSQLSearch;
 	}
 
 	try
 	{
+		m_Recset.m_strFilter = strFilter;
+		if(m_Recset.IsOpen())
+			m_Recset.Requery();
+
 		if(m_Recset.IsOpen() == FALSE)
 			m_Recset.Open("");
-					
+
 		if(!m_Recset.IsEOF())
 		{
 			m_Recset.MoveLast();
@@ -474,21 +573,28 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 	catch(CDaoException* e)
 	{
 		AfxMessageBox(e->m_pErrorInfo->m_strDescription);
+		ASSERT(0);
 		e->Delete();
 	}
 
-	// set the caret based upon which end we're starting from
-	if( m_lstHeader.m_bStartTop )
+	// if the caret position can't be set to the focus ID requested
+	if( theApp.m_FocusID <= 0 || !SetListID( theApp.m_FocusID ) )
 	{
-		m_lstHeader.SetListPos( 0 );
+		// set the caret based upon which end we're starting from
+		if( m_lstHeader.m_bStartTop )
+		{
+			m_lstHeader.SetListPos( 0 );
+		}
+		else
+		{
+		int idx = m_lstHeader.GetItemCount() - 1;
+			// if there are elements
+			if( idx >= 0 )
+				m_lstHeader.SetListPos( idx );
+		}
 	}
-	else
-	{
-	int idx = m_lstHeader.GetItemCount() - 1;
-		// if there are elements
-		if( idx >= 0 )
-			m_lstHeader.SetListPos( idx );
-	}
+
+	theApp.m_FocusID = -1; // maintain previous position from now on.
 
 //	m_lstHeader.Invalidate();
 	RedrawWindow(0,0,RDW_INVALIDATE);
@@ -870,36 +976,32 @@ LRESULT CQPasteWnd::OnDelete(WPARAM wParam, LPARAM lParam)
 
 void CQPasteWnd::DeleteSelectedRows()
 {
-	ARRAY IDs;
-	long lCount = 0;
+CClipIDs IDs;
+long lCount = 0;
 
 	if( m_lstHeader.GetSelectedCount() == 0 )
 		return;
 
-	POSITION pos = m_lstHeader.GetFirstSelectedItemPosition();
-	int nFirstSel = m_lstHeader.GetNextSelectedItem( pos );
+POSITION pos = m_lstHeader.GetFirstSelectedItemPosition();
+int nFirstSel = m_lstHeader.GetNextSelectedItem( pos );
 
-	m_Recset.MoveLast();
-	lCount = m_Recset.GetRecordCount();
+	m_lstHeader.GetSelectionItemData( IDs );
+	IDs.DeleteIDs();
 
-	if( lCount == m_lstHeader.GetSelectedCount() )
-		CClip::DeleteAll();
-	else
+	try
 	{
-		m_lstHeader.GetSelectionItemData(IDs);
-		CClip::Delete(IDs);
-	}
+		m_Recset.Requery();
 
-	m_Recset.Requery();
-
-	// set lCount to current number of records
-	if( m_Recset.IsBOF() && m_Recset.IsEOF() )
-		lCount = 0;
-	else
-	{
-		m_Recset.MoveLast();
-		lCount = m_Recset.GetRecordCount();
+		// set lCount to current number of records
+		if( m_Recset.IsBOF() && m_Recset.IsEOF() )
+			lCount = 0;
+		else
+		{
+			m_Recset.MoveLast();
+			lCount = m_Recset.GetRecordCount();
+		}
 	}
+	CATCHDAO
 
 	m_lstHeader.SetItemCountEx(lCount);
 	if(lCount == 0)
@@ -961,6 +1063,17 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 
 		switch( pMsg->wParam )
 		{
+		case VK_F7:
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+				NewGroup( true );
+			else
+				NewGroup( false );
+			break;
+
+		case VK_BACK:
+			theApp.EnterGroupID( theApp.m_GroupParentID );
+			break;
+
 		case VK_SPACE:
 			if(GetKeyState(VK_CONTROL) & 0x8000)
 				theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
@@ -1007,17 +1120,30 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 
 		break; // end case WM_KEYDOWN 
 
-	case WM_SYSKEYDOWN:
-		if(pMsg->wParam == 'C')
+	case WM_SYSKEYDOWN: // ALT key is held down
+
+		switch( pMsg->wParam )
 		{
+		case 'C': // switch to the filter combobox
 			BYTE key[256];
 			GetKeyboardState((LPBYTE)(&key));
 			if(key[VK_MENU]&128)
 			{
-				OnCancelFilter();				
+				OnCancelFilter();
 			}
-		}
-		break;
+			break;
+
+		case VK_HOME:
+			theApp.EnterGroupID( 0 );  // History
+			break;
+
+		case VK_END:
+			theApp.EnterGroupID( -1 ); // All Groups
+			break; 
+
+		} // end switch( pMsg->wParam )
+
+		break; // end case WM_SYSKEYDOWN
 	}
 
 	return CWndEx::PreTranslateMessage(pMsg);
@@ -1054,7 +1180,7 @@ CClipIDs& clips = paste.GetClipIDs();
 	m_lstHeader.GetSelectionItemData( clips );
 	if( clips.GetSize() <= 0 )
 	{
-		ASSERT(0); // does this ever happen ?????
+		ASSERT(0); // does this ever happen ??
 		clips.Add( m_lstHeader.GetItemData(pLV->iItem) );
 	}
 	paste.DoDrag();
@@ -1062,7 +1188,7 @@ CClipIDs& clips = paste.GetClipIDs();
 }
 
 void CQPasteWnd::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
-{	
+{
 	CWndEx::OnSysKeyDown(nChar, nRepCnt, nFlags);
 }
 
@@ -1085,13 +1211,21 @@ void CQPasteWnd::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 
 				CString cs;
 				if(m_Recset.m_lDontAutoDelete)
-					cs = "* ";
+					cs += "*";
 
 				if(m_Recset.m_lShortCut > 0)
-					cs += "** ";
+					cs += "s";
+                
+				if(m_Recset.m_bIsGroup)
+					cs += "G";
 
-				cs += m_Recset.m_strText;
-				
+				// attached to a group
+				if(m_Recset.m_lParentID > 0 )
+					cs += "!";
+
+				// pipe is the "end of symbols" marker
+				cs += "|" + m_Recset.GetDisplayText();
+
 				lstrcpyn(pItem->pszText, cs, pItem->cchTextMax);
 				pItem->pszText[pItem->cchTextMax-1] = '\0';
 			}
@@ -1281,5 +1415,18 @@ void CQPasteWnd::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 
 void CQPasteWnd::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 {
-	theApp.SetStatus(NULL, TRUE);
+	// avoid temporary 0 flicker when moving cursor
+	// the focus is always implicitly selected.
+	if( m_lstHeader.GetSelectedCount() > 0 )
+		theApp.SetStatus(NULL, TRUE);
+}
+
+void CQPasteWnd::OnMenuNewGroup()
+{
+	NewGroup( false );
+}
+
+void CQPasteWnd::OnMenuNewGroupSelection()
+{
+	NewGroup( true );
 }

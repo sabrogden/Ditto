@@ -22,7 +22,7 @@ CDataTable::CDataTable(CDaoDatabase* pdb)
 {
 	//{{AFX_FIELD_INIT(CDataTable)
 	m_lID = 0;
-	m_lParentID = 0;
+	m_lDataID = 0;
 	m_strClipBoardFormat = _T("");
 	m_nFields = 4;
 	//}}AFX_FIELD_INIT
@@ -45,30 +45,30 @@ void CDataTable::DoFieldExchange(CDaoFieldExchange* pFX)
 	//{{AFX_FIELD_MAP(CDataTable)
 	pFX->SetFieldType(CDaoFieldExchange::outputColumn);
 	DFX_Long(pFX, _T("[lID]"), m_lID);
-	DFX_Long(pFX, _T("[lParentID]"), m_lParentID);
+	DFX_Long(pFX, _T("[lDataID]"), m_lDataID);
 	DFX_Text(pFX, _T("[strClipBoardFormat]"), m_strClipBoardFormat);
 	DFX_LongBinary(pFX, _T("[ooData]"), m_ooData);
 	//}}AFX_FIELD_MAP
 }
 
+
 /////////////////////////////////////////////////////////////////////////////
-// CDataTable diagnostics
+// CDataTable Member Functions
 
-#ifdef _DEBUG
-void CDataTable::AssertValid() const
+// assigns the new autoincr ID to m_lID
+void CDataTable::AddNew()
 {
-	CDaoRecordset::AssertValid();
+	CDaoRecordset::AddNew();
+	// get the new, automatically assigned ID
+COleVariant varID;
+	GetFieldValue("lID", varID);
+	m_lID = varID.lVal;
 }
 
-void CDataTable::Dump(CDumpContext& dc) const
-{
-	CDaoRecordset::Dump(dc);
-}
-#endif //_DEBUG
 
 // caller must free
 // takes m_ooData's HGLOBAL (do not update recset after calling this)
-// This should be faster than making a copy, but is this SAFE ?????
+// This should be faster than making a copy, but is this SAFE ??
 HGLOBAL CDataTable::TakeData()
 {
 	// if there is nothing to take
@@ -113,16 +113,16 @@ BOOL CDataTable::ReplaceData( HGLOBAL hgData, UINT len )
 	return TRUE;
 }
 
-// copies hgData into m_ooData using ::GlobalSize(hgData) for the size
-BOOL CDataTable::SetData( HGLOBAL hgData )
+// copies hgData into m_ooData
+BOOL CDataTable::SetData( HGLOBAL hgData, UINT size )
 {
-UINT unSize = GlobalSize(hgData);
+UINT unSize = (size < 0)? ::GlobalSize(hgData) : size;
 
 	//Reallocate m_ooData.m_hData
 	if(m_ooData.m_hData)
-		m_ooData.m_hData = GlobalReAlloc(m_ooData.m_hData, unSize, GMEM_MOVEABLE);
+		m_ooData.m_hData = ::GlobalReAlloc(m_ooData.m_hData, unSize, GMEM_MOVEABLE);
 	else
-		m_ooData.m_hData = GlobalAlloc(GHND, unSize);
+		m_ooData.m_hData = ::GlobalAlloc(GHND, unSize);
 
 	m_ooData.m_dwDataLength = unSize;
 
@@ -149,26 +149,10 @@ ULONG ulBufLen = m_ooData.m_dwDataLength; //Retrieve size of array
 	return hGlobal;
 }
 
-bool CDataTable::DeleteParent( long lParentID )
+void CDataTable::CopyRec( CDataTable& src )
 {
-CString csDataSQL;
-bool bRet = false;
-
-	csDataSQL.Format( "DELETE FROM Data WHERE lParentID = %d", lParentID );
-
-	try
-	{
-		theApp.EnsureOpenDB();
-		theApp.m_pDatabase->Execute(csDataSQL, dbFailOnError);
-		bRet = TRUE;
-	}
-	catch(CDaoException* e)
-	{
-		AfxMessageBox(e->m_pErrorInfo->m_strDescription);
-		e->Delete();
-	}
-
-	return bRet;
+	m_strClipBoardFormat = src.m_strClipBoardFormat;
+	SetData( src.m_ooData.m_hData, src.m_ooData.m_dwDataLength );
 }
 
 BOOL CDataTable::DeleteAll()
@@ -215,3 +199,18 @@ BOOL CDataTable::DataEqual(HGLOBAL hgData)
 {
 	return ::CompareGlobalHH( hgData, m_ooData.m_hData, m_ooData.m_dwDataLength ) == 0;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+// CDataTable diagnostics
+
+#ifdef _DEBUG
+void CDataTable::AssertValid() const
+{
+	CDaoRecordset::AssertValid();
+}
+
+void CDataTable::Dump(CDumpContext& dc) const
+{
+	CDaoRecordset::Dump(dc);
+}
+#endif //_DEBUG

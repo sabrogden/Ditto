@@ -18,6 +18,9 @@
 #define NM_GETTOOLTIPTEXT	        WM_USER+0x108
 #define NM_SELECT_DB_ID		        WM_USER+0x109
 #define NM_SELECT_INDEX		        WM_USER+0x110
+//#define NM_LIST_CUT			        WM_USER+0x111
+//#define NM_LIST_COPY		        WM_USER+0x112
+//#define NM_LIST_PASTE		        WM_USER+0x113
 
 class CQListToolTipText
 {
@@ -46,7 +49,6 @@ public:
 	public:
 	virtual int OnToolHitTest(CPoint point, TOOLINFO * pTI) const;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-//	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam); //!!!!!!
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -98,8 +100,6 @@ protected:
 
 	//Accelerator
 	CAccels	m_Accels;
-//	HACCEL	m_Accelerator; // !!!!!
-//	bool	m_CheckingAccelerator;
 	
 	// Generated message map functions
 protected:

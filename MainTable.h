@@ -22,6 +22,11 @@ public:
 	long	m_lShortCut;
 	long	m_lDontAutoDelete;
 	long	m_lTotalCopySize;
+
+	BOOL	m_bIsGroup;
+	long	m_lParentID;
+	double	m_dOrder;
+	long	m_lDataID;
 	//}}AFX_FIELD
 
 // Overrides
@@ -36,6 +41,8 @@ public:
 	//}}AFX_VIRTUAL
 
 public:
+	CString GetDisplayText();
+	void AddNew(); // assigns the new autoincr ID to m_lID
 	void OnQuery();
 
 	int		m_nFieldCount;
@@ -44,14 +51,18 @@ public:
 
 //	long GetID();
 
-	int		m_nCurPos;
-	long	m_lCurID; // used to validate m_nCurPos
+//	int		m_nCurPos;
+//	long	m_lCurID; // used to validate m_nCurPos
 
-	// only deletes from Main
+	// copies the current source record to this current record
+	void CopyRec( CMainTable& source );
+	// makes a new copy of the current record and moves to the copy record
+	void NewCopyRec();
+
+	// ONLY deletes from Main
 	static BOOL DeleteAll();
 	
 	static void LoadAcceleratorKeys( CAccels& accels );
-//	static HACCEL LoadAcceleratorKeys(); //!!!!!
 	void Open(LPCTSTR lpszFormat,...);
 
 // Implementation

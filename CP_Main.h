@@ -21,6 +21,7 @@
 #include "TypesTable.h"
 #include "ArrayEx.h"
 #include "MainFrm.h"
+#include "ProcessPaste.h"
 
 #define MAIN_WND_TITLE		"Ditto MainWnd"
 //#define GET_APP    ((CCP_MainApp *)AfxGetApp())	
@@ -61,7 +62,7 @@ public:
 	bool ReleaseFocus(); // activate the target only if we are the active window
 	CString GetTargetName() { return GetWndText( m_hTargetWnd ); }
 	void SendPaste(); // Activates the Target and sends Ctrl-V
-	
+
 	CLIPFORMAT m_cfIgnoreClipboard; // used by CClip::LoadFromClipboard
 
 // CopyThread and ClipViewer (Copy and Paste Management)
@@ -85,7 +86,27 @@ public:
 	void OnCopyCompleted( long lLastID, int count = 1 );
 	void OnPasteCompleted();
 
+// Internal Clipboard for cut/copy/paste items between Groups
+	bool		m_IC_bCopy;   // true to copy the items, false to move them
+	CClipIDs	m_IC_IDs; // buffer
+	void IC_Cut( ARRAY* pIDs = NULL ); // if NULL, this uses the current QPaste selection
+	void IC_Copy( ARRAY* pIDs = NULL ); // if NULL, this uses the current QPaste selection
+	void IC_Paste();
+
+// Groups
+	long		m_GroupDefaultID; // new clips are saved to this group
+	long		m_GroupID;        // current group
+	long		m_GroupParentID;  // current group's parent
+	CString		m_GroupText;      // current group's description
+
+	BOOL EnterGroupID( long lID );
+	long GetValidGroupID(); // returns a valid id (not negative)
+	void SetGroupDefaultID( long lID ); // sets a valid id
+
 // Window States
+	// the ID given focus by CQPasteWnd::FillList
+	long	m_FocusID; // -1 == keep previous position, 0 == go to latest ID
+
 	bool	m_bShowingOptions;
 	bool	m_bShowingQuickPaste;
 

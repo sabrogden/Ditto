@@ -5,43 +5,29 @@
 #include "stdafx.h"
 #include "CP_Main.h"
 #include "DatabaseUtilities.h"
+#include "ProcessPaste.h"
 #include <io.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-BOOL DoCleanups()
+BOOL CreateBackup(CString csPath)
 {
-	try
-	{		
-		//Try and open mText if it's not there then create it
-		CDaoRecordset recset(theApp.EnsureOpenDB());
-		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT mText FROM Main", 0);
-		recset.Close();		
-	}
-	catch(CDaoException* e)
+CString csOriginal;
+int count = 0;
+	// create a backup of the existing database
+	do
 	{
-		e->Delete();
-		try
+		count++;
+		csOriginal = csPath + StrF(".%03d",count);
+		// in case of some weird infinite loop
+		if( count > 50 )
 		{
-			theApp.EnsureOpenDB();
-			theApp.m_pDatabase->Execute("ALTER TABLE Main ADD COLUMN mText MEMO", dbFailOnError);
-			theApp.m_pDatabase->Execute("UPDATE Main SET mText=strText", dbFailOnError);
-			theApp.m_pDatabase->Execute("ALTER TABLE Main DROP COLUMN strText", dbFailOnError);
-			theApp.m_pDatabase->Execute("ALTER TABLE Main DROP COLUMN strType", dbFailOnError);
-		}
-		catch(CDaoException *e)
-		{
-			CString cs;
-			cs = e->m_pErrorInfo->m_strDescription;
-			cs += "\n\nError updating Database!";
-			MessageBox(NULL, cs, "Ditto", MB_OK);
-
-			e->Delete();
+			ASSERT(0);
 			return FALSE;
 		}
-	}
+	} while( !::CopyFile(csPath, csOriginal, TRUE) );
 
 	return TRUE;
 }
@@ -88,8 +74,7 @@ BOOL CheckDBExists(CString csDBPath)
 		CGetSetOptions::SetDBPath("");
 		
 		// -- create a new one
-		CreateDB(GetDefaultDBName());
-		return TRUE;
+		return CreateDB(GetDefaultDBName());
 	}
 
 	BOOL bRet = FALSE;
@@ -118,7 +103,6 @@ BOOL CheckDBExists(CString csDBPath)
 		AfxMessageBox(cs);
 		
 		CFile::Rename(csDBPath, csMarkAsBad);
-		
 
 		bRet = CreateDB(csPath);
 	}
@@ -128,8 +112,27 @@ BOOL CheckDBExists(CString csDBPath)
 	return bRet;
 }
 
-BOOL ValidDB(CString csPath)
+// m_pErrorInfo:
+// - m_lErrorCode      0x00000cc1
+// - m_strSource       "DAO.Fields"
+// - m_strDescription  "Item not found in this collection."
+#define ON_FIELD_ABSENT(name,onabsent) \
+	try { table.GetFieldInfo(name,info); } \
+	catch(CDaoException* e) \
+	{ \
+		if( !bUpgrade || e->m_pErrorInfo->m_lErrorCode != 0x00000cc1 ) \
+			throw e; \
+		if( bUpgraded == FALSE ) \
+			CreateBackup(csPath); \
+		bResult &= onabsent; \
+		bUpgraded = TRUE; \
+		e->Delete(); \
+	}
+
+BOOL ValidDB(CString csPath, BOOL bUpgrade)
 {
+BOOL bResult = TRUE;
+BOOL bUpgraded = FALSE;
 	try
 	{
 		CDaoDatabase db;
@@ -139,54 +142,75 @@ BOOL ValidDB(CString csPath)
 		CDaoFieldInfo info;
 
 		table.Open("Main");
+		table.GetFieldInfo("lID", info);
+		table.GetFieldInfo("lDate", info);
+		ON_FIELD_ABSENT("mText", Upgrade_mText(db)); // +mText, -strText, -strType
+		table.GetFieldInfo("lShortCut", info);
+		table.GetFieldInfo("lDontAutoDelete", info);
+		table.GetFieldInfo("lTotalCopySize", info);
+		ON_FIELD_ABSENT("bIsGroup", Upgrade_Groups(db));
+		table.GetFieldInfo("lParentID", info); // part of Upgrade_Groups
+		table.GetFieldInfo("dOrder", info);  // part of Upgrade_Groups
+		ON_FIELD_ABSENT("lDataID", Upgrade_ShareData(db)); // +lDataID, -lParentID
 		table.Close();
 
 		table.Open("Data");
+		table.GetFieldInfo("lID", info);
+		table.GetFieldInfo("lDataID", info); // part of Upgrade_ShareData()
+		table.GetFieldInfo("strClipBoardFormat", info);
+		table.GetFieldInfo("ooData", info);
 		table.Close();
 
 		table.Open("Types");
+		table.GetFieldInfo("ID", info);
+		table.GetFieldInfo("TypeText", info);
 		table.Close();
 	}
 	catch(CDaoException* e)
 	{
-		e->Delete();
+		e->ReportError();
 		ASSERT(FALSE);
+		e->Delete();
 		return FALSE;
 	}
 
-	return TRUE;
+	// if we upgraded, perform full validation again without upgrading
+	if( bUpgraded )
+		return ValidDB( csPath, FALSE);
+
+	return bResult;
 }
 
 BOOL CreateDB(CString csPath)
 {
-	CDaoDatabase db;
-
 	try
 	{
+	CDaoDatabase db;
 		EnsureDirectory(csPath);
-
 		db.Create(csPath);
-		
-		CDaoTableDefEx table(&db);
 
-		//Creat the Main table
+	CDaoTableDefEx table(&db);
+		//Create the Main table
 		table.Create("Main");
-		
 		table.CreateField("lID", dbLong, 4, dbAutoIncrField);
 		table.CreateIndex(TRUE, "lID");
-
 		table.CreateField("lDate", dbLong, 4, 0, "0");
 		table.CreateIndex(FALSE, "lDate");
-
 		table.CreateField("mText", dbMemo, 0, dbVariableField);
-//		table.CreateField("strText", dbText, 250, dbVariableField);
-
 		table.CreateField("lShortCut", dbLong, 4, 0, "0");
 		table.CreateIndex(FALSE, "lShortCut");
-		
 		table.CreateField("lDontAutoDelete", dbLong, 4, 0, "0");
-
 		table.CreateField("lTotalCopySize", dbLong, 4, 0, "0");
+		// GROUPS
+		table.CreateField("bIsGroup", dbBoolean, 1, 0, "0"); // for Groups
+		table.CreateIndex(FALSE, "bIsGroup");
+		table.CreateField("lParentID", dbLong, 4, 0, "0"); // parent Group Main.lID
+		table.CreateIndex(FALSE, "lParentID");
+		table.CreateField("dOrder", dbDouble, 8, 0, "0"); // for Order within Groups
+		table.CreateIndex(FALSE, "dOrder");
+		// for sharing data amongst multiple clips
+		table.CreateField("lDataID", dbLong, 4, 0, "0"); // corresponds to Data.lDataID
+		table.CreateIndex(FALSE, "lDataID");
 
 		table.Append();
 		table.Close();
@@ -196,10 +220,8 @@ BOOL CreateDB(CString csPath)
 		
 		table.CreateField("lID", dbLong, 4, dbAutoIncrField);
 		table.CreateIndex(TRUE, "lID");
-
-		table.CreateField("lParentID", dbLong, 4, 0, "0");
-		table.CreateIndex(FALSE, "lParentID");
-
+		table.CreateField("lDataID", dbLong, 4, 0, "0");
+		table.CreateIndex(FALSE, "lDataID");
 		table.CreateField("strClipBoardFormat", dbText, 50, dbVariableField);
 		table.CreateField("ooData", dbLongBinary, 0);
 
@@ -220,11 +242,163 @@ BOOL CreateDB(CString csPath)
 	}
 	catch(CDaoException *e)
 	{
+		e->ReportError();
 		ASSERT(FALSE);
 		e->Delete();
 	}
 
 	return FALSE;
+}
+
+// +mText, -strText, -strType
+BOOL Upgrade_mText(CDaoDatabase& db)
+{
+	try
+	{
+		db.Execute("ALTER TABLE Main ADD COLUMN mText MEMO", dbFailOnError);
+		db.Execute("UPDATE Main SET mText=strText", dbFailOnError);
+		db.Execute("ALTER TABLE Main DROP COLUMN strText", dbFailOnError);
+		db.Execute("ALTER TABLE Main DROP COLUMN strType", dbFailOnError);
+	}
+	CATCHDAO
+	return TRUE;
+}
+
+BOOL Upgrade_Groups(CDaoDatabase& db)
+{
+	try
+	{
+	CDaoTableDefEx table(&db);
+		table.Open("Main");
+		// Groups
+		table.CreateField("bIsGroup", dbBoolean, 1, 0, "0"); // for Groups
+		table.CreateIndex(FALSE, "bIsGroup");
+		table.CreateField("lParentID", dbLong, 4, 0, "0"); // parent Group Main.lID
+		table.CreateIndex(FALSE, "lParentID");
+		table.CreateField("dOrder", dbDouble, 8, 0, "0"); // for Order within Groups
+		table.CreateIndex(FALSE, "dOrder");
+		table.Close();
+		// set defaults (otherwise might be NULL)
+		db.Execute("UPDATE Main SET bIsGroup = 0, lParentID = 0, dOrder = 0", dbFailOnError);
+	}
+	CATCHDAO
+	return TRUE;
+}
+
+BOOL Upgrade_ShareData(CDaoDatabase& db)
+{
+CPopup status(10000,10000); // peg at the bottom-right corner of screen
+	try
+	{
+	CDaoTableDefEx table(&db);
+
+		table.Open("Main");
+		table.CreateField("lDataID", dbLong, 4, 0, "0"); // corresponds to Data.lDataID
+		table.CreateIndex(FALSE, "lDataID");
+		table.Close();
+
+		table.Open("Data");
+		table.CreateField("lDataID", dbLong, 4, 0, "0"); // parent Group Main.lID
+		table.CreateIndex(FALSE, "lDataID");
+		table.Close();
+
+		// set defaults
+		db.Execute(	"UPDATE Main SET lDataID = 0", dbFailOnError );
+		db.Execute( "UPDATE Data SET lDataID = 0", dbFailOnError );
+
+		// update Main.lDataID and Data.lParentID for sharing Data
+		//
+		// - multiple Formats (Data.lID) exist for a single ClipData (Data.lDataID)
+		// - The value of lDataID is arbitrary, but must be unique to the ClipData.
+		//   - In order to ensure uniqueness, lDataID is assigned the lID of
+		//     the first Format in the Clip's set.
+
+	COleVariant var((long)0);
+	CDaoRecordset main(&db);
+	long main_fldID;
+	long main_fldDataID;
+	long main_lID;
+
+	CDaoRecordset data(&db);
+	long data_fldID;
+	long data_fldDataID;
+	long lDataID;
+	int count = 0;
+	int i = 0;
+	int percentPrev = -1;
+	int percent = -1;
+
+		main.Open(dbOpenDynaset,"SELECT lID, lDataID FROM Main");
+
+		main_fldID = GetFieldPos(main,"lID");
+		VERIFY(main_fldID == 0);
+		main_fldDataID = GetFieldPos(main,"lDataID");
+		VERIFY(main_fldDataID == 1);
+
+		if( !main.IsEOF() )
+		{
+			main.MoveLast();
+			count = main.GetRecordCount();
+			main.MoveFirst();
+		}
+
+		// for each record in Main and its corresponding records in Data,
+		//  assign a new unique lDataID.
+		while( !main.IsEOF() )
+		{
+			i++;
+			percentPrev = percent;
+			percent = (i*100)/count;
+			if( percent != percentPrev )
+				status.Show(StrF("Ditto: Upgrading database (%d%%)",percent));
+
+			main.GetFieldValue(main_fldID,var);
+			main_lID = var.lVal;
+
+			data.Open(dbOpenDynaset, StrF(
+				"SELECT lID, lDataID "
+				"FROM Data WHERE lParentID = %d", main_lID) );
+
+			data_fldID = GetFieldPos(data,"lID");
+			VERIFY(data_fldID == 0);
+			data_fldDataID = GetFieldPos(data,"lDataID");
+			VERIFY(data_fldDataID == 1);
+
+			// lDataID = the first data record lID
+			lDataID = 0;
+			if( !data.IsEOF() )
+			{
+				data.GetFieldValue(0,var); // 0 == lID field
+				lDataID = var.lVal;
+			}
+			// assign all Data records the same lDataID
+			while( !data.IsEOF() )
+			{
+				var.lVal = lDataID;
+				data.Edit();
+				data.SetFieldValue(1,var); // 1 == lDataID field
+				data.Update();
+				data.MoveNext();
+			}
+
+			// assign Main.lDataID
+			var.lVal = lDataID;
+			main.Edit();
+			main.SetFieldValue(1,var); // 1 == lDataID field
+			main.Update();
+			main.MoveNext();
+
+			data.Close();
+		}
+
+		main.Close();
+
+		// delete the old field
+		db.Execute("ALTER TABLE Data DROP CONSTRAINT lParentID", dbFailOnError);
+		db.Execute("ALTER TABLE Data DROP COLUMN lParentID", dbFailOnError);
+	}
+	CATCHDAO
+	return TRUE;
 }
 
 BOOL CompactDatabase()
@@ -255,7 +429,6 @@ BOOL CompactDatabase()
 		e->Delete();
 		return FALSE;
 	}
-
 
 	//Since compacting the database creates a new db delete the old one and replace it
 	//with the compacted db
@@ -311,19 +484,19 @@ BOOL RemoveOldEntries()
 
 			long lCount = recset.GetRecordCount();
 
-			ARRAY IDs;
+			CClipIDs IDs;
 
 			while((lCount > lMax) && (!recset.IsBOF()))
 			{
-				//Don't delete entries that have shorcuts or the flag set
-				if(recset.m_lDontAutoDelete <= 0)
+				//Only delete entries that have no shortcut and don't have the flag set
+				if(recset.m_lShortCut == 0 && recset.m_lDontAutoDelete == 0)
 					IDs.Add(recset.m_lID);
 
 				lCount--;
 				recset.MovePrev();
 			}
 
-			CClip::Delete(IDs);
+			IDs.DeleteIDs();
 		}
 	}
 
@@ -339,9 +512,9 @@ BOOL RemoveOldEntries()
 			CMainTable recset;
 			recset.Open("SELECT * FROM Main "
 						"WHERE lDate < %d AND "
-						"lShortCut <= 0 AND lDontAutoDelete <= 0", now.GetTime());
+						"lShortCut = 0 AND lDontAutoDelete = 0", now.GetTime());
 
-			ARRAY IDs;
+			CClipIDs IDs;
 
 			while(!recset.IsEOF())
 			{
@@ -349,7 +522,7 @@ BOOL RemoveOldEntries()
 				recset.MoveNext();
 			}
 
-			CClip::Delete(IDs);
+			IDs.DeleteIDs();
 		}
 	}
 
@@ -377,4 +550,68 @@ BOOL EnsureDirectory(CString csPath)
 		return TRUE;
 
 	return FALSE;
+}
+
+BOOL ExecuteSQL( CString csSQL, BOOL bReportError, CDaoException** ppEx )
+{
+	try
+	{
+		theApp.EnsureOpenDB();
+		theApp.m_pDatabase->Execute(csSQL, dbFailOnError);
+	}
+	catch(CDaoException* e)
+	{
+		if( bReportError )
+			e->ReportError();
+
+		if( ppEx )
+			*ppEx = e;
+		else
+			e->Delete();
+
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+int GetFieldPos(CDaoRecordset& recs, LPCTSTR fieldName)
+{
+CDaoFieldInfo fi;
+int count = recs.GetFieldCount();
+
+	for( int i = 0; i < count; i++ )
+	{
+		recs.GetFieldInfo(i, fi);
+		if( fi.m_strName.Compare( fieldName ) == 0 )
+			return i; // when found a match, return it
+	}
+
+	return -1;
+}
+
+void VerifyFieldPos(CDaoRecordset& recs, LPCTSTR fieldName, int index)
+{
+CDaoFieldInfo fi;
+int count = recs.GetFieldCount();
+	VERIFY( index >= 0 && index < count );
+	recs.GetFieldInfo(index, fi);
+	VERIFY( fi.m_strName.Compare( fieldName ) == 0 );
+}
+
+CString GetFieldList(CDaoRecordset& recs)
+{
+CString field;
+CString list;
+CDaoFieldInfo fi;
+int count = recs.GetFieldCount();
+
+	for( int i = 0; i < count; i++ )
+	{
+		recs.GetFieldInfo(i, fi);
+		field = StrF("\n%d: ",i) + fi.m_strName;
+		list += field;
+	}
+
+	return list;
 }

@@ -96,7 +96,7 @@ int count = GetSize();
 	CClip - holds multiple CClipFormats and CopyClipboard() statistics
 \*----------------------------------------------------------------------------*/
 
-CClip::CClip() : m_ID(0), m_lTotalCopySize(0)
+CClip::CClip() : m_ID(0), m_DataID(0), m_lTotalCopySize(0)
 {}
 
 CClip::~CClip()
@@ -113,6 +113,7 @@ void CClip::Clear()
 	m_Time = 0;
 	m_Desc = "";
 	m_lTotalCopySize = 0;
+	m_DataID = 0;
 	EmptyFormats();
 }
 
@@ -205,7 +206,7 @@ CClipTypes* pTypes = pClipTypes;
 
 	// reset copy stats
 	m_lTotalCopySize = 0;
-	m_Desc = "[Ditto Error] !!BAD DESCRIPTION!!";
+	m_Desc = "[Ditto Error] BAD DESCRIPTION";
 
 	// Get Description String
 	// NOTE: We make sure that the description always corresponds to the
@@ -226,7 +227,7 @@ CClipFormat cf;
 int numTypes = pTypes->GetSize();
 	for(int i = 0; i < numTypes; i++)
 	{
-		cf.m_cfType = pTypes->GetAt(i);
+		cf.m_cfType = pTypes->ElementAt(i);
 
 		// is this the description we already fetched?
 		if( cf.m_cfType == cfDesc.m_cfType )
@@ -279,7 +280,7 @@ bool CClip::SetDescFromText( HGLOBAL hgData )
 
 bool bRet = false;
 char* text = (char *) GlobalLock(hgData);
-ULONG ulBufLen = GlobalSize(hgData);
+long ulBufLen = GlobalSize(hgData);
 
 	ASSERT( text != NULL );
 
@@ -309,30 +310,34 @@ bool CClip::SetDescFromType()
 	return m_Desc.GetLength() > 0;
 }
 
-bool CClip::AddToDB()
+bool CClip::AddToDB( bool bCheckForDuplicates )
 {
 bool bResult;
 	try
 	{
-		CMainTable recset;
-
-		if( FindDuplicate( recset, g_Opt.m_bAllowDuplicates ) )
+		if( bCheckForDuplicates )
 		{
-			m_ID = recset.m_lID;
-			recset.Edit();
-			recset.m_lDate = (long) m_Time.GetTime(); // update the copy Time
-			recset.Update();
-			recset.Close();
-			EmptyFormats(); // delete this clip's data from memory.
-			return true;
-		}
+			CMainTable recset;
 
-		if( recset.IsOpen() )
-			recset.Close();
+			if( FindDuplicate( recset, g_Opt.m_bAllowDuplicates ) )
+			{
+				m_ID = recset.m_lID;
+				recset.Edit();
+				recset.m_lDate = (long) m_Time.GetTime(); // update the copy Time
+				recset.Update();
+				recset.Close();
+				EmptyFormats(); // delete this clip's data from memory.
+				return true;
+			}
+
+			if( recset.IsOpen() )
+				recset.Close();
+		}
 	}
 	CATCHDAO
 
-	bResult = AddToMainTable() && AddToDataTable();
+	// AddToDataTable must go first in order to assign m_DataID
+	bResult = AddToDataTable() && AddToMainTable();
 
 	// should be emptied by AddToDataTable
 	ASSERT( m_Formats.GetSize() == 0 );
@@ -355,7 +360,7 @@ bool CClip::FindDuplicate( CMainTable& recset, BOOL bCheckLastOnly )
 			// if an entry exists and they are the same size and the format data matches
 			if( !recset.IsBOF() && !recset.IsEOF() &&
 			     m_lTotalCopySize == recset.m_lTotalCopySize &&
-			    (CompareFormatDataTo(recset.m_lID) == 0) )
+			    (CompareFormatDataTo(recset.m_lDataID) == 0) )
 			{	return true; }
 			return false;
 		}
@@ -365,7 +370,7 @@ bool CClip::FindDuplicate( CMainTable& recset, BOOL bCheckLastOnly )
 		while( !recset.IsEOF() )
 		{
 			//if there is any then look if it is an exact match
-			if( CompareFormatDataTo(recset.m_lID) == 0 )
+			if( CompareFormatDataTo(recset.m_lDataID) == 0 )
 				return true;
 
 			recset.MoveNext();
@@ -376,16 +381,15 @@ bool CClip::FindDuplicate( CMainTable& recset, BOOL bCheckLastOnly )
 	return false;
 }
 
-int CClip::CompareFormatDataTo( long lID )
+int CClip::CompareFormatDataTo( long lDataID )
 {
 int nRet = 0;
 int nRecs=0, nFormats=0;
 CClipFormat* pFormat = NULL;
 	try
 	{
-		CDataTable recset;
-
-		recset.Open("SELECT * FROM Data WHERE lParentID = %d", lID);
+	CDataTable recset;
+		recset.Open("SELECT * FROM Data WHERE lDataID = %d", lDataID);
 
 		if( !recset.IsBOF() && !recset.IsEOF() )
 		{
@@ -440,16 +444,24 @@ long lDate;
 
 		lDate = (long) m_Time.GetTime();
 
-		recset.AddNew();
+		recset.AddNew();  // overridden to set m_lID to the new autoincr number
+
+		m_ID = recset.m_lID;
 
 		recset.m_lDate = lDate;
 		recset.m_strText = m_Desc;
 		recset.m_lTotalCopySize = m_lTotalCopySize;
 
+		recset.m_bIsGroup = FALSE;
+		recset.m_lParentID = theApp.m_GroupDefaultID;
+
+		VERIFY( m_DataID > 0 ); // AddToDataTable must be called first to assign this
+		recset.m_lDataID = m_DataID;
+
 		recset.Update();
-		recset.MoveLast();
-		
-		m_ID = recset.m_lID;
+
+//		recset.SetBookmark( recset.GetLastModifiedBookmark() );
+//		m_ID = recset.m_lID;
 
 		recset.Close();
 	}
@@ -466,21 +478,26 @@ long lDate;
 // Empties m_Formats as it saves them to the Data Table.
 bool CClip::AddToDataTable()
 {
-	ASSERT( m_ID != 0 );
+	VERIFY( m_DataID <= 0 ); // this func will assign m_DataID
 	try
 	{
-	CDataTable recset;
 	CClipFormat* pCF;
-
-		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT * FROM Data" ,NULL);
+	CDataTable recset;
+		recset.Open(dbOpenTable,"Data");
 
 		for( int i = m_Formats.GetSize()-1; i >= 0 ; i-- )
 		{
 			pCF = & m_Formats.ElementAt(i);
 
-			recset.AddNew();
+			recset.AddNew(); // overridden to assign new autoincr ID to m_lID
 
-			recset.m_lParentID = m_ID;
+			if( m_DataID <= 0 )
+			{
+				VERIFY( recset.m_lID > 0 );
+				m_DataID = recset.m_lID;
+			}
+
+			recset.m_lDataID = m_DataID;
 			recset.m_strClipBoardFormat = GetFormatName( pCF->m_cfType );
 			// the recset takes ownership of the HGLOBAL
 			recset.ReplaceData( pCF->m_hgData, GlobalSize(pCF->m_hgData) );
@@ -489,6 +506,8 @@ bool CClip::AddToDataTable()
 
 			m_Formats.RemoveAt( i ); // the recset now owns the global
 		}
+
+		recset.Close();
 		return true;
 	}
 	CATCHDAO
@@ -524,97 +543,7 @@ long lDate;
 	CATCHDAO
 }
 
-#define DELETE_CHUNCK_SIZE 100
-
 // STATICS
-BOOL CClip::Delete( ARRAY& IDs )
-{
-	#ifdef _DEBUG
-		DWORD dTick = GetTickCount();
-	#endif
-
-	if(IDs.GetSize() <= 0)
-		return FALSE;
-
-	int nStart = 0;
-	int nEnd = DELETE_CHUNCK_SIZE;
-	int nLoops = (IDs.GetSize() / DELETE_CHUNCK_SIZE) + 1;
-	BOOL bRet = TRUE;
-	CString csMainSQL;
-	CString csDataSQL;
-	CString csMainFormat;
-
-	for(int n = 0; n < nLoops; n++)
-	{
-		csMainSQL = "DELETE FROM Main WHERE";
-		csDataSQL = "DELETE FROM Data WHERE";
-		csMainFormat.Empty();
-
-		csMainFormat.Format(" lID = %d", IDs[nStart]);
-		csMainSQL += csMainFormat;
-
-		csMainFormat.Format(" lParentID = %d", IDs[nStart]);
-		csDataSQL += csMainFormat;
-
-		nEnd = min(nEnd, IDs.GetSize());
-
-		for(int i = nStart+1; i < nEnd; i++)
-		{
-			csMainFormat.Format(" Or lID = %d", IDs[i]);
-			csMainSQL += csMainFormat;
-
-			csMainFormat.Format(" Or lParentID = %d", IDs[i]);
-			csDataSQL += csMainFormat;
-		}
-
-		nStart = nEnd;
-		nEnd += DELETE_CHUNCK_SIZE;
-			
-		bRet = TRUE;
-
-		try
-		{
-			theApp.EnsureOpenDB();
-			theApp.m_pDatabase->Execute(csMainSQL, dbFailOnError);
-			theApp.m_pDatabase->Execute(csDataSQL, dbFailOnError);
-		}
-		catch(CDaoException* e)
-		{
-			AfxMessageBox(e->m_pErrorInfo->m_strDescription);
-			e->Delete();
-			bRet = FALSE;
-		}
-	}
-
-	#ifdef _DEBUG
-	{
-		CString cs;
-		cs.Format("Delete Time = %d\n", GetTickCount() - dTick);
-		TRACE(cs);
-	}
-	#endif	
-
-	return bRet;
-}
-
-BOOL CClip::DeleteAll()
-{
-BOOL bRet = FALSE;
-	try
-	{
-		theApp.EnsureOpenDB();
-		theApp.m_pDatabase->Execute("DELETE * FROM Main", dbFailOnError);
-		theApp.m_pDatabase->Execute("DELETE * FROM Data", dbFailOnError);
-		bRet = TRUE;
-	}
-	catch(CDaoException* e)
-	{
-		AfxMessageBox(e->m_pErrorInfo->m_strDescription);
-		e->Delete();
-	}
-
-	return bRet;
-}
 
 // Allocates a Global containing the requested Clip Format Data
 HGLOBAL CClip::LoadFormat( long lID, UINT cfType )
@@ -622,18 +551,24 @@ HGLOBAL CClip::LoadFormat( long lID, UINT cfType )
 HGLOBAL hGlobal = 0;
 	try
 	{
-		CDataTable recset;
+	CDataTable recset;
+	CString csSQL;
 
-		//Open the data table for all that have the parent id and format
-		CString csSQL;
-		csSQL.Format("SELECT * FROM Data WHERE lParentID = %d AND strClipBoardFormat = \'%s\'", lID, GetFormatName(cfType));
+		csSQL.Format(
+			"SELECT Data.* FROM Data "
+			"INNER JOIN Main ON Main.lDataID = Data.lDataID "
+			"WHERE Main.lID = %d "
+			"AND Data.strClipBoardFormat = \'%s\'",
+			lID,
+			GetFormatName(cfType));
+
 		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, csSQL);
 
 		if( !recset.IsBOF() && !recset.IsEOF() )
 		{
 			// create a new HGLOBAL duplicate
 			hGlobal = NewGlobalH( recset.m_ooData.m_hData, recset.m_ooData.m_dwDataLength );
-			// XOR take the recset's HGLOBAL... is this SAFE???
+			// XOR take the recset's HGLOBAL... is this SAFE??
 //			hGlobal = recset.TakeData();
 			if( !hGlobal || ::GlobalSize(hGlobal) == 0 )
 			{
@@ -663,14 +598,18 @@ HGLOBAL hGlobal = 0;
 
 		//Open the data table for all that have the parent id
 		CString csSQL;
-		csSQL.Format("SELECT * FROM Data WHERE lParentID = %d", lID);
+		csSQL.Format(
+			"SELECT Data.* FROM Data "
+			"INNER JOIN Main ON Main.lDataID = Data.lDataID "
+			"WHERE Main.lID = %d", lID);
+
 		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, csSQL);
 
 		while( !recset.IsEOF() )
 		{
 			// create a new HGLOBAL duplicate
 			hGlobal = NewGlobalH( recset.m_ooData.m_hData, recset.m_ooData.m_dwDataLength );
-			// XOR take the recset's HGLOBAL... is this SAFE???
+			// XOR take the recset's HGLOBAL... is this SAFE??
 //			hGlobal = recset.TakeData();
 			if( !hGlobal || ::GlobalSize(hGlobal) == 0 )
 			{
@@ -697,11 +636,14 @@ void CClip::LoadTypes( long lID, CClipTypes& types )
 	types.RemoveAll();
 	try
 	{
-		CDataTable recset;
+	CDataTable recset;
+	CString csSQL;
+		// get formats for Clip "lID" (Main.lID) using the corresponding Main.lDataID
+		csSQL.Format(
+			"SELECT Data.* FROM Data "
+			"INNER JOIN Main ON Main.lDataID = Data.lDataID "
+			"WHERE Main.lID = %d", lID);
 
-		//Open the data table for all that have the parent id
-		CString csSQL;
-		csSQL.Format("SELECT * FROM Data WHERE lParentID = %d", lID );
 		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, csSQL);
 
 		while( !recset.IsEOF() )
@@ -723,7 +665,7 @@ void CClip::LoadTypes( long lID, CClipTypes& types )
 CClipList::~CClipList()
 {
 CClip* pClip;
-	while( GetCount() )
+	while( GetSize() )
 	{
 		pClip = RemoveHead();
 		DELETE_PTR( pClip );
@@ -740,7 +682,7 @@ CClip* pClip;
 POSITION pos;
 bool bResult;
 
-	nRemaining = GetCount();
+	nRemaining = GetSize();
 	pos = GetHeadPosition();
 	while( pos )
 	{
@@ -982,7 +924,7 @@ CCopyThread::~CCopyThread()
 	m_SharedConfig.DeleteTypes();
 	DELETE_PTR( m_pClipboardViewer );
 	if( m_pClips )
-		ASSERT( m_pClips->GetCount() == 0 );
+		ASSERT( m_pClips->GetSize() == 0 );
 	DELETE_PTR( m_pClips );
 	::DeleteCriticalSection(&m_CS);
 }

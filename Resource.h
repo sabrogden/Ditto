@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by CP_Main.rc
 //
 #define IDD_ABOUTBOX                    100
@@ -80,6 +80,7 @@
 #define IDC_AT_PREVIOUS                 2017
 #define IDC_COMPACT_DB                  2018
 #define IDC_REPAIR                      2019
+#define IDC_DESC_SHOW_LEADING_WHITESPACE 2021
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -117,6 +118,9 @@
 #define ID_MENU_EXITPROGRAM             32806
 #define ID_MENU_LINESPERROW_1           32807
 #define ID_MENU_TRANSPARENCY_5          32808
+#define ID_MENU_QUICKOPTIONS            32809
+#define ID_MENU_NEWGROUP                32811
+#define ID_MENU_NEWGROUPSELECTION       32812
 
 // Next default values for new objects
 // 
@@ -124,8 +128,8 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        138
-#define _APS_NEXT_COMMAND_VALUE         32809
-#define _APS_NEXT_CONTROL_VALUE         2020
+#define _APS_NEXT_COMMAND_VALUE         32813
+#define _APS_NEXT_CONTROL_VALUE         2022
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

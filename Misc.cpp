@@ -142,42 +142,6 @@ DWORD dwTestPID;
 	return dwMyPID == dwTestPID;
 }
 
-/* !!!!!
-HWND GetFocusWnd( CPoint *pPointCaret )
-{
-HWND hFocusWnd = 0;
-CPoint pt;
-
-	if( pPointCaret )
-		*pPointCaret = CPoint(-1, -1);
-
-	HWND hForeWnd = ::GetForegroundWindow();
-
-	if( !::IsWindow(hForeWnd) )
-		return 0;
-
-	DWORD dwMyThread = ::GetCurrentThreadId();
-	DWORD dwTargetPID;
-	DWORD dwTargetThread = ::GetWindowThreadProcessId( hForeWnd, &dwTargetPID );
-
-	// get the focus window's caret position
-	// attach to new focus window
-	if( ::AttachThreadInput(dwMyThread,dwTargetThread,TRUE) )
-	{
-		hFocusWnd = ::GetFocus();
-		::GetCaretPos( &pt );
-		::ClientToScreen( hFocusWnd, &pt );
-		// detach
-		::AttachThreadInput(dwMyThread,dwTargetThread,FALSE);
-	}
-
-	if( pPointCaret )
-		*pPointCaret = pt;
-
-	return hFocusWnd;
-}
-*/
-
 HWND GetFocusWnd(CPoint *pPointCaret)
 {
 	HWND hWndFocus = NULL;
@@ -440,6 +404,7 @@ BOOL CGetSetOptions::m_bSaveMultiPaste;
 BOOL CGetSetOptions::m_bShowPersistent;
 BOOL CGetSetOptions::m_bHistoryStartTop;
 long CGetSetOptions::m_bDescTextSize;
+BOOL CGetSetOptions::m_bDescShowLeadingWhiteSpace;
 
 CGetSetOptions g_Opt;
 
@@ -452,6 +417,7 @@ CGetSetOptions::CGetSetOptions()
 	m_bShowPersistent = GetShowPersistent();
 	m_bHistoryStartTop = GetHistoryStartTop();
 	m_bDescTextSize = GetDescTextSize();
+	m_bDescShowLeadingWhiteSpace = GetDescShowLeadingWhiteSpace();
 }
 
 CGetSetOptions::~CGetSetOptions()
@@ -907,6 +873,9 @@ BOOL CGetSetOptions::GetAutoHide()				{	return GetProfileLong("AutoHide", FALSE)
 void CGetSetOptions::SetDescTextSize(long lSize){	SetProfileLong("DescTextSize", lSize); m_bDescTextSize = lSize; }
 long CGetSetOptions::GetDescTextSize()			{	return GetProfileLong("DescTextSize", 500); }
 
+void CGetSetOptions::SetDescShowLeadingWhiteSpace(BOOL bVal){  SetProfileLong("DescShowLeadingWhiteSpace", bVal); m_bDescShowLeadingWhiteSpace = bVal; }
+BOOL CGetSetOptions::GetDescShowLeadingWhiteSpace()         {  return GetProfileLong("DescShowLeadingWhiteSpace", FALSE); }
+
 /*------------------------------------------------------------------*\
 	CHotKey - a single system-wide hotkey
 \*------------------------------------------------------------------*/
@@ -1030,7 +999,7 @@ CHotKey* pHotKey;
 int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
-		pHotKey = GetAt(i);
+		pHotKey = ElementAt(i);
 		if( pHotKey )
 			delete pHotKey;
 	}
@@ -1041,7 +1010,7 @@ int CHotKeys::Find( CHotKey* pHotKey )
 int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
-		if( pHotKey == GetAt(i) )
+		if( pHotKey == ElementAt(i) )
 			return i;
 	}
 	return -1;
@@ -1062,14 +1031,14 @@ void CHotKeys::LoadAllKeys()
 {
 int count = GetSize();
 	for( int i=0; i < count; i++ )
-		GetAt(i)->LoadKey();
+		ElementAt(i)->LoadKey();
 }
 
 void CHotKeys::SaveAllKeys()
 {
 int count = GetSize();
 	for( int i=0; i < count; i++ )
-		GetAt(i)->SaveKey();
+		ElementAt(i)->SaveKey();
 }
 
 void CHotKeys::RegisterAll( bool bMsgOnError )
@@ -1079,7 +1048,7 @@ CHotKey* pHotKey;
 int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
-		pHotKey = GetAt(i);
+		pHotKey = ElementAt(i);
 		if( !pHotKey->Register() )
 		{
 			str =  "Error Registering ";
@@ -1098,7 +1067,7 @@ CHotKey* pHotKey;
 int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
-		pHotKey = GetAt(i);
+		pHotKey = ElementAt(i);
 		if( !pHotKey->Unregister() )
 		{
 			str =  "Error Unregistering ";
@@ -1115,7 +1084,7 @@ void CHotKeys::GetKeys( ARRAY& keys )
 int count = GetSize();
 	keys.SetSize( count );
 	for( int i=0; i < count; i++ )
-		keys[i] = GetAt(i)->GetKey();
+		keys[i] = ElementAt(i)->GetKey();
 }
 
 // caution! this alters hotkeys based upon corresponding indexes
@@ -1124,7 +1093,7 @@ void CHotKeys::SetKeys( ARRAY& keys, bool bSave )
 int count = GetSize();
 	ASSERT( count == keys.GetSize() );
 	for( int i=0; i < count; i++ )
-		GetAt(i)->SetKey( keys[i], bSave );
+		ElementAt(i)->SetKey( keys[i], bSave );
 }
 
 bool CHotKeys::FindFirstConflict( ARRAY& keys, int* pX, int* pY )
@@ -1135,14 +1104,14 @@ int count = keys.GetSize();
 DWORD key;
 	for( i=0; i < count && !bConflict; i++ )
 	{
-		key = keys.GetAt(i);
+		key = keys.ElementAt(i);
 		// only check valid keys
 		if( key == 0 )
 			continue;
 		// scan the array for a duplicate
 		for( j=i+1; j < count; j++ )
 		{
-			if( keys.GetAt(j) == key )
+			if( keys.ElementAt(j) == key )
 			{
 				bConflict = true;
 				break;
@@ -1501,7 +1470,7 @@ void InitToolInfo( TOOLINFO& ti )
 {
 	// INITIALIZE MEMBERS OF THE TOOLINFO STRUCTURE
 	ti.cbSize = sizeof(TOOLINFO);
-	ti.uFlags = TTF_TRACK;
+	ti.uFlags = TTF_ABSOLUTE | TTF_TRACK;
 	ti.hwnd = NULL;
 	ti.hinst = NULL;
 	ti.uId = 0; // CPopup only uses uid 0
@@ -1518,35 +1487,69 @@ void InitToolInfo( TOOLINFO& ti )
 	- technique learned from codeproject "ToolTipZen" by "Zarembo Maxim"
 \*------------------------------------------------------------------*/
 
-// when using this constructor, you must call Init( hWnd ) before using the CPopup.
 CPopup::CPopup()
 {
-	m_bOwnTT = false;
-	m_hTTWnd = NULL;
-	m_bIsShowing = false;
+	Init();
 }
 
-CPopup::CPopup( CPoint& pos, HWND hTTWnd )
+// HWND_TOP
+CPopup::CPopup( int x, int y, HWND hWndPosRelativeTo, HWND hWndInsertAfter )
 {
-	m_Pos = pos;
-	Init(hTTWnd);
+	Init();
+	m_hWndPosRelativeTo = hWndPosRelativeTo;
+	m_hWndInsertAfter = hWndInsertAfter;
+	SetPos( CPoint(x,y) );
 }
 
 CPopup::~CPopup()
 {
+	Hide();
 	if( m_bOwnTT && ::IsWindow(m_hTTWnd) )
 		::DestroyWindow( m_hTTWnd );
 }
 
-void CPopup::Init( HWND hTTWnd, TOOLINFO* pTI )
+void CPopup::Init()
+{
+// initialize variables
+	m_bOwnTT = false;
+	m_hTTWnd = NULL;
+	m_bIsShowing = false;
+	m_bAllowShow = true; // used by AllowShow()
+
+	m_Pos.x = m_Pos.y = 0;
+	m_bTop = true;
+	m_bLeft = true;
+	m_bCenterX = false;
+	m_bCenterY = false;
+	m_hWndPosRelativeTo = NULL;
+
+RECT rcScreen;
+	// Get cordinates of the working area on the screen
+	SystemParametersInfo (SPI_GETWORKAREA, 0, &rcScreen, 0);
+	m_ScreenMaxX = rcScreen.right;
+	m_ScreenMaxY = rcScreen.bottom;
+
+	m_hWndInsertAfter = HWND_TOP; //HWND_TOPMOST
+
+	SetTTWnd();
+}
+
+void CPopup::SetTTWnd( HWND hTTWnd, TOOLINFO* pTI )
 {
 	if( pTI )
 		m_TI = *pTI;
 	else
 		InitToolInfo( m_TI );
 
+	if( m_bOwnTT && ::IsWindow(m_hTTWnd) )
+	{
+		if( !::IsWindow(hTTWnd) )
+			return; // we would have to recreate the one that already exists
+		::DestroyWindow( m_hTTWnd );
+	}
+
 	m_hTTWnd = hTTWnd;
-	if( hTTWnd )
+	if( ::IsWindow(m_hTTWnd) )
 	{
 		m_bOwnTT = false;
 		// if our uid tooltip already exists, get the data, else add it.
@@ -1558,7 +1561,6 @@ void CPopup::Init( HWND hTTWnd, TOOLINFO* pTI )
 		m_bOwnTT = true;
 		CreateToolTip();
 	}
-	m_bIsShowing = false;
 }
 
 void CPopup::CreateToolTip()
@@ -1594,29 +1596,73 @@ void CPopup::SetTimeout( int timeout )
 	::SendMessage(m_hTTWnd, TTM_SETDELAYTIME, TTDT_AUTOMATIC, timeout);
 }
 
-void CPopup::Show( CString text, CPoint& pos )
+void CPopup::SetPos( CPoint& pos )
 {
-	if( m_hTTWnd == NULL )
-		return;
+	m_Pos = pos;
+}
 
-	// deactivate if it is currently activated
-	::SendMessage(m_hTTWnd, TTM_TRACKACTIVATE, false, (LPARAM)(LPTOOLINFO) &m_TI);
+void CPopup::SetPosInfo( bool bTop, bool bCenterY, bool bLeft, bool bCenterX )
+{
+	m_bTop = bTop;
+	m_bCenterY = bCenterY;
+	m_bLeft = bLeft;
+	m_bCenterX = bCenterX;
+}
 
+void CPopup::AdjustPos( CPoint& pos )
+{
+CRect rel(0,0,0,0);
+CRect rect(0,0,0,0);
+
+//	::SendMessage(m_hTTWnd, TTM_ADJUSTRECT, TRUE, (LPARAM)&rect);
+	::GetWindowRect(m_hTTWnd,&rect);
+
+	if( ::IsWindow(m_hWndPosRelativeTo) )
+		::GetWindowRect(m_hWndPosRelativeTo, &rel);
+
+	rect.MoveToXY( rel.left, rel.top );
+
+	rect.OffsetRect( 0, pos.y - (m_bCenterY? rect.Height()/2: (m_bTop? 0: rect.Height())) );
+	if( rect.bottom > m_ScreenMaxY )
+		rect.OffsetRect( 0, m_ScreenMaxY - rect.bottom );
+
+	rect.OffsetRect( pos.x - (m_bCenterX? rect.Width()/2: (m_bLeft? 0: rect.Width())), 0 );
+	if( rect.right > m_ScreenMaxX )
+		rect.OffsetRect( m_ScreenMaxX - rect.right, 0 );
+
+	pos.x = rect.left;
+	pos.y = rect.top;
+}
+
+void CPopup::SendToolTipText( CString text )
+{
 	//Replace the tabs with spaces, the tooltip didn't like the \t s
 	text.Replace("\t", "  ");
-
 	m_TI.lpszText = (LPSTR) (LPCTSTR) text;
 
-	// make sure the tooltip will be on top.
-	::SetWindowPos( m_hTTWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE );
 	// this allows \n and \r to be interpreted correctly
 	::SendMessage(m_hTTWnd, TTM_SETMAXTIPWIDTH, 0, 500);
 	// set the text
 	::SendMessage(m_hTTWnd, TTM_SETTOOLINFO, 0, (LPARAM) (LPTOOLINFO) &m_TI);
-	// set the position
-	::SendMessage(m_hTTWnd, TTM_TRACKPOSITION, 0, (LPARAM)(DWORD) MAKELONG(pos.x, pos.y));
-	// show the tooltip
+}
+
+void CPopup::Show( CString text, CPoint pos, bool bAdjustPos )
+{
+	if( m_hTTWnd == NULL )
+		return;
+
+	if( !m_bIsShowing )
+		::SendMessage(m_hTTWnd, TTM_TRACKPOSITION, 0, (LPARAM)(DWORD) MAKELONG(-10000,-10000));
+
+	SendToolTipText( text );
 	::SendMessage(m_hTTWnd, TTM_TRACKACTIVATE, true, (LPARAM)(LPTOOLINFO) &m_TI);
+	if( bAdjustPos )
+		AdjustPos(pos);
+	// set the position
+	::SendMessage(m_hTTWnd, TTM_TRACKPOSITION, 0, (LPARAM)(DWORD) MAKELONG(pos.x,pos.y));
+
+	// make sure the tooltip will be on top.
+	::SetWindowPos( m_hTTWnd, m_hWndInsertAfter, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE );
 
 	m_bIsShowing = true;
 }
@@ -1624,11 +1670,17 @@ void CPopup::Show( CString text, CPoint& pos )
 void CPopup::Show( CString text )
 { Show( text, m_Pos ); }
 
+void CPopup::AllowShow( CString text )
+{
+	if( m_bAllowShow )
+		Show( text, m_Pos );
+}
+
 void CPopup::Hide()
 {
 	if( m_hTTWnd == NULL )
 		return;
 	// deactivate if it is currently activated
-	::SendMessage(m_hTTWnd, TTM_TRACKACTIVATE, false, (LPARAM)(LPTOOLINFO) &m_TI);
+	::SendMessage(m_hTTWnd, TTM_TRACKACTIVATE, FALSE, (LPARAM)(LPTOOLINFO) &m_TI);
 	m_bIsShowing = false;
 }
