@@ -8,3 +8,4 @@
 		- Auto Delete
 		- Remove Hot key
 	- Fixed bug, when setting the group in the properties screen it was not setting the item to Never Auto Delete
+	- Fixed bug, checking the wrong url for update

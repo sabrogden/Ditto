@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=Ditto
-AppVerName=Ditto 2.1
+AppVerName=Ditto 2.2
 AppPublisher=Scott Brogden
 AppPublisherURL=ditto-cp.sourceforge.net
 AppSupportURL=ditto-cp.sourceforge.net
@@ -20,18 +20,21 @@ Name: RunAtStartup; Description: "Run Ditto on Windows Startup";
 [Files]
 
 ;installed if it is 2000 or greater
-Source: "C:\Documents and Settings\Scott\Desktop\ditto\Release\Ditto.exe"; DestDir: "{app}"; MinVersion: 0, 1; DestName: "Ditto.exe"
+Source: "C:\Documents and Settings\Scott\Desktop\ditto\Release\Ditto.exe"; DestDir: "{app}"; MinVersion: 0, 1; DestName: "Ditto.exe"; Flags: ignoreversion
 
 ;installed if it is 95, 98, me
-Source: "C:\Documents and Settings\Scott\Desktop\ditto\Release\Ditto98.exe"; DestDir: "{app}"; MinVersion: 1, 0; DestName: "Ditto.exe"
+Source: "C:\Documents and Settings\Scott\Desktop\ditto\Release\Ditto98.exe"; DestDir: "{app}"; MinVersion: 1, 0; DestName: "Ditto.exe"; Flags: ignoreversion
 
 Source: "C:\Documents and Settings\Scott\Desktop\ditto\res\Ditto.ico"; DestDir: "{app}"
+Source: "C:\Documents and Settings\Scott\Desktop\ditto\DittoSetup\Output\Changes.txt"; DestDir: "{app}"
 
 [Icons]
 Name: "{group}\Ditto"; Filename: "{app}\Ditto.exe"; IconFilename: "{app}\Ditto.ico"
 
 [Run]
 Filename: "{app}\Ditto.exe"; Description: "Launch Ditto"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\Changes.txt"; Description: "View Change History"; Flags: nowait postinstall skipifsilent shellexec
+
 
 [Registry]
 Root: HKCU; Subkey: "Software\Ditto"; Flags: uninsdeletekey
