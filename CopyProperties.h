@@ -65,6 +65,7 @@ public:
 	CEdit m_ParseEdit;
 	CButton m_ParseButton;
 	afx_msg void OnBnClickedParseButton();
+	CEdit m_DisplayTextEdit;
 };
 
 //{{AFX_INSERT_LOCATION}}

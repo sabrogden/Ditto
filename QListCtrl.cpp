@@ -1,4 +1,4 @@
- // QListCtrl.cpp : implementation file
+// QListCtrl.cpp : implementation file
 //
 
 #include "stdafx.h"
@@ -45,6 +45,7 @@ CQListCtrl::CQListCtrl()
 	m_SmallFont = CreateFontIndirect(&lf);
 
 	m_bShowTextForFirstTenHotKeys = true;
+	m_bStartTop = true;
 //	m_Accelerator = NULL; //!!!!!
 }
 
@@ -57,6 +58,42 @@ CQListCtrl::~CQListCtrl()
 		delete m_pwchTip;
 
 	DestroyAndCreateAccelerator(FALSE);
+}
+
+// returns the position 1-10 if the index is in the FirstTen block else -1
+int CQListCtrl::GetFirstTenNum( int index )
+{
+// set firstTenNum to the first ten number (1-10) corresponding to the given index
+int firstTenNum = -1; // -1 means that nItem is not in the FirstTen block.
+int count = GetItemCount();
+
+	if( m_bStartTop )
+	{
+		if( 0 <= index && index <= 9 )
+			firstTenNum = index + 1;
+	}
+	else // we are starting at the bottom and going up
+	{
+	int idxStartFirstTen = count-10; // start of the FirstTen block
+		// if index is within the FirstTen block
+		if( idxStartFirstTen <= index && index < count )
+			firstTenNum = count - index;
+	}
+	return firstTenNum;
+}
+
+// returns the list index corresponding to the given FirstTen position number.
+// (ret < 0) means that "num" is not in the FirstTen block
+int CQListCtrl::GetFirstTenIndex( int num )
+{
+	if( num <= 0 || num > 10 )
+		return -1;
+
+	if( m_bStartTop )
+		return num-1;
+	// else we are starting at the bottom and going up
+int count = GetItemCount();
+	return count - num;
 }
 
 
@@ -73,6 +110,7 @@ BEGIN_MESSAGE_MAP(CQListCtrl, CListCtrl)
 	//}}AFX_MSG_MAP
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
+	ON_WM_KILLFOCUS()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -214,7 +252,20 @@ BOOL CQListCtrl::SetCaret(int nRow, BOOL bFocus)
 
 long CQListCtrl::GetCaret()
 {
-	return GetNextItem(0, LVNI_FOCUSED);
+	return GetNextItem(-1, LVNI_FOCUSED);
+}
+
+// moves the caret to the given index, selects it, and ensures it is visible.
+BOOL CQListCtrl::SetListPos( int index )
+{
+	if( index < 0 || index >= GetItemCount() )
+		return FALSE;
+
+	RemoveAllSelection();
+	SetCaret(index);
+	SetSelection(index);
+	EnsureVisible(index,FALSE);
+	return TRUE;
 }
 
 BOOL CQListCtrl::SetFormattedText(int nRow, int nCol, LPCTSTR lpszFormat,...)
@@ -329,11 +380,15 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		
         // Draw the text.
         CString csText = GetItemText(nItem, 0);
-	
-		if(m_bShowTextForFirstTenHotKeys)
+
+		// set firstTenNum to the first ten number (1-10) corresponding to
+		//  the current nItem.
+		// -1 means that nItem is not in the FirstTen block.
+		int firstTenNum = GetFirstTenNum(nItem);
+
+		if( m_bShowTextForFirstTenHotKeys && firstTenNum > 0 )
 		{
-			if(nItem < 10)
-				rcText.left += 12;
+			rcText.left += 12;
 		}
 
 		pDC->DrawText(csText, rcText, DT_VCENTER | DT_EXPANDTABS);
@@ -342,13 +397,13 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
         if(bListHasFocus && (rItem.state & LVIS_FOCUSED))
 			pDC->DrawFocusRect(rcItem);
 
-		if((nItem < 10) && (m_bShowTextForFirstTenHotKeys))
+		if( m_bShowTextForFirstTenHotKeys && firstTenNum > 0 )
 		{
 			CString cs;
-			if(nItem == 9)
-				cs.Format("%d", 0);
+			if( firstTenNum == 10 )
+				cs = "0";
 			else
-				cs.Format("%d", nItem+1);
+				cs.Format("%d", firstTenNum);
 
 			CRect crClient;
 			
@@ -424,8 +479,8 @@ BOOL CQListCtrl::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 	// Like use its file size, etc.
 	strTipText = GetToolTipText(nID-1);
 
-	//Replace the tabs with 5 spaces, the tooltip didn't like the \t s
-	strTipText.Replace("\t", "     ");
+	//Replace the tabs with spaces, the tooltip didn't like the \t s
+	strTipText.Replace("\t", "  ");
 
 #ifndef _UNICODE
 	if (pNMHDR->code == TTN_NEEDTEXTA)
@@ -511,6 +566,10 @@ int CQListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	
 	EnableToolTips();
 
+	m_Popup.Init();
+//	m_Popup.Init( GetToolTips()->m_hWnd );
+//	m_Popup.m_TI.hwnd = m_hWnd;
+    
 	return 0;
 }
 
@@ -530,12 +589,14 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 	*/
 
 	CAccel* pAccel = m_Accels.OnMsg( pMsg );
-	if( pAccel )
-		GetParent()->SendMessage(NM_SELECT_DB_ID, pAccel->Cmd, 0);
+	if( pAccel && GetParent()->SendMessage(NM_SELECT_DB_ID, pAccel->Cmd, 0) )
+		return TRUE;
 
 	switch(pMsg->message) 
 	{
 	case WM_KEYDOWN:
+		m_Popup.Hide(); // hide the manual tooltip on any keypress
+
 		WPARAM vk = pMsg->wParam;
 		// if a number key was pressed
 		if( '0' <= vk && vk <= '9' )
@@ -548,7 +609,8 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 			// '0' is actually 10 in the ditto window
 			if( index == 0 )
 				index = 10;
-			index--; // 0 based index
+			// translate num 1-10 into the actual index (based upon m_bStartTop)
+			index = GetFirstTenIndex( index );
 			GetParent()->SendMessage(NM_SELECT_INDEX, index, 0);
 			return TRUE;
 		}
@@ -566,6 +628,13 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 				return TRUE;
 			}
 			break;
+
+		case VK_F3:
+			int nItem = GetCaret();
+				GetItemPosition( nItem, &m_Popup.m_Pos );
+				ClientToScreen( &m_Popup.m_Pos );
+//				GetClientRect( &m_Popup.m_TI.rect ); // put tooltip to the left of the item
+				m_Popup.Show( GetToolTipText(nItem) );
 		} // end switch(vk)
 
 		break; // end case WM_KEYDOWN
@@ -670,3 +739,9 @@ void CQListCtrl::DestroyAndCreateAccelerator(BOOL bCreate)
 //	return CListCtrl::OnCommand(wParam, lParam);
 //}
 */
+
+void CQListCtrl::OnKillFocus(CWnd* pNewWnd)
+{
+	CListCtrl::OnKillFocus(pNewWnd);
+	m_Popup.Hide();
+}

@@ -45,6 +45,7 @@ void CCopyProperties::DoDataExchange(CDataExchange* pDX)
 	//}}AFX_DATA_MAP
 	DDX_Control(pDX, IDC_PARSE_EDIT, m_ParseEdit);
 	DDX_Control(pDX, IDC_PARSE_BUTTON, m_ParseButton);
+	DDX_Control(pDX, IDC_EDIT_DISPLAY_TEXT, m_DisplayTextEdit);
 }
 
 
@@ -105,11 +106,14 @@ BOOL CCopyProperties::OnInitDialog()
 
 	UpdateData(FALSE);
 
-
 	SetWindowPos(&CWnd::wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
 
-	m_HotKey.SetFocus();
-	
+	// if this is a result of a NamedCopy, focus on the hotkey
+	if( theApp.m_bShowCopyProperties )
+		m_HotKey.SetFocus();
+	else
+		m_DisplayTextEdit.SetFocus();
+
 	return FALSE;
 }
 
@@ -264,17 +268,26 @@ void CCopyProperties::OnCancel()
 
 void CCopyProperties::OnBnClickedParseButton()
 {
-CString sep;
-	m_ParseEdit.GetWindowText(sep);
-	sep = RemoveEscapes( sep );
+//RECT rcScreen;
+//	SystemParametersInfo (SPI_GETWORKAREA, 0, &rcScreen, 0);
+CPoint pos(0,0);
+	ClientToScreen(&pos);
+CPopup status( pos );
+	status.Show("Parsing...");
 
-int nSep = sep.GetLength();
-	if( nSep <= 0 )
+CString delims;
+	m_ParseEdit.GetWindowText(delims);
+	delims = RemoveEscapes( delims );
+
+	// validate delimiters
+int nDelims = delims.GetLength();
+	if( nDelims <= 0 )
 	{
-		::MessageBox( m_hWnd, "Token Separator is not valid.", "Parse Failure", MB_OK|MB_ICONINFORMATION );
+		::MessageBox( m_hWnd, "Token Delimiters are not valid.", "Parse Failure", MB_OK|MB_ICONINFORMATION );
 		return;
 	}
 
+	// load the text
 HGLOBAL hGlobal = CClip::LoadFormat( m_lCopyID, CF_TEXT );
 	if( !hGlobal )
 	{
@@ -282,10 +295,11 @@ HGLOBAL hGlobal = CClip::LoadFormat( m_lCopyID, CF_TEXT );
 		return;
 	}
 
+	// copy the text from the global into a string
 int nDataSize = ::GlobalSize( hGlobal );
 char* pData = (char*) ::GlobalLock( hGlobal );
+
 char* pDataEnd = pData + nDataSize;
-int nDataLen = 0;
 char* p = pData;
 	ASSERT( pData != NULL && nDataSize > 0 );
 	// Find the terminating NULL
@@ -296,38 +310,32 @@ char* p = pData;
 		ASSERT(0);
 		return;
 	}
-	// set pDataEnd to the terminating NULL
-	pDataEnd = p;
-	
-CStringArray tokens;
-char* pToken = pData;
-	p = pData;
-	while( p = strstr( pToken, sep ) )
-	{
-		// null out the separator string
-		for( int i=0; i < nSep; i++, p++ ) { *p = '\0'; }
-		// add the substring token
-		tokens.Add( pToken );
-		pToken = p; // start the next token after the separator
-	}
-
-	// if we found at least one occurrence of sep, then get the last token
-	if( tokens.GetCount() > 0 )
-		tokens.Add( pToken );
-
+	// copy the data into a string
+CString text = pData;
+	// free the global
 	::GlobalUnlock( hGlobal );
 	::GlobalFree(hGlobal);
 
+	// tokenize the text
+CString token;
+CStringArray tokens;
+CTokenizer tokenizer(text,delims);
+	while( tokenizer.Next( token ) )
+	{
+		tokens.Add( token );
+	}
+
+	// save the tokens to the db
 CClip clip;
 int len;
 long lDate = (long) CTime::GetCurrentTime().GetTime();
 int count = tokens.GetCount();
-	// add in reverse order so that right to left corresponds to top to bottom
-	//  in the Ditto window (ditto sorts by time).
-	for( int i = count - 1; i >= 0; i-- )
+
+	for( int i = 0; i < count; i++ )
 	{
-		theApp.SetStatus( StrF("%d",i+1) );
+		status.Show( StrF("Saving Token %d out of %d", i+1, count) );
 		len = tokens[i].GetLength();
+		// ignore 0 length tokens
 		if( len <= 0 )
 			continue;
 		clip.AddFormat( CF_TEXT, (void*) (LPCTSTR) tokens[i], len+1 );
@@ -336,7 +344,6 @@ int count = tokens.GetCount();
 		clip.Clear();
 		lDate++; // make sure they are sequential
 	}
-	theApp.SetStatus();
 
 	if( count <= 0 )
 		::MessageBox( m_hWnd, "No new tokens found by parsing", "Parse Failed", MB_OK|MB_ICONINFORMATION );

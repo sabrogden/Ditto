@@ -1,7 +1,34 @@
+03 Sept 10
+----------
++ HistoryStartTop - History can be shown top-down or bottom-up
+  + CGetSetOptions::m_bHistoryStartTop, SetHistoryStartTop, GetHistoryStartTop
+  + BOOL CQPasteWnd::m_bAscending - sort ascending (true) or descending (false)
+  * OptionsQuickPaste - added checkbox
+  * CQListCtrl::
+    + BOOL m_bStartTop - start at the top (true) or the bottom (false)
+    + BOOL SetListPos( int index ) - moves cursor to a single index position
+    + int GetFirstTenNum( int index ) - convert index to number
+    + int GetFirstTenIndex( int num ) - convert number to index
+    * OnCustomdrawList() - draws FirstTen block top or bottom
+    * PreTranslateMessage() - handles FirstTen block (1-9,0) accelerators
+    
++ CPopup - Manually display tooltips (Misc.h/.cpp)
+
++ View Full Description by pressing F3 using CPopup
+  CQListCtrl::
+    + CPopup m_Popup
+    + OnKillFocus - removes Popup
+    * PreTranslateMessage - handles F3 key
+
+* CopyProperties
+  + CTokenizer (ASCII only) (Misc.h/.cpp)
+  * Multiple delimiter characters are used rather than a single separator string.
+  * Defaults to Focus on Description when not a NamedCopy
+  * Uses CPopup for status
+
+
 03 Sept 8
 ---------
-* Moved SendPaste to CCP_Main to implicitly use Target
-
 + static bool CDataTable::DeleteParent( long lParentID )
   . Deletes all records in Data Table with the given "lParentID"
   
@@ -17,6 +44,8 @@
   + Misc.h/.cpp: CAccel and CAccels
   ! fixes bug "can't use accelerators with clip IDs > 65535 (USHRT_MAX)"
     . this was due to win32 ACCEL only capable of handling a WORD cmd
+
+* Moved SendPaste to CCP_Main to implicitly use Target
 
 
 03 Sept 5
@@ -55,6 +84,15 @@
 
 03 Sept 2
 ---------
++ ShowPersistent: always-on-top "persistent show"
+  . Toggled by double clicking the titlebar or <Ctrl>-<Space>
+  + theApp.ShowPersistent( bool bVal )
+  * required modification of Target window tracking system.
+
++ Misc.h/.cpp
+  + Utility functions (HGLOBAL funcs, IsAppWnd, StrF)
+  + Debug functions (Log, SetThreadName)
+
 * ProcessCopy - redesigned to fix the fast copy bugs.
   . The same source object is used for the description as is stored in the db.
   . Actual copying from the clipboard is (usually) not interrupted.
@@ -79,11 +117,6 @@
   + void OnCopyCompleted( long lLastID, int count = 1 );
   + void OnPasteCompleted();
   + void SetStatus(char*) // for displaying status in the titlebar.
-
-+ ShowPersistent: always-on-top "persistent show"
-  . Toggled by double clicking the titlebar or <Ctrl>-<Space>
-  + theApp.ShowPersistent( bool bVal )
-  * required modification of Target window tracking system.
 
 * Targeting the previous focus window
   + CCP_MainApp::
@@ -135,10 +168,6 @@
     . Create in CCP_MainApp::AfterMainCreate()
     . Handle in CMainFrame::OnHotKey()
     . Control user input in OptionsKeyBoard.
-
-+ Misc.h/.cpp
-  + Utility functions (HGLOBAL funcs, IsAppWnd, StrF)
-  + Debug functions (Log, SetThreadName)
 
 
 03 Aug 8

@@ -56,6 +56,8 @@
 #define IDC_BUTTON1                     1040
 #define IDC_PARSE_BUTTON                1040
 #define IDC_PARSE_EDIT                  1041
+#define IDC_CHECK1                      1042
+#define IDC_HISTORY_START_TOP           1042
 #define IDD_OPTIONS_KEYSTROKES          2001
 #define IDC_HOTKEY                      2002
 #define IDC_DISPLAY_IN_SYSTEMTRAY       2003
@@ -112,7 +114,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        138
 #define _APS_NEXT_COMMAND_VALUE         32780
-#define _APS_NEXT_CONTROL_VALUE         1042
+#define _APS_NEXT_CONTROL_VALUE         1043
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

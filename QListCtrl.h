@@ -57,6 +57,17 @@ public:
 public:
 	virtual ~CQListCtrl();
 
+	CPopup	m_Popup;
+
+	// The "FirstTen" block is either at the top or the bottom
+	//  of the list based upon m_bStartTop.
+	BOOL	m_bShowTextForFirstTenHotKeys;
+	BOOL	m_bStartTop;
+	// returns the position 1-10 if the index is in the FirstTen block else -1
+	int GetFirstTenNum( int index );
+	// returns the list index corresponding to the given FirstTen position number.
+	int GetFirstTenIndex( int num );
+
 	void SetNumberOfLinesPerRow(int nLines);
 	void GetSelectionIndexes(ARRAY &arr);
 	void GetSelectionItemData(ARRAY &arr);
@@ -67,6 +78,9 @@ public:
 	BOOL SetFormattedText(int nRow, int nCol, LPCTSTR lpszFormat,...);
 	BOOL SetCaret(int nRow, BOOL bFocus = TRUE);
 	long GetCaret();
+	// moves the caret to the given index, selects it, and ensures it is visible.
+	BOOL SetListPos( int index );
+
 	DWORD GetItemData(int nItem);
 	CString GetToolTipText(int nItem);
 
@@ -82,7 +96,6 @@ protected:
 	TCHAR *m_pchTip;
 
 	HFONT m_SmallFont;
-	BOOL  m_bShowTextForFirstTenHotKeys;
 
 	//Accelerator
 	CAccels	m_Accels;
@@ -103,6 +116,8 @@ protected:
 	//}}AFX_MSG
 	afx_msg BOOL OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult );
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnKillFocus(CWnd* pNewWnd);
 };
 
 /////////////////////////////////////////////////////////////////////////////

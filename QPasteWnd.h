@@ -58,6 +58,7 @@ public:
 	CButton			m_btCancel;
 	bool			m_bHideWnd;
 	CMainTable		m_Recset;
+	bool			m_bAscending;
 
 	CString			m_Title;
 
@@ -69,6 +70,9 @@ public:
 	void MoveControls();
 
 	void DeleteSelectedRows();
+
+	CString LoadDescription( int nItem );
+	bool SaveDescription( int nItem, CString text );
 
 	//Menu Items
 	void SetLinesPerRow(long lLines);

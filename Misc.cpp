@@ -438,6 +438,7 @@ BOOL CGetSetOptions::m_bAllowDuplicates;
 BOOL CGetSetOptions::m_bUpdateTimeOnPaste;
 BOOL CGetSetOptions::m_bSaveMultiPaste;
 BOOL CGetSetOptions::m_bShowPersistent;
+BOOL CGetSetOptions::m_bHistoryStartTop;
 
 CGetSetOptions g_Opt;
 
@@ -448,6 +449,7 @@ CGetSetOptions::CGetSetOptions()
 	m_bUpdateTimeOnPaste = GetUpdateTimeOnPaste();
 	m_bSaveMultiPaste = GetSaveMultiPaste();
 	m_bShowPersistent = GetShowPersistent();
+	m_bHistoryStartTop = GetHistoryStartTop();
 }
 
 CGetSetOptions::~CGetSetOptions()
@@ -884,6 +886,9 @@ BOOL CGetSetOptions::GetSaveMultiPaste()			{	return GetProfileLong("SaveMultiPas
 
 void CGetSetOptions::SetShowPersistent(BOOL bVal)	{	SetProfileLong("ShowPersistent", bVal); m_bShowPersistent = bVal; }
 BOOL CGetSetOptions::GetShowPersistent()			{	return GetProfileLong("ShowPersistent", 0); }
+
+void CGetSetOptions::SetHistoryStartTop(BOOL bVal)	{	SetProfileLong("HistoryStartTop", bVal); m_bHistoryStartTop = bVal; }
+BOOL CGetSetOptions::GetHistoryStartTop()			{	return GetProfileLong("HistoryStartTop", 0); }
 
 void CGetSetOptions::SetShowTextForFirstTenHotKeys(BOOL bVal)	{	SetProfileLong("ShowTextForFirstTenHotKeys", bVal);			}
 BOOL CGetSetOptions::GetShowTextForFirstTenHotKeys()			{	return GetProfileLong("ShowTextForFirstTenHotKeys", TRUE);	}
@@ -1482,4 +1487,198 @@ BYTE m=0;
 	if( GetKeyState(VK_MENU) & 0x8000 )
 		m |= HOTKEYF_ALT;
 	return m;
+}
+
+/*------------------------------------------------------------------*\
+	CTokenizer - Tokenizes a string using given delimiters
+\*------------------------------------------------------------------*/
+
+CTokenizer::CTokenizer(const CString& cs, const CString& csDelim):
+	m_cs(cs),
+	m_nCurPos(0)
+{
+	SetDelimiters(csDelim);
+}
+
+void CTokenizer::SetDelimiters(const CString& csDelim)
+{
+	for(int i = 0; i < csDelim.GetLength(); ++i)
+		m_delim.set(static_cast<BYTE>(csDelim[i]));
+}
+
+bool CTokenizer::Next(CString& cs)
+{
+int len = m_cs.GetLength();
+
+	cs.Empty();
+
+	while(m_nCurPos < len && m_delim[static_cast<BYTE>(m_cs[m_nCurPos])])
+		++m_nCurPos;
+
+	if(m_nCurPos >= len)
+		return false;
+
+	int nStartPos = m_nCurPos;
+	while(m_nCurPos < len && !m_delim[static_cast<BYTE>(m_cs[m_nCurPos])])
+		++m_nCurPos;
+	
+	cs = m_cs.Mid(nStartPos, m_nCurPos - nStartPos);
+
+	return true;
+}
+
+CString	CTokenizer::Tail() const
+{
+int len = m_cs.GetLength();
+int nCurPos = m_nCurPos;
+
+	while(nCurPos < len && m_delim[static_cast<BYTE>(m_cs[nCurPos])])
+		++nCurPos;
+
+CString csResult;
+	if(nCurPos < len)
+		csResult = m_cs.Mid(nCurPos);
+
+	return csResult;
+}
+
+
+/*------------------------------------------------------------------*\
+	Global ToolTip Manual Control Functions
+\*------------------------------------------------------------------*/
+
+void InitToolInfo( TOOLINFO& ti )
+{
+	// INITIALIZE MEMBERS OF THE TOOLINFO STRUCTURE
+	ti.cbSize = sizeof(TOOLINFO);
+	ti.uFlags = TTF_TRACK;
+	ti.hwnd = NULL;
+	ti.hinst = NULL;
+	ti.uId = 0; // CPopup only uses uid 0
+	ti.lpszText = NULL;
+    // ToolTip control will cover the whole window
+	ti.rect.left = 0;
+	ti.rect.top = 0;
+	ti.rect.right = 0;
+	ti.rect.bottom = 0;
+}
+
+/*------------------------------------------------------------------*\
+	CPopup - a tooltip that pops up manually (when Show is called).
+	- technique learned from codeproject "ToolTipZen" by "Zarembo Maxim"
+\*------------------------------------------------------------------*/
+
+// when using this constructor, you must call Init( hWnd ) before using the CPopup.
+CPopup::CPopup()
+{
+	m_bOwnTT = false;
+	m_hTTWnd = NULL;
+	m_bIsShowing = false;
+}
+
+CPopup::CPopup( CPoint& pos, HWND hTTWnd )
+{
+	m_Pos = pos;
+	Init(hTTWnd);
+}
+
+CPopup::~CPopup()
+{
+	if( m_bOwnTT && ::IsWindow(m_hTTWnd) )
+		::DestroyWindow( m_hTTWnd );
+}
+
+void CPopup::Init( HWND hTTWnd, TOOLINFO* pTI )
+{
+	if( pTI )
+		m_TI = *pTI;
+	else
+		InitToolInfo( m_TI );
+
+	m_hTTWnd = hTTWnd;
+	if( hTTWnd )
+	{
+		m_bOwnTT = false;
+		// if our uid tooltip already exists, get the data, else add it.
+		if( ! ::SendMessage(m_hTTWnd, TTM_GETTOOLINFO, 0, (LPARAM)(LPTOOLINFO) &m_TI) )
+			::SendMessage(m_hTTWnd, TTM_ADDTOOL, 0, (LPARAM) (LPTOOLINFO) &m_TI);
+	}
+	else
+	{
+		m_bOwnTT = true;
+		CreateToolTip();
+	}
+	m_bIsShowing = false;
+}
+
+void CPopup::CreateToolTip()
+{
+	if( m_hTTWnd != NULL )
+		return;
+
+	// CREATE A TOOLTIP WINDOW
+	m_hTTWnd = CreateWindowEx(
+		WS_EX_TOPMOST,
+		TOOLTIPS_CLASS,
+		NULL,
+		TTS_NOPREFIX | TTS_ALWAYSTIP,		
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		NULL,
+		NULL,
+		NULL,
+		NULL
+		);
+	m_bOwnTT = true;
+
+	// SEND AN ADDTOOL MESSAGE TO THE TOOLTIP CONTROL WINDOW
+	::SendMessage(m_hTTWnd, TTM_ADDTOOL, 0, (LPARAM) (LPTOOLINFO) &m_TI);
+}
+
+void CPopup::SetTimeout( int timeout )
+{
+	if( m_hTTWnd == NULL )
+		return;
+	::SendMessage(m_hTTWnd, TTM_SETDELAYTIME, TTDT_AUTOMATIC, timeout);
+}
+
+void CPopup::Show( CString text, CPoint& pos )
+{
+	if( m_hTTWnd == NULL )
+		return;
+
+	// deactivate if it is currently activated
+	::SendMessage(m_hTTWnd, TTM_TRACKACTIVATE, false, (LPARAM)(LPTOOLINFO) &m_TI);
+
+	//Replace the tabs with spaces, the tooltip didn't like the \t s
+	text.Replace("\t", "  ");
+
+	m_TI.lpszText = (LPSTR) (LPCTSTR) text;
+
+	// make sure the tooltip will be on top.
+	::SetWindowPos( m_hTTWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE );
+	// this allows \n and \r to be interpreted correctly
+	::SendMessage(m_hTTWnd, TTM_SETMAXTIPWIDTH, 0, 500);
+	// set the text
+	::SendMessage(m_hTTWnd, TTM_SETTOOLINFO, 0, (LPARAM) (LPTOOLINFO) &m_TI);
+	// set the position
+	::SendMessage(m_hTTWnd, TTM_TRACKPOSITION, 0, (LPARAM)(DWORD) MAKELONG(pos.x, pos.y));
+	// show the tooltip
+	::SendMessage(m_hTTWnd, TTM_TRACKACTIVATE, true, (LPARAM)(LPTOOLINFO) &m_TI);
+
+	m_bIsShowing = true;
+}
+
+void CPopup::Show( CString text )
+{ Show( text, m_Pos ); }
+
+void CPopup::Hide()
+{
+	if( m_hTTWnd == NULL )
+		return;
+	// deactivate if it is currently activated
+	::SendMessage(m_hTTWnd, TTM_TRACKACTIVATE, false, (LPARAM)(LPTOOLINFO) &m_TI);
+	m_bIsShowing = false;
 }

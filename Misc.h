@@ -203,6 +203,10 @@ public:
 	static void		SetShowPersistent(BOOL bVal);
 	static BOOL		GetShowPersistent();
 
+	static BOOL	m_bHistoryStartTop;
+	static void		SetHistoryStartTop(BOOL bVal);
+	static BOOL		GetHistoryStartTop();
+
 	static void		SetShowTextForFirstTenHotKeys(BOOL bVal);
 	static BOOL		GetShowTextForFirstTenHotKeys();
 
@@ -340,5 +344,70 @@ public:
 // returns a BYTE representing the current GetKeyState modifiers:
 //  HOTKEYF_SHIFT, HOTKEYF_CONTROL, HOTKEYF_ALT
 BYTE GetKeyStateModifiers();
+
+/*------------------------------------------------------------------*\
+	CTokenizer - Tokenizes a string using given delimiters
+\*------------------------------------------------------------------*/
+// Based upon:
+// Date:        Monday, October 22, 2001
+// Autor:       Eduardo Velasquez
+// Description: Tokenizer class for CStrings. Works like strtok.
+///////////////
+
+#if !defined(_BITSET_)
+#	include <bitset>
+#endif // !defined(_BITSET_)
+
+class CTokenizer
+{
+public:
+	CString m_cs;
+	std::bitset<256> m_delim;
+	int m_nCurPos;
+
+	CTokenizer(const CString& cs, const CString& csDelim);
+	void SetDelimiters(const CString& csDelim);
+
+	bool Next(CString& cs);
+	CString	Tail() const;
+};
+
+
+/*------------------------------------------------------------------*\
+	Global ToolTip Manual Control Functions
+\*------------------------------------------------------------------*/
+
+void InitToolInfo( TOOLINFO& ti ); // initializes toolinfo with uid 0
+
+/*------------------------------------------------------------------*\
+	CPopup - a tooltip that pops up manually (when Show is called).
+	- technique learned from codeproject "ToolTipZen" by "Zarembo Maxim"
+\*------------------------------------------------------------------*/
+
+class CPopup
+{
+public:
+	bool m_bOwnTT;
+
+	HWND m_hTTWnd; // handle to the ToolTip control
+	TOOLINFO m_TI; // struct specifying info about tool in ToolTip control
+
+	bool m_bIsShowing;
+	CPoint m_Pos;
+
+	CPopup();
+	CPopup( CPoint& pos, HWND hTTWnd = NULL );
+	~CPopup();
+
+	void Init( HWND hTTWnd = NULL, TOOLINFO* pTI = NULL );
+	void CreateToolTip();
+
+	void SetTimeout( int timeout );
+
+	void Show( CString text, CPoint& pos );
+	void Show( CString text );
+	void Hide();
+};
+
 
 #endif // !defined(AFX_CP_GUI_GLOBALS__FBCDED09_A6F2_47EB_873F_50A746EBC86B__INCLUDED_)

@@ -7,6 +7,7 @@
 // OptionsQuickPaste.h : header file
 #include "NumberEdit.h"
 #include "OptionsSheet.h"
+#include "afxwin.h"
 //
 
 /////////////////////////////////////////////////////////////////////////////
@@ -29,6 +30,7 @@ public:
 	CNumberEdit	m_eTransparencyPercent;
 	CButton	m_btEnableTransparency;
 	CButton	m_btUseCtrlNum;
+	CButton m_btHistoryStartTop;
 	//}}AFX_DATA
 
 
@@ -52,6 +54,7 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
+public:
 };
 
 //{{AFX_INSERT_LOCATION}}

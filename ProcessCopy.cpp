@@ -379,7 +379,7 @@ bool CClip::FindDuplicate( CMainTable& recset, BOOL bCheckLastOnly )
 int CClip::CompareFormatDataTo( long lID )
 {
 int nRet = 0;
-int nRecs, nFormats;
+int nRecs=0, nFormats=0;
 CClipFormat* pFormat = NULL;
 	try
 	{
@@ -387,12 +387,15 @@ CClipFormat* pFormat = NULL;
 
 		recset.Open("SELECT * FROM Data WHERE lParentID = %d", lID);
 
-		// Verify the same number of saved types
-		recset.MoveLast();
-		nRecs = recset.GetRecordCount();
+		if( !recset.IsBOF() && !recset.IsEOF() )
+		{
+			// Verify the same number of saved types
+			recset.MoveLast();
+			nRecs = recset.GetRecordCount();
+		}
 		nFormats = m_Formats.GetCount();
 		nRet = nFormats - nRecs;
-		if( nRet != 0 )
+		if( nRet != 0 || nRecs == 0 )
 		{	recset.Close();	return nRet; }
 
 		// For each format type in the db

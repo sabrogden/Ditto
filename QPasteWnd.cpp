@@ -31,7 +31,7 @@ CQPasteWnd::CQPasteWnd()
 {	
 	m_Title = QPASTE_TITLE;
 	m_bHideWnd = true;
-	m_Recset.m_strSort = "lDate DESC";
+	m_bAscending = false;
 }
 
 CQPasteWnd::~CQPasteWnd()
@@ -424,6 +424,15 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 //	if(m_Recset.IsOpen())
 //		m_Recset.Close();
 
+	// currently, we only have a History Group, so assign it directly.
+	m_lstHeader.m_bStartTop = g_Opt.m_bHistoryStartTop;
+	m_bAscending = !g_Opt.m_bHistoryStartTop;
+
+	if( m_bAscending )
+		m_Recset.m_strSort = "lDate ASC";
+	else
+		m_Recset.m_strSort = "lDate DESC";
+
 	m_lstHeader.DeleteAllItems();
 
 	CRect crRect;
@@ -468,8 +477,18 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 		e->Delete();
 	}
 
-	m_lstHeader.SetSelection(0);
-	m_lstHeader.SetCaret(0);
+	// set the caret based upon which end we're starting from
+	if( m_lstHeader.m_bStartTop )
+	{
+		m_lstHeader.SetListPos( 0 );
+	}
+	else
+	{
+	int idx = m_lstHeader.GetItemCount() - 1;
+		// if there are elements
+		if( idx >= 0 )
+			m_lstHeader.SetListPos( idx );
+	}
 
 //	m_lstHeader.Invalidate();
 	RedrawWindow(0,0,RDW_INVALIDATE);
@@ -737,7 +756,7 @@ void CQPasteWnd::OnMenuProperties()
 	if(nDo == IDOK || nDo == IDCANCEL)
 	{
 		m_lstHeader.SetFocus();
-		m_lstHeader.SetCaret(nRow);
+		m_lstHeader.SetListPos(nRow);
 	}
 }
 
@@ -814,15 +833,44 @@ void CQPasteWnd::DeleteSelectedRows()
 		if( nFirstSel >= lCount )
 			nFirstSel = lCount - 1;
 
-		m_lstHeader.SetSelection(nFirstSel);
-		m_lstHeader.SetCaret(nFirstSel);
-		m_lstHeader.EnsureVisible(nFirstSel,FALSE);
+		m_lstHeader.SetListPos(nFirstSel);
 	}
 
 	m_lstHeader.RefreshVisibleRows();
 }
 
+CString CQPasteWnd::LoadDescription( int nItem )
+{
+	if( nItem < 0 || nItem >= m_lstHeader.GetItemCount() )
+		return "";
 
+CString cs;
+	try
+	{
+		m_Recset.SetAbsolutePosition( nItem );
+		cs = m_Recset.m_strText;
+	}
+	CATCHDAO
+
+	return cs;
+}
+
+bool CQPasteWnd::SaveDescription( int nItem, CString text )
+{
+	if( nItem < 0 || nItem >= m_lstHeader.GetItemCount() )
+		return false;
+
+	try
+	{
+		m_Recset.SetAbsolutePosition( nItem );
+		m_Recset.Edit();
+		m_Recset.m_strText = text;
+		m_Recset.Update();
+	}
+	CATCHDAO
+
+	return true;
+}
 
 BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg) 
 {
@@ -861,6 +909,7 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 			}
 			return TRUE;
 		}
+
 		case 'A': // Ctrl-A = Select All
 			if(GetKeyState(VK_CONTROL) & 0x8000)
 			{
@@ -872,6 +921,7 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 				return TRUE;
 			}
 			break;
+
 		} // end switch( pMsg->wParam )
 
 		break; // end case WM_KEYDOWN 
@@ -994,13 +1044,19 @@ void CQPasteWnd::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 void CQPasteWnd::OnGetToolTipText(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	CQListToolTipText* pInfo = (CQListToolTipText*)pNMHDR;
-	if(!pInfo)
+	if( !pInfo )
 		return;
+
+	if( pInfo->lItem < 0 )
+	{
+		strcpy(pInfo->cText, "no item selected");
+		return;
+	}
 
 	try
 	{
 		CString cs;
-		
+	
 		m_Recset.SetAbsolutePosition(pInfo->lItem);
 
 		cs = m_Recset.m_strText;
