@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
+// Microsoft Developer Studio generated include file.
 // Used by CP_Main.rc
 //
 #define IDD_ABOUTBOX                    100
@@ -41,10 +41,13 @@
 #define IDC_LIST1                       1014
 #define IDC_ADD                         1015
 #define IDC_CHECK_SEND_ALL              1015
+#define IDC_CLIPS_SENT                  1015
 #define IDC_DELETE                      1016
 #define IDC_EDIT_IP                     1016
+#define IDC_CLIPS_RECIVED               1016
 #define IDC_EDIT1                       1017
 #define IDC_EDIT_DESCRIPTION            1017
+#define IDC_LAST_STARTED                1017
 #define IDC_LIST2                       1018
 #define IDC_ADD_1                       1019
 #define IDC_ADD_2                       1020

@@ -61,19 +61,15 @@ CCP_MainApp::CCP_MainApp()
 
 	m_bAsynchronousRefreshView = true;
 
-	::InitializeCriticalSection(&m_CriticalSection);
+	m_lClipsSent = 0;
+	m_lClipsRecieved = 0;
+	m_oldtStartUp = COleDateTime::GetCurrentTime();
 
-	m_hHookDll = NULL;
-	m_MonitorFocusChanges = NULL;
-	m_StopMonitoringFocusChanges = NULL;
-	m_GetCurrentFocus = NULL;
+	::InitializeCriticalSection(&m_CriticalSection);
 }
 
 CCP_MainApp::~CCP_MainApp()
 {
-	if(m_hHookDll)
-		FreeLibrary(m_hHookDll);
-
 	::DeleteCriticalSection(&m_CriticalSection);
 }
 

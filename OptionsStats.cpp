@@ -32,6 +32,9 @@ COptionsStats::COptionsStats()
 	m_eSavedCopies = _T("");
 	m_eSavedCopyData = _T("");
 	m_eDatabaseSize = _T("");
+	m_eClipsSent = _T("");
+	m_eClipsRecieved = _T("");
+	m_eLastStarted = _T("");
 	//}}AFX_DATA_INIT
 }
 
@@ -49,6 +52,9 @@ void COptionsStats::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_SAVED_COPIES, m_eSavedCopies);
 	DDX_Text(pDX, IDC_SAVED_COPY_DATA, m_eSavedCopyData);
 	DDX_Text(pDX, IDC_DATABASE_SIZE, m_eDatabaseSize);
+	DDX_Text(pDX, IDC_CLIPS_SENT, m_eClipsSent);
+	DDX_Text(pDX, IDC_CLIPS_RECIVED, m_eClipsRecieved);
+	DDX_Text(pDX, IDC_LAST_STARTED, m_eLastStarted);
 	//}}AFX_DATA_MAP
 }
 
@@ -76,6 +82,20 @@ BOOL COptionsStats::OnInitDialog()
 	m_eTripDate = time2.Format("%m/%d/%Y %I:%M %p");
 	m_eTripCopies.Format("%d", CGetSetOptions::GetTripCopyCount());
 	m_eTripPastes.Format("%d", CGetSetOptions::GetTripPasteCount());
+
+	m_eClipsSent.Format("%d", theApp.m_lClipsSent);
+	m_eClipsRecieved.Format("%d", theApp.m_lClipsRecieved);
+	m_eLastStarted = theApp.m_oldtStartUp.Format("%m/%d/%y %I:%M:%S");
+	if(theApp.m_oldtStartUp.GetHour() > 12)
+		m_eLastStarted += " PM";
+	else
+		m_eLastStarted += " AM";
+
+	COleDateTimeSpan span = COleDateTime::GetCurrentTime() - theApp.m_oldtStartUp;
+
+	CString csSpan;
+	csSpan.Format("  -  D:%d H:%d M:%d", (long)span.GetTotalDays(), span.GetHours(), span.GetMinutes());
+	m_eLastStarted += csSpan;
 
 	CMainTable recset;
 	recset.Open("SELECT * FROM Main");

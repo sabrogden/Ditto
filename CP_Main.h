@@ -150,14 +150,11 @@ public:
 	CRITICAL_SECTION m_CriticalSection;
 	CPopup	 *m_pcpSendRecieveError;
 
-	HMODULE m_hHookDll;
-	DWORD (*m_MonitorFocusChanges)(HWND hWnd,UINT message);
-	DWORD (*m_StopMonitoringFocusChanges)();
-	HWND (*m_GetCurrentFocus)();
 
+	long	m_lClipsSent;
+	long	m_lClipsRecieved;
 
-
-
+	COleDateTime m_oldtStartUp;
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CCP_MainApp)
