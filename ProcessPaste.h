@@ -111,10 +111,8 @@ public:
 class CProcessPaste
 {
 public:
-	// true if we should delete m_pOle,
-	// false if it will be automatically deleted
-	bool	m_bDeleteOle;
 	COleClipSource*	m_pOle;
+	bool m_bSendPaste;
 
 	CProcessPaste();
 	~CProcessPaste();
@@ -125,8 +123,6 @@ public:
 	BOOL DoDrag();
 
 	void MarkAsPasted();
-
-	bool m_bSendPaste;
 };
 
 #endif // !defined(AFX_PROCESSPASTE_H__185CBB6F_4B63_4397_8FF9_E18D777DA506__INCLUDED_)

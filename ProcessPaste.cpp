@@ -779,7 +779,7 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 	CProcessPaste
 \*------------------------------------------------------------------*/
 
-CProcessPaste::CProcessPaste() : m_bDeleteOle(true)
+CProcessPaste::CProcessPaste()
 {
 	m_pOle = new COleClipSource;
 	m_bSendPaste = true;
@@ -787,36 +787,32 @@ CProcessPaste::CProcessPaste() : m_bDeleteOle(true)
 
 CProcessPaste::~CProcessPaste()
 {	
-	if( m_bDeleteOle )
-		delete m_pOle;
+	DELETE_PTR(m_pOle);
 }
 
 BOOL CProcessPaste::DoPaste()
 {
 	if( m_pOle->DoImmediateRender() )
 	{
-		// if we are pasting a single element, do not handle clipboard data change
-		// (the element is already in the db and its lDate is updated by MarkAsPasted())
-		if( GetClipIDs().GetSize() == 1 )
-		{
-			m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
-			m_pOle->SetClipboard();
-		}
-		else // we are pasting a new aggregate text
-		{
-			if( g_Opt.m_bSaveMultiPaste )
-				m_pOle->SetClipboard();
-			else
-			{
-				m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
-				m_pOle->SetClipboard();
-			}
-		}
+		// MarkAsPasted() must be done first since it makes use of
+		//  m_pOle->m_ClipIDs and m_pOle is inaccessible after
+		//  SetClipboard is called.
+		MarkAsPasted();
 
-		m_bDeleteOle = false; // m_pOle is managed by the OLE clipboard now
+		// Ignore the clipboard change that we will cause IF:
+		// 1) we are pasting a single element, since the element is already
+		//    in the db and its lDate was updated by MarkAsPasted().
+		// OR
+		// 2) we are pasting multiple, but g_Opt.m_bSaveMultiPaste is false
+		if( GetClipIDs().GetSize() == 1 || !g_Opt.m_bSaveMultiPaste )
+			m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
+
+		m_pOle->SetClipboard(); // m_pOle is now managed by the OLE clipboard
+		m_pOle = NULL; // m_pOle should not be accessed past this point
+
 		if(m_bSendPaste)
 			theApp.SendPaste();
-		MarkAsPasted();
+
 		return TRUE;
 	}
 	return FALSE;
