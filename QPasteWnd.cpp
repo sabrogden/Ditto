@@ -2049,11 +2049,11 @@ void CQPasteWnd::OnBackButton()
 	theApp.EnterGroupID(theApp.m_GroupParentID);
 }
 
-LRESULT CQPasteWnd::OnGetClipData(LPARAM lParam, WPARAM wParam)
+LRESULT CQPasteWnd::OnGetClipData(WPARAM wParam, LPARAM lParam)
 {
 	BOOL bRet = FALSE;
-	CClipFormat *pClip = (CClipFormat *)wParam;
-	int nItem = (int)lParam;
+	CClipFormat *pClip = (CClipFormat *)lParam;
+	int nItem = (int)wParam;
 	try
 	{
 		m_Recset.SetAbsolutePosition(nItem);

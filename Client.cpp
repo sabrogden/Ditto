@@ -230,7 +230,7 @@ BOOL CClient::OpenConnection(const char* servername)
 
 	server.sin_addr.s_addr=*((unsigned long*)hp->h_addr);
 	server.sin_family=AF_INET;
-	server.sin_port=htons(g_Opt.m_lPort);
+	server.sin_port=htons( (u_short) g_Opt.m_lPort );
 	if(connect(m_Connection,(struct sockaddr*)&server,sizeof(server)))
 	{
 		LogSendRecieveInfo("ERROR if(connect(m_Connection,(struct sockaddr*)&server,sizeof(server)))");

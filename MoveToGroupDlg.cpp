@@ -56,9 +56,9 @@ BOOL CMoveToGroupDlg::OnInitDialog()
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-LRESULT CMoveToGroupDlg::OnTreeSelect(LPARAM lParam, WPARAM wParam)
+LRESULT CMoveToGroupDlg::OnTreeSelect(WPARAM wParam, LPARAM lParam)
 {
-	int nID = (int)lParam;
+	int nID = (int)wParam;
 	if(nID >= 0)
 	{
 		m_nSelectedGroup = nID;

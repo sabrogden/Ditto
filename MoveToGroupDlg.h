@@ -43,7 +43,7 @@ protected:
 	virtual void OnOK();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	//}}AFX_MSG
-	LRESULT OnTreeSelect(LPARAM lParam, WPARAM wParam);
+	LRESULT OnTreeSelect(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 };
 
