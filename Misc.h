@@ -240,6 +240,11 @@ public:
 	static void		SetDoubleClickingOnCaptionDoes(long lOption);
 	static long		GetDoubleClickingOnCaptionDoes();
 
+	static BOOL		m_bPrompForNewGroupName;
+	static void		SetPrompForNewGroupName(BOOL bOption);
+	static BOOL		GetPrompForNewGroupName();
+
+
 	/*
 	BOOL IsAutoRun();
 	void SetAutoRun(BOOL bRun);

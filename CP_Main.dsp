@@ -203,6 +203,14 @@ SOURCE=.\ComboBoxSearch.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\GroupStatic.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GroupStatic.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\HyperLink.cpp
 # End Source File
 # Begin Source File
@@ -257,6 +265,10 @@ SOURCE=.\DatabaseUtilities.cpp
 # Begin Source File
 
 SOURCE=.\DataTable.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GroupName.cpp
 # End Source File
 # Begin Source File
 
@@ -366,6 +378,10 @@ SOURCE=.\DatabaseUtilities.h
 # Begin Source File
 
 SOURCE=.\DataTable.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GroupName.h
 # End Source File
 # Begin Source File
 

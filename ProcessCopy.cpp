@@ -613,6 +613,7 @@ HGLOBAL hGlobal = 0;
 
 	try
 	{
+		BOOL bShiftIsDown = (GetKeyState(VK_SHIFT) & 0x8000);
 		CDataTable recset;
 
 		//Open the data table for all that have the parent id
@@ -626,6 +627,17 @@ HGLOBAL hGlobal = 0;
 
 		while( !recset.IsEOF() )
 		{
+			cf.m_cfType = GetFormatID( recset.m_strClipBoardFormat );
+
+			if(bShiftIsDown)
+			{
+				if(cf.m_cfType != CF_TEXT)
+				{
+					recset.MoveNext();
+					continue;
+				}
+			}
+
 			// create a new HGLOBAL duplicate
 			hGlobal = NewGlobalH( recset.m_ooData.m_hData, recset.m_ooData.m_dwDataLength );
 			// XOR take the recset's HGLOBAL... is this SAFE??
@@ -636,7 +648,7 @@ HGLOBAL hGlobal = 0;
 				//::_RPT0( _CRT_WARN, GetErrorString(::GetLastError()) );
 				ASSERT(FALSE);
 			}
-			cf.m_cfType = GetFormatID( recset.m_strClipBoardFormat );
+			
 			cf.m_hgData = hGlobal;
 			formats.Add( cf );
 			recset.MoveNext();

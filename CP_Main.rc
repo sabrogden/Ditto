@@ -157,18 +157,12 @@ IDR_QUICK_PASTE MENU DISCARDABLE
 BEGIN
     POPUP "Menu"
     BEGIN
-        MENUITEM "New Group\tF7",               ID_MENU_NEWGROUP
-        MENUITEM "New Group Selection\tCtrl-F7", ID_MENU_NEWGROUPSELECTION
-        MENUITEM "View Full Description\tF3",   ID_MENU_VIEWFULLDESCRIPTION
-        MENUITEM SEPARATOR
-        MENUITEM "Delete Entry\tDel",           ID_MENU_DELETE
-        MENUITEM SEPARATOR
-        MENUITEM "Properties\tAlt-Enter",       ID_MENU_PROPERTIES
-        MENUITEM SEPARATOR
-        MENUITEM "Reconnect To Clipboard Chain", 
-                                                ID_MENU_RECONNECTTOCLIPBOARDCHAIN
+        POPUP "Groups"
+        BEGIN
+            MENUITEM "New Group\tCtrl-F7",          ID_MENU_NEWGROUP
+            MENUITEM "New Group Selection\tF7",     ID_MENU_NEWGROUPSELECTION
 
-        MENUITEM "Options...",                  ID_MENU_OPTIONS
+        END
         POPUP "Quick Options"
         BEGIN
             POPUP "Lines Per Row"
@@ -250,7 +244,19 @@ BEGIN
             MENUITEM "Auto Roll-up",                ID_MENU_AUTOHIDE
             MENUITEM "Always Show Description",     ID_MENU_QUICKOPTIONS_ALLWAYSSHOWDESCRIPTION
 
+            MENUITEM "Prompt For New Group Names",  ID_MENU_QUICKOPTIONS_PROMPTFORNEWGROUPNAMES
+
         END
+        MENUITEM "View Full Description\tF3",   ID_MENU_VIEWFULLDESCRIPTION
+        MENUITEM SEPARATOR
+        MENUITEM "Delete Entry\tDel",           ID_MENU_DELETE
+        MENUITEM SEPARATOR
+        MENUITEM "Properties\tAlt-Enter",       ID_MENU_PROPERTIES
+        MENUITEM SEPARATOR
+        MENUITEM "Reconnect To Clipboard Chain", 
+                                                ID_MENU_RECONNECTTOCLIPBOARDCHAIN
+
+        MENUITEM "Options...",                  ID_MENU_OPTIONS
         MENUITEM SEPARATOR
         MENUITEM "Exit Program",                ID_MENU_EXITPROGRAM
     END
@@ -502,6 +508,17 @@ BEGIN
     LTEXT           "E-mail Scott Brogden",IDC_HYPER_LINK,7,109,67,8
 END
 
+IDD_GROUP_NAME DIALOG DISCARDABLE  0, 0, 186, 49
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Ditto"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,75,28,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,129,28,50,14
+    LTEXT           "Name",IDC_STATIC,7,1,59,10
+    EDITTEXT        IDC_NAME,7,11,172,12,ES_AUTOHSCROLL
+END
+
 
 #ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
@@ -638,6 +655,14 @@ BEGIN
         RIGHTMARGIN, 285
         TOPMARGIN, 7
         BOTTOMMARGIN, 117
+    END
+
+    IDD_GROUP_NAME, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 1
+        BOTTOMMARGIN, 42
     END
 END
 #endif    // APSTUDIO_INVOKED

@@ -10,6 +10,7 @@
 #include "QListCtrl.h"
 #include "ComboBoxSearch.h"
 #include "WndEx.h"
+#include "GroupStatic.h"
 
 #ifdef AFTER_98
 	#include "AlphaBlend.h"
@@ -59,6 +60,8 @@ public:
 	bool			m_bHideWnd;
 	CMainTable		m_Recset;
 	CString			m_strSQLSearch;
+	CGroupStatic	m_stGroup;
+	CFont			GroupFont;
 
 	CString			m_Title;
 
@@ -120,7 +123,6 @@ protected:
 	afx_msg void OnMenuProperties();
 	afx_msg void OnClose();
 	afx_msg void OnBegindrag(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnFindItem(NMHDR* pNMHDR, LRESULT* pResult);
@@ -130,6 +132,7 @@ protected:
 	afx_msg void OnMenuQuickoptionsDoubleclickingoncaptionTogglesalwaysontop();
 	afx_msg void OnMenuQuickoptionsDoubleclickingoncaptionRollupwindow();
 	afx_msg void OnMenuQuickoptionsDoubleclickingoncaptionTogglesshowdescription();
+	afx_msg void OnMenuQuickoptionsPromptfornewgroupnames();
 	//}}AFX_MSG
 	afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);

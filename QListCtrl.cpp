@@ -436,11 +436,11 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			csText = CString(' ',numSpaces) + csText;
 
 			// draw the symbols
-//			pDC->FillSolidRect( rectSym, GetSysColor(COLOR_INFOBK) );
-			pDC->FillSolidRect( rectSym, RGB(0,255,255) );
+			pDC->FillSolidRect( rectSym, GetSysColor(COLOR_ACTIVECAPTION) );
+			//pDC->FillSolidRect( rectSym, RGB(0,255,255) );
 	        pDC->Draw3dRect(rectSym, GetSysColor(COLOR_3DLIGHT), GetSysColor(COLOR_3DDKSHADOW));
 //		COLORREF crOld = pDC->SetTextColor(GetSysColor(COLOR_INFOTEXT));
-		COLORREF crOld = pDC->SetTextColor(0);
+		COLORREF crOld = pDC->SetTextColor(RGB(255, 255, 255));
 			pDC->DrawText(strSymbols, rectSym, DT_VCENTER | DT_EXPANDTABS);
 			pDC->SetTextColor(crOld);
 		}
@@ -856,6 +856,8 @@ void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 			KillTimer(TIMER_SHOW_PROPERTIES);
 			SetTimer(TIMER_SHOW_PROPERTIES, 300, NULL);
 		}
+		if(GetSelectedCount() > 0 )
+			theApp.SetStatus(NULL, TRUE);
 	}
 }
 

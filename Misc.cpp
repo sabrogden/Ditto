@@ -415,7 +415,8 @@ BOOL CGetSetOptions::m_bHistoryStartTop;
 long CGetSetOptions::m_bDescTextSize;
 BOOL CGetSetOptions::m_bDescShowLeadingWhiteSpace;
 BOOL CGetSetOptions::m_bAllwaysShowDescription;
-LONG CGetSetOptions::m_bDoubleClickingOnCaptionDoes;
+long CGetSetOptions::m_bDoubleClickingOnCaptionDoes;
+BOOL CGetSetOptions::m_bPrompForNewGroupName;
 
 CGetSetOptions g_Opt;
 
@@ -432,6 +433,7 @@ CGetSetOptions::CGetSetOptions()
 	m_bDescShowLeadingWhiteSpace = GetDescShowLeadingWhiteSpace();
 	m_bAllwaysShowDescription = GetAllwaysShowDescription();
 	m_bDoubleClickingOnCaptionDoes = GetDoubleClickingOnCaptionDoes();
+	m_bPrompForNewGroupName = GetPrompForNewGroupName();
 }
 
 CGetSetOptions::~CGetSetOptions()
@@ -896,6 +898,11 @@ BOOL CGetSetOptions::GetAllwaysShowDescription()			{	return GetProfileLong("Allw
 
 void CGetSetOptions::SetDoubleClickingOnCaptionDoes(long lOption)	{	SetProfileLong("DoubleClickingOnCaptionDoes", lOption); m_bDoubleClickingOnCaptionDoes = lOption; }
 long CGetSetOptions::GetDoubleClickingOnCaptionDoes()				{	return GetProfileLong("DoubleClickingOnCaptionDoes", TOGGLES_ALLWAYS_ON_TOP); }
+
+void CGetSetOptions::SetPrompForNewGroupName(BOOL bOption)	{	SetProfileLong("PrompForNewGroupName", bOption); m_bPrompForNewGroupName = bOption; }
+BOOL CGetSetOptions::GetPrompForNewGroupName()				{	return GetProfileLong("PrompForNewGroupName", TRUE); }
+
+
 /*------------------------------------------------------------------*\
 	CHotKey - a single system-wide hotkey
 \*------------------------------------------------------------------*/

@@ -291,9 +291,9 @@ int count;
 
 	count = pClips->AddToDB( true );
 	if( count > 0 )
-	{
-		OnCopyCompleted( lID, count );
+	{		
 		lID = pClips->GetTail()->m_ID;
+		OnCopyCompleted( lID, count );
 	}
 
 	delete pClips;
@@ -433,8 +433,8 @@ BOOL bResult = FALSE;
 			{
 				m_GroupID = recs.m_lID;
 				m_GroupParentID = recs.m_lParentID;
-				if( m_GroupParentID == 0 )
-                    m_GroupParentID = -1; // back out into "all top-level groups" list.
+//				if( m_GroupParentID == 0 )
+//	                 m_GroupParentID = -1; // back out into "all top-level groups" list.
 				m_GroupText = recs.m_strText;
 				bResult = TRUE;
 			}

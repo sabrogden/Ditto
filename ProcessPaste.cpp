@@ -97,6 +97,7 @@ CTime time;
 		lID = recset.m_lID;
 
 		recset.m_lDate = (long) time.GetTime();
+		recset.m_lDontAutoDelete = (long) time.GetTime();
 
 		if( text != "" )
 			recset.m_strText = text;
@@ -477,6 +478,8 @@ BOOL bChangeOrder = (dIncrement >= 0);
 			{
 				recs.Edit();
 				recs.m_lParentID = lParentID;
+
+				recs.m_lDontAutoDelete = (long)CTime::GetCurrentTime().GetTime();
 				if( bChangeOrder )
 					recs.m_dOrder = dOrder;
 				recs.Update();
@@ -629,6 +632,7 @@ long lCopyID;
 				pAddTable->AddNew(); // overridden to fetch autoincr lID
 				lCopyID = pAddTable->m_lID;
 				pAddTable->CopyRec( *pTable ); // copy the fields
+				pAddTable->m_lDontAutoDelete  = (long)CTime::GetCurrentTime().GetTime();
 				if( lParentID > 0 ) // if valid, assign the given parent
 					pAddTable->m_lParentID = lParentID;
 				pAddTable->Update();
