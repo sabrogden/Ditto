@@ -272,3 +272,42 @@ HANDLE CBitmapHelper::hBitmapToDIB(HBITMAP hBitmap, DWORD dwCompression, HPALETT
     ReleaseDC(NULL,hDC);
     return hDIB;
 }
+
+
+bool CBitmapHelper::DrawDIB(CDC *pDC, HANDLE hData, int nLeft, int nRight, int &nWidth)
+{
+	LPBITMAPINFO	lpBI ;
+	void*           pDIBBits;
+	bool bRet = false;
+	
+	lpBI = (LPBITMAPINFO)GlobalLock(hData);
+	if(lpBI)
+	{
+		int nColors = lpBI->bmiHeader.biClrUsed ? lpBI->bmiHeader.biClrUsed : 1 << lpBI->bmiHeader.biBitCount;
+
+		if( lpBI->bmiHeader.biBitCount > 8 )
+		{
+			pDIBBits = (LPVOID)((LPDWORD)(lpBI->bmiColors + lpBI->bmiHeader.biClrUsed) + 
+				((lpBI->bmiHeader.biCompression == BI_BITFIELDS) ? 3 : 0));
+		}
+		else
+		{
+			pDIBBits = (LPVOID)(lpBI->bmiColors + nColors);
+		}
+
+		::StretchDIBits(pDC->m_hDC,
+					nLeft, nRight, 
+					lpBI->bmiHeader.biWidth, lpBI->bmiHeader.biHeight,
+					0, 0, lpBI->bmiHeader.biWidth, 
+					lpBI->bmiHeader.biHeight,
+					pDIBBits, lpBI, DIB_PAL_COLORS, SRCCOPY);
+
+		nWidth = lpBI->bmiHeader.biWidth;
+
+		GlobalUnlock(hData) ;
+
+		bRet = true;
+	}
+
+	return bRet;
+}

@@ -85,6 +85,7 @@
 #define IDC_PARSE_BUTTON                1040
 #define IDC_HIDE_DITO_ON_HOT_KEY        1040
 #define IDC_BUTTON_FONT                 1040
+#define IDC_BUTTON_NEW_GROUP            1040
 #define IDC_PARSE_EDIT                  1041
 #define IDC_CHECK1                      1042
 #define IDC_HISTORY_START_TOP           1042

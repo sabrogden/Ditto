@@ -300,6 +300,10 @@ SOURCE=.\DataTable.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FormatSQL.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\FriendDetails.cpp
 # End Source File
 # Begin Source File
@@ -446,6 +450,10 @@ SOURCE=.\DataTable.h
 # Begin Source File
 
 SOURCE=.\DialogResizer.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\FormatSQL.h
 # End Source File
 # Begin Source File
 

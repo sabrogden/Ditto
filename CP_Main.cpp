@@ -34,6 +34,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CCP_MainApp construction
 
+
 CCP_MainApp::CCP_MainApp()
 {
 	m_bAppRunning = false;

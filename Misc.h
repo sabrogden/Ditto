@@ -306,6 +306,10 @@ public:
 	static BOOL		GetFont(LOGFONT &font);
 	static void		SetFont(LOGFONT &font);
 
+	static BOOL		m_bDrawThumbnail;
+	static void		SetDrawThumbnail(long bDraw);
+	static BOOL		GetDrawThumbnail();
+
 	/*
 	BOOL IsAutoRun();
 	void SetAutoRun(BOOL bRun);

@@ -478,6 +478,7 @@ BOOL CGetSetOptions::m_bLogSendReceiveErrors;
 BOOL CGetSetOptions::m_bUseHookDllForFocus;
 BOOL CGetSetOptions::m_HideDittoOnHotKeyIfAlreadyShown;
 long CGetSetOptions::m_lPort;
+BOOL CGetSetOptions::m_bDrawThumbnail;
 
 CGetSetOptions g_Opt;
 
@@ -501,6 +502,7 @@ CGetSetOptions::CGetSetOptions()
 	m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", TRUE);
 	m_HideDittoOnHotKeyIfAlreadyShown = GetHideDittoOnHotKeyIfAlreadyShown();
 	m_lPort = GetPort();
+	m_bDrawThumbnail = GetDrawThumbnail();
 
 	#ifdef _DEBUG
 	m_bUseHookDllForFocus = FALSE;
@@ -1148,6 +1150,17 @@ BOOL CGetSetOptions::GetFont(LOGFONT &font)
 void CGetSetOptions::SetFont(LOGFONT &font)
 {
 	SetProfileData("DisplayFont", &font, sizeof(LOGFONT));
+}
+
+void CGetSetOptions::SetDrawThumbnail(long bDraw)
+{
+	SetProfileLong("DrawThumbnail", bDraw); 
+	m_bDrawThumbnail = bDraw;
+}
+
+BOOL CGetSetOptions::GetDrawThumbnail()
+{
+	return GetProfileLong("DrawThumbnail", TRUE);
 }
 
 /*------------------------------------------------------------------*\
