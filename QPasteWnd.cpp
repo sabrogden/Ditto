@@ -9,6 +9,7 @@
 #include "GroupName.h"
 #include ".\qpastewnd.h"
 #include "MoveToGroupDlg.h"
+#include "HyperLink.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -111,6 +112,8 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_SENTTO_FRIENDONE, OnMenuSenttoFriendone)
 	ON_COMMAND(ID_MENU_SENTTO_PROMPTFORIP, OnMenuSenttoPromptforip)
 	ON_COMMAND(ID_MENU_GROUPS_MOVETOGROUP, OnMenuGroupsMovetogroup)
+	ON_COMMAND(ID_MENU_PASTEPLAINTEXTONLY, OnMenuPasteplaintextonly)
+	ON_COMMAND(ID_MENU_HELP, OnMenuHelp)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(NM_SELECT, OnListSelect)
 	ON_MESSAGE(NM_END, OnListEnd)
@@ -422,34 +425,36 @@ bool CQPasteWnd::Add(const CString &csHeader, const CString &csText, int nID)
 	return true;
 }
 
-BOOL CQPasteWnd::OpenID( long lID )
+BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT)
 {
 	if( theApp.EnterGroupID(lID) )
 		return TRUE;
 	
 	// else, it is a clip, so paste it
 	CProcessPaste paste;
+	paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;
 	paste.GetClipIDs().Add( lID );
 	paste.DoPaste();
 	theApp.OnPasteCompleted();
 	return TRUE;
 }
 
-BOOL CQPasteWnd::OpenSelection()
+BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT)
 {
 	ARRAY IDs;
 	m_lstHeader.GetSelectionItemData( IDs );
     
 	int count = IDs.GetSize();
 	
-	if( count <= 0 )
+	if(count <= 0)
 		return FALSE;
 	
-	if( count == 1 )
-		return OpenID( IDs[0] );
+	if(count == 1)
+		return OpenID(IDs[0], bOnlyLoad_CF_TEXT);
 	// else count > 1
 	
 	CProcessPaste paste;
+	paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;
 	paste.GetClipIDs().Copy( IDs );
 	paste.DoPaste();
 	theApp.OnPasteCompleted();
@@ -1382,6 +1387,16 @@ void CQPasteWnd::OnMenuGroupsMovetogroup()
 	m_bHideWnd = true;
 
 	FillList();
+}
+
+void CQPasteWnd::OnMenuPasteplaintextonly() 
+{
+	OpenSelection(true);	
+}
+
+void CQPasteWnd::OnMenuHelp() 
+{
+	CHyperLink::GotoURL("Help\\DittoGettingStarted.htm", SW_SHOW);
 }
 
 

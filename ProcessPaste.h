@@ -93,6 +93,7 @@ class COleClipSource : public COleDataSource
 public:
 	CClipIDs	m_ClipIDs;
 	bool		m_bLoadedFormats;
+	bool		m_bOnlyPaste_CF_TEXT;
 
 	COleClipSource();
 	virtual ~COleClipSource();
@@ -116,6 +117,7 @@ public:
 	COleClipSource*	m_pOle;
 	bool m_bSendPaste;
 	bool m_bActivateTarget;
+	bool m_bOnlyPaste_CF_TEXT;
 
 	CProcessPaste();
 	~CProcessPaste();

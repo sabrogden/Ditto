@@ -79,8 +79,8 @@ public:
 
 	void DeleteSelectedRows();
 
-	BOOL OpenID( long lID );
-	BOOL OpenSelection();
+	BOOL OpenID(long lID, bool bOnlyLoad_CF_TEXT = false);
+	BOOL OpenSelection(bool bOnlyLoad_CF_TEXT = false);
 	BOOL OpenIndex( long nItem );
 	BOOL NewGroup( bool bGroupSelection = true );
 	// moves the caret to the given ID, selects it, and ensures it is visible.
@@ -165,6 +165,8 @@ protected:
 	afx_msg void OnMenuSenttoFriendone();
 	afx_msg void OnMenuSenttoPromptforip();
 	afx_msg void OnMenuGroupsMovetogroup();
+	afx_msg void OnMenuPasteplaintextonly();
+	afx_msg void OnMenuHelp();
 	//}}AFX_MSG
 	afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);

@@ -10,6 +10,7 @@
 #include "InternetUpdate.h"
 #include ".\mainfrm.h"
 #include "focusdll\focusdll.h"
+#include "HyperLink.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -31,12 +32,11 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_CREATE()
 	ON_COMMAND(ID_FIRST_OPTION, OnFirstOption)
 	ON_COMMAND(ID_FIRST_EXIT, OnFirstExit)
-//	ON_WM_CHANGECBCHAIN()
-//	ON_WM_DRAWCLIPBOARD()
 	ON_WM_TIMER()
 	ON_COMMAND(ID_FIRST_SHOWQUICKPASTE, OnFirstShowquickpaste)
 	ON_COMMAND(ID_FIRST_TOGGLECONNECTCV, OnFirstToggleConnectCV)
 	ON_UPDATE_COMMAND_UI(ID_FIRST_TOGGLECONNECTCV, OnUpdateFirstToggleConnectCV)
+	ON_COMMAND(ID_FIRST_HELP, OnFirstHelp)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(WM_HOTKEY, OnHotKey)
 	ON_MESSAGE(WM_SHOW_TRAY_ICON, OnShowTrayIcon)
@@ -575,4 +575,9 @@ LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 	}
 
 	return TRUE;
+}
+
+void CMainFrame::OnFirstHelp() 
+{
+	CHyperLink::GotoURL("Help\\DittoGettingStarted.htm", SW_SHOW);
 }

@@ -193,6 +193,9 @@
 #define ID_MENU_SENTTO_FRIEND_FIFTEEN   32838
 #define ID_MENU_SENTTO_PROMPTFORIP      32839
 #define ID_MENU_GROUPS_MOVETOGROUP      32840
+#define ID_MENU_PASTEPLAINTEXTONLY      32841
+#define ID_MENU_HELP                    32842
+#define ID_FIRST_HELP                   32843
 
 // Next default values for new objects
 // 
@@ -200,7 +203,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        157
-#define _APS_NEXT_COMMAND_VALUE         32841
+#define _APS_NEXT_COMMAND_VALUE         32844
 #define _APS_NEXT_CONTROL_VALUE         2028
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

@@ -702,6 +702,7 @@ COleClipSource
 COleClipSource::COleClipSource()
 {
 	m_bLoadedFormats = false;
+	m_bOnlyPaste_CF_TEXT = false;
 }
 
 COleClipSource::~COleClipSource()
@@ -734,7 +735,7 @@ BOOL COleClipSource::DoImmediateRender()
 	{
 		CClipFormats formats;
 		
-		CClip::LoadFormats( m_ClipIDs[0], formats );
+		CClip::LoadFormats(m_ClipIDs[0], formats, m_bOnlyPaste_CF_TEXT);
 		
 		return LoadFormats(&formats);
 	}
@@ -802,6 +803,7 @@ CProcessPaste::CProcessPaste()
 	m_pOle = new COleClipSource;
 	m_bSendPaste = true;
 	m_bActivateTarget = true;
+	m_bOnlyPaste_CF_TEXT = false;
 }
 
 CProcessPaste::~CProcessPaste()
@@ -811,6 +813,8 @@ CProcessPaste::~CProcessPaste()
 
 BOOL CProcessPaste::DoPaste()
 {
+	m_pOle->m_bOnlyPaste_CF_TEXT = m_bOnlyPaste_CF_TEXT;
+
 	if( m_pOle->DoImmediateRender() )
 	{
 		// MarkAsPasted() must be done first since it makes use of
@@ -829,8 +833,10 @@ BOOL CProcessPaste::DoPaste()
 		m_pOle->SetClipboard(); // m_pOle is now managed by the OLE clipboard
 		m_pOle = NULL; // m_pOle should not be accessed past this point
 		
+#ifndef _DEBUG
 		if(m_bSendPaste)
 			theApp.SendPaste(m_bActivateTarget);
+#endif
 		
 		return TRUE;
 	}

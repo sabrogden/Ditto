@@ -145,8 +145,12 @@ CClipFormat* CClipFormats::FindFormat( UINT cfType )
 CClip - holds multiple CClipFormats and CopyClipboard() statistics
 \*----------------------------------------------------------------------------*/
 
-CClip::CClip() : m_ID(0), m_DataID(0), m_lTotalCopySize(0)
-{}
+CClip::CClip() : 
+m_ID(0), 
+m_DataID(0), 
+m_lTotalCopySize(0)
+{
+}
 
 CClip::~CClip()
 {
@@ -663,7 +667,7 @@ HGLOBAL CClip::LoadFormat( long lID, UINT cfType )
 		return hGlobal;
 }
 
-bool CClip::LoadFormats( long lID, CClipFormats& formats )
+bool CClip::LoadFormats( long lID, CClipFormats& formats, bool bOnlyLoad_CF_TEXT)
 {
 	CClipFormat cf;
 	HGLOBAL hGlobal = 0;
@@ -672,7 +676,7 @@ bool CClip::LoadFormats( long lID, CClipFormats& formats )
 	
 	try
 	{
-		BOOL bShiftIsDown = (GetKeyState(VK_SHIFT) & 0x8000);
+		BOOL bShiftIsDown = ((GetKeyState(VK_SHIFT) & 0x8000) || bOnlyLoad_CF_TEXT);
 		CDataTable recset;
 		
 		//Open the data table for all that have the parent id

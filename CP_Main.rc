@@ -157,6 +157,8 @@ BEGIN
         MENUITEM "Show Quick Paste",            ID_FIRST_SHOWQUICKPASTE
         MENUITEM "Options",                     ID_FIRST_OPTION
         MENUITEM SEPARATOR
+        MENUITEM "Help",                        ID_FIRST_HELP
+        MENUITEM SEPARATOR
         MENUITEM "Connect To Clipboard",        ID_FIRST_TOGGLECONNECTCV
         MENUITEM SEPARATOR
         MENUITEM "Exit",                        ID_FIRST_EXIT
@@ -295,6 +297,7 @@ BEGIN
         END
         MENUITEM "View Full Description\tF3",   ID_MENU_VIEWFULLDESCRIPTION
         MENUITEM "View Groups\tCtrl-G",         ID_MENU_VIEWGROUPS
+        MENUITEM "Paste Plain Text Only",       ID_MENU_PASTEPLAINTEXTONLY
         MENUITEM SEPARATOR
         MENUITEM "Delete Entry\tDel",           ID_MENU_DELETE
         MENUITEM SEPARATOR
@@ -310,6 +313,8 @@ BEGIN
         END
         MENUITEM SEPARATOR
         MENUITEM "Options...",                  ID_MENU_OPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "Help",                        ID_MENU_HELP
         MENUITEM SEPARATOR
         MENUITEM "Connect To Clipboard",        ID_MENU_TOGGLECONNECTCV
         MENUITEM SEPARATOR

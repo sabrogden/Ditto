@@ -103,9 +103,9 @@ public:
 	// Allocates a Global containing the requested Clip's Format Data
 	static HGLOBAL LoadFormat( long lID, UINT cfType );
 	// Fills "formats" with the Data of all Formats in the db for the given Clip ID
-	static bool LoadFormats( long lID, CClipFormats& formats );
+	static bool LoadFormats( long lID, CClipFormats& formats, bool bOnlyLoad_CF_TEXT = false);
 	// Fills "types" with all Types in the db for the given Clip ID
-	static void LoadTypes( long lID, CClipTypes& types );
+	static void LoadTypes( long lID, CClipTypes& types);
 };
 
 
