@@ -61,7 +61,7 @@ public:
 	bool ReleaseFocus(); // activate the target only if we are the active window
 	CString GetTargetName() { return GetWndText( m_hTargetWnd ); }
 	void SendPaste(); // Activates the Target and sends Ctrl-V
-
+	
 	CLIPFORMAT m_cfIgnoreClipboard; // used by CClip::LoadFromClipboard
 
 // CopyThread and ClipViewer (Copy and Paste Management)

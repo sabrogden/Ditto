@@ -139,12 +139,13 @@ long CInternetUpdate::GetRunningVersion()
     VS_FIXEDFILEINFO *lpFFI;
     long ver;
 
-    dwSize = GetFileVersionInfoSize(csFileName, &dwHandle);
+    dwSize = GetFileVersionInfoSize(csFileName.GetBuffer(csFileName.GetLength()), &dwHandle);
     if(dwSize != 0)
     {
+		csFileName.ReleaseBuffer();
 		if((lpData=(unsigned char *)malloc(dwSize)) != NULL)
 		{
-			if(GetFileVersionInfo(csFileName, dwHandle, dwSize, lpData) != 0)
+			if(GetFileVersionInfo(csFileName.GetBuffer(csFileName.GetLength()), dwHandle, dwSize, lpData) != 0)
 			{
 				if(VerQueryValue(lpData, "\\", (LPVOID*)&lpFFI, &iBuffSize) != 0)
 				{

@@ -122,8 +122,6 @@ void CMainTable::LoadAcceleratorKeys( CAccels& accels )
 	{
 		recset.Open("SELECT * FROM Main WHERE lShortCut > 0");
 		
-		accels.StartBuildingTable();
-
 		CAccel a;
 		while(!recset.IsEOF())
 		{
@@ -133,8 +131,6 @@ void CMainTable::LoadAcceleratorKeys( CAccels& accels )
 
 			recset.MoveNext();
 		}
-
-		accels.FinishBuildingTable();
 	}
 	catch(CDaoException* e)
 	{

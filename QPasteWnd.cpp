@@ -1044,7 +1044,7 @@ NM_LISTVIEW* pLV = (NM_LISTVIEW*)pNMHDR;
 CProcessPaste paste;
 CClipIDs& clips = paste.GetClipIDs();
 	m_lstHeader.GetSelectionItemData( clips );
-	if( clips.GetCount() <= 0 )
+	if( clips.GetSize() <= 0 )
 	{
 		ASSERT(0); // does this ever happen ?????
 		clips.Add( m_lstHeader.GetItemData(pLV->iItem) );

@@ -57,7 +57,7 @@ BOOL MarkClipAsPasted(long lID)
 // allocate an HGLOBAL of the given Format Type representing these Clip IDs.
 HGLOBAL CClipIDs::Render( UINT cfType )
 {
-int count = GetCount();
+int count = GetSize();
 	if( count <= 0 )
 		return 0;
 	if( count == 1 )
@@ -68,7 +68,7 @@ int count = GetCount();
 
 void CClipIDs::GetTypes( CClipTypes& types )
 {
-int count = GetCount();
+int count = GetSize();
 	types.RemoveAll();
 	if( count > 1 )
 		types.Add( CF_TEXT );
@@ -95,7 +95,7 @@ CString CClipIDs::AggregateText( UINT cfType, char* pSeparator )
 	text.GetBuffer(1000);
 	text.ReleaseBuffer(0);
 
-	int numIDs = GetCount();
+	int numIDs = GetSize();
 	int* pIDs = GetData();
 
 	csSQL.Format("SELECT * FROM Data WHERE strClipBoardFormat = \'%s\' AND lParentID = %%d", GetFormatName(cfType));
@@ -140,7 +140,7 @@ CString CClipIDs::AggregateText( UINT cfType, char* pSeparator )
 /*------------------------------------------------------------------*\
 	COleClipSource
 \*------------------------------------------------------------------*/
-IMPLEMENT_DYNAMIC(COleClipSource, COleDataSource)
+//IMPLEMENT_DYNAMIC(COleClipSource, COleDataSource)
 COleClipSource::COleClipSource()
 {
 }
@@ -154,7 +154,7 @@ BOOL COleClipSource::DoDelayRender()
 	CClipTypes types;
 	m_ClipIDs.GetTypes( types );
 
-	int count = types.GetCount();
+	int count = types.GetSize();
 	for( int i=0; i < count; i++ )
 		DelayRenderData( types[i] );
 
@@ -163,7 +163,7 @@ BOOL COleClipSource::DoDelayRender()
 
 BOOL COleClipSource::DoImmediateRender()
 {
-int count = m_ClipIDs.GetCount();
+int count = m_ClipIDs.GetSize();
 	if( count <= 0 )
 		return 0;
 	if( count == 1 )
@@ -171,7 +171,7 @@ int count = m_ClipIDs.GetCount();
 	CClipFormats formats;
 	CClipFormat* pCF;
 		CClip::LoadFormats( m_ClipIDs[0], formats );
-		count = formats.GetCount(); // reusing "count"
+		count = formats.GetSize(); // reusing "count"
 		for( int i=0; i < count; i++ )
 		{
 			pCF = &formats[i];
@@ -234,16 +234,14 @@ CProcessPaste::~CProcessPaste()
 
 BOOL CProcessPaste::DoPaste()
 {
-bool bOldState;
 	if( m_pOle->DoImmediateRender() )
 	{
 		// if we are pasting a single element, do not handle clipboard data change
 		// (the element is already in the db and its lDate is updated by MarkAsPasted())
-		if( GetClipIDs().GetCount() == 1 )
+		if( GetClipIDs().GetSize() == 1 )
 		{
-			bOldState = theApp.EnableCbCopy( false );
+			m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", 8));
 			m_pOle->SetClipboard();
-			theApp.EnableCbCopy(bOldState);
 		}
 		else // we are pasting a new aggregate text
 		{
@@ -251,9 +249,8 @@ bool bOldState;
 				m_pOle->SetClipboard();
 			else
 			{
-				bOldState = theApp.EnableCbCopy( false );
+				m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", 8));
 				m_pOle->SetClipboard();
-				theApp.EnableCbCopy( bOldState );
 			}
 		}
 
@@ -280,7 +277,7 @@ BOOL CProcessPaste::DoDrag()
 void CProcessPaste::MarkAsPasted()
 {
 CClipIDs& clips = GetClipIDs();
-	if( clips.GetCount() == 1 )
+	if( clips.GetSize() == 1 )
 		MarkClipAsPasted( clips.GetAt(0) );
 }
 

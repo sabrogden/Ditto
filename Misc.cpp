@@ -72,7 +72,7 @@ void SetThreadName(DWORD dwThreadID, LPCTSTR szThreadName)
 
 CString StrF(const char * pszFormat, ...)
 {
-	ASSERT( AtlIsValidString( pszFormat ) );
+	ASSERT( AfxIsValidString( pszFormat ) );
 CString str;
 	va_list argList;
 	va_start( argList, pszFormat );
@@ -999,7 +999,7 @@ bool CHotKey::Unregister()
 		}
 		else
 		{
-			LOG(FUNC "FAILED!");
+			LOG("Unregister" "FAILED!");
 			ASSERT(0);
 		}
 	}
@@ -1022,7 +1022,7 @@ CHotKeys::CHotKeys() : m_hWnd(NULL) {}
 CHotKeys::~CHotKeys()
 {
 CHotKey* pHotKey;
-int count = GetCount();
+int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
 		pHotKey = GetAt(i);
@@ -1033,7 +1033,7 @@ int count = GetCount();
 
 int CHotKeys::Find( CHotKey* pHotKey )
 {
-int count = GetCount();
+int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
 		if( pHotKey == GetAt(i) )
@@ -1055,14 +1055,14 @@ int i = Find(pHotKey);
 
 void CHotKeys::LoadAllKeys()
 {
-int count = GetCount();
+int count = GetSize();
 	for( int i=0; i < count; i++ )
 		GetAt(i)->LoadKey();
 }
 
 void CHotKeys::SaveAllKeys()
 {
-int count = GetCount();
+int count = GetSize();
 	for( int i=0; i < count; i++ )
 		GetAt(i)->SaveKey();
 }
@@ -1071,7 +1071,7 @@ void CHotKeys::RegisterAll( bool bMsgOnError )
 {
 CString str;
 CHotKey* pHotKey;
-int count = GetCount();
+int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
 		pHotKey = GetAt(i);
@@ -1090,7 +1090,7 @@ void CHotKeys::UnregisterAll( bool bMsgOnError )
 {
 CString str;
 CHotKey* pHotKey;
-int count = GetCount();
+int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
 		pHotKey = GetAt(i);
@@ -1107,7 +1107,7 @@ int count = GetCount();
 
 void CHotKeys::GetKeys( ARRAY& keys )
 {
-int count = GetCount();
+int count = GetSize();
 	keys.SetSize( count );
 	for( int i=0; i < count; i++ )
 		keys[i] = GetAt(i)->GetKey();
@@ -1116,8 +1116,8 @@ int count = GetCount();
 // caution! this alters hotkeys based upon corresponding indexes
 void CHotKeys::SetKeys( ARRAY& keys, bool bSave )
 {
-int count = GetCount();
-	ASSERT( count == keys.GetCount() );
+int count = GetSize();
+	ASSERT( count == keys.GetSize() );
 	for( int i=0; i < count; i++ )
 		GetAt(i)->SetKey( keys[i], bSave );
 }
@@ -1126,7 +1126,7 @@ bool CHotKeys::FindFirstConflict( ARRAY& keys, int* pX, int* pY )
 {
 bool bConflict = false;
 int i, j;
-int count = keys.GetCount();
+int count = keys.GetSize();
 DWORD key;
 	for( i=0; i < count && !bConflict; i++ )
 	{
@@ -1394,91 +1394,32 @@ CAccels::CAccels()
 
 void CAccels::AddAccel( CAccel& a )
 {
-	Add( a );
+	m_Map.SetAt(a.Key, a.Cmd);
+	
 }
 
-void CAccels::StartBuildingTable( bool bBigAndFast, int size )
-{
-	SetSize(0);
-
-	// m_Index is used as a fast hash table based upon the 1-byte vkey
-	if( bBigAndFast )
-		m_Index.SetSize( 256 );
-	else
-		m_Index.SetSize( 0 );
-
-int count = m_Index.GetCount();
-	for( int i=0; i < count; i++ )
-		m_Index[i] = NULL;
-}
-
-void CAccels::FinishBuildingTable()
-{
-int count = GetCount();
-	if( count <= 0 )
-		return;
-	// sort by key
-	qsort( GetData(), count, sizeof(CAccel), CompareAccel );
-
-CAccel* pAccel;
-int index;
-int idxCount = m_Index.GetCount();
-	if( idxCount != 256 )
-		return;
-	// setup m_Index hash table with each CAccel
-	for( int i=0; i < count; i++ )
-	{
-		pAccel = &GetAt(i);
-		index = ACCEL_VKEY( pAccel->Key );
-		// place the first accel for this vkey in the index
-		if( m_Index[index] == NULL )
-			m_Index[index] = pAccel;
-	}
-}
-
-CAccel* CAccels::OnMsg( MSG* pMsg )
+bool CAccels::OnMsg( MSG* pMsg, DWORD &dID)
 {
 	// bit 30 (0x40000000) is 1 if this is NOT the first msg of the key
 	//  i.e. auto-repeat may cause multiple msgs of the same key
 	if( (pMsg->lParam & 0x40000000) ||
 	    (pMsg->message != WM_KEYDOWN &&
 	     pMsg->message != WM_SYSKEYDOWN) )
-	{	return NULL; }
-
-int count = GetCount();
-	if( !pMsg || count <= 0 )
-		return NULL;
-
-BYTE vkey = LOBYTE(pMsg->wParam);
-BYTE mod  = GetKeyStateModifiers();
-DWORD key = ACCEL_MAKEKEY( vkey, mod );
-CAccel* pAccel;
-
-	// if we don't have an appropriately sized Index, do a binary search
-int idxCount = m_Index.GetCount();
-	if( idxCount != 256 )
-	{
-	CAccel a(key,0);
-		return (CAccel*) bsearch( &a, GetData(), count, sizeof(CAccel), CompareAccel );
-	}
-	// else we should have a valid m_Index hash table to use
-
-	pAccel = m_Index[ vkey ];
-
-	if( pAccel == NULL )
-		return NULL;
-
-CAccel* pLast = &GetAt(count-1);
-	// for each CAccel that matches vkey
-    while( vkey == ACCEL_VKEY(pAccel->Key) && pAccel <= pLast )
-	{
-		// if modifiers are also the same, then this is the key we are looking for
-		if( mod == ACCEL_MOD(pAccel->Key) )
-			return pAccel;
-		pAccel++;
+	{	
+		return NULL; 
 	}
 
-	return NULL;
+	if( !pMsg || m_Map.GetCount() <= 0 )
+		return NULL;
+
+	BYTE vkey = LOBYTE(pMsg->wParam);
+	BYTE mod  = GetKeyStateModifiers();
+	DWORD key = ACCEL_MAKEKEY( vkey, mod );
+
+	if(m_Map.Lookup(key, dID))
+		return true;;
+
+	return false;
 }
 
 BYTE GetKeyStateModifiers()

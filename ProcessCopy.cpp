@@ -81,7 +81,7 @@ HGLOBAL COleDataObjectEx::GetGlobalData(CLIPFORMAT cfFormat, LPFORMATETC lpForma
 CClipFormat* CClipFormats::FindFormat( UINT cfType )
 {
 CClipFormat* pCF;
-int count = GetCount();
+int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
 		pCF = &GetAt(i);
@@ -101,7 +101,7 @@ CClip::CClip() : m_ID(0), m_lTotalCopySize(0)
 
 CClip::~CClip()
 {
-int count = m_Formats.GetCount();
+int count = m_Formats.GetSize();
 	// in proper handling, m_Formats should be empty
 	ASSERT( count == 0 );
 	EmptyFormats();
@@ -119,7 +119,7 @@ void CClip::Clear()
 void CClip::EmptyFormats()
 {
 	// free global memory in m_Formats
-	for( int i = m_Formats.GetCount()-1; i >= 0; i-- )
+	for( int i = m_Formats.GetSize()-1; i >= 0; i-- )
 	{
 		m_Formats[i].Free();
 		m_Formats.RemoveAt( i );
@@ -175,7 +175,7 @@ CClipTypes* pTypes = pClipTypes;
 	g_bCopyingClipboard = true;
 
 	// m_Formats should be empty when this is called.
-	ASSERT( m_Formats.GetCount() == 0 );
+	ASSERT( m_Formats.GetSize() == 0 );
 
 	// If the data is supposed to be private, then return
 	if( ::IsClipboardFormatAvailable( theApp.m_cfIgnoreClipboard ) )
@@ -192,7 +192,7 @@ CClipTypes* pTypes = pClipTypes;
 
 	// if no types were given, get only the first (most important) type.
 	//  (subsequent types could be synthetic due to automatic type conversions)
-	if( pTypes == NULL || pTypes->GetCount() == 0 )
+	if( pTypes == NULL || pTypes->GetSize() == 0 )
 	{
 		ASSERT(0); // this feature is not currently used... it is an error if it is.
 
@@ -223,7 +223,7 @@ bool bIsDescSet = false;
 	// Get global data for each supported type on the clipboard
 UINT nSize;
 CClipFormat cf;
-int numTypes = pTypes->GetCount();
+int numTypes = pTypes->GetSize();
 	for(int i = 0; i < numTypes; i++)
 	{
 		cf.m_cfType = pTypes->GetAt(i);
@@ -303,7 +303,7 @@ ULONG ulBufLen = GlobalSize(hgData);
 
 bool CClip::SetDescFromType()
 {
-	if( m_Formats.GetCount() <= 0 )
+	if( m_Formats.GetSize() <= 0 )
 		return false;
 	m_Desc = GetFormatName( m_Formats[0].m_cfType );
 	return m_Desc.GetLength() > 0;
@@ -335,7 +335,7 @@ bool bResult;
 	bResult = AddToMainTable() && AddToDataTable();
 
 	// should be emptied by AddToDataTable
-	ASSERT( m_Formats.GetCount() == 0 );
+	ASSERT( m_Formats.GetSize() == 0 );
 
 	return bResult;
 }
@@ -393,7 +393,7 @@ CClipFormat* pFormat = NULL;
 			recset.MoveLast();
 			nRecs = recset.GetRecordCount();
 		}
-		nFormats = m_Formats.GetCount();
+		nFormats = m_Formats.GetSize();
 		nRet = nFormats - nRecs;
 		if( nRet != 0 || nRecs == 0 )
 		{	recset.Close();	return nRet; }
@@ -475,7 +475,7 @@ bool CClip::AddToDataTable()
 
 		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT * FROM Data" ,NULL);
 
-		for( int i = m_Formats.GetCount()-1; i >= 0 ; i-- )
+		for( int i = m_Formats.GetSize()-1; i >= 0 ; i-- )
 		{
 			pCF = & m_Formats.GetAt(i);
 
@@ -661,7 +661,7 @@ HGLOBAL hGlobal = 0;
 	}
 	CATCHDAO
 
-	return formats.GetCount() > 0;
+	return formats.GetSize() > 0;
 }
 
 void CClip::LoadTypes( long lID, CClipTypes& types )

@@ -37,7 +37,7 @@ public:
 \*------------------------------------------------------------------*/
 class COleClipSource : public COleDataSource
 {
-	DECLARE_DYNAMIC(COleClipSource)
+	//DECLARE_DYNAMIC(COleClipSource)
 
 public:
 	CClipIDs	m_ClipIDs;

@@ -329,7 +329,7 @@ CTokenizer tokenizer(text,delims);
 CClip clip;
 int len;
 long lDate = (long) CTime::GetCurrentTime().GetTime();
-int count = tokens.GetCount();
+int count = tokens.GetSize();
 
 	for( int i = 0; i < count; i++ )
 	{
@@ -349,7 +349,7 @@ int count = tokens.GetCount();
 		::MessageBox( m_hWnd, "No new tokens found by parsing", "Parse Failed", MB_OK|MB_ICONINFORMATION );
 	else
 	{
-		::MessageBox( m_hWnd, StrF("Successfully parsed %d tokens.", tokens.GetCount()), "Parse Completed", MB_OK|MB_ICONINFORMATION );
+		::MessageBox( m_hWnd, StrF("Successfully parsed %d tokens.", tokens.GetSize()), "Parse Completed", MB_OK|MB_ICONINFORMATION );
 		theApp.RefreshView();
 	}
 }

@@ -588,9 +588,10 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 	//}
 	*/
 
-	CAccel* pAccel = m_Accels.OnMsg( pMsg );
-	if( pAccel && GetParent()->SendMessage(NM_SELECT_DB_ID, pAccel->Cmd, 0) )
-		return TRUE;
+	DWORD dID;
+	if(m_Accels.OnMsg(pMsg, dID))
+		if(GetParent()->SendMessage(NM_SELECT_DB_ID, dID, 0) )
+			return TRUE;
 
 	switch(pMsg->message) 
 	{
@@ -741,7 +742,7 @@ void CQListCtrl::DestroyAndCreateAccelerator(BOOL bCreate)
 	//if(bCreate)
 	//	m_Accelerator = CMainTable::LoadAcceleratorKeys();
 
-	m_Accels.Clear();
+//	m_Accels.Clear();
 
 	if( bCreate )
 		CMainTable::LoadAcceleratorKeys( m_Accels );

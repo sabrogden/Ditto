@@ -58,7 +58,7 @@ CCP_MainApp::~CCP_MainApp()
 
 BOOL CCP_MainApp::InitInstance()
 {
-	LOG(FUNC);
+	LOG("InitInstance");
 
 	AfxEnableControlContainer();
 
@@ -72,7 +72,7 @@ BOOL CCP_MainApp::InitInstance()
 
 		return TRUE;
 	}
-
+	
 	m_cfIgnoreClipboard = ::RegisterClipboardFormat("Clipboard Viewer Ignore");
 
 	if(CheckDBExists(CGetSetOptions::GetDBPath()) == FALSE)
@@ -252,7 +252,7 @@ CClipTypes* pTypes = new CClipTypes;
 		e->Delete();
 	}
 
-	if( pTypes->GetCount() <= 0 )
+	if( pTypes->GetSize() <= 0 )
 	{
 		pTypes->Add(CF_TEXT);
 		pTypes->Add(RegisterClipboardFormat(CF_RTF));
@@ -367,7 +367,7 @@ void CCP_MainApp::Delayed_RemoveOldEntries( UINT delay )
 
 int CCP_MainApp::ExitInstance() 
 {
-	LOG(FUNC);
+	LOG("ExitInstance");
 	if(CGetSetOptions::GetCompactAndRepairOnExit())
 		CompactDatabase();
 	
