@@ -477,7 +477,7 @@ bool CClip::AddToDataTable()
 
 		for( int i = m_Formats.GetSize()-1; i >= 0 ; i-- )
 		{
-			pCF = & m_Formats.GetAt(i);
+			pCF = & m_Formats[i];
 
 			recset.AddNew();
 
