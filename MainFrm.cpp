@@ -116,8 +116,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_ulCopyGap = CGetSetOptions::GetCopyGap();
 
-//	QuickPaste.Create( this );
-
 	theApp.AfterMainCreate();
 
 	return 0;
@@ -327,13 +325,15 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		}
 	case CHECK_FOR_UPDATE:
 		{
+			KillTimer(CHECK_FOR_UPDATE);
+
 			CInternetUpdate Update;
 			if(Update.CheckForUpdate(NULL, TRUE, FALSE))
 			{
 				SendMessage(WM_CLOSE, 0, 0);
 			}
 
-			KillTimer(CHECK_FOR_UPDATE);
+			SetTimer(CHECK_FOR_UPDATE, ONE_MINUTE*60*24, NULL);
 			break;
 		}
 	case CLOSE_APP:

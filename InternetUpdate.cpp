@@ -40,8 +40,6 @@ BOOL CInternetUpdate::CheckForUpdate(HWND hParent, BOOL bCheckForPrevUpdate, BOO
 	tm tmNow = *(Now.GetLocalTm());
 	long lCurrentDayOfYear = tmNow.tm_yday;
 
-	CGetSetOptions::SetLastUpdate(lCurrentDayOfYear);
-
 	RemoveOldUpdateFile();
 	
 	if(bCheckForPrevUpdate)
@@ -49,21 +47,17 @@ BOOL CInternetUpdate::CheckForUpdate(HWND hParent, BOOL bCheckForPrevUpdate, BOO
 		if(!CGetSetOptions::GetCheckForUpdates())
 			return FALSE;
 
-		if((lCurrentDayOfYear - CGetSetOptions::GetLastUpdate()) > 15)
-		{
-			//If it's been more than 15 days then check for updates
-		}
-		else
-		{
-			//Only check every 15 days
-			if((lCurrentDayOfYear % 15) != 0)
-				return FALSE;
+		long lLastUpdateDay = CGetSetOptions::GetLastUpdate();
 
-			//if the last time we check was today return
-			if(CGetSetOptions::GetLastUpdate() == lCurrentDayOfYear)
-				return FALSE;
-		}
+		if(lCurrentDayOfYear - lLastUpdateDay < 10)
+			return FALSE;
+
+		//if the last time we check was today return
+		if(lLastUpdateDay == lCurrentDayOfYear)
+			return FALSE;
 	}
+
+	CGetSetOptions::SetLastUpdate(lCurrentDayOfYear);
 	
 	BOOL bRet = FALSE;
 	
@@ -73,7 +67,8 @@ BOOL CInternetUpdate::CheckForUpdate(HWND hParent, BOOL bCheckForPrevUpdate, BOO
 	if(m_lUpdateVersion > m_lRunningVersion)
 	{
 		CString csMessage;
-		csMessage.Format(	"Updates available for Ditto.\n\n"
+		csMessage.Format(	"Updates available for Ditto.\n"
+							"Visit ditto-cp.sourceforge.net for details\n\n"
 							"Running Version, %s\n"
 							"Update Version, %s\n\n"
 							"Download updated version?",
