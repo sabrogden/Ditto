@@ -1104,8 +1104,8 @@ void CQPasteWnd::OnMenuProperties()
 void CQPasteWnd::UpdateFont()
 {
 	LOGFONT lf;
-	CGetSetOptions::GetFont(lf);
-	m_lstHeader.SetLogFont(lf);
+	if( CGetSetOptions::GetFont(lf) )
+		m_lstHeader.SetLogFont(lf);
 }
 
 void CQPasteWnd::OnMenuFirsttenhotkeysUsectrlnum() 
