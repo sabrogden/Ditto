@@ -1208,11 +1208,7 @@ void CGetSetOptions::SetNetworkPassword(CString csPassword)
 		SetProfileData("NetworkPassword", NULL, 0);
 	}
 
-	if(pData)
-	{
-		delete pData;
-		pData = NULL;
-	}
+	DELETE_PTR(pData);
 }
 
 CString CGetSetOptions::GetNetworkPassword()
@@ -1228,11 +1224,8 @@ CString CGetSetOptions::GetNetworkPassword()
 		if(DecryptString((UCHAR *)lpVoid, dwLength, pData, nLength))
 			cs = pData;
 
-		if(pData)
-		{
-			delete pData;
-			pData = NULL;
-		}
+		DELETE_PTR(pData);
+		DELETE_PTR(lpVoid);
 	}
 
 	if(cs == "")
