@@ -36,7 +36,7 @@ CString GetDefaultDBName()
 		csDefaultPath = string;		
 		csDefaultPath += "\\Ditto\\";
 		
-		if(_access(csDefaultPath, 0) != -1)
+		if(_access(csDefaultPath, 0) == -1)
 			CreateDirectory(csDefaultPath, NULL);
 		
 		csDefaultPath += DEFAULT_DB_NAME;
