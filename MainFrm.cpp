@@ -398,7 +398,7 @@ BOOL CMainFrame::ResetKillDBTimer()
 {
 	KillTimer(KILL_DB_TIMER);
 
-	SetTimer(KILL_DB_TIMER, ONE_MINUTE*2, NULL);
+	SetTimer(KILL_DB_TIMER, ONE_MINUTE*60, NULL);
 
 	return TRUE;
 }
