@@ -970,6 +970,9 @@ bool CHotKey::Register()
 											GetModifier(),
 											LOBYTE(m_Key) ) == TRUE;
 	}
+	else
+		m_bIsRegistered = true;
+
 	return m_bIsRegistered;
 }
 bool CHotKey::Unregister()
@@ -977,17 +980,25 @@ bool CHotKey::Unregister()
 	if( !m_bIsRegistered )
 		return true;
 
-	ASSERT(g_HotKeys.m_hWnd);
-	if( ::UnregisterHotKey( g_HotKeys.m_hWnd, m_Atom ) )
+	if(m_Key)
 	{
-		m_bIsRegistered = false;
-		return true;
+		ASSERT(g_HotKeys.m_hWnd);
+		if( ::UnregisterHotKey( g_HotKeys.m_hWnd, m_Atom ) )
+		{
+			m_bIsRegistered = false;
+			return true;
+		}
+		else
+		{
+			LOG(FUNC "FAILED!");
+			ASSERT(0);
+		}
 	}
 	else
 	{
-		LOG(FUNC "FAILED!");
-		ASSERT(0);
+		m_bIsRegistered = false;
 	}
+
 	return false;
 }
 
