@@ -97,35 +97,27 @@ BOOL CCP_MainApp::InitInstance()
 		return TRUE;
 	}
 	
+	AfxOleInit();
+
 	m_cfIgnoreClipboard = ::RegisterClipboardFormat("Clipboard Viewer Ignore");
 
-	if(CheckDBExists(CGetSetOptions::GetDBPath()) == FALSE)
+	int nRet = CheckDBExists(CGetSetOptions::GetDBPath());
+	if(nRet == FALSE)
 	{
 		AfxMessageBox("Error Opening Database.");
 		return TRUE;
 	}
+	else if(nRet == ERROR_OPENING_DATABASE)
+	{
+		CString cs;
+		cs.Format("Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO.");
+		if(MessageBox(NULL, cs, "Ditto", MB_YESNO) == IDYES)
+		{
+			ShellExecute(NULL, "open", "http://ditto-cp.sourceforge.net/dao_setup.exe", "", "", SW_SHOW);
+		}
 
-	AfxOleInit();
-
-//	if(g_Opt.m_bUseHookDllForFocus)
-//	{
-//		m_hHookDll = LoadLibrary("focus.dll");
-//		if(m_hHookDll)
-//		{
-//			m_MonitorFocusChanges = (DWORD(*)(HWND,UINT))GetProcAddress(m_hHookDll, "_MonitorFocusChanges@8");
-//			m_StopMonitoringFocusChanges = (DWORD(*)())GetProcAddress(m_hHookDll, "_StopMonitoringFocusChanges@0");
-//			m_GetCurrentFocus = (HWND(*)())GetProcAddress(m_hHookDll, "_GetCurrentFocus@0");
-//		}
-//
-//		if(	m_hHookDll == NULL || m_MonitorFocusChanges == NULL || 
-//			m_StopMonitoringFocusChanges == NULL || m_GetCurrentFocus == NULL)
-//		{
-//			g_Opt.m_bUseHookDllForFocus = FALSE;
-//		}
-//	}
-
-//	if(DoCleanups() == FALSE)
-//		return TRUE;
+		return TRUE;
+	}
 
 	CMainFrame* pFrame = new CMainFrame;
 	m_pMainWnd = m_pMainFrame = pFrame;

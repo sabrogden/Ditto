@@ -10,6 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #define DEFAULT_DB_NAME "DittoDB.mdb"
+#define ERROR_OPENING_DATABASE	2
 
 #define CATCHDAO \
 	catch(CDaoException* e) \

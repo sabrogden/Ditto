@@ -78,8 +78,10 @@ BOOL CheckDBExists(CString csDBPath)
 	}
 	
 	BOOL bRet = FALSE;
+
+	int nRet = ValidDB(csDBPath);
 	
-	if(ValidDB(csDBPath) == FALSE)
+	if(nRet == FALSE)
 	{
 		theApp.CloseDB();
 		
@@ -106,6 +108,8 @@ BOOL CheckDBExists(CString csDBPath)
 		
 		bRet = CreateDB(csPath);
 	}
+	else if(nRet == ERROR_OPENING_DATABASE)
+		bRet = ERROR_OPENING_DATABASE;
 	else
 		bRet = TRUE;
 	
@@ -136,7 +140,28 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 	try
 	{
 		CDaoDatabase db;
-		db.Open(csPath);
+
+		try
+		{
+			db.Open(csPath);
+		}
+		catch(CDaoException* e)
+		{
+			TCHAR   szErrorMessage[512];
+			UINT    nHelpContext;
+
+			if(e->GetErrorMessage(szErrorMessage, 512, &nHelpContext))
+			{
+				if(strcmp(szErrorMessage, "Unable to initialize DAO/Jet db engine.") == 0)
+				{
+					e->Delete();
+					return ERROR_OPENING_DATABASE;				
+				}
+			}
+			e->ReportError();
+			e->Delete();
+		}
+		
 		
 		CDaoTableDef table(&db);
 		CDaoFieldInfo info;
@@ -187,7 +212,30 @@ BOOL CreateDB(CString csPath)
 	{
 		CDaoDatabase db;
 		EnsureDirectory(csPath);
-		db.Create(csPath);
+
+		try
+		{
+			db.Create(csPath);
+		}
+		catch(CDaoException* e)
+		{
+			TCHAR   szErrorMessage[512];
+			UINT    nHelpContext;
+
+			if(e->GetErrorMessage(szErrorMessage, 512, &nHelpContext))
+			{
+				if(strcmp(szErrorMessage, "Unable to initialize DAO/Jet db engine.") == 0)
+				{
+					e->Delete();
+					return ERROR_OPENING_DATABASE;	
+				}
+			}
+
+			e->ReportError();
+			e->Delete();
+
+			return FALSE;
+		}
 		
 		CDaoTableDefEx table(&db);
 		//Create the Main table
