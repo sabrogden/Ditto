@@ -24,7 +24,7 @@ CQListCtrl::CQListCtrl()
 {
 	m_pchTip = NULL;
 	m_pwchTip = NULL;
-
+	
 	LOGFONT lf;
 	
 	lf.lfHeight = -9;
@@ -41,9 +41,9 @@ CQListCtrl::CQListCtrl()
 	lf.lfQuality = DEFAULT_QUALITY;
 	lf.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
 	lstrcpy(lf.lfFaceName, "Small Font");
-
+	
 	m_SmallFont = ::CreateFontIndirect(&lf);
-
+	
 	m_bShowTextForFirstTenHotKeys = true;
 	m_bStartTop = true;
 }
@@ -52,23 +52,23 @@ CQListCtrl::~CQListCtrl()
 {
 	if(m_pchTip != NULL)
 		delete m_pchTip;
-
+	
 	if(m_pwchTip != NULL)
 		delete m_pwchTip;
-
+	
 	if( m_SmallFont )
 		::DeleteObject( m_SmallFont );
-
+	
 	DestroyAndCreateAccelerator(FALSE);
 }
 
 // returns the position 1-10 if the index is in the FirstTen block else -1
 int CQListCtrl::GetFirstTenNum( int index )
 {
-// set firstTenNum to the first ten number (1-10) corresponding to the given index
-int firstTenNum = -1; // -1 means that nItem is not in the FirstTen block.
-int count = GetItemCount();
-
+	// set firstTenNum to the first ten number (1-10) corresponding to the given index
+	int firstTenNum = -1; // -1 means that nItem is not in the FirstTen block.
+	int count = GetItemCount();
+	
 	if( m_bStartTop )
 	{
 		if( 0 <= index && index <= 9 )
@@ -76,7 +76,7 @@ int count = GetItemCount();
 	}
 	else // we are starting at the bottom and going up
 	{
-	int idxStartFirstTen = count-10; // start of the FirstTen block
+		int idxStartFirstTen = count-10; // start of the FirstTen block
 		// if index is within the FirstTen block
 		if( idxStartFirstTen <= index && index < count )
 			firstTenNum = count - index;
@@ -90,33 +90,33 @@ int CQListCtrl::GetFirstTenIndex( int num )
 {
 	if( num <= 0 || num > 10 )
 		return -1;
-
+	
 	if( m_bStartTop )
 		return num-1;
 	// else we are starting at the bottom and going up
-int count = GetItemCount();
+	int count = GetItemCount();
 	return count - num;
 }
 
 
 BEGIN_MESSAGE_MAP(CQListCtrl, CListCtrl)
-	//{{AFX_MSG_MAP(CQListCtrl)
-	ON_NOTIFY_REFLECT(LVN_KEYDOWN, OnKeydown)
-	ON_NOTIFY_REFLECT(NM_DBLCLK, OnDblclk)
-	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, OnCustomdrawList)
-	ON_WM_SYSKEYDOWN()
-	ON_WM_ERASEBKGND()
-	ON_WM_CREATE()
-	ON_WM_VSCROLL()
-	ON_WM_HSCROLL()
-	ON_WM_TIMER()
-	ON_WM_WINDOWPOSCHANGED()
-	ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnSelectionChange)
-	ON_WM_SIZE()
-	//}}AFX_MSG_MAP
-	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
-	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
-	ON_WM_KILLFOCUS()
+//{{AFX_MSG_MAP(CQListCtrl)
+ON_NOTIFY_REFLECT(LVN_KEYDOWN, OnKeydown)
+ON_NOTIFY_REFLECT(NM_DBLCLK, OnDblclk)
+ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, OnCustomdrawList)
+ON_WM_SYSKEYDOWN()
+ON_WM_ERASEBKGND()
+ON_WM_CREATE()
+ON_WM_VSCROLL()
+ON_WM_HSCROLL()
+ON_WM_TIMER()
+ON_WM_WINDOWPOSCHANGED()
+ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnSelectionChange)
+ON_WM_SIZE()
+//}}AFX_MSG_MAP
+ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
+ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
+ON_WM_KILLFOCUS()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -135,11 +135,11 @@ void CQListCtrl::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 			SendSelection(arr);
 		}
 		break;
-
+		
 	case VK_ESCAPE:
 		GetParent()->SendMessage(NM_END, 0, 0);
 		break;
-
+		
 	case VK_RIGHT:
 		{
 			int nItem = GetNextItem(-1, LVNI_SELECTED);
@@ -147,7 +147,7 @@ void CQListCtrl::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 				GetParent()->SendMessage(NM_RIGHT, nItem, 0);
 		}
 		break;
-
+		
 	case VK_LEFT:
 		GetParent()->SendMessage(NM_LEFT, 0, 0);
 		break;
@@ -155,7 +155,7 @@ void CQListCtrl::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 		GetParent()->SendMessage(NM_DELETE, 0, 0);
 		break;
 	}
-
+	
 	*pResult = 0;
 }
 
@@ -170,7 +170,7 @@ void CQListCtrl::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult)
 		if (Flags | LVHT_ONITEM)
 			SendSelection(nItem);
 	}
-
+	
 	*pResult = 0;
 }
 
@@ -187,26 +187,26 @@ void CQListCtrl::SendSelection(ARRAY &arrItems)
 void CQListCtrl::GetSelectionIndexes(ARRAY &arr)
 {
 	arr.RemoveAll();
-
+	
 	POSITION pos = GetFirstSelectedItemPosition();
 	while (pos)
 		arr.Add(GetNextSelectedItem(pos));
 	
-
-	/*
-	int nItem = GetNextItem(-1, LVNI_SELECTED);
-	while (nItem != -1)
-	{
+	
+		/*
+		int nItem = GetNextItem(-1, LVNI_SELECTED);
+		while (nItem != -1)
+		{
 		arr.Add(nItem);
 		nItem = GetNextItem(nItem, LVNI_SELECTED);
-	}
+		}
 	*/
 }
 
 void CQListCtrl::GetSelectionItemData(ARRAY &arr)
 {
-DWORD dwData;
-int i;
+	DWORD dwData;
+	int i;
 	arr.RemoveAll();
 	POSITION pos = GetFirstSelectedItemPosition();
 	while (pos)
@@ -220,8 +220,8 @@ int i;
 	int nItem = GetNextItem(-1, LVNI_SELECTED);
 	while (nItem != -1)
 	{
-		arr.Add((int)GetItemData(nItem));
-		nItem = GetNextItem(nItem, LVNI_SELECTED);
+	arr.Add((int)GetItemData(nItem));
+	nItem = GetNextItem(nItem, LVNI_SELECTED);
 	}
 	*/
 }
@@ -266,7 +266,7 @@ BOOL CQListCtrl::SetListPos( int index )
 {
 	if( index < 0 || index >= GetItemCount() )
 		return FALSE;
-
+	
 	RemoveAllSelection();
 	SetCaret(index);
 	SetSelection(index);
@@ -278,31 +278,31 @@ BOOL CQListCtrl::SetFormattedText(int nRow, int nCol, LPCTSTR lpszFormat,...)
 {
 	CString csText;
 	va_list vlist;
-
+	
 	ASSERT(AfxIsValidString(lpszFormat));
 	va_start(vlist,lpszFormat);
 	csText.FormatV(lpszFormat,vlist);
 	va_end(vlist);
-
+	
 	return SetText(nRow,nCol,csText);
 }
 
 void CQListCtrl::SetNumberOfLinesPerRow(int nLines)
 {
 	CDC *pDC = GetDC();
-
+	
 	CRect crRect(0, 0, 0, 0);
-
+	
 	CFont *pOldFont = pDC->SelectObject(GetFont());
-
+	
 	//Get the height to draw one character
 	pDC->DrawText("W", crRect, DT_VCENTER | DT_EXPANDTABS | DT_CALCRECT);
-
+	
 	pDC->SelectObject(pOldFont);
-
+	
 	//Get the total height of each row
 	int nHeight = (crRect.Height() * nLines) + ROW_BOTTOM_BORDER;
-
+	
 	//Create a image list of that height and set it to the list box
 	CImageList imglist;
 	imglist.Create(DUMMY_COL_WIDTH, nHeight, ILC_COLOR16 | ILC_MASK, 1, 1);
@@ -314,7 +314,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 	NMLVCUSTOMDRAW* pLVCD = reinterpret_cast<NMLVCUSTOMDRAW*>( pNMHDR );
     
     *pResult = 0;
-
+	
     // Request item-specific notifications if this is the
     // beginning of the paint cycle.
     if ( CDDS_PREPAINT == pLVCD->nmcd.dwDrawStage )
@@ -329,7 +329,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
         COLORREF crBkgnd;
         BOOL     bListHasFocus;
         CRect    rcItem;
-                		
+		
         bListHasFocus = ( GetSafeHwnd() == ::GetFocus() );
         
         // Get the image index and selected/focused state of the
@@ -339,17 +339,17 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
         rItem.iItem = nItem;
         rItem.stateMask = LVIS_SELECTED | LVIS_FOCUSED;
         GetItem(&rItem);
-				
+		
         // Get the rect that bounds the text label.
         GetItemRect(nItem, rcItem, LVIR_LABEL);
 		rcItem.left -= DUMMY_COL_WIDTH;
-
+		
 		CPen cpWhite;
 		cpWhite.CreatePen(PS_SOLID, 1, RGB(255, 255, 255));
 		CPen *pOldPen = NULL;
 		COLORREF OldColor = -1;
 		int nOldBKMode = -1;
-
+		
 		// Draw the background of the list item.  Colors are selected 
 		// according to the item's state.
 		if(rItem.state & LVIS_SELECTED)
@@ -386,12 +386,12 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		
         // Draw the text.
         //CString csText = GetItemText(nItem, 0);
-
+		
 		CString csText;
 		LPTSTR lpszText = csText.GetBufferSetLength(g_Opt.m_bDescTextSize);
 		GetItemText(nItem, 0, lpszText, g_Opt.m_bDescTextSize);
 		csText.ReleaseBuffer();
-
+		
 		// extract symbols
 		CString strSymbols;
 		int nSymEnd = csText.Find('|');
@@ -400,57 +400,57 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			strSymbols = csText.Left(nSymEnd);
 			csText = csText.Mid(nSymEnd+1);
 		}
-
+		
 		// set firstTenNum to the first ten number (1-10) corresponding to
 		//  the current nItem.
 		// -1 means that nItem is not in the FirstTen block.
 		int firstTenNum = GetFirstTenNum(nItem);
-
+		
 		if( m_bShowTextForFirstTenHotKeys && firstTenNum > 0 )
 		{
 			rcText.left += 12;
 		}
-
+		
 		// if we are inside a group, don't display the "in group" flag
 		if( theApp.m_GroupID > 0 )
 		{
-		int nFlag = strSymbols.Find("!");
+			int nFlag = strSymbols.Find("!");
 			if( nFlag >= 0 )
 				strSymbols.Delete(nFlag);
 		}
-
+		
 		// draw the symbol box
 		if( strSymbols.GetLength() > 0 )
 		{
 			strSymbols = " " + strSymbols + " "; // leave space for box
 			// add spaces to leave room for the symbols
-		CRect rectSym(rcText.left, rcText.top+1, rcText.left, rcText.top+1);
-		CRect rectSpace(0,0,0,0);
+			CRect rectSym(rcText.left, rcText.top+1, rcText.left, rcText.top+1);
+			CRect rectSpace(0,0,0,0);
 			//Get text bounds
 			pDC->DrawText(" ", &rectSpace, DT_VCENTER | DT_EXPANDTABS | DT_CALCRECT);
 			pDC->DrawText(strSymbols, &rectSym, DT_VCENTER | DT_EXPANDTABS | DT_CALCRECT);
 			VERIFY( rectSpace.Width() > 0 );
-
-		int numSpaces = rectSym.Width() / rectSpace.Width();
+			
+			int numSpaces = rectSym.Width() / rectSpace.Width();
 			numSpaces++;
 			csText = CString(' ',numSpaces) + csText;
-
+			
 			// draw the symbols
 			pDC->FillSolidRect( rectSym, GetSysColor(COLOR_ACTIVECAPTION) );
 			//pDC->FillSolidRect( rectSym, RGB(0,255,255) );
-	        pDC->Draw3dRect(rectSym, GetSysColor(COLOR_3DLIGHT), GetSysColor(COLOR_3DDKSHADOW));
-//		COLORREF crOld = pDC->SetTextColor(GetSysColor(COLOR_INFOTEXT));
-		COLORREF crOld = pDC->SetTextColor(RGB(255, 255, 255));
+			pDC->Draw3dRect(rectSym, GetSysColor(COLOR_3DLIGHT), GetSysColor(COLOR_3DDKSHADOW));
+			//		COLORREF crOld = pDC->SetTextColor(GetSysColor(COLOR_INFOTEXT));
+			COLORREF crOld = pDC->SetTextColor(RGB(255, 255, 255));
 			pDC->DrawText(strSymbols, rectSym, DT_VCENTER | DT_EXPANDTABS);
 			pDC->SetTextColor(crOld);
 		}
-
+		
 		pDC->DrawText(csText, rcText, DT_VCENTER | DT_EXPANDTABS);
-
+		
         // Draw a focus rect around the item if necessary.
         if(bListHasFocus && (rItem.state & LVIS_FOCUSED))
 			pDC->DrawFocusRect(rcItem);
-
+		
 		if( m_bShowTextForFirstTenHotKeys && firstTenNum > 0 )
 		{
 			CString cs;
@@ -458,7 +458,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 				cs = "0";
 			else
 				cs.Format("%d", firstTenNum);
-
+			
 			CRect crClient;
 			
 			GetWindowRect(crClient);
@@ -469,27 +469,27 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			crHotKey.right = crHotKey.left + 11;
 			crHotKey.left += 2;
 			crHotKey.top += 2;
-
+			
 			HFONT hOldFont = (HFONT)pDC->SelectObject(m_SmallFont);
-
+			
 			pDC->DrawText(cs, crHotKey, DT_BOTTOM);
-
+			
 			pDC->MoveTo(CPoint(rcItem.left + 11, rcItem.top));
 			pDC->LineTo(CPoint(rcItem.left + 11, rcItem.bottom));
 			
 			pDC->SelectObject(hOldFont);
 		}
-
+		
 		// restore the previous values
 		if(pOldPen)
 			pDC->SelectObject(pOldPen);
-
+		
 		if(OldColor > -1)
 			pDC->SetTextColor(OldColor);
-
+		
 		if(nOldBKMode > -1)
 			pDC->SetBkMode(nOldBKMode);
-
+		
         *pResult = CDRF_SKIPDEFAULT;    // We've painted everything.
 	}
 }
@@ -516,10 +516,10 @@ BOOL CQListCtrl::OnEraseBkgnd(CDC* pDC)
 	//	painting.  However, there is a pixel buffer around the
 	//	border of this control (not within the item rects)
 	//	which becomes visually corrupt if it is not erased.
-
+	
 	// In most cases, I do not notice the erasure, so I have kept
 	//	the call to CListCtrl::OnEraseBkgnd(pDC);
-
+	
 	// However, for some reason, bulk erasure is very noticeable when
 	//	shift-scrolling the page to select a block of items, so
 	//	I made a special case for that:
@@ -534,21 +534,21 @@ BOOL CQListCtrl::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 	TOOLTIPTEXTA* pTTTA = (TOOLTIPTEXTA*)pNMHDR;
 	TOOLTIPTEXTW* pTTTW = (TOOLTIPTEXTW*)pNMHDR;
 	CString strTipText;
-
+	
 	UINT nID = pNMHDR->idFrom;
-
+	
 	if(nID == 0)	  	// Notification in NT from automatically
 		return FALSE;   	// created tooltip
 	
 	::SendMessage(pNMHDR->hwndFrom, TTM_SETMAXTIPWIDTH, 0, 500);
-
+	
 	// Use Item's name as the tool tip. Change this for something different.
 	// Like use its file size, etc.
 	GetToolTipText(nID-1, strTipText);
-
+	
 	//Replace the tabs with spaces, the tooltip didn't like the \t s
 	strTipText.Replace("\t", "  ");
-
+	
 #ifndef _UNICODE
 	if (pNMHDR->code == TTN_NEEDTEXTA)
 	{
@@ -564,7 +564,7 @@ BOOL CQListCtrl::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 	{
 		if(m_pwchTip != NULL)
 			delete m_pwchTip;
-
+		
 		m_pwchTip = new WCHAR[strTipText.GetLength()+1];
 		_mbstowcsz(m_pwchTip, strTipText, strTipText.GetLength());
 		m_pwchTip[strTipText.GetLength()] = 0; // end of text
@@ -575,7 +575,7 @@ BOOL CQListCtrl::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 	{
 		if(m_pchTip != NULL)
 			delete m_pchTip;
-
+		
 		m_pchTip = new TCHAR[strTipText.GetLength()+1];
 		_wcstombsz(m_pchTip, strTipText, strTipText.GetLength());
 		m_pchTip[strTipText.GetLength()] = 0; // end of text
@@ -585,7 +585,7 @@ BOOL CQListCtrl::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 	{
 		if(m_pwchTip != NULL)
 			delete m_pwchTip;
-
+		
 		m_pwchTip = new WCHAR[strTipText.GetLength()+1];
 		lstrcpyn(m_pwchTip, strTipText, strTipText.GetLength());
 		m_pwchTip[strTipText.GetLength()] = 0;
@@ -593,7 +593,7 @@ BOOL CQListCtrl::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 	}
 #endif
 	*pResult = 0;
-
+	
 	return TRUE;    // message was handled
 }
 
@@ -622,7 +622,7 @@ int CQListCtrl::OnToolHitTest(CPoint point, TOOLINFO * pTI) const
 			}
 		}
 	}
-
+	
 	return -1;
 }
 
@@ -632,114 +632,114 @@ int CQListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	
 	EnableToolTips();
-
+	
 	m_Popup.Init();
-//	m_Popup.SetTTWnd( GetToolTips()->m_hWnd );
-//	m_Popup.m_TI.hwnd = m_hWnd;
+	//	m_Popup.SetTTWnd( GetToolTips()->m_hWnd );
+	//	m_Popup.m_TI.hwnd = m_hWnd;
     
 	return 0;
 }
 
 BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg) 
 {
-DWORD dID;
+	DWORD dID;
 	if(m_Accels.OnMsg(pMsg, dID))
 		if(GetParent()->SendMessage(NM_SELECT_DB_ID, dID, 0) )
 			return TRUE;
-
-	switch(pMsg->message) 
-	{
-	case WM_KEYDOWN:
-		WPARAM vk = pMsg->wParam;
 		
-		if(m_Popup.m_bIsShowing)
+		switch(pMsg->message) 
 		{
-			m_Popup.Hide();
-
-			if(vk == VK_ESCAPE)
-				return TRUE;
-		}
-
-		// if a number key was pressed
-		if( '0' <= vk && vk <= '9' )
-		{
-			// if <Ctrl> is required but is absent, then break
-			if( g_Opt.m_bUseCtrlNumAccel && !(GetKeyState(VK_CONTROL) & 0x8000) )
-				break;
-
-			int index = vk - '0';
-			// '0' is actually 10 in the ditto window
-			if( index == 0 )
-				index = 10;
-			// translate num 1-10 into the actual index (based upon m_bStartTop)
-			index = GetFirstTenIndex( index );
-			GetParent()->SendMessage(NM_SELECT_INDEX, index, 0);
-			return TRUE;
-		}
-
-		switch( vk )
-		{
-		case 'X': // Ctrl-X = Cut (prepare for moving the items into a Group)
-			if(GetKeyState(VK_CONTROL) & 0x8000)
+		case WM_KEYDOWN:
+			WPARAM vk = pMsg->wParam;
+			
+			if(m_Popup.m_bIsShowing)
 			{
-				LoadCopyOrCutToClipboard();		
-
-				theApp.IC_Cut(); // uses selection
+				m_Popup.Hide();
+				
+				if(vk == VK_ESCAPE)
+					return TRUE;
+			}
+			
+			// if a number key was pressed
+			if( '0' <= vk && vk <= '9' )
+			{
+				// if <Ctrl> is required but is absent, then break
+				if( g_Opt.m_bUseCtrlNumAccel && !(GetKeyState(VK_CONTROL) & 0x8000) )
+					break;
+				
+				int index = vk - '0';
+				// '0' is actually 10 in the ditto window
+				if( index == 0 )
+					index = 10;
+				// translate num 1-10 into the actual index (based upon m_bStartTop)
+				index = GetFirstTenIndex( index );
+				GetParent()->SendMessage(NM_SELECT_INDEX, index, 0);
 				return TRUE;
 			}
-			break;
-
-		case 'C': // Ctrl-C = Copy (prepare for copying the items into a Group)
-			if(GetKeyState(VK_CONTROL) & 0x8000)
+			
+			switch( vk )
 			{
-				LoadCopyOrCutToClipboard();
-
-				theApp.IC_Copy(); // uses selection
-				return TRUE;
-			}
-			break;
-
-		case 'V': // Ctrl-V = Paste (actually performs the copy or move of items into the current Group)
-			if(GetKeyState(VK_CONTROL) & 0x8000)
-			{
-				theApp.IC_Paste();
-				return TRUE;
-			}
-			break;
-
-		case 'A': // Ctrl-A = Select All
-			if(GetKeyState(VK_CONTROL) & 0x8000)
-			{
-				int nCount = GetItemCount();
-				for(int i = 0; i < nCount; i++)
+			case 'X': // Ctrl-X = Cut (prepare for moving the items into a Group)
+				if(GetKeyState(VK_CONTROL) & 0x8000)
 				{
-					SetSelection(i);
+					LoadCopyOrCutToClipboard();		
+					
+					theApp.IC_Cut(); // uses selection
+					return TRUE;
 				}
+				break;
+				
+			case 'C': // Ctrl-C = Copy (prepare for copying the items into a Group)
+				if(GetKeyState(VK_CONTROL) & 0x8000)
+				{
+					LoadCopyOrCutToClipboard();
+					
+					theApp.IC_Copy(); // uses selection
+					return TRUE;
+				}
+				break;
+				
+			case 'V': // Ctrl-V = Paste (actually performs the copy or move of items into the current Group)
+				if(GetKeyState(VK_CONTROL) & 0x8000)
+				{
+					theApp.IC_Paste();
+					return TRUE;
+				}
+				break;
+				
+			case 'A': // Ctrl-A = Select All
+				if(GetKeyState(VK_CONTROL) & 0x8000)
+				{
+					int nCount = GetItemCount();
+					for(int i = 0; i < nCount; i++)
+					{
+						SetSelection(i);
+					}
+					return TRUE;
+				}
+				break;
+				
+			case VK_F3:
+				{
+					ShowFullDescription();
+					return TRUE;
+				}
+			case VK_BACK:
+				theApp.EnterGroupID( theApp.m_GroupParentID );
 				return TRUE;
-			}
-			break;
-
-		case VK_F3:
-			{
-				ShowFullDescription();
-				return TRUE;
-			}
-		case VK_BACK:
-			theApp.EnterGroupID( theApp.m_GroupParentID );
-			return TRUE;
-		case VK_SPACE:
-			if(GetKeyState(VK_CONTROL) & 0x8000)
-			{
-				theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
-				return TRUE;
-			}
-			break;
-		} // end switch(vk)
-
-		break; // end case WM_KEYDOWN
-	} // end switch(pMsg->message)
-
-	return CListCtrl::PreTranslateMessage(pMsg);
+			case VK_SPACE:
+				if(GetKeyState(VK_CONTROL) & 0x8000)
+				{
+					theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
+					return TRUE;
+				}
+				break;
+			} // end switch(vk)
+			
+			break; // end case WM_KEYDOWN
+		} // end switch(pMsg->message)
+		
+		return CListCtrl::PreTranslateMessage(pMsg);
 }
 
 void CQListCtrl::LoadCopyOrCutToClipboard()
@@ -751,7 +751,7 @@ void CQListCtrl::LoadCopyOrCutToClipboard()
 		return;
 	
 	CProcessPaste paste;
-
+	
 	//Don't send the paste just load it into memory
 	paste.m_bSendPaste = false;
 	
@@ -759,7 +759,7 @@ void CQListCtrl::LoadCopyOrCutToClipboard()
 		paste.GetClipIDs().Copy(arr);
 	else
 		paste.GetClipIDs().Add(arr[0]);
-
+	
 	paste.DoPaste();
 }
 
@@ -770,7 +770,7 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto)
 	GetWindowRect(&crWindow);
 	GetItemRect(nItem, rc, LVIR_BOUNDS);
 	ClientToScreen(rc);
-
+	
 	if(bFromAuto == false)
 	{
 		m_Popup.m_Pos = CPoint(rc.left, rc.bottom);
@@ -798,9 +798,9 @@ void CQListCtrl::GetToolTipText(int nItem, CString &csText)
 			//plus 100 for extra info - shortcut and such
 			info.cchTextMax = g_Opt.m_bDescTextSize + 100;
 			info.pszText = csText.GetBufferSetLength(info.cchTextMax);
-
+			
 			pParent->SendMessage(WM_NOTIFY,(WPARAM)info.hdr.idFrom,(LPARAM)&info);
-
+			
 			csText.ReleaseBuffer();			
 		}
 	}
@@ -818,17 +818,17 @@ DWORD CQListCtrl::GetItemData(int nItem)
 			info.hdr.code = LVN_GETDISPINFO;
 			info.hdr.hwndFrom = GetSafeHwnd();
 			info.hdr.idFrom = GetDlgCtrlID();
-
+			
 			info.item.iItem = nItem;
 			info.item.lParam = -1;
 			info.item.mask = LVIF_PARAM;
-		
+			
 			pParent->SendMessage(WM_NOTIFY,(WPARAM)info.hdr.idFrom,(LPARAM)&info);
-
+			
 			return info.item.lParam;
 		}
 	}
-
+	
 	return CListCtrl::GetItemData(nItem);
 }
 
@@ -865,7 +865,7 @@ BOOL CQListCtrl::SetItemCountEx(int iCount, DWORD dwFlags /* = LVSICF_NOINVALIDA
 void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NMLISTVIEW *pnmv = (NMLISTVIEW *) pNMHDR;
-
+	
 	if((pnmv->uNewState == 3) ||
 		(pnmv->uNewState == 1))
 	{

@@ -31,7 +31,7 @@ CWndEx::CWndEx()
 	m_bMouseDownOnMinimize = false;
 	m_bMinimized = false;
 	m_bMaxSetTimer = false;
-
+	
 	SetCaptionColorActive(false);
 }
 
@@ -59,39 +59,39 @@ bool CWndEx::SetCaptionColors( COLORREF left, COLORREF right )
 {
 	if( left == m_CaptionColorLeft || right == m_CaptionColorRight )
 		return false;
-
+	
 	m_CaptionColorLeft = left;
 	m_CaptionColorRight = right;
-
+	
 	return true;
 }
 
 bool CWndEx::SetCaptionColorActive( bool bVal )
 {
-bool bResult;
-
+	bool bResult;
+	
 	if( bVal )
 		bResult = SetCaptionColors( ::GetSysColor(COLOR_ACTIVECAPTION), ::GetSysColor(COLOR_GRADIENTACTIVECAPTION) );
 	else
 		bResult = SetCaptionColors( ::GetSysColor(COLOR_INACTIVECAPTION), ::GetSysColor(COLOR_GRADIENTINACTIVECAPTION) );
-
+	
 	return bResult;
 }
 
 
 BEGIN_MESSAGE_MAP(CWndEx, CWnd)
-	//{{AFX_MSG_MAP(CWndEx)
-	ON_WM_CREATE()
-	ON_WM_NCPAINT()
-	ON_WM_NCCALCSIZE()
-	ON_WM_NCHITTEST()
-	ON_WM_NCLBUTTONDOWN()
-	ON_WM_NCMOUSEMOVE()
-	ON_WM_NCLBUTTONUP()
-	ON_WM_ERASEBKGND()
-	ON_WM_TIMER()
-	ON_WM_WINDOWPOSCHANGING()
-	//}}AFX_MSG_MAP
+//{{AFX_MSG_MAP(CWndEx)
+ON_WM_CREATE()
+ON_WM_NCPAINT()
+ON_WM_NCCALCSIZE()
+ON_WM_NCHITTEST()
+ON_WM_NCLBUTTONDOWN()
+ON_WM_NCMOUSEMOVE()
+ON_WM_NCLBUTTONUP()
+ON_WM_ERASEBKGND()
+ON_WM_TIMER()
+ON_WM_WINDOWPOSCHANGING()
+//}}AFX_MSG_MAP
 //	ON_WM_NCLBUTTONDBLCLK()
 //	ON_WM_NCACTIVATE()
 ON_WM_SIZE()
@@ -114,7 +114,7 @@ BOOL CWndEx::Create(const CRect& crStart, CWnd* pParentWnd)
 	wc.hbrBackground = (HBRUSH) GetStockObject(WHITE_BRUSH);
 	wc.lpszMenuName =  NULL;
 	wc.lpszClassName = "QPasteClass";
-
+	
 	// Create the QPaste window class
 	if (!AfxRegisterClass(&wc))
 		return FALSE;
@@ -127,15 +127,15 @@ int CWndEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
-
+	
 	m_TitleFont.CreateFont(14,0,-900,0,400,FALSE,FALSE,0,ANSI_CHARSET,
-	OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
-	DEFAULT_PITCH|FF_SWISS,"Arial");
-
+		OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
+		DEFAULT_PITCH|FF_SWISS,"Arial");
+	
 	m_HorFont.CreateFont(14,0,0,0,400,FALSE,FALSE,0,ANSI_CHARSET,
-	OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
-	DEFAULT_PITCH|FF_SWISS,"Arial");
-
+		OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
+		DEFAULT_PITCH|FF_SWISS,"Arial");
+	
 	SetCaptionOn(CGetSetOptions::GetCaptionPos(), true);
 	SetAutoHide(CGetSetOptions::GetAutoHide());
 	
@@ -160,7 +160,7 @@ void CWndEx::SetCaptionOn(int nPos, bool bOnstartup)
 	m_lRightBorder = BORDER;
 	m_lBottomBorder = BORDER;
 	m_lLeftBorder = BORDER;
-
+	
 	if(nPos == CAPTION_RIGHT)
 		m_lRightBorder = CAPTION_BORDER;
 	if(nPos == CAPTION_BOTTOM)
@@ -169,57 +169,57 @@ void CWndEx::SetCaptionOn(int nPos, bool bOnstartup)
 		m_lLeftBorder = CAPTION_BORDER;
 	if(nPos == CAPTION_TOP)
 		m_lTopBorder = CAPTION_BORDER;
-
+	
 	SetRegion();
-
+	
 	if(!bOnstartup)
 	{
 		SetWindowPos (NULL, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
 	}
-
+	
 	RedrawWindow();
 }
 
 void CWndEx::OnNcPaint()
 {
 	CWindowDC dc(this);
-
+	
 	CRect rcFrame;
 	GetWindowRect(rcFrame);
-
+	
 	ScreenToClient(rcFrame);
-
+	
 	CRect rc;
 	GetClientRect(rc);
-
+	
 	ClientToScreen(rc);
-
+	
 	long lWidth = rcFrame.Width();
-
+	
 	// Draw the window border
 	CRect rcBorder(0, 0, lWidth, rcFrame.Height());
-
+	
 	COLORREF left = m_CaptionColorLeft;
 	COLORREF right = m_CaptionColorRight;
-
+	
 	dc.Draw3dRect(rcBorder, left, left);
 	rcBorder.DeflateRect(1, 1, 1, 1);
 	dc.Draw3dRect(rcBorder, left, left);
-
+	
 	rcBorder.InflateRect(1, 1, 1, 1);
-
+	
 	BOOL bVertical;
 	if(m_lRightBorder == CAPTION_BORDER)
 	{
 		m_crCloseBT.SetRect(rcBorder.right - m_lRightBorder + 2, 
-							7, 
-							rcBorder.right - m_lRightBorder + 14, 
-							18);
-
+			7, 
+			rcBorder.right - m_lRightBorder + 14, 
+			18);
+		
 		m_crMinimizeBT.SetRect(rcBorder.right - m_lRightBorder + 2, 
-							rcBorder.bottom - 18, 
-							rcBorder.right - m_lRightBorder + 14, 
-							rcBorder.bottom - 7);
+			rcBorder.bottom - 18, 
+			rcBorder.right - m_lRightBorder + 14, 
+			rcBorder.bottom - 7);
 		
 		rcBorder.left = rcBorder.right - m_lRightBorder;
 		bVertical = TRUE;
@@ -227,60 +227,60 @@ void CWndEx::OnNcPaint()
 	else if(m_lLeftBorder == CAPTION_BORDER)
 	{
 		m_crCloseBT.SetRect(2, 
-							7, 
-							2 + 12, 
-							7 + 11);
-
+			7, 
+			2 + 12, 
+			7 + 11);
+		
 		m_crMinimizeBT.SetRect(2, 
-								rcBorder.bottom - 18, 
-								2 + 12, 
-								rcBorder.bottom - 7);
-
+			rcBorder.bottom - 18, 
+			2 + 12, 
+			rcBorder.bottom - 7);
+		
 		rcBorder.right = rcBorder.left + m_lLeftBorder;
 		bVertical = TRUE;
 	}
 	else if(m_lTopBorder == CAPTION_BORDER)
 	{
 		m_crCloseBT.SetRect(rcBorder.right - 18, 
-							3, 
-							rcBorder.right - 6, 
-							3 + 11);
-
+			3, 
+			rcBorder.right - 6, 
+			3 + 11);
+		
 		m_crMinimizeBT.SetRect(4, 
-								2, 
-								15,
-								2 + 12);
-
+			2, 
+			15,
+			2 + 12);
+		
 		rcBorder.bottom = rcBorder.top + m_lTopBorder;
 		bVertical = FALSE;
 	}
 	else if(m_lBottomBorder == CAPTION_BORDER)
 	{
 		m_crCloseBT.SetRect(rcBorder.right - 18, 
-							rcBorder.bottom - 13,
-							rcBorder.right - 6,
-							rcBorder.bottom - 2);
-
+			rcBorder.bottom - 13,
+			rcBorder.right - 6,
+			rcBorder.bottom - 2);
+		
 		m_crMinimizeBT.SetRect(4, 
-								rcBorder.bottom - 14, 
-								15,
-								rcBorder.bottom - 2);
-
+			rcBorder.bottom - 14, 
+			15,
+			rcBorder.bottom - 2);
+		
 		rcBorder.top = rcBorder.bottom - m_lBottomBorder;
 		bVertical = FALSE;
 	}
 	float gR = 0; 
 	float gG = 0; 
 	float gB = 0; 
-
+	
 	float sR = GetRValue(left);
 	float sG = GetGValue(left);
 	float sB = GetBValue(left);
-
+	
 	float eR = GetRValue(right);
 	float eG = GetGValue(right);
 	float eB = GetBValue(right);
-
+	
 	// calculate the slope for color gradient 
 	if(bVertical)
 	{
@@ -299,11 +299,11 @@ void CWndEx::OnNcPaint()
 	
 	long lHeight = rcBorder.Height();
 	CRect cr = rcBorder;
-
+	
 	long lCount = rcBorder.Width();
 	if(bVertical)
 		lCount = lHeight;
-
+	
 	for(int i = 0; i < lCount; i++) 
 	{ 
 		if(bVertical)
@@ -317,9 +317,9 @@ void CWndEx::OnNcPaint()
 			cr.right = i + 1;
 		}
 		color = CreateSolidBrush(RGB(int(gR * (float) i + gR),
-									int(gG * (float) i + sG),
-									int(gB * (float) i + sB)));
-
+			int(gG * (float) i + sG),
+			int(gB * (float) i + sB)));
+		
 		::FillRect(dc, &cr, color);
 		DeleteObject(color);
 	}
@@ -330,8 +330,8 @@ void CWndEx::OnNcPaint()
 	::FillRect(dc, &rcBorder, color);
 	DeleteObject(color);
 	*/
-
-
+	
+	
 	int nOldBKMode = dc.SetBkMode(TRANSPARENT);
 	COLORREF oldColor = dc.SetTextColor(RGB(255, 255, 255));
 	CFont *pOldFont = NULL;
@@ -339,10 +339,10 @@ void CWndEx::OnNcPaint()
 		pOldFont=dc.SelectObject(&m_TitleFont);
 	else
 		pOldFont=dc.SelectObject(&m_HorFont);
-
+	
 	CString csText;
 	GetWindowText(csText);
-
+	
 	if(m_lRightBorder == CAPTION_BORDER)
 	{
 		CRect cr;
@@ -367,10 +367,10 @@ void CWndEx::OnNcPaint()
 		cr.SetRect(20, 1, rcBorder.right - 20, 15);
 		dc.DrawText(csText, cr, DT_SINGLELINE);
 	}
-
+	
 	DrawCloseBtn(dc, left);
 	DrawMinimizeBtn(dc, left);
-
+	
 	dc.SelectObject(pOldFont);
 	dc.SetTextColor(oldColor);
 	dc.SetBkMode(nOldBKMode);
@@ -380,29 +380,29 @@ void CWndEx::DrawCloseBtn(CWindowDC &dc, COLORREF left)
 {
 	if(left == 0)
 		left = GetSysColor(COLOR_ACTIVECAPTION);
-
+	
 	//rows first then columns
 	int Points[5][6] =
 	{
 		1,1,0,0,1,1,
-		0,1,1,1,1,0,
-		0,0,1,1,0,0,
-		0,1,1,1,1,0,
-		1,1,0,0,1,1
+			0,1,1,1,1,0,
+			0,0,1,1,0,0,
+			0,1,1,1,1,0,
+			1,1,0,0,1,1
 	};
-
+	
 	CPoint ptShift = m_crCloseBT.TopLeft();
 	ptShift.Offset(3, 3);
-
+	
 	COLORREF shaddow = RGB(GetRValue(left) * 1.16, 
-							GetGValue(left) * 1.12,
-							GetBValue(left) * 1.12);
-
+		GetGValue(left) * 1.12,
+		GetBValue(left) * 1.12);
+	
 	if(m_bMouseDownOnClose)
 		dc.Draw3dRect(m_crCloseBT, shaddow, RGB(255, 255, 255));
 	else if(m_bMouseOverClose)
 		dc.Draw3dRect(m_crCloseBT, RGB(255, 255, 255), shaddow);
-
+	
 	for (int iRow = 0; iRow < 5; iRow++)
 	{
 		for (int iCol = 0; iCol < 6; iCol++)
@@ -417,9 +417,9 @@ void CWndEx::DrawMinimizeBtn(CWindowDC &dc, COLORREF left)
 {
 	if(left == 0)
 		left = GetSysColor(COLOR_ACTIVECAPTION);
-
+	
 	bool bTopOrBottom = false;
-
+	
 	int Points[5][8];
 	int Points2[8][5];
 	if(((m_lRightBorder == CAPTION_BORDER) && (m_bMinimized == false)) ||
@@ -428,10 +428,10 @@ void CWndEx::DrawMinimizeBtn(CWindowDC &dc, COLORREF left)
 		int nTemp[5][8] = 
 		{
 			1,1,0,0,1,1,0,0,
-			0,1,1,0,0,1,1,0,
-			0,0,1,1,0,0,1,1,
-			0,1,1,0,0,1,1,0,
-			1,1,0,0,1,1,0,0
+				0,1,1,0,0,1,1,0,
+				0,0,1,1,0,0,1,1,
+				0,1,1,0,0,1,1,0,
+				1,1,0,0,1,1,0,0
 		};
 		memcpy(&Points, &nTemp, sizeof(nTemp));
 	}
@@ -441,29 +441,29 @@ void CWndEx::DrawMinimizeBtn(CWindowDC &dc, COLORREF left)
 		int nTemp[5][8] = 
 		{
 			0,0,1,1,0,0,1,1,
-			0,1,1,0,0,1,1,0,
-			1,1,0,0,1,1,0,0,
-			0,1,1,0,0,1,1,0,
-			0,0,1,1,0,0,1,1
+				0,1,1,0,0,1,1,0,
+				1,1,0,0,1,1,0,0,
+				0,1,1,0,0,1,1,0,
+				0,0,1,1,0,0,1,1
 		};
-
+		
 		memcpy(&Points, &nTemp, sizeof(nTemp));
 	}
 	else if(((m_lTopBorder == CAPTION_BORDER) && (m_bMinimized == false)) ||
 		((m_lBottomBorder == CAPTION_BORDER) && (m_bMinimized)))
 	{
 		bTopOrBottom = true;
-
+		
 		int nTemp[8][5] =
 		{
 			0,0,1,0,0,
-			0,1,1,1,0,
-			1,1,0,1,1,
-			1,0,0,0,1,
-			0,0,1,0,0,
-			0,1,1,1,0,
-			1,1,0,1,1,
-			1,0,0,0,1
+				0,1,1,1,0,
+				1,1,0,1,1,
+				1,0,0,0,1,
+				0,0,1,0,0,
+				0,1,1,1,0,
+				1,1,0,1,1,
+				1,0,0,0,1
 		};
 		memcpy(&Points2, &nTemp, sizeof(nTemp));
 	}
@@ -471,35 +471,35 @@ void CWndEx::DrawMinimizeBtn(CWindowDC &dc, COLORREF left)
 		((m_lBottomBorder == CAPTION_BORDER) && (m_bMinimized == false)))
 	{
 		bTopOrBottom = true;
-
+		
 		int nTemp[8][5] =
 		{
 			1,0,0,0,1,
-			1,1,0,1,1,
-			0,1,1,1,0,
-			0,0,1,0,0,
-			1,0,0,0,1,
-			1,1,0,1,1,
-			0,1,1,1,0,
-			0,0,1,0,0
+				1,1,0,1,1,
+				0,1,1,1,0,
+				0,0,1,0,0,
+				1,0,0,0,1,
+				1,1,0,1,1,
+				0,1,1,1,0,
+				0,0,1,0,0
 		};
 		memcpy(&Points2, &nTemp, sizeof(nTemp));
 	}
-
+	
 	COLORREF shaddow = RGB(GetRValue(left) * 1.16, 
-							GetGValue(left) * 1.12,
-							GetBValue(left) * 1.12);
-
+		GetGValue(left) * 1.12,
+		GetBValue(left) * 1.12);
+	
 	if(m_bMouseDownOnMinimize)
 		dc.Draw3dRect(m_crMinimizeBT, shaddow, RGB(255, 255, 255));
 	else if(m_bMouseOverMinimize)
 		dc.Draw3dRect(m_crMinimizeBT, RGB(255, 255, 255), shaddow);
-
+	
 	if(bTopOrBottom == false)
 	{
 		CPoint ptShift = m_crMinimizeBT.TopLeft();
 		ptShift.Offset(2, 3);
-
+		
 		for (int iRow = 0; iRow < 5; iRow++)
 		{
 			for (int iCol = 0; iCol < 8; iCol++)
@@ -513,7 +513,7 @@ void CWndEx::DrawMinimizeBtn(CWindowDC &dc, COLORREF left)
 	{
 		CPoint ptShift = m_crMinimizeBT.TopLeft();
 		ptShift.Offset(3, 2);
-
+		
 		for (int iRow = 0; iRow < 8; iRow++)
 		{
 			for (int iCol = 0; iCol < 5; iCol++)
@@ -528,7 +528,7 @@ void CWndEx::DrawMinimizeBtn(CWindowDC &dc, COLORREF left)
 void CWndEx::OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp) 
 {
 	CWnd::OnNcCalcSize(bCalcValidRects, lpncsp);
-
+	
 	//Decrease the client area
 	lpncsp->rgrc[0].left+= m_lLeftBorder;
 	lpncsp->rgrc[0].top+= m_lTopBorder;
@@ -540,22 +540,22 @@ UINT CWndEx::OnNcHitTest(CPoint point)
 {
 	if(!m_bResizable)
 		return CWnd::OnNcHitTest(point);
-
-	//Hit the close button
-//	CPoint clPoint(point);
-//	ScreenToClient(&clPoint);
-//	if(m_crCloseBT.PtInRect(clPoint))
-//		return HTCLOSE;
 	
-
+	//Hit the close button
+	//	CPoint clPoint(point);
+	//	ScreenToClient(&clPoint);
+	//	if(m_crCloseBT.PtInRect(clPoint))
+	//		return HTCLOSE;
+	
+	
 	CRect crWindow;
 	GetWindowRect(crWindow);
-
+	
 	if(crWindow.PtInRect(point) == false)
 	{
 		return CWnd::OnNcHitTest(point);
 	}
-
+	
 	if(m_bMinimized == false)
 	{
 		if ((point.y < crWindow.top + BORDER * 2) &&
@@ -571,7 +571,7 @@ UINT CWndEx::OnNcHitTest(CPoint point)
 			(point.x < crWindow.left + BORDER * 2))
 			return HTBOTTOMLEFT;
 	}
-
+	
 	if((((m_lTopBorder == CAPTION_BORDER) || (m_lBottomBorder == CAPTION_BORDER)) && 
 		(m_bMinimized)) == false)
 	{
@@ -580,7 +580,7 @@ UINT CWndEx::OnNcHitTest(CPoint point)
 		if (point.y > crWindow.bottom - BORDER * 2)
 			return HTBOTTOM;
 	}
-
+	
 	if((((m_lLeftBorder == CAPTION_BORDER) || (m_lRightBorder == CAPTION_BORDER)) && 
 		(m_bMinimized)) == false)
 	{
@@ -589,7 +589,7 @@ UINT CWndEx::OnNcHitTest(CPoint point)
 		if (point.x < crWindow.left + BORDER * 2)
 			return HTLEFT;
 	}
-
+	
 	if(m_lRightBorder == CAPTION_BORDER)
 	{
 		if (point.x > crWindow.right - m_lRightBorder)
@@ -610,7 +610,7 @@ UINT CWndEx::OnNcHitTest(CPoint point)
 		if (point.y < crWindow.top + m_lTopBorder)
 			return HTCAPTION;
 	}
-
+	
 	return CWnd::OnNcHitTest(point); // The default handler
 }
 
@@ -621,13 +621,13 @@ void CWndEx::OnNcLButtonDown(UINT nHitTest, CPoint point)
 	
 	clPoint.x += m_lLeftBorder;
 	clPoint.y += m_lTopBorder;
-
+	
 	if(m_crCloseBT.PtInRect(clPoint))
 	{
 		SetCapture();
-
+		
 		m_bMouseDownOnClose = true;
-
+		
 		CWindowDC dc(this);
 		DrawCloseBtn(dc);
 	}
@@ -682,18 +682,18 @@ void CWndEx::MinMaxWindow(long lOption)
 {
 	if((m_bMinimized) && (lOption == FORCE_MIN))
 		return;
-
+	
 	if((m_bMinimized == false) && (lOption == FORCE_MAX))
 		return;
-
+	
 	if(m_lRightBorder == CAPTION_BORDER)
 	{		
 		if(m_bMinimized == false)
 		{
 			GetWindowRect(m_crFullSizeWindow);
 			MoveWindow(m_crFullSizeWindow.right - CAPTION_BORDER, 
-						m_crFullSizeWindow.top, CAPTION_BORDER, 
-						m_crFullSizeWindow.Height());
+				m_crFullSizeWindow.top, CAPTION_BORDER, 
+				m_crFullSizeWindow.Height());
 			m_bMinimized = true;
 			OnNcPaint();
 		}
@@ -703,7 +703,7 @@ void CWndEx::MinMaxWindow(long lOption)
 			GetWindowRect(cr);
 			MoveWindow(cr.right - m_crFullSizeWindow.Width(),
 				cr.top, m_crFullSizeWindow.Width(), cr.Height());
-
+			
 			m_crFullSizeWindow.SetRectEmpty();
 			m_bMinimized = false;
 			OnNcPaint();
@@ -715,8 +715,8 @@ void CWndEx::MinMaxWindow(long lOption)
 		{
 			GetWindowRect(m_crFullSizeWindow);
 			MoveWindow(m_crFullSizeWindow.left,
-						m_crFullSizeWindow.top, CAPTION_BORDER, 
-						m_crFullSizeWindow.Height());
+				m_crFullSizeWindow.top, CAPTION_BORDER, 
+				m_crFullSizeWindow.Height());
 			m_bMinimized = true;
 			OnNcPaint();
 		}
@@ -725,8 +725,8 @@ void CWndEx::MinMaxWindow(long lOption)
 			CRect cr;
 			GetWindowRect(cr);
 			MoveWindow(cr.left, cr.top, 
-						m_crFullSizeWindow.Width(), cr.Height());
-
+				m_crFullSizeWindow.Width(), cr.Height());
+			
 			m_crFullSizeWindow.SetRectEmpty();
 			m_bMinimized = false;
 			OnNcPaint();
@@ -738,9 +738,9 @@ void CWndEx::MinMaxWindow(long lOption)
 		{
 			GetWindowRect(m_crFullSizeWindow);
 			MoveWindow(m_crFullSizeWindow.left,
-						m_crFullSizeWindow.top, 
-						m_crFullSizeWindow.Width(), 
-						CAPTION_BORDER);
+				m_crFullSizeWindow.top, 
+				m_crFullSizeWindow.Width(), 
+				CAPTION_BORDER);
 			m_bMinimized = true;
 			OnNcPaint();
 		}
@@ -749,8 +749,8 @@ void CWndEx::MinMaxWindow(long lOption)
 			CRect cr;
 			GetWindowRect(cr);
 			MoveWindow(cr.left, cr.top, 
-						cr.Width(), m_crFullSizeWindow.Height());
-
+				cr.Width(), m_crFullSizeWindow.Height());
+			
 			m_crFullSizeWindow.SetRectEmpty();
 			m_bMinimized = false;
 			OnNcPaint();
@@ -762,9 +762,9 @@ void CWndEx::MinMaxWindow(long lOption)
 		{
 			GetWindowRect(m_crFullSizeWindow);
 			MoveWindow(m_crFullSizeWindow.left,
-						m_crFullSizeWindow.bottom - CAPTION_BORDER, 
-						m_crFullSizeWindow.Width(), 
-						CAPTION_BORDER);
+				m_crFullSizeWindow.bottom - CAPTION_BORDER, 
+				m_crFullSizeWindow.Width(), 
+				CAPTION_BORDER);
 			m_bMinimized = true;
 			OnNcPaint();
 		}
@@ -773,9 +773,9 @@ void CWndEx::MinMaxWindow(long lOption)
 			CRect cr;
 			GetWindowRect(cr);
 			MoveWindow(cr.left, 
-						cr.bottom - m_crFullSizeWindow.Height(), 
-						cr.Width(), m_crFullSizeWindow.Height());
-
+				cr.bottom - m_crFullSizeWindow.Height(), 
+				cr.Width(), m_crFullSizeWindow.Height());
+			
 			m_crFullSizeWindow.SetRectEmpty();
 			m_bMinimized = false;
 			OnNcPaint();
@@ -790,7 +790,7 @@ void CWndEx::OnNcMouseMove(UINT nHitTest, CPoint point)
 	
 	clPoint.x += m_lLeftBorder;
 	clPoint.y += m_lTopBorder;
-
+	
 	if(m_crCloseBT.PtInRect(clPoint))
 	{
 		m_bMouseOverClose = true;
@@ -802,7 +802,7 @@ void CWndEx::OnNcMouseMove(UINT nHitTest, CPoint point)
 		m_bMouseOverClose = false;
 		OnNcPaint();
 	}
-
+	
 	if(m_crMinimizeBT.PtInRect(clPoint))
 	{
 		m_bMouseOverMinimize = true;
@@ -814,13 +814,13 @@ void CWndEx::OnNcMouseMove(UINT nHitTest, CPoint point)
 		m_bMouseOverMinimize = false;
 		OnNcPaint();
 	}
-
+	
 	if((m_bMaxSetTimer == false) && m_bMinimized)
 	{
 		SetTimer(TIMER_AUTO_MAX, 1000, NULL);
 		m_bMaxSetTimer = true;
 	}
-		
+	
 	CWnd::OnNcMouseMove(nHitTest, point);
 }
 
@@ -830,13 +830,13 @@ BOOL CWndEx::PreTranslateMessage(MSG* pMsg)
 	{		
 		m_bMouseDownOnCaption = true;
 	}
-
+	
 	if ((pMsg->message == WM_LBUTTONUP) && (m_bMouseDownOnCaption)) 
 	{
 		m_bMouseDownOnCaption = false;
 		pMsg->message = WM_NCLBUTTONUP;
 	}
-
+	
 	return CWnd::PreTranslateMessage(pMsg);
 }
 
@@ -844,79 +844,79 @@ BOOL CWndEx::PreTranslateMessage(MSG* pMsg)
 /*
 
   CBitmap			m_bitmap;
-	CDC				dcMem;
-	
+  CDC				dcMem;
+  
 	void			MakeBitmap();
-
-
-  CDC dcMem;
-   dcMem.CreateCompatibleDC(&dc);
-    
-    CBitmap *pOldBmp = (CBitmap *)(dcMem.SelectObject(&m_bitmap));
-
-	dc.BitBlt(rcBorder.left, 0, rcBorder.Width(), rcBorder.Height(), &dcMem, 0, 0, SRCCOPY);
-
-	dcMem.SelectObject(pOldBmp);
-    
-    dcMem.DeleteDC();
-
-
-void CWndEx::MakeBitmap()
-{
-    CWindowDC dc(this);
-    CRect rect;
-    GetWindowRect(&rect);
-
-	CRect rcBorder(0, 0, rect.Width(), rect.Height());
-	rcBorder.left = rcBorder.right - RIGHT_CAPTION - BORDER + 1;
-
-	rect = rcBorder;
-
-    int r1=245,g1=190,b1=240;
-    int r2=130,g2=0,b2=0;
-
-    int x1=0,y1=0;
-    int x2=0,y2=0;
-
-    CDC dc2;
-    dc2.CreateCompatibleDC(&dc);
-
-    if(m_bitmap.m_hObject)
-        m_bitmap.DeleteObject();
-    m_bitmap.CreateCompatibleBitmap(&dc,rect.Width(),
-        rect.Height());
-
-    CBitmap *oldbmap=dc2.SelectObject(&m_bitmap);
-
-    while(x1 < rect.Width() && y1 < rect.Height())
-    {
-        if(y1 < rect.Height()-1)
-            y1++;
-        else
-            x1++;
-
-        if(x2 < rect.Width()-1)
-            x2++;
-        else
-            y2++;
-
-        int r,g,b;
-        int i = x1+y1;
-        r = r1 + (i * (r2-r1) / (rect.Width()+rect.Height()));
-        g = g1 + (i * (g2-g1) / (rect.Width()+rect.Height()));
-        b = b1 + (i * (b2-b1) / (rect.Width()+rect.Height()));
-
-        CPen p(PS_SOLID,1,RGB(r,g,b));
-        CPen *oldpen = dc2.SelectObject(&p); 
-
-        dc2.MoveTo(x1,y1);
-        dc2.LineTo(x2,y2);
-
-        dc2.SelectObject(oldpen);
-    } 
-
-    dc2.SelectObject(oldbmap);
-}
+	
+	  
+		CDC dcMem;
+		dcMem.CreateCompatibleDC(&dc);
+		
+		  CBitmap *pOldBmp = (CBitmap *)(dcMem.SelectObject(&m_bitmap));
+		  
+			dc.BitBlt(rcBorder.left, 0, rcBorder.Width(), rcBorder.Height(), &dcMem, 0, 0, SRCCOPY);
+			
+			  dcMem.SelectObject(pOldBmp);
+			  
+				dcMem.DeleteDC();
+				
+				  
+					void CWndEx::MakeBitmap()
+					{
+					CWindowDC dc(this);
+					CRect rect;
+					GetWindowRect(&rect);
+					
+					  CRect rcBorder(0, 0, rect.Width(), rect.Height());
+					  rcBorder.left = rcBorder.right - RIGHT_CAPTION - BORDER + 1;
+					  
+						rect = rcBorder;
+						
+						  int r1=245,g1=190,b1=240;
+						  int r2=130,g2=0,b2=0;
+						  
+							int x1=0,y1=0;
+							int x2=0,y2=0;
+							
+							  CDC dc2;
+							  dc2.CreateCompatibleDC(&dc);
+							  
+								if(m_bitmap.m_hObject)
+								m_bitmap.DeleteObject();
+								m_bitmap.CreateCompatibleBitmap(&dc,rect.Width(),
+								rect.Height());
+								
+								  CBitmap *oldbmap=dc2.SelectObject(&m_bitmap);
+								  
+									while(x1 < rect.Width() && y1 < rect.Height())
+									{
+									if(y1 < rect.Height()-1)
+									y1++;
+									else
+									x1++;
+									
+									  if(x2 < rect.Width()-1)
+									  x2++;
+									  else
+									  y2++;
+									  
+										int r,g,b;
+										int i = x1+y1;
+										r = r1 + (i * (r2-r1) / (rect.Width()+rect.Height()));
+										g = g1 + (i * (g2-g1) / (rect.Width()+rect.Height()));
+										b = b1 + (i * (b2-b1) / (rect.Width()+rect.Height()));
+										
+										  CPen p(PS_SOLID,1,RGB(r,g,b));
+										  CPen *oldpen = dc2.SelectObject(&p); 
+										  
+											dc2.MoveTo(x1,y1);
+											dc2.LineTo(x2,y2);
+											
+											  dc2.SelectObject(oldpen);
+											  } 
+											  
+												dc2.SelectObject(oldbmap);
+												}
 */
 
 BOOL CWndEx::OnEraseBkgnd(CDC* pDC) 
@@ -934,9 +934,9 @@ void CWndEx::OnTimer(UINT nIDEvent)
 			GetCursorPos(&cp);
 			
 			UINT nHitTest = OnNcHitTest(cp);
-
+			
 			ScreenToClient(&cp);
-
+			
 			if(nHitTest == HTCAPTION)
 			{
 				if(m_crCloseBT.PtInRect(cp) == false)
@@ -957,10 +957,10 @@ void CWndEx::OnTimer(UINT nIDEvent)
 		{
 			CPoint cp;
 			CRect cr;
-
+			
 			GetCursorPos(&cp);
 			GetWindowRect(&cr);
-
+			
 			if(cr.PtInRect(cp) == false)
 			{
 				if(GetFocus() == NULL)
@@ -970,14 +970,14 @@ void CWndEx::OnTimer(UINT nIDEvent)
 			}
 		}
 	}
-
+	
 	CWnd::OnTimer(nIDEvent);
 }
 
 void CWndEx::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanging(lpwndpos);
-
+	
 	if(m_bMaxSetTimer)
 	{
 		KillTimer(TIMER_AUTO_MAX);
@@ -994,17 +994,17 @@ void CWndEx::SetRegion()
 		CRect rect;
 		GetWindowRect(rect);
 		CRgn rgnRect, rgnRect2, rgnRound, rgnFinalA, rgnFinalB;
-
+		
 		rgnRect.CreateRectRgn(0, 0, rect.Width() - 7, rect.Height());
 		rgnRound.CreateRoundRectRgn(0, 0, rect.Width()+1, rect.Height(), 15, 15);
-
+		
 		rgnFinalB.CreateRectRgn(0, 0, 0, 0);
 		rgnFinalB.CombineRgn(&rgnRect, &rgnRound, RGN_OR);
-
+		
 		rgnRect2.CreateRectRgn(0, 7, rect.Width(), rect.Height());
 		rgnFinalA.CreateRectRgn(0, 0, 0, 0);
 		rgnFinalA.CombineRgn(&rgnRect2, &rgnFinalB, RGN_OR);
-
+		
 		//Set the region
 		SetWindowRgn(rgnFinalA, TRUE);
 	}
@@ -1013,17 +1013,17 @@ void CWndEx::SetRegion()
 		CRect rect;
 		GetWindowRect(rect);
 		CRgn rgnRect, rgnRect2, rgnRound, rgnFinalA, rgnFinalB;
-
+		
 		rgnRect.CreateRectRgn(0, 7, rect.Width(), rect.Height());
 		rgnRound.CreateRoundRectRgn(0, 0, rect.Width(), rect.Height(), 15, 15);
-
+		
 		rgnFinalB.CreateRectRgn(0, 0, 0, 0);
 		rgnFinalB.CombineRgn(&rgnRect, &rgnRound, RGN_OR);
-
+		
 		rgnRect2.CreateRectRgn(7, 0, rect.Width(), rect.Height());
 		rgnFinalA.CreateRectRgn(0, 0, 0, 0);
 		rgnFinalA.CombineRgn(&rgnRect2, &rgnFinalB, RGN_OR);
-
+		
 		//Set the region
 		SetWindowRgn(rgnFinalA, TRUE);
 	}
@@ -1032,17 +1032,17 @@ void CWndEx::SetRegion()
 		CRect rect;
 		GetWindowRect(rect);
 		CRgn rgnRect, rgnRect2, rgnRound, rgnFinalA, rgnFinalB;
-
+		
 		rgnRect.CreateRectRgn(0, 0, rect.Width(), rect.Height()-7);
 		rgnRound.CreateRoundRectRgn(0, 0, rect.Width()+1, rect.Height()+1, 15, 15);
-
+		
 		rgnFinalB.CreateRectRgn(0, 0, 0, 0);
 		rgnFinalB.CombineRgn(&rgnRect, &rgnRound, RGN_OR);
-
+		
 		rgnRect2.CreateRectRgn(0, 0, rect.Width()-15, rect.Height());
 		rgnFinalA.CreateRectRgn(0, 0, 0, 0);
 		rgnFinalA.CombineRgn(&rgnRect2, &rgnFinalB, RGN_OR);
-
+		
 		//Set the region
 		SetWindowRgn(rgnFinalA, TRUE);
 	}
@@ -1051,6 +1051,6 @@ void CWndEx::SetRegion()
 void CWndEx::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
-
+	
 	SetRegion();
 }

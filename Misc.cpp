@@ -4,26 +4,26 @@
 #include "OptionsSheet.h"
 
 #ifdef AFTER_98
-	#include "AlphaBlend.h"
+#include "AlphaBlend.h"
 #endif
 
 // Debug Functions
 
 void AppendToFile( const char* fn, const char* msg )
 {
-FILE *file = fopen(fn, "a");
-   ASSERT( file );
-   fprintf(file, msg);
-   fclose(file);
+	FILE *file = fopen(fn, "a");
+	ASSERT( file );
+	fprintf(file, msg);
+	fclose(file);
 }
 
 void Log( const char* msg )
 {
 	ASSERT( AfxIsValidString(msg) );
-CTime	time = CTime::GetCurrentTime();
-CString	csText = time.Format("[%Y/%m/%d %I:%M:%S %p]  ");
-//CString	csTemp;
-//	csTemp.Format( "%04x  ", AfxGetInstanceHandle() );
+	CTime	time = CTime::GetCurrentTime();
+	CString	csText = time.Format("[%Y/%m/%d %I:%M:%S %p]  ");
+	//CString	csTemp;
+	//	csTemp.Format( "%04x  ", AfxGetInstanceHandle() );
 	csText += msg;
 	csText += "\n";
 	AppendToFile( "Ditto.log", csText ); //(LPCTSTR)
@@ -31,9 +31,9 @@ CString	csText = time.Format("[%Y/%m/%d %I:%M:%S %p]  ");
 
 CString GetErrorString( int err )
 {
-CString str;
-LPVOID lpMsgBuf;
-
+	CString str;
+	LPVOID lpMsgBuf;
+	
 	::FormatMessage( 
 		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 		NULL,
@@ -48,7 +48,7 @@ LPVOID lpMsgBuf;
 	//  ::MessageBox( NULL, lpMsgBuf, "GetLastError", MB_OK|MB_ICONINFORMATION );
 	::LocalFree( lpMsgBuf );
 	return str;
-
+	
 }
 
 void SetThreadName(DWORD dwThreadID, LPCTSTR szThreadName)
@@ -58,7 +58,7 @@ void SetThreadName(DWORD dwThreadID, LPCTSTR szThreadName)
     info.szName = szThreadName;
     info.dwThreadID = dwThreadID;
     info.dwFlags = 0;
-
+	
     __try
     {
         RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(DWORD), (DWORD *)&info);
@@ -73,7 +73,7 @@ void SetThreadName(DWORD dwThreadID, LPCTSTR szThreadName)
 CString StrF(const char * pszFormat, ...)
 {
 	ASSERT( AfxIsValidString( pszFormat ) );
-CString str;
+	CString str;
 	va_list argList;
 	va_start( argList, pszFormat );
 	str.FormatV( pszFormat, argList );
@@ -104,10 +104,10 @@ BYTE GetEscapeChar( BYTE ch )
 CString RemoveEscapes( const char* str )
 {
 	ASSERT( str );
-CString ret;
-char* pSrc = (char*) str;
-char* pDest = ret.GetBuffer( strlen(pSrc) );
-char* pStart = pDest;
+	CString ret;
+	char* pSrc = (char*) str;
+	char* pDest = ret.GetBuffer( strlen(pSrc) );
+	char* pStart = pDest;
 	while( *pSrc != '\0' )
 	{
 		if( *pSrc == '\\' )
@@ -126,18 +126,18 @@ char* pStart = pDest;
 
 CString GetWndText( HWND hWnd )
 {
-CString text;
+	CString text;
 	if( !IsWindow(hWnd) )
 		return "! NOT A VALID WINDOW !";
-CWnd* pWnd = CWnd::FromHandle(hWnd);
+	CWnd* pWnd = CWnd::FromHandle(hWnd);
 	pWnd->GetWindowText(text);
 	return text;
 }
 
 bool IsAppWnd( HWND hWnd )
 {
-DWORD dwMyPID = ::GetCurrentProcessId();
-DWORD dwTestPID;
+	DWORD dwMyPID = ::GetCurrentProcessId();
+	DWORD dwTestPID;
 	::GetWindowThreadProcessId( hWnd, &dwTestPID );
 	return dwMyPID == dwTestPID;
 }
@@ -160,7 +160,7 @@ HWND GetFocusWnd(CPoint *pPointCaret)
 		{
 			// Get the other thread's focussed window
 			CWnd *pWnd = CWnd::FromHandle(hWndForground);
-
+			
 			if (pWnd)
 			{
 				CWnd *pWndFocus = pWnd->GetFocus();
@@ -174,24 +174,24 @@ HWND GetFocusWnd(CPoint *pPointCaret)
 					}
 				}
 			}
-
+			
 			// Detach other thread's message queue from our own again
 			ARes = AttachThreadInput(ThreadID, GetCurrentThreadId(), FALSE);
 		}
 	}
-
+	
 	return hWndFocus;
 }
 
 
 /*----------------------------------------------------------------------------*\
-	Global Memory Helper Functions
+Global Memory Helper Functions
 \*----------------------------------------------------------------------------*/
 
 // make sure the given HGLOBAL is valid.
 BOOL IsValid( HGLOBAL hGlobal )
 {
-void* pvData = ::GlobalLock( hGlobal );
+	void* pvData = ::GlobalLock( hGlobal );
 	::GlobalUnlock( hGlobal );
 	return ( pvData != NULL );
 }
@@ -200,9 +200,9 @@ void* pvData = ::GlobalLock( hGlobal );
 void CopyToGlobalHP( HGLOBAL hDest, LPVOID pBuf, ULONG ulBufLen )
 {
 	ASSERT( hDest && pBuf && ulBufLen );
-LPVOID pvData = GlobalLock(hDest);
+	LPVOID pvData = GlobalLock(hDest);
 	ASSERT( pvData );
-ULONG size = GlobalSize(hDest);
+	ULONG size = GlobalSize(hDest);
 	ASSERT( size >= ulBufLen );	// assert if hDest isn't big enough
 	memcpy(pvData, pBuf, ulBufLen);
 	GlobalUnlock(hDest);
@@ -211,9 +211,9 @@ ULONG size = GlobalSize(hDest);
 void CopyToGlobalHH( HGLOBAL hDest, HGLOBAL hSource, ULONG ulBufLen )
 {
 	ASSERT( hDest && hSource && ulBufLen );
-LPVOID pvData = GlobalLock(hSource);
+	LPVOID pvData = GlobalLock(hSource);
 	ASSERT( pvData );
-ULONG size = GlobalSize(hSource);
+	ULONG size = GlobalSize(hSource);
 	ASSERT( size >= ulBufLen );	// assert if hSource isn't big enough
 	CopyToGlobalHP(hDest, pvData, ulBufLen);
 	GlobalUnlock(hSource);
@@ -223,7 +223,7 @@ ULONG size = GlobalSize(hSource);
 HGLOBAL NewGlobalP( LPVOID pBuf, UINT nLen )
 {
 	ASSERT( pBuf && nLen );
-HGLOBAL hDest = GlobalAlloc( GMEM_MOVEABLE | GMEM_SHARE, nLen );
+	HGLOBAL hDest = GlobalAlloc( GMEM_MOVEABLE | GMEM_SHARE, nLen );
 	ASSERT( hDest );
 	CopyToGlobalHP( hDest, pBuf, nLen );
 	return hDest;
@@ -232,8 +232,8 @@ HGLOBAL hDest = GlobalAlloc( GMEM_MOVEABLE | GMEM_SHARE, nLen );
 HGLOBAL NewGlobalH( HGLOBAL hSource, UINT nLen )
 {
 	ASSERT( hSource && nLen );
-LPVOID pvData = GlobalLock( hSource );
-HGLOBAL hDest = NewGlobalP( pvData, nLen );
+	LPVOID pvData = GlobalLock( hSource );
+	HGLOBAL hDest = NewGlobalP( pvData, nLen );
 	GlobalUnlock( hSource );
 	return hDest;
 }
@@ -241,10 +241,10 @@ HGLOBAL hDest = NewGlobalP( pvData, nLen );
 int CompareGlobalHP( HGLOBAL hLeft, LPVOID pBuf, ULONG ulBufLen )
 {
 	ASSERT( hLeft && pBuf && ulBufLen );
-LPVOID pvData = GlobalLock( hLeft );
+	LPVOID pvData = GlobalLock( hLeft );
 	ASSERT( pvData );
 	ASSERT( ulBufLen <= GlobalSize(hLeft) );
-int result = memcmp(pvData, pBuf, ulBufLen);
+	int result = memcmp(pvData, pBuf, ulBufLen);
 	GlobalUnlock( hLeft );
 	return result;
 }
@@ -253,9 +253,9 @@ int CompareGlobalHH( HGLOBAL hLeft, HGLOBAL hRight, ULONG ulBufLen )
 {
 	ASSERT( hLeft && hRight && ulBufLen );
 	ASSERT( ulBufLen <= GlobalSize(hRight) );
-LPVOID pvData = GlobalLock(hRight);
+	LPVOID pvData = GlobalLock(hRight);
 	ASSERT( pvData );
-int result = CompareGlobalHP( hLeft, pvData, ulBufLen );
+	int result = CompareGlobalHP( hLeft, pvData, ulBufLen );
 	GlobalUnlock( hLeft );
 	return result;
 }
@@ -266,15 +266,15 @@ long DoOptions(CWnd *pParent)
 	//Don't let it open up more than once
 	if(theApp.m_bShowingOptions)
 		return FALSE;
-
+	
 	theApp.m_bShowingOptions = true;
 	
 	COptionsSheet Sheet("Copy Pro Options", pParent);
-
+	
 	int nRet = Sheet.DoModal();
-
+	
 	theApp.m_bShowingOptions = false;
-
+	
 	return nRet;
 }
 
@@ -384,25 +384,25 @@ CString GetFormatName(CLIPFORMAT cbType)
 		}
 		break;
 	}
-
+	
 	return "ERROR";
 }
 
 CString GetFilePath(CString csFileName)
 {
 	long lSlash = csFileName.ReverseFind('\\');
-			
+	
 	if(lSlash > -1)
 	{
 		csFileName = csFileName.Left(lSlash + 1);
 	}
-
+	
 	return csFileName;
 }
 
 
 /*------------------------------------------------------------------*\
-	CGetSetOptions
+CGetSetOptions
 \*------------------------------------------------------------------*/
 
 long CGetSetOptions::m_nLinesPerRow;
@@ -438,37 +438,37 @@ CGetSetOptions::CGetSetOptions()
 
 CGetSetOptions::~CGetSetOptions()
 {
-
+	
 }
 
 long CGetSetOptions::GetProfileLong(CString csName, long bDefaultValue)
 {
 	HKEY hkKey;
-
+	
 	long lResult = RegOpenKeyEx(HKEY_CURRENT_USER, _T(REG_PATH),
 								NULL, KEY_READ, &hkKey);
 	
 	if(lResult != ERROR_SUCCESS)
 		return bDefaultValue;
-
+	
 	DWORD buffer;
 	DWORD len =  sizeof(buffer);
 	DWORD type;
-
+	
 	lResult = ::RegQueryValueEx(hkKey, csName, 0, &type, (LPBYTE)&buffer, &len);
 	
 	RegCloseKey(hkKey);
 	
 	if(lResult == ERROR_SUCCESS)
 		return (long)buffer;
-
+	
 	return bDefaultValue;
 }
 
 CString CGetSetOptions::GetProfileString(CString csName, CString csDefault)
 {
 	HKEY hkKey;
-
+	
 	long lResult = RegOpenKeyEx(HKEY_CURRENT_USER, _T(REG_PATH),
 								NULL, KEY_READ, &hkKey);
 	
@@ -476,10 +476,10 @@ CString CGetSetOptions::GetProfileString(CString csName, CString csDefault)
 	DWORD dwBufLen = 256;
 	
 	lResult = ::RegQueryValueEx(hkKey , csName, NULL, NULL, (LPBYTE)szString, &dwBufLen);
-
+	
 	if(lResult != ERROR_SUCCESS)
 		return csDefault;
-
+	
 	return CString(szString);
 }
 
@@ -488,17 +488,17 @@ BOOL CGetSetOptions::SetProfileLong(CString csName, long lValue)
 	HKEY hkKey;
 	DWORD dWord;
 	long lResult = RegCreateKeyEx(HKEY_CURRENT_USER, _T(REG_PATH), NULL, 
-						NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 
-						NULL, &hkKey, &dWord);
-
+		NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 
+		NULL, &hkKey, &dWord);
+	
 	if(lResult != ERROR_SUCCESS)
 		return FALSE;
-
+	
 	DWORD val = (DWORD)lValue;
 	lResult = ::RegSetValueEx(hkKey, csName, 0, REG_DWORD, (LPBYTE)&val, sizeof(DWORD));
-
+	
 	RegCloseKey(hkKey);
-
+	
 	return lResult == ERROR_SUCCESS;
 }
 
@@ -507,17 +507,17 @@ BOOL CGetSetOptions::SetProfileString(CString csName, CString csValue)
 	HKEY hkKey;
 	DWORD dWord;
 	long lResult = RegCreateKeyEx(HKEY_CURRENT_USER, _T(REG_PATH), NULL, 
-						NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 
-						NULL, &hkKey, &dWord);
-
+		NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 
+		NULL, &hkKey, &dWord);
+	
 	if(lResult != ERROR_SUCCESS)
 		return FALSE;
-
+	
 	::RegSetValueEx(hkKey, csName, NULL, REG_SZ,
-			(BYTE*)(LPCTSTR)csValue, csValue.GetLength()+sizeof(TCHAR));
-
+		(BYTE*)(LPCTSTR)csValue, csValue.GetLength()+sizeof(TCHAR));
+	
 	RegCloseKey(hkKey);
-
+	
 	return lResult == ERROR_SUCCESS;
 }
 
@@ -543,28 +543,28 @@ BOOL CGetSetOptions::GetEnableTransparency()
 
 BOOL CGetSetOptions::SetTransparencyPercent(long lPercent)
 {
-	#ifdef AFTER_98
-		if(lPercent > OPACITY_MAX)
-			lPercent = OPACITY_MAX;
-		if(lPercent < 0)
-			lPercent = 0;
-
-		return SetProfileLong("TransparencyPercent", lPercent);
-	#endif
-		return FALSE;
+#ifdef AFTER_98
+	if(lPercent > OPACITY_MAX)
+		lPercent = OPACITY_MAX;
+	if(lPercent < 0)
+		lPercent = 0;
+	
+	return SetProfileLong("TransparencyPercent", lPercent);
+#endif
+	return FALSE;
 }
 
 long CGetSetOptions::GetTransparencyPercent()
 {
-	#ifdef AFTER_98
-		long lValue = GetProfileLong("TransparencyPercent", 14);
-
-		if(lValue > OPACITY_MAX) lValue = OPACITY_MAX;
-		if(lValue < 0) lValue = 0;
-
-		return lValue;
-	#endif
-		return 0;
+#ifdef AFTER_98
+	long lValue = GetProfileLong("TransparencyPercent", 14);
+	
+	if(lValue > OPACITY_MAX) lValue = OPACITY_MAX;
+	if(lValue < 0) lValue = 0;
+	
+	return lValue;
+#endif
+	return 0;
 }
 
 BOOL CGetSetOptions::SetLinesPerRow(long lLines)
@@ -588,7 +588,7 @@ BOOL CGetSetOptions::GetRunOnStartUp()
 	
 	if(nResult != ERROR_SUCCESS)
 		return FALSE;
-
+	
 	nResult = RegQueryValueEx(hkRun, GetAppName(), NULL, NULL, NULL, NULL);
 	RegCloseKey(hkRun);
 	return nResult == ERROR_SUCCESS;
@@ -598,15 +598,15 @@ void CGetSetOptions::SetRunOnStartUp(BOOL bRun)
 {
 	if(bRun == GetRunOnStartUp())
 		return;
-
+	
 	HKEY hkRun;
 	LONG nResult = RegOpenKeyEx(HKEY_CURRENT_USER,
 		_T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
 		NULL, KEY_ALL_ACCESS, &hkRun);
-
+	
 	if(nResult != ERROR_SUCCESS)
 		return;
-
+	
 	if(bRun)
 	{
 		CString sExeName = GetExeFileName();
@@ -617,7 +617,7 @@ void CGetSetOptions::SetRunOnStartUp(BOOL bRun)
 	{
 		::RegDeleteValue(hkRun, GetAppName());
 	}
-
+	
 	::RegCloseKey(hkRun);
 }
 
@@ -648,7 +648,7 @@ BOOL CGetSetOptions::SetQuickPasteSize(CSize size)
 {
 	BOOL bRet = SetProfileLong("QuickPasteCX", size.cx);
 	bRet = SetProfileLong("QuickPasteCY", size.cy);
-
+	
 	return bRet;
 }
 void CGetSetOptions::GetQuickPasteSize(CSize &size)
@@ -661,7 +661,7 @@ BOOL CGetSetOptions::SetQuickPastePoint(CPoint point)
 {
 	BOOL bRet = SetProfileLong("QuickPasteX", point.x);
 	bRet = SetProfileLong("QuickPasteY", point.y);
-
+	
 	return bRet;
 }
 
@@ -685,7 +685,7 @@ CString CGetSetOptions::GetDBPath(BOOL bDefault/* = TRUE*/)
 {
 	//First check the reg string
 	CString csDefaultPath = GetProfileString("DBPath", "");
-
+	
 	//If there is nothing in the regesty then get the default
 	//In the users application data in my documents
 	if(bDefault)
@@ -693,7 +693,7 @@ CString CGetSetOptions::GetDBPath(BOOL bDefault/* = TRUE*/)
 		if(csDefaultPath.IsEmpty())
 			csDefaultPath = GetDefaultDBName();
 	}
-		
+	
 	return csDefaultPath;
 }
 
@@ -742,10 +742,10 @@ void CGetSetOptions::SetTripCopyCount(long lVal)
 	// negative means a relative offset
 	if(lVal < 0)
 		lVal = GetTripCopyCount() - lVal; // add the absolute value
-
+	
 	if(GetTripDate() == 0)
 		SetTripDate(-1);
-
+	
 	SetProfileLong("TripCopies", lVal);
 }
 
@@ -759,10 +759,10 @@ void CGetSetOptions::SetTripPasteCount(long lVal)
 	// negative means a relative offset
 	if(lVal < 0)
 		lVal = GetTripPasteCount() - lVal; // add the absolute value
-
+	
 	if(GetTripDate() == 0)
 		SetTripDate(-1);
-
+	
 	SetProfileLong("TripPastes", lVal);
 }
 
@@ -775,7 +775,7 @@ void CGetSetOptions::SetTripDate(long lDate)
 {
 	if(lDate == -1)
 		lDate = (long)CTime::GetCurrentTime().GetTime();
-
+	
 	SetProfileLong("TripDate", lDate);
 }
 
@@ -789,10 +789,10 @@ void CGetSetOptions::SetTotalCopyCount(long lVal)
 	// negative means a relative offset
 	if(lVal < 0)
 		lVal = GetTotalCopyCount() - lVal; // add the absolute value
-
+	
 	if(GetTotalDate() == 0)
 		SetTotalDate(-1);
-
+	
 	SetProfileLong("TotalCopies", lVal);
 }
 
@@ -806,10 +806,10 @@ void CGetSetOptions::SetTotalPasteCount(long lVal)
 	// negative means a relative offset
 	if(lVal < 0)
 		lVal = GetTotalPasteCount() - lVal; // add the absolute value
-
+	
 	if(GetTotalDate() == 0)
 		SetTotalDate(-1);
-
+	
 	SetProfileLong("TotalPastes", lVal);
 }
 
@@ -822,7 +822,7 @@ void CGetSetOptions::SetTotalDate(long lDate)
 {
 	if(lDate == -1)
 		lDate = (long)CTime::GetCurrentTime().GetTime();
-
+	
 	SetProfileLong("TotalDate", lDate);
 }
 
@@ -904,7 +904,7 @@ BOOL CGetSetOptions::GetPrompForNewGroupName()				{	return GetProfileLong("Promp
 
 
 /*------------------------------------------------------------------*\
-	CHotKey - a single system-wide hotkey
+CHotKey - a single system-wide hotkey
 \*------------------------------------------------------------------*/
 
 CHotKey::CHotKey( CString name, DWORD defKey ) : m_Name(name), m_bIsRegistered(false)
@@ -947,15 +947,15 @@ BOOL CHotKey::ValidateHotKey(DWORD dwHotKey)
 {
 	ATOM id = ::GlobalAddAtom("HK_VALIDATE");
 	BOOL bResult = ::RegisterHotKey( g_HotKeys.m_hWnd,
-									 id,
-									 GetModifier(dwHotKey),
-									 LOBYTE(dwHotKey) );
+		id,
+		GetModifier(dwHotKey),
+		LOBYTE(dwHotKey) );
 	
 	if(bResult)
 		::UnregisterHotKey(g_HotKeys.m_hWnd, id);
-
+	
 	::GlobalDeleteAtom(id);
-
+	
 	return bResult;
 }
 
@@ -966,7 +966,7 @@ UINT CHotKey::GetModifier(DWORD dwHotKey)
 	if( HIBYTE(dwHotKey) & HOTKEYF_CONTROL ) uMod |= MOD_CONTROL;
 	if( HIBYTE(dwHotKey) & HOTKEYF_ALT )     uMod |= MOD_ALT;
 	if( HIBYTE(dwHotKey) & HOTKEYF_EXT )     uMod |= MOD_WIN;
-
+	
 	return uMod;
 }
 
@@ -976,20 +976,20 @@ bool CHotKey::Register()
 	{
 		ASSERT( g_HotKeys.m_hWnd );
 		m_bIsRegistered = ::RegisterHotKey(	g_HotKeys.m_hWnd,
-											m_Atom,
-											GetModifier(),
-											LOBYTE(m_Key) ) == TRUE;
+			m_Atom,
+			GetModifier(),
+			LOBYTE(m_Key) ) == TRUE;
 	}
 	else
 		m_bIsRegistered = true;
-
+	
 	return m_bIsRegistered;
 }
 bool CHotKey::Unregister()
 {
 	if( !m_bIsRegistered )
 		return true;
-
+	
 	if(m_Key)
 	{
 		ASSERT(g_HotKeys.m_hWnd);
@@ -1008,13 +1008,13 @@ bool CHotKey::Unregister()
 	{
 		m_bIsRegistered = false;
 	}
-
+	
 	return false;
 }
 
 
 /*------------------------------------------------------------------*\
-	CHotKeys - Manages system-wide hotkeys
+CHotKeys - Manages system-wide hotkeys
 \*------------------------------------------------------------------*/
 
 CHotKeys g_HotKeys;
@@ -1022,8 +1022,8 @@ CHotKeys g_HotKeys;
 CHotKeys::CHotKeys() : m_hWnd(NULL) {}
 CHotKeys::~CHotKeys()
 {
-CHotKey* pHotKey;
-int count = GetSize();
+	CHotKey* pHotKey;
+	int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
 		pHotKey = ElementAt(i);
@@ -1034,7 +1034,7 @@ int count = GetSize();
 
 int CHotKeys::Find( CHotKey* pHotKey )
 {
-int count = GetSize();
+	int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
 		if( pHotKey == ElementAt(i) )
@@ -1045,7 +1045,7 @@ int count = GetSize();
 
 bool CHotKeys::Remove( CHotKey* pHotKey )
 {
-int i = Find(pHotKey);
+	int i = Find(pHotKey);
 	if( i >= 0 )
 	{
 		RemoveAt(i);
@@ -1056,23 +1056,23 @@ int i = Find(pHotKey);
 
 void CHotKeys::LoadAllKeys()
 {
-int count = GetSize();
+	int count = GetSize();
 	for( int i=0; i < count; i++ )
 		ElementAt(i)->LoadKey();
 }
 
 void CHotKeys::SaveAllKeys()
 {
-int count = GetSize();
+	int count = GetSize();
 	for( int i=0; i < count; i++ )
 		ElementAt(i)->SaveKey();
 }
 
 void CHotKeys::RegisterAll( bool bMsgOnError )
 {
-CString str;
-CHotKey* pHotKey;
-int count = GetSize();
+	CString str;
+	CHotKey* pHotKey;
+	int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
 		pHotKey = ElementAt(i);
@@ -1089,9 +1089,9 @@ int count = GetSize();
 
 void CHotKeys::UnregisterAll( bool bMsgOnError )
 {
-CString str;
-CHotKey* pHotKey;
-int count = GetSize();
+	CString str;
+	CHotKey* pHotKey;
+	int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
 		pHotKey = ElementAt(i);
@@ -1108,7 +1108,7 @@ int count = GetSize();
 
 void CHotKeys::GetKeys( ARRAY& keys )
 {
-int count = GetSize();
+	int count = GetSize();
 	keys.SetSize( count );
 	for( int i=0; i < count; i++ )
 		keys[i] = ElementAt(i)->GetKey();
@@ -1117,7 +1117,7 @@ int count = GetSize();
 // caution! this alters hotkeys based upon corresponding indexes
 void CHotKeys::SetKeys( ARRAY& keys, bool bSave )
 {
-int count = GetSize();
+	int count = GetSize();
 	ASSERT( count == keys.GetSize() );
 	for( int i=0; i < count; i++ )
 		ElementAt(i)->SetKey( keys[i], bSave );
@@ -1125,10 +1125,10 @@ int count = GetSize();
 
 bool CHotKeys::FindFirstConflict( ARRAY& keys, int* pX, int* pY )
 {
-bool bConflict = false;
-int i, j;
-int count = keys.GetSize();
-DWORD key;
+	bool bConflict = false;
+	int i, j;
+	int count = keys.GetSize();
+	DWORD key;
 	for( i=0; i < count && !bConflict; i++ )
 	{
 		key = keys.ElementAt(i);
@@ -1145,7 +1145,7 @@ DWORD key;
 			}
 		}
 	}
-
+	
 	if( bConflict )
 	{
 		if( pX )
@@ -1153,21 +1153,21 @@ DWORD key;
 		if( pY )
 			*pY = j;
 	}
-
+	
 	return bConflict;
 }
 
 // if true, pX and pY (if valid) are set to the indexes of the conflicting hotkeys.
 bool CHotKeys::FindFirstConflict( int* pX, int* pY )
 {
-ARRAY keys;
+	ARRAY keys;
 	GetKeys( keys );
 	return FindFirstConflict( keys, pX, pY );
 }
 
 /****************************************************************************************************
-	BOOL CALLBACK MyMonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)
- ***************************************************************************************************/
+BOOL CALLBACK MyMonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)
+***************************************************************************************************/
 typedef struct
 {
 	long	lFlags;				// Flags
@@ -1200,7 +1200,7 @@ BOOL CALLBACK MyMonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMo
 				{
 					// This is the one
 					pParam->iMonitor = pParam->nMonitorCount;
-
+					
 					// Stop the enumeration
 					return FALSE;
 				}
@@ -1212,16 +1212,16 @@ BOOL CALLBACK MyMonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMo
 					*pParam->pVirtualRect = *lprcMonitor;
 				}
 				else
-				if(pParam->iMonitor == -1)
-				{
-					pParam->pVirtualRect->left = min(pParam->pVirtualRect->left, lprcMonitor->left);
-					pParam->pVirtualRect->top = min(pParam->pVirtualRect->top, lprcMonitor->top);
-					pParam->pVirtualRect->right = max(pParam->pVirtualRect->right, lprcMonitor->right);
-					pParam->pVirtualRect->bottom = max(pParam->pVirtualRect->bottom, lprcMonitor->bottom);
-				}
+					if(pParam->iMonitor == -1)
+					{
+						pParam->pVirtualRect->left = min(pParam->pVirtualRect->left, lprcMonitor->left);
+						pParam->pVirtualRect->top = min(pParam->pVirtualRect->top, lprcMonitor->top);
+						pParam->pVirtualRect->right = max(pParam->pVirtualRect->right, lprcMonitor->right);
+						pParam->pVirtualRect->bottom = max(pParam->pVirtualRect->bottom, lprcMonitor->bottom);
+					}
 			}
 		}
-
+		
 		// Up the count if necessary
 		pParam->nMonitorCount++;
 	}
@@ -1232,16 +1232,16 @@ int GetScreenWidth(void)
 {
 	OSVERSIONINFO OS_Version_Info;
 	DWORD dwPlatform = 0;
-
+	
 	if(GetVersionEx(&OS_Version_Info) != 0)
 	{
 		dwPlatform = OS_Version_Info.dwPlatformId;
 	}
-
+	
 	if(dwPlatform == VER_PLATFORM_WIN32_NT)
 	{
 		int width, height;
-
+		
 		width = GetSystemMetrics(SM_CXSCREEN);
 		height = GetSystemMetrics(SM_CYSCREEN);
 		switch(width)
@@ -1281,16 +1281,16 @@ int GetScreenHeight(void)
 {
 	OSVERSIONINFO OS_Version_Info;
 	DWORD dwPlatform = 0;
-
+	
 	if(GetVersionEx(&OS_Version_Info) != 0)
 	{
 		dwPlatform = OS_Version_Info.dwPlatformId;
 	}
-
+	
 	if(dwPlatform == VER_PLATFORM_WIN32_NT)
 	{
 		int width, height;
-
+		
 		width = GetSystemMetrics(SM_CXSCREEN);
 		height = GetSystemMetrics(SM_CYSCREEN);
 		switch(height)
@@ -1333,10 +1333,10 @@ int GetMonitorFromRect(LPRECT lpMonitorRect)
 	ZeroMemory(&EnumParam, sizeof(EnumParam));
 	EnumParam.lFlags = MONITOR_SEARCH_METOHD;
 	EnumParam.pVirtualRect = lpMonitorRect;
-
+	
 	// Enum Displays
 	EnumDisplayMonitors(NULL, NULL, MyMonitorEnumProc, (long)&EnumParam);
-
+	
 	// Return the result
 	return EnumParam.iMonitor;
 }
@@ -1348,13 +1348,13 @@ void GetMonitorRect(int iMonitor, LPRECT lpDestRect)
 	ZeroMemory(&EnumParam, sizeof(EnumParam));
 	EnumParam.iMonitor = iMonitor;
 	EnumParam.pVirtualRect = lpDestRect;
-
+	
 	// Zero out dest rect
 	lpDestRect->bottom = lpDestRect->left = lpDestRect->right = lpDestRect->top = 0;
 	
 	// Enum Displays
 	EnumDisplayMonitors(NULL, NULL, MyMonitorEnumProc, (long)&EnumParam);
-
+	
 	// If not successful, default to the screen dimentions
 	if(lpDestRect->right == 0 || lpDestRect->bottom == 0)
 	{
@@ -1365,20 +1365,20 @@ void GetMonitorRect(int iMonitor, LPRECT lpDestRect)
 
 
 /*------------------------------------------------------------------*\
-	CAccel - an Accelerator (in-app hotkey)
+CAccel - an Accelerator (in-app hotkey)
 
-    - the win32 CreateAcceleratorTable using ACCEL was insufficient
-    because it only allowed a WORD for the cmd associated with it.
+  - the win32 CreateAcceleratorTable using ACCEL was insufficient
+  because it only allowed a WORD for the cmd associated with it.
 \*------------------------------------------------------------------*/
- 
+
 /*------------------------------------------------------------------*\
-	CAccels - Manages a set of CAccel
+CAccels - Manages a set of CAccel
 \*------------------------------------------------------------------*/
 
 int CompareAccel( const void* pLeft, const void* pRight )
 {
-WORD w;
-int l,r;
+	WORD w;
+	int l,r;
 	// swap bytes: place the VirtualKey in the MSB and the modifier in the LSB
 	//  so that Accels based upon the same vkey are grouped together.
 	// this is required by our use of m_Index
@@ -1404,28 +1404,28 @@ bool CAccels::OnMsg( MSG* pMsg, DWORD &dID)
 	// bit 30 (0x40000000) is 1 if this is NOT the first msg of the key
 	//  i.e. auto-repeat may cause multiple msgs of the same key
 	if( (pMsg->lParam & 0x40000000) ||
-	    (pMsg->message != WM_KEYDOWN &&
-	     pMsg->message != WM_SYSKEYDOWN) )
+		(pMsg->message != WM_KEYDOWN &&
+		pMsg->message != WM_SYSKEYDOWN) )
 	{	
 		return NULL; 
 	}
-
+	
 	if( !pMsg || m_Map.GetCount() <= 0 )
 		return NULL;
-
+	
 	BYTE vkey = LOBYTE(pMsg->wParam);
 	BYTE mod  = GetKeyStateModifiers();
 	DWORD key = ACCEL_MAKEKEY( vkey, mod );
-
+	
 	if(m_Map.Lookup(key, dID))
 		return true;;
-
+	
 	return false;
 }
 
 BYTE GetKeyStateModifiers()
 {
-BYTE m=0;
+	BYTE m=0;
 	if( GetKeyState(VK_SHIFT) & 0x8000 )
 		m |= HOTKEYF_SHIFT;
 	if( GetKeyState(VK_CONTROL) & 0x8000 )
@@ -1436,12 +1436,12 @@ BYTE m=0;
 }
 
 /*------------------------------------------------------------------*\
-	CTokenizer - Tokenizes a string using given delimiters
+CTokenizer - Tokenizes a string using given delimiters
 \*------------------------------------------------------------------*/
 
 CTokenizer::CTokenizer(const CString& cs, const CString& csDelim):
-	m_cs(cs),
-	m_nCurPos(0)
+m_cs(cs),
+m_nCurPos(0)
 {
 	SetDelimiters(csDelim);
 }
@@ -1454,43 +1454,43 @@ void CTokenizer::SetDelimiters(const CString& csDelim)
 
 bool CTokenizer::Next(CString& cs)
 {
-int len = m_cs.GetLength();
-
+	int len = m_cs.GetLength();
+	
 	cs.Empty();
-
+	
 	while(m_nCurPos < len && m_delim[static_cast<BYTE>(m_cs[m_nCurPos])])
 		++m_nCurPos;
-
+	
 	if(m_nCurPos >= len)
 		return false;
-
+	
 	int nStartPos = m_nCurPos;
 	while(m_nCurPos < len && !m_delim[static_cast<BYTE>(m_cs[m_nCurPos])])
 		++m_nCurPos;
 	
 	cs = m_cs.Mid(nStartPos, m_nCurPos - nStartPos);
-
+	
 	return true;
 }
 
 CString	CTokenizer::Tail() const
 {
-int len = m_cs.GetLength();
-int nCurPos = m_nCurPos;
-
+	int len = m_cs.GetLength();
+	int nCurPos = m_nCurPos;
+	
 	while(nCurPos < len && m_delim[static_cast<BYTE>(m_cs[nCurPos])])
 		++nCurPos;
-
-CString csResult;
+	
+	CString csResult;
 	if(nCurPos < len)
 		csResult = m_cs.Mid(nCurPos);
-
+	
 	return csResult;
 }
 
 
 /*------------------------------------------------------------------*\
-	Global ToolTip Manual Control Functions
+Global ToolTip Manual Control Functions
 \*------------------------------------------------------------------*/
 
 void InitToolInfo( TOOLINFO& ti )
@@ -1510,8 +1510,8 @@ void InitToolInfo( TOOLINFO& ti )
 }
 
 /*------------------------------------------------------------------*\
-	CPopup - a tooltip that pops up manually (when Show is called).
-	- technique learned from codeproject "ToolTipZen" by "Zarembo Maxim"
+CPopup - a tooltip that pops up manually (when Show is called).
+- technique learned from codeproject "ToolTipZen" by "Zarembo Maxim"
 \*------------------------------------------------------------------*/
 
 CPopup::CPopup()
@@ -1537,28 +1537,28 @@ CPopup::~CPopup()
 
 void CPopup::Init()
 {
-// initialize variables
+	// initialize variables
 	m_bOwnTT = false;
 	m_hTTWnd = NULL;
 	m_bIsShowing = false;
 	m_bAllowShow = true; // used by AllowShow()
-
+	
 	m_Pos.x = m_Pos.y = 0;
 	m_bTop = true;
 	m_bLeft = true;
 	m_bCenterX = false;
 	m_bCenterY = false;
 	m_hWndPosRelativeTo = NULL;
-
+	
 	RECT rcScreen;
-		
+	
 	GetMonitorRect(-1, &rcScreen);
-
+	
 	m_ScreenMaxX = rcScreen.right;
 	m_ScreenMaxY = rcScreen.bottom;
-
+	
 	m_hWndInsertAfter = HWND_TOP; //HWND_TOPMOST
-
+	
 	SetTTWnd();
 }
 
@@ -1568,14 +1568,14 @@ void CPopup::SetTTWnd( HWND hTTWnd, TOOLINFO* pTI )
 		m_TI = *pTI;
 	else
 		InitToolInfo( m_TI );
-
+	
 	if( m_bOwnTT && ::IsWindow(m_hTTWnd) )
 	{
 		if( !::IsWindow(hTTWnd) )
 			return; // we would have to recreate the one that already exists
 		::DestroyWindow( m_hTTWnd );
 	}
-
+	
 	m_hTTWnd = hTTWnd;
 	if( ::IsWindow(m_hTTWnd) )
 	{
@@ -1595,7 +1595,7 @@ void CPopup::CreateToolTip()
 {
 	if( m_hTTWnd != NULL )
 		return;
-
+	
 	// CREATE A TOOLTIP WINDOW
 	m_hTTWnd = CreateWindowEx(
 		WS_EX_TOPMOST,
@@ -1612,7 +1612,7 @@ void CPopup::CreateToolTip()
 		NULL
 		);
 	m_bOwnTT = true;
-
+	
 	// SEND AN ADDTOOL MESSAGE TO THE TOOLTIP CONTROL WINDOW
 	::SendMessage(m_hTTWnd, TTM_ADDTOOL, 0, (LPARAM) (LPTOOLINFO) &m_TI);
 }
@@ -1639,31 +1639,31 @@ void CPopup::SetPosInfo( bool bTop, bool bCenterY, bool bLeft, bool bCenterX )
 
 void CPopup::AdjustPos( CPoint& pos )
 {
-CRect rel(0,0,0,0);
-CRect rect(0,0,0,0);
-
-//	::SendMessage(m_hTTWnd, TTM_ADJUSTRECT, TRUE, (LPARAM)&rect);
+	CRect rel(0,0,0,0);
+	CRect rect(0,0,0,0);
+	
+	//	::SendMessage(m_hTTWnd, TTM_ADJUSTRECT, TRUE, (LPARAM)&rect);
 	::GetWindowRect(m_hTTWnd,&rect);
-
+	
 	if( ::IsWindow(m_hWndPosRelativeTo) )
 		::GetWindowRect(m_hWndPosRelativeTo, &rel);
-
+	
 	// move the rect to the relative origin
 	rect.bottom = rect.Height() + rel.top;
 	rect.top = rel.top;
 	rect.right = rect.Width() + rel.left;
 	rect.left = rel.left;
-
+	
 	// adjust the y position
 	rect.OffsetRect( 0, pos.y - (m_bCenterY? rect.Height()/2: (m_bTop? 0: rect.Height())) );
 	if( rect.bottom > m_ScreenMaxY )
 		rect.OffsetRect( 0, m_ScreenMaxY - rect.bottom );
-
+	
 	// adjust the x position
 	rect.OffsetRect( pos.x - (m_bCenterX? rect.Width()/2: (m_bLeft? 0: rect.Width())), 0 );
 	if( rect.right > m_ScreenMaxX )
 		rect.OffsetRect( m_ScreenMaxX - rect.right, 0 );
-
+	
 	pos.x = rect.left;
 	pos.y = rect.top;
 }
@@ -1673,7 +1673,7 @@ void CPopup::SendToolTipText( CString text )
 	//Replace the tabs with spaces, the tooltip didn't like the \t s
 	text.Replace("\t", "  ");
 	m_TI.lpszText = (LPSTR) (LPCTSTR) text;
-
+	
 	// this allows \n and \r to be interpreted correctly
 	::SendMessage(m_hTTWnd, TTM_SETMAXTIPWIDTH, 0, 500);
 	// set the text
@@ -1684,20 +1684,20 @@ void CPopup::Show( CString text, CPoint pos, bool bAdjustPos )
 {
 	if( m_hTTWnd == NULL )
 		return;
-
+	
 	if( !m_bIsShowing )
 		::SendMessage(m_hTTWnd, TTM_TRACKPOSITION, 0, (LPARAM)(DWORD) MAKELONG(-10000,-10000));
-
+	
 	SendToolTipText( text );
 	::SendMessage(m_hTTWnd, TTM_TRACKACTIVATE, true, (LPARAM)(LPTOOLINFO) &m_TI);
 	if( bAdjustPos )
 		AdjustPos(pos);
 	// set the position
 	::SendMessage(m_hTTWnd, TTM_TRACKPOSITION, 0, (LPARAM)(DWORD) MAKELONG(pos.x,pos.y));
-
+	
 	// make sure the tooltip will be on top.
 	::SetWindowPos( m_hTTWnd, m_hWndInsertAfter, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE|SWP_NOACTIVATE );
-
+	
 	m_bIsShowing = true;
 }
 
