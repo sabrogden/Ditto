@@ -515,6 +515,8 @@ LRESULT CMainFrame::OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam)
 	pClipList = NULL;
 
 	LogSendRecieveInfo("---------End of OnAddToDatabaseFromSocket");
+
+	theApp.Delayed_RemoveOldEntries(60000);
 	
 	return TRUE;
 }
