@@ -23,6 +23,7 @@ COptionFriends::COptionFriends() : CPropertyPage(COptionFriends::IDD)
 {
 	//{{AFX_DATA_INIT(COptionFriends)
 	m_PlaceOnClipboard = _T("");
+	m_csPassword = _T("");
 	//}}AFX_DATA_INIT
 }
 
@@ -38,6 +39,7 @@ void COptionFriends::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK_LOG_SEND_RECIEVE, m_SendRecieve);
 	DDX_Control(pDX, IDC_LIST, m_List);
 	DDX_Text(pDX, IDC_EDIT_PLACE_ON_CLIPBOARD, m_PlaceOnClipboard);
+	DDX_Text(pDX, IDC_EDIT_PASSWORD, m_csPassword);
 	//}}AFX_DATA_MAP
 }
 
@@ -70,6 +72,8 @@ BOOL COptionFriends::OnInitDialog()
 	m_bDisableRecieve.SetCheck(CGetSetOptions::GetDisableRecieve());
 
 	m_PlaceOnClipboard = g_Opt.m_csIPListToPutOnClipboard;
+
+	m_csPassword = "[Not Shown]";
 
 	UpdateData(FALSE);
 		
@@ -106,6 +110,9 @@ BOOL COptionFriends::OnApply()
 	UpdateData();
 
 	g_Opt.SetListToPutOnClipboard(m_PlaceOnClipboard);
+
+	if(m_csPassword != "[Not Shown]")
+		g_Opt.SetNetworkPassword(m_csPassword);
 
 	g_Opt.GetClientSendCount();
 	

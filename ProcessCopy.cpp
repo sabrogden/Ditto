@@ -8,6 +8,8 @@
 #include "DatabaseUtilities.h"
 #include ".\processcopy.h"
 
+#include <Mmsystem.h>
+
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
@@ -418,6 +420,9 @@ bool CClip::AddToDB( bool bCheckForDuplicates )
 		
 		// AddToDataTable must go first in order to assign m_DataID
 		bResult = AddToDataTable() && AddToMainTable();
+
+	if(g_Opt.m_csPlaySoundOnCopy.GetLength() > 0)
+		PlaySound(g_Opt.m_csPlaySoundOnCopy, NULL, SND_FILENAME|SND_ASYNC);
 	
 	// should be emptied by AddToDataTable
 	ASSERT( m_Formats.GetSize() == 0 );

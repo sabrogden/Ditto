@@ -446,9 +446,9 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			pDC->DrawText(strSymbols, &rectSym, DT_VCENTER | DT_EXPANDTABS | DT_CALCRECT);
 			VERIFY( rectSpace.Width() > 0 );
 			
-			int numSpaces = rectSym.Width() / rectSpace.Width();
-			numSpaces++;
-			csText = CString(' ',numSpaces) + csText;
+//			int numSpaces = rectSym.Width() / rectSpace.Width();
+//			numSpaces++;
+//			csText = CString(' ',numSpaces) + csText;
 			
 			// draw the symbols
 			pDC->FillSolidRect( rectSym, GetSysColor(COLOR_ACTIVECAPTION) );
@@ -458,6 +458,8 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			COLORREF crOld = pDC->SetTextColor(RGB(255, 255, 255));
 			pDC->DrawText(strSymbols, rectSym, DT_VCENTER | DT_EXPANDTABS);
 			pDC->SetTextColor(crOld);
+
+			rcText.left += rectSym.Width() + 2;
 		}
 		
 		if(DrawText(nItem, rcText, pDC) == FALSE)

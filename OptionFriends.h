@@ -27,6 +27,7 @@ public:
 	CButton	m_SendRecieve;
 	CListCtrl	m_List;
 	CString	m_PlaceOnClipboard;
+	CString	m_csPassword;
 	//}}AFX_DATA
 
 

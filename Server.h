@@ -10,6 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #include "Winsock2.h"
+#include "Encryption.h"
 
 class MyEnums
 {
@@ -36,6 +37,26 @@ public:
 	long				m_lParameter1;
 	long				m_lParameter2;
 	char				m_cExtra[50];
+};
+
+class CRecieveSocket
+{
+public:
+	CRecieveSocket(SOCKET sk);
+
+	~CRecieveSocket();
+	
+	LPVOID ReceiveEncryptedData(long lInSize, long &lOutSize);
+	BOOL RecieveExactSize(char *pData, long lSize);
+	BOOL RecieveCSendInfo(CSendInfo *pInfo);
+
+	void FreeDecryptedData();
+
+protected:
+	CEncryption *m_pEncryptor;
+	SOCKET m_Socket;
+	UCHAR *m_pDataReturnedFromDecrypt;
+	
 };
 
 UINT  MTServerThread(LPVOID pParam);

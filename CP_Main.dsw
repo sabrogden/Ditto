@@ -7,10 +7,18 @@ Project: "CP_Main"=".\CP_Main.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
-    begin source code control
-    "$/", AAAAAAAA
-    .
-    end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "EncryptDecrypt"=".\EncryptDecrypt\EncryptDecrypt.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
 }}}
 
 Package=<4>
@@ -35,10 +43,6 @@ Global:
 
 Package=<5>
 {{{
-    begin source code control
-    "$/Ditto", UFAAAAAA
-    .
-    end source code control
 }}}
 
 Package=<3>

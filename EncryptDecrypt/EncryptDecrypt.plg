@@ -1,0 +1,53 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: EncryptDecrypt - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\Scott\LOCALS~1\Temp\RSP37A3.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"Debug/EncryptDecrypt.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\Documents and Settings\Scott\Desktop\ditto\EncryptDecrypt\Encryption.cpp"
+"C:\Documents and Settings\Scott\Desktop\ditto\EncryptDecrypt\MemUtil.cpp"
+"C:\Documents and Settings\Scott\Desktop\ditto\EncryptDecrypt\NewRandom.cpp"
+"C:\Documents and Settings\Scott\Desktop\ditto\EncryptDecrypt\rijndael.cpp"
+"C:\Documents and Settings\Scott\Desktop\ditto\EncryptDecrypt\sha2.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\Scott\LOCALS~1\Temp\RSP37A3.tmp" 
+Creating temporary file "C:\DOCUME~1\Scott\LOCALS~1\Temp\RSP37A4.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"Debug/EncryptDecrypt.pch" /Yc"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\Documents and Settings\Scott\Desktop\ditto\EncryptDecrypt\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\Scott\LOCALS~1\Temp\RSP37A4.tmp" 
+Creating command line "link.exe -lib /nologo /out:"Debug\EncryptDecryptD.lib"  ".\Debug\Encryption.obj" ".\Debug\MemUtil.obj" ".\Debug\NewRandom.obj" ".\Debug\rijndael.obj" ".\Debug\sha2.obj" ".\Debug\StdAfx.obj" "
+<h3>Output Window</h3>
+Compiling...
+StdAfx.cpp
+Compiling...
+Encryption.cpp
+MemUtil.cpp
+NewRandom.cpp
+rijndael.cpp
+sha2.cpp
+Generating Code...
+Creating library...
+Creating temporary file "C:\DOCUME~1\Scott\LOCALS~1\Temp\RSP37A5.bat" with contents
+[
+@echo off
+copy  .\Debug\*.lib  ..\
+]
+Creating command line "C:\DOCUME~1\Scott\LOCALS~1\Temp\RSP37A5.bat"
+
+.\Debug\EncryptDecryptD.lib
+        1 file(s) copied.
+
+
+
+<h3>Results</h3>
+EncryptDecryptD.lib - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

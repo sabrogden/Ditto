@@ -35,6 +35,7 @@
 #define IDD_MOVE_TO_GROUP               156
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
+#define IDC_SELECT_SOUND                1002
 #define IDC_SELECT                      1003
 #define IDC_TRIP_COPIES                 1004
 #define IDC_TRIP_PASTES                 1005
@@ -133,7 +134,10 @@
 #define IDC_HOTKEY8                     2031
 #define IDC_BUTTON_DEFAULT_FAULT        2031
 #define IDC_HOTKEY9                     2032
+#define IDC_EDIT_PASSWORD               2032
 #define IDC_HOTKEY10                    2033
+#define IDC_EDIT_PLAY_SOUND             2033
+#define IDC_BUTTON_PLAY                 2034
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -214,7 +218,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        157
 #define _APS_NEXT_COMMAND_VALUE         32847
-#define _APS_NEXT_CONTROL_VALUE         2032
+#define _APS_NEXT_CONTROL_VALUE         2035
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

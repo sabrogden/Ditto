@@ -6,6 +6,7 @@
 #include "OptionsGeneral.h"
 #include "InternetUpdate.h"
 #include <io.h>
+#include <Mmsystem.h> //play sound
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -21,6 +22,7 @@ IMPLEMENT_DYNCREATE(COptionsGeneral, CPropertyPage)
 COptionsGeneral::COptionsGeneral() : CPropertyPage(COptionsGeneral::IDD)
 {
 	//{{AFX_DATA_INIT(COptionsGeneral)
+	m_csPlaySound = _T("");
 	//}}AFX_DATA_INIT
 }
 
@@ -45,6 +47,7 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EXPIRE, m_btExpire);
 	DDX_Control(pDX, IDC_DISPLAY_IN_SYSTEMTRAY, m_btShowIconInSysTray);
 	DDX_Control(pDX, IDC_START_ON_STARTUP, m_btRunOnStartup);
+	DDX_Text(pDX, IDC_EDIT_PLAY_SOUND, m_csPlaySound);
 	//}}AFX_DATA_MAP
 	DDX_Control(pDX, IDC_ALLOW_DUPLICATES, m_btAllowDuplicates);
 	DDX_Control(pDX, IDC_UPDATE_TIME_ON_PASTE, m_btUpdateTimeOnPaste);
@@ -58,6 +61,8 @@ BEGIN_MESSAGE_MAP(COptionsGeneral, CPropertyPage)
 	ON_BN_CLICKED(IDC_CHECK_FOR_UPDATES, OnCheckForUpdates)
 	ON_BN_CLICKED(IDC_SET_DB_PATH, OnSetDbPath)
 	ON_BN_CLICKED(IDC_GET_PATH, OnGetPath)
+	ON_BN_CLICKED(IDC_SELECT_SOUND, OnSelectSound)
+	ON_BN_CLICKED(IDC_BUTTON_PLAY, OnButtonPlay)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -100,6 +105,10 @@ BOOL COptionsGeneral::OnInitDialog()
 		m_ePath.SetWindowText(csPath);
 	}
 
+	m_csPlaySound = g_Opt.m_csPlaySoundOnCopy;
+
+	UpdateData(FALSE);
+
 	return TRUE;
 }
 
@@ -120,6 +129,8 @@ BOOL COptionsGeneral::OnApply()
 	CGetSetOptions::SetMaxEntries(m_eMaxSavedCopies.GetNumber());
 	CGetSetOptions::SetExpiredEntries(m_eExpireAfter.GetNumber());
 	CGetSetOptions::SetDescTextSize(m_DescTextSize.GetNumber());
+
+	CGetSetOptions::SetPlaySoundOnCopy(m_csPlaySound);
 
 	g_Opt.SetAllowDuplicates( m_btAllowDuplicates.GetCheck() );
 	g_Opt.SetUpdateTimeOnPaste( m_btUpdateTimeOnPaste.GetCheck() );
@@ -246,4 +257,43 @@ void COptionsGeneral::OnGetPath()
 	}
 	else
 		m_ePath.SetWindowText(csPath);	
+}
+
+void COptionsGeneral::OnSelectSound() 
+{
+	OPENFILENAME	FileName;
+
+	char			szFileName[400];
+	char			szDir[400];
+
+	memset(&FileName, 0, sizeof(FileName));
+	memset(szFileName, 0, sizeof(szFileName));
+	memset(&szDir, 0, sizeof(szDir));
+
+	FileName.lStructSize = sizeof(FileName);
+
+	FileName.lpstrTitle = "Select .wav file";
+	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST;
+	FileName.nMaxFile = 400;
+	FileName.lpstrFile = szFileName;
+	FileName.lpstrInitialDir = szDir;
+	FileName.lpstrFilter = "Sounds(*.wav)\0*.wav";
+	FileName.lpstrDefExt = "wav";
+
+	if(GetOpenFileName(&FileName) == 0)
+		return;
+
+	CString	csPath(FileName.lpstrFile);
+
+	if(csPath.GetLength())
+		m_csPlaySound = csPath;
+
+	UpdateData(FALSE);
+}
+
+void COptionsGeneral::OnButtonPlay() 
+{
+	UpdateData();
+
+	PlaySound(m_csPlaySound, NULL, SND_FILENAME|SND_ASYNC);
 }

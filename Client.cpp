@@ -163,11 +163,18 @@ UINT  SendClientThread(LPVOID pParam)
 CClient::CClient()
 {
 	m_Connection = NULL;
+
+	m_pEncryptor = new CEncryption; //CreateEncryptionInterface("encryptdecrypt.dll");
 }
 
 CClient::~CClient()
 {			
 	CloseConnection();
+
+	delete m_pEncryptor;
+	m_pEncryptor = NULL;
+
+//	ReleaseEncryptionInterface(m_pEncryptor);
 }
 
 BOOL CClient::CloseConnection()
@@ -228,12 +235,13 @@ BOOL CClient::OpenConnection(const char* servername)
 		return FALSE;
 	}
 
-	server.sin_addr.s_addr=*((unsigned long*)hp->h_addr);
-	server.sin_family=AF_INET;
-	server.sin_port=htons( (u_short) g_Opt.m_lPort );
-	if(connect(m_Connection,(struct sockaddr*)&server,sizeof(server)))
+	server.sin_addr.s_addr = *((unsigned long*)hp->h_addr);
+	server.sin_family = AF_INET;
+	server.sin_port = htons((u_short) g_Opt.m_lPort);
+	if(connect(m_Connection, (struct sockaddr*)&server, sizeof(server)))
 	{
-		LogSendRecieveInfo("ERROR if(connect(m_Connection,(struct sockaddr*)&server,sizeof(server)))");
+		int nWhy = WSAGetLastError();
+		LogSendRecieveInfo(StrF("ERROR if(connect(m_Connection,(struct sockaddr*)&server,sizeof(server))) why = %d", nWhy));
 		closesocket(m_Connection);
 		m_Connection = NULL;
 		return FALSE;	
@@ -266,16 +274,42 @@ BOOL CClient::SendItem(CClip *pClip)
 	{
 		pCF = &pClip->m_Formats.GetData()[i];
 		
-		Info.m_lParameter1 = GlobalSize(pCF->m_hgData);
-		strncpy(Info.m_cDesc, GetFormatName(pCF->m_cfType), sizeof(Info.m_cDesc));
-		Info.m_cDesc[sizeof(Info.m_cDesc)-1] = 0;
-
-		if(SendCSendData(Info, MyEnums::DATA_START) == FALSE)
-			return FALSE;
-
 		LPVOID pvData = GlobalLock(pCF->m_hgData);
+		long lLength = GlobalSize(pCF->m_hgData);
 
-		SendExactSize((char*)pvData, Info.m_lParameter1);
+		UCHAR* pOutput = NULL;
+		int nLenOutput = 0;
+
+		LogSendRecieveInfo(StrF("BEFORE Encrypt clip data %d", lLength));
+
+		if(m_pEncryptor)
+		{
+			if(m_pEncryptor->Encrypt((UCHAR*)pvData, lLength, g_Opt.m_csPassword, pOutput, nLenOutput))
+			{
+				LogSendRecieveInfo(StrF("AFTER Encrypt clip data %d", nLenOutput));
+
+				Info.m_lParameter1 = nLenOutput;
+				strncpy(Info.m_cDesc, GetFormatName(pCF->m_cfType), sizeof(Info.m_cDesc));
+				Info.m_cDesc[sizeof(Info.m_cDesc)-1] = 0;
+
+				if(SendCSendData(Info, MyEnums::DATA_START) == FALSE)
+					return FALSE;
+
+				SendExactSize((char*)pOutput, nLenOutput, false);
+
+				m_pEncryptor->FreeBuffer(pOutput);
+			}
+			else
+			{
+				LogSendRecieveInfo("Failed to encrypt data");
+				return FALSE;
+			}
+		}
+		else
+		{
+			ASSERT(!"SendItem::Encryption not initialized");
+			LogSendRecieveInfo("SendItem::Encryption not initialized");	
+		}
 
 		GlobalUnlock(pCF->m_hgData);
 		
@@ -297,26 +331,51 @@ BOOL CClient::SendCSendData(CSendInfo &data, MyEnums::eSendType type)
 	return SendExactSize((char *)&data, sizeof(CSendInfo));
 }
 
-BOOL CClient::SendExactSize(char *pData, long lLength)
+BOOL CClient::SendExactSize(char *pData, long lLength, bool bEncrypt)
 {
-	long lBytesRead = 0;
-	long lExpected = lLength;
-
-	while(lBytesRead < lExpected)
+	BOOL bRet = FALSE;
+	if(!m_pEncryptor && bEncrypt)
 	{
-		long lSize = send(m_Connection, pData + lBytesRead, lExpected - lBytesRead, 0);
-	
-		if(lSize == SOCKET_ERROR || lSize == 0)
-		{
-			LogSendRecieveInfo(StrF("lSize == SOCKET_ERROR, %d", WSAGetLastError()));
-			return FALSE;
-		}
-		lBytesRead += lSize;
+		ASSERT(!"Encryption not initialized");
+		LogSendRecieveInfo("SendExactSize::Encryption not initialized");
+		return bRet;
+	}
 
-		LogSendRecieveInfo(StrF("SendExactSize Last Size %d - Total %d", lSize, lBytesRead));
+	LogSendRecieveInfo(StrF("START SendExactSize Total %d", lLength));
+
+	UCHAR* pOutput = (UCHAR*)pData;
+	int nLenOutput = lLength;
+	long lBytesRead = 0;
+
+	if(bEncrypt == false || m_pEncryptor->Encrypt((UCHAR*)pData, lLength, g_Opt.m_csPassword, pOutput, nLenOutput))
+	{
+		long lExpected = nLenOutput;
+
+		while(lBytesRead < lExpected)
+		{
+			long lSize = send(m_Connection, (char*)pOutput + lBytesRead, lExpected - lBytesRead, 0);
+		
+			if(lSize == SOCKET_ERROR || lSize == 0)
+			{
+				LogSendRecieveInfo(StrF("lSize == SOCKET_ERROR, %d", WSAGetLastError()));
+				break;
+			}
+			lBytesRead += lSize;
+
+			LogSendRecieveInfo(StrF("SendExactSize Last Size %d - Total %d", lSize, lBytesRead));
+		}
+
+		bRet = TRUE;
+
+		if(pOutput != (UCHAR*)pData)
+			m_pEncryptor->FreeBuffer(pOutput);
+	}
+	else
+	{
+		LogSendRecieveInfo("SendExactSize::Failed to encrypt data");
 	}
 
 	LogSendRecieveInfo(StrF("END SendExactSize Total %d", lBytesRead));
 
-	return TRUE;
+	return bRet;
 }

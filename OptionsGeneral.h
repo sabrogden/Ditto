@@ -43,6 +43,7 @@ public:
 	CButton m_btAllowDuplicates;
 	CButton m_btUpdateTimeOnPaste;
 	CButton m_btSaveMultiPaste;
+	CString	m_csPlaySound;
 	//}}AFX_DATA
 
 
@@ -68,6 +69,8 @@ protected:
 	afx_msg void OnCheckForUpdates();
 	afx_msg void OnSetDbPath();
 	afx_msg void OnGetPath();
+	afx_msg void OnSelectSound();
+	afx_msg void OnButtonPlay();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

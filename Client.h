@@ -10,6 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #include "Server.h"
+#include "Encryption.h"
 
 class CSendToFriendInfo
 {
@@ -52,7 +53,10 @@ protected:
 	SOCKET m_Connection;
 
 	BOOL SendCSendData(CSendInfo &data, MyEnums::eSendType type);
-	BOOL SendExactSize(char *pData, long lLength);
+	BOOL SendExactSize(char *pData, long lLength, bool bEncrypt = true);
+
+protected:
+	CEncryption *m_pEncryptor;
 };
 
 BOOL SendToFriend(CSendToFriendInfo &Info);

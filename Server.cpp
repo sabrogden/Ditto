@@ -79,7 +79,95 @@ UINT  MTServerThread(LPVOID pParam)
 	return 0;
 }
 
-BOOL RecieveExactSize(SOCKET sock, char *pData, long lSize)
+CRecieveSocket::CRecieveSocket(SOCKET sk)
+{
+	m_pDataReturnedFromDecrypt = NULL;
+	m_Socket = sk;
+	m_pEncryptor = new CEncryption; //CreateEncryptionInterface("encryptdecrypt.dll");
+}
+
+CRecieveSocket::~CRecieveSocket()
+{
+	if(m_pEncryptor)
+	{
+		m_pEncryptor->FreeBuffer(m_pDataReturnedFromDecrypt);
+
+		delete m_pEncryptor;
+		m_pEncryptor = NULL;
+		//ReleaseEncryptionInterface(m_pEncryptor);
+	}
+	closesocket(m_Socket);
+}
+
+void CRecieveSocket::FreeDecryptedData()
+{ 
+	if(g_Opt.m_csPassword == "")
+	{
+		delete [] m_pDataReturnedFromDecrypt;
+	}
+	else
+	{
+		m_pEncryptor->FreeBuffer(m_pDataReturnedFromDecrypt);
+	}
+	m_pDataReturnedFromDecrypt = NULL;
+}
+
+LPVOID CRecieveSocket::ReceiveEncryptedData(long lInSize, long &lOutSize)
+{
+	if(m_pEncryptor == NULL)
+	{
+		LogSendRecieveInfo("ReceiveEncryptedData::Encryption not initialized");
+		return NULL;
+	}
+
+	if(m_pDataReturnedFromDecrypt)
+		FreeDecryptedData();
+
+	char *pInput = new char[lInSize];
+
+	UCHAR* pOutput = NULL;
+	
+	if(pInput)
+	{
+		RecieveExactSize(pInput, lInSize);
+
+		int nOut = 0;
+		CString csPassword;
+		int nCount = g_Opt.m_csNetworkPasswordArray.GetSize() + 1;
+		for(int i = -1; i < nCount; i++)
+		{
+			if(i == -1)
+				csPassword = g_Opt.m_csPassword;
+			else
+				csPassword = g_Opt.m_csNetworkPasswordArray[i];
+
+			if(m_pEncryptor->Decrypt((UCHAR*)pInput, lInSize, csPassword, pOutput, nOut) == FALSE)
+			{
+				LogSendRecieveInfo(StrF("ReceiveEncryptedData:: Failed to Decrypt data password = %s", g_Opt.m_csPassword));
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		lOutSize = nOut;
+
+		delete [] pInput;
+		pInput = NULL;
+	}	
+	else
+	{
+		ASSERT(FALSE);
+		LogSendRecieveInfo(StrF("ReceiveEncryptedData:: Failed to create new data size = %d", lInSize));
+	}
+
+	m_pDataReturnedFromDecrypt = pOutput;
+
+	return pOutput;
+}
+
+BOOL CRecieveSocket::RecieveExactSize(char *pData, long lSize)
 {
 	long lReceiveCount = 0;
 
@@ -88,35 +176,46 @@ BOOL RecieveExactSize(SOCKET sock, char *pData, long lSize)
 
 	while(lWanted > 0)
 	{
-		lReceiveCount = recv(sock, pData + lOffset, lWanted, 0);
+		lReceiveCount = recv(m_Socket, pData + lOffset, lWanted, 0);
 		if(lReceiveCount == SOCKET_ERROR)
 		{
-			LogSendRecieveInfo("********ERROR if(lReceiveCount == SOCKET_ERROR)*******");
+			LogSendRecieveInfo("RecieveExactSize:: ********ERROR if(lReceiveCount == SOCKET_ERROR)*******");
 			return FALSE;
 		}
 		else if(lReceiveCount == 0)
 		{
-			LogSendRecieveInfo("********ERROR lRecieveCount == 0");
+			LogSendRecieveInfo("RecieveExactSize:: ********ERROR lRecieveCount == 0");
 			return FALSE;
 		}
 
-		LogSendRecieveInfo(StrF("------Bytes Read %d Total Recieved %d", lReceiveCount, lOffset));
+		LogSendRecieveInfo(StrF("RecieveExactSize:: ------Bytes Read %d Total Recieved %d", lReceiveCount, lOffset));
 
 		lWanted -= lReceiveCount;
 		lOffset += lReceiveCount;
 	}
 
-	LogSendRecieveInfo(StrF("------END RecieveExactSize Recieved %d", lOffset));
+	LogSendRecieveInfo(StrF("RecieveExactSize:: ------END RecieveExactSize Recieved %d", lOffset));
 
 	return TRUE;
 }
 
-BOOL RecieveCSendInfo(SOCKET sock, CSendInfo *pInfo)
+#define ENCRYPTED_SIZE_CSENDINFO 508
+
+BOOL CRecieveSocket::RecieveCSendInfo(CSendInfo *pInfo)
 {
-	BOOL bRet = RecieveExactSize(sock, (char*)pInfo, sizeof(CSendInfo));
-	if(bRet)
+	BOOL bRet = FALSE;
+	long lOutSize = 0;
+
+	long lRecieveSize = ENCRYPTED_SIZE_CSENDINFO;
+
+	LPVOID lpData = ReceiveEncryptedData(lRecieveSize, lOutSize);
+	if(lpData)
 	{
-		bRet = pInfo->m_nSize == sizeof(CSendInfo);
+		memcpy(pInfo, lpData, sizeof(CSendInfo));
+
+		bRet = (pInfo->m_nSize == sizeof(CSendInfo));
+
+		FreeDecryptedData();
 	}
 
 	return bRet;
@@ -126,7 +225,7 @@ UINT  ClientThread(LPVOID pParam)
 {	
 	LogSendRecieveInfo("*********************Start of ClientThread*********************");
 	
-	SOCKET socket = (SOCKET)pParam;
+	CRecieveSocket Sock((SOCKET)pParam);
 
 	CClipList *pClipList = NULL;
 	CClip *pClip = NULL;
@@ -137,7 +236,7 @@ UINT  ClientThread(LPVOID pParam)
 	
 	while(true)
 	{
-		if(RecieveCSendInfo(socket, &info) == FALSE)
+		if(Sock.RecieveCSendInfo(&info) == FALSE)
 			break;
 		
 		switch(info.m_Type)
@@ -175,23 +274,43 @@ UINT  ClientThread(LPVOID pParam)
 		case MyEnums::DATA_START:
 			{
 				LogSendRecieveInfo("::DATA_START -- START");
-				cf.m_hgData = NewGlobal(info.m_lParameter1);
+
 				cf.m_cfType = GetFormatID(info.m_cDesc);
-
-				LogSendRecieveInfo(StrF("::--------DATA_START Total Size = %d type = %s", info.m_lParameter1, info.m_cDesc));
-
-				if(pClip)
-					pClip->m_lTotalCopySize += info.m_lParameter1;
-
-				LogSendRecieveInfo("::--------Before RecieveExactSize");
-				LPVOID pvData = GlobalLock(cf.m_hgData);
+				cf.m_hgData = 0;
 				
-				//Recieve the clip data
-				if(RecieveExactSize(socket, (char*)pvData, info.m_lParameter1) == FALSE)
-					bBreak = true;
+				long lInSize = info.m_lParameter1;
+				long lOutSize = 0;
 
-				GlobalUnlock(cf.m_hgData);
-				LogSendRecieveInfo("::--------After RecieveExactSize");
+				LPVOID lpData = Sock.ReceiveEncryptedData(lInSize, lOutSize);
+
+				if(lpData && lOutSize > 0)
+				{					
+					cf.m_hgData = NewGlobal(lOutSize);
+
+					if(cf.m_hgData)
+					{
+						if(pClip)
+							pClip->m_lTotalCopySize += lOutSize;
+
+						LPVOID pvData = GlobalLock(cf.m_hgData);
+						if(pvData)
+						{
+							memcpy(pvData, lpData, lOutSize);
+
+							GlobalUnlock(cf.m_hgData);
+						}
+						else
+						{
+							LogSendRecieveInfo("::DATA_START -- failed to lock hGlobal");
+						}
+					}
+					else
+					{
+						LogSendRecieveInfo("::DATA_START -- failed to create new hGlobal");
+					}
+
+					Sock.FreeDecryptedData();
+				}
 
 				LogSendRecieveInfo("::DATA_START -- END");
 			}
@@ -200,10 +319,14 @@ UINT  ClientThread(LPVOID pParam)
 			{
 				LogSendRecieveInfo("::DATA_END");
 				
-				if(pClip)
+				if(pClip && cf.m_hgData)
 				{
 					pClip->m_Formats.Add(cf);
 					cf.m_hgData = 0; // now owned by pClip
+				}
+				else
+				{
+					LogSendRecieveInfo("MyEnums::DATA_END Error if(pClip && cf.m_hgData)");
 				}
 			}
 			break;
@@ -241,6 +364,9 @@ UINT  ClientThread(LPVOID pParam)
 				bBreak = true;
 			}
 			break;
+		default:
+			LogSendRecieveInfo("::ERROR unknown action type exiting");
+			bBreak = true;
 		}
 
 		if(bBreak || theApp.m_bAppExiting)
@@ -262,8 +388,6 @@ UINT  ClientThread(LPVOID pParam)
 
 		LogSendRecieveInfo("::ERROR pClip was not NULL something is wrong");
 	}
-
-	closesocket(socket);
 
 	LogSendRecieveInfo("*********************End of ClientThread*********************");
 	

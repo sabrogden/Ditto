@@ -341,11 +341,12 @@ CClipIDs
 HGLOBAL CClipIDs::Render( UINT cfType )
 {
 	int count = GetSize();
-	if( count <= 0 )
+	if(count <= 0)
 		return 0;
-	if( count == 1 )
-		return CClip::LoadFormat( ElementAt(0), cfType );
-	CString text = AggregateText( CF_TEXT, "\r\n" );
+	if(count == 1)
+		return CClip::LoadFormat(ElementAt(0), cfType);
+	CString text = AggregateText(CF_TEXT, "\r\n", g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop);
+
 	return NewGlobalP( (void*)(LPCSTR) text, text.GetLength()+1 );
 }
 
@@ -362,7 +363,7 @@ void CClipIDs::GetTypes( CClipTypes& types )
 // Aggregates the cfType Format Data of the Clip IDs in this array, assuming
 //  each Format is NULL terminated and placing pSeparator between them.
 // This assumes that the given cfType is a null terminated text type.
-CString CClipIDs::AggregateText( UINT cfType, char* pSeparator )
+CString CClipIDs::AggregateText(UINT cfType, char* pSeparator, BOOL bReverse)
 {
 	CString csSQL;
 	CDataTable recset;
@@ -370,6 +371,8 @@ CString CClipIDs::AggregateText( UINT cfType, char* pSeparator )
 	char* pData = NULL;
 	DWORD len;
 	DWORD maxLen;
+
+	CLIPFORMAT cfRTF = GetFormatID(CF_RTF);
 	
 	// maybe we should sum up the "recset.m_ooData.m_dwDataLength" of all IDs first
 	//  in order to determine the max space required??  Or would that be wastefull?
@@ -390,9 +393,16 @@ CString CClipIDs::AggregateText( UINT cfType, char* pSeparator )
 	
 	try
 	{
+		int nIndex;
 		for( int i=0; i < numIDs; i++ )
 		{
-			recset.Open( csSQL, pIDs[i] );
+			nIndex = i;
+			if(bReverse)
+			{
+				nIndex = numIDs - i - 1;
+			}
+
+			recset.Open( csSQL, pIDs[nIndex] );
 			if( !recset.IsBOF() && !recset.IsEOF() )
 			{
 				maxLen = recset.m_ooData.m_dwDataLength;
@@ -410,19 +420,29 @@ CString CClipIDs::AggregateText( UINT cfType, char* pSeparator )
 					if( len >= maxLen )
 						continue;
 				}
-				
+
+//				if(i == 0 && cfType == cfRTF)
+//				{
+//					pData[maxLen-2] = '\0';
+//				}
+
 				text += pData;
 				GlobalUnlock(recset.m_ooData.m_hData);
 				
 				if( pSeparator )
 					text += pSeparator;
+
+//				if((i == numIDs-1) && cfType == cfRTF)
+//				{
+//					text += "}";
+//				}
 			}
 			recset.Close();
 		}
 	}
 	CATCHDAO
 		
-		return text;
+	return text;
 }
 
 //----------------------------------------------
@@ -729,9 +749,9 @@ BOOL COleClipSource::DoImmediateRender()
 	m_bLoadedFormats = true;
 	
 	int count = m_ClipIDs.GetSize();
-	if( count <= 0 )
+	if(count <= 0)
 		return 0;
-	if( count == 1 )
+	if(count == 1)
 	{
 		CClipFormats formats;
 		
@@ -741,9 +761,18 @@ BOOL COleClipSource::DoImmediateRender()
 	}
 	
 	HGLOBAL hGlobal;
-	CString text = m_ClipIDs.AggregateText( CF_TEXT, "\r\n" );
-	hGlobal = NewGlobalP( (void*)(LPCSTR) text, text.GetLength()+1 );
-	CacheGlobalData( CF_TEXT, hGlobal );
+	
+	CString text = m_ClipIDs.AggregateText(CF_TEXT, "\r\n", g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop);
+	hGlobal = NewGlobalP((void*)(LPCSTR) text, text.GetLength()+1);
+	CacheGlobalData(CF_TEXT, hGlobal);
+	
+//	text = "{\rtf1";
+//	text += m_ClipIDs.AggregateText(GetFormatID(CF_RTF), "\r\n", true);
+//	text += "}";
+//	
+//	hGlobal = NewGlobalP((void*)(LPCSTR) text, text.GetLength()+1);
+//	CacheGlobalData(GetFormatID(CF_RTF), hGlobal);
+
 	return hGlobal != 0;
 }
 

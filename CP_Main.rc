@@ -483,7 +483,7 @@ BEGIN
                     49,288,106
 END
 
-IDD_OPTIONS_GENERAL DIALOG DISCARDABLE  0, 0, 294, 188
+IDD_OPTIONS_GENERAL DIALOG DISCARDABLE  0, 0, 294, 199
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "General"
 FONT 8, "MS Sans Serif"
@@ -517,12 +517,16 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,131,101,10
     CONTROL         "Save Multi-Pastes",IDC_SAVE_MULTIPASTE,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,23,142,73,10
-    EDITTEXT        IDC_DESC_TEXT_SIZE,154,164,35,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_DESC_TEXT_SIZE,148,163,35,12,ES_AUTOHSCROLL
     LTEXT           "Amount of text to save for description",IDC_STATIC,24,
                     165,122,8
     CONTROL         "Hide Ditto on Hot Key if Ditto is Visible",
                     IDC_HIDE_DITO_ON_HOT_KEY,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,23,153,135,10
+    LTEXT           "On copy play the sound",IDC_STATIC,24,177,81,10
+    EDITTEXT        IDC_EDIT_PLAY_SOUND,105,177,145,10,ES_AUTOHSCROLL
+    PUSHBUTTON      "....",IDC_SELECT_SOUND,273,177,14,12
+    PUSHBUTTON      "Play",IDC_BUTTON_PLAY,251,177,19,12
 END
 
 IDD_SELECT_DB DIALOG DISCARDABLE  0, 0, 276, 46
@@ -642,24 +646,26 @@ BEGIN
     EDITTEXT        IDC_NAME,7,11,172,12,ES_AUTOHSCROLL
 END
 
-IDD_OPTIONS_FRIENDS DIALOG DISCARDABLE  0, 0, 310, 227
+IDD_OPTIONS_FRIENDS DIALOG DISCARDABLE  0, 0, 321, 246
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Friends"
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | WS_BORDER | 
-                    WS_TABSTOP,7,93,296,116
+                    WS_TABSTOP,7,113,307,114
     LTEXT           "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer.",
-                    IDC_STATIC,7,63,278,24
-    EDITTEXT        IDC_EDIT_PLACE_ON_CLIPBOARD,93,34,210,13,ES_AUTOHSCROLL
+                    IDC_STATIC,7,85,278,24
+    EDITTEXT        IDC_EDIT_PLACE_ON_CLIPBOARD,96,34,210,13,ES_AUTOHSCROLL
     LTEXT           "IP/Computer Names seperated by commas",IDC_STATIC,7,32,
                     70,17
     LTEXT           "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time.",
-                    IDC_STATIC,7,10,296,18
+                    IDC_STATIC,7,10,307,18
     CONTROL         "Log Send Receive Commands",IDC_CHECK_LOG_SEND_RECIEVE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,212,176,12
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,231,176,12
     CONTROL         "Disable Recieving Clips",IDC_CHECK_DISABLE_FRIENDS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,93,48,90,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,95,48,90,10
+    LTEXT           "Network Password",IDC_STATIC,7,68,79,9
+    EDITTEXT        IDC_EDIT_PASSWORD,96,65,210,13,ES_AUTOHSCROLL
 END
 
 IDD_FRIEND_DETAILS DIALOG DISCARDABLE  0, 0, 203, 79
@@ -790,7 +796,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 287
         TOPMARGIN, 7
-        BOTTOMMARGIN, 180
+        BOTTOMMARGIN, 191
     END
 
     IDD_SELECT_DB, DIALOG
@@ -845,9 +851,9 @@ BEGIN
     IDD_OPTIONS_FRIENDS, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 303
+        RIGHTMARGIN, 314
         TOPMARGIN, 4
-        BOTTOMMARGIN, 224
+        BOTTOMMARGIN, 243
     END
 
     IDD_FRIEND_DETAILS, DIALOG

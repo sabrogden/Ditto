@@ -480,6 +480,9 @@ long CGetSetOptions::m_lPort;
 BOOL CGetSetOptions::m_bDrawThumbnail;
 CString CGetSetOptions::m_csPassword;
 BOOL CGetSetOptions::m_bDrawRTF;
+BOOL CGetSetOptions::m_bMultiPasteReverse;
+CString CGetSetOptions::m_csPlaySoundOnCopy;
+CStringArray CGetSetOptions::m_csNetworkPasswordArray;
 
 CGetSetOptions g_Opt;
 
@@ -506,6 +509,29 @@ CGetSetOptions::CGetSetOptions()
 	m_bDrawThumbnail = GetDrawThumbnail();
 	m_csPassword = GetNetworkPassword();
 	m_bDrawRTF = GetDrawRTF();
+	m_bMultiPasteReverse = GetMultiPasteReverse();
+	m_csPlaySoundOnCopy = GetPlaySoundOnCopy();
+
+	CString cs = GetProfileString("NetorkPassword1", "");
+	m_csNetworkPasswordArray.Add(cs);
+	cs = GetProfileString("NetorkPassword2", "");
+	m_csNetworkPasswordArray.Add(cs);
+	cs = GetProfileString("NetorkPassword3", "");
+	m_csNetworkPasswordArray.Add(cs);
+	cs = GetProfileString("NetorkPassword4", "");
+	m_csNetworkPasswordArray.Add(cs);
+	cs = GetProfileString("NetorkPassword5", "");
+	m_csNetworkPasswordArray.Add(cs);
+	cs = GetProfileString("NetorkPassword6", "");
+	m_csNetworkPasswordArray.Add(cs);
+	cs = GetProfileString("NetorkPassword7", "");
+	m_csNetworkPasswordArray.Add(cs);
+	cs = GetProfileString("NetorkPassword8", "");
+	m_csNetworkPasswordArray.Add(cs);
+	cs = GetProfileString("NetorkPassword9", "");
+	m_csNetworkPasswordArray.Add(cs);
+	cs = GetProfileString("NetorkPassword10", "");
+	m_csNetworkPasswordArray.Add(cs);
 
 	#ifdef _DEBUG
 	m_bUseHookDllForFocus = FALSE;
@@ -1170,12 +1196,47 @@ void CGetSetOptions::SetNetworkPassword(CString csPassword)
 {
 	m_csPassword = csPassword;
 
-	SetProfileString("NetworkPassword", csPassword);
+	UCHAR *pData = NULL;
+	int nLength = 0;
+
+	if(EncryptString(csPassword, pData, nLength))
+	{
+		SetProfileData("NetworkPassword", pData, nLength);
+	}
+	else
+	{
+		SetProfileData("NetworkPassword", NULL, 0);
+	}
+
+	if(pData)
+	{
+		delete pData;
+		pData = NULL;
+	}
 }
 
 CString CGetSetOptions::GetNetworkPassword()
 {
-	CString cs = GetProfileString("NetworkPassword", "!.*abc");
+	CString cs = "";
+	DWORD dwLength = 0;
+	LPVOID lpVoid = GetProfileData("NetworkPassword", dwLength);
+	if(lpVoid)
+	{
+		UCHAR *pData = NULL;
+		int nLength = 0;
+
+		if(DecryptString((UCHAR *)lpVoid, dwLength, pData, nLength))
+			cs = pData;
+
+		if(pData)
+		{
+			delete pData;
+			pData = NULL;
+		}
+	}
+
+	if(cs == "")
+		cs = "LetMeIn";
 
 	return cs;
 }
@@ -1189,6 +1250,29 @@ void CGetSetOptions::SetDrawRTF(long bDraw)
 BOOL CGetSetOptions::GetDrawRTF()
 {
 	return GetProfileLong("DrawRTF", FALSE);
+}
+
+void CGetSetOptions::SetMultiPasteReverse(bool bVal)
+{
+	SetProfileLong("MultiPasteReverse", bVal); 
+	m_bMultiPasteReverse = bVal;
+}
+
+BOOL CGetSetOptions::GetMultiPasteReverse()
+{
+	return GetProfileLong("MultiPasteReverse", TRUE); 
+}
+
+void CGetSetOptions::SetPlaySoundOnCopy(CString cs)
+{
+	m_csPlaySoundOnCopy = cs;
+
+	SetProfileString("PlaySoundOnCopy", cs);
+}
+
+CString CGetSetOptions::GetPlaySoundOnCopy()
+{
+	return GetProfileString("PlaySoundOnCopy", "");
 }
 
 /*------------------------------------------------------------------*\
@@ -2028,3 +2112,47 @@ void CPopup::Hide()
 	m_bIsShowing = false;
 }
 
+#include "Encryption.h"
+#define STRING_PASSWORD "*4ei)"
+BOOL EncryptString(CString &csIn, UCHAR *&pOutput, int &nLenOutput)
+{
+	BOOL bRet = FALSE;
+	CEncryption *pEncryptor;
+
+	pEncryptor = new CEncryption;
+
+	if(pEncryptor)
+	{
+		UCHAR *pData = (UCHAR*)csIn.GetBuffer(csIn.GetLength());
+
+		nLenOutput = 0;
+		if(pEncryptor->Encrypt(pData, csIn.GetLength(), STRING_PASSWORD, pOutput, nLenOutput))
+		{
+			bRet = TRUE;
+		}
+
+		delete pEncryptor;
+	}
+
+	return bRet;
+}
+
+BOOL DecryptString(UCHAR *pData, int nLenIn, UCHAR *&pOutput, int &nLenOutput)
+{
+	BOOL bRet = FALSE;
+	CEncryption *pEncryptor;
+
+	pEncryptor = new CEncryption;
+
+	if(pEncryptor)
+	{
+		if(pEncryptor->Decrypt(pData, nLenIn, STRING_PASSWORD, pOutput, nLenOutput))
+		{
+			bRet = TRUE;
+		}
+
+		delete pEncryptor;
+	}
+
+	return bRet;
+}

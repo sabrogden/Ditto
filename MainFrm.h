@@ -13,7 +13,7 @@
 #include "QuickPaste.h"
 
 
-#define KILL_DB_TIMER					1
+#define KILL_DB_TIMER					1	
 #define HIDE_ICON_TIMER					2
 #define REMOVE_OLD_ENTRIES_TIMER		3
 #define CHECK_FOR_UPDATE				4

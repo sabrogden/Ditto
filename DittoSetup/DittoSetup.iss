@@ -20,18 +20,13 @@ Name: RunAtStartup; Description: "Run Ditto on Windows Startup";
 
 [Files]
 
-;installed if it is 2000 or greater
-Source: "..\Release\Ditto.exe"; DestDir: "{app}"; MinVersion: 0, 1; DestName: "Ditto.exe"; Flags: ignoreversion
-
-;installed if it is 95, 98, me
-Source: "..\Release\Ditto98.exe"; DestDir: "{app}"; MinVersion: 1, 0; DestName: "Ditto.exe"; Flags: ignoreversion
+Source: "..\Release\Ditto.exe"; DestDir: "{app}"; DestName: "Ditto.exe"; Flags: ignoreversion
+Source: "..\Release\focus.dll"; DestDir: "{app}";  Flags: ignoreversion onlyifdoesntexist
 
 Source: "Output\Changes.txt"; DestDir: "{app}"
 
-Source: "..\Release\focus.dll"; DestDir: "{app}";  Flags: ignoreversion onlyifdoesntexist
-
 ;Add help files
-Source: "..\Help\*.*"; DestDir: "{app}\Help"; Flags: ignoreversion
+Source: "..\Help\*.htm"; DestDir: "{app}\Help"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\Ditto"; Filename: "{app}\Ditto.exe";
@@ -42,7 +37,6 @@ Name: "{group}\Uninstall"; Filename: "{uninstallexe}"
 Filename: "{app}\Ditto.exe"; Description: "Launch Ditto"; Flags: nowait postinstall skipifsilent
 Filename: "{app}\Help\DittoGettingStarted.htm"; Description: "View Help"; Flags: nowait postinstall skipifsilent shellexec
 Filename: "{app}\Changes.txt"; Description: "View Change History"; Flags: nowait postinstall skipifsilent shellexec unchecked
-
 
 [Registry]
 Root: HKCU; Subkey: "Software\Ditto"; Flags: uninsdeletekey

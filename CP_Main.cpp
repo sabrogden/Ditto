@@ -414,6 +414,8 @@ long CCP_MainApp::SaveCopyClips()
 		}
 	}
 
+	bool bEnteredThread = false;
+
 	count = pClips->AddToDB( true );
 	if( count > 0 )
 	{		
@@ -423,8 +425,13 @@ long CCP_MainApp::SaveCopyClips()
 		if(g_Opt.m_lAutoSendClientCount > 0)
 		{
 			AfxBeginThread(SendClientThread, pCopyOfClips);
+			bEnteredThread = true;
 		}
+		
 	}
+	
+	if(bEnteredThread == false)
+		delete pCopyOfClips;
 
 	delete pClips;
 

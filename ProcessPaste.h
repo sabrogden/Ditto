@@ -48,12 +48,12 @@ public:
 // PASTING FUNCTIONS
 
 	// allocate an HGLOBAL of the given Format Type representing the Clip IDs in this array.
-	HGLOBAL	Render( UINT cfType );
+	HGLOBAL	Render(UINT cfType);
 	// Fills "types" with the Format Types corresponding to the Clip IDs in this array.
-	void GetTypes( CClipTypes& types );
+	void GetTypes(CClipTypes& types);
 	// Aggregates the cfType Format Data of the Clip IDs in this array, assuming
 	//  each Format is NULL terminated and placing pSeparator between them.
-	CString AggregateText( UINT cfType, char* pSeparator );
+	CString AggregateText(UINT cfType, char* pSeparator, BOOL bReverse = FALSE);
 
 // MANAGEMENT FUNCTIONS
 

@@ -62,6 +62,8 @@ HGLOBAL NewGlobal(UINT nLen);
 int CompareGlobalHP( HGLOBAL hLeft, LPVOID pBuf, ULONG ulBufLen );
 int CompareGlobalHH( HGLOBAL hLeft, HGLOBAL hRight, ULONG ulBufLen );
 
+BOOL EncryptString(CString &csString, UCHAR*& pOutput, int &nLenOutput);
+BOOL DecryptString(UCHAR *pData, int nLenIn, UCHAR*& pOutput, int &nLenOutput);
 
 int GetScreenWidth();
 int GetScreenHeight();
@@ -317,6 +319,16 @@ public:
 	static BOOL		m_bDrawRTF;
 	static void		SetDrawRTF(long bDraw);
 	static BOOL		GetDrawRTF();
+
+	static BOOL		m_bMultiPasteReverse;
+	static void		SetMultiPasteReverse(bool bVal);
+	static BOOL		GetMultiPasteReverse();
+
+	static CString	m_csPlaySoundOnCopy;
+	static void		SetPlaySoundOnCopy(CString cs);
+	static CString	GetPlaySoundOnCopy();
+
+	static CStringArray m_csNetworkPasswordArray;
 
 	/*
 	BOOL IsAutoRun();
