@@ -75,21 +75,24 @@ BOOL Recv(SOCKET sock, SendInfo *pInfo)
 	long lExpectedCount = sizeof(SendInfo);
 	SendInfo info;
 
-	while(lReceiveCount < lExpectedCount)
+	while(lLastRecievedCount < lExpectedCount)
 	{
-		lReceiveCount = recv(sock, (char*)&info, lExpectedCount-lReceiveCount, 0);
+		lReceiveCount = recv(sock, (char*)&info, lExpectedCount-lLastRecievedCount, 0);
 		if(lReceiveCount == SOCKET_ERROR)
 		{
 			LogSendRecieveInfo("********ERROR if(lReceiveCount == SOCKET_ERROR)*******");
 			return FALSE;
 		}
 		else if(lReceiveCount == 0)
+		{
+			LogSendRecieveInfo("********ERROR lRecieveCount == 0");
 			return FALSE;
+		}
 
-		LogSendRecieveInfo(StrF("------Bytes Read %d", lReceiveCount));
+		LogSendRecieveInfo(StrF("------Bytes Read %d LastRecievedCount %d", lReceiveCount, lLastRecievedCount));
 
 		memcpy(((char*)pInfo) + lLastRecievedCount, &info, lReceiveCount);
-		lReceiveCount = lLastRecievedCount + lReceiveCount;
+		//lReceiveCount = lLastRecievedCount + lReceiveCount;
 		lLastRecievedCount += lReceiveCount;
 	}
 
