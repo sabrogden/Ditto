@@ -8,6 +8,8 @@
 // CopyProperties.h : header file
 //
 
+#include "GroupCombo.h"
+
 /////////////////////////////////////////////////////////////////////////////
 // CCopyProperties dialog
 
@@ -20,6 +22,7 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CCopyProperties)
 	enum { IDD = IDD_COPY_PROPERTIES };
+	CGroupCombo	m_GroupCombo;
 	CHotKeyCtrl	m_HotKey;
 	CListBox	m_lCopyData;
 	CString	m_eDisplayText;
@@ -37,6 +40,7 @@ public:
 
 public:
 	bool m_bChangedText;
+	long m_lGroupChangedTo;
 	void	SetHideOnKillFocus(bool bVal)	{ m_bHideOnKillFocus = bVal;	}
 
 // Implementation

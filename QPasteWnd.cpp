@@ -548,6 +548,8 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 			m_Recset.m_strSort = "bIsGroup DESC, lDate DESC";
 		else
 			m_Recset.m_strSort = "bIsGroup ASC, lDate ASC";
+
+		strFilter = "((bIsGroup = TRUE AND lParentID = 0) OR bIsGroup = FALSE)";
 	}
 	else // it's some other group
 	{
@@ -964,6 +966,11 @@ void CQPasteWnd::OnMenuProperties()
 	{
 		m_lstHeader.DestroyAndCreateAccelerator(TRUE);
 		m_lstHeader.RefreshVisibleRows();
+
+		if(props.m_lGroupChangedTo >= 0)
+		{
+			OpenID(props.m_lGroupChangedTo);
+		}
 	}
 		
 	SetFocus();
@@ -972,7 +979,7 @@ void CQPasteWnd::OnMenuProperties()
 	if(nDo == IDOK || nDo == IDCANCEL)
 	{
 		m_lstHeader.SetFocus();
-		m_lstHeader.SetListPos(nRow);
+		m_lstHeader.SetListPos(lID);
 	}
 }
 

@@ -413,12 +413,6 @@ BOOL bResult = FALSE;
 		m_GroupText = "History";
 		bResult = TRUE;
 		break;
-	case -1: // All Groups "ID"
-		m_GroupID = -1;
-		m_GroupParentID = 0;
-		m_GroupText = "Groups";
-		bResult = TRUE;
-		break;
 	default: // Normal Group
 		try
 		{

@@ -24,6 +24,7 @@ CCopyProperties::CCopyProperties(long lCopyID, CWnd* pParent /*=NULL*/)
 	m_bChangedText = false;
 	m_bHandleKillFocus = false;
 	m_bHideOnKillFocus = false;
+	m_lGroupChangedTo = -1;
 	//{{AFX_DATA_INIT(CCopyProperties)
 	m_eDisplayText = _T("");
 	m_eDate = _T("");
@@ -36,6 +37,7 @@ void CCopyProperties::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CCopyProperties)
+	DDX_Control(pDX, IDC_COMBO1, m_GroupCombo);
 	DDX_Control(pDX, IDC_HOTKEY, m_HotKey);
 	DDX_Control(pDX, IDC_COPY_DATA, m_lCopyData);
 	DDX_Text(pDX, IDC_EDIT_DISPLAY_TEXT, m_eDisplayText);
@@ -65,6 +67,7 @@ BOOL CCopyProperties::OnInitDialog()
 	CDialog::OnInitDialog();
 
 	m_ParseEdit.SetWindowText("\\r\\n");
+	m_GroupCombo.FillCombo();
 
 	m_MainTable.Open("SELECT * FROM Main WHERE lID = %d", m_lCopyID);
 	if(!m_MainTable.IsEOF())
@@ -85,6 +88,7 @@ BOOL CCopyProperties::OnInitDialog()
 			m_bNeverDelete = FALSE;
 		}
 
+		m_GroupCombo.SetCurSelOnItemData(m_MainTable.m_lParentID);
 
 		m_HotKey.SetHotKey(LOBYTE(m_MainTable.m_lShortCut), HIBYTE(m_MainTable.m_lShortCut));
 		m_HotKey.SetRules(HKCOMB_A, 0);
@@ -103,6 +107,8 @@ BOOL CCopyProperties::OnInitDialog()
 			m_DataTable.MoveNext();
 		}
 	}
+
+	
 
 	UpdateData(FALSE);
 
@@ -198,6 +204,29 @@ void CCopyProperties::OnOK()
 			m_MainTable.m_lDontAutoDelete = 0;
 
 		bUpdate = true;
+	}
+
+	int nParentID = m_GroupCombo.GetItemDataFromCursel();
+
+	if(nParentID != m_MainTable.m_lParentID)
+	{
+		bool bCont = true;
+		if(m_MainTable.m_bIsGroup)
+		{
+			if(nParentID == m_MainTable.m_lID)
+				bCont = false;
+		}
+		if(bCont)
+		{
+			if(!bUpdate)
+				m_MainTable.Edit();
+		
+			m_MainTable.m_lParentID = nParentID;
+
+			m_lGroupChangedTo = nParentID;
+
+			bUpdate = true;
+		}
 	}
 
 	if(bUpdate)

@@ -268,6 +268,10 @@ SOURCE=.\DataTable.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\GroupCombo.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\GroupName.cpp
 # End Source File
 # Begin Source File
@@ -378,6 +382,10 @@ SOURCE=.\DatabaseUtilities.h
 # Begin Source File
 
 SOURCE=.\DataTable.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GroupCombo.h
 # End Source File
 # Begin Source File
 

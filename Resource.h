@@ -83,6 +83,7 @@
 #define IDC_REPAIR                      2019
 #define IDC_DESC_SHOW_LEADING_WHITESPACE 2021
 #define IDC_NAME                        2022
+#define IDC_COMBO1                      2023
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -136,7 +137,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        141
 #define _APS_NEXT_COMMAND_VALUE         32819
-#define _APS_NEXT_CONTROL_VALUE         2023
+#define _APS_NEXT_CONTROL_VALUE         2024
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
