@@ -1454,11 +1454,15 @@ void CQPasteWnd::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 {
 	CWndEx::OnWindowPosChanging(lpwndpos);
 
-	RECT rcScreen;
+	if(m_lstHeader.m_Popup.m_bIsShowing)
+		m_lstHeader.m_Popup.Hide();
 
-	// Get cordinates of the working area on the screen
-	SystemParametersInfo (SPI_GETWORKAREA, 0, &rcScreen, 0);
+	CRect rcScreen;
 
+	CRect cr(lpwndpos->x, lpwndpos->y, lpwndpos->x + lpwndpos->cx, lpwndpos->y + lpwndpos->cy);
+	int nMonitor = GetMonitorFromRect(&cr);
+	GetMonitorRect(nMonitor, &rcScreen);
+	
 	// Snap X axis to left
 	if(abs(lpwndpos->x - rcScreen.left) <= WNDSNAP_ALLOWANCE)
 	{

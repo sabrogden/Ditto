@@ -109,9 +109,10 @@ BEGIN_MESSAGE_MAP(CQListCtrl, CListCtrl)
 	ON_WM_CREATE()
 	ON_WM_VSCROLL()
 	ON_WM_HSCROLL()
-	ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnSelectionChange)
 	ON_WM_TIMER()
 	ON_WM_WINDOWPOSCHANGED()
+	ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnSelectionChange)
+	ON_WM_SIZE()
 	//}}AFX_MSG_MAP
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
@@ -848,9 +849,9 @@ void CQListCtrl::OnTimer(UINT nIDEvent)
 void CQListCtrl::OnWindowPosChanged(WINDOWPOS FAR* lpwndpos) 
 {
 	CListCtrl::OnWindowPosChanged(lpwndpos);
-	
-	if(m_Popup.m_bIsShowing)
-	{
-		m_Popup.Hide();
-	}
+}
+
+void CQListCtrl::OnSize(UINT nType, int cx, int cy) 
+{
+	CListCtrl::OnSize(nType, cx, cy);
 }

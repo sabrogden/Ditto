@@ -1535,9 +1535,10 @@ void CPopup::Init()
 	m_bCenterY = false;
 	m_hWndPosRelativeTo = NULL;
 
-RECT rcScreen;
-	// Get cordinates of the working area on the screen
-	SystemParametersInfo (SPI_GETWORKAREA, 0, &rcScreen, 0);
+	RECT rcScreen;
+		
+	GetMonitorRect(-1, &rcScreen);
+
 	m_ScreenMaxX = rcScreen.right;
 	m_ScreenMaxY = rcScreen.bottom;
 
