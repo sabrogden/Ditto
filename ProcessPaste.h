@@ -94,13 +94,14 @@ public:
 	CClipIDs	m_ClipIDs;
 	bool		m_bLoadedFormats;
 	bool		m_bOnlyPaste_CF_TEXT;
+	bool		m_bPasteHTMLFormatAs_CF_TEXT;
 
 	COleClipSource();
 	virtual ~COleClipSource();
 
 	BOOL DoDelayRender();
 	BOOL DoImmediateRender();
-	long LoadFormats(CClipFormats *pFormats);
+	long LoadFormats(CClipFormats *pFormats, bool bPasteHTMLFormatAs_CF_TEXT);
 
 protected:
 	DECLARE_MESSAGE_MAP()
@@ -118,6 +119,7 @@ public:
 	bool m_bSendPaste;
 	bool m_bActivateTarget;
 	bool m_bOnlyPaste_CF_TEXT;
+	bool m_bPasteHTMLFormatAs_CF_TEXT;
 
 	CProcessPaste();
 	~CProcessPaste();

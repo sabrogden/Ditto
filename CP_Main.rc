@@ -315,6 +315,7 @@ BEGIN
         MENUITEM "View Groups\tCtrl-G",         ID_MENU_VIEWGROUPS
         MENUITEM "Paste Plain Text Only\tShift-Enter", 
                                                 ID_MENU_PASTEPLAINTEXTONLY
+        MENUITEM "Paste HTML as Plain Text",    ID_MENU_PASTEHTMLASPLAINTEXT
         MENUITEM SEPARATOR
         MENUITEM "Delete Entry\tDel",           ID_MENU_DELETE
         MENUITEM SEPARATOR

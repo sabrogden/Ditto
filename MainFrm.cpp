@@ -483,7 +483,7 @@ LRESULT CMainFrame::OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam)
 			CProcessPaste paste;
 			//Don't send the paste just load it into memory
 			paste.m_bSendPaste = false;
-			paste.m_pOle->LoadFormats(&NewClip.m_Formats);
+			paste.m_pOle->LoadFormats(&NewClip.m_Formats, false);
 			paste.m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
 
 			LogSendRecieveInfo("---------After LoadFormats");

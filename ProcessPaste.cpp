@@ -723,6 +723,7 @@ COleClipSource::COleClipSource()
 {
 	m_bLoadedFormats = false;
 	m_bOnlyPaste_CF_TEXT = false;
+	m_bPasteHTMLFormatAs_CF_TEXT = false;
 }
 
 COleClipSource::~COleClipSource()
@@ -757,7 +758,7 @@ BOOL COleClipSource::DoImmediateRender()
 		
 		CClip::LoadFormats(m_ClipIDs[0], formats, m_bOnlyPaste_CF_TEXT);
 		
-		return LoadFormats(&formats);
+		return LoadFormats(&formats, m_bPasteHTMLFormatAs_CF_TEXT);
 	}
 	
 	HGLOBAL hGlobal;
@@ -776,15 +777,41 @@ BOOL COleClipSource::DoImmediateRender()
 	return hGlobal != 0;
 }
 
-long COleClipSource::LoadFormats(CClipFormats *pFormats)
+long COleClipSource::LoadFormats(CClipFormats *pFormats, bool bPasteHTMLFormatAs_CF_TEXT)
 {
 	CClipFormat* pCF;
 
 	int	count = pFormats->GetSize(); // reusing "count"
 
+	if(bPasteHTMLFormatAs_CF_TEXT)
+	{
+		//see if the html format is in the list
+		//if it is the list we will not paste CF_TEXT
+		for(int i = 0; i < count; i++)
+		{
+			pCF = &pFormats->ElementAt(i);
+
+			if(pCF->m_cfType == theApp.m_HTML_Format)
+				break;
+		}
+
+		if(i == count)
+			bPasteHTMLFormatAs_CF_TEXT = false;
+	}
+
 	for(int i = 0; i < count; i++)
 	{
 		pCF = &pFormats->ElementAt(i);
+
+		if(bPasteHTMLFormatAs_CF_TEXT)
+		{
+			if(pCF->m_cfType == CF_TEXT)
+				continue;
+
+			if(pCF->m_cfType == theApp.m_HTML_Format)
+				pCF->m_cfType = CF_TEXT;
+		}
+
 		CacheGlobalData( pCF->m_cfType, pCF->m_hgData );
 		pCF->m_hgData = 0; // OLE owns it now
 	}
@@ -833,6 +860,7 @@ CProcessPaste::CProcessPaste()
 	m_bSendPaste = true;
 	m_bActivateTarget = true;
 	m_bOnlyPaste_CF_TEXT = false;
+	m_bPasteHTMLFormatAs_CF_TEXT = false;
 }
 
 CProcessPaste::~CProcessPaste()
@@ -843,6 +871,7 @@ CProcessPaste::~CProcessPaste()
 BOOL CProcessPaste::DoPaste()
 {
 	m_pOle->m_bOnlyPaste_CF_TEXT = m_bOnlyPaste_CF_TEXT;
+	m_pOle->m_bPasteHTMLFormatAs_CF_TEXT = m_bPasteHTMLFormatAs_CF_TEXT;
 
 	if( m_pOle->DoImmediateRender() )
 	{

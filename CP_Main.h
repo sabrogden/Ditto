@@ -158,6 +158,8 @@ public:
 	long	m_lClipsSent;
 	long	m_lClipsRecieved;
 
+	CLIPFORMAT m_HTML_Format;
+
 	COleDateTime m_oldtStartUp;
 // Overrides
 	// ClassWizard generated virtual function overrides

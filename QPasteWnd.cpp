@@ -123,6 +123,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_FINDASYOUTYPE, OnMenuQuickoptionsFindasyoutype)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_ENSUREENTIREWINDOWISVISIBLE, OnMenuQuickoptionsEnsureentirewindowisvisible)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_SHOWCLIPSTHATAREINGROUPSINMAINLIST, OnMenuQuickoptionsShowclipsthatareingroupsinmainlist)
+	ON_COMMAND(ID_MENU_PASTEHTMLASPLAINTEXT, OnMenuPastehtmlasplaintext)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(NM_SELECT, OnListSelect)
 	ON_MESSAGE(NM_END, OnListEnd)
@@ -437,7 +438,7 @@ bool CQPasteWnd::Add(const CString &csHeader, const CString &csText, int nID)
 	return true;
 }
 
-BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT)
+BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_TEXT)
 {
 	if( theApp.EnterGroupID(lID) )
 		return TRUE;
@@ -451,8 +452,11 @@ BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT)
 
 	// else, it is a clip, so paste it
 	CProcessPaste paste;
+	
 	paste.m_bSendPaste = g_Opt.m_bSendPasteMessageAfterSelection == TRUE ? true : false;
 	paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;
+	paste.m_bPasteHTMLFormatAs_CF_TEXT = bPasteHTMLAs_CF_TEXT;
+
 	paste.GetClipIDs().Add( lID );
 	paste.DoPaste();
 	theApp.OnPasteCompleted();
@@ -463,7 +467,7 @@ BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT)
 	return TRUE;
 }
 
-BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT)
+BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_TEXT)
 {
 	ARRAY IDs;
 	m_lstHeader.GetSelectionItemData( IDs );
@@ -474,12 +478,14 @@ BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT)
 		return FALSE;
 	
 	if(count == 1)
-		return OpenID(IDs[0], bOnlyLoad_CF_TEXT);
-	// else count > 1
+		return OpenID(IDs[0], bOnlyLoad_CF_TEXT, bPasteHTMLAs_CF_TEXT);
 	
 	CProcessPaste paste;
+
 	paste.m_bSendPaste = g_Opt.m_bSendPasteMessageAfterSelection == TRUE ? true : false;
 	paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;
+	paste.m_bPasteHTMLFormatAs_CF_TEXT = bPasteHTMLAs_CF_TEXT;
+	
 	paste.GetClipIDs().Copy(IDs);
 	paste.DoPaste();
 	theApp.OnPasteCompleted();
@@ -567,7 +573,7 @@ LRESULT CQPasteWnd::OnListSelect(WPARAM wParam, LPARAM lParam)
 	int nCount = (int) wParam;
 	long *pItems = (long*) lParam;
 	
-	OpenSelection();
+	OpenSelection(false, false);
 	
 	return TRUE;
 }
@@ -1442,7 +1448,12 @@ void CQPasteWnd::OnMenuGroupsMovetogroup()
 
 void CQPasteWnd::OnMenuPasteplaintextonly() 
 {
-	OpenSelection(true);	
+	OpenSelection(true, false);	
+}
+
+void CQPasteWnd::OnMenuPastehtmlasplaintext() 
+{
+	OpenSelection(false, true);
 }
 
 void CQPasteWnd::OnMenuHelp() 

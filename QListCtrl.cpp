@@ -1018,6 +1018,8 @@ void CQListCtrl::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 void CQListCtrl::DestroyAndCreateAccelerator(BOOL bCreate)
 {
+	m_Accels.m_Map.RemoveAll();
+
 	if( bCreate )
 		CMainTable::LoadAcceleratorKeys( m_Accels );
 }
