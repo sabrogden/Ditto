@@ -29,9 +29,10 @@ CMainTable::CMainTable(CDaoDatabase* pdb)
 	m_lDontAutoDelete = 0;
 	m_lTotalCopySize = 0;
 
-	m_nFields = 7;
+	m_nFieldCount = m_nFields = 7;
 	//}}AFX_FIELD_INIT
 	m_nDefaultType = dbOpenDynaset;
+	m_bBindFields = true;
 }
 
 CString CMainTable::GetDefaultDBName()
@@ -46,6 +47,9 @@ CString CMainTable::GetDefaultSQL()
 
 void CMainTable::DoFieldExchange(CDaoFieldExchange* pFX)
 {
+	// make sure this isn't called when we aren't using bound fields
+	VERIFY( m_bBindFields == true );
+
 	//{{AFX_FIELD_MAP(CMainTable)
 	pFX->SetFieldType(CDaoFieldExchange::outputColumn);
 	DFX_Long(pFX, _T("[lID]"), m_lID);
@@ -58,20 +62,38 @@ void CMainTable::DoFieldExchange(CDaoFieldExchange* pFX)
 	//}}AFX_FIELD_MAP
 }
 
+void CMainTable::Open(int nOpenType , LPCTSTR lpszSql , int nOptions)
+{
+	OnQuery();
+	CDaoRecordset::Open(nOpenType, lpszSql, nOptions);
+}
+
+void CMainTable::Requery()
+{
+	OnQuery();
+	CDaoRecordset::Requery();
+}
+
+
 /////////////////////////////////////////////////////////////////////////////
-// CMainTable diagnostics
+// CMainTable member functions
 
-#ifdef _DEBUG
-void CMainTable::AssertValid() const
-{
-	CDaoRecordset::AssertValid();
-}
+void CMainTable::OnQuery()
+{}
 
-void CMainTable::Dump(CDumpContext& dc) const
+bool CMainTable::SetBindFields(bool bVal)
 {
-	CDaoRecordset::Dump(dc);
+bool bOld = m_bBindFields;
+
+	m_bBindFields = bVal;
+
+	if(m_bBindFields)
+		m_nFields = m_nFieldCount;
+	else
+		m_nFields = 0;
+
+	return bOld;
 }
-#endif //_DEBUG
 
 // only deletes from Main
 BOOL CMainTable::DeleteAll()
@@ -92,7 +114,7 @@ BOOL CMainTable::DeleteAll()
 	return bRet;
 }
 
-HACCEL CMainTable::LoadAcceleratorKeys()
+void CMainTable::LoadAcceleratorKeys( CAccels& accels )
 {
 	CMainTable recset;
 
@@ -100,34 +122,64 @@ HACCEL CMainTable::LoadAcceleratorKeys()
 	{
 		recset.Open("SELECT * FROM Main WHERE lShortCut > 0");
 		
-		CArray<ACCEL, ACCEL> keys;
+		accels.StartBuildingTable();
 
+		CAccel a;
 		while(!recset.IsEOF())
 		{
-			ACCEL me;
-			me.cmd = (USHORT)recset.m_lID;
-			me.fVirt = 0;
-			if( HIBYTE(recset.m_lShortCut) & HOTKEYF_SHIFT )   me.fVirt |= FSHIFT;
-			if( HIBYTE(recset.m_lShortCut) & HOTKEYF_CONTROL ) me.fVirt |= FCONTROL;
-			if( HIBYTE(recset.m_lShortCut) & HOTKEYF_ALT )     me.fVirt |= FALT;	
-			me.fVirt |= FVIRTKEY;
-			me.key = LOBYTE(recset.m_lShortCut);
-
-			keys.Add(me);
+			a.Cmd = recset.m_lID;
+			a.Key = recset.m_lShortCut;
+			accels.AddAccel( a );
 
 			recset.MoveNext();
 		}
 
-		if(keys.GetSize() > 0)
-			return CreateAcceleratorTable(keys.GetData(), keys.GetSize());
+		accels.FinishBuildingTable();
 	}
 	catch(CDaoException* e)
 	{
 		e->Delete();
 	}
-
-	return NULL;
 }
+
+/*
+//HACCEL CMainTable::LoadAcceleratorKeys()
+//{
+//	CMainTable recset;
+//
+//	try
+//	{
+//		recset.Open("SELECT * FROM Main WHERE lShortCut > 0");
+//		
+//		CArray<ACCEL, ACCEL> keys;
+//
+//		while(!recset.IsEOF())
+//		{
+//			ACCEL me;
+//			me.cmd = (USHORT)recset.m_lID;
+//			me.fVirt = 0;
+//			if( HIBYTE(recset.m_lShortCut) & HOTKEYF_SHIFT )   me.fVirt |= FSHIFT;
+//			if( HIBYTE(recset.m_lShortCut) & HOTKEYF_CONTROL ) me.fVirt |= FCONTROL;
+//			if( HIBYTE(recset.m_lShortCut) & HOTKEYF_ALT )     me.fVirt |= FALT;	
+//			me.fVirt |= FVIRTKEY;
+//			me.key = LOBYTE(recset.m_lShortCut);
+//
+//			keys.Add(me);
+//
+//			recset.MoveNext();
+//		}
+//
+//		if(keys.GetSize() > 0)
+//			return CreateAcceleratorTable(keys.GetData(), keys.GetSize());
+//	}
+//	catch(CDaoException* e)
+//	{
+//		e->Delete();
+//	}
+//
+//	return NULL;
+//}
+*/
 
 void CMainTable::Open(LPCTSTR lpszFormat,...) 
 {
@@ -141,5 +193,20 @@ void CMainTable::Open(LPCTSTR lpszFormat,...)
 	csText.FormatV(lpszFormat,vlist);
 	va_end(vlist);
 	
-	CDaoRecordset::Open(AFX_DAO_USE_DEFAULT_TYPE, csText, 0);
+	Open(AFX_DAO_USE_DEFAULT_TYPE, csText, 0);
 }
+
+/////////////////////////////////////////////////////////////////////////////
+// CMainTable diagnostics
+
+#ifdef _DEBUG
+void CMainTable::AssertValid() const
+{
+	CDaoRecordset::AssertValid();
+}
+
+void CMainTable::Dump(CDumpContext& dc) const
+{
+	CDaoRecordset::Dump(dc);
+}
+#endif //_DEBUG

@@ -50,7 +50,7 @@ public:
 	public:
 	virtual int OnToolHitTest(CPoint point, TOOLINFO * pTI) const;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
+//	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam); //!!!!!!
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -85,8 +85,9 @@ protected:
 	BOOL  m_bShowTextForFirstTenHotKeys;
 
 	//Accelerator
-	HACCEL	m_Accelerator;
-	bool	m_CheckingAccelerator;
+	CAccels	m_Accels;
+//	HACCEL	m_Accelerator; // !!!!!
+//	bool	m_CheckingAccelerator;
 	
 	// Generated message map functions
 protected:

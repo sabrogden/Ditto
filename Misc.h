@@ -293,4 +293,52 @@ public:
 
 extern CHotKeys g_HotKeys;
 
+/*------------------------------------------------------------------*\
+	CAccel - an Accelerator (in-app hotkey)
+
+    - the win32 CreateAcceleratorTable using ACCEL was insufficient
+    because it only allowed a WORD for the cmd associated with it.
+\*------------------------------------------------------------------*/
+
+#define ACCEL_VKEY(key)			LOBYTE(key)
+#define ACCEL_MOD(key)			HIBYTE(key)
+#define ACCEL_MAKEKEY(vkey,mod) ((mod << 8) | vkey)
+
+class CAccel
+{
+public:
+	DWORD	Key; // directly uses the CHotKeyCtrl format
+	DWORD	Cmd;
+	CAccel( DWORD key=0, DWORD cmd=0 ) { Key = key;  Cmd = cmd; } 
+};
+
+/*------------------------------------------------------------------*\
+	CAccels - Manages a set of CAccel
+\*------------------------------------------------------------------*/
+class CAccels : public CArray<CAccel>
+{
+public:
+	CArray<CAccel*>	m_Index;
+
+	CAccels();
+
+	void Clear() { SetSize(0); }
+	void AddAccel( CAccel& a );
+
+	// "bBigAndFast" means:
+	// - big: about 1024 bytes larger
+	// - fast: approx. constant speed lookup versus binary search
+	void StartBuildingTable( bool bBigAndFast = true, int size = -1 );
+	void FinishBuildingTable();
+
+	// handles a key's first WM_KEYDOWN or WM_SYSKEYDOWN message.
+	// it uses GetKeyState to test for modifiers.
+	// returns a pointer to the internal CAccel if it matches the given key or NULL
+	CAccel* OnMsg( MSG* pMsg );
+};
+
+// returns a BYTE representing the current GetKeyState modifiers:
+//  HOTKEYF_SHIFT, HOTKEYF_CONTROL, HOTKEYF_ALT
+BYTE GetKeyStateModifiers();
+
 #endif // !defined(AFX_CP_GUI_GLOBALS__FBCDED09_A6F2_47EB_873F_50A746EBC86B__INCLUDED_)

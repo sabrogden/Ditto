@@ -45,7 +45,7 @@ CQListCtrl::CQListCtrl()
 	m_SmallFont = CreateFontIndirect(&lf);
 
 	m_bShowTextForFirstTenHotKeys = true;
-	m_Accelerator = NULL;
+//	m_Accelerator = NULL; //!!!!!
 }
 
 CQListCtrl::~CQListCtrl()
@@ -516,16 +516,22 @@ int CQListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg) 
 {
-	if(m_Accelerator)
-	{
-		m_CheckingAccelerator = true;
-		if(TranslateAccelerator(m_hWnd, m_Accelerator, pMsg) != 0)
-		{
-			m_CheckingAccelerator = false;
-			return TRUE;
-		}
-		m_CheckingAccelerator = false;
-	}
+	/* !!!!!
+	//if(m_Accelerator)
+	//{
+	//	m_CheckingAccelerator = true;
+	//	if(TranslateAccelerator(m_hWnd, m_Accelerator, pMsg) != 0)
+	//	{
+	//		m_CheckingAccelerator = false;
+	//		return TRUE;
+	//	}
+	//	m_CheckingAccelerator = false;
+	//}
+	*/
+
+	CAccel* pAccel = m_Accels.OnMsg( pMsg );
+	if( pAccel )
+		GetParent()->SendMessage(NM_SELECT_DB_ID, pAccel->Cmd, 0);
 
 	switch(pMsg->message) 
 	{
@@ -632,27 +638,35 @@ void CQListCtrl::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 void CQListCtrl::DestroyAndCreateAccelerator(BOOL bCreate)
 {
-	if(m_Accelerator)
-	{
-		DestroyAcceleratorTable(m_Accelerator);
-		m_Accelerator = NULL;
-	}
-	
-	if(bCreate)
-		m_Accelerator = CMainTable::LoadAcceleratorKeys();
+// !!!!!!
+	//if(m_Accelerator)
+	//{
+	//	DestroyAcceleratorTable(m_Accelerator);
+	//	m_Accelerator = NULL;
+	//}
+	//
+	//if(bCreate)
+	//	m_Accelerator = CMainTable::LoadAcceleratorKeys();
+
+	m_Accels.Clear();
+
+	if( bCreate )
+		CMainTable::LoadAcceleratorKeys( m_Accels );
 }
 
-BOOL CQListCtrl::OnCommand(WPARAM wParam, LPARAM lParam) 
-{
-	//return 1 if from accelerator
-	if((HIWORD(wParam) == 1) && (m_CheckingAccelerator))
-	{
-		USHORT usPasteID = LOWORD(wParam);
-
-		GetParent()->SendMessage(NM_SELECT_DB_ID, usPasteID, 0);
-
-		return TRUE;
-	}
-	
-	return CListCtrl::OnCommand(wParam, lParam);
-}
+/* !!!!!
+//BOOL CQListCtrl::OnCommand(WPARAM wParam, LPARAM lParam) 
+//{
+//	//return 1 if from accelerator
+//	if((HIWORD(wParam) == 1) && (m_CheckingAccelerator))
+//	{
+//		USHORT usPasteID = LOWORD(wParam);
+//
+//		GetParent()->SendMessage(NM_SELECT_DB_ID, usPasteID, 0);
+//
+//		return TRUE;
+//	}
+//	
+//	return CListCtrl::OnCommand(wParam, lParam);
+//}
+*/

@@ -5,6 +5,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 #include "ArrayEx.h"
+#include "Misc.h"
 
 class CMainTable : public CDaoRecordset
 {
@@ -31,13 +32,27 @@ public:
 	virtual CString GetDefaultDBName();		// Default database name
 	virtual CString GetDefaultSQL();		// Default SQL for Recordset
 	virtual void DoFieldExchange(CDaoFieldExchange* pFX);  // RFX support
+	virtual void Open(int nOpenType = AFX_DAO_USE_DEFAULT_TYPE, LPCTSTR lpszSql = NULL, int nOptions = 0);
+	virtual void Requery();
 	//}}AFX_VIRTUAL
 
 public:
+	void OnQuery();
+
+	int		m_nFieldCount;
+	bool	m_bBindFields;
+	bool SetBindFields(bool bVal);
+
+//	long GetID();
+
+	int		m_nCurPos;
+	long	m_lCurID; // used to validate m_nCurPos
+
 	// only deletes from Main
 	static BOOL DeleteAll();
 	
-	static HACCEL LoadAcceleratorKeys();
+	static void LoadAcceleratorKeys( CAccels& accels );
+//	static HACCEL LoadAcceleratorKeys(); //!!!!!
 	void Open(LPCTSTR lpszFormat,...);
 
 // Implementation

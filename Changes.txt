@@ -9,9 +9,14 @@
 
 + Ensure Connected to Clipboard Viewer Chain using dummy WM_DRAWCLIPBOARD
   CClipboardViewer:
-  *	OnCreate: SetTimer(TIMER_ENSURE_VIEWER_IN_CHAIN, ONE_MINUTE, 0);
+  * OnCreate: SetTimer(TIMER_ENSURE_VIEWER_IN_CHAIN, ONE_MINUTE, 0);
   * WM_CV_RECONNECT - force reconnect if not in chain.
-	* WM_CV_IS_CONNECTED - performs a ping of chain.
+  * WM_CV_IS_CONNECTED - performs a ping of chain.
+
++ Custom Accelerators
+  + Misc.h/.cpp: CAccel and CAccels
+  ! fixes bug "can't use accelerators with clip IDs > 65535 (USHRT_MAX)"
+    . this was due to win32 ACCEL only capable of handling a WORD cmd
 
 
 03 Sept 5

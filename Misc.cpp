@@ -1353,3 +1353,133 @@ void GetMonitorRect(int iMonitor, LPRECT lpDestRect)
 	}
 }
 
+
+/*------------------------------------------------------------------*\
+	CAccel - an Accelerator (in-app hotkey)
+
+    - the win32 CreateAcceleratorTable using ACCEL was insufficient
+    because it only allowed a WORD for the cmd associated with it.
+\*------------------------------------------------------------------*/
+ 
+/*------------------------------------------------------------------*\
+	CAccels - Manages a set of CAccel
+\*------------------------------------------------------------------*/
+
+int CompareAccel( const void* pLeft, const void* pRight )
+{
+WORD w;
+int l,r;
+	// swap bytes: place the VirtualKey in the MSB and the modifier in the LSB
+	//  so that Accels based upon the same vkey are grouped together.
+	// this is required by our use of m_Index
+	// alternatively, we could store them this way in CAccel.
+	w = (WORD) ((CAccel*)pLeft)->Key;
+	l = (ACCEL_VKEY(w) << 8) | ACCEL_MOD(w);
+	w = (WORD) ((CAccel*)pRight)->Key;
+	r = (ACCEL_VKEY(w) << 8) | ACCEL_MOD(w);
+	return l - r;
+}
+
+CAccels::CAccels()
+{}
+
+void CAccels::AddAccel( CAccel& a )
+{
+	Add( a );
+}
+
+void CAccels::StartBuildingTable( bool bBigAndFast, int size )
+{
+	SetSize(0);
+
+	// m_Index is used as a fast hash table based upon the 1-byte vkey
+	if( bBigAndFast )
+		m_Index.SetSize( 256 );
+	else
+		m_Index.SetSize( 0 );
+
+int count = m_Index.GetCount();
+	for( int i=0; i < count; i++ )
+		m_Index[i] = NULL;
+}
+
+void CAccels::FinishBuildingTable()
+{
+int count = GetCount();
+	if( count <= 0 )
+		return;
+	// sort by key
+	qsort( GetData(), count, sizeof(CAccel), CompareAccel );
+
+CAccel* pAccel;
+int index;
+int idxCount = m_Index.GetCount();
+	if( idxCount != 256 )
+		return;
+	// setup m_Index hash table with each CAccel
+	for( int i=0; i < count; i++ )
+	{
+		pAccel = &GetAt(i);
+		index = ACCEL_VKEY( pAccel->Key );
+		// place the first accel for this vkey in the index
+		if( m_Index[index] == NULL )
+			m_Index[index] = pAccel;
+	}
+}
+
+CAccel* CAccels::OnMsg( MSG* pMsg )
+{
+	// bit 30 (0x40000000) is 1 if this is NOT the first msg of the key
+	//  i.e. auto-repeat may cause multiple msgs of the same key
+	if( (pMsg->lParam & 0x40000000) ||
+	    (pMsg->message != WM_KEYDOWN &&
+	     pMsg->message != WM_SYSKEYDOWN) )
+	{	return NULL; }
+
+int count = GetCount();
+	if( !pMsg || count <= 0 )
+		return NULL;
+
+BYTE vkey = LOBYTE(pMsg->wParam);
+BYTE mod  = GetKeyStateModifiers();
+DWORD key = ACCEL_MAKEKEY( vkey, mod );
+CAccel* pAccel;
+
+	// if we don't have an appropriately sized Index, do a binary search
+int idxCount = m_Index.GetCount();
+	if( idxCount != 256 )
+	{
+	CAccel a(key,0);
+		return (CAccel*) bsearch( &a, GetData(), count, sizeof(CAccel), CompareAccel );
+	}
+	// else we should have a valid m_Index hash table to use
+
+	pAccel = m_Index[ vkey ];
+
+	if( pAccel == NULL )
+		return NULL;
+
+CAccel* pLast = &GetAt(count-1);
+	// for each CAccel that matches vkey
+    while( vkey == ACCEL_VKEY(pAccel->Key) && pAccel <= pLast )
+	{
+		// if modifiers are also the same, then this is the key we are looking for
+		if( mod == ACCEL_MOD(pAccel->Key) )
+			return pAccel;
+		pAccel++;
+	}
+
+	return NULL;
+}
+
+BYTE GetKeyStateModifiers()
+{
+BYTE m=0;
+	if( GetKeyState(VK_SHIFT) & 0x8000 )
+		m |= HOTKEYF_SHIFT;
+	if( GetKeyState(VK_CONTROL) & 0x8000 )
+		m |= HOTKEYF_CONTROL;
+	if( GetKeyState(VK_MENU) & 0x8000 )
+		m |= HOTKEYF_ALT;
+	return m;
+}
