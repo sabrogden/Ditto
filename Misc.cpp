@@ -1144,4 +1144,201 @@ ARRAY keys;
 	return FindFirstConflict( keys, pX, pY );
 }
 
+/****************************************************************************************************
+	BOOL CALLBACK MyMonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)
+ ***************************************************************************************************/
+typedef struct
+{
+	long	lFlags;				// Flags
+	LPRECT	pVirtualRect;		// Ptr to rect that receives the results, or the src of the monitor search method
+	int		iMonitor;			// Ndx to the mointor to look at, -1 for all, -or- result of the monitor search method
+	int		nMonitorCount;		// Total number of monitors found, -1 for monitor search method
+}	MONITOR_ENUM_PARAM;
+#define	MONITOR_SEARCH_METOHD	0x00000001
+BOOL CALLBACK MyMonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)
+{
+	// Typecast param
+	MONITOR_ENUM_PARAM* pParam = (MONITOR_ENUM_PARAM*)dwData;
+	if(pParam)
+	{
+		// If a dest rect was passed
+		if(pParam->pVirtualRect)
+		{
+			// If MONITOR_SEARCH_METOHD then we are being asked for the index of the monitor
+			// that the rect falls inside of
+			if(pParam->lFlags & MONITOR_SEARCH_METOHD)
+			{
+				if(	(pParam->pVirtualRect->right	< lprcMonitor->left)	||
+					(pParam->pVirtualRect->left		> lprcMonitor->right)	||
+					(pParam->pVirtualRect->bottom	< lprcMonitor->top)		||
+					(pParam->pVirtualRect->top		> lprcMonitor->bottom))
+				{
+					// Nothing
+				}
+				else
+				{
+					// This is the one
+					pParam->iMonitor = pParam->nMonitorCount;
+
+					// Stop the enumeration
+					return FALSE;
+				}
+			}
+			else
+			{
+				if(pParam->iMonitor == pParam->nMonitorCount)
+				{
+					*pParam->pVirtualRect = *lprcMonitor;
+				}
+				else
+				if(pParam->iMonitor == -1)
+				{
+					pParam->pVirtualRect->left = min(pParam->pVirtualRect->left, lprcMonitor->left);
+					pParam->pVirtualRect->top = min(pParam->pVirtualRect->top, lprcMonitor->top);
+					pParam->pVirtualRect->right = max(pParam->pVirtualRect->right, lprcMonitor->right);
+					pParam->pVirtualRect->bottom = max(pParam->pVirtualRect->bottom, lprcMonitor->bottom);
+				}
+			}
+		}
+
+		// Up the count if necessary
+		pParam->nMonitorCount++;
+	}
+	return TRUE;
+}
+
+int GetScreenWidth(void)
+{
+	OSVERSIONINFO OS_Version_Info;
+	DWORD dwPlatform = 0;
+
+	if(GetVersionEx(&OS_Version_Info) != 0)
+	{
+		dwPlatform = OS_Version_Info.dwPlatformId;
+	}
+
+	if(dwPlatform == VER_PLATFORM_WIN32_NT)
+	{
+		int width, height;
+
+		width = GetSystemMetrics(SM_CXSCREEN);
+		height = GetSystemMetrics(SM_CYSCREEN);
+		switch(width)
+		{
+		default:
+		case 640:
+		case 800:
+		case 1024:
+			return(width);
+		case 1280:
+			if(height == 480)
+			{
+				return(width / 2);
+			}
+			return(width);
+		case 1600:
+			if(height == 600)
+			{
+				return(width / 2);
+			}
+			return(width);
+		case 2048:
+			if(height == 768)
+			{
+				return(width / 2);
+			}
+			return(width);
+		}
+	}
+	else
+	{
+		return(GetSystemMetrics(SM_CXSCREEN));
+	}
+}
+
+int GetScreenHeight(void)
+{
+	OSVERSIONINFO OS_Version_Info;
+	DWORD dwPlatform = 0;
+
+	if(GetVersionEx(&OS_Version_Info) != 0)
+	{
+		dwPlatform = OS_Version_Info.dwPlatformId;
+	}
+
+	if(dwPlatform == VER_PLATFORM_WIN32_NT)
+	{
+		int width, height;
+
+		width = GetSystemMetrics(SM_CXSCREEN);
+		height = GetSystemMetrics(SM_CYSCREEN);
+		switch(height)
+		{
+		default:
+		case 480:
+		case 600:
+		case 768:
+			return(height);
+		case 960:
+			if(width == 640)
+			{
+				return(height / 2);
+			}
+			return(height);
+		case 1200:
+			if(width == 800)
+			{
+				return(height / 2);
+			}
+			return(height);
+		case 1536:
+			if(width == 1024)
+			{
+				return(height / 2);
+			}
+			return(height);
+		}
+	}
+	else
+	{
+		return(GetSystemMetrics(SM_CYSCREEN));
+	}
+}
+
+int GetMonitorFromRect(LPRECT lpMonitorRect)
+{
+	// Build up the param
+	MONITOR_ENUM_PARAM	EnumParam;
+	ZeroMemory(&EnumParam, sizeof(EnumParam));
+	EnumParam.lFlags = MONITOR_SEARCH_METOHD;
+	EnumParam.pVirtualRect = lpMonitorRect;
+
+	// Enum Displays
+	EnumDisplayMonitors(NULL, NULL, MyMonitorEnumProc, (long)&EnumParam);
+
+	// Return the result
+	return EnumParam.iMonitor;
+}
+
+void GetMonitorRect(int iMonitor, LPRECT lpDestRect)
+{
+	// Build up the param
+	MONITOR_ENUM_PARAM	EnumParam;
+	ZeroMemory(&EnumParam, sizeof(EnumParam));
+	EnumParam.iMonitor = iMonitor;
+	EnumParam.pVirtualRect = lpDestRect;
+
+	// Zero out dest rect
+	lpDestRect->bottom = lpDestRect->left = lpDestRect->right = lpDestRect->top = 0;
+	
+	// Enum Displays
+	EnumDisplayMonitors(NULL, NULL, MyMonitorEnumProc, (long)&EnumParam);
+
+	// If not successful, default to the screen dimentions
+	if(lpDestRect->right == 0 || lpDestRect->bottom == 0)
+	{
+		lpDestRect->right = GetScreenWidth();
+		lpDestRect->bottom = GetScreenHeight();
+	}
+}
 

@@ -1,3 +1,7 @@
+03 Sept 5
+---------
++ Snap to window now works on multiple monitors
+
 03 Sept 4
 ---------
 + Ditto window snaps to window sides

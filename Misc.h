@@ -63,6 +63,9 @@ HGLOBAL NewGlobalH( HGLOBAL hSource, UINT nLen );
 int CompareGlobalHP( HGLOBAL hLeft, LPVOID pBuf, ULONG ulBufLen );
 int CompareGlobalHH( HGLOBAL hLeft, HGLOBAL hRight, ULONG ulBufLen );
 
+void GetMonitorRect(int iMonitor, LPRECT lpDestRect);
+int GetMonitorFromRect(LPRECT lpMonitorRect);
+
 long DoOptions(CWnd *pParent);
 
 CLIPFORMAT GetFormatID(LPCSTR cbName);

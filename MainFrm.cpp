@@ -172,7 +172,7 @@ void CMainFrame::OnFirstExit()
 }
 
 LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
-{
+{	
 	if( wParam == theApp.m_pDittoHotKey->m_Atom )
 	{
 		QuickPaste.ShowQPasteWnd(this);
