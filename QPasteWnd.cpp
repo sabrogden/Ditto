@@ -792,7 +792,8 @@ void CQPasteWnd::DeleteSelectedRows()
 	}
 
 	m_lstHeader.SetItemCountEx(lCount);
-//	m_lstHeader.Invalidate();  // necessary?
+	if(lCount == 0)
+		m_lstHeader.Invalidate();
 
 	m_lstHeader.RemoveAllSelection();
 
