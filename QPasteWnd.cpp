@@ -1378,9 +1378,8 @@ BOOL CQPasteWnd::SendToFriendbyPos(int nPos)
 
 	m_lstHeader.GetSelectionIndexes(IDs);
 
-	CIDArray *pIDArray = new CIDArray;
-	pIDArray->pIDs = new CID[lCount];
-	pIDArray->lCount = lCount;
+	CSendToFriendInfo Info;
+	Info.m_lPos = nPos;
 
 	BOOL bRet = FALSE;
 
@@ -1388,17 +1387,23 @@ BOOL CQPasteWnd::SendToFriendbyPos(int nPos)
 	{
 		CPopup Popup(0, 0, m_hWnd);
 		Popup.Show(StrF("Sending clip to %s", g_Opt.m_SendClients[nPos].csIP));
+
+		Info.m_pPopup = &Popup;
 		
+		Info.m_pClipList =  new CClipList;
 		for(int i = 0; i < lCount; i++)
 		{
 			m_Recset.SetAbsolutePosition(IDs[i]);
-			pIDArray->pIDs[i].lID = m_Recset.m_lID;
-			pIDArray->pIDs[i].m_csDesc = m_Recset.m_strText;
+			CClip *pClip = new CClip;
+			CClip::LoadFormats(m_Recset.m_lID, pClip->m_Formats);
+			pClip->m_Desc = m_Recset.m_strText;
+			pClip->m_ID = m_Recset.m_lID;
+			Info.m_pClipList->AddTail(pClip);
 		}
 		
-		if(SendToFriend(pIDArray, nPos, "", &Popup) == FALSE)
+		if(SendToFriend(Info) == FALSE)
 		{
-			MessageBox(StrF("Error Sending data to %s", g_Opt.m_SendClients[nPos].csIP), "Ditto");
+			MessageBox(StrF("Error Sending data to %s\n\n%s", g_Opt.m_SendClients[nPos].csIP, Info.m_csErrorText), "Ditto");
 		}
 		else
 		{
@@ -1411,10 +1416,6 @@ BOOL CQPasteWnd::SendToFriendbyPos(int nPos)
 		ASSERT(0);
 		e->Delete();
 	}	
-
-	delete [] pIDArray->pIDs;
-	pIDArray->pIDs = NULL;
-	delete pIDArray;
 
 	m_bHideWnd = true;
 

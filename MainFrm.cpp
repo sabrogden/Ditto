@@ -45,7 +45,6 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_CLIPBOARD_COPIED, OnClipboardCopied)
 	ON_WM_CLOSE()
 	ON_MESSAGE(WM_ADD_TO_DATABASE_FROM_SOCKET, OnAddToDatabaseFromSocket)
-	ON_MESSAGE(WM_LOAD_FORMATS, OnLoadFormats)
 	ON_MESSAGE(WM_SEND_RECIEVE_ERROR, OnErrorOnSendRecieve)
 	ON_MESSAGE(WM_FOCUS_CHANGED, OnFocusChanged)
 END_MESSAGE_MAP()
@@ -485,7 +484,6 @@ LRESULT CMainFrame::OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam)
 
 	pClip->MakeLatestTime();
 	pClip->AddToDB(true);
-
 	LogSendRecieveInfo("---------After AddToDB");
 
 	theApp.RefreshView();
@@ -493,14 +491,6 @@ LRESULT CMainFrame::OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam)
 
 	LogSendRecieveInfo("---------End of OnAddToDatabaseFromSocket");
 	
-	return TRUE;
-}
-
-LRESULT CMainFrame::OnLoadFormats(WPARAM wParam, LPARAM lParam)
-{
-	int nID = (int)wParam;
-	CClipFormats *pFormats = (CClipFormats *)lParam;
-	CClip::LoadFormats(nID, *pFormats);
 	return TRUE;
 }
 

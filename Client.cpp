@@ -17,91 +17,71 @@ static char THIS_FILE[]=__FILE__;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-BOOL SendToFriend(CIDArray *pArray, long lPos, CString csIP, CPopup *pPopup)
+BOOL SendToFriend(CSendToFriendInfo &Info)
 {
 	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - START OF Send To Friend - @@@@@@@@@@@@@@@");
 
-	CSendToFriendInfo Info;
-	Info.csIP = csIP;
-	Info.lPos = lPos;
-	Info.pArray = pArray;
-	Info.pPopup = pPopup;
-
-	AfxBeginThread(SendToFriendThread, &Info);
-
-	DWORD dwWaitResult;
-	MSG msg;
-	while(true)
+	if(Info.m_lPos > -1 && Info.m_lPos < MAX_SEND_CLIENTS)
 	{
-		dwWaitResult = MsgWaitForMultipleObjects(1, &Info.hThreadRunning, FALSE, 1000, QS_ALLINPUT);
-
-		// Window message to be processed
-		if(dwWaitResult == (WAIT_OBJECT_0+1))
-		{
-			while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-			{
-				// get the next message in the queue
-				TranslateMessage(&msg);
-				DispatchMessage(&msg);
-			}
-		}	
-		else if (dwWaitResult == WAIT_OBJECT_0)
-		{
-			break;
-		}
+		Info.m_csIP = g_Opt.m_SendClients[Info.m_lPos].csIP;
 	}
-
-	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - END OF Send To Friend - @@@@@@@@@@@@@@@");
-
-	return Info.bRet;
-}
-
-UINT SendToFriendThread(LPVOID pParam)
-{
-	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - START OF Send To Friend Thread - @@@@@@@@@@@@@@@");
-
-	CSendToFriendInfo *pInfo = (CSendToFriendInfo*)pParam;
-	
-	if(pInfo->lPos > -1 && pInfo->lPos < MAX_SEND_CLIENTS)
+	else
 	{
-		pInfo->csIP = g_Opt.m_SendClients[pInfo->lPos].csIP;
-	}
-
-	LogSendRecieveInfo(StrF("Sending clip to %s", pInfo->csIP));
-	CClient client;
-
-	if(client.OpenConnection(pInfo->csIP) == FALSE)
-	{
-		LogSendRecieveInfo(StrF("ERROR opening connection to %s", pInfo->csIP));
-		pInfo->bRet = FALSE;
-		SetEvent(pInfo->hThreadRunning);
+		Info.m_csErrorText = StrF("ERROR getting ip position - %d", Info.m_lPos);
+		LogSendRecieveInfo(Info.m_csErrorText);
 		return FALSE;
 	}
 
-	for(int i = 0; i < pInfo->pArray->lCount; i++)
+	LogSendRecieveInfo(StrF("Sending clip to %s", Info.m_csIP));
+	CClient client;
+
+	if(client.OpenConnection(Info.m_csIP) == FALSE)
 	{
-		if(pInfo->pPopup)
+		Info.m_csErrorText = StrF("ERROR opening connection to %s", Info.m_csIP);
+		LogSendRecieveInfo(Info.m_csErrorText);
+		return FALSE;
+	}
+
+	long lCount = Info.m_pClipList->GetCount();
+	int i = -1;
+
+	CClip* pClip;
+	POSITION pos;
+	pos = Info.m_pClipList->GetHeadPosition();
+	while(pos)
+	{
+		pClip = Info.m_pClipList->GetNext(pos);
+		if(pClip == NULL)
 		{
-			pInfo->pPopup->SendToolTipText(StrF("Sending %d of %d", i+1, pInfo->pArray->lCount));
+			ASSERT(FALSE);
+			continue;
+		}
+		i++;
+
+		if(Info.m_pPopup)
+		{
+			Info.m_pPopup->SendToolTipText(StrF("Sending %d of %d", i+1, lCount));
 		}
 
-		LogSendRecieveInfo(StrF("Sending %d of %d clip to %s", i+1, pInfo->pArray->lCount, pInfo->csIP));
-
-		if(client.SendItem(&pInfo->pArray->pIDs[i]) == FALSE)
+		MSG	msg;
+		while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
-			LogSendRecieveInfo("ERROR SendItem Failed");
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
 
-			pInfo->bRet = FALSE;
-			SetEvent(pInfo->hThreadRunning);
+		LogSendRecieveInfo(StrF("Sending %d of %d clip to %s", i+1, lCount, Info.m_csIP));
+
+		if(client.SendItem(pClip) == FALSE)
+		{
+			Info.m_csErrorText = "ERROR SendItem Failed";
+			LogSendRecieveInfo(Info.m_csErrorText);
+
 			return FALSE;
 		}
 	}
 
-	pInfo->bRet = TRUE;
-
-	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - END OF Send To Friend Thread - @@@@@@@@@@@@@@@");
-
-	SetEvent(pInfo->hThreadRunning);
+	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - END OF Send To Friend - @@@@@@@@@@@@@@@");
 
 	return TRUE;
 }
@@ -112,15 +92,16 @@ UINT  SendClientThread(LPVOID pParam)
 
 	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - START OF SendClientThread - @@@@@@@@@@@@@@@");
 
-	bool bError;
-	CIDArray *pArray = (CIDArray*)pParam;
-	if(pArray == NULL)
+	CClipList *pClipList = (CClipList*)pParam;
+	if(pClipList == NULL)
 	{
-		LogSendRecieveInfo("ERROR if(pArray == NULL)");
+		LogSendRecieveInfo("ERROR if(pClipList == NULL)");
 		return FALSE;
 	}
 
-	LogSendRecieveInfo(StrF("Start of Send ClientThread Count - %d", pArray->lCount));
+	long lCount = pClipList->GetCount();
+
+	LogSendRecieveInfo(StrF("Start of Send ClientThread Count - %d", lCount));
 	
 	for(int nClient = 0; nClient < MAX_SEND_CLIENTS; nClient++)
 	{
@@ -131,22 +112,31 @@ UINT  SendClientThread(LPVOID pParam)
 			if(client.OpenConnection(g_Opt.m_SendClients[nClient].csIP) == FALSE)
 			{
 				LogSendRecieveInfo(StrF("ERROR opening connection to %s", g_Opt.m_SendClients[nClient].csIP));
-				bError = true;
+
+				CString cs;
+				cs.Format("Error opening connection to %s",g_Opt.m_SendClients[nClient].csIP);
+				::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
+				cs.ReleaseBuffer();
+
+				continue;
 			}
 
-			bError = false;
-
-			for(int i = 0; i < pArray->lCount; i++)
+			CClip* pClip;
+			POSITION pos;
+			pos = pClipList->GetHeadPosition();
+			while(pos)
 			{
-				if(bError == false)
+				pClip = pClipList->GetNext(pos);
+				if(pClip == NULL)
 				{
-					LogSendRecieveInfo(StrF("Sending clip to %s", g_Opt.m_SendClients[nClient].csIP));
-				
-					if(client.SendItem(&pArray->pIDs[i]) == FALSE)
-						bError = true;
+					ASSERT(FALSE);
+					LogSendRecieveInfo("Error in GetNext");
+					break;
 				}
 
-				if(bError)
+				LogSendRecieveInfo(StrF("Sending clip to %s", g_Opt.m_SendClients[nClient].csIP));
+				
+				if(client.SendItem(pClip) == FALSE)
 				{
 					CString cs;
 					cs.Format("Error sending clip to %s",g_Opt.m_SendClients[nClient].csIP);
@@ -160,11 +150,8 @@ UINT  SendClientThread(LPVOID pParam)
 		}
 	}
 
-	delete []pArray->pIDs;
-	pArray->pIDs = NULL;
-
-	delete pArray;
-	pArray = NULL;
+	delete pClipList;
+	pClipList = NULL;
 	
 	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - END OF SendClientThread - @@@@@@@@@@@@@@@");
 
@@ -218,6 +205,7 @@ BOOL CClient::OpenConnection(const char* servername)
 	{
 		LogSendRecieveInfo("ERROR - socket(AF_INET,SOCK_STREAM,IPPROTO_TCP)");
 		
+		m_Connection = NULL;
 		return FALSE;
 	}
 
@@ -236,6 +224,7 @@ BOOL CClient::OpenConnection(const char* servername)
 		LogSendRecieveInfo("ERROR - if(hp==NULL)");
 
 		closesocket(m_Connection);
+		m_Connection = NULL;
 		return FALSE;
 	}
 
@@ -246,19 +235,20 @@ BOOL CClient::OpenConnection(const char* servername)
 	{
 		LogSendRecieveInfo("ERROR if(connect(m_Connection,(struct sockaddr*)&server,sizeof(server)))");
 		closesocket(m_Connection);
+		m_Connection = NULL;
 		return FALSE;	
 	}
 
 	return TRUE;
 }
 
-BOOL CClient::SendItem(CID *pData)
+BOOL CClient::SendItem(CClip *pClip)
 {
 	SendInfo Info;
 	
 	strncpy(Info.m_cComputerName, GetComputerName(), sizeof(Info.m_cComputerName));
 	strncpy(Info.m_cIP, GetIPAddress(), sizeof(Info.m_cIP));
-	strncpy(Info.m_cText, pData->m_csDesc, sizeof(Info.m_cText));
+	strncpy(Info.m_cText, pClip->m_Desc, sizeof(Info.m_cText));
 	
 	Info.m_cText[sizeof(Info.m_cText)-1] = 0;
 	Info.m_cComputerName[sizeof(Info.m_cComputerName)-1] = 0;
@@ -268,23 +258,16 @@ BOOL CClient::SendItem(CID *pData)
 		return FALSE;
 	
 	CClipFormat* pCF;
-
-	//If the data has not been loaded, then send a message to
-	//the main thread to load the data from the db
-	if(pData->m_Formats.GetSize() <= 0)
-	{
-		::SendMessage(theApp.m_MainhWnd, WM_LOAD_FORMATS, pData->lID, (LPARAM)&pData->m_Formats);
-	}
 	
-	int nCount = pData->m_Formats.GetSize();
+	int nCount = pClip->m_Formats.GetSize();
 	DWORD dwSize;
 	DWORD dwDataSent;
 
 	//For each data type
 	for( int i=0; i < nCount; i++ )
 	{
-		pCF = &pData->m_Formats[i];
-
+		pCF = &pClip->m_Formats.GetData()[i];
+		
 		Info.m_lParameter1 = dwSize = GlobalSize(pCF->m_hgData);
 		strncpy(Info.m_cText, GetFormatName(pCF->m_cfType), sizeof(Info.m_cText));
 		Info.m_cText[sizeof(Info.m_cText)-1] = 0;

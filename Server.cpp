@@ -184,8 +184,8 @@ UINT  ClientThread(LPVOID pParam)
 			{
 				if(bAddToDatabase)
 				{
-					LogSendRecieveInfo("::DATA_END");
-					::SendMessage(theApp.m_MainhWnd, WM_ADD_TO_DATABASE_FROM_SOCKET, (WPARAM)&NewClip, bSetToClipBoard);
+					LogSendRecieveInfo("::END");
+					//::SendMessage(theApp.m_MainhWnd, WM_ADD_TO_DATABASE_FROM_SOCKET, (WPARAM)&NewClip, bSetToClipBoard);
 				}
 			}
 			break;

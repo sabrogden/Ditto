@@ -1050,7 +1050,7 @@ BOOL CGetSetOptions::GetLogSendReceiveErrors()
 
 BOOL CGetSetOptions::GetHideDittoOnHotKeyIfAlreadyShown()
 {
-	return GetProfileLong("HideDittoOnHotKeyIfAlreadyShown", FALSE);
+	return GetProfileLong("HideDittoOnHotKeyIfAlreadyShown", TRUE);
 }
 
 void CGetSetOptions::SetHideDittoOnHotKeyIfAlreadyShown(BOOL bVal)

@@ -120,6 +120,8 @@ public:
 	// returns the number of clips actually saved
 	// while this does empty the Format Data, it does not delete the Clips.
 	int AddToDB( bool bLatestTime = false, bool bShowStatus = true );
+
+	const CClipList& operator=(const CClipList &cliplist);
 };
 
 

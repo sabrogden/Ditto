@@ -382,6 +382,17 @@ long CCP_MainApp::SaveCopyClips()
 	if( !pClips )
 		return 0;
 
+	CClipList* pCopyOfClips = NULL;
+	if(g_Opt.m_lAutoSendClientCount > 0)
+	{
+		//The thread will free these
+		pCopyOfClips = new CClipList;
+		if(pCopyOfClips != NULL)
+		{
+			*pCopyOfClips = *pClips;
+		}
+	}
+
 	count = pClips->AddToDB( true );
 	if( count > 0 )
 	{		
@@ -390,23 +401,7 @@ long CCP_MainApp::SaveCopyClips()
 
 		if(g_Opt.m_lAutoSendClientCount > 0)
 		{
-			//The thread will free these
-			CIDArray *pIDArray = new CIDArray;
-			pIDArray->pIDs = new CID[count];
-			pIDArray->lCount = count;
-			
-			CClip* pClip;
-			POSITION pos;
-			int nArrayPos = 0;
-			pos = pClips->GetHeadPosition();
-			while(pos)
-			{
-				pClip = pClips->GetNext(pos);
-				pIDArray->pIDs[nArrayPos].lID = pClip->m_ID;
-				pIDArray->pIDs[nArrayPos].m_csDesc = pClip->m_Desc;
-			}
-
-			AfxBeginThread(SendClientThread, pIDArray);
+			AfxBeginThread(SendClientThread, pCopyOfClips);
 		}
 	}
 

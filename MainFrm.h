@@ -79,7 +79,6 @@ protected:
 	afx_msg LRESULT OnShutDown(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnClipboardCopied(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnLoadFormats(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnErrorOnSendRecieve(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnFocusChanged(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()

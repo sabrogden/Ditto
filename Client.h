@@ -11,59 +11,30 @@
 
 #include "Server.h"
 
-class CID
-{
-public:
-	CID()
-	{
-		lID = -1;
-	}
-
-	~CID()
-	{
-		m_Formats.RemoveAll();
-	}
-	
-	long lID;
-	CString m_csDesc;
-	CClipFormats m_Formats;
-};
-
-class CIDArray
-{
-public:
-	CIDArray()
-	{
-		pIDs = NULL;
-		lCount = 0;
-	}
-	CID *pIDs;
-	long lCount;
-};
-
 class CSendToFriendInfo
 {
 public:
 	CSendToFriendInfo()
 	{
-		pPopup = NULL;
-		pArray = NULL;
-		lPos = -1;
-		bRet = FALSE;
-		hThreadRunning = CreateEvent(NULL, FALSE, FALSE, "SendToFriend");
-		ResetEvent(hThreadRunning);
+		m_pPopup = NULL;
+		m_lPos = -1;
+		m_pClipList = NULL;
+		m_pPopup = NULL;
 	}
 	~CSendToFriendInfo()
 	{
-		CloseHandle(hThreadRunning);
+		if(m_pClipList)
+		{
+			delete m_pClipList;
+			m_pClipList = NULL;
+		}
 	}
 
-	CIDArray *pArray;
-	long lPos;
-	CString csIP;
-	CPopup *pPopup;
-	BOOL bRet;
-	HANDLE hThreadRunning;
+	CClipList *m_pClipList;
+	long m_lPos;
+	CString m_csIP;
+	CPopup *m_pPopup;
+	CString m_csErrorText;
 };
 
 class CClient  
@@ -72,7 +43,7 @@ public:
 	CClient();
 	virtual ~CClient();
 
-	BOOL SendItem(CID *pData);
+	BOOL SendItem(CClip *pClip);
 	
 	BOOL OpenConnection(const char* servername);
 	BOOL CloseConnection();
@@ -83,8 +54,7 @@ protected:
 	BOOL SendData(SendInfo *pInfo, MyEnums::eSendType type);
 };
 
-BOOL SendToFriend(CIDArray *pArray, long lPos, CString csIP, CPopup *pPopup);
-UINT SendToFriendThread(LPVOID pParam);
+BOOL SendToFriend(CSendToFriendInfo &Info);
 
 UINT  SendClientThread(LPVOID pParam);
 

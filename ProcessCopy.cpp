@@ -119,9 +119,6 @@ CClip::CClip() : m_ID(0), m_DataID(0), m_lTotalCopySize(0)
 
 CClip::~CClip()
 {
-	int count = m_Formats.GetSize();
-	// in proper handling, m_Formats should be empty
-	ASSERT( count == 0 );
 	EmptyFormats();
 }
 
@@ -765,6 +762,29 @@ int CClipList::AddToDB( bool bLatestTime, bool bShowStatus )
 		theApp.SetStatus(NULL, true);
 	
 	return savedCount;
+}
+
+const CClipList& CClipList::operator=(const CClipList &cliplist)
+{
+	POSITION pos;
+	CClip* pClip;
+	
+	pos = cliplist.GetHeadPosition();
+	while(pos)
+	{
+		pClip = cliplist.GetNext(pos);
+		ASSERT(pClip);
+
+		CClip *pNewClip = new CClip;
+		if(pNewClip)
+		{
+			*pNewClip = *pClip;
+			
+			AddTail(pNewClip);
+		}
+	}
+	
+	return *this;
 }
 
 
