@@ -837,7 +837,8 @@ void CQListCtrl::OnTimer(UINT nIDEvent)
 {
 	if(nIDEvent == TIMER_SHOW_PROPERTIES)
 	{
-		ShowFullDescription(true);
+		if( theApp.m_bShowingQuickPaste )
+			ShowFullDescription(true);
 		KillTimer(TIMER_SHOW_PROPERTIES);
 	}
 	
