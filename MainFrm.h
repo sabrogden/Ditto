@@ -69,12 +69,11 @@ protected:
 	afx_msg void OnDrawClipboard();
 	afx_msg void OnTimer(UINT nIDEvent);
 	afx_msg void OnFirstShowquickpaste();
-	afx_msg void OnFirstReconnecttoclipboardchain();
-	afx_msg void OnUpdateFirstReconnecttoclipboardchain(CCmdUI* pCmdUI);
+	afx_msg void OnFirstToggleConnectCV();
+	afx_msg void OnUpdateFirstToggleConnectCV(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	afx_msg LRESULT OnHotKey(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShowTrayIcon(WPARAM wParam, LPARAM lParam);
-//	afx_msg LRESULT OnReconnectToCopyChain(WPARAM wParam, LPARAM lParam);
 //	afx_msg LRESULT OnGetIsTopView(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnCopyProperties(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShutDown(WPARAM wParam, LPARAM lParam);

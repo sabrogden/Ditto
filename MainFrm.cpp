@@ -35,8 +35,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 //	ON_WM_DRAWCLIPBOARD()
 	ON_WM_TIMER()
 	ON_COMMAND(ID_FIRST_SHOWQUICKPASTE, OnFirstShowquickpaste)
-	ON_COMMAND(ID_FIRST_RECONNECTTOCLIPBOARDCHAIN, OnFirstReconnecttoclipboardchain)
-	ON_UPDATE_COMMAND_UI(ID_FIRST_RECONNECTTOCLIPBOARDCHAIN, OnUpdateFirstReconnecttoclipboardchain)
+	ON_COMMAND(ID_FIRST_TOGGLECONNECTCV, OnFirstToggleConnectCV)
+	ON_UPDATE_COMMAND_UI(ID_FIRST_TOGGLECONNECTCV, OnUpdateFirstToggleConnectCV)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(WM_HOTKEY, OnHotKey)
 	ON_MESSAGE(WM_SHOW_TRAY_ICON, OnShowTrayIcon)
@@ -385,15 +385,14 @@ void CMainFrame::OnFirstShowquickpaste()
 	QuickPaste.ShowQPasteWnd(this, TRUE);
 }
 
-void CMainFrame::OnFirstReconnecttoclipboardchain() 
+void CMainFrame::OnFirstToggleConnectCV()
 {
-	::PostMessage( theApp.GetClipboardViewer(), WM_CV_RECONNECT, 0, 0 );
+	theApp.ToggleConnectCV();
 }
 
-void CMainFrame::OnUpdateFirstReconnecttoclipboardchain(CCmdUI* pCmdUI) 
+void CMainFrame::OnUpdateFirstToggleConnectCV(CCmdUI* pCmdUI) 
 {
-	if( theApp.IsClipboardViewerConnected() )
-		pCmdUI->m_pMenu->DeleteMenu(ID_FIRST_RECONNECTTOCLIPBOARDCHAIN, MF_BYCOMMAND);
+	theApp.UpdateMenuConnectCV( pCmdUI->m_pMenu, ID_FIRST_TOGGLECONNECTCV );
 }
 
 BOOL CMainFrame::ResetKillDBTimer()
@@ -536,7 +535,7 @@ LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 	HWND hParent = hFocus;
 	HWND hLastGoodParent = hParent;
 
-	//only procede if something changed
+	//only proceed if something changed
 	if(theApp.m_hTargetWnd == hFocus)
 		return TRUE;
 
@@ -554,7 +553,7 @@ LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 		hLastGoodParent = hParent;
 	}
 
-	//If the parent is ditto or the try icon then don't set focus to that window
+	//If the parent is ditto or the tray icon then don't set focus to that window
 	if(hLastGoodParent != m_hWnd && hLastGoodParent != hTray)
 	{
 		theApp.m_hTargetWnd = hFocus;

@@ -149,7 +149,10 @@ public:
 	HWND	m_hNextClipboardViewer;
 	bool	m_bCalling_SetClipboardViewer;
 	long	m_lReconectCount;
-	bool	m_bIsConnected;
+	bool	m_bIsConnected;  // a cache of the last known state
+	bool	m_bConnect; // the user's requested state for the viewer.
+	// m_bConnect and m_bIsConnected can differ if, e.g., we want to stay
+	//  connected, but are dropped from the chain for some unknown reason.
 
 	// m_pHandler->OnClipboardChange is called when the clipboard changes.
 	CCopyThread*	m_pHandler;
@@ -160,8 +163,11 @@ public:
 	bool	m_bPinging;
 	bool	m_bPingSuccess;
 	bool SendPing(); // returns true if we are in the chain
-	bool EnsureConnected();
+	bool EnsureConnected(); // pings and connects if ping fails
 	void SetCVIgnore(); // puts format "Clipboard Viewer Ignore" on the clipboard
+
+	bool GetConnect() { return m_bConnect; }
+	void SetConnect( bool bConnect );
 
 // Generated message map functions
 protected:
@@ -172,7 +178,8 @@ protected:
 	afx_msg void OnDrawClipboard();
 	afx_msg void OnTimer(UINT nIDEvent);
 	//}}AFX_MSG
-	afx_msg LRESULT OnCVReconnect(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnCVGetConnect(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnCVSetConnect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnCVIsConnected(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 };
@@ -258,6 +265,9 @@ public:
 
 	// Called within Main thread:
 	bool IsClipboardViewerConnected();
+	bool GetConnectCV();
+	void SetConnectCV( bool bConnect );
+
 	CClipList* GetClips(); // caller owns the returned CClipList
 	void SetSupportedTypes( CClipTypes* pTypes ); // CopyThread will own pTypes
 	HWND SetClipHandler( HWND hWnd ); // returns previous value

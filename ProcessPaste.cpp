@@ -125,7 +125,7 @@ long NewGroupID( long lParentID, CString text )
 	return lID;
 }
 
-// !!!!!! UNTESTED SQL
+// UNTESTED SQL
 // creates copies of all lSrc Data and returns the copy's lDataID (or 0 on fail)
 long NewCopyDataID( long lSrc )
 {

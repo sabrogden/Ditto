@@ -85,6 +85,11 @@ public:
 	// enables or disables copying the clipboard when it changes
 	bool EnableCbCopy(bool bState)  { return m_CopyThread.SetCopyOnChange(bState); }
 	bool IsClipboardViewerConnected() { return m_CopyThread.IsClipboardViewerConnected(); }
+	// user control over being in the clipboard viewer chain.
+	bool GetConnectCV() { return m_CopyThread.GetConnectCV(); }
+	void SetConnectCV( bool bConnect ) { m_CopyThread.SetConnectCV(bConnect); }
+	bool ToggleConnectCV();
+	void UpdateMenuConnectCV( CMenu* pMenu, UINT nMenuID );
 
 //	CClipList	m_SaveClipQueue; 
 	// Retrieves all clips from CopyThread and Saves them.

@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by CP_Main.rc
 //
 #define IDD_ABOUTBOX                    100
@@ -22,6 +22,7 @@
 #define IDB_BACK_PRESSED                148
 #define IDD_OPTIONS_FRIENDS             148
 #define IDB_BACK_FOCUSED                149
+#define IDI_DITTO_NOCOPYCB              150
 #define IDD_FRIEND_DETAILS              152
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
@@ -115,8 +116,8 @@
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
-#define ID_FIRST_RECONNECTTOCLIPBOARDCHAIN 32774
-#define ID_MENU_RECONNECTTOCLIPBOARDCHAIN 32775
+#define ID_FIRST_TOGGLECONNECTCV        32774
+#define ID_MENU_TOGGLECONNECTCV         32775
 #define ID_MENU_PROPERTIES              32776
 #define ID_MENU_FIRSTTENHOTKEYS_USECTRLNUM 32777
 #define ID_MENU_FIRSTTENHOTKEYS_SHOWHOTKEYTEXT 32778
@@ -183,7 +184,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        149
+#define _APS_NEXT_RESOURCE_VALUE        151
 #define _APS_NEXT_COMMAND_VALUE         32840
 #define _APS_NEXT_CONTROL_VALUE         2026
 #define _APS_NEXT_SYMED_VALUE           101

@@ -89,7 +89,7 @@ CString GetFilePath(CString csFullPath);
 
 //Message to the main window to show icon or not
 #define WM_SHOW_TRAY_ICON		WM_USER + 200
-#define WM_CV_RECONNECT			WM_USER + 201
+#define WM_CV_SETCONNECT		WM_USER + 201
 #define WM_CV_IS_CONNECTED		WM_USER + 202
 #define WM_COPYPROPERTIES		WM_USER + 203
 #define WM_CLOSE_APP			WM_USER + 204
@@ -99,6 +99,7 @@ CString GetFilePath(CString csFullPath);
 #define WM_LOAD_FORMATS			WM_USER + 208
 #define WM_SEND_RECIEVE_ERROR	WM_USER + 209
 #define WM_FOCUS_CHANGED		WM_USER + 210
+#define WM_CV_GETCONNECT		WM_USER + 211
 
 
 #define REG_PATH					"Software\\Ditto"

@@ -278,7 +278,7 @@ BOOL CClient::SendItem(CID *pData)
 	
 	int nCount = pData->m_Formats.GetSize();
 	DWORD dwSize;
-	int nDataSent;
+	DWORD dwDataSent;
 
 	//For each data type
 	for( int i=0; i < nCount; i++ )
@@ -292,24 +292,24 @@ BOOL CClient::SendItem(CID *pData)
 		if(SendData(&Info, MyEnums::DATA_START) == FALSE)
 			return FALSE;
 
-		nDataSent = 0;
-		while(nDataSent < dwSize)
+		dwDataSent = 0;
+		while(dwDataSent < dwSize)
 		{
 			LPVOID pvData = GlobalLock(pCF->m_hgData);
 
-			if(dwSize - nDataSent < MAX_DATA_SIZE)
-				Info.m_lParameter1 = dwSize - nDataSent;
+			if(dwSize - dwDataSent < MAX_DATA_SIZE)
+				Info.m_lParameter1 = dwSize - dwDataSent;
 			else
 				Info.m_lParameter1 = MAX_DATA_SIZE;
 
-			memcpy(Info.m_cText,  ((char*)pvData) + nDataSent, Info.m_lParameter1);
+			memcpy(Info.m_cText,  ((char*)pvData) + dwDataSent, Info.m_lParameter1);
 
 			GlobalUnlock(pCF->m_hgData);
 
 			if(SendData(&Info, MyEnums::DATA) == FALSE)
 				return FALSE;
 
-			nDataSent += Info.m_lParameter1;
+			dwDataSent += Info.m_lParameter1;
 		}
 
 		if(SendData(&Info, MyEnums::DATA_END) == FALSE)

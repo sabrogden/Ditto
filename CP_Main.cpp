@@ -293,6 +293,55 @@ void CCP_MainApp::StopCopyThread()
 	SaveCopyClips();
 }
 
+// returns the current Clipboard Viewer Connect state (though it might not yet
+//  be actually connected -- check IsClipboardViewerConnected())
+bool CCP_MainApp::ToggleConnectCV()
+{
+bool bConnect = !GetConnectCV();
+	SetConnectCV( bConnect );
+	if( bConnect )
+		m_pMainFrame->m_TrayIcon.SetIcon( IDR_MAINFRAME );
+	else
+		m_pMainFrame->m_TrayIcon.SetIcon( IDI_DITTO_NOCOPYCB );
+	return bConnect;
+}
+
+// Sets a menu entry according to the current Clipboard Viewer Connection status
+// - the menu text indicates the available command (opposite the current state)
+// - a check mark appears in the rare cases that the menu text actually represents
+//   the current state, e.g. if we are supposed to be connected, but we somehow
+//   lose that connection, "Disconnect from Clipboard" will have a check next to it.
+void CCP_MainApp::UpdateMenuConnectCV( CMenu* pMenu, UINT nMenuID )
+{
+	if( pMenu == NULL )
+		return;
+
+bool bConnect = theApp.GetConnectCV();
+bool bIsConnected = theApp.IsClipboardViewerConnected();
+CString cs;
+
+	if( bConnect )
+	{
+		cs = "Disconnect from Clipboard";
+		pMenu->ModifyMenu(nMenuID, MF_BYCOMMAND, nMenuID, cs);
+		// add a check mark if we are still disconnected (temporarily)
+		if( !bIsConnected )
+            pMenu->CheckMenuItem(nMenuID, MF_CHECKED);
+		else
+            pMenu->CheckMenuItem(nMenuID, MF_UNCHECKED);
+	}
+	else // CV is disconnected, so provide the option of connecting
+	{
+		cs = "Connect to Clipboard";
+		pMenu->ModifyMenu(nMenuID, MF_BYCOMMAND, nMenuID, cs);
+		// add a check mark if we are still connected (temporarily)
+		if( bIsConnected )
+            pMenu->CheckMenuItem(nMenuID, MF_CHECKED);
+		else
+            pMenu->CheckMenuItem(nMenuID, MF_UNCHECKED);
+	}
+}
+
 // Allocates a new CClipTypes
 CClipTypes* CCP_MainApp::LoadTypesFromDB()
 {

@@ -127,7 +127,7 @@ protected:
 	afx_msg void OnMenuOptions();
 	afx_msg void OnCancelFilter();
 	afx_msg void OnMenuExitprogram();
-	afx_msg void OnMenuReconnecttoclipboardchain();
+	afx_msg void OnMenuToggleConnectCV();
 	afx_msg void OnMenuProperties();
 	afx_msg void OnClose();
 	afx_msg void OnBegindrag(NMHDR* pNMHDR, LRESULT* pResult);

@@ -73,7 +73,7 @@ ON_COMMAND(ID_MENU_POSITIONING_ATPREVIOUSPOSITION, OnMenuPositioningAtpreviouspo
 ON_COMMAND(ID_MENU_OPTIONS, OnMenuOptions)
 ON_BN_CLICKED(ID_CANCEL, OnCancelFilter)
 ON_COMMAND(ID_MENU_EXITPROGRAM, OnMenuExitprogram)
-ON_COMMAND(ID_MENU_RECONNECTTOCLIPBOARDCHAIN, OnMenuReconnecttoclipboardchain)
+ON_COMMAND(ID_MENU_TOGGLECONNECTCV, OnMenuToggleConnectCV)
 ON_COMMAND(ID_MENU_PROPERTIES, OnMenuProperties)
 ON_WM_CLOSE()
 ON_NOTIFY(LVN_BEGINDRAG, ID_LIST_HEADER, OnBegindrag)
@@ -844,10 +844,9 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 	}
 	if(nCheckID >= 0)
 		pMenu->CheckMenuItem(nCheckID, MF_CHECKED);
-	
-	if(theApp.IsClipboardViewerConnected())
-		pMenu->DeleteMenu(ID_MENU_RECONNECTTOCLIPBOARDCHAIN, MF_BYCOMMAND);
-	
+
+	theApp.UpdateMenuConnectCV(pMenu, ID_MENU_TOGGLECONNECTCV);
+
 	if(CGetSetOptions::GetShowTextForFirstTenHotKeys())
 		pMenu->CheckMenuItem(ID_MENU_FIRSTTENHOTKEYS_SHOWHOTKEYTEXT, MF_CHECKED);
 	
@@ -1040,9 +1039,9 @@ void CQPasteWnd::OnMenuExitprogram()
 	::SendMessage(theApp.m_MainhWnd, WM_CLOSE, 0, 0);
 }
 
-void CQPasteWnd::OnMenuReconnecttoclipboardchain() 
+void CQPasteWnd::OnMenuToggleConnectCV() 
 {
-	::SendMessage(theApp.GetClipboardViewer(), WM_CV_RECONNECT, 0, 0);
+	theApp.ToggleConnectCV();
 }
 
 #include "client.h"

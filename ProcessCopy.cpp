@@ -781,7 +781,8 @@ ON_WM_CHANGECBCHAIN()
 ON_WM_DRAWCLIPBOARD()
 ON_WM_TIMER()
 //}}AFX_MSG_MAP
-ON_MESSAGE(WM_CV_RECONNECT, OnCVReconnect)
+ON_MESSAGE(WM_CV_GETCONNECT, OnCVGetConnect)
+ON_MESSAGE(WM_CV_SETCONNECT, OnCVSetConnect)
 ON_MESSAGE(WM_CV_IS_CONNECTED, OnCVIsConnected)
 ON_WM_DESTROY()
 END_MESSAGE_MAP()
@@ -795,6 +796,7 @@ CClipboardViewer::CClipboardViewer( CCopyThread* pHandler )
 	m_bCalling_SetClipboardViewer = false;
 	m_lReconectCount = 0;
 	m_bIsConnected = false;
+	m_bConnect = false;
 	m_pHandler = pHandler;
 	ASSERT(m_pHandler);
 	m_bPinging = false;
@@ -809,27 +811,38 @@ void CClipboardViewer::Create()
 {
 	CString strParentClass = AfxRegisterWndClass(0);
 	CWnd::CreateEx(0, strParentClass, "Ditto Clipboard Viewer", 0, -1, -1, 0, 0, 0, 0);
+
+	SetConnect( true );
 }
 
 // connects as a clipboard viewer
 void CClipboardViewer::Connect()
 {
+//	if( m_bIsConnected )
+//		return;
+
 	ASSERT( ::IsWindow(m_hWnd) );
-	if( m_bIsConnected )
-		return;
+
 	//Set up the clip board viewer
 	m_bCalling_SetClipboardViewer = true;
 	m_hNextClipboardViewer = CWnd::SetClipboardViewer();
 	m_bCalling_SetClipboardViewer = false;
 	m_bIsConnected = SendPing();
+
+	// verify that we are in the chain every minute
+	SetTimer(TIMER_ENSURE_VIEWER_IN_CHAIN, ONE_MINUTE, 0);
 }
 
 // disconnects as a clipboard viewer
 void CClipboardViewer::Disconnect()
 {
-	if( !m_bIsConnected )
-		return;
+//	if( !m_bIsConnected )
+//		return;
+
 	ASSERT( ::IsWindow(m_hWnd) );
+
+	KillTimer(TIMER_ENSURE_VIEWER_IN_CHAIN);
+
 	CWnd::ChangeClipboardChain( m_hNextClipboardViewer );
 	m_hNextClipboardViewer = 0;
 	m_bIsConnected = false;
@@ -874,6 +887,15 @@ void CClipboardViewer::SetCVIgnore()
 	}
 }
 
+void CClipboardViewer::SetConnect( bool bConnect )
+{
+	m_bConnect = bConnect;
+	if( m_bConnect )
+		EnsureConnected();
+	else
+		Disconnect();
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CClipboardViewer message handlers
 
@@ -881,9 +903,6 @@ int CClipboardViewer::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
-	
-	// verify that we are in the chain every minute
-	SetTimer(TIMER_ENSURE_VIEWER_IN_CHAIN, ONE_MINUTE, 0);
 	
 	//Set up the clip board viewer
 	Connect();
@@ -945,9 +964,15 @@ void CClipboardViewer::OnTimer(UINT nIDEvent)
 	CWnd::OnTimer(nIDEvent);
 }
 
-LRESULT CClipboardViewer::OnCVReconnect(WPARAM wParam, LPARAM lParam)
+LRESULT CClipboardViewer::OnCVGetConnect(WPARAM wParam, LPARAM lParam)
 {
-	return EnsureConnected();
+	return GetConnect();
+}
+
+LRESULT CClipboardViewer::OnCVSetConnect(WPARAM wParam, LPARAM lParam)
+{
+	SetConnect( wParam != FALSE ); // convert to bool
+	return TRUE;
 }
 
 LRESULT CClipboardViewer::OnCVIsConnected(WPARAM wParam, LPARAM lParam)
@@ -1003,12 +1028,6 @@ int CCopyThread::ExitInstance()
 	ASSERT( m_bQuit );  // make sure we intended to quit
 	m_pClipboardViewer->Disconnect();
 	return CWinThread::ExitInstance();
-}
-
-bool CCopyThread::IsClipboardViewerConnected()
-{
-	ASSERT( m_pClipboardViewer && m_pClipboardViewer->m_hWnd );
-	return ::SendMessage( m_pClipboardViewer->m_hWnd, WM_CV_IS_CONNECTED, 0, 0 ) != FALSE;
 }
 
 // Called within Copy Thread:
@@ -1077,6 +1096,24 @@ void CCopyThread::AddToClips( CClip* pClip )
 
 // Shared (use thread-safe access functions below)
 // Called within Main thread:
+bool CCopyThread::IsClipboardViewerConnected()
+{
+	ASSERT( m_pClipboardViewer && m_pClipboardViewer->m_hWnd );
+	return ::SendMessage( m_pClipboardViewer->m_hWnd, WM_CV_IS_CONNECTED, 0, 0 ) != FALSE;
+}
+
+bool CCopyThread::GetConnectCV()
+{
+	ASSERT( m_pClipboardViewer && m_pClipboardViewer->m_hWnd );
+	return ::SendMessage( m_pClipboardViewer->m_hWnd, WM_CV_GETCONNECT, 0, 0 ) != FALSE;
+}
+
+void CCopyThread::SetConnectCV( bool bConnect )
+{
+	ASSERT( m_pClipboardViewer && m_pClipboardViewer->m_hWnd );
+	::SendMessage( m_pClipboardViewer->m_hWnd, WM_CV_SETCONNECT, bConnect, 0 );
+}
+
 CClipList* CCopyThread::GetClips()
 {
 	CClipList* pRet;

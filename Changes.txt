@@ -1,3 +1,15 @@
+04 May 30
+---------
++ Toggle Connect to Clipboard to Connect or Disconnect the
+  Clipboard Viewer from the chain.
+  - removed "Reconnect to Clipboad Chain"
+
++ focus.dll and system-wide focus tracking implementation to correct
+  mouse tray activation.
+
++ Sending clips across a network.
+
+
 04 Jan 20
 ---------
 ! Fixed "multiple repaints on first show" bug.
