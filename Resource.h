@@ -70,6 +70,7 @@
 #define IDC_SAVE_MULTIPASTE             1039
 #define IDC_BUTTON1                     1040
 #define IDC_PARSE_BUTTON                1040
+#define IDC_HIDE_DITO_ON_HOT_KEY        1040
 #define IDC_PARSE_EDIT                  1041
 #define IDC_CHECK1                      1042
 #define IDC_HISTORY_START_TOP           1042

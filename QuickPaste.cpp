@@ -68,7 +68,7 @@ BOOL CQuickPaste::CloseQPasteWnd()
 }
 
 void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
-{
+{		
 	{
 		if((theApp.m_bShowingQuickPaste) || (theApp.m_bShowingOptions))
 		{
@@ -151,7 +151,7 @@ void CQuickPaste::HideQPasteWnd()
 	if(m_pwndPaste)
 	{
 		if (IsWindow(m_pwndPaste->m_hWnd))
-			m_pwndPaste->ShowWindow(SW_HIDE);
+			m_pwndPaste->HideQPasteWindow();
 	}
 }
 

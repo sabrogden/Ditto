@@ -468,6 +468,7 @@ long CGetSetOptions::m_lAutoSendClientCount;
 CString CGetSetOptions::m_csIPListToPutOnClipboard;
 BOOL CGetSetOptions::m_bLogSendReceiveErrors;
 BOOL CGetSetOptions::m_bUseHookDllForFocus;
+BOOL CGetSetOptions::m_HideDittoOnHotKeyIfAlreadyShown;
 
 CGetSetOptions g_Opt;
 
@@ -489,6 +490,7 @@ CGetSetOptions::CGetSetOptions()
 	m_csIPListToPutOnClipboard = GetListToPutOnClipboard();
 	m_bLogSendReceiveErrors = GetLogSendReceiveErrors();
 	m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", TRUE);
+	m_HideDittoOnHotKeyIfAlreadyShown = GetHideDittoOnHotKeyIfAlreadyShown();
 
 	#ifdef _DEBUG
 	m_bUseHookDllForFocus = FALSE;
@@ -1044,6 +1046,18 @@ void CGetSetOptions::SetLogSendReceiveErrors(BOOL bOption)
 BOOL CGetSetOptions::GetLogSendReceiveErrors()
 {
 	return GetProfileLong("LogSendReceiveErrors", FALSE);
+}
+
+BOOL CGetSetOptions::GetHideDittoOnHotKeyIfAlreadyShown()
+{
+	return GetProfileLong("HideDittoOnHotKeyIfAlreadyShown", FALSE);
+}
+
+void CGetSetOptions::SetHideDittoOnHotKeyIfAlreadyShown(BOOL bVal)
+{
+	m_HideDittoOnHotKeyIfAlreadyShown = bVal;
+
+	SetProfileLong("HideDittoOnHotKeyIfAlreadyShown", bVal);
 }
 
 /*------------------------------------------------------------------*\

@@ -32,6 +32,7 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionsGeneral)
+	DDX_Control(pDX, IDC_HIDE_DITO_ON_HOT_KEY, m_btHideDittoOnHotKey);
 	DDX_Control(pDX, IDC_DESC_TEXT_SIZE, m_DescTextSize);
 	DDX_Control(pDX, IDC_GET_PATH, m_btGetPath);
 	DDX_Control(pDX, IDC_PATH, m_ePath);
@@ -83,6 +84,7 @@ BOOL COptionsGeneral::OnInitDialog()
 	m_btAllowDuplicates.SetCheck( g_Opt.m_bAllowDuplicates );
 	m_btUpdateTimeOnPaste.SetCheck( g_Opt.m_bUpdateTimeOnPaste );
 	m_btSaveMultiPaste.SetCheck( g_Opt.m_bSaveMultiPaste );
+	m_btHideDittoOnHotKey.SetCheck(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown);
 
 	CString csPath = CGetSetOptions::GetDBPath(FALSE);
 	if(csPath.IsEmpty())
@@ -113,6 +115,7 @@ BOOL COptionsGeneral::OnApply()
 	CGetSetOptions::SetCheckForExpiredEntries(m_btExpire.GetCheck());
 	CGetSetOptions::SetCompactAndRepairOnExit(m_btCompactAndRepair.GetCheck());
 	CGetSetOptions::SetCheckForUpdates(m_btCheckForUpdates.GetCheck());
+	CGetSetOptions::SetHideDittoOnHotKeyIfAlreadyShown(m_btHideDittoOnHotKey.GetCheck());
 	
 	CGetSetOptions::SetMaxEntries(m_eMaxSavedCopies.GetNumber());
 	CGetSetOptions::SetExpiredEntries(m_eExpireAfter.GetNumber());

@@ -287,6 +287,10 @@ public:
 
 	static BOOL		m_bUseHookDllForFocus;
 
+	static BOOL		m_HideDittoOnHotKeyIfAlreadyShown;
+	static BOOL		GetHideDittoOnHotKeyIfAlreadyShown();
+	static void		SetHideDittoOnHotKeyIfAlreadyShown(BOOL bVal);
+
 
 	/*
 	BOOL IsAutoRun();

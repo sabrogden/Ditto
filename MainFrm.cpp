@@ -184,8 +184,15 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 {
 	if(wParam == theApp.m_pDittoHotKey->m_Atom)
 	{
-		theApp.TargetActiveWindow();
-		QuickPaste.ShowQPasteWnd(this);
+		if(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown && QuickPaste.IsWindowVisibleEx())
+		{
+			QuickPaste.HideQPasteWnd();
+		}
+		else
+		{
+			theApp.TargetActiveWindow();
+			QuickPaste.ShowQPasteWnd(this);
+		}
 	}
 	else if(wParam == theApp.m_pCopyHotKey->m_Atom)
 	{
