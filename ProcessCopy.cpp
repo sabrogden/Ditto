@@ -665,7 +665,7 @@ void CClip::LoadTypes( long lID, CClipTypes& types )
 CClipList::~CClipList()
 {
 CClip* pClip;
-	while( GetSize() )
+	while( GetCount() )
 	{
 		pClip = RemoveHead();
 		DELETE_PTR( pClip );
@@ -682,7 +682,7 @@ CClip* pClip;
 POSITION pos;
 bool bResult;
 
-	nRemaining = GetSize();
+	nRemaining = GetCount();
 	pos = GetHeadPosition();
 	while( pos )
 	{
@@ -924,7 +924,7 @@ CCopyThread::~CCopyThread()
 	m_SharedConfig.DeleteTypes();
 	DELETE_PTR( m_pClipboardViewer );
 	if( m_pClips )
-		ASSERT( m_pClips->GetSize() == 0 );
+		ASSERT( m_pClips->GetCount() == 0 );
 	DELETE_PTR( m_pClips );
 	::DeleteCriticalSection(&m_CS);
 }

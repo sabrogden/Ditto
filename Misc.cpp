@@ -1620,7 +1620,8 @@ CRect rect(0,0,0,0);
 	if( ::IsWindow(m_hWndPosRelativeTo) )
 		::GetWindowRect(m_hWndPosRelativeTo, &rel);
 
-	rect.MoveToXY( rel.left, rel.top );
+	rect.left = rel.left;
+	rect.top = rel.top;
 
 	rect.OffsetRect( 0, pos.y - (m_bCenterY? rect.Height()/2: (m_bTop? 0: rect.Height())) );
 	if( rect.bottom > m_ScreenMaxY )

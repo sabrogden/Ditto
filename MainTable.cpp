@@ -117,7 +117,8 @@ int count = tokens.GetSize();
 		if( chFirst == ' ' || chFirst == '\t' )
 		{
 			text += "» "; // show indication that the line is modified
-			text += line.TrimLeft();
+			line.TrimLeft();
+			text += line;
 		}
 		else
 			text += line;
