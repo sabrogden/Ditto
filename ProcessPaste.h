@@ -92,12 +92,14 @@ class COleClipSource : public COleDataSource
 
 public:
 	CClipIDs	m_ClipIDs;
+	bool		m_bLoadedFormats;
 
 	COleClipSource();
 	virtual ~COleClipSource();
 
 	BOOL DoDelayRender();
 	BOOL DoImmediateRender();
+	long LoadFormats(CClipFormats *pFormats);
 
 protected:
 	DECLARE_MESSAGE_MAP()

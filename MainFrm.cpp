@@ -43,6 +43,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_CLOSE_APP, OnShutDown)
 	ON_MESSAGE(WM_CLIPBOARD_COPIED, OnClipboardCopied)
 	ON_WM_CLOSE()
+	ON_MESSAGE(WM_ADD_TO_DATABASE_FROM_SOCKET, OnAddToDatabaseFromSocket)
+	ON_MESSAGE(WM_LOAD_FORMATS, OnLoadFormats)
+	ON_MESSAGE(WM_SEND_RECIEVE_ERROR, OnErrorOnSendRecieve)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -185,6 +188,8 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 		//Simulate the Copy
 		keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
 		keybd_event('C', 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+
+		Sleep(100);
      
 		keybd_event('C', 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 		keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
@@ -326,6 +331,16 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 			}
 			break;
 		}
+	case HIDE_ERROR_POPUP:
+		{
+			KillTimer(HIDE_ERROR_POPUP);
+			if(theApp.m_pcpSendRecieveError)
+			{
+				delete theApp.m_pcpSendRecieveError;
+				theApp.m_pcpSendRecieveError = NULL;				
+			}
+			break;
+		}
 	}
 
 	CFrameWnd::OnTimer(nIDEvent);
@@ -424,4 +439,75 @@ void CMainFrame::OnClose()
 {
 	theApp.BeforeMainClose();
 	CFrameWnd::OnClose();
+}
+
+LRESULT CMainFrame::OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam)
+{
+	CClip *pClip = (CClip*)wParam;
+	BOOL bSetToClipBoard = (BOOL)lParam;
+
+	LogSendRecieveInfo("---------Start of OnAddToDatabaseFromSocket");
+
+	if(bSetToClipBoard)
+	{
+		LogSendRecieveInfo("---------Start of Set to ClipBoard");
+		CClip NewClip;
+		NewClip = *pClip;
+
+		LogSendRecieveInfo("---------After =");
+
+		CProcessPaste paste;
+		//Don't send the paste just load it into memory
+		paste.m_bSendPaste = false;
+		paste.m_pOle->LoadFormats(&NewClip.m_Formats);
+		paste.m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
+
+		LogSendRecieveInfo("---------After LoadFormats");
+	
+		paste.DoPaste();
+
+		LogSendRecieveInfo("---------Start of Set to ClipBoard");
+	}
+
+	pClip->MakeLatestTime();
+	pClip->AddToDB(true);
+
+	LogSendRecieveInfo("---------After AddToDB");
+
+	theApp.RefreshView();
+	theApp.m_FocusID = pClip->m_ID;
+
+	LogSendRecieveInfo("---------End of OnAddToDatabaseFromSocket");
+	
+	return TRUE;
+}
+
+LRESULT CMainFrame::OnLoadFormats(WPARAM wParam, LPARAM lParam)
+{
+	int nID = (int)wParam;
+	CClipFormats *pFormats = (CClipFormats *)lParam;
+	CClip::LoadFormats(nID, *pFormats);
+	return TRUE;
+}
+
+LRESULT CMainFrame::OnErrorOnSendRecieve(WPARAM wParam, LPARAM lParam)
+{
+	KillTimer(HIDE_ERROR_POPUP);
+	if(theApp.m_pcpSendRecieveError)
+	{
+		CString csOldText = theApp.m_pcpSendRecieveError->m_csToolTipText;
+		CString csNewText = (char*)wParam;
+		CString csCombinedText = csOldText + "\n" + csNewText;
+		theApp.m_pcpSendRecieveError->Show(csCombinedText, CPoint(20, 20), true);		
+	}
+	else
+	{
+		theApp.m_pcpSendRecieveError = new CPopup(20, 20, ::GetForegroundWindow());
+		CString csNewText = (char*)wParam;
+		theApp.m_pcpSendRecieveError->Show(csNewText);
+	}
+
+	SetTimer(HIDE_ERROR_POPUP, 6000, NULL);
+
+	return TRUE;
 }

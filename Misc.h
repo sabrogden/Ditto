@@ -19,6 +19,9 @@
 #define LOG(x)
 #endif
 
+CString GetIPAddress();
+CString GetComputerName();
+
 #define FUNC		__FUNCTION__
 #define FUNCSIG		__FUNCSIG__
 void AppendToFile( const char* fn, const char *msg );
@@ -34,6 +37,8 @@ typedef struct tagTHREADNAME_INFO
     DWORD dwFlags;       // reserved for future use, most be zero
 } THREADNAME_INFO;
 void SetThreadName(DWORD dwThreadID, LPCTSTR szThreadName);
+
+void LogSendRecieveInfo(CString cs);
 
 // Utility Functions
 CString StrF(const char * pszFormat, ...);
@@ -90,8 +95,24 @@ CString GetFilePath(CString csFullPath);
 #define WM_CLOSE_APP			WM_USER + 204
 #define WM_REFRESH_VIEW			WM_USER + 205
 #define WM_CLIPBOARD_COPIED		WM_USER + 206
+#define WM_ADD_TO_DATABASE_FROM_SOCKET		WM_USER + 207
+#define WM_LOAD_FORMATS			WM_USER + 208
+#define WM_SEND_RECIEVE_ERROR	WM_USER + 209
 
 #define REG_PATH					"Software\\Ditto"
+
+#define MAX_SEND_CLIENTS	15
+class CSendClients
+{
+public:
+	CSendClients()
+	{
+		bSendAll = FALSE;
+	}
+	BOOL bSendAll;
+	CString csIP;
+	CString csDescription;
+};
 
 /*------------------------------------------------------------------*\
 	CGetSetOptions - Manages Application Registry settings
@@ -247,6 +268,20 @@ public:
 	static BOOL		m_bSendPasteOnFirstTenHotKeys;
 	static void		SetSendPasteOnFirstTenHotKeys(BOOL bOption);
 	static BOOL		GetSendPasteOnFirstTenHotKeys();
+
+	static CSendClients m_SendClients[MAX_SEND_CLIENTS];
+	static long		m_lAutoSendClientCount;
+	static void		GetClientSendCount();
+	static void		SetSendClients(CSendClients Client, int nPos);
+	static CSendClients		GetSendClients(int nPos);
+
+	static CString m_csIPListToPutOnClipboard;
+	static CString	GetListToPutOnClipboard();
+	static BOOL		SetListToPutOnClipboard(CString cs);
+
+	static BOOL		m_bLogSendReceiveErrors;
+	static void		SetLogSendReceiveErrors(BOOL bOption);
+	static BOOL		GetLogSendReceiveErrors();
 
 
 	/*
@@ -437,6 +472,8 @@ public:
 	HWND m_hWndInsertAfter;
 
 	bool m_bAllowShow; // used by SafeShow to determine whether to show or not
+
+	CString m_csToolTipText;
 
 	CPopup();
 	CPopup( int x, int y, HWND hWndPosRelativeTo = NULL, HWND hWndInsertAfter = HWND_TOP );

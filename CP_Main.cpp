@@ -7,6 +7,8 @@
 #include "Misc.h"
 #include "SelectDB.h"
 #include ".\cp_main.h"
+#include "server.h"
+#include "Client.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -58,10 +60,13 @@ CCP_MainApp::CCP_MainApp()
 	// Place all significant initialization in InitInstance
 
 	m_bAsynchronousRefreshView = true;
+
+	::InitializeCriticalSection(&m_CriticalSection);
 }
 
 CCP_MainApp::~CCP_MainApp()
 {
+	::DeleteCriticalSection(&m_CriticalSection);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -138,7 +143,12 @@ void CCP_MainApp::AfterMainCreate()
 
 	// CopyThread initialization
 	StartCopyThread();
+	
+	AfxBeginThread(MTServerThread, m_MainhWnd);
+
 	m_bAppRunning = true;
+
+	m_pcpSendRecieveError = NULL;
 }
 
 void CCP_MainApp::BeforeMainClose()
@@ -177,8 +187,8 @@ http://website.lineone.net/~codebox/focuslog.zip).
 */
 bool CCP_MainApp::TargetActiveWindow()
 {
-HWND hOld = m_hTargetWnd;
-HWND hNew = ::GetForegroundWindow();
+	HWND hOld = m_hTargetWnd;
+	HWND hNew = ::GetForegroundWindow();
 	if( hNew == m_hTargetWnd || !::IsWindow(hNew) || IsAppWnd(hNew) )
 		return false;
 
@@ -258,7 +268,7 @@ void CCP_MainApp::StopCopyThread()
 // Allocates a new CClipTypes
 CClipTypes* CCP_MainApp::LoadTypesFromDB()
 {
-CClipTypes* pTypes = new CClipTypes;
+	CClipTypes* pTypes = new CClipTypes;
 
 	try
 	{
@@ -288,15 +298,16 @@ CClipTypes* pTypes = new CClipTypes;
 
 void CCP_MainApp::ReloadTypes()
 {
-CClipTypes* pTypes = LoadTypesFromDB();
+	CClipTypes* pTypes = LoadTypesFromDB();
+
 	if( pTypes )
 		m_CopyThread.SetSupportedTypes( pTypes );
 }
 
 long CCP_MainApp::SaveCopyClips()
 {
-long lID = 0;
-int count;
+	long lID = 0;
+	int count;
 
 	CClipList* pClips = m_CopyThread.GetClips(); // we now own pClips
 	if( !pClips )
@@ -306,7 +317,28 @@ int count;
 	if( count > 0 )
 	{		
 		lID = pClips->GetTail()->m_ID;
-		OnCopyCompleted( lID, count );
+		OnCopyCompleted(lID, count);
+
+		if(g_Opt.m_lAutoSendClientCount > 0)
+		{
+			//The thread will free these
+			CIDArray *pIDArray = new CIDArray;
+			pIDArray->pIDs = new CID[count];
+			pIDArray->lCount = count;
+			
+			CClip* pClip;
+			POSITION pos;
+			int nArrayPos = 0;
+			pos = pClips->GetHeadPosition();
+			while(pos)
+			{
+				pClip = pClips->GetNext(pos);
+				pIDArray->pIDs[nArrayPos].lID = pClip->m_ID;
+				pIDArray->pIDs[nArrayPos].m_csDesc = pClip->m_Desc;
+			}
+
+			AfxBeginThread(SendClientThread, pIDArray);
+		}
 	}
 
 	delete pClips;

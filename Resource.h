@@ -20,7 +20,9 @@
 #define IDB_OPEN_FOLDER_PRESSED         146
 #define IDB_BACK                        147
 #define IDB_BACK_PRESSED                148
+#define IDD_OPTIONS_FRIENDS             148
 #define IDB_BACK_FOCUSED                149
+#define IDD_FRIEND_DETAILS              152
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT                      1003
@@ -37,8 +39,11 @@
 #define IDC_DATABASE_SIZE               1014
 #define IDC_LIST1                       1014
 #define IDC_ADD                         1015
+#define IDC_CHECK_SEND_ALL              1015
 #define IDC_DELETE                      1016
+#define IDC_EDIT_IP                     1016
 #define IDC_EDIT1                       1017
+#define IDC_EDIT_DESCRIPTION            1017
 #define IDC_LIST2                       1018
 #define IDC_ADD_1                       1019
 #define IDC_ADD_2                       1020
@@ -69,6 +74,7 @@
 #define IDC_CHECK1                      1042
 #define IDC_HISTORY_START_TOP           1042
 #define IDC_CHECK_SEND_PASTE            1042
+#define IDC_CHECK_LOG_SEND_RECIEVE      1042
 #define IDD_OPTIONS_KEYSTROKES          2001
 #define IDC_HOTKEY                      2002
 #define IDC_DISPLAY_IN_SYSTEMTRAY       2003
@@ -96,6 +102,7 @@
 #define IDC_COMBO1                      2023
 #define IDC_HOTKEY1                     2024
 #define IDC_HOTKEY2                     2025
+#define IDC_EDIT_PLACE_ON_CLIPBOARD     2025
 #define IDC_HOTKEY3                     2026
 #define IDC_HOTKEY4                     2027
 #define IDC_HOTKEY5                     2028
@@ -153,16 +160,31 @@
 #define ID_MENU_QUICKPROPERTIES_SETTONEVERAUTODELETE 32820
 #define ID_MENU_QUICKPROPERTIES_AUTODELETE 32821
 #define ID_MENU_QUICKPROPERTIES_REMOVEHOTKEY 32822
-#define ID_MENU_GROUPS_MOVETOTHEGROUP_BLANK 32823
+#define ID_MENU_SENTTO_FRIENDONE        32824
+#define ID_MENU_SENTTO_FRIEND_TWO       32825
+#define ID_MENU_SENTTO_FRIEND_THREE     32826
+#define ID_MENU_SENTTO_FRIEND_FORE      32827
+#define ID_MENU_SENTTO_FRIEND_FIVE      32828
+#define ID_MENU_SENTTO_FRIEND_SIX       32829
+#define ID_MENU_SENTTO_FRIEND_SEVEN     32830
+#define ID_MENU_SENTTO_FRIEND_EIGHT     32831
+#define ID_MENU_SENTTO_FRIEND_NINE      32832
+#define ID_MENU_SENTTO_FRIEND_TEN       32833
+#define ID_MENU_SENTTO_FRIEND_ELEVEN    32834
+#define ID_MENU_SENTTO_FRIEND_TWELVE    32835
+#define ID_MENU_SENTTO_FRIEND_THIRTEEN  32836
+#define ID_MENU_SENTTO_FRIEND_FORETEEN  32837
+#define ID_MENU_SENTTO_FRIEND_FIFTEEN   32838
+#define ID_MENU_SENTTO_PROMPTFORIP      32839
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        148
-#define _APS_NEXT_COMMAND_VALUE         32824
-#define _APS_NEXT_CONTROL_VALUE         2025
+#define _APS_NEXT_RESOURCE_VALUE        149
+#define _APS_NEXT_COMMAND_VALUE         32840
+#define _APS_NEXT_CONTROL_VALUE         2026
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

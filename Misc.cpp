@@ -9,6 +9,44 @@
 
 // Debug Functions
 
+CString GetIPAddress()
+{
+	WORD wVersionRequested;
+    WSADATA wsaData;
+    char name[255];
+    CString IP;
+	PHOSTENT hostinfo;
+	wVersionRequested = MAKEWORD(2,0);
+	
+	if (WSAStartup(wVersionRequested, &wsaData)==0)
+	{
+		if(gethostname(name, sizeof(name))==0)
+		{
+			if((hostinfo=gethostbyname(name)) != NULL)
+			{
+				IP = inet_ntoa(*(struct in_addr*)* hostinfo->h_addr_list);
+			}
+		}
+		
+		WSACleanup();
+	} 
+	IP.MakeUpper();
+
+	return IP;
+}
+
+CString GetComputerName()
+{
+	char ComputerName[MAX_COMPUTERNAME_LENGTH+1]="";
+	DWORD Size=MAX_COMPUTERNAME_LENGTH+1;
+	GetComputerName(ComputerName, &Size);
+
+	CString cs(ComputerName);
+	cs.MakeUpper();
+
+	return cs;
+}
+
 void AppendToFile( const char* fn, const char* msg )
 {
 	FILE *file = fopen(fn, "a");
@@ -26,7 +64,14 @@ void Log( const char* msg )
 	//	csTemp.Format( "%04x  ", AfxGetInstanceHandle() );
 	csText += msg;
 	csText += "\n";
+	TRACE(csText);
 	AppendToFile( "Ditto.log", csText ); //(LPCTSTR)
+}
+
+void LogSendRecieveInfo(CString cs)
+{
+	if(g_Opt.m_bLogSendReceiveErrors)
+		Log(cs);
 }
 
 CString GetErrorString( int err )
@@ -418,6 +463,10 @@ BOOL CGetSetOptions::m_bAllwaysShowDescription;
 long CGetSetOptions::m_bDoubleClickingOnCaptionDoes;
 BOOL CGetSetOptions::m_bPrompForNewGroupName;
 BOOL CGetSetOptions::m_bSendPasteOnFirstTenHotKeys;
+CSendClients CGetSetOptions::m_SendClients[MAX_SEND_CLIENTS];
+long CGetSetOptions::m_lAutoSendClientCount;
+CString CGetSetOptions::m_csIPListToPutOnClipboard;
+BOOL CGetSetOptions::m_bLogSendReceiveErrors;
 
 CGetSetOptions g_Opt;
 
@@ -436,6 +485,15 @@ CGetSetOptions::CGetSetOptions()
 	m_bDoubleClickingOnCaptionDoes = GetDoubleClickingOnCaptionDoes();
 	m_bPrompForNewGroupName = GetPrompForNewGroupName();
 	m_bSendPasteOnFirstTenHotKeys = GetSendPasteOnFirstTenHotKeys();
+	m_csIPListToPutOnClipboard = GetListToPutOnClipboard();
+	m_bLogSendReceiveErrors = GetLogSendReceiveErrors();
+
+	for(int i = 0; i < MAX_SEND_CLIENTS; i++)
+	{
+		GetSendClients(i);
+	}
+
+	GetClientSendCount();
 }
 
 CGetSetOptions::~CGetSetOptions()
@@ -907,6 +965,81 @@ BOOL CGetSetOptions::GetPrompForNewGroupName()				{	return GetProfileLong("Promp
 void CGetSetOptions::SetSendPasteOnFirstTenHotKeys(BOOL bOption)	{	SetProfileLong("SendPasteOnFirstTenHotKeys", bOption); m_bSendPasteOnFirstTenHotKeys = bOption; }
 BOOL CGetSetOptions::GetSendPasteOnFirstTenHotKeys()				{	return GetProfileLong("SendPasteOnFirstTenHotKeys", TRUE); }
 
+void CGetSetOptions::SetSendClients(CSendClients Client, int nPos)
+{
+	CString cs;
+
+	cs.Format("sendclient_ip_%d", nPos);
+	SetProfileString(cs, Client.csIP);
+
+	cs.Format("sendclient_autosend_%d", nPos);
+	SetProfileLong(cs, Client.bSendAll);
+
+	cs.Format("sendclient_description_%d", nPos);
+	SetProfileString(cs, Client.csDescription);
+
+	m_SendClients[nPos] = Client;
+}
+
+CSendClients CGetSetOptions::GetSendClients(int nPos)
+{
+	CSendClients Client;
+
+	CString cs;
+
+	cs.Format("sendclient_ip_%d", nPos);
+	Client.csIP = GetProfileString(cs, "");
+
+	cs.Format("sendclient_autosend_%d", nPos);
+	Client.bSendAll = GetProfileLong(cs, FALSE);
+
+	cs.Format("sendclient_description_%d", nPos);
+	Client.csDescription = GetProfileString(cs, "");
+
+	m_SendClients[nPos] = Client;
+
+	return Client;
+}
+
+void CGetSetOptions::GetClientSendCount()
+{
+	m_lAutoSendClientCount = 0;
+	for(int i = 0; i < MAX_SEND_CLIENTS; i++)
+	{
+		if(m_SendClients[i].csIP.GetLength() > 0)
+		{
+			if(m_SendClients[i].bSendAll)
+				m_lAutoSendClientCount++;
+		}
+	}
+}
+
+CString	CGetSetOptions::GetListToPutOnClipboard()			
+{ 
+	CString cs = GetProfileString("ListToPutOnClipboard", "");
+	cs.MakeUpper();
+	return cs;
+}
+BOOL CGetSetOptions::SetListToPutOnClipboard(CString cs)	
+{ 
+	cs.MakeUpper();
+	m_csIPListToPutOnClipboard = cs;
+	return SetProfileString("ListToPutOnClipboard", cs); 
+	
+}
+
+void CGetSetOptions::SetLogSendReceiveErrors(BOOL bOption)
+{
+	m_bLogSendReceiveErrors = bOption;
+
+	SetProfileLong("LogSendReceiveErrors", bOption);
+}
+
+BOOL CGetSetOptions::GetLogSendReceiveErrors()
+{
+	return GetProfileLong("LogSendReceiveErrors", FALSE);
+}
+
 /*------------------------------------------------------------------*\
 CHotKey - a single system-wide hotkey
 \*------------------------------------------------------------------*/
@@ -1021,6 +1154,7 @@ bool CHotKey::Unregister(bool bOnShowingDitto)
 	else
 	{
 		m_bIsRegistered = false;
+		return true;
 	}
 	
 	return false;
@@ -1684,6 +1818,8 @@ void CPopup::AdjustPos( CPoint& pos )
 
 void CPopup::SendToolTipText( CString text )
 {
+	m_csToolTipText = text;
+	
 	//Replace the tabs with spaces, the tooltip didn't like the \t s
 	text.Replace("\t", "  ");
 	m_TI.lpszText = (LPSTR) (LPCTSTR) text;
@@ -1698,6 +1834,8 @@ void CPopup::Show( CString text, CPoint pos, bool bAdjustPos )
 {
 	if( m_hTTWnd == NULL )
 		return;
+
+	m_csToolTipText = text;
 	
 	if( !m_bIsShowing )
 		::SendMessage(m_hTTWnd, TTM_TRACKPOSITION, 0, (LPARAM)(DWORD) MAKELONG(-10000,-10000));
@@ -1716,10 +1854,15 @@ void CPopup::Show( CString text, CPoint pos, bool bAdjustPos )
 }
 
 void CPopup::Show( CString text )
-{ Show( text, m_Pos ); }
+{ 
+	m_csToolTipText = text;
+	Show( text, m_Pos ); 
+}
 
 void CPopup::AllowShow( CString text )
 {
+	m_csToolTipText = text;
+	
 	if( m_bAllowShow )
 		Show( text, m_Pos );
 }

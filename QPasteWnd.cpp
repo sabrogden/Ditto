@@ -93,7 +93,22 @@ ON_COMMAND(ID_MENU_VIEWGROUPS, OnMenuViewgroups)
 	ON_COMMAND(ID_MENU_QUICKPROPERTIES_SETTONEVERAUTODELETE, OnMenuQuickpropertiesSettoneverautodelete)
 	ON_COMMAND(ID_MENU_QUICKPROPERTIES_AUTODELETE, OnMenuQuickpropertiesAutodelete)
 	ON_COMMAND(ID_MENU_QUICKPROPERTIES_REMOVEHOTKEY, OnMenuQuickpropertiesRemovehotkey)
-	ON_UPDATE_COMMAND_UI(ID_MENU_GROUPS_MOVETOTHEGROUP_BLANK, OnUpdateMenuGroupsMovetothegroupBlank)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_EIGHT, OnMenuSenttoFriendEight)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_ELEVEN, OnMenuSenttoFriendEleven)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_FIFTEEN, OnMenuSenttoFriendFifteen)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_FIVE, OnMenuSenttoFriendFive)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_FORE, OnMenuSenttoFriendFore)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_FORETEEN, OnMenuSenttoFriendForeteen)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_NINE, OnMenuSenttoFriendNine)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_SEVEN, OnMenuSenttoFriendSeven)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_SIX, OnMenuSenttoFriendSix)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_TEN, OnMenuSenttoFriendTen)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_THIRTEEN, OnMenuSenttoFriendThirteen)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_THREE, OnMenuSenttoFriendThree)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_TWELVE, OnMenuSenttoFriendTwelve)
+	ON_COMMAND(ID_MENU_SENTTO_FRIEND_TWO, OnMenuSenttoFriendTwo)
+	ON_COMMAND(ID_MENU_SENTTO_FRIENDONE, OnMenuSenttoFriendone)
+	ON_COMMAND(ID_MENU_SENTTO_PROMPTFORIP, OnMenuSenttoPromptforip)
 	//}}AFX_MSG_MAP
 ON_MESSAGE(NM_SELECT, OnListSelect)
 ON_MESSAGE(NM_END, OnListEnd)
@@ -282,14 +297,11 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 {
 	CWndEx::OnActivate(nState, pWndOther, bMinimized);
 	
-	TRACE("OnActivate\n");
-	
 	if(m_bHideWnd == false)
 		return;
 	
 	if (nState == WA_INACTIVE)
 	{
-		TRACE("WA_INACTIVE\n");
 		if(!g_Opt.m_bShowPersistent)
 		{
 			HideQPasteWindow();
@@ -300,7 +312,6 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 	}
 	else if (nState == WA_ACTIVE || nState == WA_CLICKACTIVE)
 	{
-		TRACE("WA_ACTIVE\n");
 		if(!theApp.m_bShowingQuickPaste)
 		{
 			ShowQPasteWindow();
@@ -892,6 +903,38 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 	{
 		pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_PROMPTFORNEWGROUPNAMES, MF_CHECKED);
 	}
+
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIENDONE, 0);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TWO, 1);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_THREE, 2);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FORE, 3);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FIVE, 4);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_SIX, 5);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_SEVEN,6);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_EIGHT,7);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_NINE,8);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TEN,9);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_ELEVEN,10);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TWELVE,11);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_THIRTEEN,12);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FORETEEN,13);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FIFTEEN,14);
+
+	pMenu->DeleteMenu(ID_MENU_SENTTO_PROMPTFORIP, MF_BYCOMMAND);
+}
+
+void CQPasteWnd::SetSendToMenu(CMenu *pMenu, int nMenuID, int nArrayPos)
+{
+	if(g_Opt.m_SendClients[nArrayPos].csIP.GetLength() > 0)
+	{
+		CString cs;
+		cs.Format("(%s) - %s", g_Opt.m_SendClients[nArrayPos].csIP, g_Opt.m_SendClients[nArrayPos].csDescription);
+		pMenu->ModifyMenu(nMenuID, MF_BYCOMMAND, nMenuID, cs);
+	}
+	else
+	{
+		pMenu->DeleteMenu(nMenuID, MF_BYCOMMAND);
+	}
 }
 
 LRESULT CQPasteWnd::OnSearch(WPARAM wParam, LPARAM lParam)
@@ -1001,6 +1044,8 @@ void CQPasteWnd::OnMenuReconnecttoclipboardchain()
 {
 	::SendMessage(theApp.GetClipboardViewer(), WM_CV_RECONNECT, 0, 0);
 }
+
+#include "client.h"
 
 void CQPasteWnd::OnMenuProperties() 
 {	
@@ -1227,10 +1272,155 @@ void CQPasteWnd::OnMenuQuickpropertiesRemovehotkey()
 	}	
 	m_lstHeader.RefreshVisibleRows();
 }
+
+void CQPasteWnd::OnUpdateMenuGroupsMovetothegroupBlank(CCmdUI* pCmdUI) 
+{
+	// TODO: Add your command update UI handler code here
+	
+}
+
+
+void CQPasteWnd::OnMenuSenttoFriendFifteen() 
+{
+	SendToFriendbyPos(14);
+}
+
+void CQPasteWnd::OnMenuSenttoFriendForeteen() 
+{
+	SendToFriendbyPos(13);
+}
+
+void CQPasteWnd::OnMenuSenttoFriendThirteen() 
+{
+	SendToFriendbyPos(12);
+}
+
+void CQPasteWnd::OnMenuSenttoFriendTwelve() 
+{
+	SendToFriendbyPos(11);
+}
+
+void CQPasteWnd::OnMenuSenttoFriendEleven() 
+{
+	SendToFriendbyPos(10);
+}
+
+void CQPasteWnd::OnMenuSenttoFriendTen() 
+{
+	SendToFriendbyPos(9);
+}
+
+void CQPasteWnd::OnMenuSenttoFriendNine() 
+{
+	SendToFriendbyPos(8);
+}
+
+void CQPasteWnd::OnMenuSenttoFriendEight() 
+{
+	SendToFriendbyPos(7);
+}
+
+void CQPasteWnd::OnMenuSenttoFriendSeven() 
+{
+	SendToFriendbyPos(6);
+}
+
+void CQPasteWnd::OnMenuSenttoFriendSix() 
+{
+	SendToFriendbyPos(5);
+}
+
+void CQPasteWnd::OnMenuSenttoFriendFive() 
+{
+	SendToFriendbyPos(4);
+}
+
+void CQPasteWnd::OnMenuSenttoFriendFore() 
+{
+	SendToFriendbyPos(3);
+}
+
+void CQPasteWnd::OnMenuSenttoFriendThree() 
+{
+	SendToFriendbyPos(2);	
+}
+
+void CQPasteWnd::OnMenuSenttoFriendTwo() 
+{
+	SendToFriendbyPos(1);
+}
+
+void CQPasteWnd::OnMenuSenttoFriendone() 
+{
+	SendToFriendbyPos(0);
+}
+
+void CQPasteWnd::OnMenuSenttoPromptforip() 
+{
+	// TODO: Add your command handler code here
+	
+}
+
 ///////////////////////////////////////////////////////////////////////
 //END END Menu Stuff
 ///////////////////////////////////////////////////////////////////////
 
+
+BOOL CQPasteWnd::SendToFriendbyPos(int nPos)
+{
+	CWaitCursor wait;
+
+	m_bHideWnd = false;
+
+	CClipIDs IDs;
+	long lCount = m_lstHeader.GetSelectedCount();
+	if(lCount <= 0)
+		return FALSE;
+
+	m_lstHeader.GetSelectionIndexes(IDs);
+
+	CIDArray *pIDArray = new CIDArray;
+	pIDArray->pIDs = new CID[lCount];
+	pIDArray->lCount = lCount;
+
+	BOOL bRet = FALSE;
+
+	try
+	{
+		CPopup Popup(0, 0, m_hWnd);
+		Popup.Show(StrF("Sending clip to %s", g_Opt.m_SendClients[nPos].csIP));
+		
+		for(int i = 0; i < lCount; i++)
+		{
+			m_Recset.SetAbsolutePosition(IDs[i]);
+			pIDArray->pIDs[i].lID = m_Recset.m_lID;
+			pIDArray->pIDs[i].m_csDesc = m_Recset.m_strText;
+		}
+		
+		if(SendToFriend(pIDArray, nPos, "", &Popup) == FALSE)
+		{
+			MessageBox(StrF("Error Sending data to %s", g_Opt.m_SendClients[nPos].csIP), "Ditto");
+		}
+		else
+		{
+			bRet = TRUE;
+		}
+	}
+	catch(CDaoException* e)
+	{
+		e->ReportError();
+		ASSERT(0);
+		e->Delete();
+	}	
+
+	delete [] pIDArray->pIDs;
+	pIDArray->pIDs = NULL;
+	delete pIDArray;
+
+	m_bHideWnd = true;
+
+	return bRet;
+}
 
 LRESULT CQPasteWnd::OnDelete(WPARAM wParam, LPARAM lParam)
 {
@@ -1792,8 +1982,3 @@ void CQPasteWnd::OnBackButton()
 	theApp.EnterGroupID(theApp.m_GroupParentID);
 }
 
-void CQPasteWnd::OnUpdateMenuGroupsMovetothegroupBlank(CCmdUI* pCmdUI) 
-{
-	// TODO: Add your command update UI handler code here
-	
-}

@@ -135,6 +135,33 @@ void CClip::Clear()
 	EmptyFormats();
 }
 
+const CClip& CClip::operator=(const CClip &clip)
+{
+	const CClipFormat* pCF;
+
+	m_ID = clip.m_ID;
+	m_DataID = clip.m_DataID;
+	m_Time = clip.m_Time;
+	m_Desc = clip.m_Desc;
+	m_lTotalCopySize = clip.m_lTotalCopySize;
+
+	int nCount = clip.m_Formats.GetSize();
+	
+	for(int i = 0; i < nCount; i++)
+	{
+		pCF = &clip.m_Formats.GetData()[i];
+
+		LPVOID pvData = GlobalLock(pCF->m_hgData);
+		if(pvData)
+		{
+			AddFormat(pCF->m_cfType, pvData, GlobalSize(pCF->m_hgData));
+		}
+		GlobalUnlock(pCF->m_hgData);
+	}
+
+	return *this;
+}
+
 void CClip::EmptyFormats()
 {
 	// free global memory in m_Formats

@@ -256,6 +256,40 @@ BEGIN
             MENUITEM "Prompt For New Group Names",  ID_MENU_QUICKOPTIONS_PROMPTFORNEWGROUPNAMES
 
         END
+        POPUP "Sent To"
+        BEGIN
+            MENUITEM "Friend One",                  ID_MENU_SENTTO_FRIENDONE
+            MENUITEM "Friend Two",                  ID_MENU_SENTTO_FRIEND_TWO
+
+            MENUITEM "Friend Three",                ID_MENU_SENTTO_FRIEND_THREE
+
+            MENUITEM "Friend Fore",                 ID_MENU_SENTTO_FRIEND_FORE
+
+            MENUITEM "Friend Five",                 ID_MENU_SENTTO_FRIEND_FIVE
+
+            MENUITEM "Friend Six",                  ID_MENU_SENTTO_FRIEND_SIX
+
+            MENUITEM "Friend Seven",                ID_MENU_SENTTO_FRIEND_SEVEN
+
+            MENUITEM "Friend Eight",                ID_MENU_SENTTO_FRIEND_EIGHT
+
+            MENUITEM "Friend Nine",                 ID_MENU_SENTTO_FRIEND_NINE
+
+            MENUITEM "Friend Ten",                  ID_MENU_SENTTO_FRIEND_TEN
+
+            MENUITEM "Friend Eleven",               ID_MENU_SENTTO_FRIEND_ELEVEN
+
+            MENUITEM "Friend Twelve",               ID_MENU_SENTTO_FRIEND_TWELVE
+
+            MENUITEM "Friend Thirteen",             ID_MENU_SENTTO_FRIEND_THIRTEEN
+
+            MENUITEM "Friend Foreteen",             ID_MENU_SENTTO_FRIEND_FORETEEN
+
+            MENUITEM "Friend Fifteen",              ID_MENU_SENTTO_FRIEND_FIFTEEN
+
+            MENUITEM "Prompt for IP",               ID_MENU_SENTTO_PROMPTFORIP
+
+        END
         MENUITEM "View Full Description\tF3",   ID_MENU_VIEWFULLDESCRIPTION
         MENUITEM "View Groups\tCtrl-G",         ID_MENU_VIEWGROUPS
         MENUITEM SEPARATOR
@@ -576,6 +610,39 @@ BEGIN
     EDITTEXT        IDC_NAME,7,11,172,12,ES_AUTOHSCROLL
 END
 
+IDD_OPTIONS_FRIENDS DIALOG DISCARDABLE  0, 0, 300, 214
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Friends"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | WS_BORDER | 
+                    WS_TABSTOP,7,82,286,116
+    LTEXT           "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer.",
+                    IDC_STATIC,7,52,278,24
+    EDITTEXT        IDC_EDIT_PLACE_ON_CLIPBOARD,83,31,210,13,ES_AUTOHSCROLL
+    LTEXT           "IP/Computer Names seperated by commas",IDC_STATIC,7,29,
+                    70,17
+    LTEXT           "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time.",
+                    IDC_STATIC,7,7,286,18
+    CONTROL         "Log Send Receive Commands",IDC_CHECK_LOG_SEND_RECIEVE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,199,176,12
+END
+
+IDD_FRIEND_DETAILS DIALOG DISCARDABLE  0, 0, 203, 79
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Friend Details"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,89,58,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,146,58,50,14
+    CONTROL         "Send All Copies to this friend",IDC_CHECK_SEND_ALL,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,47,7,105,10
+    LTEXT           "IP/Name",IDC_STATIC,7,23,30,8
+    EDITTEXT        IDC_EDIT_IP,47,20,83,13,ES_AUTOHSCROLL
+    LTEXT           "Description",IDC_STATIC,7,41,36,8
+    EDITTEXT        IDC_EDIT_DESCRIPTION,47,39,149,13,ES_AUTOHSCROLL
+END
+
 
 #ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
@@ -725,6 +792,22 @@ BEGIN
         RIGHTMARGIN, 179
         TOPMARGIN, 1
         BOTTOMMARGIN, 42
+    END
+
+    IDD_OPTIONS_FRIENDS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 293
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 211
+    END
+
+    IDD_FRIEND_DETAILS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 196
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 72
     END
 END
 #endif    // APSTUDIO_INVOKED

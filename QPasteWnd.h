@@ -95,6 +95,9 @@ public:
 	void OnUpdateLinesPerRow(CCmdUI* pCmdUI, int nValue);
 	void OnUpdateTransparency(CCmdUI* pCmdUI, int nValue);
 	void SetMenuChecks(CMenu *pMenu);
+	void SetSendToMenu(CMenu *pMenu, int nMenuID, int nArrayPos);
+
+	BOOL SendToFriendbyPos(int nPos);
 	
 	// Generated message map functions
 protected:
@@ -145,6 +148,22 @@ protected:
 	afx_msg void OnMenuQuickpropertiesAutodelete();
 	afx_msg void OnMenuQuickpropertiesRemovehotkey();
 	afx_msg void OnUpdateMenuGroupsMovetothegroupBlank(CCmdUI* pCmdUI);
+	afx_msg void OnMenuSenttoFriendEight();
+	afx_msg void OnMenuSenttoFriendEleven();
+	afx_msg void OnMenuSenttoFriendFifteen();
+	afx_msg void OnMenuSenttoFriendFive();
+	afx_msg void OnMenuSenttoFriendFore();
+	afx_msg void OnMenuSenttoFriendForeteen();
+	afx_msg void OnMenuSenttoFriendNine();
+	afx_msg void OnMenuSenttoFriendSeven();
+	afx_msg void OnMenuSenttoFriendSix();
+	afx_msg void OnMenuSenttoFriendTen();
+	afx_msg void OnMenuSenttoFriendThirteen();
+	afx_msg void OnMenuSenttoFriendThree();
+	afx_msg void OnMenuSenttoFriendTwelve();
+	afx_msg void OnMenuSenttoFriendTwo();
+	afx_msg void OnMenuSenttoFriendone();
+	afx_msg void OnMenuSenttoPromptforip();
 	//}}AFX_MSG
 	afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);

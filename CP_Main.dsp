@@ -55,7 +55,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
-# ADD LINK32 /nologo /subsystem:windows /map /machine:I386 /out:"Release/Ditto.exe"
+# ADD LINK32 ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib /nologo /subsystem:windows /map /machine:I386 /out:"Release/Ditto.exe"
 
 !ELSEIF  "$(CFG)" == "CP_Main - Win32 Debug"
 
@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 /nologo /subsystem:windows /debug /machine:I386 /out:"Debug/Ditto.exe" /pdbtype:sept
+# ADD LINK32 ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib /nologo /subsystem:windows /debug /machine:I386 /out:"Debug/Ditto.exe" /pdbtype:sept
 
 !ELSEIF  "$(CFG)" == "CP_Main - Win32 Pre 2000 Release"
 
@@ -248,6 +248,10 @@ SOURCE=.\AddType.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Client.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\CopyProperties.cpp
 # End Source File
 # Begin Source File
@@ -265,6 +269,10 @@ SOURCE=.\DatabaseUtilities.cpp
 # Begin Source File
 
 SOURCE=.\DataTable.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\FriendDetails.cpp
 # End Source File
 # Begin Source File
 
@@ -293,6 +301,10 @@ SOURCE=.\MainTable.cpp
 # Begin Source File
 
 SOURCE=.\Misc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\OptionFriends.cpp
 # End Source File
 # Begin Source File
 
@@ -348,6 +360,10 @@ SOURCE=.\SelectDB.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Server.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
@@ -373,6 +389,10 @@ SOURCE=.\AddType.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Client.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\CopyProperties.h
 # End Source File
 # Begin Source File
@@ -386,6 +406,10 @@ SOURCE=.\DatabaseUtilities.h
 # Begin Source File
 
 SOURCE=.\DataTable.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\FriendDetails.h
 # End Source File
 # Begin Source File
 
@@ -418,6 +442,10 @@ SOURCE=.\MainTable.h
 # Begin Source File
 
 SOURCE=.\Misc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\OptionFriends.h
 # End Source File
 # Begin Source File
 
@@ -474,6 +502,10 @@ SOURCE=.\Resource.h
 # Begin Source File
 
 SOURCE=.\SelectDB.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Server.h
 # End Source File
 # Begin Source File
 

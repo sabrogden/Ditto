@@ -140,6 +140,13 @@ public:
 
 	bool	m_bAsynchronousRefreshView;
 
+	//Socket Info
+	SOCKET	m_sSocket;
+	CRITICAL_SECTION m_CriticalSection;
+	CPopup	 *m_pcpSendRecieveError;
+
+
+
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CCP_MainApp)

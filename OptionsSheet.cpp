@@ -11,6 +11,7 @@
 #include "OptionsStats.h"
 #include "OptionsTypes.h"
 #include "About.h"
+#include "OptionFriends.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -34,6 +35,7 @@ COptionsSheet::COptionsSheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT iSelectP
 	m_pStats = NULL;
 	m_pTypes = NULL;
 	m_pAbout = NULL;
+	m_pFriends = NULL;
 }
 
 COptionsSheet::~COptionsSheet()
@@ -45,6 +47,7 @@ COptionsSheet::~COptionsSheet()
 	DELETE_PTR(m_pStats);
 	DELETE_PTR(m_pTypes);
 	DELETE_PTR(m_pAbout);
+	DELETE_PTR(m_pFriends);
 }
 
 BEGIN_MESSAGE_MAP(COptionsSheet, CPropertySheet)
@@ -63,6 +66,7 @@ int COptionsSheet::DoModal()
 	m_pGeneralOptions = new COptionsGeneral;
 	m_pKeyBoardOptions = new COptionsKeyBoard;
 	m_pQuickPasteOptions = new COptionsQuickPaste;
+	m_pFriends = new COptionFriends;
 	m_pStats = new COptionsStats;
 	m_pTypes = new COptionsTypes;
 	m_pAbout = new CAbout;
@@ -71,6 +75,7 @@ int COptionsSheet::DoModal()
 	AddPage(m_pTypes);
 	AddPage(m_pKeyBoardOptions);
 	AddPage(m_pQuickPasteOptions);
+	AddPage(m_pFriends);
 	AddPage(m_pStats);
 	AddPage(m_pAbout);
 	

@@ -18,6 +18,7 @@
 #define REMOVE_OLD_ENTRIES_TIMER		3
 #define CHECK_FOR_UPDATE				4
 #define CLOSE_APP						5
+#define HIDE_ERROR_POPUP				6
 
 
 class CMainFrame : public CFrameWnd
@@ -78,6 +79,9 @@ protected:
 	afx_msg LRESULT OnCopyProperties(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShutDown(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnClipboardCopied(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnLoadFormats(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnErrorOnSendRecieve(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);

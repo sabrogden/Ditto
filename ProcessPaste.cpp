@@ -701,6 +701,7 @@ COleClipSource
 //IMPLEMENT_DYNAMIC(COleClipSource, COleDataSource)
 COleClipSource::COleClipSource()
 {
+	m_bLoadedFormats = false;
 }
 
 COleClipSource::~COleClipSource()
@@ -721,23 +722,21 @@ BOOL COleClipSource::DoDelayRender()
 
 BOOL COleClipSource::DoImmediateRender()
 {
+	if(m_bLoadedFormats)
+		return TRUE;
+
+	m_bLoadedFormats = true;
+	
 	int count = m_ClipIDs.GetSize();
 	if( count <= 0 )
 		return 0;
 	if( count == 1 )
 	{
 		CClipFormats formats;
-		CClipFormat* pCF;
+		
 		CClip::LoadFormats( m_ClipIDs[0], formats );
-		count = formats.GetSize(); // reusing "count"
-		for( int i=0; i < count; i++ )
-		{
-			pCF = &formats[i];
-			CacheGlobalData( pCF->m_cfType, pCF->m_hgData );
-			pCF->m_hgData = 0; // OLE owns it now
-		}
-		formats.RemoveAll();
-		return count;
+		
+		return LoadFormats(&formats);
 	}
 	
 	HGLOBAL hGlobal;
@@ -745,6 +744,25 @@ BOOL COleClipSource::DoImmediateRender()
 	hGlobal = NewGlobalP( (void*)(LPCSTR) text, text.GetLength()+1 );
 	CacheGlobalData( CF_TEXT, hGlobal );
 	return hGlobal != 0;
+}
+
+long COleClipSource::LoadFormats(CClipFormats *pFormats)
+{
+	CClipFormat* pCF;
+
+	int	count = pFormats->GetSize(); // reusing "count"
+
+	for(int i = 0; i < count; i++)
+	{
+		pCF = &pFormats->ElementAt(i);
+		CacheGlobalData( pCF->m_cfType, pCF->m_hgData );
+		pCF->m_hgData = 0; // OLE owns it now
+	}
+	pFormats->RemoveAll();
+
+	m_bLoadedFormats = true;
+
+	return count;
 }
 
 

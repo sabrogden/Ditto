@@ -67,6 +67,8 @@ public:
 	long			m_DataID;
 	CClipFormats	m_Formats; // actual format data
 
+	const CClip& operator=(const CClip &clip);
+
 	// statistics assigned by LoadFromClipboard
 	CTime	m_Time;	 // time copied from clipboard
 	CString m_Desc;
