@@ -177,7 +177,7 @@ long CInternetUpdate::GetUpdateVersion()
 
 	//if nothing there get the default
 	if(csPath.IsEmpty())
-		csPath = "www.sourceforge.net/update/DittoVersion.txt";
+		csPath = "ditto-cp.sourceforge.net/Update/DittoVersion.txt";
 	
 	CString csUrl = "http://" + csPath;
 	
@@ -278,7 +278,7 @@ CString CInternetUpdate::DownloadUpdate()
 
 	//if nothing there get the default
 	if(csPath.IsEmpty())
-		csPath = "www.sourceforge.net/update/DittoSetup.exe";
+		csPath = "ditto-cp.sourceforge.net/Update/DittoSetup.exe";
 
 	CString csUrl = "http://" + csPath;
 	
