@@ -17,14 +17,15 @@ public:
 	enum eSendType{START, DATA, DATA_START, DATA_END, END, EXIT};
 };
 
-#define MAX_DATA_SIZE	1000
+#define MAX_DATA_SIZE	4000
 class SendInfo
 {
 public:
 	SendInfo()
 	{
-		m_nSize = sizeof(this);
+		m_nSize = sizeof(SendInfo);
 		m_nVersion = 1;
+		memset(&m_cExtra, -1, sizeof(m_cExtra));
 	}
 	int					m_nSize;
 	MyEnums::eSendType	m_Type;
@@ -36,6 +37,7 @@ public:
 	long		m_lParameter1;
 	long		m_lParameter2;
 	char		m_cText[MAX_DATA_SIZE];
+	char		m_cExtra[1000];
 };
 
 UINT  MTServerThread(LPVOID pParam);

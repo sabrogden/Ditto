@@ -93,6 +93,12 @@ BOOL Recv(SOCKET sock, SendInfo *pInfo)
 		lLastRecievedCount += lReceiveCount;
 	}
 
+	if(pInfo->m_nSize != lExpectedCount)
+	{
+		LogSendRecieveInfo(StrF("------ERROR Incoming struct size %d Expected Size %d", pInfo->m_nSize, lExpectedCount));
+		return FALSE;
+	}
+
 	return TRUE;
 }
 
@@ -102,13 +108,13 @@ UINT  ClientThread(LPVOID pParam)
 	
 	SOCKET socket = (SOCKET)pParam;
 
+	CClipList *pClipList = NULL;
+	CClip *pClip = NULL;
+	CClipFormat cf;
 	SendInfo info;
 	int nRecvReturn = 0;
-	CClip NewClip;
-	CClipFormat cf;
 	long lBytesCopied;
 	bool bBreak = false;
-	bool bAddToDatabase = false;
 	BYTE *pByte = NULL;
 	long lByteSize = 0;
 	BOOL bSetToClipBoard = FALSE;
@@ -122,21 +128,30 @@ UINT  ClientThread(LPVOID pParam)
 		{
 		case MyEnums::START:
 			{				
-				NewClip.Clear();
-
+				if(pClip != NULL)
+				{
+					delete pClip;
+					pClip = NULL;
+				}
+				
+				pClip = new CClip;
+				
 				CString cs;
 				cs.Format("%s\n(%s)(%s)", info.m_cText, info.m_cComputerName, info.m_cIP);
 				
-				NewClip.m_Desc = cs;
-
-				bAddToDatabase = false;
+				if(pClip)
+				{
+					pClip->m_Desc = cs;
+				}
+				
+				bSetToClipBoard = FALSE;
 
 				if(g_Opt.m_csIPListToPutOnClipboard.Find(info.m_cIP) >= 0)
 					bSetToClipBoard = TRUE;
 
 				if(g_Opt.m_csIPListToPutOnClipboard.Find(info.m_cComputerName) >= 0)
 					bSetToClipBoard = TRUE;
-
+				
 				info.m_cText[20] = 0;
 				LogSendRecieveInfo(StrF("::START %s %s %s", info.m_cText, info.m_cComputerName, info.m_cIP));
 			}
@@ -148,12 +163,14 @@ UINT  ClientThread(LPVOID pParam)
 					delete pByte;
 					pByte = NULL;
 				}
+				
 				lByteSize = info.m_lParameter1;
 				pByte = new BYTE[info.m_lParameter1];
 
 				cf.m_cfType = GetFormatID(info.m_cText);
 				lBytesCopied = 0;
-				NewClip.m_lTotalCopySize += info.m_lParameter1;
+				if(pClip)
+					pClip->m_lTotalCopySize += info.m_lParameter1;
 
 				LogSendRecieveInfo(StrF("::DATA_START Total Size = %d type = %s", lByteSize, info.m_cText));
 			}
@@ -168,29 +185,54 @@ UINT  ClientThread(LPVOID pParam)
 			break;
 		case MyEnums::DATA_END:
 			{
-				cf.m_hgData = NewGlobalP(pByte, lByteSize);
+				if(pByte)
+				{
+					cf.m_hgData = NewGlobalP(pByte, lByteSize);
 
-				NewClip.m_Formats.Add(cf);
+					if(pClip)
+					{
+						pClip->m_Formats.Add(cf);
+						cf.m_hgData = 0; // now owned by pClip
+					}
 
-				delete pByte;
-				pByte = NULL;
+					delete pByte;
+					pByte = NULL;
+				}
+				else
+					LogSendRecieveInfo("::ERROR pByte was null");
 
-				bAddToDatabase = true;
 
 				LogSendRecieveInfo("::DATA_END");
 			}
 			break;
 		case MyEnums::END:
-			{
-				if(bAddToDatabase)
+			{				
+				if(pClipList == NULL)
+					pClipList = new CClipList;
+
+				if(pClipList)
 				{
-					LogSendRecieveInfo("::END");
-					//::SendMessage(theApp.m_MainhWnd, WM_ADD_TO_DATABASE_FROM_SOCKET, (WPARAM)&NewClip, bSetToClipBoard);
+					pClipList->AddTail(pClip);
+					pClip = NULL;
 				}
+				else
+					LogSendRecieveInfo("::ERROR pClipList was NULL");
+
+				LogSendRecieveInfo("::END");
+
 			}
 			break;
 		case MyEnums::EXIT:
 			{				
+				if(pClipList && pClipList->GetCount() > 0)
+				{
+					//Post a message pClipList will be freed by the reciever
+					::PostMessage(theApp.m_MainhWnd, WM_ADD_TO_DATABASE_FROM_SOCKET, (WPARAM)pClipList, bSetToClipBoard);
+					pClipList = NULL;
+				}
+				else
+					LogSendRecieveInfo("::ERROR pClipList was NULL or Count was 0");
+
 				LogSendRecieveInfo("::EXIT");
 				bBreak = true;
 			}
@@ -200,6 +242,22 @@ UINT  ClientThread(LPVOID pParam)
 		if(bBreak || theApp.m_bAppExiting)
 			break;
 	}		
+
+	if(pClipList)
+	{
+		delete pClipList;
+		pClipList = NULL;
+
+		LogSendRecieveInfo("::ERROR pClipList was not NULL something is wrong");
+	}
+
+	if(pClip)
+	{
+		delete pClip;
+		pClip = NULL;
+
+		LogSendRecieveInfo("::ERROR pClip was not NULL something is wrong");
+	}
 
 	closesocket(socket);
 

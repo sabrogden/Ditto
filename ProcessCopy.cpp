@@ -139,7 +139,6 @@ const CClip& CClip::operator=(const CClip &clip)
 	m_ID = clip.m_ID;
 	m_DataID = clip.m_DataID;
 	m_Time = clip.m_Time;
-	m_Desc = clip.m_Desc;
 	m_lTotalCopySize = clip.m_lTotalCopySize;
 
 	int nCount = clip.m_Formats.GetSize();
@@ -155,6 +154,9 @@ const CClip& CClip::operator=(const CClip &clip)
 		}
 		GlobalUnlock(pCF->m_hgData);
 	}
+
+	//Set this after since in could get the wrong description in AddFormat
+	m_Desc = clip.m_Desc;
 
 	return *this;
 }

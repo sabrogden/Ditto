@@ -456,38 +456,61 @@ void CMainFrame::OnClose()
 
 LRESULT CMainFrame::OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam)
 {
-	CClip *pClip = (CClip*)wParam;
-	BOOL bSetToClipBoard = (BOOL)lParam;
-
 	LogSendRecieveInfo("---------Start of OnAddToDatabaseFromSocket");
+	CClipList *pClipList = (CClipList*)wParam;
+	if(pClipList == NULL)
+	{
+		LogSendRecieveInfo("---------ERROR pClipList == NULL");
+		return FALSE;
+	}
+	
+	BOOL bSetToClipBoard = (BOOL)lParam;
 
 	if(bSetToClipBoard)
 	{
 		LogSendRecieveInfo("---------Start of Set to ClipBoard");
-		CClip NewClip;
-		NewClip = *pClip;
 
-		LogSendRecieveInfo("---------After =");
+		CClip *pClip = pClipList->GetTail();
+		if(pClip)
+		{
+			CClip NewClip;
+			NewClip = *pClip;
 
-		CProcessPaste paste;
-		//Don't send the paste just load it into memory
-		paste.m_bSendPaste = false;
-		paste.m_pOle->LoadFormats(&NewClip.m_Formats);
-		paste.m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
+			LogSendRecieveInfo("---------After =");
 
-		LogSendRecieveInfo("---------After LoadFormats");
-	
-		paste.DoPaste();
+			CProcessPaste paste;
+			//Don't send the paste just load it into memory
+			paste.m_bSendPaste = false;
+			paste.m_pOle->LoadFormats(&NewClip.m_Formats);
+			paste.m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
+
+			LogSendRecieveInfo("---------After LoadFormats");
+		
+			paste.DoPaste();
+		}
+		else
+		{
+			LogSendRecieveInfo("---------GetTail returned NULL");
+
+		}
 
 		LogSendRecieveInfo("---------Start of Set to ClipBoard");
 	}
 
-	pClip->MakeLatestTime();
-	pClip->AddToDB(true);
+	pClipList->AddToDB(true);
+
 	LogSendRecieveInfo("---------After AddToDB");
 
+	CClip *pClip = pClipList->GetTail();
+	if(pClip)
+	{
+		theApp.m_FocusID = pClip->m_ID;
+	}
+
 	theApp.RefreshView();
-	theApp.m_FocusID = pClip->m_ID;
+
+	delete pClipList;
+	pClipList = NULL;
 
 	LogSendRecieveInfo("---------End of OnAddToDatabaseFromSocket");
 	
