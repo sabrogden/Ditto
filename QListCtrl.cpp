@@ -307,6 +307,8 @@ void CQListCtrl::SetNumberOfLinesPerRow(int nLines)
 	CImageList imglist;
 	imglist.Create(DUMMY_COL_WIDTH, nHeight, ILC_COLOR16 | ILC_MASK, 1, 1);
 	SetImageList(&imglist, LVSIL_SMALL );
+
+	ReleaseDC(pDC);
 }
 
 void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
