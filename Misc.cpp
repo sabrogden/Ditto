@@ -879,7 +879,7 @@ void CGetSetOptions::SetAllowDuplicates(BOOL bVal)	{	SetProfileLong("AllowDuplic
 BOOL CGetSetOptions::GetAllowDuplicates()			{	return GetProfileLong("AllowDuplicates", 0); }
 
 void CGetSetOptions::SetUpdateTimeOnPaste(BOOL bVal)	{	SetProfileLong("UpdateTimeOnPaste", bVal); m_bUpdateTimeOnPaste = bVal; }
-BOOL CGetSetOptions::GetUpdateTimeOnPaste()			{	return GetProfileLong("UpdateTimeOnPaste", 0); }
+BOOL CGetSetOptions::GetUpdateTimeOnPaste()			{	return GetProfileLong("UpdateTimeOnPaste", TRUE); }
 
 void CGetSetOptions::SetSaveMultiPaste(BOOL bVal)	{	SetProfileLong("SaveMultiPaste", bVal); m_bSaveMultiPaste = bVal; }
 BOOL CGetSetOptions::GetSaveMultiPaste()			{	return GetProfileLong("SaveMultiPaste", 0); }
@@ -888,7 +888,7 @@ void CGetSetOptions::SetShowPersistent(BOOL bVal)	{	SetProfileLong("ShowPersiste
 BOOL CGetSetOptions::GetShowPersistent()			{	return GetProfileLong("ShowPersistent", 0); }
 
 void CGetSetOptions::SetHistoryStartTop(BOOL bVal)	{	SetProfileLong("HistoryStartTop", bVal); m_bHistoryStartTop = bVal; }
-BOOL CGetSetOptions::GetHistoryStartTop()			{	return GetProfileLong("HistoryStartTop", 0); }
+BOOL CGetSetOptions::GetHistoryStartTop()			{	return GetProfileLong("HistoryStartTop", TRUE); }
 
 void CGetSetOptions::SetShowTextForFirstTenHotKeys(BOOL bVal)	{	SetProfileLong("ShowTextForFirstTenHotKeys", bVal);			}
 BOOL CGetSetOptions::GetShowTextForFirstTenHotKeys()			{	return GetProfileLong("ShowTextForFirstTenHotKeys", TRUE);	}
