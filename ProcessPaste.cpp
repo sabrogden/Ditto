@@ -832,11 +832,11 @@ BOOL CProcessPaste::DoPaste()
 		
 		m_pOle->SetClipboard(); // m_pOle is now managed by the OLE clipboard
 		m_pOle = NULL; // m_pOle should not be accessed past this point
-		
-#ifndef _DEBUG
+
+//#ifndef _DEBUG
 		if(m_bSendPaste)
 			theApp.SendPaste(m_bActivateTarget);
-#endif
+//#endif
 		
 		return TRUE;
 	}

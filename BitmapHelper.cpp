@@ -74,6 +74,7 @@ BOOL CBitmapHelper::GetCBitmap(void	*pClip2, CDC *pDC, CBitmap *pBitMap, int nMa
 			if(pBitMap)
 			{
 				pBitMap->CreateCompatibleBitmap(pDC, nWidth, nHeight);
+				ASSERT(pBitMap->m_hObject != NULL);
 
 				CDC MemDc;
 				MemDc.CreateCompatibleDC(pDC);

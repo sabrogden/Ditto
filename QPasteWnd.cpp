@@ -2056,6 +2056,8 @@ LRESULT CQPasteWnd::OnGetClipData(WPARAM wParam, LPARAM lParam)
 	int nItem = (int)wParam;
 	try
 	{
+		ASSERT( pClip->m_hgData == NULL);
+
 		m_Recset.SetAbsolutePosition(nItem);
 
 		CDataTable recset;

@@ -502,69 +502,71 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 }
 
+// DrawBitMap loads a DIB from the DB, draws a crRect thumbnail of the image
+//  to pDC and caches that thumbnail as a DIB in m_ThumbNails[ ItemID ].
+// ALL items are cached in m_ThumbNails (those without images are cached with NULL m_hgData)
 BOOL CQListCtrl::DrawBitMap(int nItem, CRect &crRect, CDC *pDC)
 {
-	CClipFormat Clip;
-	Clip.m_cfType = CF_DIB;
-	CBitmap Bitmap;
-	bool bAddToMap = false;
-	bool bGetDIB = false;
-
+	bool bFromDB = false;
 	long lDatabaseID = GetItemData(nItem);
+	CClipFormat* pThumbnail = NULL; // pointer to the thumbnail in the cache map
 
-	if(m_ThumbNails.Lookup(lDatabaseID, Clip) == FALSE)
+	CMapIDtoCF::CPair* pPair = m_ThumbNails.PLookup(lDatabaseID);
+	if( pPair == NULL )
 	{
-		GetClipData(nItem, Clip);
-			
-		bAddToMap = true;
+		pThumbnail = &(m_ThumbNails[lDatabaseID]);
+		pThumbnail->m_cfType = CF_DIB;
+		GetClipData(nItem, *pThumbnail);
+		bFromDB = true;
 	}
-	
-	if(Clip.m_hgData)
+	else
+		pThumbnail = &(pPair->value);
+
+	// if there's no data, then we're done.
+	if( pThumbnail->m_hgData == NULL )
+		return TRUE;
+
+	CBitmap Bitmap;
+	// Convert DIB to a DDB.
+	if( !CBitmapHelper::GetCBitmap(pThumbnail, pDC, &Bitmap, crRect.Height()) )
 	{
-		if(CBitmapHelper::GetCBitmap(&Clip, pDC, &Bitmap, crRect.Height()))
-		{
-			int nWidth = CBitmapHelper::GetCBitmapWidth(Bitmap);
-			int nHeight = CBitmapHelper::GetCBitmapHeight(Bitmap);
-
-			CDC MemDc;
-			MemDc.CreateCompatibleDC(pDC);
-
-			CBitmap* oldBitmap = MemDc.SelectObject(&Bitmap);
-
-			pDC->BitBlt(crRect.left, crRect.top, nWidth, nHeight, &MemDc, 0, 0, SRCCOPY);
-
-			MemDc.SelectObject(oldBitmap);
-
-			crRect.left += nWidth + 3;
-
-			bGetDIB = true;
-		}
-		else
-		{
-			bAddToMap = false;
-		}
+		Bitmap.DeleteObject();
+		pThumbnail->Free(); // the data is useless, so free it.
+		return FALSE;
 	}
 
-	if(bAddToMap)
+	BITMAP bm;
+	Bitmap.GetBitmap(&bm);
+	int nWidth = bm.bmWidth;
+	int nHeight = bm.bmHeight;
+
+	// draw Bitmap
+	CDC MemDc;
+	MemDc.CreateCompatibleDC(pDC);
+	CBitmap* oldBitmap = MemDc.SelectObject(&Bitmap);
+	pDC->BitBlt(crRect.left, crRect.top, nWidth, nHeight, &MemDc, 0, 0, SRCCOPY);
+	MemDc.SelectObject(oldBitmap);
+	MemDc.DeleteDC();
+
+	// adjust the rect so other information can be drawn next to the thumbnail
+	crRect.left += nWidth + 3;
+
+	// if the original DIB came from the DB, cache the smaller version we created above.
+	if( bFromDB )
 	{
-		CClipFormat ThumbData(CF_DIB);
+		pThumbnail->Free(); // delete the large image data loaded from the db
+		pThumbnail->m_cfType = CF_DIB;
 
-		//Convert the bitmap to a DIB to cache the bitmap
-		//caching the bitmap had problems
-		if(bGetDIB)
-		{
-			HPALETTE hPal = NULL;
+		// Convert the smaller DDB to a DIB to store in the cache
+		//caching the bitmap had problems (???)
+		HPALETTE hPal = NULL;
+		pThumbnail->m_hgData = CBitmapHelper::hBitmapToDIB( (HBITMAP)Bitmap, BI_RGB, hPal );
+	//	cf.m_hgData = BitmapToDIB(Bitmap.operator HBITMAP(), hPal);
 
-			ThumbData.m_hgData = CBitmapHelper::hBitmapToDIB(Bitmap.operator HBITMAP(), BI_RGB, hPal);
-
-//			ThumbData.m_hgData = BitmapToDIB(Bitmap.operator HBITMAP(), hPal);
-
-			//Map will delete memory in destructor
-			ThumbData.bDeleteData = false;
-		}
-		
-		m_ThumbNails.SetAt(lDatabaseID, ThumbData);
+		ASSERT( pThumbnail->bDeleteData ); // the map owns the data.
 	}
+
+	Bitmap.DeleteObject();
 
 	return TRUE;
 }

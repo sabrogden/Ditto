@@ -36,6 +36,8 @@ public:
 	int cchTextMax; 
 };
 
+typedef CMap<long, long, CClipFormat, CClipFormat&> CMapIDtoCF;
+
 class CQListCtrl : public CListCtrl
 {
 // Construction
@@ -111,7 +113,7 @@ protected:
 	//Accelerator
 	CAccels	m_Accels;
 
-	CMap<long, long, CClipFormat, CClipFormat> m_ThumbNails;
+	CMapIDtoCF m_ThumbNails;
 
 	CToolTipEx *m_pToolTip;
 
