@@ -205,7 +205,7 @@ void CCP_MainApp::StopCopyThread()
 {
 	EnableCbCopy(false);
 	m_CopyThread.Quit();
-	SaveAllClips();
+	SaveCopyClips();
 }
 
 // Allocates a new CClipTypes
@@ -246,67 +246,21 @@ CClipTypes* pTypes = LoadTypesFromDB();
 		m_CopyThread.SetSupportedTypes( pTypes );
 }
 
-// ensures that pClip's time is not older than the last clip added
-// old times can happen on fast copies (<1 sec).
-void CCP_MainApp::FixTime( CClip* pClip )
-{
-long lDate;
-	try
-	{
-	CMainTable recset;
-
-		recset.m_strSort = "lDate DESC";
-		recset.Open("SELECT * FROM Main");
-		recset.MoveFirst();
-
-		lDate = (long) pClip->m_Time.GetTime();
-		if( lDate <= recset.m_lDate )
-		{
-			lDate = recset.m_lDate + 1;
-			pClip->m_Time = lDate;
-		}
-
-		recset.Close();
-	}
-	CATCHDAO
-}
-
-long CCP_MainApp::SaveAllClips()
+long CCP_MainApp::SaveCopyClips()
 {
 long lID = 0;
-int savedCount = 0;
-int nRemaining = 0;
+int count;
 
 	CClipList* pClips = m_CopyThread.GetClips(); // we now own pClips
 	if( !pClips )
 		return 0;
 
-	CClip* pClip;
-	bool bResult;
-	nRemaining = pClips->GetCount();
-	while( pClips->GetCount() > 0 )
+	count = pClips->AddToDB( true );
+	if( count > 0 )
 	{
-		SetStatus( StrF("%d",nRemaining) );
-		nRemaining--;
-
-		pClip = pClips->RemoveHead();
-		ASSERT( pClip );
-
-		FixTime( pClip );
-
-		bResult = pClip->AddToDB();
-		if( bResult )
-		{
-			lID = pClip->m_ID;
-			savedCount++;
-		}
-		delete pClip;
+		OnCopyCompleted( lID, count );
+		lID = pClips->GetTail()->m_ID;
 	}
-
-	SetStatus();
-
-	if( savedCount > 0 )
-		OnCopyCompleted( lID, savedCount );
 
 	delete pClips;
 

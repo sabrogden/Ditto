@@ -45,6 +45,10 @@ void SetThreadName(DWORD dwThreadID, LPCTSTR szThreadName);
 
 // Utility Functions
 CString StrF(const char * pszFormat, ...);
+// called after determining that the preceding character is a backslash
+BYTE GetEscapeChar( BYTE ch );
+CString RemoveEscapes( const char* str );
+
 CString GetWndText( HWND hWnd );
 // returns true if the given window is owned by this process
 bool IsAppWnd( HWND hWnd );

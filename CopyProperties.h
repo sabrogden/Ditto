@@ -1,3 +1,4 @@
+#include "afxwin.h"
 #if !defined(AFX_COPYPROPERTIES_H__129FE1CD_D305_487A_B88C_BB01CD9C1BB7__INCLUDED_)
 #define AFX_COPYPROPERTIES_H__129FE1CD_D305_487A_B88C_BB01CD9C1BB7__INCLUDED_
 
@@ -60,6 +61,10 @@ protected:
 	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	CEdit m_ParseEdit;
+	CButton m_ParseButton;
+	afx_msg void OnBnClickedParseButton();
 };
 
 //{{AFX_INSERT_LOCATION}}

@@ -52,8 +52,10 @@
 #define IDC_HYPER_LINK                  1036
 #define IDC_ALLOW_DUPLICATES            1037
 #define IDC_UPDATE_TIME_ON_PASTE        1038
-#define IDC_CHECK3                      1039
 #define IDC_SAVE_MULTIPASTE             1039
+#define IDC_BUTTON1                     1040
+#define IDC_PARSE_BUTTON                1040
+#define IDC_PARSE_EDIT                  1041
 #define IDD_OPTIONS_KEYSTROKES          2001
 #define IDC_HOTKEY                      2002
 #define IDC_DISPLAY_IN_SYSTEMTRAY       2003
@@ -110,7 +112,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        138
 #define _APS_NEXT_COMMAND_VALUE         32780
-#define _APS_NEXT_CONTROL_VALUE         1040
+#define _APS_NEXT_CONTROL_VALUE         1042
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

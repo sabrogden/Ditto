@@ -106,14 +106,52 @@ int count = m_Formats.GetCount();
 	EmptyFormats();
 }
 
+void CClip::Clear()
+{
+	m_ID = 0;
+	m_Time = 0;
+	m_Desc = "";
+	m_lTotalCopySize = 0;
+	EmptyFormats();
+}
+
 void CClip::EmptyFormats()
 {
 	// free global memory in m_Formats
 	for( int i = m_Formats.GetCount()-1; i >= 0; i-- )
 	{
-		::GlobalFree( m_Formats[i].m_hgData );
+		m_Formats[i].Free();
 		m_Formats.RemoveAt( i );
 	}
+}
+
+// Adds a new Format to this Clip by copying the given data.
+bool CClip::AddFormat( CLIPFORMAT cfType, void* pData, UINT nLen )
+{
+	ASSERT( pData && nLen );
+HGLOBAL hGlobal = ::NewGlobalP( pData, nLen );
+	ASSERT( hGlobal );
+	// update the Clip statistics
+	m_Time = m_Time.GetCurrentTime();
+	m_lTotalCopySize += nLen;
+	if( !SetDescFromText( hGlobal ) )
+		SetDescFromType();
+
+CClipFormat format(cfType,hGlobal);
+CClipFormat *pFormat;
+
+	pFormat = m_Formats.FindFormat(cfType);
+	// if the format type already exists as part of this clip, replace the data
+	if( pFormat )
+	{
+		pFormat->Free();
+		pFormat->m_hgData = format.m_hgData;
+	}
+	else
+		m_Formats.Add(format);
+
+	format.m_hgData = 0; // now owned by m_Formats
+	return true;
 }
 
 #define EXIT_LoadFromClipboard(ret)	{ oleData.Release(); g_bCopyingClipboard = false; return(ret); }
@@ -211,8 +249,9 @@ int numTypes = pTypes->GetCount();
 			else
 			{
 				ASSERT(FALSE); // a valid GlobalMem with 0 size is strange
-				GlobalFree( cf.m_hgData );
+				cf.Free();
 			}
+			cf.m_hgData = 0; // m_Formats owns it now
 		}
 	}
 
@@ -224,7 +263,7 @@ int numTypes = pTypes->GetCount();
 	// if the description was in a type that is not supported,
 	//	we have to free it since it wasn't added to m_Formats
 	if( cfDesc.m_hgData )
-		GlobalFree( cfDesc.m_hgData );
+		cfDesc.Free();
 
 	if( m_Formats.GetSize() == 0 )
 		EXIT_LoadFromClipboard( false );
@@ -454,6 +493,32 @@ bool CClip::AddToDataTable()
 	return false;
 }
 
+// changes m_Time to be later than the latest clip entry in the db
+// ensures that pClip's time is not older than the last clip added
+// old times can happen on fast copies (<1 sec).
+void CClip::MakeLatestTime()
+{
+long lDate;
+	try
+	{
+	CMainTable recset;
+
+		recset.m_strSort = "lDate DESC";
+		recset.Open("SELECT * FROM Main");
+		recset.MoveFirst();
+
+		lDate = (long) m_Time.GetTime();
+		if( lDate <= recset.m_lDate )
+		{
+			lDate = recset.m_lDate + 1;
+			m_Time = lDate;
+		}
+
+		recset.Close();
+	}
+	CATCHDAO
+}
+
 // STATICS
 
 // deletes from both Main and Data Tables
@@ -551,12 +616,12 @@ HGLOBAL hGlobal = 0;
 	return hGlobal;
 }
 
-bool CClip::LoadFormats( long lID, CClipFormats& format )
+bool CClip::LoadFormats( long lID, CClipFormats& formats )
 {
 CClipFormat cf;
 HGLOBAL hGlobal = 0;
 
-	format.RemoveAll();
+	formats.RemoveAll();
 
 	try
 	{
@@ -581,15 +646,16 @@ HGLOBAL hGlobal = 0;
 			}
 			cf.m_cfType = GetFormatID( recset.m_strClipBoardFormat );
 			cf.m_hgData = hGlobal;
-			format.Add( cf );
+			formats.Add( cf );
 			recset.MoveNext();
 		}
+		cf.m_hgData = 0; // formats owns all the data
 
 		recset.Close();
 	}
 	CATCHDAO
 
-	return format.GetCount() > 0;
+	return formats.GetCount() > 0;
 }
 
 void CClip::LoadTypes( long lID, CClipTypes& types )
@@ -615,6 +681,57 @@ void CClip::LoadTypes( long lID, CClipTypes& types )
 	CATCHDAO
 }
 
+
+/*----------------------------------------------------------------------------*\
+	CClipList
+\*----------------------------------------------------------------------------*/
+
+CClipList::~CClipList()
+{
+CClip* pClip;
+	while( GetCount() )
+	{
+		pClip = RemoveHead();
+		DELETE_PTR( pClip );
+	}
+}
+
+// returns the number of clips actually saved
+// while this does empty the Format Data, it does not delete the Clips.
+int CClipList::AddToDB( bool bLatestTime, bool bShowStatus )
+{
+int savedCount = 0;
+int nRemaining = 0;
+CClip* pClip;
+POSITION pos;
+bool bResult;
+
+	nRemaining = GetCount();
+	pos = GetHeadPosition();
+	while( pos )
+	{
+		if( bShowStatus )
+		{
+			theApp.SetStatus( StrF("%d",nRemaining) );
+			nRemaining--;
+		}
+
+		pClip = GetNext( pos );
+		ASSERT( pClip );
+
+		if( bLatestTime )
+			pClip->MakeLatestTime();
+
+		bResult = pClip->AddToDB();
+		if( bResult )
+			savedCount++;
+	}
+
+	if( bShowStatus )
+		theApp.SetStatus();
+
+	return savedCount;
+}
 
 
 /*----------------------------------------------------------------------------*\

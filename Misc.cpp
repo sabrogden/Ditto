@@ -7,16 +7,7 @@
 	#include "AlphaBlend.h"
 #endif
 
-CString StrF(const char * pszFormat, ...)
-{
-	ASSERT( AtlIsValidString( pszFormat ) );
-CString str;
-	va_list argList;
-	va_start( argList, pszFormat );
-	str.FormatV( pszFormat, argList );
-	va_end( argList );
-	return str;
-}
+// Debug Functions
 
 void AppendToFile( const char* fn, const char* msg )
 {
@@ -76,6 +67,62 @@ void SetThreadName(DWORD dwThreadID, LPCTSTR szThreadName)
     {
     }
 } 
+
+// Utility Functions
+
+CString StrF(const char * pszFormat, ...)
+{
+	ASSERT( AtlIsValidString( pszFormat ) );
+CString str;
+	va_list argList;
+	va_start( argList, pszFormat );
+	str.FormatV( pszFormat, argList );
+	va_end( argList );
+	return str;
+}
+
+BYTE GetEscapeChar( BYTE ch )
+{
+	switch(ch)
+	{
+	case '\'':	return '\''; // Single quotation mark (') = 39 or 0x27
+	case '\"':	return '\"'; // Double quotation mark (") = 34 or 0x22
+	case '?':	return '\?'; // Question mark (?) = 63 or 0x3f
+	case '\\':	return '\\'; // Backslash (\) = 92 or 0x5c
+	case 'a':	return '\a'; // Alert (BEL) = 7
+	case 'b':	return '\b'; // Backspace (BS) = 8
+	case 'f':	return '\f'; // Formfeed (FF) = 12 or 0x0c
+	case 'n':	return '\n'; // Newline (NL or LF) = 10 or 0x0a
+	case 'r':	return '\r'; // Carriage Return (CR) = 13 or 0x0d
+	case 't':	return '\t'; // Horizontal tab (HT) = 9
+	case 'v':	return '\v'; // Vertical tab (VT) = 11 or 0x0b
+	case '0':	return '\0'; // Null character (NUL) = 0
+	}
+	return 0; // invalid
+}
+
+CString RemoveEscapes( const char* str )
+{
+	ASSERT( str );
+CString ret;
+char* pSrc = (char*) str;
+char* pDest = ret.GetBuffer( strlen(pSrc) );
+char* pStart = pDest;
+	while( *pSrc != '\0' )
+	{
+		if( *pSrc == '\\' )
+		{
+			pSrc++;
+			*pDest = GetEscapeChar( *pSrc );
+		}
+		else
+			*pDest = *pSrc;
+		pSrc++;
+		pDest++;
+	}
+	ret.ReleaseBuffer( pDest - pStart );
+	return ret;
+}
 
 CString GetWndText( HWND hWnd )
 {

@@ -18,7 +18,6 @@ class CClip;
 class CCopyThread;
 
 typedef CArray<CLIPFORMAT, CLIPFORMAT> CClipTypes;
-typedef CList<CClip*,CClip*> CClipList;
 
 /*----------------------------------------------------------------------------*\
 	COleDataObjectEx
@@ -39,7 +38,12 @@ public:
 	CLIPFORMAT	m_cfType;
     HGLOBAL		m_hgData;
 
-	CClipFormat() : m_cfType(0), m_hgData(0) {}
+	CClipFormat( CLIPFORMAT cfType = 0, HGLOBAL hgData = 0 )
+		{ m_cfType = cfType; m_hgData = hgData; }
+	~CClipFormat() { Free(); }
+
+	void Clear() { m_cfType = 0;  m_hgData = 0; }
+	void Free() { if( m_hgData ) m_hgData = ::GlobalFree( m_hgData ); }
 };
 
 /*----------------------------------------------------------------------------*\
@@ -72,8 +76,11 @@ public:
 	CClip();
 	~CClip();
 
+	void Clear();
 	void EmptyFormats();
-
+	
+	// Adds a new Format to this Clip by copying the given data.
+	bool AddFormat( CLIPFORMAT cfType, void* pData, UINT nLen );
 	// Fills this CClip with the contents of the clipboard.
 	bool LoadFromClipboard( CClipTypes* pClipTypes );
 	bool SetDescFromText( HGLOBAL hgData );
@@ -88,6 +95,9 @@ public:
 	bool FindDuplicate( CMainTable& recset, BOOL bCheckLastOnly = FALSE );
 	int  CompareFormatDataTo( long lID );
 
+	// changes m_Time to be later than the latest clip entry in the db
+	void MakeLatestTime();
+
 // STATICS
 	// deletes from both Main and Data Tables
 	static BOOL Delete( int id );
@@ -100,6 +110,20 @@ public:
 	static bool LoadFormats( long lID, CClipFormats& formats );
 	// Fills "types" with all Types in the db for the given Clip ID
 	static void LoadTypes( long lID, CClipTypes& types );
+};
+
+
+/*----------------------------------------------------------------------------*\
+	CClipList
+\*----------------------------------------------------------------------------*/
+
+class CClipList : public CList<CClip*,CClip*>
+{
+public:
+	~CClipList();
+	// returns the number of clips actually saved
+	// while this does empty the Format Data, it does not delete the Clips.
+	int AddToDB( bool bLatestTime = false, bool bShowStatus = true );
 };
 
 

@@ -73,11 +73,9 @@ public:
 	bool IsClipboardViewerConnected() { return m_CopyThread.IsClipboardViewerConnected(); }
 
 //	CClipList	m_SaveClipQueue; 
-	// ensures that pClip's time is not older than the last clip added
-	void FixTime( CClip* pClip );
 	// Retrieves all clips from CopyThread and Saves them.
 	// returns the ID of the last Clip saved (or 0 if none)
-	long SaveAllClips(); 
+	long SaveCopyClips(); 
 
 	CClipTypes* LoadTypesFromDB(); // returns a "new" allocated object
 	void ReloadTypes();

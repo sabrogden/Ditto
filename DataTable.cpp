@@ -92,7 +92,9 @@ HGLOBAL CDataTable::TakeData()
 // This should be faster than making a copy, but is this SAFE ?????
 BOOL CDataTable::ReplaceData( HGLOBAL hgData, UINT len )
 {
-	if( m_ooData.m_hData && (m_ooData.m_hData = GlobalFree( m_ooData.m_hData )) )
+	if( m_ooData.m_hData && 
+		m_ooData.m_dwDataLength &&
+		(m_ooData.m_hData = ::GlobalFree( m_ooData.m_hData )) )
 	{
 		ASSERT(FALSE);
 		return FALSE;

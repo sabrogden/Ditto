@@ -1,3 +1,25 @@
+03 Sept 3
+---------
++ Text Item Parser in CopyProperties - parses a CF_TEXT item into multiple
+  CF_TEXT items based upon a given separator string.
+  + CEdit m_ParseEdit
+  + CButton m_ParseButton
+  + void OnBnClickedParseButton()
+  + Misc 
+    + BYTE GetEscapeChar( BYTE ch );
+    + CString RemoveEscapes( const char* str );
+
++ CClip::AddFormat
+
++ CClipList::AddToDB( bool bLatestTime = false, bool bShowStatus = true )
+
+* CClipFormat frees m_hgData on destruction
+
+* changed CCP_MainApp::SaveAllClips to CCP_MainApp::SaveCopyClips
+
+* changed CCP_MainApp::FixTime to CClip::MakeLatestTime()
+
+
 03 Sept 2
 ---------
 * ProcessCopy - redesigned to fix the fast copy bugs.

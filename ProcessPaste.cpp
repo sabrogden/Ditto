@@ -193,6 +193,7 @@ int count = m_ClipIDs.GetCount();
 		{
 			pCF = &formats[i];
 			CacheGlobalData( pCF->m_cfType, pCF->m_hgData );
+			pCF->m_hgData = 0; // OLE owns it now
 		}
 		formats.RemoveAll();
 		return count;

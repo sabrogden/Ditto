@@ -319,7 +319,7 @@ LRESULT CMainFrame::OnClipboardCopied(WPARAM wParam, LPARAM lParam)
 {
 	// if the delay is undesirable, this could be altered to save one at a time,
 	//  allowing the processing of other messages between saving clips.
-	theApp.SaveAllClips();
+	theApp.SaveCopyClips();
 	return TRUE;
 }
 
