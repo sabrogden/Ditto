@@ -1243,12 +1243,20 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 			break;
 
 		case VK_ESCAPE:
-		{			
-			if(!m_cbSearch.GetShowingDropDown() &&
-				m_GroupTree.IsWindowVisible() == FALSE)
+		{	
+			if(m_strSQLSearch.IsEmpty() == FALSE)
 			{
-				HideQPasteWindow();
+				OnCancelFilter();
 				return TRUE;
+			}
+			else
+			{	
+				if(!m_cbSearch.GetShowingDropDown() &&
+					m_GroupTree.IsWindowVisible() == FALSE)
+				{
+					HideQPasteWindow();
+					return TRUE;
+				}
 			}
 			break;
 		}
@@ -1488,6 +1496,14 @@ void CQPasteWnd::OnFindItem(NMHDR* pNMHDR, LRESULT* pResult)
 
 	if(fndItem.flags & LVFI_STRING)
 	{
+		{
+			m_cbSearch.SetWindowText(fndItem.psz);
+			m_cbSearch.SetFocus();
+			m_cbSearch.SetEditSel(strlen(fndItem.psz), strlen(fndItem.psz));
+			*pResult = -1;
+			return;
+		}
+		
         int   nLength = strlen(fndItem.psz);
         long lArraySize = m_Recset.GetRecordCount();
 
