@@ -67,6 +67,7 @@ public:
 	CGroupTree		m_GroupTree;
 	CBitmapButton	m_ShowGroupsFolderBottom;
 	CBitmapButton	m_ShowGroupsFolderTop;
+	bool			m_bAllowRepaintImmediately;
 
 	void RefreshNc( bool bRepaintImmediately = false );
 	void UpdateStatus( bool bRepaintImmediately = false );  // regenerates the status (caption) text

@@ -141,7 +141,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 	}
 		
 	// Show the window
-	m_pwndPaste->ShowWindow(SW_SHOW);
+	m_pwndPaste->ShowQPasteWindow();
 	m_pwndPaste->SetForegroundWindow();
 }
 
@@ -151,6 +151,6 @@ void CQuickPaste::HideQPasteWnd()
 	if(m_pwndPaste)
 	{
 		if (IsWindow(m_pwndPaste->m_hWnd))
-			m_pwndPaste->ShowWindow(SW_SHOW);
+			m_pwndPaste->ShowWindow(SW_HIDE);
 	}
 }

@@ -512,7 +512,19 @@ void CQListCtrl::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 BOOL CQListCtrl::OnEraseBkgnd(CDC* pDC) 
 {
-//	return TRUE;
+	// Simply returning TRUE seems OK since we do custom item
+	//	painting.  However, there is a pixel buffer around the
+	//	border of this control (not within the item rects)
+	//	which becomes visually corrupt if it is not erased.
+
+	// In most cases, I do not notice the erasure, so I have kept
+	//	the call to CListCtrl::OnEraseBkgnd(pDC);
+
+	// However, for some reason, bulk erasure is very noticeable when
+	//	shift-scrolling the page to select a block of items, so
+	//	I made a special case for that:
+	if( GetSelectedCount() >= 2 )
+		return TRUE;
 	return CListCtrl::OnEraseBkgnd(pDC);
 }
 
@@ -867,7 +879,7 @@ void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 			SetTimer(TIMER_SHOW_PROPERTIES, 300, NULL);
 		}
 		if(GetSelectedCount() > 0 )
-			theApp.SetStatus(NULL, TRUE);
+			theApp.SetStatus(NULL, FALSE);
 	}
 }
 

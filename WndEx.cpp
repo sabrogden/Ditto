@@ -41,7 +41,7 @@ CWndEx::~CWndEx()
 
 void CWndEx::InvalidateNc()
 {
-	::RedrawWindow( m_hWnd, NULL, NULL, RDW_INVALIDATE | RDW_FRAME | RDW_NOINTERNALPAINT );
+	::RedrawWindow( m_hWnd, NULL, NULL, RDW_INVALIDATE | RDW_FRAME | RDW_NOCHILDREN );
 }
 
 void CWndEx::GetWindowRectEx(LPRECT lpRect)

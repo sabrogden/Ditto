@@ -36,6 +36,7 @@ CQPasteWnd::CQPasteWnd()
 	m_Title = QPASTE_TITLE;
 	m_bHideWnd = true;
 	m_strSQLSearch = "";
+	m_bAllowRepaintImmediately = true;
 }
 
 CQPasteWnd::~CQPasteWnd()
@@ -323,6 +324,9 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 	//Set the flag so we can't open this up again
 	theApp.m_bShowingQuickPaste = true;
 	SetCaptionColorActive( !g_Opt.m_bShowPersistent );
+
+	// use invalidation to avoid unnecessary repainting
+	m_bAllowRepaintImmediately = false;
 	UpdateStatus();
 
 	m_lstHeader.DestroyAndCreateAccelerator(TRUE);
@@ -350,14 +354,16 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 	m_lstHeader.SetShowTextForFirstTenHotKeys(CGetSetOptions::GetShowTextForFirstTenHotKeys());
 	
 	if(bFillList)
-		FillList();
+		FillList();	// FillList calls MoveControls
+	else
+		MoveControls();
 	
-	MoveControls();
-	
-	ShowWindow(SW_SHOW);
+	// from now on, for interactive use, we can repaint immediately
+	m_bAllowRepaintImmediately = true;
 
 	// always on top... for persistent showing (g_Opt.m_bShowPersistent)
-	::SetWindowPos( m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
+	// SHOWWINDOW was also integrated into this function rather than calling it separately
+	::SetWindowPos( m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE|SWP_SHOWWINDOW );
 
 	return TRUE;
 }
@@ -517,7 +523,7 @@ void CQPasteWnd::RefreshNc( bool bRepaintImmediately )
 	if( !theApp.m_bShowingQuickPaste )
 		return;
 
-	if( bRepaintImmediately )
+	if( bRepaintImmediately && m_bAllowRepaintImmediately )
 		OnNcPaint();
 	else
 		InvalidateNc();
@@ -647,7 +653,9 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 		{
 			m_Recset.MoveLast();
 			m_lstHeader.SetItemCountEx(m_Recset.GetRecordCount());
-		}	
+		}
+		else
+			m_lstHeader.SetItemCountEx(0);
 	}
 	catch(CDaoException* e)
 	{

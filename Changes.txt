@@ -1,3 +1,25 @@
+04 Jan 20
+---------
+! Fixed "multiple repaints on first show" bug.
+  * CQuickPaste::ShowQPasteWnd:
+    - m_pwndPaste->ShowWindow(SW_SHOW)
+      . This caused premature drawing and activation of the window.
+        It was replaced by a call to:
+    + m_pwndPaste->ShowQPasteWindow()
+    
+  * CQPasteWnd:
+    + bool m_bAllowRepaintImmediately:
+      . This acts as an override for RefreshNc's bRepaintImmediately parameter,
+        thereby stopping the status (titlebar) from being repeatedly redrawn
+        during ShowQPasteWindow.
+
+* Misc. Painting Improvements:
+  ! CWndEx::InvalidateNc(): redraw with RDW_NOCHILDREN
+    . The client area was being invalidated without this.
+  * CQListCtrl::OnEraseBkgnd(): faster when shift-scrolling.
+  * CQListCtrl::OnSelectionChange(): delayed SetStatus for faster selection.
+
+
 03 Sept 22
 ----------
 + Shared Data: Data can now be shared amongst multiple Clips.

@@ -209,7 +209,7 @@ void CCP_MainApp::SendPaste()
 {
 	if( !ActivateTarget() )
 	{
-		SetStatus("SendPaste FAILED!");
+		SetStatus("SendPaste FAILED!",TRUE);
 		return;
 	}
 
