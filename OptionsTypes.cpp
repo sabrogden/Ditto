@@ -52,20 +52,24 @@ BOOL COptionsTypes::OnApply()
 {
 	if(m_bSave)
 	{
-		CTypesTable recset;
-		recset.DeleteAll();
-
-		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT * FROM Types" ,NULL);
-
-		int nCount = m_List.GetCount();
-
-		for(int i = 0; i < nCount; i++)
+		try
 		{
-			recset.AddNew();
-			m_List.GetText(i, recset.m_TypeText);
-			recset.Update();
+			CTypesTable recset;
+			recset.DeleteAll();
+
+			recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT * FROM Types" ,NULL);
+
+			int nCount = m_List.GetCount();
+
+			for(int i = 0; i < nCount; i++)
+			{
+				recset.AddNew();
+				m_List.GetText(i, recset.m_TypeText);
+				recset.Update();
+			}
+			recset.Close();
 		}
-		recset.Close();
+		CATCHDAO
 
 		// refresh our local cache
 		theApp.ReloadTypes();
@@ -77,19 +81,24 @@ BOOL COptionsTypes::OnApply()
 BOOL COptionsTypes::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
-	
-	CTypesTable recset;
-	recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT * FROM Types" ,NULL);
-	if(recset.IsEOF())
+
+	try
 	{
-		m_List.AddString("CF_TEXT");
-		m_List.AddString(GetFormatName(RegisterClipboardFormat(CF_RTF)));
+		CTypesTable recset;
+		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT * FROM Types" ,NULL);
+		if(recset.IsEOF())
+		{
+			m_List.AddString("CF_TEXT");
+			m_List.AddString(GetFormatName(RegisterClipboardFormat(CF_RTF)));
+			m_List.AddString("CF_DIB");
+		}
+		while(!recset.IsEOF())
+		{
+			m_List.AddString(recset.m_TypeText);
+			recset.MoveNext();
+		}
 	}
-	while(!recset.IsEOF())
-	{
-		m_List.AddString(recset.m_TypeText);
-		recset.MoveNext();
-	}
+	CATCHDAO
 	
 	m_List.SetFocus();
 	return FALSE;
