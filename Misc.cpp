@@ -23,6 +23,30 @@ int GetCBitmapHeight(const CBitmap & cbm)
 	return bm.bmHeight;
 } 
 
+WORD NumColors(BITMAPINFOHEADER& bmiHeader)
+{
+	if ( bmiHeader.biClrUsed != 0)
+		return (WORD)bmiHeader.biClrUsed;
+	
+	switch ( bmiHeader.biBitCount )
+	{
+	case 1:
+		return 2;
+	case 4:
+		return 16;
+	case 8:
+		return 256;
+	default:
+		return 0;
+	}
+}
+
+
+DWORD PaletteSize(BITMAPINFOHEADER& bmiHeader)
+{
+	return NumColors(bmiHeader) * sizeof(RGBQUAD);
+}
+
 BOOL GetCBitmap(void	*pClip2, CDC *pDC, CBitmap *pBitMap, int nMaxHeight)
 {
 	LPBITMAPINFO	lpBI ;
@@ -38,7 +62,19 @@ BOOL GetCBitmap(void	*pClip2, CDC *pDC, CBitmap *pBitMap, int nMaxHeight)
 		lpBI = (LPBITMAPINFO)GlobalLock(pClip->m_hgData);
 		if(lpBI)
 		{
-			pDIBBits = (void*)(lpBI->bmiColors + sizeof(RGBQUAD));
+			int nColors = lpBI->bmiHeader.biClrUsed ? lpBI->bmiHeader.biClrUsed : 1 << lpBI->bmiHeader.biBitCount;
+
+			if( lpBI->bmiHeader.biBitCount > 8 )
+			{
+				pDIBBits = (LPVOID)((LPDWORD)(lpBI->bmiColors + lpBI->bmiHeader.biClrUsed) + 
+					((lpBI->bmiHeader.biCompression == BI_BITFIELDS) ? 3 : 0));
+			}
+			else
+			{
+				pDIBBits = (LPVOID)(lpBI->bmiColors + nColors);
+			}
+
+			//pDIBBits = (void*)(lpBI + lpBI->bmiHeader.biSize + PaletteSize(lpBI->bmiHeader));
 
 			int nHeight = min(nMaxHeight, lpBI->bmiHeader.biHeight);
 			int nWidth = (nHeight * lpBI->bmiHeader.biWidth) / lpBI->bmiHeader.biHeight;

@@ -554,8 +554,6 @@ BOOL CQListCtrl::DrawBitMap(int nItem, CRect &crRect, CDC *pDC)
 
 			ThumbData.m_hgData = BitmapToDIB(Bitmap.operator HBITMAP(), hPal);
 
-			long l = GlobalSize(ThumbData.m_hgData);
-
 			//Map will delete memory in destructor
 			ThumbData.bDeleteData = false;
 		}
