@@ -75,7 +75,8 @@ BOOL CAbout::OnInitDialog()
 
 	m_List.AddString("Credits");
 	
-	cs = "    Author - Scott Brogden, sabrogden@softhome.net";
+	cs = "    Authors - Scott Brogden, sabrogden@users.sourceforge.net";
+	cs = "            - Kevin Edwards, ingenuus@users.sourceforge.net";
 	m_List.AddString(cs);
 
 	CRect rect;
@@ -90,7 +91,7 @@ BOOL CAbout::OnInitDialog()
 	
 	m_HyperLink.MoveWindow(rect);
 
-	m_HyperLink.SetURL(_T("mailto:sabrogden@softhome.net"));
+	m_HyperLink.SetURL(_T("mailto:sabrogden@users.sourceforge.net"));
 		
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
