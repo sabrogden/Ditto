@@ -1085,7 +1085,7 @@ void CQPasteWnd::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 				cs += m_Recset.m_strText;
 				
 				lstrcpyn(pItem->pszText, cs, pItem->cchTextMax);
-				pInfo->pszText[pItem->cchTextMax-1] = '\0';
+				pItem->pszText[pItem->cchTextMax-1] = '\0';
 			}
 			catch(CDaoException *e)
 			{
