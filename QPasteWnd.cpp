@@ -114,6 +114,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_GROUPS_MOVETOGROUP, OnMenuGroupsMovetogroup)
 	ON_COMMAND(ID_MENU_PASTEPLAINTEXTONLY, OnMenuPasteplaintextonly)
 	ON_COMMAND(ID_MENU_HELP, OnMenuHelp)
+	ON_COMMAND(ID_MENU_QUICKOPTIONS_FONT, OnMenuQuickoptionsFont)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(NM_SELECT, OnListSelect)
 	ON_MESSAGE(NM_END, OnListEnd)
@@ -225,8 +226,9 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_cbSearch.SetFont(&m_SearchFont);
 	m_btCancel.SetFont(&m_SearchFont);
 	m_stGroup.SetFont(&GroupFont);
-	
-	
+
+	UpdateFont();
+		
 	return 0;
 }
 
@@ -1034,6 +1036,8 @@ void CQPasteWnd::OnMenuOptions()
 	
 	DoOptions(this);
 	
+	UpdateFont();
+
 	ShowQPasteWindow(TRUE);
 	
 	m_bHideWnd = true;
@@ -1095,6 +1099,13 @@ void CQPasteWnd::OnMenuProperties()
 		m_lstHeader.SetFocus();
 		m_lstHeader.SetListPos(lID);
 	}
+}
+
+void CQPasteWnd::UpdateFont()
+{
+	LOGFONT lf;
+	CGetSetOptions::GetFont(lf);
+	m_lstHeader.SetLogFont(lf);
 }
 
 void CQPasteWnd::OnMenuFirsttenhotkeysUsectrlnum() 
@@ -1397,6 +1408,23 @@ void CQPasteWnd::OnMenuPasteplaintextonly()
 void CQPasteWnd::OnMenuHelp() 
 {
 	CHyperLink::GotoURL("Help\\DittoGettingStarted.htm", SW_SHOW);
+}
+
+void CQPasteWnd::OnMenuQuickoptionsFont() 
+{
+	m_bHideWnd = false;
+
+	CFont *pFont = m_lstHeader.GetFont();
+	LOGFONT lf;
+	pFont->GetLogFont(&lf);
+	CFontDialog dlg(&lf);
+	if(dlg.DoModal() == IDOK)
+	{	
+		CGetSetOptions::SetFont(*dlg.m_cf.lpLogFont);
+		m_lstHeader.SetLogFont(*dlg.m_cf.lpLogFont);
+	}
+	
+	m_bHideWnd = true;
 }
 
 

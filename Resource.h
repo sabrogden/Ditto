@@ -84,6 +84,7 @@
 #define IDC_BUTTON1                     1040
 #define IDC_PARSE_BUTTON                1040
 #define IDC_HIDE_DITO_ON_HOT_KEY        1040
+#define IDC_BUTTON_FONT                 1040
 #define IDC_PARSE_EDIT                  1041
 #define IDC_CHECK1                      1042
 #define IDC_HISTORY_START_TOP           1042
@@ -127,6 +128,7 @@
 #define IDC_STATIC_FORMATS              2029
 #define IDC_HOTKEY7                     2030
 #define IDC_HOTKEY8                     2031
+#define IDC_BUTTON_DEFAULT_FAULT        2031
 #define IDC_HOTKEY9                     2032
 #define IDC_HOTKEY10                    2033
 #define ID_FIRST_OPTION                 32771
@@ -198,6 +200,7 @@
 #define ID_MENU_PASTEPLAINTEXTONLY      32841
 #define ID_MENU_HELP                    32842
 #define ID_FIRST_HELP                   32843
+#define ID_MENU_QUICKOPTIONS_FONT       32844
 
 // Next default values for new objects
 // 
@@ -205,8 +208,8 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        157
-#define _APS_NEXT_COMMAND_VALUE         32844
-#define _APS_NEXT_CONTROL_VALUE         2030
+#define _APS_NEXT_COMMAND_VALUE         32845
+#define _APS_NEXT_CONTROL_VALUE         2032
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

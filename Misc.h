@@ -150,6 +150,9 @@ public:
 	static CString GetProfileString(CString csName, CString csDefault);
 	static BOOL	SetProfileString(CString csName, CString csValue);
 
+	static LPVOID	GetProfileData(CString csName, DWORD &dwLength);
+	static BOOL	SetProfileData(CString csName, LPVOID lpData, DWORD dwLength);
+
 	static BOOL SetQuickPasteSize(CSize size);
 	static void GetQuickPasteSize(CSize &size);
 
@@ -305,6 +308,9 @@ public:
 
 	static BOOL		GetDisableRecieve();
 	static void		SetDisableRecieve(BOOL bVal);
+
+	static BOOL		GetFont(LOGFONT &font);
+	static void		SetFont(LOGFONT &font);
 
 	/*
 	BOOL IsAutoRun();

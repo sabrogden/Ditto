@@ -62,6 +62,8 @@ CQListCtrl::~CQListCtrl()
 		::DeleteObject( m_SmallFont );
 	
 	DestroyAndCreateAccelerator(FALSE);
+
+	m_Font.DeleteObject();
 }
 
 // returns the position 1-10 if the index is in the FirstTen block else -1
@@ -1000,4 +1002,13 @@ void CQListCtrl::OnTimer(UINT nIDEvent)
 	}
 	
 	CListCtrl::OnTimer(nIDEvent);
+}
+
+void CQListCtrl::SetLogFont(LOGFONT &font)
+{
+	m_Font.DeleteObject();
+
+	m_Font.CreateFontIndirect(&font);
+
+	SetFont(&m_Font);
 }

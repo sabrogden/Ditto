@@ -25,6 +25,8 @@ public:
 // Dialog Data
 	//{{AFX_DATA(COptionsQuickPaste)
 	enum { IDD = IDD_OPTIONS_QUICK_PASTE };
+	CButton	m_btDefaultButton;
+	CButton	m_btFont;
 	CButton	m_btShowText;
 	CNumberEdit	m_eLinesPerRow;
 	CNumberEdit	m_eTransparencyPercent;
@@ -46,12 +48,17 @@ public:
 protected:
 	COptionsSheet *m_pParent;
 
+	CFont m_Font;
+	LOGFONT m_LogFont;
+
 
 // Implementation
 protected:
 	// Generated message map functions
 	//{{AFX_MSG(COptionsQuickPaste)
 	virtual BOOL OnInitDialog();
+	afx_msg void OnButtonFont();
+	afx_msg void OnButtonDefaultFault();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

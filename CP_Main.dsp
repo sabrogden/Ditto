@@ -288,6 +288,10 @@ SOURCE=.\DataTable.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\DialogResizer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\DIBUTIL.CPP
 # End Source File
 # Begin Source File
@@ -384,6 +388,10 @@ SOURCE=.\QuickPaste.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\RichEditCtrlEx.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\SelectDB.cpp
 # End Source File
 # Begin Source File
@@ -438,6 +446,10 @@ SOURCE=.\DatabaseUtilities.h
 # Begin Source File
 
 SOURCE=.\DataTable.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\DialogResizer.h
 # End Source File
 # Begin Source File
 
@@ -542,6 +554,10 @@ SOURCE=.\QuickPaste.h
 # Begin Source File
 
 SOURCE=.\Resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\RichEditCtrlEx.h
 # End Source File
 # Begin Source File
 

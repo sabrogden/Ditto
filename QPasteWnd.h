@@ -47,6 +47,8 @@ public:
 	bool Add(const CString &csHeader, const CString &csText, int nID);
 	virtual ~CQPasteWnd();
 
+	void UpdateFont();
+
 //protected:
 	CQListCtrl		m_lstHeader;
 
@@ -167,6 +169,7 @@ protected:
 	afx_msg void OnMenuGroupsMovetogroup();
 	afx_msg void OnMenuPasteplaintextonly();
 	afx_msg void OnMenuHelp();
+	afx_msg void OnMenuQuickoptionsFont();
 	//}}AFX_MSG
 	afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);

@@ -21,16 +21,21 @@ COptionsQuickPaste::COptionsQuickPaste() : CPropertyPage(COptionsQuickPaste::IDD
 	//{{AFX_DATA_INIT(COptionsQuickPaste)
 		// NOTE: the ClassWizard will add member initialization here
 	//}}AFX_DATA_INIT
+
+	memset(&m_LogFont, 0, sizeof(LOGFONT));
 }
 
 COptionsQuickPaste::~COptionsQuickPaste()
 {
+	m_Font.DeleteObject();
 }
 
 void COptionsQuickPaste::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionsQuickPaste)
+	DDX_Control(pDX, IDC_BUTTON_DEFAULT_FAULT, m_btDefaultButton);
+	DDX_Control(pDX, IDC_BUTTON_FONT, m_btFont);
 	DDX_Control(pDX, IDC_SHOW_TEXT_FOR_FIRST_TEN_HOT_KEYS, m_btShowText);
 	DDX_Control(pDX, IDC_LINES_ROW, m_eLinesPerRow);
 	DDX_Control(pDX, IDC_TRANS_PERC, m_eTransparencyPercent);
@@ -44,6 +49,8 @@ void COptionsQuickPaste::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(COptionsQuickPaste, CPropertyPage)
 	//{{AFX_MSG_MAP(COptionsQuickPaste)
+	ON_BN_CLICKED(IDC_BUTTON_FONT, OnButtonFont)
+	ON_BN_CLICKED(IDC_BUTTON_DEFAULT_FAULT, OnButtonDefaultFault)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -72,6 +79,21 @@ BOOL COptionsQuickPaste::OnInitDialog()
 	m_btUseCtrlNum.SetCheck(CGetSetOptions::GetUseCtrlNumForFirstTenHotKeys());
 
 	m_btShowText.SetCheck(CGetSetOptions::GetShowTextForFirstTenHotKeys());
+
+	if(CGetSetOptions::GetFont(m_LogFont))
+	{		
+		m_Font.CreateFontIndirect(&m_LogFont);
+		m_btFont.SetFont(&m_Font);
+	}
+	else
+	{
+		CFont *ft =	m_btFont.GetFont();
+		ft->GetLogFont(&m_LogFont);
+	}
+
+	CString cs;
+	cs.Format("Font - %s", m_LogFont.lfFaceName);
+	m_btFont.SetWindowText(cs);
 		
 	return FALSE;
 }
@@ -94,5 +116,51 @@ BOOL COptionsQuickPaste::OnApply()
 	CGetSetOptions::SetUseCtrlNumForFirstTenHotKeys(m_btUseCtrlNum.GetCheck());
 	CGetSetOptions::SetShowTextForFirstTenHotKeys(m_btShowText.GetCheck());
 	
+	if(m_LogFont.lfWeight != 0)
+	{
+		CGetSetOptions::SetFont(m_LogFont);
+	}
+	
 	return CPropertyPage::OnApply();
+}
+
+void COptionsQuickPaste::OnButtonFont() 
+{
+	CFontDialog dlg(&m_LogFont);
+	if(dlg.DoModal() == IDOK)
+	{	
+		m_Font.DeleteObject();
+
+		memcpy(&m_LogFont, dlg.m_cf.lpLogFont, sizeof(LOGFONT));		
+
+		m_Font.CreateFontIndirect(&m_LogFont);
+
+		m_btFont.SetFont(&m_Font);
+
+		CString cs;
+		cs.Format("Font - %s", m_LogFont.lfFaceName);
+		m_btFont.SetWindowText(cs);
+	}
+}
+
+void COptionsQuickPaste::OnButtonDefaultFault() 
+{
+	CFont *ft =	m_btDefaultButton.GetFont();
+	ft->GetLogFont(&m_LogFont);
+
+	memset(&m_LogFont, 0, sizeof(m_LogFont));
+
+	m_LogFont.lfHeight = -11;
+	m_LogFont.lfWeight = 400;
+	m_LogFont.lfCharSet = 1;
+	strcpy(m_LogFont.lfFaceName, "Tahoma");
+
+	m_Font.DeleteObject();
+	m_Font.CreateFontIndirect(&m_LogFont);
+
+	m_btFont.SetFont(&m_Font);
+
+	CString cs;
+	cs.Format("Font - %s", m_LogFont.lfFaceName);
+	m_btFont.SetWindowText(cs);
 }

@@ -260,6 +260,8 @@ BEGIN
 
             MENUITEM "Prompt For New Group Names",  ID_MENU_QUICKOPTIONS_PROMPTFORNEWGROUPNAMES
 
+            MENUITEM "Select Font",                 ID_MENU_QUICKOPTIONS_FONT
+
         END
         POPUP "Sent To"
         BEGIN
@@ -386,39 +388,41 @@ BEGIN
     PUSHBUTTON      "&Delete",IDC_DELETE,147,30,38,14
 END
 
-IDD_OPTIONS_QUICK_PASTE DIALOGEX 0, 0, 206, 193
+IDD_OPTIONS_QUICK_PASTE DIALOG DISCARDABLE  0, 0, 229, 227
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Quick Paste"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,67,122,10
-    EDITTEXT        IDC_TRANS_PERC,140,66,19,12,ES_AUTOHSCROLL
-    LTEXT           "%",IDC_STATIC,162,69,8,8
-    LTEXT           "Text Lines per Row",IDC_STATIC,18,54,62,8
-    EDITTEXT        IDC_LINES_ROW,82,52,19,12,ES_AUTOHSCROLL
-    GROUPBOX        "Popup Positioning",IDC_STATIC,11,80,116,41
-    CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,22,
-                    89,41,10
-    CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,22,
-                    99,45,10
-    CONTROL         "At Previous Position",IDC_AT_PREVIOUS,"Button",
-                    BS_AUTORADIOBUTTON,22,109,79,10
+    CONTROL         "History Starts at the Top of the list (vs. Bottom)",
+                    IDC_HISTORY_START_TOP,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,18,8,161,10
     CONTROL         "Use Ctrl - Num for first ten copy hot keys",
                     IDC_CTRL_CLICK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,
                     19,142,10
     CONTROL         "Show text for first ten copy hot keys",
                     IDC_SHOW_TEXT_FOR_FIRST_TEN_HOT_KEYS,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,18,30,128,10
-    LTEXT           "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group",
-                    IDC_STATIC,17,137,103,36
-    CONTROL         "History Starts at the Top of the list (vs. Bottom)",
-                    IDC_HISTORY_START_TOP,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,18,8,161,10
     CONTROL         "Show leading whitespace",
                     IDC_DESC_SHOW_LEADING_WHITESPACE,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,18,41,97,10
-    GROUPBOX        "List Item Prefix Legend",IDC_STATIC,11,127,116,50
+    LTEXT           "Text Lines per Row",IDC_STATIC,18,54,62,8
+    EDITTEXT        IDC_LINES_ROW,82,52,19,12,ES_AUTOHSCROLL
+    CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,67,122,10
+    EDITTEXT        IDC_TRANS_PERC,140,66,19,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Font",IDC_BUTTON_FONT,18,81,143,17
+    PUSHBUTTON      "Default Font",IDC_BUTTON_DEFAULT_FAULT,164,84,48,12
+    CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,29,
+                    111,41,10
+    CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,29,
+                    121,45,10
+    CONTROL         "At Previous Position",IDC_AT_PREVIOUS,"Button",
+                    BS_AUTORADIOBUTTON,29,131,79,10
+    LTEXT           "%",IDC_STATIC,162,69,8,8
+    GROUPBOX        "Popup Positioning",IDC_STATIC,18,102,116,41
+    LTEXT           "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group",
+                    IDC_STATIC,24,159,103,36
+    GROUPBOX        "List Item Prefix Legend",IDC_STATIC,18,149,116,50
 END
 
 IDD_OPTIONS_KEYSTROKES DIALOG DISCARDABLE  0, 0, 302, 206
@@ -528,33 +532,33 @@ STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Stats"
 FONT 8, "MS Sans Serif"
 BEGIN
-    EDITTEXT        IDC_TRIP_COPIES,157,31,25,12,ES_AUTOHSCROLL
-    LTEXT           "Copies",IDC_STATIC,132,31,22,12
-    EDITTEXT        IDC_TRIP_PASTES,157,45,25,12,ES_AUTOHSCROLL
-    LTEXT           "Pastes",IDC_STATIC,132,45,22,12
-    PUSHBUTTON      "Reset",IDC_RESET_COUNTS,193,31,32,12
-    GROUPBOX        "Trip Odometer",IDC_STATIC,128,7,105,54
+    EDITTEXT        IDC_EDIT_ALL_DATE,13,17,97,12,ES_AUTOHSCROLL
     EDITTEXT        IDC_ALL_COPIES,41,31,25,12,ES_AUTOHSCROLL
-    LTEXT           "Copies",IDC_STATIC,13,33,22,12
     EDITTEXT        IDC_ALL_PASTES,41,45,25,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_TRIP_DATE,132,17,97,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_TRIP_COPIES,157,31,25,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_TRIP_PASTES,157,45,25,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Reset",IDC_RESET_COUNTS,193,31,32,12
+    EDITTEXT        IDC_SAVED_COPIES,76,72,41,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Remove All",IDC_REMOVE_ALL,122,72,44,12
+    EDITTEXT        IDC_SAVED_COPY_DATA,76,86,41,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LAST_STARTED,76,107,157,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_DATABASE_SIZE,76,121,41,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_CLIPS_SENT,76,135,41,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_CLIPS_RECIVED,76,149,41,12,ES_AUTOHSCROLL
+    LTEXT           "Copies",IDC_STATIC,132,31,22,12
+    LTEXT           "Pastes",IDC_STATIC,132,45,22,12
+    GROUPBOX        "Trip Odometer",IDC_STATIC,128,7,105,54
+    LTEXT           "Copies",IDC_STATIC,13,33,22,12
     LTEXT           "Pastes",IDC_STATIC,13,46,22,12
     GROUPBOX        "Odometer",IDC_STATIC,7,7,110,54
-    EDITTEXT        IDC_TRIP_DATE,132,17,97,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT_ALL_DATE,13,17,97,12,ES_AUTOHSCROLL
     LTEXT           "Saved Copies",IDC_STATIC,15,73,45,12
-    EDITTEXT        IDC_SAVED_COPIES,76,72,41,12,ES_AUTOHSCROLL
     LTEXT           "Saved Copy Data",IDC_STATIC,15,88,57,12
-    EDITTEXT        IDC_SAVED_COPY_DATA,76,86,41,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "Remove All",IDC_REMOVE_ALL,122,72,44,12
     LTEXT           "Database Size",IDC_STATIC,15,121,47,12,SS_CENTERIMAGE
-    EDITTEXT        IDC_DATABASE_SIZE,76,121,41,12,ES_AUTOHSCROLL
     LTEXT           "Clips Sent",IDC_STATIC,15,135,32,12,SS_CENTERIMAGE
-    EDITTEXT        IDC_CLIPS_SENT,76,135,41,12,ES_AUTOHSCROLL
     LTEXT           "Clips Recieved",IDC_STATIC,15,149,47,12,SS_CENTERIMAGE
-    EDITTEXT        IDC_CLIPS_RECIVED,76,149,41,12,ES_AUTOHSCROLL
     GROUPBOX        "",IDC_STATIC,7,63,166,40
     LTEXT           "Last Started",IDC_STATIC,15,107,47,12,SS_CENTERIMAGE
-    EDITTEXT        IDC_LAST_STARTED,76,107,157,12,ES_AUTOHSCROLL
     LTEXT           "Since Last Start",IDC_STATIC,120,144,51,8
 END
 
@@ -757,9 +761,9 @@ BEGIN
     IDD_OPTIONS_QUICK_PASTE, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 199
+        RIGHTMARGIN, 222
         TOPMARGIN, 7
-        BOTTOMMARGIN, 185
+        BOTTOMMARGIN, 219
     END
 
     IDD_OPTIONS_KEYSTROKES, DIALOG

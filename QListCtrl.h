@@ -94,6 +94,8 @@ public:
 
 	void HidePopup()	{ if(m_pToolTip) m_pToolTip->Hide();	}
 
+	void SetLogFont(LOGFONT &font);
+
 protected:
 	void SendSelection(int nItem);;
 	void SendSelection(ARRAY &arrItems);
@@ -112,6 +114,8 @@ protected:
 	CMap<long, long, CClipFormat, CClipFormat> m_ThumbNails;
 
 	CToolTipEx *m_pToolTip;
+
+	CFont m_Font;
 	
 	// Generated message map functions
 protected:

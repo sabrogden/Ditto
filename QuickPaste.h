@@ -24,6 +24,8 @@ public:
 	BOOL IsWindowVisibleEx();
 	BOOL EnsureVisible(CRect *pcrRect);
 
+	void UpdateFont()		{ if(m_pwndPaste) m_pwndPaste->UpdateFont();	}
+
 //protected:
 	CQPasteWnd *m_pwndPaste;
 };

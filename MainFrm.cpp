@@ -170,6 +170,8 @@ void CMainFrame::Dump(CDumpContext& dc) const
 void CMainFrame::OnFirstOption() 
 {
 	DoOptions(this);	
+	
+	QuickPaste.UpdateFont();
 }
 
 void CMainFrame::OnFirstExit() 

@@ -695,6 +695,47 @@ BOOL CGetSetOptions::SetProfileString(CString csName, CString csValue)
 	return lResult == ERROR_SUCCESS;
 }
 
+BOOL CGetSetOptions::SetProfileData(CString csName, LPVOID lpData, DWORD dwLength)
+{
+	HKEY hkKey;
+	DWORD dWord;
+	long lResult = RegCreateKeyEx(HKEY_CURRENT_USER, _T(REG_PATH), NULL, 
+						NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 
+						NULL, &hkKey, &dWord);
+
+	if(lResult != ERROR_SUCCESS)
+		return FALSE;
+
+	::RegSetValueEx(hkKey, csName, NULL, REG_BINARY,
+			(BYTE*)lpData, dwLength);
+
+	RegCloseKey(hkKey);
+
+	return lResult == ERROR_SUCCESS;
+}
+
+LPVOID CGetSetOptions::GetProfileData(CString csName, DWORD &dwLength)
+{
+	HKEY hkKey;
+
+	long lResult = RegOpenKeyEx(HKEY_CURRENT_USER, _T(REG_PATH),
+								NULL, KEY_READ, &hkKey);
+	
+	lResult = ::RegQueryValueEx(hkKey , csName, NULL, NULL, NULL, &dwLength);
+
+	if(lResult != ERROR_SUCCESS)
+		return NULL;
+
+	LPVOID lpVoid = new BYTE[dwLength];
+	
+	lResult = ::RegQueryValueEx(hkKey , csName, NULL, NULL, (LPBYTE)lpVoid, &dwLength);
+
+	if(lResult != ERROR_SUCCESS)
+		return NULL;
+
+	return lpVoid;
+}
+
 BOOL CGetSetOptions::GetShowIconInSysTray() 
 {
 	return GetProfileLong("ShowIconInSystemTray", TRUE);
@@ -1187,6 +1228,23 @@ void CGetSetOptions::SetDisableRecieve(BOOL bVal)
 	SetProfileLong("DisableRecieve", bVal);
 }
 
+BOOL CGetSetOptions::GetFont(LOGFONT &font)
+{
+	DWORD dwLength;
+	LPVOID lpVoid = GetProfileData("DisplayFont", dwLength);
+	if(lpVoid)
+	{
+		memcpy(&font, lpVoid, dwLength);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+void CGetSetOptions::SetFont(LOGFONT &font)
+{
+	SetProfileData("DisplayFont", &font, sizeof(LOGFONT));
+}
 
 /*------------------------------------------------------------------*\
 CHotKey - a single system-wide hotkey
