@@ -119,6 +119,10 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_SHOWTHUMBNAILS, OnMenuQuickoptionsShowthumbnails)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_DRAWRTFTEXT, OnMenuQuickoptionsDrawrtftext)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_PASTECLIPAFTERSELECTION, OnMenuQuickoptionsPasteclipafterselection)
+	ON_CBN_EDITCHANGE(ID_EDIT_SEARCH, OnSearchEditChange)
+	ON_COMMAND(ID_MENU_QUICKOPTIONS_FINDASYOUTYPE, OnMenuQuickoptionsFindasyoutype)
+	ON_COMMAND(ID_MENU_QUICKOPTIONS_ENSUREENTIREWINDOWISVISIBLE, OnMenuQuickoptionsEnsureentirewindowisvisible)
+	ON_COMMAND(ID_MENU_QUICKOPTIONS_SHOWCLIPSTHATAREINGROUPSINMAINLIST, OnMenuQuickoptionsShowclipsthatareingroupsinmainlist)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(NM_SELECT, OnListSelect)
 	ON_MESSAGE(NM_END, OnListEnd)
@@ -145,7 +149,9 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_MESSAGE(NM_GROUP_TREE_MESSAGE, OnGroupTreeMessage)
 	ON_COMMAND(ID_BACK_BUTTON, OnBackButton)
 	ON_MESSAGE(NM_GET_CLIP_DATA, OnGetClipData)
-	END_MESSAGE_MAP()
+	ON_MESSAGE(CB_UPDOWN, OnUpDown)
+
+END_MESSAGE_MAP()
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -656,7 +662,14 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 		else
 			m_Recset.m_strSort = "bIsGroup ASC, lDate ASC";
 		
-		strFilter = "((bIsGroup = TRUE AND lParentID = 0) OR bIsGroup = FALSE)";
+		if(g_Opt.m_bShowAllClipsInMainList)
+		{
+			strFilter = "((bIsGroup = TRUE AND lParentID = 0) OR bIsGroup = FALSE)";
+		}
+		else
+		{
+			strFilter = "((bIsGroup = TRUE AND lParentID = 0) OR (bIsGroup = FALSE AND lParentID = 0))";
+		}
 	}
 	else // it's some other group
 	{
@@ -928,6 +941,15 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 
 	if(g_Opt.m_bSendPasteMessageAfterSelection)
 		pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_PASTECLIPAFTERSELECTION, MF_CHECKED);
+
+	if(g_Opt.m_bFindAsYouType)
+		pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_FINDASYOUTYPE, MF_CHECKED);
+
+	if(g_Opt.m_bEnsureEntireWindowCanBeSeen)
+		pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_ENSUREENTIREWINDOWISVISIBLE, MF_CHECKED);
+
+	if(g_Opt.m_bShowAllClipsInMainList)
+		pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_SHOWCLIPSTHATAREINGROUPSINMAINLIST, MF_CHECKED);
 
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIENDONE, 0);
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TWO, 1);
@@ -1460,6 +1482,25 @@ void CQPasteWnd::OnMenuQuickoptionsDrawrtftext()
 void CQPasteWnd::OnMenuQuickoptionsPasteclipafterselection() 
 {
 	CGetSetOptions::SetSendPasteAfterSelection(!g_Opt.m_bSendPasteMessageAfterSelection);	
+}
+
+void CQPasteWnd::OnMenuQuickoptionsFindasyoutype() 
+{
+	CGetSetOptions::SetFindAsYouType(!g_Opt.m_bFindAsYouType);
+}
+
+void CQPasteWnd::OnMenuQuickoptionsEnsureentirewindowisvisible() 
+{
+	CGetSetOptions::SetEnsureEntireWindowCanBeSeen(!g_Opt.m_bEnsureEntireWindowCanBeSeen);
+}
+
+void CQPasteWnd::OnMenuQuickoptionsShowclipsthatareingroupsinmainlist() 
+{
+	CGetSetOptions::SetShowAllClipsInMainList(!g_Opt.m_bShowAllClipsInMainList);
+
+	CString csText;
+	m_cbSearch.GetWindowText(csText);
+	FillList(csText);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -2108,4 +2149,59 @@ LRESULT CQPasteWnd::OnGetClipData(WPARAM wParam, LPARAM lParam)
 	CATCHDAO
 
 	return bRet;
+}
+
+void CQPasteWnd::OnSearchEditChange()
+{
+	if(g_Opt.m_bFindAsYouType == FALSE)
+		return;
+
+	CString csText;
+	m_cbSearch.GetWindowText(csText);
+	
+	if(csText == "")
+		return;
+	
+	FillList(csText);
+	
+	return;
+	
+	POSITION pos = m_lstHeader.GetFirstSelectedItemPosition();
+	int nFirstSel = m_lstHeader.GetNextSelectedItem(pos);
+	int nCount = m_lstHeader.GetItemCount();
+	CString cs;
+	m_cbSearch.GetWindowText(cs);
+
+	m_Recset.SetAbsolutePosition(nFirstSel);
+
+	for(int i = nFirstSel; i < nCount; i++)
+	{
+		if(m_Recset.m_strText.Find(cs) >= 0)
+		{
+			m_lstHeader.SetListPos(i);
+			return;
+		}
+
+		m_Recset.MoveNext();
+	}
+
+	m_Recset.SetAbsolutePosition(0);
+
+	for(i = 0; i < nFirstSel; i++)
+	{
+		if(m_Recset.m_strText.Find(cs) >= 0)
+		{
+			m_lstHeader.SetListPos(i);
+			return;
+		}
+
+		m_Recset.MoveNext();
+	}
+}
+
+LRESULT CQPasteWnd::OnUpDown(WPARAM wParam, LPARAM lParam)
+{
+	m_lstHeader.SendMessage(WM_KEYDOWN, wParam, lParam);
+
+	return TRUE;
 }

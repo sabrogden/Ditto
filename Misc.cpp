@@ -484,6 +484,9 @@ BOOL CGetSetOptions::m_bMultiPasteReverse;
 CString CGetSetOptions::m_csPlaySoundOnCopy;
 CStringArray CGetSetOptions::m_csNetworkPasswordArray;
 BOOL CGetSetOptions::m_bSendPasteMessageAfterSelection;
+BOOL CGetSetOptions::m_bFindAsYouType;
+BOOL CGetSetOptions::m_bEnsureEntireWindowCanBeSeen;
+BOOL CGetSetOptions::m_bShowAllClipsInMainList;
 
 CGetSetOptions g_Opt;
 
@@ -513,6 +516,9 @@ CGetSetOptions::CGetSetOptions()
 	m_bMultiPasteReverse = GetMultiPasteReverse();
 	m_csPlaySoundOnCopy = GetPlaySoundOnCopy();
 	m_bSendPasteMessageAfterSelection = GetSendPasteAfterSelection();
+	m_bFindAsYouType = GetFindAsYouType();
+	m_bEnsureEntireWindowCanBeSeen = GetEnsureEntireWindowCanBeSeen();
+	m_bShowAllClipsInMainList = GetShowAllClipsInMainList();
 
 	CString cs = GetProfileString("NetorkPassword1", "");
 	m_csNetworkPasswordArray.Add(cs);
@@ -1280,6 +1286,39 @@ void CGetSetOptions::SetSendPasteAfterSelection(BOOL bVal)
 BOOL CGetSetOptions::GetSendPasteAfterSelection()
 {
 	return GetProfileLong("SendPasteMessageAfterSelection", TRUE);
+}
+
+void CGetSetOptions::SetFindAsYouType(BOOL bVal)
+{
+	m_bFindAsYouType = bVal;
+	SetProfileLong("FindAsYouType", bVal);
+}
+
+BOOL CGetSetOptions::GetFindAsYouType()
+{
+	return GetProfileLong("FindAsYouType", TRUE);
+}
+
+void CGetSetOptions::SetEnsureEntireWindowCanBeSeen(BOOL bVal)
+{
+	m_bEnsureEntireWindowCanBeSeen = bVal;
+	SetProfileLong("EnsureEntireWindowCanBeSeen", bVal);
+}
+
+BOOL CGetSetOptions::GetEnsureEntireWindowCanBeSeen()
+{
+	return GetProfileLong("EnsureEntireWindowCanBeSeen", TRUE);
+}
+
+void CGetSetOptions::SetShowAllClipsInMainList(BOOL bVal)
+{
+	m_bShowAllClipsInMainList = bVal;
+	SetProfileLong("ShowAllClipsInMainList", bVal);
+}
+
+BOOL CGetSetOptions::GetShowAllClipsInMainList()
+{
+	return GetProfileLong("ShowAllClipsInMainList", TRUE);
 }
 
 /*------------------------------------------------------------------*\

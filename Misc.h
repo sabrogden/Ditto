@@ -332,6 +332,18 @@ public:
 	static void		SetSendPasteAfterSelection(BOOL bVal);
 	static BOOL		GetSendPasteAfterSelection();
 
+	static BOOL		m_bFindAsYouType;
+	static void		SetFindAsYouType(BOOL bVal);
+	static BOOL		GetFindAsYouType();
+
+	static BOOL		m_bEnsureEntireWindowCanBeSeen;
+	static void		SetEnsureEntireWindowCanBeSeen(BOOL bVal);
+	static BOOL		GetEnsureEntireWindowCanBeSeen();
+
+	static BOOL		m_bShowAllClipsInMainList;
+	static void		SetShowAllClipsInMainList(BOOL bVal);
+	static BOOL		GetShowAllClipsInMainList();
+
 	static CStringArray m_csNetworkPasswordArray;
 
 	/*

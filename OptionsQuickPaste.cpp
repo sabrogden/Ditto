@@ -34,6 +34,9 @@ void COptionsQuickPaste::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionsQuickPaste)
+	DDX_Control(pDX, IDC_CHECK_ENTIRE_WINDOW_IS_VISIBLE, m_EnsureEntireWindowVisible);
+	DDX_Control(pDX, IDC_CHECK_SHOW_ALL_IN_MAIN_LIST, m_ShowAllInMainList);
+	DDX_Control(pDX, IDC_CHECK_FIND_AS_YOU_TYPE, m_FindAsYouType);
 	DDX_Control(pDX, IDC_DRAW_RTF, m_btDrawRTF);
 	DDX_Control(pDX, IDC_SHOW_THUMBNAILS, m_btShowThumbnails);
 	DDX_Control(pDX, IDC_BUTTON_DEFAULT_FAULT, m_btDefaultButton);
@@ -70,6 +73,10 @@ BOOL COptionsQuickPaste::OnInitDialog()
 	m_eLinesPerRow.SetNumber(CGetSetOptions::GetLinesPerRow());
 	m_btShowThumbnails.SetCheck(g_Opt.m_bDrawThumbnail);
 	m_btDrawRTF.SetCheck(g_Opt.m_bDrawRTF);
+
+	m_EnsureEntireWindowVisible.SetCheck(g_Opt.m_bEnsureEntireWindowCanBeSeen);
+	m_ShowAllInMainList.SetCheck(g_Opt.m_bShowAllClipsInMainList);
+	m_FindAsYouType.SetCheck(g_Opt.m_bFindAsYouType);
 
 	if(CGetSetOptions::GetQuickPastePosition() == POS_AT_CARET)
 		CheckDlgButton(IDC_AT_CARET, BST_CHECKED);
@@ -123,6 +130,9 @@ BOOL COptionsQuickPaste::OnApply()
 	CGetSetOptions::SetShowTextForFirstTenHotKeys(m_btShowText.GetCheck());
 	CGetSetOptions::SetDrawThumbnail(m_btShowThumbnails.GetCheck());
 	CGetSetOptions::SetDrawRTF(m_btDrawRTF.GetCheck());
+	CGetSetOptions::SetEnsureEntireWindowCanBeSeen(m_EnsureEntireWindowVisible.GetCheck());
+	CGetSetOptions::SetShowAllClipsInMainList(m_ShowAllInMainList.GetCheck());
+	CGetSetOptions::SetFindAsYouType(m_FindAsYouType.GetCheck());
 	
 	if(m_LogFont.lfWeight != 0)
 	{

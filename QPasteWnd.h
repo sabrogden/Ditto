@@ -170,6 +170,10 @@ protected:
 	afx_msg void OnMenuQuickoptionsShowthumbnails();
 	afx_msg void OnMenuQuickoptionsDrawrtftext();
 	afx_msg void OnMenuQuickoptionsPasteclipafterselection();
+	afx_msg void OnSearchEditChange();
+	afx_msg void OnMenuQuickoptionsFindasyoutype();
+	afx_msg void OnMenuQuickoptionsEnsureentirewindowisvisible();
+	afx_msg void OnMenuQuickoptionsShowclipsthatareingroupsinmainlist();
 	//}}AFX_MSG
 	afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);
@@ -198,6 +202,7 @@ public:
 	afx_msg void OnMenuNewGroupSelection();
 	afx_msg void OnBackButton();
 	afx_msg LRESULT OnGetClipData(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnUpDown(WPARAM wParam, LPARAM lParam);
 };
 
 

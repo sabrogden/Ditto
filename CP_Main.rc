@@ -268,6 +268,14 @@ BEGIN
 
             MENUITEM "Paste Clip after selection",  ID_MENU_QUICKOPTIONS_PASTECLIPAFTERSELECTION
 
+            MENUITEM "Find As You Type",            ID_MENU_QUICKOPTIONS_FINDASYOUTYPE
+
+            MENUITEM "Ensure Entire Window Is Visible", 
+                                                    ID_MENU_QUICKOPTIONS_ENSUREENTIREWINDOWISVISIBLE
+
+            MENUITEM "Show Clips That are in Groups in Main List", 
+                                                    ID_MENU_QUICKOPTIONS_SHOWCLIPSTHATAREINGROUPSINMAINLIST
+
         END
         POPUP "Sent To"
         BEGIN
@@ -417,25 +425,33 @@ BEGIN
     CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,67,122,10
     EDITTEXT        IDC_TRANS_PERC,140,66,19,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "Font",IDC_BUTTON_FONT,18,104,143,17
-    PUSHBUTTON      "Default Font",IDC_BUTTON_DEFAULT_FAULT,164,107,48,12
-    CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,29,
-                    132,41,10
-    CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,29,
-                    142,45,10
+    PUSHBUTTON      "Font",IDC_BUTTON_FONT,18,132,143,17
+    PUSHBUTTON      "Default Font",IDC_BUTTON_DEFAULT_FAULT,164,135,48,12
+    CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,31,
+                    187,41,10
+    CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,31,
+                    197,45,10
     CONTROL         "At Previous Position",IDC_AT_PREVIOUS,"Button",
-                    BS_AUTORADIOBUTTON,29,152,79,10
+                    BS_AUTORADIOBUTTON,31,207,79,10
     LTEXT           "%",IDC_STATIC,162,69,8,8
-    GROUPBOX        "Popup Positioning",IDC_STATIC,18,123,116,41
+    GROUPBOX        "Popup Positioning",IDC_STATIC,19,178,116,41
     LTEXT           "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group",
-                    IDC_STATIC,24,180,103,36
-    GROUPBOX        "List Item Prefix Legend",IDC_STATIC,18,170,116,50
+                    IDC_STATIC,148,183,103,36
+    GROUPBOX        "List Item Prefix Legend",IDC_STATIC,142,173,116,50
     CONTROL         "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)",
                     IDC_SHOW_THUMBNAILS,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,18,79,293,10
     CONTROL         "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)",
                     IDC_DRAW_RTF,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,89,
                     293,10
+    CONTROL         "Find As You Type",IDC_CHECK_FIND_AS_YOU_TYPE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,18,99,162,10
+    CONTROL         "Ensure Entire Window is Visible",
+                    IDC_CHECK_ENTIRE_WINDOW_IS_VISIBLE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,17,109,162,10
+    CONTROL         "Show Clips That are in Groups in Main List",
+                    IDC_CHECK_SHOW_ALL_IN_MAIN_LIST,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,17,119,162,10
 END
 
 IDD_OPTIONS_KEYSTROKES DIALOG DISCARDABLE  0, 0, 350, 206
@@ -736,8 +752,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,4,0,0
- PRODUCTVERSION 2,4,0,0
+ FILEVERSION 2,4,0,1
+ PRODUCTVERSION 2,4,0,1
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -755,14 +771,14 @@ BEGIN
             VALUE "Comments", "\0"
             VALUE "CompanyName", "\0"
             VALUE "FileDescription", "Ditto\0"
-            VALUE "FileVersion", "2, 4, 0, 0\0"
+            VALUE "FileVersion", "2, 4, 0, 1\0"
             VALUE "InternalName", "CP_Main\0"
             VALUE "LegalCopyright", "Copyright (C) 2003\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "Ditto\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "Ditto\0"
-            VALUE "ProductVersion", "2, 4, 0, 0\0"
+            VALUE "ProductVersion", "2, 4, 0, 1\0"
             VALUE "SpecialBuild", "\0"
         END
     END

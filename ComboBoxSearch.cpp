@@ -71,19 +71,36 @@ BOOL CComboBoxSearch::PreTranslateMessage(MSG* pMsg)
 						SetCurSel(nRet);
 					}
 
-					//Send a message to the parent to refill the lb from the search
-					pWnd->PostMessage(CB_SEARCH, 0, 0);
+					if(g_Opt.m_bFindAsYouType)
+					{
+						pWnd->SendMessage(NM_SELECT, 0, 0);
+					}
+					else
+					{
+						//Send a message to the parent to refill the lb from the search
+						pWnd->PostMessage(CB_SEARCH, 0, 0);
+					}
 				}
 
 				return TRUE;
 			}	
-			if (pMsg->wParam == VK_DOWN)
+			if (pMsg->wParam == VK_DOWN ||
+				pMsg->wParam == VK_UP)
 			{
-				if(!m_bShowingDropDown)
+				if(g_Opt.m_bFindAsYouType)
 				{
-					ShowDropDown();
-					return TRUE;
+					CWnd *pWnd = GetParent();
+					if(pWnd)
+					{
+						pWnd->SendMessage(CB_UPDOWN, pMsg->wParam, pMsg->lParam);
+						return TRUE;
+					}
 				}
+//				if(!m_bShowingDropDown)
+//				{
+//					ShowDropDown();
+//					return TRUE;
+//				}
 			}
 			break;
 		}

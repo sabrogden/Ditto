@@ -132,12 +132,14 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 	}
 	
 	m_pwndPaste->MinMaxWindow(FORCE_MAX);
-	
+
 	CRect crRect = CRect(point, csSize);
+
+	EnsureVisible(&crRect);
+	
 	if((nPosition == POS_AT_CARET) ||
 		(nPosition == POS_AT_CURSOR) ||
-		(bAtPrevPos) ||
-		EnsureVisible(&crRect))
+		(bAtPrevPos))
 	{
 		m_pwndPaste->MoveWindow(crRect);
 	}
@@ -149,7 +151,8 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 
 BOOL CQuickPaste::EnsureVisible(CRect *pcrRect)
 {
-	if(GetMonitorFromRect(pcrRect) < 0)
+	int nMonitor = GetMonitorFromRect(pcrRect);
+	if(nMonitor < 0)
 	{
 		GetMonitorRect(0, pcrRect);
 		pcrRect->right = pcrRect->left + 300;
@@ -158,7 +161,45 @@ BOOL CQuickPaste::EnsureVisible(CRect *pcrRect)
 		return TRUE;
 	}
 
-	return FALSE;
+	if(g_Opt.m_bEnsureEntireWindowCanBeSeen == FALSE)
+		return TRUE;
+
+	CRect crMonitor;
+	GetMonitorRect(nMonitor, crMonitor);
+
+	//Validate the left
+	long lDiff = pcrRect->left - crMonitor.left;
+	if(lDiff < 0)
+	{
+		pcrRect->left += abs(lDiff);
+		pcrRect->right += abs(lDiff);
+	}
+
+	//Right side
+	lDiff = pcrRect->right - crMonitor.right;
+	if(lDiff > 0)
+	{
+		pcrRect->left -= abs(lDiff);
+		pcrRect->right -= abs(lDiff);
+	}
+
+	//Top
+	lDiff = pcrRect->top - crMonitor.top;
+	if(lDiff < 0)
+	{
+		pcrRect->top += abs(lDiff);
+		pcrRect->bottom += abs(lDiff);
+	}
+
+	//Bottom
+	lDiff = pcrRect->bottom - crMonitor.bottom;
+	if(lDiff > 0)
+	{
+		pcrRect->top -= abs(lDiff);
+		pcrRect->bottom -= abs(lDiff);
+	}
+
+	return TRUE;
 }
 
 void CQuickPaste::HideQPasteWnd()

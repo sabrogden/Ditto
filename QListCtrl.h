@@ -14,14 +14,16 @@
 #define NM_RIGHT					WM_USER+0x101
 #define NM_LEFT						WM_USER+0x102
 #define NM_END						WM_USER+0x103
-#define NM_DELETE					WM_USER+0x105
-#define NM_PROPERTIES				WM_USER+0x106
-#define NM_LBUTTONDOWN				WM_USER+0x107
-#define NM_GETTOOLTIPTEXT	        WM_USER+0x108
-#define NM_SELECT_DB_ID		        WM_USER+0x109
-#define NM_SELECT_INDEX		        WM_USER+0x110
-#define NM_GROUP_TREE_MESSAGE       WM_USER+0x111
-#define NM_GET_CLIP_DATA	        WM_USER+0x112
+#define NM_DELETE					WM_USER+0x104
+#define NM_PROPERTIES				WM_USER+0x105
+#define NM_LBUTTONDOWN				WM_USER+0x106
+#define NM_GETTOOLTIPTEXT	        WM_USER+0x107
+#define NM_SELECT_DB_ID		        WM_USER+0x108
+#define NM_SELECT_INDEX		        WM_USER+0x109
+#define NM_GROUP_TREE_MESSAGE       WM_USER+0x110
+#define NM_GET_CLIP_DATA	        WM_USER+0x111
+#define CB_SEARCH					WM_USER+0x112
+#define CB_UPDOWN					WM_USER+0x113
 
 
 //#define NM_LIST_CUT			        WM_USER+0x111
