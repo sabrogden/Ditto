@@ -124,6 +124,7 @@
 #define IDC_HOTKEY5                     2028
 #define IDC_RICHEDIT1                   2028
 #define IDC_HOTKEY6                     2029
+#define IDC_STATIC_FORMATS              2029
 #define IDC_HOTKEY7                     2030
 #define IDC_HOTKEY8                     2031
 #define IDC_HOTKEY9                     2032
@@ -205,7 +206,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        157
 #define _APS_NEXT_COMMAND_VALUE         32844
-#define _APS_NEXT_CONTROL_VALUE         2029
+#define _APS_NEXT_CONTROL_VALUE         2030
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

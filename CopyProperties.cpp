@@ -52,6 +52,7 @@ BEGIN_MESSAGE_MAP(CCopyProperties, CDialog)
 	//{{AFX_MSG_MAP(CCopyProperties)
 	ON_BN_CLICKED(IDC_DELETE_COPY_DATA, OnDeleteCopyData)
 	ON_WM_ACTIVATE()
+	ON_WM_SIZE()
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_PARSE_BUTTON, OnBnClickedParseButton)
 END_MESSAGE_MAP()
@@ -116,6 +117,14 @@ BOOL CCopyProperties::OnInitDialog()
 		m_HotKey.SetFocus();
 	else
 		m_RichEdit.SetFocus();
+
+	m_Resize.SetParent(m_hWnd);
+	m_Resize.AddControl(IDC_RICHEDIT1, DR_SizeHeight | DR_SizeWidth);
+	m_Resize.AddControl(IDC_STATIC_FORMATS, DR_MoveTop);
+	m_Resize.AddControl(IDC_COPY_DATA, DR_MoveTop | DR_SizeWidth);
+	m_Resize.AddControl(IDC_DELETE_COPY_DATA, DR_MoveTop);
+	m_Resize.AddControl(IDOK, DR_MoveTop | DR_MoveLeft);
+	m_Resize.AddControl(IDCANCEL, DR_MoveTop | DR_MoveLeft);
 
 	return FALSE;
 }
@@ -356,3 +365,11 @@ int count = tokens.GetSize();
 	}
 }
 
+
+void CCopyProperties::OnSize(UINT nType, int cx, int cy) 
+{
+	CDialog::OnSize(nType, cx, cy);
+	
+
+	m_Resize.MoveControls(CSize(cx, cy));
+}

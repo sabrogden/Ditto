@@ -10,6 +10,7 @@
 
 #include "GroupCombo.h"
 #include "RichEditCtrlEx.h"
+#include "DialogResizer.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CCopyProperties dialog
@@ -54,6 +55,7 @@ protected:
 	bool		m_bDeletedData;
 	BOOL		m_bNeverDelete;
 	bool		m_bHideOnKillFocus;
+	CDialogResizer m_Resize;
 
 	bool		m_bHandleKillFocus;
 
@@ -64,6 +66,7 @@ protected:
 	afx_msg void OnDeleteCopyData();
 	virtual void OnCancel();
 	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 public:
