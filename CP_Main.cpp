@@ -173,7 +173,10 @@ void CCP_MainApp::StartStopServerThread()
 		AfxBeginThread(MTServerThread, m_MainhWnd);
 	}
 	else
+	{
 		m_bExitServerThread = true;
+		closesocket(theApp.m_sSocket);
+	}
 }
 
 void CCP_MainApp::BeforeMainClose()

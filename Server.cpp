@@ -73,6 +73,7 @@ UINT  MTServerThread(LPVOID pParam)
 	LogSendRecieveInfo("End of Server Thread");
 
 	bRunning = false;
+	theApp.m_sSocket = INVALID_SOCKET;
 
 	return 0;
 }
