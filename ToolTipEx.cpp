@@ -171,10 +171,17 @@ BOOL CToolTipEx::OnMsg(MSG* pMsg)
 		}
 		case WM_KEYDOWN:
 		{
-			Hide();
-			WPARAM vk = pMsg->wParam;
-			if(vk == VK_ESCAPE)
-				return TRUE;
+			if(IsWindowVisible())
+			{
+				WPARAM vk = pMsg->wParam;
+				if(vk == VK_ESCAPE)
+				{
+					Hide();
+					return TRUE;
+				}
+			}
+			else
+				Hide();
 			break;
 		}
 		case WM_LBUTTONDBLCLK:
