@@ -524,46 +524,75 @@ long lDate;
 	CATCHDAO
 }
 
+#define DELETE_CHUNCK_SIZE 100
+
 // STATICS
-
-// deletes from both Main and Data Tables
-BOOL CClip::Delete( int id )
-{
-CString csMainSQL;
-CString csDataSQL;
-BOOL bRet = FALSE;
-
-	csMainSQL.Format( "DELETE FROM Main WHERE lID = %d", id );
-	csDataSQL.Format( "DELETE FROM Data WHERE lParentID = %d", id );
-
-	try
-	{
-		theApp.EnsureOpenDB();
-		theApp.m_pDatabase->Execute(csMainSQL, dbFailOnError);
-		theApp.m_pDatabase->Execute(csDataSQL, dbFailOnError);
-		bRet = TRUE;
-	}
-	catch(CDaoException* e)
-	{
-		AfxMessageBox(e->m_pErrorInfo->m_strDescription);
-		e->Delete();
-	}
-
-	return bRet;
-}
-
 BOOL CClip::Delete( ARRAY& IDs )
 {
-int count = IDs.GetSize();
+	#ifdef _DEBUG
+		DWORD dTick = GetTickCount();
+	#endif
 
-	if(count <= 0)
+	if(IDs.GetSize() <= 0)
 		return FALSE;
 
-BOOL bRet = TRUE;
-	// delete one at a time rather than all in one query
-	//	in order to avoid the "query too large" error for large deletes
-	for( int i=0; i < count && bRet; i++ )
-		bRet = bRet && Delete( IDs[i] );
+	int nStart = 0;
+	int nEnd = DELETE_CHUNCK_SIZE;
+	int nLoops = (IDs.GetSize() / DELETE_CHUNCK_SIZE) + 1;
+	BOOL bRet = TRUE;
+	CString csMainSQL;
+	CString csDataSQL;
+	CString csMainFormat;
+
+	for(int n = 0; n < nLoops; n++)
+	{
+		csMainSQL = "DELETE FROM Main WHERE";
+		csDataSQL = "DELETE FROM Data WHERE";
+		csMainFormat.Empty();
+
+		csMainFormat.Format(" lID = %d", IDs[nStart]);
+		csMainSQL += csMainFormat;
+
+		csMainFormat.Format(" lParentID = %d", IDs[nStart]);
+		csDataSQL += csMainFormat;
+
+		nEnd = min(nEnd, IDs.GetSize());
+
+		for(int i = nStart+1; i < nEnd; i++)
+		{
+			csMainFormat.Format(" Or lID = %d", IDs[i]);
+			csMainSQL += csMainFormat;
+
+			csMainFormat.Format(" Or lParentID = %d", IDs[i]);
+			csDataSQL += csMainFormat;
+		}
+
+		nStart = nEnd;
+		nEnd += DELETE_CHUNCK_SIZE;
+			
+		bRet = TRUE;
+
+		try
+		{
+			theApp.EnsureOpenDB();
+			theApp.m_pDatabase->Execute(csMainSQL, dbFailOnError);
+			theApp.m_pDatabase->Execute(csDataSQL, dbFailOnError);
+		}
+		catch(CDaoException* e)
+		{
+			AfxMessageBox(e->m_pErrorInfo->m_strDescription);
+			e->Delete();
+			bRet = FALSE;
+		}
+	}
+
+	#ifdef _DEBUG
+	{
+		CString cs;
+		cs.Format("Delete Time = %d\n", GetTickCount() - dTick);
+		TRACE(cs);
+	}
+	#endif	
 
 	return bRet;
 }

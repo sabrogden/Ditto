@@ -71,6 +71,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_PROPERTIES, OnMenuProperties)
 	ON_WM_CLOSE()
 	ON_NOTIFY(LVN_BEGINDRAG, ID_LIST_HEADER, OnBegindrag)
+	ON_NOTIFY(LVN_ITEMCHANGED, ID_LIST_HEADER, OnSelectionChange)
 	ON_WM_SYSKEYDOWN()
 	ON_NOTIFY(LVN_GETDISPINFO, ID_LIST_HEADER, GetDispInfo)
 	ON_NOTIFY(LVN_ODFINDITEM, ID_LIST_HEADER, OnFindItem)
@@ -389,6 +390,13 @@ CString title = m_Title;
 CString prev;
 
 	GetWindowText(prev);
+
+	if(m_Recset.IsOpen())
+	{
+		CString cs;
+		cs.Format(" - %d/%d", m_lstHeader.GetSelectedCount(), m_Recset.GetRecordCount());
+		title += cs;
+	}
 
 	if( theApp.m_Status != "" )
 	{
@@ -1143,7 +1151,7 @@ void CQPasteWnd::OnGetToolTipText(NMHDR* pNMHDR, LRESULT* pResult)
 		cs += "\n\n";
 
 #ifdef _DEBUG
-		cs += StrF("Index = %d (DB ID = %d) ", pInfo->lItem, m_Recset.m_lID );
+		cs += StrF("(Index = %d) (DB ID = %d) (Size = %d)\n", pInfo->lItem, m_Recset.m_lID, m_Recset.m_strText.GetLength() );
 #endif
 
 		CTime time(m_Recset.m_lDate);
@@ -1269,4 +1277,9 @@ void CQPasteWnd::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 	{
 		lpwndpos->y = rcScreen.bottom - lpwndpos->cy;
 	}
+}
+
+void CQPasteWnd::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	theApp.SetStatus(NULL, TRUE);
 }

@@ -326,7 +326,11 @@ void CCP_MainApp::OnCopyCompleted(long lLastID, int count)
 
 void CCP_MainApp::SetStatus( const char* status, bool bRepaintImmediately )
 {
-	m_Status = status;
+	if(status != NULL)
+	{
+		m_Status = status;
+	}
+
 	if( QPasteWnd() )
 		QPasteWnd()->UpdateStatus( bRepaintImmediately );
 }

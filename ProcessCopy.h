@@ -98,7 +98,6 @@ public:
 
 // STATICS
 	// deletes from both Main and Data Tables
-	static BOOL Delete( int id );
 	static BOOL Delete( ARRAY& IDs );
 	static BOOL DeleteAll();
 

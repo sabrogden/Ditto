@@ -113,6 +113,7 @@ protected:
 	afx_msg void OnMenuProperties();
 	afx_msg void OnClose();
 	afx_msg void OnBegindrag(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg void GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnFindItem(NMHDR* pNMHDR, LRESULT* pResult);

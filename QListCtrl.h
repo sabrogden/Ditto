@@ -85,6 +85,7 @@ public:
 	void DestroyAndCreateAccelerator(BOOL bCreate);
 
 	void ShowFullDescription();
+	BOOL SetItemCountEx(int iCount, DWORD dwFlags = LVSICF_NOINVALIDATEALL);
 
 protected:
 	void SendSelection(int nItem);;
