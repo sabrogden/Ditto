@@ -19,11 +19,12 @@ static char THIS_FILE[] = __FILE__;
 
 #define ONE_MINUTE				60000
 
-#define KILL_DB_TIMER				1
-#define HIDE_ICON_TIMER				2
-#define REMOVE_OLD_ENTRIES_TIMER	3
-#define CHECK_FOR_UPDATE			4
-#define CLOSE_APP					5
+#define KILL_DB_TIMER					1
+#define HIDE_ICON_TIMER					2
+#define REMOVE_OLD_ENTRIES_TIMER		3
+#define CHECK_FOR_UPDATE				4
+#define CLOSE_APP						5
+#define TIMER_CHECK_TOP_LEVEL_VIEWER	6
 
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame
@@ -64,6 +65,7 @@ static UINT indicators[] =
 
 CMainFrame::CMainFrame()
 {
+	m_lReconectCount = 0;
 }
 
 CMainFrame::~CMainFrame()
@@ -114,6 +116,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	SetTimer(CHECK_FOR_UPDATE, ONE_MINUTE*5, 0);
 	SetTimer(REMOVE_OLD_ENTRIES_TIMER, ONE_MINUTE*2, 0);
+
+	SetTimer(TIMER_CHECK_TOP_LEVEL_VIEWER, ONE_MINUTE, 0);
 
 	m_ulCopyGap = CGetSetOptions::GetCopyGap();
 
@@ -245,44 +249,58 @@ void CMainFrame::OnDrawClipboard()
 
 void CMainFrame::OnTimer(UINT nIDEvent) 
 {
-	if(nIDEvent == HIDE_ICON_TIMER)
+	switch(nIDEvent)
 	{
-		m_TrayIcon.HideIcon();
-		KillTimer(nIDEvent);
-	}
-	else if(nIDEvent == KILL_DB_TIMER)
-	{
-		if(QuickPaste.CloseQPasteWnd())
+	case HIDE_ICON_TIMER:
 		{
-			theApp.CloseDB();
-			AfxDaoTerm();
-			KillTimer(KILL_DB_TIMER);
+			m_TrayIcon.HideIcon();
+			KillTimer(nIDEvent);
 		}
-	}
-	else if(nIDEvent == REMOVE_OLD_ENTRIES_TIMER)
-	{
-		RemoveOldEntries();
-		KillTimer(REMOVE_OLD_ENTRIES_TIMER);
-	}
-	else if(nIDEvent == CHECK_FOR_UPDATE)
-	{
-		CInternetUpdate Update;
-		if(Update.CheckForUpdate(NULL, TRUE, FALSE))
+	case KILL_DB_TIMER:
 		{
-			SendMessage(WM_CLOSE, 0, 0);
+			if(QuickPaste.CloseQPasteWnd())
+			{
+				theApp.CloseDB();
+				AfxDaoTerm();
+				KillTimer(KILL_DB_TIMER);
+			}
 		}
+	case REMOVE_OLD_ENTRIES_TIMER:
+		{
+			RemoveOldEntries();
+			KillTimer(REMOVE_OLD_ENTRIES_TIMER);
+		}
+	case CHECK_FOR_UPDATE:
+		{
+			CInternetUpdate Update;
+			if(Update.CheckForUpdate(NULL, TRUE, FALSE))
+			{
+				SendMessage(WM_CLOSE, 0, 0);
+			}
 
-		KillTimer(CHECK_FOR_UPDATE);
-	}
-	else if(nIDEvent == CLOSE_APP)
-	{
-		if(theApp.m_bShowingOptions == false)
+			KillTimer(CHECK_FOR_UPDATE);
+		}
+	case CLOSE_APP:
 		{
-			PostMessage(WM_CLOSE, 0, 0);
-			KillTimer(CLOSE_APP);
+			if(theApp.m_bShowingOptions == false)
+			{
+				PostMessage(WM_CLOSE, 0, 0);
+				KillTimer(CLOSE_APP);
+			}
+		}
+	case TIMER_CHECK_TOP_LEVEL_VIEWER:
+		{
+			if(OnGetIsTopView(0, 0) == FALSE)
+			{
+				OnReconnectToCopyChain(0, 0);
+				m_lReconectCount++;
+
+				if(m_lReconectCount > 10)
+					KillTimer(TIMER_CHECK_TOP_LEVEL_VIEWER);
+			}
 		}
 	}
-	
+
 	CFrameWnd::OnTimer(nIDEvent);
 }
 

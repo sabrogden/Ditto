@@ -53,6 +53,8 @@ protected:
 
 	ULONG m_ulCopyGap;
 
+	long  m_lReconectCount;
+
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CMainFrame)

@@ -5,7 +5,7 @@
 #include "stdafx.h"
 #include "CP_Main.h"
 #include "DatabaseUtilities.h"
-#include "io.h"
+#include <io.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -141,8 +141,7 @@ BOOL CreateDB(CString csPath)
 
 	try
 	{
-		if(_access(csPath, 0) == 0)
-			DeleteFile(csPath);
+		EnsureDirectory(csPath);
 
 		db.Create(csPath);
 		
@@ -334,4 +333,27 @@ BOOL RemoveOldEntries()
 	}
 
 	return TRUE;
+}
+
+BOOL EnsureDirectory(CString csPath)
+{
+	char drive[_MAX_DRIVE];
+	char dir[_MAX_DIR];
+	char fname[_MAX_FNAME];
+	char ext[_MAX_EXT];
+
+	_splitpath(csPath, drive, dir, fname, ext);
+
+	CString csDir(drive);
+	csDir += dir;
+
+	if(_access(csDir, 0) == -1)
+	{
+		if(CreateDirectory(csDir, NULL))
+			return TRUE;
+	}
+	else
+		return TRUE;
+
+	return FALSE;
 }

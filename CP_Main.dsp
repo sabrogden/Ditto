@@ -108,7 +108,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386 /out:"Release/Ditto.exe"
-# ADD LINK32 /nologo /subsystem:windows /machine:I386 /out:"Release/Ditto_Pre2000.exe"
+# ADD LINK32 /nologo /subsystem:windows /machine:I386 /out:"Release/Ditto98.exe"
 
 !ELSEIF  "$(CFG)" == "CP_Main - Win32 Pre 2000 Debug"
 

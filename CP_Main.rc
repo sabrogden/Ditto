@@ -314,7 +314,7 @@ BEGIN
     LTEXT           "Named Copy",IDC_STATIC,19,42,42,8
 END
 
-IDD_OPTIONS_GENERAL DIALOG DISCARDABLE  0, 0, 256, 166
+IDD_OPTIONS_GENERAL DIALOG DISCARDABLE  0, 0, 294, 166
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "General"
 FONT 8, "MS Sans Serif"
@@ -340,8 +340,8 @@ BEGIN
     PUSHBUTTON      "Check Now",IDC_CHECK_FOR_UPDATES,161,106,50,11
     CONTROL         "Set Database Path",IDC_SET_DB_PATH,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,23,79,76,10
-    EDITTEXT        IDC_PATH,23,89,198,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "....",IDC_GET_PATH,222,89,14,12
+    EDITTEXT        IDC_PATH,23,89,248,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "....",IDC_GET_PATH,273,89,14,12
 END
 
 IDD_SELECT_DB DIALOG DISCARDABLE  0, 0, 276, 46
@@ -444,8 +444,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,4
- PRODUCTVERSION 1,0,0,4
+ FILEVERSION 1,50,0,0
+ PRODUCTVERSION 1,50,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -462,15 +462,15 @@ BEGIN
         BEGIN
             VALUE "Comments", "\0"
             VALUE "CompanyName", "\0"
-            VALUE "FileDescription", "CP_Main MFC Application\0"
-            VALUE "FileVersion", "1, 0, 0, 4\0"
+            VALUE "FileDescription", "Ditto\0"
+            VALUE "FileVersion", "1, 50, 0, 0\0"
             VALUE "InternalName", "CP_Main\0"
-            VALUE "LegalCopyright", "Copyright (C) 2002\0"
+            VALUE "LegalCopyright", "Copyright (C) 2003\0"
             VALUE "LegalTrademarks", "\0"
-            VALUE "OriginalFilename", "CP_Main.EXE\0"
+            VALUE "OriginalFilename", "Ditto\0"
             VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "CP_Main Application\0"
-            VALUE "ProductVersion", "1, 0, 0, 4\0"
+            VALUE "ProductName", "Ditto\0"
+            VALUE "ProductVersion", "1, 50, 0, 0\0"
             VALUE "SpecialBuild", "\0"
         END
     END
@@ -534,7 +534,7 @@ BEGIN
     IDD_OPTIONS_GENERAL, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 249
+        RIGHTMARGIN, 287
         TOPMARGIN, 7
         BOTTOMMARGIN, 158
     END

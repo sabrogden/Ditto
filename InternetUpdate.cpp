@@ -176,8 +176,8 @@ long CInternetUpdate::GetUpdateVersion()
 
 	//if nothing there get the default
 	if(csPath.IsEmpty())
-		csPath = "sabrogden.0Catch.com/DittoVersion.txt";
-
+		csPath = "osdn.dl.sourceforge.net/sourceforge/ditto-cp/DittoVersion.txt";
+	
 	CString csUrl = "http://" + csPath;
 	
 	CString csFile = CGetSetOptions::GetExeFileName();
@@ -277,7 +277,7 @@ CString CInternetUpdate::DownloadUpdate()
 
 	//if nothing there get the default
 	if(csPath.IsEmpty())
-		csPath = "sabrogden.0Catch.com/DittoSetup.exe";
+		csPath = "osdn.dl.sourceforge.net/sourceforge/ditto-cp/DittoSetup.exe";
 
 	CString csUrl = "http://" + csPath;
 	

@@ -90,5 +90,6 @@ BOOL CheckDBExists(CString csDBPath);
 BOOL RemoveOldEntries();
 BOOL CreateDB(CString csPath);
 BOOL ValidDB(CString csPath);
+BOOL EnsureDirectory(CString csPath);
 
 #endif // !defined(AFX_DATABASEUTILITES_H__039F53EB_228F_4640_8009_3D2B1FF435D4__INCLUDED_)

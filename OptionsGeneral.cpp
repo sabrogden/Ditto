@@ -5,6 +5,7 @@
 #include "CP_Main.h"
 #include "OptionsGeneral.h"
 #include "InternetUpdate.h"
+#include <io.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -79,6 +80,8 @@ BOOL COptionsGeneral::OnInitDialog()
 	{
 		m_ePath.EnableWindow(FALSE);
 		m_btGetPath.EnableWindow(FALSE);
+		csPath = CGetSetOptions::GetDBPath();
+		m_ePath.SetWindowText(csPath);
 	}
 	else
 	{
@@ -110,17 +113,44 @@ BOOL COptionsGeneral::OnApply()
 		CString csPath;
 		m_ePath.GetWindowText(csPath);
 
+		bool bSetPath = true;
+
 		if(csPath.IsEmpty() == FALSE)
 		{
-			if(ValidDB(csPath) == FALSE)
+			if(_access(csPath, 0) == -1)
 			{
-				MessageBox("Invalid Database", "Ditto", MB_OK);
-				m_ePath.SetFocus();
-				return FALSE;
-			}			
+				CString cs;
+				cs.Format("The database %s does not exist.\n\nCreate a new database?", csPath);
+
+				if(MessageBox(cs, "Ditto", MB_YESNO) == IDYES)
+				{
+					theApp.CloseDB();
+
+					// -- create a new one
+					if(CreateDB(csPath))
+					{
+						CGetSetOptions::SetDBPath(csPath);
+					}
+					else
+						MessageBox("Error Creating Database");
+
+					bSetPath = false;
+				}
+				else
+					return FALSE;
+			}
+			else
+			{
+				if(ValidDB(csPath) == FALSE)
+				{
+					MessageBox("Invalid Database", "Ditto", MB_OK);
+					m_ePath.SetFocus();
+					return FALSE;
+				}
+			}
 		}	
 		
-		if(csPath != CGetSetOptions::GetDBPath(FALSE))
+		if((csPath != CGetSetOptions::GetDBPath(FALSE)) && (bSetPath))
 		{
 			CGetSetOptions::SetDBPath(csPath);
 			theApp.CloseDB();
