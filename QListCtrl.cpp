@@ -379,7 +379,12 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		rcText.top++;
 		
         // Draw the text.
-        CString csText = GetItemText(nItem, 0);
+        //CString csText = GetItemText(nItem, 0);
+
+		CString csText;
+		LPTSTR lpszText = csText.GetBufferSetLength(1000);
+		GetItemText(nItem, 0, lpszText, 1000);
+		csText.ReleaseBuffer();
 
 		// set firstTenNum to the first ten number (1-10) corresponding to
 		//  the current nItem.
@@ -391,7 +396,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			rcText.left += 12;
 		}
 
-		pDC->DrawText(csText, rcText, DT_VCENTER | DT_EXPANDTABS);
+		pDC->DrawText(lpszText, rcText, DT_VCENTER | DT_EXPANDTABS);
 		
         // Draw a focus rect around the item if necessary.
         if(bListHasFocus && (rItem.state & LVIS_FOCUSED))
@@ -477,7 +482,7 @@ BOOL CQListCtrl::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 
 	// Use Item's name as the tool tip. Change this for something different.
 	// Like use its file size, etc.
-	strTipText = GetToolTipText(nID-1);
+	GetToolTipText(nID-1, strTipText);
 
 	//Replace the tabs with spaces, the tooltip didn't like the \t s
 	strTipText.Replace("\t", "  ");
@@ -665,13 +670,13 @@ void CQListCtrl::ShowFullDescription()
 	GetItemRect(nItem, rc, LVIR_BOUNDS);
 	ClientToScreen(rc);
 	m_Popup.m_Pos = CPoint(rc.left, rc.bottom);
-	m_Popup.Show( GetToolTipText(nItem) );
+	CString cs;
+	GetToolTipText(nItem, cs);
+	m_Popup.Show( cs );
 }
 
-CString CQListCtrl::GetToolTipText(int nItem)
+void CQListCtrl::GetToolTipText(int nItem, CString &csText)
 {
-	CString cs;
-
 	if((GetStyle() & LVS_OWNERDATA))
 	{
 		CWnd* pParent=GetParent();
@@ -682,16 +687,15 @@ CString CQListCtrl::GetToolTipText(int nItem)
 			info.hdr.code = NM_GETTOOLTIPTEXT;
 			info.hdr.hwndFrom = GetSafeHwnd();
 			info.hdr.idFrom = GetDlgCtrlID();
-
 			info.lItem = nItem;
-					
+			info.cchTextMax = 1000;
+			info.pszText = csText.GetBufferSetLength(1000);
+
 			pParent->SendMessage(WM_NOTIFY,(WPARAM)info.hdr.idFrom,(LPARAM)&info);
 
-			cs = info.cText;
+			csText.ReleaseBuffer();			
 		}
 	}
-
-	return cs;
 }
 
 DWORD CQListCtrl::GetItemData(int nItem)

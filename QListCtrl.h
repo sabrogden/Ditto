@@ -22,14 +22,10 @@
 class CQListToolTipText
 {
 public:
-	CQListToolTipText()
-	{
-		memset(&cText, 0, sizeof(cText));
-	}
-
 	NMHDR hdr;
-	char cText[500];
 	long lItem;
+	LPTSTR pszText; 
+	int cchTextMax; 
 };
 
 class CQListCtrl : public CListCtrl
@@ -82,7 +78,7 @@ public:
 	BOOL SetListPos( int index );
 
 	DWORD GetItemData(int nItem);
-	CString GetToolTipText(int nItem);
+	void GetToolTipText(int nItem, CString &csText);
 
 	void SetShowTextForFirstTenHotKeys(BOOL bVal)	{ m_bShowTextForFirstTenHotKeys = bVal;	}
 

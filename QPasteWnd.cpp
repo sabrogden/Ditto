@@ -1083,7 +1083,10 @@ void CQPasteWnd::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 					cs += "** ";
 
 				cs += m_Recset.m_strText;
-				lstrcpy(pItem->pszText, cs);
+				
+				lstrcpyn(pItem->pszText, cs, pItem->cchTextMax);
+				if(cs.GetLength() > pItem->cchTextMax)
+					pItem->pszText[pItem->cchTextMax-1] = 0;
 			}
 			catch(CDaoException *e)
 			{
@@ -1122,7 +1125,12 @@ void CQPasteWnd::OnGetToolTipText(NMHDR* pNMHDR, LRESULT* pResult)
 
 	if( pInfo->lItem < 0 )
 	{
-		strcpy(pInfo->cText, "no item selected");
+		CString cs("no item selected");
+
+		lstrcpyn(pInfo->pszText, cs, pInfo->cchTextMax);
+		if(cs.GetLength() > pInfo->cchTextMax)
+			pInfo->pszText[pInfo->cchTextMax-1] = 0;
+
 		return;
 	}
 
@@ -1162,8 +1170,9 @@ void CQPasteWnd::OnGetToolTipText(NMHDR* pNMHDR, LRESULT* pResult)
 			cs += LOBYTE(m_Recset.m_lShortCut);
 		}
 
-		strcpy(pInfo->cText, cs);
-
+		lstrcpyn(pInfo->pszText, cs, pInfo->cchTextMax);
+		if(cs.GetLength() > pInfo->cchTextMax)
+			pInfo->pszText[pInfo->cchTextMax-1] = 0;
 	}
 	catch(CDaoException *e)
 	{
