@@ -76,6 +76,7 @@ BOOL CAbout::OnInitDialog()
 	m_List.AddString("Credits");
 	
 	cs = "    Authors - Scott Brogden, sabrogden@users.sourceforge.net";
+	m_List.AddString(cs);
 	cs = "            - Kevin Edwards, ingenuus@users.sourceforge.net";
 	m_List.AddString(cs);
 
