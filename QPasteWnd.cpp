@@ -316,7 +316,7 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 {
 	CWndEx::OnActivate(nState, pWndOther, bMinimized);
 	
-	if(m_bHideWnd == false)
+	if(m_bHideWnd == false || m_lstHeader.GetToolTipHWnd() == pWndOther->GetSafeHwnd())
 		return;
 	
 	if (nState == WA_INACTIVE)
@@ -328,6 +328,8 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 		//re register the global hot keys for the last ten
 		if(theApp.m_bAppExiting == false)
 			g_HotKeys.RegisterAll();
+
+		m_lstHeader.HidePopup();
 	}
 	else if (nState == WA_ACTIVE || nState == WA_CLICKACTIVE)
 	{
@@ -593,7 +595,9 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 	}
 	if( theApp.m_bShowingQuickPaste )
 	{
-		FillList();
+		HWND hFocus = GetFocus()->GetSafeHwnd();
+		if(hFocus == NULL || hFocus == m_lstHeader.GetSafeHwnd())
+			FillList();
 	}
 	
 	return TRUE;
@@ -2020,7 +2024,7 @@ void CQPasteWnd::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 {
 	CWndEx::OnWindowPosChanging(lpwndpos);
 
-	m_lstHeader.HidePopup();
+//	m_lstHeader.HidePopup();
 	
 	CRect rcScreen;
 	

@@ -31,6 +31,11 @@ CWndEx::CWndEx()
 	m_bMouseDownOnMinimize = false;
 	m_bMinimized = false;
 	m_bMaxSetTimer = false;
+
+	m_lTopBorder = BORDER;
+	m_lRightBorder = BORDER;
+	m_lBottomBorder = BORDER;
+	m_lLeftBorder = BORDER;
 	
 	SetCaptionColorActive(false, theApp.GetConnectCV());
 }
@@ -88,19 +93,17 @@ bool CWndEx::SetCaptionColorActive(bool bActive, bool ConnectedToClipboard)
 
 BEGIN_MESSAGE_MAP(CWndEx, CWnd)
 //{{AFX_MSG_MAP(CWndEx)
-ON_WM_CREATE()
-ON_WM_NCPAINT()
-ON_WM_NCCALCSIZE()
-ON_WM_NCHITTEST()
-ON_WM_NCLBUTTONDOWN()
-ON_WM_NCMOUSEMOVE()
-ON_WM_NCLBUTTONUP()
-ON_WM_ERASEBKGND()
-ON_WM_TIMER()
-ON_WM_WINDOWPOSCHANGING()
+	ON_WM_CREATE()
+	ON_WM_NCPAINT()
+	ON_WM_NCCALCSIZE()
+	ON_WM_NCHITTEST()
+	ON_WM_NCLBUTTONDOWN()
+	ON_WM_NCMOUSEMOVE()
+	ON_WM_NCLBUTTONUP()
+	ON_WM_ERASEBKGND()
+	ON_WM_TIMER()
+	ON_WM_WINDOWPOSCHANGING()
 //}}AFX_MSG_MAP
-//	ON_WM_NCLBUTTONDBLCLK()
-//	ON_WM_NCACTIVATE()
 ON_WM_SIZE()
 END_MESSAGE_MAP()
 

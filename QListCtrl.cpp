@@ -770,7 +770,6 @@ int CQListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_pToolTip = new CToolTipEx;
 	m_pToolTip->Create(this);
 	
-	
 	return 0;
 }
 
@@ -917,13 +916,47 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto)
 
 	if(m_pToolTip)
 	{
+		m_pToolTip->SetToolTipText(cs);
+
 		CClipFormat Clip;
-		Clip.m_cfType = CF_DIB;
-		static CBitmap *pBitMap = NULL;
+		
+		Clip.m_cfType = CF_TEXT;
 
 		if(GetClipData(nItem, Clip) && Clip.m_hgData)
+		{
+			LPVOID pvData = GlobalLock(Clip.m_hgData);
+			if(pvData)
+			{
+				CString csText = (char*)pvData;
+				m_pToolTip->SetToolTipText(csText);
+			}
+
+			GlobalUnlock(Clip.m_hgData);
+
+			Clip.Clear();
+		}
+		
+		Clip.m_cfType = RegisterClipboardFormat(CF_RTF);
+
+		if(GetClipData(nItem, Clip) && Clip.m_hgData)
+		{
+			LPVOID pvData = GlobalLock(Clip.m_hgData);
+			if(pvData)
+			{
+				CString csRTF = (char*)pvData;
+				m_pToolTip->SetRTFText(csRTF);
+			}
+
+			GlobalUnlock(Clip.m_hgData);
+
+			Clip.Clear();
+		}	
+			
+		Clip.m_cfType = CF_DIB;
+				
+		if(GetClipData(nItem, Clip) && Clip.m_hgData)
 		{			
-			pBitMap = new CBitmap;
+			CBitmap *pBitMap = new CBitmap;
 			if(pBitMap)
 			{
 				CRect rcItem;
@@ -935,11 +968,14 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto)
 
 				ReleaseDC(pDC);
 
+				//Tooltip wnd will release
 				m_pToolTip->SetBitmap(pBitMap);
 			}
+
+			Clip.Clear();
 		}
+			
 		
-		m_pToolTip->SetToolTipText(cs);
 		m_pToolTip->Show(pt);
 	}
 }
@@ -1027,7 +1063,14 @@ void CQListCtrl::DestroyAndCreateAccelerator(BOOL bCreate)
 void CQListCtrl::OnKillFocus(CWnd* pNewWnd)
 {
 	CListCtrl::OnKillFocus(pNewWnd);
-	m_pToolTip->Hide();
+
+//	if(FocusOnToolTip() == FALSE)
+//		m_pToolTip->Hide();
+}
+
+HWND CQListCtrl::GetToolTipHWnd()
+{
+	return m_pToolTip->GetSafeHwnd();
 }
 
 BOOL CQListCtrl::SetItemCountEx(int iCount, DWORD dwFlags /* = LVSICF_NOINVALIDATEALL */)

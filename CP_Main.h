@@ -128,6 +128,7 @@ public:
 
 	bool	m_bShowingOptions;
 	bool	m_bShowingQuickPaste;
+	bool	m_bRefreshView;
 
 	CString m_Status;
 	CQPasteWnd* QPasteWnd() { return m_pMainFrame->QuickPaste.m_pwndPaste; }

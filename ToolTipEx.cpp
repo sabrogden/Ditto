@@ -40,6 +40,8 @@ CToolTipEx::~CToolTipEx()
 BEGIN_MESSAGE_MAP(CToolTipEx, CWnd)
 	//{{AFX_MSG_MAP(CToolTipEx)
 	ON_WM_PAINT()
+	ON_WM_SIZE()
+	ON_WM_NCHITTEST()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -62,6 +64,11 @@ BOOL CToolTipEx::Create(CWnd* pParentWnd)
         return FALSE;
 	}
 
+	m_RichEdit.Create(WS_CHILD|WS_VISIBLE|WS_VSCROLL|WS_HSCROLL|ES_MULTILINE|ES_AUTOVSCROLL|ES_AUTOHSCROLL, CRect(10,10,100,200), this, 1);
+
+	m_RichEdit.SetReadOnly();
+	m_RichEdit.SetBackgroundColor(FALSE, GetSysColor(COLOR_INFOBK));
+
 	SetLogFont(GetSystemToolTipFont(), FALSE);
    
     return TRUE;
@@ -69,35 +76,64 @@ BOOL CToolTipEx::Create(CWnd* pParentWnd)
 
 BOOL CToolTipEx::Show(CPoint point)
 {
+	if(m_pBitmap)
+	{
+		m_RichEdit.ShowWindow(SW_HIDE);
+	}
+	else
+	{
+		m_RichEdit.ShowWindow(SW_SHOW);
+	}
+
 	CRect rect = GetBoundsRect();
 
-	CRect rcScreen;
-	
-	CRect crRectToScreen(point, CPoint(point.x + rect.right, point.y + rect.bottom));
+	//account for the scroll bars
+	rect.right += 20;
+	rect.bottom += 20;
 
-	int nMonitor = GetMonitorFromRect(&crRectToScreen);
+	//if showing rtf then increase the size because
+	//rtf will probably draw bigger
+	if(m_csRTF != "")
+	{
+		long lNewWidth = rect.Width() + (rect.Width() * .3);
+		rect.right = rect.left + lNewWidth;
+
+		long lNewHeight = rect.Height() + (rect.Height() * 1);
+		rect.bottom = rect.top + lNewHeight;
+	}
+
+	CRect rcScreen;
+
+	ClientToScreen(rect);
+
+	int nMonitor = GetMonitorFromRect(&rect);
 	GetMonitorRect(nMonitor, &rcScreen);
 		
-	if(crRectToScreen.right > rcScreen.right)
-	{
-		point.x -= (crRectToScreen.right - rcScreen.right);
-		///Add a border
-		point.x -= 2;
-	}
+	//ensure that we don't go outside the screen
+	if(point.x < 0)
+		point.x = 5;
+	if(point.y < 0)
+		point.y = 5;
 
-	if(crRectToScreen.bottom > rcScreen.bottom)
-	{
-		point.y -= (crRectToScreen.bottom - rcScreen.bottom);
-		//add a border
-		point.y -= 2;
-	}
+	rcScreen.DeflateRect(0, 0, 5, 5);
 
+	long lWidth = rect.Width();
+	long lHeight = rect.Height();
 
-	ShowWindow(SW_HIDE);
-    SetWindowPos(NULL,
-                 point.x, point.y,
-                 rect.Width(), rect.Height(),
-                 SWP_SHOWWINDOW|SWP_NOCOPYBITS|SWP_NOACTIVATE|SWP_NOZORDER);
+	rect.left = point.x;
+	rect.top = point.y;
+	rect.right = rect.left + lWidth;
+	rect.bottom = rect.top + lHeight;
+
+	if(rect.right > rcScreen.right)
+		rect.right = rcScreen.right;
+	if(rect.bottom > rcScreen.bottom)
+		rect.bottom = rcScreen.bottom;
+
+	SetWindowPos(NULL,
+		         point.x, point.y,
+			     rect.Width(), rect.Height(),
+				 SWP_SHOWWINDOW|SWP_NOCOPYBITS|SWP_NOACTIVATE|SWP_NOZORDER);
 
 	return TRUE;
 }
@@ -108,6 +144,9 @@ BOOL CToolTipEx::Hide()
 
 	ShowWindow(SW_HIDE);
 
+	m_csRTF = "";
+	m_csText = "";
+
 	return TRUE;
 }
 
@@ -116,19 +155,19 @@ void CToolTipEx::OnPaint()
 	CPaintDC dc(this); // device context for painting
 
 	CRect rect;
-    GetClientRect(rect);
+	GetClientRect(rect);
 
-	CBrush  Brush, *pOldBrush;
-	Brush.CreateSolidBrush(GetSysColor(COLOR_INFOBK));
+//	CBrush  Brush, *pOldBrush;
+//	Brush.CreateSolidBrush(GetSysColor(COLOR_INFOBK));
 
-	pOldBrush = dc.SelectObject(&Brush);
-	CFont *pOldFont = dc.SelectObject(&m_Font);
+//	pOldBrush = dc.SelectObject(&Brush);
+//	CFont *pOldFont = dc.SelectObject(&m_Font);
 
-    dc.FillRect(&rect, &Brush);
+  //  dc.FillRect(&rect, &Brush);
 
 	// Draw Text
-    dc.SetBkMode(TRANSPARENT);
-    rect.DeflateRect(m_rectMargin);
+//    dc.SetBkMode(TRANSPARENT);
+//    rect.DeflateRect(m_rectMargin);
 
 	if(m_pBitmap)
 	{
@@ -147,11 +186,11 @@ void CToolTipEx::OnPaint()
 		rect.top += nHeight;
 	}
 
-    dc.DrawText(m_csText, rect, m_dwTextStyle);
+    //dc.DrawText(m_csText, rect, m_dwTextStyle);
 
 	// Cleanup
-    dc.SelectObject(pOldBrush);
-	dc.SelectObject(pOldFont);
+//  dc.SelectObject(pOldBrush);
+//	dc.SelectObject(pOldFont);
 }
 
 void CToolTipEx::PostNcDestroy() 
@@ -161,30 +200,61 @@ void CToolTipEx::PostNcDestroy()
     delete this;
 }
 
+BOOL CToolTipEx::PreTranslateMessage(MSG* pMsg) 
+{
+	switch(pMsg->message) 
+	{
+	case WM_KEYDOWN:
+		
+		switch( pMsg->wParam )
+		{
+		case VK_ESCAPE:
+			Hide();
+			return TRUE;
+		case 'C':
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				m_RichEdit.Copy();
+			}
+			break;
+		}
+	}
+
+	return CWnd::PreTranslateMessage(pMsg);
+}
+
 BOOL CToolTipEx::OnMsg(MSG* pMsg)
 {
+	if(FALSE == IsWindowVisible())
+	{
+		return FALSE;
+	}
+
 	switch(pMsg->message) 
 	{
 		case WM_WINDOWPOSCHANGING:
 		case WM_LBUTTONDOWN:
 		{
-			//if (!IsCursorInToolTip())
-			Hide();
+			if (!IsCursorInToolTip())
+				Hide();
 			break;
 		}
 		case WM_KEYDOWN:
 		{
-			if(IsWindowVisible())
+			WPARAM vk = pMsg->wParam;
+			if(vk == VK_ESCAPE)
 			{
 				Hide();
-				WPARAM vk = pMsg->wParam;
-				if(vk == VK_ESCAPE)
-				{
-					return TRUE;
-				}
+				return TRUE;
 			}
-			else
-				Hide();
+			else if(vk == VK_TAB)
+			{
+				m_RichEdit.SetFocus();
+				return TRUE;
+			}
+
+			Hide();
+
 			break;
 		}
 		case WM_LBUTTONDBLCLK:
@@ -339,4 +409,78 @@ void CToolTipEx::SetBitmap(CBitmap *pBitmap)
 	DELETE_BITMAP
 
 	m_pBitmap = pBitmap;
+}
+
+void CToolTipEx::OnSize(UINT nType, int cx, int cy) 
+{
+	CWnd::OnSize(nType, cx, cy);
+	
+	if(::IsWindow(m_RichEdit.GetSafeHwnd()) == FALSE)
+		return;
+
+	CRect cr;
+	GetClientRect(cr);
+//	cr.DeflateRect(0, 0, 15, 0);
+	m_RichEdit.MoveWindow(cr);
+}
+
+BOOL CToolTipEx::IsCursorInToolTip()
+{
+	CRect cr;
+	GetWindowRect(cr);
+
+	CPoint cursorPos;
+	GetCursorPos(&cursorPos);
+
+	return cr.PtInRect(cursorPos);
+}
+
+void CToolTipEx::SetRTFText(const CString &csRTF)
+{
+	m_RichEdit.SetRTF(csRTF);
+	m_csRTF = csRTF;
+}
+
+void CToolTipEx::SetToolTipText(const CString &csText)
+{
+	m_RichEdit.SetText(csText);
+	m_csText = csText;
+
+	m_RichEdit.SetFont(&m_Font);
+}
+
+
+UINT CToolTipEx::OnNcHitTest(CPoint point) 
+{
+	CRect crWindow;
+	GetWindowRect(crWindow);
+	
+	const static int nBorder = 10;
+
+	if((point.y < crWindow.top + nBorder) &&
+		(point.x < crWindow.left + nBorder))
+		return HTTOPLEFT;
+	else if((point.y < crWindow.top + nBorder) &&
+		(point.x > crWindow.right - nBorder))
+		return HTTOPRIGHT;
+	else if((point.y > crWindow.bottom - nBorder) &&
+		(point.x > crWindow.right - nBorder))
+		return HTBOTTOMRIGHT;
+	else if((point.y > crWindow.bottom - nBorder) &&
+		(point.x < crWindow.left + nBorder))
+		return HTBOTTOMLEFT;
+
+	if(point.y < crWindow.top + nBorder)
+		return HTTOP;
+	else if(point.y > crWindow.bottom - nBorder)
+		return HTBOTTOM;
+	else if(point.x > crWindow.right - nBorder)
+		return HTRIGHT;
+	else if(point.x < crWindow.left + nBorder)
+		return HTLEFT;
+
+//	if(point.x > crWindow.right - 15)
+//		return HTCAPTION;
+
+	return CWnd::OnNcHitTest(point);
 }

@@ -101,6 +101,8 @@ public:
 
 	void SetLogFont(LOGFONT &font);
 
+	HWND GetToolTipHWnd();
+
 protected:
 	void SendSelection(int nItem);;
 	void SendSelection(ARRAY &arrItems);

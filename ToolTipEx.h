@@ -7,6 +7,7 @@
 // ToolTipEx.h : header file
 //
 #include "RichEditCtrlEx.h"
+#include "WndEx.h"
 /////////////////////////////////////////////////////////////////////////////
 // CToolTipEx window
 
@@ -25,7 +26,8 @@ public:
 	BOOL Create(CWnd* pParentWnd);
 	BOOL Show(CPoint point);
 	BOOL Hide();
-	void SetToolTipText(CString csText)	{ m_csText = csText; Invalidate(); }
+	void SetToolTipText(const CString &csText);
+	void SetRTFText(const CString &csRTF);
 	void SetBitmap(CBitmap *pBitmap);
 
 // Overrides
@@ -33,6 +35,7 @@ public:
 	//{{AFX_VIRTUAL(CToolTipEx)
 	protected:
 	virtual void PostNcDestroy();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -45,6 +48,9 @@ protected:
 	CString m_csText;
 	CFont m_Font;
 	CBitmap *m_pBitmap;
+	CString m_csRTF;
+
+	CRichEditCtrlEx m_RichEdit;
 
 	
 
@@ -53,11 +59,14 @@ protected:
 	CRect GetBoundsRect();
 	BOOL SetLogFont(LPLOGFONT lpLogFont, BOOL bRedraw /*=TRUE*/);
 	LPLOGFONT GetSystemToolTipFont();
+	BOOL IsCursorInToolTip();
 
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CToolTipEx)
 	afx_msg void OnPaint();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg UINT OnNcHitTest(CPoint point);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };
