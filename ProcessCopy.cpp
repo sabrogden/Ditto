@@ -506,15 +506,17 @@ long lDate;
 
 		recset.m_strSort = "lDate DESC";
 		recset.Open("SELECT * FROM Main");
-		recset.MoveFirst();
-
-		lDate = (long) m_Time.GetTime();
-		if( lDate <= recset.m_lDate )
+		if(!recset.IsEOF())
 		{
-			lDate = recset.m_lDate + 1;
-			m_Time = lDate;
-		}
+			recset.MoveFirst();
 
+			lDate = (long) m_Time.GetTime();
+			if( lDate <= recset.m_lDate )
+			{
+				lDate = recset.m_lDate + 1;
+				m_Time = lDate;
+			}
+		}
 		recset.Close();
 	}
 	CATCHDAO
