@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=Ditto
-AppVerName=Ditto 1.00.4
+AppVerName=Ditto 2.1
 AppPublisher=Scott Brogden
 AppPublisherURL=ditto-cp.sourceforge.net
 AppSupportURL=ditto-cp.sourceforge.net
@@ -20,12 +20,12 @@ Name: RunAtStartup; Description: "Run Ditto on Windows Startup";
 [Files]
 
 ;installed if it is 2000 or greater
-Source: "C:\Projects\Ditto\ditto\Release\Ditto.exe"; DestDir: "{app}"; MinVersion: 0, 1; DestName: "Ditto.exe"
+Source: "C:\Documents and Settings\Scott\Desktop\ditto\Release\Ditto.exe"; DestDir: "{app}"; MinVersion: 0, 1; DestName: "Ditto.exe"
 
 ;installed if it is 95, 98, me
-Source: "C:\Projects\Ditto\ditto\Release\Ditto98.exe"; DestDir: "{app}"; MinVersion: 1, 0; DestName: "Ditto.exe"
+Source: "C:\Documents and Settings\Scott\Desktop\ditto\Release\Ditto98.exe"; DestDir: "{app}"; MinVersion: 1, 0; DestName: "Ditto.exe"
 
-Source: "C:\Projects\Ditto\ditto\res\Ditto.ico"; DestDir: "{app}"
+Source: "C:\Documents and Settings\Scott\Desktop\ditto\res\Ditto.ico"; DestDir: "{app}"
 
 [Icons]
 Name: "{group}\Ditto"; Filename: "{app}\Ditto.exe"; IconFilename: "{app}\Ditto.ico"
