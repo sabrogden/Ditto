@@ -4,6 +4,8 @@
 #include "stdafx.h"
 #include "cp_main.h"
 #include "MoveToGroupDlg.h"
+#include "GroupName.h"
+#include "ProcessPaste.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -37,6 +39,7 @@ void CMoveToGroupDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CMoveToGroupDlg, CDialog)
 	//{{AFX_MSG_MAP(CMoveToGroupDlg)
 	ON_WM_SIZE()
+	ON_BN_CLICKED(IDC_BUTTON_NEW_GROUP, OnButtonNewGroup)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(NM_GROUP_TREE_MESSAGE, OnTreeSelect)
 END_MESSAGE_MAP()
@@ -85,4 +88,27 @@ void CMoveToGroupDlg::OnSize(UINT nType, int cx, int cy)
 	
 	// TODO: Add your message handler code here
 	
+}
+
+void CMoveToGroupDlg::OnButtonNewGroup() 
+{
+	CGroupName Name;
+		
+	int nParentID = m_Tree.GetSelectedTree();
+	if(nParentID < 0)
+		return;
+	
+	if(Name.DoModal() != IDOK)
+		return;
+		
+	CString csName = Name.m_csName;
+	
+	
+	long lID = NewGroupID(theApp.GetValidGroupID(), csName);
+	if(lID >= 0)
+	{
+		m_Tree.AddNode(csName, lID);
+	}
+
+	m_Tree.SetFocus();
 }

@@ -42,6 +42,7 @@ protected:
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnButtonNewGroup();
 	//}}AFX_MSG
 	LRESULT OnTreeSelect(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()

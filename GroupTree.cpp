@@ -77,6 +77,9 @@ void CGroupTree::FillTree()
 	HTREEITEM hItem = InsertItem("Root", TVI_ROOT);
 	SetItemData(hItem, 0);
 	SetItemState(hItem, TVIS_EXPANDED, TVIS_EXPANDED);
+
+	if(m_lSelectedFolderID < 0)
+		SelectItem(hItem);
 	
 	FillTree(0, hItem);
 }
@@ -212,4 +215,20 @@ void CGroupTree::SendToParent(long lID)
 		m_bSendAllready = true;
 		::PostMessage(m_NotificationWnd, NM_GROUP_TREE_MESSAGE, lID, 0);
 	}
+}
+
+bool CGroupTree::AddNode(CString csText, long lID)
+{
+	HTREEITEM hItem;
+
+	HTREEITEM hParent =  GetNextItem(TVI_ROOT, TVGN_CARET);
+	if(hParent == NULL)
+		return false;
+		
+	hItem = InsertItem(csText, 1, 1, hParent);
+	SelectItem(hItem);
+
+	SetItemData(hItem, lID);
+
+	return true;
 }

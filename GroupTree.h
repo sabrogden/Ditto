@@ -26,6 +26,7 @@ public:
 	bool m_bHide;
 	long m_lSelectedFolderID;
 	long GetSelectedTree();
+	bool AddNode(CString csText, long lID);
 
 protected:
 	void FillTree(long lParentID, HTREEITEM hParent);
