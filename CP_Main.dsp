@@ -493,11 +493,31 @@ SOURCE=.\TypesTable.h
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # Begin Source File
 
+SOURCE=.\res\back.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\back1.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\back2.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\bitmap1.bmp
 # End Source File
 # Begin Source File
 
 SOURCE=.\res\bmp00001.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\bmp00002.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\bmp00003.bmp
 # End Source File
 # Begin Source File
 
