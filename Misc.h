@@ -9,7 +9,6 @@
 #define ONE_MINUTE				60000
 
 #define DELETE_PTR(ptr) {  if(ptr) {delete ptr; ptr = NULL;}  }
-#define IS_WIN30_DIB(lpbi)  ((*(LPDWORD)(lpbi)) == sizeof(BITMAPINFOHEADER))
 
 #include "DatabaseUtilities.h"
 
@@ -38,11 +37,6 @@ typedef struct tagTHREADNAME_INFO
     DWORD dwFlags;       // reserved for future use, most be zero
 } THREADNAME_INFO;
 void SetThreadName(DWORD dwThreadID, LPCTSTR szThreadName);
-
-int GetCBitmapWidth(const CBitmap & cbm);
-int GetCBitmapHeight(const CBitmap & cbm); 
-BOOL GetCBitmap(void *pClip2, CDC *pDC, CBitmap *pBitMap, int nMaxHeight);
-HANDLE BitmapToDIB(HBITMAP hBitmap, HPALETTE hPal);
 
 void LogSendRecieveInfo(CString cs);
 

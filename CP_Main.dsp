@@ -203,6 +203,10 @@ SOURCE=.\ComboBoxSearch.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\DialogResizer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\GroupStatic.cpp
 # End Source File
 # Begin Source File
@@ -212,6 +216,10 @@ SOURCE=.\GroupStatic.h
 # Begin Source File
 
 SOURCE=.\HyperLink.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\memdc.h
 # End Source File
 # Begin Source File
 
@@ -231,19 +239,19 @@ SOURCE=.\QListCtrl.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\SkinHorizontalScrollbar.cpp
+SOURCE=.\RichEditCtrlEx.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SkinHorizontalScrollbar.h
+SOURCE=.\RichEditCtrlEx.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\SkinVerticleScrollbar.cpp
+SOURCE=.\ToolTipEx.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SkinVerticleScrollbar.h
+SOURCE=.\ToolTipEx.h
 # End Source File
 # Begin Source File
 
@@ -261,6 +269,10 @@ SOURCE=.\About.cpp
 # Begin Source File
 
 SOURCE=.\AddType.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\BitmapHelper.cpp
 # End Source File
 # Begin Source File
 
@@ -285,14 +297,6 @@ SOURCE=.\DatabaseUtilities.cpp
 # Begin Source File
 
 SOURCE=.\DataTable.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\DialogResizer.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\DIBUTIL.CPP
 # End Source File
 # Begin Source File
 
@@ -321,10 +325,6 @@ SOURCE=.\MainFrm.cpp
 # Begin Source File
 
 SOURCE=.\MainTable.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\memdc.h
 # End Source File
 # Begin Source File
 
@@ -388,10 +388,6 @@ SOURCE=.\QuickPaste.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\RichEditCtrlEx.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\SelectDB.cpp
 # End Source File
 # Begin Source File
@@ -409,10 +405,6 @@ SOURCE=.\SystemTray.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ToolTipEx.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\TypesTable.cpp
 # End Source File
 # End Group
@@ -426,6 +418,10 @@ SOURCE=.\About.h
 # Begin Source File
 
 SOURCE=.\AddType.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\BitmapHelper.h
 # End Source File
 # Begin Source File
 
@@ -450,14 +446,6 @@ SOURCE=.\DataTable.h
 # Begin Source File
 
 SOURCE=.\DialogResizer.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\DIBAPI.H
-# End Source File
-# Begin Source File
-
-SOURCE=.\DIBUTIL.H
 # End Source File
 # Begin Source File
 
@@ -557,10 +545,6 @@ SOURCE=.\Resource.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\RichEditCtrlEx.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\SelectDB.h
 # End Source File
 # Begin Source File
@@ -574,10 +558,6 @@ SOURCE=.\StdAfx.h
 # Begin Source File
 
 SOURCE=.\SystemTray.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ToolTipEx.h
 # End Source File
 # Begin Source File
 

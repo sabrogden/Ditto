@@ -5,7 +5,8 @@
 #include "CP_Main.h"
 #include "QListCtrl.h"
 #include "ProcessPaste.h"
-#include "dibapi.h"
+
+#include "BitmapHelper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -520,10 +521,10 @@ BOOL CQListCtrl::DrawBitMap(int nItem, CRect &crRect, CDC *pDC)
 	
 	if(Clip.m_hgData)
 	{
-		if(GetCBitmap(&Clip, pDC, &Bitmap, crRect.Height()))
+		if(CBitmapHelper::GetCBitmap(&Clip, pDC, &Bitmap, crRect.Height()))
 		{
-			int nWidth = GetCBitmapWidth(Bitmap);
-			int nHeight = GetCBitmapHeight(Bitmap);
+			int nWidth = CBitmapHelper::GetCBitmapWidth(Bitmap);
+			int nHeight = CBitmapHelper::GetCBitmapHeight(Bitmap);
 
 			CDC MemDc;
 			MemDc.CreateCompatibleDC(pDC);
@@ -554,7 +555,9 @@ BOOL CQListCtrl::DrawBitMap(int nItem, CRect &crRect, CDC *pDC)
 		{
 			HPALETTE hPal = NULL;
 
-			ThumbData.m_hgData = BitmapToDIB(Bitmap.operator HBITMAP(), hPal);
+			ThumbData.m_hgData = CBitmapHelper::hBitmapToDIB(Bitmap.operator HBITMAP(), BI_RGB, hPal);
+
+//			ThumbData.m_hgData = BitmapToDIB(Bitmap.operator HBITMAP(), hPal);
 
 			//Map will delete memory in destructor
 			ThumbData.bDeleteData = false;
@@ -870,7 +873,7 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto)
 				
 				CDC *pDC = GetDC();;
 
-				GetCBitmap(&Clip, pDC, pBitMap, (rcItem.Width() * 2));
+				CBitmapHelper::GetCBitmap(&Clip, pDC, pBitMap, (rcItem.Width() * 2));
 
 				ReleaseDC(pDC);
 

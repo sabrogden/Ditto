@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "cp_main.h"
 #include "ToolTipEx.h"
+#include "BitmapHelper.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -136,8 +137,8 @@ void CToolTipEx::OnPaint()
 
 		CBitmap* oldBitmap = MemDc.SelectObject(m_pBitmap);
 
-		int nWidth = GetCBitmapWidth(*m_pBitmap);
-		int nHeight = GetCBitmapHeight(*m_pBitmap);
+		int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
+		int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
 		
 		dc.BitBlt(rect.left, rect.top, nWidth, nHeight, &MemDc, 0, 0, SRCCOPY);
 
@@ -248,8 +249,8 @@ CRect CToolTipEx::GetBoundsRect()
 
 	if(m_pBitmap)
 	{
-		int nWidth = GetCBitmapWidth(*m_pBitmap);
-		int nHeight = GetCBitmapHeight(*m_pBitmap);
+		int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
+		int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
 
 		rect.bottom += nHeight;
 		if((rect.left + nWidth) > rect.right)
