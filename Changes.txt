@@ -19,6 +19,8 @@
 
 * changed CCP_MainApp::FixTime to CClip::MakeLatestTime()
 
+! fixed bad connect / disconnect logic in CClipboardViewer
+
 
 03 Sept 2
 ---------

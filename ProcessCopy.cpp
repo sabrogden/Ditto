@@ -6,6 +6,7 @@
 #include "CP_Main.h"
 #include "ProcessCopy.h"
 #include "DatabaseUtilities.h"
+#include ".\processcopy.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -749,6 +750,7 @@ BEGIN_MESSAGE_MAP(CClipboardViewer, CWnd)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(WM_RECONNECT_TO_COPY_CHAIN, OnReconnectToCopyChain)
 	ON_MESSAGE(WM_IS_TOP_VIEWER, OnGetIsTopViewer)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -766,7 +768,6 @@ CClipboardViewer::CClipboardViewer( CCopyThread* pHandler )
 
 CClipboardViewer::~CClipboardViewer()
 {
-	Disconnect();
 }
 
 void CClipboardViewer::Create()
@@ -778,31 +779,37 @@ CString strParentClass = AfxRegisterWndClass(0);
 // connects as a clipboard viewer
 void CClipboardViewer::Connect()
 {
+	ASSERT( ::IsWindow(m_hWnd) );
+	if( m_bIsConnected )
+		return;
 	//Set up the clip board viewer
 	m_bCalling_SetClipboardViewer = true;
 	m_hNextClipboardViewer = CWnd::SetClipboardViewer();
-	m_bIsConnected = (GetClipboardViewer() == this);
 	m_bCalling_SetClipboardViewer = false;
+	m_bIsConnected = true;
 }
 
 // disconnects as a clipboard viewer
 void CClipboardViewer::Disconnect()
 {
-	if( m_hNextClipboardViewer )
-	{
-		if( ::IsWindow(m_hNextClipboardViewer) )
-			CWnd::ChangeClipboardChain( m_hNextClipboardViewer );
-		m_hNextClipboardViewer = NULL;
-		m_bIsConnected = false;
-	}
+	if( !m_bIsConnected )
+		return;
+	ASSERT( ::IsWindow(m_hWnd) );
+	CWnd::ChangeClipboardChain( m_hNextClipboardViewer );
+	m_hNextClipboardViewer = 0;
+	m_bIsConnected = false;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+// CClipboardViewer message handlers
 
 int CClipboardViewer::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	SetTimer(TIMER_CHECK_TOP_LEVEL_VIEWER, ONE_MINUTE, 0);
+	// is it important for us to be the top viewer?
+//	SetTimer(TIMER_CHECK_TOP_LEVEL_VIEWER, ONE_MINUTE, 0);
 
 	//Set up the clip board viewer
 	Connect();
@@ -810,20 +817,20 @@ int CClipboardViewer::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
-
-/////////////////////////////////////////////////////////////////////////////
-// CClipboardViewer message handlers
-
+void CClipboardViewer::OnDestroy()
+{
+	Disconnect();
+	CWnd::OnDestroy();
+}
 
 void CClipboardViewer::OnChangeCbChain(HWND hWndRemove, HWND hWndAfter) 
 {
-    // If the next window in the chain is being removed, reset our
-    // "next window" handle.
+	// If the next window is closing, repair the chain. 
 	if(m_hNextClipboardViewer == hWndRemove)
     {
 		m_hNextClipboardViewer = hWndAfter;
     }
-	// If there is a next clipboard viewer, pass the message on to it.
+    // Otherwise, pass the message to the next link.
 	else if (m_hNextClipboardViewer != NULL)
     {
 		::SendMessage ( m_hNextClipboardViewer, WM_CHANGECBCHAIN, 
@@ -849,8 +856,7 @@ void CClipboardViewer::OnTimer(UINT nIDEvent)
 	{
 	case TIMER_CHECK_TOP_LEVEL_VIEWER:
 		{
-			m_bIsConnected = GetClipboardViewer() == this;
-			if( !m_bIsConnected )
+			if( GetClipboardViewer() != this )
 			{
 				OnReconnectToCopyChain(0, 0);
 				m_lReconectCount++;
@@ -1107,3 +1113,5 @@ CProcessCopy::CProcessCopy()
 CProcessCopy::~CProcessCopy()
 {
 }
+
+

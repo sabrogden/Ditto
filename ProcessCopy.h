@@ -165,6 +165,7 @@ public:
 protected:
 	//{{AFX_MSG(CMainFrame)
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnDestroy();
 	afx_msg void OnChangeCbChain(HWND hWndRemove, HWND hWndAfter);
 	afx_msg void OnDrawClipboard();
 	afx_msg void OnTimer(UINT nIDEvent);
@@ -172,7 +173,6 @@ protected:
 	afx_msg LRESULT OnReconnectToCopyChain(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGetIsTopViewer(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
-public:
 };
 
 
