@@ -28,6 +28,9 @@ Source: "C:\Documents and Settings\Scott\Desktop\ditto\Release\Ditto98.exe"; Des
 Source: "C:\Documents and Settings\Scott\Desktop\ditto\res\Ditto.ico"; DestDir: "{app}"
 Source: "C:\Documents and Settings\Scott\Desktop\ditto\DittoSetup\Output\Changes.txt"; DestDir: "{app}"
 
+Source: "C:\Documents and Settings\Scott\Desktop\ditto\Release\focus.dll"; DestDir: "{app}";  Flags: ignoreversion onlyifdoesntexist
+
+
 [Icons]
 Name: "{group}\Ditto"; Filename: "{app}\Ditto.exe"; IconFilename: "{app}\Ditto.ico"
 

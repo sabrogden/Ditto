@@ -1,5 +1,13 @@
-2.1  -  2-15-04
-	- Improved drawing speed
+2.3  -  7-2-04
+	- Keep multiple Computers' clipboards in sync (Friends Tab)
+	- Send copied data automatically to other machines (Friends Tab)
+	- Right click and send individual clips to other machines
+	- Single click on the icon opens ditto
+	- New method for getting the current active window to paste into
+	- Option to close ditto on hot key if ditto is already active (General Tab, On by default)
+	- Menu option to disconnect/connect ditto to the clipboard chain
+	- If DAO is not installed you will be prompted to download the DAO redistribution package from http://ditto-cp.sourceforge.net/dao_setup.exe
+
 2.2  -  2-29-04
 	- Added global hot keys for the last 10 items copied
 	- Added back button when viewing groups
@@ -9,3 +17,7 @@
 		- Remove Hot key
 	- Fixed bug, when setting the group in the properties screen it was not setting the item to Never Auto Delete
 	- Fixed bug, checking the wrong url for update
+
+2.1  -  2-15-04
+	- Improved drawing speed
+
