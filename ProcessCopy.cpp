@@ -40,7 +40,6 @@ HGLOBAL COleDataObjectEx::GetGlobalData(CLIPFORMAT cfFormat, LPFORMATETC lpForma
 		
 	if( !GetData(cfFormat, &stg) )
 	{
-		ASSERT(0); // does this ever happen?
 		return 0;
 	}
 
