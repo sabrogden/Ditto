@@ -12,19 +12,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-int GetCBitmapWidth(const CBitmap & cbm)
-{
-	BITMAP bm;
-	cbm.GetObject(sizeof(BITMAP),&bm);
-	return bm.bmWidth;
-}
-
-int GetCBitmapHeight(const CBitmap & cbm)
-{
-	BITMAP bm;
-	cbm.GetObject(sizeof(BITMAP),&bm);
-	return bm.bmHeight;
-} 
 
 /////////////////////////////////////////////////////////////////////////////
 // CSkinHorizontalScrollbar

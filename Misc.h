@@ -38,6 +38,10 @@ typedef struct tagTHREADNAME_INFO
 } THREADNAME_INFO;
 void SetThreadName(DWORD dwThreadID, LPCTSTR szThreadName);
 
+int GetCBitmapWidth(const CBitmap & cbm);
+int GetCBitmapHeight(const CBitmap & cbm); 
+
+
 void LogSendRecieveInfo(CString cs);
 
 // Utility Functions

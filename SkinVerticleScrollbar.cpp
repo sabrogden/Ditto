@@ -12,19 +12,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-int GetCBitmapWidtha(const CBitmap & cbm)
-{
-	BITMAP bm;
-	cbm.GetObject(sizeof(BITMAP),&bm);
-	return bm.bmWidth;
-}
-
-int GetCBitmapHeighta(const CBitmap & cbm)
-{
-	BITMAP bm;
-	cbm.GetObject(sizeof(BITMAP),&bm);
-	return bm.bmHeight;
-} 
 
 /////////////////////////////////////////////////////////////////////////////
 // CSkinVerticleScrollbar
@@ -42,10 +29,10 @@ CSkinVerticleScrollbar::CSkinVerticleScrollbar()
 	m_cbSpan.LoadBitmap(IDB_VERTICAL_SCROLLBAR_CHANNEL);
 	m_cbThumb.LoadBitmap(IDB_VERTICAL_SCROLLBAR_THUMB);
 
-	m_csArrow1 = CSize(GetCBitmapWidtha(m_cbArrow1), GetCBitmapHeighta(m_cbArrow1));
-	m_csArrow2 = CSize(GetCBitmapWidtha(m_cbArrow2), GetCBitmapHeighta(m_cbArrow2));
-	m_csSpan = CSize(GetCBitmapWidtha(m_cbSpan), GetCBitmapHeighta(m_cbSpan));
-	m_csThumb = CSize(GetCBitmapWidtha(m_cbThumb), GetCBitmapHeighta(m_cbThumb));
+	m_csArrow1 = CSize(GetCBitmapWidth(m_cbArrow1), GetCBitmapHeight(m_cbArrow1));
+	m_csArrow2 = CSize(GetCBitmapWidth(m_cbArrow2), GetCBitmapHeight(m_cbArrow2));
+	m_csSpan = CSize(GetCBitmapWidth(m_cbSpan), GetCBitmapHeight(m_cbSpan));
+	m_csThumb = CSize(GetCBitmapWidth(m_cbThumb), GetCBitmapHeight(m_cbThumb));
 }
 
 CSkinVerticleScrollbar::~CSkinVerticleScrollbar()

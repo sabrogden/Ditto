@@ -9,6 +9,20 @@
 
 // Debug Functions
 
+int GetCBitmapWidth(const CBitmap & cbm)
+{
+	BITMAP bm;
+	cbm.GetObject(sizeof(BITMAP),&bm);
+	return bm.bmWidth;
+}
+
+int GetCBitmapHeight(const CBitmap & cbm)
+{
+	BITMAP bm;
+	cbm.GetObject(sizeof(BITMAP),&bm);
+	return bm.bmHeight;
+} 
+
 CString GetIPAddress()
 {
 	WORD wVersionRequested;
@@ -1927,3 +1941,4 @@ void CPopup::Hide()
 	::SendMessage(m_hTTWnd, TTM_TRACKACTIVATE, FALSE, (LPARAM)(LPTOOLINFO) &m_TI);
 	m_bIsShowing = false;
 }
+
