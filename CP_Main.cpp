@@ -531,6 +531,7 @@ BOOL bResult = FALSE;
 	switch( lID )
 	{
 	case 0:  // History Group "ID"
+		m_FocusID = -2;
 		m_GroupID = 0;
 		m_GroupParentID = 0;
 		m_GroupText = "History";

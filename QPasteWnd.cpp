@@ -8,6 +8,7 @@
 #include "CopyProperties.h"
 #include "GroupName.h"
 #include ".\qpastewnd.h"
+#include "MoveToGroupDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -109,6 +110,7 @@ ON_COMMAND(ID_MENU_VIEWGROUPS, OnMenuViewgroups)
 	ON_COMMAND(ID_MENU_SENTTO_FRIEND_TWO, OnMenuSenttoFriendTwo)
 	ON_COMMAND(ID_MENU_SENTTO_FRIENDONE, OnMenuSenttoFriendone)
 	ON_COMMAND(ID_MENU_SENTTO_PROMPTFORIP, OnMenuSenttoPromptforip)
+	ON_COMMAND(ID_MENU_GROUPS_MOVETOGROUP, OnMenuGroupsMovetogroup)
 	//}}AFX_MSG_MAP
 ON_MESSAGE(NM_SELECT, OnListSelect)
 ON_MESSAGE(NM_END, OnListEnd)
@@ -632,9 +634,9 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 		m_lstHeader.m_bStartTop = true;
 		
 		if( g_Opt.m_bHistoryStartTop )
-			m_Recset.m_strSort = "bIsGroup DESC, Left([mText],250) DESC";
+			m_Recset.m_strSort = "bIsGroup DESC, lDate DESC";
 		else
-			m_Recset.m_strSort = "bIsGroup ASC, Left([mText],250) ASC";
+			m_Recset.m_strSort = "bIsGroup ASC, lDate ASC";
 		
 		
 		if( theApp.m_GroupID > 0 )
@@ -1360,6 +1362,30 @@ void CQPasteWnd::OnMenuSenttoPromptforip()
 	
 }
 
+void CQPasteWnd::OnMenuGroupsMovetogroup() 
+{
+	m_bHideWnd = false;
+
+	CMoveToGroupDlg dlg;
+	
+	if(dlg.DoModal() == IDOK)
+	{
+		int nGroup = dlg.GetSelectedGroup();
+		if(nGroup >= 0)
+		{
+			CClipIDs IDs;
+			m_lstHeader.GetSelectionItemData( IDs );
+
+			IDs.MoveTo(nGroup);
+		}		
+	}
+
+	m_bHideWnd = true;
+
+	FillList();
+}
+
+
 ///////////////////////////////////////////////////////////////////////
 //END END Menu Stuff
 ///////////////////////////////////////////////////////////////////////
@@ -1981,4 +2007,3 @@ void CQPasteWnd::OnBackButton()
 {
 	theApp.EnterGroupID(theApp.m_GroupParentID);
 }
-

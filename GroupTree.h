@@ -25,6 +25,7 @@ public:
 	void SetNotificationWndEx(HWND hWnd)	{ m_NotificationWnd = hWnd;	}
 	bool m_bHide;
 	long m_lSelectedFolderID;
+	long GetSelectedTree();
 
 protected:
 	void FillTree(long lParentID, HTREEITEM hParent);

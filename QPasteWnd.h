@@ -164,6 +164,7 @@ protected:
 	afx_msg void OnMenuSenttoFriendTwo();
 	afx_msg void OnMenuSenttoFriendone();
 	afx_msg void OnMenuSenttoPromptforip();
+	afx_msg void OnMenuGroupsMovetogroup();
 	//}}AFX_MSG
 	afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);

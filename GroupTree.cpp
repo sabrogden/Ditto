@@ -163,10 +163,19 @@ void CGroupTree::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	TRACE("Dbl Click\n");
 	HTREEITEM hItem =  GetNextItem(TVI_ROOT, TVGN_CARET);
-	SendToParent(GetItemData(hItem));
-	//SendToParent(-1);
-		
+	if(hItem)
+		SendToParent(GetItemData(hItem));
+			
 	*pResult = 1;
+}
+
+long CGroupTree::GetSelectedTree()
+{
+	HTREEITEM hItem =  GetNextItem(TVI_ROOT, TVGN_CARET);
+	if(hItem)
+		return (long)GetItemData(hItem);
+
+	return -1;
 }
 
 void CGroupTree::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult) 
@@ -179,7 +188,8 @@ void CGroupTree::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 	{	
 		TRACE("Return\n");
 		HTREEITEM hItem =  GetNextItem(TVI_ROOT, TVGN_CARET);
-		SendToParent(GetItemData(hItem));
+		if(hItem)
+			SendToParent(GetItemData(hItem));
 		
 		break;
 	}

@@ -172,6 +172,8 @@ BEGIN
             MENUITEM "New Group\tCtrl-F7",          ID_MENU_NEWGROUP
             MENUITEM "New Group Selection\tF7",     ID_MENU_NEWGROUPSELECTION
 
+            MENUITEM "Move to Group",               ID_MENU_GROUPS_MOVETOGROUP
+
         END
         POPUP "Quick Options"
         BEGIN
@@ -656,6 +658,18 @@ BEGIN
     EDITTEXT        IDC_EDIT_DESCRIPTION,47,39,149,13,ES_AUTOHSCROLL
 END
 
+IDD_MOVE_TO_GROUP DIALOG DISCARDABLE  0, 0, 254, 177
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Move to Group"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,143,156,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,197,156,50,14
+    CONTROL         "Tree1",IDC_TREE,"SysTreeView32",TVS_HASBUTTONS | 
+                    TVS_HASLINES | TVS_LINESATROOT | TVS_DISABLEDRAGDROP | 
+                    WS_BORDER | WS_TABSTOP,7,7,240,142
+END
+
 
 #ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
@@ -822,6 +836,14 @@ BEGIN
         RIGHTMARGIN, 196
         TOPMARGIN, 7
         BOTTOMMARGIN, 72
+    END
+
+    IDD_MOVE_TO_GROUP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 247
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 170
     END
 END
 #endif    // APSTUDIO_INVOKED

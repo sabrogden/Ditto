@@ -32,6 +32,7 @@
 #define IDB_VERTICAL_SCROLLBAR_CHANNEL  152
 #define IDB_VERTICAL_SCROLLBAR_THUMB    153
 #define IDB_VERTICAL_SCROLLBAR_UPARROW  155
+#define IDD_MOVE_TO_GROUP               156
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT                      1003
@@ -119,6 +120,7 @@
 #define IDC_HOTKEY3                     2026
 #define IDC_CHECK_DISABLE_FRIENDS       2026
 #define IDC_HOTKEY4                     2027
+#define IDC_TREE                        2027
 #define IDC_HOTKEY5                     2028
 #define IDC_HOTKEY6                     2029
 #define IDC_HOTKEY7                     2030
@@ -190,15 +192,16 @@
 #define ID_MENU_SENTTO_FRIEND_FORETEEN  32837
 #define ID_MENU_SENTTO_FRIEND_FIFTEEN   32838
 #define ID_MENU_SENTTO_PROMPTFORIP      32839
+#define ID_MENU_GROUPS_MOVETOGROUP      32840
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        156
-#define _APS_NEXT_COMMAND_VALUE         32840
-#define _APS_NEXT_CONTROL_VALUE         2027
+#define _APS_NEXT_RESOURCE_VALUE        157
+#define _APS_NEXT_COMMAND_VALUE         32841
+#define _APS_NEXT_CONTROL_VALUE         2028
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
