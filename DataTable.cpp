@@ -187,20 +187,44 @@ void CDataTable::Open(int nOpenType, LPCTSTR lpszSql, int nOptions)
 
 BOOL CDataTable::DataEqual(HGLOBAL hgData)
 {
+int nRet;
+int sizeGiven = GlobalSize(hgData);
+int sizeSelf = GlobalSize(m_ooData.m_hData);
+
+	//GlobalSize is allocated space and not necessarily the size of the data
+	//Should we assume that the Data being compared are the same size?
+	// so far in my tests:
+	//  GlobalSize( hgData ) == accurate size of the data contained
+	//  GlobalSize( m_ooData.m_hData ) == 0x00008000
+	//	  - this is true even after locking the memory.
+//	if( sizeGiven != m_ooData.m_dwDataLength )
+//	{
+//		ASSERT(FALSE);
+//		return FALSE;
+//	}
+
 	LPVOID saved = NULL;
 	saved = GlobalLock(m_ooData.m_hData);
 	if(!saved)
+	{
+		ASSERT(FALSE);
 		return FALSE;
+	}
 
 	LPVOID data = NULL;
 	data = GlobalLock(hgData);
 	if(!data)
+	{
+		GlobalUnlock(m_ooData.m_hData);
+		ASSERT(FALSE);
 		return FALSE;
+	}
 
+	nRet = (memcmp(data, saved, m_ooData.m_dwDataLength) == 0);
+
+	// unlock after the compare
 	GlobalUnlock(hgData);
 	GlobalUnlock(m_ooData.m_hData);
-
-	int nRet = (memcmp(data, saved, m_ooData.m_dwDataLength) == 0);
 
 	return nRet;
 }
