@@ -66,8 +66,9 @@ UINT  MTServerThread(LPVOID pParam)
 			break;
 
 		socket = accept(theApp.m_sSocket, (struct sockaddr*)&from,&fromlen);
-		
-		AfxBeginThread(ClientThread,(LPVOID)socket);
+
+		if( socket != INVALID_SOCKET )
+			AfxBeginThread(ClientThread,(LPVOID)socket);
 	}	
 
 	LogSendRecieveInfo("End of Server Thread");

@@ -180,12 +180,19 @@ void CCP_MainApp::StartStopServerThread()
 	}
 }
 
+void CCP_MainApp::StopServerThread()
+{
+	m_bExitServerThread = true;
+	closesocket(theApp.m_sSocket);
+}
+
 void CCP_MainApp::BeforeMainClose()
 {
 	ASSERT( m_bAppRunning && !m_bAppExiting );
 	m_bAppRunning = false;
 	m_bAppExiting = true;
 	g_HotKeys.UnregisterAll();
+	StopServerThread();
 	StopCopyThread();
 }
 

@@ -153,7 +153,7 @@ public:
 	CRITICAL_SECTION m_CriticalSection;
 	CPopup	 *m_pcpSendRecieveError;
 	void	StartStopServerThread();
-
+	void	StopServerThread();
 
 	long	m_lClipsSent;
 	long	m_lClipsRecieved;
