@@ -3,9 +3,8 @@
 #include "Misc.h"
 #include "OptionsSheet.h"
 
-#ifdef AFTER_98
 #include "AlphaBlend.h"
-#endif
+
 
 // Debug Functions
 

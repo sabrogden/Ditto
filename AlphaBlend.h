@@ -65,6 +65,8 @@ protected:
 	HWND m_hWnd;
 
 	BOOL m_bTransparent;
+
+	BOOL SetLayeredWindowAttributesEx(HWND hwnd, COLORREF crKey, BYTE bAlpha, DWORD dwFlags);
 };
 
 #endif // !defined(AFX_ALPHABLEND_H__B453CE58_5571_48B4_BD84_3BB70D6A41A3__INCLUDED_)

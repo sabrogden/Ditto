@@ -4,7 +4,7 @@
 
 # TARGTYPE "Win32 (x86) Application" 0x0101
 
-CFG=CP_Main - Win32 Pre 2000 Debug
+CFG=CP_MAIN - WIN32 DEBUG
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
@@ -13,14 +13,12 @@ CFG=CP_Main - Win32 Pre 2000 Debug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "CP_Main.mak" CFG="CP_Main - Win32 Pre 2000 Debug"
+!MESSAGE NMAKE /f "CP_Main.mak" CFG="CP_MAIN - WIN32 DEBUG"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "CP_Main - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "CP_Main - Win32 Debug" (based on "Win32 (x86) Application")
-!MESSAGE "CP_Main - Win32 Pre 2000 Release" (based on "Win32 (x86) Application")
-!MESSAGE "CP_Main - Win32 Pre 2000 Debug" (based on "Win32 (x86) Application")
 !MESSAGE 
 
 # Begin Project
@@ -83,68 +81,12 @@ LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib /nologo /subsystem:windows /debug /machine:I386 /out:"Debug/Ditto.exe" /pdbtype:sept
 
-!ELSEIF  "$(CFG)" == "CP_Main - Win32 Pre 2000 Release"
-
-# PROP BASE Use_MFC 6
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "CP_Main___Win32_Pre_2000_Release"
-# PROP BASE Intermediate_Dir "CP_Main___Win32_Pre_2000_Release"
-# PROP BASE Ignore_Export_Lib 0
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 6
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "CP_Main___Win32_Pre_2000_Release"
-# PROP Intermediate_Dir "CP_Main___Win32_Pre_2000_Release"
-# PROP Ignore_Export_Lib 0
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /MD /W3 /GX /O2 /I "..\CP_Database" /I "..\CP_GUI" /I "..\Controls" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /FAs /Yu"stdafx.h" /FD /c
-# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
-# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "NDEBUG" /d "_AFXDLL"
-# ADD RSC /l 0x409 /d "NDEBUG" /d "_AFXDLL"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 /nologo /subsystem:windows /machine:I386 /out:"Release/Ditto.exe"
-# ADD LINK32 ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib /nologo /subsystem:windows /map /debug /machine:I386 /out:"Release/Ditto98.exe" /libpath:"focusdll\Release"
-
-!ELSEIF  "$(CFG)" == "CP_Main - Win32 Pre 2000 Debug"
-
-# PROP BASE Use_MFC 6
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "CP_Main___Win32_Pre_2000_Debug"
-# PROP BASE Intermediate_Dir "CP_Main___Win32_Pre_2000_Debug"
-# PROP BASE Ignore_Export_Lib 0
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 6
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "CP_Main___Win32_Pre_2000_Debug"
-# PROP Intermediate_Dir "CP_Main___Win32_Pre_2000_Debug"
-# PROP Ignore_Export_Lib 0
-# PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\CP_Database" /I "..\CP_GUI" /I "..\Controls" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Yu"stdafx.h" /FD /GZ /c
-# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
-# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
-# ADD RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
-BSC32=bscmake.exe
-# ADD BASE BSC32 /nologo
-# ADD BSC32 /nologo
-LINK32=link.exe
-# ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /out:"Debug/Ditto.exe" /pdbtype:sept
-# ADD LINK32 ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib /nologo /subsystem:windows /debug /machine:I386 /out:"Debug/Ditto_Pre2000.exe" /pdbtype:sept /libpath:"focusdll\Release"
-
 !ENDIF 
 
 # Begin Target
 
 # Name "CP_Main - Win32 Release"
 # Name "CP_Main - Win32 Debug"
-# Name "CP_Main - Win32 Pre 2000 Release"
-# Name "CP_Main - Win32 Pre 2000 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -154,40 +96,10 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=.\AlphaBlend.cpp
-
-!IF  "$(CFG)" == "CP_Main - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "CP_Main - Win32 Debug"
-
-!ELSEIF  "$(CFG)" == "CP_Main - Win32 Pre 2000 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "CP_Main - Win32 Pre 2000 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\AlphaBlend.h
-
-!IF  "$(CFG)" == "CP_Main - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "CP_Main - Win32 Debug"
-
-!ELSEIF  "$(CFG)" == "CP_Main - Win32 Pre 2000 Release"
-
-# PROP Exclude_From_Build 1
-
-!ELSEIF  "$(CFG)" == "CP_Main - Win32 Pre 2000 Debug"
-
-# PROP Exclude_From_Build 1
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 

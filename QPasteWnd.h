@@ -12,10 +12,7 @@
 #include "WndEx.h"
 #include "GroupStatic.h"
 #include "GroupTree.h"
-
-#ifdef AFTER_98
-	#include "AlphaBlend.h"
-#endif
+#include "AlphaBlend.h"
 
 
 /////////////////////////////////////////////////////////////////////////////
