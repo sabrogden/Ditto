@@ -84,7 +84,7 @@ CClipFormat* pCF;
 int count = GetSize();
 	for( int i=0; i < count; i++ )
 	{
-		pCF = &GetAt(i);
+		pCF = &ElementAt(i);
 		if( pCF->m_cfType == cfType )
 			return pCF;
 	}
@@ -477,7 +477,7 @@ bool CClip::AddToDataTable()
 
 		for( int i = m_Formats.GetSize()-1; i >= 0 ; i-- )
 		{
-			pCF = & m_Formats[i];
+			pCF = & m_Formats.ElementAt(i);
 
 			recset.AddNew();
 
