@@ -30,7 +30,7 @@ UINT  MTServerThread(LPVOID pParam)
 	}
 	local.sin_family = AF_INET;
 	local.sin_addr.s_addr = INADDR_ANY;
-	local.sin_port = htons((u_short)20248);
+	local.sin_port = htons((u_short)g_Opt.m_lPort);
 	theApp.m_sSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if(theApp.m_sSocket == INVALID_SOCKET)
 	{

@@ -293,6 +293,11 @@ public:
 	static BOOL		GetHideDittoOnHotKeyIfAlreadyShown();
 	static void		SetHideDittoOnHotKeyIfAlreadyShown(BOOL bVal);
 
+	static long		m_lPort;
+	static void		SetPort(long lPort);
+	static long		GetPort();
+	
+
 
 	/*
 	BOOL IsAutoRun();

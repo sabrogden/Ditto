@@ -476,6 +476,7 @@ CString CGetSetOptions::m_csIPListToPutOnClipboard;
 BOOL CGetSetOptions::m_bLogSendReceiveErrors;
 BOOL CGetSetOptions::m_bUseHookDllForFocus;
 BOOL CGetSetOptions::m_HideDittoOnHotKeyIfAlreadyShown;
+long CGetSetOptions::m_lPort;
 
 CGetSetOptions g_Opt;
 
@@ -498,6 +499,7 @@ CGetSetOptions::CGetSetOptions()
 	m_bLogSendReceiveErrors = GetLogSendReceiveErrors();
 	m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", TRUE);
 	m_HideDittoOnHotKeyIfAlreadyShown = GetHideDittoOnHotKeyIfAlreadyShown();
+	m_lPort = GetPort();
 
 	#ifdef _DEBUG
 	m_bUseHookDllForFocus = FALSE;
@@ -1065,6 +1067,17 @@ void CGetSetOptions::SetHideDittoOnHotKeyIfAlreadyShown(BOOL bVal)
 	m_HideDittoOnHotKeyIfAlreadyShown = bVal;
 
 	SetProfileLong("HideDittoOnHotKeyIfAlreadyShown", bVal);
+}
+
+void CGetSetOptions::SetPort(long lPort)
+{
+	m_lPort = lPort;
+	SetProfileLong("SendRecvPort", lPort);
+}
+
+long CGetSetOptions::GetPort()
+{
+	return GetProfileLong("SendRecvPort", 23443);
 }
 
 /*------------------------------------------------------------------*\

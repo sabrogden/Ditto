@@ -94,7 +94,7 @@ BOOL COptionsStats::OnInitDialog()
 	COleDateTimeSpan span = COleDateTime::GetCurrentTime() - theApp.m_oldtStartUp;
 
 	CString csSpan;
-	csSpan.Format("  -  D:%d H:%d M:%d", (long)span.GetTotalDays(), span.GetHours(), span.GetMinutes());
+	csSpan.Format("  -  %d.%d.%d (D.H.M)", (long)span.GetTotalDays(), span.GetHours(), span.GetMinutes());
 	m_eLastStarted += csSpan;
 
 	CMainTable recset;
