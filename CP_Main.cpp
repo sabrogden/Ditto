@@ -380,6 +380,7 @@ CClipTypes* CCP_MainApp::LoadTypesFromDB()
 	{
 		pTypes->Add(CF_TEXT);
 		pTypes->Add(RegisterClipboardFormat(CF_RTF));
+		pTypes->Add(CF_DIB);
 	}
 
 	return pTypes;
