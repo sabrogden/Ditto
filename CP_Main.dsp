@@ -288,6 +288,10 @@ SOURCE=.\DataTable.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\DIBUTIL.CPP
+# End Source File
+# Begin Source File
+
 SOURCE=.\FriendDetails.cpp
 # End Source File
 # Begin Source File
@@ -321,6 +325,10 @@ SOURCE=.\memdc.h
 # Begin Source File
 
 SOURCE=.\Misc.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MoveToGroupDlg.cpp
 # End Source File
 # Begin Source File
 
@@ -393,6 +401,10 @@ SOURCE=.\SystemTray.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\ToolTipEx.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\TypesTable.cpp
 # End Source File
 # End Group
@@ -429,6 +441,14 @@ SOURCE=.\DataTable.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\DIBAPI.H
+# End Source File
+# Begin Source File
+
+SOURCE=.\DIBUTIL.H
+# End Source File
+# Begin Source File
+
 SOURCE=.\FriendDetails.h
 # End Source File
 # Begin Source File
@@ -462,6 +482,10 @@ SOURCE=.\MainTable.h
 # Begin Source File
 
 SOURCE=.\Misc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MoveToGroupDlg.h
 # End Source File
 # Begin Source File
 
@@ -534,6 +558,10 @@ SOURCE=.\StdAfx.h
 # Begin Source File
 
 SOURCE=.\SystemTray.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ToolTipEx.h
 # End Source File
 # Begin Source File
 
