@@ -490,6 +490,10 @@ CGetSetOptions::CGetSetOptions()
 	m_bLogSendReceiveErrors = GetLogSendReceiveErrors();
 	m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", TRUE);
 
+	#ifdef _DEBUG
+	m_bUseHookDllForFocus = FALSE;
+	#endif
+
 	for(int i = 0; i < MAX_SEND_CLIENTS; i++)
 	{
 		GetSendClients(i);
