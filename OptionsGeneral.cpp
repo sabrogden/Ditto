@@ -32,6 +32,7 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionsGeneral)
+	DDX_Control(pDX, IDC_DESC_TEXT_SIZE, m_DescTextSize);
 	DDX_Control(pDX, IDC_GET_PATH, m_btGetPath);
 	DDX_Control(pDX, IDC_PATH, m_ePath);
 	DDX_Control(pDX, IDC_SET_DB_PATH, m_btSetDatabasePath);
@@ -77,6 +78,7 @@ BOOL COptionsGeneral::OnInitDialog()
 
 	m_eExpireAfter.SetNumber(CGetSetOptions::GetExpiredEntries());
 	m_eMaxSavedCopies.SetNumber(CGetSetOptions::GetMaxEntries());
+	m_DescTextSize.SetNumber(g_Opt.m_bDescTextSize);
 
 	m_btAllowDuplicates.SetCheck( g_Opt.m_bAllowDuplicates );
 	m_btUpdateTimeOnPaste.SetCheck( g_Opt.m_bUpdateTimeOnPaste );
@@ -114,6 +116,7 @@ BOOL COptionsGeneral::OnApply()
 	
 	CGetSetOptions::SetMaxEntries(m_eMaxSavedCopies.GetNumber());
 	CGetSetOptions::SetExpiredEntries(m_eExpireAfter.GetNumber());
+	CGetSetOptions::SetDescTextSize(m_DescTextSize.GetNumber());
 
 	g_Opt.SetAllowDuplicates( m_btAllowDuplicates.GetCheck() );
 	g_Opt.SetUpdateTimeOnPaste( m_btUpdateTimeOnPaste.GetCheck() );

@@ -283,8 +283,8 @@ ULONG ulBufLen = GlobalSize(hgData);
 
 	ASSERT( text != NULL );
 
-	if( ulBufLen > LENGTH_OF_TEXT_SNIPET )
-		ulBufLen = LENGTH_OF_TEXT_SNIPET;
+	if( ulBufLen > g_Opt.m_bDescTextSize )
+		ulBufLen = g_Opt.m_bDescTextSize;
 
 	if( ulBufLen > 0 )
 	{

@@ -439,6 +439,7 @@ BOOL CGetSetOptions::m_bUpdateTimeOnPaste;
 BOOL CGetSetOptions::m_bSaveMultiPaste;
 BOOL CGetSetOptions::m_bShowPersistent;
 BOOL CGetSetOptions::m_bHistoryStartTop;
+long CGetSetOptions::m_bDescTextSize;
 
 CGetSetOptions g_Opt;
 
@@ -450,6 +451,7 @@ CGetSetOptions::CGetSetOptions()
 	m_bSaveMultiPaste = GetSaveMultiPaste();
 	m_bShowPersistent = GetShowPersistent();
 	m_bHistoryStartTop = GetHistoryStartTop();
+	m_bDescTextSize = GetDescTextSize();
 }
 
 CGetSetOptions::~CGetSetOptions()
@@ -901,6 +903,9 @@ long CGetSetOptions::GetCaptionPos()			{	return GetProfileLong("CaptionPos", CAP
 
 void CGetSetOptions::SetAutoHide(BOOL bAutoHide){	SetProfileLong("AutoHide", bAutoHide);					}
 BOOL CGetSetOptions::GetAutoHide()				{	return GetProfileLong("AutoHide", FALSE);				}
+
+void CGetSetOptions::SetDescTextSize(long lSize){	SetProfileLong("DescTextSize", lSize); m_bDescTextSize = lSize; }
+long CGetSetOptions::GetDescTextSize()			{	return GetProfileLong("DescTextSize", 500); }
 
 /*------------------------------------------------------------------*\
 	CHotKey - a single system-wide hotkey

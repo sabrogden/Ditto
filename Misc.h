@@ -171,7 +171,7 @@ public:
 	static long GetTotalPasteCount();
 	static void SetTotalDate(long lDate);
 	static long GetTotalDate();
-
+	
 	// the implementations for the following functions were moved out-of-line.
 	// when they were declared inline, the compiler failed to notice when
 	//  these functions were changed (the linker used an old compiled version)
@@ -223,6 +223,11 @@ public:
 
 	static void		SetAutoHide(BOOL bAutoHide);
 	static BOOL		GetAutoHide();
+
+	static long		m_bDescTextSize;
+	static void		SetDescTextSize(long lSize);
+	static long		GetDescTextSize();
+
 
 	/*
 	BOOL IsAutoRun();

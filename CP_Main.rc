@@ -1,4 +1,4 @@
-// Microsoft Visual C++ generated resource script.
+//Microsoft Developer Studio generated resource script.
 //
 #include "resource.h"
 
@@ -27,18 +27,18 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE 
+1 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE 
+2 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "#include ""afxres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE 
+3 TEXTINCLUDE MOVEABLE PURE 
 BEGIN
     "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
     "#define _AFX_NO_OLE_RESOURCES\r\n"
@@ -67,22 +67,22 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "res\\Ditto.ico"
-IDR_CP_MAITYPE          ICON                    "res\\CP_MainDoc.ico"
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\Ditto.ico"
+IDR_CP_MAITYPE          ICON    DISCARDABLE     "res\\CP_MainDoc.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
 //
 
-IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+IDR_MAINFRAME           BITMAP  MOVEABLE PURE   "res\\Toolbar.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Toolbar
 //
 
-IDR_MAINFRAME TOOLBAR  16, 15
+IDR_MAINFRAME TOOLBAR MOVEABLE PURE  16, 15
 BEGIN
     BUTTON      ID_FILE_NEW
     BUTTON      ID_FILE_OPEN
@@ -103,7 +103,7 @@ END
 // Menu
 //
 
-IDR_MAINFRAME MENU 
+IDR_MAINFRAME MENU DISCARDABLE 
 BEGIN
     POPUP "&File"
     BEGIN
@@ -139,7 +139,7 @@ BEGIN
     END
 END
 
-IDR_MENU MENU 
+IDR_MENU MENU DISCARDABLE 
 BEGIN
     POPUP "First"
     BEGIN
@@ -153,7 +153,7 @@ BEGIN
     END
 END
 
-IDR_QUICK_PASTE MENU 
+IDR_QUICK_PASTE MENU DISCARDABLE 
 BEGIN
     POPUP "Menu"
     BEGIN
@@ -230,7 +230,7 @@ END
 // Accelerator
 //
 
-IDR_MAINFRAME ACCELERATORS 
+IDR_MAINFRAME ACCELERATORS MOVEABLE PURE 
 BEGIN
     "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
     "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
@@ -254,8 +254,8 @@ END
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOG  0, 0, 235, 55
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_ABOUTBOX DIALOG DISCARDABLE  0, 0, 235, 55
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About CP_Main"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -265,8 +265,8 @@ BEGIN
     DEFPUSHBUTTON   "OK",IDOK,178,7,50,14,WS_GROUP
 END
 
-IDD_OPTIONS_UTILITIES DIALOG  0, 0, 241, 137
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_OPTIONS_UTILITIES DIALOG DISCARDABLE  0, 0, 241, 137
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Database"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -277,8 +277,8 @@ BEGIN
     LTEXT           "Database Path:",IDC_STATIC,14,56,50,8
 END
 
-IDD_OPTIONS_TYPES DIALOG  0, 0, 230, 172
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_OPTIONS_TYPES DIALOG DISCARDABLE  0, 0, 230, 172
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Supported Types"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -289,9 +289,9 @@ BEGIN
 END
 
 IDD_OPTIONS_QUICK_PASTE DIALOGEX 0, 0, 256, 159
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Quick Paste"
-FONT 8, "MS Sans Serif", 0, 0, 0x0
+FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,41,122,10
@@ -321,8 +321,8 @@ BEGIN
                     WS_TABSTOP,18,8,161,10
 END
 
-IDD_OPTIONS_KEYSTROKES DIALOG  0, 0, 186, 90
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_OPTIONS_KEYSTROKES DIALOG DISCARDABLE  0, 0, 186, 90
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Keyboard Shortcuts"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -334,10 +334,10 @@ BEGIN
     LTEXT           "Named Copy",IDC_STATIC,19,42,42,8
 END
 
-IDD_OPTIONS_GENERAL DIALOGEX 0, 0, 294, 178
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_OPTIONS_GENERAL DIALOG DISCARDABLE  0, 0, 294, 178
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "General"
-FONT 8, "MS Sans Serif", 0, 0, 0x0
+FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "Display Icon in System Tray",IDC_DISPLAY_IN_SYSTEMTRAY,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,28,103,10
@@ -363,15 +363,18 @@ BEGIN
     EDITTEXT        IDC_PATH,23,89,248,12,ES_AUTOHSCROLL
     PUSHBUTTON      "....",IDC_GET_PATH,273,89,14,12
     CONTROL         "Allow Duplicates",IDC_ALLOW_DUPLICATES,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,23,125,68,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,23,118,68,10
     CONTROL         "Update Clip Time On Paste",IDC_UPDATE_TIME_ON_PASTE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,138,101,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,131,101,10
     CONTROL         "Save Multi-Pastes",IDC_SAVE_MULTIPASTE,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,23,151,73,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,23,144,73,10
+    EDITTEXT        IDC_DESC_TEXT_SIZE,154,155,35,12,ES_AUTOHSCROLL
+    LTEXT           "Amount of text to save for desciption",IDC_STATIC,24,
+                    156,122,8
 END
 
-IDD_SELECT_DB DIALOG  0, 0, 276, 46
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION
+IDD_SELECT_DB DIALOG DISCARDABLE  0, 0, 276, 46
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
 CAPTION "Select Database"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -382,8 +385,8 @@ BEGIN
     PUSHBUTTON      "Use Default",IDC_USE_DEFAULT,27,25,50,14
 END
 
-IDD_OPTIONS_STATS DIALOG  0, 0, 272, 163
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_OPTIONS_STATS DIALOG DISCARDABLE  0, 0, 272, 163
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Stats"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -409,8 +412,8 @@ BEGIN
     EDITTEXT        IDC_DATABASE_SIZE,76,111,41,13,ES_AUTOHSCROLL
 END
 
-IDD_ADD_TYPE DIALOG  0, 0, 276, 230
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_ADD_TYPE DIALOG DISCARDABLE  0, 0, 276, 230
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Add Supported Type"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -429,9 +432,9 @@ BEGIN
 END
 
 IDD_COPY_PROPERTIES DIALOGEX 0, 0, 244, 211
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Copy Properties"
-FONT 8, "MS Sans Serif", 0, 0, 0x0
+FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "HotKey1",IDC_HOTKEY,"msctls_hotkey32",WS_BORDER | 
                     WS_TABSTOP,37,7,82,13
@@ -454,8 +457,8 @@ BEGIN
     PUSHBUTTON      "Parse",IDC_PARSE_BUTTON,212,24,25,14
 END
 
-IDD_ABOUT DIALOG  0, 0, 292, 124
-STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+IDD_ABOUT DIALOG DISCARDABLE  0, 0, 292, 124
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "About"
 FONT 8, "MS Sans Serif"
 BEGIN
@@ -465,6 +468,7 @@ BEGIN
 END
 
 
+#ifndef _MAC
 /////////////////////////////////////////////////////////////////////////////
 //
 // Version
@@ -487,13 +491,13 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "FileDescription", "Ditto"
-            VALUE "FileVersion", "1, 50, 0, 0"
-            VALUE "InternalName", "CP_Main"
-            VALUE "LegalCopyright", "Copyright (C) 2003"
-            VALUE "OriginalFilename", "Ditto"
-            VALUE "ProductName", "Ditto"
-            VALUE "ProductVersion", "1, 50, 0, 0"
+            VALUE "FileDescription", "Ditto\0"
+            VALUE "FileVersion", "1, 50, 0, 0\0"
+            VALUE "InternalName", "CP_Main\0"
+            VALUE "LegalCopyright", "Copyright (C) 2003\0"
+            VALUE "OriginalFilename", "Ditto\0"
+            VALUE "ProductName", "Ditto\0"
+            VALUE "ProductVersion", "1, 50, 0, 0\0"
         END
     END
     BLOCK "VarFileInfo"
@@ -502,6 +506,8 @@ BEGIN
     END
 END
 
+#endif    // !_MAC
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -509,7 +515,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO 
+GUIDELINES DESIGNINFO MOVEABLE PURE 
 BEGIN
     IDD_ABOUTBOX, DIALOG
     BEGIN
@@ -607,18 +613,18 @@ END
 // String Table
 //
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     IDR_MAINFRAME           "CP_Main\n\nCP_Mai\n\n\nCPMain.Document\nCP_Mai Document"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     AFX_IDS_APP_TITLE       "CP_Main"
     AFX_IDS_IDLEMESSAGE     "Ready"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     ID_INDICATOR_EXT        "EXT"
     ID_INDICATOR_CAPS       "CAP"
@@ -628,7 +634,7 @@ BEGIN
     ID_INDICATOR_REC        "REC"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     ID_FILE_NEW             "Create a new document\nNew"
     ID_FILE_OPEN            "Open an existing document\nOpen"
@@ -641,13 +647,13 @@ BEGIN
     ID_FILE_PRINT_PREVIEW   "Display full pages\nPrint Preview"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
     ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     ID_FILE_MRU_FILE1       "Open this document"
     ID_FILE_MRU_FILE2       "Open this document"
@@ -667,18 +673,18 @@ BEGIN
     ID_FILE_MRU_FILE16      "Open this document"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
     ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     ID_EDIT_CLEAR           "Erase the selection\nErase"
     ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
@@ -693,13 +699,13 @@ BEGIN
     ID_EDIT_REDO            "Redo the previously undone action\nRedo"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     ID_VIEW_TOOLBAR         "Show or hide the toolbar\nToggle ToolBar"
     ID_VIEW_STATUS_BAR      "Show or hide the status bar\nToggle StatusBar"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     AFX_IDS_SCSIZE          "Change the window size"
     AFX_IDS_SCMOVE          "Change the window position"
@@ -710,13 +716,13 @@ BEGIN
     AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     AFX_IDS_SCRESTORE       "Restore the window to normal size"
     AFX_IDS_SCTASKLIST      "Activate Task List"
 END
 
-STRINGTABLE 
+STRINGTABLE DISCARDABLE 
 BEGIN
     AFX_IDS_PREVIEW_CLOSE   "Close print preview mode\nCancel Preview"
 END

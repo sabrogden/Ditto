@@ -382,8 +382,8 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
         //CString csText = GetItemText(nItem, 0);
 
 		CString csText;
-		LPTSTR lpszText = csText.GetBufferSetLength(1000);
-		GetItemText(nItem, 0, lpszText, 1000);
+		LPTSTR lpszText = csText.GetBufferSetLength(g_Opt.m_bDescTextSize);
+		GetItemText(nItem, 0, lpszText, g_Opt.m_bDescTextSize);
 		csText.ReleaseBuffer();
 
 		// set firstTenNum to the first ten number (1-10) corresponding to
@@ -688,8 +688,9 @@ void CQListCtrl::GetToolTipText(int nItem, CString &csText)
 			info.hdr.hwndFrom = GetSafeHwnd();
 			info.hdr.idFrom = GetDlgCtrlID();
 			info.lItem = nItem;
-			info.cchTextMax = 1000;
-			info.pszText = csText.GetBufferSetLength(1000);
+			//plus 100 for extra info - shortcut and such
+			info.cchTextMax = g_Opt.m_bDescTextSize + 100;
+			info.pszText = csText.GetBufferSetLength(info.cchTextMax);
 
 			pParent->SendMessage(WM_NOTIFY,(WPARAM)info.hdr.idFrom,(LPARAM)&info);
 

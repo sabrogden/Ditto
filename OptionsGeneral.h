@@ -27,6 +27,7 @@ public:
 // Dialog Data
 	//{{AFX_DATA(COptionsGeneral)
 	enum { IDD = IDD_OPTIONS_GENERAL };
+	CNumberEdit	m_DescTextSize;
 	CButton	m_btGetPath;
 	CEdit	m_ePath;
 	CButton	m_btSetDatabasePath;

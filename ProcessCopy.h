@@ -12,8 +12,6 @@
 #include <afxtempl.h>
 #include "MainTable.h"
 
-#define LENGTH_OF_TEXT_SNIPET	249
-
 class CClip;
 class CCopyThread;
 

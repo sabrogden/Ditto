@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
+// Microsoft Developer Studio generated include file.
 // Used by CP_Main.rc
 //
 #define IDD_ABOUTBOX                    100
@@ -72,6 +72,7 @@
 #define IDC_MAXIMUM                     2008
 #define IDC_EXPIRE                      2009
 #define IDC_EXPIRE_AFTER                2010
+#define IDC_DESC_TEXT_SIZE              2011
 #define IDC_MAX_SAVED_COPIES            2012
 #define IDC_LINES_ROW                   2013
 #define IDC_AT_CARET                    2015
