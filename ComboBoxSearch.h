@@ -7,9 +7,6 @@
 // ComboBoxSearch.h : header file
 //
 
-#define CB_SEARCH					WM_USER+0x104
-
-
 class CComboBoxSearch : public CComboBox
 {
 // Construction
