@@ -71,13 +71,13 @@ UINT  MTServerThread(LPVOID pParam)
 BOOL Recv(SOCKET sock, SendInfo *pInfo)
 {
 	long lReceiveCount = 0;
-	long lLastRecievedCount = 0;
-	long lExpectedCount = sizeof(SendInfo);
-	SendInfo info;
 
-	while(lLastRecievedCount < lExpectedCount)
+	long lWanted = sizeof(SendInfo);
+	long lOffset = 0;
+
+	while(lWanted > 0)
 	{
-		lReceiveCount = recv(sock, (char*)&info, lExpectedCount-lLastRecievedCount, 0);
+		lReceiveCount = recv(sock, ((char*)pInfo) + lOffset, lWanted, 0);
 		if(lReceiveCount == SOCKET_ERROR)
 		{
 			LogSendRecieveInfo("********ERROR if(lReceiveCount == SOCKET_ERROR)*******");
@@ -89,16 +89,15 @@ BOOL Recv(SOCKET sock, SendInfo *pInfo)
 			return FALSE;
 		}
 
-		LogSendRecieveInfo(StrF("------Bytes Read %d LastRecievedCount %d", lReceiveCount, lLastRecievedCount));
+		LogSendRecieveInfo(StrF("------Bytes Read %d Total Recieved %d", lReceiveCount, lOffset));
 
-		memcpy(((char*)pInfo) + lLastRecievedCount, &info, lReceiveCount);
-		//lReceiveCount = lLastRecievedCount + lReceiveCount;
-		lLastRecievedCount += lReceiveCount;
+		lWanted -= lReceiveCount;
+		lOffset += lReceiveCount;
 	}
 
-	if(pInfo->m_nSize != lExpectedCount)
+	if(pInfo->m_nSize != lWanted)
 	{
-		LogSendRecieveInfo(StrF("------ERROR Incoming struct size %d Expected Size %d", pInfo->m_nSize, lExpectedCount));
+		LogSendRecieveInfo(StrF("------ERROR Incoming struct size %d Expected Size %d", pInfo->m_nSize, lWanted));
 		return FALSE;
 	}
 
