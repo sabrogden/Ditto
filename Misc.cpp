@@ -483,6 +483,7 @@ BOOL CGetSetOptions::m_bDrawRTF;
 BOOL CGetSetOptions::m_bMultiPasteReverse;
 CString CGetSetOptions::m_csPlaySoundOnCopy;
 CStringArray CGetSetOptions::m_csNetworkPasswordArray;
+BOOL CGetSetOptions::m_bSendPasteMessageAfterSelection;
 
 CGetSetOptions g_Opt;
 
@@ -511,6 +512,7 @@ CGetSetOptions::CGetSetOptions()
 	m_bDrawRTF = GetDrawRTF();
 	m_bMultiPasteReverse = GetMultiPasteReverse();
 	m_csPlaySoundOnCopy = GetPlaySoundOnCopy();
+	m_bSendPasteMessageAfterSelection = GetSendPasteAfterSelection();
 
 	CString cs = GetProfileString("NetorkPassword1", "");
 	m_csNetworkPasswordArray.Add(cs);
@@ -1266,6 +1268,18 @@ void CGetSetOptions::SetPlaySoundOnCopy(CString cs)
 CString CGetSetOptions::GetPlaySoundOnCopy()
 {
 	return GetProfileString("PlaySoundOnCopy", "");
+}
+
+void CGetSetOptions::SetSendPasteAfterSelection(BOOL bVal)
+{
+	m_bSendPasteMessageAfterSelection = bVal;
+
+	SetProfileLong("SendPasteMessageAfterSelection", bVal);
+}
+
+BOOL CGetSetOptions::GetSendPasteAfterSelection()
+{
+	return GetProfileLong("SendPasteMessageAfterSelection", TRUE);
 }
 
 /*------------------------------------------------------------------*\

@@ -118,6 +118,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_FONT, OnMenuQuickoptionsFont)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_SHOWTHUMBNAILS, OnMenuQuickoptionsShowthumbnails)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_DRAWRTFTEXT, OnMenuQuickoptionsDrawrtftext)
+	ON_COMMAND(ID_MENU_QUICKOPTIONS_PASTECLIPAFTERSELECTION, OnMenuQuickoptionsPasteclipafterselection)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(NM_SELECT, OnListSelect)
 	ON_MESSAGE(NM_END, OnListEnd)
@@ -444,10 +445,15 @@ BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT)
 
 	// else, it is a clip, so paste it
 	CProcessPaste paste;
+	paste.m_bSendPaste = g_Opt.m_bSendPasteMessageAfterSelection == TRUE ? true : false;
 	paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;
 	paste.GetClipIDs().Add( lID );
 	paste.DoPaste();
 	theApp.OnPasteCompleted();
+
+	if(g_Opt.m_bSendPasteMessageAfterSelection == FALSE)
+		theApp.ActivateTarget();
+
 	return TRUE;
 }
 
@@ -466,10 +472,15 @@ BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT)
 	// else count > 1
 	
 	CProcessPaste paste;
+	paste.m_bSendPaste = g_Opt.m_bSendPasteMessageAfterSelection == TRUE ? true : false;
 	paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;
-	paste.GetClipIDs().Copy( IDs );
+	paste.GetClipIDs().Copy(IDs);
 	paste.DoPaste();
 	theApp.OnPasteCompleted();
+
+	if(g_Opt.m_bSendPasteMessageAfterSelection == FALSE)
+		theApp.ActivateTarget();
+
 	return TRUE;
 }
 
@@ -914,6 +925,9 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 
 	if(g_Opt.m_bDrawRTF)
 		pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_DRAWRTFTEXT, MF_CHECKED);
+
+	if(g_Opt.m_bSendPasteMessageAfterSelection)
+		pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_PASTECLIPAFTERSELECTION, MF_CHECKED);
 
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIENDONE, 0);
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TWO, 1);
@@ -1441,6 +1455,11 @@ void CQPasteWnd::OnMenuQuickoptionsDrawrtftext()
 {
 	CGetSetOptions::SetDrawRTF(!g_Opt.m_bDrawRTF);
 	m_lstHeader.RefreshVisibleRows();
+}
+
+void CQPasteWnd::OnMenuQuickoptionsPasteclipafterselection() 
+{
+	CGetSetOptions::SetSendPasteAfterSelection(!g_Opt.m_bSendPasteMessageAfterSelection);	
 }
 
 ///////////////////////////////////////////////////////////////////////

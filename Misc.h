@@ -328,6 +328,10 @@ public:
 	static void		SetPlaySoundOnCopy(CString cs);
 	static CString	GetPlaySoundOnCopy();
 
+	static BOOL		m_bSendPasteMessageAfterSelection;
+	static void		SetSendPasteAfterSelection(BOOL bVal);
+	static BOOL		GetSendPasteAfterSelection();
+
 	static CStringArray m_csNetworkPasswordArray;
 
 	/*

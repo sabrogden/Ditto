@@ -88,6 +88,7 @@
 #define IDC_BUTTON_FONT                 1040
 #define IDC_BUTTON_NEW_GROUP            1040
 #define IDC_PARSE_EDIT                  1041
+#define IDC_SEND_PASTE_MESSAGE          1041
 #define IDC_CHECK1                      1042
 #define IDC_HISTORY_START_TOP           1042
 #define IDC_CHECK_SEND_PASTE            1042
@@ -222,6 +223,7 @@
 #define ID_MENU_QUICKOPTIONS_FONT       32844
 #define ID_MENU_QUICKOPTIONS_SHOWTHUMBNAILS 32845
 #define ID_MENU_QUICKOPTIONS_DRAWRTFTEXT 32846
+#define ID_MENU_QUICKOPTIONS_PASTECLIPAFTERSELECTION 32847
 
 // Next default values for new objects
 // 
@@ -229,7 +231,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        157
-#define _APS_NEXT_COMMAND_VALUE         32847
+#define _APS_NEXT_COMMAND_VALUE         32848
 #define _APS_NEXT_CONTROL_VALUE         2036
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
