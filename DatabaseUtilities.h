@@ -82,6 +82,7 @@ public:
 	
 };
 
+BOOL DoCleanups();
 CString GetDBName();
 BOOL CompactDatabase();
 CString GetDefaultDBName();

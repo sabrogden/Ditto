@@ -83,6 +83,9 @@ BOOL CCP_MainApp::InitInstance()
 
 	AfxOleInit();
 
+	if(DoCleanups() == FALSE)
+		return TRUE;
+
 	CMainFrame* pFrame = new CMainFrame;
 	m_pMainWnd = m_pMainFrame = pFrame;
 

@@ -443,7 +443,6 @@ long lDate;
 		recset.AddNew();
 
 		recset.m_lDate = lDate;
-		recset.m_strType = GetFormatName( m_Formats[0].m_cfType );
 		recset.m_strText = m_Desc;
 		recset.m_lTotalCopySize = m_lTotalCopySize;
 

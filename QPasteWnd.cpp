@@ -1085,8 +1085,7 @@ void CQPasteWnd::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 				cs += m_Recset.m_strText;
 				
 				lstrcpyn(pItem->pszText, cs, pItem->cchTextMax);
-				if(cs.GetLength() > pItem->cchTextMax)
-					pItem->pszText[pItem->cchTextMax-1] = 0;
+				pInfo->pszText[pItem->cchTextMax-1] = '\0';
 			}
 			catch(CDaoException *e)
 			{
@@ -1144,7 +1143,7 @@ void CQPasteWnd::OnGetToolTipText(NMHDR* pNMHDR, LRESULT* pResult)
 		cs += "\n\n";
 
 #ifdef _DEBUG
-		cs += StrF("%d (%d) ", pInfo->lItem, m_Recset.m_lID );
+		cs += StrF("Index = %d (DB ID = %d) ", pInfo->lItem, m_Recset.m_lID );
 #endif
 
 		CTime time(m_Recset.m_lDate);
@@ -1171,8 +1170,7 @@ void CQPasteWnd::OnGetToolTipText(NMHDR* pNMHDR, LRESULT* pResult)
 		}
 
 		lstrcpyn(pInfo->pszText, cs, pInfo->cchTextMax);
-		if(cs.GetLength() > pInfo->cchTextMax)
-			pInfo->pszText[pInfo->cchTextMax-1] = 0;
+		pInfo->pszText[pInfo->cchTextMax-1] = '\0';
 	}
 	catch(CDaoException *e)
 	{

@@ -23,13 +23,12 @@ CMainTable::CMainTable(CDaoDatabase* pdb)
 	//{{AFX_FIELD_INIT(CMainTable)
 	m_lID = 0;
 	m_lDate = 0;
-	m_strType = _T("");
 	m_strText = _T("");
 	m_lShortCut = 0;
 	m_lDontAutoDelete = 0;
 	m_lTotalCopySize = 0;
 
-	m_nFieldCount = m_nFields = 7;
+	m_nFieldCount = m_nFields = 6;
 	//}}AFX_FIELD_INIT
 	m_nDefaultType = dbOpenDynaset;
 	m_bBindFields = true;
@@ -54,8 +53,7 @@ void CMainTable::DoFieldExchange(CDaoFieldExchange* pFX)
 	pFX->SetFieldType(CDaoFieldExchange::outputColumn);
 	DFX_Long(pFX, _T("[lID]"), m_lID);
 	DFX_Long(pFX, _T("[lDate]"), m_lDate);
-	DFX_Text(pFX, _T("[strType]"), m_strType);
-	DFX_Text(pFX, _T("[strText]"), m_strText);
+	DFX_Text(pFX, _T("[mText]"), m_strText);
 	DFX_Long(pFX, _T("[lShortCut]"), m_lShortCut);
 	DFX_Long(pFX, _T("[lDontAutoDelete]"), m_lDontAutoDelete);
 	DFX_Long(pFX, _T("[lTotalCopySize]"), m_lTotalCopySize);

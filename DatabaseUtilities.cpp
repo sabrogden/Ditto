@@ -11,6 +11,41 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+BOOL DoCleanups()
+{
+	try
+	{		
+		//Try and open mText if it's not there then create it
+		CDaoRecordset recset(theApp.EnsureOpenDB());
+		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT mText FROM Main", 0);
+		recset.Close();		
+	}
+	catch(CDaoException* e)
+	{
+		e->Delete();
+		try
+		{
+			theApp.EnsureOpenDB();
+			theApp.m_pDatabase->Execute("ALTER TABLE Main ADD COLUMN mText MEMO", dbFailOnError);
+			theApp.m_pDatabase->Execute("UPDATE Main SET mText=strText", dbFailOnError);
+			theApp.m_pDatabase->Execute("ALTER TABLE Main DROP COLUMN strText", dbFailOnError);
+			theApp.m_pDatabase->Execute("ALTER TABLE Main DROP COLUMN strType", dbFailOnError);
+		}
+		catch(CDaoException *e)
+		{
+			CString cs;
+			cs = e->m_pErrorInfo->m_strDescription;
+			cs += "\n\nError updating Database!";
+			MessageBox(NULL, cs, "Ditto", MB_OK);
+
+			e->Delete();
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
+
 CString GetDBName()
 {
 	return CGetSetOptions::GetDBPath();
@@ -104,25 +139,12 @@ BOOL ValidDB(CString csPath)
 		CDaoFieldInfo info;
 
 		table.Open("Main");
-		table.GetFieldInfo("lID", info);
-		table.GetFieldInfo("lDate", info);
-		table.GetFieldInfo("strType", info);
-		table.GetFieldInfo("strText", info);
-		table.GetFieldInfo("lShortCut", info);
-		table.GetFieldInfo("lDontAutoDelete", info);
-		table.GetFieldInfo("lTotalCopySize", info);
 		table.Close();
 
 		table.Open("Data");
-		table.GetFieldInfo("lID", info);
-		table.GetFieldInfo("lParentID", info);
-		table.GetFieldInfo("strClipBoardFormat", info);
-		table.GetFieldInfo("ooData", info);
 		table.Close();
 
 		table.Open("Types");
-		table.GetFieldInfo("ID", info);
-		table.GetFieldInfo("TypeText", info);
 		table.Close();
 	}
 	catch(CDaoException* e)
@@ -156,8 +178,8 @@ BOOL CreateDB(CString csPath)
 		table.CreateField("lDate", dbLong, 4, 0, "0");
 		table.CreateIndex(FALSE, "lDate");
 
-		table.CreateField("strType", dbText, 50, dbVariableField);
-		table.CreateField("strText", dbText, 255, dbVariableField);
+		table.CreateField("mText", dbMemo, 0, dbVariableField);
+//		table.CreateField("strText", dbText, 250, dbVariableField);
 
 		table.CreateField("lShortCut", dbLong, 4, 0, "0");
 		table.CreateIndex(FALSE, "lShortCut");
@@ -204,7 +226,6 @@ BOOL CreateDB(CString csPath)
 
 	return FALSE;
 }
-
 
 BOOL CompactDatabase()
 {

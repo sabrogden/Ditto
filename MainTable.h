@@ -18,7 +18,6 @@ public:
 	//{{AFX_FIELD(CMainTable, CDaoRecordset)
 	long	m_lID;
 	long	m_lDate;
-	CString	m_strType;
 	CString	m_strText;
 	long	m_lShortCut;
 	long	m_lDontAutoDelete;
