@@ -55,7 +55,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
-# ADD LINK32 ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib /nologo /subsystem:windows /map /machine:I386 /out:"Release/Ditto.exe"
+# ADD LINK32 ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib /nologo /subsystem:windows /map /machine:I386 /out:"Release/Ditto.exe" /libpath:"focusdll\Release"
 
 !ELSEIF  "$(CFG)" == "CP_Main - Win32 Debug"
 
@@ -108,7 +108,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386 /out:"Release/Ditto.exe"
-# ADD LINK32 /nologo /subsystem:windows /map /machine:I386 /out:"Release/Ditto98.exe"
+# ADD LINK32 ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib /nologo /subsystem:windows /map /machine:I386 /out:"Release/Ditto98.exe" /libpath:"focusdll\Release"
 
 !ELSEIF  "$(CFG)" == "CP_Main - Win32 Pre 2000 Debug"
 
@@ -135,7 +135,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /out:"Debug/Ditto.exe" /pdbtype:sept
-# ADD LINK32 /nologo /subsystem:windows /debug /machine:I386 /out:"Debug/Ditto_Pre2000.exe" /pdbtype:sept
+# ADD LINK32 ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib /nologo /subsystem:windows /debug /machine:I386 /out:"Debug/Ditto_Pre2000.exe" /pdbtype:sept /libpath:"focusdll\Release"
 
 !ENDIF 
 
@@ -587,6 +587,10 @@ SOURCE=.\ReadMe.txt
 # Begin Source File
 
 SOURCE=.\Version.Lib
+# End Source File
+# Begin Source File
+
+SOURCE=.\focusdll\Release\focus.lib
 # End Source File
 # End Target
 # End Project

@@ -467,6 +467,7 @@ CSendClients CGetSetOptions::m_SendClients[MAX_SEND_CLIENTS];
 long CGetSetOptions::m_lAutoSendClientCount;
 CString CGetSetOptions::m_csIPListToPutOnClipboard;
 BOOL CGetSetOptions::m_bLogSendReceiveErrors;
+BOOL CGetSetOptions::m_bUseHookDllForFocus;
 
 CGetSetOptions g_Opt;
 
@@ -487,6 +488,7 @@ CGetSetOptions::CGetSetOptions()
 	m_bSendPasteOnFirstTenHotKeys = GetSendPasteOnFirstTenHotKeys();
 	m_csIPListToPutOnClipboard = GetListToPutOnClipboard();
 	m_bLogSendReceiveErrors = GetLogSendReceiveErrors();
+	m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", TRUE);
 
 	for(int i = 0; i < MAX_SEND_CLIENTS; i++)
 	{

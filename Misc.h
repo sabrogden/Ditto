@@ -98,6 +98,8 @@ CString GetFilePath(CString csFullPath);
 #define WM_ADD_TO_DATABASE_FROM_SOCKET		WM_USER + 207
 #define WM_LOAD_FORMATS			WM_USER + 208
 #define WM_SEND_RECIEVE_ERROR	WM_USER + 209
+#define WM_FOCUS_CHANGED		WM_USER + 210
+
 
 #define REG_PATH					"Software\\Ditto"
 
@@ -282,6 +284,8 @@ public:
 	static BOOL		m_bLogSendReceiveErrors;
 	static void		SetLogSendReceiveErrors(BOOL bOption);
 	static BOOL		GetLogSendReceiveErrors();
+
+	static BOOL		m_bUseHookDllForFocus;
 
 
 	/*

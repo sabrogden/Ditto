@@ -9,6 +9,7 @@
 #include "CopyProperties.h"
 #include "InternetUpdate.h"
 #include ".\mainfrm.h"
+#include "focusdll\focusdll.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -46,6 +47,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_ADD_TO_DATABASE_FROM_SOCKET, OnAddToDatabaseFromSocket)
 	ON_MESSAGE(WM_LOAD_FORMATS, OnLoadFormats)
 	ON_MESSAGE(WM_SEND_RECIEVE_ERROR, OnErrorOnSendRecieve)
+	ON_MESSAGE(WM_FOCUS_CHANGED, OnFocusChanged)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -65,6 +67,9 @@ CMainFrame::CMainFrame()
 
 CMainFrame::~CMainFrame()
 {
+	if(g_Opt.m_bUseHookDllForFocus)
+		StopMonitoringFocusChanges();
+	
 	CGetSetOptions::SetMainHWND(0);
 }
 
@@ -73,6 +78,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
+	if(g_Opt.m_bUseHookDllForFocus)
+		MonitorFocusChanges(m_hWnd, WM_FOCUS_CHANGED);
+	
 	SetWindowText(MAIN_WND_TITLE);
 
 	HICON hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -508,6 +516,44 @@ LRESULT CMainFrame::OnErrorOnSendRecieve(WPARAM wParam, LPARAM lParam)
 	}
 
 	SetTimer(HIDE_ERROR_POPUP, 6000, NULL);
+
+	return TRUE;
+}
+
+LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
+{
+	if(g_Opt.m_bUseHookDllForFocus == FALSE)
+		return TRUE;
+	
+	HWND hFocus = (HWND)wParam;
+	HWND hParent = hFocus;
+	HWND hLastGoodParent = hParent;
+
+	//only procede if something changed
+	if(theApp.m_hTargetWnd == hFocus)
+		return TRUE;
+
+	char cWindowText[100];
+	::GetWindowText(hFocus, cWindowText, 100);
+
+	HWND hTray = ::FindWindow("Shell_TrayWnd", "");
+
+	while(true)
+	{
+		hParent = ::GetParent(hParent);
+		if(hParent == NULL)
+			break;
+
+		hLastGoodParent = hParent;
+	}
+
+	//If the parent is ditto or the try icon then don't set focus to that window
+	if(hLastGoodParent != m_hWnd && hLastGoodParent != hTray)
+	{
+		theApp.m_hTargetWnd = hFocus;
+		if(theApp.QPasteWnd() )
+			theApp.QPasteWnd()->UpdateStatus(true);
+	}
 
 	return TRUE;
 }

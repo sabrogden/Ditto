@@ -62,10 +62,18 @@ CCP_MainApp::CCP_MainApp()
 	m_bAsynchronousRefreshView = true;
 
 	::InitializeCriticalSection(&m_CriticalSection);
+
+	m_hHookDll = NULL;
+	m_MonitorFocusChanges = NULL;
+	m_StopMonitoringFocusChanges = NULL;
+	m_GetCurrentFocus = NULL;
 }
 
 CCP_MainApp::~CCP_MainApp()
 {
+	if(m_hHookDll)
+		FreeLibrary(m_hHookDll);
+
 	::DeleteCriticalSection(&m_CriticalSection);
 }
 
@@ -98,6 +106,23 @@ BOOL CCP_MainApp::InitInstance()
 	}
 
 	AfxOleInit();
+
+//	if(g_Opt.m_bUseHookDllForFocus)
+//	{
+//		m_hHookDll = LoadLibrary("focus.dll");
+//		if(m_hHookDll)
+//		{
+//			m_MonitorFocusChanges = (DWORD(*)(HWND,UINT))GetProcAddress(m_hHookDll, "_MonitorFocusChanges@8");
+//			m_StopMonitoringFocusChanges = (DWORD(*)())GetProcAddress(m_hHookDll, "_StopMonitoringFocusChanges@0");
+//			m_GetCurrentFocus = (HWND(*)())GetProcAddress(m_hHookDll, "_GetCurrentFocus@0");
+//		}
+//
+//		if(	m_hHookDll == NULL || m_MonitorFocusChanges == NULL || 
+//			m_StopMonitoringFocusChanges == NULL || m_GetCurrentFocus == NULL)
+//		{
+//			g_Opt.m_bUseHookDllForFocus = FALSE;
+//		}
+//	}
 
 //	if(DoCleanups() == FALSE)
 //		return TRUE;
@@ -187,6 +212,9 @@ http://website.lineone.net/~codebox/focuslog.zip).
 */
 bool CCP_MainApp::TargetActiveWindow()
 {
+	if(g_Opt.m_bUseHookDllForFocus)
+		return true;
+
 	HWND hOld = m_hTargetWnd;
 	HWND hNew = ::GetForegroundWindow();
 	if( hNew == m_hTargetWnd || !::IsWindow(hNew) || IsAppWnd(hNew) )
@@ -628,4 +656,23 @@ BOOL CCP_MainApp::OnIdle(LONG lCount)
 		return TRUE;
 
 	return FALSE;
+}
+
+CString CCP_MainApp::GetTargetName() 
+{
+	char cWindowText[100];
+	HWND hParent = m_hTargetWnd;
+
+	::GetWindowText(hParent, cWindowText, 100);
+	
+	while(strlen(cWindowText) <= 0)
+	{
+		hParent = ::GetParent(hParent);
+		if(hParent == NULL)
+			break;
+
+		::GetWindowText(hParent, cWindowText, 100);
+	}
+
+	return cWindowText; 
 }

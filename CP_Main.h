@@ -71,7 +71,7 @@ public:
 	bool	TargetActiveWindow();
 	bool ActivateTarget();
 	bool ReleaseFocus(); // activate the target only if we are the active window
-	CString GetTargetName() { return GetWndText( m_hTargetWnd ); }
+	CString GetTargetName();
 	void SendPaste(bool bActivateTarget); // Activates the Target and sends Ctrl-V
 
 	CLIPFORMAT m_cfIgnoreClipboard; // used by CClip::LoadFromClipboard
@@ -144,6 +144,12 @@ public:
 	SOCKET	m_sSocket;
 	CRITICAL_SECTION m_CriticalSection;
 	CPopup	 *m_pcpSendRecieveError;
+
+	HMODULE m_hHookDll;
+	DWORD (*m_MonitorFocusChanges)(HWND hWnd,UINT message);
+	DWORD (*m_StopMonitoringFocusChanges)();
+	HWND (*m_GetCurrentFocus)();
+
 
 
 

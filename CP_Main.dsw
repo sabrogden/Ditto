@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "CP_Main"=.\CP_Main.dsp - Package Owner=<4>
+Project: "CP_Main"=".\CP_Main.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -11,6 +11,18 @@ Package=<5>
     "$/", AAAAAAAA
     .
     end source code control
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "focus"=".\focusdll\focus.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
 }}}
 
 Package=<4>

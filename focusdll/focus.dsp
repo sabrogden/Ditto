@@ -53,6 +53,11 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
+# Begin Special Build Tool
+OutDir=.\Release
+SOURCE="$(InputPath)"
+PostBuild_Cmds=copy $(OutDir)\*.lib ..\Release	copy $(OutDir)\*.dll ..\Release
+# End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "focus - Win32 Debug"
 
@@ -78,6 +83,11 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
+# Begin Special Build Tool
+OutDir=.\Debug
+SOURCE="$(InputPath)"
+PostBuild_Cmds=copy $(OutDir)\*.lib ..\Debug	copy $(OutDir)\*.dll ..\Debug
+# End Special Build Tool
 
 !ENDIF 
 
