@@ -126,7 +126,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 	if( !IsWindow(m_pwndPaste->m_hWnd) )
 	{
 		// Create the window   
-		ASSERT( m_pwndPaste->Create(point, pParent) );
+		VERIFY( m_pwndPaste->Create(point, pParent) );
 	}
 
 	if((nPosition == POS_AT_CARET) ||
