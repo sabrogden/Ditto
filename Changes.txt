@@ -1,3 +1,13 @@
+04 Aug 31
+---------
+! Fixed "Corrupted QuickPaste position when closing Ditto while minimized /
+  rolled-up" bug.
+  . Reported By: Anthony Ford - tonyforduk 2004-08-27 14:08
+    http://sourceforge.net/forum/message.php?msg_id=2732759
+  * CWndEx::GetWindowRectEx() was not properly copying m_crFullSizeWindow
+    when m_bMinimized was true.
+
+
 04 May 30
 ---------
 + Toggle Connect to Clipboard to Connect or Disconnect the

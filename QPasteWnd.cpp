@@ -344,7 +344,7 @@ BOOL CQPasteWnd::HideQPasteWindow()
 	
 	//Save the size
 	CRect rect;
-	GetWindowRectEx(rect);
+	GetWindowRectEx(&rect);
 	CGetSetOptions::SetQuickPasteSize(rect.Size());
 	CGetSetOptions::SetQuickPastePoint(rect.TopLeft());
 	

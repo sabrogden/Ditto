@@ -48,7 +48,7 @@ void CWndEx::GetWindowRectEx(LPRECT lpRect)
 {
 	if(m_bMinimized)
 	{
-		lpRect = m_crFullSizeWindow;
+		*lpRect = m_crFullSizeWindow;
 		return;
 	}
 	
