@@ -985,8 +985,15 @@ void CClipboardViewer::OnChangeCbChain(HWND hWndRemove, HWND hWndAfter)
     // Otherwise, pass the message to the next link.
 	else if (m_hNextClipboardViewer != NULL)
     {
-		::SendMessage ( m_hNextClipboardViewer, WM_CHANGECBCHAIN, 
-			(WPARAM) hWndRemove, (LPARAM) hWndAfter );
+		if(m_hNextClipboardViewer != m_hWnd)
+		{
+			::SendMessage ( m_hNextClipboardViewer, WM_CHANGECBCHAIN, 
+				(WPARAM) hWndRemove, (LPARAM) hWndAfter );
+		}
+		else
+		{
+			m_hNextClipboardViewer = NULL;
+		}
     }
 }
 
@@ -1008,7 +1015,16 @@ void CClipboardViewer::OnDrawClipboard()
 	
 	// pass the event to the next Clipboard viewer in the chain
 	if( m_hNextClipboardViewer != NULL )
-		::SendMessage(m_hNextClipboardViewer, WM_DRAWCLIPBOARD, 0, 0);	
+	{
+		if(m_hNextClipboardViewer != m_hWnd)
+		{
+			::SendMessage(m_hNextClipboardViewer, WM_DRAWCLIPBOARD, 0, 0);	
+		}
+		else
+		{
+			m_hNextClipboardViewer = NULL;
+		}
+	}
 }
 
 void CClipboardViewer::OnTimer(UINT nIDEvent) 
