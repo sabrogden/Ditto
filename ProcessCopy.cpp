@@ -330,9 +330,10 @@ BOOL CProcessCopy::GetDescriptionText(CString &csText)
 			if(ulBufLen > LENGTH_OF_TEXT_SNIPET)
 				ulBufLen = LENGTH_OF_TEXT_SNIPET;
 
-			strncpy(csText.GetBuffer(ulBufLen-1), text, ulBufLen-1);
+			char* buf = csText.GetBuffer(ulBufLen);
+			memcpy(buf, text, ulBufLen);
+			buf[ulBufLen-1] = '\0';
 			csText.ReleaseBuffer();
-			csText += '\0';
 					
 			//Unlock the data
 			GlobalUnlock(hgData);
