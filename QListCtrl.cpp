@@ -594,10 +594,24 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 
 	switch(pMsg->message) 
 	{
+	case WM_LBUTTONDOWN:
+	case WM_RBUTTONDOWN:
+		if(m_Popup.m_bIsShowing)
+		{
+			m_Popup.Hide();
+		}
+		break;
 	case WM_KEYDOWN:
-		m_Popup.Hide(); // hide the manual tooltip on any keypress
-
 		WPARAM vk = pMsg->wParam;
+		
+		if(m_Popup.m_bIsShowing)
+		{
+			m_Popup.Hide();
+
+			if(vk == VK_ESCAPE)
+				return TRUE;
+		}
+
 		// if a number key was pressed
 		if( '0' <= vk && vk <= '9' )
 		{
@@ -630,11 +644,16 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 			break;
 
 		case VK_F3:
-			int nItem = GetCaret();
-				GetItemPosition( nItem, &m_Popup.m_Pos );
-				ClientToScreen( &m_Popup.m_Pos );
-//				GetClientRect( &m_Popup.m_TI.rect ); // put tooltip to the left of the item
+			{
+				int nItem = GetCaret();
+				CRect rc;
+				GetItemRect(nItem, rc, LVIR_BOUNDS);
+				ClientToScreen(rc);
+				m_Popup.m_Pos = CPoint(rc.left, rc.bottom);
 				m_Popup.Show( GetToolTipText(nItem) );
+			
+				break;
+			}
 		} // end switch(vk)
 
 		break; // end case WM_KEYDOWN
