@@ -7,6 +7,7 @@
 
 #include <afxtempl.h>
 
+
 template <class TYPE> class CArrayEx : public CArray<TYPE,TYPE>
 {
 public:
