@@ -1,0 +1,10 @@
+2.1  -  2-15-04
+	- Improved drawing speed
+2.2  -  2-29-04
+	- Added global hot keys for the last 10 items copied
+	- Added back button when viewing groups
+	- Added menu options to set to
+		- Never Auto Delete
+		- Auto Delete
+		- Remove Hot key
+	- Fixed bug, when setting the group in the properties screen it was not setting the item to Never Auto Delete
