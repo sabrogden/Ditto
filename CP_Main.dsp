@@ -573,6 +573,10 @@ SOURCE=.\res\Ditto.ico
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\Ditto_NoCopyCb.ico
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\open_fol.bmp
 # End Source File
 # Begin Source File

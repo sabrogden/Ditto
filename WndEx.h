@@ -41,7 +41,7 @@ public:
 	COLORREF		m_CaptionColorRight;
 
 	bool	SetCaptionColors( COLORREF left, COLORREF right );
-	bool	SetCaptionColorActive( bool bVal );
+	bool	SetCaptionColorActive(bool bActive, bool ConnectedToClipboard);
 
 	void	InvalidateNc();
 

@@ -611,7 +611,7 @@ void CCP_MainApp::ShowPersistent( bool bVal )
 	if( m_bShowingQuickPaste )
 	{
 		ASSERT( QPasteWnd() );
-		QPasteWnd()->SetCaptionColorActive( !g_Opt.m_bShowPersistent );
+		QPasteWnd()->SetCaptionColorActive(!g_Opt.m_bShowPersistent, theApp.GetConnectCV());
 		QPasteWnd()->RefreshNc();
 	}
 }
@@ -716,4 +716,15 @@ CString CCP_MainApp::GetTargetName()
 	}
 
 	return cWindowText; 
+}
+
+void CCP_MainApp::SetConnectCV(bool bConnect)
+{ 
+	m_CopyThread.SetConnectCV(bConnect); 
+
+	if(QPasteWnd())
+	{
+		QPasteWnd()->SetCaptionColorActive(!g_Opt.m_bShowPersistent, theApp.GetConnectCV());
+		QPasteWnd()->RefreshNc();
+	}
 }

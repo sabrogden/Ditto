@@ -32,7 +32,7 @@ CWndEx::CWndEx()
 	m_bMinimized = false;
 	m_bMaxSetTimer = false;
 	
-	SetCaptionColorActive(false);
+	SetCaptionColorActive(false, theApp.GetConnectCV());
 }
 
 CWndEx::~CWndEx()
@@ -66,14 +66,21 @@ bool CWndEx::SetCaptionColors( COLORREF left, COLORREF right )
 	return true;
 }
 
-bool CWndEx::SetCaptionColorActive( bool bVal )
+bool CWndEx::SetCaptionColorActive(bool bActive, bool ConnectedToClipboard)
 {
 	bool bResult;
-	
-	if( bVal )
-		bResult = SetCaptionColors( ::GetSysColor(COLOR_ACTIVECAPTION), ::GetSysColor(COLOR_GRADIENTACTIVECAPTION) );
+
+	if(ConnectedToClipboard == false)
+	{
+		bResult = SetCaptionColors(RGB(255, 0, 0), RGB(255, 0, 0));
+	}
 	else
-		bResult = SetCaptionColors( ::GetSysColor(COLOR_INACTIVECAPTION), ::GetSysColor(COLOR_GRADIENTINACTIVECAPTION) );
+	{
+		if(bActive)
+			bResult = SetCaptionColors( ::GetSysColor(COLOR_ACTIVECAPTION), ::GetSysColor(COLOR_GRADIENTACTIVECAPTION) );
+		else
+			bResult = SetCaptionColors( ::GetSysColor(COLOR_INACTIVECAPTION), ::GetSysColor(COLOR_GRADIENTINACTIVECAPTION) );
+	}
 	
 	return bResult;
 }
@@ -281,8 +288,16 @@ void CWndEx::OnNcPaint()
 	float eG = GetGValue(right);
 	float eB = GetBValue(right);
 	
+	bool bGradient = true;
+	if(left == right)
+	{
+		gR = eR;
+		gG = eG;
+		gB = eB; 
+		bGradient = false;
+	}
 	// calculate the slope for color gradient 
-	if(bVertical)
+	else if(bVertical)
 	{
 		gR = (eR - sR) / rcBorder.Height();
 		gG = (eG - sG) / rcBorder.Height(); 
@@ -303,7 +318,7 @@ void CWndEx::OnNcPaint()
 	long lCount = rcBorder.Width();
 	if(bVertical)
 		lCount = lHeight;
-	
+
 	for(int i = 0; i < lCount; i++) 
 	{ 
 		if(bVertical)
@@ -316,14 +331,22 @@ void CWndEx::OnNcPaint()
 			cr.left = i;
 			cr.right = i + 1;
 		}
-		color = CreateSolidBrush(RGB(int(gR * (float) i + gR),
-			int(gG * (float) i + sG),
-			int(gB * (float) i + sB)));
+		if(bGradient || i == 0)
+		{
+			color = CreateSolidBrush(RGB(int(gR * (float) i + gR),
+				int(gG * (float) i + sG),
+				int(gB * (float) i + sB)));
+		}
 		
 		::FillRect(dc, &cr, color);
-		DeleteObject(color);
+
+		if(bGradient)
+			DeleteObject(color);
 	}
 	
+	if(bGradient == false)
+		DeleteObject(color);
+
 	/*
 	HBRUSH color;
 	color = CreateSolidBrush(left);

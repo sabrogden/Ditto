@@ -361,7 +361,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 {
 	//Set the flag so we can't open this up again
 	theApp.m_bShowingQuickPaste = true;
-	SetCaptionColorActive( !g_Opt.m_bShowPersistent );
+	SetCaptionColorActive(!g_Opt.m_bShowPersistent, theApp.GetConnectCV());
 	
 	// use invalidation to avoid unnecessary repainting
 	m_bAllowRepaintImmediately = false;
