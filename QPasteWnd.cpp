@@ -6,12 +6,15 @@
 #include "QPasteWnd.h"
 #include "ProcessPaste.h"
 #include "CopyProperties.h"
+#include ".\qpastewnd.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
+
+#define QPASTE_TITLE			"Ditto"
 
 #define ID_LIST_HEADER			0x201
 #define ID_EDIT_SEARCH			0x202
@@ -80,6 +83,9 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_MESSAGE(NM_PROPERTIES, OnProperties)
 	ON_NOTIFY(NM_GETTOOLTIPTEXT, ID_LIST_HEADER, OnGetToolTipText)
 	ON_MESSAGE(NM_SELECT_DB_ID, OnListSelect_DB_ID)
+	ON_MESSAGE(NM_SELECT_INDEX, OnListSelect_Index)
+	ON_MESSAGE(WM_REFRESH_VIEW, OnRefreshView)
+	ON_WM_NCLBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 
@@ -100,8 +106,8 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CWndEx::OnCreate(lpCreateStruct) == -1)
 		return -1;
 	
-	SetWindowText("Ditto");
-	
+	SetWindowText( QPASTE_TITLE );
+
 	m_cbSearch.Create(CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP | WS_CHILD | WS_VISIBLE | CBS_AUTOHSCROLL, 
 						CRect(0, 0, 0, 0), this, ID_EDIT_SEARCH);
 	
@@ -133,9 +139,6 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	#ifdef AFTER_98
 		m_Alpha.SetWindowHandle(m_hWnd);	
 	#endif
-	
-	//Show the window
-	ShowQPasteWindow(FALSE);
 	
 	m_TitleFont.CreateFont(14,0,-900,0,400,FALSE,FALSE,0,ANSI_CHARSET,
 	OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
@@ -219,24 +222,26 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 
 	if (nState == WA_INACTIVE)
 	{
-		HideQPasteWindow();
+		if( !g_Opt.m_bShowPersistent )
+			HideQPasteWindow();
 	}
-	else if (nState == WA_ACTIVE)
+	else if (nState == WA_ACTIVE || nState == WA_CLICKACTIVE)
 	{
-		ShowQPasteWindow();
+		if( !theApp.m_bShowingQuickPaste )
+			ShowQPasteWindow();
 	}
 }
 
 BOOL CQPasteWnd::HideQPasteWindow()
 {
-	if(m_cbSearch.GetShowingDropDown())
+	if( !theApp.m_bShowingQuickPaste || m_cbSearch.GetShowingDropDown() )
 		return FALSE;
+	//Reset the flag
+	theApp.m_bShowingQuickPaste = false;
+	theApp.ReleaseFocus();
 
 	if(m_Recset.IsOpen())
 		m_Recset.Close();
-
-	//Reset the flag
-	theApp.m_bShowingQuickPaste = false;
 
 	m_lstHeader.DestroyAndCreateAccelerator(FALSE);
 
@@ -249,15 +254,8 @@ BOOL CQPasteWnd::HideQPasteWindow()
 	// Hide the window when the focus is lost
 	ShowWindow(SW_HIDE);
 
-	//Rest the selection on the search combo
+	//Reset the selection in the search combo
 	m_cbSearch.SetCurSel(-1);
-
-	//Set focus back
-	if(m_hWndFocus)
-	{
-		::SetForegroundWindow(m_hWndFocus);
-		::SetFocus(m_hWndFocus);
-	}
 
 	return TRUE;
 }
@@ -266,6 +264,8 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 {
 	//Set the flag so we can't open this up again
 	theApp.m_bShowingQuickPaste = true;
+	SetCaptionColorActive( !g_Opt.m_bShowPersistent );
+	SetStatus( theApp.m_Status );
 
 	m_lstHeader.DestroyAndCreateAccelerator(TRUE);
 
@@ -300,6 +300,9 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 	
 	ShowWindow(SW_SHOW);
 
+	// always on top... for persistent showing (g_Opt.m_bShowPersistent)
+	::SetWindowPos( m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE );
+
 	return TRUE;
 }
 
@@ -318,10 +321,23 @@ bool CQPasteWnd::Add(const CString &csHeader, const CString &csText, int nID)
 
 LRESULT CQPasteWnd::OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam)
 {
-	ShowWindow(SW_HIDE);
+	CProcessPaste paste(theApp.m_hTargetWnd);
+	paste.GetClipIDs().Add(wParam);
+	paste.DoPaste();
+	theApp.OnPasteCompleted();
 
-	CProcessPaste past;
-	past.LoadDataAndPaste(wParam, m_hWndFocus);
+	return TRUE;
+}
+
+LRESULT CQPasteWnd::OnListSelect_Index(WPARAM wParam, LPARAM lParam)
+{
+	if( (int) wParam >= m_lstHeader.GetItemCount() )
+		return FALSE;
+
+	CProcessPaste paste(theApp.m_hTargetWnd);
+	paste.GetClipIDs().Add( m_lstHeader.GetItemData(wParam) );
+	paste.DoPaste();
+	theApp.OnPasteCompleted();
 
 	return TRUE;
 }
@@ -334,13 +350,12 @@ LRESULT CQPasteWnd::OnListSelect(WPARAM wParam, LPARAM lParam)
 	if(nCount <= 0)
 		return TRUE;
 
-	ARRAY IDs;
-	m_lstHeader.GetSelectionItemData( IDs );
+	CProcessPaste paste(theApp.m_hTargetWnd);
+	m_lstHeader.GetSelectionItemData( paste.GetClipIDs() );
 
-	ShowWindow(SW_HIDE);
+	paste.DoPaste();
 
-	CProcessPaste past;
-	past.MultiPaste( IDs.GetCount(), IDs.GetData(), m_hWndFocus );
+	theApp.OnPasteCompleted();
 
 	return TRUE;
 }
@@ -350,6 +365,41 @@ LRESULT CQPasteWnd::OnListEnd(WPARAM wParam, LPARAM lParam)
 	HideQPasteWindow();
 
 	return 0;
+}
+
+LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
+{
+	MSG msg;
+	// remove all additional refresh view messages from the queue
+	while( ::PeekMessage( &msg, m_hWnd, WM_REFRESH_VIEW, WM_REFRESH_VIEW, PM_REMOVE ) )
+	{}
+	if( theApp.m_bShowingQuickPaste )
+		FillList();
+	return TRUE;
+}
+
+void CQPasteWnd::RefreshNc()
+{
+	if( theApp.m_bShowingQuickPaste )
+		OnNcPaint();
+}
+
+void CQPasteWnd::SetStatus( const char* status )
+{
+CString title( QPASTE_TITLE );
+CString prev;
+	if( status && *status != '\0' )
+	{
+		title += " [ ";
+		title += status;
+		title += " ]";
+	}
+	GetWindowText(prev);
+	if( title != prev )
+	{
+		SetWindowText( title );
+		RefreshNc();
+	}
 }
 
 BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
@@ -400,8 +450,6 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 		{
 			m_Recset.MoveLast();
 			m_lstHeader.SetItemCountEx(m_Recset.GetRecordCount());
-
-			m_lstHeader.LoadFirstTenHotKeys(m_Recset);
 		}	
 	}
 	catch(CDaoException* e)
@@ -413,11 +461,11 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 	m_lstHeader.SetSelection(0);
 	m_lstHeader.SetCaret(0);
 
-	m_lstHeader.Invalidate();
-		
+//	m_lstHeader.Invalidate();
+	RedrawWindow(0,0,RDW_INVALIDATE);
+
 	return TRUE;
 }
-
 
 
 void CQPasteWnd::OnRclickQuickPaste(NMHDR* pNMHDR, LRESULT* pResult) 
@@ -523,7 +571,7 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 	if(nCheckID >= 0)
 		pMenu->CheckMenuItem(nCheckID, MF_CHECKED);
 
-	if(::SendMessage(theApp.m_MainhWnd, WM_IS_TOP_VIEWER, 0, 0))
+	if(theApp.IsClipboardViewerConnected())
 		pMenu->DeleteMenu(ID_MENU_RECONNECTTOCLIPBOARDCHAIN, MF_BYCOMMAND);
 
 	if(CGetSetOptions::GetShowTextForFirstTenHotKeys())
@@ -640,7 +688,7 @@ void CQPasteWnd::OnMenuExitprogram()
 
 void CQPasteWnd::OnMenuReconnecttoclipboardchain() 
 {
-	::SendMessage(theApp.m_MainhWnd, WM_RECONNECT_TO_COPY_CHAIN, 0, 0);
+	::SendMessage(theApp.GetClipboardViewer(), WM_RECONNECT_TO_COPY_CHAIN, 0, 0);
 }
 
 void CQPasteWnd::OnMenuProperties() 
@@ -725,11 +773,11 @@ void CQPasteWnd::DeleteSelectedRows()
 	lCount = m_Recset.GetRecordCount();
 
 	if( lCount == m_lstHeader.GetSelectedCount() )
-		m_Recset.DeleteAllClips();
+		CClip::DeleteAll();
 	else
 	{
 		m_lstHeader.GetSelectionItemData(IDs);
-		m_Recset.DeleteClips(IDs);
+		CClip::Delete(IDs);
 	}
 
 	m_Recset.Requery();
@@ -741,13 +789,11 @@ void CQPasteWnd::DeleteSelectedRows()
 	{
 		m_Recset.MoveLast();
 		lCount = m_Recset.GetRecordCount();
-		m_lstHeader.LoadFirstTenHotKeys(m_Recset);
 	}
 
 	m_lstHeader.SetItemCountEx(lCount);
-	m_lstHeader.Invalidate();
+//	m_lstHeader.Invalidate();  // necessary?
 
-//	int nCurSel = m_lstHeader.GetCaret();
 	m_lstHeader.RemoveAllSelection();
 
 	// adjust new cursor position to the first item we deleted.
@@ -756,30 +802,40 @@ void CQPasteWnd::DeleteSelectedRows()
 		// if there are no items after the one we deleted, then select the last one.
 		if( nFirstSel >= lCount )
 			nFirstSel = lCount - 1;
+
 		m_lstHeader.SetSelection(nFirstSel);
 		m_lstHeader.SetCaret(nFirstSel);
+		m_lstHeader.EnsureVisible(nFirstSel,FALSE);
 	}
 
 	m_lstHeader.RefreshVisibleRows();
 }
 
 
+
 BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg) 
-{	
+{
 	switch(pMsg->message) 
 	{
 	case WM_KEYDOWN:
-		if(pMsg->wParam == VK_ESCAPE)
+
+		switch( pMsg->wParam )
 		{
+		case VK_SPACE:
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+				theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
+			break;
+
+		case VK_ESCAPE:
 			if(!m_cbSearch.GetShowingDropDown())
 			{
 				HideQPasteWindow();
-
 				return TRUE;
 			}
-		}
-		else if(pMsg->wParam == VK_TAB)
-		{
+			break;
+
+		case VK_TAB:
+		{			
 			BOOL bPrev = FALSE;
 
 			if(GetKeyState(VK_SHIFT) & 0x8000)
@@ -792,11 +848,9 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 				if(pNextWnd)
 					pNextWnd->SetFocus();
 			}
-
 			return TRUE;
 		}
-		else if(pMsg->wParam == 'A')
-		{
+		case 'A': // Ctrl-A = Select All
 			if(GetKeyState(VK_CONTROL) & 0x8000)
 			{
 				int nCount = m_lstHeader.GetItemCount();
@@ -806,8 +860,11 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 				}
 				return TRUE;
 			}
-		}
-		break;
+			break;
+		} // end switch( pMsg->wParam )
+
+		break; // end case WM_KEYDOWN 
+
 	case WM_SYSKEYDOWN:
 		if(pMsg->wParam == 'C')
 		{
@@ -821,7 +878,6 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 		break;
 	}
 
-	
 	return CWndEx::PreTranslateMessage(pMsg);
 }
 
@@ -850,18 +906,16 @@ void CQPasteWnd::OnClose()
 
 void CQPasteWnd::OnBegindrag(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
-	
-    int nItem =  ((NM_LISTVIEW*) pNMHDR)->iItem;
-
-	long lID = m_lstHeader.GetItemData(nItem);
-
-	if(lID >= 0)
+NM_LISTVIEW* pLV = (NM_LISTVIEW*)pNMHDR;
+CProcessPaste paste;
+CClipIDs& clips = paste.GetClipIDs();
+	m_lstHeader.GetSelectionItemData( clips );
+	if( clips.GetCount() <= 0 )
 	{
-		CProcessPaste past;
-		past.LoadDataAndDrag(lID);
+		ASSERT(0); // does this ever happen ?????
+		clips.Add( m_lstHeader.GetItemData(pLV->iItem) );
 	}
-
+	paste.DoDrag();
 	*pResult = 0;
 }
 
@@ -940,8 +994,13 @@ void CQPasteWnd::OnGetToolTipText(NMHDR* pNMHDR, LRESULT* pResult)
 
 		cs = m_Recset.m_strText;
 		cs += "\n\n";
+
+#ifdef _DEBUG
+		cs += StrF("%d (%d) ", pInfo->lItem, m_Recset.m_lID );
+#endif
+
 		CTime time(m_Recset.m_lDate);
-		cs += time.Format("%m/%d/%Y %I:%M %p");
+		cs += time.Format("%m/%d/%Y %I:%M:%S %p");
 
 		if(m_Recset.m_lDontAutoDelete)
 		{
@@ -1017,4 +1076,13 @@ void CQPasteWnd::OnFindItem(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 
 	*pResult = -1;	// Default action.
+}
+
+void CQPasteWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
+{
+	// toggle ShowPersistent when we double click the caption
+	if( nHitTest == HTCAPTION )
+		theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
+
+	CWndEx::OnNcLButtonDblClk(nHitTest, point);
 }

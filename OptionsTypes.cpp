@@ -52,8 +52,6 @@ BOOL COptionsTypes::OnApply()
 {
 	if(m_bSave)
 	{
-		theApp.m_bReloadTypes = true;
-
 		CTypesTable recset;
 		recset.DeleteAll();
 
@@ -67,6 +65,10 @@ BOOL COptionsTypes::OnApply()
 			m_List.GetText(i, recset.m_TypeText);
 			recset.Update();
 		}
+		recset.Close();
+
+		// refresh our local cache
+		theApp.ReloadTypes();
 	}
 	
 	return CPropertyPage::OnApply();

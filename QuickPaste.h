@@ -17,11 +17,12 @@ public:
 	CQuickPaste();
 	virtual ~CQuickPaste();
 
+	void Create(CWnd *pParent);
 	void ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos = FALSE);
 	void HideQPasteWnd();
 	BOOL CloseQPasteWnd();
 
-protected:
+//protected:
 	CQPasteWnd *m_pwndPaste;
 };
 

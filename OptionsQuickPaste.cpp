@@ -78,7 +78,6 @@ BOOL COptionsQuickPaste::OnApply()
 	CGetSetOptions::SetTransparencyPercent(m_eTransparencyPercent.GetNumber());
 	CGetSetOptions::SetLinesPerRow(m_eLinesPerRow.GetNumber());
 	
-
 	if(IsDlgButtonChecked(IDC_AT_CARET))
 		CGetSetOptions::SetQuickPastePosition(POS_AT_CARET);
 	else if(IsDlgButtonChecked(IDC_AT_CURSOR))

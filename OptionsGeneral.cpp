@@ -44,6 +44,9 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_DISPLAY_IN_SYSTEMTRAY, m_btShowIconInSysTray);
 	DDX_Control(pDX, IDC_START_ON_STARTUP, m_btRunOnStartup);
 	//}}AFX_DATA_MAP
+	DDX_Control(pDX, IDC_ALLOW_DUPLICATES, m_btAllowDuplicates);
+	DDX_Control(pDX, IDC_UPDATE_TIME_ON_PASTE, m_btUpdateTimeOnPaste);
+	DDX_Control(pDX, IDC_SAVE_MULTIPASTE, m_btSaveMultiPaste);
 }
 
 
@@ -71,9 +74,13 @@ BOOL COptionsGeneral::OnInitDialog()
 	m_btExpire.SetCheck(CGetSetOptions::GetCheckForExpiredEntries());
 	m_btCompactAndRepair.SetCheck(CGetSetOptions::GetCompactAndRepairOnExit());
 	m_btCheckForUpdates.SetCheck(CGetSetOptions::GetCheckForUpdates());
-	
+
 	m_eExpireAfter.SetNumber(CGetSetOptions::GetExpiredEntries());
 	m_eMaxSavedCopies.SetNumber(CGetSetOptions::GetMaxEntries());
+
+	m_btAllowDuplicates.SetCheck( g_Opt.m_bAllowDuplicates );
+	m_btUpdateTimeOnPaste.SetCheck( g_Opt.m_bUpdateTimeOnPaste );
+	m_btSaveMultiPaste.SetCheck( g_Opt.m_bSaveMultiPaste );
 
 	CString csPath = CGetSetOptions::GetDBPath(FALSE);
 	if(csPath.IsEmpty())
@@ -107,6 +114,10 @@ BOOL COptionsGeneral::OnApply()
 	
 	CGetSetOptions::SetMaxEntries(m_eMaxSavedCopies.GetNumber());
 	CGetSetOptions::SetExpiredEntries(m_eExpireAfter.GetNumber());
+
+	g_Opt.SetAllowDuplicates( m_btAllowDuplicates.GetCheck() );
+	g_Opt.SetUpdateTimeOnPaste( m_btUpdateTimeOnPaste.GetCheck() );
+	g_Opt.SetSaveMultiPaste( m_btSaveMultiPaste.GetCheck() );
 
 	if(m_btSetDatabasePath.GetCheck() == BST_CHECKED)
 	{

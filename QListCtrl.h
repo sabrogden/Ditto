@@ -17,6 +17,7 @@
 #define NM_LBUTTONDOWN				WM_USER+0x107
 #define NM_GETTOOLTIPTEXT	        WM_USER+0x108
 #define NM_SELECT_DB_ID		        WM_USER+0x109
+#define NM_SELECT_INDEX		        WM_USER+0x110
 
 class CQListToolTipText
 {
@@ -72,7 +73,6 @@ public:
 	void SetShowTextForFirstTenHotKeys(BOOL bVal)	{ m_bShowTextForFirstTenHotKeys = bVal;	}
 
 	void DestroyAndCreateAccelerator(BOOL bCreate);
-	void LoadFirstTenHotKeys(CMainTable &recset);
 
 protected:
 	void SendSelection(int nItem);;
@@ -86,7 +86,6 @@ protected:
 
 	//Accelerator
 	HACCEL	m_Accelerator;
-	HACCEL	m_acFirstTen;
 	bool	m_CheckingAccelerator;
 	
 	// Generated message map functions

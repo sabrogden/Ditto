@@ -8,6 +8,7 @@
 #include "Misc.h"
 #include "CopyProperties.h"
 #include "InternetUpdate.h"
+#include ".\mainfrm.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,14 +18,6 @@ static char THIS_FILE[] = __FILE__;
 
 #define	WM_ICON_NOTIFY			WM_APP+10
 
-#define ONE_MINUTE				60000
-
-#define KILL_DB_TIMER					1
-#define HIDE_ICON_TIMER					2
-#define REMOVE_OLD_ENTRIES_TIMER		3
-#define CHECK_FOR_UPDATE				4
-#define CLOSE_APP						5
-#define TIMER_CHECK_TOP_LEVEL_VIEWER	6
 
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame
@@ -37,8 +30,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_CREATE()
 	ON_COMMAND(ID_FIRST_OPTION, OnFirstOption)
 	ON_COMMAND(ID_FIRST_EXIT, OnFirstExit)
-	ON_WM_CHANGECBCHAIN()
-	ON_WM_DRAWCLIPBOARD()
+//	ON_WM_CHANGECBCHAIN()
+//	ON_WM_DRAWCLIPBOARD()
 	ON_WM_TIMER()
 	ON_COMMAND(ID_FIRST_SHOWQUICKPASTE, OnFirstShowquickpaste)
 	ON_COMMAND(ID_FIRST_RECONNECTTOCLIPBOARDCHAIN, OnFirstReconnecttoclipboardchain)
@@ -46,10 +39,12 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(WM_HOTKEY, OnHotKey)
 	ON_MESSAGE(WM_SHOW_TRAY_ICON, OnShowTrayIcon)
-	ON_MESSAGE(WM_RECONNECT_TO_COPY_CHAIN, OnReconnectToCopyChain)
-	ON_MESSAGE(WM_IS_TOP_VIEWER, OnGetIsTopView)
+//	ON_MESSAGE(WM_RECONNECT_TO_COPY_CHAIN, OnReconnectToCopyChain)
+//	ON_MESSAGE(WM_IS_TOP_VIEWER, OnGetIsTopView)
 	ON_MESSAGE(WM_COPYPROPERTIES, OnCopyProperties)
 	ON_MESSAGE(WM_CLOSE_APP, OnShutDown)
+	ON_MESSAGE(WM_CLIPBOARD_COPIED, OnClipboardCopied)
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -65,17 +60,10 @@ static UINT indicators[] =
 
 CMainFrame::CMainFrame()
 {
-	m_lReconectCount = 0;
 }
 
 CMainFrame::~CMainFrame()
 {
-	if(m_hNextClipboardViewer)
-	{
-		if(::IsWindow(m_hNextClipboardViewer))
-			ChangeClipboardChain(m_hNextClipboardViewer);
-	}
-
 	CGetSetOptions::SetMainHWND(0);
 }
 
@@ -115,29 +103,14 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	#endif
 
 	SetTimer(CHECK_FOR_UPDATE, ONE_MINUTE*5, 0);
-	SetTimer(REMOVE_OLD_ENTRIES_TIMER, ONE_MINUTE*2, 0);
 
-	SetTimer(TIMER_CHECK_TOP_LEVEL_VIEWER, ONE_MINUTE, 0);
+	theApp.Delayed_RemoveOldEntries(ONE_MINUTE*2);
 
 	m_ulCopyGap = CGetSetOptions::GetCopyGap();
 
-	//Set up the clip board viewer
-	theApp.m_bHandleClipboardDataChange = false;
-    m_hNextClipboardViewer = SetClipboardViewer();
-    theApp.m_bHandleClipboardDataChange = true;
-	
-	theApp.m_MainhWnd = m_hWnd;
+//	QuickPaste.Create( this );
 
-	CGetSetOptions::SetMainHWND((long)m_hWnd);
-
-	//Set up the hot key
-	CGetSetOptions::RegisterHotKey(theApp.m_MainhWnd, 
-									CGetSetOptions::GetHotKey(), 
-									theApp.m_atomHotKey);
-
-	CGetSetOptions::RegisterHotKey(theApp.m_MainhWnd, 
-									CGetSetOptions::GetNamedCopyHotKey(), 
-									theApp.m_atomNamedCopy);
+	theApp.AfterMainCreate();
 
 	return 0;
 }
@@ -200,13 +173,13 @@ void CMainFrame::OnFirstExit()
 
 LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 {
-	if(wParam == theApp.m_atomHotKey)
+	if( wParam == theApp.m_pDittoHotKey->m_Atom )
 	{
 		QuickPaste.ShowQPasteWnd(this);
 	}
-	else if(wParam == theApp.m_atomNamedCopy)
+	else if( wParam == theApp.m_pCopyHotKey->m_Atom )
 	{
-		theApp.ShowCopyProperties = true;
+		theApp.m_bShowCopyProperties = true;
 
 		//Simulate the Copy
 		keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
@@ -217,34 +190,6 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 	}
 
 	return TRUE;
-}
-
-void CMainFrame::OnChangeCbChain(HWND hWndRemove, HWND hWndAfter) 
-{
-    // If the next window in the chain is being removed, reset our
-    // "next window" handle.
-	if(m_hNextClipboardViewer == hWndRemove)
-    {
-		m_hNextClipboardViewer = hWndAfter;
-    }
-	// If there is a next clipboard viewer, pass the message on to it.
-	else if (m_hNextClipboardViewer != NULL)
-    {
-		::SendMessage ( m_hNextClipboardViewer, WM_CHANGECBCHAIN, 
-						(WPARAM) hWndRemove, (LPARAM) hWndAfter );
-    }
-}
-
-//Message that the clipboard data has changed
-void CMainFrame::OnDrawClipboard() 
-{
-	if(!theApp.m_bHandleClipboardDataChange)
-		return;
-
-	m_Copy.DoCopy();
-
-	if (m_hNextClipboardViewer != NULL)
-		::SendMessage(m_hNextClipboardViewer, WM_DRAWCLIPBOARD, 0, 0);	
 }
 
 void CMainFrame::OnTimer(UINT nIDEvent) 
@@ -269,6 +214,7 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		}
 	case REMOVE_OLD_ENTRIES_TIMER:
 		{
+			theApp.m_bRemoveOldEntriesPending = false;
 			RemoveOldEntries();
 			KillTimer(REMOVE_OLD_ENTRIES_TIMER);
 			break;
@@ -290,18 +236,6 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 			{
 				PostMessage(WM_CLOSE, 0, 0);
 				KillTimer(CLOSE_APP);
-			}
-			break;
-		}
-	case TIMER_CHECK_TOP_LEVEL_VIEWER:
-		{
-			if(OnGetIsTopView(0, 0) == FALSE)
-			{
-				OnReconnectToCopyChain(0, 0);
-				m_lReconectCount++;
-
-				if(m_lReconectCount > 10)
-					KillTimer(TIMER_CHECK_TOP_LEVEL_VIEWER);
 			}
 			break;
 		}
@@ -334,44 +268,21 @@ void CMainFrame::OnFirstShowquickpaste()
 	QuickPaste.ShowQPasteWnd(this, TRUE);
 }
 
-LRESULT CMainFrame::OnReconnectToCopyChain(WPARAM wParam, LPARAM lParam)
-{
-	if(GetClipboardViewer() != this)
-	{
-		//Remove it from the change
-		ChangeClipboardChain(m_hNextClipboardViewer);
-		
-		//reset it as the top viewer
-		m_bCallingSetClipboardViewer = TRUE;
-		m_hNextClipboardViewer = SetClipboardViewer();
-		m_bCallingSetClipboardViewer = FALSE;
-
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
 void CMainFrame::OnFirstReconnecttoclipboardchain() 
 {
-	OnReconnectToCopyChain(0, 0);
+	::PostMessage( theApp.GetClipboardViewer(), WM_RECONNECT_TO_COPY_CHAIN, 0, 0 );
 }
 
 void CMainFrame::OnUpdateFirstReconnecttoclipboardchain(CCmdUI* pCmdUI) 
 {
-	if(GetClipboardViewer() == this)
+	if( theApp.IsClipboardViewerConnected() )
 		pCmdUI->m_pMenu->DeleteMenu(ID_FIRST_RECONNECTTOCLIPBOARDCHAIN, MF_BYCOMMAND);
-}
-
-LRESULT CMainFrame::OnGetIsTopView(WPARAM wParam, LPARAM lParam)
-{
-	return (GetClipboardViewer() == this);
 }
 
 BOOL CMainFrame::ResetKillDBTimer()
 {
 	KillTimer(KILL_DB_TIMER);
-	
+
 	SetTimer(KILL_DB_TIMER, ONE_MINUTE*2, NULL);
 
 	return TRUE;
@@ -383,15 +294,15 @@ LRESULT CMainFrame::OnCopyProperties(WPARAM wParam, LPARAM lParam)
 
 	if(lID > 0)
 	{
-		theApp.m_bHandleClipboardDataChange = false;
-		theApp.m_bShowingOptions = true;
+		bool bOldState = theApp.EnableCbCopy(false);
 
+		theApp.m_bShowingOptions = true;
 		CCopyProperties props(lID, this);
 		props.SetHideOnKillFocus(true);
 		props.DoModal();
-
-		theApp.m_bHandleClipboardDataChange = true;
 		theApp.m_bShowingOptions = false;
+
+		theApp.EnableCbCopy( bOldState );
 	}
 
 	return TRUE;
@@ -402,4 +313,28 @@ LRESULT CMainFrame::OnShutDown(WPARAM wParam, LPARAM lParam)
 	SetTimer(CLOSE_APP, 100, NULL);
 
 	return TRUE;
+}
+
+LRESULT CMainFrame::OnClipboardCopied(WPARAM wParam, LPARAM lParam)
+{
+	// if the delay is undesirable, this could be altered to save one at a time,
+	//  allowing the processing of other messages between saving clips.
+	theApp.SaveAllClips();
+	return TRUE;
+}
+
+BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
+{
+	// target before mouse messages change the focus
+	if( theApp.m_bShowingQuickPaste &&
+		WM_MOUSEFIRST <= pMsg->message && pMsg->message <= WM_MOUSELAST )
+	{	theApp.TargetActiveWindow(); }
+
+	return CFrameWnd::PreTranslateMessage(pMsg);
+}
+
+void CMainFrame::OnClose()
+{
+	theApp.BeforeMainClose();
+	CFrameWnd::OnClose();
 }

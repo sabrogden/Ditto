@@ -44,8 +44,8 @@ public:
 
 // Implementation
 protected:
-	BOOL RegisterHotKey(WORD wHotKey);
-	BOOL ValidateHotKey(WORD wHotKey);
+//	BOOL RegisterHotKey(WORD wHotKey);
+//	BOOL ValidateHotKey(WORD wHotKey);
 
 	COptionsSheet *m_pParent;
 

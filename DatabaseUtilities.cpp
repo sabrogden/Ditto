@@ -302,7 +302,7 @@ BOOL RemoveOldEntries()
 				recset.MovePrev();
 			}
 
-			recset.DeleteClips(IDs);
+			CClip::Delete(IDs);
 		}
 	}
 
@@ -328,7 +328,7 @@ BOOL RemoveOldEntries()
 				recset.MoveNext();
 			}
 
-			recset.DeleteClips(IDs);
+			CClip::Delete(IDs);
 		}
 	}
 

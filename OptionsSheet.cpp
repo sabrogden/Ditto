@@ -18,7 +18,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define DELETE_PTR(ptr)	if(ptr) { delete ptr; ptr = NULL;	}
 
 /////////////////////////////////////////////////////////////////////////////
 // COptionsSheet

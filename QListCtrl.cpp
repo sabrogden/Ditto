@@ -46,7 +46,6 @@ CQListCtrl::CQListCtrl()
 
 	m_bShowTextForFirstTenHotKeys = true;
 	m_Accelerator = NULL;
-	m_acFirstTen = NULL;
 }
 
 CQListCtrl::~CQListCtrl()
@@ -58,12 +57,6 @@ CQListCtrl::~CQListCtrl()
 		delete m_pwchTip;
 
 	DestroyAndCreateAccelerator(FALSE);
-
-	if(m_acFirstTen)
-	{
-		DestroyAcceleratorTable(m_acFirstTen);
-		m_acFirstTen = NULL;
-	}
 }
 
 
@@ -95,7 +88,6 @@ void CQListCtrl::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 		{
 			ARRAY arr;
 			GetSelectionIndexes(arr);
-			
 			SendSelection(arr);
 		}
 		break;
@@ -169,10 +161,16 @@ void CQListCtrl::GetSelectionIndexes(ARRAY &arr)
 
 void CQListCtrl::GetSelectionItemData(ARRAY &arr)
 {
+DWORD dwData;
+int i;
 	arr.RemoveAll();
 	POSITION pos = GetFirstSelectedItemPosition();
 	while (pos)
-		arr.Add(GetItemData(GetNextSelectedItem(pos)));
+	{
+		i = GetNextSelectedItem(pos);
+		dwData = GetItemData(i);
+		arr.Add( dwData );
+	}
 	
 	/*
 	int nItem = GetNextItem(-1, LVNI_SELECTED);
@@ -529,22 +527,29 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 		m_CheckingAccelerator = false;
 	}
 
-	if(m_acFirstTen)
-	{
-		m_CheckingAccelerator = true;
-		if(TranslateAccelerator(m_hWnd, m_acFirstTen, pMsg) != 0)
-		{
-			m_CheckingAccelerator = false;
-			return TRUE;
-		}
-		m_CheckingAccelerator = false;
-	}
-
 	switch(pMsg->message) 
 	{
 	case WM_KEYDOWN:
-		if(pMsg->wParam == 'A')
+		WPARAM vk = pMsg->wParam;
+		// if a number key was pressed
+		if( '0' <= vk && vk <= '9' )
 		{
+			// if <Ctrl> is required but is absent, then break
+			if( g_Opt.m_bUseCtrlNumAccel && !(GetKeyState(VK_CONTROL) & 0x8000) )
+				break;
+
+			int index = vk - '0';
+			// '0' is actually 10 in the ditto window
+			if( index == 0 )
+				index = 10;
+			index--; // 0 based index
+			GetParent()->SendMessage(NM_SELECT_INDEX, index, 0);
+			return TRUE;
+		}
+
+		switch( vk )
+		{
+		case 'A': // Ctrl-A = Select All
 			if(GetKeyState(VK_CONTROL) & 0x8000)
 			{
 				int nCount = GetItemCount();
@@ -554,9 +559,11 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 				}
 				return TRUE;
 			}
-		}
-		break;
-	}
+			break;
+		} // end switch(vk)
+
+		break; // end case WM_KEYDOWN
+	} // end switch(pMsg->message)
 
 	return CListCtrl::PreTranslateMessage(pMsg);
 }
@@ -633,46 +640,6 @@ void CQListCtrl::DestroyAndCreateAccelerator(BOOL bCreate)
 	
 	if(bCreate)
 		m_Accelerator = CMainTable::LoadAcceleratorKeys();
-}
-
-void CQListCtrl::LoadFirstTenHotKeys(CMainTable &recset)
-{
-	if(m_acFirstTen)
-	{
-		DestroyAcceleratorTable(m_acFirstTen);
-		m_acFirstTen = NULL;
-	}
-
-	int nMax = min(10, recset.GetRecordCount());
-	CArray<ACCEL, ACCEL> keys;
-	recset.MoveFirst();
-	BOOL bAddControl = CGetSetOptions::GetUseCtrlNumForFirstTenHotKeys();
-	
-	for(int i = 0; i < nMax; i++)
-	{
-		ACCEL me;
-		me.cmd = (USHORT)recset.m_lID;
-		me.fVirt = 0;
-		
-		if(bAddControl)
-		{
-			me.fVirt |= FCONTROL;
-		}
-		
-		me.fVirt |= FVIRTKEY;
-
-		if(i == 9)
-			me.key = 48;
-		else
-			me.key = 49+i;
-
-		keys.Add(me);
-
-		recset.MoveNext();
-	}
-
-	if(keys.GetSize() > 0)
-		m_acFirstTen = CreateAcceleratorTable(keys.GetData(), keys.GetSize());
 }
 
 BOOL CQListCtrl::OnCommand(WPARAM wParam, LPARAM lParam) 

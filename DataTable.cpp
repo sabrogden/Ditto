@@ -66,6 +66,84 @@ void CDataTable::Dump(CDumpContext& dc) const
 }
 #endif //_DEBUG
 
+// caller must free
+// takes m_ooData's HGLOBAL (do not update recset after calling this)
+// This should be faster than making a copy, but is this SAFE ?????
+HGLOBAL CDataTable::TakeData()
+{
+	if( m_ooData.m_hData == 0 || m_ooData.m_dwDataLength == 0 )
+		return 0;
+
+	// we have to do a realloc in order to make the hGlobal m_dwDataLength
+	HGLOBAL hGlobal = ::GlobalReAlloc(m_ooData.m_hData, m_ooData.m_dwDataLength, GMEM_MOVEABLE );
+	if( !hGlobal || ::GlobalSize(hGlobal) == 0 )
+	{
+		TRACE0( GetErrorString(::GetLastError()) );
+		//::_RPT0( _CRT_WARN, GetErrorString(::GetLastError()) );
+		ASSERT(FALSE);
+	}
+	// no longer valid
+	m_ooData.m_hData = 0;
+	m_ooData.m_dwDataLength = 0;
+	return hGlobal;
+}
+
+// this takes ownership of hgData, freeing m_ooData if necessary
+// This should be faster than making a copy, but is this SAFE ?????
+BOOL CDataTable::ReplaceData( HGLOBAL hgData, UINT len )
+{
+	if( m_ooData.m_hData && (m_ooData.m_hData = GlobalFree( m_ooData.m_hData )) )
+	{
+		ASSERT(FALSE);
+		return FALSE;
+	}
+
+	m_ooData.m_hData = hgData;
+	m_ooData.m_dwDataLength = len;
+
+	//Set the fields dirty
+	SetFieldDirty(&m_ooData);
+	SetFieldNull(&m_ooData,FALSE);
+
+	return TRUE;
+}
+
+// copies hgData into m_ooData using ::GlobalSize(hgData) for the size
+BOOL CDataTable::SetData( HGLOBAL hgData )
+{
+UINT unSize = GlobalSize(hgData);
+
+	//Reallocate m_ooData.m_hData
+	if(m_ooData.m_hData)
+		m_ooData.m_hData = GlobalReAlloc(m_ooData.m_hData, unSize, GMEM_MOVEABLE);
+	else
+		m_ooData.m_hData = GlobalAlloc(GHND, unSize);
+
+	m_ooData.m_dwDataLength = unSize;
+
+	::CopyToGlobalHH( m_ooData.m_hData, hgData, unSize );
+
+	//Set the fields dirty
+	SetFieldDirty(&m_ooData);
+	SetFieldNull(&m_ooData,FALSE);
+
+	return TRUE;
+}
+
+// allocates a new copy of the data
+HGLOBAL CDataTable::LoadData()
+{
+HGLOBAL hGlobal;
+ULONG ulBufLen = m_ooData.m_dwDataLength; //Retrieve size of array
+
+	if(ulBufLen == 0)
+		return 0;
+
+	hGlobal = NewGlobalH( m_ooData.m_hData, ulBufLen );
+
+	return hGlobal;
+}
+
 BOOL CDataTable::DeleteAll()
 {
 	BOOL bRet = FALSE;
@@ -82,85 +160,6 @@ BOOL CDataTable::DeleteAll()
 	}
 
 	return bRet;
-}
-
-BOOL CDataTable::SetData(HGLOBAL hgData)
-{
-	//Get the data from the clipboard sent in
-	LPVOID pvData = NULL;
-	pvData = GlobalLock(hgData);
-	if(!pvData)
-		return FALSE;
-
-	//Size
-	UINT unSize = GlobalSize(hgData);
-
-	//Realocate m_ooData.m_hData
-	if(m_ooData.m_hData)
-		m_ooData.m_hData = GlobalReAlloc(m_ooData.m_hData, unSize, GMEM_MOVEABLE);
-	else
-		m_ooData.m_hData = GlobalAlloc(GHND, unSize);
-
-	//Get the data associated 
-	LPVOID pvNewData = NULL;
-	pvNewData = GlobalLock(m_ooData.m_hData);
-	if(!pvNewData)
-		return FALSE;
-
-	//Set the size
-	m_ooData.m_dwDataLength = unSize;
-
-	//Set the size
-	memcpy(pvNewData, pvData, unSize);
-
-	//Set the fields dirty
-	SetFieldDirty(&m_ooData);
-	SetFieldNull(&m_ooData,FALSE);
-
-	return TRUE;
-}
-
-BOOL CDataTable::LoadData(COleDataSource *pData, UINT uiPastType)
-{
-	BOOL fRetVal = FALSE;
-	
-	//Retrieve size of array
-	ULONG ulBufLen = m_ooData.m_dwDataLength;
-
-	if(ulBufLen > 0)
-	{
-		HGLOBAL hGlobal;
-
-		hGlobal = GlobalAlloc(GMEM_ZEROINIT, ulBufLen);
-		if(hGlobal != NULL)
-		{
-			LPVOID pvData = NULL;
-			pvData = GlobalLock(hGlobal);
-			if(!pvData)
-				return FALSE;
-
-			LPVOID pvData2 = NULL;
-			pvData2 = GlobalLock(m_ooData.m_hData);
-			if(!pvData2)
-				return FALSE;
-
-			memcpy(pvData, pvData2, ulBufLen);
-			
-			GlobalUnlock(hGlobal);
-			GlobalUnlock(m_ooData.m_hData);
-
-			pData->CacheGlobalData(uiPastType, hGlobal);
-
-			fRetVal = TRUE;
-		}
-		else
-			ASSERT(FALSE);
-	}
-	else
-		ASSERT(FALSE);
-	
-	return fRetVal;
-
 }
 
 void CDataTable::Open(LPCTSTR lpszFormat,...) 
@@ -187,44 +186,5 @@ void CDataTable::Open(int nOpenType, LPCTSTR lpszSql, int nOptions)
 
 BOOL CDataTable::DataEqual(HGLOBAL hgData)
 {
-int nRet;
-int sizeGiven = GlobalSize(hgData);
-int sizeSelf = GlobalSize(m_ooData.m_hData);
-
-	//GlobalSize is allocated space and not necessarily the size of the data
-	//Should we assume that the Data being compared are the same size?
-	// so far in my tests:
-	//  GlobalSize( hgData ) == accurate size of the data contained
-	//  GlobalSize( m_ooData.m_hData ) == 0x00008000
-	//	  - this is true even after locking the memory.
-//	if( sizeGiven != m_ooData.m_dwDataLength )
-//	{
-//		ASSERT(FALSE);
-//		return FALSE;
-//	}
-
-	LPVOID saved = NULL;
-	saved = GlobalLock(m_ooData.m_hData);
-	if(!saved)
-	{
-		ASSERT(FALSE);
-		return FALSE;
-	}
-
-	LPVOID data = NULL;
-	data = GlobalLock(hgData);
-	if(!data)
-	{
-		GlobalUnlock(m_ooData.m_hData);
-		ASSERT(FALSE);
-		return FALSE;
-	}
-
-	nRet = (memcmp(data, saved, m_ooData.m_dwDataLength) == 0);
-
-	// unlock after the compare
-	GlobalUnlock(hgData);
-	GlobalUnlock(m_ooData.m_hData);
-
-	return nRet;
+	return ::CompareGlobalHH( hgData, m_ooData.m_hData, m_ooData.m_dwDataLength ) == 0;
 }

@@ -21,7 +21,6 @@ static char THIS_FILE[]=__FILE__;
 CQuickPaste::CQuickPaste()
 {
 	m_pwndPaste = NULL;
-
 }
 
 CQuickPaste::~CQuickPaste()
@@ -32,6 +31,23 @@ CQuickPaste::~CQuickPaste()
 		m_pwndPaste = NULL;
 	}
 
+}
+
+void CQuickPaste::Create(CWnd *pParent)
+{
+CPoint point;
+CSize csSize;
+
+	ASSERT(!m_pwndPaste);
+	m_pwndPaste = new CQPasteWnd;
+	ASSERT(m_pwndPaste);
+	// load previous position and size
+	CGetSetOptions::GetQuickPastePoint(point);
+	CGetSetOptions::GetQuickPasteSize(csSize);
+	// Create the window
+	ASSERT( m_pwndPaste->Create(point, pParent) );
+	// place it at the previous position and size
+	m_pwndPaste->MoveWindow(CRect(point, csSize));
 }
 
 BOOL CQuickPaste::CloseQPasteWnd()
@@ -55,14 +71,20 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 {
 	{
 		if((theApp.m_bShowingQuickPaste) || (theApp.m_bShowingOptions))
+		{
+			if( g_Opt.m_bShowPersistent )
+				m_pwndPaste->SetForegroundWindow();
 			return;
+		}
 	}
 
-	int nPosition = CGetSetOptions::GetQuickPastePosition();
+	theApp.TargetActiveWindow();
 
 	CPoint ptCaret;
-	HWND hWndActive = GetActiveWnd(&ptCaret);
+	GetFocusWnd(&ptCaret); // get caret position relative to screen
 	ptCaret.Offset(-12, 12);
+
+	int nPosition = CGetSetOptions::GetQuickPastePosition();
 
 	CPoint point;
 	CRect rcPrev;
@@ -77,7 +99,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 		return;
 	}
 
-	//If its  a window get the rect otherwise get the saved point and size
+	//If it is a window get the rect otherwise get the saved point and size
 	if (IsWindow(m_pwndPaste->m_hWnd))
 	{
 		m_pwndPaste->GetWindowRect(rcPrev);
@@ -101,11 +123,10 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 	else if(nPosition == POS_AT_PREVIOUS)
 		CGetSetOptions::GetQuickPastePoint(point);
 		
-	if (!IsWindow(m_pwndPaste->m_hWnd))
+	if( !IsWindow(m_pwndPaste->m_hWnd) )
 	{
 		// Create the window   
-		if (!m_pwndPaste->Create(point, pParent))
-			return;
+		ASSERT( m_pwndPaste->Create(point, pParent) );
 	}
 
 	if((nPosition == POS_AT_CARET) ||
@@ -115,15 +136,9 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 		m_pwndPaste->MoveWindow(CRect(point, csSize));
 	}
 		
-	//set the window that recieves the paste message
-	m_pwndPaste->SetFocusWindow(hWndActive);
-
 	// Show the window
 	m_pwndPaste->ShowWindow(SW_SHOW);
-
-	::SetForegroundWindow(m_pwndPaste->m_hWnd);
-	::SetFocus(m_pwndPaste->m_hWnd);
-
+	m_pwndPaste->SetForegroundWindow();
 }
 
 void CQuickPaste::HideQPasteWnd()

@@ -10,6 +10,7 @@
 #include "CP_Main.h"
 #include "OptionsSheet.h"
 #include "NumberEdit.h"
+#include "afxwin.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // COptionsGeneral dialog
@@ -37,6 +38,9 @@ public:
 	CButton	m_btExpire;
 	CButton		m_btShowIconInSysTray;
 	CButton		m_btRunOnStartup;
+	CButton m_btAllowDuplicates;
+	CButton m_btUpdateTimeOnPaste;
+	CButton m_btSaveMultiPaste;
 	//}}AFX_DATA
 
 
@@ -65,6 +69,7 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
+public:
 };
 
 //{{AFX_INSERT_LOCATION}}

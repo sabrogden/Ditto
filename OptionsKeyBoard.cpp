@@ -50,21 +50,11 @@ BOOL COptionsKeyBoard::OnInitDialog()
 
 	m_pParent = (COptionsSheet *)GetParent();
 
-	DWORD wHotKey = CGetSetOptions::GetHotKey();
-	
-	m_HotKey.SetHotKey(LOBYTE(wHotKey),HIBYTE(wHotKey));
+	theApp.m_pDittoHotKey->CopyToCtrl( m_HotKey );
+	theApp.m_pCopyHotKey->CopyToCtrl( m_NamedCopy );
 
-	//Unregister the hotkey
-	//Re regester it on cancel or ok
-	UnregisterHotKey(theApp.m_MainhWnd, theApp.m_atomHotKey);
-	
-	wHotKey = CGetSetOptions::GetNamedCopyHotKey();
-	
-	m_NamedCopy.SetHotKey(LOBYTE(wHotKey),HIBYTE(wHotKey));
-
-	//Unregister the hotkey
-	//Re regester it on cancel or ok
-	UnregisterHotKey(theApp.m_MainhWnd, theApp.m_atomNamedCopy);
+	//Unregister hotkeys and Reregister them on cancel or ok
+	g_HotKeys.UnregisterAll();
 
 	m_HotKey.SetFocus();
 
@@ -73,52 +63,43 @@ BOOL COptionsKeyBoard::OnInitDialog()
 
 LRESULT COptionsKeyBoard::OnWizardNext() 
 {
-	
 	return CPropertyPage::OnWizardNext();
 }
 
 BOOL COptionsKeyBoard::OnWizardFinish() 
 {
-	
-	
 	return CPropertyPage::OnWizardFinish();
 }
 
 BOOL COptionsKeyBoard::OnApply()
 {
-	DWORD wHotKey = m_HotKey.GetHotKey();
-	DWORD wNamedCopy = m_NamedCopy.GetHotKey();
+int x,y;
+CString str;
+ARRAY keys;
 
-	if((wHotKey == wNamedCopy) && (wHotKey != 0))
+	g_HotKeys.GetKeys( keys ); // save old keys just in case new ones are invalid
+
+	theApp.m_pDittoHotKey->CopyFromCtrl( m_HotKey );
+	theApp.m_pCopyHotKey->CopyFromCtrl( m_NamedCopy );
+
+	if( g_HotKeys.FindFirstConflict(keys,&x,&y) )
 	{
-		MessageBox("Activate Hot Key and Named Copy Hot Key cannot be the same.");
+		str =  g_HotKeys.GetAt(x)->GetName();
+		str += " and ";
+		str += g_HotKeys.GetAt(y)->GetName();
+		str += " cannot be the same.";
+		MessageBox(str);
+		g_HotKeys.SetKeys( keys ); // restore the original values
 		return FALSE;
 	}
 
-	CGetSetOptions::SetNamedCopyHotKey(wNamedCopy);
-	CGetSetOptions::SetHotKey(wHotKey);
-
-	if(wHotKey > 0)
-	{
-		if(!CGetSetOptions::RegisterHotKey(theApp.m_MainhWnd, wHotKey, theApp.m_atomHotKey))
-		{
-			MessageBox("Error Registering HotKey to Activate Ditto");
-			return FALSE;
-		}
-	}
-
-	if(wNamedCopy > 0)
-	{
-		if(!CGetSetOptions::RegisterHotKey(theApp.m_MainhWnd, wNamedCopy, theApp.m_atomNamedCopy))
-		{
-			MessageBox("Error Registering HotKey for Named Copy");
-			return FALSE;
-		}
-	}
+	g_HotKeys.SaveAllKeys();
+	g_HotKeys.RegisterAll(true);
 		
 	return CPropertyPage::OnApply();
 }
 
+/*
 BOOL COptionsKeyBoard::ValidateHotKey(WORD wHotKey)
 {
 	ATOM id = GlobalAddAtom("HK_VALIDATE");
@@ -131,31 +112,10 @@ BOOL COptionsKeyBoard::ValidateHotKey(WORD wHotKey)
 
 	return bResult;
 }
+*/
 
 void COptionsKeyBoard::OnCancel() 
 {
-	if(CGetSetOptions::GetHotKey())
-	{
-		if(!CGetSetOptions::RegisterHotKey(theApp.m_MainhWnd, 
-										CGetSetOptions::GetHotKey(), 
-										theApp.m_atomHotKey))
-		{
-			MessageBox("Error Registering HotKey to Activate Ditto");
-			return;
-		}
-	}
-
-	if(CGetSetOptions::GetNamedCopyHotKey())
-	{
-		if(!CGetSetOptions::RegisterHotKey(theApp.m_MainhWnd, 
-										CGetSetOptions::GetNamedCopyHotKey(), 
-										theApp.m_atomNamedCopy))
-		{
-			MessageBox("Error Registering HotKey for Named Copy");
-			return;
-		}
-	}
-	
-	
+	g_HotKeys.RegisterAll( true );
 	CPropertyPage::OnCancel();
 }

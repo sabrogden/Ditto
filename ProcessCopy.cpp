@@ -13,524 +13,980 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
+
+/*----------------------------------------------------------------------------*\
+	COleDataObjectEx
+\*----------------------------------------------------------------------------*/
+
 HGLOBAL COleDataObjectEx::GetGlobalData(CLIPFORMAT cfFormat, LPFORMATETC lpFormatEtc)
 {
-    bool bRet = theApp.m_bHandleClipboardDataChange;
-    theApp.m_bHandleClipboardDataChange = false;
+    HGLOBAL hGlobal = COleDataObject::GetGlobalData(cfFormat, lpFormatEtc);
+	if( hGlobal )
+		return hGlobal;
 
-    HGLOBAL global = COleDataObject::GetGlobalData(cfFormat, lpFormatEtc);
-
-    theApp.m_bHandleClipboardDataChange = bRet;
-
-    return global;
-}
-
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
-CProcessCopy::CProcessCopy()
-{
-	InitializeCriticalSection(&m_CriticalSection);
-}
-
-CProcessCopy::~CProcessCopy()
-{
-	DeleteCriticalSection(&m_CriticalSection);
-}
-
-#define EXIT_DO_COPY(ret)	{ m_oleData.Release(); LeaveCriticalSection(&m_CriticalSection); return(ret);	}
-
-BOOL CProcessCopy::DoCopy()
-{
-	EnterCriticalSection(&m_CriticalSection);
-	
-	//Attach the clip board
-	if(!m_oleData.AttachClipboard())
-		EXIT_DO_COPY(FALSE);
-
-	m_oleData.EnsureClipboardObject();
-
-	//Included in copy if the data is supposed to be private
-	//If it is there then return
-	if(m_oleData.IsDataAvailable(RegisterClipboardFormat("Clipboard Viewer Ignore")))
-	{
-		EXIT_DO_COPY(FALSE);
-	}
-
-	if((theApp.m_bReloadTypes) || (m_SupportedTypes.GetSize() == 0))
-		LoadSupportedTypes();
-	
-	//Start the copy process
-	//This checks if valid data is available
-	//If so it adds the text the the main table and returns the id
-	long lID = StartCopyProcess();
-	if(lID == -1)
-	{
-		EXIT_DO_COPY(FALSE);
-	}
-
-	try
-	{
-		//open the data table and add the data for supported types
-		CDataTable recset;
-		CString csDbString;
-
-		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT * FROM Data" ,NULL);
+	// The data isn't in global memory, so try getting an IStream interface to it.
+	STGMEDIUM stg;
 		
-		CLIPFORMAT format;
-		int nSize = m_SupportedTypes.GetSize();
-		for(int i = 0; i < nSize; i++)
+	if( !GetData(cfFormat, &stg) )
+	{
+		ASSERT(0); // does this ever happen?
+		return 0;
+	}
+
+	switch(stg.tymed)
+	{
+		case TYMED_HGLOBAL:
+			hGlobal = stg.hGlobal;
+			break;
+		
+		case TYMED_ISTREAM:
 		{
-			format = m_SupportedTypes[i];
-
-			if(m_oleData.IsDataAvailable(format))
+			UINT            uDataSize;
+			LARGE_INTEGER	li;
+			ULARGE_INTEGER	uli;
+			
+			li.HighPart = li.LowPart = 0;
+			
+			if ( SUCCEEDED( stg.pstm->Seek ( li, STREAM_SEEK_END, &uli )))
 			{
-				recset.AddNew();
+				hGlobal = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, uli.LowPart );
 
-				recset.m_lParentID = lID;
-				recset.m_strClipBoardFormat = GetFormatName(format);
+				void* pv = GlobalLock(hGlobal);
+				stg.pstm->Seek(li, STREAM_SEEK_SET, NULL);
+				HRESULT result = stg.pstm->Read(pv, uli.LowPart, (PULONG)&uDataSize);
+				GlobalUnlock(hGlobal);
 
-				HGLOBAL hgData = m_oleData.GetGlobalData(format);
+				if( FAILED(result) )
+					hGlobal = GlobalFree(hGlobal);
+			}
+			break;  // case TYMED_ISTREAM
+		}
+	} // end switch
 
-				bool bReadData = false;
-				if(hgData != NULL)
-				{
-					recset.SetData(hgData);
-				
-					//update the DB
-					recset.Update();
-					bReadData = true;
+	ReleaseStgMedium(&stg);
 
-					// Free the memory that GetGlobalData() allocated for us.
-					GlobalUnlock(hgData);
-					GlobalFree(hgData);
-					hgData = NULL;
-				}
-				else
-				{
-					// The data isn't in global memory, so try getting an IStream 
-					// interface to it.
-					STGMEDIUM stg;
-					
-					if(m_oleData.GetData(format, &stg))
-					{
-						switch(stg.tymed)
-						{
-							case TYMED_HGLOBAL:
-							{
-								recset.SetData(stg.hGlobal);
+    return hGlobal;
+}
 
-								//Update the db
-								recset.Update();
-								bReadData = true;
-							}
-							break;
-							
-							case TYMED_ISTREAM:
-							{
-								UINT            uDataSize;
-								LARGE_INTEGER	li;
-								ULARGE_INTEGER	uli;
-								
-								li.HighPart = li.LowPart = 0;
-								
-								if ( SUCCEEDED( stg.pstm->Seek ( li, STREAM_SEEK_END, &uli )))
-								{
-									HGLOBAL hg = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, uli.LowPart );
-									void* pv = GlobalLock(hg);
-									
-									stg.pstm->Seek(li, STREAM_SEEK_SET, NULL);
-                            
-									if(SUCCEEDED(stg.pstm->Read(pv, uli.LowPart, (PULONG)&uDataSize)))
-									{
-										GlobalUnlock(hg);
+/*----------------------------------------------------------------------------*\
+	CClipFormat - holds the data of one clip format.
+\*----------------------------------------------------------------------------*/
 
-										recset.SetData(hg);
+/*----------------------------------------------------------------------------*\
+	CClipFormats - holds an array of CClipFormat
+\*----------------------------------------------------------------------------*/
+// returns a pointer to the CClipFormat in this array which matches the given type
+//  or NULL if that type doesn't exist in this array.
+CClipFormat* CClipFormats::FindFormat( UINT cfType )
+{
+CClipFormat* pCF;
+int count = GetCount();
+	for( int i=0; i < count; i++ )
+	{
+		pCF = &GetAt(i);
+		if( pCF->m_cfType == cfType )
+			return pCF;
+	}
+	return NULL;
+}
 
-										//Update the DB
-										recset.Update();
-										bReadData = true;
-										
-										// Free the memory we just allocated.
-										GlobalFree(hg);
-									}
-									else
-									{
-										GlobalUnlock(hg);
-									}
-								}
-							}
-							break;  // case TYMED_ISTREAM
-						}
-						
-						ReleaseStgMedium(&stg);
-					}
-				}
 
-				if(bReadData)
-				{
-					GlobalUnlock(recset.m_ooData.m_hData);
-					GlobalFree(recset.m_ooData.m_hData);
-					recset.m_ooData.m_hData = NULL;
-				}
+/*----------------------------------------------------------------------------*\
+	CClip - holds multiple CClipFormats and CopyClipboard() statistics
+\*----------------------------------------------------------------------------*/
+
+CClip::CClip() : m_ID(0), m_lTotalCopySize(0)
+{}
+
+CClip::~CClip()
+{
+int count = m_Formats.GetCount();
+	// in proper handling, m_Formats should be empty
+	ASSERT( count == 0 );
+	EmptyFormats();
+}
+
+void CClip::EmptyFormats()
+{
+	// free global memory in m_Formats
+	for( int i = m_Formats.GetCount()-1; i >= 0; i-- )
+	{
+		::GlobalFree( m_Formats[i].m_hgData );
+		m_Formats.RemoveAt( i );
+	}
+}
+
+#define EXIT_LoadFromClipboard(ret)	{ oleData.Release(); g_bCopyingClipboard = false; return(ret); }
+bool g_bCopyingClipboard = false; // for debugging reentrance
+// Fills this CClip with the contents of the clipboard.
+bool CClip::LoadFromClipboard( CClipTypes* pClipTypes )
+{
+COleDataObjectEx oleData;
+CClipTypes defaultTypes;
+CClipTypes* pTypes = pClipTypes;
+
+	//ASSERT( !g_bCopyingClipboard );
+	// For some reason, this can actually happen with *very* fast copies.
+	// This is probably due to the OLE functions processing messages.
+	// This *might* be able to be avoided by directly using the win32 Clipboard API
+	// If this does happen, we just ignore the request by returning failure.
+	if( g_bCopyingClipboard )
+		return false;
+
+	g_bCopyingClipboard = true;
+
+	// m_Formats should be empty when this is called.
+	ASSERT( m_Formats.GetCount() == 0 );
+
+	//Attach to the clipboard
+	if( !oleData.AttachClipboard() )
+	{
+		ASSERT(0); // does this ever happen?
+		EXIT_LoadFromClipboard(false);
+	}
+
+	oleData.EnsureClipboardObject();
+
+	// If the data is supposed to be private, then return
+	if( oleData.IsDataAvailable( theApp.m_cfIgnoreClipboard ) )
+		EXIT_LoadFromClipboard( false );
+
+	// if no types were given, get only the first (most important) type.
+	//  (subsequent types could be synthetic due to automatic type conversions)
+	if( pTypes == NULL || pTypes->GetCount() == 0 )
+	{
+		ASSERT(0); // this feature is not currently used... it is an error if it is.
+
+		FORMATETC formatEtc;
+		oleData.BeginEnumFormats();
+		oleData.GetNextFormat(&formatEtc);
+		defaultTypes.Add( formatEtc.cfFormat );
+		pTypes = &defaultTypes;
+	}
+
+	// reset copy stats
+	m_lTotalCopySize = 0;
+	m_Desc = "[Ditto Error] !!BAD DESCRIPTION!!";
+
+	// Get Description String
+	// NOTE: We make sure that the description always corresponds to the
+	//  data saved by using the exact same globalmem instance as the source
+	//  for both... i.e. we only fetch the description format type once.
+CClipFormat cfDesc;
+bool bIsDescSet = false;
+	cfDesc.m_cfType = CF_TEXT;
+	if( oleData.IsDataAvailable( cfDesc.m_cfType ) )
+	{
+		cfDesc.m_hgData = oleData.GetGlobalData( cfDesc.m_cfType );
+		bIsDescSet = SetDescFromText( cfDesc.m_hgData );
+	}
+
+	// Get global data for each supported type on the clipboard
+UINT nSize;
+CClipFormat cf;
+int numTypes = pTypes->GetCount();
+	for(int i = 0; i < numTypes; i++)
+	{
+		cf.m_cfType = pTypes->GetAt(i);
+
+		// is this the description we already fetched?
+		if( cf.m_cfType == cfDesc.m_cfType )
+		{
+			cf = cfDesc;
+			cfDesc.m_hgData = 0; // cf owns it now (to go into m_Formats)
+		}
+		else if( !oleData.IsDataAvailable(cf.m_cfType) )
+			continue;
+		else
+			cf.m_hgData = oleData.GetGlobalData( cf.m_cfType );
+
+		if( cf.m_hgData )
+		{
+			nSize = GlobalSize( cf.m_hgData );
+			if( nSize > 0 )
+			{
+				m_Formats.Add( cf );
+				m_lTotalCopySize += nSize;
+			}
+			else
+			{
+				ASSERT(FALSE); // a valid GlobalMem with 0 size is strange
+				GlobalFree( cf.m_hgData );
 			}
 		}
-		
-		recset.Close();
+	}
 
-		RemoveOldEntries();
-		CGetSetOptions::SetTripCopyCount(-1);
-		CGetSetOptions::SetTotalCopyCount(-1);
+	m_Time = CTime::GetCurrentTime();
+
+	if( !bIsDescSet )
+		SetDescFromType();
+
+	// if the description was in a type that is not supported,
+	//	we have to free it since it wasn't added to m_Formats
+	if( cfDesc.m_hgData )
+		GlobalFree( cfDesc.m_hgData );
+
+	if( m_Formats.GetSize() == 0 )
+		EXIT_LoadFromClipboard( false );
+
+	EXIT_LoadFromClipboard( true );
+}
+
+bool CClip::SetDescFromText( HGLOBAL hgData )
+{
+	if( hgData == 0 )
+		return false;
+
+bool bRet = false;
+char* text = (char *) GlobalLock(hgData);
+ULONG ulBufLen = GlobalSize(hgData);
+
+	ASSERT( text != NULL );
+
+	if( ulBufLen > LENGTH_OF_TEXT_SNIPET )
+		ulBufLen = LENGTH_OF_TEXT_SNIPET;
+
+	if( ulBufLen > 0 )
+	{
+	char* buf = m_Desc.GetBuffer(ulBufLen);
+		memcpy(buf, text, ulBufLen); // in most cases, last char == null
+		buf[ulBufLen-1] = '\0'; // just in case not null terminated
+		m_Desc.ReleaseBuffer(); // scans for the null
+		bRet = m_Desc.GetLength() > 0;
+	}
+					
+	//Unlock the data
+	GlobalUnlock(hgData);
+
+	return bRet;
+}
+
+bool CClip::SetDescFromType()
+{
+	if( m_Formats.GetCount() <= 0 )
+		return false;
+	m_Desc = GetFormatName( m_Formats[0].m_cfType );
+	return m_Desc.GetLength() > 0;
+}
+
+bool CClip::AddToDB()
+{
+bool bResult;
+	try
+	{
+		CMainTable recset;
+
+		if( FindDuplicate( recset, g_Opt.m_bAllowDuplicates ) )
+		{
+			m_ID = recset.m_lID;
+			recset.Edit();
+			recset.m_lDate = (long) m_Time.GetTime(); // update the copy Time
+			recset.Update();
+			recset.Close();
+			EmptyFormats(); // delete this clip's data from memory.
+			return true;
+		}
+
+		if( recset.IsOpen() )
+			recset.Close();
+	}
+	CATCHDAO
+
+	bResult = AddToMainTable() && AddToDataTable();
+
+	// should be emptied by AddToDataTable
+	ASSERT( m_Formats.GetCount() == 0 );
+
+	return bResult;
+}
+
+// if a duplicate exists, set recset to the duplicate and return true
+bool CClip::FindDuplicate( CMainTable& recset, BOOL bCheckLastOnly )
+{
+	ASSERT( m_lTotalCopySize > 0 );
+	try
+	{
+		recset.m_strSort = "lDate DESC";
+
+		if( bCheckLastOnly )
+		{
+			recset.Open("SELECT * FROM Main");
+			recset.MoveFirst();
+			// if an entry exists and they are the same size and the format data matches
+			if( !recset.IsBOF() && !recset.IsEOF() &&
+			     m_lTotalCopySize == recset.m_lTotalCopySize &&
+			    (CompareFormatDataTo(recset.m_lID) == 0) )
+			{	return true; }
+			return false;
+		}
+
+		// Look for any other entries that have the same size
+		recset.Open("SELECT * FROM Main WHERE lTotalCopySize = %d", m_lTotalCopySize);
+		while( !recset.IsEOF() )
+		{
+			//if there is any then look if it is an exact match
+			if( CompareFormatDataTo(recset.m_lID) == 0 )
+				return true;
+
+			recset.MoveNext();
+		}
+	}
+	CATCHDAO
+
+	return false;
+}
+
+int CClip::CompareFormatDataTo( long lID )
+{
+int nRet = 0;
+int nRecs, nFormats;
+CClipFormat* pFormat = NULL;
+	try
+	{
+		CDataTable recset;
+
+		recset.Open("SELECT * FROM Data WHERE lParentID = %d", lID);
+
+		// Verify the same number of saved types
+		recset.MoveLast();
+		nRecs = recset.GetRecordCount();
+		nFormats = m_Formats.GetCount();
+		nRet = nFormats - nRecs;
+		if( nRet != 0 )
+		{	recset.Close();	return nRet; }
+
+		// For each format type in the db
+		
+		for( recset.MoveFirst(); !recset.IsEOF(); recset.MoveNext() )
+		{
+			pFormat = m_Formats.FindFormat( GetFormatID(recset.m_strClipBoardFormat) );
+
+			// Verify the format exists
+			if( !pFormat )
+			{	recset.Close(); return -1; }
+
+			// Compare the size
+			nRet = ::GlobalSize(pFormat->m_hgData) - recset.m_ooData.m_dwDataLength;
+			if( nRet != 0 )
+			{	recset.Close(); return nRet; }
+
+			// Binary compare
+			nRet = CompareGlobalHH( recset.m_ooData.m_hData,
+			                        pFormat->m_hgData,
+			                        recset.m_ooData.m_dwDataLength );
+			if( nRet != 0 )
+			{	recset.Close(); return nRet; }
+		}
+		recset.Close();
+	}
+	CATCHDAO
+
+	return 0;
+}
+
+// assigns m_ID
+bool CClip::AddToMainTable()
+{
+long lDate;
+	try
+	{
+	CMainTable recset;
+
+//		recset.m_strSort = "lDate DESC";
+		recset.Open("SELECT * FROM Main");
+
+		lDate = (long) m_Time.GetTime();
+
+		recset.AddNew();
+
+		recset.m_lDate = lDate;
+		recset.m_strType = GetFormatName( m_Formats[0].m_cfType );
+		recset.m_strText = m_Desc;
+		recset.m_lTotalCopySize = m_lTotalCopySize;
+
+		recset.Update();
+		recset.MoveLast();
+		
+		m_ID = recset.m_lID;
+
+		recset.Close();
 	}
 	catch(CDaoException* e)
 	{
 		ASSERT(FALSE);
 		e->Delete();
+		return false;
 	}
-	
-	EXIT_DO_COPY(TRUE);
+
+	return true;
 }
 
-long CProcessCopy::StartCopyProcess()
+// Empties m_Formats as it saves them to the Data Table.
+bool CClip::AddToDataTable()
 {
-	CString			csDescription;
-	BOOL			bReturn = FALSE;
-	CLIPFORMAT		MainType;
-	long			lReturnID = -1;
-
-	if(!GetCopyInfo(MainType))
-		return -1;
-
-	if(!GetDescriptionText(csDescription))
-		return -1;
-
-	long lRecID;
-	if((lRecID = DoesCopyEntryExist()) >= 0)
+	ASSERT( m_ID != 0 );
+	try
 	{
-		CMainTable recset;
-		recset.Open("SELECT * FROM Main WHERE lID = %d", lRecID);
+	CDataTable recset;
+	CClipFormat* pCF;
 
-		if(!recset.IsEOF())
+		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT * FROM Data" ,NULL);
+
+		for( int i = m_Formats.GetCount()-1; i >= 0 ; i-- )
 		{
-			recset.Edit();
+			pCF = & m_Formats.GetAt(i);
 
-			//Set the time to now since the entry was allready in the db
-			CTime now = CTime::GetCurrentTime();
-			recset.m_lDate = (long)now.GetTime();
+			recset.AddNew();
+
+			recset.m_lParentID = m_ID;
+			recset.m_strClipBoardFormat = GetFormatName( pCF->m_cfType );
+			// the recset takes ownership of the HGLOBAL
+			recset.ReplaceData( pCF->m_hgData, GlobalSize(pCF->m_hgData) );
 
 			recset.Update();
 
-			ShowCopyProperties(lRecID);
-			return -1;
+			m_Formats.RemoveAt( i ); // the recset now owns the global
 		}
-		else
-			ASSERT(FALSE);
+		return true;
 	}
-	
+	CATCHDAO
+
+	return false;
+}
+
+// STATICS
+
+// deletes from both Main and Data Tables
+BOOL CClip::Delete( int id )
+{
+CString csMainSQL;
+CString csDataSQL;
+BOOL bRet = FALSE;
+
+	csMainSQL.Format( "DELETE FROM Main WHERE lID = %d", id );
+	csDataSQL.Format( "DELETE FROM Data WHERE lParentID = %d", id );
+
 	try
 	{
-		//There were valid types present add the text to the main table
-		CMainTable recset;
-
-		recset.Open("SELECT * FROM Main");
-			
-		recset.AddNew();
-
-		CTime now = CTime::GetCurrentTime();
-
-		recset.m_lDate = (long)now.GetTime();
-
-		recset.m_strType = GetDescriptionString(MainType);
-		recset.m_strText = csDescription;
-
-		recset.m_lTotalCopySize = m_lTotalCopySize;
-		
-		recset.Update();
-
-		recset.MoveLast();
-		
-		lReturnID = recset.m_lID;
-
-		recset.Close();
-
-		ShowCopyProperties(lReturnID);
+		theApp.EnsureOpenDB();
+		theApp.m_pDatabase->Execute(csMainSQL, dbFailOnError);
+		theApp.m_pDatabase->Execute(csDataSQL, dbFailOnError);
+		bRet = TRUE;
 	}
 	catch(CDaoException* e)
 	{
-		ASSERT(FALSE);
+		AfxMessageBox(e->m_pErrorInfo->m_strDescription);
 		e->Delete();
-		return -1;
-	}
-
-	return lReturnID;
-	
-
-	return -1;
-}
-
-void CProcessCopy::ShowCopyProperties(long lRecID)
-{
-	if(theApp.ShowCopyProperties)
-	{
-		HWND hWndFocus = GetActiveWnd();
-
-		::SendMessage(theApp.m_MainhWnd, WM_COPYPROPERTIES, lRecID, 0);
-		theApp.ShowCopyProperties = false;
-
-		::SetForegroundWindow(hWndFocus);
-	}
-}
-
-BOOL CProcessCopy::GetCopyInfo(CLIPFORMAT &MainType)
-{
-	m_lTotalCopySize = 0;
-	MainType = 0;
-	m_lSupportedTypesAvailable = 0;
-
-	//For each type we want to save
-	for(int i = 0; i < m_SupportedTypes.GetSize(); i++)
-	{
-		//Is data available for that type
-		if(m_oleData.IsDataAvailable(m_SupportedTypes[i]))
-		{
-			m_lSupportedTypesAvailable++;
-
-			HGLOBAL hgData = m_oleData.GetGlobalData(m_SupportedTypes[i]);
-
-			//Get the size of the data
-			if(hgData != NULL)
-				m_lTotalCopySize += GlobalSize(hgData);
-		
-			if(MainType == 0)
-				MainType = m_SupportedTypes[i];			
-		}
-	}
-
-	return(m_lTotalCopySize > 0);
-}
-
-BOOL CProcessCopy::GetDescriptionText(CString &csText)
-{
-	BOOL bRet = FALSE;
-
-	if(m_oleData.IsDataAvailable(CF_TEXT))
-	{
-		//Get the text version of the data and return the text
-		char *text;
-		HGLOBAL hgData = m_oleData.GetGlobalData(CF_TEXT);
-
-		if(hgData != NULL)
-		{
-			//Get the text from the clipboard
-			text = (char *)GlobalLock(hgData);
-			ULONG ulBufLen = GlobalSize(hgData);
-
-			if(ulBufLen > LENGTH_OF_TEXT_SNIPET)
-				ulBufLen = LENGTH_OF_TEXT_SNIPET;
-
-			if( ulBufLen > 0 )
-			{
-				char* buf = csText.GetBuffer(ulBufLen);
-				memcpy(buf, text, ulBufLen); // in most cases, last char == null
-				buf[ulBufLen-1] = '\0'; // just in case not null terminated
-				csText.ReleaseBuffer(); // scans for the null
-			}
-					
-			//Unlock the data
-			GlobalUnlock(hgData);
-
-			// Free the memory that GetGlobalData() allocated for us.
-            GlobalFree(hgData);
-
-			bRet = TRUE;
-		}
-	}
-	else
-	{
-		//If the text is not available then get the description
-		for(int i = 0; i < m_SupportedTypes.GetSize(); i++)
-		{
-			if(m_oleData.IsDataAvailable(m_SupportedTypes[i]))
-			{
-				csText = GetDescriptionString(m_SupportedTypes[i]);
-				bRet = TRUE;
-				break;
-			}
-		}
 	}
 
 	return bRet;
 }
 
-BOOL CProcessCopy::DoesCopyEntryExist()
+BOOL CClip::Delete( ARRAY& IDs )
 {
+int count = IDs.GetSize();
+
+	if(count <= 0)
+		return FALSE;
+
+BOOL bRet = TRUE;
+	// delete one at a time rather than all in one query
+	//	in order to avoid the "query too large" error for large deletes
+	for( int i=0; i < count && bRet; i++ )
+		bRet = bRet && Delete( IDs[i] );
+
+	return bRet;
+}
+
+BOOL CClip::DeleteAll()
+{
+BOOL bRet = FALSE;
 	try
 	{
-		//Look for any other entries that have the save size
-		CMainTable recset;
+		theApp.EnsureOpenDB();
+		theApp.m_pDatabase->Execute("DELETE * FROM Main", dbFailOnError);
+		theApp.m_pDatabase->Execute("DELETE * FROM Data", dbFailOnError);
+		bRet = TRUE;
+	}
+	catch(CDaoException* e)
+	{
+		AfxMessageBox(e->m_pErrorInfo->m_strDescription);
+		e->Delete();
+	}
 
-		recset.Open("SELECT * FROM Main WHERE lTotalCopySize = %d", m_lTotalCopySize);
-		
-		while(!recset.IsEOF())
+	return bRet;
+}
+
+// Allocates a Global containing the requested Clip Format Data
+HGLOBAL CClip::LoadFormat( long lID, UINT cfType )
+{
+HGLOBAL hGlobal = 0;
+	try
+	{
+		CDataTable recset;
+
+		//Open the data table for all that have the parent id and format
+		CString csSQL;
+		csSQL.Format("SELECT * FROM Data WHERE lParentID = %d AND strClipBoardFormat = \'%s\'", lID, GetFormatName(cfType));
+		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, csSQL);
+
+		if( !recset.IsBOF() && !recset.IsEOF() )
 		{
-			//if there is any then look if it is an exact match
-			if(IsExactMatch(recset.m_lID))
-				return recset.m_lID;
+			// create a new HGLOBAL duplicate
+			hGlobal = NewGlobalH( recset.m_ooData.m_hData, recset.m_ooData.m_dwDataLength );
+			// XOR take the recset's HGLOBAL... is this SAFE???
+//			hGlobal = recset.TakeData();
+			if( !hGlobal || ::GlobalSize(hGlobal) == 0 )
+			{
+				TRACE0( GetErrorString(::GetLastError()) );
+				//::_RPT0( _CRT_WARN, GetErrorString(::GetLastError()) );
+				ASSERT(FALSE);
+			}
+		}
 
+		recset.Close();
+	}
+	CATCHDAO
+
+	return hGlobal;
+}
+
+bool CClip::LoadFormats( long lID, CClipFormats& format )
+{
+CClipFormat cf;
+HGLOBAL hGlobal = 0;
+
+	format.RemoveAll();
+
+	try
+	{
+		CDataTable recset;
+
+		//Open the data table for all that have the parent id
+		CString csSQL;
+		csSQL.Format("SELECT * FROM Data WHERE lParentID = %d", lID);
+		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, csSQL);
+
+		while( !recset.IsEOF() )
+		{
+			// create a new HGLOBAL duplicate
+			hGlobal = NewGlobalH( recset.m_ooData.m_hData, recset.m_ooData.m_dwDataLength );
+			// XOR take the recset's HGLOBAL... is this SAFE???
+//			hGlobal = recset.TakeData();
+			if( !hGlobal || ::GlobalSize(hGlobal) == 0 )
+			{
+				TRACE0( GetErrorString(::GetLastError()) );
+				//::_RPT0( _CRT_WARN, GetErrorString(::GetLastError()) );
+				ASSERT(FALSE);
+			}
+			cf.m_cfType = GetFormatID( recset.m_strClipBoardFormat );
+			cf.m_hgData = hGlobal;
+			format.Add( cf );
 			recset.MoveNext();
 		}
 
 		recset.Close();
 	}
-	catch(CDaoException* e)
-	{
-		ASSERT(FALSE);
-		e->Delete();
-	}
+	CATCHDAO
 
-	return -1;
+	return format.GetCount() > 0;
 }
 
-BOOL CProcessCopy::IsExactMatch(long lParentID)
+void CClip::LoadTypes( long lID, CClipTypes& types )
 {
-	CDataTable recset;
-
-	//First check if they both have the same number of saved types
-	recset.Open("SELECT * FROM Data WHERE lParentID = %d", lParentID);
-	recset.MoveLast();
-	if(recset.GetRecordCount() != m_lSupportedTypesAvailable)
-		return FALSE;
-	recset.Close();
-	
-	//For each supported type
-	for(int i = 0; i < m_SupportedTypes.GetSize(); i++)
-	{
-		//That data is a available
-		if(m_oleData.IsDataAvailable(m_SupportedTypes[i]))
-		{
-			//look if there is a data with the same clipboard format name 'CF_TEXT' 'CF_DIB'
-			recset.Open("SELECT * FROM Data WHERE lParentID = %d AND strClipBoardFormat = \'%s\'", 
-							lParentID, GetFormatName(m_SupportedTypes[i]));
-
-			//Move last to get the total returned
-			recset.MoveLast();
-
-			long lRecordCount = recset.GetRecordCount();
-
-			//If it found one - it should only find one
-			if(lRecordCount == 1)
-			{
-				//Check the internal data of each if it is not a match then return FALSE
-				if(!recset.DataEqual(m_oleData.GetGlobalData(m_SupportedTypes[i])))
-					return FALSE;
-			}
-			else if(lRecordCount == 0)
-				return FALSE;
-			else if(lRecordCount > 1)
-			{
-				ASSERT(FALSE);
-				return FALSE;
-			}
-
-			recset.Close();
-		}
-	}
-
-	return TRUE;
-}
-
-CString CProcessCopy::GetDescriptionString(CLIPFORMAT cbType)
-{
-	switch(cbType)
-	{
-	case CF_TEXT:
-		return "CF_TEXT";
-	case CF_BITMAP:
-		return "CF_BITMAP";
-	case CF_METAFILEPICT:
-		return "CF_METAFILEPICT";
-	case CF_SYLK:
-		return "CF_SYLK";
-	case CF_DIF:
-		return "CF_DIF";
-	case CF_TIFF:
-		return "CF_TIFF";
-	case CF_OEMTEXT:
-		return "CF_OEMTEXT";
-	case CF_DIB:
-		return "CF_DIB";
-	case CF_PALETTE:
-		return "CF_PALETTE";
-	case CF_PENDATA:
-		return "CF_PENDATA";
-	case CF_RIFF:
-		return "CF_RIFF";
-	case CF_WAVE:
-		return "CF_WAVE";
-	case CF_UNICODETEXT:
-		return "CF_UNICODETEXT";
-	case CF_ENHMETAFILE:
-		return "CF_ENHMETAFILE";
-	case CF_HDROP:
-		return "CF_HDROP";
-	case CF_LOCALE:
-		return "CF_LOCALE";
-	case CF_OWNERDISPLAY:
-		return "CF_OWNERDISPLAY";
-	case CF_DSPTEXT:
-		return "CF_DSPTEXT";
-	case CF_DSPBITMAP:
-		return "CF_DSPBITMAP";
-	case CF_DSPMETAFILEPICT:
-		return "CF_DSPMETAFILEPICT";
-	case CF_DSPENHMETAFILE:
-		return "CF_DSPENHMETAFILE";
-	default:
-	{
-		//Not a default type get the name from the clipboard
-		if (cbType != 0)
-		{
-			TCHAR szFormat[256];
-            GetClipboardFormatName(cbType, szFormat, 256);
-			return szFormat;
-		}
-		break;
-	}
-	}
-
-	return "ERROR";
-}
-
-BOOL CProcessCopy::LoadSupportedTypes()
-{
-	m_SupportedTypes.RemoveAll();
-
+	types.RemoveAll();
 	try
 	{
-		CTypesTable recset;
-		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT * FROM Types" ,NULL);
-		if(recset.IsEOF())
+		CDataTable recset;
+
+		//Open the data table for all that have the parent id
+		CString csSQL;
+		csSQL.Format("SELECT * FROM Data WHERE lParentID = %d", lID );
+		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, csSQL);
+
+		while( !recset.IsEOF() )
 		{
-			m_SupportedTypes.Add(CF_TEXT);
-			m_SupportedTypes.Add(RegisterClipboardFormat(CF_RTF));
-		}
-		while(!recset.IsEOF())
-		{
-			m_SupportedTypes.Add(GetFormatID(recset.m_TypeText));
+			types.Add( GetFormatID( recset.m_strClipBoardFormat ) );
 			recset.MoveNext();
 		}
+
+		recset.Close();
 	}
-	catch(CDaoException* e)
+	CATCHDAO
+}
+
+
+
+/*----------------------------------------------------------------------------*\
+	CClipboardViewer
+\*----------------------------------------------------------------------------*/
+
+IMPLEMENT_DYNAMIC(CClipboardViewer, CWnd)
+
+BEGIN_MESSAGE_MAP(CClipboardViewer, CWnd)
+	//{{AFX_MSG_MAP(CClipboardViewer)
+	ON_WM_CREATE()
+	ON_WM_CHANGECBCHAIN()
+	ON_WM_DRAWCLIPBOARD()
+	ON_WM_TIMER()
+	//}}AFX_MSG_MAP
+	ON_MESSAGE(WM_RECONNECT_TO_COPY_CHAIN, OnReconnectToCopyChain)
+	ON_MESSAGE(WM_IS_TOP_VIEWER, OnGetIsTopViewer)
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// CClipboardViewer construction/destruction
+
+CClipboardViewer::CClipboardViewer( CCopyThread* pHandler )
+{
+	m_hNextClipboardViewer = 0;
+	m_bCalling_SetClipboardViewer = false;
+	m_lReconectCount = 0;
+	m_bIsConnected = false;
+	m_pHandler = pHandler;
+	ASSERT(m_pHandler);
+}
+
+CClipboardViewer::~CClipboardViewer()
+{
+	Disconnect();
+}
+
+void CClipboardViewer::Create()
+{
+CString strParentClass = AfxRegisterWndClass(0);
+	CWnd::CreateEx(0, strParentClass, "Ditto Clipboard Viewer", 0, -1, -1, 0, 0, 0, 0);
+}
+
+// connects as a clipboard viewer
+void CClipboardViewer::Connect()
+{
+	//Set up the clip board viewer
+	m_bCalling_SetClipboardViewer = true;
+	m_hNextClipboardViewer = CWnd::SetClipboardViewer();
+	m_bIsConnected = (GetClipboardViewer() == this);
+	m_bCalling_SetClipboardViewer = false;
+}
+
+// disconnects as a clipboard viewer
+void CClipboardViewer::Disconnect()
+{
+	if( m_hNextClipboardViewer )
 	{
-		ASSERT(FALSE);
-		e->Delete();
-		m_SupportedTypes.Add(CF_TEXT);
-		m_SupportedTypes.Add(RegisterClipboardFormat(CF_RTF));
+		if( ::IsWindow(m_hNextClipboardViewer) )
+			CWnd::ChangeClipboardChain( m_hNextClipboardViewer );
+		m_hNextClipboardViewer = NULL;
+		m_bIsConnected = false;
+	}
+}
+
+int CClipboardViewer::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CWnd::OnCreate(lpCreateStruct) == -1)
+		return -1;
+
+	SetTimer(TIMER_CHECK_TOP_LEVEL_VIEWER, ONE_MINUTE, 0);
+
+	//Set up the clip board viewer
+	Connect();
+
+	return 0;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// CClipboardViewer message handlers
+
+
+void CClipboardViewer::OnChangeCbChain(HWND hWndRemove, HWND hWndAfter) 
+{
+    // If the next window in the chain is being removed, reset our
+    // "next window" handle.
+	if(m_hNextClipboardViewer == hWndRemove)
+    {
+		m_hNextClipboardViewer = hWndAfter;
+    }
+	// If there is a next clipboard viewer, pass the message on to it.
+	else if (m_hNextClipboardViewer != NULL)
+    {
+		::SendMessage ( m_hNextClipboardViewer, WM_CHANGECBCHAIN, 
+						(WPARAM) hWndRemove, (LPARAM) hWndAfter );
+    }
+}
+
+//Message that the clipboard data has changed
+void CClipboardViewer::OnDrawClipboard() 
+{
+	// don't process the event when we first attach
+	if( m_pHandler && !m_bCalling_SetClipboardViewer )
+		m_pHandler->OnClipboardChange();
+
+	// pass the event to the next Clipboard viewer in the chain
+	if( m_hNextClipboardViewer != NULL )
+		::SendMessage(m_hNextClipboardViewer, WM_DRAWCLIPBOARD, 0, 0);	
+}
+
+void CClipboardViewer::OnTimer(UINT nIDEvent) 
+{
+	switch(nIDEvent)
+	{
+	case TIMER_CHECK_TOP_LEVEL_VIEWER:
+		{
+			m_bIsConnected = GetClipboardViewer() == this;
+			if( !m_bIsConnected )
+			{
+				OnReconnectToCopyChain(0, 0);
+				m_lReconectCount++;
+
+				if(m_lReconectCount > 10)
+					KillTimer(TIMER_CHECK_TOP_LEVEL_VIEWER);
+			}
+			break;
+		}
 	}
 
-	theApp.m_bReloadTypes = false;
+	CWnd::OnTimer(nIDEvent);
+}
 
+LRESULT CClipboardViewer::OnReconnectToCopyChain(WPARAM wParam, LPARAM lParam)
+{
+	if( GetClipboardViewer() != this )
+	{
+		Disconnect();
+		Connect();
+		return TRUE;
+	}
+	return FALSE;
+}
+
+LRESULT CClipboardViewer::OnGetIsTopViewer(WPARAM wParam, LPARAM lParam)
+{
+	return (GetClipboardViewer() == this);
+}
+
+/*----------------------------------------------------------------------------*\
+	CCopyConfig
+\*----------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------*\
+	CCopyThread
+\*----------------------------------------------------------------------------*/
+
+IMPLEMENT_DYNCREATE(CCopyThread, CWinThread)
+
+CCopyThread::CCopyThread()
+{
+	m_bQuit = false;
+	m_bAutoDelete = false;
+
+	m_bConfigChanged = false;
+	m_pClips = new CClipList;
+	m_pClipboardViewer = new CClipboardViewer(this);
+	::InitializeCriticalSection(&m_CS);
+}
+
+CCopyThread::~CCopyThread()
+{
+	m_LocalConfig.DeleteTypes();
+	m_SharedConfig.DeleteTypes();
+	DELETE_PTR( m_pClipboardViewer );
+	if( m_pClips )
+		ASSERT( m_pClips->GetCount() == 0 );
+	DELETE_PTR( m_pClips );
+	::DeleteCriticalSection(&m_CS);
+}
+
+// perform and per-thread initialization here
+BOOL CCopyThread::InitInstance()
+{
+	ASSERT( ::GetCurrentThreadId() == m_nThreadID );
+	SetThreadName(m_nThreadID, "COPY");
+	// the window is created within this thread and therefore uses its message queue
+	m_pClipboardViewer->Create();
 	return TRUE;
+}
+
+// perform any per-thread cleanup here
+int CCopyThread::ExitInstance()
+{
+	ASSERT( m_bQuit );  // make sure we intended to quit
+	m_pClipboardViewer->Disconnect();
+	return CWinThread::ExitInstance();
+}
+
+// Called within Copy Thread:
+void CCopyThread::OnClipboardChange()
+{
+	SyncConfig(); // synchronize with the main thread's copy configuration
+
+	// if we are told not to copy on change, then we have nothing to do.
+	if( !m_LocalConfig.m_bCopyOnChange )
+		return;
+
+	CClip* pClip = new CClip;
+	bool bResult = pClip->LoadFromClipboard( m_LocalConfig.m_pSupportedTypes );
+
+	if( !bResult )
+	{
+		delete pClip;
+		return; // error
+	}
+
+	AddToClips(	pClip );
+
+	if( m_LocalConfig.m_bAsyncCopy )
+		::PostMessage(m_LocalConfig.m_hClipHandler, WM_CLIPBOARD_COPIED, (WPARAM)pClip, 0);
+	else
+		::SendMessage(m_LocalConfig.m_hClipHandler, WM_CLIPBOARD_COPIED, (WPARAM)pClip, 0);
+
+}
+
+void CCopyThread::SyncConfig()
+{
+	// atomic read
+	if( m_bConfigChanged )
+	{
+	CClipTypes* pTypes = NULL;
+		Hold();
+
+			pTypes = m_LocalConfig.m_pSupportedTypes;
+
+			m_LocalConfig = m_SharedConfig;
+
+			// NULL means that it shouldn't have been sync'ed
+			if( m_SharedConfig.m_pSupportedTypes == NULL )
+			{	// let m_LocalConfig keep its types
+				m_LocalConfig.m_pSupportedTypes = pTypes; // undo sync
+				pTypes = NULL; // nothing to delete
+			}
+			else
+				m_SharedConfig.m_pSupportedTypes = NULL; // now owned by LocalConfig
+
+		Release();
+		// delete old types
+		if( pTypes )
+			delete pTypes;
+	}
+}
+
+void CCopyThread::AddToClips( CClip* pClip )
+{
+	Hold();
+		if( !m_pClips )
+			m_pClips = new CClipList;
+		m_pClips->AddTail( pClip ); // m_pClips now owns pClip
+	Release();
+}
+
+// Shared (use thread-safe access functions below)
+// Called within Main thread:
+CClipList* CCopyThread::GetClips()
+{
+CClipList* pRet;
+CClipList* pClips = new CClipList;
+	Hold();
+		pRet = m_pClips;
+		m_pClips = pClips;
+	Release();
+	return pRet;
+}
+void CCopyThread::SetSupportedTypes( CClipTypes* pTypes )
+{
+CClipTypes* pTemp;
+	Hold();
+		pTemp = m_SharedConfig.m_pSupportedTypes;
+		m_SharedConfig.m_pSupportedTypes = pTypes;
+		m_bConfigChanged = true;
+	Release();
+    if( pTemp )
+		delete pTemp;
+}
+HWND CCopyThread::SetClipHandler( HWND hWnd )
+{
+HWND hRet;
+	Hold();
+		hRet = m_SharedConfig.m_hClipHandler;
+		m_SharedConfig.m_hClipHandler = hWnd;
+		m_bConfigChanged = (hRet != hWnd);
+	Release();
+	return hRet;
+}
+HWND CCopyThread::GetClipHandler()
+{
+HWND hRet;
+	Hold();
+		hRet = m_SharedConfig.m_hClipHandler;
+	Release();
+	return hRet;
+}
+bool CCopyThread::SetCopyOnChange( bool bVal )
+{
+bool bRet;
+	Hold();
+		bRet = m_SharedConfig.m_bCopyOnChange;
+		m_SharedConfig.m_bCopyOnChange = bVal;
+		m_bConfigChanged = (bRet != bVal);
+	Release();
+	return bRet;
+}
+bool CCopyThread::GetCopyOnChange()
+{
+bool bRet;
+	Hold();
+		bRet = m_SharedConfig.m_bCopyOnChange;
+	Release();
+	return bRet;
+}
+bool CCopyThread::SetAsyncCopy( bool bVal )
+{
+bool bRet;
+	Hold();
+		bRet = m_SharedConfig.m_bAsyncCopy;
+		m_SharedConfig.m_bAsyncCopy = bVal;
+		m_bConfigChanged = (bRet != bVal);
+	Release();
+	return bRet;
+}
+bool CCopyThread::GetAsyncCopy()
+{
+bool bRet;
+	Hold();
+		bRet = m_SharedConfig.m_bAsyncCopy;
+	Release();
+	return bRet;
+}
+
+void CCopyThread::Init( CCopyConfig cfg )
+{
+	ASSERT( m_LocalConfig.m_pSupportedTypes == NULL );
+	m_LocalConfig = m_SharedConfig = cfg;
+	// let m_LocalConfig own the m_pSupportedTypes
+	m_SharedConfig.m_pSupportedTypes = NULL;
+}
+
+bool CCopyThread::Quit()
+{
+	m_bQuit = true;
+	m_pClipboardViewer->PostMessage( WM_QUIT );
+	return CWinThread::PostThreadMessage( WM_QUIT, NULL, NULL ) != FALSE;
+}
+
+
+BEGIN_MESSAGE_MAP(CCopyThread, CWinThread)
+END_MESSAGE_MAP()
+
+// CCopyThread message handlers
+
+
+
+/*----------------------------------------------------------------------------*\
+	CProcessCopy
+\*----------------------------------------------------------------------------*/
+
+CProcessCopy::CProcessCopy()
+{
+}
+
+CProcessCopy::~CProcessCopy()
+{
 }

@@ -31,12 +31,19 @@ public:
 	virtual void Open(int nOpenType = AFX_DAO_USE_DEFAULT_TYPE, LPCTSTR lpszSql = NULL, int nOptions = 0);
 	//}}AFX_VIRTUAL
 public:
-	BOOL SetData(HGLOBAL hgData);
+	// caller owns the returned HGLOBAL
+	// takes m_ooData's HGLOBAL (do NOT update recset after calling this)
+	HGLOBAL TakeData();
+	// this takes ownership of hgData, freeing m_ooData if necessary
+	BOOL ReplaceData( HGLOBAL hgData, UINT len );
+
+	// copies hgData into m_ooData using ::GlobalSize(hgData) for the size
+	BOOL SetData(HGLOBAL hgData); 
+	HGLOBAL LoadData(); // allocates a new copy of the data
+
 	BOOL DeleteAll();
-	BOOL LoadData(COleDataSource *pSource, UINT uiPastType);
 	void Open(LPCTSTR lpszFormat,...);
 	BOOL DataEqual(HGLOBAL hgData);
-
 
 // Implementation
 #ifdef _DEBUG

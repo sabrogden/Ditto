@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by CP_Main.rc
 //
 #define IDD_ABOUTBOX                    100
@@ -48,7 +48,12 @@
 #define IDC_SET_DB_PATH                 1034
 #define IDC_SHOW_TEXT_FOR_FIRST_TEN_HOT_KEYS 1034
 #define IDC_USE_DEFAULT                 1035
+#define IDC_CTRL_CLICK2                 1035
 #define IDC_HYPER_LINK                  1036
+#define IDC_ALLOW_DUPLICATES            1037
+#define IDC_UPDATE_TIME_ON_PASTE        1038
+#define IDC_CHECK3                      1039
+#define IDC_SAVE_MULTIPASTE             1039
 #define IDD_OPTIONS_KEYSTROKES          2001
 #define IDC_HOTKEY                      2002
 #define IDC_DISPLAY_IN_SYSTEMTRAY       2003
@@ -105,7 +110,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        138
 #define _APS_NEXT_COMMAND_VALUE         32780
-#define _APS_NEXT_CONTROL_VALUE         1037
+#define _APS_NEXT_CONTROL_VALUE         1040
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

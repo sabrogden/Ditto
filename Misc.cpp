@@ -7,25 +7,131 @@
 	#include "AlphaBlend.h"
 #endif
 
-
-long DoOptions(CWnd *pParent)
+CString StrF(const char * pszFormat, ...)
 {
-	//Don't let it open up more than once
-	if(theApp.m_bShowingOptions)
-		return FALSE;
-
-	theApp.m_bShowingOptions = true;
-	
-	COptionsSheet Sheet("Copy Pro Options", pParent);
-
-	int nRet = Sheet.DoModal();
-
-	theApp.m_bShowingOptions = false;
-
-	return nRet;
+	ASSERT( AtlIsValidString( pszFormat ) );
+CString str;
+	va_list argList;
+	va_start( argList, pszFormat );
+	str.FormatV( pszFormat, argList );
+	va_end( argList );
+	return str;
 }
 
-HWND GetActiveWnd(CPoint *pPointCaret)
+void AppendToFile( const char* fn, const char* msg )
+{
+FILE *file = fopen(fn, "a");
+   ASSERT( file );
+   fprintf(file, msg);
+   fclose(file);
+}
+
+void Log( const char* msg )
+{
+	ASSERT( AfxIsValidString(msg) );
+CTime	time = CTime::GetCurrentTime();
+CString	csText = time.Format("[%Y/%m/%d %I:%M:%S %p]  ");
+//CString	csTemp;
+//	csTemp.Format( "%04x  ", AfxGetInstanceHandle() );
+	csText += msg;
+	csText += "\n";
+	AppendToFile( "Ditto.log", csText ); //(LPCTSTR)
+}
+
+CString GetErrorString( int err )
+{
+CString str;
+LPVOID lpMsgBuf;
+
+	::FormatMessage( 
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+		NULL,
+		err,
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+		(LPTSTR) &lpMsgBuf,
+		0,
+		NULL 
+		);
+	str = (LPCTSTR) lpMsgBuf;
+	// Display the string.
+	//  ::MessageBox( NULL, lpMsgBuf, "GetLastError", MB_OK|MB_ICONINFORMATION );
+	::LocalFree( lpMsgBuf );
+	return str;
+
+}
+
+void SetThreadName(DWORD dwThreadID, LPCTSTR szThreadName)
+{
+    THREADNAME_INFO info;
+    info.dwType = 0x1000;
+    info.szName = szThreadName;
+    info.dwThreadID = dwThreadID;
+    info.dwFlags = 0;
+
+    __try
+    {
+        RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(DWORD), (DWORD *)&info);
+    }
+    __except (EXCEPTION_CONTINUE_EXECUTION)
+    {
+    }
+} 
+
+CString GetWndText( HWND hWnd )
+{
+CString text;
+	if( !IsWindow(hWnd) )
+		return "! NOT A VALID WINDOW !";
+CWnd* pWnd = CWnd::FromHandle(hWnd);
+	pWnd->GetWindowText(text);
+	return text;
+}
+
+bool IsAppWnd( HWND hWnd )
+{
+DWORD dwMyPID = ::GetCurrentProcessId();
+DWORD dwTestPID;
+	::GetWindowThreadProcessId( hWnd, &dwTestPID );
+	return dwMyPID == dwTestPID;
+}
+
+/* !!!!!
+HWND GetFocusWnd( CPoint *pPointCaret )
+{
+HWND hFocusWnd = 0;
+CPoint pt;
+
+	if( pPointCaret )
+		*pPointCaret = CPoint(-1, -1);
+
+	HWND hForeWnd = ::GetForegroundWindow();
+
+	if( !::IsWindow(hForeWnd) )
+		return 0;
+
+	DWORD dwMyThread = ::GetCurrentThreadId();
+	DWORD dwTargetPID;
+	DWORD dwTargetThread = ::GetWindowThreadProcessId( hForeWnd, &dwTargetPID );
+
+	// get the focus window's caret position
+	// attach to new focus window
+	if( ::AttachThreadInput(dwMyThread,dwTargetThread,TRUE) )
+	{
+		hFocusWnd = ::GetFocus();
+		::GetCaretPos( &pt );
+		::ClientToScreen( hFocusWnd, &pt );
+		// detach
+		::AttachThreadInput(dwMyThread,dwTargetThread,FALSE);
+	}
+
+	if( pPointCaret )
+		*pPointCaret = pt;
+
+	return hFocusWnd;
+}
+*/
+
+HWND GetFocusWnd(CPoint *pPointCaret)
 {
 	HWND hWndFocus = NULL;
 	if (pPointCaret)
@@ -64,6 +170,93 @@ HWND GetActiveWnd(CPoint *pPointCaret)
 	}
 
 	return hWndFocus;
+}
+
+
+/*----------------------------------------------------------------------------*\
+	Global Memory Helper Functions
+\*----------------------------------------------------------------------------*/
+
+// asserts if hDest isn't big enough
+void CopyToGlobalHP( HGLOBAL hDest, LPVOID pBuf, ULONG ulBufLen )
+{
+	ASSERT( hDest && pBuf && ulBufLen );
+LPVOID pvData = GlobalLock(hDest);
+	ASSERT( pvData );
+ULONG size = GlobalSize(hDest);
+	ASSERT( size >= ulBufLen );	// assert if hDest isn't big enough
+	memcpy(pvData, pBuf, ulBufLen);
+	GlobalUnlock(hDest);
+}
+
+void CopyToGlobalHH( HGLOBAL hDest, HGLOBAL hSource, ULONG ulBufLen )
+{
+	ASSERT( hDest && hSource && ulBufLen );
+LPVOID pvData = GlobalLock(hSource);
+	ASSERT( pvData );
+ULONG size = GlobalSize(hSource);
+	ASSERT( size >= ulBufLen );	// assert if hSource isn't big enough
+	CopyToGlobalHP(hDest, pvData, ulBufLen);
+	GlobalUnlock(hSource);
+}
+
+
+HGLOBAL NewGlobalP( LPVOID pBuf, UINT nLen )
+{
+	ASSERT( pBuf && nLen );
+HGLOBAL hDest = GlobalAlloc( GMEM_MOVEABLE | GMEM_SHARE, nLen );
+	ASSERT( hDest );
+	CopyToGlobalHP( hDest, pBuf, nLen );
+	return hDest;
+}
+
+HGLOBAL NewGlobalH( HGLOBAL hSource, UINT nLen )
+{
+	ASSERT( hSource && nLen );
+LPVOID pvData = GlobalLock( hSource );
+HGLOBAL hDest = NewGlobalP( pvData, nLen );
+	GlobalUnlock( hSource );
+	return hDest;
+}
+
+int CompareGlobalHP( HGLOBAL hLeft, LPVOID pBuf, ULONG ulBufLen )
+{
+	ASSERT( hLeft && pBuf && ulBufLen );
+LPVOID pvData = GlobalLock( hLeft );
+	ASSERT( pvData );
+	ASSERT( ulBufLen <= GlobalSize(hLeft) );
+int result = memcmp(pvData, pBuf, ulBufLen);
+	GlobalUnlock( hLeft );
+	return result;
+}
+
+int CompareGlobalHH( HGLOBAL hLeft, HGLOBAL hRight, ULONG ulBufLen )
+{
+	ASSERT( hLeft && hRight && ulBufLen );
+	ASSERT( ulBufLen <= GlobalSize(hRight) );
+LPVOID pvData = GlobalLock(hRight);
+	ASSERT( pvData );
+int result = CompareGlobalHP( hLeft, pvData, ulBufLen );
+	GlobalUnlock( hLeft );
+	return result;
+}
+
+
+long DoOptions(CWnd *pParent)
+{
+	//Don't let it open up more than once
+	if(theApp.m_bShowingOptions)
+		return FALSE;
+
+	theApp.m_bShowingOptions = true;
+	
+	COptionsSheet Sheet("Copy Pro Options", pParent);
+
+	int nRet = Sheet.DoModal();
+
+	theApp.m_bShowingOptions = false;
+
+	return nRet;
 }
 
 
@@ -163,7 +356,6 @@ CString GetFormatName(CLIPFORMAT cbType)
 	case CF_DSPENHMETAFILE:
 		return "CF_DSPENHMETAFILE";
 	default:
-	{
 		//Not a default type get the name from the clipboard
 		if (cbType != 0)
 		{
@@ -172,7 +364,6 @@ CString GetFormatName(CLIPFORMAT cbType)
 			return szFormat;
 		}
 		break;
-	}
 	}
 
 	return "ERROR";
@@ -190,9 +381,26 @@ CString GetFilePath(CString csFileName)
 	return csFileName;
 }
 
+
+/*------------------------------------------------------------------*\
+	CGetSetOptions
+\*------------------------------------------------------------------*/
+
+BOOL CGetSetOptions::m_bUseCtrlNumAccel;
+BOOL CGetSetOptions::m_bAllowDuplicates;
+BOOL CGetSetOptions::m_bUpdateTimeOnPaste;
+BOOL CGetSetOptions::m_bSaveMultiPaste;
+BOOL CGetSetOptions::m_bShowPersistent;
+
+CGetSetOptions g_Opt;
+
 CGetSetOptions::CGetSetOptions()
 {
-
+	m_bUseCtrlNumAccel = GetUseCtrlNumForFirstTenHotKeys();
+	m_bAllowDuplicates = GetAllowDuplicates();
+	m_bUpdateTimeOnPaste = GetUpdateTimeOnPaste();
+	m_bSaveMultiPaste = GetSaveMultiPaste();
+	m_bShowPersistent = GetShowPersistent();
 }
 
 CGetSetOptions::~CGetSetOptions()
@@ -288,27 +496,6 @@ BOOL CGetSetOptions::GetShowIconInSysTray()
 BOOL CGetSetOptions::SetShowIconInSysTray(BOOL bShow) 
 {
 	return SetProfileLong("ShowIconInSystemTray", bShow);
-}
-
-DWORD CGetSetOptions::GetHotKey() 
-{
-	//704 is ctrl-tilda
-	return (DWORD)GetProfileLong("HotKey", 704);
-}
-
-BOOL CGetSetOptions::SetHotKey(DWORD dwHotKey) 
-{
-	return SetProfileLong("HotKey", dwHotKey);
-}
-
-DWORD CGetSetOptions::GetNamedCopyHotKey() 
-{
-	return (DWORD)GetProfileLong("NamedCopyHotKey", 0);
-}
-
-BOOL CGetSetOptions::SetNamedCopyHotKey(long lHotKey) 
-{
-	return SetProfileLong("NamedCopyHotKey", lHotKey);
 }
 
 BOOL CGetSetOptions::SetEnableTransparency(BOOL bCheck)
@@ -423,25 +610,6 @@ long CGetSetOptions::GetQuickPastePosition()
 	return GetProfileLong("ShowQuickPastePosition", POS_AT_PREVIOUS);
 }
 
-BOOL CGetSetOptions::RegisterHotKey(HWND hWnd, DWORD wHotKey, ATOM atomID)
-{
-	if(wHotKey == 0)
-		return FALSE;
-
-	return ::RegisterHotKey(hWnd, atomID, GetModifier(wHotKey), LOBYTE(wHotKey));
-}
-
-UINT CGetSetOptions::GetModifier(DWORD wHotKey)
-{
-	UINT uMod = 0;
-	if( HIBYTE(wHotKey) & HOTKEYF_SHIFT )   uMod |= MOD_SHIFT;
-	if( HIBYTE(wHotKey) & HOTKEYF_CONTROL ) uMod |= MOD_CONTROL;
-	if( HIBYTE(wHotKey) & HOTKEYF_ALT )     uMod |= MOD_ALT;
-	if( HIBYTE(wHotKey) & HOTKEYF_EXT )     uMod |= MOD_WIN;
-
-	return uMod;
-}
-
 BOOL CGetSetOptions::SetQuickPasteSize(CSize size)
 {
 	BOOL bRet = SetProfileLong("QuickPasteCX", size.cx);
@@ -537,8 +705,9 @@ long CGetSetOptions::GetExpiredEntries()
 
 void CGetSetOptions::SetTripCopyCount(long lVal)
 {
-	if(lVal == -1)
-		lVal = GetTripCopyCount() + 1;
+	// negative means a relative offset
+	if(lVal < 0)
+		lVal = GetTripCopyCount() - lVal; // add the absolute value
 
 	if(GetTripDate() == 0)
 		SetTripDate(-1);
@@ -553,8 +722,9 @@ long CGetSetOptions::GetTripCopyCount()
 
 void CGetSetOptions::SetTripPasteCount(long lVal)
 {
-	if(lVal == -1)
-		lVal = GetTripPasteCount() + 1;
+	// negative means a relative offset
+	if(lVal < 0)
+		lVal = GetTripPasteCount() - lVal; // add the absolute value
 
 	if(GetTripDate() == 0)
 		SetTripDate(-1);
@@ -582,8 +752,9 @@ long CGetSetOptions::GetTripDate()
 
 void CGetSetOptions::SetTotalCopyCount(long lVal)
 {
-	if(lVal == -1)
-		lVal = GetTotalCopyCount() + 1;
+	// negative means a relative offset
+	if(lVal < 0)
+		lVal = GetTotalCopyCount() - lVal; // add the absolute value
 
 	if(GetTotalDate() == 0)
 		SetTotalDate(-1);
@@ -598,8 +769,9 @@ long CGetSetOptions::GetTotalCopyCount()
 
 void CGetSetOptions::SetTotalPasteCount(long lVal)
 {
-	if(lVal == -1)
-		lVal = GetTotalPasteCount() + 1;
+	// negative means a relative offset
+	if(lVal < 0)
+		lVal = GetTotalPasteCount() - lVal; // add the absolute value
 
 	if(GetTotalDate() == 0)
 		SetTotalDate(-1);
@@ -634,3 +806,295 @@ BOOL CGetSetOptions::GetCompactAndRepairOnExit()
 {
 	return GetProfileLong("CompactAndRepairOnExit", 0);
 }
+
+// the implementations for the following functions were moved out-of-line.
+// when they were declared inline, the compiler failed to notice when
+//  these functions were changed (the linker used an old compiled version)
+//  (maybe because they are also static?)
+CString	CGetSetOptions::GetUpdateFilePath()			{ return GetProfileString("UpdateFilePath", "");	}
+BOOL CGetSetOptions::SetUpdateFilePath(CString cs)	{ return SetProfileString("UpdateFilePath", cs);	}
+
+CString	CGetSetOptions::GetUpdateInstallPath()			{ return GetProfileString("UpdateInstallPath", "");	}
+BOOL CGetSetOptions::SetUpdateInstallPath(CString cs)	{ return SetProfileString("UpdateInstallPath", cs);	}
+
+long CGetSetOptions::GetLastUpdate()			{ return GetProfileLong("LastUpdateDay", 0);		}
+long CGetSetOptions::SetLastUpdate(long lValue)	{ return SetProfileLong("LastUpdateDay", lValue);	}
+
+BOOL CGetSetOptions::GetCheckForUpdates()				{ return GetProfileLong("CheckForUpdates", TRUE);	}
+BOOL CGetSetOptions::SetCheckForUpdates(BOOL bCheck)	{ return SetProfileLong("CheckForUpdates", bCheck);	}
+
+void CGetSetOptions::SetUseCtrlNumForFirstTenHotKeys(BOOL bVal)	{	SetProfileLong("UseCtrlNumForFirstTenHotKeys", bVal);	m_bUseCtrlNumAccel = bVal;	}
+BOOL CGetSetOptions::GetUseCtrlNumForFirstTenHotKeys()			{	return GetProfileLong("UseCtrlNumForFirstTenHotKeys", 0); }
+
+void CGetSetOptions::SetAllowDuplicates(BOOL bVal)	{	SetProfileLong("AllowDuplicates", bVal); m_bAllowDuplicates = bVal; }
+BOOL CGetSetOptions::GetAllowDuplicates()			{	return GetProfileLong("AllowDuplicates", 0); }
+
+void CGetSetOptions::SetUpdateTimeOnPaste(BOOL bVal)	{	SetProfileLong("UpdateTimeOnPaste", bVal); m_bUpdateTimeOnPaste = bVal; }
+BOOL CGetSetOptions::GetUpdateTimeOnPaste()			{	return GetProfileLong("UpdateTimeOnPaste", 0); }
+
+void CGetSetOptions::SetSaveMultiPaste(BOOL bVal)	{	SetProfileLong("SaveMultiPaste", bVal); m_bSaveMultiPaste = bVal; }
+BOOL CGetSetOptions::GetSaveMultiPaste()			{	return GetProfileLong("SaveMultiPaste", 0); }
+
+void CGetSetOptions::SetShowPersistent(BOOL bVal)	{	SetProfileLong("ShowPersistent", bVal); m_bShowPersistent = bVal; }
+BOOL CGetSetOptions::GetShowPersistent()			{	return GetProfileLong("ShowPersistent", 0); }
+
+void CGetSetOptions::SetShowTextForFirstTenHotKeys(BOOL bVal)	{	SetProfileLong("ShowTextForFirstTenHotKeys", bVal);			}
+BOOL CGetSetOptions::GetShowTextForFirstTenHotKeys()			{	return GetProfileLong("ShowTextForFirstTenHotKeys", TRUE);	}
+
+void CGetSetOptions::SetMainHWND(long lhWnd)	{	SetProfileLong("MainhWnd", lhWnd);		}
+BOOL CGetSetOptions::GetMainHWND()				{	return GetProfileLong("MainhWnd", 0);	}
+
+
+
+/*------------------------------------------------------------------*\
+	CHotKey - a single system-wide hotkey
+\*------------------------------------------------------------------*/
+
+CHotKey::CHotKey( CString name, DWORD defKey ) : m_Name(name), m_bIsRegistered(false)
+{
+	m_Atom = ::GlobalAddAtom( m_Name );
+	ASSERT( m_Atom );
+	m_Key = (DWORD) g_Opt.GetProfileLong( m_Name, (long) defKey );
+	g_HotKeys.Add( this );
+}
+CHotKey::~CHotKey()
+{
+	Unregister();
+}
+
+void CHotKey::SetKey( DWORD key, bool bSave )
+{
+	if( m_Key == key )
+		return;
+	if( m_bIsRegistered )
+		Unregister();
+	m_Key = key;
+	if( bSave )
+		SaveKey();
+}
+
+void CHotKey::LoadKey()
+{
+	SetKey( (DWORD) g_Opt.GetProfileLong( m_Name, 0 ) );
+}
+
+bool CHotKey::SaveKey()
+{
+	return g_Opt.SetProfileLong( m_Name, (long) m_Key ) != FALSE;
+}
+
+//	CString GetKeyAsText();
+//	void SetKeyFromText( CString text );
+
+BOOL CHotKey::ValidateHotKey(DWORD dwHotKey)
+{
+	ATOM id = ::GlobalAddAtom("HK_VALIDATE");
+	BOOL bResult = ::RegisterHotKey( g_HotKeys.m_hWnd,
+									 id,
+									 GetModifier(dwHotKey),
+									 LOBYTE(dwHotKey) );
+	
+	if(bResult)
+		::UnregisterHotKey(g_HotKeys.m_hWnd, id);
+
+	::GlobalDeleteAtom(id);
+
+	return bResult;
+}
+
+UINT CHotKey::GetModifier(DWORD dwHotKey)
+{
+	UINT uMod = 0;
+	if( HIBYTE(dwHotKey) & HOTKEYF_SHIFT )   uMod |= MOD_SHIFT;
+	if( HIBYTE(dwHotKey) & HOTKEYF_CONTROL ) uMod |= MOD_CONTROL;
+	if( HIBYTE(dwHotKey) & HOTKEYF_ALT )     uMod |= MOD_ALT;
+	if( HIBYTE(dwHotKey) & HOTKEYF_EXT )     uMod |= MOD_WIN;
+
+	return uMod;
+}
+
+bool CHotKey::Register()
+{
+	if( m_Key )
+	{
+		ASSERT( g_HotKeys.m_hWnd );
+		m_bIsRegistered = ::RegisterHotKey(	g_HotKeys.m_hWnd,
+											m_Atom,
+											GetModifier(),
+											LOBYTE(m_Key) ) == TRUE;
+	}
+	return m_bIsRegistered;
+}
+bool CHotKey::Unregister()
+{
+	if( !m_bIsRegistered )
+		return true;
+
+	ASSERT(g_HotKeys.m_hWnd);
+	if( ::UnregisterHotKey( g_HotKeys.m_hWnd, m_Atom ) )
+	{
+		m_bIsRegistered = false;
+		return true;
+	}
+	else
+	{
+		LOG(FUNC "FAILED!");
+		ASSERT(0);
+	}
+	return false;
+}
+
+
+/*------------------------------------------------------------------*\
+	CHotKeys - Manages system-wide hotkeys
+\*------------------------------------------------------------------*/
+
+CHotKeys g_HotKeys;
+
+CHotKeys::CHotKeys() : m_hWnd(NULL) {}
+CHotKeys::~CHotKeys()
+{
+CHotKey* pHotKey;
+int count = GetCount();
+	for( int i=0; i < count; i++ )
+	{
+		pHotKey = GetAt(i);
+		if( pHotKey )
+			delete pHotKey;
+	}
+}
+
+int CHotKeys::Find( CHotKey* pHotKey )
+{
+int count = GetCount();
+	for( int i=0; i < count; i++ )
+	{
+		if( pHotKey == GetAt(i) )
+			return i;
+	}
+	return -1;
+}
+
+bool CHotKeys::Remove( CHotKey* pHotKey )
+{
+int i = Find(pHotKey);
+	if( i >= 0 )
+	{
+		RemoveAt(i);
+		return true;
+	}
+	return false;
+}
+
+void CHotKeys::LoadAllKeys()
+{
+int count = GetCount();
+	for( int i=0; i < count; i++ )
+		GetAt(i)->LoadKey();
+}
+
+void CHotKeys::SaveAllKeys()
+{
+int count = GetCount();
+	for( int i=0; i < count; i++ )
+		GetAt(i)->SaveKey();
+}
+
+void CHotKeys::RegisterAll( bool bMsgOnError )
+{
+CString str;
+CHotKey* pHotKey;
+int count = GetCount();
+	for( int i=0; i < count; i++ )
+	{
+		pHotKey = GetAt(i);
+		if( !pHotKey->Register() )
+		{
+			str =  "Error Registering ";
+			str += pHotKey->GetName();
+			LOG( str );
+			if( bMsgOnError )
+				AfxMessageBox(str);
+		}
+	}
+}
+
+void CHotKeys::UnregisterAll( bool bMsgOnError )
+{
+CString str;
+CHotKey* pHotKey;
+int count = GetCount();
+	for( int i=0; i < count; i++ )
+	{
+		pHotKey = GetAt(i);
+		if( !pHotKey->Unregister() )
+		{
+			str =  "Error Unregistering ";
+			str += pHotKey->GetName();
+			LOG( str );
+			if( bMsgOnError )
+				AfxMessageBox(str);
+		}
+	}
+}
+
+void CHotKeys::GetKeys( ARRAY& keys )
+{
+int count = GetCount();
+	keys.SetSize( count );
+	for( int i=0; i < count; i++ )
+		keys[i] = GetAt(i)->GetKey();
+}
+
+// caution! this alters hotkeys based upon corresponding indexes
+void CHotKeys::SetKeys( ARRAY& keys, bool bSave )
+{
+int count = GetCount();
+	ASSERT( count == keys.GetCount() );
+	for( int i=0; i < count; i++ )
+		GetAt(i)->SetKey( keys[i], bSave );
+}
+
+bool CHotKeys::FindFirstConflict( ARRAY& keys, int* pX, int* pY )
+{
+bool bConflict = false;
+int i, j;
+int count = keys.GetCount();
+DWORD key;
+	for( i=0; i < count && !bConflict; i++ )
+	{
+		key = keys.GetAt(i);
+		// only check valid keys
+		if( key == 0 )
+			continue;
+		// scan the array for a duplicate
+		for( j=i+1; j < count; j++ )
+		{
+			if( keys.GetAt(j) == key )
+			{
+				bConflict = true;
+				break;
+			}
+		}
+	}
+
+	if( bConflict )
+	{
+		if( pX )
+			*pX = i;
+		if( pY )
+			*pY = j;
+	}
+
+	return bConflict;
+}
+
+// if true, pX and pY (if valid) are set to the indexes of the conflicting hotkeys.
+bool CHotKeys::FindFirstConflict( int* pX, int* pY )
+{
+ARRAY keys;
+	GetKeys( keys );
+	return FindFirstConflict( keys, pX, pY );
+}
+
+

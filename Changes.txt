@@ -1,5 +1,93 @@
-8-18-03
--------
+03 Sept 2
+---------
+* ProcessCopy - redesigned to fix the fast copy bugs.
+  . The same source object is used for the description as is stored in the db.
+  . Actual copying from the clipboard is (usually) not interrupted.
+  + CClip - For managing a Clip (copy of the clipboard) as a single unit.
+  + CCopyThread - handles copying the clipboard when the clipboard changes and
+      safely communicating with the Main thread.
+  + CClipboardViewer - the Clipboard Viewer window (code factored out from
+      MainWnd)
+  + uses AllowDuplicates (non-sequential duplicates) flag
+
+* ProcessPaste - redesigned for delayed rendering during drag and drop and
+  immediate rendering otherwise.
+  + uses UpdateTimeOnPaste flag
+  + uses SaveMultiPaste flag
+    
+* CCP_MainApp Copy and Paste Management
+  + bool EnableCbCopy(bool bState); // copy clipboad when it changes
+  + long SaveAllClips();  // saves all clips copied by CCopyThread
+  + void ReloadTypes();   // reloads the Types Table on demand
+  + void Delayed_RemoveOldEntries( UINT delay ); // based on timer
+  + void RefreshView();   // refreshes the view if it is visible
+  + void OnCopyCompleted( long lLastID, int count = 1 );
+  + void OnPasteCompleted();
+  + void SetStatus(char*) // for displaying status in the titlebar.
+
++ ShowPersistent: always-on-top "persistent show"
+  . Toggled by double clicking the titlebar or <Ctrl>-<Space>
+  + theApp.ShowPersistent( bool bVal )
+  * required modification of Target window tracking system.
+
+* Targeting the previous focus window
+  + CCP_MainApp::
+    + HWND m_hTargetWnd;
+    + HWND TargetActiveWindow();
+    + bool ActivateTarget();
+    + bool ReleaseFocus(); // activate the target only if we are foreground
+  * The foreground window is tracked rather than the focus window.
+    . I think SetFocus doesn't do anything unless the hWnd is associated
+      with our thread's message queue.  
+  + Targeting the previous focus window is handled properly when
+    Ditto is activated by:
+      1. Mouse (in CMainFrame::PreTranslateMessage) OR
+      2. HotKey (in CQuickPaste::ShowQPasteWnd)
+ !! Problems with Targeting still exist when Ditto is activated by a
+    separate application (e.g. <Alt>-<Tab> or Taskbar Tray).  This may
+    eventually be fixed by using a system hook.
+    . See source comment preceding TargetActiveWindow() in CP_Main.cpp
+  
+* Streamlined <Ctrl> 0-9 Accelerators - now handled entirely in
+  CQListCtrl::PreTranslateMessage
+  - removed HACCEL m_acFirstTen in CQListCtrl
+
+* WndEx
+  ! fixed the close "x" button display
+  + bool SetCaptionColors( COLORREF left, COLORREF right );
+  + bool SetCaptionColorActive( bool bVal );
+
+* Startup / Shutdown 
+  + CCP_MainApp::
+    + bool m_bAppRunning;
+    + bool m_bAppExiting;
+    + CMainFrame* m_pMainFrame; // for quick access
+    + void AfterMainCreate();  // called after main window creation
+    + void BeforeMainClose();  // called before main window close
+
+* CGetSetOptions  
+  + Accessible through new global g_Opt
+  + Some local flag variables so that always getting from Profile (registry)
+    is not necessary (flags loaded on construction of g_Opt).
+
+* System HotKeys - Consolidated code in order to make adding and removing
+  HotKeys programmatically easier. 
+  + class CHotKey and CHotKeys (g_HotKeys) in Misc.h/.cpp
+  + CCP_MainApp
+    + CHotKey*  m_pDittoHotKey; // activate ditto's qpaste window
+    + CHotKey*  m_pCopyHotKey;  // named copy
+  . HotKey Management:
+    . Create in CCP_MainApp::AfterMainCreate()
+    . Handle in CMainFrame::OnHotKey()
+    . Control user input in OptionsKeyBoard.
+
++ Misc.h/.cpp
+  + Utility functions (HGLOBAL funcs, IsAppWnd, StrF)
+  + Debug functions (Log, SetThreadName)
+
+
+03 Aug 8
+--------
 + Implemented Multi-Selection Paste for CF_TEXT clips by "\r\n" concatenation
   * CQPasteWnd::OnListSelect()
   + BOOL CProcessPaste::MultiPaste( int numIDs, int* pIDs, HWND hWnd );
@@ -17,8 +105,9 @@
   + static BOOL CMainTable::DeleteClip( int id );
   + static BOOL CMainTable::DeleteClips(ARRAY &IDs); (was called DeleteRows)
 
-8-16-03
--------
+
+03 Aug 16
+---------
 ! Perform GlobalUnlock after memcmp.
   * CDataTable::DataEqual
 
@@ -26,8 +115,8 @@
   * CMainFrame::OnTimer: added breaks to cases of switch.
 
 
-8-11-03
--------
+03 Aug 11
+---------
 ! Fixed string error in processcopy.cpp
 
 
@@ -36,3 +125,4 @@ Legend:
 - = removed
 * = modified
 ! = fixed
+. = info

@@ -33,6 +33,12 @@ public:
 public:
 	void	SetResizable(bool bVal)	{ m_bResizable = bVal;	}
 
+	COLORREF		m_CaptionColorLeft;
+	COLORREF		m_CaptionColorRight;
+
+	bool	SetCaptionColors( COLORREF left, COLORREF right );
+	bool	SetCaptionColorActive( bool bVal );
+
 protected:
 	CFont			m_TitleFont;
 	bool			m_bResizable;
@@ -43,7 +49,6 @@ protected:
 	
 	void			DrawCloseBtn(CWindowDC &dc, long lRight = -1, COLORREF left = 0);
 
-	
 // Implementation
 public:
 	virtual ~CWndEx();
@@ -61,6 +66,9 @@ protected:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+//	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
+//	afx_msg BOOL OnNcActivate(BOOL bActive);
 };
 
 /////////////////////////////////////////////////////////////////////////////

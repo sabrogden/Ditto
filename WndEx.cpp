@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "CP_Main.h"
 #include "WndEx.h"
+#include ".\wndex.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -20,10 +21,35 @@ CWndEx::CWndEx()
 	m_bMouseDownOnClose = false;
 	m_bMouseOverClose = false;
 	m_bMouseDownOnCaption = false;
+
+	SetCaptionColorActive(false);
 }
 
 CWndEx::~CWndEx()
 {
+}
+
+bool CWndEx::SetCaptionColors( COLORREF left, COLORREF right )
+{
+	if( left == m_CaptionColorLeft || right == m_CaptionColorRight )
+		return false;
+
+	m_CaptionColorLeft = left;
+	m_CaptionColorRight = right;
+
+	return true;
+}
+
+bool CWndEx::SetCaptionColorActive( bool bVal )
+{
+bool bResult;
+
+	if( bVal )
+		bResult = SetCaptionColors( ::GetSysColor(COLOR_ACTIVECAPTION), ::GetSysColor(COLOR_GRADIENTACTIVECAPTION) );
+	else
+		bResult = SetCaptionColors( ::GetSysColor(COLOR_INACTIVECAPTION), ::GetSysColor(COLOR_GRADIENTINACTIVECAPTION) );
+
+	return bResult;
 }
 
 
@@ -38,6 +64,8 @@ BEGIN_MESSAGE_MAP(CWndEx, CWnd)
 	ON_WM_NCLBUTTONUP()
 	ON_WM_ERASEBKGND()
 	//}}AFX_MSG_MAP
+//	ON_WM_NCLBUTTONDBLCLK()
+//	ON_WM_NCACTIVATE()
 END_MESSAGE_MAP()
 
 
@@ -97,8 +125,8 @@ void CWndEx::OnNcPaint()
 	// Draw the window border
 	CRect rcBorder(0, 0, lWidth, rcFrame.Height());
 
-	COLORREF left = GetSysColor(COLOR_ACTIVECAPTION);
-	COLORREF right = GetSysColor(COLOR_GRADIENTACTIVECAPTION);
+	COLORREF left = m_CaptionColorLeft;
+	COLORREF right = m_CaptionColorRight;
 
 	dc.Draw3dRect(rcBorder, left, left);
 	rcBorder.DeflateRect(1, 1, 1, 1);
@@ -196,9 +224,9 @@ void CWndEx::DrawCloseBtn(CWindowDC &dc, long lRight, COLORREF left)
 							GetBValue(left) * 1.12);
 
 	if(m_bMouseDownOnClose)
-		dc.Draw3dRect(m_crCloseBT, RGB(0, 0, 0), shaddow);
+		dc.Draw3dRect(m_crCloseBT, shaddow, RGB(255, 255, 255));
 	else if(m_bMouseOverClose)
-		dc.Draw3dRect(m_crCloseBT, shaddow, RGB(0, 0, 0));
+		dc.Draw3dRect(m_crCloseBT, RGB(255, 255, 255), shaddow);
 
 	for (int iRow = 0; iRow < 5; iRow++)
 	{
@@ -314,7 +342,6 @@ void CWndEx::OnNcMouseMove(UINT nHitTest, CPoint point)
 		OnNcPaint();
 	}
 	
-	
 	CWnd::OnNcMouseMove(nHitTest, point);
 }
 
@@ -329,7 +356,6 @@ BOOL CWndEx::PreTranslateMessage(MSG* pMsg)
 		pMsg->message = WM_NCLBUTTONUP;
 	}
 
-	
 	return CWnd::PreTranslateMessage(pMsg);
 }
 
@@ -416,3 +442,4 @@ BOOL CWndEx::OnEraseBkgnd(CDC* pDC)
 {
 	return CWnd::OnEraseBkgnd(pDC);
 }
+

@@ -12,6 +12,15 @@
 #include "SystemTray.h"
 #include "QuickPaste.h"
 
+
+#define KILL_DB_TIMER					1
+#define HIDE_ICON_TIMER					2
+#define REMOVE_OLD_ENTRIES_TIMER		3
+#define CHECK_FOR_UPDATE				4
+#define CLOSE_APP						5
+#define TIMER_CHECK_TOP_LEVEL_VIEWER	6
+
+
 class CMainFrame : public CFrameWnd
 {
 public:
@@ -43,17 +52,10 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:
-	CSystemTray m_TrayIcon;
-	HWND m_hNextClipboardViewer;
-	BOOL m_bCallingSetClipboardViewer;
-	
+//protected:
 	CQuickPaste QuickPaste;
-	CProcessCopy m_Copy;
-
+	CSystemTray m_TrayIcon;
 	ULONG m_ulCopyGap;
-
-	long  m_lReconectCount;
 
 // Generated message map functions
 protected:
@@ -70,11 +72,15 @@ protected:
 	//}}AFX_MSG
 	afx_msg LRESULT OnHotKey(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShowTrayIcon(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnReconnectToCopyChain(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnGetIsTopView(WPARAM wParam, LPARAM lParam);
+//	afx_msg LRESULT OnReconnectToCopyChain(WPARAM wParam, LPARAM lParam);
+//	afx_msg LRESULT OnGetIsTopView(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnCopyProperties(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShutDown(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnClipboardCopied(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
+public:
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnClose();
 };
 
 /////////////////////////////////////////////////////////////////////////////
