@@ -294,8 +294,9 @@ BOOL CQPasteWnd::HideQPasteWindow()
 	theApp.m_bShowingQuickPaste = false;
 	theApp.ReleaseFocus();
 
-	if(m_Recset.IsOpen())
-		m_Recset.Close();
+	// Profile optimization -- is it safe to comment this out???
+//	if(m_Recset.IsOpen())
+//		m_Recset.Close();
 
 	m_lstHeader.DestroyAndCreateAccelerator(FALSE);
 
@@ -645,8 +646,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 		m_Recset.m_strFilter = strFilter;
 		if(m_Recset.IsOpen())
 			m_Recset.Requery();
-
-		if(m_Recset.IsOpen() == FALSE)
+		else
 			m_Recset.Open("");
 
 		if(!m_Recset.IsEOF())
