@@ -1532,6 +1532,7 @@ int GetMonitorFromRect(LPRECT lpMonitorRect)
 	ZeroMemory(&EnumParam, sizeof(EnumParam));
 	EnumParam.lFlags = MONITOR_SEARCH_METOHD;
 	EnumParam.pVirtualRect = lpMonitorRect;
+	EnumParam.iMonitor = -1;
 	
 	// Enum Displays
 	EnumDisplayMonitors(NULL, NULL, MyMonitorEnumProc, (long)&EnumParam);

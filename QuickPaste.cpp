@@ -133,16 +133,32 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 	
 	m_pwndPaste->MinMaxWindow(FORCE_MAX);
 	
+	CRect crRect = CRect(point, csSize);
 	if((nPosition == POS_AT_CARET) ||
 		(nPosition == POS_AT_CURSOR) ||
-		(bAtPrevPos))
+		(bAtPrevPos) ||
+		EnsureVisible(&crRect))
 	{
-		m_pwndPaste->MoveWindow(CRect(point, csSize));
+		m_pwndPaste->MoveWindow(crRect);
 	}
 	
 	// Show the window
 	m_pwndPaste->ShowQPasteWindow();
 	m_pwndPaste->SetForegroundWindow();
+}
+
+BOOL CQuickPaste::EnsureVisible(CRect *pcrRect)
+{
+	if(GetMonitorFromRect(pcrRect) < 0)
+	{
+		GetMonitorRect(0, pcrRect);
+		pcrRect->right = pcrRect->left + 300;
+		pcrRect->bottom = pcrRect->top + 300;
+
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 void CQuickPaste::HideQPasteWnd()

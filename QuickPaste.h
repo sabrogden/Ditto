@@ -22,6 +22,7 @@ public:
 	void HideQPasteWnd();
 	BOOL CloseQPasteWnd();
 	BOOL IsWindowVisibleEx();
+	BOOL EnsureVisible(CRect *pcrRect);
 
 //protected:
 	CQPasteWnd *m_pwndPaste;
