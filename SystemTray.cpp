@@ -145,6 +145,8 @@ void CSystemTray::Initialise()
 
 	m_bShowWndAnimation = FALSE;
 
+	m_bSingleClickSelect = FALSE;
+
 #ifdef SYSTEMTRAY_USEW2K
     OSVERSIONINFO os = { sizeof(os) };
     GetVersionEx(&os);
@@ -868,7 +870,7 @@ LRESULT CSystemTray::OnTrayNotification(UINT wParam, LONG lParam)
 #if defined(_WIN32_WCE) //&& _WIN32_WCE < 211
     if (LOWORD(lParam) == WM_LBUTTONDBLCLK && bAltPressed)
 #else
-    else if (LOWORD(lParam) == WM_LBUTTONDBLCLK) 
+    else if((LOWORD(lParam) == WM_LBUTTONDBLCLK) ||  (LOWORD(lParam) == WM_LBUTTONUP && m_bSingleClickSelect))
 #endif
     {
         // double click received, the default action is to execute default menu item

@@ -97,7 +97,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 						NULL,				// balloon icon
 						20 );
 
-
+	m_TrayIcon.SetSingleClickSelect(TRUE);
 	m_TrayIcon.MinimiseToTray(this);
 	m_TrayIcon.SetMenuDefaultItem(ID_FIRST_SHOWQUICKPASTE, FALSE);
 

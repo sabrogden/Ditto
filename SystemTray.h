@@ -120,6 +120,10 @@ public:
 
     UINT  GetTimerID() const   { return m_nTimerID; }
 
+	void	SetSingleClickSelect(BOOL bSel)	{ m_bSingleClickSelect = bSel; }
+	BOOL	GetSingleClickSelect()			{ return m_bSingleClickSelect;	}
+	
+
 // Static functions
 public:
     static void MinimiseToTray(CWnd* pWnd);
@@ -160,6 +164,7 @@ protected:
     UINT         m_DefaultMenuItemID;
     BOOL         m_DefaultMenuItemByPos;
 	UINT         m_uCreationFlags;
+	BOOL		 m_bSingleClickSelect;
 	
 // Static data
 protected:
