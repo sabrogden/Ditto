@@ -303,7 +303,8 @@ BEGIN
         END
         MENUITEM "View Full Description\tF3",   ID_MENU_VIEWFULLDESCRIPTION
         MENUITEM "View Groups\tCtrl-G",         ID_MENU_VIEWGROUPS
-        MENUITEM "Paste Plain Text Only",       ID_MENU_PASTEPLAINTEXTONLY
+        MENUITEM "Paste Plain Text Only\tShift-Enter", 
+                                                ID_MENU_PASTEPLAINTEXTONLY
         MENUITEM SEPARATOR
         MENUITEM "Delete Entry\tDel",           ID_MENU_DELETE
         MENUITEM SEPARATOR
@@ -435,38 +436,64 @@ BEGIN
                     293,10
 END
 
-IDD_OPTIONS_KEYSTROKES DIALOG DISCARDABLE  0, 0, 302, 206
+IDD_OPTIONS_KEYSTROKES DIALOG DISCARDABLE  0, 0, 350, 206
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Keyboard Shortcuts"
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "HotKey1",IDC_HOTKEY,"msctls_hotkey32",WS_BORDER | 
                     WS_TABSTOP,73,13,80,14
+    CONTROL         "Win",IDC_CHECK_WIN_DITTO,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,156,13,33,14
     CONTROL         "HotKey1",IDC_NAMED_COPY,"msctls_hotkey32",WS_BORDER | 
                     WS_TABSTOP,73,29,80,14
+    CONTROL         "Win",IDC_CHECK_WIN_NAMED_COPY,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,156,29,33,14
+    CONTROL         "HotKey1",IDC_HOTKEY1,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,66,74,80,14
+    CONTROL         "Win",IDC_CHECK_WIN1,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,146,74,33,14
+    CONTROL         "HotKey1",IDC_HOTKEY2,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,66,89,80,14
+    CONTROL         "Win",IDC_CHECK_WIN2,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,146,89,33,14
+    CONTROL         "HotKey1",IDC_HOTKEY3,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,66,104,80,14
+    CONTROL         "Win",IDC_CHECK_WIN3,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,147,104,33,14
+    CONTROL         "HotKey1",IDC_HOTKEY4,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,66,119,80,14
+    CONTROL         "Win",IDC_CHECK_WIN4,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,146,119,33,14
+    CONTROL         "HotKey1",IDC_HOTKEY5,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,66,134,80,14
+    CONTROL         "Win",IDC_CHECK_WIN5,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,146,134,33,14
+    CONTROL         "HotKey1",IDC_HOTKEY6,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,229,74,80,14
+    CONTROL         "Win",IDC_CHECK_WIN6,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,309,74,27,14
+    CONTROL         "HotKey1",IDC_HOTKEY7,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,229,89,80,14
+    CONTROL         "Win",IDC_CHECK_WIN7,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,309,89,26,14
+    CONTROL         "HotKey1",IDC_HOTKEY8,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,229,104,80,14
+    CONTROL         "Win",IDC_CHECK_WIN8,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,310,104,26,14
+    CONTROL         "HotKey1",IDC_HOTKEY9,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,229,119,80,14
+    CONTROL         "Win",IDC_CHECK_WIN9,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,309,119,27,14
+    CONTROL         "HotKey1",IDC_HOTKEY10,"msctls_hotkey32",WS_BORDER | 
+                    WS_TABSTOP,229,134,80,14
+    CONTROL         "Win",IDC_CHECK_WIN10,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,309,134,27,14
+    GROUPBOX        "Global Hot Keys for Last Ten Items Copied",IDC_STATIC,7,
+                    49,336,106
     CONTROL         "Send Paste (Otherwise it will just load the item on the clipboard)",
                     IDC_CHECK_SEND_PASTE,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,19,60,257,13
-    CONTROL         "HotKey1",IDC_HOTKEY1,"msctls_hotkey32",WS_BORDER | 
-                    WS_TABSTOP,66,74,80,14
-    CONTROL         "HotKey1",IDC_HOTKEY2,"msctls_hotkey32",WS_BORDER | 
-                    WS_TABSTOP,66,89,80,14
-    CONTROL         "HotKey1",IDC_HOTKEY3,"msctls_hotkey32",WS_BORDER | 
-                    WS_TABSTOP,66,104,80,14
-    CONTROL         "HotKey1",IDC_HOTKEY4,"msctls_hotkey32",WS_BORDER | 
-                    WS_TABSTOP,66,119,80,14
-    CONTROL         "HotKey1",IDC_HOTKEY5,"msctls_hotkey32",WS_BORDER | 
-                    WS_TABSTOP,66,134,80,14
-    CONTROL         "HotKey1",IDC_HOTKEY6,"msctls_hotkey32",WS_BORDER | 
-                    WS_TABSTOP,203,74,80,14
-    CONTROL         "HotKey1",IDC_HOTKEY7,"msctls_hotkey32",WS_BORDER | 
-                    WS_TABSTOP,203,89,80,14
-    CONTROL         "HotKey1",IDC_HOTKEY8,"msctls_hotkey32",WS_BORDER | 
-                    WS_TABSTOP,203,104,80,14
-    CONTROL         "HotKey1",IDC_HOTKEY9,"msctls_hotkey32",WS_BORDER | 
-                    WS_TABSTOP,203,119,80,14
-    CONTROL         "HotKey1",IDC_HOTKEY10,"msctls_hotkey32",WS_BORDER | 
-                    WS_TABSTOP,203,134,80,14
     LTEXT           "Activate Ditto",IDC_STATIC,19,16,44,8
     LTEXT           "Named Copy",IDC_STATIC,19,34,42,8
     LTEXT           "Position 1",IDC_STATIC,19,74,32,14,SS_CENTERIMAGE
@@ -474,13 +501,13 @@ BEGIN
     LTEXT           "Position 3",IDC_STATIC,19,104,32,14,SS_CENTERIMAGE
     LTEXT           "Position 4",IDC_STATIC,19,119,32,14,SS_CENTERIMAGE
     LTEXT           "Position 5",IDC_STATIC,19,134,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 6",IDC_STATIC,158,74,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 7",IDC_STATIC,158,89,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 8",IDC_STATIC,158,104,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 9",IDC_STATIC,158,119,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 10",IDC_STATIC,158,134,36,14,SS_CENTERIMAGE
-    GROUPBOX        "Global Hot Keys for Last Ten Items Copied",IDC_STATIC,7,
-                    49,288,106
+    LTEXT           "Position 6",IDC_STATIC,184,74,32,14,SS_CENTERIMAGE
+    LTEXT           "Position 7",IDC_STATIC,184,89,32,14,SS_CENTERIMAGE
+    LTEXT           "Position 8",IDC_STATIC,184,104,32,14,SS_CENTERIMAGE
+    LTEXT           "Position 9",IDC_STATIC,184,119,32,14,SS_CENTERIMAGE
+    LTEXT           "Position 10",IDC_STATIC,184,134,36,14,SS_CENTERIMAGE
+    LTEXT           "Check the ""Win"" Button to include the windows keyboard key in your hot key.",
+                    IDC_STATIC,7,159,336,25
 END
 
 IDD_OPTIONS_GENERAL DIALOG DISCARDABLE  0, 0, 294, 199
@@ -786,7 +813,7 @@ BEGIN
     IDD_OPTIONS_KEYSTROKES, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 295
+        RIGHTMARGIN, 343
         TOPMARGIN, 7
         BOTTOMMARGIN, 199
     END

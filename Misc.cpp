@@ -1325,6 +1325,33 @@ BOOL CHotKey::ValidateHotKey(DWORD dwHotKey)
 	return bResult;
 }
 
+void CHotKey::CopyFromCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID) 
+{ 
+	long lHotKey = ctrl.GetHotKey();
+
+	short sKeyKode = LOBYTE(lHotKey);
+	short sModifers = HIBYTE(lHotKey);
+
+	if(lHotKey && ::IsDlgButtonChecked(hParent, nWindowsCBID))
+	{
+		sModifers |= HOTKEYF_EXT;
+	}
+
+	SetKey(MAKEWORD(sKeyKode, sModifers)); 
+}
+
+void CHotKey::CopyToCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID)
+{
+	long lModifiers = HIBYTE(m_Key);
+
+	ctrl.SetHotKey(LOBYTE(m_Key), lModifiers); 
+
+	if(lModifiers & HOTKEYF_EXT)
+	{
+		::CheckDlgButton(hParent, nWindowsCBID, BST_CHECKED);
+	}
+}
+
 UINT CHotKey::GetModifier(DWORD dwHotKey)
 {
 	UINT uMod = 0;

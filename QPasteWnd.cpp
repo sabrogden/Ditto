@@ -434,7 +434,14 @@ BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT)
 {
 	if( theApp.EnterGroupID(lID) )
 		return TRUE;
-	
+
+	if(GetKeyState(VK_SHIFT) & 0x8000)
+	{
+		bOnlyLoad_CF_TEXT = true;
+		keybd_event(VK_SHIFT, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+		//Sleep(300);
+	}
+
 	// else, it is a clip, so paste it
 	CProcessPaste paste;
 	paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;

@@ -60,19 +60,19 @@ BOOL COptionsKeyBoard::OnInitDialog()
 
 	m_pParent = (COptionsSheet *)GetParent();
 
-	theApp.m_pDittoHotKey->CopyToCtrl( m_HotKey );
-	theApp.m_pCopyHotKey->CopyToCtrl( m_NamedCopy );
+	theApp.m_pDittoHotKey->CopyToCtrl(m_HotKey, m_hWnd, IDC_CHECK_WIN_DITTO);
+	theApp.m_pCopyHotKey->CopyToCtrl(m_NamedCopy, m_hWnd, IDC_CHECK_WIN_NAMED_COPY);
 
-	theApp.m_pPosOne->CopyToCtrl( m_One );
-	theApp.m_pPosTwo->CopyToCtrl( m_Two );
-	theApp.m_pPosThree->CopyToCtrl( m_Three );
-	theApp.m_pPosFour->CopyToCtrl( m_Four );
-	theApp.m_pPosFive->CopyToCtrl( m_Five );
-	theApp.m_pPosSix->CopyToCtrl( m_Six );
-	theApp.m_pPosSeven->CopyToCtrl( m_Seven );
-	theApp.m_pPosEight->CopyToCtrl( m_Eight );
-	theApp.m_pPosNine->CopyToCtrl( m_Nine );
-	theApp.m_pPosTen->CopyToCtrl( m_Ten );
+	theApp.m_pPosOne->CopyToCtrl(m_One, m_hWnd, IDC_CHECK_WIN1);
+	theApp.m_pPosTwo->CopyToCtrl(m_Two, m_hWnd, IDC_CHECK_WIN2);
+	theApp.m_pPosThree->CopyToCtrl(m_Three, m_hWnd, IDC_CHECK_WIN3);
+	theApp.m_pPosFour->CopyToCtrl(m_Four, m_hWnd, IDC_CHECK_WIN4);
+	theApp.m_pPosFive->CopyToCtrl(m_Five, m_hWnd, IDC_CHECK_WIN5);
+	theApp.m_pPosSix->CopyToCtrl(m_Six, m_hWnd, IDC_CHECK_WIN6);
+	theApp.m_pPosSeven->CopyToCtrl(m_Seven, m_hWnd, IDC_CHECK_WIN7);
+	theApp.m_pPosEight->CopyToCtrl(m_Eight, m_hWnd, IDC_CHECK_WIN8);
+	theApp.m_pPosNine->CopyToCtrl(m_Nine, m_hWnd, IDC_CHECK_WIN9);
+	theApp.m_pPosTen->CopyToCtrl(m_Ten, m_hWnd, IDC_CHECK_WIN10);
 
 	//Unregister hotkeys and Reregister them on cancel or ok
 	g_HotKeys.UnregisterAll();
@@ -104,19 +104,19 @@ BOOL COptionsKeyBoard::OnApply()
 	
 	g_HotKeys.GetKeys( keys ); // save old keys just in case new ones are invalid
 	
-	theApp.m_pDittoHotKey->CopyFromCtrl(m_HotKey);
-	theApp.m_pCopyHotKey->CopyFromCtrl(m_NamedCopy);
+	theApp.m_pDittoHotKey->CopyFromCtrl(m_HotKey, m_hWnd, IDC_CHECK_WIN_DITTO);
+	theApp.m_pCopyHotKey->CopyFromCtrl(m_NamedCopy, m_hWnd, IDC_CHECK_WIN_NAMED_COPY);
 	
-	theApp.m_pPosOne->CopyFromCtrl(m_One);
-	theApp.m_pPosTwo->CopyFromCtrl(m_Two);
-	theApp.m_pPosThree->CopyFromCtrl(m_Three);
-	theApp.m_pPosFour->CopyFromCtrl(m_Four);
-	theApp.m_pPosFive->CopyFromCtrl(m_Five);
-	theApp.m_pPosSix->CopyFromCtrl(m_Six);
-	theApp.m_pPosSeven->CopyFromCtrl(m_Seven);
-	theApp.m_pPosEight->CopyFromCtrl(m_Eight);
-	theApp.m_pPosNine->CopyFromCtrl(m_Nine);
-	theApp.m_pPosTen->CopyFromCtrl(m_Ten);
+	theApp.m_pPosOne->CopyFromCtrl(m_One, m_hWnd, IDC_CHECK_WIN1);
+	theApp.m_pPosTwo->CopyFromCtrl(m_Two, m_hWnd, IDC_CHECK_WIN2);
+	theApp.m_pPosThree->CopyFromCtrl(m_Three, m_hWnd, IDC_CHECK_WIN3);
+	theApp.m_pPosFour->CopyFromCtrl(m_Four, m_hWnd, IDC_CHECK_WIN4);
+	theApp.m_pPosFive->CopyFromCtrl(m_Five, m_hWnd, IDC_CHECK_WIN5);
+	theApp.m_pPosSix->CopyFromCtrl(m_Six, m_hWnd, IDC_CHECK_WIN6);
+	theApp.m_pPosSeven->CopyFromCtrl(m_Seven, m_hWnd, IDC_CHECK_WIN7);
+	theApp.m_pPosEight->CopyFromCtrl(m_Eight, m_hWnd, IDC_CHECK_WIN8);
+	theApp.m_pPosNine->CopyFromCtrl(m_Nine, m_hWnd, IDC_CHECK_WIN9);
+	theApp.m_pPosTen->CopyFromCtrl(m_Ten, m_hWnd, IDC_CHECK_WIN10);
 
 	ARRAY NewKeys;
 	g_HotKeys.GetKeys(NewKeys);

@@ -681,7 +681,6 @@ bool CClip::LoadFormats( long lID, CClipFormats& formats, bool bOnlyLoad_CF_TEXT
 	
 	try
 	{
-		BOOL bShiftIsDown = ((GetKeyState(VK_SHIFT) & 0x8000) || bOnlyLoad_CF_TEXT);
 		CDataTable recset;
 		
 		//Open the data table for all that have the parent id
@@ -697,7 +696,7 @@ bool CClip::LoadFormats( long lID, CClipFormats& formats, bool bOnlyLoad_CF_TEXT
 		{
 			cf.m_cfType = GetFormatID( recset.m_strClipBoardFormat );
 			
-			if(bShiftIsDown)
+			if(bOnlyLoad_CF_TEXT)
 			{
 				if(cf.m_cfType != CF_TEXT)
 				{

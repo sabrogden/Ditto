@@ -138,6 +138,18 @@
 #define IDC_HOTKEY10                    2033
 #define IDC_EDIT_PLAY_SOUND             2033
 #define IDC_BUTTON_PLAY                 2034
+#define IDC_CHECK_WIN_DITTO             2035
+#define IDC_CHECK_WIN_NAMED_COPY        2036
+#define IDC_CHECK_WIN6                  2037
+#define IDC_CHECK_WIN7                  2038
+#define IDC_CHECK_WIN8                  2039
+#define IDC_CHECK_WIN9                  2040
+#define IDC_CHECK_WIN10                 2041
+#define IDC_CHECK_WIN1                  2042
+#define IDC_CHECK_WIN2                  2043
+#define IDC_CHECK_WIN3                  2044
+#define IDC_CHECK_WIN4                  2045
+#define IDC_CHECK_WIN5                  2046
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -218,7 +230,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        157
 #define _APS_NEXT_COMMAND_VALUE         32847
-#define _APS_NEXT_CONTROL_VALUE         2035
+#define _APS_NEXT_CONTROL_VALUE         2036
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

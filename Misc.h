@@ -366,8 +366,8 @@ public:
 	void LoadKey();
 	bool SaveKey();
 
-	void CopyFromCtrl( CHotKeyCtrl& ctrl ) { SetKey( ctrl.GetHotKey() ); }
-	void CopyToCtrl( CHotKeyCtrl& ctrl )   { ctrl.SetHotKey(LOBYTE(m_Key),HIBYTE(m_Key)); }
+	void CopyFromCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID);
+	void CopyToCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID);
 
 //	CString GetKeyAsText();
 //	void SetKeyFromText( CString text );
