@@ -266,7 +266,7 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 		{
 			Recset.MoveLast();
 
-			if(Recset.GetRecordCount() > nPos)
+			if(Recset.GetRecordCount() > (nPos-1))
 			{
 				Recset.SetAbsolutePosition(nPos-1);
 				if(Recset.m_bIsGroup == FALSE)
