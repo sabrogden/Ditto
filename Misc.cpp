@@ -274,6 +274,13 @@ HGLOBAL NewGlobalP( LPVOID pBuf, UINT nLen )
 	return hDest;
 }
 
+HGLOBAL NewGlobal(UINT nLen)
+{
+	ASSERT(nLen);
+	HGLOBAL hDest = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, nLen);
+	return hDest;
+}
+
 HGLOBAL NewGlobalH( HGLOBAL hSource, UINT nLen )
 {
 	ASSERT( hSource && nLen );

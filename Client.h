@@ -51,7 +51,8 @@ public:
 protected:
 	SOCKET m_Connection;
 
-	BOOL SendData(SendInfo *pInfo, MyEnums::eSendType type);
+	BOOL SendCSendData(CSendInfo &data, MyEnums::eSendType type);
+	BOOL SendExactSize(char *pData, long lLength);
 };
 
 BOOL SendToFriend(CSendToFriendInfo &Info);

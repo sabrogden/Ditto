@@ -174,8 +174,8 @@ BOOL CClient::CloseConnection()
 {
 	if(m_Connection != NULL && m_Connection != 0)
 	{
-		SendInfo Info;
-		SendData(&Info, MyEnums::EXIT);
+		CSendInfo Info;
+		SendCSendData(Info, MyEnums::EXIT);
 
 		closesocket(m_Connection);
 		WSACleanup();
@@ -244,77 +244,67 @@ BOOL CClient::OpenConnection(const char* servername)
 
 BOOL CClient::SendItem(CClip *pClip)
 {
-	SendInfo Info;
+	CSendInfo Info;
 	
 	strncpy(Info.m_cComputerName, GetComputerName(), sizeof(Info.m_cComputerName));
 	strncpy(Info.m_cIP, GetIPAddress(), sizeof(Info.m_cIP));
-	strncpy(Info.m_cText, pClip->m_Desc, sizeof(Info.m_cText));
+	strncpy(Info.m_cDesc, pClip->m_Desc, sizeof(Info.m_cDesc));
 	
-	Info.m_cText[sizeof(Info.m_cText)-1] = 0;
+	Info.m_cDesc[sizeof(Info.m_cDesc)-1] = 0;
 	Info.m_cComputerName[sizeof(Info.m_cComputerName)-1] = 0;
 	Info.m_cIP[sizeof(Info.m_cIP)-1] = 0;
 
-	if(SendData(&Info, MyEnums::START) == FALSE)
+	if(SendCSendData(Info, MyEnums::START) == FALSE)
 		return FALSE;
 	
 	CClipFormat* pCF;
 	
 	int nCount = pClip->m_Formats.GetSize();
-	DWORD dwSize;
-	DWORD dwDataSent;
 
 	//For each data type
 	for( int i=0; i < nCount; i++ )
 	{
 		pCF = &pClip->m_Formats.GetData()[i];
 		
-		Info.m_lParameter1 = dwSize = GlobalSize(pCF->m_hgData);
-		strncpy(Info.m_cText, GetFormatName(pCF->m_cfType), sizeof(Info.m_cText));
-		Info.m_cText[sizeof(Info.m_cText)-1] = 0;
+		Info.m_lParameter1 = GlobalSize(pCF->m_hgData);
+		strncpy(Info.m_cDesc, GetFormatName(pCF->m_cfType), sizeof(Info.m_cDesc));
+		Info.m_cDesc[sizeof(Info.m_cDesc)-1] = 0;
 
-		if(SendData(&Info, MyEnums::DATA_START) == FALSE)
+		if(SendCSendData(Info, MyEnums::DATA_START) == FALSE)
 			return FALSE;
 
-		dwDataSent = 0;
-		while(dwDataSent < dwSize)
-		{
-			LPVOID pvData = GlobalLock(pCF->m_hgData);
+		LPVOID pvData = GlobalLock(pCF->m_hgData);
 
-			if(dwSize - dwDataSent < MAX_DATA_SIZE)
-				Info.m_lParameter1 = dwSize - dwDataSent;
-			else
-				Info.m_lParameter1 = MAX_DATA_SIZE;
+		SendExactSize((char*)pvData, Info.m_lParameter1);
 
-			memcpy(Info.m_cText,  ((char*)pvData) + dwDataSent, Info.m_lParameter1);
-
-			GlobalUnlock(pCF->m_hgData);
-
-			if(SendData(&Info, MyEnums::DATA) == FALSE)
-				return FALSE;
-
-			dwDataSent += Info.m_lParameter1;
-		}
-
-		if(SendData(&Info, MyEnums::DATA_END) == FALSE)
+		GlobalUnlock(pCF->m_hgData);
+		
+		if(SendCSendData(Info, MyEnums::DATA_END) == FALSE)
 			return FALSE;
 	}
 	
-	if(SendData(&Info, MyEnums::END) == FALSE)
+	if(SendCSendData(Info, MyEnums::END) == FALSE)
 		return FALSE;
+
+	theApp.m_lClipsSent++;
 	
 	return TRUE;
 }
 
-BOOL CClient::SendData(SendInfo *pInfo, MyEnums::eSendType type)
+BOOL CClient::SendCSendData(CSendInfo &data, MyEnums::eSendType type)
 {
-	pInfo->m_Type = type;
+	data.m_Type = type;
+	return SendExactSize((char *)&data, sizeof(CSendInfo));
+}
 
+BOOL CClient::SendExactSize(char *pData, long lLength)
+{
 	long lBytesRead = 0;
-	long lExpected = sizeof(SendInfo);
+	long lExpected = lLength;
 
 	while(lBytesRead < lExpected)
 	{
-		long lSize = send(m_Connection, ((char *)pInfo) + lBytesRead, lExpected - lBytesRead, 0);
+		long lSize = send(m_Connection, pData + lBytesRead, lExpected - lBytesRead, 0);
 	
 		if(lSize == SOCKET_ERROR || lSize == 0)
 		{
@@ -322,7 +312,11 @@ BOOL CClient::SendData(SendInfo *pInfo, MyEnums::eSendType type)
 			return FALSE;
 		}
 		lBytesRead += lSize;
+
+		LogSendRecieveInfo(StrF("SendExactSize Last Size %d - Total %d", lSize, lBytesRead));
 	}
+
+	LogSendRecieveInfo(StrF("END SendExactSize Total %d", lBytesRead));
 
 	return TRUE;
 }

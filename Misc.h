@@ -58,8 +58,10 @@ void CopyToGlobalHP( HGLOBAL hDest, LPVOID pBuf, ULONG ulBufLen );
 void CopyToGlobalHH( HGLOBAL hDest, HGLOBAL hSource, ULONG ulBufLen );
 HGLOBAL NewGlobalP( LPVOID pBuf, UINT nLen );
 HGLOBAL NewGlobalH( HGLOBAL hSource, UINT nLen );
+HGLOBAL NewGlobal(UINT nLen);
 int CompareGlobalHP( HGLOBAL hLeft, LPVOID pBuf, ULONG ulBufLen );
 int CompareGlobalHH( HGLOBAL hLeft, HGLOBAL hRight, ULONG ulBufLen );
+
 
 int GetScreenWidth();
 int GetScreenHeight();

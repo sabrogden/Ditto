@@ -17,27 +17,25 @@ public:
 	enum eSendType{START, DATA, DATA_START, DATA_END, END, EXIT};
 };
 
-#define MAX_DATA_SIZE	4000
-class SendInfo
+class CSendInfo
 {
 public:
-	SendInfo()
+	CSendInfo()
 	{
-		m_nSize = sizeof(SendInfo);
+		m_nSize = sizeof(CSendInfo);
 		m_nVersion = 1;
-		memset(&m_cExtra, -1, sizeof(m_cExtra));
+		m_lParameter1 = -1;
+		m_lParameter2 = -1;
 	}
 	int					m_nSize;
 	MyEnums::eSendType	m_Type;
 	int					m_nVersion;
-
 	char				m_cIP[20];
 	char				m_cComputerName[MAX_COMPUTERNAME_LENGTH + 1];
-
-	long		m_lParameter1;
-	long		m_lParameter2;
-	char		m_cText[MAX_DATA_SIZE];
-	char		m_cExtra[1000];
+	char				m_cDesc[250];
+	long				m_lParameter1;
+	long				m_lParameter2;
+	char				m_cExtra[50];
 };
 
 UINT  MTServerThread(LPVOID pParam);
