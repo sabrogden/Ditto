@@ -778,6 +778,7 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 CProcessPaste::CProcessPaste() : m_bDeleteOle(true)
 {
 	m_pOle = new COleClipSource;
+	m_bSendPaste = true;
 }
 
 CProcessPaste::~CProcessPaste()
@@ -809,7 +810,8 @@ BOOL CProcessPaste::DoPaste()
 		}
 
 		m_bDeleteOle = false; // m_pOle is managed by the OLE clipboard now
-		theApp.SendPaste();
+		if(m_bSendPaste)
+			theApp.SendPaste();
 		MarkAsPasted();
 		return TRUE;
 	}

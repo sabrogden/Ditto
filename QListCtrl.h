@@ -92,6 +92,7 @@ public:
 protected:
 	void SendSelection(int nItem);;
 	void SendSelection(ARRAY &arrItems);
+	void LoadCopyOrCutToClipboard();
 	
 	WCHAR *m_pwchTip;
 	TCHAR *m_pchTip;

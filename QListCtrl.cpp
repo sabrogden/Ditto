@@ -670,6 +670,8 @@ DWORD dID;
 		case 'X': // Ctrl-X = Cut (prepare for moving the items into a Group)
 			if(GetKeyState(VK_CONTROL) & 0x8000)
 			{
+				LoadCopyOrCutToClipboard();		
+
 				theApp.IC_Cut(); // uses selection
 				return TRUE;
 			}
@@ -678,6 +680,8 @@ DWORD dID;
 		case 'C': // Ctrl-C = Copy (prepare for copying the items into a Group)
 			if(GetKeyState(VK_CONTROL) & 0x8000)
 			{
+				LoadCopyOrCutToClipboard();
+
 				theApp.IC_Copy(); // uses selection
 				return TRUE;
 			}
@@ -714,6 +718,27 @@ DWORD dID;
 	} // end switch(pMsg->message)
 
 	return CListCtrl::PreTranslateMessage(pMsg);
+}
+
+void CQListCtrl::LoadCopyOrCutToClipboard()
+{
+	ARRAY arr;
+	GetSelectionItemData(arr);
+	int nCount = arr.GetSize();
+	if(nCount <= 0)
+		return;
+	
+	CProcessPaste paste;
+
+	//Don't send the paste just load it into memory
+	paste.m_bSendPaste = false;
+	
+	if(nCount > 1)
+		paste.GetClipIDs().Copy(arr);
+	else
+		paste.GetClipIDs().Add(arr[0]);
+
+	paste.DoPaste();
 }
 
 void CQListCtrl::ShowFullDescription(bool bFromAuto)

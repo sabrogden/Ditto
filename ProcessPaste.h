@@ -125,6 +125,8 @@ public:
 	BOOL DoDrag();
 
 	void MarkAsPasted();
+
+	bool m_bSendPaste;
 };
 
 #endif // !defined(AFX_PROCESSPASTE_H__185CBB6F_4B63_4397_8FF9_E18D777DA506__INCLUDED_)
