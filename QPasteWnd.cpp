@@ -10,6 +10,7 @@
 #include ".\qpastewnd.h"
 #include "MoveToGroupDlg.h"
 #include "HyperLink.h"
+#include "FormatSQL.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -672,20 +673,11 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 	}
 	else
 	{
-		//Replace all single ' with a double '
-		csSQLSearch.Replace("'", "''");
-		
-		//Can't query using strings that have '|' in them
-		//this should be removed later
-		if(csSQLSearch.Find("|") >= 0)
-			return FALSE;
-		
-		m_strSQLSearch.Format("mText LIKE \'*%s*\'", csSQLSearch);
-		
-		if( strFilter.IsEmpty() )
-			strFilter = m_strSQLSearch;
-		else
-			strFilter += " AND " + m_strSQLSearch;
+		CFormatSQL SQLFormat;
+		SQLFormat.SetVariable("mText");
+		SQLFormat.Parse(csSQLSearch);
+
+		strFilter = m_strSQLSearch = SQLFormat.GetSQLString();
 	}
 	
 	try
@@ -738,7 +730,6 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 	
 	return TRUE;
 }
-
 
 void CQPasteWnd::OnRclickQuickPaste(NMHDR* pNMHDR, LRESULT* pResult) 
 {
