@@ -1,3 +1,7 @@
+03 Sept 4
+---------
++ Ditto window snaps to window sides
+
 03 Sept 3
 ---------
 + Text Item Parser in CopyProperties - parses a CF_TEXT item into multiple
