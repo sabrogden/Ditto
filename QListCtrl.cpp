@@ -113,7 +113,10 @@ ON_WM_TIMER()
 ON_WM_WINDOWPOSCHANGED()
 ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnSelectionChange)
 ON_WM_SIZE()
-//}}AFX_MSG_MAP
+	ON_WM_KEYDOWN()
+	ON_WM_MOUSEWHEEL()
+	ON_WM_KEYUP()
+	//}}AFX_MSG_MAP
 ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
 ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
 ON_WM_KILLFOCUS()
@@ -125,7 +128,7 @@ END_MESSAGE_MAP()
 void CQListCtrl::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	LV_KEYDOWN* pLVKeyDown = (LV_KEYDOWN*)pNMHDR;
-	
+		
 	switch (pLVKeyDown->wVKey)
 	{
 	case VK_RETURN:
@@ -514,6 +517,7 @@ void CQListCtrl::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 BOOL CQListCtrl::OnEraseBkgnd(CDC* pDC) 
 {
+
 	// Simply returning TRUE seems OK since we do custom item
 	//	painting.  However, there is a pixel buffer around the
 	//	border of this control (not within the item rects)
@@ -636,6 +640,19 @@ int CQListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	EnableToolTips();
 	
 	m_Popup.Init();
+
+	InitializeFlatSB(m_hWnd);
+	FlatSB_EnableScrollBar(m_hWnd, SB_BOTH, ESB_DISABLE_BOTH);
+
+	CWnd* pParent = GetParent();
+	
+	m_SkinVerticleScrollbar.Create(NULL, WS_CHILD|SS_LEFT|SS_NOTIFY|WS_VISIBLE|WS_GROUP,CRect(0,0,0,0), pParent);
+	m_SkinHorizontalScrollbar.Create(NULL, WS_CHILD|SS_LEFT|SS_NOTIFY|WS_VISIBLE|WS_GROUP,CRect(0,0,0,0), pParent);
+	m_SkinVerticleScrollbar.m_pList = this;
+	m_SkinHorizontalScrollbar.m_pList = this;
+
+	PositionScrollBars();
+	
 	//	m_Popup.SetTTWnd( GetToolTips()->m_hWnd );
 	//	m_Popup.m_TI.hwnd = m_hWnd;
     
@@ -904,5 +921,72 @@ void CQListCtrl::OnWindowPosChanged(WINDOWPOS FAR* lpwndpos)
 
 void CQListCtrl::OnSize(UINT nType, int cx, int cy) 
 {
+	if(::IsWindow(m_hWnd))
+		PositionScrollBars();
+	
 	CListCtrl::OnSize(nType, cx, cy);
+}
+
+void CQListCtrl::PositionScrollBars()
+{
+	CWnd* pParent = GetParent();
+	
+	CRect windowRect;
+	GetWindowRect(&windowRect);
+	
+	pParent->ScreenToClient(&windowRect);
+
+	CRect vBar(windowRect.right,
+				windowRect.top,
+				windowRect.right + m_SkinVerticleScrollbar.GetHeight(),
+				windowRect.bottom + m_SkinHorizontalScrollbar.GetHeight() / 1.3);
+
+	CRect hBar(windowRect.left,
+				windowRect.bottom,
+				windowRect.right,
+				windowRect.bottom + m_SkinHorizontalScrollbar.GetHeight());
+	
+	m_SkinVerticleScrollbar.SetWindowPos(NULL,vBar.left,vBar.top,vBar.Width(),vBar.Height(),SWP_NOZORDER);
+	m_SkinHorizontalScrollbar.SetWindowPos(NULL,hBar.left,hBar.top,hBar.Width(),hBar.Height(),SWP_NOZORDER);
+	
+	m_SkinHorizontalScrollbar.UpdateThumbPosition();
+	m_SkinVerticleScrollbar.UpdateThumbPosition();
+}
+
+void CQListCtrl::MoveWindow(int x, int y, int nWidth, int nHeight, BOOL bRepaint)
+{
+	nWidth -= m_SkinVerticleScrollbar.GetHeight();;
+	nHeight -= m_SkinHorizontalScrollbar.GetHeight();
+
+	CWnd::MoveWindow(x, y, nWidth, nHeight, bRepaint);
+}
+
+void CQListCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
+{
+	// TODO: Add your message handler code here and/or call default
+	
+	CListCtrl::OnKeyDown(nChar, nRepCnt, nFlags);
+
+	m_SkinVerticleScrollbar.UpdateThumbPosition();
+	m_SkinHorizontalScrollbar.UpdateThumbPosition();
+}
+
+BOOL CQListCtrl::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) 
+{
+	BOOL bRet = CListCtrl::OnMouseWheel(nFlags, zDelta, pt);
+
+	m_SkinVerticleScrollbar.UpdateThumbPosition();
+	m_SkinHorizontalScrollbar.UpdateThumbPosition();
+
+	return bRet;
+}
+
+void CQListCtrl::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) 
+{
+	// TODO: Add your message handler code here and/or call default
+	
+	CListCtrl::OnKeyUp(nChar, nRepCnt, nFlags);
+
+	m_SkinVerticleScrollbar.UpdateThumbPosition();
+	m_SkinHorizontalScrollbar.UpdateThumbPosition();
 }

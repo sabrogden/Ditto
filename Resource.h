@@ -11,7 +11,11 @@
 #define IDD_ADD_TYPE                    134
 #define IDD_COPY_PROPERTIES             135
 #define IDD_ABOUT                       136
+#define IDB_HORIZONTAL_SCROLLBAR_THUMB  137
 #define IDD_GROUP_NAME                  138
+#define IDB_HORIZONTAL_SCROLLBAR_RIGHTARROW 138
+#define IDB_HORIZONTAL_SCROLLBAR_CHANNEL 139
+#define IDB_HORIZONTAL_SCROLLBAR_LEFTARROW 140
 #define IDB_CLOSED_FOLDER               141
 #define IDB_CLOSED_FOLDER_PRESSED       142
 #define IDB_CLOSED_FOLDER_FOCUSED       143
@@ -23,7 +27,11 @@
 #define IDD_OPTIONS_FRIENDS             148
 #define IDB_BACK_FOCUSED                149
 #define IDI_DITTO_NOCOPYCB              150
+#define IDB_VERTICAL_SCROLLBAR_DOWNARROW 151
 #define IDD_FRIEND_DETAILS              152
+#define IDB_VERTICAL_SCROLLBAR_CHANNEL  152
+#define IDB_VERTICAL_SCROLLBAR_THUMB    153
+#define IDB_VERTICAL_SCROLLBAR_UPARROW  155
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT                      1003
@@ -188,7 +196,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        151
+#define _APS_NEXT_RESOURCE_VALUE        156
 #define _APS_NEXT_COMMAND_VALUE         32840
 #define _APS_NEXT_CONTROL_VALUE         2027
 #define _APS_NEXT_SYMED_VALUE           101

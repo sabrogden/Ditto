@@ -7,6 +7,8 @@
 // QListCtrl.h : header file
 //
 #include "ArrayEx.h"
+#include "SkinHorizontalScrollbar.h"
+#include "SkinVerticleScrollbar.h"
 
 #define NM_SELECT					WM_USER+0x100
 #define NM_RIGHT					WM_USER+0x101
@@ -90,12 +92,14 @@ public:
 
 	void ShowFullDescription(bool bFromAuto = false);
 	BOOL SetItemCountEx(int iCount, DWORD dwFlags = LVSICF_NOINVALIDATEALL);
+	void MoveWindow(int x, int y, int nWidth, int nHeight, BOOL bRepaint = TRUE);
 
 protected:
 	void SendSelection(int nItem);;
 	void SendSelection(ARRAY &arrItems);
 	void LoadCopyOrCutToClipboard();
-	
+	void PositionScrollBars();
+		
 	WCHAR *m_pwchTip;
 	TCHAR *m_pchTip;
 
@@ -103,6 +107,9 @@ protected:
 
 	//Accelerator
 	CAccels	m_Accels;
+
+	CSkinVerticleScrollbar m_SkinVerticleScrollbar;
+	CSkinHorizontalScrollbar m_SkinHorizontalScrollbar;
 	
 	// Generated message map functions
 protected:
@@ -119,6 +126,9 @@ protected:
 	afx_msg void OnWindowPosChanged(WINDOWPOS FAR* lpwndpos);
 	afx_msg void OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	//}}AFX_MSG
 	afx_msg BOOL OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult );
 	DECLARE_MESSAGE_MAP()

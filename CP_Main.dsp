@@ -231,6 +231,22 @@ SOURCE=.\QListCtrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\SkinHorizontalScrollbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SkinHorizontalScrollbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SkinVerticleScrollbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SkinVerticleScrollbar.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\WndEx.cpp
 # End Source File
 # Begin Source File
@@ -297,6 +313,10 @@ SOURCE=.\MainFrm.cpp
 # Begin Source File
 
 SOURCE=.\MainTable.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\memdc.h
 # End Source File
 # Begin Source File
 
@@ -577,11 +597,51 @@ SOURCE=.\res\Ditto_NoCopyCb.ico
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\HorizontalScrollBarLeftArrow.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\HorizontalScrollBarRightArrow.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\HorizontalScrollBarSpan.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\HorizontalScrollBarThumb.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\open_fol.bmp
 # End Source File
 # Begin Source File
 
 SOURCE=.\res\Toolbar.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\VerticleScrollbarBottom.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\VerticleScrollBarDownArrow.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\VerticleScrollBarSpan.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\VerticleScrollBarThumb.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\VerticleScrollbarTop.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\VerticleScrollBarUpArrow.bmp
 # End Source File
 # End Group
 # Begin Source File

@@ -86,6 +86,7 @@ IDB_OPEN_FOLDER_PRESSED BITMAP  MOVEABLE PURE   "res\\bmp00003.bmp"
 IDB_BACK                BITMAP  MOVEABLE PURE   "res\\back.bmp"
 IDB_BACK_PRESSED        BITMAP  MOVEABLE PURE   "res\\back1.bmp"
 IDB_BACK_FOCUSED        BITMAP  MOVEABLE PURE   "res\\back2.bmp"
+IDB_HORIZONTAL_SCROLLBAR_THUMB BITMAP  DISCARDABLE     "res\\HorizontalScrollBarThumb.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -946,6 +947,31 @@ BEGIN
 END
 
 #endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (Canada) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENC)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_CAN
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_HORIZONTAL_SCROLLBAR_LEFTARROW BITMAP  DISCARDABLE     "res\\HorizontalScrollBarLeftArrow.bmp"
+IDB_HORIZONTAL_SCROLLBAR_RIGHTARROW BITMAP  DISCARDABLE     "res\\HorizontalScrollBarRightArrow.bmp"
+IDB_HORIZONTAL_SCROLLBAR_CHANNEL BITMAP  DISCARDABLE     "res\\HorizontalScrollBarSpan.bmp"
+IDB_VERTICAL_SCROLLBAR_DOWNARROW BITMAP  DISCARDABLE     "res\\VerticleScrollBarDownArrow.bmp"
+IDB_VERTICAL_SCROLLBAR_CHANNEL BITMAP  DISCARDABLE     "res\\VerticleScrollBarSpan.bmp"
+IDB_VERTICAL_SCROLLBAR_THUMB BITMAP  DISCARDABLE     "res\\VerticleScrollBarThumb.bmp"
+IDB_VERTICAL_SCROLLBAR_UPARROW BITMAP  DISCARDABLE     "res\\VerticleScrollBarUpArrow.bmp"
+#endif    // English (Canada) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

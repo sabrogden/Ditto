@@ -26,6 +26,7 @@
 #define MAIN_WND_TITLE		"Ditto MainWnd"
 //#define GET_APP    ((CCP_MainApp *)AfxGetApp())	
 
+
 //#define GET_APP ((CMainWnd*)theApp)
 extern class CCP_MainApp theApp;
 
