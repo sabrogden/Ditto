@@ -645,12 +645,7 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 
 		case VK_F3:
 			{
-				int nItem = GetCaret();
-				CRect rc;
-				GetItemRect(nItem, rc, LVIR_BOUNDS);
-				ClientToScreen(rc);
-				m_Popup.m_Pos = CPoint(rc.left, rc.bottom);
-				m_Popup.Show( GetToolTipText(nItem) );
+				ShowFullDescription();
 			
 				break;
 			}
@@ -660,6 +655,16 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 	} // end switch(pMsg->message)
 
 	return CListCtrl::PreTranslateMessage(pMsg);
+}
+
+void CQListCtrl::ShowFullDescription()
+{
+	int nItem = GetCaret();
+	CRect rc;
+	GetItemRect(nItem, rc, LVIR_BOUNDS);
+	ClientToScreen(rc);
+	m_Popup.m_Pos = CPoint(rc.left, rc.bottom);
+	m_Popup.Show( GetToolTipText(nItem) );
 }
 
 CString CQListCtrl::GetToolTipText(int nItem)

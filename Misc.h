@@ -78,6 +78,11 @@ CString GetFilePath(CString csFullPath);
 #define POS_AT_CURSOR	2
 #define POS_AT_PREVIOUS	3
 
+#define CAPTION_RIGHT	1
+#define CAPTION_BOTTOM	2
+#define CAPTION_LEFT	3
+#define CAPTION_TOP		4
+
 //Message to the main window to show icon or not
 #define WM_SHOW_TRAY_ICON		WM_USER + 200
 #define WM_CV_RECONNECT			WM_USER + 201
@@ -212,6 +217,12 @@ public:
 
 	static void		SetMainHWND(long lhWnd);
 	static BOOL		GetMainHWND();
+
+	static void		SetCaptionPos(long lPos);
+	static long		GetCaptionPos();
+
+	static void		SetAutoHide(BOOL bAutoHide);
+	static BOOL		GetAutoHide();
 
 	/*
 	BOOL IsAutoRun();

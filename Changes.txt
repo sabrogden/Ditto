@@ -1,3 +1,8 @@
+03 Sept 14
+----------
++ View caption on all sides(top, right, bottom, left)
++ Roll up window by button on caption or by auto roll up(looses focus then it will rool up)
+
 03 Sept 10
 ----------
 + HistoryStartTop - History can be shown top-down or bottom-up

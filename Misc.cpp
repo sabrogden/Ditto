@@ -896,7 +896,11 @@ BOOL CGetSetOptions::GetShowTextForFirstTenHotKeys()			{	return GetProfileLong("
 void CGetSetOptions::SetMainHWND(long lhWnd)	{	SetProfileLong("MainhWnd", lhWnd);		}
 BOOL CGetSetOptions::GetMainHWND()				{	return GetProfileLong("MainhWnd", 0);	}
 
+void CGetSetOptions::SetCaptionPos(long lPos)	{	SetProfileLong("CaptionPos", lPos);					}
+long CGetSetOptions::GetCaptionPos()			{	return GetProfileLong("CaptionPos", CAPTION_RIGHT);	}
 
+void CGetSetOptions::SetAutoHide(BOOL bAutoHide){	SetProfileLong("AutoHide", bAutoHide);					}
+BOOL CGetSetOptions::GetAutoHide()				{	return GetProfileLong("AutoHide", FALSE);				}
 
 /*------------------------------------------------------------------*\
 	CHotKey - a single system-wide hotkey

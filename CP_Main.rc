@@ -193,6 +193,23 @@ BEGIN
             MENUITEM "Show Hot Key Text",           ID_MENU_FIRSTTENHOTKEYS_SHOWHOTKEYTEXT
 
         END
+        POPUP "View Caption Bar On"
+        BEGIN
+            MENUITEM "Top",                         ID_VIEWCAPTIONBARON_TOP
+            MENUITEM "Right",                       ID_VIEWCAPTIONBARON_RIGHT
+
+            MENUITEM "Bottom",                      ID_VIEWCAPTIONBARON_BOTTOM
+
+            MENUITEM "Left",                        ID_VIEWCAPTIONBARON_LEFT
+        END
+        POPUP "Sort"
+        BEGIN
+            MENUITEM "Ascending (Latest on the Top)", ID_SORT_ASCENDING
+            MENUITEM "Descending (Latest on the Bottom", ID_SORT_DESCENDING
+        END
+        MENUITEM "Allways on Top\tCtrl-Spce",   ID_MENU_ALLWAYSONTOP
+        MENUITEM "Auto Roolup",                 ID_MENU_AUTOHIDE
+        MENUITEM "View Full Description\tF3",   ID_MENU_VIEWFULLDESCRIPTION
         MENUITEM "Reconnect To Clipboard Chain", 
                                                 ID_MENU_RECONNECTTOCLIPBOARDCHAIN
 

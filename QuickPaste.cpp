@@ -73,7 +73,10 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 		if((theApp.m_bShowingQuickPaste) || (theApp.m_bShowingOptions))
 		{
 			if( g_Opt.m_bShowPersistent )
+			{
+				m_pwndPaste->MinMaxWindow(FORCE_MAX);
 				m_pwndPaste->SetForegroundWindow();
+			}
 			return;
 		}
 	}
@@ -127,6 +130,8 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 		// Create the window   
 		VERIFY( m_pwndPaste->Create(point, pParent) );
 	}
+
+	m_pwndPaste->MinMaxWindow(FORCE_MAX);
 
 	if((nPosition == POS_AT_CARET) ||
 		(nPosition == POS_AT_CURSOR) ||

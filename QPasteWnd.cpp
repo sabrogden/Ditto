@@ -88,6 +88,15 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_MESSAGE(WM_REFRESH_VIEW, OnRefreshView)
 	ON_WM_NCLBUTTONDBLCLK()
 	ON_WM_WINDOWPOSCHANGING()
+	ON_COMMAND(ID_VIEWCAPTIONBARON_RIGHT, OnViewcaptionbaronRight)
+	ON_COMMAND(ID_VIEWCAPTIONBARON_BOTTOM, OnViewcaptionbaronBottom)
+	ON_COMMAND(ID_VIEWCAPTIONBARON_LEFT, OnViewcaptionbaronLeft)
+	ON_COMMAND(ID_VIEWCAPTIONBARON_TOP, OnViewcaptionbaronTop)
+	ON_COMMAND(ID_MENU_AUTOHIDE, OnMenuAutohide)
+	ON_COMMAND(ID_MENU_VIEWFULLDESCRIPTION, OnMenuViewfulldescription)
+	ON_COMMAND(ID_MENU_ALLWAYSONTOP, OnMenuAllwaysontop)
+	ON_COMMAND(ID_SORT_ASCENDING, OnSortAscending)
+	ON_COMMAND(ID_SORT_DESCENDING, OnSortDescending)
 END_MESSAGE_MAP()
 
 
@@ -162,24 +171,6 @@ void CQPasteWnd::OnSize(UINT nType, int cx, int cy)
 	if(!IsWindow(m_lstHeader.m_hWnd))
 		return;
 
-	//Create the region for drawing the rounded top edge
-	CRect rect;
-	GetWindowRect(rect);
-	CRgn rgnRect, rgnRect2, rgnRound, rgnFinalA, rgnFinalB;
-
-	rgnRect.CreateRectRgn(0, 0, 20, rect.Height());
-	rgnRound.CreateRoundRectRgn(0, 0, rect.Width(), rect.Height()+1, 15, 15);
-
-	rgnFinalB.CreateRectRgn(0, 0, 0, 0);
-	rgnFinalB.CombineRgn(&rgnRect, &rgnRound, RGN_OR);
-
-	rgnRect2.CreateRectRgn(0, 20, rect.Width()-1, rect.Height());
-	rgnFinalA.CreateRectRgn(0, 0, 0, 0);
-	rgnFinalA.CombineRgn(&rgnRect2, &rgnFinalB, RGN_OR);
-
-	//Set the region
-	SetWindowRgn(rgnFinalA, TRUE);
-
 	MoveControls();
 }
 
@@ -212,7 +203,8 @@ void CQPasteWnd::OnSetFocus(CWnd* pOldWnd)
 	CWndEx::OnSetFocus(pOldWnd);
 
 	// Set the focus to the list control
-	m_lstHeader.SetFocus();
+	if(::IsWindow(m_lstHeader.m_hWnd))
+		m_lstHeader.SetFocus();
 }
 
 void CQPasteWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized) 
@@ -249,7 +241,7 @@ BOOL CQPasteWnd::HideQPasteWindow()
 
 	//Save the size
 	CRect rect;
-	GetWindowRect(rect);
+	GetWindowRectEx(rect);
 	CGetSetOptions::SetQuickPasteSize(rect.Size());
 	CGetSetOptions::SetQuickPastePoint(rect.TopLeft());
 
@@ -608,6 +600,33 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 
 	if(CGetSetOptions::GetUseCtrlNumForFirstTenHotKeys())
 		pMenu->CheckMenuItem(ID_MENU_FIRSTTENHOTKEYS_USECTRLNUM, MF_CHECKED);
+
+	if(g_Opt.m_bShowPersistent)
+		pMenu->CheckMenuItem(ID_MENU_ALLWAYSONTOP, MF_CHECKED);
+
+	if(CGetSetOptions::GetAutoHide())
+		pMenu->CheckMenuItem(ID_MENU_AUTOHIDE, MF_CHECKED);
+
+	if(g_Opt.m_bHistoryStartTop)
+		pMenu->CheckMenuItem(ID_SORT_ASCENDING, MF_CHECKED);
+	else
+		pMenu->CheckMenuItem(ID_SORT_DESCENDING, MF_CHECKED);
+
+	switch(CGetSetOptions::GetCaptionPos())
+	{
+	case 1:
+		pMenu->CheckMenuItem(ID_VIEWCAPTIONBARON_RIGHT, MF_CHECKED);
+		break;
+	case 2:
+		pMenu->CheckMenuItem(ID_VIEWCAPTIONBARON_BOTTOM, MF_CHECKED);
+		break;
+	case 3:
+		pMenu->CheckMenuItem(ID_VIEWCAPTIONBARON_LEFT, MF_CHECKED);
+		break;
+	case 4:
+		pMenu->CheckMenuItem(ID_VIEWCAPTIONBARON_TOP, MF_CHECKED);
+		break;
+	}
 }
 
 LRESULT CQPasteWnd::OnSearch(WPARAM wParam, LPARAM lParam)
@@ -774,6 +793,60 @@ void CQPasteWnd::OnMenuFirsttenhotkeysShowhotkeytext()
 
 	m_lstHeader.RefreshVisibleRows();
 }
+
+void CQPasteWnd::OnViewcaptionbaronRight()
+{
+	SetCaptionOn(CAPTION_RIGHT);
+	CGetSetOptions::SetCaptionPos(CAPTION_RIGHT);
+}
+
+void CQPasteWnd::OnViewcaptionbaronBottom()
+{
+	SetCaptionOn(CAPTION_BOTTOM);
+	CGetSetOptions::SetCaptionPos(CAPTION_BOTTOM);
+}
+
+void CQPasteWnd::OnViewcaptionbaronLeft()
+{
+	SetCaptionOn(CAPTION_LEFT);
+	CGetSetOptions::SetCaptionPos(CAPTION_LEFT);
+}
+
+void CQPasteWnd::OnViewcaptionbaronTop()
+{
+	SetCaptionOn(CAPTION_TOP);
+	CGetSetOptions::SetCaptionPos(CAPTION_TOP);
+}
+
+void CQPasteWnd::OnMenuAutohide()
+{
+	bool bAutoHide = !CGetSetOptions::GetAutoHide();
+	CGetSetOptions::SetAutoHide(bAutoHide);
+	SetAutoHide(bAutoHide);
+}
+
+void CQPasteWnd::OnMenuViewfulldescription()
+{
+	m_lstHeader.ShowFullDescription();	
+}
+
+void CQPasteWnd::OnMenuAllwaysontop()
+{
+	theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
+}
+
+void CQPasteWnd::OnSortAscending()
+{
+	g_Opt.SetHistoryStartTop(TRUE);
+	FillList();
+}
+
+void CQPasteWnd::OnSortDescending()
+{
+	g_Opt.SetHistoryStartTop(FALSE);
+	FillList();
+}
+
 
 ///////////////////////////////////////////////////////////////////////
 //END END Menu Stuff

@@ -132,6 +132,15 @@ protected:
 public:
 	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
 	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
+	afx_msg void OnViewcaptionbaronRight();
+	afx_msg void OnViewcaptionbaronBottom();
+	afx_msg void OnViewcaptionbaronLeft();
+	afx_msg void OnViewcaptionbaronTop();
+	afx_msg void OnMenuAutohide();
+	afx_msg void OnMenuViewfulldescription();
+	afx_msg void OnMenuAllwaysontop();
+	afx_msg void OnSortAscending();
+	afx_msg void OnSortDescending();
 };
 
 

@@ -88,6 +88,8 @@ public:
 
 	void DestroyAndCreateAccelerator(BOOL bCreate);
 
+	void ShowFullDescription();
+
 protected:
 	void SendSelection(int nItem);;
 	void SendSelection(ARRAY &arrItems);
