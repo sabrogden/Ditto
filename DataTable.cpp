@@ -71,8 +71,13 @@ void CDataTable::Dump(CDumpContext& dc) const
 // This should be faster than making a copy, but is this SAFE ?????
 HGLOBAL CDataTable::TakeData()
 {
+	// if there is nothing to take
 	if( m_ooData.m_hData == 0 || m_ooData.m_dwDataLength == 0 )
 		return 0;
+
+	// Unlock the handle that was locked by DaoLongBinaryAllocCallback()
+	//  (through DFX_LongBinary()).
+	::GlobalUnlock( m_ooData.m_hData );
 
 	// we have to do a realloc in order to make the hGlobal m_dwDataLength
 	HGLOBAL hGlobal = ::GlobalReAlloc(m_ooData.m_hData, m_ooData.m_dwDataLength, GMEM_MOVEABLE );
@@ -89,16 +94,14 @@ HGLOBAL CDataTable::TakeData()
 }
 
 // this takes ownership of hgData, freeing m_ooData if necessary
-// This should be faster than making a copy, but is this SAFE ?????
+// This should be faster than making a copy, but is this SAFE?
+// looks like it is safe based upon:
+// http://support.microsoft.com/default.aspx?scid=http://support.microsoft.com:80/support/kb/articles/q152/5/33.asp&NoWebContent=1
+// http://support.microsoft.com/default.aspx?scid=http://support.microsoft.com:80/support/kb/articles/q119/7/65.asp&NoWebContent=1
 BOOL CDataTable::ReplaceData( HGLOBAL hgData, UINT len )
 {
-	if( m_ooData.m_hData && 
-		m_ooData.m_dwDataLength &&
-		(m_ooData.m_hData = ::GlobalFree( m_ooData.m_hData )) )
-	{
-		ASSERT(FALSE);
-		return FALSE;
-	}
+	if( m_ooData.m_hData )
+		::GlobalFree( m_ooData.m_hData );
 
 	m_ooData.m_hData = hgData;
 	m_ooData.m_dwDataLength = len;
@@ -138,12 +141,34 @@ HGLOBAL CDataTable::LoadData()
 HGLOBAL hGlobal;
 ULONG ulBufLen = m_ooData.m_dwDataLength; //Retrieve size of array
 
-	if(ulBufLen == 0)
+	if( ulBufLen == 0 || m_ooData.m_hData == 0 )
 		return 0;
 
 	hGlobal = NewGlobalH( m_ooData.m_hData, ulBufLen );
 
 	return hGlobal;
+}
+
+bool CDataTable::DeleteParent( long lParentID )
+{
+CString csDataSQL;
+bool bRet = false;
+
+	csDataSQL.Format( "DELETE FROM Data WHERE lParentID = %d", lParentID );
+
+	try
+	{
+		theApp.EnsureOpenDB();
+		theApp.m_pDatabase->Execute(csDataSQL, dbFailOnError);
+		bRet = TRUE;
+	}
+	catch(CDaoException* e)
+	{
+		AfxMessageBox(e->m_pErrorInfo->m_strDescription);
+		e->Delete();
+	}
+
+	return bRet;
 }
 
 BOOL CDataTable::DeleteAll()

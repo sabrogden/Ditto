@@ -59,8 +59,10 @@ public:
 	bool			m_bHideWnd;
 	CMainTable		m_Recset;
 
-	void RefreshNc();
-	void SetStatus( const char* status = NULL );
+	CString			m_Title;
+
+	void RefreshNc( bool bRepaintImmediately = false );
+	void UpdateStatus( bool bRepaintImmediately = false );  // regenerates the status (caption) text
 	BOOL FillList(CString csSQLSearch = "");
 	BOOL HideQPasteWindow();
 	BOOL ShowQPasteWindow(BOOL bFillList = TRUE);

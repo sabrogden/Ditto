@@ -150,24 +150,28 @@ window using system hooks or a short (e.g. 1 sec) timer... though this
 WH_CBT system hooks in a separate dll (see: robpitt's
 http://website.lineone.net/~codebox/focuslog.zip).
 */
-HWND CCP_MainApp::TargetActiveWindow()
+bool CCP_MainApp::TargetActiveWindow()
 {
 HWND hOld = m_hTargetWnd;
 HWND hNew = ::GetForegroundWindow();
-	if( hNew != m_hTargetWnd && ::IsWindow(hNew) && !IsAppWnd(hNew) )
-	{
-		m_hTargetWnd = hNew;
-		// Tracking / Debugging
-		/*
-		LOG( StrF(
-			"Target Changed" \
-			"\n\tOld = 0x%08x: \"%s\"" \
-			"\n\tNew = 0x%08x:  \"%s\"\n",
-				hOld, (LPCTSTR) GetWndText(hOld),
-				hNew, (LPCTSTR) GetWndText(hNew) ) );
-		*/
-	}
-	return hOld;
+	if( hNew == m_hTargetWnd || !::IsWindow(hNew) || IsAppWnd(hNew) )
+		return false;
+
+	m_hTargetWnd = hNew;
+	
+	if( QPasteWnd() )
+		QPasteWnd()->UpdateStatus(true);
+
+	// Tracking / Debugging
+	/*
+	LOG( StrF(
+		"Target Changed" \
+		"\n\tOld = 0x%08x: \"%s\"" \
+		"\n\tNew = 0x%08x:  \"%s\"\n",
+			hOld, (LPCTSTR) GetWndText(hOld),
+			hNew, (LPCTSTR) GetWndText(hNew) ) );
+	*/
+	return true;
 }
 
 bool CCP_MainApp::ActivateTarget()
@@ -185,6 +189,24 @@ bool CCP_MainApp::ReleaseFocus()
 		return ActivateTarget();
 	return false;
 }
+
+// sends Ctrl-V to the TargetWnd
+void CCP_MainApp::SendPaste()
+{
+	if( !ActivateTarget() )
+	{
+		SetStatus("SendPaste FAILED!");
+		return;
+	}
+
+	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+	keybd_event('V', 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+
+	keybd_event('V', 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+}
+
+// CopyThread
 
 void CCP_MainApp::StartCopyThread()
 {
@@ -299,11 +321,11 @@ void CCP_MainApp::OnCopyCompleted(long lLastID, int count)
 	ShowCopyProperties( lLastID );
 }
 
-void CCP_MainApp::SetStatus( const char* status )
+void CCP_MainApp::SetStatus( const char* status, bool bRepaintImmediately )
 {
 	m_Status = status;
 	if( QPasteWnd() )
-		QPasteWnd()->SetStatus( status );
+		QPasteWnd()->UpdateStatus( bRepaintImmediately );
 }
 
 void CCP_MainApp::ShowPersistent( bool bVal )

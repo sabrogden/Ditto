@@ -29,6 +29,7 @@ static char THIS_FILE[] = __FILE__;
 
 CQPasteWnd::CQPasteWnd()
 {	
+	m_Title = QPASTE_TITLE;
 	m_bHideWnd = true;
 	m_Recset.m_strSort = "lDate DESC";
 }
@@ -131,7 +132,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_lstHeader.SetExtendedStyle(LVS_EX_FULLROWSELECT|LVS_EX_HEADERDRAGDROP);
 
 	// Create the columns
-	if (m_lstHeader.InsertColumn(0, "", LVCFMT_LEFT, 0, 0) != 0)
+	if (m_lstHeader.InsertColumn(0, "", LVCFMT_LEFT, 2500, 0) != 0)
 	{
 		ASSERT(FALSE);
 		return -1;
@@ -266,7 +267,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 	//Set the flag so we can't open this up again
 	theApp.m_bShowingQuickPaste = true;
 	SetCaptionColorActive( !g_Opt.m_bShowPersistent );
-	SetStatus( theApp.m_Status );
+	UpdateStatus();
 
 	m_lstHeader.DestroyAndCreateAccelerator(TRUE);
 
@@ -322,7 +323,7 @@ bool CQPasteWnd::Add(const CString &csHeader, const CString &csText, int nID)
 
 LRESULT CQPasteWnd::OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam)
 {
-	CProcessPaste paste(theApp.m_hTargetWnd);
+	CProcessPaste paste;
 	paste.GetClipIDs().Add(wParam);
 	paste.DoPaste();
 	theApp.OnPasteCompleted();
@@ -335,7 +336,7 @@ LRESULT CQPasteWnd::OnListSelect_Index(WPARAM wParam, LPARAM lParam)
 	if( (int) wParam >= m_lstHeader.GetItemCount() )
 		return FALSE;
 
-	CProcessPaste paste(theApp.m_hTargetWnd);
+	CProcessPaste paste;
 	paste.GetClipIDs().Add( m_lstHeader.GetItemData(wParam) );
 	paste.DoPaste();
 	theApp.OnPasteCompleted();
@@ -351,7 +352,7 @@ LRESULT CQPasteWnd::OnListSelect(WPARAM wParam, LPARAM lParam)
 	if(nCount <= 0)
 		return TRUE;
 
-	CProcessPaste paste(theApp.m_hTargetWnd);
+	CProcessPaste paste;
 	m_lstHeader.GetSelectionItemData( paste.GetClipIDs() );
 
 	paste.DoPaste();
@@ -379,27 +380,42 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-void CQPasteWnd::RefreshNc()
+void CQPasteWnd::RefreshNc( bool bRepaintImmediately )
 {
-	if( theApp.m_bShowingQuickPaste )
+	if( !theApp.m_bShowingQuickPaste )
+		return;
+
+	if( bRepaintImmediately )
 		OnNcPaint();
+	else
+		InvalidateNc();
 }
 
-void CQPasteWnd::SetStatus( const char* status )
+void CQPasteWnd::UpdateStatus( bool bRepaintImmediately )
 {
-CString title( QPASTE_TITLE );
+CString title = m_Title;
 CString prev;
-	if( status && *status != '\0' )
+
+	GetWindowText(prev);
+
+	if( theApp.m_Status != "" )
 	{
 		title += " [ ";
-		title += status;
-		title += " ]";
+		title += theApp.m_Status;
+		title += " ] - ";
 	}
-	GetWindowText(prev);
+	else
+		title += " - ";
+
+	if( ::IsWindow(theApp.m_hTargetWnd) )
+		title += theApp.GetTargetName();
+	else
+		title += "NO TARGET!";
+
 	if( title != prev )
 	{
 		SetWindowText( title );
-		RefreshNc();
+		RefreshNc( bRepaintImmediately );
 	}
 }
 
@@ -412,14 +428,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 
 	CRect crRect;
 	GetClientRect(crRect);
-
-	// Create the columns
-	if(m_lstHeader.InsertColumn(0, "", LVCFMT_LEFT, 2500, 0) != 0)
-	{	
-		ASSERT(FALSE);	
-		return -1;	
-	}
-
+ 
 	CString csSQL;
 	if(csSQLSearch == "")
 	{
@@ -689,7 +698,7 @@ void CQPasteWnd::OnMenuExitprogram()
 
 void CQPasteWnd::OnMenuReconnecttoclipboardchain() 
 {
-	::SendMessage(theApp.GetClipboardViewer(), WM_RECONNECT_TO_COPY_CHAIN, 0, 0);
+	::SendMessage(theApp.GetClipboardViewer(), WM_CV_RECONNECT, 0, 0);
 }
 
 void CQPasteWnd::OnMenuProperties() 

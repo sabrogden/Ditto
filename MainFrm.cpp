@@ -39,8 +39,6 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(WM_HOTKEY, OnHotKey)
 	ON_MESSAGE(WM_SHOW_TRAY_ICON, OnShowTrayIcon)
-//	ON_MESSAGE(WM_RECONNECT_TO_COPY_CHAIN, OnReconnectToCopyChain)
-//	ON_MESSAGE(WM_IS_TOP_VIEWER, OnGetIsTopView)
 	ON_MESSAGE(WM_COPYPROPERTIES, OnCopyProperties)
 	ON_MESSAGE(WM_CLOSE_APP, OnShutDown)
 	ON_MESSAGE(WM_CLIPBOARD_COPIED, OnClipboardCopied)
@@ -172,13 +170,16 @@ void CMainFrame::OnFirstExit()
 }
 
 LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
-{	
+{
 	if( wParam == theApp.m_pDittoHotKey->m_Atom )
 	{
+		theApp.TargetActiveWindow();
 		QuickPaste.ShowQPasteWnd(this);
 	}
 	else if( wParam == theApp.m_pCopyHotKey->m_Atom )
 	{
+		theApp.TargetActiveWindow();
+
 		theApp.m_bShowCopyProperties = true;
 
 		//Simulate the Copy
@@ -270,7 +271,7 @@ void CMainFrame::OnFirstShowquickpaste()
 
 void CMainFrame::OnFirstReconnecttoclipboardchain() 
 {
-	::PostMessage( theApp.GetClipboardViewer(), WM_RECONNECT_TO_COPY_CHAIN, 0, 0 );
+	::PostMessage( theApp.GetClipboardViewer(), WM_CV_RECONNECT, 0, 0 );
 }
 
 void CMainFrame::OnUpdateFirstReconnecttoclipboardchain(CCmdUI* pCmdUI) 

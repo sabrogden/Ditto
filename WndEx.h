@@ -39,6 +39,8 @@ public:
 	bool	SetCaptionColors( COLORREF left, COLORREF right );
 	bool	SetCaptionColorActive( bool bVal );
 
+	void	InvalidateNc();
+
 protected:
 	CFont			m_TitleFont;
 	bool			m_bResizable;

@@ -12,8 +12,6 @@
 #include "ArrayEx.h"
 #include "ProcessCopy.h"
 
-// Sends Ctrl-V to hWnd
-void SendPaste(HWND hWnd);
 // Sets lID's lDate to GetCurrentTime() and updates paste stats
 BOOL MarkClipAsPasted(long lID);
 
@@ -23,6 +21,8 @@ BOOL MarkClipAsPasted(long lID);
 class CClipIDs : public ARRAY
 {
 public:
+// PASTING FUNCTIONS
+
 	// allocate an HGLOBAL of the given Format Type representing the Clip IDs in this array.
 	HGLOBAL	Render( UINT cfType );
 	// Fills "types" with the Format Types corresponding to the Clip IDs in this array.
@@ -60,13 +60,12 @@ public:
 class CProcessPaste
 {
 public:
-	HWND	m_hWnd; // window to paste to
 	// true if we should delete m_pOle,
 	// false if it will be automatically deleted
 	bool	m_bDeleteOle;
 	COleClipSource*	m_pOle;
 
-	CProcessPaste( HWND hWnd = 0 );
+	CProcessPaste();
 	~CProcessPaste();
 
 	CClipIDs& GetClipIDs() { return m_pOle->m_ClipIDs; }

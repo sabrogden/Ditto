@@ -18,7 +18,6 @@
 #define REMOVE_OLD_ENTRIES_TIMER		3
 #define CHECK_FOR_UPDATE				4
 #define CLOSE_APP						5
-#define TIMER_CHECK_TOP_LEVEL_VIEWER	6
 
 
 class CMainFrame : public CFrameWnd

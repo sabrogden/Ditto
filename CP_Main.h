@@ -56,9 +56,11 @@ public:
 // Focus Tracking
 	HWND	m_hTargetWnd;
 //	HWND	m_hTargetFocus;
-	HWND	TargetActiveWindow(); // returns the previously targeted window
+	bool	TargetActiveWindow();
 	bool ActivateTarget();
-	bool ReleaseFocus(); // activate the target only if we are the foreground window
+	bool ReleaseFocus(); // activate the target only if we are the active window
+	CString GetTargetName() { return GetWndText( m_hTargetWnd ); }
+	void SendPaste(); // Activates the Target and sends Ctrl-V
 
 	CLIPFORMAT m_cfIgnoreClipboard; // used by CClip::LoadFromClipboard
 
@@ -89,7 +91,7 @@ public:
 
 	CString m_Status;
 	CQPasteWnd* QPasteWnd() { return m_pMainFrame->QuickPaste.m_pwndPaste; }
-	void SetStatus( const char* status = NULL );
+	void SetStatus( const char* status = NULL, bool bRepaintImmediately = false );
 
 	void ShowPersistent( bool bVal );
 

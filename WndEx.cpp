@@ -29,6 +29,11 @@ CWndEx::~CWndEx()
 {
 }
 
+void CWndEx::InvalidateNc()
+{
+	::RedrawWindow( m_hWnd, NULL, NULL, RDW_INVALIDATE | RDW_FRAME | RDW_NOINTERNALPAINT );
+}
+
 bool CWndEx::SetCaptionColors( COLORREF left, COLORREF right )
 {
 	if( left == m_CaptionColorLeft || right == m_CaptionColorRight )

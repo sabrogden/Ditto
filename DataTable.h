@@ -45,6 +45,8 @@ public:
 	void Open(LPCTSTR lpszFormat,...);
 	BOOL DataEqual(HGLOBAL hgData);
 
+	static bool DeleteParent( long lParentID );
+
 // Implementation
 #ifdef _DEBUG
 	virtual void AssertValid() const;

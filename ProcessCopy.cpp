@@ -177,6 +177,10 @@ CClipTypes* pTypes = pClipTypes;
 	// m_Formats should be empty when this is called.
 	ASSERT( m_Formats.GetCount() == 0 );
 
+	// If the data is supposed to be private, then return
+	if( ::IsClipboardFormatAvailable( theApp.m_cfIgnoreClipboard ) )
+		EXIT_LoadFromClipboard( false );
+
 	//Attach to the clipboard
 	if( !oleData.AttachClipboard() )
 	{
@@ -185,10 +189,6 @@ CClipTypes* pTypes = pClipTypes;
 	}
 
 	oleData.EnsureClipboardObject();
-
-	// If the data is supposed to be private, then return
-	if( oleData.IsDataAvailable( theApp.m_cfIgnoreClipboard ) )
-		EXIT_LoadFromClipboard( false );
 
 	// if no types were given, get only the first (most important) type.
 	//  (subsequent types could be synthetic due to automatic type conversions)
@@ -715,7 +715,7 @@ bool bResult;
 	{
 		if( bShowStatus )
 		{
-			theApp.SetStatus( StrF("%d",nRemaining) );
+			theApp.SetStatus( StrF("%d",nRemaining), true );
 			nRemaining--;
 		}
 
@@ -731,7 +731,7 @@ bool bResult;
 	}
 
 	if( bShowStatus )
-		theApp.SetStatus();
+		theApp.SetStatus(NULL, true);
 
 	return savedCount;
 }
@@ -750,8 +750,8 @@ BEGIN_MESSAGE_MAP(CClipboardViewer, CWnd)
 	ON_WM_DRAWCLIPBOARD()
 	ON_WM_TIMER()
 	//}}AFX_MSG_MAP
-	ON_MESSAGE(WM_RECONNECT_TO_COPY_CHAIN, OnReconnectToCopyChain)
-	ON_MESSAGE(WM_IS_TOP_VIEWER, OnGetIsTopViewer)
+	ON_MESSAGE(WM_CV_RECONNECT, OnCVReconnect)
+	ON_MESSAGE(WM_CV_IS_CONNECTED, OnCVIsConnected)
 	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
@@ -766,6 +766,8 @@ CClipboardViewer::CClipboardViewer( CCopyThread* pHandler )
 	m_bIsConnected = false;
 	m_pHandler = pHandler;
 	ASSERT(m_pHandler);
+	m_bPinging = false;
+	m_bPingSuccess = false;
 }
 
 CClipboardViewer::~CClipboardViewer()
@@ -788,7 +790,7 @@ void CClipboardViewer::Connect()
 	m_bCalling_SetClipboardViewer = true;
 	m_hNextClipboardViewer = CWnd::SetClipboardViewer();
 	m_bCalling_SetClipboardViewer = false;
-	m_bIsConnected = true;
+	m_bIsConnected = SendPing();
 }
 
 // disconnects as a clipboard viewer
@@ -802,6 +804,45 @@ void CClipboardViewer::Disconnect()
 	m_bIsConnected = false;
 }
 
+bool CClipboardViewer::SendPing()
+{
+HWND hWnd;
+bool bResult = false;
+
+	hWnd = ::GetClipboardViewer();
+	// if there is a chain
+	if( ::IsWindow(hWnd) )
+	{
+		m_bPingSuccess = false;
+		m_bPinging = true;
+		::SendMessage( hWnd, WM_DRAWCLIPBOARD, 0, 0 );
+		m_bPinging = false;
+		bResult = m_bPingSuccess;
+	}
+
+	m_bIsConnected = bResult;
+
+	return bResult;
+}
+
+bool CClipboardViewer::EnsureConnected()
+{
+	if( !SendPing() )
+		Connect();
+
+	return m_bIsConnected;
+}
+
+// puts format "Clipboard Viewer Ignore" on the clipboard
+void CClipboardViewer::SetCVIgnore()
+{
+	if( ::OpenClipboard( m_hWnd ) )
+	{
+		::SetClipboardData( theApp.m_cfIgnoreClipboard, NULL );
+		::CloseClipboard();
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CClipboardViewer message handlers
 
@@ -810,8 +851,8 @@ int CClipboardViewer::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	// is it important for us to be the top viewer?
-//	SetTimer(TIMER_CHECK_TOP_LEVEL_VIEWER, ONE_MINUTE, 0);
+	// verify that we are in the chain every minute
+	SetTimer(TIMER_ENSURE_VIEWER_IN_CHAIN, ONE_MINUTE, 0);
 
 	//Set up the clip board viewer
 	Connect();
@@ -843,9 +884,18 @@ void CClipboardViewer::OnChangeCbChain(HWND hWndRemove, HWND hWndAfter)
 //Message that the clipboard data has changed
 void CClipboardViewer::OnDrawClipboard() 
 {
+	if( m_bPinging )
+	{
+		m_bPingSuccess = true;
+		return;
+	}
+
 	// don't process the event when we first attach
 	if( m_pHandler && !m_bCalling_SetClipboardViewer )
-		m_pHandler->OnClipboardChange();
+	{
+		if( !::IsClipboardFormatAvailable( theApp.m_cfIgnoreClipboard ) )
+			m_pHandler->OnClipboardChange();
+	}
 
 	// pass the event to the next Clipboard viewer in the chain
 	if( m_hNextClipboardViewer != NULL )
@@ -856,37 +906,22 @@ void CClipboardViewer::OnTimer(UINT nIDEvent)
 {
 	switch(nIDEvent)
 	{
-	case TIMER_CHECK_TOP_LEVEL_VIEWER:
-		{
-			if( GetClipboardViewer() != this )
-			{
-				OnReconnectToCopyChain(0, 0);
-				m_lReconectCount++;
-
-				if(m_lReconectCount > 10)
-					KillTimer(TIMER_CHECK_TOP_LEVEL_VIEWER);
-			}
-			break;
-		}
+	case TIMER_ENSURE_VIEWER_IN_CHAIN:
+		EnsureConnected();
+		break;
 	}
 
 	CWnd::OnTimer(nIDEvent);
 }
 
-LRESULT CClipboardViewer::OnReconnectToCopyChain(WPARAM wParam, LPARAM lParam)
+LRESULT CClipboardViewer::OnCVReconnect(WPARAM wParam, LPARAM lParam)
 {
-	if( GetClipboardViewer() != this )
-	{
-		Disconnect();
-		Connect();
-		return TRUE;
-	}
-	return FALSE;
+	return EnsureConnected();
 }
 
-LRESULT CClipboardViewer::OnGetIsTopViewer(WPARAM wParam, LPARAM lParam)
+LRESULT CClipboardViewer::OnCVIsConnected(WPARAM wParam, LPARAM lParam)
 {
-	return (GetClipboardViewer() == this);
+	return SendPing();
 }
 
 /*----------------------------------------------------------------------------*\
@@ -937,6 +972,12 @@ int CCopyThread::ExitInstance()
 	ASSERT( m_bQuit );  // make sure we intended to quit
 	m_pClipboardViewer->Disconnect();
 	return CWinThread::ExitInstance();
+}
+
+bool CCopyThread::IsClipboardViewerConnected()
+{
+	ASSERT( m_pClipboardViewer && m_pClipboardViewer->m_hWnd );
+	return ::SendMessage( m_pClipboardViewer->m_hWnd, WM_CV_IS_CONNECTED, 0, 0 ) != FALSE;
 }
 
 // Called within Copy Thread:

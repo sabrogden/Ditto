@@ -12,28 +12,6 @@ static char THIS_FILE[]=__FILE__;
 	Globals
 \*------------------------------------------------------------------*/
 
-void SendPaste(HWND hWnd)
-{
-	if(hWnd)
-	{
-		//Set a Control key down then a 'V' down then the ups
-		//To simulate a paste
-		::SetForegroundWindow(hWnd);
-		// Does SetFocus do anything?... since hWnd is not associated with
-		//	our thread's message queue?
-//		::SetFocus(hWnd);
-	
-		keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
-		keybd_event('V', 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
-
-     
-		keybd_event('V', 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-		keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	}
-	else
-		ASSERT(FALSE);
-}
-
 BOOL MarkClipAsPasted(long lID)
 {
 	CGetSetOptions::SetTripPasteCount(-1);
@@ -71,6 +49,11 @@ BOOL MarkClipAsPasted(long lID)
 /*------------------------------------------------------------------*\
 	CClipIDs
 \*------------------------------------------------------------------*/
+
+//-------------------
+// PASTING FUNCTIONS
+//-------------------
+
 // allocate an HGLOBAL of the given Format Type representing these Clip IDs.
 HGLOBAL CClipIDs::Render( UINT cfType )
 {
@@ -238,8 +221,7 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 	CProcessPaste
 \*------------------------------------------------------------------*/
 
-CProcessPaste::CProcessPaste( HWND hWnd ) :
-	m_hWnd(hWnd), m_bDeleteOle(true)
+CProcessPaste::CProcessPaste() : m_bDeleteOle(true)
 {
 	m_pOle = new COleClipSource;
 }
@@ -276,7 +258,7 @@ bool bOldState;
 		}
 
 		m_bDeleteOle = false; // m_pOle is managed by the OLE clipboard now
-		SendPaste(m_hWnd);
+		theApp.SendPaste();
 		MarkAsPasted();
 		return TRUE;
 	}

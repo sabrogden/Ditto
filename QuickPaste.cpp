@@ -78,7 +78,6 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 		}
 	}
 
-	theApp.TargetActiveWindow();
 
 	CPoint ptCaret;
 	GetFocusWnd(&ptCaret); // get caret position relative to screen

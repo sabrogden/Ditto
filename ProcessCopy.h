@@ -131,7 +131,7 @@ public:
 	CClipboardViewer
 \*----------------------------------------------------------------------------*/
 
-#define TIMER_CHECK_TOP_LEVEL_VIEWER	6
+#define TIMER_ENSURE_VIEWER_IN_CHAIN	6
 
 class CClipboardViewer : public CWnd
 {
@@ -158,8 +158,14 @@ public:
 	// m_pHandler->OnClipboardChange is called when the clipboard changes.
 	CCopyThread*	m_pHandler;
 
-	void	Connect();    // connects as a clipboard viewer
-	void	Disconnect(); // disconnects as a clipboard viewer
+	void Connect();    // connects as a clipboard viewer
+	void Disconnect(); // disconnects as a clipboard viewer
+
+	bool	m_bPinging;
+	bool	m_bPingSuccess;
+	bool SendPing(); // returns true if we are in the chain
+	bool EnsureConnected();
+	void SetCVIgnore(); // puts format "Clipboard Viewer Ignore" on the clipboard
 
 // Generated message map functions
 protected:
@@ -170,8 +176,8 @@ protected:
 	afx_msg void OnDrawClipboard();
 	afx_msg void OnTimer(UINT nIDEvent);
 	//}}AFX_MSG
-	afx_msg LRESULT OnReconnectToCopyChain(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnGetIsTopViewer(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnCVReconnect(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnCVIsConnected(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -255,7 +261,7 @@ public:
 	CClipList*          m_pClips; // snapshots of the clipboard when it changed.
 
 	// Called within Main thread:
-	bool IsClipboardViewerConnected() { return m_pClipboardViewer->m_bIsConnected; }
+	bool IsClipboardViewerConnected();
 	CClipList* GetClips(); // caller owns the returned CClipList
 	void SetSupportedTypes( CClipTypes* pTypes ); // CopyThread will own pTypes
 	HWND SetClipHandler( HWND hWnd ); // returns previous value

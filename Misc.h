@@ -79,13 +79,13 @@ CString GetFilePath(CString csFullPath);
 #define POS_AT_PREVIOUS	3
 
 //Message to the main window to show icon or not
-#define WM_SHOW_TRAY_ICON			WM_USER + 200
-#define WM_RECONNECT_TO_COPY_CHAIN	WM_USER + 201
-#define WM_IS_TOP_VIEWER			WM_USER + 202  // Use theApp.IsClipboardViewerConnected()
-#define WM_COPYPROPERTIES			WM_USER + 203
-#define WM_CLOSE_APP				WM_USER + 204
-#define WM_REFRESH_VIEW				WM_USER + 205
-#define WM_CLIPBOARD_COPIED			WM_USER + 206
+#define WM_SHOW_TRAY_ICON		WM_USER + 200
+#define WM_CV_RECONNECT			WM_USER + 201
+#define WM_CV_IS_CONNECTED		WM_USER + 202
+#define WM_COPYPROPERTIES		WM_USER + 203
+#define WM_CLOSE_APP			WM_USER + 204
+#define WM_REFRESH_VIEW			WM_USER + 205
+#define WM_CLIPBOARD_COPIED		WM_USER + 206
 
 #define REG_PATH					"Software\\Ditto"
 
