@@ -86,7 +86,7 @@ public:
 
 	void DestroyAndCreateAccelerator(BOOL bCreate);
 
-	void ShowFullDescription();
+	void ShowFullDescription(bool bFromAuto = false);
 	BOOL SetItemCountEx(int iCount, DWORD dwFlags = LVSICF_NOINVALIDATEALL);
 
 protected:
@@ -112,6 +112,9 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnWindowPosChanged(WINDOWPOS FAR* lpwndpos);
+	afx_msg void OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult);
 	//}}AFX_MSG
 	afx_msg BOOL OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult );
 	DECLARE_MESSAGE_MAP()

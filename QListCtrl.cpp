@@ -109,6 +109,9 @@ BEGIN_MESSAGE_MAP(CQListCtrl, CListCtrl)
 	ON_WM_CREATE()
 	ON_WM_VSCROLL()
 	ON_WM_HSCROLL()
+	ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnSelectionChange)
+	ON_WM_TIMER()
+	ON_WM_WINDOWPOSCHANGED()
 	//}}AFX_MSG_MAP
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
@@ -633,13 +636,6 @@ DWORD dID;
 
 	switch(pMsg->message) 
 	{
-	case WM_LBUTTONDOWN:
-	case WM_RBUTTONDOWN:
-		if(m_Popup.m_bIsShowing)
-		{
-			m_Popup.Hide();
-		}
-		break;
 	case WM_KEYDOWN:
 		WPARAM vk = pMsg->wParam;
 		
@@ -719,13 +715,20 @@ DWORD dID;
 	return CListCtrl::PreTranslateMessage(pMsg);
 }
 
-void CQListCtrl::ShowFullDescription()
+void CQListCtrl::ShowFullDescription(bool bFromAuto)
 {
 	int nItem = GetCaret();
-	CRect rc;
+	CRect rc, crWindow;
+	GetWindowRect(&crWindow);
 	GetItemRect(nItem, rc, LVIR_BOUNDS);
 	ClientToScreen(rc);
-	m_Popup.m_Pos = CPoint(rc.left, rc.bottom); // rc.top??
+
+	if(bFromAuto == false)
+	{
+		m_Popup.m_Pos = CPoint(rc.left, rc.bottom);
+	}
+	else
+		m_Popup.m_Pos = CPoint((crWindow.left + (crWindow.right - crWindow.left)/2), rc.bottom);
 	CString cs;
 	GetToolTipText(nItem, cs);
 	m_Popup.Show( cs );
@@ -807,4 +810,46 @@ BOOL CQListCtrl::SetItemCountEx(int iCount, DWORD dwFlags /* = LVSICF_NOINVALIDA
 {
 	theApp.SetStatus(NULL, TRUE);
 	return CListCtrl::SetItemCountEx(iCount, dwFlags);
+}
+
+#define TIMER_SHOW_PROPERTIES	1
+
+void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	NMLISTVIEW *pnmv = (NMLISTVIEW *) pNMHDR;
+
+	if((pnmv->uNewState == 3) ||
+		(pnmv->uNewState == 1))
+	{
+		if(m_Popup.m_bIsShowing)
+		{
+			m_Popup.Hide();
+		}
+		if(g_Opt.m_bAllwaysShowDescription)
+		{
+			KillTimer(TIMER_SHOW_PROPERTIES);
+			SetTimer(TIMER_SHOW_PROPERTIES, 300, NULL);
+		}
+	}
+}
+
+void CQListCtrl::OnTimer(UINT nIDEvent) 
+{
+	if(nIDEvent == TIMER_SHOW_PROPERTIES)
+	{
+		ShowFullDescription(true);
+		KillTimer(TIMER_SHOW_PROPERTIES);
+	}
+	
+	CListCtrl::OnTimer(nIDEvent);
+}
+
+void CQListCtrl::OnWindowPosChanged(WINDOWPOS FAR* lpwndpos) 
+{
+	CListCtrl::OnWindowPosChanged(lpwndpos);
+	
+	if(m_Popup.m_bIsShowing)
+	{
+		m_Popup.Hide();
+	}
 }

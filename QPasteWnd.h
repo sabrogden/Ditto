@@ -126,6 +126,10 @@ protected:
 	afx_msg void OnFindItem(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnMenuFirsttenhotkeysUsectrlnum();
 	afx_msg void OnMenuFirsttenhotkeysShowhotkeytext();
+	afx_msg void OnMenuQuickoptionsAllwaysshowdescription();
+	afx_msg void OnMenuQuickoptionsDoubleclickingoncaptionTogglesalwaysontop();
+	afx_msg void OnMenuQuickoptionsDoubleclickingoncaptionRollupwindow();
+	afx_msg void OnMenuQuickoptionsDoubleclickingoncaptionTogglesshowdescription();
 	//}}AFX_MSG
 	afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);

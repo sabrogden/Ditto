@@ -77,6 +77,10 @@ CString GetFilePath(CString csFullPath);
 #define CAPTION_LEFT	3
 #define CAPTION_TOP		4
 
+#define TOGGLES_ALLWAYS_ON_TOP				1
+#define TOGGLES_ALLWAYS_SHOW_DESCRIPTION	2
+#define	ROLLES_UP_WINDOW					3
+
 //Message to the main window to show icon or not
 #define WM_SHOW_TRAY_ICON		WM_USER + 200
 #define WM_CV_RECONNECT			WM_USER + 201
@@ -226,6 +230,14 @@ public:
 	static BOOL		m_bDescShowLeadingWhiteSpace;
 	static void		SetDescShowLeadingWhiteSpace(BOOL bVal);
 	static BOOL		GetDescShowLeadingWhiteSpace();
+
+	static BOOL		m_bAllwaysShowDescription;
+	static void		SetAllwaysShowDescription(long bShow);
+	static BOOL		GetAllwaysShowDescription();
+
+	static long		m_bDoubleClickingOnCaptionDoes;
+	static void		SetDoubleClickingOnCaptionDoes(long lOption);
+	static long		GetDoubleClickingOnCaptionDoes();
 
 	/*
 	BOOL IsAutoRun();

@@ -406,6 +406,8 @@ BOOL CGetSetOptions::m_bShowPersistent;
 BOOL CGetSetOptions::m_bHistoryStartTop;
 long CGetSetOptions::m_bDescTextSize;
 BOOL CGetSetOptions::m_bDescShowLeadingWhiteSpace;
+BOOL CGetSetOptions::m_bAllwaysShowDescription;
+LONG CGetSetOptions::m_bDoubleClickingOnCaptionDoes;
 
 CGetSetOptions g_Opt;
 
@@ -420,6 +422,8 @@ CGetSetOptions::CGetSetOptions()
 	m_bHistoryStartTop = GetHistoryStartTop();
 	m_bDescTextSize = GetDescTextSize();
 	m_bDescShowLeadingWhiteSpace = GetDescShowLeadingWhiteSpace();
+	m_bAllwaysShowDescription = GetAllwaysShowDescription();
+	m_bDoubleClickingOnCaptionDoes = GetDoubleClickingOnCaptionDoes();
 }
 
 CGetSetOptions::~CGetSetOptions()
@@ -879,6 +883,11 @@ long CGetSetOptions::GetDescTextSize()			{	return GetProfileLong("DescTextSize",
 void CGetSetOptions::SetDescShowLeadingWhiteSpace(BOOL bVal){  SetProfileLong("DescShowLeadingWhiteSpace", bVal); m_bDescShowLeadingWhiteSpace = bVal; }
 BOOL CGetSetOptions::GetDescShowLeadingWhiteSpace()         {  return GetProfileLong("DescShowLeadingWhiteSpace", FALSE); }
 
+void CGetSetOptions::SetAllwaysShowDescription(long bShow)	{	SetProfileLong("AllwaysShowDescription", bShow); m_bAllwaysShowDescription = bShow; }
+BOOL CGetSetOptions::GetAllwaysShowDescription()			{	return GetProfileLong("AllwaysShowDescription", FALSE); }
+
+void CGetSetOptions::SetDoubleClickingOnCaptionDoes(long lOption)	{	SetProfileLong("DoubleClickingOnCaptionDoes", lOption); m_bDoubleClickingOnCaptionDoes = lOption; }
+long CGetSetOptions::GetDoubleClickingOnCaptionDoes()				{	return GetProfileLong("DoubleClickingOnCaptionDoes", TOGGLES_ALLWAYS_ON_TOP); }
 /*------------------------------------------------------------------*\
 	CHotKey - a single system-wide hotkey
 \*------------------------------------------------------------------*/

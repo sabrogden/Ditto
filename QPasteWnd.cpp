@@ -77,6 +77,10 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_NOTIFY(LVN_ODFINDITEM, ID_LIST_HEADER, OnFindItem)
 	ON_COMMAND(ID_MENU_FIRSTTENHOTKEYS_USECTRLNUM, OnMenuFirsttenhotkeysUsectrlnum)
 	ON_COMMAND(ID_MENU_FIRSTTENHOTKEYS_SHOWHOTKEYTEXT, OnMenuFirsttenhotkeysShowhotkeytext)
+	ON_COMMAND(ID_MENU_QUICKOPTIONS_ALLWAYSSHOWDESCRIPTION, OnMenuQuickoptionsAllwaysshowdescription)
+	ON_COMMAND(ID_MENU_QUICKOPTIONS_DOUBLECLICKINGONCAPTION_TOGGLESALWAYSONTOP, OnMenuQuickoptionsDoubleclickingoncaptionTogglesalwaysontop)
+	ON_COMMAND(ID_MENU_QUICKOPTIONS_DOUBLECLICKINGONCAPTION_ROLLUPWINDOW, OnMenuQuickoptionsDoubleclickingoncaptionRollupwindow)
+	ON_COMMAND(ID_MENU_QUICKOPTIONS_DOUBLECLICKINGONCAPTION_TOGGLESALWAYSSHOWDESCRIPTION, OnMenuQuickoptionsDoubleclickingoncaptionTogglesshowdescription)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(NM_SELECT, OnListSelect)
 	ON_MESSAGE(NM_END, OnListEnd)
@@ -618,6 +622,8 @@ void CQPasteWnd::OnRclickQuickPaste(NMHDR* pNMHDR, LRESULT* pResult)
 
 		SetMenuChecks(cmSubMenu);
 
+		m_lstHeader.m_Popup.Hide();
+
 		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON,
 				pp.x, pp.y, this, NULL);
 	}
@@ -740,6 +746,24 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 	case 4:
 		pMenu->CheckMenuItem(ID_VIEWCAPTIONBARON_TOP, MF_CHECKED);
 		break;
+	}
+
+	if(CGetSetOptions::GetAllwaysShowDescription())
+	{
+		pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_ALLWAYSSHOWDESCRIPTION, MF_CHECKED);
+	}
+
+	switch(CGetSetOptions::GetDoubleClickingOnCaptionDoes())
+	{
+		case TOGGLES_ALLWAYS_ON_TOP:
+			pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_DOUBLECLICKINGONCAPTION_TOGGLESALWAYSONTOP, MF_CHECKED);
+			break;
+		case TOGGLES_ALLWAYS_SHOW_DESCRIPTION:
+			pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_DOUBLECLICKINGONCAPTION_ROLLUPWINDOW, MF_CHECKED);
+			break;
+		case ROLLES_UP_WINDOW:
+			pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_DOUBLECLICKINGONCAPTION_TOGGLESALWAYSSHOWDESCRIPTION, MF_CHECKED);
+			break;
 	}
 }
 
@@ -961,6 +985,38 @@ void CQPasteWnd::OnSortDescending()
 	FillList();
 }
 
+void CQPasteWnd::OnMenuNewGroup()
+{
+	NewGroup( false );
+}
+
+void CQPasteWnd::OnMenuNewGroupSelection()
+{
+	NewGroup( true );
+}
+
+void CQPasteWnd::OnMenuQuickoptionsAllwaysshowdescription() 
+{
+	CGetSetOptions::SetAllwaysShowDescription(!g_Opt.m_bAllwaysShowDescription);
+	
+}
+
+void CQPasteWnd::OnMenuQuickoptionsDoubleclickingoncaptionTogglesalwaysontop() 
+{
+	CGetSetOptions::SetDoubleClickingOnCaptionDoes(TOGGLES_ALLWAYS_ON_TOP);
+	
+}
+
+void CQPasteWnd::OnMenuQuickoptionsDoubleclickingoncaptionRollupwindow() 
+{
+	CGetSetOptions::SetDoubleClickingOnCaptionDoes(ROLLES_UP_WINDOW);
+	
+}
+
+void CQPasteWnd::OnMenuQuickoptionsDoubleclickingoncaptionTogglesshowdescription() 
+{
+	CGetSetOptions::SetDoubleClickingOnCaptionDoes(TOGGLES_ALLWAYS_SHOW_DESCRIPTION);	
+}
 
 ///////////////////////////////////////////////////////////////////////
 //END END Menu Stuff
@@ -1374,7 +1430,20 @@ void CQPasteWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
 {
 	// toggle ShowPersistent when we double click the caption
 	if( nHitTest == HTCAPTION )
-		theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
+	{
+		switch(g_Opt.m_bDoubleClickingOnCaptionDoes)
+		{
+		case TOGGLES_ALLWAYS_ON_TOP:
+			theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
+			break;
+		case TOGGLES_ALLWAYS_SHOW_DESCRIPTION:
+			CGetSetOptions::SetAllwaysShowDescription(!g_Opt.m_bAllwaysShowDescription);
+			break;
+		case ROLLES_UP_WINDOW:
+			MinMaxWindow();
+			break;
+		}
+	}
 
 	CWndEx::OnNcLButtonDblClk(nHitTest, point);
 }
@@ -1422,14 +1491,4 @@ void CQPasteWnd::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 	// the focus is always implicitly selected.
 	if( m_lstHeader.GetSelectedCount() > 0 )
 		theApp.SetStatus(NULL, TRUE);
-}
-
-void CQPasteWnd::OnMenuNewGroup()
-{
-	NewGroup( false );
-}
-
-void CQPasteWnd::OnMenuNewGroupSelection()
-{
-	NewGroup( true );
 }
