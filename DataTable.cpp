@@ -100,6 +100,18 @@ HGLOBAL CDataTable::TakeData()
 // http://support.microsoft.com/default.aspx?scid=http://support.microsoft.com:80/support/kb/articles/q119/7/65.asp&NoWebContent=1
 BOOL CDataTable::ReplaceData( HGLOBAL hgData, UINT len )
 {
+	// make sure the given HGLOBAL is valid.
+	if( hgData != NULL )
+	{
+		VERIFY( len > 0 );
+	UINT size = ::GlobalSize( hgData );
+		VERIFY( size >= len );
+		VERIFY( IsValid(hgData) );
+	}
+	else
+		VERIFY( len == 0 );
+
+	// free the old HGLOBAL
 	if( m_ooData.m_hData )
 		::GlobalFree( m_ooData.m_hData );
 

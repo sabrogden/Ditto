@@ -188,6 +188,14 @@ HWND GetFocusWnd(CPoint *pPointCaret)
 	Global Memory Helper Functions
 \*----------------------------------------------------------------------------*/
 
+// make sure the given HGLOBAL is valid.
+BOOL IsValid( HGLOBAL hGlobal )
+{
+void* pvData = ::GlobalLock( hGlobal );
+	::GlobalUnlock( hGlobal );
+	return ( pvData != NULL );
+}
+
 // asserts if hDest isn't big enough
 void CopyToGlobalHP( HGLOBAL hDest, LPVOID pBuf, ULONG ulBufLen )
 {

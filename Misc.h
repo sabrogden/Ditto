@@ -48,6 +48,7 @@ bool IsAppWnd( HWND hWnd );
 HWND GetFocusWnd(CPoint *pPointCaret = NULL);
 
 // Global Memory Helper Functions
+BOOL IsValid( HGLOBAL hGlobal );
 void CopyToGlobalHP( HGLOBAL hDest, LPVOID pBuf, ULONG ulBufLen );
 void CopyToGlobalHH( HGLOBAL hDest, HGLOBAL hSource, ULONG ulBufLen );
 HGLOBAL NewGlobalP( LPVOID pBuf, UINT nLen );

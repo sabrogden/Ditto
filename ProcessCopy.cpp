@@ -23,7 +23,17 @@ HGLOBAL COleDataObjectEx::GetGlobalData(CLIPFORMAT cfFormat, LPFORMATETC lpForma
 {
     HGLOBAL hGlobal = COleDataObject::GetGlobalData(cfFormat, lpFormatEtc);
 	if( hGlobal )
+	{
+		if( !::IsValid(hGlobal) )
+		{
+			LOG( StrF(
+			  "COleDataObjectEx::GetGlobalData(\"%s\"): ERROR: Invalid (NULL) data returned.",
+			  GetFormatName(cfFormat) ) );
+			::GlobalFree( hGlobal );
+			hGlobal = NULL;
+		}
 		return hGlobal;
+	}
 
 	// The data isn't in global memory, so try getting an IStream interface to it.
 	STGMEDIUM stg;
@@ -66,7 +76,16 @@ HGLOBAL COleDataObjectEx::GetGlobalData(CLIPFORMAT cfFormat, LPFORMATETC lpForma
 
 	ReleaseStgMedium(&stg);
 
-    return hGlobal;
+	if( hGlobal && !::IsValid(hGlobal) )
+	{
+		LOG( StrF(
+			"COleDataObjectEx::GetGlobalData(\"%s\"): ERROR: Invalid (NULL) data returned.",
+			GetFormatName(cfFormat) ) );
+		::GlobalFree( hGlobal );
+		hGlobal = NULL;
+	}
+
+	return hGlobal;
 }
 
 /*----------------------------------------------------------------------------*\
@@ -245,6 +264,7 @@ int numTypes = pTypes->GetSize();
 			nSize = GlobalSize( cf.m_hgData );
 			if( nSize > 0 )
 			{
+				ASSERT( ::IsValid(cf.m_hgData) );
 				m_Formats.Add( cf );
 				m_lTotalCopySize += nSize;
 			}
