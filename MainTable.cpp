@@ -73,6 +73,67 @@ void CMainTable::Dump(CDumpContext& dc) const
 }
 #endif //_DEBUG
 
+// deletes from both Main and Data
+BOOL CMainTable::DeleteClip( int id )
+{
+CString csMainSQL;
+CString csDataSQL;
+BOOL bRet = FALSE;
+
+	csMainSQL.Format( "DELETE FROM Main WHERE lID = %d", id );
+	csDataSQL.Format( "DELETE FROM Data WHERE lParentID = %d", id );
+
+	try
+	{
+		theApp.EnsureOpenDB();
+		theApp.m_pDatabase->Execute(csMainSQL, dbFailOnError);
+		theApp.m_pDatabase->Execute(csDataSQL, dbFailOnError);
+		bRet = TRUE;
+	}
+	catch(CDaoException* e)
+	{
+		AfxMessageBox(e->m_pErrorInfo->m_strDescription);
+		e->Delete();
+	}
+
+	return bRet;
+}
+
+BOOL CMainTable::DeleteClips(ARRAY &IDs)
+{
+int count = IDs.GetSize();
+
+	if(count <= 0)
+		return FALSE;
+
+BOOL bRet = TRUE;
+	// delete one at a time rather than all in one query
+	//	in order to avoid the "query too large" error for large deletes
+	for( int i=0; i < count && bRet; i++ )
+		bRet = bRet && DeleteClip( IDs[i] );
+
+	return bRet;
+}
+
+BOOL CMainTable::DeleteAllClips()
+{
+BOOL bRet = FALSE;
+	try
+	{
+		theApp.EnsureOpenDB();
+		theApp.m_pDatabase->Execute("DELETE * FROM Main", dbFailOnError);
+		theApp.m_pDatabase->Execute("DELETE * FROM Data", dbFailOnError);
+		bRet = TRUE;
+	}
+	catch(CDaoException* e)
+	{
+		AfxMessageBox(e->m_pErrorInfo->m_strDescription);
+		e->Delete();
+	}
+
+	return bRet;
+}
+
 BOOL CMainTable::DeleteAll()
 {
 	BOOL bRet = FALSE;
@@ -88,62 +149,6 @@ BOOL CMainTable::DeleteAll()
 		e->Delete();
 	}
 
-	return bRet;
-}
-
-BOOL CMainTable::DeleteRows(ARRAY &IDs)
-{
-	if(IDs.GetSize() <= 0)
-		return FALSE;
-
-	CString csMainSQL = "DELETE FROM Main WHERE";
-	CString csDataSQL = "DELETE FROM Data WHERE";
-	CString csMainFormat;
-
-	csMainFormat.Format(" lID = %d", IDs[0]);
-	csMainSQL += csMainFormat;
-
-	csMainFormat.Format(" lParentID = %d", IDs[0]);
-	csDataSQL += csMainFormat;
-
-	for(int i = 1; i < IDs.GetSize(); i++)
-	{
-		csMainFormat.Format(" Or lID = %d", IDs[i]);
-		csMainSQL += csMainFormat;
-
-		csMainFormat.Format(" Or lParentID = %d", IDs[i]);
-		csDataSQL += csMainFormat;
-	}
-		
-	BOOL bRet = TRUE;
-
-	try
-	{
-		theApp.EnsureOpenDB();
-		theApp.m_pDatabase->Execute(csMainSQL, dbFailOnError);
-	}
-	catch(CDaoException* e)
-	{
-		AfxMessageBox(e->m_pErrorInfo->m_strDescription);
-		e->Delete();
-		bRet = FALSE;
-	}
-
-	if(bRet)
-	{
-		try
-		{
-			theApp.EnsureOpenDB();
-			theApp.m_pDatabase->Execute(csDataSQL, dbFailOnError);
-		}
-		catch(CDaoException* e)
-		{
-			AfxMessageBox(e->m_pErrorInfo->m_strDescription);
-			e->Delete();
-			bRet = FALSE;
-		}
-	}
-	
 	return bRet;
 }
 

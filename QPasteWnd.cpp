@@ -331,20 +331,19 @@ LRESULT CQPasteWnd::OnListSelect(WPARAM wParam, LPARAM lParam)
 	int nCount = (int) wParam;
 	long *pItems = (long*) lParam;
 
-	
-	if(nCount)
-	{			
-		int nID = m_lstHeader.GetItemData(pItems[0]);
+	if(nCount <= 0)
+		return TRUE;
 
-		ShowWindow(SW_HIDE);
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData( IDs );
 
-		CProcessPaste past;
-		past.LoadDataAndPaste(nID, m_hWndFocus);
-	}
+	ShowWindow(SW_HIDE);
+
+	CProcessPaste past;
+	past.MultiPaste( IDs.GetCount(), IDs.GetData(), m_hWndFocus );
 
 	return TRUE;
 }
-
 
 LRESULT CQPasteWnd::OnListEnd(WPARAM wParam, LPARAM lParam)
 {
@@ -714,32 +713,52 @@ LRESULT CQPasteWnd::OnDelete(WPARAM wParam, LPARAM lParam)
 void CQPasteWnd::DeleteSelectedRows()
 {
 	ARRAY IDs;
-	m_lstHeader.GetSelectionItemData(IDs);
+	long lCount = 0;
 
-	if(m_Recset.DeleteRows(IDs))
+	if( m_lstHeader.GetSelectedCount() == 0 )
+		return;
+
+	POSITION pos = m_lstHeader.GetFirstSelectedItemPosition();
+	int nFirstSel = m_lstHeader.GetNextSelectedItem( pos );
+
+	m_Recset.MoveLast();
+	lCount = m_Recset.GetRecordCount();
+
+	if( lCount == m_lstHeader.GetSelectedCount() )
+		m_Recset.DeleteAllClips();
+	else
 	{
-		m_Recset.Requery();
-
-		long lCount = 0;
-		if(m_Recset.IsEOF() == FALSE)
-		{
-			m_Recset.MoveLast();
-			lCount = m_Recset.GetRecordCount();
-			m_lstHeader.LoadFirstTenHotKeys(m_Recset);
-		}
-
-		m_lstHeader.SetItemCountEx(lCount);
-		m_lstHeader.Invalidate();
+		m_lstHeader.GetSelectionItemData(IDs);
+		m_Recset.DeleteClips(IDs);
 	}
 
-	int nCurSel = m_lstHeader.GetCaret();
-	if(nCurSel < 0) 
-		nCurSel = 0;
+	m_Recset.Requery();
 
+	// set lCount to current number of records
+	if( m_Recset.IsBOF() && m_Recset.IsEOF() )
+		lCount = 0;
+	else
+	{
+		m_Recset.MoveLast();
+		lCount = m_Recset.GetRecordCount();
+		m_lstHeader.LoadFirstTenHotKeys(m_Recset);
+	}
+
+	m_lstHeader.SetItemCountEx(lCount);
+	m_lstHeader.Invalidate();
+
+//	int nCurSel = m_lstHeader.GetCaret();
 	m_lstHeader.RemoveAllSelection();
 
-	m_lstHeader.SetSelection(nCurSel);
-	m_lstHeader.SetCaret(nCurSel);
+	// adjust new cursor position to the first item we deleted.
+	if( lCount > 0 )
+	{
+		// if there are no items after the one we deleted, then select the last one.
+		if( nFirstSel >= lCount )
+			nFirstSel = lCount - 1;
+		m_lstHeader.SetSelection(nFirstSel);
+		m_lstHeader.SetCaret(nFirstSel);
+	}
 
 	m_lstHeader.RefreshVisibleRows();
 }

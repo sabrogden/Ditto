@@ -18,6 +18,10 @@ public:
 	BOOL LoadDataAndPaste(long lID, HWND hWnd);
 	BOOL LoadDataAndDrag(long lID);
 
+	BOOL MultiPaste( int numIDs, int* pIDs, HWND hWnd );
+	BOOL MultiDrag( int numIDs, int* pIDs, HWND hWnd );
+	CString AggregateText(int numIDs, int* pIDs, UINT uiPastType, char* pSeparator);
+
 protected:
 	void SendPaste(HWND hWnd);
 	BOOL LoadData(long lID, COleDataSource *pData);

@@ -34,8 +34,14 @@ public:
 	//}}AFX_VIRTUAL
 
 public:
-	BOOL DeleteRows(ARRAY &IDs);
-	BOOL DeleteAll();
+	// deletes from both Main and Data
+	static BOOL DeleteClip( int id );
+	static BOOL DeleteClips(ARRAY &IDs);
+	static BOOL DeleteAllClips();
+
+	// only deletes from Main
+	static BOOL DeleteAll();
+	
 	static HACCEL LoadAcceleratorKeys();
 	void Open(LPCTSTR lpszFormat,...);
 

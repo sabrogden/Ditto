@@ -1,2 +1,38 @@
+8-18-03
+-------
++ Implemented Multi-Selection Paste for CF_TEXT clips by "\r\n" concatenation
+  * CQPasteWnd::OnListSelect()
+  + BOOL CProcessPaste::MultiPaste( int numIDs, int* pIDs, HWND hWnd );
+  + BOOL CProcessPaste::MultiDrag( int numIDs, int* pIDs, HWND hWnd );
+  + CString CProcessPaste::AggregateText(int numIDs, int* pIDs, UINT uiPastType, char* pSeparator);
+  + bool CopyToGlobal( HGLOBAL hGlobal, LPVOID pBuf, ULONG ulBufLen )
+  + HGLOBAL NewGlobal( LPVOID pBuf, ULONG ulBufLen )
+
+* After a delete, position caret at first item deleted.
+  * void CQPasteWnd::DeleteSelectedRows()
+
+! Fixed Error "query too complex" when deleting large number of Clips
+  * void CQPasteWnd::DeleteSelectedRows()
+  + static BOOL CMainTable::DeleteAllClips();
+  + static BOOL CMainTable::DeleteClip( int id );
+  + static BOOL CMainTable::DeleteClips(ARRAY &IDs); (was called DeleteRows)
+
+8-16-03
+-------
+! Perform GlobalUnlock after memcmp.
+  * CDataTable::DataEqual
+
+! Fixed "random" termination.
+  * CMainFrame::OnTimer: added breaks to cases of switch.
+
+
 8-11-03
-Fixed string error in processcopy.cpp
+-------
+! Fixed string error in processcopy.cpp
+
+
+Legend:
++ = added
+- = removed
+* = modified
+! = fixed
