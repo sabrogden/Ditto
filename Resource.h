@@ -117,6 +117,7 @@
 #define IDC_NAME                        2022
 #define IDC_SHOW_THUMBNAILS             2022
 #define IDC_COMBO1                      2023
+#define IDC_DRAW_RTF                    2023
 #define IDC_HOTKEY1                     2024
 #define IDC_HOTKEY2                     2025
 #define IDC_EDIT_PLACE_ON_CLIPBOARD     2025
@@ -204,6 +205,7 @@
 #define ID_FIRST_HELP                   32843
 #define ID_MENU_QUICKOPTIONS_FONT       32844
 #define ID_MENU_QUICKOPTIONS_SHOWTHUMBNAILS 32845
+#define ID_MENU_QUICKOPTIONS_DRAWRTFTEXT 32846
 
 // Next default values for new objects
 // 
@@ -211,7 +213,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        157
-#define _APS_NEXT_COMMAND_VALUE         32846
+#define _APS_NEXT_COMMAND_VALUE         32847
 #define _APS_NEXT_CONTROL_VALUE         2032
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

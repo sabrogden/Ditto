@@ -478,6 +478,8 @@ BOOL CGetSetOptions::m_bUseHookDllForFocus;
 BOOL CGetSetOptions::m_HideDittoOnHotKeyIfAlreadyShown;
 long CGetSetOptions::m_lPort;
 BOOL CGetSetOptions::m_bDrawThumbnail;
+CString CGetSetOptions::m_csPassword;
+BOOL CGetSetOptions::m_bDrawRTF;
 
 CGetSetOptions g_Opt;
 
@@ -502,6 +504,8 @@ CGetSetOptions::CGetSetOptions()
 	m_HideDittoOnHotKeyIfAlreadyShown = GetHideDittoOnHotKeyIfAlreadyShown();
 	m_lPort = GetPort();
 	m_bDrawThumbnail = GetDrawThumbnail();
+	m_csPassword = GetNetworkPassword();
+	m_bDrawRTF = GetDrawRTF();
 
 	#ifdef _DEBUG
 	m_bUseHookDllForFocus = FALSE;
@@ -1160,6 +1164,31 @@ void CGetSetOptions::SetDrawThumbnail(long bDraw)
 BOOL CGetSetOptions::GetDrawThumbnail()
 {
 	return GetProfileLong("DrawThumbnail", TRUE);
+}
+
+void CGetSetOptions::SetNetworkPassword(CString csPassword)
+{
+	m_csPassword = csPassword;
+
+	SetProfileString("NetworkPassword", csPassword);
+}
+
+CString CGetSetOptions::GetNetworkPassword()
+{
+	CString cs = GetProfileString("NetworkPassword", "!.*abc");
+
+	return cs;
+}
+
+void CGetSetOptions::SetDrawRTF(long bDraw)
+{
+	SetProfileLong("DrawRTF", bDraw); 
+	m_bDrawRTF = bDraw;
+}
+
+BOOL CGetSetOptions::GetDrawRTF()
+{
+	return GetProfileLong("DrawRTF", FALSE);
 }
 
 /*------------------------------------------------------------------*\

@@ -5,8 +5,8 @@
 #include "CP_Main.h"
 #include "QListCtrl.h"
 #include "ProcessPaste.h"
-
 #include "BitmapHelper.h"
+#include <atlbase.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -49,6 +49,7 @@ CQListCtrl::CQListCtrl()
 	m_bShowTextForFirstTenHotKeys = true;
 	m_bStartTop = true;
 	m_pToolTip = NULL;
+	m_pFormatter = NULL;
 }
 
 CQListCtrl::~CQListCtrl()
@@ -65,6 +66,12 @@ CQListCtrl::~CQListCtrl()
 	DestroyAndCreateAccelerator(FALSE);
 
 	m_Font.DeleteObject();
+
+	if(m_pFormatter)
+	{
+		delete m_pFormatter;
+		m_pFormatter = NULL;
+	}
 }
 
 // returns the position 1-10 if the index is in the FirstTen block else -1
@@ -453,7 +460,8 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			pDC->SetTextColor(crOld);
 		}
 		
-		pDC->DrawText(csText, rcText, DT_VCENTER | DT_EXPANDTABS);
+		if(DrawText(nItem, rcText, pDC) == FALSE)
+			pDC->DrawText(csText, rcText, DT_VCENTER | DT_EXPANDTABS);
 		
         // Draw a focus rect around the item if necessary.
         if(bListHasFocus && (rItem.state & LVIS_FOCUSED))
@@ -500,6 +508,60 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		
         *pResult = CDRF_SKIPDEFAULT;    // We've painted everything.
 	}
+}
+
+BOOL CQListCtrl::DrawText(int nItem, CRect &crRect, CDC *pDC)
+{
+	if(g_Opt.m_bDrawRTF == FALSE)
+		return FALSE;
+	
+	static CLIPFORMAT clFormat = GetFormatID(CF_RTF);
+
+	BOOL bRet = FALSE;
+
+	long lDatabaseID = GetItemData(nItem);
+
+	CClipFormat* pThumbnail = &(m_RTFData[lDatabaseID]);
+	if(pThumbnail == NULL)
+		return FALSE;
+
+	//If it has not been read in
+	if(pThumbnail->m_cfType != clFormat)
+	{
+		pThumbnail->m_cfType = clFormat;
+
+		//Get the data from the database
+		GetClipData(nItem, *pThumbnail);
+	}
+
+	// if there's no data, then we're done.
+	if( pThumbnail->m_hgData == NULL )
+		return FALSE;
+
+	if(m_pFormatter == NULL)
+	{
+		m_pFormatter = new CFormattedTextDraw;
+		m_pFormatter->Create();
+	}
+
+	if(m_pFormatter)
+	{
+	   char *pData = (char*)GlobalLock(pThumbnail->m_hgData);
+	   if(pData)
+	   {
+		   CComBSTR bStr(pData);
+		   
+		   m_pFormatter->put_RTFText(bStr);
+		   
+		   m_pFormatter->Draw(pDC->m_hDC, crRect);
+
+		   GlobalUnlock(pThumbnail->m_hgData);
+
+		   bRet = TRUE;
+	   }
+	}
+
+	return bRet;
 }
 
 // DrawBitMap loads a DIB from the DB, draws a crRect thumbnail of the image

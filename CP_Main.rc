@@ -264,6 +264,8 @@ BEGIN
 
             MENUITEM "Show Thumbnails",             ID_MENU_QUICKOPTIONS_SHOWTHUMBNAILS
 
+            MENUITEM "Draw RTF Text",               ID_MENU_QUICKOPTIONS_DRAWRTFTEXT
+
         END
         POPUP "Sent To"
         BEGIN
@@ -390,7 +392,7 @@ BEGIN
     PUSHBUTTON      "&Delete",IDC_DELETE,147,30,38,14
 END
 
-IDD_OPTIONS_QUICK_PASTE DIALOG DISCARDABLE  0, 0, 229, 227
+IDD_OPTIONS_QUICK_PASTE DIALOG DISCARDABLE  0, 0, 332, 249
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Quick Paste"
 FONT 8, "MS Sans Serif"
@@ -412,21 +414,25 @@ BEGIN
     CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,67,122,10
     EDITTEXT        IDC_TRANS_PERC,140,66,19,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "Font",IDC_BUTTON_FONT,18,91,143,17
-    PUSHBUTTON      "Default Font",IDC_BUTTON_DEFAULT_FAULT,164,94,48,12
+    PUSHBUTTON      "Font",IDC_BUTTON_FONT,18,104,143,17
+    PUSHBUTTON      "Default Font",IDC_BUTTON_DEFAULT_FAULT,164,107,48,12
     CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,29,
-                    119,41,10
+                    132,41,10
     CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,29,
-                    129,45,10
+                    142,45,10
     CONTROL         "At Previous Position",IDC_AT_PREVIOUS,"Button",
-                    BS_AUTORADIOBUTTON,29,139,79,10
+                    BS_AUTORADIOBUTTON,29,152,79,10
     LTEXT           "%",IDC_STATIC,162,69,8,8
-    GROUPBOX        "Popup Positioning",IDC_STATIC,18,110,116,41
+    GROUPBOX        "Popup Positioning",IDC_STATIC,18,123,116,41
     LTEXT           "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group",
-                    IDC_STATIC,24,167,103,36
-    GROUPBOX        "List Item Prefix Legend",IDC_STATIC,18,157,116,50
-    CONTROL         "Show thumbnails (for CF_DIB types)",IDC_SHOW_THUMBNAILS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,79,129,10
+                    IDC_STATIC,24,180,103,36
+    GROUPBOX        "List Item Prefix Legend",IDC_STATIC,18,170,116,50
+    CONTROL         "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)",
+                    IDC_SHOW_THUMBNAILS,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,18,79,293,10
+    CONTROL         "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)",
+                    IDC_DRAW_RTF,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,89,
+                    293,10
 END
 
 IDD_OPTIONS_KEYSTROKES DIALOG DISCARDABLE  0, 0, 302, 206
@@ -766,9 +772,9 @@ BEGIN
     IDD_OPTIONS_QUICK_PASTE, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 222
+        RIGHTMARGIN, 325
         TOPMARGIN, 7
-        BOTTOMMARGIN, 219
+        BOTTOMMARGIN, 241
     END
 
     IDD_OPTIONS_KEYSTROKES, DIALOG

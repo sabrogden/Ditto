@@ -6,7 +6,7 @@
 #endif // _MSC_VER > 1000
 // ToolTipEx.h : header file
 //
-
+#include "RichEditCtrlEx.h"
 /////////////////////////////////////////////////////////////////////////////
 // CToolTipEx window
 
@@ -45,6 +45,8 @@ protected:
 	CString m_csText;
 	CFont m_Font;
 	CBitmap *m_pBitmap;
+
+	
 
 protected:
 	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);

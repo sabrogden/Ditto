@@ -29,6 +29,9 @@
 #include <afxole.h>
 #include <Winsock2.h>
 
+#include <imm.h>
+#import "riched20.dll" raw_interfaces_only, raw_native_types, no_namespace, named_guids
+
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.

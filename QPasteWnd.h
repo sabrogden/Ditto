@@ -168,6 +168,7 @@ protected:
 	afx_msg void OnMenuHelp();
 	afx_msg void OnMenuQuickoptionsFont();
 	afx_msg void OnMenuQuickoptionsShowthumbnails();
+	afx_msg void OnMenuQuickoptionsDrawrtftext();
 	//}}AFX_MSG
 	afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);

@@ -310,6 +310,14 @@ public:
 	static void		SetDrawThumbnail(long bDraw);
 	static BOOL		GetDrawThumbnail();
 
+	static CString	m_csPassword;
+	static void		SetNetworkPassword(CString csPassword);
+	static CString	GetNetworkPassword();
+
+	static BOOL		m_bDrawRTF;
+	static void		SetDrawRTF(long bDraw);
+	static BOOL		GetDrawRTF();
+
 	/*
 	BOOL IsAutoRun();
 	void SetAutoRun(BOOL bRun);

@@ -34,6 +34,7 @@ void COptionsQuickPaste::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionsQuickPaste)
+	DDX_Control(pDX, IDC_DRAW_RTF, m_btDrawRTF);
 	DDX_Control(pDX, IDC_SHOW_THUMBNAILS, m_btShowThumbnails);
 	DDX_Control(pDX, IDC_BUTTON_DEFAULT_FAULT, m_btDefaultButton);
 	DDX_Control(pDX, IDC_BUTTON_FONT, m_btFont);
@@ -68,6 +69,7 @@ BOOL COptionsQuickPaste::OnInitDialog()
 	m_eTransparencyPercent.SetNumber(CGetSetOptions::GetTransparencyPercent());
 	m_eLinesPerRow.SetNumber(CGetSetOptions::GetLinesPerRow());
 	m_btShowThumbnails.SetCheck(g_Opt.m_bDrawThumbnail);
+	m_btDrawRTF.SetCheck(g_Opt.m_bDrawRTF);
 
 	if(CGetSetOptions::GetQuickPastePosition() == POS_AT_CARET)
 		CheckDlgButton(IDC_AT_CARET, BST_CHECKED);
@@ -120,6 +122,7 @@ BOOL COptionsQuickPaste::OnApply()
 	CGetSetOptions::SetUseCtrlNumForFirstTenHotKeys(m_btUseCtrlNum.GetCheck());
 	CGetSetOptions::SetShowTextForFirstTenHotKeys(m_btShowText.GetCheck());
 	CGetSetOptions::SetDrawThumbnail(m_btShowThumbnails.GetCheck());
+	CGetSetOptions::SetDrawRTF(m_btDrawRTF.GetCheck());
 	
 	if(m_LogFont.lfWeight != 0)
 	{

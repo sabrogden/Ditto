@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
-# ADD LINK32 ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib /nologo /subsystem:windows /map /debug /machine:I386 /out:"Release/Ditto.exe" /libpath:"focusdll\Release"
+# ADD LINK32 ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib riched20.lib /nologo /subsystem:windows /map /debug /machine:I386 /out:"Release/Ditto.exe" /libpath:"focusdll\Release"
 
 !ELSEIF  "$(CFG)" == "CP_Main - Win32 Debug"
 
@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib /nologo /subsystem:windows /debug /machine:I386 /out:"Debug/Ditto.exe" /pdbtype:sept
+# ADD LINK32 ws2_32.lib kernel32.lib user32.lib gdi32.lib winspool.lib riched20.lib /nologo /subsystem:windows /debug /machine:I386 /out:"Debug/Ditto.exe" /pdbtype:sept
 
 !ENDIF 
 
@@ -116,6 +116,14 @@ SOURCE=.\ComboBoxSearch.h
 # Begin Source File
 
 SOURCE=.\DialogResizer.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\FormattedTextDraw.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\FormattedTextDraw.h
 # End Source File
 # Begin Source File
 
@@ -386,6 +394,10 @@ SOURCE=.\GroupTree.h
 # Begin Source File
 
 SOURCE=.\HyperLink.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\IEncryption.h
 # End Source File
 # Begin Source File
 

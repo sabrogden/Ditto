@@ -8,6 +8,7 @@
 //
 #include "ArrayEx.h"
 #include "ToolTipEx.h"
+#include "FormattedTextDraw.h"
 
 #define NM_SELECT					WM_USER+0x100
 #define NM_RIGHT					WM_USER+0x101
@@ -104,6 +105,8 @@ protected:
 	void LoadCopyOrCutToClipboard();
 	BOOL GetClipData(int nItem, CClipFormat &Clip);
 	BOOL DrawBitMap(int nItem, CRect &crRect, CDC *pDC);
+
+	BOOL DrawText(int nItem, CRect &crRect, CDC *pDC);
 		
 	WCHAR *m_pwchTip;
 	TCHAR *m_pchTip;
@@ -114,10 +117,13 @@ protected:
 	CAccels	m_Accels;
 
 	CMapIDtoCF m_ThumbNails;
+	CMapIDtoCF m_RTFData;
 
 	CToolTipEx *m_pToolTip;
 
 	CFont m_Font;
+
+	IFormattedTextDraw *m_pFormatter;
 	
 	// Generated message map functions
 protected:

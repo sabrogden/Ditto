@@ -117,6 +117,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_HELP, OnMenuHelp)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_FONT, OnMenuQuickoptionsFont)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_SHOWTHUMBNAILS, OnMenuQuickoptionsShowthumbnails)
+	ON_COMMAND(ID_MENU_QUICKOPTIONS_DRAWRTFTEXT, OnMenuQuickoptionsDrawrtftext)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(NM_SELECT, OnListSelect)
 	ON_MESSAGE(NM_END, OnListEnd)
@@ -904,6 +905,9 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 	if(g_Opt.m_bDrawThumbnail)
 		pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_SHOWTHUMBNAILS, MF_CHECKED);
 
+	if(g_Opt.m_bDrawRTF)
+		pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_DRAWRTFTEXT, MF_CHECKED);
+
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIENDONE, 0);
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TWO, 1);
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_THREE, 2);
@@ -1426,7 +1430,11 @@ void CQPasteWnd::OnMenuQuickoptionsShowthumbnails()
 	m_lstHeader.RefreshVisibleRows();
 }
 
-
+void CQPasteWnd::OnMenuQuickoptionsDrawrtftext() 
+{
+	CGetSetOptions::SetDrawRTF(!g_Opt.m_bDrawRTF);
+	m_lstHeader.RefreshVisibleRows();
+}
 
 ///////////////////////////////////////////////////////////////////////
 //END END Menu Stuff
@@ -2075,4 +2083,3 @@ LRESULT CQPasteWnd::OnGetClipData(WPARAM wParam, LPARAM lParam)
 
 	return bRet;
 }
-
