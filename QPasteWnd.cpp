@@ -86,6 +86,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_MESSAGE(NM_SELECT_INDEX, OnListSelect_Index)
 	ON_MESSAGE(WM_REFRESH_VIEW, OnRefreshView)
 	ON_WM_NCLBUTTONDBLCLK()
+	ON_WM_WINDOWPOSCHANGING()
 END_MESSAGE_MAP()
 
 
@@ -1086,4 +1087,41 @@ void CQPasteWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
 		theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
 
 	CWndEx::OnNcLButtonDblClk(nHitTest, point);
+}
+
+#define WNDSNAP_ALLOWANCE 12
+
+void CQPasteWnd::OnWindowPosChanging(WINDOWPOS* lpwndpos)
+{
+	CWndEx::OnWindowPosChanging(lpwndpos);
+
+	RECT rcScreen;
+
+	// Get cordinates of the working area on the screen
+	SystemParametersInfo (SPI_GETWORKAREA, 0, &rcScreen, 0);
+
+	// Snap X axis to left
+	if(abs(lpwndpos->x - rcScreen.left) <= WNDSNAP_ALLOWANCE)
+	{
+		lpwndpos->x = rcScreen.left;
+	}
+
+	// Snap X axis to right
+	if (abs(lpwndpos->x + lpwndpos->cx - rcScreen.right) <= WNDSNAP_ALLOWANCE)
+	{
+		lpwndpos->x = rcScreen.right - lpwndpos->cx;
+	}
+
+	// Snap Y axis to top
+	if (abs(lpwndpos->y - rcScreen.top) <= WNDSNAP_ALLOWANCE)
+	{
+		// Assign new cordinate
+		lpwndpos->y = rcScreen.top;
+	} 
+
+	// Snap Y axis to bottom
+	if (abs(lpwndpos->y + lpwndpos->cy - rcScreen.bottom) <= WNDSNAP_ALLOWANCE)
+	{
+		lpwndpos->y = rcScreen.bottom - lpwndpos->cy;
+	}
 }

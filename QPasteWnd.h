@@ -125,6 +125,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
+	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
 };
 
 
