@@ -149,7 +149,7 @@ protected:
 	afx_msg LRESULT OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListSelect_Index(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnRefreshView(WPARAM wParam, LPARAM lParam);
-	afx_msg void OnGroupTreeMessage(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnGroupTreeMessage(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);

@@ -145,7 +145,8 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	}
 
-	m_GroupTree.CreateEx(NULL, "SysTreeView32", NULL, WS_BORDER|WS_POPUP|TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS, CRect(0, 0, 100, 100), this, 0);
+	((CWnd *)&m_GroupTree)->CreateEx(NULL, "SysTreeView32", NULL, WS_BORDER|WS_POPUP|TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS, CRect(0, 0, 100, 100), this, 0);
+
 	m_GroupTree.SetNotificationWndEx(m_hWnd);
 	m_GroupTree.ShowWindow(SW_HIDE);
 
@@ -1645,7 +1646,7 @@ void CQPasteWnd::OnShowGroupsBottom()
 	m_bHideWnd = true;
 }
 
-void CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
+LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
 {
 	m_bHideWnd = false;
 
@@ -1678,4 +1679,6 @@ void CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
 	}
 
 	m_bHideWnd = true;
+
+	return TRUE;
 }
