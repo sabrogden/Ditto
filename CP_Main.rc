@@ -277,31 +277,28 @@ CAPTION "Quick Paste"
 FONT 8, "MS Sans Serif", 0, 0, 0x0
 BEGIN
     CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,46,122,10
-    EDITTEXT        IDC_TRANS_PERC,140,45,19,12,ES_AUTOHSCROLL
-    LTEXT           "%",IDC_STATIC,162,48,8,8
-    LTEXT           "Text Lines per Row",IDC_STATIC,18,61,62,8
-    EDITTEXT        IDC_LINES_ROW,82,59,19,12,ES_AUTOHSCROLL
-    GROUPBOX        "Positioning",IDC_STATIC,11,74,196,41
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,30,122,10
+    EDITTEXT        IDC_TRANS_PERC,140,29,19,12,ES_AUTOHSCROLL
+    LTEXT           "%",IDC_STATIC,162,32,8,8
+    LTEXT           "Text Lines per Row",IDC_STATIC,18,45,62,8
+    EDITTEXT        IDC_LINES_ROW,82,43,19,12,ES_AUTOHSCROLL
+    GROUPBOX        "Positioning",IDC_STATIC,11,58,196,41
     CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,22,
-                    83,41,10
+                    67,41,10
     CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,22,
-                    93,45,10
+                    77,45,10
     CONTROL         "At Previous Position",IDC_AT_PREVIOUS,"Button",
-                    BS_AUTORADIOBUTTON,22,103,79,10
+                    BS_AUTORADIOBUTTON,22,87,79,10
     CONTROL         "Use Ctrl - Num for first ten copy hot keys",
                     IDC_CTRL_CLICK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,
-                    24,142,10
+                    8,142,10
     CONTROL         "Show text for first ten copy hot keys",
                     IDC_SHOW_TEXT_FOR_FIRST_TEN_HOT_KEYS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,18,34,128,10
-    LTEXT           "** befere text  = text has a hot key assigned to it.",
-                    IDC_STATIC,18,122,153,8
+                    BS_AUTOCHECKBOX | WS_TABSTOP,18,18,128,10
+    LTEXT           "** before text  = text has a hot key assigned to it.",
+                    IDC_STATIC,18,106,153,8
     LTEXT           "* before text = text will never be auto deleted.",
-                    IDC_STATIC,18,133,143,8
-    CONTROL         "Use Ctrl - Num for first ten copy hot keys",
-                    IDC_CTRL_CLICK2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,
-                    14,142,10
+                    IDC_STATIC,18,117,143,8
 END
 
 IDD_OPTIONS_KEYSTROKES DIALOG  0, 0, 186, 90
