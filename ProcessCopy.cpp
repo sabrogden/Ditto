@@ -401,6 +401,8 @@ bool CClip::FindDuplicate( CMainTable& recset, BOOL bCheckLastOnly )
 		if( bCheckLastOnly )
 		{
 			recset.Open("SELECT * FROM Main");
+			if(recset.IsEOF())
+				return false;
 			recset.MoveFirst();
 			// if an entry exists and they are the same size and the format data matches
 			if( !recset.IsBOF() && !recset.IsEOF() &&
