@@ -520,25 +520,27 @@ CGetSetOptions::CGetSetOptions()
 	m_bEnsureEntireWindowCanBeSeen = GetEnsureEntireWindowCanBeSeen();
 	m_bShowAllClipsInMainList = GetShowAllClipsInMainList();
 
+	m_csNetworkPasswordArray.RemoveAll();
+
 	CString cs = GetProfileString("NetorkPassword1", "");
 	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetorkPassword2", "");
+	cs = GetProfileString("NetworkPassword2", "");
 	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetorkPassword3", "");
+	cs = GetProfileString("NetworkPassword3", "");
 	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetorkPassword4", "");
+	cs = GetProfileString("NetworkPassword4", "");
 	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetorkPassword5", "");
+	cs = GetProfileString("NetworkPassword5", "");
 	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetorkPassword6", "");
+	cs = GetProfileString("NetworkPassword6", "");
 	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetorkPassword7", "");
+	cs = GetProfileString("NetworkPassword7", "");
 	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetorkPassword8", "");
+	cs = GetProfileString("NetworkPassword8", "");
 	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetorkPassword9", "");
+	cs = GetProfileString("NetworkPassword9", "");
 	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetorkPassword10", "");
+	cs = GetProfileString("NetworkPassword10", "");
 	m_csNetworkPasswordArray.Add(cs);
 
 	#ifdef _DEBUG

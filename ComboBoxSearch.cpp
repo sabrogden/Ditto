@@ -85,7 +85,8 @@ BOOL CComboBoxSearch::PreTranslateMessage(MSG* pMsg)
 				return TRUE;
 			}	
 			if (pMsg->wParam == VK_DOWN ||
-				pMsg->wParam == VK_UP)
+				pMsg->wParam == VK_UP ||
+				pMsg->wParam == VK_F3)
 			{
 				if(g_Opt.m_bFindAsYouType)
 				{

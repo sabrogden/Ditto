@@ -55,8 +55,7 @@ public:
 protected:
 	CEncryption *m_pEncryptor;
 	SOCKET m_Socket;
-	UCHAR *m_pDataReturnedFromDecrypt;
-	
+	UCHAR *m_pDataReturnedFromDecrypt;	
 };
 
 UINT  MTServerThread(LPVOID pParam);

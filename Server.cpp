@@ -133,13 +133,33 @@ LPVOID CRecieveSocket::ReceiveEncryptedData(long lInSize, long &lOutSize)
 
 		int nOut = 0;
 		CString csPassword;
-		int nCount = g_Opt.m_csNetworkPasswordArray.GetSize() + 1;
-		for(int i = -1; i < nCount; i++)
+		int nCount = g_Opt.m_csNetworkPasswordArray.GetSize();
+		int nIndex;
+		for(int i = -2; i < nCount; i++)
 		{
-			if(i == -1)
+			nIndex = i;
+
+			//First time through try the last index that was valid
+			if(i == -2)
+			{
+				nIndex = theApp.m_lLastGoodIndexForNextworkPassword;
+				if(nIndex == -2)
+					continue;
+			}
+
+			if(nIndex == -1)
+			{
 				csPassword = g_Opt.m_csPassword;
+			}
 			else
-				csPassword = g_Opt.m_csNetworkPasswordArray[i];
+			{
+				if(nIndex >= 0 && nIndex < nCount)
+				{
+					csPassword = g_Opt.m_csNetworkPasswordArray[nIndex];
+				}
+				else
+					continue;
+			}
 
 			if(m_pEncryptor->Decrypt((UCHAR*)pInput, lInSize, csPassword, pOutput, nOut) == FALSE)
 			{
@@ -147,6 +167,7 @@ LPVOID CRecieveSocket::ReceiveEncryptedData(long lInSize, long &lOutSize)
 			}
 			else
 			{
+				theApp.m_lLastGoodIndexForNextworkPassword = nIndex;
 				break;
 			}
 		}

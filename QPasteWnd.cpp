@@ -992,6 +992,8 @@ void CQPasteWnd::SetSendToMenu(CMenu *pMenu, int nMenuID, int nArrayPos)
 
 LRESULT CQPasteWnd::OnSearch(WPARAM wParam, LPARAM lParam)
 {
+	m_lstHeader.HidePopup();
+
 	CString csText;
 	m_cbSearch.GetWindowText(csText);
 	
@@ -2172,6 +2174,8 @@ void CQPasteWnd::OnSearchEditChange()
 	
 	if(csText == "")
 		return;
+
+	m_lstHeader.HidePopup();
 	
 	FillList(csText);
 	
@@ -2212,7 +2216,16 @@ void CQPasteWnd::OnSearchEditChange()
 
 LRESULT CQPasteWnd::OnUpDown(WPARAM wParam, LPARAM lParam)
 {
-	m_lstHeader.SendMessage(WM_KEYDOWN, wParam, lParam);
+	if(wParam == VK_F3)
+	{
+		m_lstHeader.ShowFullDescription();
+	}
+	else
+	{
+		m_lstHeader.HidePopup();
+
+		m_lstHeader.SendMessage(WM_KEYDOWN, wParam, lParam);
+	}
 
 	return TRUE;
 }

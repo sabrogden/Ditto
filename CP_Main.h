@@ -158,6 +158,8 @@ public:
 	long	m_lClipsSent;
 	long	m_lClipsRecieved;
 
+	long	m_lLastGoodIndexForNextworkPassword;
+
 	CLIPFORMAT m_HTML_Format;
 
 	COleDateTime m_oldtStartUp;

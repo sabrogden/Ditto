@@ -68,6 +68,8 @@ CCP_MainApp::CCP_MainApp()
 
 	m_bExitServerThread = false;
 
+	m_lLastGoodIndexForNextworkPassword = -2;
+
 	m_HTML_Format = ::RegisterClipboardFormat("HTML Format");
 
 	::InitializeCriticalSection(&m_CriticalSection);
