@@ -336,7 +336,7 @@ END
 IDD_OPTIONS_QUICK_PASTE DIALOGEX 0, 0, 206, 193
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Quick Paste"
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,67,122,10
@@ -537,8 +537,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,50,0,0
- PRODUCTVERSION 1,50,0,0
+ FILEVERSION 2,1,0,0
+ PRODUCTVERSION 2,1,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -553,13 +553,18 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "\0"
             VALUE "FileDescription", "Ditto\0"
-            VALUE "FileVersion", "1, 50, 0, 0\0"
+            VALUE "FileVersion", "2, 1, 0, 0\0"
             VALUE "InternalName", "CP_Main\0"
             VALUE "LegalCopyright", "Copyright (C) 2003\0"
+            VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "Ditto\0"
+            VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "Ditto\0"
-            VALUE "ProductVersion", "1, 50, 0, 0\0"
+            VALUE "ProductVersion", "2, 1, 0, 0\0"
+            VALUE "SpecialBuild", "\0"
         END
     END
     BLOCK "VarFileInfo"
