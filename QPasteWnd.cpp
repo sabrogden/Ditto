@@ -514,7 +514,7 @@ CString strFilter;
 	else // it's some other group
 	{
 		m_lstHeader.m_bStartTop = true;
-		m_Recset.m_strSort = "bIsGroup ASC, mText ASC";
+		m_Recset.m_strSort = "bIsGroup ASC, Left([mText],250) ASC";
 
 		if( theApp.m_GroupID > 0 )
 			strFilter.Format( "lParentID = %d", theApp.m_GroupID );
