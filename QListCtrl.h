@@ -7,8 +7,7 @@
 // QListCtrl.h : header file
 //
 #include "ArrayEx.h"
-#include "SkinHorizontalScrollbar.h"
-#include "SkinVerticleScrollbar.h"
+#include "ToolTipEx.h"
 
 #define NM_SELECT					WM_USER+0x100
 #define NM_RIGHT					WM_USER+0x101
@@ -21,6 +20,8 @@
 #define NM_SELECT_DB_ID		        WM_USER+0x109
 #define NM_SELECT_INDEX		        WM_USER+0x110
 #define NM_GROUP_TREE_MESSAGE       WM_USER+0x111
+#define NM_GET_CLIP_DATA	        WM_USER+0x112
+
 
 //#define NM_LIST_CUT			        WM_USER+0x111
 //#define NM_LIST_COPY		        WM_USER+0x112
@@ -59,8 +60,6 @@ public:
 public:
 	virtual ~CQListCtrl();
 
-	CPopup	m_Popup;
-
 	// The "FirstTen" block is either at the top or the bottom
 	//  of the list based upon m_bStartTop.
 	BOOL	m_bShowTextForFirstTenHotKeys;
@@ -92,13 +91,15 @@ public:
 
 	void ShowFullDescription(bool bFromAuto = false);
 	BOOL SetItemCountEx(int iCount, DWORD dwFlags = LVSICF_NOINVALIDATEALL);
-	void MoveWindow(int x, int y, int nWidth, int nHeight, BOOL bRepaint = TRUE);
+
+	void HidePopup()	{ if(m_pToolTip) m_pToolTip->Hide();	}
 
 protected:
 	void SendSelection(int nItem);;
 	void SendSelection(ARRAY &arrItems);
 	void LoadCopyOrCutToClipboard();
-	void PositionScrollBars();
+	BOOL GetClipData(int nItem, CClipFormat &Clip);
+	BOOL DrawBitMap(int nItem, CRect &crRect, CDC *pDC);
 		
 	WCHAR *m_pwchTip;
 	TCHAR *m_pchTip;
@@ -108,8 +109,9 @@ protected:
 	//Accelerator
 	CAccels	m_Accels;
 
-	CSkinVerticleScrollbar m_SkinVerticleScrollbar;
-	CSkinHorizontalScrollbar m_SkinHorizontalScrollbar;
+	CMap<long, long, CClipFormat, CClipFormat> m_ThumbNails;
+
+	CToolTipEx *m_pToolTip;
 	
 	// Generated message map functions
 protected:
@@ -123,12 +125,7 @@ protected:
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnTimer(UINT nIDEvent);
-	afx_msg void OnWindowPosChanged(WINDOWPOS FAR* lpwndpos);
 	afx_msg void OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
-	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 	//}}AFX_MSG
 	afx_msg BOOL OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult );
 	DECLARE_MESSAGE_MAP()

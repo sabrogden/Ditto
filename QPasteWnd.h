@@ -192,6 +192,7 @@ public:
 	afx_msg void OnMenuNewGroup();
 	afx_msg void OnMenuNewGroupSelection();
 	afx_msg void OnBackButton();
+	afx_msg LRESULT OnGetClipData(LPARAM lParam, WPARAM wParam);
 };
 
 

@@ -35,13 +35,13 @@ class CClipFormat
 public:
 	CLIPFORMAT	m_cfType;
     HGLOBAL		m_hgData;
+	bool		bDeleteData;
 
-	CClipFormat( CLIPFORMAT cfType = 0, HGLOBAL hgData = 0 )
-		{ m_cfType = cfType; m_hgData = hgData; }
-	~CClipFormat() { Free(); }
+	CClipFormat(CLIPFORMAT cfType = 0, HGLOBAL hgData = 0);
+	~CClipFormat();
 
-	void Clear() { m_cfType = 0;  m_hgData = 0; }
-	void Free() { if( m_hgData ) m_hgData = ::GlobalFree( m_hgData ); }
+	void Clear();
+	void Free();
 };
 
 /*----------------------------------------------------------------------------*\

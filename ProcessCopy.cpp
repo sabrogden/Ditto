@@ -90,6 +90,37 @@ HGLOBAL COleDataObjectEx::GetGlobalData(CLIPFORMAT cfFormat, LPFORMATETC lpForma
 /*----------------------------------------------------------------------------*\
 CClipFormat - holds the data of one clip format.
 \*----------------------------------------------------------------------------*/
+CClipFormat::CClipFormat(CLIPFORMAT cfType, HGLOBAL hgData)
+{
+	m_cfType = cfType;
+	m_hgData = hgData;
+	bDeleteData = true;
+}
+
+CClipFormat::~CClipFormat() 
+{ 
+	Free(); 
+}
+
+void CClipFormat::Clear()
+{
+	m_cfType = 0;
+	m_hgData = 0;
+}
+
+void CClipFormat::Free()
+{
+	if(bDeleteData)
+	{
+		if(m_hgData)
+		{
+			m_hgData = ::GlobalFree( m_hgData );
+			m_hgData = NULL;
+		}
+	}
+}
+
+
 
 /*----------------------------------------------------------------------------*\
 CClipFormats - holds an array of CClipFormat

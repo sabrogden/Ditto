@@ -23,6 +23,53 @@ int GetCBitmapHeight(const CBitmap & cbm)
 	return bm.bmHeight;
 } 
 
+BOOL GetCBitmap(void	*pClip2, CDC *pDC, CBitmap *pBitMap, int nMaxHeight)
+{
+	LPBITMAPINFO	lpBI ;
+	void*           pDIBBits;
+	BOOL bRet = FALSE;
+
+	CClipFormat		*pClip = (CClipFormat *)pClip2;
+
+	switch(pClip->m_cfType)
+	{
+	case CF_DIB:
+	{
+		lpBI = (LPBITMAPINFO)GlobalLock(pClip->m_hgData);
+		if(lpBI)
+		{
+			pDIBBits = (void*)(lpBI->bmiColors + sizeof(RGBQUAD));
+
+			int nHeight = min(nMaxHeight, lpBI->bmiHeader.biHeight);
+			int nWidth = (nHeight * lpBI->bmiHeader.biWidth) / lpBI->bmiHeader.biHeight;
+			
+			if(pBitMap)
+			{
+				pBitMap->CreateCompatibleBitmap(pDC, nWidth, nHeight);
+
+				CDC MemDc;
+				MemDc.CreateCompatibleDC(pDC);
+
+				CBitmap* oldBitmap = MemDc.SelectObject(pBitMap);	
+			
+				::StretchDIBits(MemDc.m_hDC,
+					0, 0, 
+					nWidth, nHeight,
+					0, 0, lpBI->bmiHeader.biWidth, 
+					lpBI->bmiHeader.biHeight,
+					pDIBBits, lpBI, DIB_PAL_COLORS, SRCCOPY);
+
+				MemDc.SelectObject(oldBitmap);
+
+				bRet = TRUE;
+			}
+		}
+	}
+	}
+
+	return bRet;
+}
+
 CString GetIPAddress()
 {
 	WORD wVersionRequested;

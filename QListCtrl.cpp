@@ -5,6 +5,7 @@
 #include "CP_Main.h"
 #include "QListCtrl.h"
 #include "ProcessPaste.h"
+#include "dibapi.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -46,6 +47,7 @@ CQListCtrl::CQListCtrl()
 	
 	m_bShowTextForFirstTenHotKeys = true;
 	m_bStartTop = true;
+	m_pToolTip = NULL;
 }
 
 CQListCtrl::~CQListCtrl()
@@ -101,24 +103,20 @@ int CQListCtrl::GetFirstTenIndex( int num )
 
 BEGIN_MESSAGE_MAP(CQListCtrl, CListCtrl)
 //{{AFX_MSG_MAP(CQListCtrl)
-ON_NOTIFY_REFLECT(LVN_KEYDOWN, OnKeydown)
-ON_NOTIFY_REFLECT(NM_DBLCLK, OnDblclk)
-ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, OnCustomdrawList)
-ON_WM_SYSKEYDOWN()
-ON_WM_ERASEBKGND()
-ON_WM_CREATE()
-ON_WM_VSCROLL()
-ON_WM_HSCROLL()
-ON_WM_TIMER()
-ON_WM_WINDOWPOSCHANGED()
-ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnSelectionChange)
-ON_WM_SIZE()
-	ON_WM_KEYDOWN()
-	ON_WM_MOUSEWHEEL()
-	ON_WM_KEYUP()
+	ON_NOTIFY_REFLECT(LVN_KEYDOWN, OnKeydown)
+	ON_NOTIFY_REFLECT(NM_DBLCLK, OnDblclk)
+	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, OnCustomdrawList)
+	ON_WM_SYSKEYDOWN()
+	ON_WM_ERASEBKGND()
+	ON_WM_CREATE()
+	ON_WM_VSCROLL()
+	ON_WM_HSCROLL()
+	ON_WM_TIMER()
+	ON_WM_WINDOWPOSCHANGED()
+	ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnSelectionChange)
 	//}}AFX_MSG_MAP
-ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
-ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
+	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
+	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
 ON_WM_KILLFOCUS()
 END_MESSAGE_MAP()
 
@@ -424,6 +422,8 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 				strSymbols.Delete(nFlag);
 		}
 		
+		DrawBitMap(nItem, rcText, pDC);
+
 		// draw the symbol box
 		if( strSymbols.GetLength() > 0 )
 		{
@@ -497,6 +497,73 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		
         *pResult = CDRF_SKIPDEFAULT;    // We've painted everything.
 	}
+}
+
+BOOL CQListCtrl::DrawBitMap(int nItem, CRect &crRect, CDC *pDC)
+{
+	CClipFormat Clip;
+	Clip.m_cfType = CF_DIB;
+	CBitmap Bitmap;
+	bool bAddToMap = false;
+	bool bGetDIB = false;
+
+	long lDatabaseID = GetItemData(nItem);
+
+	if(m_ThumbNails.Lookup(lDatabaseID, Clip) == FALSE)
+	{
+		GetClipData(nItem, Clip);
+			
+		bAddToMap = true;
+	}
+	
+	if(Clip.m_hgData)
+	{
+		if(GetCBitmap(&Clip, pDC, &Bitmap, crRect.Height()))
+		{
+			int nWidth = GetCBitmapWidth(Bitmap);
+			int nHeight = GetCBitmapHeight(Bitmap);
+
+			CDC MemDc;
+			MemDc.CreateCompatibleDC(pDC);
+
+			CBitmap* oldBitmap = MemDc.SelectObject(&Bitmap);
+
+			pDC->BitBlt(crRect.left, crRect.top, nWidth, nHeight, &MemDc, 0, 0, SRCCOPY);
+
+			MemDc.SelectObject(oldBitmap);
+
+			crRect.left += nWidth + 3;
+
+			bGetDIB = true;
+		}
+		else
+		{
+			bAddToMap = false;
+		}
+	}
+
+	if(bAddToMap)
+	{
+		CClipFormat ThumbData(CF_DIB);
+
+		//Convert the bitmap to a DIB to cache the bitmap
+		//caching the bitmap had problems
+		if(bGetDIB)
+		{
+			HPALETTE hPal = NULL;
+
+			ThumbData.m_hgData = BitmapToDIB(Bitmap.operator HBITMAP(), hPal);
+
+			long l = GlobalSize(ThumbData.m_hgData);
+
+			//Map will delete memory in destructor
+			ThumbData.bDeleteData = false;
+		}
+		
+		m_ThumbNails.SetAt(lDatabaseID, ThumbData);
+	}
+
+	return TRUE;
 }
 
 void CQListCtrl::RefreshVisibleRows()
@@ -638,24 +705,11 @@ int CQListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	
 	EnableToolTips();
-	
-	m_Popup.Init();
 
-	InitializeFlatSB(m_hWnd);
-	FlatSB_EnableScrollBar(m_hWnd, SB_BOTH, ESB_DISABLE_BOTH);
-
-	CWnd* pParent = GetParent();
+	m_pToolTip = new CToolTipEx;
+	m_pToolTip->Create(this);
 	
-	m_SkinVerticleScrollbar.Create(NULL, WS_CHILD|SS_LEFT|SS_NOTIFY|WS_VISIBLE|WS_GROUP,CRect(0,0,0,0), pParent);
-	m_SkinHorizontalScrollbar.Create(NULL, WS_CHILD|SS_LEFT|SS_NOTIFY|WS_VISIBLE|WS_GROUP,CRect(0,0,0,0), pParent);
-	m_SkinVerticleScrollbar.m_pList = this;
-	m_SkinHorizontalScrollbar.m_pList = this;
-
-	PositionScrollBars();
 	
-	//	m_Popup.SetTTWnd( GetToolTips()->m_hWnd );
-	//	m_Popup.m_TI.hwnd = m_hWnd;
-    
 	return 0;
 }
 
@@ -665,100 +719,98 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 	if(m_Accels.OnMsg(pMsg, dID))
 		if(GetParent()->SendMessage(NM_SELECT_DB_ID, dID, 0) )
 			return TRUE;
+
+	if(m_pToolTip)
+	{
+		if(m_pToolTip->OnMsg(pMsg))
+			return TRUE;
+	}
 		
-		switch(pMsg->message) 
+	switch(pMsg->message) 
+	{
+	case WM_KEYDOWN:
+		WPARAM vk = pMsg->wParam;
+				
+		// if a number key was pressed
+		if( '0' <= vk && vk <= '9' )
 		{
-		case WM_KEYDOWN:
-			WPARAM vk = pMsg->wParam;
+			// if <Ctrl> is required but is absent, then break
+			if( g_Opt.m_bUseCtrlNumAccel && !(GetKeyState(VK_CONTROL) & 0x8000) )
+				break;
 			
-			if(m_Popup.m_bIsShowing)
-			{
-				m_Popup.Hide();
-				
-				if(vk == VK_ESCAPE)
-					return TRUE;
-			}
-			
-			// if a number key was pressed
-			if( '0' <= vk && vk <= '9' )
-			{
-				// if <Ctrl> is required but is absent, then break
-				if( g_Opt.m_bUseCtrlNumAccel && !(GetKeyState(VK_CONTROL) & 0x8000) )
-					break;
-				
-				int index = vk - '0';
-				// '0' is actually 10 in the ditto window
-				if( index == 0 )
-					index = 10;
-				// translate num 1-10 into the actual index (based upon m_bStartTop)
-				index = GetFirstTenIndex( index );
-				GetParent()->SendMessage(NM_SELECT_INDEX, index, 0);
-				return TRUE;
-			}
-			
-			switch( vk )
-			{
-			case 'X': // Ctrl-X = Cut (prepare for moving the items into a Group)
-				if(GetKeyState(VK_CONTROL) & 0x8000)
-				{
-					LoadCopyOrCutToClipboard();		
-					
-					theApp.IC_Cut(); // uses selection
-					return TRUE;
-				}
-				break;
-				
-			case 'C': // Ctrl-C = Copy (prepare for copying the items into a Group)
-				if(GetKeyState(VK_CONTROL) & 0x8000)
-				{
-					LoadCopyOrCutToClipboard();
-					
-					theApp.IC_Copy(); // uses selection
-					return TRUE;
-				}
-				break;
-				
-			case 'V': // Ctrl-V = Paste (actually performs the copy or move of items into the current Group)
-				if(GetKeyState(VK_CONTROL) & 0x8000)
-				{
-					theApp.IC_Paste();
-					return TRUE;
-				}
-				break;
-				
-			case 'A': // Ctrl-A = Select All
-				if(GetKeyState(VK_CONTROL) & 0x8000)
-				{
-					int nCount = GetItemCount();
-					for(int i = 0; i < nCount; i++)
-					{
-						SetSelection(i);
-					}
-					return TRUE;
-				}
-				break;
-				
-			case VK_F3:
-				{
-					ShowFullDescription();
-					return TRUE;
-				}
-			case VK_BACK:
-				theApp.EnterGroupID( theApp.m_GroupParentID );
-				return TRUE;
-			case VK_SPACE:
-				if(GetKeyState(VK_CONTROL) & 0x8000)
-				{
-					theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
-					return TRUE;
-				}
-				break;
-			} // end switch(vk)
-			
-			break; // end case WM_KEYDOWN
-		} // end switch(pMsg->message)
+			int index = vk - '0';
+			// '0' is actually 10 in the ditto window
+			if( index == 0 )
+				index = 10;
+			// translate num 1-10 into the actual index (based upon m_bStartTop)
+			index = GetFirstTenIndex( index );
+			GetParent()->SendMessage(NM_SELECT_INDEX, index, 0);
+			return TRUE;
+		}
 		
-		return CListCtrl::PreTranslateMessage(pMsg);
+		switch( vk )
+		{
+		case 'X': // Ctrl-X = Cut (prepare for moving the items into a Group)
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				LoadCopyOrCutToClipboard();		
+				
+				theApp.IC_Cut(); // uses selection
+				return TRUE;
+			}
+			break;
+			
+		case 'C': // Ctrl-C = Copy (prepare for copying the items into a Group)
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				LoadCopyOrCutToClipboard();
+				
+				theApp.IC_Copy(); // uses selection
+				return TRUE;
+			}
+			break;
+			
+		case 'V': // Ctrl-V = Paste (actually performs the copy or move of items into the current Group)
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				theApp.IC_Paste();
+				return TRUE;
+			}
+			break;
+			
+		case 'A': // Ctrl-A = Select All
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				int nCount = GetItemCount();
+				for(int i = 0; i < nCount; i++)
+				{
+					SetSelection(i);
+				}
+				return TRUE;
+			}
+			break;
+			
+		case VK_F3:
+			{
+				ShowFullDescription();
+				return TRUE;
+			}
+		case VK_BACK:
+			theApp.EnterGroupID( theApp.m_GroupParentID );
+			return TRUE;
+		case VK_SPACE:
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
+				return TRUE;
+			}
+			break;
+		} // end switch(vk)
+		
+		break; // end case WM_KEYDOWN
+	} // end switch(pMsg->message)
+		
+	return CListCtrl::PreTranslateMessage(pMsg);
 }
 
 void CQListCtrl::LoadCopyOrCutToClipboard()
@@ -789,16 +841,46 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto)
 	GetWindowRect(&crWindow);
 	GetItemRect(nItem, rc, LVIR_BOUNDS);
 	ClientToScreen(rc);
+
+	CPoint pt;
 	
 	if(bFromAuto == false)
 	{
-		m_Popup.m_Pos = CPoint(rc.left, rc.bottom);
+		pt = CPoint(rc.left, rc.bottom);
 	}
 	else
-		m_Popup.m_Pos = CPoint((crWindow.left + (crWindow.right - crWindow.left)/2), rc.bottom);
+		pt = CPoint((crWindow.left + (crWindow.right - crWindow.left)/2), rc.bottom);
+
 	CString cs;
 	GetToolTipText(nItem, cs);
-	m_Popup.Show( cs );
+
+	if(m_pToolTip)
+	{
+		CClipFormat Clip;
+		Clip.m_cfType = CF_DIB;
+		static CBitmap *pBitMap = NULL;
+
+		if(GetClipData(nItem, Clip) && Clip.m_hgData)
+		{			
+			pBitMap = new CBitmap;
+			if(pBitMap)
+			{
+				CRect rcItem;
+				GetWindowRect(rcItem);
+				
+				CDC *pDC = GetDC();;
+
+				GetCBitmap(&Clip, pDC, pBitMap, (rcItem.Width() * 2));
+
+				ReleaseDC(pDC);
+
+				m_pToolTip->SetBitmap(pBitMap);
+			}
+		}
+		
+		m_pToolTip->SetToolTipText(cs);
+		m_pToolTip->Show(pt);
+	}
 }
 
 void CQListCtrl::GetToolTipText(int nItem, CString &csText)
@@ -823,6 +905,18 @@ void CQListCtrl::GetToolTipText(int nItem, CString &csText)
 			csText.ReleaseBuffer();			
 		}
 	}
+}
+
+BOOL CQListCtrl::GetClipData(int nItem, CClipFormat &Clip)
+{
+	CWnd* pParent=GetParent();
+	if(pParent && (pParent->GetSafeHwnd() != NULL))
+	{
+		if(GetParent()->SendMessage(NM_GET_CLIP_DATA, nItem, (LPARAM) &Clip))
+			return TRUE;
+	}
+
+	return FALSE;
 }
 
 DWORD CQListCtrl::GetItemData(int nItem)
@@ -870,7 +964,7 @@ void CQListCtrl::DestroyAndCreateAccelerator(BOOL bCreate)
 void CQListCtrl::OnKillFocus(CWnd* pNewWnd)
 {
 	CListCtrl::OnKillFocus(pNewWnd);
-	m_Popup.Hide();
+	m_pToolTip->Hide();
 }
 
 BOOL CQListCtrl::SetItemCountEx(int iCount, DWORD dwFlags /* = LVSICF_NOINVALIDATEALL */)
@@ -888,10 +982,6 @@ void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 	if((pnmv->uNewState == 3) ||
 		(pnmv->uNewState == 1))
 	{
-		if(m_Popup.m_bIsShowing)
-		{
-			m_Popup.Hide();
-		}
 		if(g_Opt.m_bAllwaysShowDescription)
 		{
 			KillTimer(TIMER_SHOW_PROPERTIES);
@@ -912,81 +1002,4 @@ void CQListCtrl::OnTimer(UINT nIDEvent)
 	}
 	
 	CListCtrl::OnTimer(nIDEvent);
-}
-
-void CQListCtrl::OnWindowPosChanged(WINDOWPOS FAR* lpwndpos) 
-{
-	CListCtrl::OnWindowPosChanged(lpwndpos);
-}
-
-void CQListCtrl::OnSize(UINT nType, int cx, int cy) 
-{
-	if(::IsWindow(m_hWnd))
-		PositionScrollBars();
-	
-	CListCtrl::OnSize(nType, cx, cy);
-}
-
-void CQListCtrl::PositionScrollBars()
-{
-	CWnd* pParent = GetParent();
-	
-	CRect windowRect;
-	GetWindowRect(&windowRect);
-	
-	pParent->ScreenToClient(&windowRect);
-
-	CRect vBar(windowRect.right,
-				windowRect.top,
-				windowRect.right + m_SkinVerticleScrollbar.GetHeight(),
-				windowRect.bottom + m_SkinHorizontalScrollbar.GetHeight() / 1.3);
-
-	CRect hBar(windowRect.left,
-				windowRect.bottom,
-				windowRect.right,
-				windowRect.bottom + m_SkinHorizontalScrollbar.GetHeight());
-	
-	m_SkinVerticleScrollbar.SetWindowPos(NULL,vBar.left,vBar.top,vBar.Width(),vBar.Height(),SWP_NOZORDER);
-	m_SkinHorizontalScrollbar.SetWindowPos(NULL,hBar.left,hBar.top,hBar.Width(),hBar.Height(),SWP_NOZORDER);
-	
-	m_SkinHorizontalScrollbar.UpdateThumbPosition();
-	m_SkinVerticleScrollbar.UpdateThumbPosition();
-}
-
-void CQListCtrl::MoveWindow(int x, int y, int nWidth, int nHeight, BOOL bRepaint)
-{
-	nWidth -= m_SkinVerticleScrollbar.GetHeight();;
-	nHeight -= m_SkinHorizontalScrollbar.GetHeight();
-
-	CWnd::MoveWindow(x, y, nWidth, nHeight, bRepaint);
-}
-
-void CQListCtrl::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
-{
-	// TODO: Add your message handler code here and/or call default
-	
-	CListCtrl::OnKeyDown(nChar, nRepCnt, nFlags);
-
-	m_SkinVerticleScrollbar.UpdateThumbPosition();
-	m_SkinHorizontalScrollbar.UpdateThumbPosition();
-}
-
-BOOL CQListCtrl::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) 
-{
-	BOOL bRet = CListCtrl::OnMouseWheel(nFlags, zDelta, pt);
-
-	m_SkinVerticleScrollbar.UpdateThumbPosition();
-	m_SkinHorizontalScrollbar.UpdateThumbPosition();
-
-	return bRet;
-}
-
-void CQListCtrl::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags) 
-{
-	// TODO: Add your message handler code here and/or call default
-	
-	CListCtrl::OnKeyUp(nChar, nRepCnt, nFlags);
-
-	m_SkinVerticleScrollbar.UpdateThumbPosition();
-	m_SkinHorizontalScrollbar.UpdateThumbPosition();
 }
