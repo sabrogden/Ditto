@@ -144,6 +144,7 @@
 #define IDC_CHECK_FIND_AS_YOU_TYPE      2036
 #define IDC_CHECK_WIN6                  2037
 #define IDC_CHECK_ENTIRE_WINDOW_IS_VISIBLE 2037
+#define IDC_EDIT_ADDITIONAL             2037
 #define IDC_CHECK_WIN7                  2038
 #define IDC_CHECK_SHOW_ALL_IN_MAIN_LIST 2038
 #define IDC_CHECK_WIN8                  2039
@@ -239,7 +240,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        157
 #define _APS_NEXT_COMMAND_VALUE         32852
-#define _APS_NEXT_CONTROL_VALUE         2037
+#define _APS_NEXT_CONTROL_VALUE         2038
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

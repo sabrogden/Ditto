@@ -520,29 +520,8 @@ CGetSetOptions::CGetSetOptions()
 	m_bEnsureEntireWindowCanBeSeen = GetEnsureEntireWindowCanBeSeen();
 	m_bShowAllClipsInMainList = GetShowAllClipsInMainList();
 
-	m_csNetworkPasswordArray.RemoveAll();
-
-	CString cs = GetProfileString("NetorkPassword1", "");
-	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetworkPassword2", "");
-	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetworkPassword3", "");
-	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetworkPassword4", "");
-	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetworkPassword5", "");
-	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetworkPassword6", "");
-	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetworkPassword7", "");
-	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetworkPassword8", "");
-	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetworkPassword9", "");
-	m_csNetworkPasswordArray.Add(cs);
-	cs = GetProfileString("NetworkPassword10", "");
-	m_csNetworkPasswordArray.Add(cs);
-
+	GetExtraNetworkPassword(true);
+	
 	#ifdef _DEBUG
 	m_bUseHookDllForFocus = FALSE;
 	#endif
@@ -1202,46 +1181,86 @@ BOOL CGetSetOptions::GetDrawThumbnail()
 	return GetProfileLong("DrawThumbnail", TRUE);
 }
 
+void CGetSetOptions::SetExtraNetworkPassword(CString csPassword)
+{
+	SetProfileString("NetworkExtraPassword", csPassword);
+}
+
+CString CGetSetOptions::GetExtraNetworkPassword(bool bFillArray)
+{
+	CString cs = GetProfileString("NetworkExtraPassword", "");
+
+	if(bFillArray)
+	{
+		m_csNetworkPasswordArray.RemoveAll();
+
+		char seps[]   = ",";
+		char *token;
+
+		char *pString = cs.GetBuffer(cs.GetLength());
+		
+		/* Establish string and get the first token: */
+		token = strtok(pString, seps);
+		while(token != NULL)
+		{
+			CString cs(token);
+			cs.TrimLeft();
+			cs.TrimRight();
+
+			m_csNetworkPasswordArray.Add(cs);
+
+			// Get next token
+			token = strtok( NULL, seps );
+		}
+
+		cs.ReleaseBuffer();
+	}
+
+	return cs;
+}
+
 void CGetSetOptions::SetNetworkPassword(CString csPassword)
 {
 	m_csPassword = csPassword;
 
-	UCHAR *pData = NULL;
-	int nLength = 0;
+	SetProfileString("NetworkStringPassword", csPassword);
 
-	if(EncryptString(csPassword, pData, nLength))
-	{
-		SetProfileData("NetworkPassword", pData, nLength);
-	}
-	else
-	{
-		SetProfileData("NetworkPassword", NULL, 0);
-	}
-
-	DELETE_PTR(pData);
+//	UCHAR *pData = NULL;
+//	int nLength = 0;
+//
+//	if(EncryptString(csPassword, pData, nLength))
+//	{
+//		SetProfileData("NetworkPassword", pData, nLength);
+//	}
+//	else
+//	{
+//		SetProfileData("NetworkPassword", NULL, 0);
+//	}
+//
+//	DELETE_PTR(pData);
 }
 
 CString CGetSetOptions::GetNetworkPassword()
 {
-	CString cs = "";
-	DWORD dwLength = 0;
-	LPVOID lpVoid = GetProfileData("NetworkPassword", dwLength);
-	if(lpVoid)
-	{
-		UCHAR *pData = NULL;
-		int nLength = 0;
+	return GetProfileString("NetworkStringPassword", "LetMeIn");
 
-		if(DecryptString((UCHAR *)lpVoid, dwLength, pData, nLength))
-			cs = pData;
-
-		DELETE_PTR(pData);
-		DELETE_PTR(lpVoid);
-	}
-
-	if(cs == "")
-		cs = "LetMeIn";
-
-	return cs;
+//	CString cs = "";
+//	DWORD dwLength = 0;
+//	LPVOID lpVoid = GetProfileData("NetworkPassword", dwLength);
+//	if(lpVoid)
+//	{
+//		UCHAR *pData = NULL;
+//		int nLength = 0;
+//
+//		if(DecryptString((UCHAR *)lpVoid, dwLength, pData, nLength))
+//			cs = pData;
+//
+//		DELETE_PTR(pData);
+//		DELETE_PTR(lpVoid);
+//	}
+//
+//	if(cs == "")
+//		cs = "LetMeIn";
 }
 
 void CGetSetOptions::SetDrawRTF(long bDraw)

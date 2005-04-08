@@ -701,9 +701,9 @@ CAPTION "Friends"
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | WS_BORDER | 
-                    WS_TABSTOP,7,113,307,114
+                    WS_TABSTOP,7,142,307,85
     LTEXT           "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer.",
-                    IDC_STATIC,7,85,278,24
+                    IDC_STATIC,7,113,278,24
     EDITTEXT        IDC_EDIT_PLACE_ON_CLIPBOARD,96,34,210,13,ES_AUTOHSCROLL
     LTEXT           "IP/Computer Names seperated by commas",IDC_STATIC,7,32,
                     70,17
@@ -715,6 +715,9 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,95,48,90,10
     LTEXT           "Network Password",IDC_STATIC,7,68,79,9
     EDITTEXT        IDC_EDIT_PASSWORD,96,65,210,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_ADDITIONAL,95,100,210,11,ES_AUTOHSCROLL
+    LTEXT           "If you are recieving clips from computers where your network password does not match, enter additional network passwords seperated by commas",
+                    IDC_STATIC,7,81,307,16
 END
 
 IDD_FRIEND_DETAILS DIALOG DISCARDABLE  0, 0, 203, 79

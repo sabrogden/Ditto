@@ -24,6 +24,7 @@ COptionFriends::COptionFriends() : CPropertyPage(COptionFriends::IDD)
 	//{{AFX_DATA_INIT(COptionFriends)
 	m_PlaceOnClipboard = _T("");
 	m_csPassword = _T("");
+	m_csAdditionalPasswords = _T("");
 	//}}AFX_DATA_INIT
 }
 
@@ -40,6 +41,7 @@ void COptionFriends::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LIST, m_List);
 	DDX_Text(pDX, IDC_EDIT_PLACE_ON_CLIPBOARD, m_PlaceOnClipboard);
 	DDX_Text(pDX, IDC_EDIT_PASSWORD, m_csPassword);
+	DDX_Text(pDX, IDC_EDIT_ADDITIONAL, m_csAdditionalPasswords);
 	//}}AFX_DATA_MAP
 }
 
@@ -68,12 +70,11 @@ BOOL COptionFriends::OnInitDialog()
 	InsertItems();
 
 	m_SendRecieve.SetCheck(CGetSetOptions::GetLogSendReceiveErrors());
-
 	m_bDisableRecieve.SetCheck(CGetSetOptions::GetDisableRecieve());
 
 	m_PlaceOnClipboard = g_Opt.m_csIPListToPutOnClipboard;
-
-	m_csPassword = "[Not Shown]";
+	m_csPassword = g_Opt.m_csPassword;
+	m_csAdditionalPasswords = CGetSetOptions::GetExtraNetworkPassword(false);
 
 	UpdateData(FALSE);
 		
@@ -101,8 +102,8 @@ BOOL COptionFriends::OnApply()
 		g_Opt.SetSendClients(client, i);
 	}
 
+	CGetSetOptions::SetNetworkPassword(m_csPassword);
 	CGetSetOptions::SetLogSendReceiveErrors(m_SendRecieve.GetCheck());
-
 
 	CGetSetOptions::SetDisableRecieve(m_bDisableRecieve.GetCheck());
 	theApp.StartStopServerThread();
@@ -110,11 +111,12 @@ BOOL COptionFriends::OnApply()
 	UpdateData();
 
 	g_Opt.SetListToPutOnClipboard(m_PlaceOnClipboard);
-
-	if(m_csPassword != "[Not Shown]")
-		g_Opt.SetNetworkPassword(m_csPassword);
-
+	g_Opt.SetNetworkPassword(m_csPassword);
 	g_Opt.GetClientSendCount();
+
+	g_Opt.SetExtraNetworkPassword(m_csAdditionalPasswords);
+	//get get to refill the array extra passwords
+	g_Opt.GetExtraNetworkPassword(true);
 	
 	return CPropertyPage::OnApply();
 }

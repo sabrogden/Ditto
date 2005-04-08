@@ -344,6 +344,9 @@ public:
 	static void		SetShowAllClipsInMainList(BOOL bVal);
 	static BOOL		GetShowAllClipsInMainList();
 
+	static void		SetExtraNetworkPassword(CString csPassword);
+	static CString	GetExtraNetworkPassword(bool bFillArray);
+
 	static CStringArray m_csNetworkPasswordArray;
 
 	/*

@@ -28,6 +28,7 @@ public:
 	CListCtrl	m_List;
 	CString	m_PlaceOnClipboard;
 	CString	m_csPassword;
+	CString	m_csAdditionalPasswords;
 	//}}AFX_DATA
 
 
