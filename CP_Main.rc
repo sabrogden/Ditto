@@ -716,8 +716,9 @@ BEGIN
     LTEXT           "Network Password",IDC_STATIC,7,68,79,9
     EDITTEXT        IDC_EDIT_PASSWORD,96,65,210,13,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT_ADDITIONAL,95,100,210,11,ES_AUTOHSCROLL
-    LTEXT           "If you are recieving clips from computers where your network password does not match, enter additional network passwords seperated by commas",
+    LTEXT           "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas",
                     IDC_STATIC,7,81,307,16
+    LTEXT           "Receive Passwords",IDC_STATIC,7,102,79,9
 END
 
 IDD_FRIEND_DETAILS DIALOG DISCARDABLE  0, 0, 203, 79
@@ -756,8 +757,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,4,0,2
- PRODUCTVERSION 2,4,0,2
+ FILEVERSION 2,5,0,0
+ PRODUCTVERSION 2,5,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -775,14 +776,14 @@ BEGIN
             VALUE "Comments", "\0"
             VALUE "CompanyName", "\0"
             VALUE "FileDescription", "Ditto\0"
-            VALUE "FileVersion", "2, 4, 0, 2\0"
+            VALUE "FileVersion", "2, 5, 0, 0\0"
             VALUE "InternalName", "CP_Main\0"
             VALUE "LegalCopyright", "Copyright (C) 2003\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "Ditto\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "Ditto\0"
-            VALUE "ProductVersion", "2, 4, 0, 2\0"
+            VALUE "ProductVersion", "2, 5, 0, 0\0"
             VALUE "SpecialBuild", "\0"
         END
     END
