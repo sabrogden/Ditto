@@ -11,6 +11,12 @@ Package=<5>
 
 Package=<4>
 {{{
+    Begin Project Dependency
+    Project_Dep_Name EncryptDecrypt
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name focus
+    End Project Dependency
 }}}
 
 ###############################################################################
