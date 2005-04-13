@@ -325,6 +325,12 @@ style='mso-bookmark:_Toc84105483'>Right Click Menu -&gt; Quick Options</span></p
  <li class=MsoNormal style='mso-list:l6 level1 lfo1;tab-stops:list .5in'><b>Prompt
      for new Group names –</b> If you create a new group it will prompt you for
      the name.</li>
+ <li class=MsoNormal style='mso-list:l6 level1 lfo1;tab-stops:list .5in'><b>
+ Paste HTML as Plain Text </b>- If html format is on the clipboard then the 
+ actual html code will be pasted as text.</li>
+</ul>
+
+<ul style='margin-top:0in' type=disc>
  <li class=MsoNormal style='mso-list:l6 level1 lfo1;tab-stops:list .5in'><b>Double
      Clicking on the Caption bar –</b> Controls the action ditto will take when
      you double click on its header:</li>
@@ -417,6 +423,14 @@ style='mso-bookmark:_Toc84105484'><a name="bm_General"></a>Options -&gt; General
      binary format (not easily searched).&nbsp;&nbsp; Ditto stores a subset of
      the data (the default is 250 bytes) in plain text to allow for easy
      searching.</li>
+ <li class=MsoNormal style='mso-list:l3 level1 lfo2;tab-stops:list .5in'><b>On 
+ copy play the sound</b> - When ditto saves a clip it will play the sound 
+ specified here.</li>
+ <li class=MsoNormal style='mso-list:l3 level1 lfo2;tab-stops:list .5in'><b>
+ Paste Clip in active window after selection</b> - If this is unselected then 
+ when you select a clip in the main list it will just place the clip on the 
+ clipboard, it will NOT paste the clip.&nbsp; If this is selected then it will 
+ paste the clip in the active window.</li>
 </ul>
 
 <p class=MsoNormal>&nbsp;</p>
@@ -467,6 +481,9 @@ style='mso-bookmark:_Toc84105486'><a name="mb_KeyboardShortcuts"></a>Options -&g
      main Ditto window does not need to be shown to use these hot keys.</li>
 </ul>
 
+<p>Note:&nbsp; The &quot;Win&quot; check box next to each indicates that the Windows key 
+will be included in the short cut.</p>
+
 <p class=MsoNormal><b>&nbsp;</b></p>
 
 <p class=dittoheading3><span
@@ -500,6 +517,23 @@ copy list.</p>
  <li class=MsoNormal style='mso-list:l0 level1 lfo4;tab-stops:list .5in'><b>Enable
      Quick Paste Transparency – </b>Shows the list window as transparent at the
      percent entered.</li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo4;tab-stops:list .5in'><b>Show 
+ thumbnails </b>- If checked then when the clipboard type CF_DIB is saved then a 
+ thumbnail of the bitmap will be drawn in the list.</li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo4;tab-stops:list .5in'><b>Draw 
+ RTF text in List -</b> If checked then if RFT text is in a saved clip then the 
+ rich text will be drawn in the list.</li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo4;tab-stops:list .5in'><b>Find 
+ As You Type -</b> If checked then when you start typing then it will filter the 
+ list as you type, if it is not checked then it will not filter the list until 
+ you hit the enter key.</li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo4;tab-stops:list .5in'><b>
+ Ensure Entire Window is Visible -</b> If checked then when ditto is shown it 
+ will ensure that the entire window is visible.</li>
+ <li class=MsoNormal style='mso-list:l0 level1 lfo4;tab-stops:list .5in'><b>Show 
+ Clips that are in Groups in Main List</b> - If checked then when a clip is in a 
+ group it will be shown in the main list.&nbsp; If not checked then the clip 
+ will ONLY be shown in the group it is assigned to.</li>
  <li class=MsoNormal style='mso-list:l0 level1 lfo4;tab-stops:list .5in'><b>Popup
      Positioning</b></li>
 </ul>
@@ -541,6 +575,23 @@ received over the network and the source’s IP or computer name is in this list
 then the copy will be put directly onto the clipboard.&nbsp; Otherwise it will
 only be in the Saved Clips List to use at a later time.&nbsp; Enter the IP or
 Computer Names separated by commas into the edit box.</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b>Network Password</b> - When clips are sent over the 
+network the data is encrypted using this password.&nbsp; On the receiving side 
+the data is unencrypted using their network password.&nbsp; So when sending a 
+clip across the network, both sides Network Password must be the same.&nbsp; If 
+this you want to receive clips from multiple people with different passwords 
+then you can enter the registry keys</p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+<p class=MsoNormal><b>Receive Passwords - </b>If you are receiving clips from 
+computers where your network password does not match, enter additional network 
+passwords separated by commas.&nbsp; When a clip is received the network 
+password will be tried first, if that doesn't work the list of &quot;Receive 
+Passwords&quot; will be used to decrypt the clip.</p>
 
 <p class=MsoNormal>&nbsp;</p>
 
