@@ -1,3 +1,9 @@
+2.5.0.0
+	[ENHANCMENTS]
+	- Show full Rich Text or Text in description window
+	- Added option to paste html format as plain text
+	
+
 2.4.0.2 02-27-05
 	[ENHANCMENTS]
 	- Added option to 'Find as you Type'
