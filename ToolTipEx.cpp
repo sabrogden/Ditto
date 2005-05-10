@@ -25,7 +25,8 @@ static char THIS_FILE[] = __FILE__;
 CToolTipEx::CToolTipEx() :
 	m_dwTextStyle(DT_EXPANDTABS|DT_EXTERNALLEADING|DT_NOPREFIX|DT_WORDBREAK),
 	m_rectMargin(2, 2, 3, 3),
-	m_pBitmap(NULL)
+	m_pBitmap(NULL),
+	m_pNotifyWnd(NULL)
 {
 }
 
@@ -42,6 +43,7 @@ BEGIN_MESSAGE_MAP(CToolTipEx, CWnd)
 	ON_WM_PAINT()
 	ON_WM_SIZE()
 	ON_WM_NCHITTEST()
+	ON_WM_ACTIVATE()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -483,4 +485,19 @@ UINT CToolTipEx::OnNcHitTest(CPoint point)
 //		return HTCAPTION;
 
 	return CWnd::OnNcHitTest(point);
+}
+
+void CToolTipEx::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized) 
+{
+	CWnd::OnActivate(nState, pWndOther, bMinimized);
+	
+	if (nState == WA_INACTIVE)
+	{
+		Hide();
+
+		if(m_pNotifyWnd)
+		{
+			m_pNotifyWnd->PostMessage(NM_INACTIVE_TOOLTIPWND, 0, 0);
+		}
+	}
 }

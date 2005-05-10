@@ -29,6 +29,7 @@ public:
 	void SetToolTipText(const CString &csText);
 	void SetRTFText(const CString &csRTF);
 	void SetBitmap(CBitmap *pBitmap);
+	void SetNotifyWnd(CWnd *pNotify)		{ m_pNotifyWnd = pNotify;	}
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -52,6 +53,8 @@ protected:
 
 	CRichEditCtrlEx m_RichEdit;
 
+	CWnd *m_pNotifyWnd;
+
 	
 
 protected:
@@ -67,6 +70,7 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg UINT OnNcHitTest(CPoint point);
+	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

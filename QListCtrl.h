@@ -24,6 +24,7 @@
 #define NM_GET_CLIP_DATA	        WM_USER+0x111
 #define CB_SEARCH					WM_USER+0x112
 #define CB_UPDOWN					WM_USER+0x113
+#define NM_INACTIVE_TOOLTIPWND		WM_USER+0x114
 
 
 //#define NM_LIST_CUT			        WM_USER+0x111

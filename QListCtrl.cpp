@@ -769,6 +769,8 @@ int CQListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_pToolTip = new CToolTipEx;
 	m_pToolTip->Create(this);
+
+	m_pToolTip->SetNotifyWnd(GetParent());
 	
 	return 0;
 }

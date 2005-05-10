@@ -204,6 +204,7 @@ public:
 	afx_msg void OnBackButton();
 	afx_msg LRESULT OnGetClipData(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnUpDown(WPARAM wParam, LPARAM lParam);
+	LRESULT OnToolTipWndInactive(WPARAM wParam, LPARAM lParam);
 };
 
 

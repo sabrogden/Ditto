@@ -151,6 +151,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_BACK_BUTTON, OnBackButton)
 	ON_MESSAGE(NM_GET_CLIP_DATA, OnGetClipData)
 	ON_MESSAGE(CB_UPDOWN, OnUpDown)
+	ON_MESSAGE(NM_INACTIVE_TOOLTIPWND, OnToolTipWndInactive)
 
 END_MESSAGE_MAP()
 
@@ -2229,6 +2230,17 @@ LRESULT CQPasteWnd::OnUpDown(WPARAM wParam, LPARAM lParam)
 		m_lstHeader.HidePopup();
 
 		m_lstHeader.SendMessage(WM_KEYDOWN, wParam, lParam);
+	}
+
+	return TRUE;
+}
+
+LRESULT CQPasteWnd::OnToolTipWndInactive(WPARAM wParam, LPARAM lParam)
+{
+	CWnd *p = GetFocus();
+	if(p == NULL)
+	{
+		HideQPasteWindow();
 	}
 
 	return TRUE;
