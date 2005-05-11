@@ -529,7 +529,7 @@ BEGIN
                     IDC_STATIC,7,159,336,25
 END
 
-IDD_OPTIONS_GENERAL DIALOG DISCARDABLE  0, 0, 309, 214
+IDD_OPTIONS_GENERAL DIALOG DISCARDABLE  0, 0, 309, 225
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "General"
 FONT 8, "MS Sans Serif"
@@ -576,6 +576,9 @@ BEGIN
     CONTROL         "Paste Clip in active window after selection",
                     IDC_SEND_PASTE_MESSAGE,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,23,190,148,10
+    LTEXT           "Maximum Clip Size in Kilobytes",IDC_STATIC,23,202,96,8
+    EDITTEXT        IDC_EDIT_MAX_SIZE,121,201,26,12,ES_AUTOHSCROLL
+    LTEXT           "(Leave blank for no limit)",IDC_STATIC,151,202,78,8
 END
 
 IDD_SELECT_DB DIALOG DISCARDABLE  0, 0, 276, 46
@@ -849,7 +852,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 302
         TOPMARGIN, 7
-        BOTTOMMARGIN, 206
+        BOTTOMMARGIN, 217
     END
 
     IDD_SELECT_DB, DIALOG

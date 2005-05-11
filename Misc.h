@@ -347,6 +347,10 @@ public:
 	static void		SetExtraNetworkPassword(CString csPassword);
 	static CString	GetExtraNetworkPassword(bool bFillArray);
 
+	static long		m_lMaxClipSizeInKs;
+	static long		GetMaxClipSizeInKs();
+	static void		SetMaxClipSizeInKs(long lK);
+
 	static CStringArray m_csNetworkPasswordArray;
 
 	/*

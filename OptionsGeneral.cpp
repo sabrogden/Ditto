@@ -34,6 +34,7 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionsGeneral)
+	DDX_Control(pDX, IDC_EDIT_MAX_SIZE, m_MaxClipSize);
 	DDX_Control(pDX, IDC_SEND_PASTE_MESSAGE, m_btSendPasteMessage);
 	DDX_Control(pDX, IDC_HIDE_DITO_ON_HOT_KEY, m_btHideDittoOnHotKey);
 	DDX_Control(pDX, IDC_DESC_TEXT_SIZE, m_DescTextSize);
@@ -93,6 +94,13 @@ BOOL COptionsGeneral::OnInitDialog()
 	m_btHideDittoOnHotKey.SetCheck(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown);
 	m_btSendPasteMessage.SetCheck(g_Opt.m_bSendPasteMessageAfterSelection);
 
+	if(g_Opt.m_lMaxClipSizeInKs > 0)
+	{
+		CString csMax;
+		csMax.Format("%d", g_Opt.m_lMaxClipSizeInKs/1024);
+		m_MaxClipSize.SetWindowText(csMax);
+	}
+
 	CString csPath = CGetSetOptions::GetDBPath(FALSE);
 	if(csPath.IsEmpty())
 	{
@@ -138,6 +146,10 @@ BOOL COptionsGeneral::OnApply()
 	g_Opt.SetAllowDuplicates( m_btAllowDuplicates.GetCheck() );
 	g_Opt.SetUpdateTimeOnPaste( m_btUpdateTimeOnPaste.GetCheck() );
 	g_Opt.SetSaveMultiPaste( m_btSaveMultiPaste.GetCheck() );
+
+	CString csMax;
+	m_MaxClipSize.GetWindowText(csMax);
+	g_Opt.SetMaxClipSizeInKs(atoi(csMax));
 
 	if(m_btSetDatabasePath.GetCheck() == BST_CHECKED)
 	{

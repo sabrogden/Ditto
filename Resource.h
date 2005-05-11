@@ -147,6 +147,7 @@
 #define IDC_EDIT_ADDITIONAL             2037
 #define IDC_CHECK_WIN7                  2038
 #define IDC_CHECK_SHOW_ALL_IN_MAIN_LIST 2038
+#define IDC_EDIT_MAX_SIZE               2038
 #define IDC_CHECK_WIN8                  2039
 #define IDC_CHECK_WIN9                  2040
 #define IDC_CHECK_WIN10                 2041
@@ -240,7 +241,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        157
 #define _APS_NEXT_COMMAND_VALUE         32852
-#define _APS_NEXT_CONTROL_VALUE         2038
+#define _APS_NEXT_CONTROL_VALUE         2039
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

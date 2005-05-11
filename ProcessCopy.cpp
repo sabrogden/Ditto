@@ -326,6 +326,16 @@ bool CClip::LoadFromClipboard( CClipTypes* pClipTypes )
 			nSize = GlobalSize( cf.m_hgData );
 			if( nSize > 0 )
 			{
+				if(g_Opt.m_lMaxClipSizeInKs > 0 &&
+					nSize > g_Opt.m_lMaxClipSizeInKs)
+				{
+					CString cs;
+					cs.Format("Maximum clip size reached max size = %d, clip size = %d", g_Opt.m_lMaxClipSizeInKs, nSize);
+					Log(cs);
+
+					EXIT_LoadFromClipboard(false);
+				}
+
 				ASSERT( ::IsValid(cf.m_hgData) );
 				m_Formats.Add( cf );
 				m_lTotalCopySize += nSize;
@@ -432,6 +442,30 @@ bool CClip::AddToDB( bool bCheckForDuplicates )
 	
 	return bResult;
 }
+
+//bool CClip::CheckForMaxSize()
+//{
+//	try
+//	{
+//		CClipFormat* pCF;
+//		
+//		for( int i = m_Formats.GetSize()-1; i >= 0 ; i-- )
+//		{
+//			pCF = &m_Formats.ElementAt(i);
+//	
+//			LPVOID pvData = GlobalLock(pCF->m_hgData);
+//			if(pvData)
+//			{
+//				GlobalSize(pCF->m_hgData)
+//			}
+//			GlobalUnlock(pCF->m_hgData);
+//	
+//		}
+//	}
+//	CATCHDAO
+//		
+//	return false;
+//}
 
 // if a duplicate exists, set recset to the duplicate and return true
 bool CClip::FindDuplicate( CMainTable& recset, BOOL bCheckLastOnly )
