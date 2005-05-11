@@ -594,11 +594,10 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 	while( ::PeekMessage( &msg, m_hWnd, WM_REFRESH_VIEW, WM_REFRESH_VIEW, PM_REMOVE ) )
 	{
 	}
+
 	if( theApp.m_bShowingQuickPaste )
 	{
-		HWND hFocus = GetFocus()->GetSafeHwnd();
-		if(hFocus == NULL || hFocus == m_lstHeader.GetSafeHwnd())
-			FillList();
+		FillList();
 	}
 	
 	return TRUE;
@@ -1465,7 +1464,11 @@ void CQPasteWnd::OnMenuPastehtmlasplaintext()
 
 void CQPasteWnd::OnMenuHelp() 
 {
-	CHyperLink::GotoURL("Help\\DittoGettingStarted.htm", SW_SHOW);
+	CString csFile = CGetSetOptions::GetExeFileName();
+	csFile = GetFilePath(csFile);
+	csFile += "Help\\DittoGettingStarted.htm";
+
+	CHyperLink::GotoURL(csFile, SW_SHOW);
 }
 
 void CQPasteWnd::OnMenuQuickoptionsFont() 

@@ -583,5 +583,8 @@ LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 
 void CMainFrame::OnFirstHelp() 
 {
-	CHyperLink::GotoURL("Help\\DittoGettingStarted.htm", SW_SHOW);
+	CString csFile = CGetSetOptions::GetExeFileName();
+	csFile = GetFilePath(csFile);
+	csFile += "Help\\DittoGettingStarted.htm";
+	CHyperLink::GotoURL(csFile, SW_SHOW);
 }
