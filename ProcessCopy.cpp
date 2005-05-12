@@ -326,11 +326,11 @@ bool CClip::LoadFromClipboard( CClipTypes* pClipTypes )
 			nSize = GlobalSize( cf.m_hgData );
 			if( nSize > 0 )
 			{
-				if(g_Opt.m_lMaxClipSizeInKs > 0 &&
-					nSize > g_Opt.m_lMaxClipSizeInKs)
+				if(g_Opt.m_lMaxClipSizeInBytes > 0 &&
+					nSize > g_Opt.m_lMaxClipSizeInBytes)
 				{
 					CString cs;
-					cs.Format("Maximum clip size reached max size = %d, clip size = %d", g_Opt.m_lMaxClipSizeInKs, nSize);
+					cs.Format("Maximum clip size reached max size = %d, clip size = %d", g_Opt.m_lMaxClipSizeInBytes, nSize);
 					Log(cs);
 
 					EXIT_LoadFromClipboard(false);

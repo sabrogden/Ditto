@@ -487,7 +487,7 @@ BOOL CGetSetOptions::m_bSendPasteMessageAfterSelection;
 BOOL CGetSetOptions::m_bFindAsYouType;
 BOOL CGetSetOptions::m_bEnsureEntireWindowCanBeSeen;
 BOOL CGetSetOptions::m_bShowAllClipsInMainList;
-long CGetSetOptions::m_lMaxClipSizeInKs;
+long CGetSetOptions::m_lMaxClipSizeInBytes;
 
 CGetSetOptions g_Opt;
 
@@ -520,7 +520,7 @@ CGetSetOptions::CGetSetOptions()
 	m_bFindAsYouType = GetFindAsYouType();
 	m_bEnsureEntireWindowCanBeSeen = GetEnsureEntireWindowCanBeSeen();
 	m_bShowAllClipsInMainList = GetShowAllClipsInMainList();
-	m_lMaxClipSizeInKs = GetMaxClipSizeInKs() * 1024;
+	m_lMaxClipSizeInBytes = GetMaxClipSizeInBytes();
 
 	GetExtraNetworkPassword(true);
 	
@@ -1344,15 +1344,15 @@ BOOL CGetSetOptions::GetShowAllClipsInMainList()
 	return GetProfileLong("ShowAllClipsInMainList", TRUE);
 }
 
-long CGetSetOptions::GetMaxClipSizeInKs()
+long CGetSetOptions::GetMaxClipSizeInBytes()
 {
-	return GetProfileLong("MaxClipSizeInKs", 0);
+	return GetProfileLong("MaxClipSizeInBytes", 0);
 }
 
-void CGetSetOptions::SetMaxClipSizeInKs(long lK)
+void CGetSetOptions::SetMaxClipSizeInBytes(long lSize)
 {
-	m_lMaxClipSizeInKs = lK * 1024;
-	SetProfileLong("MaxClipSizeInKs", lK);
+	m_lMaxClipSizeInBytes = lSize;
+	SetProfileLong("MaxClipSizeInBytes", lSize);
 }
 
 /*------------------------------------------------------------------*\

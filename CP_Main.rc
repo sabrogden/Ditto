@@ -529,7 +529,7 @@ BEGIN
                     IDC_STATIC,7,159,336,25
 END
 
-IDD_OPTIONS_GENERAL DIALOG DISCARDABLE  0, 0, 309, 225
+IDD_OPTIONS_GENERAL DIALOG DISCARDABLE  0, 0, 295, 242
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "General"
 FONT 8, "MS Sans Serif"
@@ -556,7 +556,7 @@ BEGIN
     CONTROL         "Set Database Path",IDC_SET_DB_PATH,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,23,79,76,10
     EDITTEXT        IDC_PATH,23,89,248,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "....",IDC_GET_PATH,288,89,14,12
+    PUSHBUTTON      "....",IDC_GET_PATH,274,89,14,12
     CONTROL         "Allow Duplicates",IDC_ALLOW_DUPLICATES,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,23,118,68,10
     CONTROL         "Update Clip Time On Paste",IDC_UPDATE_TIME_ON_PASTE,
@@ -571,14 +571,14 @@ BEGIN
                     WS_TABSTOP,23,153,135,10
     LTEXT           "On copy play the sound",IDC_STATIC,24,177,81,10
     EDITTEXT        IDC_EDIT_PLAY_SOUND,105,177,145,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "....",IDC_SELECT_SOUND,288,177,14,12
+    PUSHBUTTON      "....",IDC_SELECT_SOUND,274,177,14,12
     PUSHBUTTON      "Play",IDC_BUTTON_PLAY,251,177,19,12
     CONTROL         "Paste Clip in active window after selection",
                     IDC_SEND_PASTE_MESSAGE,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,23,190,148,10
-    LTEXT           "Maximum Clip Size in Kilobytes",IDC_STATIC,23,202,96,8
-    EDITTEXT        IDC_EDIT_MAX_SIZE,121,201,26,12,ES_AUTOHSCROLL
-    LTEXT           "(Leave blank for no limit)",IDC_STATIC,151,202,78,8
+    LTEXT           "Maximum Clip Size in Bytes",IDC_STATIC,23,202,88,8
+    EDITTEXT        IDC_EDIT_MAX_SIZE,112,201,59,12,ES_AUTOHSCROLL
+    LTEXT           "(Leave blank for no limit)",IDC_STATIC,176,202,78,8
 END
 
 IDD_SELECT_DB DIALOG DISCARDABLE  0, 0, 276, 46
@@ -850,9 +850,9 @@ BEGIN
     IDD_OPTIONS_GENERAL, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 302
+        RIGHTMARGIN, 288
         TOPMARGIN, 7
-        BOTTOMMARGIN, 217
+        BOTTOMMARGIN, 234
     END
 
     IDD_SELECT_DB, DIALOG

@@ -94,10 +94,10 @@ BOOL COptionsGeneral::OnInitDialog()
 	m_btHideDittoOnHotKey.SetCheck(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown);
 	m_btSendPasteMessage.SetCheck(g_Opt.m_bSendPasteMessageAfterSelection);
 
-	if(g_Opt.m_lMaxClipSizeInKs > 0)
+	if(g_Opt.m_lMaxClipSizeInBytes > 0)
 	{
 		CString csMax;
-		csMax.Format("%d", g_Opt.m_lMaxClipSizeInKs/1024);
+		csMax.Format("%d", g_Opt.m_lMaxClipSizeInBytes);
 		m_MaxClipSize.SetWindowText(csMax);
 	}
 
@@ -149,7 +149,7 @@ BOOL COptionsGeneral::OnApply()
 
 	CString csMax;
 	m_MaxClipSize.GetWindowText(csMax);
-	g_Opt.SetMaxClipSizeInKs(atoi(csMax));
+	g_Opt.SetMaxClipSizeInBytes(atoi(csMax));
 
 	if(m_btSetDatabasePath.GetCheck() == BST_CHECKED)
 	{
