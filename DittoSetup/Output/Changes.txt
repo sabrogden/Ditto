@@ -1,3 +1,11 @@
+2.5.1.0
+	[ENHANCMENTS]
+	- Added size limit on a clip, if a clip is over that limit the clip will not be saved
+	
+	[BUG FIXES]
+	- Back button will refresh the screen and go back to parent group
+	- When focus is on the description window then you click on another window, Ditto will hide it's window correctly
+
 2.5.0.0
 	[ENHANCMENTS]
 	- Show full Rich Text or Text in description window
