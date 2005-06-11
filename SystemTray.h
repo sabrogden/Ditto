@@ -41,6 +41,8 @@
 #define NIIF_NONE 0
 #endif
 
+#define WM_CUSTOMIZE_TRAY_MENU	WM_USER + 211
+
 // #include <afxwin.h>
 #include <afxtempl.h>
 #include <afxdisp.h>    // COleDateTime

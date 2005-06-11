@@ -18,6 +18,10 @@ IMPLEMENT_DYNCREATE(COptionsKeyBoard, CPropertyPage)
 
 COptionsKeyBoard::COptionsKeyBoard() : CPropertyPage(COptionsKeyBoard::IDD)
 {
+	m_csTitle = theApp.m_Language.GetString("KeyboardShortcutsTitle", "Keyboard Shortcuts");
+	m_psp.pszTitle = m_csTitle;
+	m_psp.dwFlags |= PSP_USETITLE;
+	
 	//{{AFX_DATA_INIT(COptionsKeyBoard)
 	//}}AFX_DATA_INIT
 }
@@ -80,6 +84,8 @@ BOOL COptionsKeyBoard::OnInitDialog()
 	m_btSendPaste.SetCheck(g_Opt.m_bSendPasteOnFirstTenHotKeys);
 
 	m_HotKey.SetFocus();
+
+	theApp.m_Language.UpdateOptionShortcuts(this);
 
 	return FALSE;
 }

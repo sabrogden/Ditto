@@ -96,6 +96,8 @@ BOOL CAddType::OnInitDialog()
 	oleData.Release();
 
 	m_lbDefaultTypes.SetFocus();
+
+	theApp.m_Language.UpdateOptionSupportedTypesAdd(this);
 	return FALSE;
 }
 

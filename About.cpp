@@ -21,6 +21,10 @@ IMPLEMENT_DYNCREATE(CAbout, CPropertyPage)
 
 CAbout::CAbout() : CPropertyPage(CAbout::IDD)
 {
+	m_csTitle = theApp.m_Language.GetString("AboutTitle", "About");
+	m_psp.pszTitle = m_csTitle;
+	m_psp.dwFlags |= PSP_USETITLE;
+
 	//{{AFX_DATA_INIT(CAbout)
 		// NOTE: the ClassWizard will add member initialization here
 	//}}AFX_DATA_INIT

@@ -19,6 +19,10 @@ IMPLEMENT_DYNCREATE(COptionsTypes, CPropertyPage)
 
 COptionsTypes::COptionsTypes() : CPropertyPage(COptionsTypes::IDD)
 {
+	m_csTitle = theApp.m_Language.GetString("SupportedTypesTitle", "Supported Types");
+	m_psp.pszTitle = m_csTitle;
+	m_psp.dwFlags |= PSP_USETITLE; 
+
 	//{{AFX_DATA_INIT(COptionsTypes)
 	//}}AFX_DATA_INIT
 
@@ -101,6 +105,9 @@ BOOL COptionsTypes::OnInitDialog()
 	CATCHDAO
 	
 	m_List.SetFocus();
+
+	theApp.m_Language.UpdateOptionSupportedTypes(this);
+	
 	return FALSE;
 }
 

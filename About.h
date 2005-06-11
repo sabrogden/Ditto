@@ -38,6 +38,9 @@ public:
 
 // Implementation
 protected:
+
+	CString m_csTitle;
+
 	// Generated message map functions
 	//{{AFX_MSG(CAbout)
 	virtual BOOL OnInitDialog();

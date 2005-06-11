@@ -82,6 +82,7 @@ protected:
 	afx_msg LRESULT OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnErrorOnSendRecieve(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnFocusChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnCustomizeTrayMenu(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);

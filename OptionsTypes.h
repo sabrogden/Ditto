@@ -38,6 +38,7 @@ public:
 // Implementation
 protected:
 	bool m_bSave;
+	CString m_csTitle;
 	BOOL TextAllReadyThere(const CString &cs);
 
 

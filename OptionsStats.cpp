@@ -22,6 +22,10 @@ IMPLEMENT_DYNCREATE(COptionsStats, CPropertyPage)
 COptionsStats::COptionsStats()
 	: CPropertyPage(COptionsStats::IDD)
 {
+	m_csTitle = theApp.m_Language.GetString("StatsTitle", "Stats");
+	m_psp.pszTitle = m_csTitle;
+	m_psp.dwFlags |= PSP_USETITLE; 
+
 	//{{AFX_DATA_INIT(COptionsStats)
 	m_eAllCopies = _T("");
 	m_eAllPastes = _T("");
@@ -120,6 +124,8 @@ BOOL COptionsStats::OnInitDialog()
 		m_eDatabaseSize.Format("%d KB", (buf.st_size/1024));
 
 	UpdateData(FALSE);
+
+	theApp.m_Language.UpdateOptionStats(this);
 		
 	return TRUE;
 }
@@ -139,7 +145,7 @@ void COptionsStats::OnResetCounts()
 
 void COptionsStats::OnRemoveAll() 
 {
-	if(MessageBox("This will remove all Copy Entries!\n\nContinue?", "Warning", MB_YESNO) == IDYES)
+	if(MessageBox(theApp.m_Language.GetString("Remove_All", "This will remove all Copy Entries!\n\nContinue?"), "Warning", MB_YESNO) == IDYES)
 	{
 		if( DeleteAllIDs() )
 		{

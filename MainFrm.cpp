@@ -47,6 +47,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_ADD_TO_DATABASE_FROM_SOCKET, OnAddToDatabaseFromSocket)
 	ON_MESSAGE(WM_SEND_RECIEVE_ERROR, OnErrorOnSendRecieve)
 	ON_MESSAGE(WM_FOCUS_CHANGED, OnFocusChanged)
+	ON_MESSAGE(WM_CUSTOMIZE_TRAY_MENU, OnCustomizeTrayMenu)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -587,4 +588,15 @@ void CMainFrame::OnFirstHelp()
 	csFile = GetFilePath(csFile);
 	csFile += "Help\\DittoGettingStarted.htm";
 	CHyperLink::GotoURL(csFile, SW_SHOW);
+}
+
+LRESULT CMainFrame::OnCustomizeTrayMenu(WPARAM wParam, LPARAM lParam)
+{
+	CMenu *pMenu = (CMenu*)wParam;
+	if(pMenu)
+	{
+		theApp.m_Language.UpdateTrayIconRightClickMenu(pMenu);
+	}
+
+	return true;
 }

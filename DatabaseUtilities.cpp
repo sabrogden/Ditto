@@ -97,10 +97,16 @@ BOOL CheckDBExists(CString csDBPath)
 		CString csPath = GetDefaultDBName();
 		
 		CString cs;
-		cs.Format("Unrecognized Database Format \"%s\",\n"
-			"the file will be renamed \"%s\",\n"
-			"and a new database will be created,\n"
-			"\"%s\"", csDBPath, csMarkAsBad, csPath);
+		cs.Format("%s \"%s\",\n"
+			"%s \"%s\",\n"
+			"%s,\n"
+			"\"%s\"",
+			theApp.m_Language.GetString("Database_Format", "Unrecognized Database Format"),
+			csDBPath, 
+			theApp.m_Language.GetString("File_Renamed", "the file will be renamed"),
+			csMarkAsBad, 
+			theApp.m_Language.GetString("New_Database", "and a new database will be created"),
+			csPath);
 		
 		AfxMessageBox(cs);
 		
@@ -454,6 +460,8 @@ BOOL CompactDatabase()
 	if(!theApp.CloseDB())
 		return FALSE;
 	
+	CWaitCursor wait;
+
 	CString csDBName = GetDBName();
 	CString csTempDBName = csDBName;
 	csTempDBName.Replace(".mdb", "TempDBName.mdb");

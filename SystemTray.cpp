@@ -856,6 +856,9 @@ LRESULT CSystemTray::OnTrayNotification(UINT wParam, LONG lParam)
         pTargetWnd->SetForegroundWindow(); 
         
 #ifndef _WIN32_WCE
+
+		pTargetWnd->SendMessage(WM_CUSTOMIZE_TRAY_MENU, (WPARAM)pSubMenu, 0);
+
         ::TrackPopupMenu(pSubMenu->m_hMenu, 0, pos.x, pos.y, 0, 
                          pTargetWnd->GetSafeHwnd(), NULL);
 #else

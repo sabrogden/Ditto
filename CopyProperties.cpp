@@ -126,6 +126,8 @@ BOOL CCopyProperties::OnInitDialog()
 	m_Resize.AddControl(IDOK, DR_MoveTop | DR_MoveLeft);
 	m_Resize.AddControl(IDCANCEL, DR_MoveTop | DR_MoveLeft);
 
+	theApp.m_Language.UpdateClipProperties(this);
+
 	return FALSE;
 }
 

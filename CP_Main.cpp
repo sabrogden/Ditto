@@ -103,18 +103,26 @@ BOOL CCP_MainApp::InitInstance()
 	AfxOleInit();
 	AfxInitRichEdit();
 
+	CString csFile = CGetSetOptions::GetLanguageFile();
+	if(!m_Language.LoadLanguageFile(csFile))
+	{
+		CString cs;
+		cs.Format("Error loading language file - %s - \n\n%s", csFile, m_Language.m_csLastError);
+
+		MessageBox(m_MainhWnd, cs, "Ditto", MB_OK);
+	}
+
 	m_cfIgnoreClipboard = ::RegisterClipboardFormat("Clipboard Viewer Ignore");
 
 	int nRet = CheckDBExists(CGetSetOptions::GetDBPath());
 	if(nRet == FALSE)
 	{
-		AfxMessageBox("Error Opening Database.");
+		AfxMessageBox(theApp.m_Language.GetString("Error_Opening_Database", "Error Opening Database."));
 		return TRUE;
 	}
 	else if(nRet == ERROR_OPENING_DATABASE)
 	{
-		CString cs;
-		cs.Format("Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO.");
+		CString cs = theApp.m_Language.GetString("Error_Init_Dao", "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO.");
 		if(MessageBox(NULL, cs, "Ditto", MB_YESNO) == IDYES)
 		{
 			ShellExecute(NULL, "open", "http://ditto-cp.sourceforge.net/dao_setup.exe", "", "", SW_SHOW);
@@ -313,7 +321,7 @@ void CCP_MainApp::StopCopyThread()
 //  be actually connected -- check IsClipboardViewerConnected())
 bool CCP_MainApp::ToggleConnectCV()
 {
-bool bConnect = !GetConnectCV();
+	bool bConnect = !GetConnectCV();
 	SetConnectCV( bConnect );
 	if( bConnect )
 		m_pMainFrame->m_TrayIcon.SetIcon( IDR_MAINFRAME );
@@ -332,13 +340,14 @@ void CCP_MainApp::UpdateMenuConnectCV( CMenu* pMenu, UINT nMenuID )
 	if( pMenu == NULL )
 		return;
 
-bool bConnect = theApp.GetConnectCV();
-bool bIsConnected = theApp.IsClipboardViewerConnected();
-CString cs;
+	bool bConnect = theApp.GetConnectCV();
+	bool bIsConnected = theApp.IsClipboardViewerConnected();
+	CString cs;
 
 	if( bConnect )
 	{
-		cs = "Disconnect from Clipboard";
+		cs = theApp.m_Language.GetString("Disconnect_Clipboard", "Disconnect from Clipboard.");
+
 		pMenu->ModifyMenu(nMenuID, MF_BYCOMMAND, nMenuID, cs);
 		// add a check mark if we are still disconnected (temporarily)
 		if( !bIsConnected )
@@ -348,7 +357,8 @@ CString cs;
 	}
 	else // CV is disconnected, so provide the option of connecting
 	{
-		cs = "Connect to Clipboard";
+		cs = theApp.m_Language.GetString("Connect_Clipboard", "Connect to Clipboard.");
+
 		pMenu->ModifyMenu(nMenuID, MF_BYCOMMAND, nMenuID, cs);
 		// add a check mark if we are still connected (temporarily)
 		if( bIsConnected )
@@ -672,9 +682,7 @@ void CCP_MainApp::Delayed_RemoveOldEntries( UINT delay )
 int CCP_MainApp::ExitInstance() 
 {
 	LOG("ExitInstance");
-	if(CGetSetOptions::GetCompactAndRepairOnExit())
-		CompactDatabase();
-	
+
 	CloseDB();
 
 	return CWinApp::ExitInstance();

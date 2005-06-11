@@ -103,6 +103,7 @@ CString GetFilePath(CString csFullPath);
 #define WM_SEND_RECIEVE_ERROR	WM_USER + 208
 #define WM_FOCUS_CHANGED		WM_USER + 209
 #define WM_CV_GETCONNECT		WM_USER + 210
+//defined in tray icon #define WM_CUSTOMIZE_TRAY_MENU	WM_USER + 211
 
 
 #define REG_PATH					"Software\\Ditto"
@@ -178,9 +179,6 @@ public:
 
 	static void SetCheckForExpiredEntries(BOOL bVal);
 	static BOOL GetCheckForExpiredEntries();
-
-	static void SetCompactAndRepairOnExit(BOOL bVal);
-	static BOOL GetCompactAndRepairOnExit();
 
 	static void SetMaxEntries(long lVal);
 	static long GetMaxEntries();
@@ -350,6 +348,13 @@ public:
 	static long		m_lMaxClipSizeInBytes;
 	static long		GetMaxClipSizeInBytes();
 	static void		SetMaxClipSizeInBytes(long lSize);
+
+	static CString	GetLanguageFile();
+	static void		SetLanguageFile(CString csLanguage);
+
+	static long		m_lSaveClipDelay;
+	static long		GetSaveClipDelay();
+	static void		SetSaveClipDelay(long lDelay);
 
 	static CStringArray m_csNetworkPasswordArray;
 

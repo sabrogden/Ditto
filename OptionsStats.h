@@ -46,6 +46,8 @@ public:
 // Implementation
 protected:
 
+	CString m_csTitle;
+
 	// Generated message map functions
 	//{{AFX_MSG(COptionsStats)
 	virtual BOOL OnInitDialog();

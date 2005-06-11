@@ -799,6 +799,8 @@ void CQPasteWnd::OnRclickQuickPaste(NMHDR* pNMHDR, LRESULT* pResult)
 			pp.y = rc.bottom;
 		}
 		
+		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
+
 		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON,
 			pp.x, pp.y, this, NULL);
 	}

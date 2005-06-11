@@ -21,6 +21,10 @@ IMPLEMENT_DYNCREATE(COptionsGeneral, CPropertyPage)
 
 COptionsGeneral::COptionsGeneral() : CPropertyPage(COptionsGeneral::IDD)
 {
+	m_csTitle = theApp.m_Language.GetString("GeneralTitle", "General");
+	m_psp.pszTitle = m_csTitle;
+	m_psp.dwFlags |= PSP_USETITLE; 
+
 	//{{AFX_DATA_INIT(COptionsGeneral)
 	m_csPlaySound = _T("");
 	//}}AFX_DATA_INIT
@@ -34,6 +38,8 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionsGeneral)
+	DDX_Control(pDX, IDC_EDIT_SAVE_DELAY, m_SaveDelay);
+	DDX_Control(pDX, IDC_COMBO_LANGUAGE, m_cbLanguage);
 	DDX_Control(pDX, IDC_EDIT_MAX_SIZE, m_MaxClipSize);
 	DDX_Control(pDX, IDC_SEND_PASTE_MESSAGE, m_btSendPasteMessage);
 	DDX_Control(pDX, IDC_HIDE_DITO_ON_HOT_KEY, m_btHideDittoOnHotKey);
@@ -42,7 +48,6 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PATH, m_ePath);
 	DDX_Control(pDX, IDC_SET_DB_PATH, m_btSetDatabasePath);
 	DDX_Control(pDX, IDC_CHECK_UPDATES, m_btCheckForUpdates);
-	DDX_Control(pDX, IDC_COMPACT_REPAIR, m_btCompactAndRepair);
 	DDX_Control(pDX, IDC_EXPIRE_AFTER, m_eExpireAfter);
 	DDX_Control(pDX, IDC_MAX_SAVED_COPIES, m_eMaxSavedCopies);
 	DDX_Control(pDX, IDC_MAXIMUM, m_btMaximumCheck);
@@ -81,12 +86,12 @@ BOOL COptionsGeneral::OnInitDialog()
 	m_btShowIconInSysTray.SetCheck(CGetSetOptions::GetShowIconInSysTray());
 	m_btMaximumCheck.SetCheck(CGetSetOptions::GetCheckForMaxEntries());
 	m_btExpire.SetCheck(CGetSetOptions::GetCheckForExpiredEntries());
-	m_btCompactAndRepair.SetCheck(CGetSetOptions::GetCompactAndRepairOnExit());
 	m_btCheckForUpdates.SetCheck(CGetSetOptions::GetCheckForUpdates());
 	
 	m_eExpireAfter.SetNumber(CGetSetOptions::GetExpiredEntries());
 	m_eMaxSavedCopies.SetNumber(CGetSetOptions::GetMaxEntries());
 	m_DescTextSize.SetNumber(g_Opt.m_bDescTextSize);
+	m_SaveDelay.SetNumber(g_Opt.m_lSaveClipDelay);
 
 	m_btAllowDuplicates.SetCheck( g_Opt.m_bAllowDuplicates );
 	m_btUpdateTimeOnPaste.SetCheck( g_Opt.m_bUpdateTimeOnPaste );
@@ -117,9 +122,33 @@ BOOL COptionsGeneral::OnInitDialog()
 
 	m_csPlaySound = g_Opt.m_csPlaySoundOnCopy;
 
+	FillLanguages();
+
 	UpdateData(FALSE);
 
+	theApp.m_Language.UpdateOptionGeneral(this);
 	return TRUE;
+}
+
+void COptionsGeneral::FillLanguages()
+{
+	CString csFile = CGetSetOptions::GetExeFileName();
+	csFile = GetFilePath(csFile);
+	csFile += "language\\*.xml";
+
+	CString csLanguage = CGetSetOptions::GetLanguageFile();
+
+	CFileFind find;
+	BOOL bCont = find.FindFile(csFile);
+
+	while(bCont)
+	{
+		bCont = find.FindNextFile();
+		int nIndex = m_cbLanguage.AddString(find.GetFileTitle());
+
+		if(find.GetFileTitle() == csLanguage)
+			m_cbLanguage.SetCurSel(nIndex);
+	}
 }
 
 BOOL COptionsGeneral::OnApply()
@@ -132,7 +161,6 @@ BOOL COptionsGeneral::OnApply()
 	CGetSetOptions::SetRunOnStartUp(m_btRunOnStartup.GetCheck());
 	CGetSetOptions::SetCheckForMaxEntries(m_btMaximumCheck.GetCheck());
 	CGetSetOptions::SetCheckForExpiredEntries(m_btExpire.GetCheck());
-	CGetSetOptions::SetCompactAndRepairOnExit(m_btCompactAndRepair.GetCheck());
 	CGetSetOptions::SetCheckForUpdates(m_btCheckForUpdates.GetCheck());
 	CGetSetOptions::SetHideDittoOnHotKeyIfAlreadyShown(m_btHideDittoOnHotKey.GetCheck());
 	CGetSetOptions::SetSendPasteAfterSelection(m_btSendPasteMessage.GetCheck());
@@ -140,12 +168,25 @@ BOOL COptionsGeneral::OnApply()
 	CGetSetOptions::SetMaxEntries(m_eMaxSavedCopies.GetNumber());
 	CGetSetOptions::SetExpiredEntries(m_eExpireAfter.GetNumber());
 	CGetSetOptions::SetDescTextSize(m_DescTextSize.GetNumber());
+	CGetSetOptions::SetSaveClipDelay(m_SaveDelay.GetNumber());
 
 	CGetSetOptions::SetPlaySoundOnCopy(m_csPlaySound);
 
-	g_Opt.SetAllowDuplicates( m_btAllowDuplicates.GetCheck() );
-	g_Opt.SetUpdateTimeOnPaste( m_btUpdateTimeOnPaste.GetCheck() );
-	g_Opt.SetSaveMultiPaste( m_btSaveMultiPaste.GetCheck() );
+	g_Opt.SetAllowDuplicates(m_btAllowDuplicates.GetCheck());
+	g_Opt.SetUpdateTimeOnPaste(m_btUpdateTimeOnPaste.GetCheck());
+	g_Opt.SetSaveMultiPaste(m_btSaveMultiPaste.GetCheck());
+
+	CString csLanguage;
+	m_cbLanguage.GetLBText(m_cbLanguage.GetCurSel(), csLanguage);
+	g_Opt.SetLanguageFile(csLanguage);
+	
+	if(!theApp.m_Language.LoadLanguageFile(csLanguage))
+	{
+		CString cs;
+		cs.Format("Error loading language file - %s - \n\n%s", csLanguage, theApp.m_Language.m_csLastError);
+
+		MessageBox(cs, "Ditto", MB_OK);
+	}
 
 	CString csMax;
 	m_MaxClipSize.GetWindowText(csMax);
@@ -209,7 +250,12 @@ BOOL COptionsGeneral::OnSetActive()
 }
 void COptionsGeneral::OnBtCompactAndRepair() 
 {
+	CWaitCursor wait;
+
 	CompactDatabase();
+
+	UpdateWindow();
+	
 	RepairDatabase();
 }
 

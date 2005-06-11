@@ -47,6 +47,7 @@ protected:
 	void InsertItems();
 	BOOL EditItem(int nItem);
 
+	CString m_csTitle;
 	COptionsSheet *m_pParent;
 	
 	// Generated message map functions

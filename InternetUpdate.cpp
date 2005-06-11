@@ -67,13 +67,14 @@ BOOL CInternetUpdate::CheckForUpdate(HWND hParent, BOOL bCheckForPrevUpdate, BOO
 	if(m_lUpdateVersion > m_lRunningVersion)
 	{
 		CString csMessage;
-		csMessage.Format(	"Updates available for Ditto.\n"
-							"Visit ditto-cp.sourceforge.net for details\n\n"
-							"Running Version, %s\n"
-							"Update Version, %s\n\n"
-							"Download updated version?",
+		csMessage.Format(	"%s, %s\n"
+							"%s, %s\n\n"
+							"%s",
+							theApp.m_Language.GetString("Updates_Available", "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version"),
 							GetVersionString(m_lRunningVersion), 
-							GetVersionString(m_lUpdateVersion));
+							theApp.m_Language.GetString("Update_Version", "Update Version"),
+							GetVersionString(m_lUpdateVersion),
+							theApp.m_Language.GetString("Download_Update", "Download updated version?"));
 
 		if(MessageBox(hParent, csMessage, "Ditto", MB_YESNO) == IDYES)
 		{
@@ -91,7 +92,7 @@ BOOL CInternetUpdate::CheckForUpdate(HWND hParent, BOOL bCheckForPrevUpdate, BOO
 	}
 	else if(m_bShowMessages)
 	{
-		MessageBox(hParent, "No updates available", "Ditto", MB_OK);
+		MessageBox(hParent, theApp.m_Language.GetString("No_Updates", "No updates available"), "Ditto", MB_OK);
 	}
 
 	return bRet;

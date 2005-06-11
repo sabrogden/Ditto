@@ -488,6 +488,7 @@ BOOL CGetSetOptions::m_bFindAsYouType;
 BOOL CGetSetOptions::m_bEnsureEntireWindowCanBeSeen;
 BOOL CGetSetOptions::m_bShowAllClipsInMainList;
 long CGetSetOptions::m_lMaxClipSizeInBytes;
+long CGetSetOptions::m_lSaveClipDelay;
 
 CGetSetOptions g_Opt;
 
@@ -521,6 +522,7 @@ CGetSetOptions::CGetSetOptions()
 	m_bEnsureEntireWindowCanBeSeen = GetEnsureEntireWindowCanBeSeen();
 	m_bShowAllClipsInMainList = GetShowAllClipsInMainList();
 	m_lMaxClipSizeInBytes = GetMaxClipSizeInBytes();
+	m_lSaveClipDelay = GetSaveClipDelay();
 
 	GetExtraNetworkPassword(true);
 	
@@ -972,16 +974,6 @@ long CGetSetOptions::GetTotalDate()
 	return GetProfileLong("TotalDate", 0);
 }
 
-void CGetSetOptions::SetCompactAndRepairOnExit(BOOL bVal)
-{
-	SetProfileLong("CompactAndRepairOnExit", bVal);
-}
-
-BOOL CGetSetOptions::GetCompactAndRepairOnExit()
-{
-	return GetProfileLong("CompactAndRepairOnExit", 0);
-}
-
 // the implementations for the following functions were moved out-of-line.
 // when they were declared inline, the compiler failed to notice when
 //  these functions were changed (the linker used an old compiled version)
@@ -1353,6 +1345,27 @@ void CGetSetOptions::SetMaxClipSizeInBytes(long lSize)
 {
 	m_lMaxClipSizeInBytes = lSize;
 	SetProfileLong("MaxClipSizeInBytes", lSize);
+}
+
+CString CGetSetOptions::GetLanguageFile()
+{
+	return GetProfileString("LanguageFile", "");
+}
+
+void CGetSetOptions::SetLanguageFile(CString csLanguage)
+{
+	SetProfileString("LanguageFile", csLanguage);
+}
+
+long CGetSetOptions::GetSaveClipDelay()
+{
+	return GetProfileLong("SaveClipDelay", 500);
+}
+
+void CGetSetOptions::SetSaveClipDelay(long lDelay)
+{
+	m_lSaveClipDelay = lDelay;
+	SetProfileLong("SaveClipDelay", lDelay);
 }
 
 /*------------------------------------------------------------------*\

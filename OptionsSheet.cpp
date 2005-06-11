@@ -89,6 +89,8 @@ BOOL COptionsSheet::OnInitDialog()
 	SetWindowPos(&CWnd::wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
 
 	SetWindowText("Ditto");
+
+	theApp.m_Language.UpdateOptionsSheet(this);
 	
 	return bResult;
 }

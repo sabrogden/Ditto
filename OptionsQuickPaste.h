@@ -55,6 +55,7 @@ protected:
 
 	CFont m_Font;
 	LOGFONT m_LogFont;
+	CString m_csTitle;
 
 
 // Implementation

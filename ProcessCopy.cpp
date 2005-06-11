@@ -1047,11 +1047,20 @@ void CClipboardViewer::OnDrawClipboard()
 		return;
 	}
 	
-	// don't process the event when we first attach
-	if( m_pHandler && !m_bCalling_SetClipboardViewer )
+	if((GetTickCount() - m_lLastCopy) > g_Opt.m_lSaveClipDelay)
 	{
-		if( !::IsClipboardFormatAvailable( theApp.m_cfIgnoreClipboard ) )
-			m_pHandler->OnClipboardChange();
+		// don't process the event when we first attach
+		if( m_pHandler && !m_bCalling_SetClipboardViewer )
+		{
+			if( !::IsClipboardFormatAvailable( theApp.m_cfIgnoreClipboard ) )
+				m_pHandler->OnClipboardChange();
+		}
+	}
+	else
+	{
+		CString cs;
+		cs.Format("Clip copy to fast difference from last copy = %d", (GetTickCount() - m_lLastCopy));
+		Log(cs);
 	}
 	
 	// pass the event to the next Clipboard viewer in the chain

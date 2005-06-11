@@ -18,6 +18,10 @@ IMPLEMENT_DYNCREATE(COptionsQuickPaste, CPropertyPage)
 
 COptionsQuickPaste::COptionsQuickPaste() : CPropertyPage(COptionsQuickPaste::IDD)
 {
+	m_csTitle = theApp.m_Language.GetString("QuickPasteTitle", "Quick Paste");
+	m_psp.pszTitle = m_csTitle;
+	m_psp.dwFlags |= PSP_USETITLE; 
+
 	//{{AFX_DATA_INIT(COptionsQuickPaste)
 		// NOTE: the ClassWizard will add member initialization here
 	//}}AFX_DATA_INIT
@@ -107,6 +111,8 @@ BOOL COptionsQuickPaste::OnInitDialog()
 	CString cs;
 	cs.Format("Font - %s", m_LogFont.lfFaceName);
 	m_btFont.SetWindowText(cs);
+
+	theApp.m_Language.UpdateOptionQuickPaste(this);
 		
 	return FALSE;
 }

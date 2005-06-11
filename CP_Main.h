@@ -22,6 +22,7 @@
 #include "ArrayEx.h"
 #include "MainFrm.h"
 #include "ProcessPaste.h"
+#include "MultiLanguage.h"
 
 #define MAIN_WND_TITLE		"Ditto MainWnd"
 //#define GET_APP    ((CCP_MainApp *)AfxGetApp())	
@@ -164,6 +165,9 @@ public:
 	CLIPFORMAT m_HTML_Format;
 
 	COleDateTime m_oldtStartUp;
+
+	//Mulitlange Support
+	CMultiLanguage m_Language;
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CCP_MainApp)

@@ -171,6 +171,7 @@ public:
 	bool GetConnect() { return m_bConnect; }
 	void SetConnect( bool bConnect );
 
+	long m_lLastCopy;
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CMainFrame)

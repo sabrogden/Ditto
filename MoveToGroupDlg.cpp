@@ -54,6 +54,8 @@ BOOL CMoveToGroupDlg::OnInitDialog()
 	m_Tree.m_lSelectedFolderID = m_nSelectedGroup;
 	m_Tree.SetNotificationWndEx(m_hWnd);
 	m_Tree.FillTree();
+
+	theApp.m_Language.UpdateMoveToGroups(this);
 	
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE

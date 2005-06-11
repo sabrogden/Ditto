@@ -27,6 +27,8 @@ public:
 // Dialog Data
 	//{{AFX_DATA(COptionsGeneral)
 	enum { IDD = IDD_OPTIONS_GENERAL };
+	CNumberEdit	m_SaveDelay;
+	CComboBox	m_cbLanguage;
 	CEdit	m_MaxClipSize;
 	CButton	m_btSendPasteMessage;
 	CButton	m_btHideDittoOnHotKey;
@@ -35,7 +37,6 @@ public:
 	CEdit	m_ePath;
 	CButton	m_btSetDatabasePath;
 	CButton	m_btCheckForUpdates;
-	CButton	m_btCompactAndRepair;
 	CNumberEdit	m_eExpireAfter;
 	CNumberEdit	m_eMaxSavedCopies;
 	CButton	m_btMaximumCheck;
@@ -63,6 +64,11 @@ public:
 protected:
 	
 	COptionsSheet *m_pParent;
+
+	CString m_csTitle;
+	CSetPropertyPageTitle m_SetTitle;
+
+	void FillLanguages();
 
 	// Generated message map functions
 	//{{AFX_MSG(COptionsGeneral)

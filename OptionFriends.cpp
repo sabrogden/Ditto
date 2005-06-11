@@ -21,6 +21,10 @@ IMPLEMENT_DYNCREATE(COptionFriends, CPropertyPage)
 
 COptionFriends::COptionFriends() : CPropertyPage(COptionFriends::IDD)
 {
+	m_csTitle = theApp.m_Language.GetString("FriendsTitle", "Friends");
+	m_psp.pszTitle = m_csTitle;
+	m_psp.dwFlags |= PSP_USETITLE; 
+
 	//{{AFX_DATA_INIT(COptionFriends)
 	m_PlaceOnClipboard = _T("");
 	m_csPassword = _T("");
@@ -77,6 +81,8 @@ BOOL COptionFriends::OnInitDialog()
 	m_csAdditionalPasswords = CGetSetOptions::GetExtraNetworkPassword(false);
 
 	UpdateData(FALSE);
+
+	theApp.m_Language.UpdateOptionFriends(this);
 		
 	return FALSE;
 }

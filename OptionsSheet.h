@@ -10,6 +10,34 @@
 /////////////////////////////////////////////////////////////////////////////
 // COptionsSheet
 
+class CSetPropertyPageTitle
+{
+public:
+	CSetPropertyPageTitle()
+	{
+		
+	}
+	~CSetPropertyPageTitle()
+	{
+		
+	}
+
+	void SetTitle(CString csKey, CString csDefault, AFX_OLDPROPSHEETPAGE &psp)
+	{
+		CString csText = theApp.m_Language.GetString(csKey, csDefault);
+		if(csText.GetLength() > 0)
+		{
+			pTitle = new char(csText.GetLength());
+			strcpy(pTitle, csText);
+
+			psp.pszTitle = pTitle;
+			psp.dwFlags |= PSP_USETITLE; 
+		}
+	}
+
+	char *pTitle;
+};
+
 class COptionsSheet : public CPropertySheet
 {
 	DECLARE_DYNAMIC(COptionsSheet)

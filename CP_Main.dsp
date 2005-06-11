@@ -69,7 +69,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "EncryptDecrypt\\" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /D "AFTER_98" /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "EncryptDecrypt\\" /I "TinyXml\\" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /D "AFTER_98" /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -260,6 +260,10 @@ SOURCE=.\MoveToGroupDlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\MultiLanguage.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\OptionFriends.cpp
 # End Source File
 # Begin Source File
@@ -418,6 +422,10 @@ SOURCE=.\Misc.h
 # Begin Source File
 
 SOURCE=.\MoveToGroupDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MultiLanguage.h
 # End Source File
 # Begin Source File
 
@@ -624,6 +632,18 @@ SOURCE=.\EncryptDecrypt.lib
 # PROP Exclude_From_Build 1
 # End Source File
 # End Group
+# Begin Group "TinyXml"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\TinyXml\tinystr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TinyXml\tinyxml.h
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\ReadMe.txt
@@ -631,6 +651,10 @@ SOURCE=.\ReadMe.txt
 # Begin Source File
 
 SOURCE=.\focusdll\Release\focus.lib
+# End Source File
+# Begin Source File
+
+SOURCE=.\tinyxml.lib
 # End Source File
 # End Target
 # End Project
