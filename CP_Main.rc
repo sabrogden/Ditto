@@ -171,8 +171,8 @@ BEGIN
     BEGIN
         POPUP "Groups"
         BEGIN
-            MENUITEM "New Group\tCtrl-F7",          ID_MENU_NEWGROUP
-            MENUITEM "New Group Selection\tF7",     ID_MENU_NEWGROUPSELECTION
+            MENUITEM "New Group",                   ID_MENU_NEWGROUP
+            MENUITEM "New Group Selection",         ID_MENU_NEWGROUPSELECTION
 
             MENUITEM "Move to Group",               ID_MENU_GROUPS_MOVETOGROUP
 
@@ -254,7 +254,7 @@ BEGIN
                                                         ID_MENU_QUICKOPTIONS_DOUBLECLICKINGONCAPTION_TOGGLESALWAYSSHOWDESCRIPTION
 
             END
-            MENUITEM "Always on Top\tCtrl-Space",   ID_MENU_ALLWAYSONTOP
+            MENUITEM "Always on Top",               ID_MENU_ALLWAYSONTOP
             MENUITEM "Auto Roll-up",                ID_MENU_AUTOHIDE
             MENUITEM "Always Show Description",     ID_MENU_QUICKOPTIONS_ALLWAYSSHOWDESCRIPTION
 
@@ -311,15 +311,14 @@ BEGIN
             MENUITEM "Prompt for IP",               ID_MENU_SENTTO_PROMPTFORIP
 
         END
-        MENUITEM "View Full Description\tF3",   ID_MENU_VIEWFULLDESCRIPTION
-        MENUITEM "View Groups\tCtrl-G",         ID_MENU_VIEWGROUPS
-        MENUITEM "Paste Plain Text Only\tShift-Enter", 
-                                                ID_MENU_PASTEPLAINTEXTONLY
+        MENUITEM "View Full Description",       ID_MENU_VIEWFULLDESCRIPTION
+        MENUITEM "View Groups",                 ID_MENU_VIEWGROUPS
+        MENUITEM "Paste Plain Text Only",       ID_MENU_PASTEPLAINTEXTONLY
         MENUITEM "Paste HTML as Plain Text",    ID_MENU_PASTEHTMLASPLAINTEXT
         MENUITEM SEPARATOR
-        MENUITEM "Delete Entry\tDel",           ID_MENU_DELETE
+        MENUITEM "Delete Entry",                ID_MENU_DELETE
         MENUITEM SEPARATOR
-        MENUITEM "Properties\tAlt-Enter",       ID_MENU_PROPERTIES
+        MENUITEM "Properties",                  ID_MENU_PROPERTIES
         POPUP "Quick Properties"
         BEGIN
             MENUITEM "Never Auto Delete",           ID_MENU_QUICKPROPERTIES_SETTONEVERAUTODELETE
@@ -581,11 +580,12 @@ BEGIN
     LTEXT           "(Leave blank for no limit)",IDC_STATIC_NO_LIMIT,176,202,
                     78,8
     LTEXT           "Lanuage",IDC_STATIC_LANGUAGE,23,66,36,10
-    COMBOBOX        IDC_COMBO_LANGUAGE,71,65,130,95,CBS_DROPDOWNLIST | 
+    COMBOBOX        IDC_COMBO_LANGUAGE,65,65,130,95,CBS_DROPDOWNLIST | 
                     CBS_SORT | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)",
                     IDC_STATIC_SAVE_DELAY,23,215,186,19
     EDITTEXT        IDC_EDIT_SAVE_DELAY,209,214,38,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "About Language",IDC_BUTTON_ABOUT,204,65,58,12
 END
 
 IDD_SELECT_DB DIALOG DISCARDABLE  0, 0, 276, 46

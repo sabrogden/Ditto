@@ -175,6 +175,14 @@ protected:
 	afx_msg void OnMenuQuickoptionsEnsureentirewindowisvisible();
 	afx_msg void OnMenuQuickoptionsShowclipsthatareingroupsinmainlist();
 	afx_msg void OnMenuPastehtmlasplaintext();
+	afx_msg void OnUpdateMenuNewgroup(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateMenuNewgroupselection(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateMenuAllwaysontop(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateMenuViewfulldescription(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateMenuViewgroups(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateMenuPasteplaintextonly(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateMenuDelete(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateMenuProperties(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);

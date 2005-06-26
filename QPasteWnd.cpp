@@ -124,6 +124,14 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_ENSUREENTIREWINDOWISVISIBLE, OnMenuQuickoptionsEnsureentirewindowisvisible)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_SHOWCLIPSTHATAREINGROUPSINMAINLIST, OnMenuQuickoptionsShowclipsthatareingroupsinmainlist)
 	ON_COMMAND(ID_MENU_PASTEHTMLASPLAINTEXT, OnMenuPastehtmlasplaintext)
+	ON_UPDATE_COMMAND_UI(ID_MENU_NEWGROUP, OnUpdateMenuNewgroup)
+	ON_UPDATE_COMMAND_UI(ID_MENU_NEWGROUPSELECTION, OnUpdateMenuNewgroupselection)
+	ON_UPDATE_COMMAND_UI(ID_MENU_ALLWAYSONTOP, OnUpdateMenuAllwaysontop)
+	ON_UPDATE_COMMAND_UI(ID_MENU_VIEWFULLDESCRIPTION, OnUpdateMenuViewfulldescription)
+	ON_UPDATE_COMMAND_UI(ID_MENU_VIEWGROUPS, OnUpdateMenuViewgroups)
+	ON_UPDATE_COMMAND_UI(ID_MENU_PASTEPLAINTEXTONLY, OnUpdateMenuPasteplaintextonly)
+	ON_UPDATE_COMMAND_UI(ID_MENU_DELETE, OnUpdateMenuDelete)
+	ON_UPDATE_COMMAND_UI(ID_MENU_PROPERTIES, OnUpdateMenuProperties)
 	//}}AFX_MSG_MAP
 	ON_MESSAGE(NM_SELECT, OnListSelect)
 	ON_MESSAGE(NM_END, OnListEnd)
@@ -2249,4 +2257,68 @@ LRESULT CQPasteWnd::OnToolTipWndInactive(WPARAM wParam, LPARAM lParam)
 	}
 
 	return TRUE;
+}
+
+void CQPasteWnd::OnUpdateMenuNewgroup(CCmdUI* pCmdUI) 
+{
+	CString cs;
+	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
+	cs += "\tCtrl-F7";
+	pCmdUI->SetText(cs);
+}
+
+void CQPasteWnd::OnUpdateMenuNewgroupselection(CCmdUI* pCmdUI) 
+{
+	CString cs;
+	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
+	cs += "\tF7";
+	pCmdUI->SetText(cs);	
+}
+
+void CQPasteWnd::OnUpdateMenuAllwaysontop(CCmdUI* pCmdUI) 
+{
+	CString cs;
+	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
+	cs += "\tCtrl-Space";
+	pCmdUI->SetText(cs);
+}
+
+void CQPasteWnd::OnUpdateMenuViewfulldescription(CCmdUI* pCmdUI) 
+{
+	CString cs;
+	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
+	cs += "\tF3";
+	pCmdUI->SetText(cs);
+}
+
+void CQPasteWnd::OnUpdateMenuViewgroups(CCmdUI* pCmdUI) 
+{
+	CString cs;
+	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
+	cs += "\tCtrl-G";
+	pCmdUI->SetText(cs);	
+}
+
+void CQPasteWnd::OnUpdateMenuPasteplaintextonly(CCmdUI* pCmdUI) 
+{
+	CString cs;
+	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
+	cs += "\tShift-Enter";
+	pCmdUI->SetText(cs);	
+}
+
+void CQPasteWnd::OnUpdateMenuDelete(CCmdUI* pCmdUI) 
+{
+	CString cs;
+	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
+	cs += "\tDel";
+	pCmdUI->SetText(cs);
+}
+
+void CQPasteWnd::OnUpdateMenuProperties(CCmdUI* pCmdUI) 
+{
+	CString cs;
+	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
+	cs += "\tAlt-Enter";
+	pCmdUI->SetText(cs);
 }

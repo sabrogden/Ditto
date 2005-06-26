@@ -70,6 +70,7 @@ BEGIN_MESSAGE_MAP(COptionsGeneral, CPropertyPage)
 	ON_BN_CLICKED(IDC_GET_PATH, OnGetPath)
 	ON_BN_CLICKED(IDC_SELECT_SOUND, OnSelectSound)
 	ON_BN_CLICKED(IDC_BUTTON_PLAY, OnButtonPlay)
+	ON_BN_CLICKED(IDC_BUTTON_ABOUT, OnButtonAbout)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -357,4 +358,36 @@ void COptionsGeneral::OnButtonPlay()
 	UpdateData();
 
 	PlaySound(m_csPlaySound, NULL, SND_FILENAME|SND_ASYNC);
+}
+
+void COptionsGeneral::OnButtonAbout() 
+{
+	CMultiLanguage Lang;
+
+	CString csLanguage;
+	m_cbLanguage.GetLBText(m_cbLanguage.GetCurSel(), csLanguage);
+
+	Lang.SetOnlyGetHeader(true);
+		
+	if(Lang.LoadLanguageFile(csLanguage))
+	{
+		CString csMessage;
+
+		csMessage.Format("Language -  %s\n"
+						 "Version -   %d\n"
+						 "Author -   %s\n"
+						 "Notes -   %s", csLanguage, 
+									   Lang.GetVersion(), 
+									   Lang.GetAuthor(), 
+									   Lang.GetNotes());
+
+		MessageBox(csMessage, "Ditto", MB_OK);
+	}
+	else
+	{
+		CString csError;
+		csError.Format("Error loading language file - %s - reason = ", csLanguage, Lang.m_csLastError);
+
+		MessageBox(csError, "Ditto", MB_OK);
+	}
 }

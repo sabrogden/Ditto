@@ -79,6 +79,7 @@ protected:
 	afx_msg void OnGetPath();
 	afx_msg void OnSelectSound();
 	afx_msg void OnButtonPlay();
+	afx_msg void OnButtonAbout();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

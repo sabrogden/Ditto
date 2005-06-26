@@ -190,6 +190,7 @@
 #define IDC_COMBO_LANGUAGE              2070
 #define IDC_EDIT_SAVE_DELAY             2071
 #define IDC_STATIC_SAVE_DELAY           2072
+#define IDC_BUTTON_ABOUT                2073
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -275,7 +276,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        157
 #define _APS_NEXT_COMMAND_VALUE         32852
-#define _APS_NEXT_CONTROL_VALUE         2073
+#define _APS_NEXT_CONTROL_VALUE         2074
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
