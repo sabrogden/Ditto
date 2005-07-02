@@ -132,10 +132,10 @@ void COptionFriends::InitListCtrlCols()
 {
 	// Insert some columns
 	m_List.InsertColumn(0, _T(""), LVCFMT_LEFT, 25);
-	m_List.InsertColumn(1, _T("Send All Copies"), LVCFMT_LEFT, 90);
-	m_List.InsertColumn(2, _T("IP/Name"), LVCFMT_LEFT, 135);
-	m_List.InsertColumn(3, _T("Descriptions"), LVCFMT_LEFT, 157);
 
+	m_List.InsertColumn(1, theApp.m_Language.GetString("Send_All_Copies", "Send All Copies"), LVCFMT_LEFT, 90);
+	m_List.InsertColumn(2, theApp.m_Language.GetString("IP_Name", "IP/Name"), LVCFMT_LEFT, 135);
+	m_List.InsertColumn(3, theApp.m_Language.GetString("Descriptions", "Descriptions"), LVCFMT_LEFT, 157);
 }
 
 void COptionFriends::InsertItems()
