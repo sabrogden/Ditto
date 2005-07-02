@@ -2263,62 +2263,88 @@ void CQPasteWnd::OnUpdateMenuNewgroup(CCmdUI* pCmdUI)
 {
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-	cs += "\tCtrl-F7";
-	pCmdUI->SetText(cs);
+	if(cs.Find("Ctrl-F7") < 0)
+	{
+		cs += "\tCtrl-F7";
+		pCmdUI->SetText(cs);
+	}
 }
 
 void CQPasteWnd::OnUpdateMenuNewgroupselection(CCmdUI* pCmdUI) 
 {
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-	cs += "\tF7";
-	pCmdUI->SetText(cs);	
+	if(cs.Find("F7") < 0)
+	{
+		cs += "\tF7";
+		pCmdUI->SetText(cs);	
+	}
 }
 
 void CQPasteWnd::OnUpdateMenuAllwaysontop(CCmdUI* pCmdUI) 
 {
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-	cs += "\tCtrl-Space";
-	pCmdUI->SetText(cs);
+	if(cs.Find("Ctrl-Space") < 0)
+	{
+		cs += "\tCtrl-Space";
+		pCmdUI->SetText(cs);
+	}
 }
 
 void CQPasteWnd::OnUpdateMenuViewfulldescription(CCmdUI* pCmdUI) 
 {
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-	cs += "\tF3";
-	pCmdUI->SetText(cs);
+	if(cs.Find("F3") < 0)
+	{
+		cs += "\tF3";
+		pCmdUI->SetText(cs);
+	}
 }
 
 void CQPasteWnd::OnUpdateMenuViewgroups(CCmdUI* pCmdUI) 
 {
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-	cs += "\tCtrl-G";
-	pCmdUI->SetText(cs);	
+	if(cs.Find("Ctrl-G") < 0)
+	{
+		cs += "\tCtrl-G";
+		pCmdUI->SetText(cs);	
+	}
 }
 
 void CQPasteWnd::OnUpdateMenuPasteplaintextonly(CCmdUI* pCmdUI) 
 {
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-	cs += "\tShift-Enter";
-	pCmdUI->SetText(cs);	
+	if(cs.Find("Shift-Enter") < 0)
+	{
+		cs += "\tShift-Enter";
+		pCmdUI->SetText(cs);	
+	}
 }
 
 void CQPasteWnd::OnUpdateMenuDelete(CCmdUI* pCmdUI) 
 {
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-	cs += "\tDel";
-	pCmdUI->SetText(cs);
+
+	if(cs.Find("Del") < 0)
+	{
+		cs += "\tDel";
+		pCmdUI->SetText(cs);
+	}
 }
 
 void CQPasteWnd::OnUpdateMenuProperties(CCmdUI* pCmdUI) 
 {
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-	cs += "\tAlt-Enter";
-	pCmdUI->SetText(cs);
+
+	if(cs.Find("tAlt-Enter") < 0)
+	{
+		cs += "\tAlt-Enter";
+		pCmdUI->SetText(cs);
+	}
 }
