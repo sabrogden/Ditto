@@ -104,7 +104,7 @@ BOOL CCP_MainApp::InitInstance()
 	AfxInitRichEdit();
 
 	CString csFile = CGetSetOptions::GetLanguageFile();
-	if(!m_Language.LoadLanguageFile(csFile))
+	if(csFile.GetLength() > 0 && !m_Language.LoadLanguageFile(csFile))
 	{
 		CString cs;
 		cs.Format("Error loading language file - %s - \n\n%s", csFile, m_Language.m_csLastError);

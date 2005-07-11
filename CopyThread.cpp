@@ -16,14 +16,14 @@ static char THIS_FILE[] = __FILE__;
 
 IMPLEMENT_DYNCREATE(CCopyThread, CWinThread)
 
-CCopyThread::CCopyThread()
+CCopyThread::CCopyThread():
+	m_bQuit(false),
+	m_bConfigChanged(false),
+	m_pClips(NULL),
+	m_pClipboardViewer(NULL)
 {
-	m_bQuit = false;
-	m_bAutoDelete = false;
-	
-	m_bConfigChanged = false;
-	m_pClips = new CClipList;
-	m_pClipboardViewer = new CClipboardViewer(this);
+	m_bAutoDelete = false,
+
 	::InitializeCriticalSection(&m_CS);
 }
 
@@ -31,16 +31,16 @@ CCopyThread::~CCopyThread()
 {
 	m_LocalConfig.DeleteTypes();
 	m_SharedConfig.DeleteTypes();
-	DELETE_PTR( m_pClipboardViewer );
-	if( m_pClips )
-		ASSERT( m_pClips->GetCount() == 0 );
-	DELETE_PTR( m_pClips );
+	DELETE_PTR(m_pClipboardViewer);
+	DELETE_PTR(m_pClips);
 	::DeleteCriticalSection(&m_CS);
 }
 
 BOOL CCopyThread::InitInstance()
 {
 	SetThreadName(m_nThreadID, "COPY");
+
+	m_pClipboardViewer = new CClipboardViewer(this);
 
 	// the window is created within this thread and therefore uses its message queue
 	m_pClipboardViewer->Create();
@@ -123,10 +123,12 @@ void CCopyThread::SyncConfig()
 void CCopyThread::AddToClips(CClip* pClip)
 {
 	Hold();
+
 	if(!m_pClips)
 		m_pClips = new CClipList;
 
 	m_pClips->AddTail(pClip); // m_pClips now owns pClip
+
 	Release();
 }
 
@@ -153,8 +155,10 @@ void CCopyThread::SetConnectCV(bool bConnect)
 CClipList* CCopyThread::GetClips()
 {
 	Hold();
+	
 	CClipList* pRet = m_pClips;
 	m_pClips = NULL;
+
 	Release();
 	return pRet;
 }
