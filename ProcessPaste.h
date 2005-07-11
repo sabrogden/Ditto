@@ -10,7 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #include "ArrayEx.h"
-#include "ProcessCopy.h"
+#include "Clip.h"
 
 // returns the increment necessary to fit "count" elements between (dStart,dEnd)
 // if this returns 0, then "count" elements cannot fit between (dStart,dEnd).

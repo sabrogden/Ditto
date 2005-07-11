@@ -13,7 +13,7 @@
 #endif
 
 #include "resource.h"       // main symbols
-#include "ProcessCopy.h"
+#include "Clip.h"
 #include "DatabaseUtilities.h"
 #include "Misc.h"
 #include "DataTable.h"
@@ -23,6 +23,7 @@
 #include "MainFrm.h"
 #include "ProcessPaste.h"
 #include "MultiLanguage.h"
+#include "CopyThread.h"
 
 #define MAIN_WND_TITLE		"Ditto MainWnd"
 //#define GET_APP    ((CCP_MainApp *)AfxGetApp())	
@@ -70,9 +71,8 @@ public:
 	CHotKey*	m_pPosTen;
 
 // Focus Tracking
-	HWND	m_hTargetWnd;
-//	HWND	m_hTargetFocus;
-	bool	TargetActiveWindow();
+	HWND m_hTargetWnd;
+	bool TargetActiveWindow();
 	bool ActivateTarget();
 	bool ReleaseFocus(); // activate the target only if we are the active window
 	CString GetTargetName();
@@ -85,15 +85,15 @@ public:
 	void StartCopyThread();
 	void StopCopyThread();
 	// for posting messages
-	HWND GetClipboardViewer() { return m_CopyThread.m_pClipboardViewer->m_hWnd; }
+	HWND GetClipboardViewer()			{ return m_CopyThread.m_pClipboardViewer->m_hWnd; }
 	// enables or disables copying the clipboard when it changes
-	bool EnableCbCopy(bool bState)  { return m_CopyThread.SetCopyOnChange(bState); }
-	bool IsClipboardViewerConnected() { return m_CopyThread.IsClipboardViewerConnected(); }
+	bool EnableCbCopy(bool bState)		{ return m_CopyThread.SetCopyOnChange(bState); }
+	bool IsClipboardViewerConnected()	{ return m_CopyThread.IsClipboardViewerConnected(); }
 	// user control over being in the clipboard viewer chain.
-	bool GetConnectCV() { return m_CopyThread.GetConnectCV(); }
-	void SetConnectCV( bool bConnect );
+	bool GetConnectCV()					{ return m_CopyThread.GetConnectCV(); }
+	void SetConnectCV(bool bConnect);
 	bool ToggleConnectCV();
-	void UpdateMenuConnectCV( CMenu* pMenu, UINT nMenuID );
+	void UpdateMenuConnectCV(CMenu* pMenu, UINT nMenuID);
 
 //	CClipList	m_SaveClipQueue; 
 	// Retrieves all clips from CopyThread and Saves them.
@@ -109,8 +109,8 @@ public:
 // Internal Clipboard for cut/copy/paste items between Groups
 	bool		m_IC_bCopy;   // true to copy the items, false to move them
 	CClipIDs	m_IC_IDs; // buffer
-	void IC_Cut( ARRAY* pIDs = NULL ); // if NULL, this uses the current QPaste selection
-	void IC_Copy( ARRAY* pIDs = NULL ); // if NULL, this uses the current QPaste selection
+	void IC_Cut(ARRAY* pIDs = NULL); // if NULL, this uses the current QPaste selection
+	void IC_Copy(ARRAY* pIDs = NULL); // if NULL, this uses the current QPaste selection
 	void IC_Paste();
 
 // Groups
@@ -119,9 +119,9 @@ public:
 	long		m_GroupParentID;  // current group's parent
 	CString		m_GroupText;      // current group's description
 
-	BOOL EnterGroupID( long lID );
+	BOOL EnterGroupID(long lID);
 	long GetValidGroupID(); // returns a valid id (not negative)
-	void SetGroupDefaultID( long lID ); // sets a valid id
+	void SetGroupDefaultID(long lID); // sets a valid id
 
 // Window States
 	// the ID given focus by CQPasteWnd::FillList
@@ -133,15 +133,15 @@ public:
 
 	CString m_Status;
 	CQPasteWnd* QPasteWnd() { return m_pMainFrame->QuickPaste.m_pwndPaste; }
-	void SetStatus( const char* status = NULL, bool bRepaintImmediately = false );
+	void SetStatus(const char* status = NULL, bool bRepaintImmediately = false);
 
-	void ShowPersistent( bool bVal );
+	void ShowPersistent(bool bVal);
 
-	bool	m_bShowCopyProperties;
-	void ShowCopyProperties( long lID );
+	bool m_bShowCopyProperties;
+	void ShowCopyProperties(long lID);
 
 	bool	m_bRemoveOldEntriesPending;
-	void Delayed_RemoveOldEntries( UINT delay );
+	void Delayed_RemoveOldEntries(UINT delay);
 
 // Database
 	CDaoDatabase*	m_pDatabase;
