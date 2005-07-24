@@ -1,3 +1,9 @@
+2.6.0.0 7-24-05
+	[ENHANCMENTS]
+	- Add suport for mulitple languages
+	- Added delay time for saving clips, if copies happen to fast Ditto will ignore them.  Settable on General Tab in Options.
+	- When focus is on the search combo, copy and delete will now work.
+
 2.5.1.0
 	[ENHANCMENTS]
 	- Added size limit on a clip, if a clip is over that limit the clip will not be saved
