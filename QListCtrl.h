@@ -104,10 +104,12 @@ public:
 
 	HWND GetToolTipHWnd();
 
+	BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam);
+
 protected:
 	void SendSelection(int nItem);;
-	void SendSelection(ARRAY &arrItems);
 	void LoadCopyOrCutToClipboard();
+	void SendSelection(ARRAY &arrItems);
 	BOOL GetClipData(int nItem, CClipFormat &Clip);
 	BOOL DrawBitMap(int nItem, CRect &crRect, CDC *pDC);
 

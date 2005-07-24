@@ -181,12 +181,15 @@ BOOL COptionsGeneral::OnApply()
 	m_cbLanguage.GetLBText(m_cbLanguage.GetCurSel(), csLanguage);
 	g_Opt.SetLanguageFile(csLanguage);
 	
-	if(!theApp.m_Language.LoadLanguageFile(csLanguage))
+	if(csLanguage.IsEmpty() == FALSE)
 	{
-		CString cs;
-		cs.Format("Error loading language file - %s - \n\n%s", csLanguage, theApp.m_Language.m_csLastError);
+		if(!theApp.m_Language.LoadLanguageFile(csLanguage))
+		{
+			CString cs;
+			cs.Format("Error loading language file - %s - \n\n%s", csLanguage, theApp.m_Language.m_csLastError);
 
-		MessageBox(cs, "Ditto", MB_OK);
+			MessageBox(cs, "Ditto", MB_OK);
+		}
 	}
 
 	CString csMax;

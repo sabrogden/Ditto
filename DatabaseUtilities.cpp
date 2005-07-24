@@ -459,8 +459,6 @@ BOOL CompactDatabase()
 {
 	if(!theApp.CloseDB())
 		return FALSE;
-	
-	CWaitCursor wait;
 
 	CString csDBName = GetDBName();
 	CString csTempDBName = csDBName;

@@ -2234,16 +2234,8 @@ void CQPasteWnd::OnSearchEditChange()
 
 LRESULT CQPasteWnd::OnUpDown(WPARAM wParam, LPARAM lParam)
 {
-	if(wParam == VK_F3)
-	{
-		m_lstHeader.ShowFullDescription();
-	}
-	else
-	{
-		m_lstHeader.HidePopup();
-
+	if(m_lstHeader.HandleKeyDown(wParam, lParam) == FALSE)
 		m_lstHeader.SendMessage(WM_KEYDOWN, wParam, lParam);
-	}
 
 	return TRUE;
 }

@@ -200,7 +200,19 @@ SOURCE=.\Client.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\Clip.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ClipboardViewer.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\CopyProperties.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CopyThread.cpp
 # End Source File
 # Begin Source File
 
@@ -296,10 +308,6 @@ SOURCE=.\OptionsUtilities.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ProcessCopy.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\ProcessPaste.cpp
 # End Source File
 # Begin Source File
@@ -357,7 +365,19 @@ SOURCE=.\Client.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\Clip.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ClipboardViewer.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\CopyProperties.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CopyThread.h
 # End Source File
 # Begin Source File
 
@@ -458,10 +478,6 @@ SOURCE=.\OptionsTypes.h
 # Begin Source File
 
 SOURCE=.\OptionsUtilities.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ProcessCopy.h
 # End Source File
 # Begin Source File
 

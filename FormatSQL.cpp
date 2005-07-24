@@ -33,6 +33,9 @@ void CFormatSQL::Parse(CString cs)
 	//Replace all "|" with a space
 	cs.Replace("|", " ");
 
+	cs.Replace("[", " ");
+	cs.Replace("]", " ");
+
 	int nLength = cs.GetLength();
 
 	CString csCurrentWord;

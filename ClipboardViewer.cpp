@@ -74,7 +74,7 @@ void CClipboardViewer::Disconnect()
 {
 	KillTimer(TIMER_ENSURE_VIEWER_IN_CHAIN);
 
-	CWnd::ChangeClipboardChain( m_hNextClipboardViewer );
+	CWnd::ChangeClipboardChain(m_hNextClipboardViewer);
 	m_hNextClipboardViewer = 0;
 	m_bIsConnected = false;
 }
@@ -149,6 +149,8 @@ void CClipboardViewer::OnDestroy()
 
 void CClipboardViewer::OnChangeCbChain(HWND hWndRemove, HWND hWndAfter) 
 {
+	Log(StrF("OnChangeCbChain Removed = %d After = %d", hWndAfter, hWndAfter));
+
 	// If the next window is closing, repair the chain. 
 	if(m_hNextClipboardViewer == hWndRemove)
     {
@@ -159,6 +161,8 @@ void CClipboardViewer::OnChangeCbChain(HWND hWndRemove, HWND hWndAfter)
     {
 		if(m_hNextClipboardViewer != m_hWnd)
 		{
+			Log(StrF("OnChangeCbChain Sending WM_CHANGECBCHAIN to %d", m_hNextClipboardViewer));
+
 			::SendMessage(m_hNextClipboardViewer, WM_CHANGECBCHAIN, (WPARAM) hWndRemove, (LPARAM) hWndAfter);
 		}
 		else
@@ -171,40 +175,53 @@ void CClipboardViewer::OnChangeCbChain(HWND hWndRemove, HWND hWndAfter)
 //Message that the clipboard data has changed
 void CClipboardViewer::OnDrawClipboard() 
 {
-	if( m_bPinging )
+	if(m_bPinging)
 	{
 		m_bPingSuccess = true;
 		return;
 	}
+
+	Log("Start of OnDrawClipboard");
+	bool bPassOn = false;
 	
 	if((GetTickCount() - m_lLastCopy) > g_Opt.m_lSaveClipDelay)
 	{
 		// don't process the event when we first attach
-		if( m_pHandler && !m_bCalling_SetClipboardViewer )
+		if(m_pHandler && !m_bCalling_SetClipboardViewer)
 		{
-			if( !::IsClipboardFormatAvailable( theApp.m_cfIgnoreClipboard ) )
+			if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
+			{
 				m_pHandler->OnClipboardChange();
+
+				bPassOn = true;
+				m_lLastCopy = GetTickCount();
+			}
 		}
 	}
 	else
 	{
-		CString cs;
-		cs.Format("Clip copy to fast difference from last copy = %d", (GetTickCount() - m_lLastCopy));
-		Log(cs);
+		Log(StrF("Clip copy to fast difference from last copy = %d", (GetTickCount() - m_lLastCopy)));
 	}
 	
-	// pass the event to the next Clipboard viewer in the chain
-	if( m_hNextClipboardViewer != NULL )
+	if(bPassOn)
 	{
-		if(m_hNextClipboardViewer != m_hWnd)
+		// pass the event to the next Clipboard viewer in the chain
+		if(m_hNextClipboardViewer != NULL)
 		{
-			::SendMessage(m_hNextClipboardViewer, WM_DRAWCLIPBOARD, 0, 0);	
-		}
-		else
-		{
-			m_hNextClipboardViewer = NULL;
+			if(m_hNextClipboardViewer != m_hWnd)
+			{
+				Log(StrF("OnDrawClipboard Sending WM_DRAWCLIPBOARD to %d", m_hNextClipboardViewer));
+
+				::SendMessage(m_hNextClipboardViewer, WM_DRAWCLIPBOARD, 0, 0);	
+			}
+			else
+			{
+				m_hNextClipboardViewer = NULL;
+			}
 		}
 	}
+
+	Log("End of OnDrawClipboard");
 }
 
 void CClipboardViewer::OnTimer(UINT nIDEvent) 

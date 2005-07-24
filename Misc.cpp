@@ -65,7 +65,12 @@ void Log( const char* msg )
 	csText += msg;
 	csText += "\n";
 	TRACE(csText);
-	AppendToFile( "Ditto.log", csText ); //(LPCTSTR)
+
+	CString csFile = CGetSetOptions::GetExeFileName();
+	csFile = GetFilePath(csFile);
+	csFile += "Ditto.log";
+
+	AppendToFile(csFile, csText);
 }
 
 void LogSendRecieveInfo(CString cs)

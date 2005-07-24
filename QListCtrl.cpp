@@ -791,88 +791,96 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 	switch(pMsg->message) 
 	{
 	case WM_KEYDOWN:
-		WPARAM vk = pMsg->wParam;
-				
-		// if a number key was pressed
-		if( '0' <= vk && vk <= '9' )
-		{
-			// if <Ctrl> is required but is absent, then break
-			if( g_Opt.m_bUseCtrlNumAccel && !(GetKeyState(VK_CONTROL) & 0x8000) )
-				break;
-			
-			int index = vk - '0';
-			// '0' is actually 10 in the ditto window
-			if( index == 0 )
-				index = 10;
-			// translate num 1-10 into the actual index (based upon m_bStartTop)
-			index = GetFirstTenIndex( index );
-			GetParent()->SendMessage(NM_SELECT_INDEX, index, 0);
+		if(HandleKeyDown(pMsg->wParam, pMsg->lParam))
 			return TRUE;
-		}
-		
-		switch( vk )
-		{
-		case 'X': // Ctrl-X = Cut (prepare for moving the items into a Group)
-			if(GetKeyState(VK_CONTROL) & 0x8000)
-			{
-				LoadCopyOrCutToClipboard();		
-				
-				theApp.IC_Cut(); // uses selection
-				return TRUE;
-			}
-			break;
-			
-		case 'C': // Ctrl-C = Copy (prepare for copying the items into a Group)
-			if(GetKeyState(VK_CONTROL) & 0x8000)
-			{
-				LoadCopyOrCutToClipboard();
-				
-				theApp.IC_Copy(); // uses selection
-				return TRUE;
-			}
-			break;
-			
-		case 'V': // Ctrl-V = Paste (actually performs the copy or move of items into the current Group)
-			if(GetKeyState(VK_CONTROL) & 0x8000)
-			{
-				theApp.IC_Paste();
-				return TRUE;
-			}
-			break;
-			
-		case 'A': // Ctrl-A = Select All
-			if(GetKeyState(VK_CONTROL) & 0x8000)
-			{
-				int nCount = GetItemCount();
-				for(int i = 0; i < nCount; i++)
-				{
-					SetSelection(i);
-				}
-				return TRUE;
-			}
-			break;
-			
-		case VK_F3:
-			{
-				ShowFullDescription();
-				return TRUE;
-			}
-		case VK_BACK:
-			theApp.EnterGroupID( theApp.m_GroupParentID );
-			return TRUE;
-		case VK_SPACE:
-			if(GetKeyState(VK_CONTROL) & 0x8000)
-			{
-				theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
-				return TRUE;
-			}
-			break;
-		} // end switch(vk)
 		
 		break; // end case WM_KEYDOWN
 	} // end switch(pMsg->message)
 		
 	return CListCtrl::PreTranslateMessage(pMsg);
+}
+
+BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
+{
+	WPARAM vk = wParam;
+				
+	// if a number key was pressed
+	if( '0' <= vk && vk <= '9' )
+	{
+		// if <Ctrl> is required but is absent, then break
+		if( g_Opt.m_bUseCtrlNumAccel && !(GetKeyState(VK_CONTROL) & 0x8000) )
+			return FALSE;
+		
+		int index = vk - '0';
+		// '0' is actually 10 in the ditto window
+		if( index == 0 )
+			index = 10;
+		// translate num 1-10 into the actual index (based upon m_bStartTop)
+		index = GetFirstTenIndex( index );
+		GetParent()->SendMessage(NM_SELECT_INDEX, index, 0);
+		return TRUE;
+	}
+	
+	switch( vk )
+	{
+	case 'X': // Ctrl-X = Cut (prepare for moving the items into a Group)
+		if(GetKeyState(VK_CONTROL) & 0x8000)
+		{
+			LoadCopyOrCutToClipboard();		
+			
+			theApp.IC_Cut(); // uses selection
+			return TRUE;
+		}
+		break;
+		
+	case 'C': // Ctrl-C = Copy (prepare for copying the items into a Group)
+		if(GetKeyState(VK_CONTROL) & 0x8000)
+		{
+			LoadCopyOrCutToClipboard();
+			
+			theApp.IC_Copy(); // uses selection
+			return TRUE;
+		}
+		break;
+		
+	case 'V': // Ctrl-V = Paste (actually performs the copy or move of items into the current Group)
+		if(GetKeyState(VK_CONTROL) & 0x8000)
+		{
+			theApp.IC_Paste();
+			return TRUE;
+		}
+		break;
+		
+	case 'A': // Ctrl-A = Select All
+		if(GetKeyState(VK_CONTROL) & 0x8000)
+		{
+			int nCount = GetItemCount();
+			for(int i = 0; i < nCount; i++)
+			{
+				SetSelection(i);
+			}
+			return TRUE;
+		}
+		break;
+		
+	case VK_F3:
+		{
+			ShowFullDescription();
+			return TRUE;
+		}
+	case VK_BACK:
+		theApp.EnterGroupID( theApp.m_GroupParentID );
+		return TRUE;
+	case VK_SPACE:
+		if(GetKeyState(VK_CONTROL) & 0x8000)
+		{
+			theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
+			return TRUE;
+		}
+		break;
+	} // end switch(vk)
+	
+	return FALSE;
 }
 
 void CQListCtrl::LoadCopyOrCutToClipboard()

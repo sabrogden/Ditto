@@ -84,7 +84,7 @@ BOOL CComboBoxSearch::PreTranslateMessage(MSG* pMsg)
 
 				return TRUE;
 			}	
-			if (pMsg->wParam == VK_DOWN ||
+			else if (pMsg->wParam == VK_DOWN ||
 				pMsg->wParam == VK_UP ||
 				pMsg->wParam == VK_F3)
 			{
@@ -102,6 +102,23 @@ BOOL CComboBoxSearch::PreTranslateMessage(MSG* pMsg)
 //					ShowDropDown();
 //					return TRUE;
 //				}
+			}
+			else if(pMsg->wParam == 'C' && 
+					GetKeyState(VK_CONTROL) & 0x8000 ||
+					pMsg->wParam == 'X' && 
+					GetKeyState(VK_CONTROL) & 0x8000 ||
+					pMsg->wParam == VK_DELETE)
+			{
+				LONG lEditSel = GetEditSel();
+				if(LOWORD(lEditSel) == HIWORD(lEditSel))
+				{
+					CWnd *pWnd = GetParent();
+					if(pWnd)
+					{
+						pWnd->SendMessage(CB_UPDOWN, pMsg->wParam, pMsg->lParam);
+						return TRUE;
+					}
+				}
 			}
 			break;
 		}
