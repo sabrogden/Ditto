@@ -2253,6 +2253,9 @@ LRESULT CQPasteWnd::OnToolTipWndInactive(WPARAM wParam, LPARAM lParam)
 
 void CQPasteWnd::OnUpdateMenuNewgroup(CCmdUI* pCmdUI) 
 {
+	if(!pCmdUI->m_pMenu)
+		return;
+
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
 	if(cs.Find("Ctrl-F7") < 0)
@@ -2264,6 +2267,9 @@ void CQPasteWnd::OnUpdateMenuNewgroup(CCmdUI* pCmdUI)
 
 void CQPasteWnd::OnUpdateMenuNewgroupselection(CCmdUI* pCmdUI) 
 {
+	if(!pCmdUI->m_pMenu)
+		return;
+
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
 	if(cs.Find("F7") < 0)
@@ -2275,6 +2281,9 @@ void CQPasteWnd::OnUpdateMenuNewgroupselection(CCmdUI* pCmdUI)
 
 void CQPasteWnd::OnUpdateMenuAllwaysontop(CCmdUI* pCmdUI) 
 {
+	if(!pCmdUI->m_pMenu)
+		return;
+
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
 	if(cs.Find("Ctrl-Space") < 0)
@@ -2286,6 +2295,9 @@ void CQPasteWnd::OnUpdateMenuAllwaysontop(CCmdUI* pCmdUI)
 
 void CQPasteWnd::OnUpdateMenuViewfulldescription(CCmdUI* pCmdUI) 
 {
+	if(!pCmdUI->m_pMenu)
+		return;
+
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
 	if(cs.Find("F3") < 0)
@@ -2297,6 +2309,9 @@ void CQPasteWnd::OnUpdateMenuViewfulldescription(CCmdUI* pCmdUI)
 
 void CQPasteWnd::OnUpdateMenuViewgroups(CCmdUI* pCmdUI) 
 {
+	if(!pCmdUI->m_pMenu)
+		return;
+
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
 	if(cs.Find("Ctrl-G") < 0)
@@ -2308,6 +2323,9 @@ void CQPasteWnd::OnUpdateMenuViewgroups(CCmdUI* pCmdUI)
 
 void CQPasteWnd::OnUpdateMenuPasteplaintextonly(CCmdUI* pCmdUI) 
 {
+	if(!pCmdUI->m_pMenu)
+		return;
+
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
 	if(cs.Find("Shift-Enter") < 0)
@@ -2319,6 +2337,9 @@ void CQPasteWnd::OnUpdateMenuPasteplaintextonly(CCmdUI* pCmdUI)
 
 void CQPasteWnd::OnUpdateMenuDelete(CCmdUI* pCmdUI) 
 {
+	if(!pCmdUI->m_pMenu)
+		return;
+
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
 
@@ -2331,6 +2352,9 @@ void CQPasteWnd::OnUpdateMenuDelete(CCmdUI* pCmdUI)
 
 void CQPasteWnd::OnUpdateMenuProperties(CCmdUI* pCmdUI) 
 {
+	if(!pCmdUI->m_pMenu)
+		return;
+
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
 
