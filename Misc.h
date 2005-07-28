@@ -12,21 +12,14 @@
 
 #include "DatabaseUtilities.h"
 
-// Debugging
-#ifdef _DEBUG
-#define LOG(x)		Log(x)
-#else
-#define LOG(x)
-#endif
-
 CString GetIPAddress();
 CString GetComputerName();
 
 #define FUNC		__FUNCTION__
 #define FUNCSIG		__FUNCSIG__
-void AppendToFile( const char* fn, const char *msg );
-void Log( const char* msg );
-CString GetErrorString( int err );
+void AppendToFile(const char* fn, const char *msg);
+void Log(const char* msg, bool bFromSendRecieve = false);
+CString GetErrorString(int err);
 
 #define MS_VC_EXCEPTION 0x406d1388
 typedef struct tagTHREADNAME_INFO
@@ -355,6 +348,15 @@ public:
 	static long		m_lSaveClipDelay;
 	static long		GetSaveClipDelay();
 	static void		SetSaveClipDelay(long lDelay);
+
+	static long		m_lProcessDrawClipboardDelay;
+	static long		GetProcessDrawClipboardDelay();
+	static void		SetProcessDrawClipboardDelay(long lDelay);
+
+	static BOOL		m_bEnableDebugLogging;
+	static BOOL		GetEnableDebugLogging();
+	static void		SetEnableDebugLogging(BOOL bEnable);
+
 
 	static CStringArray m_csNetworkPasswordArray;
 

@@ -7,6 +7,7 @@
 
 
 #define TIMER_ENSURE_VIEWER_IN_CHAIN	6
+#define TIMER_DRAW_CLIPBOARD			7
 
 class CClipboardViewer : public CWnd
 {

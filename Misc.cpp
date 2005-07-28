@@ -55,17 +55,24 @@ void AppendToFile( const char* fn, const char* msg )
 	fclose(file);
 }
 
-void Log( const char* msg )
+void Log(const char* msg, bool bFromSendRecieve)
 {
-	ASSERT( AfxIsValidString(msg) );
+	ASSERT(AfxIsValidString(msg));
 	CTime	time = CTime::GetCurrentTime();
 	CString	csText = time.Format("[%Y/%m/%d %I:%M:%S %p]  ");
-	//CString	csTemp;
-	//	csTemp.Format( "%04x  ", AfxGetInstanceHandle() );
+	
 	csText += msg;
 	csText += "\n";
 	TRACE(csText);
 
+#ifndef _DEBUG
+	if(!bFromSendRecieve)
+	{
+		if(!g_Opt.m_bEnableDebugLogging)
+			return;
+	}
+#endif
+	
 	CString csFile = CGetSetOptions::GetExeFileName();
 	csFile = GetFilePath(csFile);
 	csFile += "Ditto.log";
@@ -76,7 +83,7 @@ void Log( const char* msg )
 void LogSendRecieveInfo(CString cs)
 {
 	if(g_Opt.m_bLogSendReceiveErrors)
-		Log(cs);
+		Log(cs, true);
 }
 
 CString GetErrorString( int err )
@@ -494,6 +501,8 @@ BOOL CGetSetOptions::m_bEnsureEntireWindowCanBeSeen;
 BOOL CGetSetOptions::m_bShowAllClipsInMainList;
 long CGetSetOptions::m_lMaxClipSizeInBytes;
 long CGetSetOptions::m_lSaveClipDelay;
+long CGetSetOptions::m_lProcessDrawClipboardDelay;
+BOOL CGetSetOptions::m_bEnableDebugLogging;
 
 CGetSetOptions g_Opt;
 
@@ -528,6 +537,8 @@ CGetSetOptions::CGetSetOptions()
 	m_bShowAllClipsInMainList = GetShowAllClipsInMainList();
 	m_lMaxClipSizeInBytes = GetMaxClipSizeInBytes();
 	m_lSaveClipDelay = GetSaveClipDelay();
+	m_lProcessDrawClipboardDelay = GetProcessDrawClipboardDelay();
+	m_bEnableDebugLogging = GetEnableDebugLogging();
 
 	GetExtraNetworkPassword(true);
 	
@@ -1373,6 +1384,28 @@ void CGetSetOptions::SetSaveClipDelay(long lDelay)
 	SetProfileLong("SaveClipDelay", lDelay);
 }
 
+long CGetSetOptions::GetProcessDrawClipboardDelay()
+{
+	return GetProfileLong("ProcessDrawClipboardDelay", 50);
+}
+
+void CGetSetOptions::SetProcessDrawClipboardDelay(long lDelay)
+{
+	m_lProcessDrawClipboardDelay = lDelay;
+	SetProfileLong("ProcessDrawClipboardDelay", lDelay);
+}
+
+BOOL CGetSetOptions::GetEnableDebugLogging()
+{
+	return GetProfileLong("EnableDebugLogging", FALSE);
+}
+
+void CGetSetOptions::SetEnableDebugLogging(BOOL bEnable)
+{
+	m_bEnableDebugLogging = bEnable;
+	SetProfileLong("EnableDebugLogging", bEnable);
+}
+
 /*------------------------------------------------------------------*\
 CHotKey - a single system-wide hotkey
 \*------------------------------------------------------------------*/
@@ -1470,15 +1503,15 @@ UINT CHotKey::GetModifier(DWORD dwHotKey)
 
 bool CHotKey::Register()
 {
-	if( m_Key )
+	if(m_Key)
 	{
 		if(m_bIsRegistered == false)
 		{
-			ASSERT( g_HotKeys.m_hWnd );
-			m_bIsRegistered = ::RegisterHotKey(	g_HotKeys.m_hWnd,
-				m_Atom,
-				GetModifier(),
-				LOBYTE(m_Key) ) == TRUE;
+			ASSERT(g_HotKeys.m_hWnd);
+			m_bIsRegistered = ::RegisterHotKey(g_HotKeys.m_hWnd,
+												m_Atom,
+												GetModifier(),
+												LOBYTE(m_Key) ) == TRUE;
 		}
 	}
 	else
@@ -1488,7 +1521,7 @@ bool CHotKey::Register()
 }
 bool CHotKey::Unregister(bool bOnShowingDitto)
 {
-	if( !m_bIsRegistered )
+	if(!m_bIsRegistered)
 		return true;
 	
 	if(bOnShowingDitto)
@@ -1500,14 +1533,14 @@ bool CHotKey::Unregister(bool bOnShowingDitto)
 	if(m_Key)
 	{
 		ASSERT(g_HotKeys.m_hWnd);
-		if( ::UnregisterHotKey( g_HotKeys.m_hWnd, m_Atom ) )
+		if(::UnregisterHotKey( g_HotKeys.m_hWnd, m_Atom))
 		{
 			m_bIsRegistered = false;
 			return true;
 		}
 		else
 		{
-			LOG("Unregister" "FAILED!");
+			Log("Unregister" "FAILED!");
 			ASSERT(0);
 		}
 	}
@@ -1532,10 +1565,10 @@ CHotKeys::~CHotKeys()
 {
 	CHotKey* pHotKey;
 	int count = GetSize();
-	for( int i=0; i < count; i++ )
+	for(int i=0; i < count; i++)
 	{
 		pHotKey = ElementAt(i);
-		if( pHotKey )
+		if(pHotKey)
 			delete pHotKey;
 	}
 }
@@ -1543,7 +1576,7 @@ CHotKeys::~CHotKeys()
 int CHotKeys::Find( CHotKey* pHotKey )
 {
 	int count = GetSize();
-	for( int i=0; i < count; i++ )
+	for(int i=0; i < count; i++)
 	{
 		if( pHotKey == ElementAt(i) )
 			return i;
@@ -1554,7 +1587,7 @@ int CHotKeys::Find( CHotKey* pHotKey )
 bool CHotKeys::Remove( CHotKey* pHotKey )
 {
 	int i = Find(pHotKey);
-	if( i >= 0 )
+	if(i >= 0)
 	{
 		RemoveAt(i);
 		return true;
@@ -1565,31 +1598,31 @@ bool CHotKeys::Remove( CHotKey* pHotKey )
 void CHotKeys::LoadAllKeys()
 {
 	int count = GetSize();
-	for( int i=0; i < count; i++ )
+	for(int i=0; i < count; i++)
 		ElementAt(i)->LoadKey();
 }
 
 void CHotKeys::SaveAllKeys()
 {
 	int count = GetSize();
-	for( int i=0; i < count; i++ )
+	for(int i=0; i < count; i++)
 		ElementAt(i)->SaveKey();
 }
 
-void CHotKeys::RegisterAll( bool bMsgOnError )
+void CHotKeys::RegisterAll(bool bMsgOnError)
 {
 	CString str;
 	CHotKey* pHotKey;
 	int count = GetSize();
-	for( int i=0; i < count; i++ )
+	for(int i = 0; i < count; i++)
 	{
 		pHotKey = ElementAt(i);
-		if( !pHotKey->Register() )
+		if(!pHotKey->Register())
 		{
 			str =  "Error Registering ";
 			str += pHotKey->GetName();
-			LOG( str );
-			if( bMsgOnError )
+			Log(str);
+			if(bMsgOnError)
 				AfxMessageBox(str);
 		}
 	}
@@ -1600,53 +1633,54 @@ void CHotKeys::UnregisterAll(bool bMsgOnError, bool bOnShowDitto)
 	CString str;
 	CHotKey* pHotKey;
 	int count = GetSize();
-	for( int i=0; i < count; i++ )
+	for(int i = 0; i < count; i++)
 	{
 		pHotKey = ElementAt(i);
 		if(!pHotKey->Unregister(bOnShowDitto))
 		{
-			str =  "Error Unregistering ";
+			str = "Error Unregistering ";
 			str += pHotKey->GetName();
-			LOG( str );
-			if( bMsgOnError )
+			Log(str);
+			if(bMsgOnError)
 				AfxMessageBox(str);
 		}
 	}
 }
 
-void CHotKeys::GetKeys( ARRAY& keys )
+void CHotKeys::GetKeys(ARRAY& keys)
 {
 	int count = GetSize();
-	keys.SetSize( count );
-	for( int i=0; i < count; i++ )
+	keys.SetSize(count);
+	for(int i=0; i < count; i++)
 		keys[i] = ElementAt(i)->GetKey();
 }
 
 // caution! this alters hotkeys based upon corresponding indexes
-void CHotKeys::SetKeys( ARRAY& keys, bool bSave )
+void CHotKeys::SetKeys(ARRAY& keys, bool bSave)
 {
 	int count = GetSize();
-	ASSERT( count == keys.GetSize() );
-	for( int i=0; i < count; i++ )
-		ElementAt(i)->SetKey( keys[i], bSave );
+	ASSERT(count == keys.GetSize());
+	for(int i=0; i < count; i++)
+		ElementAt(i)->SetKey(keys[i], bSave);
 }
 
-bool CHotKeys::FindFirstConflict( ARRAY& keys, int* pX, int* pY )
+bool CHotKeys::FindFirstConflict(ARRAY& keys, int* pX, int* pY)
 {
 	bool bConflict = false;
 	int i, j;
 	int count = keys.GetSize();
 	DWORD key;
-	for( i=0; i < count && !bConflict; i++ )
+	for(i = 0; i < count && !bConflict; i++)
 	{
 		key = keys.ElementAt(i);
 		// only check valid keys
-		if( key == 0 )
+		if(key == 0)
 			continue;
+
 		// scan the array for a duplicate
-		for( j=i+1; j < count; j++ )
+		for(j = i+1; j < count; j++ )
 		{
-			if( keys.ElementAt(j) == key )
+			if(keys.ElementAt(j) == key)
 			{
 				bConflict = true;
 				break;
@@ -1654,11 +1688,11 @@ bool CHotKeys::FindFirstConflict( ARRAY& keys, int* pX, int* pY )
 		}
 	}
 	
-	if( bConflict )
+	if(bConflict)
 	{
-		if( pX )
+		if(pX)
 			*pX = i-1;
-		if( pY )
+		if(pY)
 			*pY = j;
 	}
 	
@@ -1666,11 +1700,11 @@ bool CHotKeys::FindFirstConflict( ARRAY& keys, int* pX, int* pY )
 }
 
 // if true, pX and pY (if valid) are set to the indexes of the conflicting hotkeys.
-bool CHotKeys::FindFirstConflict( int* pX, int* pY )
+bool CHotKeys::FindFirstConflict(int* pX, int* pY)
 {
 	ARRAY keys;
-	GetKeys( keys );
-	return FindFirstConflict( keys, pX, pY );
+	GetKeys(keys);
+	return FindFirstConflict(keys, pX, pY);
 }
 
 /****************************************************************************************************

@@ -85,7 +85,7 @@ CCP_MainApp::~CCP_MainApp()
 
 BOOL CCP_MainApp::InitInstance()
 {
-	LOG("InitInstance");
+	Log("InitInstance");
 
 	AfxEnableControlContainer();
 
@@ -681,7 +681,7 @@ void CCP_MainApp::Delayed_RemoveOldEntries( UINT delay )
 
 int CCP_MainApp::ExitInstance() 
 {
-	LOG("ExitInstance");
+	Log("ExitInstance");
 
 	CloseDB();
 

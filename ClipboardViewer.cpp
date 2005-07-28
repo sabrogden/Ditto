@@ -181,47 +181,30 @@ void CClipboardViewer::OnDrawClipboard()
 		return;
 	}
 
-	Log("Start of OnDrawClipboard");
-	bool bPassOn = false;
-	
-	if((GetTickCount() - m_lLastCopy) > g_Opt.m_lSaveClipDelay)
+	// don't process the event when we first attach
+	if(m_pHandler && !m_bCalling_SetClipboardViewer)
 	{
-		// don't process the event when we first attach
-		if(m_pHandler && !m_bCalling_SetClipboardViewer)
+		if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
 		{
-			if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
-			{
-				m_pHandler->OnClipboardChange();
-
-				bPassOn = true;
-				m_lLastCopy = GetTickCount();
-			}
-		}
-	}
-	else
-	{
-		Log(StrF("Clip copy to fast difference from last copy = %d", (GetTickCount() - m_lLastCopy)));
-	}
-	
-	if(bPassOn)
-	{
-		// pass the event to the next Clipboard viewer in the chain
-		if(m_hNextClipboardViewer != NULL)
-		{
-			if(m_hNextClipboardViewer != m_hWnd)
-			{
-				Log(StrF("OnDrawClipboard Sending WM_DRAWCLIPBOARD to %d", m_hNextClipboardViewer));
-
-				::SendMessage(m_hNextClipboardViewer, WM_DRAWCLIPBOARD, 0, 0);	
-			}
-			else
-			{
-				m_hNextClipboardViewer = NULL;
-			}
+			Log(StrF("OnDrawClipboard::SetTimer %d", GetTickCount()));
+			
+			KillTimer(TIMER_DRAW_CLIPBOARD);
+			SetTimer(TIMER_DRAW_CLIPBOARD, g_Opt.m_lProcessDrawClipboardDelay, NULL);		
 		}
 	}
 
-	Log("End of OnDrawClipboard");
+	// pass the event to the next Clipboard viewer in the chain
+	if(m_hNextClipboardViewer != NULL)
+	{
+		if(m_hNextClipboardViewer != m_hWnd)
+		{
+			::SendMessage(m_hNextClipboardViewer, WM_DRAWCLIPBOARD, 0, 0);	
+		}
+		else
+		{
+			m_hNextClipboardViewer = NULL;
+		}
+	}
 }
 
 void CClipboardViewer::OnTimer(UINT nIDEvent) 
@@ -230,6 +213,27 @@ void CClipboardViewer::OnTimer(UINT nIDEvent)
 	{
 	case TIMER_ENSURE_VIEWER_IN_CHAIN:
 		EnsureConnected();
+		break;
+
+	case TIMER_DRAW_CLIPBOARD:
+		KillTimer(nIDEvent);
+
+		if((GetTickCount() - m_lLastCopy) > g_Opt.m_lSaveClipDelay)
+		{
+			if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
+			{
+				Log(StrF("OnDrawClipboard::OnTimer %d", GetTickCount()));
+
+				m_pHandler->OnClipboardChange();
+
+				m_lLastCopy = GetTickCount();
+			}
+		}
+		else
+		{
+			Log(StrF("Clip copy to fast difference from last copy = %d", (GetTickCount() - m_lLastCopy)));
+		}
+
 		break;
 	}
 	
