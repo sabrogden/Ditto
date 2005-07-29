@@ -132,24 +132,19 @@ void CCopyThread::AddToClips(CClip* pClip)
 	Release();
 }
 
-// Shared (use thread-safe access functions below)
-// Called within Main thread:
 bool CCopyThread::IsClipboardViewerConnected()
 {
-	ASSERT(m_pClipboardViewer && m_pClipboardViewer->m_hWnd);
-	return ::SendMessage(m_pClipboardViewer->m_hWnd, WM_CV_IS_CONNECTED, 0, 0) != FALSE;
+	return m_pClipboardViewer->SendPing();
 }
 
 bool CCopyThread::GetConnectCV()
 {
-	ASSERT(m_pClipboardViewer && m_pClipboardViewer->m_hWnd);
-	return ::SendMessage(m_pClipboardViewer->m_hWnd, WM_CV_GETCONNECT, 0, 0) != FALSE;
+	return m_pClipboardViewer->GetConnect();
 }
 
 void CCopyThread::SetConnectCV(bool bConnect)
 {
-	ASSERT(m_pClipboardViewer && m_pClipboardViewer->m_hWnd);
-	::SendMessage( m_pClipboardViewer->m_hWnd, WM_CV_SETCONNECT, bConnect, 0);
+	m_pClipboardViewer->SetConnect(bConnect);
 }
 
 CClipList* CCopyThread::GetClips()

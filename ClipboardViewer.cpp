@@ -14,17 +14,18 @@ static char THIS_FILE[] = __FILE__;
 /////////////////////////////////////////////////////////////////////////////
 // CClipboardViewer
 
-CClipboardViewer::CClipboardViewer(CCopyThread* pHandler)
+CClipboardViewer::CClipboardViewer(CCopyThread* pHandler) :
+	m_hNextClipboardViewer(0),
+	m_bCalling_SetClipboardViewer(false),
+	m_lReconectCount(0),
+	m_bIsConnected(false),
+	m_bConnect(false),
+	m_pHandler(pHandler),
+	m_bPinging(false),
+	m_bPingSuccess(false),
+	m_bHandlingClipChange(false)
 {
-	m_hNextClipboardViewer = 0;
-	m_bCalling_SetClipboardViewer = false;
-	m_lReconectCount = 0;
-	m_bIsConnected = false;
-	m_bConnect = false;
-	m_pHandler = pHandler;
-	ASSERT(m_pHandler);
-	m_bPinging = false;
-	m_bPingSuccess = false;
+
 }
 
 CClipboardViewer::~CClipboardViewer()
@@ -40,9 +41,6 @@ BEGIN_MESSAGE_MAP(CClipboardViewer, CWnd)
 	ON_WM_TIMER()
 	ON_WM_DESTROY()
 	//}}AFX_MSG_MAP
-	ON_MESSAGE(WM_CV_GETCONNECT, OnCVGetConnect)
-	ON_MESSAGE(WM_CV_SETCONNECT, OnCVSetConnect)
-	ON_MESSAGE(WM_CV_IS_CONNECTED, OnCVIsConnected)
 END_MESSAGE_MAP()
 
 
@@ -118,7 +116,7 @@ void CClipboardViewer::SetCVIgnore()
 	}
 }
 
-void CClipboardViewer::SetConnect( bool bConnect )
+void CClipboardViewer::SetConnect(bool bConnect)
 {
 	m_bConnect = bConnect;
 	if(m_bConnect)
@@ -149,8 +147,6 @@ void CClipboardViewer::OnDestroy()
 
 void CClipboardViewer::OnChangeCbChain(HWND hWndRemove, HWND hWndAfter) 
 {
-	Log(StrF("OnChangeCbChain Removed = %d After = %d", hWndAfter, hWndAfter));
-
 	// If the next window is closing, repair the chain. 
 	if(m_hNextClipboardViewer == hWndRemove)
     {
@@ -161,8 +157,6 @@ void CClipboardViewer::OnChangeCbChain(HWND hWndRemove, HWND hWndAfter)
     {
 		if(m_hNextClipboardViewer != m_hWnd)
 		{
-			Log(StrF("OnChangeCbChain Sending WM_CHANGECBCHAIN to %d", m_hNextClipboardViewer));
-
 			::SendMessage(m_hNextClipboardViewer, WM_CHANGECBCHAIN, (WPARAM) hWndRemove, (LPARAM) hWndAfter);
 		}
 		else
@@ -186,7 +180,7 @@ void CClipboardViewer::OnDrawClipboard()
 	{
 		if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
 		{
-			Log(StrF("OnDrawClipboard::SetTimer %d", GetTickCount()));
+			Log(StrF("OnDrawClipboard:: *** SetTimer *** %d", GetTickCount()));
 			
 			KillTimer(TIMER_DRAW_CLIPBOARD);
 			SetTimer(TIMER_DRAW_CLIPBOARD, g_Opt.m_lProcessDrawClipboardDelay, NULL);		
@@ -218,40 +212,35 @@ void CClipboardViewer::OnTimer(UINT nIDEvent)
 	case TIMER_DRAW_CLIPBOARD:
 		KillTimer(nIDEvent);
 
-		if((GetTickCount() - m_lLastCopy) > g_Opt.m_lSaveClipDelay)
+		if(m_bHandlingClipChange == false)
 		{
-			if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
+			m_bHandlingClipChange = true;
+
+			if((GetTickCount() - m_lLastCopy) > g_Opt.m_lSaveClipDelay)
 			{
-				Log(StrF("OnDrawClipboard::OnTimer %d", GetTickCount()));
+				if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
+				{
+					Log(StrF("OnDrawClipboard::OnTimer %d", GetTickCount()));
 
-				m_pHandler->OnClipboardChange();
+					m_pHandler->OnClipboardChange();
 
-				m_lLastCopy = GetTickCount();
+					m_lLastCopy = GetTickCount();
+				}
 			}
+			else
+			{
+				Log(StrF("Clip copy to fast difference from last copy = %d", (GetTickCount() - m_lLastCopy)));
+			}
+
+			m_bHandlingClipChange = false;
 		}
 		else
 		{
-			Log(StrF("Clip copy to fast difference from last copy = %d", (GetTickCount() - m_lLastCopy)));
+			Log("HandlingClipChange is Set, ERROR");
 		}
 
 		break;
 	}
 	
 	CWnd::OnTimer(nIDEvent);
-}
-
-LRESULT CClipboardViewer::OnCVGetConnect(WPARAM wParam, LPARAM lParam)
-{
-	return GetConnect();
-}
-
-LRESULT CClipboardViewer::OnCVSetConnect(WPARAM wParam, LPARAM lParam)
-{
-	SetConnect(wParam != FALSE); // convert to bool
-	return TRUE;
-}
-
-LRESULT CClipboardViewer::OnCVIsConnected(WPARAM wParam, LPARAM lParam)
-{
-	return SendPing();
 }

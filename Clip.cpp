@@ -240,8 +240,6 @@ bool CClip::AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen)
 	return true;
 }
 
-bool g_bCopyingClipboard = false; // for debugging reentrance
-
 // Fills this CClip with the contents of the clipboard.
 bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 {
@@ -249,28 +247,18 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 	CClipTypes defaultTypes;
 	CClipTypes* pTypes = pClipTypes;
 
-	if( g_bCopyingClipboard )
-		return false;
-	
-	g_bCopyingClipboard = true;
-	
 	// m_Formats should be empty when this is called.
 	ASSERT(m_Formats.GetSize() == 0);
 	
 	// If the data is supposed to be private, then return
 	if(::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
 	{
-		g_bCopyingClipboard = false;
-
 		return false;
 	}
-
-	Sleep(2000);
 	
 	//Attach to the clipboard
 	if(!oleData.AttachClipboard())
 	{
-		g_bCopyingClipboard = false;
 		ASSERT(0); // does this ever happen?
 		return false;
 	}
@@ -342,7 +330,6 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 					Log(cs);
 
 					oleData.Release();
-					g_bCopyingClipboard = false;
 					return false;
 				}
 
@@ -378,11 +365,9 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 	
 	if(m_Formats.GetSize() == 0)
 	{
-		g_bCopyingClipboard = false;
 		return false;
 	}
-	
-	g_bCopyingClipboard = false;
+
 	return true;
 }
 

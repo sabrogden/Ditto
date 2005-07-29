@@ -63,7 +63,8 @@ void Log(const char* msg, bool bFromSendRecieve)
 	
 	csText += msg;
 	csText += "\n";
-	TRACE(csText);
+	//TRACE(csText);
+	OutputDebugString(csText);
 
 #ifndef _DEBUG
 	if(!bFromSendRecieve)
@@ -1386,7 +1387,7 @@ void CGetSetOptions::SetSaveClipDelay(long lDelay)
 
 long CGetSetOptions::GetProcessDrawClipboardDelay()
 {
-	return GetProfileLong("ProcessDrawClipboardDelay", 50);
+	return GetProfileLong("ProcessDrawClipboardDelay", 100);
 }
 
 void CGetSetOptions::SetProcessDrawClipboardDelay(long lDelay)

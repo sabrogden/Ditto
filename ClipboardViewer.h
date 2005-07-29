@@ -39,16 +39,17 @@ public:
 	void Connect();    // connects as a clipboard viewer
 	void Disconnect(); // disconnects as a clipboard viewer
 
-	bool	m_bPinging;
-	bool	m_bPingSuccess;
+	bool m_bPinging;
+	bool m_bPingSuccess;
 	bool SendPing(); // returns true if we are in the chain
 	bool EnsureConnected(); // pings and connects if ping fails
 	void SetCVIgnore(); // puts format "Clipboard Viewer Ignore" on the clipboard
 
-	bool GetConnect() { return m_bConnect; }
-	void SetConnect( bool bConnect );
+	bool GetConnect()				{ return m_bConnect; }
+	void SetConnect(bool bConnect);
 
 	long m_lLastCopy;
+	bool m_bHandlingClipChange;
 
 	// Generated message map functions
 protected:
@@ -59,9 +60,6 @@ protected:
 	afx_msg void OnDrawClipboard();
 	afx_msg void OnTimer(UINT nIDEvent);
 	//}}AFX_MSG
-	afx_msg LRESULT OnCVGetConnect(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnCVSetConnect(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnCVIsConnected(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 };
 
