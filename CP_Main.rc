@@ -399,60 +399,60 @@ FONT 8, "MS Sans Serif"
 BEGIN
     LISTBOX         IDC_LIST1,7,7,129,158,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
                     LBS_EXTENDEDSEL | WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "&Add",IDC_ADD,147,10,38,14
-    PUSHBUTTON      "&Delete",IDC_DELETE,147,30,38,14
+    PUSHBUTTON      "&Add",IDC_ADD,147,10,50,14
+    PUSHBUTTON      "&Delete",IDC_DELETE,147,30,50,14
 END
 
-IDD_OPTIONS_QUICK_PASTE DIALOG DISCARDABLE  0, 0, 332, 249
+IDD_OPTIONS_QUICK_PASTE DIALOG DISCARDABLE  0, 0, 360, 250
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Quick Paste"
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "History Starts at the Top of the list (vs. Bottom)",
                     IDC_HISTORY_START_TOP,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,18,8,161,10
+                    WS_TABSTOP,18,8,335,10
     CONTROL         "Use Ctrl - Num for first ten copy hot keys",
                     IDC_CTRL_CLICK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,
-                    19,142,10
+                    19,335,10
     CONTROL         "Show text for first ten copy hot keys",
                     IDC_SHOW_TEXT_FOR_FIRST_TEN_HOT_KEYS,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,18,30,128,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,18,30,335,10
     CONTROL         "Show leading whitespace",
                     IDC_DESC_SHOW_LEADING_WHITESPACE,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,18,41,97,10
-    LTEXT           "Text Lines per Row",IDC_STATIC_LINES,18,54,62,8
-    EDITTEXT        IDC_LINES_ROW,82,52,19,12,ES_AUTOHSCROLL
+                    BS_AUTOCHECKBOX | WS_TABSTOP,18,41,335,10
+    LTEXT           "Text Lines per Row",IDC_STATIC_LINES,18,54,93,8
+    EDITTEXT        IDC_LINES_ROW,114,52,19,12,ES_AUTOHSCROLL
     CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,67,122,10
-    EDITTEXT        IDC_TRANS_PERC,140,66,19,12,ES_AUTOHSCROLL
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,67,155,10
+    EDITTEXT        IDC_TRANS_PERC,177,66,19,12,ES_AUTOHSCROLL
     PUSHBUTTON      "Font",IDC_BUTTON_FONT,18,132,143,17
-    PUSHBUTTON      "Default Font",IDC_BUTTON_DEFAULT_FAULT,164,135,48,12
-    CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,31,
-                    187,41,10
-    CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,31,
-                    197,45,10
+    PUSHBUTTON      "Default Font",IDC_BUTTON_DEFAULT_FAULT,164,135,70,12
+    CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,22,
+                    182,93,10
+    CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,22,
+                    192,97,10
     CONTROL         "At Previous Position",IDC_AT_PREVIOUS,"Button",
-                    BS_AUTORADIOBUTTON,31,207,79,10
-    LTEXT           "%",IDC_STATIC,162,69,8,8
-    GROUPBOX        "Popup Positioning",IDC_STATIC_POPUP,19,178,116,41
+                    BS_AUTORADIOBUTTON,22,202,117,10
+    LTEXT           "%",IDC_STATIC,199,66,8,12,SS_CENTERIMAGE
+    GROUPBOX        "Popup Positioning",IDC_STATIC_POPUP,10,173,138,41
     LTEXT           "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group",
-                    IDC_STATIC_LEG,148,183,103,36
-    GROUPBOX        "List Item Prefix Legend",IDC_STATIC_LEGEND,142,173,116,
+                    IDC_STATIC_LEG,158,183,154,36
+    GROUPBOX        "List Item Prefix Legend",IDC_STATIC_LEGEND,153,173,165,
                     50
     CONTROL         "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)",
                     IDC_SHOW_THUMBNAILS,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,18,79,293,10
+                    WS_TABSTOP,18,79,335,10
     CONTROL         "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)",
                     IDC_DRAW_RTF,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,89,
-                    293,10
+                    335,10
     CONTROL         "Find As You Type",IDC_CHECK_FIND_AS_YOU_TYPE,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,18,99,162,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,18,99,335,10
     CONTROL         "Ensure Entire Window is Visible",
                     IDC_CHECK_ENTIRE_WINDOW_IS_VISIBLE,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,17,109,162,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,17,109,335,10
     CONTROL         "Show Clips That are in Groups in Main List",
                     IDC_CHECK_SHOW_ALL_IN_MAIN_LIST,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,17,119,162,10
+                    WS_TABSTOP,17,119,335,10
 END
 
 IDD_OPTIONS_KEYSTROKES DIALOG DISCARDABLE  0, 0, 350, 206
@@ -512,74 +512,74 @@ BEGIN
                     IDC_STATIC_GROUP,7,49,336,106
     CONTROL         "Send Paste (Otherwise it will just load the item on the clipboard)",
                     IDC_CHECK_SEND_PASTE,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,19,60,257,13
-    LTEXT           "Activate Ditto",IDC_STATIC_ACTIVATE,19,16,44,8
-    LTEXT           "Named Copy",IDC_STATIC_NAMED_COPY,19,34,42,8
-    LTEXT           "Position 1",IDC_STATIC_1,19,74,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 2",IDC_STATIC_2,19,89,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 3",IDC_STATIC_3,19,104,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 4",IDC_STATIC_4,19,119,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 5",IDC_STATIC_5,19,134,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 6",IDC_STATIC_6,184,74,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 7",IDC_STATIC_7,184,89,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 8",IDC_STATIC_8,184,104,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 9",IDC_STATIC_9,184,119,32,14,SS_CENTERIMAGE
-    LTEXT           "Position 10",IDC_STATIC_10,184,134,36,14,SS_CENTERIMAGE
+                    WS_TABSTOP,19,60,324,13
+    LTEXT           "Activate Ditto",IDC_STATIC_ACTIVATE,19,16,53,8
+    LTEXT           "Named Copy",IDC_STATIC_NAMED_COPY,19,34,51,8
+    RTEXT           "Position 1",IDC_STATIC_1,16,74,42,14,SS_CENTERIMAGE
+    RTEXT           "Position 2",IDC_STATIC_2,16,89,42,14,SS_CENTERIMAGE
+    RTEXT           "Position 3",IDC_STATIC_3,16,104,42,14,SS_CENTERIMAGE
+    RTEXT           "Position 4",IDC_STATIC_4,16,119,42,14,SS_CENTERIMAGE
+    RTEXT           "Position 5",IDC_STATIC_5,16,134,42,14,SS_CENTERIMAGE
+    RTEXT           "Position 6",IDC_STATIC_6,181,74,42,14,SS_CENTERIMAGE
+    RTEXT           "Position 7",IDC_STATIC_7,181,89,42,14,SS_CENTERIMAGE
+    RTEXT           "Position 8",IDC_STATIC_8,181,104,42,14,SS_CENTERIMAGE
+    RTEXT           "Position 9",IDC_STATIC_9,181,119,42,14,SS_CENTERIMAGE
+    RTEXT           "Position 10",IDC_STATIC_10,181,134,42,14,SS_CENTERIMAGE
     LTEXT           "Check the ""Win"" Button to include the windows keyboard key in your hot key.",
                     IDC_STATIC_WIN,7,159,336,25
 END
 
-IDD_OPTIONS_GENERAL DIALOG DISCARDABLE  0, 0, 295, 242
+IDD_OPTIONS_GENERAL DIALOG DISCARDABLE  0, 0, 351, 242
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "General"
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "Start Ditto on System Startup",IDC_START_ON_STARTUP,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,15,107,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,15,138,10
     CONTROL         "Display Icon in System Tray",IDC_DISPLAY_IN_SYSTEMTRAY,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,28,103,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,28,321,10
     CONTROL         "Maximum Number of Saved Copies",IDC_MAXIMUM,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,23,41,126,10
-    EDITTEXT        IDC_MAX_SAVED_COPIES,149,41,19,12,ES_AUTOHSCROLL
+                    BS_AUTOCHECKBOX | WS_TABSTOP,23,41,144,10
+    EDITTEXT        IDC_MAX_SAVED_COPIES,167,41,19,12,ES_AUTOHSCROLL
     CONTROL         "Paste Entries Expire after",IDC_EXPIRE,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,23,54,95,10
-    EDITTEXT        IDC_EXPIRE_AFTER,118,53,19,12,ES_AUTOHSCROLL
-    LTEXT           "Days",IDC_STATIC_DAYS,142,56,26,8
+                    BS_AUTOCHECKBOX | WS_TABSTOP,23,54,140,10
+    EDITTEXT        IDC_EXPIRE_AFTER,167,53,19,12,ES_AUTOHSCROLL
+    LTEXT           "Days",IDC_STATIC_DAYS,192,53,51,12,SS_CENTERIMAGE
     PUSHBUTTON      "Compact and Repair Database",IDC_BT_COMPACT_AND_REPAIR,
                     170,14,105,11
     CONTROL         "Set Database Path",IDC_SET_DB_PATH,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,23,79,76,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,23,79,320,10
     EDITTEXT        IDC_PATH,23,89,248,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "....",IDC_GET_PATH,274,89,14,12
+    PUSHBUTTON      "....",IDC_GET_PATH,272,89,14,12
     CONTROL         "Automatically check for updates online",
                     IDC_CHECK_UPDATES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
-                    23,106,137,10
-    PUSHBUTTON      "Check Now",IDC_CHECK_FOR_UPDATES,161,106,50,11
+                    23,106,173,10
+    PUSHBUTTON      "Check Now",IDC_CHECK_FOR_UPDATES,201,106,50,11
     CONTROL         "Allow Duplicates",IDC_ALLOW_DUPLICATES,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,23,118,68,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,23,118,320,10
     CONTROL         "Update Clip Time On Paste",IDC_UPDATE_TIME_ON_PASTE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,131,101,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,130,321,10
     CONTROL         "Save Multi-Pastes",IDC_SAVE_MULTIPASTE,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,23,142,73,10
+                    BS_AUTOCHECKBOX | WS_TABSTOP,23,142,321,10
     CONTROL         "Hide Ditto on Hot Key if Ditto is Visible",
                     IDC_HIDE_DITO_ON_HOT_KEY,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,23,153,135,10
+                    WS_TABSTOP,23,153,322,10
     LTEXT           "Amount of text to save for description",
-                    IDC_STATIC_AMOUNT,24,165,122,8
-    EDITTEXT        IDC_DESC_TEXT_SIZE,148,163,35,12,ES_AUTOHSCROLL
-    LTEXT           "On copy play the sound",IDC_STATIC_SOUND,24,177,81,10
-    EDITTEXT        IDC_EDIT_PLAY_SOUND,105,177,145,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "Play",IDC_BUTTON_PLAY,251,177,19,12
-    PUSHBUTTON      "....",IDC_SELECT_SOUND,274,177,14,12
+                    IDC_STATIC_AMOUNT,23,165,153,8
+    EDITTEXT        IDC_DESC_TEXT_SIZE,178,163,35,12,ES_AUTOHSCROLL
+    LTEXT           "On copy play the sound",IDC_STATIC_SOUND,23,177,139,10
+    EDITTEXT        IDC_EDIT_PLAY_SOUND,167,177,115,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Play",IDC_BUTTON_PLAY,285,177,35,12
+    PUSHBUTTON      "....",IDC_SELECT_SOUND,323,177,14,12
     CONTROL         "Paste Clip in active window after selection",
                     IDC_SEND_PASTE_MESSAGE,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,23,190,148,10
+                    WS_TABSTOP,23,190,318,10
     LTEXT           "Maximum Clip Size in Bytes",IDC_STATIC_MAX_SIZE,23,202,
-                    88,8
-    EDITTEXT        IDC_EDIT_MAX_SIZE,112,201,59,12,ES_AUTOHSCROLL
-    LTEXT           "(Leave blank for no limit)",IDC_STATIC_NO_LIMIT,176,202,
-                    78,8
-    LTEXT           "Lanuage",IDC_STATIC_LANGUAGE,23,66,36,10
+                    137,8
+    EDITTEXT        IDC_EDIT_MAX_SIZE,164,200,59,12,ES_AUTOHSCROLL
+    LTEXT           "(Leave blank for no limit)",IDC_STATIC_NO_LIMIT,232,202,
+                    112,8
+    LTEXT           "Lanuage",IDC_STATIC_LANGUAGE,23,65,36,12,SS_CENTERIMAGE
     COMBOBOX        IDC_COMBO_LANGUAGE,65,65,130,95,CBS_DROPDOWNLIST | 
                     CBS_SORT | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)",
@@ -600,90 +600,90 @@ BEGIN
     PUSHBUTTON      "Use Default",IDC_USE_DEFAULT,27,25,50,14
 END
 
-IDD_OPTIONS_STATS DIALOG DISCARDABLE  0, 0, 272, 206
+IDD_OPTIONS_STATS DIALOG DISCARDABLE  0, 0, 346, 207
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Stats"
 FONT 8, "MS Sans Serif"
 BEGIN
-    EDITTEXT        IDC_EDIT_ALL_DATE,13,17,97,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_ALL_COPIES,41,31,25,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_ALL_PASTES,41,45,25,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_TRIP_DATE,132,17,97,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_TRIP_COPIES,157,31,25,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_TRIP_PASTES,157,45,25,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "Reset",IDC_RESET_COUNTS,193,31,32,12
-    EDITTEXT        IDC_SAVED_COPIES,76,72,41,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "Remove All",IDC_REMOVE_ALL,122,72,44,12
-    EDITTEXT        IDC_SAVED_COPY_DATA,76,86,41,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_LAST_STARTED,76,107,157,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_DATABASE_SIZE,76,121,41,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_CLIPS_SENT,76,135,41,12,ES_AUTOHSCROLL
-    EDITTEXT        IDC_CLIPS_RECIVED,76,149,41,12,ES_AUTOHSCROLL
-    LTEXT           "Copies",IDC_STATIC_5,132,31,22,12
-    LTEXT           "Pastes",IDC_STATIC_6,132,45,22,12
-    GROUPBOX        "Trip Odometer",IDC_STATIC_2,128,7,105,54
-    LTEXT           "Copies",IDC_STATIC_3,13,33,22,12
-    LTEXT           "Pastes",IDC_STATIC_4,13,46,22,12
-    GROUPBOX        "Odometer",IDC_STATIC_1,7,7,110,54
-    LTEXT           "Saved Copies",IDC_STATIC_7,15,73,45,12
-    LTEXT           "Saved Copy Data",IDC_STATIC_8,15,88,57,12
-    LTEXT           "Database Size",IDC_STATIC_10,15,121,47,12,
+    EDITTEXT        IDC_EDIT_ALL_DATE,13,17,133,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ALL_COPIES,54,31,25,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ALL_PASTES,54,45,25,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_TRIP_DATE,174,17,123,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_TRIP_COPIES,214,31,25,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_TRIP_PASTES,214,45,25,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Reset",IDC_RESET_COUNTS,253,31,44,12
+    EDITTEXT        IDC_SAVED_COPIES,99,72,41,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Remove All",IDC_REMOVE_ALL,145,72,62,12
+    EDITTEXT        IDC_SAVED_COPY_DATA,99,86,41,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_LAST_STARTED,99,115,157,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_DATABASE_SIZE,99,129,41,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_CLIPS_SENT,99,143,41,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_CLIPS_RECIVED,99,157,41,12,ES_AUTOHSCROLL
+    LTEXT           "Copies",IDC_STATIC_5,174,31,37,12,SS_CENTERIMAGE
+    LTEXT           "Pastes",IDC_STATIC_6,174,45,36,12,SS_CENTERIMAGE
+    GROUPBOX        "Trip Odometer",IDC_STATIC_2,170,7,135,54
+    LTEXT           "Copies",IDC_STATIC_3,13,31,37,12,SS_CENTERIMAGE
+    LTEXT           "Pastes",IDC_STATIC_4,13,45,36,12,SS_CENTERIMAGE
+    GROUPBOX        "Odometer",IDC_STATIC_1,7,7,145,54
+    LTEXT           "Saved Copies",IDC_STATIC_7,15,72,76,12,SS_CENTERIMAGE
+    LTEXT           "Saved Copy Data",IDC_STATIC_8,15,88,80,18
+    LTEXT           "Database Size",IDC_STATIC_10,15,129,79,12,
                     SS_CENTERIMAGE
-    LTEXT           "Clips Sent",IDC_STATIC_11,15,135,32,12,SS_CENTERIMAGE
-    LTEXT           "Clips Recieved",IDC_STATIC_12,15,149,47,12,
+    LTEXT           "Clips Sent",IDC_STATIC_11,15,143,79,12,SS_CENTERIMAGE
+    LTEXT           "Clips Recieved",IDC_STATIC_12,15,157,79,12,
                     SS_CENTERIMAGE
-    GROUPBOX        "",IDC_STATIC,7,63,166,40
-    LTEXT           "Last Started",IDC_STATIC_9,15,107,47,12,SS_CENTERIMAGE
-    LTEXT           "Since Last Start",IDC_STATIC_13,120,144,51,8
+    GROUPBOX        "",IDC_STATIC,7,63,206,47
+    LTEXT           "Last Started",IDC_STATIC_9,15,115,79,12,SS_CENTERIMAGE
+    LTEXT           "Since Last Start",IDC_STATIC_13,145,152,100,8
 END
 
-IDD_ADD_TYPE DIALOG DISCARDABLE  0, 0, 276, 230
+IDD_ADD_TYPE DIALOG DISCARDABLE  0, 0, 293, 231
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Add Supported Type"
 FONT 8, "MS Sans Serif"
 BEGIN
-    PUSHBUTTON      "Cancel",IDCANCEL,219,209,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,236,210,50,14
     LISTBOX         IDC_LIST1,7,15,113,174,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
                     LBS_EXTENDEDSEL | WS_VSCROLL | WS_TABSTOP
     EDITTEXT        IDC_EDIT1,135,15,91,14,ES_AUTOHSCROLL
     LISTBOX         IDC_LIST2,135,43,97,146,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
                     LBS_EXTENDEDSEL | WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "Add",IDC_ADD_1,7,191,31,11
-    PUSHBUTTON      "Add",IDC_ADD_2,231,15,31,11
-    PUSHBUTTON      "Add",IDC_ADD_3,130,191,31,11
-    LTEXT           "Custom Type",IDC_STATIC_2,135,7,42,8
-    LTEXT           "Currently on the Clipboard",IDC_STATIC_3,135,35,82,8
-    LTEXT           "Main Types",IDC_STATIC_1,7,7,38,8
+    PUSHBUTTON      "Add",IDC_ADD_1,7,191,44,11
+    PUSHBUTTON      "Add",IDC_ADD_2,231,15,44,11
+    PUSHBUTTON      "Add",IDC_ADD_3,130,191,44,11
+    LTEXT           "Custom Type",IDC_STATIC_2,135,7,81,8
+    LTEXT           "Currently on the Clipboard",IDC_STATIC_3,135,35,132,8
+    LTEXT           "Main Types",IDC_STATIC_1,7,7,80,8
 END
 
-IDD_COPY_PROPERTIES DIALOG DISCARDABLE  0, 0, 244, 223
+IDD_COPY_PROPERTIES DIALOG DISCARDABLE  0, 0, 258, 220
 STYLE WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
 CAPTION "Copy Properties"
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "HotKey1",IDC_HOTKEY,"msctls_hotkey32",WS_BORDER | 
-                    WS_TABSTOP,37,7,82,13
-    EDITTEXT        IDC_DATE,149,7,88,13,ES_AUTOHSCROLL | NOT WS_TABSTOP
+                    WS_TABSTOP,44,7,82,13
+    EDITTEXT        IDC_DATE,163,7,88,13,ES_AUTOHSCROLL | NOT WS_TABSTOP
     CONTROL         "&Never Auto Delete",IDC_NEVER_AUTO_DELETE,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,8,23,75,10
-    EDITTEXT        IDC_PARSE_EDIT,177,23,30,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "Parse",IDC_PARSE_BUTTON,212,23,25,12
-    COMBOBOX        IDC_COMBO1,63,39,174,128,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    BS_AUTOCHECKBOX | WS_TABSTOP,8,23,149,10
+    EDITTEXT        IDC_PARSE_EDIT,163,23,30,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Parse",IDC_PARSE_BUTTON,195,23,56,12
+    COMBOBOX        IDC_COMBO1,77,39,174,128,CBS_DROPDOWNLIST | WS_VSCROLL | 
                     WS_TABSTOP
-    LISTBOX         IDC_COPY_DATA,7,125,230,75,LBS_SORT | 
+    LISTBOX         IDC_COPY_DATA,7,136,244,60,LBS_SORT | 
                     LBS_NOINTEGRALHEIGHT | LBS_EXTENDEDSEL | WS_VSCROLL | 
                     WS_TABSTOP
-    PUSHBUTTON      "Delete",IDC_DELETE_COPY_DATA,7,204,24,12
-    DEFPUSHBUTTON   "OK",IDOK,133,202,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,187,202,50,14
-    LTEXT           "Item Title",IDC_STATIC_TITLE,7,49,46,8
-    LTEXT           "Date",IDC_STATIC_DATE,128,7,16,13,SS_CENTERIMAGE
-    LTEXT           "Hot Key",IDC_STATIC_HOT_KEY,7,7,28,13,SS_CENTERIMAGE
-    LTEXT           "Copy Formats",IDC_STATIC_FORMATS,7,116,46,8
-    LTEXT           "Move To Group",IDC_STATIC_MOVE_TO_GROUP,8,40,56,9
+    PUSHBUTTON      "Delete",IDC_DELETE_COPY_DATA,7,201,42,12
+    DEFPUSHBUTTON   "OK",IDOK,148,199,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,201,199,50,14
+    LTEXT           "Item Title",IDC_STATIC_TITLE,7,55,168,8
+    RTEXT           "Date",IDC_STATIC_DATE,135,7,49,13,SS_CENTERIMAGE
+    LTEXT           "Hot Key",IDC_STATIC_HOT_KEY,7,7,35,13,SS_CENTERIMAGE
+    LTEXT           "Copy Formats",IDC_STATIC_FORMATS,7,126,226,8
+    LTEXT           "Move To Group",IDC_STATIC_MOVE_TO_GROUP,8,40,67,9
     CONTROL         "",IDC_RICHEDIT1,"RICHEDIT",ES_MULTILINE | 
                     ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | 
-                    WS_BORDER | WS_VSCROLL | WS_TABSTOP,7,58,230,57
+                    WS_BORDER | WS_VSCROLL | WS_TABSTOP,7,63,244,62
 END
 
 IDD_ABOUT DIALOG DISCARDABLE  0, 0, 292, 124
@@ -707,30 +707,30 @@ BEGIN
     EDITTEXT        IDC_NAME,7,11,172,12,ES_AUTOHSCROLL
 END
 
-IDD_OPTIONS_FRIENDS DIALOG DISCARDABLE  0, 0, 321, 246
+IDD_OPTIONS_FRIENDS DIALOG DISCARDABLE  0, 0, 353, 247
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Friends"
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | WS_BORDER | 
-                    WS_TABSTOP,7,142,307,85
+                    WS_TABSTOP,7,159,339,68
     LTEXT           "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer.",
-                    IDC_STATIC_6,7,113,278,24
-    EDITTEXT        IDC_EDIT_PLACE_ON_CLIPBOARD,96,34,210,13,ES_AUTOHSCROLL
+                    IDC_STATIC_6,7,126,339,28
+    EDITTEXT        IDC_EDIT_PLACE_ON_CLIPBOARD,96,39,210,13,ES_AUTOHSCROLL
     LTEXT           "IP/Computer Names seperated by commas",IDC_STATIC_2,7,
-                    32,70,17
+                    37,84,17
     LTEXT           "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time.",
-                    IDC_STATIC_1,7,10,307,18
+                    IDC_STATIC_1,7,10,339,26
     CONTROL         "Log Send Receive Commands",IDC_CHECK_LOG_SEND_RECIEVE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,231,176,12
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,232,339,12
     CONTROL         "Disable Recieving Clips",IDC_CHECK_DISABLE_FRIENDS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,95,48,90,10
-    LTEXT           "Network Password",IDC_STATIC_3,7,68,79,9
-    EDITTEXT        IDC_EDIT_PASSWORD,96,65,210,13,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT_ADDITIONAL,95,100,210,11,ES_AUTOHSCROLL
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,95,53,146,10
+    LTEXT           "Network Password",IDC_STATIC_3,7,69,79,9
+    EDITTEXT        IDC_EDIT_PASSWORD,96,66,210,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_ADDITIONAL,95,110,210,12,ES_AUTOHSCROLL
     LTEXT           "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas",
-                    IDC_STATIC_4,7,81,307,16
-    LTEXT           "Receive Passwords",IDC_STATIC_5,7,102,79,9
+                    IDC_STATIC_4,7,83,339,22
+    LTEXT           "Receive Passwords",IDC_STATIC_5,7,112,79,9
 END
 
 IDD_FRIEND_DETAILS DIALOG DISCARDABLE  0, 0, 203, 79
@@ -843,9 +843,9 @@ BEGIN
     IDD_OPTIONS_QUICK_PASTE, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 325
+        RIGHTMARGIN, 353
         TOPMARGIN, 7
-        BOTTOMMARGIN, 241
+        BOTTOMMARGIN, 242
     END
 
     IDD_OPTIONS_KEYSTROKES, DIALOG
@@ -859,7 +859,7 @@ BEGIN
     IDD_OPTIONS_GENERAL, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 288
+        RIGHTMARGIN, 344
         TOPMARGIN, 7
         BOTTOMMARGIN, 234
     END
@@ -872,29 +872,20 @@ BEGIN
         BOTTOMMARGIN, 39
     END
 
-    IDD_OPTIONS_STATS, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 265
-        VERTGUIDE, 233
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 199
-    END
-
     IDD_ADD_TYPE, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 269
+        RIGHTMARGIN, 286
         TOPMARGIN, 7
-        BOTTOMMARGIN, 223
+        BOTTOMMARGIN, 224
     END
 
     IDD_COPY_PROPERTIES, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 237
+        RIGHTMARGIN, 251
         TOPMARGIN, 7
-        BOTTOMMARGIN, 216
+        BOTTOMMARGIN, 213
     END
 
     IDD_ABOUT, DIALOG
@@ -916,9 +907,9 @@ BEGIN
     IDD_OPTIONS_FRIENDS, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 314
+        RIGHTMARGIN, 346
         TOPMARGIN, 4
-        BOTTOMMARGIN, 243
+        BOTTOMMARGIN, 244
     END
 
     IDD_FRIEND_DETAILS, DIALOG

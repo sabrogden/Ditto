@@ -326,6 +326,7 @@ bool CMultiLanguage::LoadSection(TiXmlNode &doc, LANGUAGE_ARRAY &Array, CString 
 
 	TiXmlNode* ForeignNode;
 	CString csID;
+	CString csLineFeed("\n");
 		
 	TiXmlElement *ItemElement = node->FirstChildElement();
 
@@ -344,6 +345,9 @@ bool CMultiLanguage::LoadSection(TiXmlNode &doc, LANGUAGE_ARRAY &Array, CString 
 		if(ForeignNode)
 		{
 			plItem->m_csForeignLang = ForeignNode->Value();
+			
+			//Replace the literal "\n" with line feeds
+			plItem->m_csForeignLang.Replace("\\n", csLineFeed);
 		}
 
 		Array.Add(plItem);
