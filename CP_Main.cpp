@@ -9,6 +9,7 @@
 #include ".\cp_main.h"
 #include "server.h"
 #include "Client.h"
+#include <io.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -122,11 +123,25 @@ BOOL CCP_MainApp::InitInstance()
 	}
 	else if(nRet == ERROR_OPENING_DATABASE)
 	{
-		CString cs = theApp.m_Language.GetString("Error_Init_Dao", "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO.");
-		if(MessageBox(NULL, cs, "Ditto", MB_YESNO) == IDYES)
+		CString csFile = CGetSetOptions::GetExeFileName();
+		csFile = GetFilePath(csFile);
+		csFile += "dao\\Disk1\\SETUP.EXE";
+
+		//If they have downloaded the version with dao in the install
+		if(_access(csFile, 0) == 0)
 		{
-			ShellExecute(NULL, "open", "http://ditto-cp.sourceforge.net/dao_setup.exe", "", "", SW_SHOW);
+			CString cs = theApp.m_Language.GetString("Error_Init_Dao_Intall", "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO.");
+			MessageBox(NULL, cs, "Ditto", MB_OK);
+			WinExec(csFile, SW_SHOW);
 		}
+		else
+		{
+			CString cs = theApp.m_Language.GetString("Error_Init_Dao", "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO.");
+			if(MessageBox(NULL, cs, "Ditto", MB_YESNO) == IDYES)
+			{
+				ShellExecute(NULL, "open", "http://ditto-cp.sourceforge.net/dao_setup.exe", "", "", SW_SHOW);
+			}
+		}	
 
 		return TRUE;
 	}
@@ -153,9 +168,11 @@ void CCP_MainApp::AfterMainCreate()
 	ASSERT( ::IsWindow(m_MainhWnd) );
 	g_Opt.SetMainHWND((long)m_MainhWnd);
 
-	g_HotKeys.Init( m_MainhWnd );
+	g_GlobalHotKeys.Init(m_MainhWnd);
+	g_HotKeys.Init(m_MainhWnd);
+
 	// create hotkeys here.  They are automatically deleted on exit
-	m_pDittoHotKey = new CHotKey("DittoHotKey",704); //704 is ctrl-tilda
+	m_pDittoHotKey = new CHotKey(CString("DittoHotKey"), 704); //704 is ctrl-tilda
 	m_pCopyHotKey = new CHotKey("CopyHotKey");
 	m_pPosOne = new CHotKey("Position1", 0, true);
 	m_pPosTwo = new CHotKey("Position2", 0, true);
@@ -263,10 +280,10 @@ bool CCP_MainApp::TargetActiveWindow()
 
 bool CCP_MainApp::ActivateTarget()
 {
-	if( !::IsWindow(m_hTargetWnd) || m_hTargetWnd == ::GetForegroundWindow() )
-		return false;
-	::SetForegroundWindow( m_hTargetWnd );
-//	::SetFocus( m_hTargetWnd );
+	::ShowWindow(m_hTargetWnd, SW_SHOW);
+	::SetForegroundWindow(m_hTargetWnd);
+	::SetFocus(m_hTargetWnd);
+
 	return true;
 }
 
@@ -280,14 +297,42 @@ bool CCP_MainApp::ReleaseFocus()
 // sends Ctrl-V to the TargetWnd
 void CCP_MainApp::SendPaste(bool bActivateTarget)
 {
+	//Make sure all the keys are up
+	for(char ch = '0'; ch <= '9'; ch++)
+	{
+		keybd_event(ch, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	}
+
+	for(ch = 'A'; ch <= 'Z'; ch++)
+	{
+		keybd_event(ch, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	}
+	keybd_event(VK_SHIFT, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	keybd_event(VK_MENU, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	keybd_event(VK_LWIN, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	
+	Sleep(50);
+
 	if(bActivateTarget && !ActivateTarget())
 	{
 		SetStatus("SendPaste FAILED!",TRUE);
 		return;
 	}
 
+	MSG KeyboardMsg;
+	while (::PeekMessage(&KeyboardMsg, NULL, 0, 0, PM_REMOVE))
+	{
+		::TranslateMessage(&KeyboardMsg);
+		::DispatchMessage(&KeyboardMsg);
+    }
+
+	Sleep(50);
+
 	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
 	keybd_event('V', 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+
+	Sleep(50);
 
 	keybd_event('V', 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
