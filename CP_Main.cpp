@@ -168,7 +168,6 @@ void CCP_MainApp::AfterMainCreate()
 	ASSERT( ::IsWindow(m_MainhWnd) );
 	g_Opt.SetMainHWND((long)m_MainhWnd);
 
-	g_GlobalHotKeys.Init(m_MainhWnd);
 	g_HotKeys.Init(m_MainhWnd);
 
 	// create hotkeys here.  They are automatically deleted on exit

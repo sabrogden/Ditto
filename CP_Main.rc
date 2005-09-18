@@ -630,7 +630,7 @@ BEGIN
     LTEXT           "Database Size",IDC_STATIC_10,15,129,79,12,
                     SS_CENTERIMAGE
     LTEXT           "Clips Sent",IDC_STATIC_11,15,143,79,12,SS_CENTERIMAGE
-    LTEXT           "Clips Recieved",IDC_STATIC_12,15,157,79,12,
+    LTEXT           "Clips Received",IDC_STATIC_12,15,157,79,12,
                     SS_CENTERIMAGE
     GROUPBOX        "",IDC_STATIC,7,63,206,47
     LTEXT           "Last Started",IDC_STATIC_9,15,115,79,12,SS_CENTERIMAGE
@@ -663,7 +663,7 @@ FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "HotKey1",IDC_HOTKEY,"msctls_hotkey32",WS_BORDER | 
                     WS_TABSTOP,44,7,82,13
-    EDITTEXT        IDC_DATE,163,7,88,13,ES_AUTOHSCROLL | NOT WS_TABSTOP
+    EDITTEXT        IDC_DATE,165,7,86,13,ES_AUTOHSCROLL | NOT WS_TABSTOP
     CONTROL         "&Never Auto Delete",IDC_NEVER_AUTO_DELETE,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,8,23,149,10
     EDITTEXT        IDC_PARSE_EDIT,163,23,30,12,ES_AUTOHSCROLL
@@ -677,7 +677,7 @@ BEGIN
     DEFPUSHBUTTON   "OK",IDOK,148,199,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,201,199,50,14
     LTEXT           "Item Title",IDC_STATIC_TITLE,7,55,168,8
-    RTEXT           "Date",IDC_STATIC_DATE,135,7,49,13,SS_CENTERIMAGE
+    RTEXT           "Date",IDC_STATIC_DATE,131,7,31,13,SS_CENTERIMAGE
     LTEXT           "Hot Key",IDC_STATIC_HOT_KEY,7,7,35,13,SS_CENTERIMAGE
     LTEXT           "Copy Formats",IDC_STATIC_FORMATS,7,126,226,8
     LTEXT           "Move To Group",IDC_STATIC_MOVE_TO_GROUP,8,40,67,9
@@ -769,8 +769,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,6,1,0
- PRODUCTVERSION 2,6,1,0
+ FILEVERSION 2,6,2,0
+ PRODUCTVERSION 2,6,2,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -788,14 +788,14 @@ BEGIN
             VALUE "Comments", "\0"
             VALUE "CompanyName", "\0"
             VALUE "FileDescription", "Ditto\0"
-            VALUE "FileVersion", "2, 6, 1, 0\0"
+            VALUE "FileVersion", "2, 6, 2, 0\0"
             VALUE "InternalName", "CP_Main\0"
             VALUE "LegalCopyright", "Copyright (C) 2003\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "Ditto\0"
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "Ditto\0"
-            VALUE "ProductVersion", "2, 6, 1, 0\0"
+            VALUE "ProductVersion", "2, 6, 2, 0\0"
             VALUE "SpecialBuild", "\0"
         END
     END

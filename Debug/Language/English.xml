@@ -194,7 +194,7 @@
 		<Item English_Text = "Last Started" ID = "2060"></Item>
 		<Item English_Text = "Database Size" ID = "2061"></Item>
 		<Item English_Text = "Clips Sent" ID = "2066"></Item>
-		<Item English_Text = "Clips Recieved" ID = "2067"></Item>
+		<Item English_Text = "Clips received" ID = "2067"></Item>
 		<Item English_Text = "Since Last Start" ID = "2068"></Item>
 		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true"></Item>
 	</Ditto_Options_Stats>
@@ -235,6 +235,7 @@
 		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All"></Item>
 		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard"></Item>			
 		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard"></Item>			
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall"></Item>
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1"></Item>

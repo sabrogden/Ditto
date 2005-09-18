@@ -235,6 +235,7 @@
 		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Alle Kopien werden gelöscht!\n\nFortsetzen?</Item>
 		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Verbindung zur Zwischenablage beenden</Item>			
 		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Zur Zwischenablage verbinden</Item>			
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall"></Item>
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">OK</Item>
