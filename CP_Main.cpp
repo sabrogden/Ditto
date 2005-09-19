@@ -110,7 +110,7 @@ BOOL CCP_MainApp::InitInstance()
 		CString cs;
 		cs.Format("Error loading language file - %s - \n\n%s", csFile, m_Language.m_csLastError);
 
-		MessageBox(m_MainhWnd, cs, "Ditto", MB_OK);
+		Log(cs);
 	}
 
 	m_cfIgnoreClipboard = ::RegisterClipboardFormat("Clipboard Viewer Ignore");
