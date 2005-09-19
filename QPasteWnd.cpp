@@ -658,7 +658,7 @@ void CQPasteWnd::UpdateStatus( bool bRepaintImmediately )
 	if( ::IsWindow(theApp.m_hTargetWnd) )
 		title += theApp.GetTargetName();
 	else
-		title += "NO TARGET!";
+		title += theApp.m_Language.GetString("No_Target", "No target");
 	
 	if( title != prev )
 	{
@@ -2242,10 +2242,13 @@ LRESULT CQPasteWnd::OnUpDown(WPARAM wParam, LPARAM lParam)
 
 LRESULT CQPasteWnd::OnToolTipWndInactive(WPARAM wParam, LPARAM lParam)
 {
-	CWnd *p = GetFocus();
-	if(p == NULL)
+	if(!g_Opt.m_bShowPersistent)
 	{
-		HideQPasteWindow();
+		CWnd *p = GetFocus();
+		if(p == NULL)
+		{
+			HideQPasteWindow();
+		}
 	}
 
 	return TRUE;

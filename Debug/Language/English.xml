@@ -104,6 +104,7 @@
 		<Item English_Text = "Set Database Path" ID = "1034"></Item>
 		<Item English_Text = "Language" ID = "2069"></Item>
 		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072"></Item>
+		<Item English_Text = "About Language" ID = "2073"></Item>
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true"></Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
@@ -236,6 +237,7 @@
 		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard"></Item>			
 		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard"></Item>			
 		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall"></Item>
+		<Item English_Text = "NO TARGET" ID = "No_Target"></Item>		
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1"></Item>
