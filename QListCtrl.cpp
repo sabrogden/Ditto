@@ -943,6 +943,7 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto)
 
 			GlobalUnlock(Clip.m_hgData);
 
+			Clip.Free();
 			Clip.Clear();
 		}
 		
@@ -959,6 +960,7 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto)
 
 			GlobalUnlock(Clip.m_hgData);
 
+			Clip.Free();
 			Clip.Clear();
 		}	
 			
@@ -982,6 +984,7 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto)
 				m_pToolTip->SetBitmap(pBitMap);
 			}
 
+			Clip.Free();
 			Clip.Clear();
 		}
 			
