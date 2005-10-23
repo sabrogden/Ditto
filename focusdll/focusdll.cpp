@@ -37,7 +37,7 @@ static LRESULT WINAPI HookProc(int code, WPARAM wParam, LPARAM lParam)
         
         //And if notification requested, send a windows message.
         if(hNotifyWnd)
-			SendMessage(hNotifyWnd, uMessage, wParam, lParam);
+			PostMessage(hNotifyWnd, uMessage, wParam, lParam);
     }
  
     return CallNextHookEx(hHook,code,wParam,lParam);
