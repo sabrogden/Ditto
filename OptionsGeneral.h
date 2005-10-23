@@ -27,6 +27,7 @@ public:
 // Dialog Data
 	//{{AFX_DATA(COptionsGeneral)
 	enum { IDD = IDD_OPTIONS_GENERAL };
+	CButton	m_EnsureConnected;
 	CNumberEdit	m_SaveDelay;
 	CComboBox	m_cbLanguage;
 	CEdit	m_MaxClipSize;
@@ -66,7 +67,6 @@ protected:
 	COptionsSheet *m_pParent;
 
 	CString m_csTitle;
-	CSetPropertyPageTitle m_SetTitle;
 
 	void FillLanguages();
 
