@@ -38,6 +38,7 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionsGeneral)
+	DDX_Control(pDX, IDC_ENSURE, m_EnsureConnected);
 	DDX_Control(pDX, IDC_EDIT_SAVE_DELAY, m_SaveDelay);
 	DDX_Control(pDX, IDC_COMBO_LANGUAGE, m_cbLanguage);
 	DDX_Control(pDX, IDC_EDIT_MAX_SIZE, m_MaxClipSize);
@@ -99,6 +100,7 @@ BOOL COptionsGeneral::OnInitDialog()
 	m_btSaveMultiPaste.SetCheck( g_Opt.m_bSaveMultiPaste );
 	m_btHideDittoOnHotKey.SetCheck(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown);
 	m_btSendPasteMessage.SetCheck(g_Opt.m_bSendPasteMessageAfterSelection);
+	m_EnsureConnected.SetCheck(g_Opt.m_bEnsureConnectToClipboard);
 
 	if(g_Opt.m_lMaxClipSizeInBytes > 0)
 	{
@@ -165,6 +167,7 @@ BOOL COptionsGeneral::OnApply()
 	CGetSetOptions::SetCheckForUpdates(m_btCheckForUpdates.GetCheck());
 	CGetSetOptions::SetHideDittoOnHotKeyIfAlreadyShown(m_btHideDittoOnHotKey.GetCheck());
 	CGetSetOptions::SetSendPasteAfterSelection(m_btSendPasteMessage.GetCheck());
+	CGetSetOptions::SetEnsureConnectToClipboard(m_EnsureConnected.GetCheck());
 	
 	CGetSetOptions::SetMaxEntries(m_eMaxSavedCopies.GetNumber());
 	CGetSetOptions::SetExpiredEntries(m_eExpireAfter.GetNumber());

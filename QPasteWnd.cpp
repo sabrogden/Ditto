@@ -1240,12 +1240,12 @@ void CQPasteWnd::OnSortDescending()
 
 void CQPasteWnd::OnMenuNewGroup()
 {
-	NewGroup( false );
+	NewGroup(false);
 }
 
 void CQPasteWnd::OnMenuNewGroupSelection()
 {
-	NewGroup( true );
+	NewGroup(true);
 }
 
 void CQPasteWnd::OnMenuQuickoptionsAllwaysshowdescription() 

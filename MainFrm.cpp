@@ -561,6 +561,7 @@ LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 	::GetWindowText(hFocus, cWindowText, 100);
 
 	HWND hTray = ::FindWindow("Shell_TrayWnd", "");
+	int nCount = 0;
 
 	while(true)
 	{
@@ -569,6 +570,13 @@ LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 			break;
 
 		hLastGoodParent = hParent;
+
+		nCount++;
+		if(nCount > 100)
+		{
+			Log("OnFocusChanged reached maximum search depth of 100");
+			break;
+		}
 	}
 
 	//If the parent is ditto or the tray icon then don't set focus to that window

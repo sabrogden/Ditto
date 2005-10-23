@@ -504,6 +504,7 @@ long CGetSetOptions::m_lMaxClipSizeInBytes;
 long CGetSetOptions::m_lSaveClipDelay;
 long CGetSetOptions::m_lProcessDrawClipboardDelay;
 BOOL CGetSetOptions::m_bEnableDebugLogging;
+BOOL CGetSetOptions::m_bEnsureConnectToClipboard;
 
 CGetSetOptions g_Opt;
 
@@ -540,6 +541,7 @@ CGetSetOptions::CGetSetOptions()
 	m_lSaveClipDelay = GetSaveClipDelay();
 	m_lProcessDrawClipboardDelay = GetProcessDrawClipboardDelay();
 	m_bEnableDebugLogging = GetEnableDebugLogging();
+	m_bEnsureConnectToClipboard = GetEnsureConnectToClipboard();
 
 	GetExtraNetworkPassword(true);
 	
@@ -1406,6 +1408,18 @@ void CGetSetOptions::SetEnableDebugLogging(BOOL bEnable)
 	m_bEnableDebugLogging = bEnable;
 	SetProfileLong("EnableDebugLogging", bEnable);
 }
+
+BOOL CGetSetOptions::GetEnsureConnectToClipboard()
+{
+	return GetProfileLong("EnsureConnected", TRUE);
+}
+
+void CGetSetOptions::SetEnsureConnectToClipboard(BOOL bSet)
+{
+	m_bEnsureConnectToClipboard = bSet;
+	SetProfileLong("EnsureConnected", bSet);
+}
+
 
 /*------------------------------------------------------------------*\
 CHotKey - a single system-wide hotkey
@@ -2315,4 +2329,37 @@ BOOL DecryptString(UCHAR *pData, int nLenIn, UCHAR *&pOutput, int &nLenOutput)
 	}
 
 	return bRet;
+}
+
+LPCSTR GetMonthAbb(long lMonth)
+{
+	switch(lMonth) 
+	{
+	case 1:
+		return "Jan";
+	case 2:
+		return "Feb";
+	case 3:
+		return "Mar";
+	case 4:
+		return "Apr";
+	case 5:
+		return "May";
+	case 6:
+		return "Jun";
+	case 7:
+		return "Jul";
+	case 8:
+		return "Aug";
+	case 9:
+		return "Sep";
+	case 10:
+		return "Oct";
+	case 11:
+		return "Nov";
+	case 12:
+		return "Dec";
+	}
+
+	return "";
 }

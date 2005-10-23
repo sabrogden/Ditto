@@ -79,6 +79,9 @@ public:
 	void SendPaste(bool bActivateTarget); // Activates the Target and sends Ctrl-V
 
 	CLIPFORMAT m_cfIgnoreClipboard; // used by CClip::LoadFromClipboard
+	CLIPFORMAT m_PingFormat;
+	CLIPFORMAT m_HTML_Format;
+	CLIPFORMAT m_RTF_Format;
 
 // CopyThread and ClipViewer (Copy and Paste Management)
 	CCopyThread	m_CopyThread;
@@ -161,8 +164,6 @@ public:
 	long	m_lClipsRecieved;
 
 	long	m_lLastGoodIndexForNextworkPassword;
-
-	CLIPFORMAT m_HTML_Format;
 
 	COleDateTime m_oldtStartUp;
 

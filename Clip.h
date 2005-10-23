@@ -99,6 +99,8 @@ public:
 	// changes m_Time to be later than the latest clip entry in the db
 	void MakeLatestTime();
 
+//	void PrependDateToFormat(CClipFormat &cf);
+
 // STATICS
 	// Allocates a Global containing the requested Clip's Format Data
 	static HGLOBAL LoadFormat(long lID, UINT cfType);

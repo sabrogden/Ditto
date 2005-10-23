@@ -93,6 +93,7 @@
 #define IDC_HISTORY_START_TOP           1042
 #define IDC_CHECK_SEND_PASTE            1042
 #define IDC_CHECK_LOG_SEND_RECIEVE      1042
+#define IDC_ENSURE                      1042
 #define IDD_OPTIONS_KEYSTROKES          2001
 #define IDC_HOTKEY                      2002
 #define IDC_DISPLAY_IN_SYSTEMTRAY       2003

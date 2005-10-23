@@ -72,6 +72,8 @@ CCP_MainApp::CCP_MainApp()
 	m_lLastGoodIndexForNextworkPassword = -2;
 
 	m_HTML_Format = ::RegisterClipboardFormat("HTML Format");
+	m_PingFormat = ::RegisterClipboardFormat("Ditto Ping Format");
+	m_RTF_Format = ::RegisterClipboardFormat("Rich Text Format");
 
 	::InitializeCriticalSection(&m_CriticalSection);
 }
@@ -386,15 +388,16 @@ void CCP_MainApp::UpdateMenuConnectCV( CMenu* pMenu, UINT nMenuID )
 
 	bool bConnect = theApp.GetConnectCV();
 	bool bIsConnected = theApp.IsClipboardViewerConnected();
+	
 	CString cs;
 
-	if( bConnect )
+	if(bConnect)
 	{
 		cs = theApp.m_Language.GetString("Disconnect_Clipboard", "Disconnect from Clipboard.");
 
 		pMenu->ModifyMenu(nMenuID, MF_BYCOMMAND, nMenuID, cs);
-		// add a check mark if we are still disconnected (temporarily)
-		if( !bIsConnected )
+
+		if(!bIsConnected)
             pMenu->CheckMenuItem(nMenuID, MF_CHECKED);
 		else
             pMenu->CheckMenuItem(nMenuID, MF_UNCHECKED);
@@ -404,8 +407,8 @@ void CCP_MainApp::UpdateMenuConnectCV( CMenu* pMenu, UINT nMenuID )
 		cs = theApp.m_Language.GetString("Connect_Clipboard", "Connect to Clipboard.");
 
 		pMenu->ModifyMenu(nMenuID, MF_BYCOMMAND, nMenuID, cs);
-		// add a check mark if we are still connected (temporarily)
-		if( bIsConnected )
+
+		if(bIsConnected)
             pMenu->CheckMenuItem(nMenuID, MF_CHECKED);
 		else
             pMenu->CheckMenuItem(nMenuID, MF_UNCHECKED);
@@ -454,6 +457,7 @@ void CCP_MainApp::ReloadTypes()
 
 long CCP_MainApp::SaveCopyClips()
 {
+	Log("SaveCopyClips START");
 	long lID = 0;
 	int count;
 
@@ -492,6 +496,8 @@ long CCP_MainApp::SaveCopyClips()
 		delete pCopyOfClips;
 
 	delete pClips;
+
+	Log("SaveCopyClips END");
 
 	return lID;
 }
@@ -783,6 +789,7 @@ CString CCP_MainApp::GetTargetName()
 {
 	char cWindowText[100];
 	HWND hParent = m_hTargetWnd;
+	int nCount = 0;
 
 	::GetWindowText(hParent, cWindowText, 100);
 	
@@ -793,6 +800,13 @@ CString CCP_MainApp::GetTargetName()
 			break;
 
 		::GetWindowText(hParent, cWindowText, 100);
+
+		nCount++;
+		if(nCount > 100)
+		{
+			Log("GetTargetName reached maximum search depth of 100");
+			break;
+		}
 	}
 
 	return cWindowText; 

@@ -106,7 +106,7 @@ void CMoveToGroupDlg::OnButtonNewGroup()
 	CString csName = Name.m_csName;
 	
 	
-	long lID = NewGroupID(theApp.GetValidGroupID(), csName);
+	long lID = NewGroupID(nParentID, csName);
 	if(lID >= 0)
 	{
 		m_Tree.AddNode(csName, lID);

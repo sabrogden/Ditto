@@ -21,6 +21,8 @@ void AppendToFile(const char* fn, const char *msg);
 void Log(const char* msg, bool bFromSendRecieve = false);
 CString GetErrorString(int err);
 
+LPCSTR GetMonthAbb(long lMonth);
+
 #define MS_VC_EXCEPTION 0x406d1388
 typedef struct tagTHREADNAME_INFO
 {
@@ -86,7 +88,7 @@ CString GetFilePath(CString csFullPath);
 
 //Message to the main window to show icon or not
 #define WM_SHOW_TRAY_ICON		WM_USER + 200
-#define WM_CV_SETCONNECT		WM_USER + 201
+#define WM_SETCONNECT			WM_USER + 201
 #define WM_CV_IS_CONNECTED		WM_USER + 202
 #define WM_COPYPROPERTIES		WM_USER + 203
 #define WM_CLOSE_APP			WM_USER + 204
@@ -357,6 +359,9 @@ public:
 	static BOOL		GetEnableDebugLogging();
 	static void		SetEnableDebugLogging(BOOL bEnable);
 
+	static BOOL		m_bEnsureConnectToClipboard;
+	static BOOL		GetEnsureConnectToClipboard();
+	static void		SetEnsureConnectToClipboard(BOOL bSet);
 
 	static CStringArray m_csNetworkPasswordArray;
 

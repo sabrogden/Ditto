@@ -75,7 +75,7 @@ void CCopyThread::OnClipboardChange()
 		return;
 	
 	CClip* pClip = new CClip;
-	bool bResult = pClip->LoadFromClipboard( m_LocalConfig.m_pSupportedTypes );
+	bool bResult = pClip->LoadFromClipboard(m_LocalConfig.m_pSupportedTypes);
 	
 	if(!bResult)
 	{
@@ -134,7 +134,7 @@ void CCopyThread::AddToClips(CClip* pClip)
 
 bool CCopyThread::IsClipboardViewerConnected()
 {
-	return m_pClipboardViewer->SendPing();
+	return m_pClipboardViewer->m_bIsConnected;
 }
 
 bool CCopyThread::GetConnectCV()
@@ -144,7 +144,8 @@ bool CCopyThread::GetConnectCV()
 
 void CCopyThread::SetConnectCV(bool bConnect)
 {
-	m_pClipboardViewer->SetConnect(bConnect);
+	ASSERT( m_pClipboardViewer && m_pClipboardViewer->m_hWnd );
+	::SendMessage(m_pClipboardViewer->m_hWnd, WM_SETCONNECT, bConnect, 0);
 }
 
 CClipList* CCopyThread::GetClips()

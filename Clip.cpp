@@ -320,6 +320,12 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 		
 		if(cf.m_hgData)
 		{
+//			if(g_Opt.m_bPrePendDateToClip && 
+//				cf.m_cfType == CF_TEXT || cf.m_cfType == theApp.m_RTF_Format)
+//			{
+//				PrependDateToFormat(cf);
+//			}
+
 			nSize = GlobalSize(cf.m_hgData);
 			if(nSize > 0)
 			{
@@ -788,7 +794,7 @@ void CClip::LoadTypes(long lID, CClipTypes& types)
 		
 		while(!recset.IsEOF())
 		{
-			types.Add( GetFormatID( recset.m_strClipBoardFormat ) );
+			types.Add(GetFormatID( recset.m_strClipBoardFormat));
 			recset.MoveNext();
 		}
 		
@@ -796,6 +802,45 @@ void CClip::LoadTypes(long lID, CClipTypes& types)
 	}
 	CATCHDAO
 }
+
+//void CClip::PrependDateToFormat(CClipFormat &cf)
+//{
+//	char *cData = (char*)GlobalLock(cf.m_hgData);
+//	if(cData)
+//	{
+//		CString csText(cData);
+//
+//		GlobalUnlock(cf.m_hgData);
+//
+//		COleDateTime Date = COleDateTime::GetCurrentTime();
+//
+//		CString csDate;
+//		CString csYear;
+//		
+//		csYear.Format("%d", Date.GetYear());
+//		csYear = csYear.Mid(2);
+//
+//		long lInsertPos = 0;
+//		if(cf.m_cfType == theApp.m_RTF_Format)
+//			lInsertPos = 6;
+//
+//		csDate.Format("%d%s%s ", Date.GetDay(), GetMonthAbb(Date.GetMonth()), csYear);
+//		csText.Insert(lInsertPos, csDate);
+//
+//		char *cData = csText.GetBuffer(csText.GetLength());
+//		
+//		//free the old data
+//		cf.Free();
+//
+//		cf.m_hgData = NewGlobalP(cData, csText.GetLength());
+//		csText.ReleaseBuffer();
+//
+//		if(cf.m_cfType == CF_TEXT)
+//		{
+//			m_Desc.Insert(0, csDate);
+//		}
+//	}
+//}
 
 
 /*----------------------------------------------------------------------------*\
