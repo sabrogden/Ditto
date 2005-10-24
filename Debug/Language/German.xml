@@ -105,6 +105,7 @@
 		<Item English_Text = "Language" ID = "2069">Sprache</Item>
 		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">Kopien ignorieren, die X Millisekunden (1000 ms = 1 Sek) nach der letzten Kopie auftreten</Item>
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Allgemein</Item>
+		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Sicherstellen, dass Ditto die Zwischenablage boebachtet</Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "&Add" ID = "1015">&Hinzufügen</Item>

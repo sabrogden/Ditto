@@ -105,6 +105,7 @@
 		<Item English_Text = "Language" ID = "2069"></Item>
 		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072"></Item>
 		<Item English_Text = "About Language" ID = "2073"></Item>
+		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042"></Item>
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true"></Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
