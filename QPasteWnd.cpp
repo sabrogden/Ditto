@@ -41,6 +41,7 @@ CQPasteWnd::CQPasteWnd()
 	m_bHideWnd = true;
 	m_strSQLSearch = "";
 	m_bAllowRepaintImmediately = true;
+	m_bHandleSearchTextChange = true;
 }
 
 CQPasteWnd::~CQPasteWnd()
@@ -119,7 +120,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_SHOWTHUMBNAILS, OnMenuQuickoptionsShowthumbnails)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_DRAWRTFTEXT, OnMenuQuickoptionsDrawrtftext)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_PASTECLIPAFTERSELECTION, OnMenuQuickoptionsPasteclipafterselection)
-	ON_CBN_EDITCHANGE(ID_EDIT_SEARCH, OnSearchEditChange)
+	ON_EN_CHANGE(ID_EDIT_SEARCH, OnSearchEditChange)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_FINDASYOUTYPE, OnMenuQuickoptionsFindasyoutype)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_ENSUREENTIREWINDOWISVISIBLE, OnMenuQuickoptionsEnsureentirewindowisvisible)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_SHOWCLIPSTHATAREINGROUPSINMAINLIST, OnMenuQuickoptionsShowclipsthatareingroupsinmainlist)
@@ -183,8 +184,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	
 	SetWindowText( QPASTE_TITLE );
 	
-	m_cbSearch.Create(CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP | WS_CHILD | WS_VISIBLE | CBS_AUTOHSCROLL, 
-		CRect(0, 0, 0, 0), this, ID_EDIT_SEARCH);
+	m_Search.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | WS_BORDER,	CRect(0, 0, 0, 0), this, ID_EDIT_SEARCH);
 	
 	// Create the header control
 	if (!m_lstHeader.Create(WS_TABSTOP|WS_CHILD|WS_VISIBLE|LVS_NOCOLUMNHEADER|LVS_REPORT|LVS_SHOWSELALWAYS|LVS_OWNERDATA,
@@ -217,9 +217,9 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	
 	//Set the z-order
 	m_lstHeader.SetWindowPos(this, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE);
-	m_cbSearch.SetWindowPos(&m_lstHeader, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE);
-	m_btCancel.SetWindowPos(&m_cbSearch, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE);
-	m_ShowGroupsFolderBottom.SetWindowPos(&m_cbSearch, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE);
+	m_Search.SetWindowPos(&m_lstHeader, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE);
+	m_btCancel.SetWindowPos(&m_Search, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE);
+	m_ShowGroupsFolderBottom.SetWindowPos(&m_Search, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE);
 	
 	//LVS_EX_FLATSB
 	m_lstHeader.SetExtendedStyle(LVS_EX_FULLROWSELECT|LVS_EX_HEADERDRAGDROP);
@@ -243,7 +243,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	
 	GroupFont.CreateFont(-11, 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, "MS Sans Serif");
 	
-	m_cbSearch.SetFont(&m_SearchFont);
+	m_Search.SetFont(&m_SearchFont);
 	m_btCancel.SetFont(&m_SearchFont);
 	m_stGroup.SetFont(&GroupFont);
 
@@ -298,13 +298,13 @@ void CQPasteWnd::MoveControls()
 	if( m_strSQLSearch.IsEmpty() == FALSE )
 	{
 		m_btCancel.ShowWindow(SW_SHOW);
-		m_btCancel.MoveWindow(cx - 20, cy - 20, 20, 20);
+		m_btCancel.MoveWindow(cx - 17, cy - 18, 15, 15);
 		nWidth -= 19;
 	}
 	else
 		m_btCancel.ShowWindow(SW_HIDE);
 	
-	m_cbSearch.MoveWindow(18, cy - 22, nWidth-18, 100);
+	m_Search.MoveWindow(18, cy - 19, nWidth-20, 17);
 	
 	m_ShowGroupsFolderBottom.MoveWindow(0, cy - 19, 18, 16);
 	
@@ -354,7 +354,7 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 
 BOOL CQPasteWnd::HideQPasteWindow()
 {
-	if( !theApp.m_bShowingQuickPaste || m_cbSearch.GetShowingDropDown() )
+	if(!theApp.m_bShowingQuickPaste)
 		return FALSE;
 
 	//Reset the flag
@@ -381,8 +381,9 @@ BOOL CQPasteWnd::HideQPasteWindow()
 	// Hide the window when the focus is lost
 	ShowWindow(SW_HIDE);
 	
-	//Reset the selection in the search combo
-	m_cbSearch.SetCurSel(-1);
+	m_bHandleSearchTextChange = false;
+	m_Search.SetWindowText("");
+	m_bHandleSearchTextChange = true;
 	
 	return TRUE;
 }
@@ -1009,7 +1010,7 @@ LRESULT CQPasteWnd::OnSearch(WPARAM wParam, LPARAM lParam)
 	m_lstHeader.HidePopup();
 
 	CString csText;
-	m_cbSearch.GetWindowText(csText);
+	m_Search.GetWindowText(csText);
 	
 	if(csText == "")
 		return FALSE;
@@ -1020,7 +1021,7 @@ LRESULT CQPasteWnd::OnSearch(WPARAM wParam, LPARAM lParam)
 	
 	MoveControls();
 	
-	m_cbSearch.SetEditSel(-1, 0);
+	m_Search.SetSel(-1, 0);
 	
 	return TRUE;
 }
@@ -1530,7 +1531,7 @@ void CQPasteWnd::OnMenuQuickoptionsShowclipsthatareingroupsinmainlist()
 	CGetSetOptions::SetShowAllClipsInMainList(!g_Opt.m_bShowAllClipsInMainList);
 
 	CString csText;
-	m_cbSearch.GetWindowText(csText);
+	m_Search.GetWindowText(csText);
 	FillList(csText);
 }
 
@@ -1718,8 +1719,7 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 				}
 				else
 				{	
-					if(!m_cbSearch.GetShowingDropDown() &&
-						m_GroupTree.IsWindowVisible() == FALSE)
+					if(m_GroupTree.IsWindowVisible() == FALSE)
 					{
 						HideQPasteWindow();
 						return TRUE;
@@ -1788,7 +1788,10 @@ void CQPasteWnd::OnCancelFilter()
 {
 	FillList();
 	
-	m_cbSearch.SetCurSel(-1);
+	m_bHandleSearchTextChange = false;
+	m_Search.SetWindowText("");
+	m_bHandleSearchTextChange = true;
+
 	MoveControls();
 	
 	m_lstHeader.SetFocus();
@@ -1964,10 +1967,10 @@ void CQPasteWnd::OnFindItem(NMHDR* pNMHDR, LRESULT* pResult)
 	if(fndItem.flags & LVFI_STRING)
 	{
 		{
-			m_cbSearch.SetWindowText(fndItem.psz);
-			m_cbSearch.SetFocus();
-			m_cbSearch.SetEditSel(strlen(fndItem.psz), strlen(fndItem.psz));
-			*pResult = -1;
+			m_Search.SetWindowText(fndItem.psz);
+			m_Search.SetFocus();
+			m_Search.SetSel(1, 1);
+			*pResult = 1;
 			return;
 		}
 		
@@ -2121,7 +2124,10 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
 	
 	m_GroupTree.ShowWindow(SW_HIDE);
 	
-	m_cbSearch.SetCurSel(-1);
+	m_bHandleSearchTextChange = false;
+	m_Search.SetWindowText("");
+	m_bHandleSearchTextChange = true;
+	
 	MoveControls();
 	
 	if(lID >= 0)
@@ -2187,49 +2193,15 @@ void CQPasteWnd::OnSearchEditChange()
 	if(g_Opt.m_bFindAsYouType == FALSE)
 		return;
 
-	CString csText;
-	m_cbSearch.GetWindowText(csText);
-	
-	if(csText == "")
+	if(m_bHandleSearchTextChange == false)
 		return;
-
+	
+	CString csText;
+	m_Search.GetWindowText(csText);
+	
 	m_lstHeader.HidePopup();
 	
 	FillList(csText);
-	
-	return;
-	
-	POSITION pos = m_lstHeader.GetFirstSelectedItemPosition();
-	int nFirstSel = m_lstHeader.GetNextSelectedItem(pos);
-	int nCount = m_lstHeader.GetItemCount();
-	CString cs;
-	m_cbSearch.GetWindowText(cs);
-
-	m_Recset.SetAbsolutePosition(nFirstSel);
-
-	for(int i = nFirstSel; i < nCount; i++)
-	{
-		if(m_Recset.m_strText.Find(cs) >= 0)
-		{
-			m_lstHeader.SetListPos(i);
-			return;
-		}
-
-		m_Recset.MoveNext();
-	}
-
-	m_Recset.SetAbsolutePosition(0);
-
-	for(i = 0; i < nFirstSel; i++)
-	{
-		if(m_Recset.m_strText.Find(cs) >= 0)
-		{
-			m_lstHeader.SetListPos(i);
-			return;
-		}
-
-		m_Recset.MoveNext();
-	}
 }
 
 LRESULT CQPasteWnd::OnUpDown(WPARAM wParam, LPARAM lParam)

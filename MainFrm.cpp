@@ -333,10 +333,12 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 			CInternetUpdate Update;
 			if(Update.CheckForUpdate(NULL, TRUE, FALSE))
 			{
-				SendMessage(WM_CLOSE, 0, 0);
+				PostMessage(WM_CLOSE, 0, 0);
 			}
-
-			SetTimer(CHECK_FOR_UPDATE, ONE_MINUTE*60*24, NULL);
+			else
+			{
+				SetTimer(CHECK_FOR_UPDATE, ONE_MINUTE*60*24, NULL);
+			}
 			break;
 		}
 	case CLOSE_APP:

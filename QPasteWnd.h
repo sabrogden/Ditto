@@ -8,7 +8,7 @@
 //
 
 #include "QListCtrl.h"
-#include "ComboBoxSearch.h"
+#include "SearchEditBox.h"
 #include "WndEx.h"
 #include "GroupStatic.h"
 #include "GroupTree.h"
@@ -54,7 +54,7 @@ public:
 	#endif
 	
 	CFont			m_TitleFont;
-	CComboBoxSearch	m_cbSearch;
+	CSearchEditBox	m_Search;
 	CFont			m_SearchFont;
 	CButton			m_btCancel;
 	bool			m_bHideWnd;
@@ -68,6 +68,7 @@ public:
 	CBitmapButton	m_ShowGroupsFolderTop;
 	CBitmapButton	m_BackButton;
 	bool			m_bAllowRepaintImmediately;
+	bool			m_bHandleSearchTextChange;
 	
 	void RefreshNc( bool bRepaintImmediately = false );
 	void UpdateStatus( bool bRepaintImmediately = false );  // regenerates the status (caption) text

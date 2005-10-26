@@ -107,14 +107,6 @@ SOURCE=.\ArrayEx.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ComboBoxSearch.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ComboBoxSearch.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\DialogResizer.cpp
 # End Source File
 # Begin Source File
@@ -164,6 +156,14 @@ SOURCE=.\RichEditCtrlEx.cpp
 # Begin Source File
 
 SOURCE=.\RichEditCtrlEx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SearchEditBox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SearchEditBox.h
 # End Source File
 # Begin Source File
 
