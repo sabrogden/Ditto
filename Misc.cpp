@@ -1411,7 +1411,7 @@ void CGetSetOptions::SetEnableDebugLogging(BOOL bEnable)
 
 BOOL CGetSetOptions::GetEnsureConnectToClipboard()
 {
-	return GetProfileLong("EnsureConnected", TRUE);
+	return GetProfileLong("EnsureConnected", FALSE);
 }
 
 void CGetSetOptions::SetEnsureConnectToClipboard(BOOL bSet)
