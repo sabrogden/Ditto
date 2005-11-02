@@ -795,8 +795,6 @@ void CQPasteWnd::OnRclickQuickPaste(NMHDR* pNMHDR, LRESULT* pResult)
 		cmSubMenu = cmPopUp.GetSubMenu(0);
 		if(!cmSubMenu)
 			return;
-
-		SetMenuChecks(cmSubMenu);
 		
 		if(pNMHDR == NULL)
 		{
@@ -809,6 +807,8 @@ void CQPasteWnd::OnRclickQuickPaste(NMHDR* pNMHDR, LRESULT* pResult)
 		}
 		
 		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
+
+		SetMenuChecks(cmSubMenu);
 
 		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON,
 			pp.x, pp.y, this, NULL);
@@ -2206,6 +2206,8 @@ void CQPasteWnd::OnSearchEditChange()
 
 LRESULT CQPasteWnd::OnUpDown(WPARAM wParam, LPARAM lParam)
 {
+	m_lstHeader.HidePopup();
+	
 	if(m_lstHeader.HandleKeyDown(wParam, lParam) == FALSE)
 		m_lstHeader.SendMessage(WM_KEYDOWN, wParam, lParam);
 
