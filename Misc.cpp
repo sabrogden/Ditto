@@ -1070,6 +1070,9 @@ void CGetSetOptions::SetSendClients(CSendClients Client, int nPos)
 	cs.Format("sendclient_description_%d", nPos);
 	SetProfileString(cs, Client.csDescription);
 
+	//Save this setting so it's not reset
+	Client.bShownFirstError = m_SendClients[nPos].bShownFirstError;
+
 	m_SendClients[nPos] = Client;
 }
 
