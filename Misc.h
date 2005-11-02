@@ -110,10 +110,12 @@ public:
 	CSendClients()
 	{
 		bSendAll = FALSE;
+		bShownFirstError = FALSE;
 	}
 	BOOL bSendAll;
 	CString csIP;
 	CString csDescription;
+	BOOL bShownFirstError;
 };
 
 /*------------------------------------------------------------------*\

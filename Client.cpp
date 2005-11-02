@@ -113,14 +113,22 @@ UINT  SendClientThread(LPVOID pParam)
 			{
 				LogSendRecieveInfo(StrF("ERROR opening connection to %s", g_Opt.m_SendClients[nClient].csIP));
 
-				CString cs;
-				cs.Format("Error opening connection to %s",g_Opt.m_SendClients[nClient].csIP);
-				::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
-				cs.ReleaseBuffer();
+				if(g_Opt.m_SendClients[nClient].bShownFirstError == FALSE)
+				{
+					CString cs;
+					cs.Format("Error opening connection to %s",g_Opt.m_SendClients[nClient].csIP);
+					::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
+					cs.ReleaseBuffer();
+
+					g_Opt.m_SendClients[nClient].bShownFirstError = TRUE;
+				}
 
 				continue;
 			}
 
+			//We were connected successfully show an error next time we can't connect
+			g_Opt.m_SendClients[nClient].bShownFirstError = FALSE;
+			
 			CClip* pClip;
 			POSITION pos;
 			pos = pClipList->GetHeadPosition();
