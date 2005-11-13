@@ -119,6 +119,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	theApp.AfterMainCreate();
 
+	MoveWindow(0, 0, -2, -2);
+
 	return 0;
 }
 
