@@ -315,6 +315,8 @@ void CQPasteWnd::MoveControls()
 void CQPasteWnd::OnSetFocus(CWnd* pOldWnd)
 {
 	CWndEx::OnSetFocus(pOldWnd);
+
+	::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE|SWP_SHOWWINDOW );
 	
 	// Set the focus to the list control
 	if(::IsWindow(m_lstHeader.m_hWnd))
