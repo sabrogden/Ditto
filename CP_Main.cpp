@@ -281,7 +281,7 @@ bool CCP_MainApp::TargetActiveWindow()
 
 bool CCP_MainApp::ActivateTarget()
 {
-	::ShowWindow(m_hTargetWnd, SW_SHOW);
+//	::ShowWindow(m_hTargetWnd, SW_SHOW);
 	::SetForegroundWindow(m_hTargetWnd);
 	::SetFocus(m_hTargetWnd);
 
