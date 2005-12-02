@@ -357,9 +357,6 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
         GetItemRect(nItem, rcItem, LVIR_LABEL);
 		rcItem.left -= DUMMY_COL_WIDTH;
 		
-		CPen cpWhite;
-		cpWhite.CreatePen(PS_SOLID, 1, RGB(255, 255, 255));
-		CPen *pOldPen = NULL;
 		COLORREF OldColor = -1;
 		int nOldBKMode = -1;
 		
@@ -371,7 +368,6 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			{
                 crBkgnd = GetSysColor(COLOR_HIGHLIGHT);
                 OldColor = pDC->SetTextColor(GetSysColor(COLOR_HIGHLIGHTTEXT));
-				pOldPen = pDC->SelectObject((CPen*)&cpWhite);
 			}
             else
 			{
@@ -383,11 +379,22 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		{
             //Shade alternating Rows
 			if((nItem % 2) == 0)
-				crBkgnd = COLOR_SHADOW;
+			{
+				COLORREF color = GetSysColor(COLOR_WINDOW);
+				int r = GetRValue(color) - 15;
+				int g = GetGValue(color) - 15;
+				int b = GetBValue(color) - 15;
+
+				r = max(r, 0);
+				g = max(g, 0);
+				b = max(b, 0);
+
+				crBkgnd = RGB(r, g, b);
+			}
 			else
 				crBkgnd = GetSysColor(COLOR_WINDOW);
 			
-            OldColor = pDC->SetTextColor(GetSysColor(COLOR_BTNTEXT));
+            OldColor = pDC->SetTextColor(GetSysColor(COLOR_WINDOWTEXT));
 		}
 		
         pDC->FillSolidRect(rcItem, crBkgnd);
@@ -499,9 +506,6 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		}
 		
 		// restore the previous values
-		if(pOldPen)
-			pDC->SelectObject(pOldPen);
-		
 		if(OldColor > -1)
 			pDC->SetTextColor(OldColor);
 		
