@@ -21,7 +21,8 @@ CClipboardViewer::CClipboardViewer(CCopyThread* pHandler) :
 	m_bPinging(false),
 	m_bHandlingClipChange(false),
 	m_bIsConnected(false),
-	m_bConnect(false)
+	m_bConnect(false),
+	m_lLastCopy(0)
 {
 
 }

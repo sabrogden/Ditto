@@ -824,6 +824,23 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 		GetParent()->SendMessage(NM_SELECT_INDEX, index, 0);
 		return TRUE;
 	}
+
+	if(VK_NUMPAD0 <= vk && vk <= VK_NUMPAD9)
+	{
+		// if <Ctrl> is required but is absent, then break
+		if( g_Opt.m_bUseCtrlNumAccel && !(GetKeyState(VK_CONTROL) & 0x8000) )
+			return FALSE;
+		
+		int index = vk - VK_NUMPAD0;
+		// '0' is actually 10 in the ditto window
+		if(index == 0)
+			index = 10;
+		
+		// translate num 1-10 into the actual index (based upon m_bStartTop)
+		index = GetFirstTenIndex(index);
+		GetParent()->SendMessage(NM_SELECT_INDEX, index, 0);
+		return TRUE;
+	}
 	
 	switch( vk )
 	{
