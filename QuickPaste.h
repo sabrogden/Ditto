@@ -18,11 +18,10 @@ public:
 	virtual ~CQuickPaste();
 
 	void Create(CWnd *pParent);
-	void ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos = FALSE);
+	void ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboard);
 	void HideQPasteWnd();
 	BOOL CloseQPasteWnd();
 	BOOL IsWindowVisibleEx();
-	BOOL EnsureVisible(CRect *pcrRect);
 
 	void UpdateFont()		{ if(m_pwndPaste) m_pwndPaste->UpdateFont();	}
 

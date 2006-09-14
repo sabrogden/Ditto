@@ -74,58 +74,48 @@ void CGroupTree::FillTree()
 	DeleteAllItems();
 	m_bSendAllready = false;
 
-	HTREEITEM hItem = InsertItem("Root", TVI_ROOT);
-	SetItemData(hItem, 0);
+	HTREEITEM hItem = InsertItem(_T("Root"), TVI_ROOT);
+	SetItemData(hItem, -1);
 	SetItemState(hItem, TVIS_EXPANDED, TVIS_EXPANDED);
 
 	if(m_lSelectedFolderID < 0)
 		SelectItem(hItem);
 	
-	FillTree(0, hItem);
+	FillTree(-1, hItem);
 }
 
 
 void CGroupTree::FillTree(long lParentID, HTREEITEM hParent)
 {	
 	try
-	{			
-		CMainTable recset;
-
-		recset.m_strFilter.Format("bIsGroup = TRUE AND lParentID = %d", lParentID);
-
-		recset.Open();
-
-		if(recset.IsEOF() == FALSE)
-		{		
+	{
+		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText FROM Main WHERE bIsGroup = 1 AND lParentID = %d"), lParentID);
+			
+		if(q.eof() == false)
+		{
 			HTREEITEM hItem;
 
-			while(!recset.IsEOF())
+			while(!q.eof())
 			{
-				if(recset.m_lID == m_lSelectedFolderID)
+				if(q.getIntField(_T("lID")) == m_lSelectedFolderID)
 				{
-					hItem = InsertItem(recset.m_strText, 1, 1, hParent);
+					hItem = InsertItem(q.getStringField(_T("mText")), 1, 1, hParent);
 					SelectItem(hItem);
 				}
 				else
 				{				
-					hItem = InsertItem(recset.m_strText, 0, 0, hParent);
+					hItem = InsertItem(q.getStringField(_T("mText")), 0, 0, hParent);
 				}
 
-				SetItemData(hItem, recset.m_lID);
+				SetItemData(hItem, q.getIntField(_T("lID")));
 				
-				FillTree(recset.m_lID, hItem);
+				FillTree(q.getIntField(_T("lID")), hItem);
 
-				recset.MoveNext();
+				q.nextRow();
 			}
-
 		}
 	}		
-	catch(CDaoException* e)
-	{
-		ASSERT(FALSE);
-		e->Delete();
-		return;
-	}	
+	CATCH_SQLITE_EXCEPTION	
 }
 
 void CGroupTree::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult) 
@@ -143,7 +133,6 @@ void CGroupTree::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CGroupTree::OnKillFocus(CWnd* pNewWnd) 
 {
-	TRACE("TREE Kill Focus\n");
 	CTreeCtrl::OnKillFocus(pNewWnd);
 }
 
@@ -155,16 +144,13 @@ void CGroupTree::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 	{
 		if (nState == WA_INACTIVE)
 		{		
-			TRACE("TREE Inactivate\n");
 			SendToParent(-1);
 		}
 	}
-	
 }
 
 void CGroupTree::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-	TRACE("Dbl Click\n");
 	HTREEITEM hItem =  GetNextItem(TVI_ROOT, TVGN_CARET);
 	if(hItem)
 		SendToParent(GetItemData(hItem));
@@ -189,7 +175,6 @@ void CGroupTree::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 	{
 	case VK_RETURN:
 	{	
-		TRACE("Return\n");
 		HTREEITEM hItem =  GetNextItem(TVI_ROOT, TVGN_CARET);
 		if(hItem)
 			SendToParent(GetItemData(hItem));
@@ -198,7 +183,6 @@ void CGroupTree::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 	case VK_ESCAPE:
 	{	
-		TRACE("Escape\n");
 		SendToParent(-1);
 		break;
 	}	

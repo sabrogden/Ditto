@@ -24,6 +24,7 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CAbout)
 	enum { IDD = IDD_ABOUT };
+	CHyperLink	m_Link;
 	CHyperLink	m_HyperLink;
 	CListBox	m_List;
 	//}}AFX_DATA

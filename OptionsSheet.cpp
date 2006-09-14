@@ -7,7 +7,6 @@
 #include "OptionsKeyBoard.h"
 #include "OptionsGeneral.h"
 #include "OptionsQuickPaste.h"
-#include "OptionsUtilities.h"
 #include "OptionsStats.h"
 #include "OptionsTypes.h"
 #include "About.h"
@@ -86,9 +85,7 @@ BOOL COptionsSheet::OnInitDialog()
 {
 	BOOL bResult = CPropertySheet::OnInitDialog();
 	
-	SetWindowPos(&CWnd::wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
-
-	SetWindowText("Ditto");
+	SetWindowText(_T("Ditto"));
 
 	theApp.m_Language.UpdateOptionsSheet(this);
 	

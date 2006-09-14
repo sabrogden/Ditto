@@ -2,9 +2,8 @@
 #include "CP_Main.h"
 #include "Misc.h"
 #include "OptionsSheet.h"
-
+#include "TextConvert.h"
 #include "AlphaBlend.h"
-
 
 // Debug Functions
 
@@ -37,7 +36,7 @@ CString GetIPAddress()
 
 CString GetComputerName()
 {
-	char ComputerName[MAX_COMPUTERNAME_LENGTH+1]="";
+	TCHAR ComputerName[MAX_COMPUTERNAME_LENGTH+1] = _T("");
 	DWORD Size=MAX_COMPUTERNAME_LENGTH+1;
 	GetComputerName(ComputerName, &Size);
 
@@ -47,24 +46,45 @@ CString GetComputerName()
 	return cs;
 }
 
-void AppendToFile( const char* fn, const char* msg )
+void AppendToFile(const TCHAR* fn, const TCHAR* msg)
 {
-	FILE *file = fopen(fn, "a");
+#ifdef _UNICODE
+	FILE *file = _wfopen(fn, _T("a"));
+#else
+	FILE *file = fopen(fn, _T("a"));
+#endif
+
 	ASSERT( file );
+
+#ifdef _UNICODE
+	fwprintf(file, msg);
+#else
 	fprintf(file, msg);
+#endif
+
 	fclose(file);
 }
 
-void Log(const char* msg, bool bFromSendRecieve)
+void log(const TCHAR* msg, bool bFromSendRecieve, CString csFile, long lLine)
 {
 	ASSERT(AfxIsValidString(msg));
 	CTime	time = CTime::GetCurrentTime();
-	CString	csText = time.Format("[%Y/%m/%d %I:%M:%S %p]  ");
+	CString	csText = time.Format("[%Y/%m/%d %I:%M:%S %p - ");
+
+	CString csFileLine;
+	csFile = GetFileName(csFile);
+	csFileLine.Format(_T("%s %d] "), csFile, lLine);
+	csText += csFileLine;
 	
 	csText += msg;
 	csText += "\n";
-	//TRACE(csText);
-	OutputDebugString(csText);
+
+#ifndef _DEBUG
+	if(CGetSetOptions::m_bOutputDebugString)
+#endif
+	{
+		OutputDebugString(csText);
+	}
 
 #ifndef _DEBUG
 	if(!bFromSendRecieve)
@@ -74,17 +94,16 @@ void Log(const char* msg, bool bFromSendRecieve)
 	}
 #endif
 	
-	CString csFile = CGetSetOptions::GetExeFileName();
-	csFile = GetFilePath(csFile);
-	csFile += "Ditto.log";
+	CString csExeFile = CGetSetOptions::GetPath(PATH_LOG_FILE);
+	csExeFile += "Ditto.log";
 
-	AppendToFile(csFile, csText);
+	AppendToFile(csExeFile, csText);
 }
 
-void LogSendRecieveInfo(CString cs)
+void logsendrecieveinfo(CString cs, CString csFile, long lLine)
 {
 	if(g_Opt.m_bLogSendReceiveErrors)
-		Log(cs, true);
+		log(cs, true, csFile, lLine);
 }
 
 CString GetErrorString( int err )
@@ -109,26 +128,9 @@ CString GetErrorString( int err )
 	
 }
 
-void SetThreadName(DWORD dwThreadID, LPCTSTR szThreadName)
-{
-    THREADNAME_INFO info;
-    info.dwType = 0x1000;
-    info.szName = szThreadName;
-    info.dwThreadID = dwThreadID;
-    info.dwFlags = 0;
-	
-    __try
-    {
-        RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(DWORD), (DWORD *)&info);
-    }
-    __except (EXCEPTION_CONTINUE_EXECUTION)
-    {
-    }
-} 
-
 // Utility Functions
 
-CString StrF(const char * pszFormat, ...)
+CString StrF(const TCHAR * pszFormat, ...)
 {
 	ASSERT( AfxIsValidString( pszFormat ) );
 	CString str;
@@ -159,19 +161,19 @@ BYTE GetEscapeChar( BYTE ch )
 	return 0; // invalid
 }
 
-CString RemoveEscapes( const char* str )
+CString RemoveEscapes( const TCHAR* str )
 {
 	ASSERT( str );
 	CString ret;
-	char* pSrc = (char*) str;
-	char* pDest = ret.GetBuffer( strlen(pSrc) );
-	char* pStart = pDest;
+	TCHAR* pSrc = (TCHAR*) str;
+	TCHAR* pDest = ret.GetBuffer(STRLEN(pSrc));
+	TCHAR* pStart = pDest;
 	while( *pSrc != '\0' )
 	{
 		if( *pSrc == '\\' )
 		{
 			pSrc++;
-			*pDest = GetEscapeChar( *pSrc );
+			*pDest = GetEscapeChar((BYTE)pSrc );
 		}
 		else
 			*pDest = *pSrc;
@@ -200,47 +202,28 @@ bool IsAppWnd( HWND hWnd )
 	return dwMyPID == dwTestPID;
 }
 
-HWND GetFocusWnd(CPoint *pPointCaret)
+CPoint GetFocusedCaretPos()
 {
-	HWND hWndFocus = NULL;
-	if (pPointCaret)
-		*pPointCaret = CPoint(-1, -1);
-	
-	HWND hWndForground = GetForegroundWindow(); // Get the desktop's foreground window
-	if (hWndForground != NULL)
+	CPoint pt(-1, -1);
+
+	if(theApp.m_hTargetWnd)
 	{
-		DWORD ProcID;
-		DWORD ThreadID = GetWindowThreadProcessId(hWndForground, &ProcID);
-		
-		// Attach other thread's message queue to our own to ensure GetFocus() is working properly
-		BOOL ARes = AttachThreadInput(ThreadID, GetCurrentThreadId(), TRUE);
-		if (ARes)
+		GUITHREADINFO guiThreadInfo;
+		guiThreadInfo.cbSize = sizeof(GUITHREADINFO);
+		DWORD OtherThreadID = GetWindowThreadProcessId(theApp.m_hTargetWnd, NULL);
+		if(GetGUIThreadInfo(OtherThreadID, &guiThreadInfo))
 		{
-			// Get the other thread's focussed window
-			CWnd *pWnd = CWnd::FromHandle(hWndForground);
-			
-			if (pWnd)
+			CRect rc(guiThreadInfo.rcCaret);
+			if(rc.IsRectEmpty() == FALSE)
 			{
-				CWnd *pWndFocus = pWnd->GetFocus();
-				if (pWndFocus)
-				{
-					hWndFocus = pWndFocus->m_hWnd;
-					if (pPointCaret)
-					{
-						*pPointCaret = pWndFocus->GetCaretPos();
-						pWndFocus->ClientToScreen(pPointCaret);
-					}
-				}
+				pt = rc.BottomRight();
+				::ClientToScreen(theApp.m_hTargetWnd, &pt);
 			}
-			
-			// Detach other thread's message queue from our own again
-			ARes = AttachThreadInput(ThreadID, GetCurrentThreadId(), FALSE);
 		}
 	}
 	
-	return hWndFocus;
+	return pt;
 }
-
 
 /*----------------------------------------------------------------------------*\
 Global Memory Helper Functions
@@ -303,14 +286,19 @@ HGLOBAL NewGlobalH( HGLOBAL hSource, UINT nLen )
 	return hDest;
 }
 
-int CompareGlobalHP( HGLOBAL hLeft, LPVOID pBuf, ULONG ulBufLen )
+int CompareGlobalHP(HGLOBAL hLeft, LPVOID pBuf, ULONG ulBufLen)
 {
-	ASSERT( hLeft && pBuf && ulBufLen );
-	LPVOID pvData = GlobalLock( hLeft );
-	ASSERT( pvData );
-	ASSERT( ulBufLen <= GlobalSize(hLeft) );
+	ASSERT(hLeft && pBuf && ulBufLen);
+
+	LPVOID pvData = GlobalLock(hLeft);
+	
+	ASSERT(pvData);
+	ASSERT(ulBufLen <= GlobalSize(hLeft));
+
 	int result = memcmp(pvData, pBuf, ulBufLen);
-	GlobalUnlock( hLeft );
+	
+	GlobalUnlock(hLeft);
+
 	return result;
 }
 
@@ -334,7 +322,7 @@ long DoOptions(CWnd *pParent)
 	
 	theApp.m_bShowingOptions = true;
 	
-	COptionsSheet Sheet("Copy Pro Options", pParent);
+	COptionsSheet Sheet(_T("Copy Pro Options"), pParent);
 	
 	int nRet = Sheet.DoModal();
 	
@@ -345,47 +333,47 @@ long DoOptions(CWnd *pParent)
 
 
 //Do not change these these are stored in the database
-CLIPFORMAT GetFormatID(LPCSTR cbName)
+CLIPFORMAT GetFormatID(LPCTSTR cbName)
 {
-	if(strcmp(cbName, "CF_TEXT") == 0)
+	if(STRCMP(cbName, _T("CF_TEXT")) == 0)
 		return CF_TEXT;
-	else if(strcmp(cbName, "CF_METAFILEPICT") == 0)
+	else if(STRCMP(cbName, _T("CF_METAFILEPICT")) == 0)
 		return CF_METAFILEPICT;
-	else if(strcmp(cbName, "CF_SYLK") == 0)
+	else if(STRCMP(cbName, _T("CF_SYLK")) == 0)
 		return CF_SYLK;
-	else if(strcmp(cbName, "CF_DIF") == 0)
+	else if(STRCMP(cbName, _T("CF_DIF")) == 0)
 		return CF_DIF;
-	else if(strcmp(cbName, "CF_TIFF") == 0)
+	else if(STRCMP(cbName, _T("CF_TIFF")) == 0)
 		return CF_TIFF;
-	else if(strcmp(cbName, "CF_OEMTEXT") == 0)
+	else if(STRCMP(cbName, _T("CF_OEMTEXT")) == 0)
 		return CF_OEMTEXT;
-	else if(strcmp(cbName, "CF_DIB") == 0)
+	else if(STRCMP(cbName, _T("CF_DIB")) == 0)
 		return CF_DIB;
-	else if(strcmp(cbName, "CF_PALETTE") == 0)
+	else if(STRCMP(cbName, _T("CF_PALETTE")) == 0)
 		return CF_PALETTE;
-	else if(strcmp(cbName, "CF_PENDATA") == 0)
+	else if(STRCMP(cbName, _T("CF_PENDATA")) == 0)
 		return CF_PENDATA;
-	else if(strcmp(cbName, "CF_RIFF") == 0)
+	else if(STRCMP(cbName, _T("CF_RIFF")) == 0)
 		return CF_RIFF;
-	else if(strcmp(cbName, "CF_WAVE") == 0)
+	else if(STRCMP(cbName, _T("CF_WAVE")) == 0)
 		return CF_WAVE;
-	else if(strcmp(cbName, "CF_UNICODETEXT") == 0)
+	else if(STRCMP(cbName, _T("CF_UNICODETEXT")) == 0)
 		return CF_UNICODETEXT;
-	else if(strcmp(cbName, "CF_ENHMETAFILE") == 0)
+	else if(STRCMP(cbName, _T("CF_ENHMETAFILE")) == 0)
 		return CF_ENHMETAFILE;
-	else if(strcmp(cbName, "CF_HDROP") == 0)
+	else if(STRCMP(cbName, _T("CF_HDROP")) == 0)
 		return CF_HDROP;
-	else if(strcmp(cbName, "CF_LOCALE") == 0)
+	else if(STRCMP(cbName, _T("CF_LOCALE")) == 0)
 		return CF_LOCALE;
-	else if(strcmp(cbName, "CF_OWNERDISPLAY") == 0)
+	else if(STRCMP(cbName, _T("CF_OWNERDISPLAY")) == 0)
 		return CF_OWNERDISPLAY;
-	else if(strcmp(cbName, "CF_DSPTEXT") == 0)
+	else if(STRCMP(cbName, _T("CF_DSPTEXT")) == 0)
 		return CF_DSPTEXT;
-	else if(strcmp(cbName, "CF_DSPBITMAP") == 0)
+	else if(STRCMP(cbName, _T("CF_DSPBITMAP")) == 0)
 		return CF_DSPBITMAP;
-	else if(strcmp(cbName, "CF_DSPMETAFILEPICT") == 0)
+	else if(STRCMP(cbName, _T("CF_DSPMETAFILEPICT")) == 0)
 		return CF_DSPMETAFILEPICT;
-	else if(strcmp(cbName, "CF_DSPENHMETAFILE") == 0)
+	else if(STRCMP(cbName, _T("CF_DSPENHMETAFILE")) == 0)
 		return CF_DSPENHMETAFILE;
 	
 	
@@ -398,47 +386,47 @@ CString GetFormatName(CLIPFORMAT cbType)
 	switch(cbType)
 	{
 	case CF_TEXT:
-		return "CF_TEXT";
+		return _T("CF_TEXT");
 	case CF_BITMAP:
-		return "CF_BITMAP";
+		return _T("CF_BITMAP");
 	case CF_METAFILEPICT:
-		return "CF_METAFILEPICT";
+		return _T("CF_METAFILEPICT");
 	case CF_SYLK:
-		return "CF_SYLK";
+		return _T("CF_SYLK");
 	case CF_DIF:
-		return "CF_DIF";
+		return _T("CF_DIF");
 	case CF_TIFF:
-		return "CF_TIFF";
+		return _T("CF_TIFF");
 	case CF_OEMTEXT:
-		return "CF_OEMTEXT";
+		return _T("CF_OEMTEXT");
 	case CF_DIB:
-		return "CF_DIB";
+		return _T("CF_DIB");
 	case CF_PALETTE:
-		return "CF_PALETTE";
+		return _T("CF_PALETTE");
 	case CF_PENDATA:
-		return "CF_PENDATA";
+		return _T("CF_PENDATA");
 	case CF_RIFF:
-		return "CF_RIFF";
+		return _T("CF_RIFF");
 	case CF_WAVE:
-		return "CF_WAVE";
+		return _T("CF_WAVE");
 	case CF_UNICODETEXT:
-		return "CF_UNICODETEXT";
+		return _T("CF_UNICODETEXT");
 	case CF_ENHMETAFILE:
-		return "CF_ENHMETAFILE";
+		return _T("CF_ENHMETAFILE");
 	case CF_HDROP:
-		return "CF_HDROP";
+		return _T("CF_HDROP");
 	case CF_LOCALE:
-		return "CF_LOCALE";
+		return _T("CF_LOCALE");
 	case CF_OWNERDISPLAY:
-		return "CF_OWNERDISPLAY";
+		return _T("CF_OWNERDISPLAY");
 	case CF_DSPTEXT:
-		return "CF_DSPTEXT";
+		return _T("CF_DSPTEXT");
 	case CF_DSPBITMAP:
-		return "CF_DSPBITMAP";
+		return _T("CF_DSPBITMAP");
 	case CF_DSPMETAFILEPICT:
-		return "CF_DSPMETAFILEPICT";
+		return _T("CF_DSPMETAFILEPICT");
 	case CF_DSPENHMETAFILE:
-		return "CF_DSPENHMETAFILE";
+		return _T("CF_DSPENHMETAFILE");
 	default:
 		//Not a default type get the name from the clipboard
 		if (cbType != 0)
@@ -465,962 +453,15 @@ CString GetFilePath(CString csFileName)
 	return csFileName;
 }
 
-
-/*------------------------------------------------------------------*\
-CGetSetOptions
-\*------------------------------------------------------------------*/
-
-long CGetSetOptions::m_nLinesPerRow;
-BOOL CGetSetOptions::m_bUseCtrlNumAccel;
-BOOL CGetSetOptions::m_bAllowDuplicates;
-BOOL CGetSetOptions::m_bUpdateTimeOnPaste;
-BOOL CGetSetOptions::m_bSaveMultiPaste;
-BOOL CGetSetOptions::m_bShowPersistent;
-BOOL CGetSetOptions::m_bHistoryStartTop;
-long CGetSetOptions::m_bDescTextSize;
-BOOL CGetSetOptions::m_bDescShowLeadingWhiteSpace;
-BOOL CGetSetOptions::m_bAllwaysShowDescription;
-long CGetSetOptions::m_bDoubleClickingOnCaptionDoes;
-BOOL CGetSetOptions::m_bPrompForNewGroupName;
-BOOL CGetSetOptions::m_bSendPasteOnFirstTenHotKeys;
-CSendClients CGetSetOptions::m_SendClients[MAX_SEND_CLIENTS];
-long CGetSetOptions::m_lAutoSendClientCount;
-CString CGetSetOptions::m_csIPListToPutOnClipboard;
-BOOL CGetSetOptions::m_bLogSendReceiveErrors;
-BOOL CGetSetOptions::m_bUseHookDllForFocus;
-BOOL CGetSetOptions::m_HideDittoOnHotKeyIfAlreadyShown;
-long CGetSetOptions::m_lPort;
-BOOL CGetSetOptions::m_bDrawThumbnail;
-CString CGetSetOptions::m_csPassword;
-BOOL CGetSetOptions::m_bDrawRTF;
-BOOL CGetSetOptions::m_bMultiPasteReverse;
-CString CGetSetOptions::m_csPlaySoundOnCopy;
-CStringArray CGetSetOptions::m_csNetworkPasswordArray;
-BOOL CGetSetOptions::m_bSendPasteMessageAfterSelection;
-BOOL CGetSetOptions::m_bFindAsYouType;
-BOOL CGetSetOptions::m_bEnsureEntireWindowCanBeSeen;
-BOOL CGetSetOptions::m_bShowAllClipsInMainList;
-long CGetSetOptions::m_lMaxClipSizeInBytes;
-long CGetSetOptions::m_lSaveClipDelay;
-long CGetSetOptions::m_lProcessDrawClipboardDelay;
-BOOL CGetSetOptions::m_bEnableDebugLogging;
-BOOL CGetSetOptions::m_bEnsureConnectToClipboard;
-
-CGetSetOptions g_Opt;
-
-CGetSetOptions::CGetSetOptions()
+CString GetFileName(CString csFileName)
 {
-	m_nLinesPerRow = GetLinesPerRow();
-	m_bUseCtrlNumAccel = GetUseCtrlNumForFirstTenHotKeys();
-	m_bAllowDuplicates = GetAllowDuplicates();
-	m_bUpdateTimeOnPaste = GetUpdateTimeOnPaste();
-	m_bSaveMultiPaste = GetSaveMultiPaste();
-	m_bShowPersistent = GetShowPersistent();
-	m_bHistoryStartTop = GetHistoryStartTop();
-	m_bDescTextSize = GetDescTextSize();
-	m_bDescShowLeadingWhiteSpace = GetDescShowLeadingWhiteSpace();
-	m_bAllwaysShowDescription = GetAllwaysShowDescription();
-	m_bDoubleClickingOnCaptionDoes = GetDoubleClickingOnCaptionDoes();
-	m_bPrompForNewGroupName = GetPrompForNewGroupName();
-	m_bSendPasteOnFirstTenHotKeys = GetSendPasteOnFirstTenHotKeys();
-	m_csIPListToPutOnClipboard = GetListToPutOnClipboard();
-	m_bLogSendReceiveErrors = GetLogSendReceiveErrors();
-	m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", TRUE);
-	m_HideDittoOnHotKeyIfAlreadyShown = GetHideDittoOnHotKeyIfAlreadyShown();
-	m_lPort = GetPort();
-	m_bDrawThumbnail = GetDrawThumbnail();
-	m_csPassword = GetNetworkPassword();
-	m_bDrawRTF = GetDrawRTF();
-	m_bMultiPasteReverse = GetMultiPasteReverse();
-	m_csPlaySoundOnCopy = GetPlaySoundOnCopy();
-	m_bSendPasteMessageAfterSelection = GetSendPasteAfterSelection();
-	m_bFindAsYouType = GetFindAsYouType();
-	m_bEnsureEntireWindowCanBeSeen = GetEnsureEntireWindowCanBeSeen();
-	m_bShowAllClipsInMainList = GetShowAllClipsInMainList();
-	m_lMaxClipSizeInBytes = GetMaxClipSizeInBytes();
-	m_lSaveClipDelay = GetSaveClipDelay();
-	m_lProcessDrawClipboardDelay = GetProcessDrawClipboardDelay();
-	m_bEnableDebugLogging = GetEnableDebugLogging();
-	m_bEnsureConnectToClipboard = GetEnsureConnectToClipboard();
-
-	GetExtraNetworkPassword(true);
-	
-	#ifdef _DEBUG
-	m_bUseHookDllForFocus = FALSE;
-	#endif
-
-	for(int i = 0; i < MAX_SEND_CLIENTS; i++)
+	long lSlash = csFileName.ReverseFind('\\');
+	if(lSlash > -1)
 	{
-		GetSendClients(i);
+		csFileName = csFileName.Right(csFileName.GetLength() - lSlash - 1);
 	}
 
-	GetClientSendCount();
-}
-
-CGetSetOptions::~CGetSetOptions()
-{
-	
-}
-
-long CGetSetOptions::GetProfileLong(CString csName, long bDefaultValue)
-{
-	HKEY hkKey;
-	
-	long lResult = RegOpenKeyEx(HKEY_CURRENT_USER, _T(REG_PATH),
-								NULL, KEY_READ, &hkKey);
-	
-	if(lResult != ERROR_SUCCESS)
-		return bDefaultValue;
-	
-	DWORD buffer;
-	DWORD len =  sizeof(buffer);
-	DWORD type;
-	
-	lResult = ::RegQueryValueEx(hkKey, csName, 0, &type, (LPBYTE)&buffer, &len);
-	
-	RegCloseKey(hkKey);
-	
-	if(lResult == ERROR_SUCCESS)
-		return (long)buffer;
-	
-	return bDefaultValue;
-}
-
-CString CGetSetOptions::GetProfileString(CString csName, CString csDefault)
-{
-	HKEY hkKey;
-	
-	long lResult = RegOpenKeyEx(HKEY_CURRENT_USER, _T(REG_PATH),
-								NULL, KEY_READ, &hkKey);
-	
-	char szString[256];
-	DWORD dwBufLen = 256;
-	
-	lResult = ::RegQueryValueEx(hkKey , csName, NULL, NULL, (LPBYTE)szString, &dwBufLen);
-	
-	if(lResult != ERROR_SUCCESS)
-		return csDefault;
-	
-	return CString(szString);
-}
-
-BOOL CGetSetOptions::SetProfileLong(CString csName, long lValue)
-{
-	HKEY hkKey;
-	DWORD dWord;
-	long lResult = RegCreateKeyEx(HKEY_CURRENT_USER, _T(REG_PATH), NULL, 
-		NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 
-		NULL, &hkKey, &dWord);
-	
-	if(lResult != ERROR_SUCCESS)
-		return FALSE;
-	
-	DWORD val = (DWORD)lValue;
-	lResult = ::RegSetValueEx(hkKey, csName, 0, REG_DWORD, (LPBYTE)&val, sizeof(DWORD));
-	
-	RegCloseKey(hkKey);
-	
-	return lResult == ERROR_SUCCESS;
-}
-
-BOOL CGetSetOptions::SetProfileString(CString csName, CString csValue)
-{
-	HKEY hkKey;
-	DWORD dWord;
-	long lResult = RegCreateKeyEx(HKEY_CURRENT_USER, _T(REG_PATH), NULL, 
-		NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 
-		NULL, &hkKey, &dWord);
-	
-	if(lResult != ERROR_SUCCESS)
-		return FALSE;
-	
-	::RegSetValueEx(hkKey, csName, NULL, REG_SZ,
-		(BYTE*)(LPCTSTR)csValue, csValue.GetLength()+sizeof(TCHAR));
-	
-	RegCloseKey(hkKey);
-	
-	return lResult == ERROR_SUCCESS;
-}
-
-BOOL CGetSetOptions::SetProfileData(CString csName, LPVOID lpData, DWORD dwLength)
-{
-	HKEY hkKey;
-	DWORD dWord;
-	long lResult = RegCreateKeyEx(HKEY_CURRENT_USER, _T(REG_PATH), NULL, 
-						NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, 
-						NULL, &hkKey, &dWord);
-
-	if(lResult != ERROR_SUCCESS)
-		return FALSE;
-
-	::RegSetValueEx(hkKey, csName, NULL, REG_BINARY,
-			(BYTE*)lpData, dwLength);
-
-	RegCloseKey(hkKey);
-
-	return lResult == ERROR_SUCCESS;
-}
-
-LPVOID CGetSetOptions::GetProfileData(CString csName, DWORD &dwLength)
-{
-	HKEY hkKey;
-
-	long lResult = RegOpenKeyEx(HKEY_CURRENT_USER, _T(REG_PATH),
-								NULL, KEY_READ, &hkKey);
-	
-	lResult = ::RegQueryValueEx(hkKey , csName, NULL, NULL, NULL, &dwLength);
-
-	if(lResult != ERROR_SUCCESS)
-		return NULL;
-
-	LPVOID lpVoid = new BYTE[dwLength];
-	
-	lResult = ::RegQueryValueEx(hkKey , csName, NULL, NULL, (LPBYTE)lpVoid, &dwLength);
-
-	if(lResult != ERROR_SUCCESS)
-		return NULL;
-
-	return lpVoid;
-}
-
-BOOL CGetSetOptions::GetShowIconInSysTray() 
-{
-	return GetProfileLong("ShowIconInSystemTray", TRUE);
-}
-
-BOOL CGetSetOptions::SetShowIconInSysTray(BOOL bShow) 
-{
-	return SetProfileLong("ShowIconInSystemTray", bShow);
-}
-
-BOOL CGetSetOptions::SetEnableTransparency(BOOL bCheck)
-{
-	return SetProfileLong("EnableTransparency", bCheck);
-}
-
-BOOL CGetSetOptions::GetEnableTransparency()
-{
-	return GetProfileLong("EnableTransparency", FALSE);
-}
-
-BOOL CGetSetOptions::SetTransparencyPercent(long lPercent)
-{
-#ifdef AFTER_98
-	if(lPercent > OPACITY_MAX)
-		lPercent = OPACITY_MAX;
-	if(lPercent < 0)
-		lPercent = 0;
-	
-	return SetProfileLong("TransparencyPercent", lPercent);
-#endif
-	return FALSE;
-}
-
-long CGetSetOptions::GetTransparencyPercent()
-{
-#ifdef AFTER_98
-	long lValue = GetProfileLong("TransparencyPercent", 14);
-	
-	if(lValue > OPACITY_MAX) lValue = OPACITY_MAX;
-	if(lValue < 0) lValue = 0;
-	
-	return lValue;
-#endif
-	return 0;
-}
-
-BOOL CGetSetOptions::SetLinesPerRow(long lLines)
-{
-	m_nLinesPerRow = lLines;
-	return SetProfileLong("LinesPerRow", lLines);
-}
-
-long CGetSetOptions::GetLinesPerRow()
-{
-	return GetProfileLong("LinesPerRow", 2);
-}
-
-BOOL CGetSetOptions::GetRunOnStartUp()
-{
-	HKEY hkRun;
-	
-	LONG nResult = RegOpenKeyEx(HKEY_CURRENT_USER,
-		_T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
-		NULL, KEY_READ, &hkRun);
-	
-	if(nResult != ERROR_SUCCESS)
-		return FALSE;
-	
-	nResult = RegQueryValueEx(hkRun, GetAppName(), NULL, NULL, NULL, NULL);
-	RegCloseKey(hkRun);
-	return nResult == ERROR_SUCCESS;
-}
-
-void CGetSetOptions::SetRunOnStartUp(BOOL bRun)
-{
-	if(bRun == GetRunOnStartUp())
-		return;
-	
-	HKEY hkRun;
-	LONG nResult = RegOpenKeyEx(HKEY_CURRENT_USER,
-		_T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
-		NULL, KEY_ALL_ACCESS, &hkRun);
-	
-	if(nResult != ERROR_SUCCESS)
-		return;
-	
-	if(bRun)
-	{
-		CString sExeName = GetExeFileName();
-		::RegSetValueEx(hkRun, GetAppName(), NULL, REG_SZ,
-			(BYTE*)(LPCTSTR)sExeName, sExeName.GetLength()+sizeof(TCHAR));
-	} 
-	else 
-	{
-		::RegDeleteValue(hkRun, GetAppName());
-	}
-	
-	::RegCloseKey(hkRun);
-}
-
-CString CGetSetOptions::GetExeFileName()
-{
-	CString sExeName;
-	GetModuleFileName(NULL, sExeName.GetBuffer(_MAX_PATH),_MAX_PATH);
-	sExeName.ReleaseBuffer();
-	return sExeName;
-}
-
-CString CGetSetOptions::GetAppName()
-{
-	return "Ditto";
-}
-
-BOOL CGetSetOptions::SetQuickPastePosition(long lPosition)
-{
-	return SetProfileLong("ShowQuickPastePosition", lPosition);
-}
-
-long CGetSetOptions::GetQuickPastePosition()
-{
-	return GetProfileLong("ShowQuickPastePosition", POS_AT_PREVIOUS);
-}
-
-BOOL CGetSetOptions::SetQuickPasteSize(CSize size)
-{
-	BOOL bRet = SetProfileLong("QuickPasteCX", size.cx);
-	bRet = SetProfileLong("QuickPasteCY", size.cy);
-	
-	return bRet;
-}
-void CGetSetOptions::GetQuickPasteSize(CSize &size)
-{
-	size.cx = GetProfileLong("QuickPasteCX", 300);
-	size.cy = GetProfileLong("QuickPasteCY", 300);
-}
-
-BOOL CGetSetOptions::SetQuickPastePoint(CPoint point)
-{
-	BOOL bRet = SetProfileLong("QuickPasteX", point.x);
-	bRet = SetProfileLong("QuickPasteY", point.y);
-	
-	return bRet;
-}
-
-void CGetSetOptions::GetQuickPastePoint(CPoint &point)
-{
-	point.x = GetProfileLong("QuickPasteX", 300);
-	point.y = GetProfileLong("QuickPasteY", 300);
-}
-
-long CGetSetOptions::GetCopyGap()
-{
-	return GetProfileLong("CopyGap", 150);
-}
-
-BOOL CGetSetOptions::SetDBPath(CString csPath)
-{
-	return SetProfileString("DBPath", csPath);
-}
-
-CString CGetSetOptions::GetDBPath(BOOL bDefault/* = TRUE*/)
-{
-	//First check the reg string
-	CString csDefaultPath = GetProfileString("DBPath", "");
-	
-	//If there is nothing in the regesty then get the default
-	//In the users application data in my documents
-	if(bDefault)
-	{
-		if(csDefaultPath.IsEmpty())
-			csDefaultPath = GetDefaultDBName();
-	}
-	
-	return csDefaultPath;
-}
-
-void CGetSetOptions::SetCheckForMaxEntries(BOOL bVal)
-{
-	SetProfileLong("CheckForMaxEntries", bVal);
-}
-
-BOOL CGetSetOptions::GetCheckForMaxEntries()
-{
-	return GetProfileLong("CheckForMaxEntries", 0);
-}
-
-void CGetSetOptions::SetCheckForExpiredEntries(BOOL bVal)
-{
-	SetProfileLong("CheckForExpiredEntries", bVal);
-}
-
-BOOL CGetSetOptions::GetCheckForExpiredEntries()
-{
-	return GetProfileLong("CheckForExpiredEntries", 0);
-}
-
-void CGetSetOptions::SetMaxEntries(long lVal)
-{
-	SetProfileLong("MaxEntries", lVal);
-}
-
-long CGetSetOptions::GetMaxEntries()
-{
-	return GetProfileLong("MaxEntries", 500);
-}
-
-void CGetSetOptions::SetExpiredEntries(long lVal)
-{
-	SetProfileLong("ExpiredEntries", lVal);
-}
-
-long CGetSetOptions::GetExpiredEntries()
-{
-	return GetProfileLong("ExpiredEntries", 5);
-}
-
-void CGetSetOptions::SetTripCopyCount(long lVal)
-{
-	// negative means a relative offset
-	if(lVal < 0)
-		lVal = GetTripCopyCount() - lVal; // add the absolute value
-	
-	if(GetTripDate() == 0)
-		SetTripDate(-1);
-	
-	SetProfileLong("TripCopies", lVal);
-}
-
-long CGetSetOptions::GetTripCopyCount()
-{
-	return GetProfileLong("TripCopies", 0);
-}
-
-void CGetSetOptions::SetTripPasteCount(long lVal)
-{
-	// negative means a relative offset
-	if(lVal < 0)
-		lVal = GetTripPasteCount() - lVal; // add the absolute value
-	
-	if(GetTripDate() == 0)
-		SetTripDate(-1);
-	
-	SetProfileLong("TripPastes", lVal);
-}
-
-long CGetSetOptions::GetTripPasteCount()
-{
-	return GetProfileLong("TripPastes", 0);
-}
-
-void CGetSetOptions::SetTripDate(long lDate)
-{
-	if(lDate == -1)
-		lDate = (long)CTime::GetCurrentTime().GetTime();
-	
-	SetProfileLong("TripDate", lDate);
-}
-
-long CGetSetOptions::GetTripDate()
-{
-	return GetProfileLong("TripDate", 0);
-}
-
-void CGetSetOptions::SetTotalCopyCount(long lVal)
-{
-	// negative means a relative offset
-	if(lVal < 0)
-		lVal = GetTotalCopyCount() - lVal; // add the absolute value
-	
-	if(GetTotalDate() == 0)
-		SetTotalDate(-1);
-	
-	SetProfileLong("TotalCopies", lVal);
-}
-
-long CGetSetOptions::GetTotalCopyCount()
-{
-	return GetProfileLong("TotalCopies", 0);
-}
-
-void CGetSetOptions::SetTotalPasteCount(long lVal)
-{
-	// negative means a relative offset
-	if(lVal < 0)
-		lVal = GetTotalPasteCount() - lVal; // add the absolute value
-	
-	if(GetTotalDate() == 0)
-		SetTotalDate(-1);
-	
-	SetProfileLong("TotalPastes", lVal);
-}
-
-long CGetSetOptions::GetTotalPasteCount()
-{
-	return GetProfileLong("TotalPastes", 0);
-}
-
-void CGetSetOptions::SetTotalDate(long lDate)
-{
-	if(lDate == -1)
-		lDate = (long)CTime::GetCurrentTime().GetTime();
-	
-	SetProfileLong("TotalDate", lDate);
-}
-
-long CGetSetOptions::GetTotalDate()
-{
-	return GetProfileLong("TotalDate", 0);
-}
-
-// the implementations for the following functions were moved out-of-line.
-// when they were declared inline, the compiler failed to notice when
-//  these functions were changed (the linker used an old compiled version)
-//  (maybe because they are also static?)
-CString	CGetSetOptions::GetUpdateFilePath()			{ return GetProfileString("UpdateFilePath", "");	}
-BOOL CGetSetOptions::SetUpdateFilePath(CString cs)	{ return SetProfileString("UpdateFilePath", cs);	}
-
-CString	CGetSetOptions::GetUpdateInstallPath()			{ return GetProfileString("UpdateInstallPath", "");	}
-BOOL CGetSetOptions::SetUpdateInstallPath(CString cs)	{ return SetProfileString("UpdateInstallPath", cs);	}
-
-long CGetSetOptions::GetLastUpdate()			{ return GetProfileLong("LastUpdateDay", 0);		}
-long CGetSetOptions::SetLastUpdate(long lValue)	{ return SetProfileLong("LastUpdateDay", lValue);	}
-
-BOOL CGetSetOptions::GetCheckForUpdates()				{ return GetProfileLong("CheckForUpdates", TRUE);	}
-BOOL CGetSetOptions::SetCheckForUpdates(BOOL bCheck)	{ return SetProfileLong("CheckForUpdates", bCheck);	}
-
-void CGetSetOptions::SetUseCtrlNumForFirstTenHotKeys(BOOL bVal)	{	SetProfileLong("UseCtrlNumForFirstTenHotKeys", bVal);	m_bUseCtrlNumAccel = bVal;	}
-BOOL CGetSetOptions::GetUseCtrlNumForFirstTenHotKeys()			{	return GetProfileLong("UseCtrlNumForFirstTenHotKeys", 0); }
-
-void CGetSetOptions::SetAllowDuplicates(BOOL bVal)	{	SetProfileLong("AllowDuplicates", bVal); m_bAllowDuplicates = bVal; }
-BOOL CGetSetOptions::GetAllowDuplicates()			{	return GetProfileLong("AllowDuplicates", 0); }
-
-void CGetSetOptions::SetUpdateTimeOnPaste(BOOL bVal)	{	SetProfileLong("UpdateTimeOnPaste", bVal); m_bUpdateTimeOnPaste = bVal; }
-BOOL CGetSetOptions::GetUpdateTimeOnPaste()			{	return GetProfileLong("UpdateTimeOnPaste", TRUE); }
-
-void CGetSetOptions::SetSaveMultiPaste(BOOL bVal)	{	SetProfileLong("SaveMultiPaste", bVal); m_bSaveMultiPaste = bVal; }
-BOOL CGetSetOptions::GetSaveMultiPaste()			{	return GetProfileLong("SaveMultiPaste", 0); }
-
-void CGetSetOptions::SetShowPersistent(BOOL bVal)	{	SetProfileLong("ShowPersistent", bVal); m_bShowPersistent = bVal; }
-BOOL CGetSetOptions::GetShowPersistent()			{	return GetProfileLong("ShowPersistent", 0); }
-
-void CGetSetOptions::SetHistoryStartTop(BOOL bVal)	{	SetProfileLong("HistoryStartTop", bVal); m_bHistoryStartTop = bVal; }
-BOOL CGetSetOptions::GetHistoryStartTop()			{	return GetProfileLong("HistoryStartTop", TRUE); }
-
-void CGetSetOptions::SetShowTextForFirstTenHotKeys(BOOL bVal)	{	SetProfileLong("ShowTextForFirstTenHotKeys", bVal);			}
-BOOL CGetSetOptions::GetShowTextForFirstTenHotKeys()			{	return GetProfileLong("ShowTextForFirstTenHotKeys", TRUE);	}
-
-void CGetSetOptions::SetMainHWND(long lhWnd)	{	SetProfileLong("MainhWnd", lhWnd);		}
-BOOL CGetSetOptions::GetMainHWND()				{	return GetProfileLong("MainhWnd", 0);	}
-
-void CGetSetOptions::SetCaptionPos(long lPos)	{	SetProfileLong("CaptionPos", lPos);					}
-long CGetSetOptions::GetCaptionPos()			{	return GetProfileLong("CaptionPos", CAPTION_RIGHT);	}
-
-void CGetSetOptions::SetAutoHide(BOOL bAutoHide){	SetProfileLong("AutoHide", bAutoHide);					}
-BOOL CGetSetOptions::GetAutoHide()				{	return GetProfileLong("AutoHide", FALSE);				}
-
-void CGetSetOptions::SetDescTextSize(long lSize){	SetProfileLong("DescTextSize", lSize); m_bDescTextSize = lSize; }
-long CGetSetOptions::GetDescTextSize()			{	return GetProfileLong("DescTextSize", 500); }
-
-void CGetSetOptions::SetDescShowLeadingWhiteSpace(BOOL bVal){  SetProfileLong("DescShowLeadingWhiteSpace", bVal); m_bDescShowLeadingWhiteSpace = bVal; }
-BOOL CGetSetOptions::GetDescShowLeadingWhiteSpace()         {  return GetProfileLong("DescShowLeadingWhiteSpace", FALSE); }
-
-void CGetSetOptions::SetAllwaysShowDescription(long bShow)	{	SetProfileLong("AllwaysShowDescription", bShow); m_bAllwaysShowDescription = bShow; }
-BOOL CGetSetOptions::GetAllwaysShowDescription()			{	return GetProfileLong("AllwaysShowDescription", FALSE); }
-
-void CGetSetOptions::SetDoubleClickingOnCaptionDoes(long lOption)	{	SetProfileLong("DoubleClickingOnCaptionDoes", lOption); m_bDoubleClickingOnCaptionDoes = lOption; }
-long CGetSetOptions::GetDoubleClickingOnCaptionDoes()				{	return GetProfileLong("DoubleClickingOnCaptionDoes", TOGGLES_ALLWAYS_ON_TOP); }
-
-void CGetSetOptions::SetPrompForNewGroupName(BOOL bOption)	{	SetProfileLong("PrompForNewGroupName", bOption); m_bPrompForNewGroupName = bOption; }
-BOOL CGetSetOptions::GetPrompForNewGroupName()				{	return GetProfileLong("PrompForNewGroupName", TRUE); }
-
-void CGetSetOptions::SetSendPasteOnFirstTenHotKeys(BOOL bOption)	{	SetProfileLong("SendPasteOnFirstTenHotKeys", bOption); m_bSendPasteOnFirstTenHotKeys = bOption; }
-BOOL CGetSetOptions::GetSendPasteOnFirstTenHotKeys()				{	return GetProfileLong("SendPasteOnFirstTenHotKeys", TRUE); }
-
-void CGetSetOptions::SetSendClients(CSendClients Client, int nPos)
-{
-	CString cs;
-
-	cs.Format("sendclient_ip_%d", nPos);
-	SetProfileString(cs, Client.csIP);
-
-	cs.Format("sendclient_autosend_%d", nPos);
-	SetProfileLong(cs, Client.bSendAll);
-
-	cs.Format("sendclient_description_%d", nPos);
-	SetProfileString(cs, Client.csDescription);
-
-	//Save this setting so it's not reset
-	Client.bShownFirstError = m_SendClients[nPos].bShownFirstError;
-
-	m_SendClients[nPos] = Client;
-}
-
-CSendClients CGetSetOptions::GetSendClients(int nPos)
-{
-	CSendClients Client;
-
-	CString cs;
-
-	cs.Format("sendclient_ip_%d", nPos);
-	Client.csIP = GetProfileString(cs, "");
-
-	cs.Format("sendclient_autosend_%d", nPos);
-	Client.bSendAll = GetProfileLong(cs, FALSE);
-
-	cs.Format("sendclient_description_%d", nPos);
-	Client.csDescription = GetProfileString(cs, "");
-
-	m_SendClients[nPos] = Client;
-
-	return Client;
-}
-
-void CGetSetOptions::GetClientSendCount()
-{
-	m_lAutoSendClientCount = 0;
-	for(int i = 0; i < MAX_SEND_CLIENTS; i++)
-	{
-		if(m_SendClients[i].csIP.GetLength() > 0)
-		{
-			if(m_SendClients[i].bSendAll)
-				m_lAutoSendClientCount++;
-		}
-	}
-}
-
-CString	CGetSetOptions::GetListToPutOnClipboard()			
-{ 
-	CString cs = GetProfileString("ListToPutOnClipboard", "");
-	cs.MakeUpper();
-	return cs;
-}
-BOOL CGetSetOptions::SetListToPutOnClipboard(CString cs)	
-{ 
-	cs.MakeUpper();
-	m_csIPListToPutOnClipboard = cs;
-	return SetProfileString("ListToPutOnClipboard", cs); 
-	
-}
-
-void CGetSetOptions::SetLogSendReceiveErrors(BOOL bOption)
-{
-	m_bLogSendReceiveErrors = bOption;
-
-	SetProfileLong("LogSendReceiveErrors", bOption);
-}
-
-BOOL CGetSetOptions::GetLogSendReceiveErrors()
-{
-	return GetProfileLong("LogSendReceiveErrors", FALSE);
-}
-
-BOOL CGetSetOptions::GetHideDittoOnHotKeyIfAlreadyShown()
-{
-	return GetProfileLong("HideDittoOnHotKeyIfAlreadyShown", TRUE);
-}
-
-void CGetSetOptions::SetHideDittoOnHotKeyIfAlreadyShown(BOOL bVal)
-{
-	m_HideDittoOnHotKeyIfAlreadyShown = bVal;
-
-	SetProfileLong("HideDittoOnHotKeyIfAlreadyShown", bVal);
-}
-
-void CGetSetOptions::SetPort(long lPort)
-{
-	m_lPort = lPort;
-	SetProfileLong("SendRecvPort", lPort);
-}
-
-long CGetSetOptions::GetPort()
-{
-	return GetProfileLong("SendRecvPort", 23443);
-}
-
-BOOL CGetSetOptions::GetDisableRecieve()
-{
-	return GetProfileLong("DisableRecieve", FALSE);
-}
-
-void CGetSetOptions::SetDisableRecieve(BOOL bVal)
-{
-	SetProfileLong("DisableRecieve", bVal);
-}
-
-BOOL CGetSetOptions::GetFont(LOGFONT &font)
-{
-	DWORD dwLength;
-	LPVOID lpVoid = GetProfileData("DisplayFont", dwLength);
-	if(lpVoid)
-	{
-		memcpy(&font, lpVoid, dwLength);
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-void CGetSetOptions::SetFont(LOGFONT &font)
-{
-	SetProfileData("DisplayFont", &font, sizeof(LOGFONT));
-}
-
-void CGetSetOptions::SetDrawThumbnail(long bDraw)
-{
-	SetProfileLong("DrawThumbnail", bDraw); 
-	m_bDrawThumbnail = bDraw;
-}
-
-BOOL CGetSetOptions::GetDrawThumbnail()
-{
-	return GetProfileLong("DrawThumbnail", TRUE);
-}
-
-void CGetSetOptions::SetExtraNetworkPassword(CString csPassword)
-{
-	SetProfileString("NetworkExtraPassword", csPassword);
-}
-
-CString CGetSetOptions::GetExtraNetworkPassword(bool bFillArray)
-{
-	CString cs = GetProfileString("NetworkExtraPassword", "");
-
-	if(bFillArray)
-	{
-		m_csNetworkPasswordArray.RemoveAll();
-
-		char seps[]   = ",";
-		char *token;
-
-		char *pString = cs.GetBuffer(cs.GetLength());
-		
-		/* Establish string and get the first token: */
-		token = strtok(pString, seps);
-		while(token != NULL)
-		{
-			CString cs(token);
-			cs.TrimLeft();
-			cs.TrimRight();
-
-			m_csNetworkPasswordArray.Add(cs);
-
-			// Get next token
-			token = strtok( NULL, seps );
-		}
-
-		cs.ReleaseBuffer();
-	}
-
-	return cs;
-}
-
-void CGetSetOptions::SetNetworkPassword(CString csPassword)
-{
-	m_csPassword = csPassword;
-
-	SetProfileString("NetworkStringPassword", csPassword);
-
-//	UCHAR *pData = NULL;
-//	int nLength = 0;
-//
-//	if(EncryptString(csPassword, pData, nLength))
-//	{
-//		SetProfileData("NetworkPassword", pData, nLength);
-//	}
-//	else
-//	{
-//		SetProfileData("NetworkPassword", NULL, 0);
-//	}
-//
-//	DELETE_PTR(pData);
-}
-
-CString CGetSetOptions::GetNetworkPassword()
-{
-	return GetProfileString("NetworkStringPassword", "LetMeIn");
-
-//	CString cs = "";
-//	DWORD dwLength = 0;
-//	LPVOID lpVoid = GetProfileData("NetworkPassword", dwLength);
-//	if(lpVoid)
-//	{
-//		UCHAR *pData = NULL;
-//		int nLength = 0;
-//
-//		if(DecryptString((UCHAR *)lpVoid, dwLength, pData, nLength))
-//			cs = pData;
-//
-//		DELETE_PTR(pData);
-//		DELETE_PTR(lpVoid);
-//	}
-//
-//	if(cs == "")
-//		cs = "LetMeIn";
-}
-
-void CGetSetOptions::SetDrawRTF(long bDraw)
-{
-	SetProfileLong("DrawRTF", bDraw); 
-	m_bDrawRTF = bDraw;
-}
-
-BOOL CGetSetOptions::GetDrawRTF()
-{
-	return GetProfileLong("DrawRTF", FALSE);
-}
-
-void CGetSetOptions::SetMultiPasteReverse(bool bVal)
-{
-	SetProfileLong("MultiPasteReverse", bVal); 
-	m_bMultiPasteReverse = bVal;
-}
-
-BOOL CGetSetOptions::GetMultiPasteReverse()
-{
-	return GetProfileLong("MultiPasteReverse", TRUE); 
-}
-
-void CGetSetOptions::SetPlaySoundOnCopy(CString cs)
-{
-	m_csPlaySoundOnCopy = cs;
-
-	SetProfileString("PlaySoundOnCopy", cs);
-}
-
-CString CGetSetOptions::GetPlaySoundOnCopy()
-{
-	return GetProfileString("PlaySoundOnCopy", "");
-}
-
-void CGetSetOptions::SetSendPasteAfterSelection(BOOL bVal)
-{
-	m_bSendPasteMessageAfterSelection = bVal;
-
-	SetProfileLong("SendPasteMessageAfterSelection", bVal);
-}
-
-BOOL CGetSetOptions::GetSendPasteAfterSelection()
-{
-	return GetProfileLong("SendPasteMessageAfterSelection", TRUE);
-}
-
-void CGetSetOptions::SetFindAsYouType(BOOL bVal)
-{
-	m_bFindAsYouType = bVal;
-	SetProfileLong("FindAsYouType", bVal);
-}
-
-BOOL CGetSetOptions::GetFindAsYouType()
-{
-	return GetProfileLong("FindAsYouType", TRUE);
-}
-
-void CGetSetOptions::SetEnsureEntireWindowCanBeSeen(BOOL bVal)
-{
-	m_bEnsureEntireWindowCanBeSeen = bVal;
-	SetProfileLong("EnsureEntireWindowCanBeSeen", bVal);
-}
-
-BOOL CGetSetOptions::GetEnsureEntireWindowCanBeSeen()
-{
-	return GetProfileLong("EnsureEntireWindowCanBeSeen", TRUE);
-}
-
-void CGetSetOptions::SetShowAllClipsInMainList(BOOL bVal)
-{
-	m_bShowAllClipsInMainList = bVal;
-	SetProfileLong("ShowAllClipsInMainList", bVal);
-}
-
-BOOL CGetSetOptions::GetShowAllClipsInMainList()
-{
-	return GetProfileLong("ShowAllClipsInMainList", TRUE);
-}
-
-long CGetSetOptions::GetMaxClipSizeInBytes()
-{
-	return GetProfileLong("MaxClipSizeInBytes", 0);
-}
-
-void CGetSetOptions::SetMaxClipSizeInBytes(long lSize)
-{
-	m_lMaxClipSizeInBytes = lSize;
-	SetProfileLong("MaxClipSizeInBytes", lSize);
-}
-
-CString CGetSetOptions::GetLanguageFile()
-{
-	return GetProfileString("LanguageFile", "");
-}
-
-void CGetSetOptions::SetLanguageFile(CString csLanguage)
-{
-	SetProfileString("LanguageFile", csLanguage);
-}
-
-long CGetSetOptions::GetSaveClipDelay()
-{
-	return GetProfileLong("SaveClipDelay", 500);
-}
-
-void CGetSetOptions::SetSaveClipDelay(long lDelay)
-{
-	m_lSaveClipDelay = lDelay;
-	SetProfileLong("SaveClipDelay", lDelay);
-}
-
-long CGetSetOptions::GetProcessDrawClipboardDelay()
-{
-	return GetProfileLong("ProcessDrawClipboardDelay", 100);
-}
-
-void CGetSetOptions::SetProcessDrawClipboardDelay(long lDelay)
-{
-	m_lProcessDrawClipboardDelay = lDelay;
-	SetProfileLong("ProcessDrawClipboardDelay", lDelay);
-}
-
-BOOL CGetSetOptions::GetEnableDebugLogging()
-{
-	return GetProfileLong("EnableDebugLogging", FALSE);
-}
-
-void CGetSetOptions::SetEnableDebugLogging(BOOL bEnable)
-{
-	m_bEnableDebugLogging = bEnable;
-	SetProfileLong("EnableDebugLogging", bEnable);
-}
-
-BOOL CGetSetOptions::GetEnsureConnectToClipboard()
-{
-	return GetProfileLong("EnsureConnected", FALSE);
-}
-
-void CGetSetOptions::SetEnsureConnectToClipboard(BOOL bSet)
-{
-	m_bEnsureConnectToClipboard = bSet;
-	SetProfileLong("EnsureConnected", bSet);
+	return csFileName;
 }
 
 
@@ -1467,7 +508,7 @@ bool CHotKey::SaveKey()
 
 BOOL CHotKey::ValidateHotKey(DWORD dwHotKey)
 {
-	ATOM id = ::GlobalAddAtom("HK_VALIDATE");
+	ATOM id = ::GlobalAddAtom(_T("HK_VALIDATE"));
 	BOOL bResult = ::RegisterHotKey( g_HotKeys.m_hWnd,
 		id,
 		GetModifier(dwHotKey),
@@ -1500,7 +541,7 @@ void CHotKey::CopyToCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID)
 {
 	long lModifiers = HIBYTE(m_Key);
 
-	ctrl.SetHotKey(LOBYTE(m_Key), lModifiers); 
+	ctrl.SetHotKey(LOBYTE(m_Key), (WORD)lModifiers); 
 
 	if(lModifiers & HOTKEYF_EXT)
 	{
@@ -1558,7 +599,7 @@ bool CHotKey::Unregister(bool bOnShowingDitto)
 		}
 		else
 		{
-			Log("Unregister" "FAILED!");
+			Log(_T("Unregister FAILED!"));
 			ASSERT(0);
 		}
 	}
@@ -2010,27 +1051,29 @@ m_nCurPos(0)
 void CTokenizer::SetDelimiters(const CString& csDelim)
 {
 	for(int i = 0; i < csDelim.GetLength(); ++i)
-		m_delim.set(static_cast<BYTE>(csDelim[i]));
+		m_delim.Add(csDelim[i]);
+
+	m_delim.SortAscending();
 }
 
 bool CTokenizer::Next(CString& cs)
 {
-	int len = m_cs.GetLength();
-	
 	cs.Empty();
-	
-	while(m_nCurPos < len && m_delim[static_cast<BYTE>(m_cs[m_nCurPos])])
-		++m_nCurPos;
-	
-	if(m_nCurPos >= len)
+	int len = m_cs.GetLength();
+
+	while (m_nCurPos < len && m_delim.Find(m_cs[m_nCurPos]))
+		++ m_nCurPos;
+
+	if (m_nCurPos >= len)
 		return false;
-	
+
 	int nStartPos = m_nCurPos;
-	while(m_nCurPos < len && !m_delim[static_cast<BYTE>(m_cs[m_nCurPos])])
-		++m_nCurPos;
-	
+
+	while (m_nCurPos < len && !m_delim.Find(m_cs[m_nCurPos]))
+		++ m_nCurPos;
+
 	cs = m_cs.Mid(nStartPos, m_nCurPos - nStartPos);
-	
+
 	return true;
 }
 
@@ -2234,8 +1277,8 @@ void CPopup::SendToolTipText( CString text )
 	m_csToolTipText = text;
 	
 	//Replace the tabs with spaces, the tooltip didn't like the \t s
-	text.Replace("\t", "  ");
-	m_TI.lpszText = (LPSTR) (LPCTSTR) text;
+	text.Replace(_T("\t"), _T("  "));
+	m_TI.lpszText = (LPTSTR) (LPCTSTR) text;
 	
 	// this allows \n and \r to be interpreted correctly
 	::SendMessage(m_hTTWnd, TTM_SETMAXTIPWIDTH, 0, 500);
@@ -2289,80 +1332,221 @@ void CPopup::Hide()
 	m_bIsShowing = false;
 }
 
-#include "Encryption.h"
-#define STRING_PASSWORD "*4ei)"
-BOOL EncryptString(CString &csIn, UCHAR *&pOutput, int &nLenOutput)
+/*------------------------------------------------------------------*\
+ID based Globals
+\*------------------------------------------------------------------*/
+
+BOOL MarkClipAsPasted(long lID)
+{
+	CGetSetOptions::SetTripPasteCount(-1);
+	CGetSetOptions::SetTotalPasteCount(-1);
+	
+	if( !g_Opt.m_bUpdateTimeOnPaste )
+		return FALSE;
+	
+	try
+	{	
+		//Update the time it was copied so that it appears at the top of the 
+		//paste list.  Items are sorted by this time.
+
+		CTime now = CTime::GetCurrentTime();
+		try
+		{
+			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT lDate FROM Main ORDER BY lDate DESC LIMIT 1"));			
+			if(q.eof() == false)
+			{
+				long lLatestDate = q.getIntField(_T("lDate"));
+				if(now.GetTime() <= lLatestDate)
+				{
+					now = lLatestDate + 1;
+				}
+			}
+		}
+		CATCH_SQLITE_EXCEPTION
+
+		theApp.m_db.execDMLEx(_T("UPDATE Main SET lDate = %d where lID = %d;"), (long)now.GetTime(), lID);
+		
+		return TRUE;
+	}
+	CATCH_SQLITE_EXCEPTION
+	
+	return FALSE;
+}
+
+long NewGroupID(long lParentID, CString text)
+{
+	long lID=0;
+	CTime time;
+	time = CTime::GetCurrentTime();
+	
+	try
+	{
+		//sqlite doesn't like single quotes ' replace them with double ''
+		if(text.IsEmpty())
+			text = time.Format("NewGroup %y/%m/%d %H:%M:%S");
+		text.Replace(_T("'"), _T("''"));
+
+		CString cs;
+		cs.Format(_T("insert into Main values(NULL, %d, '%s', 0, %d, 0, 1, %d, '');"),
+							(long)time.GetTime(),
+							text,
+							(long)time.GetTime(),
+							lParentID);
+
+		theApp.m_db.execDML(cs);
+
+		lID = (long)theApp.m_db.lastRowId();
+	}
+	CATCH_SQLITE_EXCEPTION_AND_RETURN(0)
+	
+	return lID;
+}
+
+// deletes the given item
+BOOL DeleteID(long lID)
 {
 	BOOL bRet = FALSE;
-	CEncryption *pEncryptor;
-
-	pEncryptor = new CEncryption;
-
-	if(pEncryptor)
+	
+	try
 	{
-		UCHAR *pData = (UCHAR*)csIn.GetBuffer(csIn.GetLength());
-
-		nLenOutput = 0;
-		if(pEncryptor->Encrypt(pData, csIn.GetLength(), STRING_PASSWORD, pOutput, nLenOutput))
+		bool bCont = false;
+		bool bGroup = false;
 		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT bIsGroup FROM Main WHERE lId = %d"), lID);
+			bCont = !q.eof();
+			if(bCont)
+			{
+				bGroup = q.getIntField(_T("bIsGroup")) > 0;
+			}
+		}
+
+		if(bCont)
+		{			
+			if(bGroup)
+			{
+				theApp.m_db.execDMLEx(_T("UPDATE Main SET lParentID = -1 WHERE lParentID = %d;"), lID);
+			}
+			
+			//now is deleted from a trigger
+			//theApp.m_db.execDMLEx(_T("DELETE FROM Data WHERE lParentID = %d;"), lID);
+
+			theApp.m_db.execDMLEx(_T("DELETE FROM Main WHERE lID = %d;"), lID);
+
 			bRet = TRUE;
 		}
 
-		delete pEncryptor;
+		theApp.OnDeleteID(lID);
 	}
-
+	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
+		
 	return bRet;
 }
 
-BOOL DecryptString(UCHAR *pData, int nLenIn, UCHAR *&pOutput, int &nLenOutput)
+BOOL DeleteAllIDs()
 {
-	BOOL bRet = FALSE;
-	CEncryption *pEncryptor;
-
-	pEncryptor = new CEncryption;
-
-	if(pEncryptor)
+	try
 	{
-		if(pEncryptor->Decrypt(pData, nLenIn, STRING_PASSWORD, pOutput, nLenOutput))
+		theApp.m_db.execDML(_T("DELETE FROM Data;"));
+		theApp.m_db.execDML(_T("DELETE FROM Main;"));
+	}
+	CATCH_SQLITE_EXCEPTION
+
+	return TRUE;
+}
+
+BOOL DeleteFormats(long lParentID, ARRAY& formatIDs)
+{	
+	if(formatIDs.GetSize() <= 0)
+		return TRUE;
+		
+	try
+	{
+		//Delete the requested data formats
+		int nCount = formatIDs.GetSize();
+		for(int i = 0; i < nCount; i++)
 		{
-			bRet = TRUE;
+			theApp.m_db.execDMLEx(_T("DELETE FROM Data WHERE lID = %d;"), formatIDs[i]);
 		}
 
-		delete pEncryptor;
-	}
+		CClip clip;
+		if(clip.LoadFormats(lParentID))
+		{
+			DWORD CRC = clip.GenerateCRC();
 
-	return bRet;
+			//Update the main table with new size
+			theApp.m_db.execDMLEx(_T("UPDATE Main SET CRC = %d WHERE lID = %d"), CRC, lParentID);
+		}
+	}
+	CATCH_SQLITE_EXCEPTION
+		
+	return TRUE;
 }
 
-LPCSTR GetMonthAbb(long lMonth)
+BOOL EnsureWindowVisible(CRect *pcrRect)
 {
-	switch(lMonth) 
+	int nMonitor = GetMonitorFromRect(pcrRect);
+	if(nMonitor < 0)
 	{
-	case 1:
-		return "Jan";
-	case 2:
-		return "Feb";
-	case 3:
-		return "Mar";
-	case 4:
-		return "Apr";
-	case 5:
-		return "May";
-	case 6:
-		return "Jun";
-	case 7:
-		return "Jul";
-	case 8:
-		return "Aug";
-	case 9:
-		return "Sep";
-	case 10:
-		return "Oct";
-	case 11:
-		return "Nov";
-	case 12:
-		return "Dec";
+		GetMonitorRect(0, pcrRect);
+		pcrRect->right = pcrRect->left + 300;
+		pcrRect->bottom = pcrRect->top + 300;
+
+		return TRUE;
 	}
 
-	return "";
+	CRect crMonitor;
+	GetMonitorRect(nMonitor, crMonitor);
+
+	//Validate the left
+	long lDiff = pcrRect->left - crMonitor.left;
+	if(lDiff < 0)
+	{
+		pcrRect->left += abs(lDiff);
+		pcrRect->right += abs(lDiff);
+	}
+
+	//Right side
+	lDiff = pcrRect->right - crMonitor.right;
+	if(lDiff > 0)
+	{
+		pcrRect->left -= abs(lDiff);
+		pcrRect->right -= abs(lDiff);
+	}
+
+	//Top
+	lDiff = pcrRect->top - crMonitor.top;
+	if(lDiff < 0)
+	{
+		pcrRect->top += abs(lDiff);
+		pcrRect->bottom += abs(lDiff);
+	}
+
+	//Bottom
+	lDiff = pcrRect->bottom - crMonitor.bottom;
+	if(lDiff > 0)
+	{
+		pcrRect->top -= abs(lDiff);
+		pcrRect->bottom -= abs(lDiff);
+	}
+
+	return TRUE;
+}
+
+__int64 GetLastWriteTime(const CString &csFile)
+{
+	__int64 nLastWrite = 0;
+	CFileFind finder;
+	BOOL bResult = finder.FindFile(csFile);
+
+	if (bResult)
+	{
+		finder.FindNextFile();
+
+		FILETIME ft;
+		finder.GetLastWriteTime(&ft);
+
+		memcpy(&nLastWrite, &ft, sizeof(ft));
+	}
+
+	return nLastWrite;
 }

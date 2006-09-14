@@ -27,7 +27,7 @@ typedef int (*PFNGETVERSION)(); // function prototype
 extern "C" DLL_DECLSPEC int GetInterfaceVersion();
 
 // helper method
-static IEncryption* CreateEncryptionInterface(const char* szDllPath)
+static IEncryption* CreateEncryptionInterface(const TCHAR* szDllPath)
 {
     IEncryption* pInterface = NULL;
     HMODULE hDll = LoadLibrary(szDllPath);
@@ -49,7 +49,7 @@ static IEncryption* CreateEncryptionInterface(const char* szDllPath)
     return pInterface;
 }
 
-static BOOL IsEncryptionDll(const char* szDllPath)
+static BOOL IsEncryptionDll(const TCHAR* szDllPath)
 {
     HMODULE hDll = LoadLibrary(szDllPath);
 	

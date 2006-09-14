@@ -36,16 +36,15 @@ public:
 	CCopyThread*	m_pHandler;
 
 	void Connect();    // connects as a clipboard viewer
-	void Disconnect(); // disconnects as a clipboard viewer
+	void Disconnect(bool bSendPing = true); // disconnects as a clipboard viewer
 
 	void SendPing();
 
 	bool GetConnect()				{ return m_bConnect; }
 	void SetConnect(bool bConnect);
-
 	void SetEnsureConnectedTimer();
 
-	long m_lLastCopy;
+	DWORD m_dwLastCopy;
 	bool m_bHandlingClipChange;
 
 	// Generated message map functions

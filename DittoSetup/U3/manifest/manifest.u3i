@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<u3manifest version="1.0">
+  <application uuid="33820de7-c934-490a-8445-3212afbd9bf9" version="03.10.00.00">
+    <icon>Ditto.ico</icon>
+    <name>Ditto</name>
+    <description>Ditto is an extension to the standard windows clipboard. It saves each item placed on the clipboard allowing you access to any of those items at a later time.</description>
+    <vendor url="ditto-cp.sourceforge.net">Ditto</vendor>
+    <options>
+      <minFreeSpace>2.0</minFreeSpace>
+	  <upgrade appData="add" deviceExec="overwrite"/>
+    </options>
+    <i18n/>
+  </application>
+  <actions>
+		<deviceInstall cmd="%U3_DEVICE_EXEC_PATH%\Ditto.exe">-U3Install</deviceInstall>
+		<appStart cmd="%U3_HOST_EXEC_PATH%\U3Action.exe">-appStart -SIDevice \"%U3_DEVICE_EXEC_PATH%\ditto.exe\" -U3</appStart>
+		<appStop cmd="%U3_HOST_EXEC_PATH%\U3Action.exe">-appStop \"%U3_HOST_EXEC_PATH%\U3DittoStop.exe\"</appStop>
+		<hostCleanUp cmd="%U3_HOST_EXEC_PATH%\U3Action.exe">-hostCleanUp</hostCleanUp>
+  </actions>
+</u3manifest>

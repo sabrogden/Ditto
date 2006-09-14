@@ -29,12 +29,14 @@ CFormatSQL::~CFormatSQL()
 void CFormatSQL::Parse(CString cs)
 {
 	//Replace all single ' with a double '
-	cs.Replace("'", "''");
+	cs.Replace(_T("'"), _T("''"));
 	//Replace all "|" with a space
-	cs.Replace("|", " ");
+	cs.Replace(_T("|"), _T(" "));
 
-	cs.Replace("[", " ");
-	cs.Replace("]", " ");
+	cs.Replace(_T("["), _T(" "));
+	cs.Replace(_T("]"), _T(" "));
+
+	cs.Replace(_T("*"), _T("%"));
 
 	int nLength = cs.GetLength();
 
@@ -126,13 +128,13 @@ bool CFormatSQL::AddToSQL(CString cs, eSpecialTypes &eNOTValue, eSpecialTypes &e
 	cs.TrimLeft();
 	cs.TrimRight();
 
-	if(cs.Find("*") < 0 && cs.Find("?") < 0)
+	if(cs.Find(_T("%")) < 0 && cs.Find(_T("?")) < 0)
 	{
-		csThisSQL.Format("%s%sLIKE \'*%s*\'", m_csVariable, GetKeyWordString(eNOTValue), cs);
+		csThisSQL.Format(_T("%s%sLIKE \'%%%s%%\'"), m_csVariable, GetKeyWordString(eNOTValue), cs);
 	}
 	else
 	{
-		csThisSQL.Format("%s%sLIKE \'%s\'", m_csVariable, GetKeyWordString(eNOTValue), cs);
+		csThisSQL.Format(_T("%s%sLIKE \'%s%%\'"), m_csVariable, GetKeyWordString(eNOTValue), cs);
 	}
 
 	if(m_csWhere.GetLength() > 0)

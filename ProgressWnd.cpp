@@ -15,6 +15,8 @@ LPCTSTR szSection = _T("Settings");
 LPCTSTR szEntryX  = _T("X");
 LPCTSTR szEntryY  = _T("Y");
 
+#define _CRT_NON_CONFORMING_SWPRINTFS 1
+
 /////////////////////////////////////////////////////////////////////////////
 // CProgressWnd
 

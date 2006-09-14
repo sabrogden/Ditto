@@ -37,7 +37,8 @@ BOOL CInternetUpdate::CheckForUpdate(HWND hParent, BOOL bCheckForPrevUpdate, BOO
 	m_hParent = hParent;
 	
 	CTime Now = CTime::GetCurrentTime();
-	tm tmNow = *(Now.GetLocalTm());
+	struct tm ptmTemp;
+	tm tmNow = *(Now.GetLocalTm(&ptmTemp));
 	long lCurrentDayOfYear = tmNow.tm_yday;
 
 	RemoveOldUpdateFile();
@@ -67,16 +68,16 @@ BOOL CInternetUpdate::CheckForUpdate(HWND hParent, BOOL bCheckForPrevUpdate, BOO
 	if(m_lUpdateVersion > m_lRunningVersion)
 	{
 		CString csMessage;
-		csMessage.Format(	"%s, %s\n"
-							"%s, %s\n\n"
-							"%s",
+		csMessage.Format(	_T("%s, %s\n")
+							_T("%s, %s\n\n")
+							_T("%s"),
 							theApp.m_Language.GetString("Updates_Available", "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version"),
 							GetVersionString(m_lRunningVersion), 
 							theApp.m_Language.GetString("Update_Version", "Update Version"),
 							GetVersionString(m_lUpdateVersion),
 							theApp.m_Language.GetString("Download_Update", "Download updated version?"));
 
-		if(MessageBox(hParent, csMessage, "Ditto", MB_YESNO) == IDYES)
+		if(MessageBox(hParent, csMessage, _T("Ditto"), MB_YESNO) == IDYES)
 		{
 			CString csFile = DownloadUpdate();
 
@@ -92,7 +93,7 @@ BOOL CInternetUpdate::CheckForUpdate(HWND hParent, BOOL bCheckForPrevUpdate, BOO
 	}
 	else if(m_bShowMessages)
 	{
-		MessageBox(hParent, theApp.m_Language.GetString("No_Updates", "No updates available"), "Ditto", MB_OK);
+		MessageBox(hParent, theApp.m_Language.GetString("No_Updates", "No updates available"), _T("Ditto"), MB_OK);
 	}
 
 	return bRet;
@@ -100,12 +101,11 @@ BOOL CInternetUpdate::CheckForUpdate(HWND hParent, BOOL bCheckForPrevUpdate, BOO
 
 BOOL CInternetUpdate::RemoveOldUpdateFile()
 {
-	CString csFile = CGetSetOptions::GetExeFileName();
-	csFile = GetFilePath(csFile);
+	CString csFile = CGetSetOptions::GetPath(PATH_UPDATE_FILE);
 	csFile += "DittoSetup.exe";
 	
 	BOOL bRet = TRUE;
-	if(_access(csFile, 0) != -1)
+	if(FileExists(csFile))
 	{
 		bRet = ::DeleteFile(csFile);
 	}
@@ -116,7 +116,7 @@ BOOL CInternetUpdate::RemoveOldUpdateFile()
 CString CInternetUpdate::GetVersionString(long lVersion)
 {
 	CString csLine;
-	csLine.Format("%02i.%02i.%02i%02i", 
+	csLine.Format(_T("%02i.%02i.%02i.%02i"), 
 		(lVersion >> 24) & 0x03f,
 		(lVersion >> 16) & 0x03f,
 		((lVersion >> 8) & 0x07f),
@@ -143,7 +143,7 @@ long CInternetUpdate::GetRunningVersion()
 		{
 			if(GetFileVersionInfo(csFileName.GetBuffer(csFileName.GetLength()), dwHandle, dwSize, lpData) != 0)
 			{
-				if(VerQueryValue(lpData, "\\", (LPVOID*)&lpFFI, &iBuffSize) != 0)
+				if(VerQueryValue(lpData, _T("\\"), (LPVOID*)&lpFFI, &iBuffSize) != 0)
 				{
 					if(iBuffSize > 0)
 					{
@@ -163,7 +163,6 @@ long CInternetUpdate::GetRunningVersion()
     return(0);
 }
 
-
 long CInternetUpdate::GetUpdateVersion()
 {
 	char httpbuff[HTTPBUFLEN];
@@ -173,13 +172,20 @@ long CInternetUpdate::GetUpdateVersion()
 
 	//if nothing there get the default
 	if(csPath.IsEmpty())
-		csPath = "ditto-cp.sourceforge.net/Update/DittoVersion.txt";
+	{
+		if(g_Opt.m_bU3)
+		{
+			csPath = "ditto-cp.sourceforge.net/U3/DittoVersion.txt";
+		}
+		else
+		{
+			csPath = "ditto-cp.sourceforge.net/Update3/DittoVersion.txt";
+		}
+	}
 	
 	CString csUrl = "http://" + csPath;
 	
-	CString csFile = CGetSetOptions::GetExeFileName();
-
-	csFile = GetFilePath(csFile);
+	CString csFile = CGetSetOptions::GetPath(PATH_UPDATE_FILE);
 	csFile += "DittoVersion.txt";
 
 	bool bError = false;
@@ -221,7 +227,7 @@ long CInternetUpdate::GetUpdateVersion()
 				if(file.ReadString(csVersion))
 				{
 					file.Close();		
-					lReturn = atol(csVersion);
+					lReturn = ATOL(csVersion);
 				}
 			}
 		}
@@ -246,7 +252,7 @@ long CInternetUpdate::GetUpdateVersion()
 	{
 		if(m_bShowMessages)
 		{
-			MessageBox(m_hParent, "Error Connecting.", "Ditto", MB_OK);
+			MessageBox(m_hParent, _T("Error Connecting."), _T("Ditto"), MB_OK);
 			m_bShowMessages = FALSE;
 		}
 	}
@@ -259,7 +265,7 @@ long CInternetUpdate::GetUpdateVersion()
 		remotefile = NULL;
 	}
 
-	if(access(csFile, 0) != -1)
+	if(FileExists(csFile))
 		CFile::Remove(csFile);
 
 	return lReturn;
@@ -274,12 +280,21 @@ CString CInternetUpdate::DownloadUpdate()
 
 	//if nothing there get the default
 	if(csPath.IsEmpty())
-		csPath = "ditto-cp.sourceforge.net/Update/DittoSetup.exe";
+	{
+		if(g_Opt.m_bU3)
+		{
+			csPath = "ditto-cp.sourceforge.net/U3/DittoSetup.exe";
+		}
+		else
+		{
+			csPath = "ditto-cp.sourceforge.net/U3/DittoSetup.exe";
+		}
+	}
+		
 
 	CString csUrl = "http://" + csPath;
 	
-	CString csFile = CGetSetOptions::GetExeFileName();
-	csFile = GetFilePath(csFile);
+	CString csFile = CGetSetOptions::GetPath(PATH_UPDATE_FILE);
 	csFile += "DittoSetup.exe";
 
 	long lReturn = -1;
@@ -299,9 +314,9 @@ CString CInternetUpdate::DownloadUpdate()
 
 		//Set up the progress wnd
 		CProgressWnd progress;
-		progress.Create(CWnd::FromHandlePermanent(m_hParent), "Ditto Update");
+		progress.Create(CWnd::FromHandlePermanent(m_hParent), _T("Ditto Update"));
 		progress.SetRange(0, dFileSize, HTTPBUFLEN);
-		progress.SetText("Downloading Ditto Update ...");
+		progress.SetText(_T("Downloading Ditto Update ..."));
 		
 		//Create the file to put the info in
 		CFile myfile(csFile, CFile::modeCreate|CFile::modeWrite|CFile::typeBinary);
@@ -325,7 +340,7 @@ CString CInternetUpdate::DownloadUpdate()
 
 			if(!RemoteFile)
 			{
-				MessageBox(m_hParent, "Error Downloading update.", "Ditto", MB_OK);
+				MessageBox(m_hParent, _T("Error Downloading update."), _T("Ditto"), MB_OK);
 				csFile = "";
 				break;
 			}
@@ -335,19 +350,19 @@ CString CInternetUpdate::DownloadUpdate()
 	}
 	catch(CInternetException *pEX)
 	{
-		MessageBox(m_hParent, "Error Downloading update.", "Ditto", MB_OK);
+		MessageBox(m_hParent, _T("Error Downloading update."), _T("Ditto"), MB_OK);
 		csFile.Empty();
 		pEX->Delete();
 	}
 	catch(CFileException *e)
 	{
-		MessageBox(m_hParent, "Error Downloading update.", "Ditto", MB_OK);
+		MessageBox(m_hParent, _T("Error Downloading update."), _T("Ditto"), MB_OK);
 		csFile.Empty();
 		e->Delete();
 	}
 	catch(...)
 	{
-		MessageBox(m_hParent, "Error Downloading update.", "Ditto", MB_OK);
+		MessageBox(m_hParent, _T("Error Downloading update."), _T("Ditto"), MB_OK);
 		csFile.Empty();
 	}
 

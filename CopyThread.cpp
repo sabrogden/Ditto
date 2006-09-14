@@ -38,8 +38,6 @@ CCopyThread::~CCopyThread()
 
 BOOL CCopyThread::InitInstance()
 {
-	SetThreadName(m_nThreadID, "COPY");
-
 	m_pClipboardViewer = new CClipboardViewer(this);
 
 	// the window is created within this thread and therefore uses its message queue
@@ -50,7 +48,7 @@ BOOL CCopyThread::InitInstance()
 
 int CCopyThread::ExitInstance()
 {
-	m_pClipboardViewer->Disconnect();
+	m_pClipboardViewer->Disconnect(false);
 
 	return CWinThread::ExitInstance();
 }
@@ -71,7 +69,7 @@ void CCopyThread::OnClipboardChange()
 	SyncConfig(); // synchronize with the main thread's copy configuration
 	
 	// if we are told not to copy on change, then we have nothing to do.
-	if( !m_LocalConfig.m_bCopyOnChange )
+	if(!m_LocalConfig.m_bCopyOnChange)
 		return;
 	
 	CClip* pClip = new CClip;
@@ -145,7 +143,7 @@ bool CCopyThread::GetConnectCV()
 void CCopyThread::SetConnectCV(bool bConnect)
 {
 	ASSERT( m_pClipboardViewer && m_pClipboardViewer->m_hWnd );
-	::SendMessage(m_pClipboardViewer->m_hWnd, WM_SETCONNECT, bConnect, 0);
+	::SendMessage( m_pClipboardViewer->m_hWnd, WM_SETCONNECT, bConnect, 0 );
 }
 
 CClipList* CCopyThread::GetClips()
@@ -158,6 +156,7 @@ CClipList* CCopyThread::GetClips()
 	Release();
 	return pRet;
 }
+
 void CCopyThread::SetSupportedTypes( CClipTypes* pTypes )
 {
 	Hold();

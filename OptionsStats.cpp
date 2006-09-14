@@ -79,17 +79,17 @@ BOOL COptionsStats::OnInitDialog()
 
 	CTime time(CGetSetOptions::GetTotalDate());
 	m_eAllDate = time.Format("%m/%d/%Y %I:%M %p");
-	m_eAllCopies.Format("%d", CGetSetOptions::GetTotalCopyCount());
-	m_eAllPastes.Format("%d", CGetSetOptions::GetTotalPasteCount());
+	m_eAllCopies.Format(_T("%d"), CGetSetOptions::GetTotalCopyCount());
+	m_eAllPastes.Format(_T("%d"), CGetSetOptions::GetTotalPasteCount());
 
 	CTime time2(CGetSetOptions::GetTripDate());
 	m_eTripDate = time2.Format("%m/%d/%Y %I:%M %p");
-	m_eTripCopies.Format("%d", CGetSetOptions::GetTripCopyCount());
-	m_eTripPastes.Format("%d", CGetSetOptions::GetTripPasteCount());
+	m_eTripCopies.Format(_T("%d"), CGetSetOptions::GetTripCopyCount());
+	m_eTripPastes.Format(_T("%d"), CGetSetOptions::GetTripPasteCount());
 
-	m_eClipsSent.Format("%d", theApp.m_lClipsSent);
-	m_eClipsRecieved.Format("%d", theApp.m_lClipsRecieved);
-	m_eLastStarted = theApp.m_oldtStartUp.Format("%m/%d/%y %I:%M:%S");
+	m_eClipsSent.Format(_T("%d"), theApp.m_lClipsSent);
+	m_eClipsRecieved.Format(_T("%d"), theApp.m_lClipsRecieved);
+	m_eLastStarted = theApp.m_oldtStartUp.Format(_T("%m/%d/%y %I:%M:%S"));
 	if(theApp.m_oldtStartUp.GetHour() > 12)
 		m_eLastStarted += " PM";
 	else
@@ -98,30 +98,22 @@ BOOL COptionsStats::OnInitDialog()
 	COleDateTimeSpan span = COleDateTime::GetCurrentTime() - theApp.m_oldtStartUp;
 
 	CString csSpan;
-	csSpan.Format("  -  %d.%d.%d (D.H.M)", (long)span.GetTotalDays(), span.GetHours(), span.GetMinutes());
+	csSpan.Format(_T("  -  %d.%d.%d (D.H.M)"), (long)span.GetTotalDays(), span.GetHours(), span.GetMinutes());
 	m_eLastStarted += csSpan;
 
-	CMainTable recset;
-	recset.Open("SELECT * FROM Main");
-	if(!recset.IsEOF())
+	try
 	{
-		recset.MoveLast();
-		m_eSavedCopies.Format("%d", recset.GetRecordCount());
+		m_eSavedCopies.Format(_T("%d"), theApp.m_db.execScalar(_T("SELECT COUNT(lID) FROM Main")));
+		m_eSavedCopyData.Format(_T("%d"), theApp.m_db.execScalar(_T("SELECT COUNT(lID) FROM Data")));
 	}
-
-	CDataTable recset2;
-	recset2.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT * FROM Data" ,NULL);
-	if(!recset2.IsEOF())
-	{
-		recset2.MoveLast();
-		m_eSavedCopyData.Format("%d", recset2.GetRecordCount());
-	}
+	CATCH_SQLITE_EXCEPTION
+	
 
 	struct _stat buf;
-	int nResult;
-	nResult = _stat(GetDBName(), &buf);
+	int nResult = STAT(GetDBName(), &buf);
+			
 	if(nResult == 0)
-		m_eDatabaseSize.Format("%d KB", (buf.st_size/1024));
+		m_eDatabaseSize.Format(_T("%d KB"), (buf.st_size/1024));
 
 	UpdateData(FALSE);
 
@@ -145,7 +137,7 @@ void COptionsStats::OnResetCounts()
 
 void COptionsStats::OnRemoveAll() 
 {
-	if(MessageBox(theApp.m_Language.GetString("Remove_All", "This will remove all Copy Entries!\n\nContinue?"), "Warning", MB_YESNO) == IDYES)
+	if(MessageBox(theApp.m_Language.GetString("Remove_All", "This will remove all Copy Entries!\n\nContinue?"), _T("Warning"), MB_YESNO) == IDYES)
 	{
 		if( DeleteAllIDs() )
 		{
@@ -154,9 +146,9 @@ void COptionsStats::OnRemoveAll()
 
 			struct _stat buf;
 			int nResult;
-			nResult = _stat(GetDBName(), &buf);
+			nResult = STAT(GetDBName(), &buf);
 			if(nResult == 0)
-				m_eDatabaseSize.Format("%d KB", (buf.st_size/1024));
+				m_eDatabaseSize.Format(_T("%d KB"), (buf.st_size/1024));
 
 			UpdateData(FALSE);
 		}

@@ -11,6 +11,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // CToolTipEx window
 
+#define HIDE_WINDOW_TIMER 1
+
 class CToolTipEx : public CWnd
 {
 // Construction
@@ -27,9 +29,12 @@ public:
 	BOOL Show(CPoint point);
 	BOOL Hide();
 	void SetToolTipText(const CString &csText);
-	void SetRTFText(const CString &csRTF);
+//	void SetRTFText(const CString &csRTF);
+	void SetRTFText(const char *pRTF);
 	void SetBitmap(CBitmap *pBitmap);
 	void SetNotifyWnd(CWnd *pNotify)		{ m_pNotifyWnd = pNotify;	}
+	void HideWindowInXMilliSeconds(long lms)	{ SetTimer(HIDE_WINDOW_TIMER, lms, NULL); }
+	CRect GetBoundsRect();
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -59,7 +64,6 @@ protected:
 
 protected:
 	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);
-	CRect GetBoundsRect();
 	BOOL SetLogFont(LPLOGFONT lpLogFont, BOOL bRedraw /*=TRUE*/);
 	LPLOGFONT GetSystemToolTipFont();
 	BOOL IsCursorInToolTip();
@@ -73,6 +77,8 @@ protected:
 	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 /////////////////////////////////////////////////////////////////////////////

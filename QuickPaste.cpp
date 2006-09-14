@@ -48,6 +48,8 @@ void CQuickPaste::Create(CWnd *pParent)
 	ASSERT( m_pwndPaste->Create(point, pParent) );
 	// place it at the previous position and size
 	m_pwndPaste->MoveWindow(CRect(point, csSize));
+
+	Log(_T("Creating QPasteWnd"));
 }
 
 BOOL CQuickPaste::CloseQPasteWnd()
@@ -55,10 +57,15 @@ BOOL CQuickPaste::CloseQPasteWnd()
 	if(m_pwndPaste)
 	{
 		if(m_pwndPaste->IsWindowVisible())
+		{
+			Log(_T("CloseQPasteWnd called but the window is visible"));
 			return FALSE;
+		}
 		
 		if(m_pwndPaste)
-			m_pwndPaste->SendMessage(WM_CLOSE, 0, 0);
+			m_pwndPaste->DestroyWindow();
+
+		Log(_T("CloseQPasteWnd called closing qpastewnd"));
 		
 		delete m_pwndPaste;
 		m_pwndPaste = NULL;
@@ -67,24 +74,33 @@ BOOL CQuickPaste::CloseQPasteWnd()
 	return TRUE;
 }
 
-void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
+void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboard)
 {		
+	if(bFromKeyboard == false && GetKeyState(VK_SHIFT) & 0x8000 && GetKeyState(VK_CONTROL) & 0x8000)
 	{
-		if((theApp.m_bShowingQuickPaste) || (theApp.m_bShowingOptions))
-		{
-			if( g_Opt.m_bShowPersistent )
-			{
-				m_pwndPaste->MinMaxWindow(FORCE_MAX);
-				m_pwndPaste->SetForegroundWindow();
-			}
-			return;
-		}
+		if(m_pwndPaste)
+			m_pwndPaste->DestroyWindow();
+
+		Log(_T("CloseQPasteWnd called closing qpastewnd from keyboard"));
+
+		delete m_pwndPaste;
+		m_pwndPaste = NULL;
+
+		theApp.m_db.close();
+		OpenDatabase(CGetSetOptions::GetDBPath());
+
+		return;
 	}
-	
-	
-	CPoint ptCaret;
-	GetFocusWnd(&ptCaret); // get caret position relative to screen
-	ptCaret.Offset(-12, 12);
+
+	if((theApp.m_bShowingQuickPaste) || (theApp.m_bShowingOptions))
+	{
+		if(g_Opt.m_bShowPersistent)
+		{
+			m_pwndPaste->MinMaxWindow(FORCE_MAX);
+			m_pwndPaste->SetForegroundWindow();
+		}
+		return;
+	}
 	
 	int nPosition = CGetSetOptions::GetQuickPastePosition();
 	
@@ -100,6 +116,8 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 		ASSERT(FALSE);
 		return;
 	}
+
+	m_pwndPaste->MinMaxWindow(FORCE_MAX);
 	
 	//If it is a window get the rect otherwise get the saved point and size
 	if (IsWindow(m_pwndPaste->m_hWnd))
@@ -111,6 +129,16 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 	{
 		CGetSetOptions::GetQuickPastePoint(point);
 		CGetSetOptions::GetQuickPasteSize(csSize);
+	}
+
+	CPoint ptCaret = GetFocusedCaretPos();
+	if(ptCaret.x <= 0 || ptCaret.y <= 0)
+	{
+		CRect cr;
+		::GetWindowRect(theApp.m_hTargetWnd, cr);
+		ptCaret = cr.CenterPoint();
+		ptCaret.x -= csSize.cx/2;
+		ptCaret.y -= csSize.cy/2;
 	}
 	
 	if(bAtPrevPos)
@@ -130,12 +158,11 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 		// Create the window   
 		VERIFY( m_pwndPaste->Create(point, pParent) );
 	}
-	
-	m_pwndPaste->MinMaxWindow(FORCE_MAX);
 
 	CRect crRect = CRect(point, csSize);
 
-	EnsureVisible(&crRect);
+	if(g_Opt.m_bEnsureEntireWindowCanBeSeen)
+		EnsureWindowVisible(&crRect);
 	
 	if((nPosition == POS_AT_CARET) ||
 		(nPosition == POS_AT_CURSOR) ||
@@ -145,61 +172,8 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, BOOL bAtPrevPos)
 	}
 	
 	// Show the window
-	m_pwndPaste->ShowQPasteWindow();
+	m_pwndPaste->ShowQPasteWindow(FALSE);
 	m_pwndPaste->SetForegroundWindow();
-}
-
-BOOL CQuickPaste::EnsureVisible(CRect *pcrRect)
-{
-	int nMonitor = GetMonitorFromRect(pcrRect);
-	if(nMonitor < 0)
-	{
-		GetMonitorRect(0, pcrRect);
-		pcrRect->right = pcrRect->left + 300;
-		pcrRect->bottom = pcrRect->top + 300;
-
-		return TRUE;
-	}
-
-	if(g_Opt.m_bEnsureEntireWindowCanBeSeen == FALSE)
-		return TRUE;
-
-	CRect crMonitor;
-	GetMonitorRect(nMonitor, crMonitor);
-
-	//Validate the left
-	long lDiff = pcrRect->left - crMonitor.left;
-	if(lDiff < 0)
-	{
-		pcrRect->left += abs(lDiff);
-		pcrRect->right += abs(lDiff);
-	}
-
-	//Right side
-	lDiff = pcrRect->right - crMonitor.right;
-	if(lDiff > 0)
-	{
-		pcrRect->left -= abs(lDiff);
-		pcrRect->right -= abs(lDiff);
-	}
-
-	//Top
-	lDiff = pcrRect->top - crMonitor.top;
-	if(lDiff < 0)
-	{
-		pcrRect->top += abs(lDiff);
-		pcrRect->bottom += abs(lDiff);
-	}
-
-	//Bottom
-	lDiff = pcrRect->bottom - crMonitor.bottom;
-	if(lDiff > 0)
-	{
-		pcrRect->top -= abs(lDiff);
-		pcrRect->bottom -= abs(lDiff);
-	}
-
-	return TRUE;
 }
 
 void CQuickPaste::HideQPasteWnd()

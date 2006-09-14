@@ -16,7 +16,7 @@ static char THIS_FILE[] = __FILE__;
 // CCopyProperties dialog
 
 
-CCopyProperties::CCopyProperties(long lCopyID, CWnd* pParent /*=NULL*/)
+CCopyProperties::CCopyProperties(long lCopyID, CWnd* pParent, CClip *pMemoryClip)
 	: CDialog(CCopyProperties::IDD, pParent)
 {
 	m_lCopyID = lCopyID;
@@ -24,7 +24,11 @@ CCopyProperties::CCopyProperties(long lCopyID, CWnd* pParent /*=NULL*/)
 	m_bChangedText = false;
 	m_bHandleKillFocus = false;
 	m_bHideOnKillFocus = false;
+	m_bInGroup = false;
 	m_lGroupChangedTo = -1;
+	m_pMemoryClip = pMemoryClip;
+	m_bSetToTopMost = true;
+
 	//{{AFX_DATA_INIT(CCopyProperties)
 	m_eDate = _T("");
 	m_bNeverAutoDelete = FALSE;
@@ -36,6 +40,7 @@ void CCopyProperties::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CCopyProperties)
+	DDX_Control(pDX, IDC_EDIT_QUICK_PASTE, m_QuickPasteText);
 	DDX_Control(pDX, IDC_RICHEDIT1, m_RichEdit);
 	DDX_Control(pDX, IDC_COMBO1, m_GroupCombo);
 	DDX_Control(pDX, IDC_HOTKEY, m_HotKey);
@@ -43,8 +48,6 @@ void CCopyProperties::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_DATE, m_eDate);
 	DDX_Check(pDX, IDC_NEVER_AUTO_DELETE, m_bNeverAutoDelete);
 	//}}AFX_DATA_MAP
-	DDX_Control(pDX, IDC_PARSE_EDIT, m_ParseEdit);
-	DDX_Control(pDX, IDC_PARSE_BUTTON, m_ParseButton);
 }
 
 
@@ -54,7 +57,6 @@ BEGIN_MESSAGE_MAP(CCopyProperties, CDialog)
 	ON_WM_ACTIVATE()
 	ON_WM_SIZE()
 	//}}AFX_MSG_MAP
-	ON_BN_CLICKED(IDC_PARSE_BUTTON, OnBnClickedParseButton)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -64,59 +66,39 @@ BOOL CCopyProperties::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	m_ParseEdit.SetWindowText("\\r\\n");
 	m_GroupCombo.FillCombo();
 
-	m_MainTable.Open("SELECT * FROM Main WHERE lID = %d", m_lCopyID);
-	if(!m_MainTable.IsEOF())
+	try
 	{
-		CTime time(m_MainTable.m_lDate);
-		m_eDate = time.Format("%m/%d/%Y %I:%M %p");
-
-		m_RichEdit.SetText(m_MainTable.m_strText);
-
-		if(m_MainTable.m_lDontAutoDelete)
+		if(m_lCopyID == -1 && m_pMemoryClip != NULL)
 		{
-			m_bNeverDelete = TRUE;
-			m_bNeverAutoDelete = TRUE;
+			LoadDataFromCClip(*m_pMemoryClip);
 		}
 		else
 		{
-			m_bNeverAutoDelete = FALSE;
-			m_bNeverDelete = FALSE;
-		}
-
-		m_GroupCombo.SetCurSelOnItemData(m_MainTable.m_lParentID);
-
-		m_HotKey.SetHotKey(LOBYTE(m_MainTable.m_lShortCut), HIBYTE(m_MainTable.m_lShortCut));
-		m_HotKey.SetRules(HKCOMB_A, 0);
-
-		CString cs;
-		cs.Format("SELECT * FROM Data WHERE lDataID = %d", m_MainTable.m_lDataID);
-
-		m_DataTable.Open(AFX_DAO_USE_DEFAULT_TYPE, cs ,NULL);
-
-		while(!m_DataTable.IsEOF())
-		{
-			cs.Format("%s, %d", m_DataTable.m_strClipBoardFormat, m_DataTable.m_ooData.m_dwDataLength);
-			int nIndex = m_lCopyData.AddString(cs);
-			m_lCopyData.SetItemData(nIndex, m_DataTable.m_lID);
-
-			m_DataTable.MoveNext();
+			CClip Clip;
+			if(Clip.LoadMainTable(m_lCopyID))
+			{
+				Clip.LoadFormats(m_lCopyID);
+				LoadDataFromCClip(Clip);			
+			}
 		}
 	}
-
-	
+	CATCH_SQLITE_EXCEPTION
 
 	UpdateData(FALSE);
 
-	SetWindowPos(&CWnd::wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
+	if(m_bSetToTopMost)
+		SetWindowPos(&CWnd::wndTopMost, 0, 0, 0, 0, SWP_NOMOVE|SWP_NOSIZE);
 
-	// if this is a result of a NamedCopy, focus on the hotkey
-	if( theApp.m_bShowCopyProperties )
-		m_HotKey.SetFocus();
+	if(m_lCopyID == -1 && m_pMemoryClip != NULL)
+	{
+		GetDlgItem(IDOK)->SetFocus();
+	}
 	else
+	{
 		m_RichEdit.SetFocus();
+	}
 
 	m_Resize.SetParent(m_hWnd);
 	m_Resize.AddControl(IDC_RICHEDIT1, DR_SizeHeight | DR_SizeWidth);
@@ -129,6 +111,49 @@ BOOL CCopyProperties::OnInitDialog()
 	theApp.m_Language.UpdateClipProperties(this);
 
 	return FALSE;
+}
+
+void CCopyProperties::LoadDataFromCClip(CClip &Clip)
+{
+	m_eDate = Clip.m_Time.Format("%m/%d/%Y %I:%M %p");
+	m_RichEdit.SetText(Clip.m_Desc);
+
+	if(Clip.m_lDontAutoDelete)
+	{
+		m_bNeverAutoDelete = TRUE;
+	}
+	else
+	{
+		m_bNeverAutoDelete = FALSE;
+	}
+
+	m_GroupCombo.SetCurSelOnItemData(Clip.m_lParent);
+
+	if(Clip.m_lParent >= 0)
+		m_bInGroup = true;
+
+	m_HotKey.SetHotKey(LOBYTE(Clip.m_lShortCut), HIBYTE(Clip.m_lShortCut));
+	m_HotKey.SetRules(HKCOMB_A, 0);
+
+	m_QuickPasteText.SetWindowText(Clip.m_csQuickPaste);
+
+	CString cs;
+	CClipFormat* pCF;
+	int nCount = Clip.m_Formats.GetSize();
+	for(int i = 0; i < nCount; i++)
+	{
+		pCF = &Clip.m_Formats.GetData()[i];
+		if(pCF)
+		{
+			cs.Format(_T("%s, %d"), GetFormatName(pCF->m_cfType), GlobalSize(pCF->m_hgData));
+			int nIndex = m_lCopyData.AddString(cs);
+			
+			if(m_lCopyID == -1 && pCF->m_lDBID == -1)
+				m_lCopyData.SetItemData(nIndex, i);
+			else
+				m_lCopyData.SetItemData(nIndex, pCF->m_lDBID);
+		}
+	}
 }
 
 void CCopyProperties::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized) 
@@ -157,100 +182,77 @@ void CCopyProperties::OnOK()
 {
 	UpdateData();
 
-	bool bUpdate = false;
-
-	long lHotKey = m_HotKey.GetHotKey();
-		
-	if(lHotKey != m_MainTable.m_lShortCut)
+	try
 	{
-		if(lHotKey > 0)
+		if(m_lCopyID == -1 && m_pMemoryClip != NULL)
 		{
-			CMainTable recset;
-			recset.Open("SELECT * FROM Main WHERE lShortCut = %d", lHotKey);
-			if(!recset.IsEOF())
+			LoadDataIntoCClip(*m_pMemoryClip);
+
+			m_DeletedData.SortDescending();
+			int nCount = m_DeletedData.GetSize();
+			for(int i = 0; i < nCount; i++)
 			{
-				CString cs;
-				cs.Format("The shortcut is currently assigned to \n\n%s\n\nAssign to new copy item?", recset.m_strText);
+				m_pMemoryClip->m_Formats.RemoveAt(m_DeletedData[i], 1);
+			}
+		}
+		else
+		{
+			CClip Clip;
+			if(Clip.LoadMainTable(m_lCopyID))
+			{
+				LoadDataIntoCClip(Clip);
 
-				if(MessageBox(cs, "Ditto", MB_YESNO) == IDNO)
-					return;
-
-				recset.Edit();
-				recset.m_lShortCut = 0;
-				recset.Update();
+				Clip.ModifyMainTable();
+			
+				if(m_bDeletedData)
+				{
+					DeleteFormats(m_lCopyID, m_DeletedData);
+				}
 			}
 		}
 
-		if(!bUpdate)
-			m_MainTable.Edit();
-
-		m_MainTable.m_lShortCut = lHotKey;
-
-		bUpdate = true;
+		m_bHandleKillFocus = true;
 	}
-
-	CString csDisplayText;
-	csDisplayText = m_RichEdit.GetText();
-	if(csDisplayText != m_MainTable.m_strText)
-	{
-		if(!bUpdate)
-			m_MainTable.Edit();
-
-		m_bChangedText = true;
-
-		m_MainTable.m_strText = csDisplayText;
-
-		bUpdate = true;
-	}
-
-	if(m_bNeverAutoDelete != m_bNeverDelete)
-	{
-		if(!bUpdate)
-			m_MainTable.Edit();
-
-		if(m_bNeverAutoDelete)
-			m_MainTable.m_lDontAutoDelete = (long)CTime::GetCurrentTime().GetTime();
-		else
-			m_MainTable.m_lDontAutoDelete = 0;
-
-		bUpdate = true;
-	}
-
-	int nParentID = m_GroupCombo.GetItemDataFromCursel();
-
-	if(nParentID != m_MainTable.m_lParentID)
-	{
-		bool bCont = true;
-		if(m_MainTable.m_bIsGroup)
-		{
-			if(nParentID == m_MainTable.m_lID)
-				bCont = false;
-		}
-		if(bCont)
-		{
-			if(!bUpdate)
-				m_MainTable.Edit();
-		
-			m_MainTable.m_lParentID = nParentID;
-			m_MainTable.m_lDontAutoDelete = (long)CTime::GetCurrentTime().GetTime();
-
-			m_lGroupChangedTo = nParentID;
-
-			bUpdate = true;
-		}
-	}
-
-	if(bUpdate)
-		m_MainTable.Update();
-	
-	if(m_bDeletedData)
-	{
-		DeleteFormats( m_MainTable.m_lDataID, m_DeletedData );
-	}
-
-	m_bHandleKillFocus = true;
+	CATCH_SQLITE_EXCEPTION
 
 	CDialog::OnOK();
+}
+
+void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
+{
+	Clip.m_lShortCut = m_HotKey.GetHotKey();
+
+	//remove any others that have the same hot key
+	if(Clip.m_lShortCut > 0)
+	{
+		theApp.m_db.execDMLEx(_T("UPDATE Main SET lShortCut = 0 where lShortCut = %d AND lID <> %d;"), Clip.m_lShortCut, m_lCopyID);
+	}
+
+	Clip.m_Desc = m_RichEdit.GetText();
+	Clip.m_Desc.Replace(_T("'"), _T("''"));
+
+	m_QuickPasteText.GetWindowText(Clip.m_csQuickPaste);
+	Clip.m_csQuickPaste.MakeUpper();
+	Clip.m_csQuickPaste.Replace(_T("'"), _T("''"));
+
+	//remove any other that have the same quick paste text
+	if(Clip.m_csQuickPaste.IsEmpty() == FALSE)
+	{
+		theApp.m_db.execDMLEx(_T("UPDATE Main SET QuickPasteText = '' WHERE QuickPasteText = '%s' AND lID <> %d;"), Clip.m_csQuickPaste, m_lCopyID);
+	}
+
+	Clip.m_lParent = m_GroupCombo.GetItemDataFromCursel();
+
+	//If we are going from no group to a group or the
+	//don't auto delete check box is checked
+	if(m_bInGroup == false && Clip.m_lParent >= 0 || m_bNeverAutoDelete)
+	{
+		Clip.m_lDontAutoDelete = (long)CTime::GetCurrentTime().GetTime();
+	}
+	else if(m_bNeverAutoDelete == FALSE)
+	{
+		Clip.m_lDontAutoDelete = FALSE;
+	}
 }
 
 void CCopyProperties::OnDeleteCopyData() 
@@ -282,91 +284,6 @@ void CCopyProperties::OnCancel()
 		
 	CDialog::OnCancel();
 }
-
-void CCopyProperties::OnBnClickedParseButton()
-{
-CPopup status(0,0,m_hWnd);
-	status.Show("Parsing...");
-
-CString delims;
-	m_ParseEdit.GetWindowText(delims);
-	delims = RemoveEscapes( delims );
-
-	// validate delimiters
-int nDelims = delims.GetLength();
-	if( nDelims <= 0 )
-	{
-		::MessageBox( m_hWnd, "Token Delimiters are not valid.", "Parse Failure", MB_OK|MB_ICONINFORMATION );
-		return;
-	}
-
-	// load the text
-HGLOBAL hGlobal = CClip::LoadFormat( m_lCopyID, CF_TEXT );
-	if( !hGlobal )
-	{
-		::MessageBox( m_hWnd, "No CF_TEXT Format Data could be found.", "Parse Failure", MB_OK|MB_ICONINFORMATION );
-		return;
-	}
-
-	// copy the text from the global into a string
-int nDataSize = ::GlobalSize( hGlobal );
-char* pData = (char*) ::GlobalLock( hGlobal );
-
-char* pDataEnd = pData + nDataSize;
-char* p = pData;
-	ASSERT( pData != NULL && nDataSize > 0 );
-	// Find the terminating NULL
-	while( *p != '\0' && p < pDataEnd ) { p++; }
-	// there was no NULL in the string!
-	if( p >= pDataEnd )
-	{
-		ASSERT(0);
-		return;
-	}
-	// copy the data into a string
-CString text = pData;
-	// free the global
-	::GlobalUnlock( hGlobal );
-	::GlobalFree(hGlobal);
-
-	// tokenize the text
-CString token;
-CStringArray tokens;
-CTokenizer tokenizer(text,delims);
-	while( tokenizer.Next( token ) )
-	{
-		tokens.Add( token );
-	}
-
-	// save the tokens to the db
-CClip clip;
-int len;
-long lDate = (long) CTime::GetCurrentTime().GetTime();
-int count = tokens.GetSize();
-
-	for( int i = 0; i < count; i++ )
-	{
-		status.Show( StrF("Saving Token %d out of %d", i+1, count) );
-		len = tokens[i].GetLength();
-		// ignore 0 length tokens
-		if( len <= 0 )
-			continue;
-		clip.AddFormat( CF_TEXT, (void*) (LPCTSTR) tokens[i], len+1 );
-		clip.m_Time = lDate;
-		clip.AddToDB( false ); // false = don't check for duplicates
-		clip.Clear();
-		lDate++; // make sure they are sequential
-	}
-
-	if( count <= 0 )
-		::MessageBox( m_hWnd, "No new tokens found by parsing", "Parse Failed", MB_OK|MB_ICONINFORMATION );
-	else
-	{
-		::MessageBox( m_hWnd, StrF("Successfully parsed %d tokens.", tokens.GetSize()), "Parse Completed", MB_OK|MB_ICONINFORMATION );
-		theApp.RefreshView();
-	}
-}
-
 
 void CCopyProperties::OnSize(UINT nType, int cx, int cy) 
 {

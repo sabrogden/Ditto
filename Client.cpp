@@ -5,6 +5,10 @@
 #include "stdafx.h"
 #include "cp_main.h"
 #include "Client.h"
+#include "TextConvert.h"
+#include "RecieveSocket.h"
+#include "FileRecieve.h"
+#include "FileTransferProgressDlg.h"
 
 
 #ifdef _DEBUG
@@ -27,17 +31,17 @@ BOOL SendToFriend(CSendToFriendInfo &Info)
 	}
 	else
 	{
-		Info.m_csErrorText = StrF("ERROR getting ip position - %d", Info.m_lPos);
+		Info.m_csErrorText = StrF(_T("ERROR getting ip position - %d"), Info.m_lPos);
 		LogSendRecieveInfo(Info.m_csErrorText);
 		return FALSE;
 	}
 
-	LogSendRecieveInfo(StrF("Sending clip to %s", Info.m_csIP));
+	LogSendRecieveInfo(StrF(_T("Sending clip to %s"), Info.m_csIP));
 	CClient client;
 
 	if(client.OpenConnection(Info.m_csIP) == FALSE)
 	{
-		Info.m_csErrorText = StrF("ERROR opening connection to %s", Info.m_csIP);
+		Info.m_csErrorText = StrF(_T("ERROR opening connection to %s"), Info.m_csIP);
 		LogSendRecieveInfo(Info.m_csErrorText);
 		return FALSE;
 	}
@@ -60,7 +64,7 @@ BOOL SendToFriend(CSendToFriendInfo &Info)
 
 		if(Info.m_pPopup)
 		{
-			Info.m_pPopup->SendToolTipText(StrF("Sending %d of %d", i+1, lCount));
+			Info.m_pPopup->SendToolTipText(StrF(_T("Sending %d of %d"), i+1, lCount));
 		}
 
 		MSG	msg;
@@ -70,7 +74,7 @@ BOOL SendToFriend(CSendToFriendInfo &Info)
 			DispatchMessage(&msg);
 		}
 
-		LogSendRecieveInfo(StrF("Sending %d of %d clip to %s", i+1, lCount, Info.m_csIP));
+		LogSendRecieveInfo(StrF(_T("Sending %d of %d clip to %s"), i+1, lCount, Info.m_csIP));
 
 		if(client.SendItem(pClip) == FALSE)
 		{
@@ -101,7 +105,7 @@ UINT  SendClientThread(LPVOID pParam)
 
 	long lCount = pClipList->GetCount();
 
-	LogSendRecieveInfo(StrF("Start of Send ClientThread Count - %d", lCount));
+	LogSendRecieveInfo(StrF(_T("Start of Send ClientThread Count - %d"), lCount));
 	
 	for(int nClient = 0; nClient < MAX_SEND_CLIENTS; nClient++)
 	{
@@ -111,12 +115,12 @@ UINT  SendClientThread(LPVOID pParam)
 			CClient client;
 			if(client.OpenConnection(g_Opt.m_SendClients[nClient].csIP) == FALSE)
 			{
-				LogSendRecieveInfo(StrF("ERROR opening connection to %s", g_Opt.m_SendClients[nClient].csIP));
+				LogSendRecieveInfo(StrF(_T("ERROR opening connection to %s"), g_Opt.m_SendClients[nClient].csIP));
 
 				if(g_Opt.m_SendClients[nClient].bShownFirstError == FALSE)
 				{
 					CString cs;
-					cs.Format("Error opening connection to %s",g_Opt.m_SendClients[nClient].csIP);
+					cs.Format(_T("Error opening connection to %s"), g_Opt.m_SendClients[nClient].csIP);
 					::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
 					cs.ReleaseBuffer();
 
@@ -128,7 +132,7 @@ UINT  SendClientThread(LPVOID pParam)
 
 			//We were connected successfully show an error next time we can't connect
 			g_Opt.m_SendClients[nClient].bShownFirstError = FALSE;
-			
+
 			CClip* pClip;
 			POSITION pos;
 			pos = pClipList->GetHeadPosition();
@@ -142,12 +146,12 @@ UINT  SendClientThread(LPVOID pParam)
 					break;
 				}
 
-				LogSendRecieveInfo(StrF("Sending clip to %s", g_Opt.m_SendClients[nClient].csIP));
+				LogSendRecieveInfo(StrF(_T("Sending clip to %s"), g_Opt.m_SendClients[nClient].csIP));
 				
 				if(client.SendItem(pClip) == FALSE)
 				{
 					CString cs;
-					cs.Format("Error sending clip to %s",g_Opt.m_SendClients[nClient].csIP);
+					cs.Format(_T("Error sending clip to %s"), g_Opt.m_SendClients[nClient].csIP);
 					::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
 					cs.ReleaseBuffer();
 					break;
@@ -171,18 +175,11 @@ UINT  SendClientThread(LPVOID pParam)
 CClient::CClient()
 {
 	m_Connection = NULL;
-
-	m_pEncryptor = new CEncryption; //CreateEncryptionInterface("encryptdecrypt.dll");
 }
 
 CClient::~CClient()
 {			
 	CloseConnection();
-
-	delete m_pEncryptor;
-	m_pEncryptor = NULL;
-
-//	ReleaseEncryptionInterface(m_pEncryptor);
 }
 
 BOOL CClient::CloseConnection()
@@ -190,7 +187,7 @@ BOOL CClient::CloseConnection()
 	if(m_Connection != NULL && m_Connection != 0)
 	{
 		CSendInfo Info;
-		SendCSendData(Info, MyEnums::EXIT);
+		m_SendSocket.SendCSendData(Info, MyEnums::EXIT);
 
 		closesocket(m_Connection);
 		WSACleanup();
@@ -201,7 +198,7 @@ BOOL CClient::CloseConnection()
 	return TRUE;
 }
 
-BOOL CClient::OpenConnection(const char* servername)
+BOOL CClient::OpenConnection(const TCHAR* servername)
 {
 	WSADATA wsaData;
 	struct hostent *hp;
@@ -224,17 +221,19 @@ BOOL CClient::OpenConnection(const char* servername)
 		return FALSE;
 	}
 
-	if(inet_addr(servername)==INADDR_NONE)
+	CStringA csServerNameA = CTextConvert::ConvertToChar(servername);
+
+	if(inet_addr(csServerNameA)==INADDR_NONE)
 	{
-		hp=gethostbyname(servername);
+		hp = gethostbyname(csServerNameA);
 	}
 	else
 	{
-		addr=inet_addr(servername);
-		hp=gethostbyaddr((char*)&addr,sizeof(addr),AF_INET);
+		addr = inet_addr(csServerNameA);
+		hp = gethostbyaddr((char*)&addr,sizeof(addr),AF_INET);
 	}
 
-	if(hp==NULL)
+	if(hp == NULL)
 	{
 		LogSendRecieveInfo("ERROR - if(hp==NULL)");
 
@@ -249,7 +248,7 @@ BOOL CClient::OpenConnection(const char* servername)
 	if(connect(m_Connection, (struct sockaddr*)&server, sizeof(server)))
 	{
 		int nWhy = WSAGetLastError();
-		LogSendRecieveInfo(StrF("ERROR if(connect(m_Connection,(struct sockaddr*)&server,sizeof(server))) why = %d", nWhy));
+		LogSendRecieveInfo(StrF(_T("ERROR if(connect(m_Connection,(struct sockaddr*)&server,sizeof(server))) why = %d"), nWhy));
 		closesocket(m_Connection);
 		m_Connection = NULL;
 		return FALSE;	
@@ -261,16 +260,31 @@ BOOL CClient::OpenConnection(const char* servername)
 BOOL CClient::SendItem(CClip *pClip)
 {
 	CSendInfo Info;
-	
-	strncpy(Info.m_cComputerName, GetComputerName(), sizeof(Info.m_cComputerName));
-	strncpy(Info.m_cIP, GetIPAddress(), sizeof(Info.m_cIP));
-	strncpy(Info.m_cDesc, pClip->m_Desc, sizeof(Info.m_cDesc));
+
+	//Send all text over as UTF-8
+	CStringA dest;
+	if(CTextConvert::ConvertToUTF8(GetComputerName(), dest))
+	{
+		strncpy(Info.m_cComputerName, dest, sizeof(Info.m_cComputerName));
+	}
+
+	if(CTextConvert::ConvertToUTF8(GetIPAddress(), dest))
+	{
+		strncpy(Info.m_cIP, dest, sizeof(Info.m_cIP));	
+	}
+
+	if(CTextConvert::ConvertToUTF8(pClip->m_Desc, dest))
+	{
+		strncpy(Info.m_cDesc, dest, sizeof(Info.m_cDesc));
+	}
 	
 	Info.m_cDesc[sizeof(Info.m_cDesc)-1] = 0;
 	Info.m_cComputerName[sizeof(Info.m_cComputerName)-1] = 0;
 	Info.m_cIP[sizeof(Info.m_cIP)-1] = 0;
 
-	if(SendCSendData(Info, MyEnums::START) == FALSE)
+	m_SendSocket.SetSocket(m_Connection);
+
+	if(m_SendSocket.SendCSendData(Info, MyEnums::START) == FALSE)
 		return FALSE;
 	
 	CClipFormat* pCF;
@@ -282,50 +296,10 @@ BOOL CClient::SendItem(CClip *pClip)
 	{
 		pCF = &pClip->m_Formats.GetData()[i];
 		
-		LPVOID pvData = GlobalLock(pCF->m_hgData);
-		long lLength = GlobalSize(pCF->m_hgData);
-
-		UCHAR* pOutput = NULL;
-		int nLenOutput = 0;
-
-		LogSendRecieveInfo(StrF("BEFORE Encrypt clip data %d", lLength));
-
-		if(m_pEncryptor)
-		{
-			if(m_pEncryptor->Encrypt((UCHAR*)pvData, lLength, g_Opt.m_csPassword, pOutput, nLenOutput))
-			{
-				LogSendRecieveInfo(StrF("AFTER Encrypt clip data %d", nLenOutput));
-
-				Info.m_lParameter1 = nLenOutput;
-				strncpy(Info.m_cDesc, GetFormatName(pCF->m_cfType), sizeof(Info.m_cDesc));
-				Info.m_cDesc[sizeof(Info.m_cDesc)-1] = 0;
-
-				if(SendCSendData(Info, MyEnums::DATA_START) == FALSE)
-					return FALSE;
-
-				SendExactSize((char*)pOutput, nLenOutput, false);
-
-				m_pEncryptor->FreeBuffer(pOutput);
-			}
-			else
-			{
-				LogSendRecieveInfo("Failed to encrypt data");
-				return FALSE;
-			}
-		}
-		else
-		{
-			ASSERT(!"SendItem::Encryption not initialized");
-			LogSendRecieveInfo("SendItem::Encryption not initialized");	
-		}
-
-		GlobalUnlock(pCF->m_hgData);
-		
-		if(SendCSendData(Info, MyEnums::DATA_END) == FALSE)
-			return FALSE;
+		SendClipFormat(pCF);
 	}
 	
-	if(SendCSendData(Info, MyEnums::END) == FALSE)
+	if(m_SendSocket.SendCSendData(Info, MyEnums::END) == FALSE)
 		return FALSE;
 
 	theApp.m_lClipsSent++;
@@ -333,57 +307,125 @@ BOOL CClient::SendItem(CClip *pClip)
 	return TRUE;
 }
 
-BOOL CClient::SendCSendData(CSendInfo &data, MyEnums::eSendType type)
+BOOL CClient::SendClipFormat(CClipFormat* pCF)
 {
-	data.m_Type = type;
-	return SendExactSize((char *)&data, sizeof(CSendInfo));
-}
-
-BOOL CClient::SendExactSize(char *pData, long lLength, bool bEncrypt)
-{
+	CSendInfo Info;
+	LPVOID pvData = GlobalLock(pCF->m_hgData);
+	long lLength = GlobalSize(pCF->m_hgData);
+	UCHAR* pOutput = NULL;
+	int nLenOutput = 0;
+	CTextConvert Convert;
 	BOOL bRet = FALSE;
-	if(!m_pEncryptor && bEncrypt)
+
+	LogSendRecieveInfo(StrF(_T("BEFORE Encrypt clip data %d"), lLength));
+
+	if(m_SendSocket.m_pEncryptor)
 	{
-		ASSERT(!"Encryption not initialized");
-		LogSendRecieveInfo("SendExactSize::Encryption not initialized");
-		return bRet;
-	}
-
-	LogSendRecieveInfo(StrF("START SendExactSize Total %d", lLength));
-
-	UCHAR* pOutput = (UCHAR*)pData;
-	int nLenOutput = lLength;
-	long lBytesRead = 0;
-
-	if(bEncrypt == false || m_pEncryptor->Encrypt((UCHAR*)pData, lLength, g_Opt.m_csPassword, pOutput, nLenOutput))
-	{
-		long lExpected = nLenOutput;
-
-		while(lBytesRead < lExpected)
+		if(m_SendSocket.m_pEncryptor->Encrypt((UCHAR*)pvData, lLength, g_Opt.m_csPassword, pOutput, nLenOutput))
 		{
-			long lSize = send(m_Connection, (char*)pOutput + lBytesRead, lExpected - lBytesRead, 0);
-		
-			if(lSize == SOCKET_ERROR || lSize == 0)
+			LogSendRecieveInfo(StrF(_T("AFTER Encrypt clip data %d"), nLenOutput));
+
+			Info.m_lParameter1 = nLenOutput;
+
+			//Send over as UTF-8
+			CStringA dest;
+			if(CTextConvert::ConvertToUTF8(GetFormatName(pCF->m_cfType), dest))
 			{
-				LogSendRecieveInfo(StrF("lSize == SOCKET_ERROR, %d", WSAGetLastError()));
-				break;
+				strncpy(Info.m_cDesc, dest, sizeof(Info.m_cDesc));
+				Info.m_cDesc[sizeof(Info.m_cDesc)-1] = 0;
 			}
-			lBytesRead += lSize;
 
-			LogSendRecieveInfo(StrF("SendExactSize Last Size %d - Total %d", lSize, lBytesRead));
+			if(m_SendSocket.SendCSendData(Info, MyEnums::DATA_START) == FALSE)
+				return FALSE;
+
+			m_SendSocket.SendExactSize((char*)pOutput, nLenOutput, false);
+
+			m_SendSocket.m_pEncryptor->FreeBuffer(pOutput);
+
+			bRet = TRUE;
 		}
-
-		bRet = TRUE;
-
-		if(pOutput != (UCHAR*)pData)
-			m_pEncryptor->FreeBuffer(pOutput);
+		else
+		{
+			LogSendRecieveInfo("Failed to encrypt data");
+			return FALSE;
+		}
 	}
 	else
 	{
-		LogSendRecieveInfo("SendExactSize::Failed to encrypt data");
+		ASSERT(!"SendItem::Encryption not initialized");
+		LogSendRecieveInfo("SendItem::Encryption not initialized");	
 	}
 
-	LogSendRecieveInfo(StrF("END SendExactSize Total %d", lBytesRead));
+	GlobalUnlock(pCF->m_hgData);
+	
+	if(m_SendSocket.SendCSendData(Info, MyEnums::DATA_END) == FALSE)
+		return FALSE;
 
 	return bRet;
+}
+
+HGLOBAL CClient::RequestCopiedFiles(CClipFormat &HDropFormat, CString csIP, CString csComputerName)
+{
+	CSendInfo Info;
+	bool bBreak = false;
+	HGLOBAL hReturn = NULL;
+	CString csErrorString;
+
+	CFileTransferProgressDlg *pProgress = new CFileTransferProgressDlg;
+	if(pProgress == NULL)
+		return NULL;
+
+	pProgress->Create(IDD_DIALOG_REMOTE_FILE);
+	pProgress->ShowWindow(SW_SHOW);
+	pProgress->SetMessage(StrF(_T("Opening Connection to %s (%s)"), csComputerName, csIP));
+	pProgress->PumpMessages();
+
+	do 
+	{
+		if(OpenConnection(csIP) == FALSE)
+		{
+			csErrorString.Format(_T("Error Opening Connection to %s (%s)"), csComputerName, csIP);
+			break;
+		}
+
+		m_SendSocket.SetSocket(m_Connection);
+
+		if(m_SendSocket.SendCSendData(Info, MyEnums::START) == FALSE)
+			break;
+
+		if(SendClipFormat(&HDropFormat) == FALSE)
+		{
+			csErrorString = _T("Error sending data request.");
+			break;
+		}
+
+		if(m_SendSocket.SendCSendData(Info, MyEnums::END) == FALSE)
+			break;
+			
+		if(m_SendSocket.SendCSendData(Info, MyEnums::REQUEST_FILES) == FALSE)
+			break;
+
+		CFileRecieve Recieve;
+		long lRet = Recieve.RecieveFiles(m_Connection, csIP, pProgress);
+		if(lRet == TRUE)
+		{
+			hReturn = Recieve.CreateCF_HDROPBuffer();
+		}
+		else if(lRet == FALSE)
+		{
+			csErrorString = _T("Error recieving files.");
+		}
+
+	} while(false);
+
+	CloseConnection();
+
+	if(hReturn == NULL && csErrorString.IsEmpty() == FALSE)
+	{
+		MessageBox(pProgress->m_hWnd, csErrorString, _T("Ditto"), MB_OK|MB_ICONEXCLAMATION);
+	}
+
+	pProgress->DestroyWindow();
+
+	return hReturn;
 }

@@ -219,7 +219,7 @@ void CMainTable::LoadAcceleratorKeys( CAccels& accels )
 		{
 			a.Cmd = recset.m_lID;
 			a.Key = recset.m_lShortCut;
-			accels.AddAccel( a );
+			accels.AddAccel(a);
 
 			recset.MoveNext();
 		}

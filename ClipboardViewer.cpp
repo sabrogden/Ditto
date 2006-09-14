@@ -22,7 +22,7 @@ CClipboardViewer::CClipboardViewer(CCopyThread* pHandler) :
 	m_bHandlingClipChange(false),
 	m_bIsConnected(false),
 	m_bConnect(false),
-	m_lLastCopy(0)
+	m_dwLastCopy(0)
 {
 
 }
@@ -49,13 +49,15 @@ END_MESSAGE_MAP()
 void CClipboardViewer::Create()
 {
 	CString strParentClass = AfxRegisterWndClass(0);
-	CWnd::CreateEx(0, strParentClass, "Ditto Clipboard Viewer", 0, -1, -1, 0, 0, 0, 0);
+	CWnd::CreateEx(0, strParentClass, _T("Ditto Clipboard Viewer"), 0, -1, -1, 0, 0, 0, 0);
+
+	SetConnect(true);
 }
 
 // connects as a clipboard viewer
 void CClipboardViewer::Connect()
 {
-	Log("Connect to Clipboard");
+	Log(_T("Connect to Clipboard"));
 	
 	//Set up the clip board viewer
 	m_bCalling_SetClipboardViewer = true;
@@ -74,17 +76,28 @@ void CClipboardViewer::SetEnsureConnectedTimer()
 }
 
 // disconnects as a clipboard viewer
-void CClipboardViewer::Disconnect()
+void CClipboardViewer::Disconnect(bool bSendPing)
 {
-	Log("Disconnect From Clipboard");
+	Log(_T("Disconnect From Clipboard"));
 
 	KillTimer(TIMER_ENSURE_VIEWER_IN_CHAIN);
 
-	CWnd::ChangeClipboardChain(m_hNextClipboardViewer);
+	BOOL bRet = CWnd::ChangeClipboardChain(m_hNextClipboardViewer);
+	if(!bRet)
+	{
+		Log(_T("Error disconnecting from clipboard"));
+		bRet = CWnd::ChangeClipboardChain(m_hNextClipboardViewer);
+		if(!bRet)
+		{
+			Log(_T("Error disconnecting from clipboard2"));
+		}
+	}
+
 	m_hNextClipboardViewer = 0;
 	m_bConnect = false;
 	m_bIsConnected = false;
-	SendPing();
+	if(bSendPing)
+		SendPing();
 }
 
 void CClipboardViewer::SendPing()
@@ -93,8 +106,6 @@ void CClipboardViewer::SendPing()
 	{
 		if(OpenClipboard())
 		{
-			Log("Sending Ping");
-
 			m_bPinging = true;
 			SetClipboardData(theApp.m_PingFormat, NewGlobalP("Ditto Ping", sizeof("Ditto Ping")));
 			SetClipboardData(theApp.m_cfIgnoreClipboard , NewGlobalP("Ignore", sizeof("Ignore")));
@@ -108,7 +119,6 @@ void CClipboardViewer::SendPing()
 void CClipboardViewer::SetConnect(bool bConnect)
 {
 	m_bConnect = bConnect;
-
 	if(bConnect)
 	{
 		if(m_bIsConnected == false)
@@ -148,8 +158,8 @@ void CClipboardViewer::OnDestroy()
 
 void CClipboardViewer::OnChangeCbChain(HWND hWndRemove, HWND hWndAfter) 
 {
-	Log("OnChangeCbChain");
-
+	Log(_T("OnChangeCbChain"));
+	
 	// If the next window is closing, repair the chain. 
 	if(m_hNextClipboardViewer == hWndRemove)
     {
@@ -160,7 +170,7 @@ void CClipboardViewer::OnChangeCbChain(HWND hWndRemove, HWND hWndAfter)
     {
 		if(m_hNextClipboardViewer != m_hWnd)
 		{
-			::PostMessage(m_hNextClipboardViewer, WM_CHANGECBCHAIN, (WPARAM) hWndRemove, (LPARAM) hWndAfter);
+			::SendMessage(m_hNextClipboardViewer, WM_CHANGECBCHAIN, (WPARAM) hWndRemove, (LPARAM) hWndAfter);
 		}
 		else
 		{
@@ -175,30 +185,34 @@ void CClipboardViewer::OnDrawClipboard()
 	if(::IsClipboardFormatAvailable(theApp.m_PingFormat))
 	{
 		m_bPinging = false;
-		Log("ping suscessfull");
 		return;
 	}
 
 	// don't process the event when we first attach
 	if(m_pHandler && !m_bCalling_SetClipboardViewer)
 	{
-		if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
+		if(m_bIsConnected)
 		{
-			Log(StrF("OnDrawClipboard:: *** SetTimer *** %d", GetTickCount()));
-			
-			KillTimer(TIMER_DRAW_CLIPBOARD);
-			SetTimer(TIMER_DRAW_CLIPBOARD, g_Opt.m_lProcessDrawClipboardDelay, NULL);		
-
-			SetEnsureConnectedTimer();
+			if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
+			{
+				Log(StrF(_T("OnDrawClipboard:: *** SetTimer *** %d"), GetTickCount()));
+				
+				KillTimer(TIMER_DRAW_CLIPBOARD);
+				SetTimer(TIMER_DRAW_CLIPBOARD, g_Opt.m_lProcessDrawClipboardDelay, NULL);		
+			}
+		}
+		else
+		{
+			Log(_T("Not connected, ignore clipboard change"));
 		}
 	}
 
 	// pass the event to the next Clipboard viewer in the chain
-	if(m_hNextClipboardViewer != NULL && !m_bCalling_SetClipboardViewer)
+	if(m_hNextClipboardViewer != NULL)
 	{
 		if(m_hNextClipboardViewer != m_hWnd)
 		{
-			::PostMessage(m_hNextClipboardViewer, WM_DRAWCLIPBOARD, 0, 0);	
+			::SendMessage(m_hNextClipboardViewer, WM_DRAWCLIPBOARD, 0, 0);	
 		}
 		else
 		{
@@ -221,33 +235,30 @@ void CClipboardViewer::OnTimer(UINT nIDEvent)
 		if(m_bHandlingClipChange == false)
 		{
 			m_bHandlingClipChange = true;
+			DWORD dwNow = GetTickCount();
 
-			if((GetTickCount() - m_lLastCopy) > g_Opt.m_lSaveClipDelay)
+			if(dwNow - m_dwLastCopy > g_Opt.m_dwSaveClipDelay || m_dwLastCopy > dwNow)
 			{
 				if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
 				{
-					Log(StrF("OnDrawClipboard::OnTimer %d", GetTickCount()));
+					Log(StrF(_T("OnDrawClipboard::OnTimer %d"), dwNow));
 
 					m_pHandler->OnClipboardChange();
 
-					m_lLastCopy = GetTickCount();
-
-					Log(StrF("OnDrawClipboard::OnTimer END %d", GetTickCount()));
+					m_dwLastCopy = dwNow;
 				}
 			}
 			else
 			{
-				Log(StrF("Clip copy to fast difference from last copy = %d", (GetTickCount() - m_lLastCopy)));
+				Log(StrF(_T("Clip copy to fast difference from last copy = %d"), (dwNow - m_dwLastCopy)));
 			}
 
 			m_bHandlingClipChange = false;
 		}
 		else
 		{
-			Log("HandlingClipChange is Set, ERROR");
+			Log(_T("HandlingClipChange is Set, ERROR"));
 		}
-
-		break;
 	case TIMER_PING:
 		KillTimer(TIMER_PING);
 
@@ -255,21 +266,24 @@ void CClipboardViewer::OnTimer(UINT nIDEvent)
 		//if so reconnect
 		if(m_bPinging)
 		{
-			m_bIsConnected = false;
 			if(m_bConnect)
 			{
-				Log("Ping Failed Reconnecting to clipboard");
+				Log(_T("Ping Failed Reconnecting to clipboard"));
 				Connect();
 			}
 			else
 			{
-				Log("Ping Failed but Connected set to FALSE so this is ok");
+				Log(_T("Ping Failed but Connected set to FALSE so this is ok"));
 			}
 		}
 		else
 		{
-			m_bIsConnected = true;
+			if(m_bConnect)
+			{
+				m_bIsConnected = true;
+			}
 		}
+
 		break;
 	}
 	

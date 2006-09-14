@@ -70,15 +70,22 @@ long CNumberEdit::GetNumber()
 	CString csText;
 	GetWindowText(csText);
 	
-	return atol(csText);
+	return ATOL(csText);
 }
 
 double CNumberEdit::GetNumberD()
 {
 	CString csText;
 	GetWindowText(csText);
-	
-	return atof(csText);
+
+#ifdef _UNICODE				
+	TCHAR *pEnd;
+	double d = _tcstod(csText, &pEnd);
+#else
+	double d = atof(csText);
+#endif
+
+	return d;
 }
 
 BOOL CNumberEdit::SetNumber(long lNumber)
@@ -92,7 +99,7 @@ BOOL CNumberEdit::SetNumber(long lNumber)
 
 	//Its good
 	CString csText;
-	csText.Format("%d", lNumber);
+	csText.Format(_T("%d"), lNumber);
 	SetWindowText(csText);
 
 	return TRUE;

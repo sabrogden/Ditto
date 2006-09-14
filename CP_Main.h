@@ -16,18 +16,14 @@
 #include "Clip.h"
 #include "DatabaseUtilities.h"
 #include "Misc.h"
-#include "DataTable.h"
-#include "MainTable.h"
-#include "TypesTable.h"
+#include "Options.h"
 #include "ArrayEx.h"
 #include "MainFrm.h"
 #include "ProcessPaste.h"
 #include "MultiLanguage.h"
 #include "CopyThread.h"
 
-#define MAIN_WND_TITLE		"Ditto MainWnd"
-//#define GET_APP    ((CCP_MainApp *)AfxGetApp())	
-
+#include "sqlite\CppSQLite3.h"
 
 //#define GET_APP ((CMainWnd*)theApp)
 extern class CCP_MainApp theApp;
@@ -41,6 +37,8 @@ class CCP_MainApp : public CWinApp
 public:
 	CCP_MainApp();
 	~CCP_MainApp();
+
+	CppSQLite3DB m_db;
 
 	HANDLE	m_hMutex; // for singleton app
 	// track stages of startup / shutdown
@@ -57,7 +55,8 @@ public:
 
 // System-wide HotKeys
 	CHotKey*	m_pDittoHotKey; // activate ditto's qpaste window
-	CHotKey*	m_pCopyHotKey;  // named copy
+	CHotKey*	m_pNamedPaste;
+	CHotKey*	m_pNamedCopy;
 
 	CHotKey*	m_pPosOne;
 	CHotKey*	m_pPosTwo;
@@ -77,11 +76,7 @@ public:
 	bool ReleaseFocus(); // activate the target only if we are the active window
 	CString GetTargetName();
 	void SendPaste(bool bActivateTarget); // Activates the Target and sends Ctrl-V
-
-	CLIPFORMAT m_cfIgnoreClipboard; // used by CClip::LoadFromClipboard
-	CLIPFORMAT m_PingFormat;
-	CLIPFORMAT m_HTML_Format;
-	CLIPFORMAT m_RTF_Format;
+	void SendCopy();
 
 // CopyThread and ClipViewer (Copy and Paste Management)
 	CCopyThread	m_CopyThread;
@@ -97,6 +92,13 @@ public:
 	void SetConnectCV(bool bConnect);
 	bool ToggleConnectCV();
 	void UpdateMenuConnectCV(CMenu* pMenu, UINT nMenuID);
+	bool ImportClips(HWND hWnd);
+
+	void OnDeleteID(long lID);
+
+	BOOL GetClipData(long lID, CClipFormat &Clip);
+
+	bool EditItems(CClipIDs &Ids, bool bShowError);
 
 //	CClipList	m_SaveClipQueue; 
 	// Retrieves all clips from CopyThread and Saves them.
@@ -128,7 +130,7 @@ public:
 
 // Window States
 	// the ID given focus by CQPasteWnd::FillList
-	long	m_FocusID; // -1 == keep previous position, 0 == go to latest ID
+	long	m_FocusID;
 
 	bool	m_bShowingOptions;
 	bool	m_bShowingQuickPaste;
@@ -136,27 +138,18 @@ public:
 
 	CString m_Status;
 	CQPasteWnd* QPasteWnd() { return m_pMainFrame->QuickPaste.m_pwndPaste; }
-	void SetStatus(const char* status = NULL, bool bRepaintImmediately = false);
+	void SetStatus(const TCHAR* status = NULL, bool bRepaintImmediately = false);
 
 	void ShowPersistent(bool bVal);
 
-	bool m_bShowCopyProperties;
-	void ShowCopyProperties(long lID);
-
 	bool	m_bRemoveOldEntriesPending;
 	void Delayed_RemoveOldEntries(UINT delay);
-
-// Database
-	CDaoDatabase*	m_pDatabase;
-	CDaoDatabase* EnsureOpenDB(CString csName = "");
-	BOOL CloseDB();
 
 	bool	m_bAsynchronousRefreshView;
 
 	//Socket Info
 	SOCKET	m_sSocket;
 	CRITICAL_SECTION m_CriticalSection;
-	CPopup	 *m_pcpSendRecieveError;
 	void	StartStopServerThread();
 	void	StopServerThread();
 
@@ -165,10 +158,24 @@ public:
 
 	long	m_lLastGoodIndexForNextworkPassword;
 
+	CLIPFORMAT m_cfIgnoreClipboard; // used by CClip::LoadFromClipboard
+	CLIPFORMAT m_cfDelaySavingData;
+	CLIPFORMAT m_PingFormat;
+	CLIPFORMAT m_HTML_Format;
+	CLIPFORMAT m_RemoteCF_HDROP;
+
 	COleDateTime m_oldtStartUp;
 
 	//Mulitlange Support
 	CMultiLanguage m_Language;
+
+	enum eQuickPasteMode{NONE_QUICK_PASTE, ADDING_QUICK_PASTE, PASTING_QUICK_PASTE};
+
+	eQuickPasteMode m_QuickPasteMode;
+	CClipList* m_pQuickPasteClip;
+
+	bool m_bDittoHasFocus;
+
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CCP_MainApp)
@@ -186,6 +193,9 @@ public:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 	virtual BOOL OnIdle(LONG lCount);
+
+protected:
+	void ShowCommandLineError(CString csTitle, CString csMessage);
 };
 
 

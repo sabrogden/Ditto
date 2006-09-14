@@ -13,6 +13,29 @@
 #include "GroupStatic.h"
 #include "GroupTree.h"
 #include "AlphaBlend.h"
+#include "Sqlite\CppSQLite3.h"
+#include <vector>
+#include <afxmt.h>
+
+class CMainTable
+{
+public:
+	CMainTable():
+		m_lID(-1),
+		m_bDontAutoDelete(false),
+		m_bIsGroup(false),
+		m_bHasShortCut(false),
+		m_bHasParent(false)
+	{
+	}
+	long	m_lID;
+	CString m_Desc;
+	bool	m_bDontAutoDelete;
+	bool	m_bIsGroup;
+	bool	m_bHasShortCut;	
+	bool	m_bHasParent;
+	CString m_QuickPaste;
+};
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -36,7 +59,6 @@ public:
 	public:
 	virtual BOOL Create(const POINT& ptStart, CWnd* pParentWnd);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
-	protected:
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -49,16 +71,12 @@ public:
 //protected:
 	CQListCtrl		m_lstHeader;
 
-	#ifdef AFTER_98
-		CAlphaBlend		m_Alpha;
-	#endif
-	
+	CAlphaBlend		m_Alpha;
 	CFont			m_TitleFont;
 	CSearchEditBox	m_Search;
 	CFont			m_SearchFont;
 	CButton			m_btCancel;
 	bool			m_bHideWnd;
-	CMainTable		m_Recset;
 	CString			m_strSQLSearch;
 	CGroupStatic	m_stGroup;
 	CFont			GroupFont;
@@ -68,7 +86,22 @@ public:
 	CBitmapButton	m_ShowGroupsFolderTop;
 	CBitmapButton	m_BackButton;
 	bool			m_bAllowRepaintImmediately;
+
+	CString			m_SQL;
+	CString			m_CountSQL;
+	long			m_lRecordCount;
+	bool			m_bStopQuery;
 	bool			m_bHandleSearchTextChange;
+	bool			m_bFoundClipToSetFocusTo;
+	long			m_lItemsPerPage;
+
+	std::vector<CMainTable> m_Cache;
+
+	HANDLE m_Events[4];
+	HANDLE m_ExitEvent;
+	HANDLE m_SearchingEvent;
+
+	CCriticalSection m_CritSection;
 	
 	void RefreshNc( bool bRepaintImmediately = false );
 	void UpdateStatus( bool bRepaintImmediately = false );  // regenerates the status (caption) text
@@ -84,7 +117,7 @@ public:
 	BOOL OpenIndex( long nItem );
 	BOOL NewGroup( bool bGroupSelection = true );
 	// moves the caret to the given ID, selects it, and ensures it is visible.
-	BOOL SetListID( long lID );
+	long SetListID( long lID );
 
 	CString LoadDescription( int nItem );
 	bool SaveDescription( int nItem, CString text );
@@ -98,7 +131,14 @@ public:
 	void SetSendToMenu(CMenu *pMenu, int nMenuID, int nArrayPos);
 
 	BOOL SendToFriendbyPos(int nPos);
+
+	bool InsertNextNRecords(int nEnd);
 	
+	CString GetDisplayText(long lDontAutoDelete, long lShortCut, bool bIsGroup, long lParentID, CString csText);
+
+	void FillMainTable(CMainTable &table, CppSQLite3Query &q);
+	void RunThread();
+
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CQPasteWnd)
@@ -147,7 +187,6 @@ protected:
 	afx_msg void OnMenuQuickpropertiesSettoneverautodelete();
 	afx_msg void OnMenuQuickpropertiesAutodelete();
 	afx_msg void OnMenuQuickpropertiesRemovehotkey();
-	afx_msg void OnUpdateMenuGroupsMovetothegroupBlank(CCmdUI* pCmdUI);
 	afx_msg void OnMenuSenttoFriendEight();
 	afx_msg void OnMenuSenttoFriendEleven();
 	afx_msg void OnMenuSenttoFriendFifteen();
@@ -176,6 +215,7 @@ protected:
 	afx_msg void OnMenuQuickoptionsEnsureentirewindowisvisible();
 	afx_msg void OnMenuQuickoptionsShowclipsthatareingroupsinmainlist();
 	afx_msg void OnMenuPastehtmlasplaintext();
+	afx_msg void OnPromptToDeleteClip();
 	afx_msg void OnUpdateMenuNewgroup(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateMenuNewgroupselection(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateMenuAllwaysontop(CCmdUI* pCmdUI);
@@ -183,7 +223,8 @@ protected:
 	afx_msg void OnUpdateMenuViewgroups(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateMenuPasteplaintextonly(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateMenuDelete(CCmdUI* pCmdUI);
-	afx_msg void OnUpdateMenuProperties(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateMenuProperties(CCmdUI* pCmdUI);	
+	afx_msg void OnDestroy();
 	//}}AFX_MSG
 	afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);
@@ -195,6 +236,9 @@ protected:
 	afx_msg LRESULT OnListSelect_Index(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnRefreshView(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGroupTreeMessage(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnFillRestOfList(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnRefeshVisibleRows(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnSetListCount(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
@@ -211,9 +255,18 @@ public:
 	afx_msg void OnMenuNewGroup();
 	afx_msg void OnMenuNewGroupSelection();
 	afx_msg void OnBackButton();
-	afx_msg LRESULT OnGetClipData(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnUpDown(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnItemDeleted(WPARAM wParam, LPARAM lParam);
 	LRESULT OnToolTipWndInactive(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnMenuExport();
+	afx_msg void OnMenuImport();
+	afx_msg void OnQuickpropertiesRemovequickpaste();
+	afx_msg void OnMenuEdititem();
+	afx_msg void OnMenuNewclip();
+	afx_msg void OnUpdateMenuEdititem(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateMenuNewclip(CCmdUI *pCmdUI);
 };
 
 

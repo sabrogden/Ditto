@@ -36,6 +36,8 @@ public:
 	BOOL SetCurSelOnItemData(long lItemData);
 	int GetItemDataFromCursel();
 
+	long m_lSkipGroupID;
+
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CGroupCombo)

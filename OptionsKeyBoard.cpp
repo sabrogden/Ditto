@@ -34,6 +34,7 @@ void COptionsKeyBoard::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionsKeyBoard)
+	DDX_Control(pDX, IDC_NAMED_PASTE, m_NamedPaste);
 	DDX_Control(pDX, IDC_CHECK_SEND_PASTE, m_btSendPaste);
 	DDX_Control(pDX, IDC_HOTKEY9, m_Nine);
 	DDX_Control(pDX, IDC_HOTKEY8, m_Eight);
@@ -65,7 +66,14 @@ BOOL COptionsKeyBoard::OnInitDialog()
 	m_pParent = (COptionsSheet *)GetParent();
 
 	theApp.m_pDittoHotKey->CopyToCtrl(m_HotKey, m_hWnd, IDC_CHECK_WIN_DITTO);
-	theApp.m_pCopyHotKey->CopyToCtrl(m_NamedCopy, m_hWnd, IDC_CHECK_WIN_NAMED_COPY);
+
+	//A U3 device is unable to use the keyboard hooks, so named paste and copy 
+	//can't be used
+	if(!g_Opt.m_bU3)
+	{
+		theApp.m_pNamedCopy->CopyToCtrl(m_NamedCopy, m_hWnd, IDC_CHECK_WIN_NAMED_COPY);
+		theApp.m_pNamedPaste->CopyToCtrl(m_NamedPaste, m_hWnd, IDC_CHECK_WIN_NAMED_PASTE);
+	}
 
 	theApp.m_pPosOne->CopyToCtrl(m_One, m_hWnd, IDC_CHECK_WIN1);
 	theApp.m_pPosTwo->CopyToCtrl(m_Two, m_hWnd, IDC_CHECK_WIN2);
@@ -87,6 +95,19 @@ BOOL COptionsKeyBoard::OnInitDialog()
 
 	theApp.m_Language.UpdateOptionShortcuts(this);
 
+	//A U3 device is unable to use the keyboard hooks, so named paste and copy 
+	//can't be used
+	if(g_Opt.m_bU3)
+	{
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_STATIC_NAMED_COPY), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_STATIC_NAMED_COPY2), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_NAMED_COPY), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_NAMED_PASTE), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_WIN_NAMED_COPY), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_WIN_NAMED_PASTE), SW_HIDE);
+	}
+	
+		
 	return FALSE;
 }
 
@@ -111,7 +132,14 @@ BOOL COptionsKeyBoard::OnApply()
 	g_HotKeys.GetKeys( keys ); // save old keys just in case new ones are invalid
 	
 	theApp.m_pDittoHotKey->CopyFromCtrl(m_HotKey, m_hWnd, IDC_CHECK_WIN_DITTO);
-	theApp.m_pCopyHotKey->CopyFromCtrl(m_NamedCopy, m_hWnd, IDC_CHECK_WIN_NAMED_COPY);
+	
+	//A U3 device is unable to use the keyboard hooks, so named paste and copy 
+	//can't be used
+	if(!g_Opt.m_bU3)
+	{
+		theApp.m_pNamedCopy->CopyFromCtrl(m_NamedCopy, m_hWnd, IDC_CHECK_WIN_NAMED_COPY);
+		theApp.m_pNamedPaste->CopyFromCtrl(m_NamedPaste, m_hWnd, IDC_CHECK_WIN_NAMED_PASTE);
+	}
 	
 	theApp.m_pPosOne->CopyFromCtrl(m_One, m_hWnd, IDC_CHECK_WIN1);
 	theApp.m_pPosTwo->CopyFromCtrl(m_Two, m_hWnd, IDC_CHECK_WIN2);
@@ -127,14 +155,14 @@ BOOL COptionsKeyBoard::OnApply()
 	ARRAY NewKeys;
 	g_HotKeys.GetKeys(NewKeys);
 	
-	if( g_HotKeys.FindFirstConflict(NewKeys, &x, &y) )
+	if(g_HotKeys.FindFirstConflict(NewKeys, &x, &y))
 	{
 		str =  g_HotKeys.ElementAt(x)->GetName();
 		str += " and ";
 		str += g_HotKeys.ElementAt(y)->GetName();
 		str += " cannot be the same.";
 		MessageBox(str);
-		g_HotKeys.SetKeys( keys ); // restore the original values
+		g_HotKeys.SetKeys(keys); // restore the original values
 		return FALSE;
 	}
 	

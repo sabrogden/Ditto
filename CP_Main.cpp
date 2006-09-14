@@ -2,14 +2,18 @@
 //
 
 #include "stdafx.h"
+//#include "vld.h"
 #include "CP_Main.h"
 #include "MainFrm.h"
 #include "Misc.h"
-#include "SelectDB.h"
 #include ".\cp_main.h"
 #include "server.h"
 #include "Client.h"
+#include "InternetUpdate.h"
 #include <io.h>
+#include "Path.h"
+#include "Clip_ImportExport.h"
+#include "HyperLink.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -19,6 +23,53 @@ static char THIS_FILE[] = __FILE__;
 
 /////////////////////////////////////////////////////////////////////////////
 // The one and only CCP_MainApp object
+
+class DittoCommandLineInfo : public CCommandLineInfo
+{
+public:
+	DittoCommandLineInfo()
+	{
+		m_bDisconnect = FALSE;
+		m_bConnect = FALSE;
+		m_bU3 = FALSE;
+		m_bU3Stop = FALSE;
+		m_bU3Install = FALSE;
+	}
+
+	virtual void ParseParam(const TCHAR* pszParam, BOOL bFlag, BOOL bLast)
+	{
+		if(bFlag)
+		{
+			if(STRICMP(pszParam, _T("Connect")) == 0)
+			{
+				m_bConnect = TRUE;
+			}
+			else if(STRICMP(pszParam, _T("Disconnect")) == 0)
+			{
+				m_bDisconnect = TRUE;
+			}
+			else if(STRICMP(pszParam, _T("U3")) == 0)
+			{
+				m_bU3 = TRUE;
+			}
+			else if(STRICMP(pszParam, _T("U3appStop")) == 0)
+			{
+				m_bU3Stop = TRUE;
+			}
+			else if(STRICMP(pszParam, _T("U3Install")) == 0)
+			{
+				m_bU3Install = TRUE;
+			}
+		}
+
+	}
+
+	BOOL m_bDisconnect;
+	BOOL m_bConnect;
+	BOOL m_bU3;
+	BOOL m_bU3Stop;
+	BOOL m_bU3Install;
+};
 
 CCP_MainApp theApp;
 
@@ -46,20 +97,15 @@ CCP_MainApp::CCP_MainApp()
 
 	m_bShowingQuickPaste = false;
 	m_bShowingOptions = false;
-	m_bShowCopyProperties = false;
 	m_bRemoveOldEntriesPending = false;
 
 	m_IC_bCopy = false;
 
 	m_GroupDefaultID = 0;
-	m_GroupID = 0;
+	m_GroupID = -1;
 	m_GroupParentID = 0;
 	m_GroupText = "History";
-
-	m_FocusID = -1; // -1 == keep previous position, 0 == go to latest ID
-
-	m_pDatabase = NULL;
-	// Place all significant initialization in InitInstance
+	m_FocusID = -1;
 
 	m_bAsynchronousRefreshView = true;
 
@@ -71,9 +117,15 @@ CCP_MainApp::CCP_MainApp()
 
 	m_lLastGoodIndexForNextworkPassword = -2;
 
-	m_HTML_Format = ::RegisterClipboardFormat("HTML Format");
-	m_PingFormat = ::RegisterClipboardFormat("Ditto Ping Format");
-	m_RTF_Format = ::RegisterClipboardFormat("Rich Text Format");
+	m_HTML_Format = ::RegisterClipboardFormat(_T("HTML Format"));
+	m_PingFormat = ::RegisterClipboardFormat(_T("Ditto Ping Format"));
+	m_cfIgnoreClipboard = ::RegisterClipboardFormat(_T("Clipboard Viewer Ignore"));
+	m_cfDelaySavingData = ::RegisterClipboardFormat(_T("Ditto Delay Saving Data"));
+	m_RemoteCF_HDROP = ::RegisterClipboardFormat(_T("Ditto Remote CF_HDROP"));
+
+	m_QuickPasteMode = NONE_QUICK_PASTE;
+	m_pQuickPasteClip = NULL;
+	m_bDittoHasFocus = false;
 
 	::InitializeCriticalSection(&m_CriticalSection);
 }
@@ -88,11 +140,93 @@ CCP_MainApp::~CCP_MainApp()
 
 BOOL CCP_MainApp::InitInstance()
 {
-	Log("InitInstance");
-
 	AfxEnableControlContainer();
+	AfxOleInit();
+	AfxInitRichEditEx();
 
-	m_hMutex = CreateMutex(NULL, FALSE, "Ditto Is Now Running");
+	DittoCommandLineInfo cmdInfo;
+	ParseCommandLine(cmdInfo);
+	if(cmdInfo.m_strFileName.IsEmpty() == FALSE)
+	{
+		try
+		{
+			CClip_ImportExport Clip;
+			CppSQLite3DB db;
+			db.open(cmdInfo.m_strFileName);
+
+			CClip_ImportExport clip;
+			if(clip.ImportFromSqliteDB(db, false, true))
+			{
+				ShowCommandLineError("Ditto", theApp.m_Language.GetString("Importing_Good", "Clip placed on clipboard"));
+			}
+			else
+			{
+				ShowCommandLineError("Ditto", theApp.m_Language.GetString("Error_Importing", "Error importing exported clip"));
+			}
+		}
+		catch (CppSQLite3Exception& e)
+		{
+			ASSERT(FALSE);
+
+			CString csError;
+			csError.Format(_T("%s - Exception - %d - %s"), theApp.m_Language.GetString("Error_Parsing", "Error parsing exported clip"), e.errorCode(), e.errorMessage());
+			ShowCommandLineError("Ditto", csError);
+		}	
+
+		return FALSE;
+	}
+	else if(cmdInfo.m_bConnect || cmdInfo.m_bDisconnect)
+	{
+		HWND hWnd = (HWND)CGetSetOptions::GetMainHWND();
+		if(hWnd)
+			::SendMessage(hWnd, WM_SET_CONNECTED, cmdInfo.m_bConnect, cmdInfo.m_bDisconnect);
+
+		return FALSE;
+	}
+	else if(cmdInfo.m_bU3Install)
+	{
+		CString csFile = CGetSetOptions::GetPath(PATH_HELP);
+		csFile += "U3_Install.htm";
+		CHyperLink::GotoURL(csFile, SW_SHOW);
+		return FALSE;
+	}
+
+	//if starting from a u3 device we will pass in -U3Start
+	if(cmdInfo.m_bU3)
+		g_Opt.m_bU3 = cmdInfo.m_bU3 ? TRUE : FALSE;
+
+	g_Opt.LoadSettings();
+
+	if(cmdInfo.m_bU3Stop)
+	{
+		MessageBox(NULL, _T("recieved Stop"), _T(""), MB_OK);
+		HWND hWnd = (HWND)CGetSetOptions::GetMainHWND();
+		if(hWnd)
+		{
+			MessageBox(NULL, _T("Sending Close"), _T(""), MB_OK);
+			::SendMessage(hWnd, WM_CLOSE, 0, 0);
+		}
+
+		return FALSE;
+	}
+
+	CInternetUpdate update;
+
+	long lRunningVersion = update.GetRunningVersion();
+	CString cs = update.GetVersionString(lRunningVersion);
+	cs.Insert(0, _T("InitInstance  -  Running Version - "));
+	Log(cs);
+
+	CString csMutex("Ditto Is Now Running");
+	if(g_Opt.m_bU3)
+	{
+		//If running from a U3 device then allow other ditto's to run
+		//only prevent Ditto from running from the same device
+		csMutex += " ";
+		csMutex += GETENV(_T("U3_DEVICE_SERIAL"));
+	}
+
+	m_hMutex = CreateMutex(NULL, FALSE, csMutex);
 	DWORD dwError = GetLastError();
 	if(dwError == ERROR_ALREADY_EXISTS)
 	{
@@ -102,50 +236,25 @@ BOOL CCP_MainApp::InitInstance()
 
 		return TRUE;
 	}
-	
-	AfxOleInit();
-	AfxInitRichEdit();
 
 	CString csFile = CGetSetOptions::GetLanguageFile();
 	if(csFile.GetLength() > 0 && !m_Language.LoadLanguageFile(csFile))
 	{
 		CString cs;
-		cs.Format("Error loading language file - %s - \n\n%s", csFile, m_Language.m_csLastError);
-
+		cs.Format(_T("Error loading language file - %s - \n\n%s"), csFile, m_Language.m_csLastError);
 		Log(cs);
 	}
 
-	m_cfIgnoreClipboard = ::RegisterClipboardFormat("Clipboard Viewer Ignore");
+//	if(g_Opt.m_bU3)
+//	{
+//		CopyDownDatabase();
+//	}
 
 	int nRet = CheckDBExists(CGetSetOptions::GetDBPath());
 	if(nRet == FALSE)
 	{
 		AfxMessageBox(theApp.m_Language.GetString("Error_Opening_Database", "Error Opening Database."));
-		return TRUE;
-	}
-	else if(nRet == ERROR_OPENING_DATABASE)
-	{
-		CString csFile = CGetSetOptions::GetExeFileName();
-		csFile = GetFilePath(csFile);
-		csFile += "dao\\Disk1\\SETUP.EXE";
-
-		//If they have downloaded the version with dao in the install
-		if(_access(csFile, 0) == 0)
-		{
-			CString cs = theApp.m_Language.GetString("Error_Init_Dao_Intall", "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO.");
-			MessageBox(NULL, cs, "Ditto", MB_OK);
-			WinExec(csFile, SW_SHOW);
-		}
-		else
-		{
-			CString cs = theApp.m_Language.GetString("Error_Init_Dao", "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO.");
-			if(MessageBox(NULL, cs, "Ditto", MB_YESNO) == IDYES)
-			{
-				ShellExecute(NULL, "open", "http://ditto-cp.sourceforge.net/dao_setup.exe", "", "", SW_SHOW);
-			}
-		}	
-
-		return TRUE;
+		return FALSE;
 	}
 
 	CMainFrame* pFrame = new CMainFrame;
@@ -170,11 +279,24 @@ void CCP_MainApp::AfterMainCreate()
 	ASSERT( ::IsWindow(m_MainhWnd) );
 	g_Opt.SetMainHWND((long)m_MainhWnd);
 
+	//Save the HWND so the stop app can send us a close message
+	if(g_Opt.m_bU3)
+	{
+		CGetSetOptions::WriteU3Hwnd(m_MainhWnd);
+	}
+
 	g_HotKeys.Init(m_MainhWnd);
 
 	// create hotkeys here.  They are automatically deleted on exit
 	m_pDittoHotKey = new CHotKey(CString("DittoHotKey"), 704); //704 is ctrl-tilda
-	m_pCopyHotKey = new CHotKey("CopyHotKey");
+
+	//A U3 device is unable to use the keyboard hooks, so named paste and copy 
+	//can't be used
+	if(!g_Opt.m_bU3)
+	{
+		m_pNamedCopy = new CHotKey("CopyHotKey");
+		m_pNamedPaste = new CHotKey("NamedPaste");
+	}
 	m_pPosOne = new CHotKey("Position1", 0, true);
 	m_pPosTwo = new CHotKey("Position2", 0, true);
 	m_pPosThree = new CHotKey("Position3", 0, true);
@@ -194,8 +316,6 @@ void CCP_MainApp::AfterMainCreate()
 	StartStopServerThread();
 
 	m_bAppRunning = true;
-
-	m_pcpSendRecieveError = NULL;
 }
 
 void CCP_MainApp::StartStopServerThread()
@@ -258,13 +378,21 @@ bool CCP_MainApp::TargetActiveWindow()
 		return true;
 
 	HWND hOld = m_hTargetWnd;
+	GUITHREADINFO guiThreadInfo;
+	guiThreadInfo.cbSize = sizeof(GUITHREADINFO);
 	HWND hNew = ::GetForegroundWindow();
-	if( hNew == m_hTargetWnd || !::IsWindow(hNew) || IsAppWnd(hNew) )
+	DWORD OtherThreadID = GetWindowThreadProcessId(hNew, NULL);
+	if(GetGUIThreadInfo(OtherThreadID, &guiThreadInfo))
+	{
+		hNew = guiThreadInfo.hwndFocus;
+	}
+
+	if(hNew == m_hTargetWnd || !::IsWindow(hNew) || IsAppWnd(hNew))
 		return false;
 
 	m_hTargetWnd = hNew;
 	
-	if( QPasteWnd() )
+	if(QPasteWnd())
 		QPasteWnd()->UpdateStatus(true);
 
 	// Tracking / Debugging
@@ -281,7 +409,6 @@ bool CCP_MainApp::TargetActiveWindow()
 
 bool CCP_MainApp::ActivateTarget()
 {
-//	::ShowWindow(m_hTargetWnd, SW_SHOW);
 	::SetForegroundWindow(m_hTargetWnd);
 	::SetFocus(m_hTargetWnd);
 
@@ -298,8 +425,12 @@ bool CCP_MainApp::ReleaseFocus()
 // sends Ctrl-V to the TargetWnd
 void CCP_MainApp::SendPaste(bool bActivateTarget)
 {
+	Log(_T("SendPaste"));
+
+	char ch;
+
 	//Make sure all the keys are up
-	for(char ch = '0'; ch <= '9'; ch++)
+	for(ch = '0'; ch <= '9'; ch++)
 	{
 		keybd_event(ch, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 	}
@@ -317,7 +448,7 @@ void CCP_MainApp::SendPaste(bool bActivateTarget)
 
 	if(bActivateTarget && !ActivateTarget())
 	{
-		SetStatus("SendPaste FAILED!",TRUE);
+		SetStatus(_T("SendPaste FAILED!"), TRUE);
 		return;
 	}
 
@@ -336,6 +467,48 @@ void CCP_MainApp::SendPaste(bool bActivateTarget)
 	Sleep(50);
 
 	keybd_event('V', 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+
+	Log(_T("END SendPaste"));
+}
+
+// sends Ctrl-V to the TargetWnd
+void CCP_MainApp::SendCopy()
+{
+	char ch;
+
+	//Make sure all the keys are up
+	for(ch = '0'; ch <= '9'; ch++)
+	{
+		keybd_event(ch, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	}
+
+	for(ch = 'A'; ch <= 'Z'; ch++)
+	{
+		keybd_event(ch, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	}
+	keybd_event(VK_SHIFT, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	keybd_event(VK_MENU, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	keybd_event(VK_LWIN, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	
+	Sleep(50);
+
+	MSG KeyboardMsg;
+	while (::PeekMessage(&KeyboardMsg, NULL, 0, 0, PM_REMOVE))
+	{
+		::TranslateMessage(&KeyboardMsg);
+		::DispatchMessage(&KeyboardMsg);
+    }
+
+	Sleep(50);
+
+	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+	keybd_event('C', 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+
+	Sleep(50);
+
+	keybd_event('C', 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 }
 
@@ -368,11 +541,7 @@ void CCP_MainApp::StopCopyThread()
 bool CCP_MainApp::ToggleConnectCV()
 {
 	bool bConnect = !GetConnectCV();
-	SetConnectCV( bConnect );
-	if( bConnect )
-		m_pMainFrame->m_TrayIcon.SetIcon( IDR_MAINFRAME );
-	else
-		m_pMainFrame->m_TrayIcon.SetIcon( IDI_DITTO_NOCOPYCB );
+	SetConnectCV(bConnect);
 	return bConnect;
 }
 
@@ -381,37 +550,23 @@ bool CCP_MainApp::ToggleConnectCV()
 // - a check mark appears in the rare cases that the menu text actually represents
 //   the current state, e.g. if we are supposed to be connected, but we somehow
 //   lose that connection, "Disconnect from Clipboard" will have a check next to it.
-void CCP_MainApp::UpdateMenuConnectCV( CMenu* pMenu, UINT nMenuID )
+void CCP_MainApp::UpdateMenuConnectCV(CMenu* pMenu, UINT nMenuID)
 {
-	if( pMenu == NULL )
+	if(pMenu == NULL)
 		return;
 
 	bool bConnect = theApp.GetConnectCV();
-	bool bIsConnected = theApp.IsClipboardViewerConnected();
-	
 	CString cs;
 
 	if(bConnect)
 	{
 		cs = theApp.m_Language.GetString("Disconnect_Clipboard", "Disconnect from Clipboard.");
-
 		pMenu->ModifyMenu(nMenuID, MF_BYCOMMAND, nMenuID, cs);
-
-		if(!bIsConnected)
-            pMenu->CheckMenuItem(nMenuID, MF_CHECKED);
-		else
-            pMenu->CheckMenuItem(nMenuID, MF_UNCHECKED);
 	}
-	else // CV is disconnected, so provide the option of connecting
+	else
 	{
 		cs = theApp.m_Language.GetString("Connect_Clipboard", "Connect to Clipboard.");
-
 		pMenu->ModifyMenu(nMenuID, MF_BYCOMMAND, nMenuID, cs);
-
-		if(bIsConnected)
-            pMenu->CheckMenuItem(nMenuID, MF_CHECKED);
-		else
-            pMenu->CheckMenuItem(nMenuID, MF_UNCHECKED);
 	}
 }
 
@@ -422,26 +577,27 @@ CClipTypes* CCP_MainApp::LoadTypesFromDB()
 
 	try
 	{
-		CTypesTable recset;
-		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT * FROM Types" ,NULL);
-		while(!recset.IsEOF())
+		CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT TypeText FROM Types"));			
+		while(q.eof() == false)
 		{
-			pTypes->Add( GetFormatID(recset.m_TypeText) );
-			recset.MoveNext();
-		}
-		recset.Close();
-	}
-	catch(CDaoException* e)
-	{
-		ASSERT(FALSE);
-		e->Delete();
-	}
+			pTypes->Add(GetFormatID(q.getStringField(_T("TypeText"))));
 
-	if( pTypes->GetSize() <= 0 )
+			q.nextRow();
+		}
+	}
+	CATCH_SQLITE_EXCEPTION
+
+	if(pTypes->GetSize() <= 0)
 	{
 		pTypes->Add(CF_TEXT);
 		pTypes->Add(RegisterClipboardFormat(CF_RTF));
-		pTypes->Add(CF_DIB);
+		pTypes->Add(CF_UNICODETEXT);
+		pTypes->Add(CF_HDROP);
+
+		if(g_Opt.m_bU3 == false)
+		{
+			pTypes->Add(CF_DIB);
+		}
 	}
 
 	return pTypes;
@@ -457,12 +613,11 @@ void CCP_MainApp::ReloadTypes()
 
 long CCP_MainApp::SaveCopyClips()
 {
-	Log("SaveCopyClips START");
 	long lID = 0;
 	int count;
 
 	CClipList* pClips = m_CopyThread.GetClips(); // we now own pClips
-	if( !pClips )
+	if(!pClips)
 		return 0;
 
 	CClipList* pCopyOfClips = NULL;
@@ -477,74 +632,85 @@ long CCP_MainApp::SaveCopyClips()
 	}
 
 	bool bEnteredThread = false;
+	bool bDeletepClips = true;
 
-	count = pClips->AddToDB( true );
-	if( count > 0 )
-	{		
-		lID = pClips->GetTail()->m_ID;
-		OnCopyCompleted(lID, count);
+	if(m_QuickPasteMode == ADDING_QUICK_PASTE)
+	{
+		//this will be added when they are done entering the quick paste text
+		m_pQuickPasteClip = pClips;
+		
+		bDeletepClips = false;
 
+		//go ahead and send the clips out even though it won't be added for a bit
+		count = 1;
+	}
+	else
+	{
+		count = pClips->AddToDB(true);
+
+		if(count > 0)
+		{
+			lID = pClips->GetTail()->m_ID;
+			OnCopyCompleted(lID, count);
+		}
+	}
+
+	if(count > 0)
+	{
 		if(g_Opt.m_lAutoSendClientCount > 0)
 		{
 			AfxBeginThread(SendClientThread, pCopyOfClips);
 			bEnteredThread = true;
 		}
-		
 	}
 	
 	if(bEnteredThread == false)
 		delete pCopyOfClips;
 
-	delete pClips;
-
-	Log("SaveCopyClips END");
+	if(bDeletepClips)
+		delete pClips;
 
 	return lID;
 }
 
 void CCP_MainApp::RefreshView()
 {
-	if( m_bShowingQuickPaste )
+	CQPasteWnd *pWnd = QPasteWnd();
+	if(pWnd)
 	{
-		ASSERT( QPasteWnd() );
 		if(m_bAsynchronousRefreshView)
-			QPasteWnd()->PostMessage(WM_REFRESH_VIEW);
+			pWnd->PostMessage(WM_REFRESH_VIEW);
 		else
-			QPasteWnd()->SendMessage(WM_REFRESH_VIEW);
+			pWnd->SendMessage(WM_REFRESH_VIEW);
 	}
 }
 
 void CCP_MainApp::OnPasteCompleted()
 {
 	// the list only changes if UpdateTimeOnPaste is true (updated time)
-	if( g_Opt.m_bUpdateTimeOnPaste )
+	if(g_Opt.m_bUpdateTimeOnPaste)
 		RefreshView();
 }
 
 void CCP_MainApp::OnCopyCompleted(long lLastID, int count)
 {
-	if( count <= 0 )
+	if(count <= 0)
 		return;
 
 	// queue a message to RemoveOldEntries
-	Delayed_RemoveOldEntries( 60000 );
+	Delayed_RemoveOldEntries(60000);
 
 	// update copy statistics
-	CGetSetOptions::SetTripCopyCount( -count );
-	CGetSetOptions::SetTotalCopyCount( -count );
-
-	// if we are in the History group, focus on the latest copy
-	if( m_GroupID == 0 )
-		m_FocusID = 0;
+	CGetSetOptions::SetTripCopyCount(-count);
+	CGetSetOptions::SetTotalCopyCount(-count);
 
 	RefreshView();
-	ShowCopyProperties( lLastID );
 }
 
 // Internal Clipboard for cut/copy/paste items between Groups
 
 // if NULL, this uses the current QPaste selection
-void CCP_MainApp::IC_Cut( ARRAY* pIDs )
+void CCP_MainApp::IC_Cut(ARRAY* pIDs)
 {
 	if( pIDs == NULL )
 	{
@@ -563,33 +729,33 @@ void CCP_MainApp::IC_Cut( ARRAY* pIDs )
 }
 
 // if NULL, this uses the current QPaste selection
-void CCP_MainApp::IC_Copy( ARRAY* pIDs )
+void CCP_MainApp::IC_Copy(ARRAY* pIDs)
 {
-	if( pIDs == NULL )
+	if(pIDs == NULL)
 	{
-		if( QPasteWnd() )
-			QPasteWnd()->m_lstHeader.GetSelectionItemData( m_IC_IDs );
+		if(QPasteWnd())
+			QPasteWnd()->m_lstHeader.GetSelectionItemData(m_IC_IDs);
 		else
 			m_IC_IDs.SetSize(0);
 	}
 	else
-		m_IC_IDs.Copy( *pIDs );
+		m_IC_IDs.Copy(*pIDs);
 
 	m_IC_bCopy = true;
 
-	if( QPasteWnd() )
+	if(QPasteWnd())
 		QPasteWnd()->UpdateStatus();
 }
 
 void CCP_MainApp::IC_Paste()
 {
-	if( m_IC_IDs.GetSize() <= 0 )
+	if(m_IC_IDs.GetSize() <= 0)
 		return;
 
-	if( m_IC_bCopy )
-		m_IC_IDs.CopyTo( GetValidGroupID() );
+	if(m_IC_bCopy)
+		m_IC_IDs.CopyTo(GetValidGroupID());
 	else // Move
-		m_IC_IDs.MoveTo( GetValidGroupID() );
+		m_IC_IDs.MoveTo(GetValidGroupID());
 
 	// don't process the same items twice.
 	m_IC_IDs.SetSize(0);
@@ -598,63 +764,52 @@ void CCP_MainApp::IC_Paste()
 
 // Groups
 
-BOOL CCP_MainApp::EnterGroupID( long lID )
+BOOL CCP_MainApp::EnterGroupID(long lID)
 {
-BOOL bResult = FALSE;
+	BOOL bResult = FALSE;
 
-	if( m_GroupID == lID )
+	if(m_GroupID == lID)
 		return TRUE;
 
 	// if we are switching to the parent, focus on the previous group
-	if( m_GroupParentID == lID && m_GroupID > 0 )
+	if(m_GroupParentID == lID && m_GroupID > 0)
 		m_FocusID = m_GroupID;
 
-	switch( lID )
+	switch(lID)
 	{
-	case 0:  // History Group "ID"
-		m_FocusID = -2;
-		m_GroupID = 0;
-		m_GroupParentID = 0;
-		m_GroupText = "History";
-		bResult = TRUE;
-		break;
-	case -1: // All Groups "ID"
+	case -1:
+		m_FocusID = -1;
 		m_GroupID = -1;
-		m_GroupParentID = 0;
-		m_GroupText = "Groups";
+		m_GroupParentID = -1;
+		m_GroupText = "History";
 		bResult = TRUE;
 		break;
 	default: // Normal Group
 		try
 		{
-		CMainTable recs;
-		COleVariant varKey( lID, VT_I4 );
-
-			recs.Open( dbOpenTable, "Main" );
-			recs.SetCurrentIndex("lID");
-
-			// Find first record whose [lID] field == lID
-			if( recs.Seek(_T("="), &varKey) && recs.m_bIsGroup )
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lParentID, mText, bIsGroup FROM Main WHERE lID = %d"), lID);
+			if(q.eof() == false)
 			{
-				m_GroupID = recs.m_lID;
-				m_GroupParentID = recs.m_lParentID;
-//				if( m_GroupParentID == 0 )
-//	                 m_GroupParentID = -1; // back out into "all top-level groups" list.
-				m_GroupText = recs.m_strText;
-				bResult = TRUE;
+				if(q.getIntField(_T("bIsGroup")) > 0)
+				{
+					m_GroupID = lID;
+					m_GroupParentID = q.getIntField(_T("lParentID"));
+//					if( m_GroupParentID == 0 )
+//				      m_GroupParentID = -1; // back out into "all top-level groups" list.
+					m_GroupText = q.getStringField(_T("mText"));
+					bResult = TRUE;
+				}
 			}
-
-			recs.Close();
 		}
-		CATCHDAO
+		CATCH_SQLITE_EXCEPTION
 		break;
 	}
 
-	if( bResult )
+	if(bResult)
 	{
 		theApp.RefreshView();
-		if( QPasteWnd() )
-			QPasteWnd()->UpdateStatus( true );
+		if(QPasteWnd())
+			QPasteWnd()->UpdateStatus(true);
 	}
 
 	return bResult;
@@ -663,8 +818,6 @@ BOOL bResult = FALSE;
 // returns a usable group id (not negative)
 long CCP_MainApp::GetValidGroupID()
 {
-	if( m_GroupID <= 0 )
-		return 0;
 	return m_GroupID;
 }
 
@@ -685,7 +838,7 @@ void CCP_MainApp::SetGroupDefaultID( long lID )
 
 // Window States
 
-void CCP_MainApp::SetStatus( const char* status, bool bRepaintImmediately )
+void CCP_MainApp::SetStatus( const TCHAR* status, bool bRepaintImmediately )
 {
 	m_Status = status;
 	if( QPasteWnd() )
@@ -704,19 +857,6 @@ void CCP_MainApp::ShowPersistent( bool bVal )
 	}
 }
 
-void CCP_MainApp::ShowCopyProperties( long lID )
-{
-	if( m_bShowCopyProperties && lID > 0 )
-	{
-		HWND hWndFocus = ::GetForegroundWindow();
-
-		m_bShowCopyProperties = false;
-		::SendMessage(m_MainhWnd, WM_COPYPROPERTIES, lID, 0); // modal
-
-		::SetForegroundWindow(hWndFocus);
-	}
-}
-
 void CCP_MainApp::Delayed_RemoveOldEntries( UINT delay )
 {
 	if( !m_bRemoveOldEntriesPending )
@@ -731,48 +871,23 @@ void CCP_MainApp::Delayed_RemoveOldEntries( UINT delay )
 
 int CCP_MainApp::ExitInstance() 
 {
-	Log("ExitInstance");
+	Log(_T("ExitInstance"));
 
-	CloseDB();
+	m_db.close();
+
+//	if(g_Opt.m_bU3)
+//	{
+//		if(g_Opt.IsU3DeviceAvailable())
+//		{
+//			CopyUpDatabase();
+//		}
+//		else
+//		{
+//			Log(_T("Needed to copy up database but device was not available to copy to"));
+//		}
+//	}
 
 	return CWinApp::ExitInstance();
-}
-
-CDaoDatabase* CCP_MainApp::EnsureOpenDB(CString csName)
-{
-	try
-	{
-		if(!m_pDatabase)
-			m_pDatabase = new CDaoDatabase;
-
-		if(!m_pDatabase->IsOpen())
-		{
-			if(csName == "")
-				m_pDatabase->Open(GetDBName());
-			else
-				m_pDatabase->Open(csName);
-		}
-
-		if(m_pMainWnd)
-			((CMainFrame *)m_pMainWnd)->ResetKillDBTimer();
-	}
-	CATCHDAO
-
-	return m_pDatabase;
-}
-
-BOOL CCP_MainApp::CloseDB()
-{
-	if(m_pDatabase)
-	{
-		if(m_pDatabase->IsOpen())
-			m_pDatabase->Close();
-
-		delete m_pDatabase;
-		m_pDatabase = NULL;
-	}
-
-	return TRUE;
 }
 
 // return TRUE if there is more idle processing to do
@@ -787,13 +902,14 @@ BOOL CCP_MainApp::OnIdle(LONG lCount)
 
 CString CCP_MainApp::GetTargetName() 
 {
-	char cWindowText[100];
+	TCHAR cWindowText[100];
 	HWND hParent = m_hTargetWnd;
-	int nCount = 0;
 
 	::GetWindowText(hParent, cWindowText, 100);
+
+	int nCount = 0;
 	
-	while(strlen(cWindowText) <= 0)
+	while(STRLEN(cWindowText) <= 0)
 	{
 		hParent = ::GetParent(hParent);
 		if(hParent == NULL)
@@ -804,7 +920,7 @@ CString CCP_MainApp::GetTargetName()
 		nCount++;
 		if(nCount > 100)
 		{
-			Log("GetTargetName reached maximum search depth of 100");
+			Log(_T("GetTargetName reached maximum search depth of 100"));
 			break;
 		}
 	}
@@ -815,10 +931,150 @@ CString CCP_MainApp::GetTargetName()
 void CCP_MainApp::SetConnectCV(bool bConnect)
 { 
 	m_CopyThread.SetConnectCV(bConnect); 
+	
+	if(bConnect)
+		m_pMainFrame->m_TrayIcon.SetIcon(IDR_MAINFRAME);
+	else
+		m_pMainFrame->m_TrayIcon.SetIcon(IDI_DITTO_NOCOPYCB);
 
 	if(QPasteWnd())
 	{
 		QPasteWnd()->SetCaptionColorActive(!g_Opt.m_bShowPersistent, theApp.GetConnectCV());
 		QPasteWnd()->RefreshNc();
 	}
+}
+
+void CCP_MainApp::OnDeleteID(long lID)
+{
+	if(QPasteWnd())
+	{
+		QPasteWnd()->PostMessage(NM_ITEM_DELETED, lID, 0);
+	}
+}
+
+
+bool CCP_MainApp::ImportClips(HWND hWnd)
+{
+	OPENFILENAME	FileName;
+	TCHAR			szFileName[400];
+	TCHAR			szDir[400];
+
+	memset(&FileName, 0, sizeof(FileName));
+	memset(szFileName, 0, sizeof(szFileName));
+	memset(&szDir, 0, sizeof(szDir));
+
+	CString csInitialDir = CGetSetOptions::GetLastImportDir();
+	STRCPY(szDir, csInitialDir);
+
+	FileName.lStructSize = sizeof(FileName);
+	FileName.lpstrTitle = _T("Import Clips");
+	FileName.Flags = OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST;
+	FileName.nMaxFile = 400;
+	FileName.lpstrFile = szFileName;
+	FileName.lpstrInitialDir = szDir;
+	FileName.lpstrFilter = _T("Exported Ditto Clips (.dto)\0*.dto\0\0");
+	FileName.lpstrDefExt = _T("dto");
+
+	if(GetOpenFileName(&FileName) == 0)
+		return false;
+
+	using namespace nsPath;
+	CPath path(FileName.lpstrFile);
+	CString csPath = path.GetPath();
+	CGetSetOptions::SetLastImportDir(csPath);
+	
+	try
+	{
+		CppSQLite3DB db;
+		db.open(FileName.lpstrFile);
+
+		CClip_ImportExport clip;
+		if(clip.ImportFromSqliteDB(db, true, false))
+		{
+			CShowMainFrame Show;
+
+			CString cs;
+			
+			cs.Format(_T("%s %d "), theApp.m_Language.GetString("Import_Successfully", "Successfully imported"), clip.m_lImportCount);
+			if(clip.m_lImportCount = 1)
+				cs += theApp.m_Language.GetString("Clip", "clip");
+			else
+				cs += theApp.m_Language.GetString("Clips", "clips");
+
+			MessageBox(hWnd, cs, _T("Ditto"), MB_OK);
+		}
+		else
+		{
+			CShowMainFrame Show;
+			MessageBox(hWnd, theApp.m_Language.GetString("Error_Importing", "Error importing exported clip"), _T("Ditto"), MB_OK);
+		}
+	}
+	catch (CppSQLite3Exception& e)
+	{
+		ASSERT(FALSE);
+
+		CString csError;
+		csError.Format(_T("%s - Exception - %d - %s"), theApp.m_Language.GetString("Error_Parsing", "Error parsing exported clip"), e.errorCode(), e.errorMessage());
+		MessageBox(hWnd, csError, _T("Ditto"), MB_OK);
+	}	
+
+	return true;
+}
+
+void CCP_MainApp::ShowCommandLineError(CString csTitle, CString csMessage)
+{
+	Log(StrF(_T("ShowCommandLineError %s - %s"), csTitle, csMessage));
+
+	CToolTipEx *pErrorWnd = new CToolTipEx;
+	pErrorWnd->Create(NULL);
+	pErrorWnd->SetToolTipText(csTitle + "\n\n" + csMessage);
+
+	CPoint pt;
+	CRect rcScreen;
+	GetMonitorRect(0, &rcScreen);
+	pt = rcScreen.BottomRight();
+
+	CRect cr = pErrorWnd->GetBoundsRect();
+
+	pt.x -= max(cr.Width()+50, 150);
+	pt.y -= max(cr.Height()+50, 150);
+
+	pErrorWnd->Show(pt);
+	
+	Sleep(4000);
+
+	pErrorWnd->DestroyWindow();
+}
+
+BOOL CCP_MainApp::GetClipData(long lID, CClipFormat &Clip)
+{
+	BOOL bRet = FALSE;
+
+	try
+	{
+		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT ooData FROM Data WHERE lParentID = %d AND strClipboardFormat = '%s'"), lID, GetFormatName(Clip.m_cfType));
+		if(q.eof() == false)
+		{
+			int nDataLen = 0;
+			const unsigned char *cData = q.getBlobField(_T("ooData"), nDataLen);
+			if(cData != NULL)
+			{
+				Clip.m_hgData = NewGlobal(nDataLen);
+
+				::CopyToGlobalHP(Clip.m_hgData, (LPVOID)cData, nDataLen);
+
+				bRet = TRUE;
+			}
+		}
+	}
+	CATCH_SQLITE_EXCEPTION
+
+	return bRet;
+}
+
+bool CCP_MainApp::EditItems(CClipIDs &Ids, bool bShowError)
+{
+	m_pMainFrame->ShowEditWnd(Ids);
+
+	return true;
 }

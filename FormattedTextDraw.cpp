@@ -57,6 +57,9 @@ HRESULT CFormattedTextDraw::put_RTFText(BSTR newVal)
 	editStream.dwError = 0;
 	editStream.pfnCallback = EditStreamInCallback;
 	hr = m_spTextServices->TxSendMessage(EM_STREAMIN, (WPARAM)(SF_RTF | SF_UNICODE), (LPARAM)&editStream, &lResult);
+
+	free(m_editCookie.bstrText);
+
 	return S_OK;
 }
 
@@ -394,7 +397,7 @@ HRESULT CFormattedTextDraw::CharFormatFromHFONT(CHARFORMAT2W* pCF, HFONT hFont)
 	pCF->bPitchAndFamily = lf.lfPitchAndFamily;
 
 #ifdef UNICODE
-	_tcscpy(pCF->szFaceName, lf.lfFaceName);
+	wcscpy(pCF->szFaceName, lf.lfFaceName);
 #else
 	MultiByteToWideChar(CP_ACP, 0, lf.lfFaceName, LF_FACESIZE, pCF->szFaceName, LF_FACESIZE);
 #endif

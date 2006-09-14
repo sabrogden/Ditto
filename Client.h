@@ -11,6 +11,7 @@
 
 #include "Server.h"
 #include "Encryption.h"
+#include "SendSocket.h"
 
 class CSendToFriendInfo
 {
@@ -46,17 +47,20 @@ public:
 
 	BOOL SendItem(CClip *pClip);
 	
-	BOOL OpenConnection(const char* servername);
+	BOOL OpenConnection(const TCHAR* servername);
 	BOOL CloseConnection();
+
+	HGLOBAL RequestCopiedFiles(CClipFormat &HDropFormat, CString csIP, CString csComputerName);
 
 protected:
 	SOCKET m_Connection;
 
-	BOOL SendCSendData(CSendInfo &data, MyEnums::eSendType type);
-	BOOL SendExactSize(char *pData, long lLength, bool bEncrypt = true);
+	CSendSocket m_SendSocket;
 
+	BOOL SendClipFormat(CClipFormat* pCF);
+	
 protected:
-	CEncryption *m_pEncryptor;
+	
 };
 
 BOOL SendToFriend(CSendToFriendInfo &Info);

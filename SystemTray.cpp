@@ -632,7 +632,7 @@ BOOL CSystemTray::ShowBalloon(LPCTSTR szText,
            NIIF_WARNING == dwIcon || NIIF_ERROR == dwIcon);
 
     // The timeout must be between 10 and 30 seconds.
-    ASSERT(uTimeout >= 10 && uTimeout <= 30);
+    ASSERT(uTimeout >= 0 && uTimeout <= 30);
 
 
     m_tnd.uFlags = NIF_INFO;

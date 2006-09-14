@@ -1,21 +1,18 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by CP_Main.rc
 //
 #define IDD_ABOUTBOX                    100
 #define IDR_MAINFRAME                   128
 #define IDR_CP_MAITYPE                  129
+#define IDR_EDIT_WND                    129
 #define IDR_MENU                        130
 #define IDD_SELECT_DB                   131
 #define IDD_OPTIONS_STATS               132
 #define IDD_ADD_TYPE                    134
 #define IDD_COPY_PROPERTIES             135
 #define IDD_ABOUT                       136
-#define IDB_HORIZONTAL_SCROLLBAR_THUMB  137
 #define IDD_GROUP_NAME                  138
-#define IDB_HORIZONTAL_SCROLLBAR_RIGHTARROW 138
-#define IDB_HORIZONTAL_SCROLLBAR_CHANNEL 139
-#define IDB_HORIZONTAL_SCROLLBAR_LEFTARROW 140
 #define IDB_CLOSED_FOLDER               141
 #define IDB_CLOSED_FOLDER_PRESSED       142
 #define IDB_CLOSED_FOLDER_FOCUSED       143
@@ -27,12 +24,10 @@
 #define IDD_OPTIONS_FRIENDS             148
 #define IDB_BACK_FOCUSED                149
 #define IDI_DITTO_NOCOPYCB              150
-#define IDB_VERTICAL_SCROLLBAR_DOWNARROW 151
 #define IDD_FRIEND_DETAILS              152
-#define IDB_VERTICAL_SCROLLBAR_CHANNEL  152
-#define IDB_VERTICAL_SCROLLBAR_THUMB    153
-#define IDB_VERTICAL_SCROLLBAR_UPARROW  155
 #define IDD_MOVE_TO_GROUP               156
+#define IDD_DIALOG_REMOTE_FILE          157
+#define IDR_FILE_COPY                   158
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -69,6 +64,7 @@
 #define IDC_NEVER_AUTO_DELETE           1025
 #define IDC_NAMED_COPY                  1026
 #define IDC_COMPACT_REPAIR              1027
+#define IDC_NAMED_PASTE                 1027
 #define IDC_BT_COMPACT_AND_REPAIR       1028
 #define IDC_CHECK_UPDATES               1029
 #define IDC_CHECK_FOR_UPDATES           1030
@@ -151,6 +147,7 @@
 #define IDC_EDIT_MAX_SIZE               2038
 #define IDC_CHECK_WIN8                  2039
 #define IDC_STATIC_HOT_KEY              2039
+#define IDC_CHECK_PROMPT_DELETE_CLIP    2039
 #define IDC_CHECK_WIN9                  2040
 #define IDC_STATIC_DATE                 2040
 #define IDC_CHECK_WIN10                 2041
@@ -166,6 +163,7 @@
 #define IDC_CHECK_WIN5                  2046
 #define IDC_STATIC_MAX_SIZE             2046
 #define IDC_STATIC_NO_LIMIT             2047
+#define IDC_CHECK_WIN_NAMED_PASTE       2047
 #define IDC_STATIC_ACTIVATE             2048
 #define IDC_STATIC_NAMED_COPY           2049
 #define IDC_STATIC_WIN                  2050
@@ -181,6 +179,7 @@
 #define IDC_STATIC_9                    2060
 #define IDC_STATIC_10                   2061
 #define IDC_STATIC_LINES                2062
+#define IDC_STATIC_NAMED_COPY2          2062
 #define IDC_STATIC_POPUP                2063
 #define IDC_STATIC_LEGEND               2064
 #define IDC_STATIC_LEG                  2065
@@ -192,6 +191,11 @@
 #define IDC_EDIT_SAVE_DELAY             2071
 #define IDC_STATIC_SAVE_DELAY           2072
 #define IDC_BUTTON_ABOUT                2073
+#define IDC_EDIT_QUICK_PASTE            2074
+#define IDC_STATIC_LINK                 2075
+#define IDC_PROGRESS_FILE               2076
+#define IDC_PROGRESS_ALL_FILES          2077
+#define IDC_FILE_COPY                   2078
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -269,15 +273,29 @@
 #define ID_MENU_QUICKOPTIONS_ENSUREENTIREWINDOWISVISIBLE 32849
 #define ID_MENU_QUICKOPTIONS_SHOWCLIPSTHATAREINGROUPSINMAINLIST 32850
 #define ID_MENU_PASTEHTMLASPLAINTEXT    32851
+#define ID_QUICKOPTIONS_PROMPTTODELETECLIP 32852
+#define ID_MENU_EXPORT                  32853
+#define ID_FIRST_IMPORT                 32854
+#define ID_MENU_IMPORT                  32855
+#define ID_QUICKPROPERTIES_REMOVEQUICKPASTE 32856
+#define ID_MENU_EDITITEM                32860
+#define ID_BUTTON_SAVE                  32862
+#define ID_BUTTON_SAVE_ALL              32863
+#define ID_BUTTON_CLOSE                 32864
+#define ID_BUTTON_NEW                   32866
+#define ID_MENU_NEWCLIP                 32867
+#define ID_FIRST_NEWCLIP                32868
+#define ID_BUTTON_SAVE_CLOSE_CLIPBOARD  32869
+#define ID_FIRST_COPYTODEVICE           32870
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        157
-#define _APS_NEXT_COMMAND_VALUE         32852
-#define _APS_NEXT_CONTROL_VALUE         2074
+#define _APS_NEXT_RESOURCE_VALUE        164
+#define _APS_NEXT_COMMAND_VALUE         32871
+#define _APS_NEXT_CONTROL_VALUE         2079
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

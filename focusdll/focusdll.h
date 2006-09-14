@@ -10,10 +10,15 @@ extern "C" {
 #endif
 
 DLLEXPORT DWORD WINAPI MonitorFocusChanges(HWND hWnd,UINT message);
-
 DLLEXPORT DWORD WINAPI StopMonitoringFocusChanges();
 
+DLLEXPORT DWORD WINAPI MonitorKeyboardChanges(HWND hWnd,UINT message);
+DLLEXPORT DWORD WINAPI StopMonitoringKeyboardChanges();
+
 DLLEXPORT HWND  WINAPI GetCurrentFocus();
+
+DLLEXPORT void  WINAPI SetCaptureKeys(bool bCapture);
+DLLEXPORT bool  WINAPI GetCaptureKeys();
 
 
 #ifdef __cplusplus

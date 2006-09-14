@@ -9,6 +9,7 @@
 #include "ArrayEx.h"
 #include "ToolTipEx.h"
 #include "FormattedTextDraw.h"
+#include "sqlite/CppSQLite3.h"
 
 #define NM_SELECT					WM_USER+0x100
 #define NM_RIGHT					WM_USER+0x101
@@ -21,10 +22,14 @@
 #define NM_SELECT_DB_ID		        WM_USER+0x108
 #define NM_SELECT_INDEX		        WM_USER+0x109
 #define NM_GROUP_TREE_MESSAGE       WM_USER+0x110
-#define NM_GET_CLIP_DATA	        WM_USER+0x111
 #define CB_SEARCH					WM_USER+0x112
 #define CB_UPDOWN					WM_USER+0x113
 #define NM_INACTIVE_TOOLTIPWND		WM_USER+0x114
+#define NM_FILL_REST_OF_LIST		WM_USER+0x115
+
+#define NM_SET_LIST_COUNT			WM_USER+0x116
+#define NM_REFRESH_VISIBLE_ROWS		WM_USER+0x117
+#define NM_ITEM_DELETED				WM_USER+0x118
 
 
 //#define NM_LIST_CUT			        WM_USER+0x111
@@ -60,6 +65,7 @@ public:
 	public:
 	virtual int OnToolHitTest(CPoint point, TOOLINFO * pTI) const;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pLResult);
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -93,7 +99,7 @@ public:
 
 	void SetShowTextForFirstTenHotKeys(BOOL bVal)	{ m_bShowTextForFirstTenHotKeys = bVal;	}
 
-	void DestroyAndCreateAccelerator(BOOL bCreate);
+	void DestroyAndCreateAccelerator(BOOL bCreate, CppSQLite3DB &db);
 
 	void ShowFullDescription(bool bFromAuto = false);
 	BOOL SetItemCountEx(int iCount, DWORD dwFlags = LVSICF_NOINVALIDATEALL);
@@ -104,7 +110,9 @@ public:
 
 	HWND GetToolTipHWnd();
 
-	BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam);
+	BOOL HandleKeyDown(WPARAM wParam, LPARAM lParam);
+
+	BOOL OnItemDeleted(long lID);
 
 protected:
 	void SendSelection(int nItem);;
@@ -141,10 +149,11 @@ protected:
 	afx_msg void OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnTimer(UINT nIDEvent);
 	afx_msg void OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	//}}AFX_MSG
 	afx_msg BOOL OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult );
 	DECLARE_MESSAGE_MAP()

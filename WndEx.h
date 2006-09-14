@@ -7,8 +7,7 @@
 // WndEx.h : header file
 //
 
-#define	CAPTION_BORDER			16
-#define BORDER					2
+#include "DittoWindow.h"
 
 #define	SWAP_MIN_MAX			1
 #define FORCE_MIN				2
@@ -35,46 +34,18 @@ public:
 	//}}AFX_VIRTUAL
 
 public:
-	void	SetResizable(bool bVal)	{ m_bResizable = bVal;	}
-
-	COLORREF		m_CaptionColorLeft;
-	COLORREF		m_CaptionColorRight;
-
-	bool	SetCaptionColors( COLORREF left, COLORREF right );
-	bool	SetCaptionColorActive(bool bActive, bool ConnectedToClipboard);
-
-	void	InvalidateNc();
-
-	void	SetCaptionOn(int nPos, bool bOnstartup = false);
-	void	SetAutoHide(BOOL bAutoHide);
-	void	MinMaxWindow(long lOption = SWAP_MIN_MAX);
-	void	GetWindowRectEx(LPRECT lpRect);
+	bool SetCaptionColors( COLORREF left, COLORREF right );
+	void InvalidateNc();
+	void SetCaptionOn(int nPos, bool bOnstartup = false);
+	void SetAutoHide(BOOL bAutoHide);
+	void MinMaxWindow(long lOption = SWAP_MIN_MAX);
+	void GetWindowRectEx(LPRECT lpRect);
+	bool SetCaptionColorActive(bool bActive, bool ConnectedToClipboard);
 
 protected:
-	CFont			m_TitleFont;
-	CFont			m_HorFont;
-	bool			m_bResizable;
-	CRect			m_crCloseBT;
-	CRect			m_crMinimizeBT;
-	bool			m_bMouseOverClose;
-	bool			m_bMouseDownOnClose;
-	bool			m_bMouseDownOnCaption;
-	bool			m_bMouseOverMinimize;
-	bool			m_bMouseDownOnMinimize;
-
-	long			m_lTopBorder;
-	long			m_lRightBorder;
-	long			m_lBottomBorder;
-	long			m_lLeftBorder;
-
-	CRect			m_crFullSizeWindow;
-
-	bool			m_bMinimized;
-	bool			m_bMaxSetTimer;
-	
-	void			DrawCloseBtn(CWindowDC &dc, COLORREF left = 0);
-	void			DrawMinimizeBtn(CWindowDC &dc, COLORREF left = 0);
-	void			SetRegion();
+	CDittoWindow m_DittoWindow;
+	CRect m_crFullSizeWindow;
+	bool m_bMaxSetTimer;
 
 // Implementation
 public:
@@ -97,8 +68,6 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 public:
-//	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
-//	afx_msg BOOL OnNcActivate(BOOL bActive);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 };
 

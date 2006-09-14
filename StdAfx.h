@@ -12,6 +12,10 @@
 
 #pragma warning(disable : 4995)
 
+//remove 2005 warnings
+#define _CRT_SECURE_NO_DEPRECATE 1
+#define _CRT_NON_CONFORMING_SWPRINTFS 1
+
 
 #define _WIN32_WINNT 0x0500
 #define WINVER 0x0500
@@ -22,12 +26,13 @@
 #include <afxext.h>         // MFC extensions
 #include <afxdisp.h>        // MFC Automation classes
 #include <afxdtctl.h>		// MFC support for Internet Explorer 4 Common Controls
-#include <afxdao.h>
 #ifndef _AFX_NO_AFXCMN_SUPPORT
 #include <afxcmn.h>			// MFC support for Windows Common Controls
 #endif // _AFX_NO_AFXCMN_SUPPORT
 #include <afxole.h>
 #include <Winsock2.h>
+
+#include "UnicodeMacros.h"
 
 #include <imm.h>
 #import "riched20.dll" raw_interfaces_only, raw_native_types, no_namespace, named_guids

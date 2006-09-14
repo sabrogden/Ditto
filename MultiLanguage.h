@@ -30,7 +30,7 @@ public:
 
 typedef CArray<CLangItem*, CLangItem*> LANGUAGE_ARRAY;
 
-typedef CMap<CString, LPCSTR, CLangItem*, CLangItem*> LANGUAGE_MAP;
+typedef CMap<CString, LPCTSTR, CLangItem*, CLangItem*> LANGUAGE_MAP;
 
 class CMultiLanguage  
 {

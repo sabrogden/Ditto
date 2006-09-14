@@ -81,8 +81,10 @@ BOOL CAlphaBlend::SetWindowHandle(HWND hWnd)
 
 BOOL CAlphaBlend::SetWindowHandle(CWnd *pWnd)
 {
-	if (pWnd && ::IsWindow(pWnd->GetSafeHwnd())) m_hWnd = pWnd->GetSafeHwnd();
-	else return false;
+	if (pWnd && ::IsWindow(pWnd->GetSafeHwnd())) 
+		m_hWnd = pWnd->GetSafeHwnd();
+	else 
+		return false;
 	return true;
 }
 
@@ -109,7 +111,7 @@ BOOL CAlphaBlend::SetLayeredWindowAttributesEx(HWND hwnd, COLORREF crKey, BYTE b
 	HINSTANCE DLL;
 	fnc setLayeredWindowAttributes;
 	
-	DLL = LoadLibrary("user32.dll");
+	DLL = LoadLibrary(_T("user32.dll"));
 	if(DLL != NULL)
 	{
 		setLayeredWindowAttributes = (fnc)GetProcAddress(DLL,"SetLayeredWindowAttributes");  
@@ -169,6 +171,7 @@ BOOL CAlphaBlend::SetTransparent(HWND hWnd, int nOpacity, BOOL bTransparent)
 	// set members
 	if (!SetWindowHandle(hWnd)) 
 		return false;
+
 	if (!SetOpacity(nOpacity)) 
 		return false;
 

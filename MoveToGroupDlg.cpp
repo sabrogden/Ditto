@@ -95,18 +95,12 @@ void CMoveToGroupDlg::OnSize(UINT nType, int cx, int cy)
 void CMoveToGroupDlg::OnButtonNewGroup() 
 {
 	CGroupName Name;
-		
-	int nParentID = m_Tree.GetSelectedTree();
-	if(nParentID < 0)
-		return;
-	
 	if(Name.DoModal() != IDOK)
 		return;
 		
 	CString csName = Name.m_csName;
 	
-	
-	long lID = NewGroupID(nParentID, csName);
+	long lID = NewGroupID(m_Tree.GetSelectedTree(), csName);
 	if(lID >= 0)
 	{
 		m_Tree.AddNode(csName, lID);

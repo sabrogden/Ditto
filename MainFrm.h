@@ -11,14 +11,18 @@
 
 #include "SystemTray.h"
 #include "QuickPaste.h"
+#include "ToolTipEx.h"
+#include "EditFrameWnd.h"
 
 
-#define KILL_DB_TIMER					1	
+#define CLOSE_WINDOW_TIMER				1	
 #define HIDE_ICON_TIMER					2
 #define REMOVE_OLD_ENTRIES_TIMER		3
 #define CHECK_FOR_UPDATE				4
 #define CLOSE_APP						5
-#define HIDE_ERROR_POPUP				6
+#define STOP_MONITORING_KEYBOARD_TIMER	7
+#define STOP_LOOKING_FOR_KEYBOARD		8
+#define REMOVE_OLD_REMOTE_COPIES		9
 
 
 class CMainFrame : public CFrameWnd
@@ -52,12 +56,27 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-//protected:
 	CQuickPaste QuickPaste;
 	CSystemTray m_TrayIcon;
 	ULONG m_ulCopyGap;
+	CString m_csKeyboardPaste;
+	CToolTipEx *m_pTypingToolTip;
+	CString csTypeToolTipTitle;
+	CPoint m_ToolTipPoint;
+	CAlphaBlend m_Transparency;
+
 
 	void DoFirstTenPositionsPaste(int nPos);
+	void StopLookingForKeystrokes(bool bInitAppVaribles);
+	bool PasteQuickPasteEntry(CString csQuickPaste);
+	bool SaveQuickPasteEntry(CString csQuickPaste, CClipList *pClipList);
+	void ShowErrorMessage(CString csTitle, CString csMessage);
+
+	static void DeleteOldRemoteCopies(CString csDir);
+	static UINT RemoteOldRemoteFilesThread(LPVOID pParam);
+
+	void ShowEditWnd(CClipIDs &Ids);
+	CEditFrameWnd *m_pEditFrameWnd;
 
 // Generated message map functions
 protected:
@@ -83,10 +102,25 @@ protected:
 	afx_msg LRESULT OnErrorOnSendRecieve(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnFocusChanged(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnCustomizeTrayMenu(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnKeyBoardChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEditWndClose(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnSetConnected(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnClose();
+	afx_msg void OnFirstImport();
+	afx_msg void OnDestroy();
+	afx_msg void OnFirstNewclip();
+};
+
+class CShowMainFrame
+{
+public:
+	CShowMainFrame();
+	~CShowMainFrame();
+	static bool m_bShowingMainFrame;
+	bool m_bHideMainFrameOnExit;
 };
 
 /////////////////////////////////////////////////////////////////////////////

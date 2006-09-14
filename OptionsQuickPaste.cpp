@@ -53,6 +53,7 @@ void COptionsQuickPaste::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_HISTORY_START_TOP, m_btHistoryStartTop);
 	DDX_Control(pDX, IDC_DESC_SHOW_LEADING_WHITESPACE, m_btDescShowLeadingWhiteSpace);
 	//}}AFX_DATA_MAP
+	DDX_Control(pDX, IDC_CHECK_PROMPT_DELETE_CLIP, m_PromptForDelete);
 }
 
 
@@ -96,6 +97,7 @@ BOOL COptionsQuickPaste::OnInitDialog()
 	m_btUseCtrlNum.SetCheck(CGetSetOptions::GetUseCtrlNumForFirstTenHotKeys());
 
 	m_btShowText.SetCheck(CGetSetOptions::GetShowTextForFirstTenHotKeys());
+	m_PromptForDelete.SetCheck(CGetSetOptions::GetPromptWhenDeletingClips());
 
 	if(CGetSetOptions::GetFont(m_LogFont))
 	{		
@@ -109,7 +111,7 @@ BOOL COptionsQuickPaste::OnInitDialog()
 	}
 
 	CString cs;
-	cs.Format("Font - %s", m_LogFont.lfFaceName);
+	cs.Format(_T("Font - %s"), m_LogFont.lfFaceName);
 	m_btFont.SetWindowText(cs);
 
 	theApp.m_Language.UpdateOptionQuickPaste(this);
@@ -139,6 +141,7 @@ BOOL COptionsQuickPaste::OnApply()
 	CGetSetOptions::SetEnsureEntireWindowCanBeSeen(m_EnsureEntireWindowVisible.GetCheck());
 	CGetSetOptions::SetShowAllClipsInMainList(m_ShowAllInMainList.GetCheck());
 	CGetSetOptions::SetFindAsYouType(m_FindAsYouType.GetCheck());
+	CGetSetOptions::SetPromptWhenDeletingClips(m_PromptForDelete.GetCheck());
 	
 	if(m_LogFont.lfWeight != 0)
 	{
@@ -162,7 +165,7 @@ void COptionsQuickPaste::OnButtonFont()
 		m_btFont.SetFont(&m_Font);
 
 		CString cs;
-		cs.Format("Font - %s", m_LogFont.lfFaceName);
+		cs.Format(_T("Font - %s"), m_LogFont.lfFaceName);
 		m_btFont.SetWindowText(cs);
 	}
 }
@@ -177,7 +180,7 @@ void COptionsQuickPaste::OnButtonDefaultFault()
 	m_LogFont.lfHeight = -11;
 	m_LogFont.lfWeight = 400;
 	m_LogFont.lfCharSet = 1;
-	strcpy(m_LogFont.lfFaceName, "Tahoma");
+	STRCPY(m_LogFont.lfFaceName, _T("@Arial Unicode MS"));
 
 	m_Font.DeleteObject();
 	m_Font.CreateFontIndirect(&m_LogFont);
@@ -185,6 +188,6 @@ void COptionsQuickPaste::OnButtonDefaultFault()
 	m_btFont.SetFont(&m_Font);
 
 	CString cs;
-	cs.Format("Font - %s", m_LogFont.lfFaceName);
+	cs.Format(_T("Font - %s"), m_LogFont.lfFaceName);
 	m_btFont.SetWindowText(cs);
-}
+}	

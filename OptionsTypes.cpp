@@ -58,22 +58,18 @@ BOOL COptionsTypes::OnApply()
 	{
 		try
 		{
-			CTypesTable recset;
-			recset.DeleteAll();
+			theApp.m_db.execDML(_T("DELETE FROM Types;"));
 
-			recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT * FROM Types" ,NULL);
-
+			CString csText;
 			int nCount = m_List.GetCount();
-
 			for(int i = 0; i < nCount; i++)
 			{
-				recset.AddNew();
-				m_List.GetText(i, recset.m_TypeText);
-				recset.Update();
+				m_List.GetText(i, csText);
+
+				theApp.m_db.execDMLEx(_T("INSERT INTO Types VALUES(NULL, '%s');"), csText);
 			}
-			recset.Close();
 		}
-		CATCHDAO
+		CATCH_SQLITE_EXCEPTION
 
 		// refresh our local cache
 		theApp.ReloadTypes();
@@ -88,21 +84,28 @@ BOOL COptionsTypes::OnInitDialog()
 
 	try
 	{
-		CTypesTable recset;
-		recset.Open(AFX_DAO_USE_DEFAULT_TYPE, "SELECT * FROM Types" ,NULL);
-		if(recset.IsEOF())
+		CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT TypeText FROM Types"));
+		if(q.eof())
 		{
-			m_List.AddString("CF_TEXT");
+			m_List.AddString(_T("CF_TEXT"));
 			m_List.AddString(GetFormatName(RegisterClipboardFormat(CF_RTF)));
-			m_List.AddString("CF_DIB");
+			m_List.AddString(_T("CF_UNICODETEXT"));
+			m_List.AddString(_T("CF_HDROP"));
+
+			if(g_Opt.m_bU3 == false)
+			{
+				m_List.AddString(_T("CF_DIB"));
+			}
 		}
-		while(!recset.IsEOF())
+
+		while(q.eof() == false)
 		{
-			m_List.AddString(recset.m_TypeText);
-			recset.MoveNext();
+			m_List.AddString(q.getStringField(0));
+
+			q.nextRow();
 		}
 	}
-	CATCHDAO
+	CATCH_SQLITE_EXCEPTION
 	
 	m_List.SetFocus();
 

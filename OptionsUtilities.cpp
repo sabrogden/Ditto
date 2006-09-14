@@ -61,7 +61,6 @@ BOOL COptionsUtilities::OnApply()
 
 	if(csOldPath != csPath)
 	{
-		theApp.CloseDB();
 		CGetSetOptions::SetDBPath(csPath);
 	}
 		
@@ -86,8 +85,8 @@ void COptionsUtilities::OnGetPath()
 {
 	OPENFILENAME	FileName;
 
-	char			szFileName[400];
-	char			szDir[400];
+	TCHAR	szFileName[400];
+	TCHAR	szDir[400];
 
 	memset(&FileName, 0, sizeof(FileName));
 	memset(szFileName, 0, sizeof(szFileName));
@@ -96,13 +95,13 @@ void COptionsUtilities::OnGetPath()
 	FileName.lStructSize = sizeof(FileName);
 
 	
-	FileName.lpstrTitle = "Open Database";
+	FileName.lpstrTitle = _T("Open Database");
 	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
 	FileName.nMaxFile = 400;
 	FileName.lpstrFile = szFileName;
 	FileName.lpstrInitialDir = szDir;
-	FileName.lpstrFilter = "Database Files (.MDB)\0*.mdb";
-	FileName.lpstrDefExt = "mdb";
+	FileName.lpstrFilter = _T("Database Files (.MDB)\0*.mdb");
+	FileName.lpstrDefExt = _T("mdb");
 
 	if(GetOpenFileName(&FileName) == 0)
 		return;

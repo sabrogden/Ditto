@@ -69,6 +69,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
+	CButton m_PromptForDelete;
 };
 
 //{{AFX_INSERT_LOCATION}}

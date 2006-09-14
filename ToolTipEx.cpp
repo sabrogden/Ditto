@@ -45,6 +45,7 @@ BEGIN_MESSAGE_MAP(CToolTipEx, CWnd)
 	ON_WM_NCHITTEST()
 	ON_WM_ACTIVATE()
 	//}}AFX_MSG_MAP
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -66,7 +67,7 @@ BOOL CToolTipEx::Create(CWnd* pParentWnd)
         return FALSE;
 	}
 
-	m_RichEdit.Create(WS_CHILD|WS_VISIBLE|WS_VSCROLL|WS_HSCROLL|ES_MULTILINE|ES_AUTOVSCROLL|ES_AUTOHSCROLL, CRect(10,10,100,200), this, 1);
+	m_RichEdit.Create(_T(""), _T(""), WS_CHILD|WS_VISIBLE|WS_VSCROLL|WS_HSCROLL|ES_MULTILINE|ES_AUTOVSCROLL|ES_AUTOHSCROLL, CRect(10,10,100,200), this, 1);
 
 	m_RichEdit.SetReadOnly();
 	m_RichEdit.SetBackgroundColor(FALSE, GetSysColor(COLOR_INFOBK));
@@ -97,7 +98,7 @@ BOOL CToolTipEx::Show(CPoint point)
 	//rtf will probably draw bigger
 	if(m_csRTF != "")
 	{
-		long lNewWidth = rect.Width() + (rect.Width() * .3);
+		long lNewWidth = (long)rect.Width() + (long)(rect.Width() * .3);
 		rect.right = rect.left + lNewWidth;
 
 		long lNewHeight = rect.Height() + (rect.Height() * 1);
@@ -108,7 +109,9 @@ BOOL CToolTipEx::Show(CPoint point)
 
 	ClientToScreen(rect);
 
-	int nMonitor = GetMonitorFromRect(&rect);
+	CRect cr(point, point);
+
+	int nMonitor = GetMonitorFromRect(&cr);
 	GetMonitorRect(nMonitor, &rcScreen);
 		
 	//ensure that we don't go outside the screen
@@ -132,7 +135,7 @@ BOOL CToolTipEx::Show(CPoint point)
 	if(rect.bottom > rcScreen.bottom)
 		rect.bottom = rcScreen.bottom;
 
-	SetWindowPos(NULL,
+	SetWindowPos(&CWnd::wndTopMost,
 		         point.x, point.y,
 			     rect.Width(), rect.Height(),
 				 SWP_SHOWWINDOW|SWP_NOCOPYBITS|SWP_NOACTIVATE|SWP_NOZORDER);
@@ -143,7 +146,7 @@ BOOL CToolTipEx::Show(CPoint point)
 BOOL CToolTipEx::Hide()
 {
 	DELETE_BITMAP
-
+	
 	ShowWindow(SW_HIDE);
 
 	m_csRTF = "";
@@ -377,12 +380,12 @@ LPLOGFONT CToolTipEx::GetSystemToolTipFont()
 
     NONCLIENTMETRICS ncm;
     ncm.cbSize = sizeof(NONCLIENTMETRICS);
-    if (!SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS), &ncm, 0))
-        return FALSE;
+    if(!SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS), &ncm, 0))
+       return FALSE;
 
     memcpy(&LogFont, &(ncm.lfStatusFont), sizeof(LOGFONT));
 
-    return &LogFont; 
+    return &LogFont;
 }
 
 BOOL CToolTipEx::SetLogFont(LPLOGFONT lpLogFont, BOOL bRedraw /*=TRUE*/)
@@ -437,20 +440,24 @@ BOOL CToolTipEx::IsCursorInToolTip()
 	return cr.PtInRect(cursorPos);
 }
 
-void CToolTipEx::SetRTFText(const CString &csRTF)
+void CToolTipEx::SetRTFText(const char *pRTF)
 {
-	m_RichEdit.SetRTF(csRTF);
-	m_csRTF = csRTF;
+	m_RichEdit.SetRTF(pRTF);
+	m_csRTF = pRTF;
 }
+
+//void CToolTipEx::SetRTFText(const CString &csRTF)
+//{
+//	m_RichEdit.SetRTF(csRTF);
+//	m_csRTF = csRTF;
+//}
 
 void CToolTipEx::SetToolTipText(const CString &csText)
 {
-	m_RichEdit.SetText(csText);
 	m_csText = csText;
-
 	m_RichEdit.SetFont(&m_Font);
+	m_RichEdit.SetText(csText);
 }
-
 
 UINT CToolTipEx::OnNcHitTest(CPoint point) 
 {
@@ -500,4 +507,16 @@ void CToolTipEx::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 			m_pNotifyWnd->PostMessage(NM_INACTIVE_TOOLTIPWND, 0, 0);
 		}
 	}
+}
+void CToolTipEx::OnTimer(UINT_PTR nIDEvent)
+{
+	switch(nIDEvent)
+	{
+	case HIDE_WINDOW_TIMER:
+		Hide();
+		PostMessage(WM_DESTROY, 0, 0);
+		break;
+	}
+
+	CWnd::OnTimer(nIDEvent);
 }

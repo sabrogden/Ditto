@@ -277,7 +277,7 @@ protected:
 		}
 		else if ( *length )
 		{
-			strncpy( _value, p, *length );
+			strncpy(_value, p, *length);
 			return p + (*length);
 		}
 		else

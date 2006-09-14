@@ -10,7 +10,7 @@
 #endif // _MSC_VER > 1000
 #include <afxole.h>
 #include <afxtempl.h>
-#include "MainTable.h"
+#include "tinyxml.h"
 
 class CClip;
 class CCopyThread;
@@ -36,8 +36,9 @@ public:
 	CLIPFORMAT	m_cfType;
     HGLOBAL		m_hgData;
 	bool		bDeleteData;
+	long		m_lDBID;
 
-	CClipFormat(CLIPFORMAT cfType = 0, HGLOBAL hgData = 0);
+	CClipFormat(CLIPFORMAT cfType = 0, HGLOBAL hgData = 0, long lDBID = -1);
 	~CClipFormat();
 
 	void Clear();
@@ -63,51 +64,50 @@ public:
 class CClip
 {
 public:
-	long			m_ID; // 0 if it hasn't yet been saved or is unknown
-	long			m_DataID;
-	CClipFormats	m_Formats; // actual format data
-
-	const CClip& operator=(const CClip &clip);
-
-	// statistics assigned by LoadFromClipboard
-	CTime	m_Time;	 // time copied from clipboard
-	CString m_Desc;
-	ULONG	m_lTotalCopySize;
-
 	CClip();
 	~CClip();
+	const CClip& operator=(const CClip &clip);
+
+	static DWORD m_LastAddedCRC;
+	static long m_LastAddedID;
+
+	long m_ID;
+	CClipFormats m_Formats;
+	CTime m_Time;
+	CString m_Desc;
+	ULONG m_lTotalCopySize;
+	long m_lParent;
+	long m_lDontAutoDelete;
+	long m_lShortCut;
+	BOOL m_bIsGroup;
+	DWORD m_CRC;
+	CString m_csQuickPaste;
 
 	void Clear();
 	void EmptyFormats();
-	
-	// Adds a new Format to this Clip by copying the given data.
 	bool AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen);
-	// Fills this CClip with the contents of the clipboard.
 	bool LoadFromClipboard(CClipTypes* pClipTypes);
 	bool SetDescFromText(HGLOBAL hgData);
 	bool SetDescFromType();
-
-	// Immediately save this clip to the db (empties m_Formats due to AddToDataTable).
 	bool AddToDB(bool bCheckForDuplicates = true);
-	bool AddToMainTable();
-	bool AddToDataTable();
-
-	// if a duplicate exists, set recset to the duplicate and return true
-	bool FindDuplicate(CMainTable& recset, BOOL bCheckLastOnly = FALSE);
-	int  CompareFormatDataTo(long lDataID);
-
-	// changes m_Time to be later than the latest clip entry in the db
+	bool ModifyMainTable();
+	bool SaveFromEditWnd(BOOL bUpdateDesc);
 	void MakeLatestTime();
+	BOOL LoadMainTable(long lID);
+	DWORD GenerateCRC();
 
-//	void PrependDateToFormat(CClipFormat &cf);
-
-// STATICS
 	// Allocates a Global containing the requested Clip's Format Data
 	static HGLOBAL LoadFormat(long lID, UINT cfType);
 	// Fills "formats" with the Data of all Formats in the db for the given Clip ID
-	static bool LoadFormats(long lID, CClipFormats& formats, bool bOnlyLoad_CF_TEXT = false);
+	bool LoadFormats(long lID, bool bOnlyLoad_CF_TEXT = false);
 	// Fills "types" with all Types in the db for the given Clip ID
 	static void LoadTypes(long lID, CClipTypes& types);
+
+	
+protected:
+	bool AddToMainTable();
+	bool AddToDataTable();
+	int FindDuplicate();
 };
 
 

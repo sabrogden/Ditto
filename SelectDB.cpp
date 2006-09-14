@@ -67,8 +67,8 @@ void CSelectDB::OnSelect()
 {
 	OPENFILENAME	FileName;
 
-	char			szFileName[400];
-	char			szDir[400];
+	TCHAR			szFileName[400];
+	TCHAR			szDir[400];
 
 	memset(&FileName, 0, sizeof(FileName));
 	memset(szFileName, 0, sizeof(szFileName));
@@ -77,13 +77,13 @@ void CSelectDB::OnSelect()
 	FileName.lStructSize = sizeof(FileName);
 
 	
-	FileName.lpstrTitle = "Open Database";
+	FileName.lpstrTitle = _T("Open Database");
 	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST;
 	FileName.nMaxFile = 400;
 	FileName.lpstrFile = szFileName;
 	FileName.lpstrInitialDir = szDir;
-	FileName.lpstrFilter = "Database Files (.MDB)\0*.mdb";
-	FileName.lpstrDefExt = "mdb";
+	FileName.lpstrFilter = _T("Database Files (.MDB)\0*.mdb");
+	FileName.lpstrDefExt = _T("mdb");
 
 	if(GetOpenFileName(&FileName) == 0)
 		return;
@@ -92,7 +92,7 @@ void CSelectDB::OnSelect()
 
 	if(ValidDB(csPath) == FALSE)
 	{
-		MessageBox("Invalid Database", "Ditto", MB_OK);
+		MessageBox(_T("Invalid Database"), _T("Ditto"), MB_OK);
 		m_ePath.SetFocus();
 	}
 	else

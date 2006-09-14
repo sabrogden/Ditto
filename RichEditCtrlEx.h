@@ -10,6 +10,26 @@
 /////////////////////////////////////////////////////////////////////////////
 // CRichEditCtrlEx window
 
+BOOL PASCAL AfxInitRichEditEx();
+
+class _AFX_RICHEDITEX_STATE
+{
+public:
+    _AFX_RICHEDITEX_STATE()
+	{
+		m_hInstRichEdit20 = NULL;
+	}
+    virtual ~_AFX_RICHEDITEX_STATE()
+	{
+		if(m_hInstRichEdit20 != NULL)
+		{
+			::FreeLibrary(m_hInstRichEdit20);
+		}
+    }
+
+    HINSTANCE m_hInstRichEdit20;
+};
+
 class CRichEditCtrlEx : public CRichEditCtrl
 {
 // Construction
@@ -25,6 +45,8 @@ public:
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CRichEditCtrlEx)
+	public:
+	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -59,7 +81,8 @@ public:
 	void SetSelectionItalic();
 	void SetSelectionUnderlined();
 
-	void SetRTF(CString sRTF);
+	void SetRTF(CStringA sRTF);
+	void SetRTF(const char *pRTF);
 	CString GetRTF();
 
 	void SetText(CString sText);
@@ -70,7 +93,7 @@ public:
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CRichEditCtrlEx)
-		// NOTE - the ClassWizard will add and remove member functions here.
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()

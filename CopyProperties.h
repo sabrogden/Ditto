@@ -19,11 +19,12 @@ class CCopyProperties : public CDialog
 {
 // Construction
 public:
-	CCopyProperties(long lCopyID, CWnd* pParent = NULL);   // standard constructor
+	CCopyProperties(long lCopyID, CWnd* pParent = NULL, CClip *pMemoryClip = NULL);   // standard constructor
 
 // Dialog Data
 	//{{AFX_DATA(CCopyProperties)
 	enum { IDD = IDD_COPY_PROPERTIES };
+	CEdit	m_QuickPasteText;
 	CRichEditCtrlEx	m_RichEdit;
 	CGroupCombo	m_GroupCombo;
 	CHotKeyCtrl	m_HotKey;
@@ -43,21 +44,25 @@ public:
 public:
 	bool m_bChangedText;
 	long m_lGroupChangedTo;
-	void	SetHideOnKillFocus(bool bVal)	{ m_bHideOnKillFocus = bVal;	}
+	void SetHideOnKillFocus(bool bVal)	{ m_bHideOnKillFocus = bVal; }
+	void SetHandleKillFocus(bool bVal)	{ m_bHandleKillFocus = bVal; }
+	void SetToTopMost(bool bVal)		{ m_bSetToTopMost = bVal; }
 
 // Implementation
 protected:
 
-	long		m_lCopyID;
-	CDataTable	m_DataTable;
-	CMainTable	m_MainTable;
-	ARRAY		m_DeletedData;
-	bool		m_bDeletedData;
-	BOOL		m_bNeverDelete;
-	bool		m_bHideOnKillFocus;
+	long m_lCopyID;
+	ARRAY m_DeletedData;
+	bool m_bDeletedData;
+	bool m_bHideOnKillFocus;
 	CDialogResizer m_Resize;
+	bool m_bInGroup;
+	bool m_bHandleKillFocus;
+	bool m_bSetToTopMost;
+	CClip *m_pMemoryClip;
 
-	bool		m_bHandleKillFocus;
+	void LoadDataIntoCClip(CClip &Clip);
+	void LoadDataFromCClip(CClip &Clip);
 
 	// Generated message map functions
 	//{{AFX_MSG(CCopyProperties)
@@ -69,11 +74,6 @@ protected:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
-public:
-	CEdit m_ParseEdit;
-	CButton m_ParseButton;
-	afx_msg void OnBnClickedParseButton();
-	CEdit m_DisplayTextEdit;
 };
 
 //{{AFX_INSERT_LOCATION}}

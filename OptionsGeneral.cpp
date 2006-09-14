@@ -7,6 +7,10 @@
 #include "InternetUpdate.h"
 #include <io.h>
 #include <Mmsystem.h> //play sound
+#include "Path.h"
+#include "AccessToSqlite.h"
+
+using namespace nsPath;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -93,7 +97,7 @@ BOOL COptionsGeneral::OnInitDialog()
 	m_eExpireAfter.SetNumber(CGetSetOptions::GetExpiredEntries());
 	m_eMaxSavedCopies.SetNumber(CGetSetOptions::GetMaxEntries());
 	m_DescTextSize.SetNumber(g_Opt.m_bDescTextSize);
-	m_SaveDelay.SetNumber(g_Opt.m_lSaveClipDelay);
+	m_SaveDelay.SetNumber(g_Opt.m_dwSaveClipDelay);
 
 	m_btAllowDuplicates.SetCheck( g_Opt.m_bAllowDuplicates );
 	m_btUpdateTimeOnPaste.SetCheck( g_Opt.m_bUpdateTimeOnPaste );
@@ -105,11 +109,11 @@ BOOL COptionsGeneral::OnInitDialog()
 	if(g_Opt.m_lMaxClipSizeInBytes > 0)
 	{
 		CString csMax;
-		csMax.Format("%d", g_Opt.m_lMaxClipSizeInBytes);
+		csMax.Format(_T("%d"), g_Opt.m_lMaxClipSizeInBytes);
 		m_MaxClipSize.SetWindowText(csMax);
 	}
 
-	CString csPath = CGetSetOptions::GetDBPath(FALSE);
+	CString csPath = CGetSetOptions::GetDBPath();
 	if(csPath.IsEmpty())
 	{
 		m_ePath.EnableWindow(FALSE);
@@ -129,20 +133,37 @@ BOOL COptionsGeneral::OnInitDialog()
 
 	UpdateData(FALSE);
 
+	if(g_Opt.m_bU3)
+	{
+		//If running from a U3 device then don't allow them to set
+		//-run on startup
+		//-db path
+		m_btRunOnStartup.ShowWindow(SW_HIDE);
+		m_ePath.EnableWindow(FALSE);
+		m_btSetDatabasePath.EnableWindow(FALSE);
+		m_btGetPath.EnableWindow(FALSE);
+		m_ePath.SetWindowText(_T("U3 Device"));
+		m_btCheckForUpdates.ShowWindow(SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_FOR_UPDATES), SW_HIDE);
+	}
+
 	theApp.m_Language.UpdateOptionGeneral(this);
 	return TRUE;
 }
 
+#define NO_MATCH	-2
+#define FOUND_MATCH	-1
+
 void COptionsGeneral::FillLanguages()
 {
-	CString csFile = CGetSetOptions::GetExeFileName();
-	csFile = GetFilePath(csFile);
-	csFile += "language\\*.xml";
+	CString csFile = CGetSetOptions::GetPath(PATH_LANGUAGE);
+	csFile += "*.xml";
 
 	CString csLanguage = CGetSetOptions::GetLanguageFile();
 
 	CFileFind find;
 	BOOL bCont = find.FindFile(csFile);
+	int nEnglishIndex = NO_MATCH;
 
 	while(bCont)
 	{
@@ -150,7 +171,20 @@ void COptionsGeneral::FillLanguages()
 		int nIndex = m_cbLanguage.AddString(find.GetFileTitle());
 
 		if(find.GetFileTitle() == csLanguage)
+		{
+			nEnglishIndex = -1;
 			m_cbLanguage.SetCurSel(nIndex);
+		}
+		else if(find.GetFileTitle() == _T("English"))
+		{
+			if(nEnglishIndex == NO_MATCH)
+				nEnglishIndex = nIndex;
+		}
+	}
+
+	if(nEnglishIndex >= 0)
+	{
+		m_cbLanguage.SetCurSel(nEnglishIndex);
 	}
 }
 
@@ -181,51 +215,50 @@ BOOL COptionsGeneral::OnApply()
 	g_Opt.SetSaveMultiPaste(m_btSaveMultiPaste.GetCheck());
 
 	CString csLanguage;
-	m_cbLanguage.GetLBText(m_cbLanguage.GetCurSel(), csLanguage);
-	g_Opt.SetLanguageFile(csLanguage);
+	if(m_cbLanguage.GetCurSel() >= 0)
+	{
+		m_cbLanguage.GetLBText(m_cbLanguage.GetCurSel(), csLanguage);
+		g_Opt.SetLanguageFile(csLanguage);
+	}
 	
 	if(csLanguage.IsEmpty() == FALSE)
 	{
 		if(!theApp.m_Language.LoadLanguageFile(csLanguage))
 		{
 			CString cs;
-			cs.Format("Error loading language file - %s - \n\n%s", csLanguage, theApp.m_Language.m_csLastError);
+			cs.Format(_T("Error loading language file - %s - \n\n%s"), csLanguage, theApp.m_Language.m_csLastError);
 
-			MessageBox(cs, "Ditto", MB_OK);
+			MessageBox(cs, _T("Ditto"), MB_OK);
 		}
 	}
 
 	CString csMax;
 	m_MaxClipSize.GetWindowText(csMax);
-	g_Opt.SetMaxClipSizeInBytes(atoi(csMax));
+	g_Opt.SetMaxClipSizeInBytes(ATOI(csMax));
 
-	if(m_btSetDatabasePath.GetCheck() == BST_CHECKED)
+	if(!g_Opt.m_bU3 && m_btSetDatabasePath.GetCheck() == BST_CHECKED)
 	{
 		CString csPath;
 		m_ePath.GetWindowText(csPath);
 
-		bool bSetPath = true;
+		bool bOpenNewDatabase = false;
 
 		if(csPath.IsEmpty() == FALSE)
 		{
-			if(_access(csPath, 0) == -1)
+			if(FileExists(csPath) == FALSE)
 			{
 				CString cs;
-				cs.Format("The database %s does not exist.\n\nCreate a new database?", csPath);
+				cs.Format(_T("The database %s does not exist.\n\nCreate a new database?"), csPath);
 
-				if(MessageBox(cs, "Ditto", MB_YESNO) == IDYES)
+				if(MessageBox(cs, _T("Ditto"), MB_YESNO) == IDYES)
 				{
-					theApp.CloseDB();
-
 					// -- create a new one
 					if(CreateDB(csPath))
 					{
-						CGetSetOptions::SetDBPath(csPath);
+						bOpenNewDatabase = true;
 					}
 					else
-						MessageBox("Error Creating Database");
-
-					bSetPath = false;
+						MessageBox(_T("Error Creating Database"));
 				}
 				else
 					return FALSE;
@@ -234,18 +267,30 @@ BOOL COptionsGeneral::OnApply()
 			{
 				if(ValidDB(csPath) == FALSE)
 				{
-					MessageBox("Invalid Database", "Ditto", MB_OK);
+					MessageBox(_T("Invalid Database"), _T("Ditto"), MB_OK);
 					m_ePath.SetFocus();
 					return FALSE;
 				}
+				else
+				{
+					bOpenNewDatabase = true;
+				}
+			}
+
+			if(bOpenNewDatabase)
+			{
+				if(OpenDatabase(csPath) == FALSE)
+				{
+					MessageBox(_T("Error Opening new database"), _T("Ditto"), MB_OK);
+					m_ePath.SetFocus();
+					return FALSE;
+				}
+				else
+				{
+					theApp.RefreshView();
+				}
 			}
 		}	
-		
-		if((csPath != CGetSetOptions::GetDBPath(FALSE)) && (bSetPath))
-		{
-			CGetSetOptions::SetDBPath(csPath);
-			theApp.CloseDB();
-		}
 	}
 	
 	return CPropertyPage::OnApply();
@@ -259,11 +304,11 @@ void COptionsGeneral::OnBtCompactAndRepair()
 {
 	CWaitCursor wait;
 
-	CompactDatabase();
-
-	UpdateWindow();
-	
-	RepairDatabase();
+	try
+	{
+		theApp.m_db.execQuery(_T("VACUUM"));
+	}
+	CATCH_SQLITE_EXCEPTION
 }
 
 void COptionsGeneral::OnCheckForUpdates() 
@@ -294,33 +339,66 @@ void COptionsGeneral::OnSetDbPath()
 void COptionsGeneral::OnGetPath() 
 {
 	OPENFILENAME	FileName;
-
-	char			szFileName[400];
-	char			szDir[400];
+	TCHAR			szFileName[400];
+	TCHAR			szDir[400];
 
 	memset(&FileName, 0, sizeof(FileName));
 	memset(szFileName, 0, sizeof(szFileName));
 	memset(&szDir, 0, sizeof(szDir));
-
 	FileName.lStructSize = sizeof(FileName);
-
-	
-	FileName.lpstrTitle = "Open Database";
+	FileName.lpstrTitle = _T("Open Database");
 	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST;
 	FileName.nMaxFile = 400;
 	FileName.lpstrFile = szFileName;
 	FileName.lpstrInitialDir = szDir;
-	FileName.lpstrFilter = "Database Files (.MDB)\0*.mdb";
-	FileName.lpstrDefExt = "mdb";
+	FileName.lpstrFilter = _T("Ditto Databases (*.db; *.mdb)\0*.db;*.mdb\0\0");
+	FileName.lpstrDefExt = _T("db");
 
 	if(GetOpenFileName(&FileName) == 0)
 		return;
 
-	CString	csPath(FileName.lpstrFile);
+	CString csPath(FileName.lpstrFile);
+	CPath path(FileName.lpstrFile);
+
+	if(path.GetExtension() == _T("mdb"))
+	{
+		CString cs;
+
+		cs.Format(_T("The database '%s' must be converted to a Sqlite Database (Version 3 format).\n\nConvert database?"), FileName.lpstrFile);
+		if(MessageBox(cs, _T("Ditto"), MB_YESNO) == IDNO)
+			return;
+
+		CString csNewDBPath = path.RemoveExtension();
+
+		//Make sure the db name is unique
+		CString csTempName;
+		csTempName.Format(_T("%s.db"), csNewDBPath);
+		int i = 1;
+		while(FileExists(csTempName))
+		{
+			csTempName.Format(_T("%s_%d.db"), csNewDBPath, i);
+			i++;
+		}
+		csNewDBPath = csTempName;
+		
+		CreateDB(csNewDBPath);
+
+		CAccessToSqlite Convert;
+		if(Convert.ConvertDatabase(csNewDBPath, FileName.lpstrFile))
+		{
+			csPath = csNewDBPath;
+		}
+		else
+		{
+			MessageBox(_T("Error converting database."), _T("Ditto"), MB_OK);
+			DeleteFile(csNewDBPath);
+			return;
+		}
+	}
 
 	if(ValidDB(csPath) == FALSE)
 	{
-		MessageBox("Invalid Database", "Ditto", MB_OK);
+		MessageBox(_T("Invalid Database"), _T("Ditto"), MB_OK);
 		m_ePath.SetFocus();
 	}
 	else
@@ -331,8 +409,8 @@ void COptionsGeneral::OnSelectSound()
 {
 	OPENFILENAME	FileName;
 
-	char			szFileName[400];
-	char			szDir[400];
+	TCHAR			szFileName[400];
+	TCHAR			szDir[400];
 
 	memset(&FileName, 0, sizeof(FileName));
 	memset(szFileName, 0, sizeof(szFileName));
@@ -340,13 +418,13 @@ void COptionsGeneral::OnSelectSound()
 
 	FileName.lStructSize = sizeof(FileName);
 
-	FileName.lpstrTitle = "Select .wav file";
+	FileName.lpstrTitle = _T("Select .wav file");
 	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST;
 	FileName.nMaxFile = 400;
 	FileName.lpstrFile = szFileName;
 	FileName.lpstrInitialDir = szDir;
-	FileName.lpstrFilter = "Sounds(*.wav)\0*.wav";
-	FileName.lpstrDefExt = "wav";
+	FileName.lpstrFilter = _T("Sounds(*.wav)\0*.wav\0\0");
+	FileName.lpstrDefExt = _T("wav");
 
 	if(GetOpenFileName(&FileName) == 0)
 		return;
@@ -379,21 +457,21 @@ void COptionsGeneral::OnButtonAbout()
 	{
 		CString csMessage;
 
-		csMessage.Format("Language -  %s\n"
-						 "Version -   %d\n"
-						 "Author -   %s\n"
-						 "Notes -   %s", csLanguage, 
+		csMessage.Format(_T("Language -  %s\n")
+						 _T("Version -   %d\n")
+						 _T("Author -   %s\n")
+						 _T("Notes -   %s"), csLanguage, 
 									   Lang.GetVersion(), 
 									   Lang.GetAuthor(), 
 									   Lang.GetNotes());
 
-		MessageBox(csMessage, "Ditto", MB_OK);
+		MessageBox(csMessage, _T("Ditto"), MB_OK);
 	}
 	else
 	{
 		CString csError;
-		csError.Format("Error loading language file - %s - reason = ", csLanguage, Lang.m_csLastError);
+		csError.Format(_T("Error loading language file - %s - reason = "), csLanguage, Lang.m_csLastError);
 
-		MessageBox(csError, "Ditto", MB_OK);
+		MessageBox(csError, _T("Ditto"), MB_OK);
 	}
 }

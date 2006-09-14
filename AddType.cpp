@@ -52,31 +52,31 @@ BOOL CAddType::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	m_lbDefaultTypes.AddString("CF_TEXT");
-	m_lbDefaultTypes.AddString("CF_BITMAP");
-	m_lbDefaultTypes.AddString("CF_METAFILEPICT");
-	m_lbDefaultTypes.AddString("CF_SYLK");
-	m_lbDefaultTypes.AddString("CF_DIF");
-	m_lbDefaultTypes.AddString("CF_TIFF");
-	m_lbDefaultTypes.AddString("CF_OEMTEXT");
-	m_lbDefaultTypes.AddString("CF_DIB");
-	m_lbDefaultTypes.AddString("CF_PALETTE");
-	m_lbDefaultTypes.AddString("CF_PENDATA");
-	m_lbDefaultTypes.AddString("CF_RIFF");
-	m_lbDefaultTypes.AddString("CF_WAVE");
-	m_lbDefaultTypes.AddString("CF_UNICODETEXT");
-	m_lbDefaultTypes.AddString("CF_ENHMETAFILE");
-	m_lbDefaultTypes.AddString("CF_HDROP");
-	m_lbDefaultTypes.AddString("CF_LOCALE");
-	m_lbDefaultTypes.AddString("CF_OWNERDISPLAY");
-	m_lbDefaultTypes.AddString("CF_DSPTEXT");
-	m_lbDefaultTypes.AddString("CF_DSPBITMAP");
-	m_lbDefaultTypes.AddString("CF_DSPMETAFILEPICT");
-	m_lbDefaultTypes.AddString("CF_DSPENHMETAFILE");
+	m_lbDefaultTypes.AddString(_T("CF_TEXT"));
+	m_lbDefaultTypes.AddString(_T("CF_BITMAP"));
+	m_lbDefaultTypes.AddString(_T("CF_METAFILEPICT"));
+	m_lbDefaultTypes.AddString(_T("CF_SYLK"));
+	m_lbDefaultTypes.AddString(_T("CF_DIF"));
+	m_lbDefaultTypes.AddString(_T("CF_TIFF"));
+	m_lbDefaultTypes.AddString(_T("CF_OEMTEXT"));
+	m_lbDefaultTypes.AddString(_T("CF_DIB"));
+	m_lbDefaultTypes.AddString(_T("CF_PALETTE"));
+	m_lbDefaultTypes.AddString(_T("CF_PENDATA"));
+	m_lbDefaultTypes.AddString(_T("CF_RIFF"));
+	m_lbDefaultTypes.AddString(_T("CF_WAVE"));
+	m_lbDefaultTypes.AddString(_T("CF_UNICODETEXT"));
+	m_lbDefaultTypes.AddString(_T("CF_ENHMETAFILE"));
+	m_lbDefaultTypes.AddString(_T("CF_HDROP"));
+	m_lbDefaultTypes.AddString(_T("CF_LOCALE"));
+	m_lbDefaultTypes.AddString(_T("CF_OWNERDISPLAY"));
+	m_lbDefaultTypes.AddString(_T("CF_DSPTEXT"));
+	m_lbDefaultTypes.AddString(_T("CF_DSPBITMAP"));
+	m_lbDefaultTypes.AddString(_T("CF_DSPMETAFILEPICT"));
+	m_lbDefaultTypes.AddString(_T("CF_DSPENHMETAFILE"));
 	m_lbDefaultTypes.AddString(GetFormatName(RegisterClipboardFormat(CF_RTF)));
 	m_lbDefaultTypes.AddString(GetFormatName(RegisterClipboardFormat(CF_RTFNOOBJS)));
 	m_lbDefaultTypes.AddString(GetFormatName(RegisterClipboardFormat(CF_RETEXTOBJ)));
-	m_lbDefaultTypes.AddString(GetFormatName(RegisterClipboardFormat("HTML Format")));
+	m_lbDefaultTypes.AddString(GetFormatName(RegisterClipboardFormat(_T("HTML Format"))));
 		
 	COleDataObject oleData;
 

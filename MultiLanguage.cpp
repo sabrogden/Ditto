@@ -5,6 +5,8 @@
 #include "stdafx.h"
 #include "cp_main.h"
 #include "MultiLanguage.h"
+#include "TextConvert.h"
+#include "TextConvert.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -98,6 +100,7 @@ CString CMultiLanguage::GetString(CString csID, CString csDefault)
 		return csDefault;
 
 	return pItem->m_csForeignLang;
+	return "";
 }
 
 bool CMultiLanguage::UpdateRightClickMenu(CMenu *pMenu)
@@ -223,6 +226,7 @@ bool CMultiLanguage::UpdateWindowToLanguage(CWnd *pParent, LANGUAGE_ARRAY &Array
 	return true;
 }
 
+
 CMenu * CMultiLanguage::GetMenuPos(CMenu *pMenu, const CString &csLookingForMenuText, int &nMenuPos)
 {
 	CMenu *pSubMenu;
@@ -255,9 +259,7 @@ bool CMultiLanguage::LoadLanguageFile(CString csFile)
 {
 	m_csLastError = "";
 	
-	CString csPath = CGetSetOptions::GetExeFileName();
-	csPath = GetFilePath(csPath);
-	csPath += "language\\";
+	CString csPath = CGetSetOptions::GetPath(PATH_LANGUAGE);
 	csPath += csFile;
 	csPath += ".xml";
 
@@ -269,10 +271,12 @@ bool CMultiLanguage::LoadLanguageFile(CString csFile)
 		return false;
 	}
 
-	TiXmlDocument doc(csPath);
+	CStringA csPathA = CTextConvert::ConvertToChar(csPath);
+
+	TiXmlDocument doc(csPathA);
 	if(!doc.LoadFile())
 	{
-		m_csLastError.Format("Error loading file %s - reasion = %s", csFile, doc.ErrorDesc());
+		m_csLastError.Format(_T("Error loading file %s - reason = %s"), csFile, doc.ErrorDesc());
 		Log(m_csLastError);
 		return false;
 	}
@@ -280,23 +284,24 @@ bool CMultiLanguage::LoadLanguageFile(CString csFile)
 	TiXmlElement *ItemHeader = doc.FirstChildElement("Ditto_Language_File");
 	if(!ItemHeader)
 	{
-		m_csLastError.Format("Error finding the section %s", "Ditto_Language_File");
+		m_csLastError.Format(_T("Error finding the section Ditto_Language_File"));
 		ASSERT(!m_csLastError);
 		Log(m_csLastError);
 		return false;
 	}
 
 	CString csVersion = ItemHeader->Attribute("Version");
-	m_lFileVersion = atoi(csVersion);
+	m_lFileVersion = ATOI(csVersion);
 	m_csAuthor = ItemHeader->Attribute("Author");
 	m_csNotes = ItemHeader->Attribute("Notes");
 
 	if(m_bOnlyGetHeader)
 		return true;
 
+
 	bool bRet = LoadSection(*ItemHeader, m_RightClickMenu, "Ditto_Right_Click_Menu");
-	bRet = LoadSection(*ItemHeader, m_ClipProperties, "Ditto_Clip_Properties");
 	bRet = LoadSection(*ItemHeader, m_OptionsGeneral, "Ditto_Options_General");
+	bRet = LoadSection(*ItemHeader, m_ClipProperties, "Ditto_Clip_Properties");
 	bRet = LoadSection(*ItemHeader, m_OptionsSupportedTypes, "Ditto_Options_Supported_Types");
 	bRet = LoadSection(*ItemHeader, m_OptionsShortcuts, "Ditto_Options_Shortcuts");
 	bRet = LoadSection(*ItemHeader, m_OptionsQuickPaste, "Ditto_Options_Quick_Paste");
@@ -315,10 +320,11 @@ bool CMultiLanguage::LoadLanguageFile(CString csFile)
 
 bool CMultiLanguage::LoadSection(TiXmlNode &doc, LANGUAGE_ARRAY &Array, CString csSection)
 {
-	TiXmlNode *node = doc.FirstChild(csSection);
+	CStringA csSectionA = CTextConvert::ConvertToChar(csSection);
+	TiXmlNode *node = doc.FirstChild(csSectionA);
 	if(!node)
 	{
-		m_csLastError.Format("Error finding the section %s", csSection);
+		m_csLastError.Format(_T("Error finding the section %s"), csSection);
 		ASSERT(!m_csLastError);
 		Log(m_csLastError);
 		return false;
@@ -335,22 +341,25 @@ bool CMultiLanguage::LoadSection(TiXmlNode &doc, LANGUAGE_ARRAY &Array, CString 
 	//<Item English_Text = "Use Ctrl - Num" ID= "32777"></Item>
 	while(ItemElement)
 	{
-		CLangItem *plItem = new CLangItem;
+ 		ForeignNode = ItemElement->FirstChild();
+ 		if(ForeignNode)
+ 		{
+			CLangItem *plItem = new CLangItem;
+			if(plItem)
+			{
+				plItem->m_csEnglishLang = ItemElement->Attribute("English_Text");
+				csID = ItemElement->Attribute("ID");
+				plItem->m_nID = ATOI(csID);
+ 				
+				LPCSTR Value = ForeignNode->Value();
+				CTextConvert::ConvertFromUTF8(Value, plItem->m_csForeignLang);
 
-		plItem->m_csEnglishLang = ItemElement->Attribute("English_Text");
-		csID = ItemElement->Attribute("ID");
-		plItem->m_nID = atoi(csID);
+				//Replace the literal "\n" with line feeds
+ 				plItem->m_csForeignLang.Replace(_T("\\n"), csLineFeed);
 
-		ForeignNode = ItemElement->FirstChild();
-		if(ForeignNode)
-		{
-			plItem->m_csForeignLang = ForeignNode->Value();
-			
-			//Replace the literal "\n" with line feeds
-			plItem->m_csForeignLang.Replace("\\n", csLineFeed);
-		}
-
-		Array.Add(plItem);
+				Array.Add(plItem);
+			}
+ 		}		
 
 		ItemElement = ItemElement->NextSiblingElement();
 	}
@@ -360,16 +369,18 @@ bool CMultiLanguage::LoadSection(TiXmlNode &doc, LANGUAGE_ARRAY &Array, CString 
 
 bool CMultiLanguage::LoadStringTableSection(TiXmlNode &doc, LANGUAGE_MAP &Map, CString csSection)
 {
-	TiXmlNode *node = doc.FirstChild(csSection);
+	CStringA csSectionA = CTextConvert::ConvertToChar(csSection);
+	TiXmlNode *node = doc.FirstChild(csSectionA);
 	if(!node)
 	{
 		CString cs;
-		cs.Format("Error finding the section %s", csSection);
+		cs.Format(_T("Error finding the section %s"), csSection);
 		ASSERT(!cs);
 		Log(cs);
 		return false;
 	}
 
+	CString csLineFeed("\n");
 	TiXmlNode* ForeignNode;
 		
 	TiXmlElement *ItemElement = node->FirstChildElement();
@@ -387,7 +398,11 @@ bool CMultiLanguage::LoadStringTableSection(TiXmlNode &doc, LANGUAGE_MAP &Map, C
 		ForeignNode = ItemElement->FirstChild();
 		if(ForeignNode) 
 		{
-			plItem->m_csForeignLang = ForeignNode->Value();
+			LPCSTR Value = ForeignNode->Value();
+			CTextConvert::ConvertFromUTF8(Value, plItem->m_csForeignLang);
+
+			//Replace the literal "\n" with line feeds
+			plItem->m_csForeignLang.Replace(_T("\\n"), csLineFeed);
 		}
 
 		Map.SetAt(plItem->m_csID, plItem);

@@ -16,6 +16,7 @@ static char THIS_FILE[] = __FILE__;
 
 CGroupCombo::CGroupCombo()
 {
+	m_lSkipGroupID = -1;
 }
 
 CGroupCombo::~CGroupCombo()
@@ -36,10 +37,10 @@ void CGroupCombo::FillCombo()
 {
 	ResetContent();
 
-	int nIndex = AddString("--NONE--");
+	int nIndex = AddString(_T("--NONE--"));
 	SetItemData(nIndex, 0);
 
-	FillCombo(0, 0);
+	FillCombo(-1, 1);
 }
 
 void CGroupCombo::FillCombo(long lParentID, long lSpaces)
@@ -47,9 +48,8 @@ void CGroupCombo::FillCombo(long lParentID, long lSpaces)
 	try
 	{			
 		int nIndex;
-		CMainTable recset;
-
 		CString csSpaces;
+
 		for(int i = 0; i < lSpaces; i++)
 		{
 			csSpaces += "---";
@@ -64,30 +64,25 @@ void CGroupCombo::FillCombo(long lParentID, long lSpaces)
 
 		lSpaces++;
 
-		recset.m_strFilter.Format("bIsGroup = TRUE AND lParentID = %d", lParentID);
-
-		recset.Open();
-
-		if(recset.IsEOF() == FALSE)
-		{			
-			while(!recset.IsEOF())
+		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText FROM Main WHERE bIsGroup = 1 AND lParentID = %d"), lParentID);
+			
+		if(q.eof() == false)
+		{
+			while(!q.eof())
 			{
-				nIndex = AddString(csSpaces + recset.m_strText);
-				SetItemData(nIndex, recset.m_lID);
+				if(q.getIntField(_T("lID")) != m_lSkipGroupID)
+				{
+					nIndex = AddString(csSpaces + q.getStringField(_T("mText")));
+					SetItemData(nIndex, q.getIntField(_T("lID")));
 
-				FillCombo(recset.m_lID, lSpaces);
+					FillCombo(q.getIntField(_T("lID")), lSpaces);
+				}
 
-				recset.MoveNext();
+				q.nextRow();
 			}
-
 		}
 	}		
-	catch(CDaoException* e)
-	{
-		ASSERT(FALSE);
-		e->Delete();
-		return;
-	}	
+	CATCH_SQLITE_EXCEPTION	
 }
 
 BOOL CGroupCombo::SetCurSelOnItemData(long lItemData)

@@ -55,7 +55,7 @@ BEGIN_MESSAGE_MAP(COptionFriends, CPropertyPage)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST, OnDblclkList)
 	ON_NOTIFY(LVN_KEYDOWN, IDC_LIST, OnKeydownList)
 	ON_BN_CLICKED(IDC_CHECK_DISABLE_FRIENDS, OnCheckDisableFriends)
-	//}}AFX_MSG_MAP
+	//}}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -155,7 +155,7 @@ void COptionFriends::InsertItems()
 
 //-------------------------------------------------------------------
 
-		strItem.Format("%d", i+1);
+		strItem.Format(_T("%d"), i+1);
 
 		lvi.iSubItem = 0;
 		lvi.pszText = (LPTSTR)(LPCTSTR)(strItem);
@@ -224,10 +224,10 @@ BOOL COptionFriends::EditItem(int nItem)
 	{
 		if(dlg.m_checkSendAll)
 		{
-			m_List.SetItemText(nItem, 1, "X");
+			m_List.SetItemText(nItem, 1, _T("X"));
 		}
 		else
-			m_List.SetItemText(nItem, 1, "");
+			m_List.SetItemText(nItem, 1, _T(""));
 
 		m_List.SetItemText(nItem, 2, dlg.m_csIP);
 		m_List.SetItemText(nItem, 3, dlg.m_csDescription);
@@ -250,9 +250,9 @@ void COptionFriends::OnKeydownList(NMHDR* pNMHDR, LRESULT* pResult)
 			if(pos)
 			{
 				int nItem = m_List.GetNextSelectedItem(pos);
-				m_List.SetItemText(nItem, 1, EMPTRY_STRING);
-				m_List.SetItemText(nItem, 2, EMPTRY_STRING);
-				m_List.SetItemText(nItem, 3, EMPTRY_STRING);
+				m_List.SetItemText(nItem, 1, _T(EMPTRY_STRING));
+				m_List.SetItemText(nItem, 2, _T(EMPTRY_STRING));
+				m_List.SetItemText(nItem, 3, _T(EMPTRY_STRING));
 			}
 		}
 		break;
