@@ -35,24 +35,24 @@ Name: RunAtStartup; Description: "Run Ditto on Windows Startup";
 
 [Files]
 ;Unicode for 2000 and later
-Source: "Release\DittoU.exe"; DestDir: "{app}"; DestName: "Ditto.exe"; Flags: ignoreversion; MinVersion: 0, 4.0
+Source: "..\Release\DittoU.exe"; DestDir: "{app}"; DestName: "Ditto.exe"; Flags: ignoreversion; MinVersion: 0, 4.0
 
 ;Non unicode for pre 2000
-Source: "Release\Ditto.exe"; DestDir: "{app}"; DestName: "Ditto.exe"; Flags: ignoreversion; MinVersion: 4.0, 0
+Source: "..\Release\Ditto.exe"; DestDir: "{app}"; DestName: "Ditto.exe"; Flags: ignoreversion; MinVersion: 4.0, 0
 
-Source: "Release\focus.dll"; DestDir: "{app}"; BeforeInstall: BeforeFocusInstall(); Flags: ignoreversion restartreplace
-Source: "Release\sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Release\AccessToSqlite.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "Release\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Release\focus.dll"; DestDir: "{app}"; BeforeInstall: BeforeFocusInstall(); Flags: ignoreversion restartreplace
+Source: "..\Release\sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Release\AccessToSqlite.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\zlib\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
 
-Source: "Release\Changes.txt"; DestDir: "{app}"
+;Source: "Changes.txt"; DestDir: "{app}"
 
-Source: "Language\*"; DestDir: "{app}\Language"; BeforeInstall: BeforeLanguageInstall();
+Source: "..\Debug\Language\*"; DestDir: "{app}\Language"; BeforeInstall: BeforeLanguageInstall();
 
-Source: "Release\mfc-crt\*"; DestDir: "{app}"
+;Source: "Release\mfc-crt\*"; DestDir: "{app}"
 
 ;Add help files
-Source: "Help\*.htm"; DestDir: "{app}\Help"; Flags: ignoreversion
+Source: "..\Help\*.htm"; DestDir: "{app}\Help"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\Ditto"; Filename: "{app}\Ditto.exe";
@@ -69,6 +69,7 @@ Root: HKCU; Subkey: "Software\Ditto"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Ditto"; flags: uninsdeletevalue; ValueData: "{app}\Ditto.exe"; Tasks: RunAtStartup
 Root: HKCU; Subkey: "Software\Ditto"; ValueType: string; ValueName: "LanguageFile"; ValueData: {language}
 
+;associate .dto with Ditto
 Root: HKCR; Subkey: ".dto"; ValueType: string; ValueName: ""; ValueData: "Ditto"; Flags: uninsdeletevalue
 Root: HKCR; Subkey: "Ditto"; ValueType: string; ValueName: ""; ValueData: "Ditto"; Flags: uninsdeletekey
 Root: HKCR; Subkey: "Ditto\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: "{app}\Ditto.exe,0"
