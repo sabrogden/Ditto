@@ -1,0 +1,37 @@
+3.9.0.0    8-03-06
+- Fixed issue that could cause Ditto to not disconnect from the clipboard
+
+3.8.0.0	   7-27-06
+- Added the command line parameters "-disconnect" and "-connect" to control if ditto is connected to the clipboard or not
+- Added option to output debug strings(F5) to file(Ctrl-F5) or debugview.exe (F5 in quick paste window)
+
+3.6.0.0    6-06-06
+- Added the ability to edit clips
+
+3.5.0.0    5-09-06
+- Added option to import/export clips
+- Added menu option to clear quick paste text for selected clips
+
+3.4.0.0    4-26-06
+- Compact database button in options now compacts the sqlite database
+- Added option to prompt when deleting clips (options - Quick paste - prompt when deleting clips)
+- Fixed error where Ditto would show "NO TARGET" when some Outlook windows would show
+- Fixed shortcut key Alt-Home and removed short cut key Alt-End
+- Fixed crash when many clips are selected and pasted
+- Added Dutch translation
+
+3.3.0.0    3-26-06
+- Added ability to send files from one computer to another.  Just copy the file send the clip to the other computer, on paste Ditto will copy file from computer A to B and past the file
+
+3.2.0.0    2-17-06
+- Fixed error on multiple pastes in unicode, the line fide was inserted properly
+- Fixed error that caused the "run on start" to not get entered properly in the registry
+- Fixed Error where if an item had a thumbnail with the clip then the clip was delete the thumbnail would still show in the list
+
+3.1.0.0    1-22-06
+- added special processing for CF_HDROP (copied file from windows explorer).  When copied the name 
+	of the file copied will show in ditto. (it used to only show CF_HDROP
+- added CF_HDROP to the default save types
+- fixed error when pasting and auto hide is selected ditto would not auto hide on paste
+- when pasting from quick paste as soon as a known quick paste is typed paste it
+- fixed extra character from showing when using a foreign language

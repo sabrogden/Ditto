@@ -45,11 +45,11 @@ Source: "..\Release\sqlite3.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\Release\AccessToSqlite.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\zlib\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
 
-;Source: "Changes.txt"; DestDir: "{app}"
+Source: "Changes.txt"; DestDir: "{app}"
 
 Source: "..\Debug\Language\*"; DestDir: "{app}\Language"; BeforeInstall: BeforeLanguageInstall();
 
-;Source: "Release\mfc-crt\*"; DestDir: "{app}"
+Source: "mfc-crt\*"; DestDir: "{app}"
 
 ;Add help files
 Source: "..\Help\*.htm"; DestDir: "{app}\Help"; Flags: ignoreversion
