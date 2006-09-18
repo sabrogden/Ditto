@@ -93,6 +93,7 @@ public:
 	bool ToggleConnectCV();
 	void UpdateMenuConnectCV(CMenu* pMenu, UINT nMenuID);
 	bool ImportClips(HWND hWnd);
+	int ShowOptionsDlg();
 
 	void OnDeleteID(long lID);
 
@@ -132,7 +133,6 @@ public:
 	// the ID given focus by CQPasteWnd::FillList
 	long	m_FocusID;
 
-	bool	m_bShowingOptions;
 	bool	m_bShowingQuickPaste;
 	bool	m_bRefreshView;
 

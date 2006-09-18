@@ -14,6 +14,7 @@
 #include "Path.h"
 #include "Clip_ImportExport.h"
 #include "HyperLink.h"
+#include "OptionsSheet.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -96,7 +97,6 @@ CCP_MainApp::CCP_MainApp()
 	m_pMainFrame = NULL;
 
 	m_bShowingQuickPaste = false;
-	m_bShowingOptions = false;
 	m_bRemoveOldEntriesPending = false;
 
 	m_IC_bCopy = false;
@@ -183,32 +183,12 @@ BOOL CCP_MainApp::InitInstance()
 
 		return FALSE;
 	}
-	else if(cmdInfo.m_bU3Install)
-	{
-		CString csFile = CGetSetOptions::GetPath(PATH_HELP);
-		csFile += "U3_Install.htm";
-		CHyperLink::GotoURL(csFile, SW_SHOW);
-		return FALSE;
-	}
 
 	//if starting from a u3 device we will pass in -U3Start
 	if(cmdInfo.m_bU3)
 		g_Opt.m_bU3 = cmdInfo.m_bU3 ? TRUE : FALSE;
 
 	g_Opt.LoadSettings();
-
-	if(cmdInfo.m_bU3Stop)
-	{
-		MessageBox(NULL, _T("recieved Stop"), _T(""), MB_OK);
-		HWND hWnd = (HWND)CGetSetOptions::GetMainHWND();
-		if(hWnd)
-		{
-			MessageBox(NULL, _T("Sending Close"), _T(""), MB_OK);
-			::SendMessage(hWnd, WM_CLOSE, 0, 0);
-		}
-
-		return FALSE;
-	}
 
 	CInternetUpdate update;
 
@@ -245,10 +225,16 @@ BOOL CCP_MainApp::InitInstance()
 		Log(cs);
 	}
 
-//	if(g_Opt.m_bU3)
-//	{
-//		CopyDownDatabase();
-//	}
+	//The first time we run Ditto on U3 show a web page about ditto
+	if(g_Opt.m_bU3)
+	{
+		if(FileExists(CGetSetOptions::GetDBPath()) == FALSE)
+		{
+			CString csFile = CGetSetOptions::GetPath(PATH_HELP);
+			csFile += "U3_Install.htm";
+			CHyperLink::GotoURL(csFile, SW_SHOW);
+		}
+	}
 
 	int nRet = CheckDBExists(CGetSetOptions::GetDBPath());
 	if(nRet == FALSE)
@@ -1077,4 +1063,26 @@ bool CCP_MainApp::EditItems(CClipIDs &Ids, bool bShowError)
 	m_pMainFrame->ShowEditWnd(Ids);
 
 	return true;
+}
+
+int CCP_MainApp::ShowOptionsDlg()
+{
+	static bool bShowingOptions = false;
+	int nRet = IDABORT;
+
+	if(bShowingOptions = false)
+	{
+		bShowingOptions = true;
+
+		CShowMainFrame Show;
+		COptionsSheet Sheet(_T(""), m_pMainFrame);
+		int nRet = Sheet.DoModal();
+		if(nRet == IDOK)
+		{
+			m_pMainFrame->QuickPaste.ShowQPasteWnd(m_pMainFrame, false, false, TRUE);	
+		}
+		bShowingOptions = false;
+	}
+
+	return nRet;
 }
