@@ -314,24 +314,6 @@ int CompareGlobalHH( HGLOBAL hLeft, HGLOBAL hRight, ULONG ulBufLen )
 }
 
 
-long DoOptions(CWnd *pParent)
-{
-	//Don't let it open up more than once
-	if(theApp.m_bShowingOptions)
-		return FALSE;
-	
-	theApp.m_bShowingOptions = true;
-	
-	COptionsSheet Sheet(_T("Copy Pro Options"), pParent);
-	
-	int nRet = Sheet.DoModal();
-	
-	theApp.m_bShowingOptions = false;
-	
-	return nRet;
-}
-
-
 //Do not change these these are stored in the database
 CLIPFORMAT GetFormatID(LPCTSTR cbName)
 {

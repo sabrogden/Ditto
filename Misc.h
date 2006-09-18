@@ -87,8 +87,6 @@ int GetScreenHeight();
 void GetMonitorRect(int iMonitor, LPRECT lpDestRect);
 int GetMonitorFromRect(LPRECT lpMonitorRect);
 
-long DoOptions(CWnd *pParent);
-
 CLIPFORMAT GetFormatID(LPCTSTR cbName);
 CString GetFormatName(CLIPFORMAT cbType);
 BOOL PreTranslateGuiDll(MSG *pMsg);
