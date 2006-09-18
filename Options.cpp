@@ -1495,7 +1495,7 @@ void CGetSetOptions::SetEnsureConnectToClipboard(BOOL bSet)
 
 BOOL CGetSetOptions::GetPromptWhenDeletingClips()
 {
-	return GetProfileLong("PromptWhenDeletingClips", FALSE);
+	return GetProfileLong("PromptWhenDeletingClips", TRUE);
 }
 
 void CGetSetOptions::SetPromptWhenDeletingClips(BOOL bSet)
