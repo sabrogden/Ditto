@@ -71,6 +71,7 @@ public:
 	bool PasteQuickPasteEntry(CString csQuickPaste);
 	bool SaveQuickPasteEntry(CString csQuickPaste, CClipList *pClipList);
 	void ShowErrorMessage(CString csTitle, CString csMessage);
+	bool CloseAllOpenDialogs();
 
 	static void DeleteOldRemoteCopies(CString csDir);
 	static UINT RemoteOldRemoteFilesThread(LPVOID pParam);
@@ -121,6 +122,7 @@ public:
 	~CShowMainFrame();
 	static bool m_bShowingMainFrame;
 	bool m_bHideMainFrameOnExit;
+	HWND m_hWnd;
 };
 
 /////////////////////////////////////////////////////////////////////////////

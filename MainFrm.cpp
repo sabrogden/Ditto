@@ -25,7 +25,9 @@ static char THIS_FILE[] = __FILE__;
 
 bool CShowMainFrame::m_bShowingMainFrame = false;
 
-CShowMainFrame::CShowMainFrame() : m_bHideMainFrameOnExit(false)
+CShowMainFrame::CShowMainFrame() : 
+	m_bHideMainFrameOnExit(false), 
+	m_hWnd(NULL)
 {
 	if(m_bShowingMainFrame == false)
 	{
@@ -33,10 +35,12 @@ CShowMainFrame::CShowMainFrame() : m_bHideMainFrameOnExit(false)
 		m_bHideMainFrameOnExit = true;
 		m_bShowingMainFrame = true;
 	}
+
+	m_hWnd = theApp.m_pMainFrame->GetSafeHwnd();
 }
 CShowMainFrame::~CShowMainFrame()
 {
-	if(m_bHideMainFrameOnExit)
+	if(m_bHideMainFrameOnExit && m_hWnd && ::IsWindow(m_hWnd))
 	{
 		theApp.m_pMainFrame->m_TrayIcon.MinimiseToTray(theApp.m_pMainFrame);
 		m_bShowingMainFrame = false;
@@ -221,15 +225,12 @@ void CMainFrame::Dump(CDumpContext& dc) const
 
 void CMainFrame::OnFirstOption() 
 {
-	CShowMainFrame Show;
-
-	DoOptions(this);	
-	
-	QuickPaste.UpdateFont();
+	theApp.ShowOptionsDlg();
 }
 
 void CMainFrame::OnFirstExit() 
 {
+//	CloseAllOpenDialogs();
 	this->SendMessage(WM_CLOSE, 0, 0);
 }
 
@@ -244,7 +245,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 		else
 		{
 			theApp.TargetActiveWindow();
-			QuickPaste.ShowQPasteWnd(this, false, true);
+			QuickPaste.ShowQPasteWnd(this, false, true, FALSE);
 		}		
 	}
 	else if(!g_Opt.m_bU3 && wParam == theApp.m_pNamedCopy->m_Atom)
@@ -427,11 +428,9 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		}
 	case CLOSE_APP:
 		{
-			if(theApp.m_bShowingOptions == false)
-			{
-				PostMessage(WM_CLOSE, 0, 0);
-				KillTimer(CLOSE_APP);
-			}
+			PostMessage(WM_CLOSE, 0, 0);
+			KillTimer(CLOSE_APP);
+			
 			break;
 		}
 	case STOP_MONITORING_KEYBOARD_TIMER:
@@ -516,7 +515,7 @@ LRESULT CMainFrame::OnShowTrayIcon(WPARAM wParam, LPARAM lParam)
 
 void CMainFrame::OnFirstShowquickpaste() 
 {
-	QuickPaste.ShowQPasteWnd(this, true, false);
+	QuickPaste.ShowQPasteWnd(this, true, false, FALSE);
 }
 
 void CMainFrame::OnFirstToggleConnectCV()
@@ -537,11 +536,9 @@ LRESULT CMainFrame::OnCopyProperties(WPARAM wParam, LPARAM lParam)
 	{
 		bool bOldState = theApp.EnableCbCopy(false);
 
-		theApp.m_bShowingOptions = true;
 		CCopyProperties props(lID, this);
 		props.SetHideOnKillFocus(true);
 		props.DoModal();
-		theApp.m_bShowingOptions = false;
 
 		theApp.EnableCbCopy( bOldState );
 	}
@@ -575,7 +572,9 @@ BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 }
 
 void CMainFrame::OnClose()
-{
+{	
+	CloseAllOpenDialogs();
+
 	if(m_pEditFrameWnd)
 	{
 		if(m_pEditFrameWnd->CloseAll() == false)
@@ -584,6 +583,45 @@ void CMainFrame::OnClose()
 
 	theApp.BeforeMainClose();
 	CFrameWnd::OnClose();
+}
+
+bool CMainFrame::CloseAllOpenDialogs()
+{
+	bool bRet = false;
+	DWORD dwordProcessId;
+	DWORD dwordChildWindowProcessId;
+	GetWindowThreadProcessId(this->m_hWnd, &dwordProcessId);
+	ASSERT(dwordProcessId);
+
+	CWnd *pTempWnd = GetDesktopWindow()->GetWindow(GW_CHILD);
+	while((pTempWnd = pTempWnd->GetWindow(GW_HWNDNEXT)) != NULL)
+	{
+		if(pTempWnd->GetSafeHwnd() == NULL)
+			break;
+
+		GetWindowThreadProcessId(pTempWnd->GetSafeHwnd(), &dwordChildWindowProcessId);
+		if(dwordChildWindowProcessId == dwordProcessId)
+		{
+			TCHAR szTemp[100];
+			GetClassName(pTempWnd->GetSafeHwnd(), szTemp, 100);
+
+			// #32770 is class name for dialogs so don't process the message if it is a dialog
+			if(STRCMP(szTemp, _T("#32770")) == 0)
+			{
+				pTempWnd->SendMessage(WM_CLOSE, 0, 0);
+				bRet = true;
+			}
+		}
+	}
+
+	MSG msg;
+	while(PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	return bRet;
 }
 
 LRESULT CMainFrame::OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam)
