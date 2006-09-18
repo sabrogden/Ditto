@@ -74,7 +74,7 @@ BOOL CQuickPaste::CloseQPasteWnd()
 	return TRUE;
 }
 
-void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboard)
+void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboard, BOOL bReFillList)
 {		
 	if(bFromKeyboard == false && GetKeyState(VK_SHIFT) & 0x8000 && GetKeyState(VK_CONTROL) & 0x8000)
 	{
@@ -92,7 +92,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 		return;
 	}
 
-	if((theApp.m_bShowingQuickPaste) || (theApp.m_bShowingOptions))
+	if(theApp.m_bShowingQuickPaste)
 	{
 		if(g_Opt.m_bShowPersistent)
 		{
@@ -172,7 +172,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	}
 	
 	// Show the window
-	m_pwndPaste->ShowQPasteWindow(FALSE);
+	m_pwndPaste->ShowQPasteWindow(bReFillList);
 	m_pwndPaste->SetForegroundWindow();
 }
 
