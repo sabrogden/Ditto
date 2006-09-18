@@ -613,7 +613,7 @@ BOOL CQPasteWnd::NewGroup( bool bGroupSelection )
 		m_bHideWnd = false;
 		
 		int nRet = Name.DoModal();
-		
+	
 		m_bHideWnd = true;
 		
 		if(nRet == IDOK)
@@ -1175,16 +1175,7 @@ void CQPasteWnd::OnMenuPositioningAtpreviousposition()
 
 void CQPasteWnd::OnMenuOptions() 
 {
-	m_bHideWnd = false;
-	
-	DoOptions(this);
-	
-	UpdateFont();
-
-	ShowQPasteWindow(TRUE);
-	
-	m_bHideWnd = true;
-	m_lstHeader.SetFocus();
+	theApp.ShowOptionsDlg();
 }
 
 void CQPasteWnd::OnMenuExitprogram() 
@@ -1222,7 +1213,7 @@ void CQPasteWnd::OnMenuProperties()
 	
 	CCopyProperties props(lID, this);
 	int nDo = props.DoModal();
-	
+
 	if(nDo == IDOK)
 	{
 		m_CritSection.Lock();
@@ -1244,7 +1235,6 @@ void CQPasteWnd::OnMenuProperties()
 		m_CritSection.Unlock();
 
 		SetEvent(m_Events[THREAD_FILL_ACCELERATORS]);
-//		m_lstHeader.DestroyAndCreateAccelerator(TRUE);
 
 		m_lstHeader.RefreshVisibleRows();
 		
@@ -1252,16 +1242,12 @@ void CQPasteWnd::OnMenuProperties()
 		{
 			OpenID(props.m_lGroupChangedTo);
 		}
-	}
-	
-	SetFocus();
-	m_bHideWnd = true;
-	
-	if(nDo == IDOK || nDo == IDCANCEL)
-	{
+
 		m_lstHeader.SetFocus();
 		m_lstHeader.SetListPos(nRow);
 	}
+	
+	m_bHideWnd = true;
 }
 
 void CQPasteWnd::UpdateFont()
@@ -1609,8 +1595,9 @@ void CQPasteWnd::OnMenuGroupsMovetogroup()
 	m_bHideWnd = false;
 
 	CMoveToGroupDlg dlg;
-	
-	if(dlg.DoModal() == IDOK)
+
+	int nRet = dlg.DoModal();
+	if(nRet == IDOK)
 	{
 		int nGroup = dlg.GetSelectedGroup();
 		if(nGroup >= 0)
@@ -1619,12 +1606,11 @@ void CQPasteWnd::OnMenuGroupsMovetogroup()
 			m_lstHeader.GetSelectionItemData( IDs );
 
 			IDs.MoveTo(nGroup);
-		}		
+		}
+		FillList();
 	}
 
 	m_bHideWnd = true;
-
-	FillList();
 }
 
 void CQPasteWnd::OnMenuPasteplaintextonly() 
