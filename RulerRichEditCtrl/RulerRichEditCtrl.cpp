@@ -1485,9 +1485,9 @@ void CRulerRichEditCtrl::DoFont()
 		}
 
 		m_rtf.SendMessage(EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM) &cf);
-	}
 
-	m_rtf.SetFocus();
+		m_rtf.SetFocus();
+	}
 }
 
 void CRulerRichEditCtrl::SetCurrentFontName( const CString& font )
