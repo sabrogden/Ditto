@@ -91,8 +91,75 @@ BOOL CProcessPaste::DoDrag()
 
 void CProcessPaste::MarkAsPasted()
 {
+	Log(_T("start of MarkAsPasted"));
+
 	CClipIDs& clips = GetClipIDs();
 	if(clips.GetSize() == 1)
-		MarkClipAsPasted(clips.ElementAt(0));
+	{
+		CGetSetOptions::SetTripPasteCount(-1);
+		CGetSetOptions::SetTotalPasteCount(-1);
+
+		if(!g_Opt.m_bUpdateTimeOnPaste)
+			return;
+
+		long lID = (long)clips.ElementAt(0);
+		//Moved to a thread because when running from from U3 devices the write is time consuming
+		AfxBeginThread(CProcessPaste::MarkAsPastedThread, (LPVOID)lID, THREAD_PRIORITY_LOWEST);
+	}
+
+	Log(_T("End of MarkAsPasted"));
 }
 
+UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
+{
+	static CEvent UpdateTimeEvent(TRUE, TRUE, _T("Ditto_Update_Clip_Time"), NULL);
+	UpdateTimeEvent.ResetEvent();
+
+	Log(_T("Start of MarkAsPastedThread"));
+
+	//If running from a U3 device then wait a little before updating the db
+	//updating the db can take a second or two and it delays the act of pasting
+	if(g_Opt.m_bU3)
+	{
+		Sleep(350);
+	}
+
+	long lID = (long)pParam;
+	BOOL bRet = FALSE;
+
+	try
+	{
+		CppSQLite3DB Local_db;
+		Local_db.open(CGetSetOptions::GetDBPath());
+
+		//Update the time it was copied so that it appears at the top of the
+		//paste list. Items are sorted by this time.
+		CTime now = CTime::GetCurrentTime();
+		try
+		{
+			CppSQLite3Query q = Local_db.execQuery(_T("SELECT lDate FROM Main ORDER BY lDate DESC LIMIT 1"));
+
+			if(q.eof() == false)
+			{
+				long lLatestDate = q.getIntField(_T("lDate"));
+				if(now.GetTime() <= lLatestDate)
+				{
+					now = lLatestDate + 1;
+				}
+			}
+		}
+
+		CATCH_SQLITE_EXCEPTION
+
+		Local_db.execDMLEx(_T("UPDATE Main SET lDate = %d where lID = %d;"), (long)now.GetTime(), lID);
+		Local_db.close();
+		bRet = TRUE;
+	}
+
+	CATCH_SQLITE_EXCEPTION
+
+	Log(_T("End of MarkAsPastedThread"));
+
+	UpdateTimeEvent.SetEvent();
+	return bRet;
+}

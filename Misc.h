@@ -322,7 +322,6 @@ public:
 /*------------------------------------------------------------------*\
 	ID based Globals
 \*------------------------------------------------------------------*/
-BOOL MarkClipAsPasted(long lID);
 long NewGroupID(long lParentID = 0, CString text = "");
 BOOL DeleteID(long lID);
 BOOL DeleteAllIDs();

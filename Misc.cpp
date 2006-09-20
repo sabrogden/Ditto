@@ -1318,43 +1318,6 @@ void CPopup::Hide()
 ID based Globals
 \*------------------------------------------------------------------*/
 
-BOOL MarkClipAsPasted(long lID)
-{
-	CGetSetOptions::SetTripPasteCount(-1);
-	CGetSetOptions::SetTotalPasteCount(-1);
-	
-	if( !g_Opt.m_bUpdateTimeOnPaste )
-		return FALSE;
-	
-	try
-	{	
-		//Update the time it was copied so that it appears at the top of the 
-		//paste list.  Items are sorted by this time.
-
-		CTime now = CTime::GetCurrentTime();
-		try
-		{
-			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT lDate FROM Main ORDER BY lDate DESC LIMIT 1"));			
-			if(q.eof() == false)
-			{
-				long lLatestDate = q.getIntField(_T("lDate"));
-				if(now.GetTime() <= lLatestDate)
-				{
-					now = lLatestDate + 1;
-				}
-			}
-		}
-		CATCH_SQLITE_EXCEPTION
-
-		theApp.m_db.execDMLEx(_T("UPDATE Main SET lDate = %d where lID = %d;"), (long)now.GetTime(), lID);
-		
-		return TRUE;
-	}
-	CATCH_SQLITE_EXCEPTION
-	
-	return FALSE;
-}
-
 long NewGroupID(long lParentID, CString text)
 {
 	long lID=0;

@@ -2693,6 +2693,7 @@ void CQPasteWnd::RunThread()
 {
 	try
 	{
+		CEvent UpdateTimeEvent(TRUE, TRUE, _T("Ditto_Update_Clip_Time"), NULL);
 		CppSQLite3DB db;
 
 		CString csDbPath = CGetSetOptions::GetDBPath();
@@ -2774,6 +2775,9 @@ void CQPasteWnd::RunThread()
 				case THREAD_DO_QUERY:
 				{
 					ResetEvent(m_SearchingEvent);
+
+					//If we pasted then wait for the time on the pasted event to be updated before we query the db
+					DWORD dRet = WaitForSingleObject(UpdateTimeEvent, 2000);
 
 					long lTick = GetTickCount();
 					BOOL bRefreshedRows = false;
