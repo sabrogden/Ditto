@@ -162,7 +162,7 @@ void CGetSetOptions::LoadSettings()
 			switch(lLanguage)
 			{
 			case 1036: //French
-				csLanguage = _T("French");
+				csLanguage = _T("Français");
 				break;
 
 			case 1040: //Italian
@@ -174,7 +174,7 @@ void CGetSetOptions::LoadSettings()
 				break;
 
 			case 3082: //German
-				csLanguage = _T("Spanish");
+				csLanguage = _T("Español");
 				break;
 			}
 
