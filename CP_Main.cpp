@@ -1070,7 +1070,7 @@ int CCP_MainApp::ShowOptionsDlg()
 	static bool bShowingOptions = false;
 	int nRet = IDABORT;
 
-	if(bShowingOptions = false)
+	if(bShowingOptions == false)
 	{
 		bShowingOptions = true;
 
