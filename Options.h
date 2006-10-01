@@ -321,7 +321,6 @@ public:
 
 	static CString  GetPath(long lPathID);
 
-	static bool		IsU3DeviceAvailable();
 	static void		WriteU3Hwnd(HWND hWnd);
 	static __int64	nLastDbWriteTime;
 };

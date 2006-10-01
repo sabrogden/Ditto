@@ -1619,16 +1619,6 @@ CString CGetSetOptions::GetPath(long lPathID)
 	return csDir;
 }
 
-bool CGetSetOptions::IsU3DeviceAvailable()
-{
-	CString csAvailable = GETENV(_T("U3_IS_DEVICE_AVAILABLE"));
-
-	if(csAvailable == "true")
-		return true;
-
-	return false;
-}
-
 void CGetSetOptions::WriteU3Hwnd(HWND hWnd)
 {
 	CString csIniFile = GetPath(PATH_U3_HWND_INI);
