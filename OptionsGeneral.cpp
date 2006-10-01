@@ -396,13 +396,22 @@ void COptionsGeneral::OnGetPath()
 		}
 	}
 
-	if(ValidDB(csPath) == FALSE)
+	if(FileExists(csPath))
 	{
-		MessageBox(_T("Invalid Database"), _T("Ditto"), MB_OK);
-		m_ePath.SetFocus();
+		if(ValidDB(csPath) == FALSE)
+		{
+			MessageBox(_T("Invalid Database"), _T("Ditto"), MB_OK);
+			m_ePath.SetFocus();
+		}
+		else
+		{
+			m_ePath.SetWindowText(csPath);	
+		}
 	}
 	else
-		m_ePath.SetWindowText(csPath);	
+	{
+		m_ePath.SetWindowText(csPath);
+	}
 }
 
 void COptionsGeneral::OnSelectSound() 
