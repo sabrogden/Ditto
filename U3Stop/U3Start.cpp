@@ -24,6 +24,11 @@ BOOL CU3StartApp::InitInstance()
 {
 	CWinApp::InitInstance();
 
+	//if the device isn't available then just return, u3action will kill the process
+	CString csAvailable = getenv("U3_IS_DEVICE_AVAILABLE");
+	if(csAvailable != "true")
+		return FALSE;
+
 	//Load the ini file in the same dir as this is running
 	CString sExeName;
 	GetModuleFileName(NULL, sExeName.GetBuffer(_MAX_PATH),_MAX_PATH);
