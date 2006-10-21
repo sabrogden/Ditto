@@ -323,6 +323,9 @@ public:
 
 	static void		WriteU3Hwnd(HWND hWnd);
 	static __int64	nLastDbWriteTime;
+
+	static long		GetDittoRestoreClipboardDelay();
+	static void		SetDittoRestoreClipboardDelay(long lDelay);
 };
 
 // global for easy access and for initialization of fast access variables

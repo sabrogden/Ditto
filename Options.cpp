@@ -149,6 +149,7 @@ void CGetSetOptions::LoadSettings()
 
 	GetClientSendCount();
 
+
 	//If running from a U3 device and no language file as been asigned
 	//then use the language defined by the U3 launcher
 	if(m_bU3)
@@ -1624,4 +1625,14 @@ void CGetSetOptions::WriteU3Hwnd(HWND hWnd)
 	CString csIniFile = GetPath(PATH_U3_HWND_INI);
 	csIniFile += _T("DittohWnd.ini");
 	WritePrivateProfileInt(_T("Ditto"), _T("MainhWnd"), (int)hWnd, csIniFile);
+}
+
+long CGetSetOptions::GetDittoRestoreClipboardDelay()
+{
+	return GetProfileLong("RestoreClipboardDelay", 750);
+
+}
+void CGetSetOptions::SetDittoRestoreClipboardDelay(long lDelay)
+{
+	SetProfileLong("RestoreClipboardDelay", lDelay);
 }
