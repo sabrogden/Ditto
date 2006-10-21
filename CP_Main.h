@@ -22,6 +22,8 @@
 #include "ProcessPaste.h"
 #include "MultiLanguage.h"
 #include "CopyThread.h"
+#include "ClipboardSaveRestore.h"
+#include "DittoCopyBuffer.h"
 
 #include "sqlite\CppSQLite3.h"
 
@@ -149,7 +151,6 @@ public:
 
 	//Socket Info
 	SOCKET	m_sSocket;
-	CRITICAL_SECTION m_CriticalSection;
 	void	StartStopServerThread();
 	void	StopServerThread();
 
@@ -169,12 +170,20 @@ public:
 	//Mulitlange Support
 	CMultiLanguage m_Language;
 
-	enum eQuickPasteMode{NONE_QUICK_PASTE, ADDING_QUICK_PASTE, PASTING_QUICK_PASTE};
+	enum eQuickPasteMode{NONE_QUICK_PASTE, ADDING_QUICK_PASTE, PASTING_QUICK_PASTE, DITTO_BUFFER_QUICK_PASTE};
 
 	eQuickPasteMode m_QuickPasteMode;
 	CClipList* m_pQuickPasteClip;
 
+	void CreateDittoCopyBuffer(long lCopyBuffer);
+	void ClearDittoCopyBuffer();
+	
 	bool m_bDittoHasFocus;
+
+	void PumpMessageEx();
+
+protected:
+	CDittoCopyBuffer *m_pDittoCopyBuffer;
 
 // Overrides
 	// ClassWizard generated virtual function overrides

@@ -13,6 +13,7 @@
 #include "HyperLink.h"
 #include "tinyxml.h"
 #include "Path.h"
+#include "DittoCopyBuffer.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -252,66 +253,19 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 	{
 		if(theApp.m_QuickPasteMode == CCP_MainApp::NONE_QUICK_PASTE)
 		{
-			theApp.m_QuickPasteMode = CCP_MainApp::ADDING_QUICK_PASTE;
+			theApp.m_QuickPasteMode = CCP_MainApp::DITTO_BUFFER_QUICK_PASTE;
+			
+			theApp.CreateDittoCopyBuffer(1);
 
-			theApp.SendCopy();
-
-			m_pTypingToolTip = new CToolTipEx;
-			m_pTypingToolTip->Create(this);
-
-			csTypeToolTipTitle = theApp.m_Language.GetString("Named_Copy_Title", "Ditto - Named Copy");
-
-			m_pTypingToolTip->SetToolTipText(csTypeToolTipTitle);
-
-			CRect rcScreen;
-			GetMonitorRect(0, &rcScreen);
-
-			m_ToolTipPoint = GetFocusedCaretPos();
-			if(m_ToolTipPoint.x < 0 || m_ToolTipPoint.y < 0)
-			{
-				CRect cr;
-				::GetWindowRect(theApp.m_hTargetWnd, cr);
-				m_ToolTipPoint = cr.CenterPoint();
-			}
-			m_ToolTipPoint.Offset(-15, 15);
-			m_pTypingToolTip->Show(m_ToolTipPoint);
-
-			//If they don't type anything for 2 seconds stop looking
-			SetTimer(STOP_LOOKING_FOR_KEYBOARD, 20000, NULL);
-
-			MonitorKeyboardChanges(m_hWnd, WM_FOCUS_CHANGED+1);
-			SetCaptureKeys(true);
+			SetTimer(END_DITTO_BUFFER_CLIPBOARD_TIMER, 2000, NULL);
 		}
 	}
 	else if(!g_Opt.m_bU3 && wParam == theApp.m_pNamedPaste->m_Atom)
 	{
 		if(theApp.m_QuickPasteMode == CCP_MainApp::NONE_QUICK_PASTE)
 		{
-			theApp.m_QuickPasteMode = CCP_MainApp::PASTING_QUICK_PASTE;
-
-			m_pTypingToolTip = new CToolTipEx;
-			m_pTypingToolTip->Create(this);
-
-			csTypeToolTipTitle = theApp.m_Language.GetString("Named_Paste_Title", "Ditto - Named Paste");
-			m_pTypingToolTip->SetToolTipText(csTypeToolTipTitle);
-
-			CRect rcScreen;
-
-			m_ToolTipPoint = GetFocusedCaretPos();
-			if(m_ToolTipPoint.x < 0 || m_ToolTipPoint.y < 0)
-			{
-				CRect cr;
-				::GetWindowRect(theApp.m_hTargetWnd, cr);
-				m_ToolTipPoint = cr.CenterPoint();
-			}
-			m_ToolTipPoint.Offset(-15, 15);
-			m_pTypingToolTip->Show(m_ToolTipPoint);
-			
-			//If they don't type anything for 2 seconds stop looking
-			SetTimer(STOP_LOOKING_FOR_KEYBOARD, 20000, NULL);
-
-			MonitorKeyboardChanges(m_hWnd, WM_FOCUS_CHANGED+1);
-			SetCaptureKeys(true);
+			CDittoCopyBuffer Past;
+			Past.PastCopyBuffer(1);
 		}
 	}
 	else if(wParam == theApp.m_pPosOne->m_Atom)
@@ -384,6 +338,30 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 
 				g_Opt.m_bUpdateTimeOnPaste = bItWas;
 			}
+		}
+	}
+	CATCH_SQLITE_EXCEPTION
+}
+
+void CMainFrame::DoDittoCopyBufferPaste(int nCopyBuffer)
+{
+	try
+	{	
+		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID FROM Main WHERE CopyBuffer = %d"), nCopyBuffer);
+
+		if(q.eof() == false)
+		{	
+			//Don't move these to the top
+			BOOL bItWas = g_Opt.m_bUpdateTimeOnPaste;
+			g_Opt.m_bUpdateTimeOnPaste = FALSE;
+
+			CProcessPaste paste;
+			paste.GetClipIDs().Add(q.getIntField(_T("lID")));
+			paste.m_bActivateTarget = false;
+			paste.DoPaste();
+			theApp.OnPasteCompleted();
+
+			g_Opt.m_bUpdateTimeOnPaste = bItWas;
 		}
 	}
 	CATCH_SQLITE_EXCEPTION
@@ -466,6 +444,11 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		}
 	case REMOVE_OLD_REMOTE_COPIES:
 		AfxBeginThread(CMainFrame::RemoteOldRemoteFilesThread, NULL);
+		break;
+
+	case END_DITTO_BUFFER_CLIPBOARD_TIMER:
+		KillTimer(END_DITTO_BUFFER_CLIPBOARD_TIMER);
+		theApp.ClearDittoCopyBuffer();
 		break;
 	}
 

@@ -185,6 +185,7 @@ void CClip::Clear()
 	m_lShortCut = 0;
 	m_bIsGroup = FALSE;
 	m_csQuickPaste = "";
+	
 	EmptyFormats();
 }
 
@@ -491,18 +492,15 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 			int nID = FindDuplicate();
 			if(nID >= 0)
 			{
-				m_csQuickPaste.Replace(_T("'"), _T("''"));
-
-				if(m_csQuickPaste.IsEmpty())
+				CString csQuickPasteSQL;
+				if(m_csQuickPaste.IsEmpty() == FALSE)
 				{
-					theApp.m_db.execDMLEx(_T("UPDATE Main SET lDate = %d where lID = %d;"), 
-											(long)m_Time.GetTime(), nID);
+					m_csQuickPaste.Replace(_T("'"), _T("''"));
+					csQuickPasteSQL.Format(_T(", QuickPasteText = '%s'"), m_csQuickPaste);
 				}
-				else
-				{		
-					theApp.m_db.execDMLEx(_T("UPDATE Main SET lDate = %d, QuickPasteText = '%s' where lID = %d;"), 
-											(long)m_Time.GetTime(), m_csQuickPaste, nID);
-				}
+
+				theApp.m_db.execDMLEx(_T("UPDATE Main SET lDate = %d%s where lID = %d;"), 
+										(long)m_Time.GetTime(), csQuickPasteSQL, nID);
 				
 				EmptyFormats();
 
@@ -597,7 +595,7 @@ bool CClip::AddToMainTable()
 		m_csQuickPaste.Replace(_T("'"), _T("''"));
 
 		CString cs;
-		cs.Format(_T("insert into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s');"),
+		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s');"),
 							(long)m_Time.GetTime(),
 							m_Desc,
 							m_lShortCut,
@@ -632,6 +630,7 @@ bool CClip::ModifyMainTable()
 			_T("lParentID = %d, ")
 			_T("lDontAutoDelete = %d, ")
 			_T("QuickPasteText = '%s' ")
+			_T("CopyBuffer = %d ")
 			_T("WHERE lID = %d;"), 
 			m_lShortCut, 
 			m_Desc, 
@@ -717,6 +716,7 @@ BOOL CClip::LoadMainTable(long lID)
 			m_lShortCut = q.getIntField(_T("lShortCut"));
 			m_bIsGroup = q.getIntField(_T("bIsGroup"));
 			m_csQuickPaste = q.getStringField(_T("QuickPasteText"));
+
 			m_ID = lID;
 		}
 	}

@@ -796,6 +796,33 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\DittoCopyBuffer.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Unicode Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Unicode Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath=".\DittoRulerRichEditCtrl.cpp">
 			</File>
 			<File
@@ -2634,6 +2661,9 @@
 				RelativePath="DialogResizer.h">
 			</File>
 			<File
+				RelativePath=".\DittoCopyBuffer.h">
+			</File>
+			<File
 				RelativePath=".\DittoRulerRichEditCtrl.h">
 			</File>
 			<File
@@ -2897,7 +2927,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Debug\focus.dll">
+				RelativePath="Release\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">
@@ -2924,7 +2954,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Release\focus.dll">
+				RelativePath="Debug\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">

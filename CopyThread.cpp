@@ -73,7 +73,46 @@ void CCopyThread::OnClipboardChange()
 		return;
 	
 	CClip* pClip = new CClip;
-	bool bResult = pClip->LoadFromClipboard(m_LocalConfig.m_pSupportedTypes);
+
+	CClipTypes* pSupportedTypes = m_LocalConfig.m_pSupportedTypes;
+	bool bDeleteMemory = false;
+
+	//If we are copying from a Ditto Buffer then save all to the database, so when we paste this it will paste 
+	//just like you were using Ctrl-V
+	if(theApp.m_QuickPasteMode == CCP_MainApp::DITTO_BUFFER_QUICK_PASTE)
+	{
+		pSupportedTypes = new CClipTypes;
+		if(pSupportedTypes)
+		{
+			bDeleteMemory = true;
+			COleDataObject oleData;
+
+			if(oleData.AttachClipboard())
+			{
+				oleData.BeginEnumFormats();
+
+				FORMATETC format;
+				while(oleData.GetNextFormat(&format))
+				{
+					pSupportedTypes->Add(format.cfFormat);
+				}
+
+				oleData.Release();
+			}
+		}
+		else
+		{
+			pSupportedTypes = m_LocalConfig.m_pSupportedTypes;
+		}
+	}
+
+	bool bResult = pClip->LoadFromClipboard(pSupportedTypes);
+
+	if(bDeleteMemory)
+	{
+		delete pSupportedTypes;
+		pSupportedTypes = NULL;
+	}
 	
 	if(!bResult)
 	{

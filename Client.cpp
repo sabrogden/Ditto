@@ -90,15 +90,17 @@ BOOL SendToFriend(CSendToFriendInfo &Info)
 	return TRUE;
 }
 
+CCriticalSection SendClientCritSection;
 UINT  SendClientThread(LPVOID pParam)
 {	
-	EnterCriticalSection(&theApp.m_CriticalSection);
+	SendClientCritSection.Lock();
 
 	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - START OF SendClientThread - @@@@@@@@@@@@@@@");
 
 	CClipList *pClipList = (CClipList*)pParam;
 	if(pClipList == NULL)
 	{
+		SendClientCritSection.Unlock();
 		LogSendRecieveInfo("ERROR if(pClipList == NULL)");
 		return FALSE;
 	}
@@ -167,7 +169,7 @@ UINT  SendClientThread(LPVOID pParam)
 	
 	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - END OF SendClientThread - @@@@@@@@@@@@@@@");
 
-	LeaveCriticalSection(&theApp.m_CriticalSection);
+	SendClientCritSection.Unlock();
 
 	return TRUE;
 }

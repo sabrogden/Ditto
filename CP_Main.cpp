@@ -127,12 +127,12 @@ CCP_MainApp::CCP_MainApp()
 	m_pQuickPasteClip = NULL;
 	m_bDittoHasFocus = false;
 
-	::InitializeCriticalSection(&m_CriticalSection);
+	m_pDittoCopyBuffer = NULL;
 }
 
 CCP_MainApp::~CCP_MainApp()
 {
-	::DeleteCriticalSection(&m_CriticalSection);
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -438,22 +438,21 @@ void CCP_MainApp::SendPaste(bool bActivateTarget)
 		return;
 	}
 
-	MSG KeyboardMsg;
-	while (::PeekMessage(&KeyboardMsg, NULL, 0, 0, PM_REMOVE))
-	{
-		::TranslateMessage(&KeyboardMsg);
-		::DispatchMessage(&KeyboardMsg);
-    }
+	PumpMessageEx();
 
-	Sleep(50);
+	Sleep(1);
 
 	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
 	keybd_event('V', 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
 
-	Sleep(50);
+	Sleep(1);
+
+	PumpMessageEx();
 
 	keybd_event('V', 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+
+	PumpMessageEx();
 
 	Log(_T("END SendPaste"));
 }
@@ -626,6 +625,15 @@ long CCP_MainApp::SaveCopyClips()
 		m_pQuickPasteClip = pClips;
 		
 		bDeletepClips = false;
+
+		//go ahead and send the clips out even though it won't be added for a bit
+		count = 1;
+	}
+	else if(m_QuickPasteMode == DITTO_BUFFER_QUICK_PASTE && m_pDittoCopyBuffer != NULL)
+	{
+		m_pDittoCopyBuffer->EndCopy(pClips);
+		
+		ClearDittoCopyBuffer();
 
 		//go ahead and send the clips out even though it won't be added for a bit
 		count = 1;
@@ -1085,4 +1093,31 @@ int CCP_MainApp::ShowOptionsDlg()
 	}
 
 	return nRet;
+}
+
+void CCP_MainApp::CreateDittoCopyBuffer(long lCopyBuffer)
+{
+	m_pDittoCopyBuffer = new CDittoCopyBuffer();
+	if(m_pDittoCopyBuffer)
+	{
+		m_pDittoCopyBuffer->StartCopy(lCopyBuffer);
+	}
+}
+
+void CCP_MainApp::ClearDittoCopyBuffer()
+{
+	delete m_pDittoCopyBuffer;
+	m_pDittoCopyBuffer = NULL;
+
+	theApp.m_QuickPasteMode = CCP_MainApp::NONE_QUICK_PASTE;
+}
+
+void CCP_MainApp::PumpMessageEx()
+{
+	MSG KeyboardMsg;
+	while (::PeekMessage(&KeyboardMsg, NULL, 0, 0, PM_REMOVE))
+	{
+		::TranslateMessage(&KeyboardMsg);
+		::DispatchMessage(&KeyboardMsg);
+	}
 }

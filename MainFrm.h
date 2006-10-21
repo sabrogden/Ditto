@@ -23,7 +23,7 @@
 #define STOP_MONITORING_KEYBOARD_TIMER	7
 #define STOP_LOOKING_FOR_KEYBOARD		8
 #define REMOVE_OLD_REMOTE_COPIES		9
-
+#define END_DITTO_BUFFER_CLIPBOARD_TIMER	10
 
 class CMainFrame : public CFrameWnd
 {
@@ -65,7 +65,7 @@ public:
 	CPoint m_ToolTipPoint;
 	CAlphaBlend m_Transparency;
 
-
+	void DoDittoCopyBufferPaste(int nCopyBuffer);
 	void DoFirstTenPositionsPaste(int nPos);
 	void StopLookingForKeystrokes(bool bInitAppVaribles);
 	bool PasteQuickPasteEntry(CString csQuickPaste);

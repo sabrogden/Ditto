@@ -230,6 +230,26 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
  		{
  			e.errorCode();
  		}
+
+		//This was added later so try to add each time and catch the exception here
+		try
+		{
+			db.execQuery(_T("SELECT lID, lClipID, lCopyBuffer FROM CopyBuffers"));
+		}
+		catch(CppSQLite3Exception& e)
+		{
+			e.errorCode();
+
+			db.execDML(_T("CREATE TABLE CopyBuffers(")
+				_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")
+				_T("lClipID INTEGER,")
+				_T("lCopyBuffer INTEGER)"));
+
+			db.execDML(_T("CREATE TRIGGER delete_copy_buffer_trigger BEFORE DELETE ON Main FOR EACH ROW\n")
+				_T("BEGIN\n")
+				_T("DELETE FROM CopyBuffers WHERE lClipID = old.lID;\n")
+				_T("END\n"));
+		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 
@@ -252,7 +272,7 @@ BOOL CreateDB(CString csPath)
 								_T("CRC INTEGER, ")
 								_T("bIsGroup INTEGER, ")
 								_T("lParentID INTEGER, ")
-								_T("QuickPasteText TEXT);"));
+								_T("QuickPasteText TEXT)"));
 
 		db.execDML(_T("CREATE TABLE Data(")
 							_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")
@@ -272,6 +292,17 @@ BOOL CreateDB(CString csPath)
 						_T("BEGIN\n")
 							_T("DELETE FROM Data WHERE lParentID = old.lID;\n")
 						_T("END\n"));
+
+		db.execDML(_T("CREATE TABLE CopyBuffers(")
+			_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")
+			_T("lClipID INTEGER, ")
+			_T("lCopyBuffer INTEGER)"));
+
+		db.execDML(_T("CREATE TRIGGER delete_copy_buffer_trigger BEFORE DELETE ON Main FOR EACH ROW\n")
+			_T("BEGIN\n")
+			_T("DELETE FROM CopyBuffers WHERE lClipID = old.lID;\n")
+			_T("END\n"));
+
 		db.close();
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
