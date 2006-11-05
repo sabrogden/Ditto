@@ -203,8 +203,7 @@ BOOL CClient::CloseConnection()
 BOOL CClient::OpenConnection(const TCHAR* servername)
 {
 	WSADATA wsaData;
-	struct hostent *hp;
-	unsigned int addr;
+	unsigned int addr = INADDR_NONE;
 	struct sockaddr_in server;
 	int wsaret=WSAStartup(0x101,&wsaData);
 	if(wsaret)	
@@ -225,28 +224,33 @@ BOOL CClient::OpenConnection(const TCHAR* servername)
 
 	CStringA csServerNameA = CTextConvert::ConvertToChar(servername);
 
-	if(inet_addr(csServerNameA)==INADDR_NONE)
+	//11-5-06 Serge Baranov found that if we are passing in an ip then
+	//don't look the name up using gethostbyname/gethostbyaddr->
+	//on simple networks that don't use DNS these will fail.
+	//So now only lookup the host name if they don't provide an IP.
+
+	addr = inet_addr(csServerNameA);
+	if(addr == INADDR_NONE)
 	{
-		hp = gethostbyname(csServerNameA);
-	}
-	else
-	{
-		addr = inet_addr(csServerNameA);
-		hp = gethostbyaddr((char*)&addr,sizeof(addr),AF_INET);
+		struct hostent *hp = gethostbyname(csServerNameA);
+		if(hp != NULL)
+		{
+			addr = *(unsigned int*)hp->h_addr;
+		}
 	}
 
-	if(hp == NULL)
+	if(addr == NULL || addr == INADDR_NONE)
 	{
-		LogSendRecieveInfo("ERROR - if(hp==NULL)");
+		LogSendRecieveInfo("addr == NULL || addr == INADDR_NONE");
 
 		closesocket(m_Connection);
 		m_Connection = NULL;
 		return FALSE;
 	}
 
-	server.sin_addr.s_addr = *((unsigned long*)hp->h_addr);
+	server.sin_addr.s_addr = addr;
 	server.sin_family = AF_INET;
-	server.sin_port = htons((u_short) g_Opt.m_lPort);
+	server.sin_port = htons((u_short)g_Opt.m_lPort);
 	if(connect(m_Connection, (struct sockaddr*)&server, sizeof(server)))
 	{
 		int nWhy = WSAGetLastError();
