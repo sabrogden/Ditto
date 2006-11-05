@@ -60,7 +60,7 @@ BOOL COleClipSource::DoImmediateRender()
 	if(m_ClipIDs.AggregateText(CF_TEXT, "\r\n", g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop, csAText))
 	{
 		long lLen = csAText.GetLength();
-		hGlobal = NewGlobalP(csAText.GetBuffer(lLen), lLen+1);
+		hGlobal = NewGlobalP(csAText.GetBuffer(lLen), lLen+sizeof(char));
 		csAText.ReleaseBuffer();
 		CacheGlobalData(CF_TEXT, hGlobal);
 	}
@@ -70,7 +70,7 @@ BOOL COleClipSource::DoImmediateRender()
 	if(m_ClipIDs.AggregateUnicodeText(CF_UNICODETEXT, Sep, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop, csWText))
 	{
 		long lLen = csWText.GetLength() * sizeof(wchar_t);
-		hGlobal = NewGlobalP(csWText.GetBuffer(lLen), lLen+1);
+		hGlobal = NewGlobalP(csWText.GetBuffer(lLen), lLen+sizeof(wchar_t));
 		csWText.ReleaseBuffer();
 		CacheGlobalData(CF_UNICODETEXT, hGlobal);
 	}
