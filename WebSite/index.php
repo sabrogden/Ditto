@@ -137,7 +137,9 @@ Source<br>
         </table>
         </td>
         <td width="61%" valign="top">
+        <a href="http://software.u3.com/Product_Details.aspx?ProductId=236&amp;Selection=7&amp;Lang=en-US">
         <img border="0" src="Ditto_pic.jpg" width="381" height="305">
+        </a>
         <p><a href="http://www.sourceforge.net/"><img border="0" src="http://sourceforge.net/sflogo.php?group_id=84084&amp;type=5" width="210" height="52" alt="SourceForge.net Logo" ></a></td>
         <td width="61%" valign="top">
         <p>
