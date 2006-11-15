@@ -23,7 +23,6 @@
 #include "MultiLanguage.h"
 #include "CopyThread.h"
 #include "ClipboardSaveRestore.h"
-#include "DittoCopyBuffer.h"
 
 #include "sqlite\CppSQLite3.h"
 
@@ -71,6 +70,16 @@ public:
 	CHotKey*	m_pPosNine;
 	CHotKey*	m_pPosTen;
 
+	CHotKey		*m_pCopyBuffer1;
+	CHotKey		*m_pPasteBuffer1;
+	CHotKey		*m_pCutBuffer1;
+	CHotKey		*m_pCopyBuffer2;
+	CHotKey		*m_pPasteBuffer2;
+	CHotKey		*m_pCutBuffer2;
+	CHotKey		*m_pCopyBuffer3;
+	CHotKey		*m_pPasteBuffer3;
+	CHotKey		*m_pCutBuffer3;
+
 // Focus Tracking
 	HWND m_hTargetWnd;
 	bool TargetActiveWindow();
@@ -79,6 +88,7 @@ public:
 	CString GetTargetName();
 	void SendPaste(bool bActivateTarget); // Activates the Target and sends Ctrl-V
 	void SendCopy();
+	void SendCut();
 
 // CopyThread and ClipViewer (Copy and Paste Management)
 	CCopyThread	m_CopyThread;
@@ -174,17 +184,12 @@ public:
 
 	eQuickPasteMode m_QuickPasteMode;
 	CClipList* m_pQuickPasteClip;
-
-	void CreateDittoCopyBuffer(long lCopyBuffer);
-	void ClearDittoCopyBuffer();
 	
 	bool m_bDittoHasFocus;
 
 	void PumpMessageEx();
 
 protected:
-	CDittoCopyBuffer *m_pDittoCopyBuffer;
-
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CCP_MainApp)

@@ -15,6 +15,7 @@
 #include "Clip_ImportExport.h"
 #include "HyperLink.h"
 #include "OptionsSheet.h"
+#include "DittoCopyBuffer.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -37,33 +38,34 @@ public:
 		m_bU3Install = FALSE;
 	}
 
-	virtual void ParseParam(const TCHAR* pszParam, BOOL bFlag, BOOL bLast)
-	{
-		if(bFlag)
-		{
-			if(STRICMP(pszParam, _T("Connect")) == 0)
-			{
-				m_bConnect = TRUE;
-			}
-			else if(STRICMP(pszParam, _T("Disconnect")) == 0)
-			{
-				m_bDisconnect = TRUE;
-			}
-			else if(STRICMP(pszParam, _T("U3")) == 0)
-			{
-				m_bU3 = TRUE;
-			}
-			else if(STRICMP(pszParam, _T("U3appStop")) == 0)
-			{
-				m_bU3Stop = TRUE;
-			}
-			else if(STRICMP(pszParam, _T("U3Install")) == 0)
-			{
-				m_bU3Install = TRUE;
-			}
-		}
-
-	}
+ 	virtual void ParseParam(const TCHAR* pszParam, BOOL bFlag, BOOL bLast)
+ 	{
+  		if(bFlag)
+  		{
+  			if(STRICMP(pszParam, _T("Connect")) == 0)
+  			{
+  				m_bConnect = TRUE;
+  			}
+  			else if(STRICMP(pszParam, _T("Disconnect")) == 0)
+  			{
+  				m_bDisconnect = TRUE;
+  			}
+  			else if(STRICMP(pszParam, _T("U3")) == 0)
+  			{
+  				m_bU3 = TRUE;
+  			}
+  			else if(STRICMP(pszParam, _T("U3appStop")) == 0)
+  			{
+  				m_bU3Stop = TRUE;
+  			}
+  			else if(STRICMP(pszParam, _T("U3Install")) == 0)
+  			{
+  				m_bU3Install = TRUE;
+  			}
+  		}
+ 
+		CCommandLineInfo::ParseParam(pszParam, bFlag, bLast);
+ 	}
 
 	BOOL m_bDisconnect;
 	BOOL m_bConnect;
@@ -126,8 +128,6 @@ CCP_MainApp::CCP_MainApp()
 	m_QuickPasteMode = NONE_QUICK_PASTE;
 	m_pQuickPasteClip = NULL;
 	m_bDittoHasFocus = false;
-
-	m_pDittoCopyBuffer = NULL;
 }
 
 CCP_MainApp::~CCP_MainApp()
@@ -150,6 +150,8 @@ BOOL CCP_MainApp::InitInstance()
 	{
 		try
 		{
+			g_Opt.m_bEnableDebugLogging = g_Opt.GetEnableDebugLogging();
+
 			CClip_ImportExport Clip;
 			CppSQLite3DB db;
 			db.open(cmdInfo.m_strFileName);
@@ -293,6 +295,15 @@ void CCP_MainApp::AfterMainCreate()
 	m_pPosEight = new CHotKey("Position8", 0, true);
 	m_pPosNine = new CHotKey("Position9", 0, true);
 	m_pPosTen = new CHotKey("Position10", 0, true);
+	m_pCopyBuffer1 = new CHotKey("CopyBufferCopyHotKey_0", 0, true);
+	m_pPasteBuffer1 = new CHotKey("CopyBufferPasteHotKey_0", 0, true);
+	m_pCutBuffer1 = new CHotKey("CopyBufferCutHotKey_0", 0, true);
+	m_pCopyBuffer2 = new CHotKey("CopyBufferCopyHotKey_1", 0, true);
+	m_pPasteBuffer2 = new CHotKey("CopyBufferPasteHotKey_1", 0, true);
+	m_pCutBuffer2 = new CHotKey("CopyBufferCutHotKey_1", 0, true);
+	m_pCopyBuffer3 = new CHotKey("CopyBufferCopyHotKey_2", 0, true);
+	m_pPasteBuffer3 = new CHotKey("CopyBufferPasteHotKey_2", 0, true);
+	m_pCutBuffer3 = new CHotKey("CopyBufferPasteHotKey_2", 0, true);
 
 	g_HotKeys.RegisterAll();
 
@@ -411,8 +422,6 @@ bool CCP_MainApp::ReleaseFocus()
 // sends Ctrl-V to the TargetWnd
 void CCP_MainApp::SendPaste(bool bActivateTarget)
 {
-	Log(_T("SendPaste"));
-
 	char ch;
 
 	//Make sure all the keys are up
@@ -453,8 +462,6 @@ void CCP_MainApp::SendPaste(bool bActivateTarget)
 	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 
 	PumpMessageEx();
-
-	Log(_T("END SendPaste"));
 }
 
 // sends Ctrl-V to the TargetWnd
@@ -479,12 +486,7 @@ void CCP_MainApp::SendCopy()
 	
 	Sleep(50);
 
-	MSG KeyboardMsg;
-	while (::PeekMessage(&KeyboardMsg, NULL, 0, 0, PM_REMOVE))
-	{
-		::TranslateMessage(&KeyboardMsg);
-		::DispatchMessage(&KeyboardMsg);
-    }
+	PumpMessageEx();
 
 	Sleep(50);
 
@@ -494,6 +496,41 @@ void CCP_MainApp::SendCopy()
 	Sleep(50);
 
 	keybd_event('C', 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+}
+
+// sends Ctrl-X to the TargetWnd
+void CCP_MainApp::SendCut()
+{
+	char ch;
+
+	//Make sure all the keys are up
+	for(ch = '0'; ch <= '9'; ch++)
+	{
+		keybd_event(ch, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	}
+
+	for(ch = 'A'; ch <= 'Z'; ch++)
+	{
+		keybd_event(ch, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	}
+	keybd_event(VK_SHIFT, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	keybd_event(VK_MENU, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	keybd_event(VK_LWIN, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+
+	Sleep(50);
+
+	PumpMessageEx();
+
+	Sleep(50);
+
+	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+	keybd_event('X', 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+
+	Sleep(50);
+
+	keybd_event('X', 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 }
 
@@ -629,12 +666,10 @@ long CCP_MainApp::SaveCopyClips()
 		//go ahead and send the clips out even though it won't be added for a bit
 		count = 1;
 	}
-	else if(m_QuickPasteMode == DITTO_BUFFER_QUICK_PASTE && m_pDittoCopyBuffer != NULL)
+	else if(CDittoCopyBuffer::GetDittoCopyBuffer()->Active())
 	{
-		m_pDittoCopyBuffer->EndCopy(pClips);
+		CDittoCopyBuffer::GetDittoCopyBuffer()->EndCopy(pClips);
 		
-		ClearDittoCopyBuffer();
-
 		//go ahead and send the clips out even though it won't be added for a bit
 		count = 1;
 	}
@@ -1093,23 +1128,6 @@ int CCP_MainApp::ShowOptionsDlg()
 	}
 
 	return nRet;
-}
-
-void CCP_MainApp::CreateDittoCopyBuffer(long lCopyBuffer)
-{
-	m_pDittoCopyBuffer = new CDittoCopyBuffer();
-	if(m_pDittoCopyBuffer)
-	{
-		m_pDittoCopyBuffer->StartCopy(lCopyBuffer);
-	}
-}
-
-void CCP_MainApp::ClearDittoCopyBuffer()
-{
-	delete m_pDittoCopyBuffer;
-	m_pDittoCopyBuffer = NULL;
-
-	theApp.m_QuickPasteMode = CCP_MainApp::NONE_QUICK_PASTE;
 }
 
 void CCP_MainApp::PumpMessageEx()

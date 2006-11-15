@@ -841,6 +841,68 @@ BEGIN
                     ACS_TRANSPARENT | WS_TABSTOP,7,4,270,26
 END
 
+IDD_OPTIONS_COPY_BUFFERS DIALOGEX 0, 0, 287, 250
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Copy Buffers"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_COPY_1,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,
+                    63,16,80,14
+    CONTROL         "Win",IDC_WIN_COPY_1,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,146,16,33,14
+    CONTROL         "",IDC_PASTE_1,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,
+                    63,32,80,14
+    CONTROL         "Win",IDC_WIN_PASTE_1,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,146,32,33,14
+    LTEXT           "Copy",IDC_STATIC_COPY_1,19,16,42,14,SS_CENTERIMAGE
+    LTEXT           "Paste",IDC_STATIC_PASTE_1,19,32,43,14,SS_CENTERIMAGE
+    CONTROL         "",IDC_CUT_1,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,63,
+                    47,80,14
+    CONTROL         "Win",IDC_WIN_CUT_1,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,146,47,33,14
+    LTEXT           "Cut",IDC_STATIC_CUT_1,19,47,43,14,SS_CENTERIMAGE
+    GROUPBOX        "Copy Buffer 1",IDC_BUFFER_GROUP_1,7,7,273,61
+    CONTROL         "Play Sound on Copy",IDC_PLAY_SOUND_1,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,179,16,80,14
+    CONTROL         "",IDC_COPY_2,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,
+                    63,81,80,14
+    CONTROL         "Win",IDC_WIN_COPY_2,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,146,81,33,14
+    CONTROL         "",IDC_PASTE_2,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,
+                    63,97,80,14
+    CONTROL         "Win",IDC_WIN_PASTE_2,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,146,97,33,14
+    LTEXT           "Copy",IDC_STATIC_COPY_2,19,81,42,14,SS_CENTERIMAGE
+    LTEXT           "Paste",IDC_STATIC_PASTE_2,19,97,43,14,SS_CENTERIMAGE
+    CONTROL         "",IDC_CUT_2,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,63,
+                    112,80,14
+    CONTROL         "Win",IDC_WIN_CUT_2,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,146,112,33,14
+    LTEXT           "Cut",IDC_STATIC_CUT_2,19,112,43,14,SS_CENTERIMAGE
+    GROUPBOX        "Copy Buffer 2",IDC_BUFFER_GROUP_2,7,72,273,61
+    CONTROL         "Play Sound on Copy",IDC_PLAY_SOUND_2,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,179,81,80,14
+    CONTROL         "",IDC_COPY_3,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,
+                    63,148,80,14
+    CONTROL         "Win",IDC_WIN_COPY_3,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,146,148,33,14
+    CONTROL         "",IDC_PASTE_3,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,
+                    63,164,80,14
+    CONTROL         "Win",IDC_WIN_PASTE_3,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,146,164,33,14
+    LTEXT           "Copy",IDC_STATIC_COPY_3,19,148,42,14,SS_CENTERIMAGE
+    LTEXT           "Paste",IDC_STATIC_PASTE_3,19,164,43,14,SS_CENTERIMAGE
+    CONTROL         "",IDC_CUT_3,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,63,
+                    179,80,14
+    CONTROL         "Win",IDC_WIN_CUT_3,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,146,179,33,14
+    LTEXT           "Cut",IDC_STATIC_CUT_3,19,179,43,14,SS_CENTERIMAGE
+    GROUPBOX        "Copy Buffer 3",IDC_BUFFER_GROUP_3,7,139,273,61
+    CONTROL         "Play Sound on Copy",IDC_PLAY_SOUND_3,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,179,148,80,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -848,8 +910,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,11,0,0
- PRODUCTVERSION 3,11,0,0
+ FILEVERSION 3,12,0,0
+ PRODUCTVERSION 3,12,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -865,12 +927,12 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "FileDescription", "Ditto"
-            VALUE "FileVersion", "3, 11, 0, 0"
+            VALUE "FileVersion", "3, 12, 0, 0"
             VALUE "InternalName", "CP_Main"
             VALUE "LegalCopyright", "Copyright (C) 2003"
             VALUE "OriginalFilename", "Ditto"
             VALUE "ProductName", "Ditto"
-            VALUE "ProductVersion", "3, 11, 0, 0"
+            VALUE "ProductVersion", "3, 12, 0, 0"
         END
     END
     BLOCK "VarFileInfo"
@@ -1006,6 +1068,14 @@ BEGIN
         RIGHTMARGIN, 277
         TOPMARGIN, 7
         BOTTOMMARGIN, 103
+    END
+
+    IDD_OPTIONS_COPY_BUFFERS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 280
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 243
     END
 END
 #endif    // APSTUDIO_INVOKED

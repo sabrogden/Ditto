@@ -20,7 +20,8 @@ bool CClipboardSaveRestore::Save()
 	//Attach to the clipboard
 	if(!oleData.AttachClipboard())
 	{
-		ASSERT(0);
+		ASSERT(FALSE);
+		Log(_T("CClipboardSaveRestore::Save error opening clipboard"));
 		return bRet;
 	}
 

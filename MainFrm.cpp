@@ -249,23 +249,23 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 			QuickPaste.ShowQPasteWnd(this, false, true, FALSE);
 		}		
 	}
-	else if(!g_Opt.m_bU3 && wParam == theApp.m_pNamedCopy->m_Atom)
+	else if(wParam == theApp.m_pNamedCopy->m_Atom)
 	{
-		if(theApp.m_QuickPasteMode == CCP_MainApp::NONE_QUICK_PASTE)
+		if(g_Opt.m_bU3 == false)
 		{
-			theApp.m_QuickPasteMode = CCP_MainApp::DITTO_BUFFER_QUICK_PASTE;
-			
-			theApp.CreateDittoCopyBuffer(1);
-
-			SetTimer(END_DITTO_BUFFER_CLIPBOARD_TIMER, 2000, NULL);
+			if(theApp.m_QuickPasteMode == CCP_MainApp::NONE_QUICK_PASTE)
+			{
+				
+			}
 		}
 	}
-	else if(!g_Opt.m_bU3 && wParam == theApp.m_pNamedPaste->m_Atom)
+	else if(wParam == theApp.m_pNamedPaste->m_Atom)
 	{
-		if(theApp.m_QuickPasteMode == CCP_MainApp::NONE_QUICK_PASTE)
+		if(g_Opt.m_bU3 == false)
 		{
-			CDittoCopyBuffer Past;
-			Past.PastCopyBuffer(1);
+			if(theApp.m_QuickPasteMode == CCP_MainApp::NONE_QUICK_PASTE)
+			{
+			}
 		}
 	}
 	else if(wParam == theApp.m_pPosOne->m_Atom)
@@ -279,7 +279,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 	else if(wParam == theApp.m_pPosThree->m_Atom)
 	{
 		DoFirstTenPositionsPaste(2);
-	}	
+	}
 	else if(wParam == theApp.m_pPosFour->m_Atom)
 	{
 		DoFirstTenPositionsPaste(3);
@@ -307,6 +307,42 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 	else if(wParam == theApp.m_pPosTen->m_Atom)
 	{
 		DoFirstTenPositionsPaste(9);
+	}
+	else if(wParam == theApp.m_pCopyBuffer1->m_Atom)
+	{
+		CDittoCopyBuffer::GetDittoCopyBuffer()->StartCopy(1);
+	}
+	else if(wParam == theApp.m_pPasteBuffer1->m_Atom)
+	{
+		CDittoCopyBuffer::GetDittoCopyBuffer()->PastCopyBuffer(1);
+	}
+	else if(wParam == theApp.m_pCutBuffer1->m_Atom)
+	{
+		CDittoCopyBuffer::GetDittoCopyBuffer()->StartCopy(1, true);
+	}
+	else if(wParam == theApp.m_pCopyBuffer2->m_Atom)
+	{
+		CDittoCopyBuffer::GetDittoCopyBuffer()->StartCopy(2);
+	}
+	else if(wParam == theApp.m_pPasteBuffer2->m_Atom)
+	{
+		CDittoCopyBuffer::GetDittoCopyBuffer()->PastCopyBuffer(2);
+	}
+	else if(wParam == theApp.m_pCutBuffer2->m_Atom)
+	{
+		CDittoCopyBuffer::GetDittoCopyBuffer()->StartCopy(2, true);
+	}
+	else if(wParam == theApp.m_pCopyBuffer3->m_Atom)
+	{
+		CDittoCopyBuffer::GetDittoCopyBuffer()->StartCopy(3);
+	}
+	else if(wParam == theApp.m_pPasteBuffer3->m_Atom)
+	{	
+		CDittoCopyBuffer::GetDittoCopyBuffer()->PastCopyBuffer(3);
+	}
+	else if(wParam == theApp.m_pCutBuffer3->m_Atom)
+	{
+		CDittoCopyBuffer::GetDittoCopyBuffer()->StartCopy(3, true);
 	}
 
 	return TRUE;
@@ -444,11 +480,6 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		}
 	case REMOVE_OLD_REMOTE_COPIES:
 		AfxBeginThread(CMainFrame::RemoteOldRemoteFilesThread, NULL);
-		break;
-
-	case END_DITTO_BUFFER_CLIPBOARD_TIMER:
-		KillTimer(END_DITTO_BUFFER_CLIPBOARD_TIMER);
-		theApp.ClearDittoCopyBuffer();
 		break;
 	}
 

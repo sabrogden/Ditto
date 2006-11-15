@@ -1636,3 +1636,19 @@ void CGetSetOptions::SetDittoRestoreClipboardDelay(long lDelay)
 {
 	SetProfileLong("RestoreClipboardDelay", lDelay);
 }
+
+void CGetSetOptions::GetCopyBufferItem(int nPos, CCopyBufferItem &Item)
+{
+	Item.m_lCopyHotKey = GetProfileLong(StrF(_T("CopyBufferCopyHotKey_%d"), nPos), 0);
+	Item.m_lPasteHotKey = GetProfileLong(StrF(_T("CopyBufferPasteHotKey_%d"), nPos), 0);
+	Item.m_lCutHotKey = GetProfileLong(StrF(_T("CopyBufferCutHotKey_%d"), nPos), 0);
+	Item.m_bPlaySoundOnCopy = GetProfileLong(StrF(_T("CopyBufferPlaySound_%d"), nPos), 0);
+}
+
+void CGetSetOptions::SetCopyBufferItem(int nPos, CCopyBufferItem &Item)
+{
+	SetProfileLong(StrF(_T("CopyBufferCopyHotKey_%d"), nPos), Item.m_lCopyHotKey);
+	GetProfileLong(StrF(_T("CopyBufferPasteHotKey_%d"), nPos), Item.m_lPasteHotKey);
+	GetProfileLong(StrF(_T("CopyBufferCutHotKey_%d"), nPos), Item.m_lCutHotKey);
+	GetProfileLong(StrF(_T("CopyBufferPlaySound_%d"), nPos), Item.m_bPlaySoundOnCopy);
+}

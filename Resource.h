@@ -28,6 +28,7 @@
 #define IDD_MOVE_TO_GROUP               156
 #define IDD_DIALOG_REMOTE_FILE          157
 #define IDR_FILE_COPY                   158
+#define IDD_OPTIONS_COPY_BUFFERS        166
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -90,6 +91,9 @@
 #define IDC_CHECK_SEND_PASTE            1042
 #define IDC_CHECK_LOG_SEND_RECIEVE      1042
 #define IDC_ENSURE                      1042
+#define IDC_PLAY_SOUND_1                1042
+#define IDC_PLAY_SOUND_2                1043
+#define IDC_PLAY_SOUND_3                1044
 #define IDD_OPTIONS_KEYSTROKES          2001
 #define IDC_HOTKEY                      2002
 #define IDC_DISPLAY_IN_SYSTEMTRAY       2003
@@ -196,6 +200,36 @@
 #define IDC_PROGRESS_FILE               2076
 #define IDC_PROGRESS_ALL_FILES          2077
 #define IDC_FILE_COPY                   2078
+#define IDC_STATIC_COPY_1               2079
+#define IDC_STATIC_PASTE_1              2080
+#define IDC_STATIC_CUT_1                2081
+#define IDC_COPY_1                      2082
+#define IDC_PASTE_1                     2083
+#define IDC_CUT_1                       2084
+#define IDC_WIN_COPY_1                  2085
+#define IDC_WIN_PASTE_1                 2086
+#define IDC_WIN_CUT_1                   2087
+#define IDC_BUFFER_GROUP_1              2088
+#define IDC_COPY_2                      2089
+#define IDC_WIN_COPY_2                  2090
+#define IDC_PASTE_2                     2091
+#define IDC_WIN_PASTE_2                 2092
+#define IDC_STATIC_COPY_2               2093
+#define IDC_STATIC_PASTE_2              2094
+#define IDC_CUT_2                       2095
+#define IDC_WIN_CUT_2                   2096
+#define IDC_STATIC_CUT_2                2097
+#define IDC_BUFFER_GROUP_2              2098
+#define IDC_COPY_3                      2099
+#define IDC_WIN_COPY_3                  2100
+#define IDC_PASTE_3                     2101
+#define IDC_WIN_PASTE_3                 2102
+#define IDC_STATIC_COPY_3               2103
+#define IDC_STATIC_PASTE_3              2104
+#define IDC_CUT_3                       2105
+#define IDC_WIN_CUT_3                   2106
+#define IDC_STATIC_CUT_3                2107
+#define IDC_BUFFER_GROUP_3              2108
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -293,9 +327,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        164
+#define _APS_NEXT_RESOURCE_VALUE        167
 #define _APS_NEXT_COMMAND_VALUE         32871
-#define _APS_NEXT_CONTROL_VALUE         2079
+#define _APS_NEXT_CONTROL_VALUE         2089
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

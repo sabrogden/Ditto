@@ -504,6 +504,8 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 				
 				EmptyFormats();
 
+				m_ID = nID;
+
 				return true;
 			}
 		}

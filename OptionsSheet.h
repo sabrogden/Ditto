@@ -47,6 +47,7 @@ protected:
 	CPropertyPage *m_pTypes;
 	CPropertyPage *m_pAbout;
 	CPropertyPage *m_pFriends;
+	CPropertyPage *m_pCopyBuffers;
 
 
 	//{{AFX_MSG(COptionsSheet)

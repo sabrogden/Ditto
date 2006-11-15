@@ -1390,6 +1390,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\OptionsCopyBuffers.cpp">
+			</File>
+			<File
 				RelativePath="OptionsGeneral.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -2724,6 +2727,9 @@
 				RelativePath="Options.h">
 			</File>
 			<File
+				RelativePath=".\OptionsCopyBuffers.h">
+			</File>
+			<File
 				RelativePath="OptionsGeneral.h">
 			</File>
 			<File
@@ -2801,6 +2807,9 @@
 			</File>
 			<File
 				RelativePath="res\bitmap1.bmp">
+			</File>
+			<File
+				RelativePath=".\res\bitmap2.bmp">
 			</File>
 			<File
 				RelativePath="res\bmp00001.bmp">
@@ -2927,7 +2936,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Release\focus.dll">
+				RelativePath="Debug\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">
@@ -2954,7 +2963,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Debug\focus.dll">
+				RelativePath="Release\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">

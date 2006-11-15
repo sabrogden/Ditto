@@ -15,6 +15,23 @@ public:
 	BOOL bShownFirstError;
 };
 
+#define MAX_COPY_BUFFER	3
+class CCopyBufferItem
+{
+public:
+	CCopyBufferItem()
+	{
+		m_lCopyHotKey = -1;
+		m_lPasteHotKey = -1;
+		m_lCutHotKey = -1;
+		m_bPlaySoundOnCopy = FALSE;
+	}
+	long m_lCopyHotKey;
+	long m_lPasteHotKey;
+	long m_lCutHotKey;
+	BOOL m_bPlaySoundOnCopy;
+};
+
 #define REG_PATH					"Software\\Ditto"
 
 #define POS_AT_CARET	1
@@ -326,6 +343,9 @@ public:
 
 	static long		GetDittoRestoreClipboardDelay();
 	static void		SetDittoRestoreClipboardDelay(long lDelay);
+
+	static void		GetCopyBufferItem(int nPos, CCopyBufferItem &Item);
+	static void		SetCopyBufferItem(int nPos, CCopyBufferItem &Item);
 };
 
 // global for easy access and for initialization of fast access variables
