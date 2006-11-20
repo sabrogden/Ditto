@@ -23,7 +23,7 @@
 #include "MultiLanguage.h"
 #include "CopyThread.h"
 #include "ClipboardSaveRestore.h"
-
+#include "DittoCopyBuffer.h"
 #include "sqlite\CppSQLite3.h"
 
 //#define GET_APP ((CMainWnd*)theApp)
@@ -187,6 +187,7 @@ public:
 	
 	bool m_bDittoHasFocus;
 
+	CDittoCopyBuffer m_CopyBuffer;
 	void PumpMessageEx();
 
 protected:

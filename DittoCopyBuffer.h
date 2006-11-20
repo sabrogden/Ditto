@@ -16,15 +16,15 @@ public:
 class CDittoCopyBuffer
 {
 public:
+	CDittoCopyBuffer();
 	~CDittoCopyBuffer(void);
-
-	static CDittoCopyBuffer *GetDittoCopyBuffer()	{ return &m_Singleton; }
 
 	bool Active()	{ return m_bActive; }
 	bool StartCopy(long lCopyBuffer, bool bCut = false);
-	bool EndCopy(CClipList *pClips);
+	bool EndCopy(long lID);
 	bool PastCopyBuffer(long lCopyBuffer);
 
+	static bool PutClipOnDittoCopyBuffer(long lClipId, long lBuffer);
 	static UINT DelayRestoreClipboard(LPVOID pParam);
 	static UINT StartCopyTimer(LPVOID pParam);
 
@@ -32,15 +32,12 @@ protected:
 	void EndRestoreThread();
 
 protected:
-	CDittoCopyBuffer();
-	static CDittoCopyBuffer m_Singleton;
-
-protected:
 	long m_lCurrentDittoBuffer;
 	CClipboardSaveRestore m_SavedClipboard;
 	bool m_bActive;
 	DWORD m_dwLastPaste;
-	static CEvent m_ActiveTimer;
-	static CEvent m_RestoreTimer;
-	static CEvent m_RestoreActive;
+	CEvent m_ActiveTimer;
+	CEvent m_RestoreTimer;
+	CEvent m_RestoreActive;
+	CClipboardSaveRestoreCopyBuffer *m_pClipboard;
 };

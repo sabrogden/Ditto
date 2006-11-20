@@ -666,13 +666,6 @@ long CCP_MainApp::SaveCopyClips()
 		//go ahead and send the clips out even though it won't be added for a bit
 		count = 1;
 	}
-	else if(CDittoCopyBuffer::GetDittoCopyBuffer()->Active())
-	{
-		CDittoCopyBuffer::GetDittoCopyBuffer()->EndCopy(pClips);
-		
-		//go ahead and send the clips out even though it won't be added for a bit
-		count = 1;
-	}
 	else
 	{
 		count = pClips->AddToDB(true);
@@ -681,6 +674,11 @@ long CCP_MainApp::SaveCopyClips()
 		{
 			lID = pClips->GetTail()->m_ID;
 			OnCopyCompleted(lID, count);
+
+			if(m_CopyBuffer.Active())
+			{
+				m_CopyBuffer.EndCopy(lID);
+			}
 		}
 	}
 

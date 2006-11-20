@@ -25,8 +25,6 @@ CProcessPaste::~CProcessPaste()
 
 BOOL CProcessPaste::DoPaste()
 {
-	Log(_T("Do Paste"));
-
 	m_pOle->m_bOnlyPaste_CF_TEXT = m_bOnlyPaste_CF_TEXT;
 	m_pOle->m_bPasteHTMLFormatAs_CF_TEXT = m_bPasteHTMLFormatAs_CF_TEXT;
 
@@ -69,9 +67,6 @@ BOOL CProcessPaste::DoPaste()
 			theApp.ActivateTarget();
 		}
 #endif
-
-		Log(_T("Do Paste RETURN TRUE"));
-
 		return TRUE;
 	}
 	return FALSE;

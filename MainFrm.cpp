@@ -310,39 +310,39 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 	}
 	else if(wParam == theApp.m_pCopyBuffer1->m_Atom)
 	{
-		CDittoCopyBuffer::GetDittoCopyBuffer()->StartCopy(1);
+		theApp.m_CopyBuffer.StartCopy(1);
 	}
 	else if(wParam == theApp.m_pPasteBuffer1->m_Atom)
 	{
-		CDittoCopyBuffer::GetDittoCopyBuffer()->PastCopyBuffer(1);
+		theApp.m_CopyBuffer.PastCopyBuffer(1);
 	}
 	else if(wParam == theApp.m_pCutBuffer1->m_Atom)
 	{
-		CDittoCopyBuffer::GetDittoCopyBuffer()->StartCopy(1, true);
+		theApp.m_CopyBuffer.StartCopy(1, true);
 	}
 	else if(wParam == theApp.m_pCopyBuffer2->m_Atom)
 	{
-		CDittoCopyBuffer::GetDittoCopyBuffer()->StartCopy(2);
+		theApp.m_CopyBuffer.StartCopy(2);
 	}
 	else if(wParam == theApp.m_pPasteBuffer2->m_Atom)
 	{
-		CDittoCopyBuffer::GetDittoCopyBuffer()->PastCopyBuffer(2);
+		theApp.m_CopyBuffer.PastCopyBuffer(2);
 	}
 	else if(wParam == theApp.m_pCutBuffer2->m_Atom)
 	{
-		CDittoCopyBuffer::GetDittoCopyBuffer()->StartCopy(2, true);
+		theApp.m_CopyBuffer.StartCopy(2, true);
 	}
 	else if(wParam == theApp.m_pCopyBuffer3->m_Atom)
 	{
-		CDittoCopyBuffer::GetDittoCopyBuffer()->StartCopy(3);
+		theApp.m_CopyBuffer.StartCopy(3);
 	}
 	else if(wParam == theApp.m_pPasteBuffer3->m_Atom)
 	{	
-		CDittoCopyBuffer::GetDittoCopyBuffer()->PastCopyBuffer(3);
+		theApp.m_CopyBuffer.PastCopyBuffer(3);
 	}
 	else if(wParam == theApp.m_pCutBuffer3->m_Atom)
 	{
-		CDittoCopyBuffer::GetDittoCopyBuffer()->StartCopy(3, true);
+		theApp.m_CopyBuffer.StartCopy(3, true);
 	}
 
 	return TRUE;

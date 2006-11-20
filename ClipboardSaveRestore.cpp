@@ -12,11 +12,13 @@ CClipboardSaveRestore::~CClipboardSaveRestore(void)
 
 bool CClipboardSaveRestore::Save()
 {
+	m_Clipboard.RemoveAll();
+
 	bool bRet = false;
 	COleDataObjectEx oleData;
 	CClipFormat cf;
 	FORMATETC fm;
-	
+
 	//Attach to the clipboard
 	if(!oleData.AttachClipboard())
 	{

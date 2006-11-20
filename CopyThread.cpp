@@ -79,7 +79,7 @@ void CCopyThread::OnClipboardChange()
 
 	//If we are copying from a Ditto Buffer then save all to the database, so when we paste this it will paste 
 	//just like you were using Ctrl-V
-	if(theApp.m_QuickPasteMode == CCP_MainApp::DITTO_BUFFER_QUICK_PASTE)
+	if(theApp.m_CopyBuffer.Active())
 	{
 		pSupportedTypes = new CClipTypes;
 		if(pSupportedTypes)
