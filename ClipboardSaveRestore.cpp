@@ -17,43 +17,36 @@ bool CClipboardSaveRestore::Save()
 	bool bRet = false;
 	COleDataObjectEx oleData;
 	CClipFormat cf;
-	FORMATETC fm;
 
-	//Attach to the clipboard
-	if(!oleData.AttachClipboard())
+	if(::OpenClipboard(theApp.m_MainhWnd))
 	{
-		ASSERT(FALSE);
-		Log(_T("CClipboardSaveRestore::Save error opening clipboard"));
-		return bRet;
-	}
-
-	oleData.EnsureClipboardObject();
-
-	oleData.BeginEnumFormats();
-
-	while(oleData.GetNextFormat(&fm))
-	{
-		cf.m_hgData = oleData.GetGlobalData(fm.cfFormat);
-		cf.m_cfType = fm.cfFormat;
-
-		if(cf.m_hgData)
+		int nFormat = EnumClipboardFormats(0);
+		while(nFormat != 0)
 		{
-			int nSize = GlobalSize(cf.m_hgData);
-			if(nSize > 0)
+			HGLOBAL hGlobal = ::GetClipboardData(nFormat);
+			LPVOID pvData = GlobalLock(hGlobal);
+			if(pvData)
 			{
-				m_Clipboard.Add(cf);
-				bRet = true;
-			}
-			else
-			{
-				ASSERT(FALSE); // a valid GlobalMem with 0 size is strange
-				cf.Free();
-			}
-			cf.m_hgData = 0; // m_Formats owns it now
-		}
-	}
+				ULONG Size = GlobalSize(hGlobal);
+				if(Size > 0)
+				{
+					LPVOID pvData = GlobalLock(hGlobal);
+					cf.m_hgData = NewGlobalP(pvData, Size);
+					
+					cf.m_cfType = nFormat;
 
-	oleData.Release();
+					m_Clipboard.Add(cf);
+					bRet = true;
+				}
+
+				GlobalUnlock(hGlobal);
+			}
+
+			nFormat = EnumClipboardFormats(nFormat);
+		}
+
+		::CloseClipboard();
+	}
 
 	return bRet;
 }
@@ -61,29 +54,35 @@ bool CClipboardSaveRestore::Save()
 bool CClipboardSaveRestore::Restore()
 {
 	bool bRet = false;
-	if(::OpenClipboard(NULL))
+
+	if(::OpenClipboard(theApp.m_MainhWnd))
 	{
 		::EmptyClipboard();
+
+		SetClipboardData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
 
 		int nSize = m_Clipboard.GetSize();
 		for(int nPos = 0; nPos < nSize; nPos++)
 		{
-			CClipFormat cf = m_Clipboard[nPos];
-			if(cf.m_hgData)
+			CClipFormat *pCF = &m_Clipboard.ElementAt(nPos);
+			if(pCF && pCF->m_hgData)
 			{
-				::SetClipboardData(cf.m_cfType, cf.m_hgData);
-				cf.m_hgData = NULL;//clipboard now owns the data
+				::SetClipboardData(pCF->m_cfType, pCF->m_hgData);
+				pCF->m_hgData = NULL;//clipboard now owns the data
 
 				bRet = TRUE;
 			}
 		}
 
-		SetClipboardData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
-
 		::CloseClipboard();
 	}
 
 	m_Clipboard.RemoveAll();
+
+	if(bRet == FALSE)
+	{
+		Log(_T("CClipboardSaveRestore::Restore failed to restore clipboard"));
+	}
 
 	return bRet;
 }

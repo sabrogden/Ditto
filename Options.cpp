@@ -1648,7 +1648,7 @@ void CGetSetOptions::GetCopyBufferItem(int nPos, CCopyBufferItem &Item)
 void CGetSetOptions::SetCopyBufferItem(int nPos, CCopyBufferItem &Item)
 {
 	SetProfileLong(StrF(_T("CopyBufferCopyHotKey_%d"), nPos), Item.m_lCopyHotKey);
-	GetProfileLong(StrF(_T("CopyBufferPasteHotKey_%d"), nPos), Item.m_lPasteHotKey);
-	GetProfileLong(StrF(_T("CopyBufferCutHotKey_%d"), nPos), Item.m_lCutHotKey);
-	GetProfileLong(StrF(_T("CopyBufferPlaySound_%d"), nPos), Item.m_bPlaySoundOnCopy);
+	SetProfileLong(StrF(_T("CopyBufferPasteHotKey_%d"), nPos), Item.m_lPasteHotKey);
+	SetProfileLong(StrF(_T("CopyBufferCutHotKey_%d"), nPos), Item.m_lCutHotKey);
+	SetProfileLong(StrF(_T("CopyBufferPlaySound_%d"), nPos), Item.m_bPlaySoundOnCopy);
 }

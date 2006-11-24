@@ -1016,6 +1016,10 @@ BYTE GetKeyStateModifiers()
 		m |= HOTKEYF_CONTROL;
 	if( GetKeyState(VK_MENU) & 0x8000 )
 		m |= HOTKEYF_ALT;
+	if( GetKeyState(VK_LWIN) & 0x8000 )
+		m |= HOTKEYF_EXT;
+	if( GetKeyState(VK_RWIN) & 0x8000 )
+		m |= HOTKEYF_EXT;
 	return m;
 }
 

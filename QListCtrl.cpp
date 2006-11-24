@@ -7,6 +7,7 @@
 #include "ProcessPaste.h"
 #include "BitmapHelper.h"
 #include "MainTableFunctions.h"
+#include "DittoCopyBuffer.h"
 #include <atlbase.h>
 
 #ifdef _DEBUG
@@ -204,6 +205,21 @@ void CQListCtrl::GetSelectionIndexes(ARRAY &arr)
 	{
 		arr.Add(GetNextSelectedItem(pos));
 	}
+}
+
+bool CQListCtrl::PutSelectedItemOnDittoCopyBuffer(long lBuffer)
+{
+	bool bRet = false;
+	ARRAY arr;
+	GetSelectionItemData(arr);
+	int nCount = arr.GetSize();
+	if(nCount > 0 && arr[0])
+	{
+		CDittoCopyBuffer::PutClipOnDittoCopyBuffer(arr[0], lBuffer);
+		bRet = true;
+	}
+
+	return bRet;
 }
 
 void CQListCtrl::GetSelectionItemData(ARRAY &arr)
@@ -788,8 +804,24 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 {
 	DWORD dID;
 	if(m_Accels.OnMsg(pMsg, dID))
-		if(GetParent()->SendMessage(NM_SELECT_DB_ID, dID, 0) )
-			return TRUE;
+	{
+		switch(dID)
+		{
+		case COPY_BUFFER_HOT_KEY_1_ID:
+			PutSelectedItemOnDittoCopyBuffer(0);
+			break;
+		case COPY_BUFFER_HOT_KEY_2_ID:
+			PutSelectedItemOnDittoCopyBuffer(1);
+			break;
+		case COPY_BUFFER_HOT_KEY_3_ID:
+			PutSelectedItemOnDittoCopyBuffer(2);
+			break;
+		default:
+			GetParent()->SendMessage(NM_SELECT_DB_ID, dID, 0);
+		}
+
+		return TRUE;
+	}
 
 	if(m_pToolTip)
 	{
@@ -1133,7 +1165,41 @@ void CQListCtrl::DestroyAndCreateAccelerator(BOOL bCreate, CppSQLite3DB &db)
 	m_Accels.m_Map.RemoveAll();
 
 	if(bCreate)
+	{
 		CMainTableFunctions::LoadAcceleratorKeys(m_Accels, db);
+
+		LoadDittoCopyBufferHotkeys();
+	}
+}
+
+void CQListCtrl::LoadDittoCopyBufferHotkeys()
+{
+	CCopyBufferItem Item;
+	CAccel a;
+
+	g_Opt.GetCopyBufferItem(0, Item);	
+	if(Item.m_lCopyHotKey > 0)
+	{
+		a.Cmd = COPY_BUFFER_HOT_KEY_1_ID;
+		a.Key = Item.m_lCopyHotKey;
+		m_Accels.AddAccel(a);
+	}
+
+	g_Opt.GetCopyBufferItem(1, Item);
+	if(Item.m_lCopyHotKey > 0)
+	{
+		a.Cmd = COPY_BUFFER_HOT_KEY_2_ID;
+		a.Key = Item.m_lCopyHotKey;
+		m_Accels.AddAccel(a);
+	}
+
+	g_Opt.GetCopyBufferItem(2, Item);
+	if(Item.m_lCopyHotKey > 0)
+	{
+		a.Cmd = COPY_BUFFER_HOT_KEY_3_ID;
+		a.Key = Item.m_lCopyHotKey;
+		m_Accels.AddAccel(a);
+	}
 }
 
 void CQListCtrl::OnKillFocus(CWnd* pNewWnd)

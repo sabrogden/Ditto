@@ -31,6 +31,10 @@
 #define NM_REFRESH_VISIBLE_ROWS		WM_USER+0x117
 #define NM_ITEM_DELETED				WM_USER+0x118
 
+#define COPY_BUFFER_HOT_KEY_1_ID	-100
+#define COPY_BUFFER_HOT_KEY_2_ID	-101
+#define COPY_BUFFER_HOT_KEY_3_ID	-102
+
 
 //#define NM_LIST_CUT			        WM_USER+0x111
 //#define NM_LIST_COPY		        WM_USER+0x112
@@ -92,7 +96,8 @@ public:
 	BOOL SetCaret(int nRow, BOOL bFocus = TRUE);
 	long GetCaret();
 	// moves the caret to the given index, selects it, and ensures it is visible.
-	BOOL SetListPos( int index );
+	BOOL SetListPos(int index);
+	bool PutSelectedItemOnDittoCopyBuffer(long lBuffer);
 
 	DWORD GetItemData(int nItem);
 	void GetToolTipText(int nItem, CString &csText);
@@ -120,6 +125,7 @@ protected:
 	void SendSelection(ARRAY &arrItems);
 	BOOL GetClipData(int nItem, CClipFormat &Clip);
 	BOOL DrawBitMap(int nItem, CRect &crRect, CDC *pDC);
+	void LoadDittoCopyBufferHotkeys();
 
 	BOOL DrawText(int nItem, CRect &crRect, CDC *pDC);
 		

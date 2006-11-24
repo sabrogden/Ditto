@@ -27,21 +27,28 @@ bool CDittoCopyBuffer::StartCopy(long lCopyBuffer, bool bCut)
 	//Make sure the end copy thread has exited
 	EndRestoreThread();
 
-	m_bActive = true;
-	m_lCurrentDittoBuffer = lCopyBuffer;
-	m_SavedClipboard.Save();
-	if(bCut)
+	if(m_SavedClipboard.Save())
 	{
-		theApp.SendCut();
+		if(bCut)
+		{
+			theApp.SendCut();
+		}
+		else
+		{
+			theApp.SendCopy();
+		}
+
+		//Create a thread to track if they have copied anything, if thread has exited before they have
+		//copied something then the copy buffer copy is canceled
+		AfxBeginThread(CDittoCopyBuffer::StartCopyTimer, (LPVOID)this, THREAD_PRIORITY_LOWEST);
+
+		m_bActive = true;
+		m_lCurrentDittoBuffer = lCopyBuffer;
 	}
 	else
 	{
-		theApp.SendCopy();
+		Log(_T("Start of Ditto Failed to save buffer"));
 	}
-
-	//Create a thread to track if they have copied anything, if thread has exited before they have
-	//copied something then the copy buffer copy is canceled
-	AfxBeginThread(CDittoCopyBuffer::StartCopyTimer, (LPVOID)this, THREAD_PRIORITY_LOWEST);
 
 	return true;
 }
@@ -89,14 +96,7 @@ bool CDittoCopyBuffer::EndCopy(long lID)
 	
 	if(PutClipOnDittoCopyBuffer(lID, m_lCurrentDittoBuffer))
 	{
-		Log(StrF(_T("Ditto end copy, saved clip successfully Clip ID = %d"), lID));
-
-		CCopyBufferItem Item;
-		g_Opt.GetCopyBufferItem(m_lCurrentDittoBuffer, Item);
-		if(Item.m_bPlaySoundOnCopy)
-		{
-			PlaySound(_T("ding.wav"), NULL, SND_FILENAME|SND_ASYNC);
-		}
+		Log(StrF(_T("Ditto end copy, saved clip successfully Clip ID = %d"), lID));	
 
 		bRet = true;
 	}
@@ -123,6 +123,13 @@ bool CDittoCopyBuffer::PutClipOnDittoCopyBuffer(long lClipId, long lBuffer)
 
 		theApp.m_db.execDMLEx(_T("UPDATE CopyBuffers SET lClipID = %d WHERE lCopyBuffer = %d"), lClipId, lBuffer);
 
+		CCopyBufferItem Item;
+		g_Opt.GetCopyBufferItem(lBuffer, Item);
+		if(Item.m_bPlaySoundOnCopy)
+		{
+			PlaySound(_T("ding.wav"), NULL, SND_FILENAME|SND_ASYNC);
+		}
+
 		return true;
 	}
 	CATCH_SQLITE_EXCEPTION
@@ -132,14 +139,13 @@ bool CDittoCopyBuffer::PutClipOnDittoCopyBuffer(long lClipId, long lBuffer)
 
 bool CDittoCopyBuffer::PastCopyBuffer(long lCopyBuffer)
 {
-	DWORD dNow = GetTickCount();
-	if(((dNow - m_dwLastPaste) < 500) || (dNow < m_dwLastPaste))
+	//Can't paste while another is still active
+	if(WaitForSingleObject(m_RestoreActive, 1) == WAIT_TIMEOUT)
 	{
 		Log(_T("Copy Buffer pasted to fast"));
-		m_dwLastPaste = GetTickCount();
 		return false;
 	}
-	m_dwLastPaste = GetTickCount();
+
 	bool bRet = false;
 
 	Log(StrF(_T("Start - PastCopyBuffer buffer = %d"), m_lCurrentDittoBuffer));
@@ -155,9 +161,10 @@ bool CDittoCopyBuffer::PastCopyBuffer(long lCopyBuffer)
 			m_pClipboard = new CClipboardSaveRestoreCopyBuffer;
 			if(m_pClipboard)
 			{
-				//make sure the previouse paste is done
-				EndRestoreThread();
-
+				//Save the clipboard, 
+				//then put the new data on the clipboard
+				//then send a paste
+				//then wait a little and restore the original clipboard data
 				if(m_pClipboard->Save())
 				{
 					CProcessPaste paste;
@@ -202,7 +209,9 @@ UINT CDittoCopyBuffer::DelayRestoreClipboard(LPVOID pParam)
 		pBuffer->m_RestoreTimer.ResetEvent();
 		pBuffer->m_RestoreActive.ResetEvent();
 
-		DWORD dRes = WaitForSingleObject(pBuffer->m_RestoreTimer, pBuffer->m_pClipboard->m_lRestoreDelay);
+		CClipboardSaveRestoreCopyBuffer *pLocalClipboard = pBuffer->m_pClipboard;
+
+		DWORD dRes = WaitForSingleObject(pBuffer->m_RestoreTimer, pLocalClipboard->m_lRestoreDelay);
 
 		if(GetKeyState(VK_SHIFT) & 0x8000)
 		{
@@ -210,11 +219,18 @@ UINT CDittoCopyBuffer::DelayRestoreClipboard(LPVOID pParam)
 		}
 		else
 		{
-			pBuffer->m_pClipboard->Restore();
+			if(pLocalClipboard->Restore())
+			{
+				Log(_T("CDittoCopyBuffer::DelayRestoreClipboard Successfully"));
+			}
+			else
+			{
+				Log(_T("CDittoCopyBuffer::DelayRestoreClipboard Failed to restore"));
+			}
 		}
 
-		delete pBuffer->m_pClipboard;
-		pBuffer->m_pClipboard = NULL;
+		delete pLocalClipboard;
+		pLocalClipboard = NULL;
 
 		pBuffer->m_RestoreActive.SetEvent();
 	}

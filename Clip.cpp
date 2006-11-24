@@ -28,8 +28,7 @@ COleDataObjectEx
 
 HGLOBAL COleDataObjectEx::GetGlobalData(CLIPFORMAT cfFormat, LPFORMATETC lpFormatEtc)
 {
-	HGLOBAL hGlobal = ::GetClipboardData(cfFormat);
-    hGlobal = COleDataObject::GetGlobalData(cfFormat, lpFormatEtc);
+    HGLOBAL hGlobal = COleDataObject::GetGlobalData(cfFormat, lpFormatEtc);
 	if(hGlobal)
 	{
 		if(!::IsValid(hGlobal))
@@ -632,7 +631,6 @@ bool CClip::ModifyMainTable()
 			_T("lParentID = %d, ")
 			_T("lDontAutoDelete = %d, ")
 			_T("QuickPasteText = '%s' ")
-			_T("CopyBuffer = %d ")
 			_T("WHERE lID = %d;"), 
 			m_lShortCut, 
 			m_Desc, 
