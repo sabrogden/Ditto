@@ -93,6 +93,8 @@ BOOL COptionsSheet::OnInitDialog()
 	SetWindowText(_T("Ditto"));
 
 	theApp.m_Language.UpdateOptionsSheet(this);
+
+	::ShowWindow(::GetDlgItem(m_hWnd, ID_APPLY_NOW), SW_HIDE);
 	
 	return bResult;
 }
