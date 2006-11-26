@@ -2212,8 +2212,8 @@ void CQPasteWnd::OnGetToolTipText(NMHDR* pNMHDR, LRESULT* pResult)
 			cs += StrF(_T("(Index = %d) (DB ID = %d)\n"), pInfo->lItem, q.getIntField(_T("lID")));
 #endif
 			
-			CTime time(q.getIntField(_T("lDate")));
-			cs += time.Format("%m/%d/%Y %I:%M:%S %p");
+			COleDateTime time((time_t)q.getIntField(_T("lDate")));
+			cs += time.Format();
 			
 			if(q.getIntField(_T("lDontAutoDelete")) > 0)
 			{

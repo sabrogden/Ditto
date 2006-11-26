@@ -115,7 +115,8 @@ BOOL CCopyProperties::OnInitDialog()
 
 void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 {
-	m_eDate = Clip.m_Time.Format("%m/%d/%Y %I:%M %p");
+	COleDateTime dtTime(Clip.m_Time.GetTime());
+	m_eDate = dtTime.Format();
 	m_RichEdit.SetText(Clip.m_Desc);
 
 	if(Clip.m_lDontAutoDelete)
