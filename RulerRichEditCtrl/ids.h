@@ -47,6 +47,7 @@
 #define STRING_COLOR		33
 #define STRING_DEFAULT		34
 #define STRING_CUSTOM		35
+#define ID_BUTTONWRAP		36
 
 // Mouse handling
 extern UINT urm_RULERACTION;

@@ -83,6 +83,7 @@ public:
 	virtual void DoIndent();
 	virtual void DoOutdent();
 	virtual void DoBullet();
+	virtual void DoWrap();
 
 	void SetCurrentFontName( const CString& font );
 	void SetCurrentFontSize( int points );
@@ -111,6 +112,7 @@ protected:
 	afx_msg void OnButtonIndent();
 	afx_msg void OnButtonOutdent();
 	afx_msg void OnButtonBullet();
+	afx_msg void OnButtonWrap();
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	afx_msg LRESULT OnSetText (WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGetText (WPARAM wParam, LPARAM lParam);
@@ -140,6 +142,8 @@ protected:
 	BOOL			m_showToolbar;
 	BOOL			m_showRuler;
 	BOOL			m_readOnly;
+
+	BOOL			m_bInWrapMode;
 
 	// Sub-controls
 	CRulerRichEdit	m_rtf;

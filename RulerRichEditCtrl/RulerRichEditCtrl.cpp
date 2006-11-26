@@ -166,6 +166,7 @@ CRulerRichEditCtrl::CRulerRichEditCtrl() : m_pen( PS_DOT, 0, RGB( 0, 0, 0 ) )
 	m_movingtab = -1;
 	m_offset = 0;
 	m_readOnly = FALSE;
+	m_bInWrapMode = FALSE;
 	ShowToolbar();
 	ShowRuler();
 
@@ -404,6 +405,7 @@ BEGIN_MESSAGE_MAP(CRulerRichEditCtrl, CWnd)
 	ON_BN_CLICKED(BUTTON_INDENT, OnButtonIndent)
 	ON_BN_CLICKED(BUTTON_OUTDENT, OnButtonOutdent)
 	ON_BN_CLICKED(BUTTON_BULLET, OnButtonBullet)
+	ON_BN_CLICKED(ID_BUTTONWRAP, OnButtonWrap)
 	ON_WM_SETFOCUS()
 	ON_REGISTERED_MESSAGE(urm_RULERACTION, OnTrackRuler)
 	ON_REGISTERED_MESSAGE(urm_GETSCROLLPOS, OnGetScrollPos)
@@ -1095,6 +1097,11 @@ void CRulerRichEditCtrl::OnButtonBold()
 
 }
 
+void CRulerRichEditCtrl::OnButtonWrap()
+{
+	DoWrap();
+}
+
 void CRulerRichEditCtrl::OnButtonItalic() 
 /* ============================================================
 	Function :		CRulerRichEditCtrl::OnButtonItalic
@@ -1342,6 +1349,8 @@ void CRulerRichEditCtrl::UpdateToolbarButtons()
 
 		if( cf.dwMask & CFM_COLOR )
 			m_toolbar.SetFontColor( cf.crTextColor );
+
+		DoWrap();
 	}
 }
 
@@ -1672,6 +1681,25 @@ void CRulerRichEditCtrl::DoColor()
 
 }
 
+void CRulerRichEditCtrl::DoWrap()
+{
+	if(m_bInWrapMode)
+	{
+		// Turn off word wrap.
+		m_rtf.SetTargetDevice(NULL, 1);
+		m_bInWrapMode = false;
+	}
+
+	else
+	{
+		// Turn on word wrap.
+		m_rtf.SetTargetDevice(NULL, 0); 
+		m_bInWrapMode = true;
+	}
+
+	m_toolbar.CheckButton(ID_BUTTONWRAP, !m_toolbar.IsButtonChecked(ID_BUTTONWRAP));
+}
+
 void CRulerRichEditCtrl::DoBold()
 /* ============================================================
 	Function :		CRulerRichEditCtrl::DoBold
@@ -1687,7 +1715,6 @@ void CRulerRichEditCtrl::DoBold()
 
    ============================================================*/
 {
-
 	m_toolbar.CheckButton( BUTTON_BOLD, !m_toolbar.IsButtonChecked( BUTTON_BOLD ) );
 
 	int effect = 0;
