@@ -30,13 +30,11 @@ bool CClipboardSaveRestore::Save()
 				ULONG Size = GlobalSize(hGlobal);
 				if(Size > 0)
 				{
-					LPVOID pvData = GlobalLock(hGlobal);
-					cf.m_hgData = NewGlobalP(pvData, Size);
-					
+					//Copy the data locally
+					cf.m_hgData = NewGlobalP(pvData, Size);	
 					cf.m_cfType = nFormat;
 
 					m_Clipboard.Add(cf);
-					bRet = true;
 				}
 
 				GlobalUnlock(hGlobal);
@@ -46,6 +44,7 @@ bool CClipboardSaveRestore::Save()
 		}
 
 		::CloseClipboard();
+		bRet = true;
 	}
 
 	return bRet;
@@ -69,11 +68,10 @@ bool CClipboardSaveRestore::Restore()
 			{
 				::SetClipboardData(pCF->m_cfType, pCF->m_hgData);
 				pCF->m_hgData = NULL;//clipboard now owns the data
-
-				bRet = TRUE;
 			}
 		}
 
+		bRet = TRUE;
 		::CloseClipboard();
 	}
 

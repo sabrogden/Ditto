@@ -38,6 +38,6 @@ protected:
 	DWORD m_dwLastPaste;
 	CEvent m_ActiveTimer;
 	CEvent m_RestoreTimer;
-	CEvent m_RestoreActive;
+	CEvent m_Pasting;
 	CClipboardSaveRestoreCopyBuffer *m_pClipboard;
 };

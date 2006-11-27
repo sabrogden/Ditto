@@ -7,7 +7,7 @@
 CDittoCopyBuffer::CDittoCopyBuffer() :
 	m_ActiveTimer(TRUE, TRUE),
 	m_RestoreTimer(TRUE, TRUE),
-	m_RestoreActive(TRUE, TRUE)
+	m_Pasting(TRUE, TRUE)
 {
 	m_bActive = false;
 	m_dwLastPaste = 0;
@@ -63,6 +63,7 @@ UINT CDittoCopyBuffer::StartCopyTimer(LPVOID pParam)
 		DWORD dRes = WaitForSingleObject(pBuffer->m_ActiveTimer, 1500);
 		if(dRes == WAIT_TIMEOUT)
 		{
+			pBuffer->m_SavedClipboard.Clear();
 			pBuffer->m_bActive = false;
 		}
 	}
@@ -140,12 +141,14 @@ bool CDittoCopyBuffer::PutClipOnDittoCopyBuffer(long lClipId, long lBuffer)
 bool CDittoCopyBuffer::PastCopyBuffer(long lCopyBuffer)
 {
 	//Can't paste while another is still active
-	if(WaitForSingleObject(m_RestoreActive, 1) == WAIT_TIMEOUT)
+	if(WaitForSingleObject(m_Pasting, 1) == WAIT_TIMEOUT)
 	{
 		Log(_T("Copy Buffer pasted to fast"));
 		return false;
 	}
 
+	m_RestoreTimer.ResetEvent();
+	m_Pasting.ResetEvent();
 	bool bRet = false;
 
 	Log(StrF(_T("Start - PastCopyBuffer buffer = %d"), m_lCurrentDittoBuffer));
@@ -190,6 +193,9 @@ bool CDittoCopyBuffer::PastCopyBuffer(long lCopyBuffer)
 	}
 	CATCH_SQLITE_EXCEPTION
 
+	if(bRet == false)
+		m_Pasting.SetEvent();
+
 	return bRet;
 }
 
@@ -197,8 +203,9 @@ void CDittoCopyBuffer::EndRestoreThread()
 {
 	//Tell the thread to stop waiting and restore the clipboard
 	m_RestoreTimer.SetEvent();
+
 	//make sure it's ended
-	WaitForSingleObject(m_RestoreActive, 5000);
+	WaitForSingleObject(m_Pasting, 5000);
 }
 
 UINT CDittoCopyBuffer::DelayRestoreClipboard(LPVOID pParam)
@@ -206,9 +213,6 @@ UINT CDittoCopyBuffer::DelayRestoreClipboard(LPVOID pParam)
 	CDittoCopyBuffer *pBuffer = (CDittoCopyBuffer*)pParam;
 	if(pBuffer)
 	{
-		pBuffer->m_RestoreTimer.ResetEvent();
-		pBuffer->m_RestoreActive.ResetEvent();
-
 		CClipboardSaveRestoreCopyBuffer *pLocalClipboard = pBuffer->m_pClipboard;
 
 		DWORD dRes = WaitForSingleObject(pBuffer->m_RestoreTimer, pLocalClipboard->m_lRestoreDelay);
@@ -232,7 +236,7 @@ UINT CDittoCopyBuffer::DelayRestoreClipboard(LPVOID pParam)
 		delete pLocalClipboard;
 		pLocalClipboard = NULL;
 
-		pBuffer->m_RestoreActive.SetEvent();
+		pBuffer->m_Pasting.SetEvent();
 	}
 
 	return TRUE;
