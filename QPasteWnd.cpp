@@ -787,6 +787,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 	m_CritSection.Unlock();
 
 	CString strFilter;
+	CString strParentFilter;
 	CString csSort;
 	
 	// History Group
@@ -817,7 +818,10 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 			csSort = "bIsGroup ASC, lDate ASC";
 		
 		if(theApp.m_GroupID >= 0)
+		{
 			strFilter.Format(_T("lParentID = %d"), theApp.m_GroupID);
+			strParentFilter = strFilter;
+		}
 		
 		m_stGroup.SetWindowText(theApp.m_GroupText);
 	}
@@ -836,7 +840,15 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 		SQLFormat.SetVariable("mText");
 		SQLFormat.Parse(csSQLSearch);
 
-		strFilter = m_strSQLSearch = SQLFormat.GetSQLString();
+		strFilter = SQLFormat.GetSQLString();
+
+		if(strParentFilter.IsEmpty() == FALSE)
+		{
+			strFilter += " AND ";
+			strFilter += strParentFilter;
+		}
+
+		m_strSQLSearch = strFilter;
 	}
 	
 
