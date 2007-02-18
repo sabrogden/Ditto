@@ -1962,11 +1962,23 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 			//toggle outputing text to outputdebugstring
 			if(GetKeyState(VK_CONTROL) & 0x8000)
 			{
+				if(CGetSetOptions::m_bEnableDebugLogging)
+					Log(_T("turning file logging OFF"));
+
 				CGetSetOptions::m_bEnableDebugLogging = !CGetSetOptions::m_bEnableDebugLogging;
+
+				if(CGetSetOptions::m_bEnableDebugLogging)
+					Log(_T("turning file logging ON"));
 			}
 			else
 			{
+				if(CGetSetOptions::m_bEnableDebugLogging)
+					Log(_T("turning DebugString logging OFF"));
+
 				CGetSetOptions::m_bOutputDebugString = !CGetSetOptions::m_bOutputDebugString;
+
+				if(CGetSetOptions::m_bEnableDebugLogging)
+					Log(_T("turning DebugString logging ON"));
 			}
 			return TRUE;
 			
@@ -2441,7 +2453,7 @@ void CQPasteWnd::OnSearchEditChange()
 
 	if(m_bHandleSearchTextChange == false)
 	{
-		Log(_T("Handle text change is NOT set"));
+		//Log(_T("Handle text change is NOT set"));
 		return;
 	}
 

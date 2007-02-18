@@ -821,7 +821,7 @@ LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 
 	HWND hTray = ::FindWindow(_T("Shell_TrayWnd"), _T(""));
 
-//	Log(StrF("Focus = %d", hFocus));
+	//Log(StrF(_T("Focus = %d"), hFocus));
 
 	int nCount = 0;
 	while(true)
@@ -830,13 +830,13 @@ LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 		if(hParent == NULL)
 			break;
 
-//		Log(StrF("Focus2 = %d", hParent));
+		//Log(StrF(_T("Focus2 = %d"), hParent));
 
 		//allow focus on edit window
 		if(m_pEditFrameWnd && hParent == m_pEditFrameWnd->GetSafeHwnd())
 		{
 			break;
-		}
+		}		
 
 		hLastGoodParent = hParent;  
 
@@ -848,6 +848,7 @@ LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 		}
 	}
 
+	
 	//If the parent is ditto or the tray icon then don't set focus to that window
 	if(hLastGoodParent == m_hWnd || hLastGoodParent == hTray)
 	{
@@ -855,8 +856,15 @@ LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 		theApp.m_bDittoHasFocus = true;
 		dLastDittoHasFocusTick = GetTickCount();   
 	}
+	else if(IsWindow(hFocus) == FALSE)
+	{
+		Log( StrF(_T("Invalid focus window 0x%08x"), hFocus));
+		theApp.m_bDittoHasFocus = false;
+	}
 	else
 	{
+		Log( StrF(_T("SetTarget 0x%08x: \"%s\""), hFocus, GetWndText(hFocus)));
+
 		theApp.m_bDittoHasFocus = false;
 
 		theApp.m_hTargetWnd = hFocus;

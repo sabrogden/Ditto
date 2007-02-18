@@ -394,14 +394,13 @@ bool CCP_MainApp::TargetActiveWindow()
 		QPasteWnd()->UpdateStatus(true);
 
 	// Tracking / Debugging
-	/*
-	LOG( StrF(
-		"Target Changed" \
-		"\n\tOld = 0x%08x: \"%s\"" \
-		"\n\tNew = 0x%08x:  \"%s\"\n",
-			hOld, (LPCTSTR) GetWndText(hOld),
-			hNew, (LPCTSTR) GetWndText(hNew) ) );
-	*/
+	//Log( StrF(
+	//	_T("Target Changed") \
+	//	_T("\n\tOld = 0x%08x: \"%s\"") \
+	//	_T("\n\tNew = 0x%08x:  \"%s\"\n"),
+	//		hOld, (LPCTSTR) GetWndText(hOld),
+	//		hNew, (LPCTSTR) GetWndText(hNew) ) );
+	
 	return true;
 }
 
