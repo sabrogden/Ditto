@@ -1,3 +1,13 @@
+3.14.0.0   2-18-06
+- Added new feature, "Ditto copy buffers" Options - Copy buffers.  Can assign short cut keys for extra copy buffers.  These copy buffers work just like Ctrl-C and Ctrl-V.  Things can be copied and pasted without affecting the standard clipboard data.
+- Updated to latest sqlite db version.  This fixed the problem with foreign characters in the current user's name.
+- Added CF_HDROP (copied files), Rich Text, Html Format to multi-paste support.  (will group those types on multi-paste)
+- Added option for what separater is put between multi-pasted clips. (Options - General)
+- Added "Word Wrap" setting in clip editor
+- When searching in a group only search the clips in that group.
+- Hide apply button in options.  The button didn't do anything.
+
+
 3.9.0.0    8-03-06
 - Fixed issue that could cause Ditto to not disconnect from the clipboard
 

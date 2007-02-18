@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="Ascii"?>
-<Ditto_Language_File Version = "1" Author = "Hélder Podence" Notes = "">
+<Ditto_Language_File Version = "1" Author = "Hélder Podence" Notes = "Versão 1.1 do 29/12/2006">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Grupos</Item>
 		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Novo grupo	Ctrl-F7</Item>
@@ -69,13 +69,13 @@
 		<Item English_Text = "Exit Program" ID = "32806">Saír do Ditto</Item>
 		
 		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Prompt to Delete Clip" ID = "32852"></Item>	
-		<Item English_Text = "Import" ID = "32855"></Item>
-		<Item English_Text = "Export" ID = "32853"></Item>
-		<Item English_Text = "Remove Quick Paste" ID = "32856"></Item>	
-		<Item English_Text = "Edit Clip" ID = "32860"></Item>
-		<Item English_Text = "New Clip" ID = "32867"></Item>	
-		
+		<Item English_Text = "Prompt to Delete Clip" ID = "32852">Perguntar para apagar o Clip</Item>
+		<Item English_Text = "Import" ID = "32855">Importar</Item>
+		<Item English_Text = "Export" ID = "32853">Exportar</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">Remover o colar rápido</Item>
+		<Item English_Text = "Edit Clip" ID = "32860">Editar o Clip</Item>
+		<Item English_Text = "New Clip" ID = "32867">Novo Clip</Item>
+
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039">Atalho</Item>
@@ -175,7 +175,7 @@
 		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Regularizações rápidas</Item>
 		
 		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Prompt when deleting clips" ID = "2039"></Item>
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Perguntar quando se estiver a apagar o clip</Item>
 		
 	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>
@@ -254,34 +254,34 @@
 		<Item English_Text = "NO TARGET" ID = "No_Target">Sem alvo</Item>		
 		
 		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Prompt when deleting clips" ID = "2039"></Item>
-		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip"></Item>
-		<Item English_Text = "Error importing exported clip" ID = "Error_Importing"></Item>
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Perguntar quando se estiver a apagar o Clip</Item>
+		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">Apagar os Clips seleccionados?</Item>
+		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">Erro de importação de clip exportado</Item>
 		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing"></Item>
-		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good"></Item>
-		<Item English_Text = "Successfully imported" ID = "Import_Successfully"></Item>
-		<Item English_Text = "clip" ID = "Clip"></Item>
-		<Item English_Text = "clips" ID = "Clips"></Item>
-		<Item English_Text = "Update clip description on save?" ID = "Update_Desc"></Item>
-		<Item English_Text = "New Clip" ID = "New_Clip"></Item>
-		<Item English_Text = "Save" ID = "Save"></Item>
-		<Item English_Text = "Save All" ID = "Save_All"></Item>
-		<Item English_Text = "Close Current Tab" ID = "Close"></Item>
-		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable"></Item>
-		<Item English_Text = "to be editable" ID = "Editable"></Item>
-		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges"></Item>
-		<Item English_Text = "Error saving clip" ID = "ErrorSaving"></Item>
-		<Item English_Text = "New" ID = "New"></Item>
-		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close"></Item>
-		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit"></Item>
-		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title"></Item>
-		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1"></Item>
-		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2"></Item>
-		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3"></Item>
-		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title"></Item>
-		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1"></Item>
-		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2"></Item>
-		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3"></Item> 
+		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good">Clip no clipboard</Item>
+		<Item English_Text = "Successfully imported" ID = "Import_Successfully">Importação bem sucedida</Item>
+		<Item English_Text = "clip" ID = "Clip">clip</Item>
+		<Item English_Text = "clips" ID = "Clips">clips</Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">Actualizar a descrição do clip enquanto se guarda?</Item>
+		<Item English_Text = "New Clip" ID = "New_Clip">Novo Clip</Item>
+		<Item English_Text = "Save" ID = "Save">Guardar</Item>
+		<Item English_Text = "Save All" ID = "Save_All">Guardar tudo</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">Fechar o separador corrente</Item>
+		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable">O ítem corrente não é editável. O clip deve ter um dos tipos de clips</Item>
+		<Item English_Text = "to be editable" ID = "Editable">para ser editado</Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">Deseja guardar as alterações para</Item>
+		<Item English_Text = "Error saving clip" ID = "ErrorSaving">Erro enquanto se estava a guardar o clip</Item>
+		<Item English_Text = "New" ID = "New">Novo</Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">Guardar, fechar e por no clipboard</Item>
+		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">Edição do Ditto</Item>
+		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title">Colado nomeado - Ditto</Item>
+		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">Erro durante o carregamento dos dados</Item>
+		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2">Erro para encontrar o clip com o texto QuickPaste de</Item>
+		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">Execpção para encontrar o clip</Item>
+		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title">Cópia nomeada - Ditto</Item>
+		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">Erro para guardar a cópia nomeada na base de dados </Item>
+		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">Execpção para guardar a cópia nomeada</Item>
+		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">O Ditto não recebeu a cópia</Item>
 		
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
@@ -296,8 +296,8 @@
 		<Item English_Text = "Exit" ID = "32772">Saír </Item>
 		
 		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Import" ID = "32854"></Item>
-		<Item English_Text = "New Clip" ID = "32868"></Item>
+		<Item English_Text = "Import" ID = "32854">Importar</Item>
+		<Item English_Text = "New Clip" ID = "32868">Novo clip</Item>
 		
 	</Ditto_Tray_Icon_Menu>
 </Ditto_Language_File>

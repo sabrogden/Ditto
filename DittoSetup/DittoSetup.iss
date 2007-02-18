@@ -4,7 +4,7 @@
 [Setup]
 AppName=Ditto
 AppVerName=Ditto 3.14.0.0
-OutputBaseFilename=DittoSetup_3_13_0_0
+OutputBaseFilename=DittoSetup_3_14_0_0
 AppPublisher=Scott Brogden
 AppPublisherURL=ditto-cp.sourceforge.net
 AppSupportURL=ditto-cp.sourceforge.net
@@ -13,7 +13,7 @@ DefaultDirName={pf}\Ditto
 DefaultGroupName=Ditto
 AppMutex=Ditto Is Now Running
 UsePreviousTasks=no
-DisableDirPage=yes
+;DisableDirPage=yes
 DisableProgramGroupPage=yes
 DisableReadyPage=yes
 DirExistsWarning=no

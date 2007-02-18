@@ -1334,12 +1334,11 @@ void CRulerRichEditCtrl::UpdateToolbarButtons()
 		m_toolbar.SetState( BUTTON_BOLD, TBSTATE_ENABLED | ( ( cf.dwEffects & CFE_BOLD )  ? TBSTATE_CHECKED : 0 ) );
 		m_toolbar.SetState( BUTTON_ITALIC, TBSTATE_ENABLED | ( ( cf.dwEffects & CFE_ITALIC )  ? TBSTATE_CHECKED : 0 ) );
 		m_toolbar.SetState( BUTTON_UNDERLINE, TBSTATE_ENABLED | ( ( cf.dwEffects & CFM_UNDERLINE )  ? TBSTATE_CHECKED : 0 ) );
-
 		m_toolbar.SetState( BUTTON_LEFTALIGN, TBSTATE_ENABLED | ( para.wAlignment == PFA_LEFT ? TBSTATE_CHECKED : 0 ) );
 		m_toolbar.SetState( BUTTON_CENTERALIGN, TBSTATE_ENABLED | ( para.wAlignment == PFA_CENTER ? TBSTATE_CHECKED : 0 ) );
 		m_toolbar.SetState( BUTTON_RIGHTALIGN, TBSTATE_ENABLED | ( para.wAlignment == PFA_RIGHT ? TBSTATE_CHECKED : 0 ) );
-
 		m_toolbar.SetState( BUTTON_BULLET, TBSTATE_ENABLED | ( para.wNumbering ? TBSTATE_CHECKED : 0 ) );
+		m_toolbar.SetState( ID_BUTTONWRAP, TBSTATE_ENABLED | ( m_bInWrapMode ? TBSTATE_CHECKED : 0 ));
 
 		if( cf.dwMask & CFM_FACE )
 			m_toolbar.SetFontName( CString( cf.szFaceName ) );
@@ -1349,8 +1348,6 @@ void CRulerRichEditCtrl::UpdateToolbarButtons()
 
 		if( cf.dwMask & CFM_COLOR )
 			m_toolbar.SetFontColor( cf.crTextColor );
-
-		DoWrap();
 	}
 }
 
