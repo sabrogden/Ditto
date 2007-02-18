@@ -1652,3 +1652,21 @@ void CGetSetOptions::SetCopyBufferItem(int nPos, CCopyBufferItem &Item)
 	SetProfileLong(StrF(_T("CopyBufferCutHotKey_%d"), nPos), Item.m_lCutHotKey);
 	SetProfileLong(StrF(_T("CopyBufferPlaySound_%d"), nPos), Item.m_bPlaySoundOnCopy);
 }
+
+CString CGetSetOptions::GetMultiPasteSeparator(bool bConvertToLineFeeds)
+{
+	CString csSep = GetProfileString(_T("MultiPasteSeparator"), _T("[LF]"));
+	if(bConvertToLineFeeds)
+	{
+		CString csLineFeed(_T("\r\n"));
+		csSep.Replace(_T("[LF]"), csLineFeed);
+		csSep.Replace(_T("[lf]"), csLineFeed);
+	}
+
+	return csSep;
+}
+
+void CGetSetOptions::SetMultiPasteSeparator(CString csSep)
+{
+	SetProfileString(_T("MultiPasteSeparator"), csSep);
+}

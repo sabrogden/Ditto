@@ -1,5 +1,7 @@
 #pragma once
 
+#include "IClipAggregator.h"
+
 class CClipIDs : public CArrayEx<int>
 {
 public:
@@ -9,10 +11,7 @@ public:
 	HGLOBAL	Render(UINT cfType);
 	// Fills "types" with the Format Types corresponding to the Clip IDs in this array.
 	void GetTypes(CClipTypes& types);
-	// Aggregates the cfType Format Data of the Clip IDs in this array, assuming
-	//  each Format is NULL terminated and placing pSeparator between them.
-	bool AggregateText(UINT cfType, LPCSTR lpSep, BOOL bReverse, CStringA &csNewText);
-	bool AggregateUnicodeText(UINT cfType, CStringW Separator, BOOL bReverse, CStringW &csWNewString);
+	bool AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bReverse);
 
 // MANAGEMENT FUNCTIONS
 

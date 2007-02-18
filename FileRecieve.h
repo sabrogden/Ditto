@@ -13,6 +13,7 @@ public:
 
 	long RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgressDlg *pProgress);
 	HGLOBAL CreateCF_HDROPBuffer();
+	void AddFile(CString csFile)	{ m_RecievedFiles.Add(csFile); }
 
 protected:
 	long RecieveFileData(ULONG lFileSize, CString csFileName);

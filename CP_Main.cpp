@@ -119,6 +119,7 @@ CCP_MainApp::CCP_MainApp()
 
 	m_lLastGoodIndexForNextworkPassword = -2;
 
+	m_RTFFormat = ::RegisterClipboardFormat(_T("Rich Text Format"));
 	m_HTML_Format = ::RegisterClipboardFormat(_T("HTML Format"));
 	m_PingFormat = ::RegisterClipboardFormat(_T("Ditto Ping Format"));
 	m_cfIgnoreClipboard = ::RegisterClipboardFormat(_T("Clipboard Viewer Ignore"));

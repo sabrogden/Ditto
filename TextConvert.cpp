@@ -51,6 +51,15 @@ CStringA CTextConvert::ConvertToChar(const CString &src)
 #endif
 }
 
+CStringW CTextConvert::ConvertToUnicode(const CString &src)
+{
+#ifdef _UNICODE
+	return src;
+#else
+	return MultiByteToUnicodeString(src);
+#endif
+}
+
 bool CTextConvert::ConvertFromUTF8(const CStringA &src, CString &dest)
 {
 #ifdef _UNICODE	

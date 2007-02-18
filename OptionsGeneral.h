@@ -48,6 +48,7 @@ public:
 	CButton m_btUpdateTimeOnPaste;
 	CButton m_btSaveMultiPaste;
 	CString	m_csPlaySound;
+	CEdit m_ClipSeparator;
 	//}}AFX_DATA
 
 

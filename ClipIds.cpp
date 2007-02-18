@@ -4,6 +4,11 @@
 #include "tinyxml.h"
 #include "TextConvert.h"
 #include "Clip_ImportExport.h"
+#include "CF_HDropAggregator.h"
+#include "CF_UnicodeTextAggregator.h"
+#include "CF_TextAggregator.h"
+#include "richtextaggregator.h"
+#include "htmlformataggregator.h"
 
 // allocate an HGLOBAL of the given Format Type representing these Clip IDs.
 HGLOBAL CClipIDs::Render(UINT cfType)
@@ -19,97 +24,106 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 		return CClip::LoadFormat(ElementAt(0), cfType);
 	}
 
-	CStringA csText;
-	if(AggregateText(CF_TEXT, "\r\n", g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop, csText))
+	CStringA SepA = CTextConvert::ConvertToChar(g_Opt.GetMultiPasteSeparator());
+	CStringW SepW = CTextConvert::ConvertToUnicode(g_Opt.GetMultiPasteSeparator());
+
+	if(cfType == CF_TEXT)
 	{
-		long lLen = csText.GetLength();
-		HGLOBAL h = NewGlobalP(csText.GetBuffer(lLen), lLen+1);
-		return h;
+		CCF_TextAggregator CFText(SepA);
+		if(AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		{
+			return CFText.GetHGlobal();
+		}
 	}
+	else if(cfType == CF_UNICODETEXT)
+	{
+		CCF_UnicodeTextAggregator CFUnicodeText(SepW);
+		if(AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		{
+			return CFUnicodeText.GetHGlobal();
+		}
+	}
+	else if(cfType == CF_HDROP)
+	{
+		CCF_HDropAggregator HDrop;
+		if(AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		{
+			return HDrop.GetHGlobal();
+		}
+	}
+	else if(cfType == theApp.m_HTML_Format)
+	{
+		CHTMLFormatAggregator Html(SepA);
+		if(AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		{
+			return Html.GetHGlobal();
+		}
+	}
+	else if(cfType == theApp.m_RTFFormat)
+	{
+		CRichTextAggregator RichText(SepA);
+		if(AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		{
+			return RichText.GetHGlobal();
+		}
+	}
+	
 	return NULL;
 }
 
 void CClipIDs::GetTypes(CClipTypes& types)
 {
-	int count = GetSize();
+	int IDCount = GetSize();
 	types.RemoveAll();
-	if(count > 1)
-	{
-		types.Add(CF_TEXT);
-	}
-	else if(count == 1)
+
+	if(IDCount == 1)
 	{
 		CClip::LoadTypes(ElementAt(0), types);
 	}
-}
-
-// Aggregates the cfType Format Data of the Clip IDs in this array, assuming
-//  each Format is NULL terminated and placing pSeparator between them.
-// This assumes that the given cfType is a null terminated text type.
-bool CClipIDs::AggregateText(UINT cfType, LPCSTR lpSep, BOOL bReverse, CStringA &csNewText)
-{
-	CString csSQL;
-	int numIDs = GetSize();
-	int* pIDs = GetData();
-	bool bRet = false;
-	
-	try
+	else if(IDCount > 1)
 	{
-		int nIndex;
-		for(int i=0; i < numIDs; i++)
+		//Add the types that are common accross all paste ids
+		long lCount;
+		CMap<CLIPFORMAT, CLIPFORMAT, long, long> RenderTypes;
+
+		for(int nIDPos = 0; nIDPos < IDCount; nIDPos++)
 		{
-			nIndex = i;
-			if(bReverse)
-			{
-				nIndex = numIDs - i - 1;
-			}
+			CClipTypes CurrTypes;
+			CClip::LoadTypes(ElementAt(nIDPos), CurrTypes);
 
-			csSQL.Format(_T("SELECT Data.ooData FROM Data ")
-							_T("INNER JOIN Main ON Main.lID = Data.lParentID ")
-							_T("WHERE Data.strClipBoardFormat = '%s' ")
-							_T("AND Main.lID = %d"),
-							GetFormatName(cfType),
-							pIDs[nIndex]);
+			int nTypeCount = CurrTypes.GetSize();
 
-			CppSQLite3Query q = theApp.m_db.execQuery(csSQL);
-
-			if(q.eof() == false)
-			{
-				int nDataLen = 0;
-				const unsigned char *cData = q.getBlobField(_T("ooData"), nDataLen);
-				if(cData == NULL)
+			for(int nType = 0; nType < nTypeCount; nType++)
+			{	
+				lCount = 0;
+				if(nIDPos == 0 || RenderTypes.Lookup(CurrTypes[nType], lCount) == TRUE)
 				{
-					continue;
+					lCount++;
+					RenderTypes.SetAt(CurrTypes[nType], lCount);
 				}
-
-				//Ensure it's null terminated
-				if(cData[nDataLen-1] != '\0')
-				{
-					int len = 0;
-					for(len = 0; len < nDataLen && cData[len] != '\0'; len++ )
-					{
-					}
-					// if it is not null terminated, skip this item
-					if(len >= nDataLen)
-						continue;
-				}
-
-				csNewText += (LPSTR)cData;
-				csNewText += lpSep;
-
-				bRet = true;
 			}
 		}
-	}
-	CATCH_SQLITE_EXCEPTION
-	catch(...  ) 
-	{
-	}
 
-	return bRet;
+		CLIPFORMAT Format;
+		POSITION pos = RenderTypes.GetStartPosition();
+		while(pos)
+		{
+			RenderTypes.GetNextAssoc(pos, Format, lCount);
+			if(lCount == IDCount)
+			{
+				types.Add(Format);
+			}			
+		}
+
+		//If there were no common types add the first clip
+		if(types.GetSize() <= 0)
+		{
+			CClip::LoadTypes(ElementAt(0), types);
+		}
+	}
 }
- 
-bool CClipIDs::AggregateUnicodeText(UINT cfType, CStringW cWSep, BOOL bReverse, CStringW &csWNewString)
+
+bool CClipIDs::AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bReverse)
 {
 	CString csSQL;
 	LPWSTR Text = NULL;
@@ -117,7 +131,7 @@ bool CClipIDs::AggregateUnicodeText(UINT cfType, CStringW cWSep, BOOL bReverse, 
 	int numIDs = GetSize();
 	int* pIDs = GetData();
 	bool bRet = false;
-	
+
 	try
 	{
 		int nIndex;
@@ -128,52 +142,38 @@ bool CClipIDs::AggregateUnicodeText(UINT cfType, CStringW cWSep, BOOL bReverse, 
 			{
 				nIndex = numIDs - i - 1;
 			}
-			
+
 			csSQL.Format(_T("SELECT * FROM Data ")
 				_T("INNER JOIN Main ON Main.lID = Data.lParentID ")
 				_T("WHERE Data.strClipBoardFormat = '%s' ")
 				_T("AND Main.lID = %d"),
 				GetFormatName(cfType),
 				pIDs[nIndex]);
-			
+
 			CppSQLite3Query q = theApp.m_db.execQuery(csSQL);
-			
+
 			if(q.eof() == false)
 			{
 				int nDataLen = 0;
-				const unsigned char *cData = q.getBlobField(_T("ooData"), nDataLen);
-				if(cData == NULL)
+				LPVOID pData = (LPVOID)q.getBlobField(_T("ooData"), nDataLen);
+				if(pData == NULL)
 				{
 					continue;
 				}
-				
-				//Ensure it's null terminated
-				if(cData[nDataLen-1] != '\0')
+
+				if(Aggregator.AddClip(pData, nDataLen, i, numIDs))
 				{
-					int len = 0;
-					for(len = 0; len < nDataLen && cData[len] != '\0'; len++ )
-					{
-					}
-					// if it is not null terminated, skip this item
-					if(len >= nDataLen)
-						continue;
+					bRet = true;
 				}
-				
-				nTextSize += nDataLen;
-
-				csWNewString += (LPWSTR)cData;
-				csWNewString += cWSep;
-
-				bRet = true;
 			}
 		}
 	}
 	CATCH_SQLITE_EXCEPTION
-	catch(...)
+		catch(...)
 	{
 
 	}
-		
+
 	return bRet;
 }
 

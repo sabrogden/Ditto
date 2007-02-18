@@ -255,7 +255,7 @@ public:
 	void SetDelimiters(const CString& csDelim);
 
 	bool Next(CString& cs);
-	CString	Tail() const;
+	CString	Tail();
 };
 
 

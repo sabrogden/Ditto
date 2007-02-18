@@ -442,6 +442,15 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\CF_HDropAggregator.cpp">
+			</File>
+			<File
+				RelativePath=".\CF_TextAggregator.cpp">
+			</File>
+			<File
+				RelativePath=".\CF_UnicodeTextAggregator.cpp">
+			</File>
+			<File
 				RelativePath="Clip.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1055,6 +1064,9 @@
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\HTMLFormatAggregator.cpp">
 			</File>
 			<File
 				RelativePath="InternetUpdate.cpp">
@@ -1801,6 +1813,9 @@
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\RichTextAggregator.cpp">
 			</File>
 			<File
 				RelativePath=".\SaveAnimation.cpp">
@@ -2628,6 +2643,15 @@
 				RelativePath="BitmapHelper.h">
 			</File>
 			<File
+				RelativePath=".\CF_HDropAggregator.h">
+			</File>
+			<File
+				RelativePath=".\CF_TextAggregator.h">
+			</File>
+			<File
+				RelativePath=".\CF_UnicodeTextAggregator.h">
+			</File>
+			<File
 				RelativePath="Clip.h">
 			</File>
 			<File
@@ -2697,7 +2721,13 @@
 				RelativePath="GroupTree.h">
 			</File>
 			<File
+				RelativePath=".\HTMLFormatAggregator.h">
+			</File>
+			<File
 				RelativePath="HyperLink.h">
+			</File>
+			<File
+				RelativePath=".\IClipAggregator.h">
 			</File>
 			<File
 				RelativePath="InternetUpdate.h">
@@ -2767,6 +2797,9 @@
 			</File>
 			<File
 				RelativePath="Resource.h">
+			</File>
+			<File
+				RelativePath=".\RichTextAggregator.h">
 			</File>
 			<File
 				RelativePath=".\SaveAnimation.h">
@@ -2936,7 +2969,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Debug\focus.dll">
+				RelativePath="Release\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">
@@ -2963,7 +2996,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Release\focus.dll">
+				RelativePath="Debug\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">

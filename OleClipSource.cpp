@@ -2,6 +2,11 @@
 #include "CP_Main.h"
 #include "OleClipSource.h"
 #include "TextConvert.h"
+#include "CF_HDropAggregator.h"
+#include "CF_UnicodeTextAggregator.h"
+#include "CF_TextAggregator.h"
+#include "richtextaggregator.h"
+#include "htmlformataggregator.h"
 
 /*------------------------------------------------------------------*\
 COleClipSource
@@ -44,7 +49,52 @@ BOOL COleClipSource::DoImmediateRender()
 	if(count <= 0)
 		return 0;
 
-	if(count == 1)
+	BOOL bProcessedMult = FALSE;
+
+	if(count > 1)
+	{
+		CStringA SepA = CTextConvert::ConvertToChar(g_Opt.GetMultiPasteSeparator());
+		CCF_TextAggregator CFText(SepA);
+		if(m_ClipIDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		{
+			CacheGlobalData(CF_TEXT, CFText.GetHGlobal());
+			bProcessedMult = TRUE;
+		}
+
+		CStringW SepW = CTextConvert::ConvertToUnicode(g_Opt.GetMultiPasteSeparator());
+		CCF_UnicodeTextAggregator CFUnicodeText(SepW);
+		if(m_ClipIDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		{
+			CacheGlobalData(CF_UNICODETEXT, CFUnicodeText.GetHGlobal());
+			bProcessedMult = TRUE;
+		}
+
+		if(m_bOnlyPaste_CF_TEXT == false)
+		{
+			CCF_HDropAggregator HDrop;
+			if(m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+			{
+				CacheGlobalData(CF_HDROP, HDrop.GetHGlobal());
+				bProcessedMult = TRUE;
+			}
+
+			CRichTextAggregator RichText(SepA);
+			if(m_ClipIDs.AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+			{
+				CacheGlobalData(theApp.m_RTFFormat, RichText.GetHGlobal());
+				bProcessedMult = TRUE;
+			}
+
+			CHTMLFormatAggregator Html(SepA);
+			if(m_ClipIDs.AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+			{
+				CacheGlobalData(theApp.m_HTML_Format, Html.GetHGlobal());
+				bProcessedMult = TRUE;
+			}
+		}
+	}
+
+	if(count >= 1 && bProcessedMult == FALSE)
 	{
 		CClip clip;
 		CClipFormats formats;
@@ -52,37 +102,9 @@ BOOL COleClipSource::DoImmediateRender()
 		clip.LoadFormats(m_ClipIDs[0], m_bOnlyPaste_CF_TEXT);
 		
 		return PutFormatOnClipboard(&clip.m_Formats, m_bPasteHTMLFormatAs_CF_TEXT);
-	}
-	
-	HGLOBAL hGlobal;
+	}		
 
-	CStringA csAText;
-	if(m_ClipIDs.AggregateText(CF_TEXT, "\r\n", g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop, csAText))
-	{
-		long lLen = csAText.GetLength();
-		hGlobal = NewGlobalP(csAText.GetBuffer(lLen), lLen+sizeof(char));
-		csAText.ReleaseBuffer();
-		CacheGlobalData(CF_TEXT, hGlobal);
-	}
-	
-	CStringW Sep = _T("\r\n");
-	CStringW csWText;
-	if(m_ClipIDs.AggregateUnicodeText(CF_UNICODETEXT, Sep, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop, csWText))
-	{
-		long lLen = csWText.GetLength() * sizeof(wchar_t);
-		hGlobal = NewGlobalP(csWText.GetBuffer(lLen), lLen+sizeof(wchar_t));
-		csWText.ReleaseBuffer();
-		CacheGlobalData(CF_UNICODETEXT, hGlobal);
-	}
-
-//	text = "{\rtf1";
-//	text += m_ClipIDs.AggregateText(GetFormatID(CF_RTF), "\r\n", true);
-//	text += "}";
-//	
-//	hGlobal = NewGlobalP((void*)(LPCSTR) text, text.GetLength()+1);
-//	CacheGlobalData(GetFormatID(CF_RTF), hGlobal);
-
-	return hGlobal != 0;
+	return bProcessedMult;
 }
 
 long COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats, bool bPasteHTMLFormatAs_CF_TEXT)

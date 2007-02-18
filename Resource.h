@@ -211,7 +211,9 @@
 #define IDC_WIN_CUT_1                   2087
 #define IDC_BUFFER_GROUP_1              2088
 #define IDC_COPY_2                      2089
+#define IDC_EDIT_CLIP_SEPARATOR         2089
 #define IDC_WIN_COPY_2                  2090
+#define IDC_STATIC_CLIP_SEPARATOR       2090
 #define IDC_PASTE_2                     2091
 #define IDC_WIN_PASTE_2                 2092
 #define IDC_STATIC_COPY_2               2093
@@ -329,7 +331,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        167
 #define _APS_NEXT_COMMAND_VALUE         32871
-#define _APS_NEXT_CONTROL_VALUE         2089
+#define _APS_NEXT_CONTROL_VALUE         2091
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

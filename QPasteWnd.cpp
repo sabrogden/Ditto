@@ -574,6 +574,11 @@ BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_TEXT
 	
 	if(count == 1)
 		return OpenID(IDs[0], bOnlyLoad_CF_TEXT, bPasteHTMLAs_CF_TEXT);
+
+	if(GetKeyState(VK_SHIFT) & 0x8000)
+	{
+		bOnlyLoad_CF_TEXT = true;
+	}
 	
 	CProcessPaste paste;
 

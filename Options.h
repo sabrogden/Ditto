@@ -346,6 +346,9 @@ public:
 
 	static void		GetCopyBufferItem(int nPos, CCopyBufferItem &Item);
 	static void		SetCopyBufferItem(int nPos, CCopyBufferItem &Item);
+
+	static CString  GetMultiPasteSeparator(bool bConvertToLineFeeds = true);
+	static void		SetMultiPasteSeparator(CString csSep);
 };
 
 // global for easy access and for initialization of fast access variables

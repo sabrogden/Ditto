@@ -1063,12 +1063,12 @@ bool CTokenizer::Next(CString& cs)
 	return true;
 }
 
-CString	CTokenizer::Tail() const
+CString	CTokenizer::Tail()
 {
 	int len = m_cs.GetLength();
 	int nCurPos = m_nCurPos;
 	
-	while(nCurPos < len && m_delim[static_cast<BYTE>(m_cs[nCurPos])])
+	while(nCurPos < len && m_delim.Find(m_cs[nCurPos]))
 		++nCurPos;
 	
 	CString csResult;

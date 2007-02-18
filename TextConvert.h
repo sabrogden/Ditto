@@ -14,6 +14,7 @@ public:
 	static CStringW MultiByteToUnicodeString(const CStringA &srcString);
 
 	static CStringA ConvertToChar(const CString &src);
+	static CStringW ConvertToUnicode(const CString &src);
 
 protected:
 };

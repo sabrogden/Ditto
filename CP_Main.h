@@ -174,6 +174,7 @@ public:
 	CLIPFORMAT m_PingFormat;
 	CLIPFORMAT m_HTML_Format;
 	CLIPFORMAT m_RemoteCF_HDROP;
+	CLIPFORMAT m_RTFFormat;
 
 	COleDateTime m_oldtStartUp;
 

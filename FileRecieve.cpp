@@ -224,7 +224,7 @@ HGLOBAL CFileRecieve::CreateCF_HDROPBuffer()
 	{
 		STRCPY(pCurrent, (LPCTSTR)m_RecievedFiles[n]);
 
-		pCurrent += m_RecievedFiles[n].GetLength()*sizeof(TCHAR); 
+		pCurrent += m_RecievedFiles[n].GetLength(); 
 		*pCurrent = 0;
 		pCurrent++;
 	}
