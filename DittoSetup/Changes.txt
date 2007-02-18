@@ -6,6 +6,7 @@
 - Added "Word Wrap" setting in clip editor
 - When searching in a group only search the clips in that group.
 - Hide apply button in options.  The button didn't do anything.
+- Don't underline the character following an ampersand(&) when displaying clip text.
 
 
 3.9.0.0    8-03-06

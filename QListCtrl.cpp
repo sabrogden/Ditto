@@ -482,14 +482,14 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			pDC->Draw3dRect(rectSym, GetSysColor(COLOR_3DLIGHT), GetSysColor(COLOR_3DDKSHADOW));
 			//		COLORREF crOld = pDC->SetTextColor(GetSysColor(COLOR_INFOTEXT));
 			COLORREF crOld = pDC->SetTextColor(RGB(255, 255, 255));
-			pDC->DrawText(strSymbols, rectSym, DT_VCENTER | DT_EXPANDTABS);
+			pDC->DrawText(strSymbols, rectSym, DT_VCENTER|DT_EXPANDTABS|DT_NOPREFIX);
 			pDC->SetTextColor(crOld);
 
 			rcText.left += rectSym.Width() + 2;
 		}
 		
 		if(DrawText(nItem, rcText, pDC) == FALSE)
-			pDC->DrawText(csText, rcText, DT_VCENTER | DT_EXPANDTABS);
+			pDC->DrawText(csText, rcText, DT_VCENTER|DT_EXPANDTABS|DT_NOPREFIX);
 		
         // Draw a focus rect around the item if necessary.
         if(bListHasFocus && (rItem.state & LVIS_FOCUSED))
