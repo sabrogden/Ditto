@@ -237,7 +237,7 @@ void CMainFrame::OnFirstExit()
 
 LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 {
-	if(wParam == theApp.m_pDittoHotKey->m_Atom)
+	if(theApp.m_pDittoHotKey && wParam == theApp.m_pDittoHotKey->m_Atom)
 	{
 		if(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown && QuickPaste.IsWindowVisibleEx())
 		{
@@ -249,7 +249,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 			QuickPaste.ShowQPasteWnd(this, false, true, FALSE);
 		}		
 	}
-	else if(wParam == theApp.m_pNamedCopy->m_Atom)
+	else if(theApp.m_pNamedCopy && wParam == theApp.m_pNamedCopy->m_Atom)
 	{
 		if(g_Opt.m_bU3 == false)
 		{
@@ -259,7 +259,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
-	else if(wParam == theApp.m_pNamedPaste->m_Atom)
+	else if(theApp.m_pNamedPaste && wParam == theApp.m_pNamedPaste->m_Atom)
 	{
 		if(g_Opt.m_bU3 == false)
 		{
@@ -268,79 +268,79 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
-	else if(wParam == theApp.m_pPosOne->m_Atom)
+	else if(theApp.m_pPosOne && wParam == theApp.m_pPosOne->m_Atom)
 	{
 		DoFirstTenPositionsPaste(0);
 	}
-	else if(wParam == theApp.m_pPosTwo->m_Atom)
+	else if(theApp.m_pPosTwo && wParam == theApp.m_pPosTwo->m_Atom)
 	{
 		DoFirstTenPositionsPaste(1);
 	}
-	else if(wParam == theApp.m_pPosThree->m_Atom)
+	else if(theApp.m_pPosThree && wParam == theApp.m_pPosThree->m_Atom)
 	{
 		DoFirstTenPositionsPaste(2);
 	}
-	else if(wParam == theApp.m_pPosFour->m_Atom)
+	else if(theApp.m_pPosFour && wParam == theApp.m_pPosFour->m_Atom)
 	{
 		DoFirstTenPositionsPaste(3);
 	}
-	else if(wParam == theApp.m_pPosFive->m_Atom)
+	else if(theApp.m_pPosFive && wParam == theApp.m_pPosFive->m_Atom)
 	{
 		DoFirstTenPositionsPaste(4);
 	}
-	else if(wParam == theApp.m_pPosSix->m_Atom)
+	else if(theApp.m_pPosSix && wParam == theApp.m_pPosSix->m_Atom)
 	{
 		DoFirstTenPositionsPaste(5);
 	}
-	else if(wParam == theApp.m_pPosSeven->m_Atom)
+	else if(theApp.m_pPosSeven && wParam == theApp.m_pPosSeven->m_Atom)
 	{
 		DoFirstTenPositionsPaste(6);
 	}
-	else if(wParam == theApp.m_pPosEight->m_Atom)
+	else if(theApp.m_pPosEight && wParam == theApp.m_pPosEight->m_Atom)
 	{
 		DoFirstTenPositionsPaste(7);
 	}
-	else if(wParam == theApp.m_pPosNine->m_Atom)
+	else if(theApp.m_pPosNine && wParam == theApp.m_pPosNine->m_Atom)
 	{
 		DoFirstTenPositionsPaste(8);
 	}
-	else if(wParam == theApp.m_pPosTen->m_Atom)
+	else if(theApp.m_pPosTen && wParam == theApp.m_pPosTen->m_Atom)
 	{
 		DoFirstTenPositionsPaste(9);
 	}
-	else if(wParam == theApp.m_pCopyBuffer1->m_Atom)
+	else if(theApp.m_pCopyBuffer1 && wParam == theApp.m_pCopyBuffer1->m_Atom)
 	{
 		theApp.m_CopyBuffer.StartCopy(0);
 	}
-	else if(wParam == theApp.m_pPasteBuffer1->m_Atom)
+	else if(theApp.m_pPasteBuffer1 && wParam == theApp.m_pPasteBuffer1->m_Atom)
 	{
 		theApp.m_CopyBuffer.PastCopyBuffer(0);
 	}
-	else if(wParam == theApp.m_pCutBuffer1->m_Atom)
+	else if(theApp.m_pCutBuffer1 && wParam == theApp.m_pCutBuffer1->m_Atom)
 	{
 		theApp.m_CopyBuffer.StartCopy(0, true);
 	}
-	else if(wParam == theApp.m_pCopyBuffer2->m_Atom)
+	else if(theApp.m_pCopyBuffer2 && wParam == theApp.m_pCopyBuffer2->m_Atom)
 	{
 		theApp.m_CopyBuffer.StartCopy(1);
 	}
-	else if(wParam == theApp.m_pPasteBuffer2->m_Atom)
+	else if(theApp.m_pPasteBuffer2 && wParam == theApp.m_pPasteBuffer2->m_Atom)
 	{
 		theApp.m_CopyBuffer.PastCopyBuffer(1);
 	}
-	else if(wParam == theApp.m_pCutBuffer2->m_Atom)
+	else if(theApp.m_pCutBuffer2 && wParam == theApp.m_pCutBuffer2->m_Atom)
 	{
 		theApp.m_CopyBuffer.StartCopy(1, true);
 	}
-	else if(wParam == theApp.m_pCopyBuffer3->m_Atom)
+	else if(theApp.m_pCopyBuffer3 && wParam == theApp.m_pCopyBuffer3->m_Atom)
 	{
 		theApp.m_CopyBuffer.StartCopy(2);
 	}
-	else if(wParam == theApp.m_pPasteBuffer3->m_Atom)
+	else if(theApp.m_pPasteBuffer3 && wParam == theApp.m_pPasteBuffer3->m_Atom)
 	{	
 		theApp.m_CopyBuffer.PastCopyBuffer(2);
 	}
-	else if(wParam == theApp.m_pCutBuffer3->m_Atom)
+	else if(theApp.m_pCutBuffer3 && wParam == theApp.m_pCutBuffer3->m_Atom)
 	{
 		theApp.m_CopyBuffer.StartCopy(2, true);
 	}

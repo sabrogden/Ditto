@@ -4,6 +4,9 @@
 #include "Misc.h"
 #include "TextConvert.h"
 #include "sqlite\CppSQLite3.h"
+#include "Path.h"
+
+using namespace nsPath;
 
 UINT WritePrivateProfileInt(LPCTSTR lpAppName, LPCTSTR lpKeyName, INT nValue, LPCTSTR lpFileName)
 {
@@ -759,8 +762,23 @@ BOOL CGetSetOptions::SetDBPath(CString csPath)
 
 CString CGetSetOptions::GetDBPath()
 {
-	//First check the reg string
-	CString csDBPath = GetProfileString("DBPath3", "");
+	CString csDBPath;
+	if(m_bU3)
+	{
+		csDBPath = GetProfileString("DBPath3", "");
+		if(csDBPath.IsEmpty())
+		{
+			csDBPath = GetDefaultDBName();
+		}
+
+		CPath ExistingPath(csDBPath);
+		csDBPath = CGetSetOptions::GetPath(PATH_DATABASE);
+		csDBPath += ExistingPath.GetName();
+	}
+	else
+	{
+		csDBPath = GetProfileString("DBPath3", "");
+	}
 
 	return csDBPath;
 }
