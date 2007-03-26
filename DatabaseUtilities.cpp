@@ -74,25 +74,32 @@ CString GetDefaultDBName()
 	}
 	else
 	{	
-		LPMALLOC pMalloc;
-		
-		if(SUCCEEDED(::SHGetMalloc(&pMalloc))) 
-		{ 
-			LPITEMIDLIST pidlPrograms;
-			
-			SHGetSpecialFolderLocation(NULL, CSIDL_APPDATA, &pidlPrograms);
-			
-			TCHAR string[MAX_PATH];
-			SHGetPathFromIDList(pidlPrograms, string);
-			
-			pMalloc->Free(pidlPrograms);
-			pMalloc->Release();
-			
-			csDefaultPath = string;		
+		if(CGetSetOptions::GetIsPortableDitto())
+		{
+			csDefaultPath.Empty();
 		}
+		else
+		{
+			LPMALLOC pMalloc;
+		
+			if(SUCCEEDED(::SHGetMalloc(&pMalloc))) 
+			{ 
+				LPITEMIDLIST pidlPrograms;
+				
+				SHGetSpecialFolderLocation(NULL, CSIDL_APPDATA, &pidlPrograms);
+				
+				TCHAR string[MAX_PATH];
+				SHGetPathFromIDList(pidlPrograms, string);
+				
+				pMalloc->Free(pidlPrograms);
+				pMalloc->Release();
+				
+				csDefaultPath = string;		
+			}
 
-		FIX_CSTRING_PATH(csDefaultPath);
-		csDefaultPath += "Ditto\\";
+			FIX_CSTRING_PATH(csDefaultPath);
+			csDefaultPath += "Ditto\\";
+		}
 	}
 
 	if(FileExists(csDefaultPath) == FALSE)
@@ -117,7 +124,7 @@ BOOL CheckDBExists(CString csDBPath)
 	{
 		csDBPath = GetDefaultDBName();
 
-		if(FileExists(csDBPath) == FALSE)
+		if(FileExists(csDBPath) == FALSE && CGetSetOptions::GetIsPortableDitto() == FALSE)
 		{
 			CString csOldDB = CGetSetOptions::GetDBPathOld();
 			if(csOldDB.IsEmpty())

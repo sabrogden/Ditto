@@ -75,28 +75,31 @@ CGetSetOptions::~CGetSetOptions()
 
 void CGetSetOptions::LoadSettings()
 {
-	m_csIniFileName = GetIniFileName();
+	m_csIniFileName = GetIniFileName(false);
 
 	if(m_bU3)
-		m_bFromIni = true;
-
-	if(!m_bU3)
 	{
-//		m_bInConversion = true;
-//
-//		//If there is a variable in the registry for the db path but no .ini file
-//		//then we need to convert the registry settings to .ini settings
-//
-//		CString csDB = GetDBPath();
-//		if(csDB.IsEmpty())
-//			csDB = GetDBPathOld();
-//		if(csDB.IsEmpty() == FALSE && FileExists(m_csIniFileName) == FALSE)
-//		{
-//			ConverSettingsToIni();
-//		}
-//
-//		m_bInConversion = false;
+		m_bFromIni = true;
 	}
+	else
+	{
+		//First check to see if they have an ini file in my docs&settings - ditto
+		if(FileExists(m_csIniFileName))
+		{
+			m_bFromIni = true;
+		}
+		else
+		{
+			//next check if they have an ini file in the application directory
+			m_csIniFileName = GetIniFileName(true);
+			if(FileExists(m_csIniFileName))
+			{
+				m_bFromIni = true;
+			}
+		}
+	}
+
+	GetSetCurrentDirectory();
 
 	m_nLinesPerRow = GetLinesPerRow();
 	m_bUseCtrlNumAccel = GetUseCtrlNumForFirstTenHotKeys();
@@ -292,7 +295,7 @@ void CGetSetOptions::ConverSettingsToIni()
 	m_bInConversion = false;
 }
 
-CString CGetSetOptions::GetIniFileName()
+CString CGetSetOptions::GetIniFileName(bool bLocalIniFile)
 {
 	CString csPath = _T("c:\\program files\\Ditto\\");
 
@@ -302,24 +305,31 @@ CString CGetSetOptions::GetIniFileName()
 	}
 	else
 	{	
-		LPMALLOC pMalloc;
-
-		if(SUCCEEDED(::SHGetMalloc(&pMalloc))) 
-		{ 
-			LPITEMIDLIST pidlPrograms;
-
-			SHGetSpecialFolderLocation(NULL, CSIDL_APPDATA, &pidlPrograms);
-
-			TCHAR string[MAX_PATH];
-			SHGetPathFromIDList(pidlPrograms, string);
-
-			pMalloc->Free(pidlPrograms);
-			pMalloc->Release();
-
-			csPath = string;		
+		if(bLocalIniFile)
+		{
+			csPath = GetFilePath(GetExeFileName());
 		}
-		FIX_CSTRING_PATH(csPath);
-		csPath += "Ditto\\";
+		else
+		{
+			LPMALLOC pMalloc;
+
+			if(SUCCEEDED(::SHGetMalloc(&pMalloc))) 
+			{ 
+				LPITEMIDLIST pidlPrograms;
+
+				SHGetSpecialFolderLocation(NULL, CSIDL_APPDATA, &pidlPrograms);
+
+				TCHAR string[MAX_PATH];
+				SHGetPathFromIDList(pidlPrograms, string);
+
+				pMalloc->Free(pidlPrograms);
+				pMalloc->Release();
+
+				csPath = string;		
+			}
+			FIX_CSTRING_PATH(csPath);
+			csPath += "Ditto\\";
+		}
 	}
 
 	if(FileExists(csPath) == FALSE)
@@ -1687,4 +1697,22 @@ CString CGetSetOptions::GetMultiPasteSeparator(bool bConvertToLineFeeds)
 void CGetSetOptions::SetMultiPasteSeparator(CString csSep)
 {
 	SetProfileString(_T("MultiPasteSeparator"), csSep);
+}
+
+BOOL CGetSetOptions::GetSetCurrentDirectory()
+{
+	BOOL bRet = GetProfileLong(_T("SetCurrentDirectory"), FALSE);
+	if(bRet)
+	{
+		CString csExePath = GetFilePath(GetExeFileName());
+		FIX_CSTRING_PATH(csExePath);
+		::SetCurrentDirectory(csExePath);
+	}
+
+	return bRet;
+}
+
+bool CGetSetOptions::GetIsPortableDitto()
+{
+	return GetProfileLong(_T("Portable"), FALSE) == TRUE;
 }

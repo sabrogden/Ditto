@@ -68,7 +68,7 @@ public:
 	static bool m_bU3;
 
 	static void LoadSettings();
-	static CString GetIniFileName();
+	static CString GetIniFileName(bool bLocalIniFile);
 	static void ConverSettingsToIni();
 
 	static CString GetExeFileName();
@@ -349,6 +349,10 @@ public:
 
 	static CString  GetMultiPasteSeparator(bool bConvertToLineFeeds = true);
 	static void		SetMultiPasteSeparator(CString csSep);
+
+	static BOOL		GetSetCurrentDirectory();
+
+	static bool		GetIsPortableDitto();
 };
 
 // global for easy access and for initialization of fast access variables
