@@ -208,6 +208,11 @@ BOOL CCP_MainApp::InitInstance()
 		csMutex += " ";
 		csMutex += GETENV(_T("U3_DEVICE_SERIAL"));
 	}
+	else if(g_Opt.GetIsPortableDitto())
+	{
+		csMutex += " ";
+		csMutex += g_Opt.GetExeFileName();
+	}
 
 	m_hMutex = CreateMutex(NULL, FALSE, csMutex);
 	DWORD dwError = GetLastError();

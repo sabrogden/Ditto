@@ -74,6 +74,7 @@ CString GetDefaultDBName()
 	}
 	else
 	{	
+		//If portable then default to the running path
 		if(CGetSetOptions::GetIsPortableDitto())
 		{
 			csDefaultPath.Empty();
