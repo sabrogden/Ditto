@@ -3,8 +3,8 @@
 
 [Setup]
 AppName=Portable Ditto
-AppVerName=Ditto Portable 3.14.0.0
-OutputBaseFilename=DittoPortableSetup_3_14_0_0
+AppVerName=Ditto Portable 3.15.0.0
+OutputBaseFilename=DittoPortableSetup_3_15_0_0
 AppPublisher=Scott Brogden
 AppPublisherURL=ditto-cp.sourceforge.net
 AppSupportURL=ditto-cp.sourceforge.net

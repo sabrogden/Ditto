@@ -255,7 +255,35 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 		{
 			if(theApp.m_QuickPasteMode == CCP_MainApp::NONE_QUICK_PASTE)
 			{
-				
+				theApp.m_QuickPasteMode = CCP_MainApp::ADDING_QUICK_PASTE;
+
+				theApp.SendCopy();
+
+				m_pTypingToolTip = new CToolTipEx;
+				m_pTypingToolTip->Create(this);
+
+				csTypeToolTipTitle = theApp.m_Language.GetString("Named_Copy_Title", "Ditto - Named Copy");
+
+				m_pTypingToolTip->SetToolTipText(csTypeToolTipTitle);
+
+				CRect rcScreen;
+				GetMonitorRect(0, &rcScreen);
+
+				m_ToolTipPoint = GetFocusedCaretPos();
+				if(m_ToolTipPoint.x < 0 || m_ToolTipPoint.y < 0)
+				{
+					CRect cr;
+					::GetWindowRect(theApp.m_hTargetWnd, cr);
+					m_ToolTipPoint = cr.CenterPoint();
+				}
+				m_ToolTipPoint.Offset(-15, 15);
+				m_pTypingToolTip->Show(m_ToolTipPoint);
+
+				//If they don't type anything for 2 seconds stop looking
+				SetTimer(STOP_LOOKING_FOR_KEYBOARD, 20000, NULL);
+
+				MonitorKeyboardChanges(m_hWnd, WM_FOCUS_CHANGED+1);
+				SetCaptureKeys(true);
 			}
 		}
 	}
@@ -265,6 +293,31 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 		{
 			if(theApp.m_QuickPasteMode == CCP_MainApp::NONE_QUICK_PASTE)
 			{
+				theApp.m_QuickPasteMode = CCP_MainApp::PASTING_QUICK_PASTE;
+
+				m_pTypingToolTip = new CToolTipEx;
+				m_pTypingToolTip->Create(this);
+
+				csTypeToolTipTitle = theApp.m_Language.GetString("Named_Paste_Title", "Ditto - Named Paste");
+				m_pTypingToolTip->SetToolTipText(csTypeToolTipTitle);
+
+				CRect rcScreen;
+
+				m_ToolTipPoint = GetFocusedCaretPos();
+				if(m_ToolTipPoint.x < 0 || m_ToolTipPoint.y < 0)
+				{
+					CRect cr;
+					::GetWindowRect(theApp.m_hTargetWnd, cr);
+					m_ToolTipPoint = cr.CenterPoint();
+				}
+				m_ToolTipPoint.Offset(-15, 15);
+				m_pTypingToolTip->Show(m_ToolTipPoint);
+
+				//If they don't type anything for 2 seconds stop looking
+				SetTimer(STOP_LOOKING_FOR_KEYBOARD, 20000, NULL);
+
+				MonitorKeyboardChanges(m_hWnd, WM_FOCUS_CHANGED+1);
+				SetCaptureKeys(true);
 			}
 		}
 	}
