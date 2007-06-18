@@ -42,7 +42,7 @@ Source: "..\Debug\Language\*"; DestDir: "{app}\Language";
 Source: "mfc-crt\*"; DestDir: "{app}"
 
 ;portable app settings stored in an .ini file
-Source: "Ditto.Settings"; DestDir: "{app}"
+Source: "Ditto.Settings"; DestDir: "{app}"; Flags: onlyifdoesntexist
 
 ;Add help files
 Source: "..\Help\*.htm"; DestDir: "{app}\Help"; Flags: ignoreversion
@@ -52,6 +52,8 @@ Filename: "{app}\Ditto.exe"; Description: "Launch Ditto"; Flags: nowait postinst
 Filename: "{app}\Help\DittoGettingStarted.htm"; Description: "View Help"; Flags: nowait postinstall skipifsilent shellexec
 Filename: "{app}\Changes.txt"; Description: "View Change History"; Flags: nowait postinstall skipifsilent shellexec unchecked
 
+[INI]
+Filename: "{app}\Ditto.Settings"; Section: "Ditto"; Key: "LanguageFile"; String: {language}
 
 [Code]
 procedure BeforeFocusInstall();

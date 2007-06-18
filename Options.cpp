@@ -1716,3 +1716,13 @@ bool CGetSetOptions::GetIsPortableDitto()
 {
 	return GetProfileLong(_T("Portable"), FALSE) == TRUE;
 }
+
+BOOL CGetSetOptions::GetEditWordWrap()
+{
+	return GetProfileLong(_T("EditWordWrap"), TRUE);
+}
+
+void CGetSetOptions::SetEditWordWrap(BOOL bSet)
+{
+	SetProfileLong(_T("EditWordWrap"), bSet);
+}

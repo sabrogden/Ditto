@@ -47,6 +47,7 @@
 #include "StdGrfx.h"
 #include "RulerRichEditCtrl.h"
 #include "TextFile/TextFile.h"
+#include "..\Options.h"
 
 #include "ids.h"
 #include ".\rulerricheditctrl.h"
@@ -166,7 +167,7 @@ CRulerRichEditCtrl::CRulerRichEditCtrl() : m_pen( PS_DOT, 0, RGB( 0, 0, 0 ) )
 	m_movingtab = -1;
 	m_offset = 0;
 	m_readOnly = FALSE;
-	m_bInWrapMode = FALSE;
+	m_bInWrapMode = g_Opt.GetEditWordWrap();
 	ShowToolbar();
 	ShowRuler();
 
@@ -229,7 +230,6 @@ BOOL CRulerRichEditCtrl::Create( DWORD dwStyle, const RECT &rect, CWnd* pParentW
 			{
 				if( CreateRuler() )
 				{
-
 					UpdateToolbarButtons();
 					result = TRUE;
 				}
@@ -259,7 +259,6 @@ BOOL CRulerRichEditCtrl::CreateToolbar()
 
 	CRect toolbarRect( 0, 0, rect.right, TOOLBAR_HEIGHT );
 	return m_toolbar.Create( this, toolbarRect );
-
 }
 
 BOOL CRulerRichEditCtrl::CreateRuler()
@@ -275,13 +274,11 @@ BOOL CRulerRichEditCtrl::CreateRuler()
 
    ============================================================*/
 {
-
 	CRect rect;
 	GetClientRect( rect );
 
 	CRect rulerRect( 0, TOOLBAR_HEIGHT, rect.right, TOOLBAR_HEIGHT + RULER_HEIGHT );
 	return m_ruler.Create( rulerRect, this, RULER_CONTROL );
-
 }
 
 BOOL CRulerRichEditCtrl::CreateRTFControl( BOOL autohscroll )
@@ -300,7 +297,6 @@ BOOL CRulerRichEditCtrl::CreateRTFControl( BOOL autohscroll )
 
    ============================================================*/
 {
-
 	BOOL result = FALSE;
 
 	CRect rect;
@@ -340,7 +336,6 @@ BOOL CRulerRichEditCtrl::CreateRTFControl( BOOL autohscroll )
 	}
 
 	return result;
-
 }
 
 void CRulerRichEditCtrl::CreateMargins()
@@ -357,7 +352,6 @@ void CRulerRichEditCtrl::CreateMargins()
 
    ============================================================*/
 {
-
 	// Set up edit rect margins
 	int scmargin = 4;
 	CRect rc;
@@ -383,7 +377,6 @@ void CRulerRichEditCtrl::CreateMargins()
 	// controls and the ruler.
 	m_margin = scmargin * 2 + r2.left - r1.left;
 	m_ruler.SetMargin( m_margin );
-
 }
 
 BEGIN_MESSAGE_MAP(CRulerRichEditCtrl, CWnd)
@@ -413,6 +406,7 @@ BEGIN_MESSAGE_MAP(CRulerRichEditCtrl, CWnd)
 	ON_REGISTERED_MESSAGE(urm_SETCURRENTFONTSIZE, OnSetCurrentFontSize)
 	ON_REGISTERED_MESSAGE(urm_SETCURRENTFONTCOLOR, OnSetCurrentFontColor)
 	//}}AFX_MSG_MAP
+	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1664,7 +1658,6 @@ void CRulerRichEditCtrl::DoColor()
 	CColorDialog dlg( clr );
 	if( dlg.DoModal() == IDOK )
 	{
-
 		// Apply new color
 		cf.dwMask = CFM_COLOR;
 		cf.dwEffects = 0;
@@ -1686,13 +1679,14 @@ void CRulerRichEditCtrl::DoWrap()
 		m_rtf.SetTargetDevice(NULL, 1);
 		m_bInWrapMode = false;
 	}
-
 	else
 	{
 		// Turn on word wrap.
 		m_rtf.SetTargetDevice(NULL, 0); 
 		m_bInWrapMode = true;
 	}
+
+	g_Opt.SetEditWordWrap(m_bInWrapMode);
 
 	m_toolbar.CheckButton(ID_BUTTONWRAP, !m_toolbar.IsButtonChecked(ID_BUTTONWRAP));
 }
@@ -1734,7 +1728,7 @@ void CRulerRichEditCtrl::DoItalic()
 	Usage :			Call to toggle the selected text to/from 
 					italic.
 
-   ============================================================*/
+   ===========================================================  =*/
 {
 
 	m_toolbar.CheckButton( BUTTON_ITALIC, !m_toolbar.IsButtonChecked( BUTTON_ITALIC ) );
@@ -2112,6 +2106,13 @@ BOOL CRulerRichEditCtrl::PreTranslateMessage(MSG* pMsg)
 				return TRUE;
 			}
 			break;
+		case 'I':
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				DoItalic();
+				return TRUE;
+			}
+			break;
 		case 'B':
 			if(GetKeyState(VK_CONTROL) & 0x8000)
 			{
@@ -2123,6 +2124,27 @@ BOOL CRulerRichEditCtrl::PreTranslateMessage(MSG* pMsg)
 			if(GetKeyState(VK_CONTROL) & 0x8000)
 			{
 				DoUnderline();
+				return TRUE;
+			}
+			break;
+		case 'Z':
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				m_rtf.Undo();
+				return TRUE;
+			}
+			break;
+		case 'Y':
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				m_rtf.Redo();
+				return TRUE;
+			}
+			break;
+		case 'W':
+			if(GetKeyState(VK_CONTROL) & 0x8000)
+			{
+				DoWrap();
 				return TRUE;
 			}
 			break;

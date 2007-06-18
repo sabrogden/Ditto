@@ -353,6 +353,9 @@ public:
 	static BOOL		GetSetCurrentDirectory();
 
 	static bool		GetIsPortableDitto();
+
+	static BOOL		GetEditWordWrap();
+	static void		SetEditWordWrap(BOOL bSet);
 };
 
 // global for easy access and for initialization of fast access variables
