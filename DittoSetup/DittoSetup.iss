@@ -29,6 +29,7 @@ Name: "Portuguese"; MessagesFile: "Portuguese.isl"
 Name: "Spanish"; MessagesFile: "Spanish.isl"
 Name: "Polski"; MessagesFile: "Polish.isl"
 Name: "Dutch"; MessagesFile: "Dutch.isl"
+Name: "Swedish"; MessagesFile: "Swedish.isl"
 
 [Tasks]
 Name: RunAtStartup; Description: "Run Ditto on Windows Startup";
