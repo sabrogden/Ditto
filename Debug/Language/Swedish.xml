@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="Ascii"?>
+<Ditto_Language_File Version = "1" Author = "Ulf Swedjemark" Notes = "ulf.swedjemark@comhem.se">
+	<Ditto_Right_Click_Menu>
+		<Item English_Text = "Groups" ID = "-1">Grupper</Item>
+		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Ny grupp Ctrl-F7</Item>
+		<Item English_Text = "New Group Selection	F7" ID = "32812">Välj ny grupp</Item>
+		<Item English_Text = "Move to Group" ID = "32840">Flytta till grupp</Item>
+		<Item English_Text = "Quick Options" ID = "-1">Snabbval</Item>
+		<Item English_Text = "Lines Per Row" ID = "-1">Antal rader per led (row)</Item>
+		<Item English_Text = "1" ID = "32807">1</Item>
+		<Item English_Text = "2" ID = "32786">2</Item>
+		<Item English_Text = "3" ID = "32787">3</Item>
+		<Item English_Text = "4" ID = "32788">4</Item>
+		<Item English_Text = "5" ID = "32789">5</Item>
+		<Item English_Text = "Transparency" ID = "-1">Transparens</Item>
+		<Item English_Text = "None" ID = "32800">Ingen</Item>
+		<Item English_Text = "5 " ID = "32808">5</Item>
+		<Item English_Text = "10 " ID = "32792">10</Item>
+		<Item English_Text = "15 " ID = "32794">15</Item>
+		<Item English_Text = "20 " ID = "32796">20</Item>
+		<Item English_Text = "25 " ID = "32798">25</Item>
+		<Item English_Text = "30 " ID = "32799">30</Item>
+		<Item English_Text = "40 " ID = "32790">40</Item>
+		<Item English_Text = "Positioning" ID = "-1">Placering</Item>
+		<Item English_Text = "At Caret" ID = "32802">Vid markören (insättningspunkten)</Item>
+		<Item English_Text = "At Cursor" ID = "32803">Vid pekaren</Item>
+		<Item English_Text = "At Previous Position" ID = "32804">Vid föregående position</Item>
+		<Item English_Text = "First Ten Hot Keys" ID = "-1">De första tio snabbkommandona (hotkeys)</Item>
+		<Item English_Text = "Use Ctrl - Num" ID = "32777">Använd CTRL-Numeriskt tangentbord</Item>
+		<Item English_Text = "Show Hot Key Text" ID = "32778">Visa hotkey-text</Item>
+		<Item English_Text = "View Caption Bar On" ID = "-1">Visa beskrivningslista</Item>
+		<Item English_Text = "Top" ID = "32783">Högst upp</Item>
+		<Item English_Text = "Right" ID = "32780">Höger</Item>
+		<Item English_Text = "Bottom" ID = "32781">Nederst</Item>
+		<Item English_Text = "Left" ID = "32782">Vänster</Item>
+		<Item English_Text = "Sort" ID = "-1">Sortera</Item>
+		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">Stigande (senast använda högst upp)</Item>
+		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">Fallande (senast använda nederst)</Item>
+		<Item English_Text = "Double Clicking on Caption" ID = "-1">Dubbelklicka på beskrivningen</Item>
+		<Item English_Text = "Toggles Always on Top" ID = "32814">Kastar om vad som står i förgrunden: på/av</Item>
+		<Item English_Text = "Rolls-up Window" ID = "32815">Rullar upp fönster</Item>
+		<Item English_Text = "Toggles Always Show Description" ID = "32816">Kastar om 'Alltid visa beskrivning'</Item>
+		<Item English_Text = "Always on Top	Ctrl-Space" ID = "32784">Alltid synligt: Ctrl-blanksteg</Item>
+		<Item English_Text = "Auto Roll-up" ID = "32791">Automatisk fönsterrullning till högst upp</Item>
+		<Item English_Text = "Always Show Description" ID = "32813">Visa alltid beskrivning: på/av</Item>
+		<Item English_Text = "Prompt For New Group Names" ID = "32817">Fråga efter namn på ny grupp</Item>
+		<Item English_Text = "Select Font" ID = "32844">Välj font</Item>
+		<Item English_Text = "Show Thumbnails" ID = "32845">Visa thumbnails</Item>
+		<Item English_Text = "Draw RTF Text" ID = "32846">Infoga rtf-text</Item>
+		<Item English_Text = "Paste Clip after selection" ID = "32847">Klistra in efter val</Item>
+		<Item English_Text = "Find As You Type" ID = "32848">Hitta medan du skriver</Item>
+		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Hela fönstret synligt</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Visa urklipp som är i grupper i huvudlistan</Item>
+		<Item English_Text = "Sent To" ID = "-1">Skickat till</Item>
+		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824"> - samma dator</Item>
+		<Item English_Text = "View Full Description	F3" ID = "32793">Se fullständig beskrivning</Item>
+		<Item English_Text = "View Groups	Ctrl-G" ID = "32819">Se grupper: Ctrl-G</Item>
+		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">Klistra bara in oformaterad text: Shift-Enter</Item>
+		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">Klistra in html som oformaterad text</Item>
+		<Item English_Text = "Delete Entry	Del" ID = "32801">Ta bort klipp: Del</Item>
+		<Item English_Text = "Properties	Alt-Enter" ID = "32776">Egenskaper: Alt-Enter</Item>
+		<Item English_Text = "Quick Properties" ID = "-1">Snabbkommandon</Item>
+		<Item English_Text = "Never Auto Delete" ID = "32820">Ta aldrig bort automatiskt</Item>
+		<Item English_Text = "Auto Delete" ID = "32821">Ta bort automatiskt</Item>
+		<Item English_Text = "Remove Hot Key" ID = "32822">Ta bort hotkey</Item>
+		<Item English_Text = "Options..." ID = "32805">Inställningar...</Item>
+		<Item English_Text = "Help" ID = "32842">Hjälp</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "32775">Koppla bort Urklipp</Item>
+		<Item English_Text = "Exit Program" ID = "32806">Avsluta programmet</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt to Delete Clip" ID = "32852">Ta bort klipp</Item>	
+		<Item English_Text = "Import" ID = "32855">Importera</Item>
+		<Item English_Text = "Export" ID = "32853">Exportera</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">Ta bort snabbinklistring</Item>	
+		<Item English_Text = "Edit Clip" ID = "32860">Redigera klipp</Item>
+		<Item English_Text = "New Clip" ID = "32867">Nytt klipp</Item>	
+	</Ditto_Right_Click_Menu>
+	<Ditto_Clip_Properties>
+		<Item English_Text = "Hot Key" ID = "2039">Hotkey</Item>
+		<Item English_Text = "Date" ID = "2040">Datum</Item>
+		<Item English_Text = "&Never Auto Delete" ID = "1025">&Ta aldrig bort automatiskt</Item>
+		<Item English_Text = "Move To Group" ID = "2041">Flytta till grupp</Item>
+		<Item English_Text = "Item Title" ID = "2042">Namn på klippet</Item>
+		<Item English_Text = "Copy Formats" ID = "2029">Kopiera formatet</Item>
+		<Item English_Text = "Delete" ID = "1021">Ta bort</Item>
+		<Item English_Text = "OK" ID = "1">OK</Item>
+		<Item English_Text = "Cancel" ID = "2">Avbryt</Item>
+		<Item English_Text = "Copy Properties" ID = "-1">Kopiera egenskaper</Item>
+	</Ditto_Clip_Properties>
+	<Ditto_Options_General>
+		<Item English_Text = "Start Ditto on System Startup" ID = "2004">Starta Ditto vid uppstart</Item>
+		<Item English_Text = "Display Icon in System Tray" ID = "2003">Visa ikon i systemfältet</Item>
+		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Maxantal sparade klipp</Item>
+		<Item English_Text = "Paste Entries Expire after" ID = "2009">Inklistrade klipp tas bort efter</Item>
+		<Item English_Text = "Days" ID = "2043">Dagar</Item>
+		<Item English_Text = "Compact and Repair" ID = "1028">Komprimera och reparera</Item>
+		<Item English_Text = "Automatically check for updates online" ID = "1029">Sök automatiskt efter uppdateringar online</Item>
+		<Item English_Text = "Check Now" ID = "1030">Sök nu</Item>
+		<Item English_Text = "Allow Duplicates" ID = "1037">Tillåt duplikat</Item>
+		<Item English_Text = "Update Clip Time On Paste" ID = "1038">Uppdatera klippets datum efter inklistring</Item>
+		<Item English_Text = "Save Multi-Pastes" ID = "1039">Spara multi-inklistringar</Item>
+		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Dölj Ditto under hotkey om Ditto syns</Item>
+		<Item English_Text = "Amount of text to save for description" ID = "2044">Mått för textomfång att spara för beskrivning</Item>
+		<Item English_Text = "On copy play the sound" ID = "2045">Ljud vid kopiering</Item>
+		<Item English_Text = "Play" ID = "2034">Spela upp</Item>
+		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">Klistra in klipp i aktivt fönster efter val</Item>
+		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">Maxstorlek i bytes</Item>
+		<Item English_Text = "(Leave blank for no limit)" ID = "2047">(Tomt = ingen gräns)</Item>
+		<Item English_Text = "Set Database Path" ID = "1034">Ange sökväg</Item>
+		<Item English_Text = "Language" ID = "2069">Språk</Item>
+		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">Bortse från klipp som kommer x millisekunder (1000 ms = 1 sek) efter senaste klipp</Item>
+		<Item English_Text = "About Language" ID = "2073">Om språk</Item>
+		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Se till att Ditto alltid är kopplat till Urklipp</Item>
+		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Allmänt</Item>
+	</Ditto_Options_General>
+	<Ditto_Options_Supported_Types>
+		<Item English_Text = "&Add" ID = "1015">&Lägg till</Item>
+		<Item English_Text = "&Delete" ID = "1016">&Ta bort</Item>
+		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">Understödda typer</Item>
+	</Ditto_Options_Supported_Types>
+	<Ditto_Options_Shortcuts>
+		<Item English_Text = "Activate Ditto" ID = "2048">Aktivera Ditto</Item>
+		<Item English_Text = "Win" ID = "2035">Win</Item>
+		<Item English_Text = "Named Copy" ID = "2049">Namngivet klipp</Item>
+		<Item English_Text = "Win" ID = "2036">Win</Item>
+		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">Allmänna hotkeys för de tio senaste klippen</Item>
+		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Skicka klippet (annars laddas klippet bara i Urklipp)</Item>
+		<Item English_Text = "Position 1" ID = "2052">Position 1</Item>
+		<Item English_Text = "Position 2" ID = "2053">Position 2</Item>
+		<Item English_Text = "Position 3" ID = "2054">Position 3</Item>
+		<Item English_Text = "Position 4" ID = "2055">Position 4</Item>
+		<Item English_Text = "Position 5" ID = "2056">Position 5</Item>
+		<Item English_Text = "Position 6" ID = "2057">Position 6</Item>
+		<Item English_Text = "Position 7" ID = "2058">Position 7</Item>
+		<Item English_Text = "Position 8" ID = "2059">Position 8</Item>
+		<Item English_Text = "Position 9" ID = "2060">Position 9</Item>
+		<Item English_Text = "Position 10" ID = "2061">Position 10</Item>
+		<Item English_Text = "Win" ID = "2042">Win</Item>
+		<Item English_Text = "Win" ID = "2043">Win</Item>
+		<Item English_Text = "Win" ID = "2044">Win</Item>
+		<Item English_Text = "Win" ID = "2045">Win</Item>
+		<Item English_Text = "Win" ID = "2046">Win</Item>
+		<Item English_Text = "Win" ID = "2037">Win</Item>
+		<Item English_Text = "Win" ID = "2038">Win</Item>
+		<Item English_Text = "Win" ID = "2039">Win</Item>
+		<Item English_Text = "Win" ID = "2040">Win</Item>
+		<Item English_Text = "Win" ID = "2041">Win</Item>
+		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Bocka för Win-knappen för att inkludera win-tangenten som möjlig i en hotkey</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">Tangentbordsgenvägar</Item>
+	</Ditto_Options_Shortcuts>
+	<Ditto_Options_Quick_Paste>
+		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">Minneslistan börjar högst upp (resp. nederst)</Item>
+		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">Använd Ctrl-Numeriskt tangentbord för de tio första kopierade klippen</Item>
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">Visa text för de tio första hotkeys</Item>
+		<Item English_Text = "Show leading whitespace" ID = "2021">Visa inledande blanksteg</Item>
+		<Item English_Text = "Text Lines per Row" ID = "2062">Textrader per led (row)</Item>
+		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">Aktivera transparens för snabbinklistring</Item>
+		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">Visa thumbnails (för CF_DIB typer) (Kan sänka datorns snabbhet)</Item>
+		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">Lägg in rtf-text i listan (för rtf-typer) (Kan sänka datorns snabbhet)</Item>
+		<Item English_Text = "Find As You Type" ID = "2036">Hitta medan du skriver</Item>
+		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">Se till att hela fönstret är synligt</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">Visa klipp som är i grupper i huvudlistan</Item>
+		<Item English_Text = "Font" ID = "1040">Font</Item>
+		<Item English_Text = "Default Font" ID = "2031">Förinställd font</Item>
+		<Item English_Text = "Popup Positioning" ID = "2063">Popup-position</Item>
+		<Item English_Text = "At Caret" ID = "2015">Vid markören</Item>
+		<Item English_Text = "At Cursor" ID = "2016">Vid muspekaren</Item>
+		<Item English_Text = "At Previous Position" ID = "2017">Vid föregående position</Item>
+		<Item English_Text = "List Item Prefix Legend" ID = "2064">Lista klipp-prefixen</Item>
+		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">* = Ta ej bort automatiskt\n s = genväg finns\n G = Klipp är en grupp\n ! = Klipp finns i en grupp</Item>
+		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Snabbinklistring</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Fråga vid borttagning av klipp</Item>
+	</Ditto_Options_Quick_Paste>	
+	<Ditto_Options_Friends>
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">När ett klipp skickas från ett ip-nummer eller dator som är i denna lista, infogas det i Urklipp. I annat fall läggs det in bland klipp som sparas för senare användning</Item>
+		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">Ip/Datornamn åtskilda med kommatecken</Item>
+		<Item English_Text = "Disable Recieving Clips" ID = "2026">Avaktivera mottagning av klipp</Item>
+		<Item English_Text = "Network Password" ID = "2054">Nätverkslösenord</Item>
+		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">Kommer klipp från datorer där ditt nätverkslösenord inte stämmer, lägg då till ytterligare nätverkslösenord, åtskilda med kommatecken</Item>
+		<Item English_Text = "Receive Passwords" ID = "2056">Erhåll lösenord</Item>
+		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Om 'Skicka alla klipp' väljs, kommer alla klipp att skickas till den andra datorn. Om detta ej är valt, kommer klippet att återfinnas i högerklicks-menyn för att sändas till den andra datorn</Item>
+		<Item English_Text = "Log Send Receive Commands" ID = "1042">Logga 'Skicka Ta emot kommandon'</Item>
+		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Vänner</Item>
+	</Ditto_Options_Friends>
+	<Ditto_Options_Friends_Detail>
+		<Item English_Text = "Send All Copies to this friend" ID = "1015">Skicka alla klipp till denne vän</Item>
+		<Item English_Text = "IP/Name" ID = "2052">IP/Namn</Item>
+		<Item English_Text = "Description" ID = "2053">Beskrivning</Item>
+		<Item English_Text = "Friend Details" ID = "-1">Detaljer för vännen</Item>
+	</Ditto_Options_Friends_Detail>
+	<Ditto_Options_Stats>
+		<Item English_Text = "Odometer" ID = "2052">Dataväg (odometer)</Item>
+		<Item English_Text = "Trip Odometer" ID = "2053">Trippmätare</Item>
+		<Item English_Text = "Copies" ID = "2054">Klipp</Item>
+		<Item English_Text = "Pastes" ID = "2055">Inklistringar</Item>
+		<Item English_Text = "Copies" ID = "2056">Klipp</Item>
+		<Item English_Text = "Pastes" ID = "2057">Inklistringar</Item>
+		<Item English_Text = "Reset" ID = "1006">Återställ</Item>
+		<Item English_Text = "Saved Copies" ID = "2058">Sparade klipp</Item>
+		<Item English_Text = "Saved Copy Data" ID = "2059">Sparade klippdata</Item>
+		<Item English_Text = "Remove All" ID = "1013">Ta bort alla</Item>
+		<Item English_Text = "Last Started" ID = "2060">Senast startad</Item>
+		<Item English_Text = "Database Size" ID = "2061">Databasstorlek</Item>
+		<Item English_Text = "Clips Sent" ID = "2066">Skickade klipp</Item>
+		<Item English_Text = "Clips received" ID = "2067">Mottagna klipp</Item>
+		<Item English_Text = "Since Last Start" ID = "2068">Efter senaste start</Item>
+		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true">Statistik</Item>
+	</Ditto_Options_Stats>
+	<Ditto_Options_Supported_Types_Add>
+		<Item English_Text = "Main Types" ID = "2052">Huvudtyper</Item>
+		<Item English_Text = "Custom Type" ID = "2053">Användardefinierad typ</Item>
+		<Item English_Text = "Add" ID = "1020">Lägg till</Item>
+		<Item English_Text = "Currently on the Clipboard" ID = "2054">Nu i Urklipp</Item>
+		<Item English_Text = "Add" ID = "1019">Lägg till</Item>
+		<Item English_Text = "Add" ID = "1021">Lägg till</Item>
+		<Item English_Text = "Cancel" ID = "2">Avbryt</Item>
+		<Item English_Text = "Add Supported Type" ID = "-1">Lägg till understödd typ</Item>
+	</Ditto_Options_Supported_Types_Add>
+	<Ditto_Move_To_Groups>
+		<Item English_Text = "New Group" ID = "1040">Ny grupp</Item>
+		<Item English_Text = "OK" ID = "1">OK</Item>
+		<Item English_Text = "Cancel" ID = "2">Avbryt</Item>
+		<Item English_Text = "Move to Group" ID = "-1">Flytta till grupp</Item>
+	</Ditto_Move_To_Groups>
+	<Ditto_String_Table>
+		<Item English_Text = "General" ID = "GeneralTitle">Allmän</Item>
+		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">Understödda typer</Item>
+		<Item English_Text = "Stats" ID = "StatsTitle">Statistik</Item>
+		<Item English_Text = "Friends" ID = "FriendsTitle">Vänner</Item>
+		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">Snabbinklistring</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">Tangentbordsgenvägar</Item>
+		<Item English_Text = "About" ID = "AboutTitle">Om</Item>
+		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">Fel vid öppnandet av databasen</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">Omöjligt att starta initialisera DAO/Jet-databasen. \nVälj JA för att ladda hem DAO från http://ditto-cp.sourceforge.net/dao_setup.exe\n\nStarta om Ditto efter installation av DAO</Item>
+		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format">Okänt databasformat</Item>
+		<Item English_Text = "the file will be renamed" ID = "File_Renamed">Filen kommer att få nytt namn</Item>
+		<Item English_Text = "and a new database will be created" ID = "New_Database">och en ny databas kommer att skapas</Item>
+		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">Uppdateringar finns för Ditto. \nGå till ditto-cp.sourceforge.net för detaljer\n\nInstallerad version</Item>
+		<Item English_Text = "Update Version" ID = "Update_Version">Updateversion</Item>
+		<Item English_Text = "Download updated version?" ID = "Download_Update">Ladda hem uppdaterad version?</Item>		
+		<Item English_Text = "No updates available" ID = "No_Updates">Inga uppdateringar finns</Item>			
+		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Detta kommer att ta bort alla klipp!\n\nFortsätta?</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Koppla från Urklipp</Item>
+		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Koppla in Urklipp</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Install">Omöjligt att initialisera DAO/Jet-databasen. DAO kommer nu att installeras.\n\nStarta om Ditto efter installation av DAO</Item>
+		<Item English_Text = "NO TARGET" ID = "No_Target">INGET MÅL</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Fråga vid borttagning av klipp</Item>
+		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">Ta bort valda klipp?</Item>
+		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">Fel vid import av exporterade klipp</Item>
+		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing">Fel vid analys av exporterat klipp</Item>
+		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good">Klipp i Urklipp</Item>
+		<Item English_Text = "Successfully imported" ID = "Import_Successfully">Klippet importerat</Item>
+		<Item English_Text = "clip" ID = "Clip">Klipp</Item>
+		<Item English_Text = "clips" ID = "Clips">Klipp</Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">Uppdatera beskrivningen av klippet vid spara?</Item>
+		<Item English_Text = "New Clip" ID = "New_Clip">Nytt klipp</Item>
+		<Item English_Text = "Save" ID = "Save">Spara</Item>
+		<Item English_Text = "Save All" ID = "Save_All">Spara alla</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">Stäng aktuellt ställe</Item>
+		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable">Aktuellt klipp går ej att redigera. Ett klipp måste tillhöra en klipp-typ</Item>
+		<Item English_Text = "to be editable" ID = "Editable">för att kunna redigeras</Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">Vill du spara ändringarna?</Item>
+		<Item English_Text = "Error saving clip" ID = "ErrorSaving">Fel vid sparande av klipp</Item>
+		<Item English_Text = "New" ID = "New">Nytt</Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">Spara, stäng och placera i Urklipp</Item>
+		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">Redigera Ditto</Item>
+		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title">Ditto - inklistring med namn</Item>
+		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">Fel vid laddningen av data</Item>
+		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2">Fel - det går inte att hitta klipp med snabbinklistringstexten </Item>
+		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">Undantag när det gäller att hitta klippet</Item>
+		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title">Ditto - klipp med namn</Item>
+		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">Fel vid sparande i databasen av klipp med namn</Item>
+		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">Undantag när det gäller att spara klipp med namn</Item>
+		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">Ditto tog ej emot ett klipp</Item> 
+	</Ditto_String_Table>
+	<Ditto_Options_Sheet>
+		<Item English_Text = "OK" ID = "1">OK</Item>
+		<Item English_Text = "Cancel" ID = "2">Avbryt</Item>
+		<Item English_Text = "Apply" ID = "12321">Verkställ</Item>
+	</Ditto_Options_Sheet>
+	<Ditto_Tray_Icon_Menu>
+		<Item English_Text = "Show Quick Paste" ID = "32773">Visa snabbinklistring</Item>
+		<Item English_Text = "Options" ID = "32771">Inställningar</Item>
+		<Item English_Text = "Help" ID = "32843">Hjälp</Item>
+		<Item English_Text = "Exit" ID = "32772">Avsluta</Item>
+
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Import" ID = "32854">Importera</Item>
+		<Item English_Text = "New Clip" ID = "32868">Nytt klipp</Item>
+		
+	</Ditto_Tray_Icon_Menu>
+</Ditto_Language_File>
