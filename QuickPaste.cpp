@@ -29,8 +29,7 @@ CQuickPaste::~CQuickPaste()
 	{
 		delete m_pwndPaste;
 		m_pwndPaste = NULL;
-	}
-	
+	}	
 }
 
 void CQuickPaste::Create(CWnd *pParent)
@@ -92,13 +91,11 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 		return;
 	}
 
-	if(theApp.m_bShowingQuickPaste)
+	if(g_Opt.m_bShowPersistent && m_pwndPaste != NULL)
 	{
-		if(g_Opt.m_bShowPersistent)
-		{
-			m_pwndPaste->MinMaxWindow(FORCE_MAX);
-			m_pwndPaste->SetForegroundWindow();
-		}
+		m_pwndPaste->ShowWindow(SW_SHOW);
+		m_pwndPaste->MinMaxWindow(FORCE_MAX);
+		m_pwndPaste->SetForegroundWindow();
 		return;
 	}
 	
@@ -172,6 +169,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	}
 	
 	// Show the window
+	m_pwndPaste->ShowWindow(SW_SHOW);
 	m_pwndPaste->ShowQPasteWindow(bReFillList);
 	m_pwndPaste->SetForegroundWindow();
 }

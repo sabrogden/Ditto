@@ -87,6 +87,7 @@ IDB_BACK                BITMAP                  "res\\back.bmp"
 IDB_BACK_PRESSED        BITMAP                  "res\\back1.bmp"
 IDB_BACK_FOCUSED        BITMAP                  "res\\back2.bmp"
 IDR_EDIT_WND            BITMAP                  "res\\mainfram.bmp"
+IDR_TOOLBAR_GROUP       BITMAP                  "res\\toolbar1.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -118,6 +119,13 @@ BEGIN
     BUTTON      ID_BUTTON_SAVE_CLOSE_CLIPBOARD
     SEPARATOR
     BUTTON      ID_BUTTON_CLOSE
+END
+
+IDR_TOOLBAR_GROUP TOOLBAR  16, 15
+BEGIN
+    BUTTON      ID_BUTTON_REFRESH_GROUP
+    BUTTON      ID_BUTTON_PIN
+    BUTTON      ID_BUTTON_NEW_GROUP
 END
 
 
@@ -746,11 +754,11 @@ BEGIN
     LTEXT           "Quick Paste Text",IDC_STATIC,7,56,62,13,SS_CENTERIMAGE
 END
 
-IDD_ABOUT DIALOG  0, 0, 292, 153
+IDD_ABOUT DIALOGEX 0, 0, 292, 153
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
     WS_SYSMENU
 CAPTION "About"
-FONT 8, "MS Shell Dlg"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     LISTBOX         IDC_LIST,7,16,271,86,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | 
                     WS_TABSTOP

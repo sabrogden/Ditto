@@ -832,6 +832,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\DittoDropTarget.cpp">
+			</File>
+			<File
 				RelativePath=".\DittoRulerRichEditCtrl.cpp">
 			</File>
 			<File
@@ -1066,6 +1069,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\GroupWnd.cpp">
+			</File>
+			<File
 				RelativePath=".\HTMLFormatAggregator.cpp">
 			</File>
 			<File
@@ -1104,6 +1110,9 @@
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\MagneticWnd.cpp">
 			</File>
 			<File
 				RelativePath="MainFrm.cpp">
@@ -2691,6 +2700,9 @@
 				RelativePath=".\DittoCopyBuffer.h">
 			</File>
 			<File
+				RelativePath=".\DittoDropTarget.h">
+			</File>
+			<File
 				RelativePath=".\DittoRulerRichEditCtrl.h">
 			</File>
 			<File
@@ -2721,6 +2733,9 @@
 				RelativePath="GroupTree.h">
 			</File>
 			<File
+				RelativePath=".\GroupWnd.h">
+			</File>
+			<File
 				RelativePath=".\HTMLFormatAggregator.h">
 			</File>
 			<File
@@ -2731,6 +2746,9 @@
 			</File>
 			<File
 				RelativePath="InternetUpdate.h">
+			</File>
+			<File
+				RelativePath=".\MagneticWnd.h">
 			</File>
 			<File
 				RelativePath="MainFrm.h">
@@ -2969,7 +2987,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Release\focus.dll">
+				RelativePath="Debug\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">
@@ -2996,7 +3014,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Debug\focus.dll">
+				RelativePath="Release\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">

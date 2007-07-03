@@ -61,6 +61,7 @@ bool CGetSetOptions::m_bInConversion = false;
 bool CGetSetOptions::m_bFromIni = false;
 CString CGetSetOptions::m_csIniFileName;
 __int64 CGetSetOptions::nLastDbWriteTime = 0;
+bool CGetSetOptions::m_bGroupWndPinned = true;
 
 CGetSetOptions g_Opt;
 
@@ -141,6 +142,7 @@ void CGetSetOptions::LoadSettings()
 	m_bEnableDebugLogging = GetEnableDebugLogging();
 	m_bEnsureConnectToClipboard = GetEnsureConnectToClipboard();
 	m_bOutputDebugString = false;
+	m_bGroupWndPinned = GetGroupWndPinned();
 
 	GetExtraNetworkPassword(true);
 
@@ -1725,4 +1727,54 @@ BOOL CGetSetOptions::GetEditWordWrap()
 void CGetSetOptions::SetEditWordWrap(BOOL bSet)
 {
 	SetProfileLong(_T("EditWordWrap"), bSet);
+}
+
+BOOL CGetSetOptions::SetGroupWndSize(CSize size)
+{
+	BOOL bRet = SetProfileLong("GroupWndCX", size.cx);
+	bRet = SetProfileLong("GroupWndCY", size.cy);
+
+	return bRet;
+}
+
+void CGetSetOptions::GetGroupWndSize(CSize &size)
+{
+	size.cx = GetProfileLong("GroupWndCX", 0);
+	size.cy = GetProfileLong("GroupWndCY", 0);
+}
+
+BOOL CGetSetOptions::SetGroupWndPoint(CPoint point)
+{
+	BOOL bRet = SetProfileLong("GroupWndX", point.x);
+	bRet = SetProfileLong("GroupWndY", point.y);
+
+	return bRet;
+}
+
+void CGetSetOptions::GetGroupWndPoint(CPoint &point)
+{
+	point.x = GetProfileLong("GroupWndX", 0);
+	point.y = GetProfileLong("GroupWndY", 0);	
+}
+
+int CGetSetOptions::GetGroupWndTransparency()
+{
+	return GetProfileLong("GroupWndTrans", 0);
+}
+
+void CGetSetOptions::SetGroupWndTransparency(int nTrans)
+{
+	SetProfileLong("GroupWndTrans", nTrans);
+}
+
+bool CGetSetOptions::GetGroupWndPinned()
+{
+	return (GetProfileLong("GroupWndPinned", TRUE) == TRUE);
+
+}
+void CGetSetOptions::SetGroupWndPinned(bool bSet)
+{
+	m_bGroupWndPinned = (bSet == TRUE);
+	SetProfileLong("GroupWndPinned", bSet);
+
 }

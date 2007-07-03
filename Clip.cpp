@@ -702,6 +702,7 @@ void CClip::MakeLatestTime()
 
 BOOL CClip::LoadMainTable(long lID)
 {
+	bool bRet = false;
 	try
 	{
 		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), lID);
@@ -718,11 +719,13 @@ BOOL CClip::LoadMainTable(long lID)
 			m_csQuickPaste = q.getStringField(_T("QuickPasteText"));
 
 			m_ID = lID;
+
+			bRet = true;
 		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 
-	return TRUE;
+	return bRet;
 }
 
 // STATICS

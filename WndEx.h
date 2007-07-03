@@ -8,12 +8,13 @@
 //
 
 #include "DittoWindow.h"
+#include "MagneticWnd.h"
 
 #define	SWAP_MIN_MAX			1
 #define FORCE_MIN				2
 #define FORCE_MAX				3
 
-class CWndEx : public CWnd
+class CWndEx : public CMagneticWnd
 {
 // Construction
 public:

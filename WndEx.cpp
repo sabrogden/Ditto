@@ -44,7 +44,7 @@ void CWndEx::GetWindowRectEx(LPRECT lpRect)
 		return;
 	}
 	
-	CWnd::GetWindowRect(lpRect);
+	CMagneticWnd::GetWindowRect(lpRect);
 }
 
 bool CWndEx::SetCaptionColors( COLORREF left, COLORREF right )
@@ -54,7 +54,7 @@ bool CWndEx::SetCaptionColors( COLORREF left, COLORREF right )
 	return true;
 }
 
-BEGIN_MESSAGE_MAP(CWndEx, CWnd)
+BEGIN_MESSAGE_MAP(CWndEx, CMagneticWnd)
 //{{AFX_MSG_MAP(CWndEx)
 	ON_WM_CREATE()
 	ON_WM_NCPAINT()
@@ -99,7 +99,7 @@ BOOL CWndEx::Create(const CRect& crStart, CWnd* pParentWnd)
 
 int CWndEx::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {
-	if (CWnd::OnCreate(lpCreateStruct) == -1)
+	if (CMagneticWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
 	
 	m_DittoWindow.DoCreate(this);
@@ -156,7 +156,7 @@ void CWndEx::OnNcPaint()
 
 void CWndEx::OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp) 
 {
-	CWnd::OnNcCalcSize(bCalcValidRects, lpncsp);
+	CMagneticWnd::OnNcCalcSize(bCalcValidRects, lpncsp);
 	
 	m_DittoWindow.DoNcCalcSize(bCalcValidRects, lpncsp);
 }
@@ -165,7 +165,7 @@ UINT CWndEx::OnNcHitTest(CPoint point)
 {
 	UINT Ret = m_DittoWindow.DoNcHitTest(this, point);
 	if(Ret == -1)
-		return CWnd::OnNcHitTest(point);
+		return CMagneticWnd::OnNcHitTest(point);
 
 	return Ret;
 }
@@ -174,7 +174,7 @@ void CWndEx::OnNcLButtonDown(UINT nHitTest, CPoint point)
 {
 	m_DittoWindow.DoNcLButtonDown(this, nHitTest, point);
 
-	CWnd::OnNcLButtonDown(nHitTest, point);
+	CMagneticWnd::OnNcLButtonDown(nHitTest, point);
 }
 
 void CWndEx::OnNcLButtonUp(UINT nHitTest, CPoint point) 
@@ -189,7 +189,7 @@ void CWndEx::OnNcLButtonUp(UINT nHitTest, CPoint point)
 		return;
 	}
 	
-	CWnd::OnNcLButtonUp(nHitTest, point);
+	CMagneticWnd::OnNcLButtonUp(nHitTest, point);
 }
 
 void CWndEx::MinMaxWindow(long lOption)
@@ -307,19 +307,19 @@ void CWndEx::OnNcMouseMove(UINT nHitTest, CPoint point)
 		m_bMaxSetTimer = true;
 	}
 	
-	CWnd::OnNcMouseMove(nHitTest, point);
+	CMagneticWnd::OnNcMouseMove(nHitTest, point);
 }
 
 BOOL CWndEx::PreTranslateMessage(MSG* pMsg) 
 {
 	m_DittoWindow.DoPreTranslateMessage(pMsg);
 	
-	return CWnd::PreTranslateMessage(pMsg);
+	return CMagneticWnd::PreTranslateMessage(pMsg);
 }
 
 BOOL CWndEx::OnEraseBkgnd(CDC* pDC) 
 {
-	return CWnd::OnEraseBkgnd(pDC);
+	return CMagneticWnd::OnEraseBkgnd(pDC);
 }
 
 void CWndEx::OnTimer(UINT nIDEvent)
@@ -374,12 +374,12 @@ void CWndEx::OnTimer(UINT nIDEvent)
 		}
 	}
 	
-	CWnd::OnTimer(nIDEvent);
+	CMagneticWnd::OnTimer(nIDEvent);
 }
 
 void CWndEx::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 {
-	CWnd::OnWindowPosChanging(lpwndpos);
+	CMagneticWnd::OnWindowPosChanging(lpwndpos);
 	
 	if(m_bMaxSetTimer)
 	{
@@ -391,7 +391,7 @@ void CWndEx::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 
 void CWndEx::OnSize(UINT nType, int cx, int cy)
 {
-	CWnd::OnSize(nType, cx, cy);
+	CMagneticWnd::OnSize(nType, cx, cy);
 	
 	m_DittoWindow.DoSetRegion(this);
 }
@@ -416,7 +416,7 @@ void CWndEx::OnInitMenuPopup(CMenu *pPopupMenu, UINT nIndex,BOOL bSysMenu)
 	}
     else if ((hParentMenu = ::GetMenu(m_hWnd)) != NULL)
     {
-        CWnd* pParent = this;
+        CMagneticWnd* pParent = this;
 		// Child windows don't have menus--need to go to the top!
         if (pParent != NULL &&
 			(hParentMenu = ::GetMenu(pParent->m_hWnd)) != NULL)

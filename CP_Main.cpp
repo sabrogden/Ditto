@@ -125,6 +125,7 @@ CCP_MainApp::CCP_MainApp()
 	m_cfIgnoreClipboard = ::RegisterClipboardFormat(_T("Clipboard Viewer Ignore"));
 	m_cfDelaySavingData = ::RegisterClipboardFormat(_T("Ditto Delay Saving Data"));
 	m_RemoteCF_HDROP = ::RegisterClipboardFormat(_T("Ditto Remote CF_HDROP"));
+	m_DittoIdsFormat = ::RegisterClipboardFormat(_T("Ditto Clip Ids Format"));
 
 	m_QuickPasteMode = NONE_QUICK_PASTE;
 	m_pQuickPasteClip = NULL;
@@ -711,9 +712,9 @@ void CCP_MainApp::RefreshView()
 	if(pWnd)
 	{
 		if(m_bAsynchronousRefreshView)
-			pWnd->PostMessage(WM_REFRESH_VIEW);
+			pWnd->PostMessage(WM_REFRESH_VIEW, 0, 0);
 		else
-			pWnd->SendMessage(WM_REFRESH_VIEW);
+			pWnd->SendMessage(WM_REFRESH_VIEW, 0, 0);
 	}
 }
 

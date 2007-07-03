@@ -356,6 +356,19 @@ public:
 
 	static BOOL		GetEditWordWrap();
 	static void		SetEditWordWrap(BOOL bSet);
+
+	static BOOL SetGroupWndSize(CSize size);
+	static void GetGroupWndSize(CSize &size);
+
+	static BOOL SetGroupWndPoint(CPoint point);
+	static void GetGroupWndPoint(CPoint &point);
+
+	static int GetGroupWndTransparency();
+	static void SetGroupWndTransparency(int nTrans);
+
+	static bool m_bGroupWndPinned;
+	static bool GetGroupWndPinned();
+	static void SetGroupWndPinned(bool bSet);
 };
 
 // global for easy access and for initialization of fast access variables
