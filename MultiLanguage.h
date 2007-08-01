@@ -63,6 +63,8 @@ public:
 
 	void	SetOnlyGetHeader(bool bVal)	{ m_bOnlyGetHeader = true;	}
 
+	static CMenu* GetMenuPos(CMenu *pMenu, const CString &csLookingForMenuText, int &nMenuPos);
+
 	CString m_csLastError;
 
 protected:
@@ -91,8 +93,6 @@ protected:
 protected:
 	bool LoadSection(TiXmlNode &doc, LANGUAGE_ARRAY &Array, CString csSection);
 	bool LoadStringTableSection(TiXmlNode &doc, LANGUAGE_MAP &Map, CString csSection);
-
-	CMenu* GetMenuPos(CMenu *pMenu, const CString &csLookingForMenuText, int &nMenuPos);
 
 	bool UpdateMenuToLanguage(CMenu *pMenu, LANGUAGE_ARRAY &Array);
 	bool UpdateWindowToLanguage(CWnd *pParent, LANGUAGE_ARRAY &Array);

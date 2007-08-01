@@ -324,7 +324,7 @@ void CCP_MainApp::AfterMainCreate()
 
 void CCP_MainApp::StartStopServerThread()
 {
-	if(CGetSetOptions::GetDisableRecieve() == FALSE)
+	if(CGetSetOptions::GetDisableRecieve() == FALSE && g_Opt.GetAllowFriends())
 	{
 		AfxBeginThread(MTServerThread, m_MainhWnd);
 	}

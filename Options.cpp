@@ -1776,5 +1776,9 @@ void CGetSetOptions::SetGroupWndPinned(bool bSet)
 {
 	m_bGroupWndPinned = (bSet == TRUE);
 	SetProfileLong("GroupWndPinned", bSet);
+}
 
+bool CGetSetOptions::GetAllowFriends()
+{
+	return (GetProfileLong("AllowFriends", TRUE) == TRUE);
 }

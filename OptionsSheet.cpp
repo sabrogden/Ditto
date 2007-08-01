@@ -68,7 +68,7 @@ int COptionsSheet::DoModal()
 	m_pGeneralOptions = new COptionsGeneral;
 	m_pKeyBoardOptions = new COptionsKeyBoard;
 	m_pQuickPasteOptions = new COptionsQuickPaste;
-	m_pFriends = new COptionFriends;
+	
 	m_pCopyBuffers = new COptionsCopyBuffers;
 	m_pStats = new COptionsStats;
 	m_pTypes = new COptionsTypes;
@@ -79,7 +79,11 @@ int COptionsSheet::DoModal()
 	AddPage(m_pKeyBoardOptions);
 	AddPage(m_pCopyBuffers);
 	AddPage(m_pQuickPasteOptions);
-	AddPage(m_pFriends);
+	if(g_Opt.GetAllowFriends())
+	{
+		m_pFriends = new COptionFriends;
+		AddPage(m_pFriends);
+	}
 	AddPage(m_pStats);
 	AddPage(m_pAbout);
 	

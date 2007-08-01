@@ -369,6 +369,8 @@ public:
 	static bool m_bGroupWndPinned;
 	static bool GetGroupWndPinned();
 	static void SetGroupWndPinned(bool bSet);
+
+	static bool GetAllowFriends();
 };
 
 // global for easy access and for initialization of fast access variables

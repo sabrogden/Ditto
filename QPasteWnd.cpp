@@ -1089,6 +1089,17 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FORETEEN,13);
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FIFTEEN,14);
 
+	if(g_Opt.GetAllowFriends() == false)
+	{
+		CString csText("Send To");
+		int nPos = -1;
+		CMultiLanguage::GetMenuPos(pMenu, csText, nPos);
+		if(nPos >= 0)
+		{
+			pMenu->DeleteMenu(nPos, MF_BYPOSITION);
+		}
+	}
+
 	pMenu->DeleteMenu(ID_MENU_SENTTO_PROMPTFORIP, MF_BYCOMMAND);
 }
 
@@ -1783,6 +1794,9 @@ void CQPasteWnd::OnMenuNewclip()
 
 BOOL CQPasteWnd::SendToFriendbyPos(int nPos)
 {
+	if(g_Opt.GetAllowFriends() == false)
+		return FALSE;
+
 	CWaitCursor wait;
 
 	CClipIDs IDs;
