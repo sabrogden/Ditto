@@ -51,7 +51,7 @@
 		<Item English_Text = "Find As You Type" ID = "32848">Wyszukuj podczas pisania</Item>
 		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Zapewnij widocznosc calego okienka</Item>
 		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Pokaz klipy bedace w grupach na liscie glownej</Item>
-		<Item English_Text = "Sent To" ID = "-1">Wyslij do</Item>
+		<Item English_Text = "Send To" ID = "-1">Wyslij do</Item>
 		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">192.168.1.101) - ten sam komputer</Item>
 		<Item English_Text = "View Full Description	F3" ID = "32793">Pokaz pelny opis	F3</Item>
 		<Item English_Text = "View Groups	Ctrl-G" ID = "32819">Pokaz grupy	Ctrl-G</Item>

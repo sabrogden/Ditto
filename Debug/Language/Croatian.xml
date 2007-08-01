@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="Ascii"?>
+<Ditto_Language_File Version = "1" Author = "Robert Dragicevic" Notes = "robidragic@gmail.com">
+	<Ditto_Right_Click_Menu>
+		<Item English_Text = "Groups" ID = "-1">Skupina</Item>
+		<Item English_Text = "New Group Ctrl-F7" ID = "32811">Nova skupina Ctrl-F7</Item>
+		<Item English_Text = "New Group Selection F7" ID = "32812">Odaberi novu skupinu F7</Item>
+		<Item English_Text = "Move to Group" ID = "32840">Premjesti u skupinu</Item>
+		<Item English_Text = "Quick Options" ID = "-1">Opcije ukratko</Item>
+		<Item English_Text = "Lines Per Row" ID = "-1">Broj linija u redu</Item>
+		<Item English_Text = "1" ID = "32807">1</Item>
+		<Item English_Text = "2" ID = "32786">2</Item>
+		<Item English_Text = "3" ID = "32787">3</Item>
+		<Item English_Text = "4" ID = "32788">4</Item>
+		<Item English_Text = "5" ID = "32789">5</Item>
+		<Item English_Text = "Transparency" ID = "-1">Prozirnost</Item>
+		<Item English_Text = "None" ID = "32800">Neprozirno</Item>
+		<Item English_Text = "5 " ID = "32808">5</Item>
+		<Item English_Text = "10 " ID = "32792">10</Item>
+		<Item English_Text = "15 " ID = "32794">15</Item>
+		<Item English_Text = "20 " ID = "32796">20</Item>
+		<Item English_Text = "25 " ID = "32798">25</Item>
+		<Item English_Text = "30 " ID = "32799">30</Item>
+		<Item English_Text = "40 " ID = "32790">40</Item>
+		<Item English_Text = "Positioning" ID = "-1">Pozicioniranje</Item>
+		<Item English_Text = "At Caret" ID = "32802">Na ulaznu poziciju</Item>
+		<Item English_Text = "At Cursor" ID = "32803">Na poziciju kursora</Item>
+		<Item English_Text = "At Previous Position" ID = "32804">Na predhodnu poziciju</Item>
+		<Item English_Text = "First Ten Hot Keys" ID = "-1">Prvih deset tipkovnièkih kratica (Hot Keys)</Item>
+		<Item English_Text = "Use Ctrl-Num" ID = "32777">Koristi Ctrl-Num</Item>
+		<Item English_Text = "Show Hot Key Text" ID = "32778">Prikaži tekst tipkovnièkih kratica</Item>
+		<Item English_Text = "View Caption Bar On" ID = "-1">Prikaži alatnu traku poglavlja</Item>
+		<Item English_Text = "Top" ID = "32783">Gore</Item>
+		<Item English_Text = "Right" ID = "32780">Desno</Item>
+		<Item English_Text = "Bottom" ID = "32781">Dolje</Item>
+		<Item English_Text = "Left" ID = "32782">Lijevo</Item>
+		<Item English_Text = "Sort" ID = "-1">Sortiraj</Item>
+		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">Sortiraj uzlazno (Posljednje na vrh stupca)</Item>
+		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">Sortiraj silazno (Posljednje na dno stupca)</Item>
+		<Item English_Text = "Double Clicking on Caption" ID = "-1">Dvostruki "klik" na poglavlje</Item>
+		<Item English_Text = "Toggles Always on Top" ID = "32814">Zakvaèke (Toggles) uvijek stavi na vrh</Item>
+		<Item English_Text = "Rolls-up Window" ID = "32815">Smotaj prozor</Item>
+		<Item English_Text = "Toggles Always Show Description" ID = "32816">Zakvaèke uvijek prikazuju opis objekta</Item>
+		<Item English_Text = "Always on Top Ctrl-Space" ID = "32784">Uvijek na vrh Ctrl-Space</Item>
+		<Item English_Text = "Auto Roll-up" ID = "32791">Automatski smotaj prozor</Item>
+		<Item English_Text = "Always Show Description" ID = "32813">Uvijek prikaži opis objekta</Item>
+		<Item English_Text = "Prompt For New Group Names" ID = "32817">Upitaj za odabir imena nove skupine</Item>
+		<Item English_Text = "Select Font" ID = "32844">Odaberi vrstu slova</Item>
+		<Item English_Text = "Show Thumbnails" ID = "32845">Prikaži umanjene slike (Thumbnails)</Item>
+		<Item English_Text = "Draw RTF Text" ID = "32846">Izvuci RTF tekst</Item>
+		<Item English_Text = "Paste Clip after selection" ID = "32847">Zaljepi objekt nakon odabira</Item>
+		<Item English_Text = "Find As You Type" ID = "32848">Odredi kao predpostavljeno</Item>
+		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Osiguraj vidljivost cijelog prozora</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Prikaži objekte iz skupina na glavnoj listi</Item>
+		<Item English_Text = "Send To" ID = "-1">Pošalji u</Item>
+		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">(192.168.1.101) - identièno raèunalo</Item>
+		<Item English_Text = "View Full Description F3" ID = "32793">Prikaži potpuni opis objekta F3</Item>
+		<Item English_Text = "View Groups Ctrl-G" ID = "32819">Prikaži skupine Ctrl-G</Item>
+		<Item English_Text = "Paste Plain Text Only Shift-Enter" ID = "32841">Zaljepi samo tekst Shift-Enter</Item>
+		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">Zaljepi HTML kao tekst</Item>
+		<Item English_Text = "Delete Entry Del" ID = "32801">Izbriši objekt Del</Item>
+		<Item English_Text = "Properties Alt-Enter" ID = "32776">Svojstva  Alt-Enter</Item>
+		<Item English_Text = "Quick Properties" ID = "-1">Svojstva ukratko</Item>
+		<Item English_Text = "Never Auto Delete" ID = "32820">Ne briši automatski</Item>
+		<Item English_Text = "Auto Delete" ID = "32821">Briši automatski</Item>
+		<Item English_Text = "Remove Hot Key" ID = "32822">Briši tipkovnièke kratice</Item>
+		<Item English_Text = "Options..." ID = "32805">Opcije</Item>
+		<Item English_Text = "Help" ID = "32842">Pomoæ</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "32775">Odvoji od meðuspremnika</Item>
+		<Item English_Text = "Exit Program" ID = "32806">Napusti program</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt to Delete Clip" ID = "32852">Upozori prije brisanja objekta</Item>	
+		<Item English_Text = "Import" ID = "32855">Unesi</Item>
+		<Item English_Text = "Export" ID = "32853">Iznesi</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">Ukloni "Quick Paste"</Item>	
+		<Item English_Text = "Edit Clip" ID = "32860">Uredi objekt</Item>
+		<Item English_Text = "New Clip" ID = "32867">Novi objekt</Item>	
+		
+	</Ditto_Right_Click_Menu>
+	<Ditto_Clip_Properties>
+		<Item English_Text = "Hot Key" ID = "2039">Tipkovnièke kratice</Item>
+		<Item English_Text = "Hot Key" ID = "2039">Tipkovnièke kratice</Item>
+		<Item English_Text = "Date" ID = "2040">Datum</Item>
+		<Item English_Text = "&Never Auto Delete" ID = "1025">&Ne briši automatski</Item>
+		<Item English_Text = "Move To Group" ID = "2041">Premjesti u skupinu</Item>
+		<Item English_Text = "Item Title" ID = "2042">Ime objekta</Item>
+		<Item English_Text = "Copy Formats" ID = "2029">Kopiraj formate</Item>
+		<Item English_Text = "Delete" ID = "1021">Briši</Item>
+		<Item English_Text = "OK" ID = "1">OK</Item>
+		<Item English_Text = "Cancel" ID = "2">Otkaži</Item>
+		<Item English_Text = "Copy Properties" ID = "-1">Kopiraj svojstva</Item>
+	</Ditto_Clip_Properties>
+	<Ditto_Options_General>
+		<Item English_Text = "Start Ditto on System Startup" ID = "2004">Pokreni Ditto pri pokretanju sustava</Item>
+		<Item English_Text = "Display Icon in System Tray" ID = "2003">Prikaži ikonu u sistemskoj traci</Item>
+		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Maksimalan broj spremljenih kopija</Item>
+		<Item English_Text = "Paste Entries Expire after" ID = "2009">Zaljepljeni objekti se brišu nakon</Item>
+		<Item English_Text = "Days" ID = "2043">Dana</Item>
+		<Item English_Text = "Compact and Repair" ID = "1028">Sažimaj i popravi</Item>
+		<Item English_Text = "Automatically check for updates online" ID = "1029">Automatski provjeri nove nadogradnje</Item>
+		<Item English_Text = "Check Now" ID = "1030">Provjeri sad</Item>
+		<Item English_Text = "Allow Duplicates" ID = "1037">Dopusti dvostruke ulaze</Item>
+		<Item English_Text = "Update Clip Time On Paste" ID = "1038">Obnovi vrijeme ljepljenja objekata</Item>
+		<Item English_Text = "Save Multi-Pastes" ID = "1039">Spemi višestruka ljepljenja</Item>
+		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Sakrij Ditto u tipkovnièkim kraticama ako je vidljiv</Item>
+		<Item English_Text = "Amount of text to save for description" ID = "2044">Duljina teksta prilikom spremanja opisa</Item>
+		<Item English_Text = "On copy play the sound" ID = "2045">Prilikom kopiranja sviraj zvuk</Item>
+		<Item English_Text = "Play" ID = "2034">Sviraj</Item>
+		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">Zaljepi objekt u aktivni prozor nakon odabira</Item>
+		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">Maksimalna velièina objekta u bajtima</Item>
+		<Item English_Text = "(Leave blank for no limit)" ID = "2047">(Ostavi prazno za Neogranièeno)</Item>
+		<Item English_Text = "Set Database Path" ID = "1034">Postavi putanju za bazu podataka</Item>
+		<Item English_Text = "Language" ID = "2069">Jezik</Item>
+		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">Ignoriraj kopiranje koje traje X milisekundi od zadnjeg kopiranja (1000 ms = 1 sec)</Item>
+		<Item English_Text = "About Language" ID = "2073">O Jeziku</Item>
+		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Osiguraj stalnu vezu Ditta s Meðuspremnikom</Item>
+		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Opæenito</Item>
+	</Ditto_Options_General>
+	<Ditto_Options_Supported_Types>
+		<Item English_Text = "&Add" ID = "1015">&Dodaj</Item>
+		<Item English_Text = "&Delete" ID = "1016">&Briši</Item>
+		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">Podržani formati</Item>
+	</Ditto_Options_Supported_Types>
+	<Ditto_Options_Shortcuts>
+		<Item English_Text = "Activate Ditto" ID = "2048">Pokreni Ditto</Item>
+		<Item English_Text = "Win" ID = "2035">Win</Item>
+		<Item English_Text = "Named Copy" ID = "2049">Imenuj objekt</Item>
+		<Item English_Text = "Win" ID = "2036">Win</Item>
+                                     <Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">Glavne tipkovnièke kratice zadnjih 10 kopiranih objekata</Item>
+		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Pošalji zaljepljeno (U suprotnom æe objekt biti samo umetnut u meðuspremnik)</Item>
+		<Item English_Text = "Position 1" ID = "2052">Pozicija 01</Item>
+		<Item English_Text = "Position 2" ID = "2053">Pozicija 02</Item>
+		<Item English_Text = "Position 3" ID = "2054">Pozicija 03</Item>
+		<Item English_Text = "Position 4" ID = "2055">Pozicija 04</Item>
+		<Item English_Text = "Position 5" ID = "2056">Pozicija 05</Item>
+		<Item English_Text = "Position 6" ID = "2057">Pozicija 06</Item>
+		<Item English_Text = "Position 7" ID = "2058">Pozicija 07</Item>
+		<Item English_Text = "Position 8" ID = "2059">Pozicija 08</Item>
+		<Item English_Text = "Position 9" ID = "2060">Pozicija 09</Item>
+		<Item English_Text = "Position 10" ID = "2061">Pozicija 10</Item>
+		<Item English_Text = "Win" ID = "2042">Win</Item>
+		<Item English_Text = "Win" ID = "2043">Win</Item>
+		<Item English_Text = "Win" ID = "2044">Win</Item>
+		<Item English_Text = "Win" ID = "2045">Win</Item>
+		<Item English_Text = "Win" ID = "2046">Win</Item>
+		<Item English_Text = "Win" ID = "2037">Win</Item>
+		<Item English_Text = "Win" ID = "2038">Win</Item>
+		<Item English_Text = "Win" ID = "2039">Win</Item>
+		<Item English_Text = "Win" ID = "2040">Win</Item>
+		<Item English_Text = "Win" ID = "2041">Win</Item>
+		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Provjeri tipku "Win" zbog unosa "Windows" tipkovnice u tvoje tipkovnièke kratice</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">Tipkovnièke kratice</Item>
+	</Ditto_Options_Shortcuts>
+	<Ditto_Options_Quick_Paste>
+		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">Statistika unosa objekata poèinje od vrha liste (prema dolje)</Item>
+		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">Upotrijebi     Ctrl-Num     za prvih 10 kratica</Item>
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">Prikaži tekst za prvih 10 kopija kratica</Item>
+		<Item English_Text = "Show leading whitespace" ID = "2021">U uvodu prikaži prazan prostor (whitespace)</Item>
+		<Item English_Text = "Text Lines per Row" ID = "2062">Broj linija teksta u retku</Item>
+		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">Prozirnost kod brzog ljepljenja (Quick Paste)</Item>
+		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">Prikaži umanjene slike (za CF_DIB format) (moguæe usporavanje rada memorije i zaslona)</Item>
+		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">Ispiši RTF tekst u listu (za RTF format) (moguæe usporavanje rada memorije i zaslona)</Item>
+		<Item English_Text = "Find As You Type" ID = "2036">Odredi kao predpostavljeno</Item>
+		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">Omoguæi vidljivost cijelog prozora</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">Prikaži objekte iz skupine sa glavne liste</Item>
+		<Item English_Text = "Font" ID = "1040">Vrsta slova</Item>
+		<Item English_Text = "Default Font" ID = "2031">Odabrana slova</Item>
+		<Item English_Text = "Popup Positioning" ID = "2063">Pozicija "Popup" prozora programa</Item>
+		<Item English_Text = "At Caret" ID = "2015">Na ulaznu poziciju</Item>
+		<Item English_Text = "At Cursor" ID = "2016">Na poziciju kursora</Item>
+		<Item English_Text = "At Previous Position" ID = "2017">Na predhodnu poziciju</Item>
+		<Item English_Text = "List Item Prefix Legend" ID = "2064">Prikaz liste prefiksa objekata</Item>
+		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n  G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">* = Ne briši automatski\n  s = Kratica postoji\n G = Objekt je skupina\n  ! = Objekt je pridodan skupini</Item>
+		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Brzo ljepljenje</Item>	
+		
+                                //New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Upozori prije brisanja objekata</Item>
+
+                </Ditto_Options_Quick_Paste> 
+                <Ditto_Options_Friends>
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Ako je kod primanja poslane kopije objekata ime IP ili raèunala na listi tada æe objekti biti pohranjeni u meðuspremniku.  U suprotnom æe biti u spremljenim objektima za kasniju uporabu</Item>
+		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP/Ime raèunala odvoji kosom crtom</Item>
+		<Item English_Text = "Disable Recieving Clips" ID = "2026">Onemoguæi primanje objekata</Item>
+		<Item English_Text = "Network Password" ID = "2054">Mrežna zaporka</Item>
+		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">Ako primate objekte s raèunala na kojem vaša mrežna zaporka ne vrijedi, upišite alternativnu zaporku odvojenu kosom crtom</Item>
+		<Item English_Text = "Receive Passwords" ID = "2056">Prihvati zaporke</Item>
+		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Ako je odabrana naredba za slanje svih kopija objekata na drugo raèunalo, tada æe sve kopije biti poslane. U suprotnom potreban je desni klik na Izbornik za slanje kopija</Item>
+		<Item English_Text = "Log Send Receive Commands" ID = "1042">Zabilježi naredbe poslano-primljeno</Item>
+		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Prijatelji</Item>
+	</Ditto_Options_Friends>
+	<Ditto_Options_Friends_Detail>
+		<Item English_Text = "Send All Copies to this friend" ID = "1015">Pošalji sve kopije objekata ovom prijatelju</Item>
+		<Item English_Text = "IP/Name" ID = "2052">IP/Naziv</Item>
+		<Item English_Text = "Description" ID = "2053">Opis</Item>
+		<Item English_Text = "Friend Details" ID = "-1">Pojedinosti o prijatelju</Item>
+	</Ditto_Options_Friends_Detail>
+	<Ditto_Options_Stats>
+		<Item English_Text = "Odometer" ID = "2052">Brojaè</Item>
+		<Item English_Text = "Trip Odometer" ID = "2053">Brojaè ulaza</Item>
+		<Item English_Text = "Copies" ID = "2054">Kopiranja</Item>
+		<Item English_Text = "Pastes" ID = "2055">Ljepljenja</Item>
+		<Item English_Text = "Copies" ID = "2056">Kopiranja</Item>
+		<Item English_Text = "Pastes" ID = "2057">Ljepljenja</Item>
+		<Item English_Text = "Reset" ID = "1006">Resetiraj</Item>
+		<Item English_Text = "Saved Copies" ID = "2058">Spremljena kopiranja</Item>
+		<Item English_Text = "Saved Copy Data" ID = "2059">Podatci o spremljenim kopiranjima</Item>
+		<Item English_Text = "Remove All" ID = "1013">Ukloni sve</Item>
+		<Item English_Text = "Last Started" ID = "2060">Posljednje pokretanje</Item>
+		<Item English_Text = "Database Size" ID = "2061">Velièina baze podataka</Item>
+		<Item English_Text = "Clips Sent" ID = "2066">Poslani objekti</Item>
+		<Item English_Text = "Clips received" ID = "2067">Primljeni objekti</Item>
+		<Item English_Text = "Since Last Start" ID = "2068">Od posljednjeg pokretanja</Item>
+		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true">Statistika</Item>
+	</Ditto_Options_Stats>
+	<Ditto_Options_Supported_Types_Add>
+		<Item English_Text = "Main Types" ID = "2052">Glavni formati</Item>
+		<Item English_Text = "Custom Type" ID = "2053">Uobièajeni formati</Item>
+		<Item English_Text = "Add" ID = "1020">Dodaj</Item>
+		<Item English_Text = "Currently on the Clipboard" ID = "2054">Trenutno u meðuspremniku</Item>
+		<Item English_Text = "Add" ID = "1019">Dodaj</Item>
+		<Item English_Text = "Add" ID = "1021">Dodaj</Item>
+		<Item English_Text = "Cancel" ID = "2">Otkaži</Item>
+		<Item English_Text = "Add Supported Type" ID = "-1">Dodaj podržane formate</Item>
+	</Ditto_Options_Supported_Types_Add>
+	<Ditto_Move_To_Groups>
+		<Item English_Text = "New Group" ID = "1040">Nova skupina</Item>
+		<Item English_Text = "OK" ID = "1">OK</Item>
+		<Item English_Text = "Cancel" ID = "2">Otkaži</Item>
+		<Item English_Text = "Move to Group" ID = "-1">Premjesti u skupinu</Item>
+	</Ditto_Move_To_Groups>
+	<Ditto_String_Table>
+		<Item English_Text = "General" ID = "GeneralTitle">Opæenito</Item>
+		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">Podržani formati</Item>
+		<Item English_Text = "Stats" ID = "StatsTitle">Statistika</Item>
+		<Item English_Text = "Friends" ID = "FriendsTitle">Prijatelji</Item>
+		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">Brzo ljepljenje</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">Tipkovnièke kratice</Item>
+		<Item English_Text = "About" ID = "AboutTitle">O programu</Item>
+		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">Greška kod otvaranja baze podataka</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">Onemoguæena inicijalizacija DAO/Jet db engine.\nOdaberi YES za skidanje DAO sa http://ditto-cp.sourceforge.net/dao_setup.exe\n\nResetiraj Ditto nakon instalacije DAO</Item>
+		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format">Nepoznat format baze podataka</Item>
+		<Item English_Text = "the file will be renamed" ID = "File_Renamed">podatak æe biti preimenovan</Item>
+		<Item English_Text = "and a new database will be created" ID = "New_Database">i biti æe otvorena nova baza podataka</Item>
+		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">Dostupne nadogradnje za Ditto.\nPosjetite ditto-cp.sourceforge.net zbog pojedinosti\n\nTrenutna verzija</Item>
+		<Item English_Text = "Update Version" ID = "Update_Version">Verzija nadogradnji</Item>
+		<Item English_Text = "Download updated version?" ID = "Download_Update">Skinuti novu verziju nadogradnji?</Item>			
+		<Item English_Text = "No updates available" ID = "No_Updates">Nove nadogradnje nisu dostupne</Item>			
+		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Ova naredba æe ukloniti sve ulaze kopiranja!\n\nNastaviti?</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Razdvoji od meðuspremnika</Item>
+		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Spoji s meðuspremnikom</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">Onemoguæena inicijalizacija DAO/Jet db pogona.  DAO æe sada biti instaliran.\n\nResetiraj Ditto nakon instalacije DAO</Item>
+		<Item English_Text = "NO TARGET" ID = "No_Target">Nije pronaðeno odredište</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Upozori prije brisanja objekata</Item>
+		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">Briši odabrane objekte</Item>
+		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">Greška kod uvoza-izvoza objekata</Item>
+		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing">Gramatièka pogreška prilikom izvoza objekata</Item>
+		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good">Objekt stavljen u meðuspremnik</Item>
+		<Item English_Text = "Successfully imported" ID = "Import_Successfully">Uspješno izvezeno</Item>
+		<Item English_Text = "clip" ID = "Clip">Objekt</Item>
+		<Item English_Text = "clips" ID = "Clips">Objekti</Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">Obnovi opis objekta prilikom spremanja</Item>
+		<Item English_Text = "New Clip" ID = "New_Clip">Novi objekt</Item>
+		<Item English_Text = "Save" ID = "Save">Spremi</Item>
+		<Item English_Text = "Save All" ID = "Save_All">Spremi sve</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">Zatvori postojeæi Tab</Item>
+		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable">Postojeæi objekt se ne može izmijeniti.  Objekt mora biti u jednom od podržanih formata</Item>
+		<Item English_Text = "to be editable" ID = "Editable">omoguæi promjene</Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">Želiš li spremiti promjene?</Item>
+		<Item English_Text = "Error saving clip" ID = "ErrorSaving">Greška prilikom spremanja objekta</Item>
+		<Item English_Text = "New" ID = "New">Novo</Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">Spremi, zatvori i premjesti u meðuspremnik</Item>
+		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">Ditto ureðivanje</Item>
+		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title">Ditto - Imenovanje zaljepljenog</Item>
+		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">Greška prilikom uèitavanja podataka</Item>
+		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2">Greška kod pronalaženja objekta sa "QuickPaste" tekstom</Item>
+		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">Izuzeæe prilikom pronalaženja objekta</Item>
+		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title">Ditto - Imenovanje kopija</Item>
+		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">Greška kod spremanja imenovanog objekta u bazu podataka</Item>
+		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">Izuzeæe spremanja imenovane kopije</Item>
+		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">Ditto nije primio kopiju objekta</Item> 
+				
+	</Ditto_String_Table>
+	<Ditto_Options_Sheet>
+		<Item English_Text = "OK" ID = "1">OK</Item>
+		<Item English_Text = "Cancel" ID = "2">Otkaži</Item>
+		<Item English_Text = "Apply" ID = "12321">Primjeni</Item>
+	</Ditto_Options_Sheet>
+	<Ditto_Tray_Icon_Menu>
+		<Item English_Text = "Show Quick Paste" ID = "32773">Prikaži zaljepljene objekte</Item>
+		<Item English_Text = "Options" ID = "32771">Opcije</Item>
+		<Item English_Text = "Help" ID = "32843">Pomoæ</Item>
+		<Item English_Text = "Exit" ID = "32772">Izlaz</Item>
+
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Import" ID = "32854">Unesi</Item>
+		<Item English_Text = "New Clip" ID = "32868">Novi objekt</Item>
+		
+	</Ditto_Tray_Icon_Menu>
+</Ditto_Language_File>
