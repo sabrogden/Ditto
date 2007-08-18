@@ -84,9 +84,9 @@ public:
 	static BOOL GetProfileFont(CString csSection, LOGFONT &font);
 
 	static BOOL SetProfileLong(CString csName, long lValue);
-	static long GetProfileLong(CString csName, long lDefaultValue = -1);
+	static long GetProfileLong(CString csName, long lDefaultValue = -1, CString csNewPath = _T(""));
 
-	static CString GetProfileString(CString csName, CString csDefault);
+	static CString GetProfileString(CString csName, CString csDefault, CString csNewPath = _T(""));
 	static BOOL	SetProfileString(CString csName, CString csValue);
 
 	static LPVOID GetProfileData(CString csName, DWORD &dwLength);
@@ -369,6 +369,12 @@ public:
 	static bool m_bGroupWndPinned;
 	static bool GetGroupWndPinned();
 	static void SetGroupWndPinned(bool bSet);
+
+	static CString GetPasteString(CString csAppName);
+	static CString GetDefaultPasteString();
+
+	static CString GetCopyString(CString csAppName);
+	static CString GetDefaultCopyString();
 
 	static bool GetAllowFriends();
 };

@@ -97,6 +97,7 @@ CString GetFileName(CString csFileName);
 BOOL EnsureWindowVisible(CRect *pcrRect);
 
 __int64 GetLastWriteTime(const CString &csFile);
+CString GetProcessName(HWND hWnd);
 
 //Message to the main window to show icon or not
 #define WM_SHOW_TRAY_ICON		WM_USER + 200

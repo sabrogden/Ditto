@@ -1830,6 +1830,9 @@
 				RelativePath=".\SaveAnimation.cpp">
 			</File>
 			<File
+				RelativePath=".\SendKeys.cpp">
+			</File>
+			<File
 				RelativePath="StdAfx.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -2823,6 +2826,9 @@
 				RelativePath=".\SaveAnimation.h">
 			</File>
 			<File
+				RelativePath=".\SendKeys.h">
+			</File>
+			<File
 				RelativePath="ServerDefines.h">
 			</File>
 			<File
@@ -2987,7 +2993,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Debug\focus.dll">
+				RelativePath="Release\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">
@@ -3014,7 +3020,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Release\focus.dll">
+				RelativePath="Debug\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">

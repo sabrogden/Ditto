@@ -56,17 +56,17 @@ BOOL CProcessPaste::DoPaste()
 		// when new data is put on the Clipboard
 		m_pOle = NULL; // m_pOle should not be accessed past this point
 
-#ifndef _DEBUG
+//#ifndef _DEBUG
 		if(m_bSendPaste)
 		{
 			theApp.SendPaste(m_bActivateTarget);
 		}
-#else
+//#else
 		if(m_bActivateTarget)
 		{
 			theApp.ActivateTarget();
 		}
-#endif
+//#endif
 		return TRUE;
 	}
 	return FALSE;

@@ -16,6 +16,7 @@
 #include "HyperLink.h"
 #include "OptionsSheet.h"
 #include "DittoCopyBuffer.h"
+#include "SendKeys.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -444,7 +445,7 @@ void CCP_MainApp::SendPaste(bool bActivateTarget)
 	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 	keybd_event(VK_MENU, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 	keybd_event(VK_LWIN, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	
+
 	Sleep(50);
 
 	if(bActivateTarget && !ActivateTarget())
@@ -455,19 +456,17 @@ void CCP_MainApp::SendPaste(bool bActivateTarget)
 
 	PumpMessageEx();
 
-	Sleep(1);
+	CString csPasteToApp = GetProcessName(m_hTargetWnd);
+	CString csPasteString = g_Opt.GetPasteString(csPasteToApp);
 
-	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
-	keybd_event('V', 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+	CString csMessage;
+	csMessage = "Sending paste to app " + csPasteToApp + " key stroke " + csPasteString;
+	Log(csMessage);
 
-	Sleep(1);
-
-	PumpMessageEx();
-
-	keybd_event('V', 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-
-	PumpMessageEx();
+	CSendKeys send;
+	//CString cs("^v");
+	//CString cs("%e{DELAY=50}p");
+	send.SendKeys(csPasteString);
 }
 
 // sends Ctrl-V to the TargetWnd
@@ -494,15 +493,16 @@ void CCP_MainApp::SendCopy()
 
 	PumpMessageEx();
 
-	Sleep(50);
+	CString csPasteToApp = GetProcessName(m_hTargetWnd);
+	CString csPasteString = g_Opt.GetCopyString(csPasteToApp);
 
-	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
-	keybd_event('C', 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+	CString csMessage;
+	csMessage = "Sending copy to app " + csPasteToApp + " key stroke " + csPasteString;
+	Log(csMessage);
 
-	Sleep(50);
-
-	keybd_event('C', 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	CSendKeys send;
+	//CString cs("^c");
+	send.SendKeys(csPasteString);
 }
 
 // sends Ctrl-X to the TargetWnd

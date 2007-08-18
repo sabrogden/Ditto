@@ -342,17 +342,29 @@ CString CGetSetOptions::GetIniFileName(bool bLocalIniFile)
 	return csPath;
 }
 
-long CGetSetOptions::GetProfileLong(CString csName, long lDefaultValue)
+long CGetSetOptions::GetProfileLong(CString csName, long lDefaultValue, CString csNewPath)
 {
 	if(m_bFromIni && !m_bInConversion)
 	{
-		return GetPrivateProfileInt(_T("Ditto"), csName, lDefaultValue, m_csIniFileName);
+		CString csApp(_T("Ditto"));
+
+		if(csNewPath.IsEmpty() == FALSE)
+		{
+			csApp += "-" + csNewPath;
+		}
+
+		return GetPrivateProfileInt(csApp, csName, lDefaultValue, m_csIniFileName);
+	}
+
+	CString csPath(_T(REG_PATH));
+	if(csNewPath.IsEmpty() == FALSE)
+	{
+		csPath += "\\" + csNewPath;
 	}
 
 	HKEY hkKey;
 
-	long lResult = RegOpenKeyEx(HKEY_CURRENT_USER, _T(REG_PATH),
-		NULL, KEY_READ, &hkKey);
+	long lResult = RegOpenKeyEx(HKEY_CURRENT_USER, csPath, NULL, KEY_READ, &hkKey);
 
 	if(lResult != ERROR_SUCCESS)
 		return lDefaultValue;
@@ -371,20 +383,31 @@ long CGetSetOptions::GetProfileLong(CString csName, long lDefaultValue)
 	return lDefaultValue;
 }
 
-CString CGetSetOptions::GetProfileString(CString csName, CString csDefault)
+CString CGetSetOptions::GetProfileString(CString csName, CString csDefault, CString csNewPath)
 {
 	if(m_bFromIni && !m_bInConversion)
 	{
+		CString csApp(_T("Ditto"));
+
+		if(csNewPath.IsEmpty() == FALSE)
+		{
+			csApp += "-" + csNewPath;
+		}
+
 		TCHAR cString[MAX_PATH];
-		GetPrivateProfileString(_T("Ditto"), csName, csDefault, cString, sizeof(cString), m_csIniFileName);
+		GetPrivateProfileString(csApp, csName, csDefault, cString, sizeof(cString), m_csIniFileName);
 
 		return cString;
 	}
 
-	HKEY hkKey;
+	CString csPath(_T(REG_PATH));
+	if(csNewPath.IsEmpty() == FALSE)
+	{
+		csPath += "\\" + csNewPath;
+	}
 
-	long lResult = RegOpenKeyEx(HKEY_CURRENT_USER, _T(REG_PATH),
-		NULL, KEY_READ, &hkKey);
+	HKEY hkKey;
+	long lResult = RegOpenKeyEx(HKEY_CURRENT_USER, csPath, NULL, KEY_READ, &hkKey);
 
 	TCHAR szString[256];
 	ZeroMemory(szString, sizeof(szString));
@@ -1782,3 +1805,32 @@ bool CGetSetOptions::GetAllowFriends()
 {
 	return (GetProfileLong("AllowFriends", TRUE) == TRUE);
 }
+
+CString CGetSetOptions::GetPasteString(CString csAppName)
+{
+	CString csPasteString = GetProfileString(csAppName, _T(""), _T("PasteStrings"));
+	if(csPasteString.IsEmpty())
+		return GetDefaultPasteString();
+
+	return csPasteString;
+}
+
+CString CGetSetOptions::GetDefaultPasteString()
+{
+	return GetProfileString(_T("DefaultPasteString"), _T("^v"));
+}
+
+CString CGetSetOptions::GetCopyString(CString csAppName)
+{
+	CString csCopyString = GetProfileString(csAppName, _T(""), _T("CopyStrings"));
+	if(csCopyString.IsEmpty())
+		return GetDefaultCopyString();
+
+	return csCopyString;
+}
+
+CString CGetSetOptions::GetDefaultCopyString()
+{
+	return GetProfileString(_T("DefaultCopyString"), _T("^c"));
+}
+

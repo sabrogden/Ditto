@@ -4,6 +4,7 @@
 #include "OptionsSheet.h"
 #include "TextConvert.h"
 #include "AlphaBlend.h"
+#include "Tlhelp32.h"
 
 // Debug Functions
 
@@ -1498,4 +1499,29 @@ __int64 GetLastWriteTime(const CString &csFile)
 	}
 
 	return nLastWrite;
+}
+
+CString GetProcessName(HWND hWnd) 
+{
+	DWORD Id;
+	GetWindowThreadProcessId(hWnd, &Id);
+
+	PROCESSENTRY32 processEntry = { 0 };
+
+	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	processEntry.dwSize = sizeof(PROCESSENTRY32);
+
+	if (Process32First(hSnapShot, &processEntry)) 
+	{
+		do 
+		{
+			if (processEntry.th32ProcessID == Id) 
+			{
+				return processEntry.szExeFile;
+			}
+		} while(Process32Next(hSnapShot, &processEntry));
+	}
+	CloseHandle(hSnapShot);
+
+	return "";
 }
