@@ -150,6 +150,9 @@
 		<Item English_Text = "Win" ID = "2041"></Item>
 		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050"></Item>
 		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true"></Item>
+		
+		//New item added in 3.15.1 8/18/07
+		<Item English_Text = "Send custom strokes Per Application" ID = "2091"></Item>
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Quick_Paste>
 		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042"></Item>
