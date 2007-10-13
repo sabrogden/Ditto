@@ -585,6 +585,8 @@ BEGIN
                     WS_TABSTOP,174,44,33,14
     LTEXT           "Named Paste",IDC_STATIC_NAMED_COPY2,19,44,69,14,
                     SS_CENTERIMAGE
+    LTEXT           "Send custom strokes Per Application",
+                    IDC_STATIC_CUSTOM_KEY,213,15,116,8
 END
 
 IDD_OPTIONS_GENERAL DIALOGEX 0, 0, 351, 259

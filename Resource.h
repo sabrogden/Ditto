@@ -217,6 +217,7 @@
 #define IDC_STATIC_CLIP_SEPARATOR       2090
 #define IDC_PASTE_2                     2091
 #define IDC_WIN_PASTE_2                 2092
+#define IDC_STATIC_CUSTOM_KEY           2092
 #define IDC_STATIC_COPY_2               2093
 #define IDC_STATIC_PASTE_2              2094
 #define IDC_CUT_2                       2095
@@ -326,7 +327,6 @@
 #define ID_FIRST_COPYTODEVICE           32870
 #define ID_BUTTON_REFRESH_GROUP         32872
 #define ID_BUTTON_PIN                   32874
-#define ID_BUTTON32875                  32875
 #define ID_BUTTON_NEW_GROUP             32875
 
 // Next default values for new objects
@@ -336,7 +336,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        169
 #define _APS_NEXT_COMMAND_VALUE         32876
-#define _APS_NEXT_CONTROL_VALUE         2092
+#define _APS_NEXT_CONTROL_VALUE         2093
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

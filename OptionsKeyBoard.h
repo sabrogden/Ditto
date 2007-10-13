@@ -9,6 +9,8 @@
 #include "stdafx.h"
 #include "CP_Main.h"
 #include "OptionsSheet.h"
+#include "afxwin.h"
+#include "HyperLink.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // COptionsKeyBoard dialog
@@ -68,6 +70,8 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
+public:
+	CHyperLink m_CustomeKeysHelp;
 };
 
 //{{AFX_INSERT_LOCATION}}

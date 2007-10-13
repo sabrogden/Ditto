@@ -100,6 +100,15 @@ void CGetSetOptions::LoadSettings()
 		}
 	}
 
+	//first time running set some defaults
+	if(GetTotalCopyCount() <= 0)
+	{
+		SetMaxEntries(500);
+		SetCheckForMaxEntries(TRUE);
+		SetQuickPastePosition(POS_AT_CARET);
+		SetDisableRecieve(TRUE);
+	}
+
 	GetSetCurrentDirectory();
 
 	m_nLinesPerRow = GetLinesPerRow();
@@ -350,7 +359,7 @@ long CGetSetOptions::GetProfileLong(CString csName, long lDefaultValue, CString 
 
 		if(csNewPath.IsEmpty() == FALSE)
 		{
-			csApp += "-" + csNewPath;
+			csApp = csNewPath;
 		}
 
 		return GetPrivateProfileInt(csApp, csName, lDefaultValue, m_csIniFileName);
@@ -391,7 +400,7 @@ CString CGetSetOptions::GetProfileString(CString csName, CString csDefault, CStr
 
 		if(csNewPath.IsEmpty() == FALSE)
 		{
-			csApp += "-" + csNewPath;
+			csApp = csNewPath;
 		}
 
 		TCHAR cString[MAX_PATH];

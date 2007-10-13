@@ -49,6 +49,7 @@ void COptionsKeyBoard::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_NAMED_COPY, m_NamedCopy);
 	DDX_Control(pDX, IDC_HOTKEY, m_HotKey);
 	//}}AFX_DATA_MAP
+	DDX_Control(pDX, IDC_STATIC_CUSTOM_KEY, m_CustomeKeysHelp);
 }
 
 BEGIN_MESSAGE_MAP(COptionsKeyBoard, CPropertyPage)
@@ -62,6 +63,10 @@ END_MESSAGE_MAP()
 BOOL COptionsKeyBoard::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
+
+	CString csHelpPath = CGetSetOptions::GetPath(PATH_HELP);
+	csHelpPath += "DittoCustomKeys.htm";
+	m_CustomeKeysHelp.SetURL(csHelpPath);
 
 	m_pParent = (COptionsSheet *)GetParent();
 

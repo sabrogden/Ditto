@@ -18,16 +18,17 @@
   </tr>
   <tr>
     <td width="2%" bgcolor="#3C6496" height="40">&nbsp;</td>
-    <td width="28%" height="40">
+    <td width="15%" height="40">
     <b><font size="7">Ditto</font></b>
 
     </td>
-    <td width="70%" height="40" align="right" valign="top">
-    <a href="http://prdownloads.sourceforge.net/ditto-cp/DittoSetup_3_9_0_0.exe?download"><font size="5">Download</font></a><font size="5">&nbsp;</font>&nbsp;&nbsp;&nbsp;
-    -&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://ditto-cp.sourceforge.net/Help">Help</a>&nbsp;&nbsp;&nbsp;&nbsp;
-    -&nbsp;&nbsp;&nbsp;&nbsp; <a href="#Features">Features</a>&nbsp;&nbsp;&nbsp;&nbsp;
-    -&nbsp;&nbsp;&nbsp;&nbsp; <a href="#Change History">Change History</a>&nbsp;&nbsp;&nbsp;&nbsp;
-    -&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://sourceforge.net/forum/?group_id=84084">Public
+    <td width="83%" height="40" align="right" valign="top">
+    <a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Setup_3_15_1_0.exe?download"><font size="6"><b>Download</b></font></a>&nbsp;&nbsp;
+    -&nbsp;&nbsp; <a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Portable_3_15_1_0.zip?download"><font size="4"><b>Portable</b></font></a><font size="5">
+    </font><font size="1">(zip file)</font>&nbsp;&nbsp; -&nbsp;&nbsp; <a href="http://ditto-cp.wiki.sourceforge.net/">Wiki</a>&nbsp;&nbsp;
+    -&nbsp;&nbsp; <a href="http://ditto-cp.sourceforge.net/Help">Help</a>&nbsp;&nbsp;
+    -&nbsp;&nbsp; <a href="#Features">Features</a>&nbsp;&nbsp; -&nbsp;&nbsp; <a href="#Change History">Change History</a>&nbsp;&nbsp;
+    -&nbsp;&nbsp; <a href="http://sourceforge.net/forum/?group_id=84084">Public
     Forums</a>
 
 <br><br>
@@ -92,24 +93,21 @@ Available Languages - </font><font size="2">English&nbsp;
     </ul>
         <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber7">
           <tr>
-            <td width="50%"><b><font size="5">Download</font></b></td>
+            <td width="50%"><b><font size="5">Download - </font></b> 
+Version 3.15.1</td>
           </tr>
           <tr>
             <td width="50%">
-            <p style="margin-left: 24">
-<a href="http://prdownloads.sourceforge.net/ditto-cp/DittoSetup_3_9_0_0.exe?download">Download</a> 
-Version 3.9</p>
-            <p style="margin-left: 24"><font size="1">If updating from v.2.x
-            Ditto will convert your db to a sqlite db.&nbsp; A progress bar will
-            show the progress of the conversion.</font></p>
-            <p style="margin-left: 24">
-<a href="http://prdownloads.sourceforge.net/ditto-cp/DittoSource_3_9_0_0.zip?download">Download
-Source<br>
-<br>
-</a><a href="http://sourceforge.net/forum/?group_id=84084">Public 
-            Forums<br>
+            <p style="margin-left: 24"><a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Setup_3_15_1_0.exe?download">Download
+            Standard Install</a></p>
+            <p style="margin-left: 24"><a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Portable_3_15_1_0.zip?download">Download
+            Portable (zip file)</a></p>
+            <p style="margin-left: 24"><a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Source_3_15_1_0.zip?download">Download
+Source</a><a href="http://prdownloads.sourceforge.net/ditto-cp/DittoSource_3_15_1_0.zip?download">
             <br>
-            </a></p>
+            <br>
+            </a>
+            </p>
             </td>
           </tr>
           <tr>
@@ -170,8 +168,27 @@ google_color_text = "000000";
         <td width="100%" height="11"><b><font size="6"><a name="Change History"></a></font><font size="5">Change History</font></b></td>
       </tr>
       <tr>
-        <td width="100%" height="11"><b>3.9.0.0    8-03-06</b><br>
-          &nbsp;&nbsp;&nbsp;&nbsp; - Fixed issue that could cause Ditto to not disconnect from the clipboard
+        <td width="100%" height="11"><b>3.15.1.0   8-19-07</b><br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - Custom Key strokes per application
+          (http://ditto-cp.wiki.sourceforge.net/Custom+key+strokes)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - Added option to hide friends, via registry setting only
+          (http://ditto-cp.wiki.sourceforge.net/Disable+Friends)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - Change some default values on new installs, limit copies to 500, disable friends, show at caret<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - Save word wrap option<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - Editor hot keys, added keys for undo, redo, wrap, bold, underline<br>
+          <br>
+          <br>
+          <b>3.14.0.0   2-18-06</b><br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - Added new feature, "Ditto copy buffers" Options - Copy buffers.  Can assign short cut keys for extra copy buffers.  These copy buffers work just like Ctrl-C and Ctrl-V.  Things can be copied and pasted without affecting the standard clipboard data.<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - Updated to latest sqlite db version.  This fixed the problem with foreign characters in the current user's name.<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - Added CF_HDROP (copied files), Rich Text, Html Format to multi-paste support.  (will group those types on multi-paste)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - Added option for what separater is put between multi-pasted clips. (Options - General)<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - Added "Word Wrap" setting in clip editor<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - When searching in a group only search the clips in that group.<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - Hide apply button in options.  The button didn't do anything.<br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - Don't underline the character following an ampersand(&amp;) when displaying clip text.
+          <p><b>3.9.0.0    8-03-06</b><br>
+          &nbsp;&nbsp;&nbsp;&nbsp; - Fixed issue that could cause Ditto to not disconnect from the clipboard</p>
           <p><b>3.8.0.0	   7-27-06</b><br>
           &nbsp;&nbsp;&nbsp;&nbsp; - Added the command line parameters "-disconnect" and "-connect" to control if ditto is connected to the clipboard or not<br>
           &nbsp;&nbsp;&nbsp;&nbsp; - Added option to output debug strings(F5) to file(Ctrl-F5) or debugview.exe (F5/Ctrl
