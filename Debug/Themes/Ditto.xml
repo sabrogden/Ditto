@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="Ascii"?>
+<Ditto_Theme_File Version = "1" Author = "Ditto" Notes = "Base theme file for future Ditto Themes">
+	<CaptionLeft>RGB(0, 84, 195)</CaptionLeft>
+	<CaptionRight>RGB(61, 149, 255)</CaptionRight>
+	<CaptionLeftTopMost>RGB(122, 150, 223)</CaptionLeftTopMost>
+	<CaptionRightTopMost>RGB(157, 185, 235)</CaptionRightTopMost>
+	<CaptionLeftNotConnected>RGB(255, 0, 0)</CaptionLeftNotConnected>
+	<CaptionRightNotConnected>RGB(255, 0, 0)</CaptionRightNotConnected>
+	<CaptionTextColor>RGB(255, 255, 255)</CaptionTextColor>
+	<ListBoxOddRowsBG>RGB(255, 255, 255)</ListBoxOddRowsBG>
+	<ListBoxEvenRowsBG>RGB(240, 240, 240)</ListBoxEvenRowsBG>
+	<ListBoxOddRowsText>RGB(0, 0, 0)</ListBoxOddRowsText>
+	<ListBoxEvenRowsText>RGB(0, 0, 0)</ListBoxEvenRowsText>
+	<ListBoxSelectedBG>RGB(30, 116, 211)</ListBoxSelectedBG>
+	<ListBoxSelectedNoFocusBG>RGB(236, 233, 216)</ListBoxSelectedNoFocusBG>
+	<ListBoxSelectedText>RGB(255, 255, 255)</ListBoxSelectedText>
+	<ListBoxSelectedNoFocusText>RGB(0, 0, 0)</ListBoxSelectedNoFocusText>
+</Ditto_Theme_File>

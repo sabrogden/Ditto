@@ -133,9 +133,12 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	{
 		CRect cr;
 		::GetWindowRect(theApp.m_hTargetWnd, cr);
-		ptCaret = cr.CenterPoint();
-		ptCaret.x -= csSize.cx/2;
-		ptCaret.y -= csSize.cy/2;
+		if(cr.PtInRect(ptCaret) == FALSE)
+		{
+			ptCaret = cr.CenterPoint();
+			ptCaret.x -= csSize.cx/2;
+			ptCaret.y -= csSize.cy/2;
+		}
 	}
 	
 	if(bAtPrevPos)

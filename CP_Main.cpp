@@ -126,7 +126,6 @@ CCP_MainApp::CCP_MainApp()
 	m_cfIgnoreClipboard = ::RegisterClipboardFormat(_T("Clipboard Viewer Ignore"));
 	m_cfDelaySavingData = ::RegisterClipboardFormat(_T("Ditto Delay Saving Data"));
 	m_RemoteCF_HDROP = ::RegisterClipboardFormat(_T("Ditto Remote CF_HDROP"));
-	m_DittoIdsFormat = ::RegisterClipboardFormat(_T("Ditto Clip Ids Format"));
 
 	m_QuickPasteMode = NONE_QUICK_PASTE;
 	m_pQuickPasteClip = NULL;
@@ -488,21 +487,21 @@ void CCP_MainApp::SendCopy()
 	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 	keybd_event(VK_MENU, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
 	keybd_event(VK_LWIN, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	
+
 	Sleep(50);
 
 	PumpMessageEx();
 
-	CString csPasteToApp = GetProcessName(m_hTargetWnd);
-	CString csPasteString = g_Opt.GetCopyString(csPasteToApp);
+	CString csToApp = GetProcessName(m_hTargetWnd);
+	CString csString = g_Opt.GetCopyString(csToApp);
 
 	CString csMessage;
-	csMessage = "Sending copy to app " + csPasteToApp + " key stroke " + csPasteString;
+	csMessage = "Sending copy to app " + csToApp + " key stroke " + csString;
 	Log(csMessage);
 
 	CSendKeys send;
 	//CString cs("^c");
-	send.SendKeys(csPasteString);
+	send.SendKeys(csString);
 }
 
 // sends Ctrl-X to the TargetWnd
@@ -529,15 +528,16 @@ void CCP_MainApp::SendCut()
 
 	PumpMessageEx();
 
-	Sleep(50);
+	CString csToApp = GetProcessName(m_hTargetWnd);
+	CString csString = g_Opt.GetCutString(csToApp);
 
-	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
-	keybd_event('X', 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+	CString csMessage;
+	csMessage = "Sending cut to app " + csToApp + " key stroke " + csString;
+	Log(csMessage);
 
-	Sleep(50);
-
-	keybd_event('X', 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	CSendKeys send;
+	//CString cs("^x");
+	send.SendKeys(csString);
 }
 
 // CopyThread
@@ -712,9 +712,9 @@ void CCP_MainApp::RefreshView()
 	if(pWnd)
 	{
 		if(m_bAsynchronousRefreshView)
-			pWnd->PostMessage(WM_REFRESH_VIEW, 0, 0);
+			pWnd->PostMessage(WM_REFRESH_VIEW);
 		else
-			pWnd->SendMessage(WM_REFRESH_VIEW, 0, 0);
+			pWnd->SendMessage(WM_REFRESH_VIEW);
 	}
 }
 
@@ -885,7 +885,7 @@ void CCP_MainApp::ShowPersistent( bool bVal )
 	if( m_bShowingQuickPaste )
 	{
 		ASSERT( QPasteWnd() );
-		QPasteWnd()->SetCaptionColorActive(!g_Opt.m_bShowPersistent, theApp.GetConnectCV());
+		QPasteWnd()->SetCaptionColorActive(g_Opt.m_bShowPersistent, theApp.GetConnectCV());
 		QPasteWnd()->RefreshNc();
 	}
 }
@@ -972,7 +972,7 @@ void CCP_MainApp::SetConnectCV(bool bConnect)
 
 	if(QPasteWnd())
 	{
-		QPasteWnd()->SetCaptionColorActive(!g_Opt.m_bShowPersistent, theApp.GetConnectCV());
+		QPasteWnd()->SetCaptionColorActive(g_Opt.m_bShowPersistent, theApp.GetConnectCV());
 		QPasteWnd()->RefreshNc();
 	}
 }

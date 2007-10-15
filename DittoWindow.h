@@ -30,7 +30,7 @@ public:
 	bool DoPreTranslateMessage(MSG* pMsg);
 	void SetCaptionOn(CWnd *pWnd, int nPos, bool bOnstartup);
 	bool SetCaptionColors(COLORREF left, COLORREF right);
-	bool SetCaptionColorActive(bool bActive, bool ConnectedToClipboard);
+	void SetCaptionTextColor(COLORREF color);
 
 	long m_lTopBorder;
 	long m_lRightBorder;
@@ -64,4 +64,5 @@ public:
 
 	COLORREF m_CaptionColorLeft;
 	COLORREF m_CaptionColorRight;
+	COLORREF m_CaptionTextColor;
 };

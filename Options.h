@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Theme.h"
+
 #define MAX_SEND_CLIENTS	15
 class CSendClients
 {
@@ -55,6 +57,7 @@ public:
 #define PATH_DATABASE		5
 #define PATH_INI			6
 #define PATH_U3_HWND_INI	7
+#define PATH_THEMES			8
 
 class CGetSetOptions
 {
@@ -66,6 +69,7 @@ public:
 	static CString m_csIniFileName;
 	static bool m_bInConversion;
 	static bool m_bU3;
+	static CTheme m_Theme;
 
 	static void LoadSettings();
 	static CString GetIniFileName(bool bLocalIniFile);
@@ -352,31 +356,27 @@ public:
 
 	static BOOL		GetSetCurrentDirectory();
 
-	static bool		GetIsPortableDitto();
-
-	static BOOL		GetEditWordWrap();
-	static void		SetEditWordWrap(BOOL bSet);
-
-	static BOOL SetGroupWndSize(CSize size);
-	static void GetGroupWndSize(CSize &size);
-
-	static BOOL SetGroupWndPoint(CPoint point);
-	static void GetGroupWndPoint(CPoint &point);
-
-	static int GetGroupWndTransparency();
-	static void SetGroupWndTransparency(int nTrans);
-
-	static bool m_bGroupWndPinned;
-	static bool GetGroupWndPinned();
-	static void SetGroupWndPinned(bool bSet);
-
 	static CString GetPasteString(CString csAppName);
 	static CString GetDefaultPasteString();
 
 	static CString GetCopyString(CString csAppName);
 	static CString GetDefaultCopyString();
 
+	static CString GetCutString(CString csAppName);
+	static CString GetDefaultCutString();
+
+	static BOOL	GetEditWordWrap();
+	static void	SetEditWordWrap(BOOL bSet);
+
 	static bool GetAllowFriends();
+
+	static bool		GetIsPortableDitto();
+
+	static long		GetAutoMaxDelay();
+	static void		SetAutoMaxDelay(long lDelay);
+
+	static void SetTheme(CString csTheme);
+	static CString GetTheme();
 };
 
 // global for easy access and for initialization of fast access variables

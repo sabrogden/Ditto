@@ -57,6 +57,8 @@ protected:
 	LOGFONT m_LogFont;
 	CString m_csTitle;
 
+	void FillThemes();
+
 
 // Implementation
 protected:
@@ -70,6 +72,8 @@ protected:
 
 public:
 	CButton m_PromptForDelete;
+	CComboBox m_cbTheme;
+	afx_msg void OnBnClickedButtonTheme();
 };
 
 //{{AFX_INSERT_LOCATION}}

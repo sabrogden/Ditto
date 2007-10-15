@@ -29,7 +29,6 @@
 #define IDD_DIALOG_REMOTE_FILE          157
 #define IDR_FILE_COPY                   158
 #define IDD_OPTIONS_COPY_BUFFERS        166
-#define IDR_TOOLBAR_GROUP               167
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -216,10 +215,13 @@
 #define IDC_WIN_COPY_2                  2090
 #define IDC_STATIC_CLIP_SEPARATOR       2090
 #define IDC_PASTE_2                     2091
+#define IDC_STATIC_CUSTOM_KEYS          2091
 #define IDC_WIN_PASTE_2                 2092
-#define IDC_STATIC_CUSTOM_KEY           2092
+#define IDC_STATIC_THEME                2092
 #define IDC_STATIC_COPY_2               2093
+#define IDC_COMBO_THEME                 2093
 #define IDC_STATIC_PASTE_2              2094
+#define IDC_BUTTON_THEME                2094
 #define IDC_CUT_2                       2095
 #define IDC_WIN_CUT_2                   2096
 #define IDC_STATIC_CUT_2                2097
@@ -325,18 +327,15 @@
 #define ID_FIRST_NEWCLIP                32868
 #define ID_BUTTON_SAVE_CLOSE_CLIPBOARD  32869
 #define ID_FIRST_COPYTODEVICE           32870
-#define ID_BUTTON_REFRESH_GROUP         32872
-#define ID_BUTTON_PIN                   32874
-#define ID_BUTTON_NEW_GROUP             32875
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        169
-#define _APS_NEXT_COMMAND_VALUE         32876
-#define _APS_NEXT_CONTROL_VALUE         2093
+#define _APS_NEXT_RESOURCE_VALUE        167
+#define _APS_NEXT_COMMAND_VALUE         32871
+#define _APS_NEXT_CONTROL_VALUE         2095
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

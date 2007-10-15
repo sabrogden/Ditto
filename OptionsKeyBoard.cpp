@@ -49,7 +49,7 @@ void COptionsKeyBoard::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_NAMED_COPY, m_NamedCopy);
 	DDX_Control(pDX, IDC_HOTKEY, m_HotKey);
 	//}}AFX_DATA_MAP
-	DDX_Control(pDX, IDC_STATIC_CUSTOM_KEY, m_CustomeKeysHelp);
+	DDX_Control(pDX, IDC_STATIC_CUSTOM_KEYS, m_CustomeKeysHelp);
 }
 
 BEGIN_MESSAGE_MAP(COptionsKeyBoard, CPropertyPage)

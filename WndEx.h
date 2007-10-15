@@ -8,13 +8,12 @@
 //
 
 #include "DittoWindow.h"
-#include "MagneticWnd.h"
 
 #define	SWAP_MIN_MAX			1
 #define FORCE_MIN				2
 #define FORCE_MAX				3
 
-class CWndEx : public CMagneticWnd
+class CWndEx : public CWnd
 {
 // Construction
 public:
@@ -35,18 +34,22 @@ public:
 	//}}AFX_VIRTUAL
 
 public:
-	bool SetCaptionColors( COLORREF left, COLORREF right );
 	void InvalidateNc();
 	void SetCaptionOn(int nPos, bool bOnstartup = false);
 	void SetAutoHide(BOOL bAutoHide);
 	void MinMaxWindow(long lOption = SWAP_MIN_MAX);
 	void GetWindowRectEx(LPRECT lpRect);
-	bool SetCaptionColorActive(bool bActive, bool ConnectedToClipboard);
+	bool SetCaptionColorActive(BOOL bPersistant, BOOL ConnectedToClipboard);
+	void SetAutoMaxDelay(long lDelay)	{ m_lDelayMaxSeconds = lDelay; }
 
 protected:
 	CDittoWindow m_DittoWindow;
 	CRect m_crFullSizeWindow;
 	bool m_bMaxSetTimer;
+	COleDateTime m_TimeMinimized;
+	COleDateTime m_TimeMaximized;
+	int m_lDelayMaxSeconds;
+
 
 // Implementation
 public:

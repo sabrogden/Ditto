@@ -87,7 +87,6 @@ IDB_BACK                BITMAP                  "res\\back.bmp"
 IDB_BACK_PRESSED        BITMAP                  "res\\back1.bmp"
 IDB_BACK_FOCUSED        BITMAP                  "res\\back2.bmp"
 IDR_EDIT_WND            BITMAP                  "res\\mainfram.bmp"
-IDR_TOOLBAR_GROUP       BITMAP                  "res\\toolbar1.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -119,13 +118,6 @@ BEGIN
     BUTTON      ID_BUTTON_SAVE_CLOSE_CLIPBOARD
     SEPARATOR
     BUTTON      ID_BUTTON_CLOSE
-END
-
-IDR_TOOLBAR_GROUP TOOLBAR  16, 15
-BEGIN
-    BUTTON      ID_BUTTON_REFRESH_GROUP
-    BUTTON      ID_BUTTON_PIN
-    BUTTON      ID_BUTTON_NEW_GROUP
 END
 
 
@@ -310,7 +302,7 @@ BEGIN
             MENUITEM "Prompt to Delete Clip",       32852,MFT_STRING,
             MFS_ENABLED
         END
-        POPUP "Send To",                        65535,MFT_STRING,MFS_ENABLED
+        POPUP "Sent To",                        65535,MFT_STRING,MFS_ENABLED
         BEGIN
             MENUITEM "Friend One",                  32824,MFT_STRING,
             MFS_ENABLED
@@ -471,19 +463,19 @@ BEGIN
     CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,67,155,10
     EDITTEXT        IDC_TRANS_PERC,177,66,19,12,ES_AUTOHSCROLL
-    PUSHBUTTON      "Font",IDC_BUTTON_FONT,18,146,143,17
-    PUSHBUTTON      "Default Font",IDC_BUTTON_DEFAULT_FAULT,164,149,70,12
+    PUSHBUTTON      "Font",IDC_BUTTON_FONT,18,160,143,17
+    PUSHBUTTON      "Default Font",IDC_BUTTON_DEFAULT_FAULT,164,163,70,12
     CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,22,
-                    182,93,10
+                    195,93,10
     CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,22,
-                    192,97,10
+                    205,97,10
     CONTROL         "At Previous Position",IDC_AT_PREVIOUS,"Button",
-                    BS_AUTORADIOBUTTON,22,202,117,10
+                    BS_AUTORADIOBUTTON,22,215,117,10
     LTEXT           "%",IDC_STATIC,199,66,8,12,SS_CENTERIMAGE
-    GROUPBOX        "Popup Positioning",IDC_STATIC_POPUP,10,173,138,41
+    GROUPBOX        "Popup Positioning",IDC_STATIC_POPUP,10,186,138,41
     LTEXT           "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group",
-                    IDC_STATIC_LEG,158,183,154,36
-    GROUPBOX        "List Item Prefix Legend",IDC_STATIC_LEGEND,153,173,165,
+                    IDC_STATIC_LEG,158,196,154,36
+    GROUPBOX        "List Item Prefix Legend",IDC_STATIC_LEGEND,153,186,165,
                     50
     CONTROL         "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)",
                     IDC_SHOW_THUMBNAILS,"Button",BS_AUTOCHECKBOX | 
@@ -502,6 +494,10 @@ BEGIN
     CONTROL         "Prompt when deleting clips",
                     IDC_CHECK_PROMPT_DELETE_CLIP,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,18,128,335,10
+    LTEXT           "Theme",IDC_STATIC_THEME,18,142,36,12,SS_CENTERIMAGE
+    COMBOBOX        IDC_COMBO_THEME,59,142,130,95,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "About Theme",IDC_BUTTON_THEME,198,142,106,12
 END
 
 IDD_OPTIONS_KEYSTROKES DIALOGEX 0, 0, 350, 206
@@ -586,7 +582,7 @@ BEGIN
     LTEXT           "Named Paste",IDC_STATIC_NAMED_COPY2,19,44,69,14,
                     SS_CENTERIMAGE
     LTEXT           "Send custom strokes Per Application",
-                    IDC_STATIC_CUSTOM_KEY,213,15,116,8
+                    IDC_STATIC_CUSTOM_KEYS,210,16,133,8
 END
 
 IDD_OPTIONS_GENERAL DIALOGEX 0, 0, 351, 259
@@ -756,11 +752,11 @@ BEGIN
     LTEXT           "Quick Paste Text",IDC_STATIC,7,56,62,13,SS_CENTERIMAGE
 END
 
-IDD_ABOUT DIALOGEX 0, 0, 292, 153
+IDD_ABOUT DIALOG  0, 0, 292, 153
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
     WS_SYSMENU
 CAPTION "About"
-FONT 8, "MS Shell Dlg", 0, 0, 0x0
+FONT 8, "MS Shell Dlg"
 BEGIN
     LISTBOX         IDC_LIST,7,16,271,86,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | 
                     WS_TABSTOP
@@ -923,8 +919,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,15,0,0
- PRODUCTVERSION 3,15,0,0
+ FILEVERSION 3,15,1,0
+ PRODUCTVERSION 3,15,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -940,12 +936,12 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "FileDescription", "Ditto"
-            VALUE "FileVersion", "3, 15, 0, 0"
+            VALUE "FileVersion", "3, 15, 1, 0"
             VALUE "InternalName", "CP_Main"
             VALUE "LegalCopyright", "Copyright (C) 2003"
             VALUE "OriginalFilename", "Ditto"
             VALUE "ProductName", "Ditto"
-            VALUE "ProductVersion", "3, 15, 0, 0"
+            VALUE "ProductVersion", "3, 15, 1, 0"
         END
     END
     BLOCK "VarFileInfo"

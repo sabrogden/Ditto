@@ -61,7 +61,7 @@ bool CGetSetOptions::m_bInConversion = false;
 bool CGetSetOptions::m_bFromIni = false;
 CString CGetSetOptions::m_csIniFileName;
 __int64 CGetSetOptions::nLastDbWriteTime = 0;
-bool CGetSetOptions::m_bGroupWndPinned = true;
+CTheme CGetSetOptions::m_Theme;
 
 CGetSetOptions g_Opt;
 
@@ -151,7 +151,6 @@ void CGetSetOptions::LoadSettings()
 	m_bEnableDebugLogging = GetEnableDebugLogging();
 	m_bEnsureConnectToClipboard = GetEnsureConnectToClipboard();
 	m_bOutputDebugString = false;
-	m_bGroupWndPinned = GetGroupWndPinned();
 
 	GetExtraNetworkPassword(true);
 
@@ -202,6 +201,8 @@ void CGetSetOptions::LoadSettings()
 			}
 		}
 	}
+
+	m_Theme.Load(GetTheme());
 }
 
 void CGetSetOptions::ConverSettingsToIni()
@@ -1629,6 +1630,18 @@ CString CGetSetOptions::GetPath(long lPathID)
 
 		break;
 
+	case PATH_THEMES:
+
+		if(m_bU3)
+		{
+			csDir = GETENV(_T("U3_DEVICE_EXEC_PATH"));
+			FIX_CSTRING_PATH(csDir);
+		}
+
+		csDir += "Themes\\";
+
+		break;
+
 	case PATH_REMOTE_FILES:
 		if(m_bU3)
 		{
@@ -1751,6 +1764,48 @@ bool CGetSetOptions::GetIsPortableDitto()
 	return GetProfileLong(_T("Portable"), FALSE) == TRUE;
 }
 
+CString CGetSetOptions::GetPasteString(CString csAppName)
+{
+	CString csString = GetProfileString(csAppName, _T(""), _T("PasteStrings"));
+	if(csString.IsEmpty())
+		return GetDefaultPasteString();
+
+	return csString;
+}
+
+CString CGetSetOptions::GetDefaultPasteString()
+{
+	return GetProfileString(_T("DefaultPasteString"), _T("^v"));
+}
+
+CString CGetSetOptions::GetCopyString(CString csAppName)
+{
+	CString csString = GetProfileString(csAppName, _T(""), _T("CopyStrings"));
+	if(csString.IsEmpty())
+		return GetDefaultCopyString();
+
+	return csString;
+}
+
+CString CGetSetOptions::GetDefaultCopyString()
+{
+	return GetProfileString(_T("DefaultCopyString"), _T("^c"));
+}
+
+CString CGetSetOptions::GetCutString(CString csAppName)
+{
+	CString csString = GetProfileString(csAppName, _T(""), _T("CutStrings"));
+	if(csString.IsEmpty())
+		return GetDefaultCutString();
+
+	return csString;
+}
+
+CString CGetSetOptions::GetDefaultCutString()
+{
+	return GetProfileString(_T("DefaultCutString"), _T("^x"));
+}
+
 BOOL CGetSetOptions::GetEditWordWrap()
 {
 	return GetProfileLong(_T("EditWordWrap"), TRUE);
@@ -1761,85 +1816,27 @@ void CGetSetOptions::SetEditWordWrap(BOOL bSet)
 	SetProfileLong(_T("EditWordWrap"), bSet);
 }
 
-BOOL CGetSetOptions::SetGroupWndSize(CSize size)
-{
-	BOOL bRet = SetProfileLong("GroupWndCX", size.cx);
-	bRet = SetProfileLong("GroupWndCY", size.cy);
-
-	return bRet;
-}
-
-void CGetSetOptions::GetGroupWndSize(CSize &size)
-{
-	size.cx = GetProfileLong("GroupWndCX", 0);
-	size.cy = GetProfileLong("GroupWndCY", 0);
-}
-
-BOOL CGetSetOptions::SetGroupWndPoint(CPoint point)
-{
-	BOOL bRet = SetProfileLong("GroupWndX", point.x);
-	bRet = SetProfileLong("GroupWndY", point.y);
-
-	return bRet;
-}
-
-void CGetSetOptions::GetGroupWndPoint(CPoint &point)
-{
-	point.x = GetProfileLong("GroupWndX", 0);
-	point.y = GetProfileLong("GroupWndY", 0);	
-}
-
-int CGetSetOptions::GetGroupWndTransparency()
-{
-	return GetProfileLong("GroupWndTrans", 0);
-}
-
-void CGetSetOptions::SetGroupWndTransparency(int nTrans)
-{
-	SetProfileLong("GroupWndTrans", nTrans);
-}
-
-bool CGetSetOptions::GetGroupWndPinned()
-{
-	return (GetProfileLong("GroupWndPinned", TRUE) == TRUE);
-
-}
-void CGetSetOptions::SetGroupWndPinned(bool bSet)
-{
-	m_bGroupWndPinned = (bSet == TRUE);
-	SetProfileLong("GroupWndPinned", bSet);
-}
-
 bool CGetSetOptions::GetAllowFriends()
 {
 	return (GetProfileLong("AllowFriends", TRUE) == TRUE);
 }
 
-CString CGetSetOptions::GetPasteString(CString csAppName)
+long CGetSetOptions::GetAutoMaxDelay()
 {
-	CString csPasteString = GetProfileString(csAppName, _T(""), _T("PasteStrings"));
-	if(csPasteString.IsEmpty())
-		return GetDefaultPasteString();
-
-	return csPasteString;
+	return GetProfileLong(_T("AutoMaxDelaySeconds"), 2);
 }
 
-CString CGetSetOptions::GetDefaultPasteString()
+void CGetSetOptions::SetAutoMaxDelay(long lDelay)
 {
-	return GetProfileString(_T("DefaultPasteString"), _T("^v"));
+	SetProfileLong(_T("AutoMaxDelaySeconds"), lDelay);
 }
 
-CString CGetSetOptions::GetCopyString(CString csAppName)
+void CGetSetOptions::SetTheme(CString csTheme)
 {
-	CString csCopyString = GetProfileString(csAppName, _T(""), _T("CopyStrings"));
-	if(csCopyString.IsEmpty())
-		return GetDefaultCopyString();
-
-	return csCopyString;
+	SetProfileString(_T("Theme"), csTheme);
 }
 
-CString CGetSetOptions::GetDefaultCopyString()
+CString CGetSetOptions::GetTheme()
 {
-	return GetProfileString(_T("DefaultCopyString"), _T("^c"));
+	return GetProfileString(_T("Theme"), "");
 }
-

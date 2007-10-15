@@ -51,7 +51,7 @@ BOOL CMoveToGroupDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	m_Tree.SetSelectedGroup(m_nSelectedGroup);
+	m_Tree.m_lSelectedFolderID = m_nSelectedGroup;
 	m_Tree.SetNotificationWndEx(m_hWnd);
 	m_Tree.FillTree();
 
@@ -79,7 +79,7 @@ LRESULT CMoveToGroupDlg::OnTreeSelect(WPARAM wParam, LPARAM lParam)
 
 void CMoveToGroupDlg::OnOK() 
 {
-	m_nSelectedGroup = m_Tree.GetSelectedGroup();
+	m_nSelectedGroup = m_Tree.GetSelectedTree();
 	
 	CDialog::OnOK();
 }
@@ -100,7 +100,7 @@ void CMoveToGroupDlg::OnButtonNewGroup()
 		
 	CString csName = Name.m_csName;
 	
-	long lID = NewGroupID(m_Tree.GetSelectedGroup(), csName);
+	long lID = NewGroupID(m_Tree.GetSelectedTree(), csName);
 	if(lID >= 0)
 	{
 		m_Tree.AddNode(csName, lID);

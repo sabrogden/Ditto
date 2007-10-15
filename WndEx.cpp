@@ -25,6 +25,7 @@ CWndEx::CWndEx()
 {	
 	SetCaptionColorActive(false, theApp.GetConnectCV());
 	m_crFullSizeWindow.SetRectEmpty();
+	m_lDelayMaxSeconds = 2;
 }
 
 CWndEx::~CWndEx()
@@ -44,17 +45,10 @@ void CWndEx::GetWindowRectEx(LPRECT lpRect)
 		return;
 	}
 	
-	CMagneticWnd::GetWindowRect(lpRect);
+	CWnd::GetWindowRect(lpRect);
 }
 
-bool CWndEx::SetCaptionColors( COLORREF left, COLORREF right )
-{
-	m_DittoWindow.SetCaptionColors(left, right);
-	
-	return true;
-}
-
-BEGIN_MESSAGE_MAP(CWndEx, CMagneticWnd)
+BEGIN_MESSAGE_MAP(CWndEx, CWnd)
 //{{AFX_MSG_MAP(CWndEx)
 	ON_WM_CREATE()
 	ON_WM_NCPAINT()
@@ -99,7 +93,7 @@ BOOL CWndEx::Create(const CRect& crStart, CWnd* pParentWnd)
 
 int CWndEx::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {
-	if (CMagneticWnd::OnCreate(lpCreateStruct) == -1)
+	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
 	
 	m_DittoWindow.DoCreate(this);
@@ -109,25 +103,32 @@ int CWndEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	SetAutoHide(CGetSetOptions::GetAutoHide());
 	SetCaptionColorActive(false, theApp.GetConnectCV());
 	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true);
+	SetAutoMaxDelay(CGetSetOptions::GetAutoMaxDelay());
 	
 	return 0;
 }
 
-bool CWndEx::SetCaptionColorActive(bool bActive, bool ConnectedToClipboard)
+bool CWndEx::SetCaptionColorActive(BOOL bPersistant, BOOL ConnectedToClipboard)
 {
 	bool bResult;
 
 	if(ConnectedToClipboard == false)
 	{
-		bResult = SetCaptionColors(RGB(255, 0, 0), RGB(255, 0, 0));
+		bResult = m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeftNotConnected(), g_Opt.m_Theme.CaptionRightNotConnected());
 	}
 	else
 	{
-		if(bActive)
-			bResult = SetCaptionColors(::GetSysColor(COLOR_ACTIVECAPTION), ::GetSysColor(COLOR_GRADIENTACTIVECAPTION));
+		if(bPersistant)
+		{
+			bResult = m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeftTopMost(), g_Opt.m_Theme.CaptionRightTopMost());
+		}
 		else
-			bResult = SetCaptionColors(::GetSysColor(COLOR_INACTIVECAPTION), ::GetSysColor(COLOR_GRADIENTINACTIVECAPTION));
+		{
+			bResult = m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeft(), g_Opt.m_Theme.CaptionRight());
+		}
 	}
+
+	m_DittoWindow.SetCaptionTextColor(g_Opt.m_Theme.CaptionTextColor());
 
 	return bResult;
 }
@@ -156,7 +157,7 @@ void CWndEx::OnNcPaint()
 
 void CWndEx::OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp) 
 {
-	CMagneticWnd::OnNcCalcSize(bCalcValidRects, lpncsp);
+	CWnd::OnNcCalcSize(bCalcValidRects, lpncsp);
 	
 	m_DittoWindow.DoNcCalcSize(bCalcValidRects, lpncsp);
 }
@@ -165,7 +166,7 @@ UINT CWndEx::OnNcHitTest(CPoint point)
 {
 	UINT Ret = m_DittoWindow.DoNcHitTest(this, point);
 	if(Ret == -1)
-		return CMagneticWnd::OnNcHitTest(point);
+		return CWnd::OnNcHitTest(point);
 
 	return Ret;
 }
@@ -174,7 +175,7 @@ void CWndEx::OnNcLButtonDown(UINT nHitTest, CPoint point)
 {
 	m_DittoWindow.DoNcLButtonDown(this, nHitTest, point);
 
-	CMagneticWnd::OnNcLButtonDown(nHitTest, point);
+	CWnd::OnNcLButtonDown(nHitTest, point);
 }
 
 void CWndEx::OnNcLButtonUp(UINT nHitTest, CPoint point) 
@@ -189,7 +190,7 @@ void CWndEx::OnNcLButtonUp(UINT nHitTest, CPoint point)
 		return;
 	}
 	
-	CMagneticWnd::OnNcLButtonUp(nHitTest, point);
+	CWnd::OnNcLButtonUp(nHitTest, point);
 }
 
 void CWndEx::MinMaxWindow(long lOption)
@@ -209,6 +210,7 @@ void CWndEx::MinMaxWindow(long lOption)
 				m_crFullSizeWindow.top, CAPTION_BORDER, 
 				m_crFullSizeWindow.Height());
 			m_DittoWindow.m_bMinimized = true;
+			m_TimeMinimized = COleDateTime::GetCurrentTime();
 			OnNcPaint();
 		}
 		else
@@ -220,6 +222,7 @@ void CWndEx::MinMaxWindow(long lOption)
 			
 			m_crFullSizeWindow.SetRectEmpty();
 			m_DittoWindow.m_bMinimized = false;
+			m_TimeMaximized = COleDateTime::GetCurrentTime();
 			OnNcPaint();
 		}
 	}
@@ -232,6 +235,7 @@ void CWndEx::MinMaxWindow(long lOption)
 				m_crFullSizeWindow.top, CAPTION_BORDER, 
 				m_crFullSizeWindow.Height());
 			m_DittoWindow.m_bMinimized = true;
+			m_TimeMinimized = COleDateTime::GetCurrentTime();
 			OnNcPaint();
 		}
 		else
@@ -243,6 +247,7 @@ void CWndEx::MinMaxWindow(long lOption)
 			
 			m_crFullSizeWindow.SetRectEmpty();
 			m_DittoWindow.m_bMinimized = false;
+			m_TimeMaximized = COleDateTime::GetCurrentTime();
 			OnNcPaint();
 		}
 	}
@@ -256,6 +261,7 @@ void CWndEx::MinMaxWindow(long lOption)
 				m_crFullSizeWindow.Width(), 
 				CAPTION_BORDER);
 			m_DittoWindow.m_bMinimized = true;
+			m_TimeMinimized = COleDateTime::GetCurrentTime();
 			OnNcPaint();
 		}
 		else
@@ -267,6 +273,7 @@ void CWndEx::MinMaxWindow(long lOption)
 			
 			m_crFullSizeWindow.SetRectEmpty();
 			m_DittoWindow.m_bMinimized = false;
+			m_TimeMaximized = COleDateTime::GetCurrentTime();
 			OnNcPaint();
 		}
 	}
@@ -280,6 +287,7 @@ void CWndEx::MinMaxWindow(long lOption)
 				m_crFullSizeWindow.Width(), 
 				CAPTION_BORDER);
 			m_DittoWindow.m_bMinimized = true;
+			m_TimeMinimized = COleDateTime::GetCurrentTime();
 			OnNcPaint();
 		}
 		else
@@ -292,6 +300,7 @@ void CWndEx::MinMaxWindow(long lOption)
 			
 			m_crFullSizeWindow.SetRectEmpty();
 			m_DittoWindow.m_bMinimized = false;
+			m_TimeMaximized = COleDateTime::GetCurrentTime();
 			OnNcPaint();
 		}
 	}
@@ -303,23 +312,27 @@ void CWndEx::OnNcMouseMove(UINT nHitTest, CPoint point)
 
 	if((m_bMaxSetTimer == false) && m_DittoWindow.m_bMinimized)
 	{
-		SetTimer(TIMER_AUTO_MAX, 250, NULL);
-		m_bMaxSetTimer = true;
+		COleDateTimeSpan sp = COleDateTime::GetCurrentTime() - m_TimeMinimized;
+		if(sp.GetTotalSeconds() >= m_lDelayMaxSeconds)
+		{
+			SetTimer(TIMER_AUTO_MAX, 250, NULL);
+			m_bMaxSetTimer = true;
+		}
 	}
 	
-	CMagneticWnd::OnNcMouseMove(nHitTest, point);
+	CWnd::OnNcMouseMove(nHitTest, point);
 }
 
 BOOL CWndEx::PreTranslateMessage(MSG* pMsg) 
 {
 	m_DittoWindow.DoPreTranslateMessage(pMsg);
 	
-	return CMagneticWnd::PreTranslateMessage(pMsg);
+	return CWnd::PreTranslateMessage(pMsg);
 }
 
 BOOL CWndEx::OnEraseBkgnd(CDC* pDC) 
 {
-	return CMagneticWnd::OnEraseBkgnd(pDC);
+	return CWnd::OnEraseBkgnd(pDC);
 }
 
 void CWndEx::OnTimer(UINT nIDEvent)
@@ -374,12 +387,12 @@ void CWndEx::OnTimer(UINT nIDEvent)
 		}
 	}
 	
-	CMagneticWnd::OnTimer(nIDEvent);
+	CWnd::OnTimer(nIDEvent);
 }
 
 void CWndEx::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 {
-	CMagneticWnd::OnWindowPosChanging(lpwndpos);
+	CWnd::OnWindowPosChanging(lpwndpos);
 	
 	if(m_bMaxSetTimer)
 	{
@@ -391,7 +404,7 @@ void CWndEx::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 
 void CWndEx::OnSize(UINT nType, int cx, int cy)
 {
-	CMagneticWnd::OnSize(nType, cx, cy);
+	CWnd::OnSize(nType, cx, cy);
 	
 	m_DittoWindow.DoSetRegion(this);
 }
@@ -416,7 +429,7 @@ void CWndEx::OnInitMenuPopup(CMenu *pPopupMenu, UINT nIndex,BOOL bSysMenu)
 	}
     else if ((hParentMenu = ::GetMenu(m_hWnd)) != NULL)
     {
-        CMagneticWnd* pParent = this;
+        CWnd* pParent = this;
 		// Child windows don't have menus--need to go to the top!
         if (pParent != NULL &&
 			(hParentMenu = ::GetMenu(pParent->m_hWnd)) != NULL)

@@ -385,13 +385,13 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		{
             if(bListHasFocus)
 			{
-                crBkgnd = GetSysColor(COLOR_HIGHLIGHT);
-                OldColor = pDC->SetTextColor(GetSysColor(COLOR_HIGHLIGHTTEXT));
+                crBkgnd = g_Opt.m_Theme.ListBoxSelectedBG();
+                OldColor = pDC->SetTextColor(g_Opt.m_Theme.ListBoxSelectedText());
 			}
             else
 			{
-                crBkgnd = GetSysColor(COLOR_BTNFACE);
-                OldColor = pDC->SetTextColor(GetSysColor(COLOR_BTNTEXT));
+                crBkgnd = g_Opt.m_Theme.ListBoxSelectedNoFocusBG();
+                OldColor = pDC->SetTextColor(g_Opt.m_Theme.ListBoxSelectedNoFocusText());
 			}
 		}
         else
@@ -399,21 +399,14 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
             //Shade alternating Rows
 			if((nItem % 2) == 0)
 			{
-				COLORREF color = GetSysColor(COLOR_WINDOW);
-				int r = GetRValue(color) - 15;
-				int g = GetGValue(color) - 15;
-				int b = GetBValue(color) - 15;
-
-				r = max(r, 0);
-				g = max(g, 0);
-				b = max(b, 0);
-
-				crBkgnd = RGB(r, g, b);
+				crBkgnd = g_Opt.m_Theme.ListBoxOddRowsBG();
+				OldColor = pDC->SetTextColor(g_Opt.m_Theme.ListBoxOddRowsText());
 			}
 			else
-				crBkgnd = GetSysColor(COLOR_WINDOW);
-			
-            OldColor = pDC->SetTextColor(GetSysColor(COLOR_WINDOWTEXT));
+			{
+				crBkgnd = g_Opt.m_Theme.ListBoxEvenRowsBG();
+				OldColor = pDC->SetTextColor(g_Opt.m_Theme.ListBoxEvenRowsText());
+			}
 		}
 		
         pDC->FillSolidRect(rcItem, crBkgnd);
@@ -436,7 +429,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		int nSymEnd = csText.Find('|');
 		if( nSymEnd >= 0 )
 		{
-			strSymbols = csText.Left(nSymEnd);
+			strSymbols = csText.Left(nSymEnd);  
 			csText = csText.Mid(nSymEnd+1);
 		}
 		

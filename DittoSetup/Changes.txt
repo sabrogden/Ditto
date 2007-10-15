@@ -1,3 +1,11 @@
+3.15.1.0   8-19-07
+- Custom Key strokes per application
+- Added option to hide friends, via registry setting only
+- Change some default values on new installs, limit copies to 500, disable friends, show at caret
+- Save word wrap option
+- Editor hot keys, added keys for undo, redo, wrap, bold, underline
+
+
 3.14.0.0   2-18-06
 - Added new feature, "Ditto copy buffers" Options - Copy buffers.  Can assign short cut keys for extra copy buffers.  These copy buffers work just like Ctrl-C and Ctrl-V.  Things can be copied and pasted without affecting the standard clipboard data.
 - Updated to latest sqlite db version.  This fixed the problem with foreign characters in the current user's name.

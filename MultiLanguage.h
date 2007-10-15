@@ -62,7 +62,6 @@ public:
 	CString GetNotes()	{ return m_csNotes;			}
 
 	void	SetOnlyGetHeader(bool bVal)	{ m_bOnlyGetHeader = true;	}
-
 	static CMenu* GetMenuPos(CMenu *pMenu, const CString &csLookingForMenuText, int &nMenuPos);
 
 	CString m_csLastError;

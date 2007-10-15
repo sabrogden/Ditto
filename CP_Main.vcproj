@@ -832,9 +832,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\DittoDropTarget.cpp">
-			</File>
-			<File
 				RelativePath=".\DittoRulerRichEditCtrl.cpp">
 			</File>
 			<File
@@ -1069,9 +1066,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\GroupWnd.cpp">
-			</File>
-			<File
 				RelativePath=".\HTMLFormatAggregator.cpp">
 			</File>
 			<File
@@ -1110,9 +1104,6 @@
 						PreprocessorDefinitions=""
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\MagneticWnd.cpp">
 			</File>
 			<File
 				RelativePath="MainFrm.cpp">
@@ -1950,6 +1941,9 @@
 						BasicRuntimeChecks="3"/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\Theme.cpp">
+			</File>
 			<Filter
 				Name="Controls"
 				Filter="">
@@ -2703,9 +2697,6 @@
 				RelativePath=".\DittoCopyBuffer.h">
 			</File>
 			<File
-				RelativePath=".\DittoDropTarget.h">
-			</File>
-			<File
 				RelativePath=".\DittoRulerRichEditCtrl.h">
 			</File>
 			<File
@@ -2736,9 +2727,6 @@
 				RelativePath="GroupTree.h">
 			</File>
 			<File
-				RelativePath=".\GroupWnd.h">
-			</File>
-			<File
 				RelativePath=".\HTMLFormatAggregator.h">
 			</File>
 			<File
@@ -2749,9 +2737,6 @@
 			</File>
 			<File
 				RelativePath="InternetUpdate.h">
-			</File>
-			<File
-				RelativePath=".\MagneticWnd.h">
 			</File>
 			<File
 				RelativePath="MainFrm.h">
@@ -2845,6 +2830,9 @@
 			</File>
 			<File
 				RelativePath="TextConvert.h">
+			</File>
+			<File
+				RelativePath=".\Theme.h">
 			</File>
 			<File
 				RelativePath="UnicodeMacros.h">

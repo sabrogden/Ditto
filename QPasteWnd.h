@@ -14,8 +14,6 @@
 #include "GroupTree.h"
 #include "AlphaBlend.h"
 #include "Sqlite\CppSQLite3.h"
-#include "GroupWnd.h"
-
 #include <vector>
 #include <afxmt.h>
 
@@ -78,10 +76,12 @@ public:
 	CSearchEditBox	m_Search;
 	CFont			m_SearchFont;
 	CButton			m_btCancel;
+	bool			m_bHideWnd;
 	CString			m_strSQLSearch;
 	CGroupStatic	m_stGroup;
 	CFont			GroupFont;
 	CString			m_Title;
+	CGroupTree		m_GroupTree;
 	CBitmapButton	m_ShowGroupsFolderBottom;
 	CBitmapButton	m_ShowGroupsFolderTop;
 	CBitmapButton	m_BackButton;
@@ -94,7 +94,6 @@ public:
 	bool			m_bHandleSearchTextChange;
 	bool			m_bFoundClipToSetFocusTo;
 	long			m_lItemsPerPage;
-	CGroupWnd		m_GroupWnd;
 
 	std::vector<CMainTable> m_Cache;
 
@@ -182,7 +181,8 @@ protected:
 	afx_msg void OnMenuQuickoptionsDoubleclickingoncaptionRollupwindow();
 	afx_msg void OnMenuQuickoptionsDoubleclickingoncaptionTogglesshowdescription();
 	afx_msg void OnMenuQuickoptionsPromptfornewgroupnames();
-	afx_msg void OnShowGroups();
+	afx_msg void OnShowGroupsBottom();
+	afx_msg void OnShowGroupsTop();
 	afx_msg void OnMenuViewgroups();
 	afx_msg void OnMenuQuickpropertiesSettoneverautodelete();
 	afx_msg void OnMenuQuickpropertiesAutodelete();

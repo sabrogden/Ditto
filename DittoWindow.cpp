@@ -28,8 +28,9 @@ CDittoWindow::CDittoWindow(void)
 	m_crChevronBT.SetRectEmpty();
 	m_crMaximizeBT.SetRectEmpty();
 	m_crMinimizeBT.SetRectEmpty();
-	m_CaptionColorLeft = ::GetSysColor(COLOR_ACTIVECAPTION);
-	m_CaptionColorRight = ::GetSysColor(COLOR_GRADIENTACTIVECAPTION);
+	m_CaptionColorLeft = RGB(0, 84, 230);
+	m_CaptionColorRight = RGB(61, 149, 255);
+	m_CaptionTextColor = RGB(255, 255, 255);
 }
 
 CDittoWindow::~CDittoWindow(void)
@@ -296,7 +297,7 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 		DeleteObject(color);
 
 	int nOldBKMode = dc.SetBkMode(TRANSPARENT);
-	COLORREF oldColor = dc.SetTextColor(RGB(255, 255, 255));
+	COLORREF oldColor = dc.SetTextColor(m_CaptionTextColor);
 
 	CFont *pOldFont = NULL;
 	if(bVertical)
@@ -866,11 +867,13 @@ void CDittoWindow::SetCaptionOn(CWnd *pWnd, int nPos, bool bOnstartup)
 
 bool CDittoWindow::SetCaptionColors(COLORREF left, COLORREF right)
 {
-	if( left == m_CaptionColorLeft || right == m_CaptionColorRight )
-		return false;
-
 	m_CaptionColorLeft = left;
 	m_CaptionColorRight = right;
 
 	return true;
+}
+
+void CDittoWindow::SetCaptionTextColor(COLORREF color)
+{
+	m_CaptionTextColor = color;
 }

@@ -32,8 +32,6 @@ BOOL COleClipSource::DoDelayRender()
 	int count = types.GetSize();
 	for(int i=0; i < count; i++)
 		DelayRenderData(types[i]);
-
-	DelayRenderData(theApp.m_DittoIdsFormat);
 	
 	return count;
 }
@@ -195,43 +193,33 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 	}
 	else
 	{
-		if(lpFormatEtc->cfFormat == theApp.m_DittoIdsFormat)
+		CClip clip;
+
+		clip.LoadFormats(m_ClipIDs[0]);
+
+		CClipFormat *pDittoDelayCF_HDROP = clip.m_Formats.FindFormat(theApp.m_RemoteCF_HDROP);
+		CClipFormat *pCF_HDROP = clip.m_Formats.FindFormat(CF_HDROP);
+
+		if(pDittoDelayCF_HDROP && pCF_HDROP)
 		{
-			if(m_ClipIDs.GetCount() > 0)
+			CDittoCF_HDROP *pData = (CDittoCF_HDROP*)GlobalLock(pDittoDelayCF_HDROP->m_hgData);
+			if(pData)
 			{
-				hData = NewGlobalP(m_ClipIDs.GetData(), m_ClipIDs.GetCount()*sizeof(m_ClipIDs[0]));
+				CString csComputerName;
+				CString csIP;
+
+				CTextConvert::ConvertFromUTF8(pData->m_cIP, csIP);
+				CTextConvert::ConvertFromUTF8(pData->m_cComputerName, csComputerName);
+				
+				GlobalUnlock(pDittoDelayCF_HDROP->m_hgData);
+
+				CClient cl;
+				hData = cl.RequestCopiedFiles(*pCF_HDROP, csIP, csComputerName);
 			}
 		}
 		else
 		{
-			CClip clip;
-
-			clip.LoadFormats(m_ClipIDs[0]);
-
-			CClipFormat *pDittoDelayCF_HDROP = clip.m_Formats.FindFormat(theApp.m_RemoteCF_HDROP);
-			CClipFormat *pCF_HDROP = clip.m_Formats.FindFormat(CF_HDROP);
-
-			if(pDittoDelayCF_HDROP && pCF_HDROP)
-			{
-				CDittoCF_HDROP *pData = (CDittoCF_HDROP*)GlobalLock(pDittoDelayCF_HDROP->m_hgData);
-				if(pData)
-				{
-					CString csComputerName;
-					CString csIP;
-
-					CTextConvert::ConvertFromUTF8(pData->m_cIP, csIP);
-					CTextConvert::ConvertFromUTF8(pData->m_cComputerName, csComputerName);
-					
-					GlobalUnlock(pDittoDelayCF_HDROP->m_hgData);
-
-					CClient cl;
-					hData = cl.RequestCopiedFiles(*pCF_HDROP, csIP, csComputerName);
-				}
-			}
-			else
-			{
-				hData = m_ClipIDs.Render(lpFormatEtc->cfFormat);
-			}
+			hData = m_ClipIDs.Render(lpFormatEtc->cfFormat);
 		}
 
 		//Add to a cache of already rendered data
