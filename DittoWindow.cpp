@@ -227,37 +227,18 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 		m_crMinimizeBT.SetRectEmpty();
 	}
 
-	float gR = 0; 
-	float gG = 0; 
-	float gB = 0; 
+	int r1 = GetRValue(m_CaptionColorLeft);
+	int g1 = GetGValue(m_CaptionColorLeft);
+	int b1 = GetBValue(m_CaptionColorLeft);
 
-	float sR = GetRValue(m_CaptionColorLeft);
-	float sG = GetGValue(m_CaptionColorLeft);
-	float sB = GetBValue(m_CaptionColorLeft);
-
-	float eR = GetRValue(m_CaptionColorRight);
-	float eG = GetGValue(m_CaptionColorRight);
-	float eB = GetBValue(m_CaptionColorRight);
+	int r2 = GetRValue(m_CaptionColorRight);
+	int g2 = GetGValue(m_CaptionColorRight);
+	int b2 = GetBValue(m_CaptionColorRight);
 
 	bool bGradient = true;
 	if(m_CaptionColorLeft == m_CaptionColorRight)
 	{
-		gR = eR;
-		gG = eG;
-		gB = eB; 
 		bGradient = false;
-	}
-	else if(bVertical)
-	{
-		gR = (eR - sR) / rcBorder.Height();
-		gG = (eG - sG) / rcBorder.Height(); 
-		gB = (eB - sB) / rcBorder.Height(); 
-	}
-	else
-	{
-		gR = (eR - sR) / rcBorder.Width();
-		gG = (eG - sG) / rcBorder.Width(); 
-		gB = (eB - sB) / rcBorder.Width(); 
 	}
 
 	HBRUSH color;
@@ -268,7 +249,12 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 		lCount = lHeight;
 
 	for(int i = 0; i < lCount; i++) 
-	{ 
+	{
+		int r, g, b;
+		r = r1 + (i * (r2 - r1) / lCount);
+		g = g1 + (i * (g2 - g1) / lCount);
+		b = b1 + (i * (b2 - b1) / lCount);
+
 		if(bVertical)
 		{
 			cr.top = i;
@@ -282,9 +268,7 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 
 		if(bGradient || i == 0)
 		{
-			color = CreateSolidBrush(RGB(int(gR * (float) i + gR),
-				int(gG * (float) i + sG),
-				int(gB * (float) i + sB)));
+			color = CreateSolidBrush(RGB(r, g, b));
 		}
 
 		::FillRect(dc, &cr, color);

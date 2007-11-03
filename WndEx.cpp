@@ -162,7 +162,7 @@ void CWndEx::OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp)
 	m_DittoWindow.DoNcCalcSize(bCalcValidRects, lpncsp);
 }
 
-UINT CWndEx::OnNcHitTest(CPoint point) 
+LRESULT CWndEx::OnNcHitTest(CPoint point) 
 {
 	UINT Ret = m_DittoWindow.DoNcHitTest(this, point);
 	if(Ret == -1)

@@ -61,7 +61,7 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnNcPaint();
 	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp);
-	afx_msg UINT OnNcHitTest(CPoint point);
+	afx_msg LRESULT OnNcHitTest(CPoint point);
 	afx_msg void OnNcLButtonDown(UINT nHitTest, CPoint point);
 	afx_msg void OnNcMouseMove(UINT nHitTest, CPoint point);
 	afx_msg void OnNcLButtonUp(UINT nHitTest, CPoint point);

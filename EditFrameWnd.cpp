@@ -167,7 +167,7 @@ void CEditFrameWnd::OnNcPaint()
 	m_DittoWindow.DoNcPaint(this);	
 }
 
-UINT CEditFrameWnd::OnNcHitTest(CPoint point) 
+LRESULT CEditFrameWnd::OnNcHitTest(CPoint point) 
 {
 	UINT Ret = m_DittoWindow.DoNcHitTest(this, point);
 	if(Ret == -1)

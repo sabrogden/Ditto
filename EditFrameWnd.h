@@ -34,7 +34,7 @@ public:
 	afx_msg void OnDummy();
 	afx_msg void OnNcPaint();
 	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp);
-	afx_msg UINT OnNcHitTest(CPoint point);
+	afx_msg LRESULT OnNcHitTest(CPoint point);
 protected:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 public:
