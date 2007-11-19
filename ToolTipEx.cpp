@@ -459,7 +459,7 @@ void CToolTipEx::SetToolTipText(const CString &csText)
 	m_RichEdit.SetText(csText);
 }
 
-LRESULT CToolTipEx::OnNcHitTest(CPoint point) 
+HITTEST_RET CToolTipEx::OnNcHitTest(CPoint point) 
 {
 	CRect crWindow;
 	GetWindowRect(crWindow);

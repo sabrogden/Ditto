@@ -8,7 +8,7 @@ copy ..\Release\DittoU.exe Ditto\Ditto.exe
 copy ..\Release\sqlite3.dll Ditto\sqlite3.dll
 copy ..\Release\AccessToSqlite.dll Ditto\AccessToSqlite.dll
 copy ..\Release\focus.dll Ditto\focus.dll
-copy ..\zlib\zlib1.dll Ditto\zlib.dll
+copy ..\zlib\zlib1.dll Ditto\zlib1.dll
 
 copy Changes.txt Ditto\Changes.txt
 

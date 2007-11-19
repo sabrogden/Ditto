@@ -73,7 +73,7 @@ protected:
 	//{{AFX_MSG(CToolTipEx)
 	afx_msg void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
-	afx_msg LRESULT OnNcHitTest(CPoint point);
+	afx_msg HITTEST_RET OnNcHitTest(CPoint point);
 	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()

@@ -100,6 +100,13 @@ void CGetSetOptions::LoadSettings()
 		}
 	}
 
+	if(m_bFromIni)
+	{
+		CString csPath = GetFilePath(m_csIniFileName);
+		if(FileExists(csPath) == FALSE)
+			CreateDirectory(csPath, NULL);
+	}
+
 	//first time running set some defaults
 	if(GetTotalCopyCount() <= 0)
 	{
@@ -344,10 +351,7 @@ CString CGetSetOptions::GetIniFileName(bool bLocalIniFile)
 		}
 	}
 
-	if(FileExists(csPath) == FALSE)
-		CreateDirectory(csPath, NULL);
-
-	csPath = csPath + "Ditto.Settings";
+	csPath += "Ditto.Settings";
 
 	return csPath;
 }

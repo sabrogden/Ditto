@@ -340,7 +340,7 @@ void CQPasteWnd::MoveControls()
 	}
 	
 	// Resize the list control
-	m_lstHeader.MoveWindow(0, lTopOfListBox, cx, cy - 22 - lTopOfListBox);
+	m_lstHeader.MoveWindow(0, lTopOfListBox, cx, cy - 23 - lTopOfListBox);
 	
 	int nWidth = cx;
 	
@@ -353,7 +353,7 @@ void CQPasteWnd::MoveControls()
 	else
 		m_btCancel.ShowWindow(SW_HIDE);
 	
-	m_Search.MoveWindow(18, cy - 19, nWidth-20, 17);
+	m_Search.MoveWindow(18, cy - 20, nWidth-20, 18);
 	
 	m_ShowGroupsFolderBottom.MoveWindow(0, cy - 19, 18, 16);
 	
