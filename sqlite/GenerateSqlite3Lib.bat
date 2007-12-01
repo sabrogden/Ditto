@@ -1,0 +1,1 @@
+lib /def:sqlite3.def

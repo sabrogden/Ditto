@@ -270,6 +270,8 @@ BOOL CreateDB(CString csPath)
 	{
 		CppSQLite3DB db;
 		db.open(csPath);
+		
+		db.execDML(_T("PRAGMA auto_vacuum = 1"));
 
 		db.execDML(_T("CREATE TABLE Main(")
 								_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")
