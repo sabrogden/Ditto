@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ditto_Language_File Version = "1" Author = "Alexandru Bogdan Munteanu" Notes = "http://muntealb.bravehost.com/">
+	<Ditto_Right_Click_Menu>
+		<Item English_Text = "Groups" ID = "-1">Grupuri</Item>
+		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Grup Nou  [Ctrl-F7]</Item>
+		<Item English_Text = "New Group Selection	F7" ID = "32812">Selectează Grupul Nou  [F7]</Item>
+		<Item English_Text = "Move to Group" ID = "32840">Mută într-un Grup</Item>
+		<Item English_Text = "Quick Options" ID = "-1">Opțiuni Rapide</Item>
+		<Item English_Text = "Lines Per Row" ID = "-1">Rîndurile Vizibile dintr-un Item al Listei</Item>
+		<Item English_Text = "1" ID = "32807">1</Item>
+		<Item English_Text = "2" ID = "32786">2</Item>
+		<Item English_Text = "3" ID = "32787">3</Item>
+		<Item English_Text = "4" ID = "32788">4</Item>
+		<Item English_Text = "5" ID = "32789">5</Item>
+		<Item English_Text = "Transparency" ID = "-1">Transparență</Item>
+		<Item English_Text = "None" ID = "32800">Deloc</Item>
+		<Item English_Text = "5 " ID = "32808">5 </Item>
+		<Item English_Text = "10 " ID = "32792">10 </Item>
+		<Item English_Text = "15 " ID = "32794">15 </Item>
+		<Item English_Text = "20 " ID = "32796">20 </Item>
+		<Item English_Text = "25 " ID = "32798">25 </Item>
+		<Item English_Text = "30 " ID = "32799">30 </Item>
+		<Item English_Text = "40 " ID = "32790">40 </Item>
+		<Item English_Text = "Positioning" ID = "-1">Apariția Ferestrei Softului</Item>
+		<Item English_Text = "At Caret" ID = "32802">La Locul Cursorului din Text</Item>
+		<Item English_Text = "At Cursor" ID = "32803">La Locul Indicatorul Mausului</Item>
+		<Item English_Text = "At Previous Position" ID = "32804">La Locul Precedent</Item>
+		<Item English_Text = "First Ten Hot Keys" ID = "-1">Taste Rapide pentru Primele Zece Itemuri</Item>
+		<Item English_Text = "Use Ctrl - Num" ID = "32777">Folosește [Ctrl - Num]</Item>
+		<Item English_Text = "Show Hot Key Text" ID = "32778">Arată Etichetele Tastelor Rapide</Item>
+		<Item English_Text = "View Caption Bar On" ID = "-1">Poziția Barei în Fereastra Softului</Item>
+		<Item English_Text = "Top" ID = "32783">Sus</Item>
+		<Item English_Text = "Right" ID = "32780">Dreapta</Item>
+		<Item English_Text = "Bottom" ID = "32781">Jos</Item>
+		<Item English_Text = "Left" ID = "32782">Stînga</Item>
+		<Item English_Text = "Sort" ID = "-1">Sortează Clipurile din Listă</Item>
+		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">Crescător</Item>
+		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">Descrescător</Item>
+		<Item English_Text = "Double Clicking on Caption" ID = "-1">Dublul-Clic pe Bara Ferestrei Softului</Item>
+		<Item English_Text = "Toggles Always on Top" ID = "32814">Comută Setarea "Mereu Deasupra"</Item>
+		<Item English_Text = "Rolls-up Window" ID = "32815">Rulează Panoul de Lipire Rapidă</Item>
+		<Item English_Text = "Toggles Always Show Description" ID = "32816">Comută Afișarea Permanentă a Descrierii Clipului Selectat</Item>
+		<Item English_Text = "Always on Top	Ctrl-Space" ID = "32784">Fereastra Softului e "Mereu Deasupra"  [Ctrl-Space]</Item>
+		<Item English_Text = "Auto Roll-up" ID = "32791">Auto-Rulează Panoul de Lipire Rapidă</Item>
+		<Item English_Text = "Always Show Description" ID = "32813">Afișează Permanent Descrierea Clipului Selectat</Item>
+		<Item English_Text = "Prompt For New Group Names" ID = "32817">Solicită Numele Grupurilor Noi</Item>
+		<Item English_Text = "Select Font" ID = "32844">Selectează Fontul Listei</Item>
+		<Item English_Text = "Show Thumbnails" ID = "32845">Arată Miniaturile în Listă</Item>
+		<Item English_Text = "Draw RTF Text" ID = "32846">Afișează Textul Clipurilor din Listă în Format RTF</Item>
+		<Item English_Text = "Paste Clip after selection" ID = "32847">Dublul-clic pe un Clip îl Lipește în Fereastra Activă</Item>
+		<Item English_Text = "Find As You Type" ID = "32848">Găsește Textul pe Măsură ce e Tastat</Item>
+		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Întreaga Fereastră a Softului e Vizibilă</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Arată în Listă și Clipurile care Aparțin unor Grupuri</Item>
+		<Item English_Text = "Sent To" ID = "-1">Trimite la Alt Calculator</Item>
+		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">(192.168.1.101) - același calculator</Item>
+		<Item English_Text = "View Full Description	F3" ID = "32793">Vezi Eticheta Clipului [F3]</Item>
+		<Item English_Text = "View Groups	Ctrl-G" ID = "32819">Vezi Grupurile de Clipuri	 [Ctrl-G]</Item>
+		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">Lipește ca Text Simplu  [Shift-Enter]</Item>
+		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">Lipește HTML ca Text Simplu</Item>
+		<Item English_Text = "Delete Entry	Del" ID = "32801">Șterge Clipul  [Del]</Item>
+		<Item English_Text = "Properties	Alt-Enter" ID = "32776">Proprietăți</Item>
+		<Item English_Text = "Quick Properties" ID = "-1">Proprietăți Rapide</Item>
+		<Item English_Text = "Never Auto Delete" ID = "32820">Nu Șterge Automat Niciodată</Item>
+		<Item English_Text = "Auto Delete" ID = "32821">Șterge Automat</Item>
+		<Item English_Text = "Remove Hot Key" ID = "32822">Înlătură Scurtătura</Item>
+		<Item English_Text = "Options..." ID = "32805">Opțiuni...</Item>
+		<Item English_Text = "Help" ID = "32842">Ajutor</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "32775">Deconectează de la Cliplanșetă</Item>
+		<Item English_Text = "Exit Program" ID = "32806">Ieși din Program</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt to Delete Clip" ID = "32852">Ștergerea Clipurilor Trebuie Confirmată</Item>	
+		<Item English_Text = "Import" ID = "32855">Importă</Item>
+		<Item English_Text = "Export" ID = "32853">Exportă</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">Înlătură Eticheta de Căutare Rapidă</Item>	
+		<Item English_Text = "Edit Clip" ID = "32860">Editează Clipul</Item>
+		<Item English_Text = "New Clip" ID = "32867">Clip Nou</Item>	
+		
+	</Ditto_Right_Click_Menu>
+	<Ditto_Clip_Properties>
+		<Item English_Text = "Hot Key" ID = "2039">Scurtătură</Item>
+		<Item English_Text = "Hot Key" ID = "2039">Scurtătură</Item>
+		<Item English_Text = "Date" ID = "2040">Data</Item>
+		<Item English_Text = "&Never Auto Delete" ID = "1025">&Nu șterge acest clip în mod automat</Item>
+		<Item English_Text = "Move To Group" ID = "2041">Mută în Grupul</Item>
+		<Item English_Text = "Item Title" ID = "2042">Titlul Clipului</Item>
+		<Item English_Text = "Copy Formats" ID = "2029">Formatul Clipului</Item>
+		<Item English_Text = "Delete" ID = "1021">Șterge</Item>
+		<Item English_Text = "OK" ID = "1">OK</Item>
+		<Item English_Text = "Cancel" ID = "2">Anulează</Item>
+		<Item English_Text = "Copy Properties" ID = "-1">Proprietățile Clipului</Item>
+	</Ditto_Clip_Properties>
+	<Ditto_Options_General>
+		<Item English_Text = "Start Ditto on System Startup" ID = "2004">Pornește Ditto odată cu Windows</Item>
+		<Item English_Text = "Display Icon in System Tray" ID = "2003">Arată iconița softului în sistaler [system tray]</Item>
+		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Numărul maxim de copieri salvate</Item>
+		<Item English_Text = "Paste Entries Expire after" ID = "2009">Itemurile ce au fost lipite expiră după</Item>
+		<Item English_Text = "Days" ID = "2043">zile</Item>
+		<Item English_Text = "Compact and Repair" ID = "1028">Compactează și Repară BD</Item>
+		<Item English_Text = "Automatically check for updates online" ID = "1029">Caută automat pe internet actualizări ale softului</Item>
+		<Item English_Text = "Check Now" ID = "1030">Verifică Acum</Item>
+		<Item English_Text = "Allow Duplicates" ID = "1037">Permite dublurile (clipuri cu același conținut)</Item>
+		<Item English_Text = "Update Clip Time On Paste" ID = "1038">La lipirea clipului modifică-i data în cea curentă și pune-l primul pe listă</Item>
+		<Item English_Text = "Save Multi-Pastes" ID = "1039">Salvează multi-lipirile (după lipirea mai multor itemuri deodată creează un item alcătuit din clipurile unite)</Item>
+		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Arată/Ascunde cu tasta rapidă dacă fereastra softului e vizibilă</Item>
+		<Item English_Text = "Amount of text to save for description" ID = "2044">Nr. max. de caractere din textul clipului utilizate pt. descriere</Item>
+		<Item English_Text = "On copy play the sound" ID = "2045">La copiere emite sunetul</Item>
+		<Item English_Text = "Play" ID = "2034">Redă</Item>
+		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">Dublul-clic pe un item din listă îl lipește în fereastra activă (nebifare = îl va pune doar în cliplanșetă)</Item>
+		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">Mărimea maximă a clipului în baiți</Item>
+		<Item English_Text = "(Leave blank for no limit)" ID = "2047">(cîmpul gol = mărime nelimitată)</Item>
+		<Item English_Text = "Set Database Path" ID = "1034">Calea bazei de date</Item>
+		<Item English_Text = "Language" ID = "2069">Limbă</Item>
+		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">Ignoră copierile care sînt făcute la X milisecunde de la ultima copiere (1000 ms = 1 sec)</Item>
+		<Item English_Text = "About Language" ID = "2073">Informații despre Traducere</Item>
+		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Asigură-te că Ditto e mereu conectat la cliplanșetă</Item>
+		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Generale</Item>
+	</Ditto_Options_General>
+	<Ditto_Options_Supported_Types>
+		<Item English_Text = "&Add" ID = "1015">&Adaugă</Item>
+		<Item English_Text = "&Delete" ID = "1016">Î&nlătură</Item>
+		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">Tipuri Suportate</Item>
+	</Ditto_Options_Supported_Types>
+	<Ditto_Options_Shortcuts>
+		<Item English_Text = "Activate Ditto" ID = "2048">Arată Fereastra Softului</Item>
+		<Item English_Text = "Win" ID = "2035">Win</Item>
+		<Item English_Text = "Named Copy" ID = "2049">Eticheta Copierii</Item>
+		<Item English_Text = "Win" ID = "2036">Win</Item>
+		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">Taste Rapide Globale (nu e necesar ca fereastra softului să fie vizibilă) => pentru ultimele zece itemuri copiate</Item>
+		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Lipește itemul cu numărul 1-10 din listă (nebifat = el va fi doar încărcat în cliplanșetă)</Item>
+		<Item English_Text = "Position 1" ID = "2052">Poziția 1</Item>
+		<Item English_Text = "Position 2" ID = "2053">Poziția 2</Item>
+		<Item English_Text = "Position 3" ID = "2054">Poziția 3</Item>
+		<Item English_Text = "Position 4" ID = "2055">Poziția 4</Item>
+		<Item English_Text = "Position 5" ID = "2056">Poziția 5</Item>
+		<Item English_Text = "Position 6" ID = "2057">Poziția 6</Item>
+		<Item English_Text = "Position 7" ID = "2058">Poziția 7</Item>
+		<Item English_Text = "Position 8" ID = "2059">Poziția 8</Item>
+		<Item English_Text = "Position 9" ID = "2060">Poziția 9</Item>
+		<Item English_Text = "Position 10" ID = "2061">Poziția 10</Item>
+		<Item English_Text = "Win" ID = "2042">Win</Item>
+		<Item English_Text = "Win" ID = "2043">Win</Item>
+		<Item English_Text = "Win" ID = "2044">Win</Item>
+		<Item English_Text = "Win" ID = "2045">Win</Item>
+		<Item English_Text = "Win" ID = "2046">Win</Item>
+		<Item English_Text = "Win" ID = "2037">Win</Item>
+		<Item English_Text = "Win" ID = "2038">Win</Item>
+		<Item English_Text = "Win" ID = "2039">Win</Item>
+		<Item English_Text = "Win" ID = "2040">Win</Item>
+		<Item English_Text = "Win" ID = "2041">Win</Item>
+		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Bifați butonul "Win" pentru a include tasta "Windows" în combinația de taste</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">Scurtături de Tastatură</Item>
+		
+		//New item added in 3.15.1 8/18/07
+		<Item English_Text = "Send custom strokes Per Application" ID = "2091">Tastări personalizate per aplicație</Item>
+	</Ditto_Options_Shortcuts>
+	<Ditto_Options_Quick_Paste>
+		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">Istoricul pornește din vîrful listei (itemurile noi sînt puse în capul listei)</Item>
+		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">Folosește combinația de taste [Ctrl + Num 0-9] pentru lipirea celor mai noi 10 itemuri din listă</Item>
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">Arată în listă numărul corespunzător (0-9) pentru tastele rapide de lipire [Ctrl + Num 0-9]</Item>
+		<Item English_Text = "Show leading whitespace" ID = "2021">Afișează în listă spațiul gol inițial dintr-un text dacă acesta există</Item>
+		<Item English_Text = "Text Lines per Row" ID = "2062">Rînduri pt. fiecare item din listă</Item>
+		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">Activează transparența pt. panoul de lipire rapidă</Item>
+		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">Arată miniaturi în listă (pt. clipurile în format CF_DIB) -> crește utilizarea memoriei și scade viteza de afișare</Item>
+		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">Arată text RTF în listă (pt. clipurile în format RTF) -> crește utilizarea memoriei și scade viteza de afișare</Item>
+		<Item English_Text = "Find As You Type" ID = "2036">Găsește textul pe măsură ce e tastat (filtrează lista de itemuri imediat ce începe tastarea textului de căutat)</Item>
+		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">Toată fereastra softului trebuie să fie vizibilă (nebifat = e vizibil doar primul item din listă)</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">Arată în listă și itemurile care aparțin unor grupuri (nebifat = itemurile sînt arătate doar cînd e deschis grupul)</Item>
+		<Item English_Text = "Font" ID = "1040">Font</Item>
+		<Item English_Text = "Default Font" ID = "2031">Fontul Implicit</Item>
+		<Item English_Text = "Popup Positioning" ID = "2063">Apariția ferestrei softului (pt. tasta rapidă)</Item>
+		<Item English_Text = "At Caret" ID = "2015">La locul cursorului din text</Item>
+		<Item English_Text = "At Cursor" ID = "2016">La locul indicatorul mausului</Item>
+		<Item English_Text = "At Previous Position" ID = "2017">La locul folosit anterior</Item>
+		<Item English_Text = "List Item Prefix Legend" ID = "2064">Legendă pentru prefixurile itemurilor din listă</Item>
+		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">  * = Nu va fi șters automat\n  s = Are o scurtătură de taste\n G = Itemul e un grup\n  ! = Itemul aparține unui grup</Item>
+		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Lipește Rapid</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Ștergerea itemurilor trebuie confirmată</Item>
+		
+	</Ditto_Options_Quick_Paste>	
+	<Ditto_Options_Friends>
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Atunci cînd primiți un clip ce v-a fost trimis, dacă adresa IP sau numele calculatorului sînt în această listă, atunci clipul va fi pus în cliplanșetă.  În caz contrar va fi pus între clipurile salvate pentru o utilizare ulterioară.</Item>
+		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP-uri/Nume de Calculatoare separate prin virgule</Item>
+		<Item English_Text = "Disable Recieving Clips" ID = "2026">Dezactivează primirea de clipuri</Item>
+		<Item English_Text = "Network Password" ID = "2054">Parolă de Rețea</Item>
+		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">Dacă primiți clipuri de la calculatoare unde parola dv. de rețea nu se potrivește, introduceți parole suplimentare de rețea separate prin virgule</Item>
+		<Item English_Text = "Receive Passwords" ID = "2056">Parole Suplimentare</Item>
+		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Dacă opțiunea "Trimite Toate Clipurile" e selectată, atunci toate clipurile de pe acest calculator vor fi trimise la celălalt calculator.  Dacă opțiunea nu e selectată atunci folosiți comanda din meniul contextual pentru a trimite un clip la alt calculator.</Item>
+		<Item English_Text = "Log Send Receive Commands" ID = "1042">Loghează comenzile de primire/trimitere (opțiune utilă numai pentru debugarea softului)</Item>
+		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Prieteni</Item>
+	</Ditto_Options_Friends>
+	<Ditto_Options_Friends_Detail>
+		<Item English_Text = "Send All Copies to this friend" ID = "1015">Trimite toate copierile acestui prieten</Item>
+		<Item English_Text = "IP/Name" ID = "2052">IP/Nume</Item>
+		<Item English_Text = "Description" ID = "2053">Descriere</Item>
+		<Item English_Text = "Friend Details" ID = "-1">Detaliile Prietenului</Item>
+	</Ditto_Options_Friends_Detail>
+	<Ditto_Options_Stats>
+		<Item English_Text = "Odometer" ID = "2052">Odometru (Contor de acțiuni efectuate)</Item>
+		<Item English_Text = "Trip Odometer" ID = "2053">Odometru Personalizat (se poate seta data)</Item>
+		<Item English_Text = "Copies" ID = "2054">Copieri</Item>
+		<Item English_Text = "Pastes" ID = "2055">Lipiri</Item>
+		<Item English_Text = "Copies" ID = "2056">Copieri</Item>
+		<Item English_Text = "Pastes" ID = "2057">Lipiri</Item>
+		<Item English_Text = "Reset" ID = "1006">Resetează</Item>
+		<Item English_Text = "Saved Copies" ID = "2058">Copieri Salvate</Item>
+		<Item English_Text = "Saved Copy Data" ID = "2059">Datele Copierilor Salvate</Item>
+		<Item English_Text = "Remove All" ID = "1013">Șterge Toate Datele</Item>
+		<Item English_Text = "Last Started" ID = "2060">Ultima Pornire</Item>
+		<Item English_Text = "Database Size" ID = "2061">Mărimea Bazei de Date</Item>
+		<Item English_Text = "Clips Sent" ID = "2066">Clipuri Trimise</Item>
+		<Item English_Text = "Clips received" ID = "2067">Clipuri Primite</Item>
+		<Item English_Text = "Since Last Start" ID = "2068">de la ultima pornire</Item>
+		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true">Statistici</Item>
+	</Ditto_Options_Stats>
+	<Ditto_Options_Supported_Types_Add>
+		<Item English_Text = "Main Types" ID = "2052">Tipuri Principale</Item>
+		<Item English_Text = "Custom Type" ID = "2053">Tip Personalizat</Item>
+		<Item English_Text = "Add" ID = "1020">Adaugă</Item>
+		<Item English_Text = "Currently on the Clipboard" ID = "2054">Acum în Cliplanșetă</Item>
+		<Item English_Text = "Add" ID = "1019">Adaugă</Item>
+		<Item English_Text = "Add" ID = "1021">Adaugă</Item>
+		<Item English_Text = "Cancel" ID = "2">Anulează</Item>
+		<Item English_Text = "Add Supported Type" ID = "-1">Adaugă Tip Suportat</Item>
+	</Ditto_Options_Supported_Types_Add>
+	<Ditto_Move_To_Groups>
+		<Item English_Text = "New Group" ID = "1040">Grup Nou</Item>
+		<Item English_Text = "OK" ID = "1">OK</Item>
+		<Item English_Text = "Cancel" ID = "2">Anulează</Item>
+		<Item English_Text = "Move to Group" ID = "-1">Mută într-un Grup</Item>
+	</Ditto_Move_To_Groups>
+	<Ditto_String_Table>
+		<Item English_Text = "General" ID = "GeneralTitle">Generale</Item>
+		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">Tipuri Suportate</Item>
+		<Item English_Text = "Stats" ID = "StatsTitle">Statistici</Item>
+		<Item English_Text = "Friends" ID = "FriendsTitle">Prieteni</Item>
+		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">Lipire Rapidă</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">Scurtături de Tastatură</Item>
+		<Item English_Text = "About" ID = "AboutTitle">Despre</Item>
+		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">Eroare la deschiderea bazei de date</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">Nu pot inițializa motorul bazei de date DAO/Jet.\nSelectați DA [YES] pentru a descărca DAO de la http://ditto-cp.sourceforge.net/dao_setup.exe\n\nReporniți Ditto după instalarea DAO.</Item>
+		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format">Formatul bazei de date e nerecunoscut</Item>
+		<Item English_Text = "the file will be renamed" ID = "File_Renamed">fișierul va fi redenumit</Item>
+		<Item English_Text = "and a new database will be created" ID = "New_Database">și o bază de date nouă va fi creată</Item>
+		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">Există actualizări disponibile pentru Ditto.\nVizitați ditto-cp.sourceforge.net pentru detalii\n\nVersiunea Instalată</Item>
+		<Item English_Text = "Update Version" ID = "Update_Version">Versiunea Actualizată</Item>
+		<Item English_Text = "Download updated version?" ID = "Download_Update">Descarc versiunea actualizată?</Item>			
+		<Item English_Text = "No updates available" ID = "No_Updates">Nu sînt disponibile actualizări</Item>			
+		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Aceasta va înlătura toate intrările ce conțin copieri!\n\nContinui?</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Deconectează de la Cliplanșetă</Item>
+		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Conectează la Cliplanșetă</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">Nu pot inițializa motorul bazei de date DAO/Jet.  DAO va fi instalat acum.\n\nRepornește Ditto după instalarea lui DAO.</Item>
+		<Item English_Text = "NO TARGET" ID = "No_Target">NICI O ȚINTĂ</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Avertizează înainte de ștergerea clipurilor</Item>
+		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">Șterg Clipurile Selectate?</Item>
+		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">Eroare la importarea clipului exportat</Item>
+		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing">Eroare la parsarea clipului exportat</Item>
+		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good">Clip plasat în cliplanșetă</Item>
+		<Item English_Text = "Successfully imported" ID = "Import_Successfully">Importat cu succes</Item>
+		<Item English_Text = "clip" ID = "Clip">clip</Item>
+		<Item English_Text = "clips" ID = "Clips">clipuri</Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">Descrierea clipului e actualizată la salvare</Item>
+		<Item English_Text = "New Clip" ID = "New_Clip">Clip Nou</Item>
+		<Item English_Text = "Save" ID = "Save">Salvează</Item>
+		<Item English_Text = "Save All" ID = "Save_All">Salvează Tot</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">Închide Tabul Curent</Item>
+		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable">Itemul curent nu e editabil. Un clip trebuie să fie de unul din tipurile următoare</Item>
+		<Item English_Text = "to be editable" ID = "Editable">pentru a fi editabil</Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">Doriți să salvați modificările la</Item>
+		<Item English_Text = "Error saving clip" ID = "ErrorSaving">Eroare la salvarea clipului</Item>
+		<Item English_Text = "New" ID = "New">Nou</Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">Salvează, închide și pune în cliplanșetă</Item>
+		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">Editează cu Ditto</Item>
+		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title">Ditto - Eticheta Lipirii</Item>
+		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">Eroare la încărcarea datelor</Item>
+		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2">Eroare la găsirea clipului cu ajutorul etichetei</Item>
+		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">Excepție la găsirea clipului</Item>
+		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title">Ditto - Eticheta Copierii</Item>
+		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">Eroare la salvarea în baza de date a etichetei copierii</Item>
+		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">Excepție la salvarea etichetei copierii</Item>
+		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">Ditto nu a recepționat o etichetă a copierii</Item> 
+				
+	</Ditto_String_Table>
+	<Ditto_Options_Sheet>
+		<Item English_Text = "OK" ID = "1">OK</Item>
+		<Item English_Text = "Cancel" ID = "2">Anulează</Item>
+		<Item English_Text = "Apply" ID = "12321">Aplică</Item>
+	</Ditto_Options_Sheet>
+	<Ditto_Tray_Icon_Menu>
+		<Item English_Text = "Show Quick Paste" ID = "32773">Panoul de Lipire Rapidă</Item>
+		<Item English_Text = "Options" ID = "32771">Opțiuni</Item>
+		<Item English_Text = "Help" ID = "32843">Ajutor</Item>
+		<Item English_Text = "Exit" ID = "32772">Ieși</Item>
+
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Import" ID = "32854">Importă</Item>
+		<Item English_Text = "New Clip" ID = "32868">Clip Nou</Item>
+		
+	</Ditto_Tray_Icon_Menu>
+</Ditto_Language_File>

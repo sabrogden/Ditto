@@ -1,3 +1,10 @@
+3.15.3.0   11-30-07
+- Fixed empty directly from being created in application data in stand alone version
+- Added themes
+- Updated to latest sqlite db version
+- When creating a new db auto vacuum is set
+
+
 3.15.1.0   8-19-07
 - Custom Key strokes per application
 - Added option to hide friends, via registry setting only

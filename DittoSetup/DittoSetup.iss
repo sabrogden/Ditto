@@ -3,8 +3,8 @@
 
 [Setup]
 AppName=Ditto
-AppVerName=Ditto 3.15.0.0
-OutputBaseFilename=DittoSetup_3_15_0_0
+AppVerName=Ditto 3.15.3.0
+OutputBaseFilename=DittoSetup_3_15_3_0
 AppPublisher=Scott Brogden
 AppPublisherURL=ditto-cp.sourceforge.net
 AppSupportURL=ditto-cp.sourceforge.net
@@ -34,6 +34,9 @@ Name: "Croatian"; MessagesFile: "Croatian.isl"
 Name: "Turkish"; MessagesFile: "Turkish.isl"
 Name: "Japanese"; MessagesFile: "Japanese.isl"
 Name: "Chinese"; MessagesFile: "ChineseSimp.isl"
+Name: "Romanian"; MessagesFile: "Romanian.isl"
+
+
 [Tasks]
 Name: RunAtStartup; Description: "Run Ditto on Windows Startup";
 
@@ -52,6 +55,7 @@ Source: "..\zlib\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "Changes.txt"; DestDir: "{app}"
 
 Source: "..\Debug\Language\*"; DestDir: "{app}\Language"; BeforeInstall: BeforeLanguageInstall();
+Source: "..\Debug\Themes\*"; DestDir: "{app}\Themes";
 
 Source: "mfc-crt\*"; DestDir: "{app}"
 
@@ -72,6 +76,10 @@ Filename: "{app}\Changes.txt"; Description: "View Change History"; Flags: nowait
 Root: HKCU; Subkey: "Software\Ditto"; Flags: uninsdeletekey
 Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "Ditto"; flags: uninsdeletevalue; ValueData: "{app}\Ditto.exe"; Tasks: RunAtStartup
 Root: HKCU; Subkey: "Software\Ditto"; ValueType: string; ValueName: "LanguageFile"; ValueData: {language}
+
+Root: HKCU; Subkey: "Software\Ditto\PasteStrings"; ValueType: string; ValueName: "gvim.exe"; ValueData: """{{PLUS}gP"
+Root: HKCU; Subkey: "Software\Ditto\CopyStrings"; ValueType: string; ValueName: "gvim.exe"; ValueData: """{{PLUS}y"
+Root: HKCU; Subkey: "Software\Ditto\CutStrings"; ValueType: string; ValueName: "gvim.exe"; ValueData: """{{PLUS}x"
 
 ;associate .dto with Ditto
 Root: HKCR; Subkey: ".dto"; ValueType: string; ValueName: ""; ValueData: "Ditto"; Flags: uninsdeletevalue

@@ -312,6 +312,7 @@ void COptionsGeneral::OnBtCompactAndRepair()
 
 	try
 	{
+		theApp.m_db.execDML(_T("PRAGMA auto_vacuum = 1"));
 		theApp.m_db.execQuery(_T("VACUUM"));
 	}
 	CATCH_SQLITE_EXCEPTION
