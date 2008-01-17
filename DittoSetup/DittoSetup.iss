@@ -3,8 +3,8 @@
 
 [Setup]
 AppName=Ditto
-AppVerName=Ditto 3.15.3.0
-OutputBaseFilename=DittoSetup_3_15_3_0
+AppVerName=Ditto 3.15.4.0
+OutputBaseFilename=DittoSetup_3_15_4_0
 AppPublisher=Scott Brogden
 AppPublisherURL=ditto-cp.sourceforge.net
 AppSupportURL=ditto-cp.sourceforge.net
