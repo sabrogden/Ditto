@@ -8,6 +8,7 @@
 #include "ProcessPaste.h"
 #include <io.h>
 #include "AccessToSqlite.h"
+#include "Path.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -103,9 +104,6 @@ CString GetDefaultDBName()
 		}
 	}
 
-	if(FileExists(csDefaultPath) == FALSE)
-		CreateDirectory(csDefaultPath, NULL);
-
 	CString csTempName = csDefaultPath + "Ditto.db";
 	int i = 1;
 	while(FileExists(csTempName))
@@ -148,6 +146,13 @@ BOOL CheckDBExists(CString csDBPath)
 	if(FileExists(csDBPath) == FALSE)
 	{
 		csDBPath = GetDefaultDBName();
+
+		nsPath::CPath FullPath(csDBPath);
+		CString csPath = FullPath.GetPath().GetStr();
+		if(csPath.IsEmpty() == false && FileExists(csDBPath) == FALSE)
+		{
+			CreateDirectory(csPath, NULL);
+		}
 
 		// -- create a new one
 		bRet = CreateDB(csDBPath);
@@ -264,12 +269,12 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 	return TRUE;                                                     
 }
 
-BOOL CreateDB(CString csPath)
+BOOL CreateDB(CString csFile)
 {
 	try
 	{
 		CppSQLite3DB db;
-		db.open(csPath);
+		db.open(csFile);
 		
 		db.execDML(_T("PRAGMA auto_vacuum = 1"));
 
