@@ -3,6 +3,7 @@ Rmdir Ditto /s /q
 MkDir Ditto
 MkDir Ditto\Help
 MkDir Ditto\Language
+MkDir Ditto\Themes
 
 copy ..\Release\DittoU.exe Ditto\Ditto.exe
 copy ..\Release\sqlite3.dll Ditto\sqlite3.dll
@@ -19,7 +20,6 @@ copy Ditto.Settings Ditto\Ditto.Settings
 copy ..\Help\*.* Ditto\Help\
 copy ..\Debug\language\*.xml Ditto\language\
 copy ..\Debug\themes\*.xml Ditto\themes\
-
 
 7za.exe a -tzip Ditto_Portable.zip "Ditto\*" -r
 

@@ -23,8 +23,10 @@
 
     </td>
     <td width="83%" height="40" align="right" valign="top">
-    <a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Setup_3_15_1_0.exe?download"><font size="6"><b>Download</b></font></a>&nbsp;&nbsp;
-    -&nbsp;&nbsp; <a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Portable_3_15_1_0.zip?download"><font size="4"><b>Portable</b></font></a><font size="5">
+    <font size="6"><b>
+    <a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Setup_3_15_4_0.exe?download">Download</a></b></font>&nbsp;&nbsp;
+    -&nbsp;&nbsp; <font size="4"><b>
+    <a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Portable_3_15_4_0.zip?download">Portable</a></b></font><font size="5">
     </font><font size="1">(zip file)</font>&nbsp;&nbsp; -&nbsp;&nbsp; <a href="http://ditto-cp.wiki.sourceforge.net/">Wiki</a>&nbsp;&nbsp;
     -&nbsp;&nbsp; <a href="http://ditto-cp.sourceforge.net/Help">Help</a>&nbsp;&nbsp;
     -&nbsp;&nbsp; <a href="#Features">Features</a>&nbsp;&nbsp; -&nbsp;&nbsp; <a href="#Change History">Change History</a>&nbsp;&nbsp;
@@ -44,10 +46,14 @@ of those items at a later time. Ditto allows you to save any type of information
 that can be put on the clipboard, text, images, html, custom formats, .....<p><a href="Language.php"><font size="5">Translate Ditto into your language</font></a><font size="5">
 </font>
 <font size="3"><br>
-Available Languages - </font><font size="2">English&nbsp;
-        -&nbsp;&nbsp;German&nbsp; -&nbsp; Italian&nbsp; -&nbsp; French
-- Portuguese - Spanish - Polish - Dutch<br>
-</font></p>
+Available Languages (</font><font size="1">right click/save link as</font><font size="3">) - </font><font size="2">English&nbsp;
+        -&nbsp;&nbsp;<a href="Chinese.xml">Chinese</a> - <a href="Croatian.xml">
+Croatian</a> - <a href="Dutch.xml">Dutch</a> - <a href="French.xml">French</a> -
+<a href="German.xml">German</a> - <a href="Italiano.xml">Italian</a> -
+<a href="Japanese.xml">Japanese</a> - <a href="Polski.xml">Polish</a> -
+<a href="Portuguese.xml">Portuguese</a> - <a href="Romanian.xml">Romanian</a> -
+<a href="Spanish.xml">Spanish</a> - <a href="Swedish.xml">Swedish</a> -
+<a href="Turkish.xml">Turkish</a></font></p>
     <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="114%" id="AutoNumber6">
       <tr>
         <td width="51%">
@@ -94,15 +100,18 @@ Available Languages - </font><font size="2">English&nbsp;
         <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="100%" id="AutoNumber7">
           <tr>
             <td width="50%"><b><font size="5">Download - </font></b> 
-Version 3.15.1</td>
+            Version 3.15.4</td>
           </tr>
           <tr>
             <td width="50%">
-            <p style="margin-left: 24"><a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Setup_3_15_1_0.exe?download">Download
+            <p style="margin-left: 24">
+            <a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Setup_3_15_4_0.exe?download">Download
             Standard Install</a></p>
-            <p style="margin-left: 24"><a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Portable_3_15_1_0.zip?download">Download
+            <p style="margin-left: 24">
+            <a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Portable_3_15_4_0.zip?download">Download
             Portable (zip file)</a></p>
-            <p style="margin-left: 24"><a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Source_3_15_1_0.zip?download">Download
+            <p style="margin-left: 24">
+            <a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Source_3_15_4_0.zip?download">Download
 Source</a><a href="http://prdownloads.sourceforge.net/ditto-cp/DittoSource_3_15_1_0.zip?download">
             <br>
             <br>
@@ -158,7 +167,7 @@ google_color_text = "000000";
 //--></script>
         <script type="text/javascript"
   src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
+        </script>
         
         </td>
       </tr>
@@ -168,7 +177,13 @@ google_color_text = "000000";
         <td width="100%" height="11"><b><font size="6"><a name="Change History"></a></font><font size="5">Change History</font></b></td>
       </tr>
       <tr>
-        <td width="100%" height="11"><b>3.15.1.0   8-19-07</b><br>
+        <td width="100%" height="11"><b>3.15.4.0 01-16-08</b><br>
+&nbsp;&nbsp;&nbsp;&nbsp; - Fixed empty directory from being created in 
+        application data in stand alone version<br>
+&nbsp;&nbsp;&nbsp;&nbsp; - Added themes (http://ditto-cp.wiki.sourceforge.net/Themes)<br>
+&nbsp;&nbsp;&nbsp;&nbsp; - Updated to latest sqlite db version<br>
+&nbsp;&nbsp;&nbsp;&nbsp; - When creating a new db auto vacuum is set. Or when 
+        doing a compact and repair.<p><b>3.15.1.0   8-19-07</b><br>
           &nbsp;&nbsp;&nbsp;&nbsp; - Custom Key strokes per application
           (http://ditto-cp.wiki.sourceforge.net/Custom+key+strokes)<br>
           &nbsp;&nbsp;&nbsp;&nbsp; - Added option to hide friends, via registry setting only
@@ -187,6 +202,7 @@ google_color_text = "000000";
           &nbsp;&nbsp;&nbsp;&nbsp; - When searching in a group only search the clips in that group.<br>
           &nbsp;&nbsp;&nbsp;&nbsp; - Hide apply button in options.  The button didn't do anything.<br>
           &nbsp;&nbsp;&nbsp;&nbsp; - Don't underline the character following an ampersand(&amp;) when displaying clip text.
+        </p>
           <p><b>3.9.0.0    8-03-06</b><br>
           &nbsp;&nbsp;&nbsp;&nbsp; - Fixed issue that could cause Ditto to not disconnect from the clipboard</p>
           <p><b>3.8.0.0	   7-27-06</b><br>
