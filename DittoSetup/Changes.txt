@@ -1,8 +1,8 @@
-3.15.3.0   11-30-07
+3.15.4.0   01-16-08
 - Fixed empty directly from being created in application data in stand alone version
-- Added themes
+- Added themes (http://ditto-cp.wiki.sourceforge.net/Themes)
 - Updated to latest sqlite db version
-- When creating a new db auto vacuum is set
+- When creating a new db auto vacuum is set.  Or when doing a compact and repair.
 
 
 3.15.1.0   8-19-07
