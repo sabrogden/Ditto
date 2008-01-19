@@ -54,6 +54,7 @@ Croatian</a> - <a href="Dutch.xml">Dutch</a> - <a href="French.xml">French</a> -
 <a href="Portuguese.xml">Portuguese</a> - <a href="Romanian.xml">Romanian</a> -
 <a href="Spanish.xml">Spanish</a> - <a href="Swedish.xml">Swedish</a> -
 <a href="Turkish.xml">Turkish</a></font></p>
+    <p><font size="5"><a href="themes/index.php">Download Themes</a></font></p>
     <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" width="114%" id="AutoNumber6">
       <tr>
         <td width="51%">
