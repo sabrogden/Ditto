@@ -3,7 +3,7 @@
 #include "TextConvert.h"
 
 bool WriteDataToFile(CString csPath, LPVOID data, ULONG size);
-CString g_csDIBImagePath = "";
+CString g_csDIBImagePath = _T("");
 int g_nDIBImageName = 1;
 
 bool DittoAddin(const CDittoInfo &DittoInfo, CDittoAddinInfo &info)
@@ -25,7 +25,7 @@ bool DittoAddin(const CDittoInfo &DittoInfo, CDittoAddinInfo &info)
 bool SupportedFunctions(const CDittoInfo &DittoInfo, FunctionType type, std::vector<CFunction> &Functions)
 {
 	CFunction func;
-	func.m_csFunction = "ConvertPathToHtmlImageTag";
+	func.m_csFunction = _T("ConvertPathToHtmlImageTag");
 	func.m_csDisplayName = _T("Past As html image link");
 	func.m_csDetailDescription = _T("Converts a CF_DIB or CF_HDROP to a html format for pasting into outlook express");
 
@@ -43,10 +43,8 @@ bool SupportedFunctions(const CDittoInfo &DittoInfo, FunctionType type, std::vec
 
 void CreateLocalPath(bool bCreateDir)
 {
-	TCHAR localPath[MAX_PATH];
-	GetTempPath(sizeof(localPath), localPath);
-	g_csDIBImagePath = localPath;
-	g_csDIBImagePath += _T("ditto");
+	g_csDIBImagePath = _wgetenv(_T("TMP"));;
+	g_csDIBImagePath += _T("\\ditto");
 	if(bCreateDir)
 	{
 		CreateDirectory(g_csDIBImagePath, NULL);
@@ -64,7 +62,7 @@ bool ConvertPathToHtmlImageTag(const CDittoInfo &DittoInfo, IClip *pClip)
 			CreateLocalPath(true);
 		}
 
-		CString csIMG = "";
+		CString csIMG = _T("");
 
 		IClipFormat *pCF_DIB = pFormats->FindFormatEx(CF_DIB);
 		if(pCF_DIB != NULL)

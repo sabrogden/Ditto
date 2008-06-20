@@ -20,7 +20,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL;UNICODE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -75,7 +75,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL;UNICODE"
 				RuntimeLibrary="2"
 				TreatWChar_tAsBuiltInType="TRUE"
 				UsePrecompiledHeader="3"

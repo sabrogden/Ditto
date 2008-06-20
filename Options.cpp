@@ -1704,7 +1704,7 @@ CString CGetSetOptions::GetPath(long lPathID)
 
 		csDir += "Addins\\";
 
-		csDir = _T("C:\\Documents and Settings\\Brogdens\\Desktop\\ditto\\Addins\\OutlookExpress\\Debug\\");
+		//csDir = _T("C:\\Documents and Settings\\Brogdens\\Desktop\\ditto\\Addins\\OutlookExpress\\Debug\\");
 
 		break;
 	}
