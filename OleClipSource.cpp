@@ -17,6 +17,7 @@ COleClipSource::COleClipSource()
 	m_bLoadedFormats = false;
 	m_bOnlyPaste_CF_TEXT = false;
 	m_bPasteHTMLFormatAs_CF_TEXT = false;
+	m_pCustomPasteFormats = NULL;
 }
 
 COleClipSource::~COleClipSource()
@@ -44,6 +45,11 @@ BOOL COleClipSource::DoImmediateRender()
 		return TRUE;
 
 	m_bLoadedFormats = true;
+
+	if(m_pCustomPasteFormats != NULL)
+	{
+		return PutFormatOnClipboard(m_pCustomPasteFormats, m_bPasteHTMLFormatAs_CF_TEXT);
+	}
 	
 	int count = m_ClipIDs.GetSize();
 	if(count <= 0)

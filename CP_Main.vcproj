@@ -805,6 +805,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\DittoAddin.cpp">
+			</File>
+			<File
+				RelativePath=".\DittoAddins.cpp">
+			</File>
+			<File
 				RelativePath=".\DittoCopyBuffer.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -2694,7 +2700,16 @@
 				RelativePath="DialogResizer.h">
 			</File>
 			<File
+				RelativePath=".\DittoAddin.h">
+			</File>
+			<File
+				RelativePath=".\DittoAddins.h">
+			</File>
+			<File
 				RelativePath=".\DittoCopyBuffer.h">
+			</File>
+			<File
+				RelativePath=".\Shared\DittoDefines.h">
 			</File>
 			<File
 				RelativePath=".\DittoRulerRichEditCtrl.h">

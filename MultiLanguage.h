@@ -60,6 +60,7 @@ public:
 	CString GetAuthor()	{ return m_csAuthor;		}
 	long	GetVersion(){ return m_lFileVersion;	}
 	CString GetNotes()	{ return m_csNotes;			}
+	CString GetLangCode() { return m_csLangCode;	}
 
 	void	SetOnlyGetHeader(bool bVal)	{ m_bOnlyGetHeader = true;	}
 	static CMenu* GetMenuPos(CMenu *pMenu, const CString &csLookingForMenuText, int &nMenuPos);
@@ -86,6 +87,7 @@ protected:
 	CString m_csAuthor;
 	CString m_csNotes;
 	long	m_lFileVersion;
+	CString m_csLangCode;
 
 	bool	m_bOnlyGetHeader;
 

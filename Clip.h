@@ -11,6 +11,7 @@
 #include <afxole.h>
 #include <afxtempl.h>
 #include "tinyxml.h"
+#include "Shared\IClip.h"
 
 class CClip;
 class CCopyThread;
@@ -30,7 +31,7 @@ public:
 /*----------------------------------------------------------------------------*\
 	CClipFormat - holds the data of one clip format.
 \*----------------------------------------------------------------------------*/
-class CClipFormat
+class CClipFormat : public IClipFormat
 {
 public:
 	CLIPFORMAT	m_cfType;
@@ -43,17 +44,29 @@ public:
 
 	void Clear();
 	void Free();
+
+	virtual CLIPFORMAT Type() { return m_cfType; }
+	virtual HGLOBAL Data() { return m_hgData; }
+	virtual void Type(CLIPFORMAT type) { m_cfType = type; }
+	virtual void Data(HGLOBAL data) { m_hgData = data; }
 };
 
 /*----------------------------------------------------------------------------*\
 	CClipFormats - holds an array of CClipFormat
 \*----------------------------------------------------------------------------*/
-class CClipFormats : public CArray<CClipFormat,CClipFormat&>
+class CClipFormats : public CArray<CClipFormat,CClipFormat&>, public IClipFormats
 {
 public:
 	// returns a pointer to the CClipFormat in this array which matches the given type
 	//  or NULL if that type doesn't exist in this array.
 	CClipFormat* FindFormat(UINT cfType); 
+
+	virtual int Size() { return this->GetCount(); }
+	virtual IClipFormat *GetAt(int nPos) { return &this->ElementAt(nPos); }
+	virtual void DeleteAt(int nPos) { this->RemoveAt(nPos); }
+	virtual void DeleteAll() { this->RemoveAll(); }
+	virtual int AddNew(CLIPFORMAT type, HGLOBAL data) {CClipFormat ft(type, data, -1); ft.bDeleteData = false; return this->Add(ft); }
+	virtual IClipFormat *FindFormatEx(CLIPFORMAT type)	{ return FindFormat((UINT)type); }
 };
 
 
@@ -61,7 +74,7 @@ public:
 	CClip - holds multiple CClipFormats and clip statistics
 	- provides static functions for manipulating a Clip as a single unit.
 \*----------------------------------------------------------------------------*/
-class CClip
+class CClip : public IClip
 {
 public:
 	CClip();
@@ -82,6 +95,19 @@ public:
 	BOOL m_bIsGroup;
 	DWORD m_CRC;
 	CString m_csQuickPaste;
+
+	virtual CString Description() { return m_Desc; }
+	virtual void Description(CString csValue) { m_Desc = csValue; }
+	virtual CTime PasteTime() { return m_Time; }
+	virtual int ID() { return m_ID; }
+	virtual int Parent() { return m_lParent; }
+	virtual void Parent(int nParent) { m_lParent = nParent; }
+	virtual int DontAutoDelete() { return m_lDontAutoDelete; }
+	virtual void DontAutoDelete(int Dont) { m_lDontAutoDelete = Dont; }
+	virtual CString QuickPaste() { return m_csQuickPaste; }
+	virtual void QuickPaste(CString csValue) { m_csQuickPaste = csValue; }
+
+	virtual IClipFormats *Clips() { return (IClipFormats*)&m_Formats; }
 
 	void Clear();
 	void EmptyFormats();

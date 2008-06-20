@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="Ascii"?>
-<Ditto_Language_File Version = "1" Author = "Victor Gascon" Notes = "http://www.vgascon.com">
+<Ditto_Language_File Version = "1" Author = "Victor Gascon" Notes = "http://www.vgascon.com" LanguageCode = "spa">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Grupos</Item>
 		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Nuevo Grupo</Item>

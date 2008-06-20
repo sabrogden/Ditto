@@ -64,7 +64,6 @@ BYTE GetEscapeChar( BYTE ch );
 CString RemoveEscapes( const TCHAR* str );
 
 CString GetWndText( HWND hWnd );
-CString GetParentsString( HWND hWndStart, TCHAR* sSep = _T("\n->") );
 // returns true if the given window is owned by this process
 bool IsAppWnd( HWND hWnd );
 // returns the current Focus window even if it is not owned by our thread.

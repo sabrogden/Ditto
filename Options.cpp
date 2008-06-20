@@ -1694,6 +1694,19 @@ CString CGetSetOptions::GetPath(long lPathID)
 			FIX_CSTRING_PATH(csDir);
 		}
 		break;
+
+	case PATH_ADDINS:
+		if(m_bU3)
+		{
+			csDir = GETENV(_T("U3_DEVICE_EXEC_PATH"));
+			FIX_CSTRING_PATH(csDir);
+		}
+
+		csDir += "Addins\\";
+
+		csDir = _T("C:\\Documents and Settings\\Brogdens\\Desktop\\ditto\\Addins\\OutlookExpress\\Debug\\");
+
+		break;
 	}
 
 	return csDir;

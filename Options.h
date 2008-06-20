@@ -58,6 +58,7 @@ public:
 #define PATH_INI			6
 #define PATH_U3_HWND_INI	7
 #define PATH_THEMES			8
+#define PATH_ADDINS			9
 
 class CGetSetOptions
 {

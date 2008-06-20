@@ -193,7 +193,7 @@ void CCopyProperties::OnOK()
 			int nCount = m_DeletedData.GetSize();
 			for(int i = 0; i < nCount; i++)
 			{
-				m_pMemoryClip->m_Formats.RemoveAt(m_DeletedData[i], 1);
+				m_pMemoryClip->m_Formats.RemoveAt(m_DeletedData[i]);
 			}
 		}
 		else

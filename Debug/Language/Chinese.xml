@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="Ascii"?>
-<Ditto_Language_File Version = "1" Author = "石珊珊(Shi ShanShan)" Notes = "此中文语言文件根据Ditto_03.15.01.00版本自带的英文语言文件制作翻译而成。部分选项标签和菜单由于软件作者未在英文语言文件中给出翻译用接口，故未能译为中文。翻译风格直译与意译结合，部分语句考虑到在菜单或窗口显示长度的问题，有做精简处理。本人现今博客：hi.baidu.com/ttzm33 常用邮箱：menk33@163.com 欢迎指正交流~:-)2007年11月14日注">
+<Ditto_Language_File Version = "1" Author = "石珊珊(Shi ShanShan)" Notes = "此中文语言文件根据Ditto_03.15.01.00版本自带的英文语言文件制作翻译而成。部分选项标签和菜单由于软件作者未在英文语言文件中给出翻译用接口，故未能译为中文。翻译风格直译与意译结合，部分语句考虑到在菜单或窗口显示长度的问题，有做精简处理。本人现今博客：hi.baidu.com/ttzm33 常用邮箱：menk33@163.com 欢迎指正交流~:-)2007年11月14日注" LanguageCode = "chi">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">组</Item>
 		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">新建组</Item>

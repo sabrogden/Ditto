@@ -189,11 +189,21 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_NEWCLIP, OnMenuNewclip)
 	ON_UPDATE_COMMAND_UI(ID_MENU_EDITITEM, OnUpdateMenuEdititem)
 	ON_UPDATE_COMMAND_UI(ID_MENU_NEWCLIP, OnUpdateMenuNewclip)
+	ON_WM_CTLCOLOR_REFLECT()
+	ON_COMMAND_RANGE(3000, 4000, OnAddinSelect)
 	END_MESSAGE_MAP()
 
 
 /////////////////////////////////////////////////////////////////////////////
 // CQPasteWnd message handlers
+
+HBRUSH CQPasteWnd::CtlColor(CDC* pDC, UINT nCtlColor) 
+{
+	pDC->SetBkMode(TRANSPARENT);
+	pDC->SetBkColor(RGB(255, 0, 0));
+
+	return (HBRUSH)GetStockObject(NULL_BRUSH);
+}
 
 BOOL CQPasteWnd::Create(const POINT& ptStart, CWnd* pParentWnd) 
 {
@@ -535,10 +545,13 @@ bool CQPasteWnd::Add(const CString &csHeader, const CString &csText, int nID)
 	return true;
 }
 
-BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_TEXT)
+BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_TEXT, CClipFormats *pPasteFormats)
 {
-	if( theApp.EnterGroupID(lID) )
-		return TRUE;
+	if(pPasteFormats == NULL)
+	{
+		if(theApp.EnterGroupID(lID))
+			return TRUE;
+	}
 
 	if(GetKeyState(VK_SHIFT) & 0x8000)
 	{
@@ -552,7 +565,14 @@ BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_T
 	paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;
 	paste.m_bPasteHTMLFormatAs_CF_TEXT = bPasteHTMLAs_CF_TEXT;
 
-	paste.GetClipIDs().Add(lID);
+	if(pPasteFormats != NULL)
+	{
+		paste.SetCustomPasteFormats(pPasteFormats);
+	}
+	else
+	{
+		paste.GetClipIDs().Add(lID);
+	}
 	paste.DoPaste();
 	theApp.OnPasteCompleted();
 
@@ -899,6 +919,8 @@ void CQPasteWnd::OnRclickQuickPaste(NMHDR* pNMHDR, LRESULT* pResult)
 			pp.y = rc.bottom;
 		}
 		
+		theApp.m_Addins.AddPrePasteAddinsToMenu(cmSubMenu);
+
 		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 
 		SetMenuChecks(cmSubMenu);
@@ -2940,4 +2962,42 @@ void CQPasteWnd::OnTimer(UINT_PTR nIDEvent)
 	}
 
 	CWndEx::OnTimer(nIDEvent);
+}
+
+void CQPasteWnd::OnAddinSelect(UINT id)
+{
+	/*if((GetKeyState(VK_SHIFT) & 0x8000) &&
+		(GetKeyState(VK_CONTROL) & 0x8000))
+	{
+		if(theApp.m_Addins.Loaded())
+		{
+			theApp.m_Addins.UnloadAll();
+			MessageBox(_T("Addin Unloaded"));
+		}
+		else
+		{
+			theApp.m_Addins.LoadAll();
+			MessageBox(_T("Addin Loaded"));
+		}
+	}*/
+
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	if(IDs.GetCount() > 0)
+	{
+		long lID = IDs[0];
+		CClip clip;
+		if(clip.LoadMainTable(lID))
+		{
+			if(clip.LoadFormats(lID, false))
+			{
+				bool bCont = theApp.m_Addins.CallPrePasteFunction(id, &clip);
+				if(bCont)
+				{
+					OpenID(-1, false, false, &clip.m_Formats);
+				}
+			}
+		}
+	}
 }

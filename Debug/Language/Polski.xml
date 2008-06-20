@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="Ascii"?>
-<Ditto_Language_File Version = "0.1" Author = "Radoslaw Szambelan" Notes = "Draft">
+<Ditto_Language_File Version = "0.1" Author = "Radoslaw Szambelan" Notes = "Draft" LanguageCode = "pol">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Grupy</Item>
 		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Nowa Grupa	Ctrl-F7</Item>

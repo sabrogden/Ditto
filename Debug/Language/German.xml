@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Ditto_Language_File Version = "1.1" Author = "Stephan Jaeger" Notes = "">
+<Ditto_Language_File Version = "1.1" Author = "Stephan Jaeger" Notes = "" LanguageCode="ger">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Gruppen</Item>
 		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Neue Gruppe STRG-F7</Item>

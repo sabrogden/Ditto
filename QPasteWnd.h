@@ -112,7 +112,7 @@ public:
 
 	void DeleteSelectedRows();
 
-	BOOL OpenID(long lID, bool bOnlyLoad_CF_TEXT = false, bool bPasteHTMLAs_CF_TEXT = false);
+	BOOL OpenID(long lID, bool bOnlyLoad_CF_TEXT = false, bool bPasteHTMLAs_CF_TEXT = false, CClipFormats *pPasteFormats = NULL);
 	BOOL OpenSelection(bool bOnlyLoad_CF_TEXT = false, bool bPasteHTMLAs_CF_TEXT = false);
 	BOOL OpenIndex( long nItem );
 	BOOL NewGroup( bool bGroupSelection = true );
@@ -142,6 +142,7 @@ public:
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CQPasteWnd)
+	DECLARE_MESSAGE_MAP()
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
@@ -225,7 +226,6 @@ protected:
 	afx_msg void OnUpdateMenuDelete(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateMenuProperties(CCmdUI* pCmdUI);	
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
 	afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSearch(WPARAM wParam, LPARAM lParam);
@@ -239,8 +239,7 @@ protected:
 	afx_msg LRESULT OnFillRestOfList(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnRefeshVisibleRows(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSetListCount(WPARAM wParam, LPARAM lParam);
-	DECLARE_MESSAGE_MAP()
-public:
+	afx_msg HBRUSH CtlColor(CDC* pDC, UINT nCtlColor) ;
 	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
 	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
 	afx_msg void OnViewcaptionbaronRight();
@@ -258,7 +257,6 @@ public:
 	afx_msg LRESULT OnUpDown(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnItemDeleted(WPARAM wParam, LPARAM lParam);
 	LRESULT OnToolTipWndInactive(WPARAM wParam, LPARAM lParam);
-public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnMenuExport();
 	afx_msg void OnMenuImport();
@@ -267,6 +265,8 @@ public:
 	afx_msg void OnMenuNewclip();
 	afx_msg void OnUpdateMenuEdititem(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateMenuNewclip(CCmdUI *pCmdUI);
+	afx_msg void CQPasteWnd::OnAddinSelect(UINT id);
+//}}AFX_MSG
 };
 
 

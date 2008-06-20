@@ -21,6 +21,7 @@ static char THIS_FILE[]=__FILE__;
 CMultiLanguage::CMultiLanguage()
 {
 	m_csAuthor = "";
+	m_csLangCode = "";
 	m_lFileVersion = 0;
 	m_bOnlyGetHeader = false;
 }
@@ -33,6 +34,7 @@ CMultiLanguage::~CMultiLanguage()
 void CMultiLanguage::ClearArrays()
 {
 	m_csAuthor = "";
+	m_csLangCode = "";
 	m_lFileVersion = 0;
 	m_bOnlyGetHeader = false;
 
@@ -294,10 +296,10 @@ bool CMultiLanguage::LoadLanguageFile(CString csFile)
 	m_lFileVersion = ATOI(csVersion);
 	m_csAuthor = ItemHeader->Attribute("Author");
 	m_csNotes = ItemHeader->Attribute("Notes");
+	m_csLangCode = ItemHeader->Attribute("LanguageCode");
 
 	if(m_bOnlyGetHeader)
 		return true;
-
 
 	bool bRet = LoadSection(*ItemHeader, m_RightClickMenu, "Ditto_Right_Click_Menu");
 	bRet = LoadSection(*ItemHeader, m_OptionsGeneral, "Ditto_Options_General");

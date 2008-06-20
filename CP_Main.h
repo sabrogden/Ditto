@@ -25,6 +25,7 @@
 #include "ClipboardSaveRestore.h"
 #include "DittoCopyBuffer.h"
 #include "sqlite\CppSQLite3.h"
+#include "DittoAddins.h"
 
 //#define GET_APP ((CMainWnd*)theApp)
 extern class CCP_MainApp theApp;
@@ -150,6 +151,7 @@ public:
 
 	CString m_Status;
 	CQPasteWnd* QPasteWnd() { return m_pMainFrame->QuickPaste.m_pwndPaste; }
+	HWND QPastehWnd();
 	void SetStatus(const TCHAR* status = NULL, bool bRepaintImmediately = false);
 
 	void ShowPersistent(bool bVal);
@@ -190,6 +192,8 @@ public:
 
 	CDittoCopyBuffer m_CopyBuffer;
 	void PumpMessageEx();
+
+	CDittoAddins m_Addins;
 
 protected:
 // Overrides

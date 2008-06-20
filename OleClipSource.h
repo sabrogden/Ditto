@@ -14,6 +14,7 @@ public:
 	bool		m_bLoadedFormats;
 	bool		m_bOnlyPaste_CF_TEXT;
 	bool		m_bPasteHTMLFormatAs_CF_TEXT;
+	CClipFormats *m_pCustomPasteFormats;
 
 	COleClipSource();
 	virtual ~COleClipSource();

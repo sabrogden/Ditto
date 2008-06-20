@@ -265,6 +265,8 @@ BOOL CCP_MainApp::InitInstance()
 	// prevent no one having focus on startup
 	ReleaseFocus();
 
+	m_Addins.LoadAll();
+
 	return TRUE;
 }
 
@@ -412,39 +414,8 @@ bool CCP_MainApp::TargetActiveWindow()
 
 bool CCP_MainApp::ActivateTarget()
 {
-//	HWND top = m_hTargetWnd;
-//	HWND next = ::GetParent(top);
-//	while( next != NULL )
-//	{
-//		top = next;
-//		next = ::GetParent(top);
-//	}
-
-    DWORD tidTarget = ::GetWindowThreadProcessId( m_hTargetWnd, NULL );
-    DWORD tidSelf = ::GetCurrentThreadId();
-
-    // We can't set the focus window from another thread,
-	// so we have to attach to the thread input first:
-	::AttachThreadInput( tidTarget, tidSelf, TRUE );
-
-//    ::SetWindowPos( top, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE );
-//    ::SetForegroundWindow( top );
-//    ::SetForegroundWindow( m_hTargetWnd );
+	::SetForegroundWindow(m_hTargetWnd);
 	::SetFocus(m_hTargetWnd);
-
-//	Log( StrF(
-//		_T("ActivateTarget - AFTER:") \
-//		_T("\n\tm_hTargetWnd = %s") \
-//		_T("\n\tGetForegroundWindow = %s") \
-//		_T("\n\tGetActiveWindow = %s") \
-//		_T("\n\tGetFocus = %s\n"),
-//			GetParentsString(m_hTargetWnd),
-//			GetParentsString(::GetForegroundWindow()),
-//			GetParentsString(::GetActiveWindow()),
-//			GetParentsString(::GetFocus()) ) );
-
-    // Detach from thread input
-	::AttachThreadInput( tidTarget, tidSelf, FALSE );
 
 	return true;
 }
@@ -1173,4 +1144,17 @@ void CCP_MainApp::PumpMessageEx()
 		::TranslateMessage(&KeyboardMsg);
 		::DispatchMessage(&KeyboardMsg);
 	}
+}
+
+HWND CCP_MainApp::QPastehWnd() 
+{ 
+	if(m_pMainFrame != NULL)
+	{
+		if(m_pMainFrame->QuickPaste.m_pwndPaste != NULL)
+		{
+			return m_pMainFrame->QuickPaste.m_pwndPaste->GetSafeHwnd();
+		}
+	}
+
+	return NULL;
 }

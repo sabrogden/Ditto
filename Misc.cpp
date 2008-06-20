@@ -74,7 +74,7 @@ void log(const TCHAR* msg, bool bFromSendRecieve, CString csFile, long lLine)
 
 	CString csFileLine;
 	csFile = GetFileName(csFile);
-	csFileLine.Format(_T("%s [%d] "), csFile, lLine);
+	csFileLine.Format(_T("%s %d] "), csFile, lLine);
 	csText += csFileLine;
 	
 	csText += msg;
@@ -193,26 +193,6 @@ CString GetWndText( HWND hWnd )
 	CWnd* pWnd = CWnd::FromHandle(hWnd);
 	pWnd->GetWindowText(text);
 	return text;
-}
-
-CString GetParentsString( HWND hWndStart, TCHAR* sSep )
-{
-HWND hWnd = hWndStart;
-CString sOne = "";
-CString sResult = "";
-TCHAR pBuf[255];
-
-    pBuf[0] = 0;
-    do {
-        ::GetClassName(hWnd, pBuf, 255);
-        sOne = StrF( _T("\n->[0x%08x: (%s) \"%s\"]"),
-            hWnd, pBuf, (LPCTSTR) GetWndText(hWnd) );
-        sResult += sSep;
-        sResult += sOne;
-        hWnd = ::GetParent(hWnd);
-    } while( hWnd != NULL );
-
-    return sResult;
 }
 
 bool IsAppWnd( HWND hWnd )
