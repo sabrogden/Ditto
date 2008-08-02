@@ -390,7 +390,10 @@ bool CCP_MainApp::TargetActiveWindow()
 	DWORD OtherThreadID = GetWindowThreadProcessId(hNew, NULL);
 	if(GetGUIThreadInfo(OtherThreadID, &guiThreadInfo))
 	{
-		hNew = guiThreadInfo.hwndFocus;
+		if(guiThreadInfo.hwndFocus != NULL)
+		{
+			hNew = guiThreadInfo.hwndFocus;
+		}
 	}
 
 	if(hNew == m_hTargetWnd || !::IsWindow(hNew) || IsAppWnd(hNew))
