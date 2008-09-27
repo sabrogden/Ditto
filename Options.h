@@ -378,6 +378,11 @@ public:
 
 	static void SetTheme(CString csTheme);
 	static CString GetTheme();
+
+	static long		GetKeyStateWaitTimerCount();
+	static long		GetKeyStatePasteDelay();
+
+	static DWORD	GetDittoHotKey();
 };
 
 // global for easy access and for initialization of fast access variables

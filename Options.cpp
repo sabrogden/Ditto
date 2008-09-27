@@ -1857,3 +1857,18 @@ CString CGetSetOptions::GetTheme()
 {
 	return GetProfileString(_T("Theme"), "");
 }
+
+long CGetSetOptions::GetKeyStateWaitTimerCount()
+{
+	return GetProfileLong(_T("KeyStateWaitTimerCount"), 20);
+}
+
+long CGetSetOptions::GetKeyStatePasteDelay()
+{
+	return GetProfileLong(_T("KeyStatePasteDelay"), 200);
+}
+
+DWORD CGetSetOptions::GetDittoHotKey()
+{
+	return (DWORD)GetProfileLong(_T("DittoHotKey"), 704);
+}

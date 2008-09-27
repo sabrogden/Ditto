@@ -177,6 +177,39 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	m_pwndPaste->SetForegroundWindow();
 }
 
+void CQuickPaste::MoveSelection(bool down)
+{
+	if(m_pwndPaste)
+	{
+		if (IsWindow(m_pwndPaste->m_hWnd))
+		{
+			m_pwndPaste->MoveSelection(down);
+		}
+	}
+}
+
+void CQuickPaste::OnKeyStateUp()
+{
+	if(m_pwndPaste)
+	{
+		if (IsWindow(m_pwndPaste->m_hWnd))
+		{
+			m_pwndPaste->OnKeyStateUp();
+		}
+	}
+}
+
+void CQuickPaste::SetKeyModiferState(bool bActive)
+{
+	if(m_pwndPaste)
+	{
+		if (IsWindow(m_pwndPaste->m_hWnd))
+		{
+			m_pwndPaste->SetKeyModiferState(bActive);
+		}
+	}
+}
+
 void CQuickPaste::HideQPasteWnd()
 {
 	// Hide the window

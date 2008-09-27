@@ -22,6 +22,9 @@ public:
 	void HideQPasteWnd();
 	BOOL CloseQPasteWnd();
 	BOOL IsWindowVisibleEx();
+	void MoveSelection(bool down);
+	void OnKeyStateUp();
+	void SetKeyModiferState(bool bActive);
 
 	void UpdateFont()		{ if(m_pwndPaste) m_pwndPaste->UpdateFont();	}
 

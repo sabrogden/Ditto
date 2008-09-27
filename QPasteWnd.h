@@ -94,6 +94,7 @@ public:
 	bool			m_bHandleSearchTextChange;
 	bool			m_bFoundClipToSetFocusTo;
 	long			m_lItemsPerPage;
+	bool			m_bModifersMoveActive;
 
 	std::vector<CMainTable> m_Cache;
 
@@ -102,6 +103,8 @@ public:
 	HANDLE m_SearchingEvent;
 
 	CCriticalSection m_CritSection;
+
+	CAccels m_MainAccels;
 	
 	void RefreshNc( bool bRepaintImmediately = false );
 	void UpdateStatus( bool bRepaintImmediately = false );  // regenerates the status (caption) text
@@ -138,6 +141,9 @@ public:
 
 	void FillMainTable(CMainTable &table, CppSQLite3Query &q);
 	void RunThread();
+	void MoveSelection(bool down);
+	void OnKeyStateUp();
+	void SetKeyModiferState(bool bActive);
 
 	// Generated message map functions
 protected:

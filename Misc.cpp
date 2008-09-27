@@ -1001,6 +1001,10 @@ bool CAccels::OnMsg( MSG* pMsg, DWORD &dID)
 	BYTE vkey = LOBYTE(pMsg->wParam);
 	BYTE mod  = GetKeyStateModifiers();
 	DWORD key = ACCEL_MAKEKEY( vkey, mod );
+
+	CString cs;
+	cs.Format(_T("Key: %d, Mod: %d, vkey: %d"), key, mod, vkey);
+	OutputDebugString(cs);
 	
 	if(m_Map.Lookup(key, dID))
 		return true;;

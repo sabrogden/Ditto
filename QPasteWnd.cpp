@@ -36,11 +36,13 @@ static char THIS_FILE[] = __FILE__;
 
 #define TIMER_FILL_CACHE		1
 #define TIMER_DO_SEARCH			2
+#define TIMER_PASTE_FROM_MODIFER	3
 
 #define THREAD_DO_QUERY				0
 #define THREAD_EXIT_THREAD			1
 #define THREAD_FILL_ACCELERATORS	2
 #define THREAD_DESTROY_ACCELERATORS	3
+
 
 /////////////////////////////////////////////////////////////////////////////
 // CQPasteWnd
@@ -53,6 +55,7 @@ CQPasteWnd::CQPasteWnd()
 	m_bAllowRepaintImmediately = true;
 	m_bHandleSearchTextChange = true;
 	m_lItemsPerPage = 0;
+	m_bModifersMoveActive = false;
 }
 
 CQPasteWnd::~CQPasteWnd()
@@ -391,6 +394,8 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 	
 	if (nState == WA_INACTIVE)
 	{
+		m_bModifersMoveActive = false;
+
 		if(!g_Opt.m_bShowPersistent)
 		{
 			HideQPasteWindow();
@@ -520,6 +525,8 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 	// always on top... for persistent showing (g_Opt.m_bShowPersistent)
 	// SHOWWINDOW was also integrated into this function rather than calling it separately
 	::SetWindowPos( m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE|SWP_NOMOVE|SWP_SHOWWINDOW );
+
+	SetKeyModiferState(true);
 	
 	return TRUE;
 }
@@ -1972,8 +1979,71 @@ CString CQPasteWnd::LoadDescription(int nItem)
 	return cs;
 }
 
+void CQPasteWnd::MoveSelection(bool down)
+{
+	if(m_bModifersMoveActive)
+	{
+		ARRAY arr;
+		m_lstHeader.GetSelectionIndexes(arr);
+		if(arr.GetCount() > 0)
+		{
+			int index = arr[0];
+
+			if(down)
+			{	
+				if(index < m_lstHeader.GetItemCount()-1)
+				{
+					m_lstHeader.SetListPos(index+1);
+				}
+			}
+			else
+			{
+				if(index > 0)
+				{
+					m_lstHeader.SetListPos(index-1);
+				}
+			}
+		}
+		else
+		{
+			if(m_lstHeader.GetItemCount() > 0)
+			{
+				m_lstHeader.SetListPos(0);
+			}
+		}
+	}
+}
+
+void CQPasteWnd::OnKeyStateUp()
+{
+	if(m_bModifersMoveActive)
+	{	
+		Log(_T("OnKeyStateUp"));
+		SetTimer(TIMER_PASTE_FROM_MODIFER, g_Opt.GetKeyStatePasteDelay(), NULL);
+	}
+	else
+	{
+		Log(_T("OnKeyStateUp - Modifers not active"));
+	}
+}
+
+void CQPasteWnd::SetKeyModiferState(bool bActive)
+{
+	Log(StrF(_T("SetKeyModiferState %d"), bActive));
+	m_bModifersMoveActive = bActive;
+}
+
 BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg) 
 {
+	//DWORD dID;
+	//if(m_MainAccels.OnMsg(pMsg, dID))
+	//{
+	//	switch(dID)
+	//	{
+	//	
+	//	}
+	//}
+
 	switch(pMsg->message) 
 	{
 	case WM_KEYDOWN:
@@ -1996,7 +2066,7 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 				return TRUE;
 			}
 			break;
-
+ 
 		case VK_F5:
 			//toggle outputing text to outputdebugstring
 			if(GetKeyState(VK_CONTROL) & 0x8000)
@@ -2023,19 +2093,28 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 			
 		case VK_ESCAPE:
 			{	
-				if(m_lstHeader.HandleKeyDown(pMsg->wParam, pMsg->lParam) == FALSE)
+				if(m_bModifersMoveActive)
 				{
-					if(m_strSQLSearch.IsEmpty() == FALSE)
+					Log(_T("Escape key hit setting modifers to NOT active"));
+					m_bModifersMoveActive = false;
+					return TRUE;
+				}
+				else
+				{
+					if(m_lstHeader.HandleKeyDown(pMsg->wParam, pMsg->lParam) == FALSE)
 					{
-						OnCancelFilter();
-						return TRUE;
-					}
-					else
-					{	
-						if(m_GroupTree.IsWindowVisible() == FALSE)
+						if(m_strSQLSearch.IsEmpty() == FALSE)
 						{
-							HideQPasteWindow();
+							OnCancelFilter();
 							return TRUE;
+						}
+						else
+						{	
+							if(m_GroupTree.IsWindowVisible() == FALSE)
+							{
+								HideQPasteWindow();
+								return TRUE;
+							}
 						}
 					}
 				}
@@ -2063,18 +2142,55 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 				OnShowGroupsTop();
 				return TRUE;
 			}
+			break;
 		case 'N':
 			if(GetKeyState(VK_CONTROL) & 0x8000)
 			{
 				OnMenuNewclip();
 				return TRUE;
 			}
+			break;
 		case 'E':
 			if(GetKeyState(VK_CONTROL) & 0x8000)
 			{
 				OnMenuEdititem();
 				return TRUE;
 			}
+			break;
+
+		case VK_UP:
+			if(m_bModifersMoveActive)
+			{
+				MoveSelection(false);
+				return TRUE;
+			}
+			break;
+
+		case VK_DOWN:
+			if(m_bModifersMoveActive)
+			{
+				MoveSelection(true);
+				return TRUE;
+			}
+			break;
+
+		case VK_HOME:
+			if(m_bModifersMoveActive)
+			{
+				m_lstHeader.SetListPos(0);
+				return TRUE;
+			}
+			break;
+		case VK_END:
+			if(m_bModifersMoveActive)
+			{
+				if(m_lstHeader.GetItemCount() > 0)
+				{
+					m_lstHeader.SetListPos(m_lstHeader.GetItemCount()-1);
+				}
+				return TRUE;
+			}
+			break;
 		} // end switch( pMsg->wParam )
 		
 		break; // end case WM_KEYDOWN 
@@ -2959,6 +3075,20 @@ void CQPasteWnd::OnTimer(UINT_PTR nIDEvent)
 			theApp.m_FocusID = m_lstHeader.GetItemData(nCaretPos);
 
 		FillList(csText);
+	}
+	if(nIDEvent == TIMER_PASTE_FROM_MODIFER)
+	{
+		Log(_T("TIMER_PASTE_FROM_MODIFER timer\n"));
+		KillTimer(TIMER_PASTE_FROM_MODIFER);
+		if(m_bModifersMoveActive)
+		{
+			Log(_T("Open Selection\n"));
+			OpenSelection(false, false);
+		}
+		else
+		{
+			Log(_T("m_bModifersMoveActive set to false\n"));
+		}
 	}
 
 	CWndEx::OnTimer(nIDEvent);

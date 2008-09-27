@@ -161,7 +161,6 @@ CRulerRichEditCtrl::CRulerRichEditCtrl() : m_pen( PS_DOT, 0, RGB( 0, 0, 0 ) )
 
    ============================================================*/
 {
-
 	m_rulerPosition = 0;
 	m_margin = 0;
 	m_movingtab = -1;
@@ -170,7 +169,6 @@ CRulerRichEditCtrl::CRulerRichEditCtrl() : m_pen( PS_DOT, 0, RGB( 0, 0, 0 ) )
 	m_bInWrapMode = g_Opt.GetEditWordWrap();
 	ShowToolbar();
 	ShowRuler();
-
 }
 
 CRulerRichEditCtrl::~CRulerRichEditCtrl()
@@ -234,6 +232,10 @@ BOOL CRulerRichEditCtrl::Create( DWORD dwStyle, const RECT &rect, CWnd* pParentW
 					result = TRUE;
 				}
 			}
+
+			//Do wrap will reverse the saved option so initially set it as opposite of what it's saved as
+			m_bInWrapMode = !m_bInWrapMode;
+			DoWrap();
 		}		
 	}
 
@@ -1688,7 +1690,7 @@ void CRulerRichEditCtrl::DoWrap()
 
 	g_Opt.SetEditWordWrap(m_bInWrapMode);
 
-	m_toolbar.CheckButton(ID_BUTTONWRAP, !m_toolbar.IsButtonChecked(ID_BUTTONWRAP));
+	m_toolbar.CheckButton(ID_BUTTONWRAP, m_bInWrapMode);
 }
 
 void CRulerRichEditCtrl::DoBold()

@@ -94,6 +94,10 @@ static UINT indicators[] =
 CMainFrame::CMainFrame()
 {
 	m_pEditFrameWnd = NULL;
+	m_keyStateModifiers = 0;
+	m_startKeyStateTime = 0;
+	m_bMovedSelectionMoveKeyState = false;
+	m_keyModifiersTimerCount = 0;
 }
 
 CMainFrame::~CMainFrame()
@@ -239,12 +243,28 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 {
 	if(theApp.m_pDittoHotKey && wParam == theApp.m_pDittoHotKey->m_Atom)
 	{
-		if(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown && QuickPaste.IsWindowVisibleEx())
+		//If they still have the shift/ctrl keys down
+		if(m_keyStateModifiers != 0 && QuickPaste.IsWindowVisibleEx())
+		{
+			if(m_bMovedSelectionMoveKeyState == false)
+			{
+				Log(_T("Setting flag m_bMovedSelectionMoveKeyState to true, will paste when modifer keys are up"));
+			}
+
+			QuickPaste.MoveSelection(true);
+			m_bMovedSelectionMoveKeyState = true;
+		}
+		else if(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown && QuickPaste.IsWindowVisibleEx())
 		{
 			QuickPaste.HideQPasteWnd();
 		}
 		else
 		{
+			m_keyModifiersTimerCount = 0;
+			m_bMovedSelectionMoveKeyState = false;
+			m_startKeyStateTime = GetTickCount();
+			m_keyStateModifiers = GetKeyStateModifiers();
+			SetTimer(KEY_STATE_MODIFIERS, 50, NULL);
 			theApp.TargetActiveWindow();
 			QuickPaste.ShowQPasteWnd(this, false, true, FALSE);
 		}		
@@ -533,6 +553,39 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		}
 	case REMOVE_OLD_REMOTE_COPIES:
 		AfxBeginThread(CMainFrame::RemoteOldRemoteFilesThread, NULL);
+		break;
+
+	case KEY_STATE_MODIFIERS:
+		m_keyModifiersTimerCount++;
+		if(m_keyStateModifiers != 0)
+		{
+			BYTE keyState = GetKeyStateModifiers();
+			//Have they release the key state modifiers yet(ctrl, shift, alt)
+			if((m_keyStateModifiers & keyState) == 0)
+			{
+				KillTimer(KEY_STATE_MODIFIERS);
+				long waitTime = (long)(GetTickCount() - m_startKeyStateTime);
+
+				if(m_bMovedSelectionMoveKeyState || m_keyModifiersTimerCount > g_Opt.GetKeyStateWaitTimerCount())
+				{
+					Log(StrF(_T("Timer KEY_STATE_MODIFIERS timeout count hit(%d), count (%d), time (%d), Move Selection from Modifer (%d) sending paste"), g_Opt.GetKeyStateWaitTimerCount(), m_keyModifiersTimerCount, waitTime, m_bMovedSelectionMoveKeyState));
+					QuickPaste.OnKeyStateUp();
+				}				
+				else
+				{
+					Log(StrF(_T("Timer KEY_STATE_MODIFIERS count NOT hit(%d), count (%d) time (%d)"), g_Opt.GetKeyStateWaitTimerCount(), m_keyModifiersTimerCount, waitTime));
+					QuickPaste.SetKeyModiferState(false);
+				}
+
+				m_keyStateModifiers = 0;
+				m_keyModifiersTimerCount = 0;
+				m_bMovedSelectionMoveKeyState = 0;
+			}
+		}
+		else
+		{
+			KillTimer(KEY_STATE_MODIFIERS);
+		}
 		break;
 	}
 

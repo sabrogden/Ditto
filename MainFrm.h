@@ -24,6 +24,7 @@
 #define STOP_LOOKING_FOR_KEYBOARD		8
 #define REMOVE_OLD_REMOTE_COPIES		9
 #define END_DITTO_BUFFER_CLIPBOARD_TIMER	10
+#define KEY_STATE_MODIFIERS				11
 
 class CMainFrame : public CFrameWnd
 {
@@ -64,6 +65,10 @@ public:
 	CString csTypeToolTipTitle;
 	CPoint m_ToolTipPoint;
 	CAlphaBlend m_Transparency;
+	BYTE m_keyStateModifiers;
+	DWORD m_startKeyStateTime;
+	bool m_bMovedSelectionMoveKeyState;
+	short m_keyModifiersTimerCount;
 
 	void DoDittoCopyBufferPaste(int nCopyBuffer);
 	void DoFirstTenPositionsPaste(int nPos);
