@@ -304,15 +304,18 @@ void CCP_MainApp::AfterMainCreate()
 	m_pPosEight = new CHotKey("Position8", 0, true);
 	m_pPosNine = new CHotKey("Position9", 0, true);
 	m_pPosTen = new CHotKey("Position10", 0, true);
+
 	m_pCopyBuffer1 = new CHotKey("CopyBufferCopyHotKey_0", 0, true);
 	m_pPasteBuffer1 = new CHotKey("CopyBufferPasteHotKey_0", 0, true);
 	m_pCutBuffer1 = new CHotKey("CopyBufferCutHotKey_0", 0, true);
+	
 	m_pCopyBuffer2 = new CHotKey("CopyBufferCopyHotKey_1", 0, true);
 	m_pPasteBuffer2 = new CHotKey("CopyBufferPasteHotKey_1", 0, true);
 	m_pCutBuffer2 = new CHotKey("CopyBufferCutHotKey_1", 0, true);
+
 	m_pCopyBuffer3 = new CHotKey("CopyBufferCopyHotKey_2", 0, true);
 	m_pPasteBuffer3 = new CHotKey("CopyBufferPasteHotKey_2", 0, true);
-	m_pCutBuffer3 = new CHotKey("CopyBufferPasteHotKey_2", 0, true);
+	m_pCutBuffer3 = new CHotKey("CopyBufferCutHotKey_2", 0, true);
 
 	g_HotKeys.RegisterAll();
 
@@ -940,7 +943,7 @@ BOOL CCP_MainApp::OnIdle(LONG lCount)
 
 CString CCP_MainApp::GetTargetName() 
 {
-	TCHAR cWindowText[100];
+	TCHAR cWindowText[200];
 	HWND hParent = m_hTargetWnd;
 
 	::GetWindowText(hParent, cWindowText, 100);
