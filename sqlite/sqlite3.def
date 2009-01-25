@@ -1,7 +1,6 @@
 EXPORTS
 sqlite3_aggregate_context
 sqlite3_aggregate_count
-sqlite3_apis
 sqlite3_auto_extension
 sqlite3_bind_blob
 sqlite3_bind_double
@@ -31,6 +30,8 @@ sqlite3_column_blob
 sqlite3_column_bytes
 sqlite3_column_bytes16
 sqlite3_column_count
+sqlite3_column_database_name
+sqlite3_column_database_name16
 sqlite3_column_decltype
 sqlite3_column_decltype16
 sqlite3_column_double
@@ -38,6 +39,10 @@ sqlite3_column_int
 sqlite3_column_int64
 sqlite3_column_name
 sqlite3_column_name16
+sqlite3_column_origin_name
+sqlite3_column_origin_name16
+sqlite3_column_table_name
+sqlite3_column_table_name16
 sqlite3_column_text
 sqlite3_column_text16
 sqlite3_column_type
@@ -45,6 +50,8 @@ sqlite3_column_value
 sqlite3_commit_hook
 sqlite3_complete
 sqlite3_complete16
+sqlite3_config
+sqlite3_context_db_handle
 sqlite3_create_collation
 sqlite3_create_collation16
 sqlite3_create_collation_v2
@@ -53,7 +60,10 @@ sqlite3_create_function16
 sqlite3_create_module
 sqlite3_create_module_v2
 sqlite3_data_count
+sqlite3_db_config
 sqlite3_db_handle
+sqlite3_db_mutex
+sqlite3_db_status
 sqlite3_declare_vtab
 sqlite3_enable_load_extension
 sqlite3_enable_shared_cache
@@ -62,6 +72,7 @@ sqlite3_errmsg
 sqlite3_errmsg16
 sqlite3_exec
 sqlite3_expired
+sqlite3_extended_errcode
 sqlite3_extended_result_codes
 sqlite3_file_control
 sqlite3_finalize
@@ -71,10 +82,12 @@ sqlite3_get_autocommit
 sqlite3_get_auxdata
 sqlite3_get_table
 sqlite3_global_recover
+sqlite3_initialize
 sqlite3_interrupt
 sqlite3_last_insert_rowid
 sqlite3_libversion
 sqlite3_libversion_number
+sqlite3_limit
 sqlite3_load_extension
 sqlite3_malloc
 sqlite3_memory_alarm
@@ -84,13 +97,14 @@ sqlite3_mprintf
 sqlite3_mutex_alloc
 sqlite3_mutex_enter
 sqlite3_mutex_free
-sqlite3_mutex_held
 sqlite3_mutex_leave
-sqlite3_mutex_notheld
 sqlite3_mutex_try
+sqlite3_next_stmt
 sqlite3_open
 sqlite3_open16
 sqlite3_open_v2
+sqlite3_os_end
+sqlite3_os_init
 sqlite3_overload_function
 sqlite3_prepare
 sqlite3_prepare16
@@ -98,6 +112,7 @@ sqlite3_prepare16_v2
 sqlite3_prepare_v2
 sqlite3_profile
 sqlite3_progress_handler
+sqlite3_randomness
 sqlite3_realloc
 sqlite3_release_memory
 sqlite3_reset
@@ -106,6 +121,7 @@ sqlite3_result_blob
 sqlite3_result_double
 sqlite3_result_error
 sqlite3_result_error16
+sqlite3_result_error_code
 sqlite3_result_error_nomem
 sqlite3_result_error_toobig
 sqlite3_result_int
@@ -120,11 +136,16 @@ sqlite3_result_zeroblob
 sqlite3_rollback_hook
 sqlite3_set_authorizer
 sqlite3_set_auxdata
+sqlite3_shutdown
 sqlite3_sleep
 sqlite3_snprintf
 sqlite3_soft_heap_limit
 sqlite3_sql
+sqlite3_status
 sqlite3_step
+sqlite3_stmt_status
+sqlite3_table_column_metadata
+sqlite3_test_control
 sqlite3_thread_cleanup
 sqlite3_threadsafe
 sqlite3_total_changes
@@ -149,3 +170,4 @@ sqlite3_vfs_find
 sqlite3_vfs_register
 sqlite3_vfs_unregister
 sqlite3_vmprintf
+sqlite3_win32_mbcs_to_utf8

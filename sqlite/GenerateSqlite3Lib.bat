@@ -1,1 +1,2 @@
-lib /def:sqlite3.def
+lib\lib.exe /def:sqlite3.def
+pause
