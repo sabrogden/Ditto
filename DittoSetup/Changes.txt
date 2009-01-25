@@ -1,3 +1,14 @@
+3.16.2.0  1-25-09
+- Fixed SetFocus fix in ActivateTarget -- needed AttachThreadInput
+- Added the ability to create add-ins, called before an item is pasted
+- Fixed issue with getting the currently focused window when not using the hook dll
+- Updated italiano language file
+- Added option to paste from hot key, press multiple times to move the selection, release the modifer key (control, shift, alt) to paste
+- Fixed word wrap option to reload correctly
+- Fixed issues with loading cut copy buffer 3 correctly from config on restart
+- Check if key is up before sending key up command.  This was causing problems if an app is listening to global key up commands
+- Updated to sqlite version 3.16.10
+
 3.15.4.0   01-16-08
 - Fixed empty directly from being created in application data in stand alone version
 - Added themes (http://ditto-cp.wiki.sourceforge.net/Themes)
