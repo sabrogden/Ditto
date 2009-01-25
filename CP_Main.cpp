@@ -420,8 +420,28 @@ bool CCP_MainApp::TargetActiveWindow()
 
 bool CCP_MainApp::ActivateTarget()
 {
-	::SetForegroundWindow(m_hTargetWnd);
+	DWORD tidTarget = ::GetWindowThreadProcessId(m_hTargetWnd, NULL);
+	DWORD tidSelf = ::GetCurrentThreadId();
+
+	// We can't set the focus window from another thread,
+	// so we have to attach to the thread input first:
+	::AttachThreadInput(tidTarget, tidSelf, TRUE);
+
 	::SetFocus(m_hTargetWnd);
+
+	//	Log( StrF(
+	//		_T("ActivateTarget - AFTER:") \
+	//		_T("\n\tm_hTargetWnd = %s") \
+	//		_T("\n\tGetForegroundWindow = %s") \
+	//		_T("\n\tGetActiveWindow = %s") \
+	//		_T("\n\tGetFocus = %s\n"),
+	//			GetParentsString(m_hTargetWnd),
+	//			GetParentsString(::GetForegroundWindow()),
+	//			GetParentsString(::GetActiveWindow()),
+	//			GetParentsString(::GetFocus()) ) );
+
+	// Detach from thread input
+	::AttachThreadInput(tidTarget, tidSelf, FALSE);
 
 	return true;
 }
