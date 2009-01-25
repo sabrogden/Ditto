@@ -427,6 +427,7 @@ bool CCP_MainApp::ActivateTarget()
 	// so we have to attach to the thread input first:
 	::AttachThreadInput(tidTarget, tidSelf, TRUE);
 
+	::SetForegroundWindow(m_hTargetWnd);
 	::SetFocus(m_hTargetWnd);
 
 	//	Log( StrF(
@@ -470,10 +471,12 @@ void CCP_MainApp::SendPaste(bool bActivateTarget)
 
 	CString csPasteToApp = GetProcessName(m_hTargetWnd);
 	CString csPasteString = g_Opt.GetPasteString(csPasteToApp);
+	DWORD pasteDelay = g_Opt.DelayBeforeSendKeys();
 
-	CString csMessage;
-	csMessage = "Sending paste to app " + csPasteToApp + " key stroke " + csPasteString;
-	Log(csMessage);
+	Log(StrF(_T("Sending paste to app %s key stroke: %s Paste Delay: %d"), csPasteToApp, csPasteString, pasteDelay));
+
+	//give the app some time to take focus before sending paste
+	Sleep(pasteDelay);
 
 	CSendKeys send;
 	send.SendKeys(csPasteString);
@@ -502,10 +505,12 @@ void CCP_MainApp::SendCopy()
 
 	CString csToApp = GetProcessName(m_hTargetWnd);
 	CString csString = g_Opt.GetCopyString(csToApp);
+	DWORD pasteDelay = g_Opt.DelayBeforeSendKeys();
 
-	CString csMessage;
-	csMessage = "Sending copy to app " + csToApp + " key stroke " + csString;
-	Log(csMessage);
+	Log(StrF(_T("Sending copy to app %s key stroke: %s Paste Delay: %d"), csToApp, csString, pasteDelay));
+
+	//give the app some time to take focus before sending paste
+	Sleep(pasteDelay);
 
 	CSendKeys send;
 	send.SendKeys(csString);
@@ -522,10 +527,12 @@ void CCP_MainApp::SendCut()
 
 	CString csToApp = GetProcessName(m_hTargetWnd);
 	CString csString = g_Opt.GetCutString(csToApp);
+	DWORD pasteDelay = g_Opt.DelayBeforeSendKeys();
 
-	CString csMessage;
-	csMessage = "Sending cut to app " + csToApp + " key stroke " + csString;
-	Log(csMessage);
+	Log(StrF(_T("Sending cut to app %s key stroke: %s Paste Delay: %d"), csToApp, csString, pasteDelay));
+
+	//give the app some time to take focus before sending paste
+	Sleep(pasteDelay);
 
 	CSendKeys send;
 	send.SendKeys(csString);

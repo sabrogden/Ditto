@@ -1872,3 +1872,8 @@ DWORD CGetSetOptions::GetDittoHotKey()
 {
 	return (DWORD)GetProfileLong(_T("DittoHotKey"), 704);
 }
+
+DWORD CGetSetOptions::DelayBeforeSendKeys()
+{
+	return (DWORD)GetProfileLong(_T("DelayBeforeSendKeys"), 100);
+}
