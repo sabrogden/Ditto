@@ -436,22 +436,7 @@ bool CCP_MainApp::ReleaseFocus()
 // sends Ctrl-V to the TargetWnd
 void CCP_MainApp::SendPaste(bool bActivateTarget)
 {
-	char ch;
-
-	//Make sure all the keys are up
-	for(ch = '0'; ch <= '9'; ch++)
-	{
-		keybd_event(ch, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	}
-
-	for(ch = 'A'; ch <= 'Z'; ch++)
-	{
-		keybd_event(ch, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	}
-	keybd_event(VK_SHIFT, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	keybd_event(VK_MENU, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	keybd_event(VK_LWIN, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	AllKeysUp();
 
 	Sleep(50);
 
@@ -471,30 +456,25 @@ void CCP_MainApp::SendPaste(bool bActivateTarget)
 	Log(csMessage);
 
 	CSendKeys send;
-	//CString cs("^v");
-	//CString cs("%e{DELAY=50}p");
 	send.SendKeys(csPasteString);
+}
+
+void CCP_MainApp::AllKeysUp()
+{
+	for(int key = 0; key < 256; key++)
+	{
+		//If the key is pressed, send a key up, having other keys down interferes with sending ctrl-v, -c and -x
+		if(GetKeyState(key) & 0x8000)
+		{
+			keybd_event(key, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+		}
+	}
 }
 
 // sends Ctrl-V to the TargetWnd
 void CCP_MainApp::SendCopy()
 {
-	char ch;
-
-	//Make sure all the keys are up
-	for(ch = '0'; ch <= '9'; ch++)
-	{
-		keybd_event(ch, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	}
-
-	for(ch = 'A'; ch <= 'Z'; ch++)
-	{
-		keybd_event(ch, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	}
-	keybd_event(VK_SHIFT, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	keybd_event(VK_MENU, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	keybd_event(VK_LWIN, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	AllKeysUp();
 
 	Sleep(50);
 
@@ -508,29 +488,13 @@ void CCP_MainApp::SendCopy()
 	Log(csMessage);
 
 	CSendKeys send;
-	//CString cs("^c");
 	send.SendKeys(csString);
 }
 
 // sends Ctrl-X to the TargetWnd
 void CCP_MainApp::SendCut()
 {
-	char ch;
-
-	//Make sure all the keys are up
-	for(ch = '0'; ch <= '9'; ch++)
-	{
-		keybd_event(ch, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	}
-
-	for(ch = 'A'; ch <= 'Z'; ch++)
-	{
-		keybd_event(ch, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	}
-	keybd_event(VK_SHIFT, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	keybd_event(VK_CONTROL, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	keybd_event(VK_MENU, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-	keybd_event(VK_LWIN, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+	AllKeysUp();
 
 	Sleep(50);
 
@@ -544,11 +508,8 @@ void CCP_MainApp::SendCut()
 	Log(csMessage);
 
 	CSendKeys send;
-	//CString cs("^x");
 	send.SendKeys(csString);
 }
-
-// CopyThread
 
 void CCP_MainApp::StartCopyThread()
 {
