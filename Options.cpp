@@ -1792,7 +1792,7 @@ CString CGetSetOptions::GetPasteString(CString csAppName)
 
 CString CGetSetOptions::GetDefaultPasteString()
 {
-	return GetProfileString(_T("DefaultPasteString"), _T("^v"));
+	return GetProfileString(_T("DefaultPasteString"), _T("^{Delay 75}v"));
 }
 
 CString CGetSetOptions::GetCopyString(CString csAppName)
@@ -1806,7 +1806,7 @@ CString CGetSetOptions::GetCopyString(CString csAppName)
 
 CString CGetSetOptions::GetDefaultCopyString()
 {
-	return GetProfileString(_T("DefaultCopyString"), _T("^c"));
+	return GetProfileString(_T("DefaultCopyString"), _T("^{Delay 75}c"));
 }
 
 CString CGetSetOptions::GetCutString(CString csAppName)
@@ -1820,7 +1820,7 @@ CString CGetSetOptions::GetCutString(CString csAppName)
 
 CString CGetSetOptions::GetDefaultCutString()
 {
-	return GetProfileString(_T("DefaultCutString"), _T("^x"));
+	return GetProfileString(_T("DefaultCutString"), _T("^{Delay 75}x"));
 }
 
 BOOL CGetSetOptions::GetEditWordWrap()
