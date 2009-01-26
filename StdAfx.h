@@ -36,7 +36,7 @@
 #include "UnicodeMacros.h"
 
 #include <imm.h>
-#import "riched20.dll" raw_interfaces_only, raw_native_types, no_namespace, named_guids
+#import "riched20.dll" raw_interfaces_only, raw_native_types, no_namespace, named_guids, exclude("UINT_PTR") 
 
 
 //{{AFX_INSERT_LOCATION}}
