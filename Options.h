@@ -383,7 +383,7 @@ public:
 	static long		GetKeyStatePasteDelay();
 
 	static DWORD	GetDittoHotKey();
-	static DWORD	DelayBeforeSendKeys();
+	static DWORD	SendKeysDelay();
 };
 
 // global for easy access and for initialization of fast access variables

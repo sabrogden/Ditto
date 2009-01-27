@@ -132,8 +132,6 @@ public:
 	void IC_Copy(ARRAY* pIDs = NULL); // if NULL, this uses the current QPaste selection
 	void IC_Paste();
 
-	void AllKeysUp();
-
 // Groups
 	long		m_GroupDefaultID; // new clips are saved to this group
 	long		m_GroupID;        // current group
@@ -193,7 +191,7 @@ public:
 	bool m_bDittoHasFocus;
 
 	CDittoCopyBuffer m_CopyBuffer;
-	void PumpMessageEx();
+	void PumpMessageEx(HWND hWnd = NULL);
 
 	CDittoAddins m_Addins;
 

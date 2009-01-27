@@ -400,7 +400,7 @@ bool CCP_MainApp::TargetActiveWindow()
 	}
 
 	if(hNew == m_hTargetWnd || !::IsWindow(hNew) || IsAppWnd(hNew))
-		return false;
+		return false;	
 
 	m_hTargetWnd = hNew;
 	
@@ -420,29 +420,14 @@ bool CCP_MainApp::TargetActiveWindow()
 
 bool CCP_MainApp::ActivateTarget()
 {
-	DWORD tidTarget = ::GetWindowThreadProcessId(m_hTargetWnd, NULL);
-	DWORD tidSelf = ::GetCurrentThreadId();
+	if (m_hTargetWnd != NULL) 
+	{
+		SetForegroundWindow(m_hTargetWnd);
 
-	// We can't set the focus window from another thread,
-	// so we have to attach to the thread input first:
-	::AttachThreadInput(tidTarget, tidSelf, TRUE);
-
-	::SetForegroundWindow(m_hTargetWnd);
-	::SetFocus(m_hTargetWnd);
-
-	//	Log( StrF(
-	//		_T("ActivateTarget - AFTER:") \
-	//		_T("\n\tm_hTargetWnd = %s") \
-	//		_T("\n\tGetForegroundWindow = %s") \
-	//		_T("\n\tGetActiveWindow = %s") \
-	//		_T("\n\tGetFocus = %s\n"),
-	//			GetParentsString(m_hTargetWnd),
-	//			GetParentsString(::GetForegroundWindow()),
-	//			GetParentsString(::GetActiveWindow()),
-	//			GetParentsString(::GetFocus()) ) );
-
-	// Detach from thread input
-	::AttachThreadInput(tidTarget, tidSelf, FALSE);
+		AttachThreadInput(GetWindowThreadProcessId(m_hTargetWnd, NULL), GetCurrentThreadId(), TRUE);
+		SetFocus(m_hTargetWnd);
+		AttachThreadInput(GetWindowThreadProcessId(m_hTargetWnd, NULL), GetCurrentThreadId(), FALSE);
+	}
 
 	return true;
 }
@@ -457,9 +442,14 @@ bool CCP_MainApp::ReleaseFocus()
 // sends Ctrl-V to the TargetWnd
 void CCP_MainApp::SendPaste(bool bActivateTarget)
 {
-	AllKeysUp();
+	CSendKeys send;
+	send.AllKeysUp();
 
-	Sleep(50);
+	CString csPasteToApp = GetProcessName(m_hTargetWnd);
+	CString csPasteString = g_Opt.GetPasteString(csPasteToApp);
+	DWORD delay = g_Opt.SendKeysDelay();
+
+	Sleep(delay);
 
 	if(bActivateTarget && !ActivateTarget())
 	{
@@ -469,72 +459,58 @@ void CCP_MainApp::SendPaste(bool bActivateTarget)
 
 	PumpMessageEx();
 
-	CString csPasteToApp = GetProcessName(m_hTargetWnd);
-	CString csPasteString = g_Opt.GetPasteString(csPasteToApp);
-	DWORD pasteDelay = g_Opt.DelayBeforeSendKeys();
-
-	Log(StrF(_T("Sending paste to app %s key stroke: %s Paste Delay: %d"), csPasteToApp, csPasteString, pasteDelay));
+	Log(StrF(_T("Sending paste to app %s key stroke: %s, Delay: %d"), csPasteToApp, csPasteString, delay));
 
 	//give the app some time to take focus before sending paste
-	Sleep(pasteDelay);
-
-	CSendKeys send;
+	Sleep(delay);
+	send.SetKeyDownUpDelay(delay);
+	
 	send.SendKeys(csPasteString);
-}
-
-void CCP_MainApp::AllKeysUp()
-{
-	for(int key = 0; key < 256; key++)
-	{
-		//If the key is pressed, send a key up, having other keys down interferes with sending ctrl-v, -c and -x
-		if(GetKeyState(key) & 0x8000)
-		{
-			keybd_event(key, 0, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-		}
-	}
 }
 
 // sends Ctrl-V to the TargetWnd
 void CCP_MainApp::SendCopy()
 {
-	AllKeysUp();
-
-	Sleep(50);
-
-	PumpMessageEx();
+	CSendKeys send;
+	send.AllKeysUp();
 
 	CString csToApp = GetProcessName(m_hTargetWnd);
 	CString csString = g_Opt.GetCopyString(csToApp);
-	DWORD pasteDelay = g_Opt.DelayBeforeSendKeys();
+	DWORD delay = g_Opt.SendKeysDelay();
 
-	Log(StrF(_T("Sending copy to app %s key stroke: %s Paste Delay: %d"), csToApp, csString, pasteDelay));
+	Sleep(delay);
+
+	PumpMessageEx();
+
+	Log(StrF(_T("Sending copy to app %s key stroke: %s, Delay: %d"), csToApp, csString, delay));
 
 	//give the app some time to take focus before sending paste
-	Sleep(pasteDelay);
+	Sleep(delay);
+	send.SetKeyDownUpDelay(delay);
 
-	CSendKeys send;
 	send.SendKeys(csString);
 }
 
 // sends Ctrl-X to the TargetWnd
 void CCP_MainApp::SendCut()
 {
-	AllKeysUp();
+	CSendKeys send;
+	send.AllKeysUp();
 
-	Sleep(50);
+	CString csToApp = GetProcessName(m_hTargetWnd);
+	CString csString = g_Opt.GetCopyString(csToApp);
+	DWORD delay = g_Opt.SendKeysDelay();
+
+	Sleep(delay);
 
 	PumpMessageEx();
 
-	CString csToApp = GetProcessName(m_hTargetWnd);
-	CString csString = g_Opt.GetCutString(csToApp);
-	DWORD pasteDelay = g_Opt.DelayBeforeSendKeys();
-
-	Log(StrF(_T("Sending cut to app %s key stroke: %s Paste Delay: %d"), csToApp, csString, pasteDelay));
+	Log(StrF(_T("Sending cut to app %s key stroke: %s, Delay: %d"), csToApp, csString, delay));
 
 	//give the app some time to take focus before sending paste
-	Sleep(pasteDelay);
+	Sleep(delay);
+	send.SetKeyDownUpDelay(delay);
 
-	CSendKeys send;
 	send.SendKeys(csString);
 }
 
@@ -1130,10 +1106,10 @@ int CCP_MainApp::ShowOptionsDlg()
 	return nRet;
 }
 
-void CCP_MainApp::PumpMessageEx()
+void CCP_MainApp::PumpMessageEx(HWND hWnd)
 {
 	MSG KeyboardMsg;
-	while (::PeekMessage(&KeyboardMsg, NULL, 0, 0, PM_REMOVE))
+	while (::PeekMessage(&KeyboardMsg, hWnd, 0, 0, PM_REMOVE))
 	{
 		::TranslateMessage(&KeyboardMsg);
 		::DispatchMessage(&KeyboardMsg);

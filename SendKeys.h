@@ -9,7 +9,7 @@ class CSendKeys
 {
 private:
   bool m_bWait, m_bUsingParens, m_bShiftDown, m_bAltDown, m_bControlDown, m_bWinDown;
-  DWORD  m_nDelayAlways, m_nDelayNow;
+  DWORD  m_nDelayAlways, m_nDelayNow, m_keyDowUpDelay;
 
   static BOOL CALLBACK enumwindowsProc(HWND hwnd, LPARAM lParam);
   void   CarryDelay();
@@ -57,6 +57,7 @@ private:
 
   void PopUpShiftKeys();
 
+  
   static bool IsVkExtended(BYTE VKey);
   void SendKeyUp(BYTE VKey);
   void SendKeyDown(BYTE VKey, WORD NumTimes, bool GenUpMsg, bool bDelay = false);
@@ -66,10 +67,12 @@ private:
 
 public:
 
+  void AllKeysUp();
   bool SendKeys(LPCTSTR KeysString, bool Wait = false);
   static bool AppActivate(HWND wnd);
   static bool AppActivate(LPCTSTR WindowTitle, LPCTSTR WindowClass = 0);
   void SetDelay(const DWORD delay) { m_nDelayAlways = delay; }
+  void SetKeyDownUpDelay(const DWORD delay) { m_keyDowUpDelay = delay; }
   CSendKeys();
 };
 

@@ -1792,7 +1792,7 @@ CString CGetSetOptions::GetPasteString(CString csAppName)
 
 CString CGetSetOptions::GetDefaultPasteString()
 {
-	return GetProfileString(_T("DefaultPasteString"), _T("^{Delay 75}v"));
+	return GetProfileString(_T("DefaultPasteString"), _T("^v"));
 }
 
 CString CGetSetOptions::GetCopyString(CString csAppName)
@@ -1806,7 +1806,7 @@ CString CGetSetOptions::GetCopyString(CString csAppName)
 
 CString CGetSetOptions::GetDefaultCopyString()
 {
-	return GetProfileString(_T("DefaultCopyString"), _T("^{Delay 75}c"));
+	return GetProfileString(_T("DefaultCopyString"), _T("^c"));
 }
 
 CString CGetSetOptions::GetCutString(CString csAppName)
@@ -1820,7 +1820,7 @@ CString CGetSetOptions::GetCutString(CString csAppName)
 
 CString CGetSetOptions::GetDefaultCutString()
 {
-	return GetProfileString(_T("DefaultCutString"), _T("^{Delay 75}x"));
+	return GetProfileString(_T("DefaultCutString"), _T("^x"));
 }
 
 BOOL CGetSetOptions::GetEditWordWrap()
@@ -1873,7 +1873,7 @@ DWORD CGetSetOptions::GetDittoHotKey()
 	return (DWORD)GetProfileLong(_T("DittoHotKey"), 704);
 }
 
-DWORD CGetSetOptions::DelayBeforeSendKeys()
+DWORD CGetSetOptions::SendKeysDelay()
 {
-	return (DWORD)GetProfileLong(_T("DelayBeforeSendKeys"), 100);
+	return (DWORD)GetProfileLong(_T("SendKeysDelay"), 75);
 }

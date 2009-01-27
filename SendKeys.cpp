@@ -196,6 +196,18 @@ bool CSendKeys::IsVkExtended(BYTE VKey)
   return false;
 }
 
+void CSendKeys::AllKeysUp()
+{
+	for(int key = 0; key < 256; key++)
+	{
+		//If the key is pressed, send a key up, having other keys down interferes with sending ctrl-v, -c and -x
+		if(GetKeyState(key) & 0x8000)
+		{
+			SendKeyUp(key);
+		}
+	}
+}
+
 // Generates KEYUP
 void CSendKeys::SendKeyUp(BYTE VKey)
 {
@@ -207,7 +219,7 @@ void CSendKeys::SendKeyUp(BYTE VKey)
 }
 
 void CSendKeys::SendKeyDown(BYTE VKey, WORD NumTimes, bool GenUpMsg, bool bDelay)
-{
+ {
   WORD Cnt = 0;
   BYTE ScanCode = 0;
   bool NumState = false;
@@ -269,7 +281,13 @@ void CSendKeys::SendKeyDown(BYTE VKey, WORD NumTimes, bool GenUpMsg, bool bDelay
       CarryDelay();
 
     KeyboardEvent(VKey, ScanCode, IsVkExtended(VKey) ? KEYEVENTF_EXTENDEDKEY : 0);
-    if (GenUpMsg)
+    
+	if(m_keyDowUpDelay > 0)
+	{
+		Sleep(m_keyDowUpDelay);
+	}
+
+	if (GenUpMsg)
       KeyboardEvent(VKey, ScanCode, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP);
   }
 }
