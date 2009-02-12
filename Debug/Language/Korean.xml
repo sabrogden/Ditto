@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ditto_Language_File Version = "1" Author = "Dongyoul Kim" Notes = "">
+	<Ditto_Right_Click_Menu>
+		<Item English_Text = "Groups" ID = "-1">그룹</Item>
+		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">새그룹	Ctrl-F7</Item>
+		<Item English_Text = "New Group Selection	F7" ID = "32812">새그룹 선택 F7</Item>
+		<Item English_Text = "Move to Group" ID = "32840">그룹이동</Item>
+		<Item English_Text = "Quick Options" ID = "-1">환경설정</Item>
+		<Item English_Text = "Lines Per Row" ID = "-1">로우당 줄수</Item>
+		<Item English_Text = "1" ID = "32807"></Item>
+		<Item English_Text = "2" ID = "32786"></Item>
+		<Item English_Text = "3" ID = "32787"></Item>
+		<Item English_Text = "4" ID = "32788"></Item>
+		<Item English_Text = "5" ID = "32789"></Item>
+		<Item English_Text = "Transparency" ID = "-1">투명도</Item>
+		<Item English_Text = "None" ID = "32800">없음</Item>
+		<Item English_Text = "5 " ID = "32808"></Item>
+		<Item English_Text = "10 " ID = "32792"></Item>
+		<Item English_Text = "15 " ID = "32794"></Item>
+		<Item English_Text = "20 " ID = "32796"></Item>
+		<Item English_Text = "25 " ID = "32798"></Item>
+		<Item English_Text = "30 " ID = "32799"></Item>
+		<Item English_Text = "40 " ID = "32790"></Item>
+		<Item English_Text = "Positioning" ID = "-1">위치</Item>
+		<Item English_Text = "At Caret" ID = "32802">입력위치에</Item>
+		<Item English_Text = "At Cursor" ID = "32803">커서에</Item>
+		<Item English_Text = "At Previous Position" ID = "32804">이전위치에</Item>
+		<Item English_Text = "First Ten Hot Keys" ID = "-1">단축키 10선</Item>
+		<Item English_Text = "Use Ctrl - Num" ID = "32777">Ctrl - 번호 사용</Item>
+		<Item English_Text = "Show Hot Key Text" ID = "32778">단축키 텍스트 보여주기</Item>
+		<Item English_Text = "View Caption Bar On" ID = "-1">캡션 바 위치</Item>
+		<Item English_Text = "Top" ID = "32783">위</Item>
+		<Item English_Text = "Right" ID = "32780">오른쪽</Item>
+		<Item English_Text = "Bottom" ID = "32781">아래</Item>
+		<Item English_Text = "Left" ID = "32782">왼쪽</Item>
+		<Item English_Text = "Sort" ID = "-1">정렬</Item>
+		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">오름차순(마지막이 위로)</Item>
+		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">내림차순(마지막이 아래로)</Item>
+		<Item English_Text = "Double Clicking on Caption" ID = "-1">캡션 더블클릭</Item>
+		<Item English_Text = "Toggles Always on Top" ID = "32814">항상 위로 토글</Item>
+		<Item English_Text = "Rolls-up Window" ID = "32815">윈도우 접고펴기</Item>
+		<Item English_Text = "Toggles Always Show Description" ID = "32816">항상 설명 보기 토글</Item>
+		<Item English_Text = "Always on Top	Ctrl-Space" ID = "32784">항상 위로 Ctrl-Space</Item>
+		<Item English_Text = "Auto Roll-up" ID = "32791">자동 접고펴기</Item>
+		<Item English_Text = "Always Show Description" ID = "32813">항상 설명 보기</Item>
+		<Item English_Text = "Prompt For New Group Names" ID = "32817">새그룹에 이름입력</Item>
+		<Item English_Text = "Select Font" ID = "32844">폰트선택</Item>
+		<Item English_Text = "Show Thumbnails" ID = "32845">썸네일 보여주기</Item>
+		<Item English_Text = "Draw RTF Text" ID = "32846">RTF 텍스트 그리기</Item>
+		<Item English_Text = "Paste Clip after selection" ID = "32847">선택한 후 클립 붙이기</Item>
+		<Item English_Text = "Find As You Type" ID = "32848">입력하는 즉시 찾기</Item>
+		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">전체 윈도우 확실히 보여주기</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">그룹에 속한 클립 메인목록에 보여주기</Item>
+		<Item English_Text = "Send To" ID = "-1">보내기</Item>
+		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">(192.168.1.101) - 동일 컴퓨터</Item>
+		<Item English_Text = "View Full Description	F3" ID = "32793">설명 보여주기</Item>
+		<Item English_Text = "View Groups	Ctrl-G" ID = "32819">그룹 보여주기</Item>
+		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">텍스트만 붙이기 Shift-Enter</Item>
+		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">HTML을 텍스트로 붙이기</Item>
+		<Item English_Text = "Delete Entry	Del" ID = "32801">엔트리 삭제</Item>
+		<Item English_Text = "Properties	Alt-Enter" ID = "32776">속성 	     Alt-Enter</Item>
+		<Item English_Text = "Quick Properties" ID = "-1">빠른  속성</Item>
+		<Item English_Text = "Never Auto Delete" ID = "32820">자동 삭제 취소</Item>
+		<Item English_Text = "Auto Delete" ID = "32821">자동 삭제</Item>
+		<Item English_Text = "Remove Hot Key" ID = "32822">단축기 삭제</Item>
+		<Item English_Text = "Options..." ID = "32805">환경설정...</Item>
+		<Item English_Text = "Help" ID = "32842">도움말</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "32775">클립보드 연결 끊기</Item>
+		<Item English_Text = "Exit Program" ID = "32806">프로그램 종료</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt to Delete Clip" ID = "32852">삭제 시 확인창</Item>	
+		<Item English_Text = "Import" ID = "32855">불러오기</Item>
+		<Item English_Text = "Export" ID = "32853">내보내기</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">클립창 제거</Item>	
+		<Item English_Text = "Edit Clip" ID = "32860">클립 편집</Item>
+		<Item English_Text = "New Clip" ID = "32867">새 클립</Item>	
+		
+	</Ditto_Right_Click_Menu>
+	<Ditto_Clip_Properties>
+		<Item English_Text = "Hot Key" ID = "2039">단축키</Item>
+		<Item English_Text = "Hot Key" ID = "2039">단축키</Item>
+		<Item English_Text = "Date" ID = "2040">날짜</Item>
+		<Item English_Text = "&Never Auto Delete" ID = "1025">자동 삭제 취소(&N)</Item>
+		<Item English_Text = "Move To Group" ID = "2041">그룹이동</Item>
+		<Item English_Text = "Item Title" ID = "2042">아이템 제목</Item>
+		<Item English_Text = "Copy Formats" ID = "2029">포맷 복사</Item>
+		<Item English_Text = "Delete" ID = "1021">삭제</Item>
+		<Item English_Text = "OK" ID = "1">확인</Item>
+		<Item English_Text = "Cancel" ID = "2">취소</Item>
+		<Item English_Text = "Copy Properties" ID = "-1">속성 복사</Item>
+	</Ditto_Clip_Properties>
+	<Ditto_Options_General>
+		<Item English_Text = "Start Ditto on System Startup" ID = "2004">시스템 시작시 Ditto 자동 실행</Item>
+		<Item English_Text = "Display Icon in System Tray" ID = "2003">트레이에 아이콘 보이기</Item>
+		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">복사본 최대 개수</Item>
+		<Item English_Text = "Paste Entries Expire after" ID = "2009">일정기간 후 삭제</Item>
+		<Item English_Text = "Days" ID = "2043">일</Item>
+		<Item English_Text = "Compact and Repair" ID = "1028">압축하고 복구</Item>
+		<Item English_Text = "Automatically check for updates online" ID = "1029">자동으로 온라인 업데이트 검사</Item>
+		<Item English_Text = "Check Now" ID = "1030">지금 검사</Item>
+		<Item English_Text = "Allow Duplicates" ID = "1037">중복 허용</Item>
+		<Item English_Text = "Update Clip Time On Paste" ID = "1038">붙이기 시 클립시간 갱신</Item>
+		<Item English_Text = "Save Multi-Pastes" ID = "1039">여러개 붙이기 후 새로운 클립으로 저장</Item>
+		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Ditto가 보일 때 Hot Key 누르면 사라지기</Item>
+		<Item English_Text = "Amount of text to save for description" ID = "2044">설명으로 저장할 텍스트 크기</Item>
+		<Item English_Text = "On copy play the sound" ID = "2045">복사 시 사운드 재생</Item>
+		<Item English_Text = "Play" ID = "2034">재생</Item>
+		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">선택 후 활성 윈도우에 클립 붙이기</Item>
+		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">최대 클립사이즈 (바이트)</Item>
+		<Item English_Text = "(Leave blank for no limit)" ID = "2047">제한 없을 경우 빈칸으로 남길 것</Item>
+		<Item English_Text = "Set Database Path" ID = "1034">데이터베이스 경로설정</Item>
+		<Item English_Text = "Language" ID = "2069">언어</Item>
+		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">마지막 복사 후 X 밀리세컨드 안에 일어난 복사는 무시</Item>
+		<Item English_Text = "About Language" ID = "2073">언어에 대하여</Item>
+		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Ditto가 항상 클립보드와 연결되었는지 확인</Item>
+		<Item English_Text = "General" ID = "-1" PropertyPage = "true">일반</Item>
+	</Ditto_Options_General>
+	<Ditto_Options_Supported_Types>
+		<Item English_Text = "&Add" ID = "1015">추가(&A)</Item>
+		<Item English_Text = "&Delete" ID = "1016">삭제(&D)</Item>
+		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">지원형식</Item>
+	</Ditto_Options_Supported_Types>
+	<Ditto_Options_Shortcuts>
+		<Item English_Text = "Activate Ditto" ID = "2048">Ditto 활성</Item>
+		<Item English_Text = "Win" ID = "2035">우선</Item>
+		<Item English_Text = "Named Copy" ID = "2049">명명 복사</Item>
+		<Item English_Text = "Win" ID = "2036">우선</Item>
+		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">마지막 10개 복사본 아이템 단축키</Item>
+		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">붙이기 보내기(아니면 단지 클립보드로 로드됨)</Item>
+		<Item English_Text = "Position 1" ID = "2052">1 번째</Item>
+		<Item English_Text = "Position 2" ID = "2053">2 번째</Item>
+		<Item English_Text = "Position 3" ID = "2054">3 번째</Item>
+		<Item English_Text = "Position 4" ID = "2055">4 번째</Item>
+		<Item English_Text = "Position 5" ID = "2056">5 번째</Item>
+		<Item English_Text = "Position 6" ID = "2057">6 번째</Item>
+		<Item English_Text = "Position 7" ID = "2058">7 번째</Item>
+		<Item English_Text = "Position 8" ID = "2059">8 번째</Item>
+		<Item English_Text = "Position 9" ID = "2060">9 번째</Item>
+		<Item English_Text = "Position 10" ID = "2061">10 번째</Item>
+		<Item English_Text = "Win" ID = "2042">우선</Item>
+		<Item English_Text = "Win" ID = "2043">우선</Item>
+		<Item English_Text = "Win" ID = "2044">우선</Item>
+		<Item English_Text = "Win" ID = "2045">우선</Item>
+		<Item English_Text = "Win" ID = "2046">우선</Item>
+		<Item English_Text = "Win" ID = "2037">우선</Item>
+		<Item English_Text = "Win" ID = "2038">우선</Item>
+		<Item English_Text = "Win" ID = "2039">우선</Item>
+		<Item English_Text = "Win" ID = "2040">우선</Item>
+		<Item English_Text = "Win" ID = "2041">우선</Item>
+		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">단축키를 윈도우 키보드 키에 포함하려면 '우선' 체크버튼 선택</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">단축키</Item>
+		
+		//New item added in 3.15.1 8/18/07
+		<Item English_Text = "Send custom strokes Per Application" ID = "2091">애플리케이션의 커스텀 입력 보내기</Item>
+	</Ditto_Options_Shortcuts>
+	<Ditto_Options_Quick_Paste>
+		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">목록의 맨위부터 히스토리 시작 (또는 아래)</Item>
+		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">최근 10개 복사본 단축키로 Ctrl - 번호 사용</Item>
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">최근 10개 복사본 단축키 텍스트 보기</Item>
+		<Item English_Text = "Show leading whitespace" ID = "2021">앞에 붙은 빈칸 보여주기</Item>
+		<Item English_Text = "Text Lines per Row" ID = "2062">목록 한칸에 보여줄 줄 수</Item>
+		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">클립창 투명하게 하기</Item>
+		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">썸네일 보기(CF_DIB 형식) (메모리 사용이나 디스플레이 속도가 늘어날 수 있음)</Item>
+		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">목록에서 RTF 그리기 (RTF 형식) (메모리 사용이나 디스플레이 속도가 늘어날 수 있음)</Item>
+		<Item English_Text = "Find As You Type" ID = "2036">입력하는 즉시 찾기</Item>
+		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">전체 윈도우 확실히 보여주기</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">그룹에 속한 클립 메인목록에 보여주기</Item>
+		<Item English_Text = "Font" ID = "1040">폰트</Item>
+		<Item English_Text = "Default Font" ID = "2031">기본 폰트</Item>
+		<Item English_Text = "Popup Positioning" ID = "2063">팝업 위치</Item>
+		<Item English_Text = "At Caret" ID = "2015">입력위치에</Item>
+		<Item English_Text = "At Cursor" ID = "2016">커서에</Item>
+		<Item English_Text = "At Previous Position" ID = "2017">이전위치에</Item>
+		<Item English_Text = "List Item Prefix Legend" ID = "2064">아이템 목록 접두어 범례</Item>
+		<Item English_Text = "  * = Don't Auto Delete\ns = Shortcut exists\nG = Item is a Group\n! = Item is attached to a Group" ID = "2065">  * = 작동삭제 금지\n  s = 단축키 있음\n G = 그룹 아이템\n  ! = 그룹에 속해 있음</Item>
+		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">클립창</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">클립삭제 시 물어보기</Item>
+		
+		//New strings added in 3.15.2 10-6-07
+		<Item English_Text = "Theme" ID = "2092">테마</Item>
+		<Item English_Text = "About Theme" ID = "2094">테마에 대하여</Item>
+		
+	</Ditto_Options_Quick_Paste>	
+	<Ditto_Options_Friends>
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">이 목록에 IP나 컴퓨터 이름이 있을 경우만 보낸 복사본이 클립보드에 들어간다.  아닌 경우 저장된 클립에 들어간다.</Item>
+		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">컴마로 구분된 IP/컴퓨터 이름</Item>
+		<Item English_Text = "Disable Recieving Clips" ID = "2026">받은 클립 사용금지</Item>
+		<Item English_Text = "Network Password" ID = "2054">네트워크 비밀번호</Item>
+		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">네트워크 비밀번호가 맞지 않은 컴퓨터로부터 클립을 받았다면, 컴마로 구분하여 네트워크 비밀번호를 추가 입력</Item>
+		<Item English_Text = "Receive Passwords" ID = "2056"></Item>
+		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">모두 보내기를 선택하였을 경우 다른 컴퓨터에 이 컴퓨터의 모든 복사본을 전송.  아닌 경우 하나의 복사본 보내기만 팝업메뉴에 나타남.</Item>
+		<Item English_Text = "Log Send Receive Commands" ID = "1042">전송 수신 명령 로그</Item>
+		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">친구들</Item>
+	</Ditto_Options_Friends>
+	<Ditto_Options_Friends_Detail>
+		<Item English_Text = "Send All Copies to this friend" ID = "1015">이 친구에게 모두 보내기</Item>
+		<Item English_Text = "IP/Name" ID = "2052">IP/이름</Item>
+		<Item English_Text = "Description" ID = "2053">설명</Item>
+		<Item English_Text = "Friend Details" ID = "-1">친구 자세히 보기</Item>
+	</Ditto_Options_Friends_Detail>
+	<Ditto_Options_Stats>
+		<Item English_Text = "Odometer" ID = "2052">주행기록</Item>
+		<Item English_Text = "Trip Odometer" ID = "2053">트립 주행기록</Item>
+		<Item English_Text = "Copies" ID = "2054">복사</Item>
+		<Item English_Text = "Pastes" ID = "2055">붙이기</Item>
+		<Item English_Text = "Copies" ID = "2056">복사</Item>
+		<Item English_Text = "Pastes" ID = "2057">붙이기</Item>
+		<Item English_Text = "Reset" ID = "1006">리셋</Item>
+		<Item English_Text = "Saved Copies" ID = "2058">저장된 복사본</Item>
+		<Item English_Text = "Saved Copy Data" ID = "2059">저장된 복사본 데이터</Item>
+		<Item English_Text = "Remove All" ID = "1013">전체 삭제</Item>
+		<Item English_Text = "Last Started" ID = "2060">마지막 시작일</Item>
+		<Item English_Text = "Database Size" ID = "2061">데이터베이스 크기</Item>
+		<Item English_Text = "Clips Sent" ID = "2066">보낸 클립</Item>
+		<Item English_Text = "Clips received" ID = "2067">받은 클립</Item>
+		<Item English_Text = "Since Last Start" ID = "2068">마지막 시작부터</Item>
+		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true">통계</Item>
+	</Ditto_Options_Stats>
+	<Ditto_Options_Supported_Types_Add>
+		<Item English_Text = "Main Types" ID = "2052">메인 형식</Item>
+		<Item English_Text = "Custom Type" ID = "2053">커스텀 형식</Item>
+		<Item English_Text = "Add" ID = "1020">추가</Item>
+		<Item English_Text = "Currently on the Clipboard" ID = "2054">현재 클립보드</Item>
+		<Item English_Text = "Add" ID = "1019">추가</Item>
+		<Item English_Text = "Add" ID = "1021">추가</Item>
+		<Item English_Text = "Cancel" ID = "2">취소</Item>
+		<Item English_Text = "Add Supported Type" ID = "-1">지원 형식 추가</Item>
+	</Ditto_Options_Supported_Types_Add>
+	<Ditto_Move_To_Groups>
+		<Item English_Text = "New Group" ID = "1040">새그룹</Item>
+		<Item English_Text = "OK" ID = "1">확인</Item>
+		<Item English_Text = "Cancel" ID = "2">취소</Item>
+		<Item English_Text = "Move to Group" ID = "-1">그룹 이동</Item>
+	</Ditto_Move_To_Groups>
+	<Ditto_String_Table>
+		<Item English_Text = "General" ID = "GeneralTitle">일반</Item>
+		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">지원형식</Item>
+		<Item English_Text = "Stats" ID = "StatsTitle">통계</Item>
+		<Item English_Text = "Friends" ID = "FriendsTitle">친구들</Item>
+		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">클립창</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">단축키</Item>
+		<Item English_Text = "About" ID = "AboutTitle">정보</Item>
+		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">데이터베이스 열기 에러</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">DAO/Jet db 엔진을 초기화 할 수 없습니다.\nhttp://ditto-cp.sourceforge.net/dao_setup.exe 에서 DAO를 다운로드하려면 YES를 선택하세요.\n\nDAO 설치 후 Ditto를 다시 시작합니다.</Item>
+		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format">알 수 없는 데이터베이스 양식</Item>
+		<Item English_Text = "the file will be renamed" ID = "File_Renamed">파일이름을 바꿉니다.</Item>
+		<Item English_Text = "and a new database will be created" ID = "New_Database">그리고 새로운 데이터베이스를 생성합니다.</Item>
+		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">Ditto 업데이트가 있습니다.\n자세한 내용은 ditto-cp.sourceforge.net 을 방문하세요.\n\n실행 버전</Item>
+		<Item English_Text = "Update Version" ID = "Update_Version">업데이트 버전</Item>
+		<Item English_Text = "Download updated version?" ID = "Download_Update">업데이트 버전을 다운로드 할까요?</Item>			
+		<Item English_Text = "No updates available" ID = "No_Updates">업데이트 할 것이 없습니다.</Item>			
+		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">모든 복사본을 삭제합니다.\n\n계속할까요?</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">클립보드 연결 끊기</Item>
+		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">클립보드와 연결</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">DAO/Jet DB 엔진 초기화할 수 없습니다. DAO를 지금 설치합니다.\n\nDAO 설치후 Ditto를 다시 시작할까요?</Item>
+		<Item English_Text = "NO TARGET" ID = "No_Target">대상이 없음</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">클립삭제 시 물어보기</Item>
+		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">선택한 클립들을 삭제할까요?</Item>
+		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">내보냈던 클립 가져오기 에러</Item>
+		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing">내보냈던 클립 파싱 에러</Item>
+		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good">클립을 클립보드에 넣었음.</Item>
+		<Item English_Text = "Successfully imported" ID = "Import_Successfully">가져오기 성공</Item>
+		<Item English_Text = "clip" ID = "Clip">클립</Item>
+		<Item English_Text = "clips" ID = "Clips">클립들</Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">저장 시 클립 설명 갱신?</Item>
+		<Item English_Text = "New Clip" ID = "New_Clip">새 클립</Item>
+		<Item English_Text = "Save" ID = "Save">저장</Item>
+		<Item English_Text = "Save All" ID = "Save_All">모두 저장</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">현재 탭 닫기</Item>
+		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable">현재 아이템은 편집할 수 없습니다. 클립이 클립 형식 중 하나이어야 합니다.</Item>
+		<Item English_Text = "to be editable" ID = "Editable">편집하기</Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">변경된 사항을 저장하겠습까</Item>
+		<Item English_Text = "Error saving clip" ID = "ErrorSaving">클립 저장 에러</Item>
+		<Item English_Text = "New" ID = "New">새클립</Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">저장, 닫은 후 클립보드에 넣기</Item>
+		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">Ditto 편집</Item>
+		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title">Ditto - 명명 붙이기</Item>
+		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">데이터 읽기 에러</Item>
+		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2">빠른 텍스트 붙이기에서 클립 검색 에러</Item>
+		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">클립 검색 예외</Item>
+		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title">Ditto - 명명 복사</Item>
+		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">명명 복사를 데이터베이스에 저장시 에러</Item>
+		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">명명 복사 저장 예외</Item>
+		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">Ditto가 복사본을 받지 못했습니다.</Item> 
+				
+	</Ditto_String_Table>
+	<Ditto_Options_Sheet>
+		<Item English_Text = "OK" ID = "1">확인</Item>
+		<Item English_Text = "Cancel" ID = "2">취소</Item>
+		<Item English_Text = "Apply" ID = "12321">적용</Item>
+	</Ditto_Options_Sheet>
+	<Ditto_Tray_Icon_Menu>
+		<Item English_Text = "Show Quick Paste" ID = "32773">클립창 보기</Item>
+		<Item English_Text = "Options" ID = "32771">환경설정</Item>
+		<Item English_Text = "Help" ID = "32843">도움말</Item>
+		<Item English_Text = "Exit" ID = "32772">종료</Item>
+
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Import" ID = "32854">불러오기</Item>
+		<Item English_Text = "New Clip" ID = "32868">새클립</Item>
+		
+	</Ditto_Tray_Icon_Menu>
+</Ditto_Language_File>
