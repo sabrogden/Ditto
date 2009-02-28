@@ -969,7 +969,7 @@ LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 	}
 	else
 	{
-		Log( StrF(_T("SetTarget 0x%08x: \"%s\""), hFocus, GetWndText(hFocus)));
+		//Log( StrF(_T("SetTarget 0x%08x: \"%s\""), hFocus, GetWndText(hFocus)));
 
 		theApp.m_bDittoHasFocus = false;
 

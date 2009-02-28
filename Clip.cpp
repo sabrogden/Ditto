@@ -276,6 +276,7 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 	// If the data is supposed to be private, then return
 	if(::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
 	{
+		Log(_T("Clipboard ignore type is on the clipboard, skipping this clipboard change"));
 		return false;
 	}
 
@@ -283,12 +284,14 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 	//to allow the ctrl-v to do a paste
 	if(::IsClipboardFormatAvailable(theApp.m_cfDelaySavingData))
 	{
+		Log(_T("Delay clipboard type is on the clipboard, delaying 1500 ms to allow ctrl-v to work"));
 		Sleep(1500);
 	}
 		
 	//Attach to the clipboard
 	if(!oleData.AttachClipboard())
 	{
+		Log(_T("failed to attache to clipboard, skipping this clipboard change"));
 		ASSERT(0); // does this ever happen?
 		return false;
 	}
@@ -327,14 +330,19 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 		cfDesc.m_hgData = oleData.GetGlobalData(cfDesc.m_cfType);
 		bIsDescSet = SetDescFromText(cfDesc.m_hgData);
 	}
-	
-	// Get global data for each supported type on the clipboard
+
 	UINT nSize;
 	CClipFormat cf;
 	int numTypes = pTypes->GetSize();
+
+	Log(StrF(_T("Begin enumerating over supported types, Count: %d"), numTypes));
+
 	for(int i = 0; i < numTypes; i++)
 	{
 		cf.m_cfType = pTypes->ElementAt(i);
+
+		BOOL bSuccess = false;
+		Log(StrF(_T("Begin try and load type %s"), GetFormatName(cf.m_cfType)));
 		
 		// is this the description we already fetched?
 		if(cf.m_cfType == cfDesc.m_cfType)
@@ -344,6 +352,7 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 		}
 		else if(!oleData.IsDataAvailable(cf.m_cfType))
 		{
+			Log(StrF(_T("End of load - Data is not available for type %s"), GetFormatName(cf.m_cfType)));
 			continue;
 		}
 		else
@@ -369,15 +378,21 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 				ASSERT(::IsValid(cf.m_hgData));
 				
 				m_Formats.Add(cf);
+				bSuccess = true;
 			}
 			else
 			{
 				ASSERT(FALSE); // a valid GlobalMem with 0 size is strange
 				cf.Free();
+				Log(StrF(_T("Data length is 0 for type %s"), GetFormatName(cf.m_cfType)));
 			}
 			cf.m_hgData = 0; // m_Formats owns it now
 		}
+
+		Log(StrF(_T("End of load - type %s, Success: %d"), GetFormatName(cf.m_cfType), bSuccess));
 	}
+
+	Log(StrF(_T("End enumerating over supported types, Count: %d"), numTypes));
 	
 	m_Time = CTime::GetCurrentTime();
 	
@@ -397,6 +412,7 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 	
 	if(m_Formats.GetSize() == 0)
 	{
+		Log(_T("Not clip types were in supported types array"));
 		return false;
 	}
 
