@@ -356,78 +356,68 @@ void CCP_MainApp::BeforeMainClose()
 	StopCopyThread();
 }
 
-/*
-Re: Targeting the previous focus window
-
-We usually gain focus after the following messages:
-keyboard: WM_KEYUP(0x0101),WM_CHAR(0x0102),WM_HOTKEY(0x0312)
-mouse: WM_MOUSEFIRST(0x0200),WM_MOUSEMOVE(0x0200),WM_LBUTTONDOWN(0x0201)
-
-CMainFrame::PreTranslateMessage is used to intercept messages before
-they are processed (before we are actually given focus) in order to
-save the previous window that had focus.
-- It currently just handles "activating" mouse messages when showing.
-
-ShowQPasteWnd also has a call to "TargetActiveWindow" which handles
-finding the Target on hotkey activation.
-
-This works well for most window switching (mouse or hotkey), but does
-not work well for <Alt>-<Tab> or other window switching applications
-(e.g. the taskbar tray), since the previous window was only a means to
-switching and not the target itself.
-- one solution might be to always monitor the current foreground
-window using system hooks or a short (e.g. 1 sec) timer... though this
-*might* be cpu intensive (slow).  I'm currently looking into using
-WH_CBT system hooks in a separate dll (see: robpitt's
-http://website.lineone.net/~codebox/focuslog.zip).
-*/
 bool CCP_MainApp::TargetActiveWindow()
 {
-	if(g_Opt.m_bUseHookDllForFocus)
-		return true;
+	HWND newActive = ::GetForegroundWindow();
+	AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), TRUE);
+	HWND newFocus = GetFocus();
+	AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), FALSE);
 
-	HWND hOld = m_hTargetWnd;
-	GUITHREADINFO guiThreadInfo;
-	guiThreadInfo.cbSize = sizeof(GUITHREADINFO);
-	HWND hNew = ::GetForegroundWindow();
-	DWORD OtherThreadID = GetWindowThreadProcessId(hNew, NULL);
-	if(GetGUIThreadInfo(OtherThreadID, &guiThreadInfo))
+	if(newFocus == 0 && newActive != 0)
 	{
-		if(guiThreadInfo.hwndFocus != NULL)
-		{
-			hNew = guiThreadInfo.hwndFocus;
-		}
+		newFocus = newActive;
+	}
+	else if(newActive == 0 && newFocus != 0)
+	{
+		newActive = newFocus;
 	}
 
-	if(hNew == m_hTargetWnd || !::IsWindow(hNew) || IsAppWnd(hNew))
-		return false;	
+	if(newFocus == 0 || !IsWindow(newFocus) || newActive == 0 || !IsWindow(newActive))
+	{
+		Log(_T("TargetActiveWindow values invalid"));
+		return false;
+	}
 
-	m_hTargetWnd = hNew;
-	
+	if(newFocus == m_FocusWnd)
+	{
+//		Log(_T("TargetActiveWindow window the same"));
+		return false;
+	}
+
+	TCHAR className[50];
+	GetClassName(newFocus, className, sizeof(className));
+	if(STRCMP(className, _T("Shell_TrayWnd")) == 0)
+	{
+		Log(_T("TargetActiveWindow shell tray icon has focus"));
+		m_bDittoHasFocus = true;
+		return false;
+	}
+
+	if(IsAppWnd(newFocus))
+	{
+		Log(_T("TargetActiveWindow Ditto Has Focus"));
+		m_bDittoHasFocus = true;
+		return false;
+	}
+
+	m_FocusWnd = newFocus;
+	m_ActiveWnd = newActive;
+
 	if(QPasteWnd())
 		QPasteWnd()->UpdateStatus(true);
 
-	// Tracking / Debugging
-	//Log( StrF(
-	//	_T("Target Changed") \
-	//	_T("\n\tOld = 0x%08x: \"%s\"") \
-	//	_T("\n\tNew = 0x%08x:  \"%s\"\n"),
-	//		hOld, (LPCTSTR) GetWndText(hOld),
-	//		hNew, (LPCTSTR) GetWndText(hNew) ) );
+	Log(StrF(_T("TargetActiveWindow Active: %d Focus: %d"), m_ActiveWnd, m_FocusWnd));
 	
 	return true;
 }
 
 bool CCP_MainApp::ActivateTarget()
 {
-	if (m_hTargetWnd != NULL) 
-	{
-		SetForegroundWindow(m_hTargetWnd);
+	SetForegroundWindow(m_ActiveWnd);
 
-		AttachThreadInput(GetWindowThreadProcessId(m_hTargetWnd, NULL), GetCurrentThreadId(), TRUE);
-		SetFocus(m_hTargetWnd);
-		AttachThreadInput(GetWindowThreadProcessId(m_hTargetWnd, NULL), GetCurrentThreadId(), FALSE);
-	}
+	AttachThreadInput(GetWindowThreadProcessId(m_ActiveWnd, NULL), GetCurrentThreadId(), TRUE);
+	SetFocus(m_FocusWnd);
+	AttachThreadInput(GetWindowThreadProcessId(m_ActiveWnd, NULL), GetCurrentThreadId(), FALSE);
 
 	return true;
 }
@@ -445,18 +435,16 @@ void CCP_MainApp::SendPaste(bool bActivateTarget)
 	CSendKeys send;
 	send.AllKeysUp();
 
-	CString csPasteToApp = GetProcessName(m_hTargetWnd);
+	CString csPasteToApp = GetProcessName(m_ActiveWnd);
 	CString csPasteString = g_Opt.GetPasteString(csPasteToApp);
 	DWORD delay = g_Opt.SendKeysDelay();
-
-	Sleep(delay);
 
 	if(bActivateTarget && !ActivateTarget())
 	{
 		SetStatus(_T("SendPaste FAILED!"), TRUE);
 		return;
 	}
-
+	
 	PumpMessageEx();
 
 	Log(StrF(_T("Sending paste to app %s key stroke: %s, Delay: %d"), csPasteToApp, csPasteString, delay));
@@ -474,7 +462,7 @@ void CCP_MainApp::SendCopy()
 	CSendKeys send;
 	send.AllKeysUp();
 
-	CString csToApp = GetProcessName(m_hTargetWnd);
+	CString csToApp = GetProcessName(m_ActiveWnd);
 	CString csString = g_Opt.GetCopyString(csToApp);
 	DWORD delay = g_Opt.SendKeysDelay();
 
@@ -497,7 +485,7 @@ void CCP_MainApp::SendCut()
 	CSendKeys send;
 	send.AllKeysUp();
 
-	CString csToApp = GetProcessName(m_hTargetWnd);
+	CString csToApp = GetProcessName(m_ActiveWnd);
 	CString csString = g_Opt.GetCopyString(csToApp);
 	DWORD delay = g_Opt.SendKeysDelay();
 
@@ -908,7 +896,7 @@ BOOL CCP_MainApp::OnIdle(LONG lCount)
 CString CCP_MainApp::GetTargetName() 
 {
 	TCHAR cWindowText[200];
-	HWND hParent = m_hTargetWnd;
+	HWND hParent = m_ActiveWnd;
 
 	::GetWindowText(hParent, cWindowText, 100);
 

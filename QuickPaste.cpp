@@ -132,7 +132,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	if(ptCaret.x <= 0 || ptCaret.y <= 0)
 	{
 		CRect cr;
-		::GetWindowRect(theApp.m_hTargetWnd, cr);
+		::GetWindowRect(theApp.m_FocusWnd, cr);
 		if(cr.PtInRect(ptCaret) == FALSE)
 		{
 			ptCaret = cr.CenterPoint();

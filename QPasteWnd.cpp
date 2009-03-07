@@ -801,7 +801,7 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 		title += " - ";
 	}
 	
-	if( ::IsWindow(theApp.m_hTargetWnd) )
+	if( ::IsWindow(theApp.m_ActiveWnd) )
 		title += theApp.GetTargetName();
 	else
 		title += theApp.m_Language.GetString("No_Target", "No target");

@@ -293,7 +293,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 				if(m_ToolTipPoint.x < 0 || m_ToolTipPoint.y < 0)
 				{
 					CRect cr;
-					::GetWindowRect(theApp.m_hTargetWnd, cr);
+					::GetWindowRect(theApp.m_FocusWnd, cr);
 					m_ToolTipPoint = cr.CenterPoint();
 				}
 				m_ToolTipPoint.Offset(-15, 15);
@@ -327,7 +327,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 				if(m_ToolTipPoint.x < 0 || m_ToolTipPoint.y < 0)
 				{
 					CRect cr;
-					::GetWindowRect(theApp.m_hTargetWnd, cr);
+					::GetWindowRect(theApp.m_FocusWnd, cr);
 					m_ToolTipPoint = cr.CenterPoint();
 				}
 				m_ToolTipPoint.Offset(-15, 15);
@@ -686,7 +686,9 @@ BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 	// target before mouse messages change the focus
 	if( theApp.m_bShowingQuickPaste &&
 		WM_MOUSEFIRST <= pMsg->message && pMsg->message <= WM_MOUSELAST )
-	{	theApp.TargetActiveWindow(); }
+	{	
+		theApp.TargetActiveWindow(); 
+	}
 
 	return CFrameWnd::PreTranslateMessage(pMsg);
 }
@@ -901,82 +903,7 @@ LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 	if(g_Opt.m_bUseHookDllForFocus == FALSE)
 		return TRUE;
 	
-	HWND hFocus = (HWND)wParam;
-	HWND hParent = hFocus;
-	HWND hLastGoodParent = hParent;
-	static DWORD dLastDittoHasFocusTick = 0;
-
-	//Sometimes when we bring ditto up there will come a null focus 
-	//rite after that
-	if(hFocus == NULL && (GetTickCount() - dLastDittoHasFocusTick < 500))
-	{
-		Log(_T("NULL focus within 500 ticks of bringing up ditto"));
-		return TRUE;
-	}
-	else if(hFocus == NULL)
-	{
-		Log(_T("NULL focus received"));
-	}
-
-	//only proceed if something changed
-	if(theApp.m_hTargetWnd == hFocus)
-		return TRUE;
-
-	TCHAR cWindowText[100];
-	::GetWindowText(hFocus, cWindowText, 100);
-
-	HWND hTray = ::FindWindow(_T("Shell_TrayWnd"), _T(""));
-
-	//Log(StrF(_T("Focus = %d"), hFocus));
-
-	int nCount = 0;
-	while(true)
-	{
-		hParent = ::GetParent(hParent);
-		if(hParent == NULL)
-			break;
-
-		//Log(StrF(_T("Focus2 = %d"), hParent));
-
-		//allow focus on edit window
-		if(m_pEditFrameWnd && hParent == m_pEditFrameWnd->GetSafeHwnd())
-		{
-			break;
-		}		
-
-		hLastGoodParent = hParent;  
-
-		nCount++;
-		if(nCount > 100)
-		{
-			Log(_T("OnFocusChanged reached maximum search depth of 100"));
-			break;
-		}
-	}
-
-	
-	//If the parent is ditto or the tray icon then don't set focus to that window
-	if(hLastGoodParent == m_hWnd || hLastGoodParent == hTray)
-	{
-		Log(_T("Ditto Has Focus"));
-		theApp.m_bDittoHasFocus = true;
-		dLastDittoHasFocusTick = GetTickCount();   
-	}
-	else if(IsWindow(hFocus) == FALSE)
-	{
-		Log( StrF(_T("Invalid focus window 0x%08x"), hFocus));
-		theApp.m_bDittoHasFocus = false;
-	}
-	else
-	{
-		//Log( StrF(_T("SetTarget 0x%08x: \"%s\""), hFocus, GetWndText(hFocus)));
-
-		theApp.m_bDittoHasFocus = false;
-
-		theApp.m_hTargetWnd = hFocus;
-		if(theApp.QPasteWnd() )
-			theApp.QPasteWnd()->UpdateStatus(true);
-	}
+	theApp.TargetActiveWindow();
 
 	return TRUE;
 }

@@ -3,8 +3,8 @@
 
 [Setup]
 AppName=Ditto
-AppVerName=Ditto 3.16.2.0
-OutputBaseFilename=DittoSetup_3_16_2_0
+AppVerName=Ditto 3.16.3.0
+OutputBaseFilename=DittoSetup_3_16_3_0
 AppPublisher=Scott Brogden
 AppPublisherURL=ditto-cp.sourceforge.net
 AppSupportURL=ditto-cp.sourceforge.net
@@ -35,6 +35,7 @@ Name: Turkish; MessagesFile: Turkish.isl
 Name: Japanese; MessagesFile: Japanese.isl
 Name: Chinese; MessagesFile: ChineseSimp.isl
 Name: Romanian; MessagesFile: Romanian.isl
+Name: Korean; MessagesFile: Korean.isl
 
 
 [Tasks]
@@ -92,6 +93,8 @@ Root: HKCU; Subkey: Software\Ditto\CutStrings; ValueType: string; ValueName: gvi
 
 Root: HKCU; Subkey: Software\Ditto\PasteStrings; ValueType: string; ValueName: cmd.exe; ValueData: % {{Delay100}ep
 Root: HKCU; Subkey: Software\Ditto\CopyStrings; ValueType: string; ValueName: cmd.exe; ValueData: % {{Delay100}ey
+
+Root: HKCU; Subkey: Software\Ditto\PasteStrings; ValueType: string; ValueName: opera.exe; ValueData: {{Delay100}^v
 
 ;associate .dto with Ditto
 Root: HKCR; Subkey: .dto; ValueType: string; ValueName: ; ValueData: Ditto; Flags: uninsdeletevalue

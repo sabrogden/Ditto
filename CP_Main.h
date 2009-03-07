@@ -82,7 +82,8 @@ public:
 	CHotKey		*m_pCutBuffer3;
 
 // Focus Tracking
-	HWND m_hTargetWnd;
+	HWND m_ActiveWnd;
+	HWND m_FocusWnd;
 	bool TargetActiveWindow();
 	bool ActivateTarget();
 	bool ReleaseFocus(); // activate the target only if we are the active window
