@@ -207,18 +207,18 @@ CPoint GetFocusedCaretPos()
 {
 	CPoint pt(-1, -1);
 
-	if(theApp.m_ActiveWnd)
+	if(theApp.m_activeWnd.ActiveWnd())
 	{
 		GUITHREADINFO guiThreadInfo;
 		guiThreadInfo.cbSize = sizeof(GUITHREADINFO);
-		DWORD OtherThreadID = GetWindowThreadProcessId(theApp.m_ActiveWnd, NULL);
+		DWORD OtherThreadID = GetWindowThreadProcessId(theApp.m_activeWnd.ActiveWnd(), NULL);
 		if(GetGUIThreadInfo(OtherThreadID, &guiThreadInfo))
 		{
 			CRect rc(guiThreadInfo.rcCaret);
 			if(rc.IsRectEmpty() == FALSE)
 			{
 				pt = rc.BottomRight();
-				::ClientToScreen(theApp.m_FocusWnd, &pt);
+				::ClientToScreen(theApp.m_activeWnd.FocusWnd(), &pt);
 			}
 		}
 	}

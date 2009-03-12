@@ -850,6 +850,9 @@
 				RelativePath=".\EditWnd.cpp">
 			</File>
 			<File
+				RelativePath=".\ExternalWindowTracker.cpp">
+			</File>
+			<File
 				RelativePath="FileTransferProgressDlg.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -2724,6 +2727,9 @@
 				RelativePath=".\EditWnd.h">
 			</File>
 			<File
+				RelativePath=".\ExternalWindowTracker.h">
+			</File>
+			<File
 				RelativePath="FileTransferProgressDlg.h">
 			</File>
 			<File
@@ -2996,7 +3002,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Release\focus.dll">
+				RelativePath="Debug\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">
@@ -3023,7 +3029,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Debug\focus.dll">
+				RelativePath="Release\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">

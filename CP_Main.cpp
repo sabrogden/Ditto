@@ -129,7 +129,6 @@ CCP_MainApp::CCP_MainApp()
 
 	m_QuickPasteMode = NONE_QUICK_PASTE;
 	m_pQuickPasteClip = NULL;
-	m_bDittoHasFocus = false;
 }
 
 CCP_MainApp::~CCP_MainApp()
@@ -255,15 +254,11 @@ BOOL CCP_MainApp::InitInstance()
 	CMainFrame* pFrame = new CMainFrame;
 	m_pMainWnd = m_pMainFrame = pFrame;
 
-	// prevent no one having focus on startup
-	TargetActiveWindow();
+	m_activeWnd.TrackActiveWnd();
 
 	pFrame->LoadFrame(IDR_MAINFRAME, WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, NULL, NULL);
 	pFrame->ShowWindow(SW_SHOW);
 	pFrame->UpdateWindow();
-
-	// prevent no one having focus on startup
-	ReleaseFocus();
 
 	m_Addins.LoadAll();
 
@@ -354,152 +349,6 @@ void CCP_MainApp::BeforeMainClose()
 	g_HotKeys.UnregisterAll();
 	StopServerThread();
 	StopCopyThread();
-}
-
-bool CCP_MainApp::TargetActiveWindow()
-{
-	HWND newActive = ::GetForegroundWindow();
-	AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), TRUE);
-	HWND newFocus = GetFocus();
-	AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), FALSE);
-
-	if(newFocus == 0 && newActive != 0)
-	{
-		newFocus = newActive;
-	}
-	else if(newActive == 0 && newFocus != 0)
-	{
-		newActive = newFocus;
-	}
-
-	if(newFocus == 0 || !IsWindow(newFocus) || newActive == 0 || !IsWindow(newActive))
-	{
-		Log(_T("TargetActiveWindow values invalid"));
-		return false;
-	}
-
-	if(newFocus == m_FocusWnd)
-	{
-//		Log(_T("TargetActiveWindow window the same"));
-		return false;
-	}
-
-	TCHAR className[50];
-	GetClassName(newFocus, className, sizeof(className));
-	if(STRCMP(className, _T("Shell_TrayWnd")) == 0)
-	{
-		Log(_T("TargetActiveWindow shell tray icon has focus"));
-		m_bDittoHasFocus = true;
-		return false;
-	}
-
-	if(IsAppWnd(newFocus))
-	{
-		Log(_T("TargetActiveWindow Ditto Has Focus"));
-		m_bDittoHasFocus = true;
-		return false;
-	}
-
-	m_FocusWnd = newFocus;
-	m_ActiveWnd = newActive;
-
-	if(QPasteWnd())
-		QPasteWnd()->UpdateStatus(true);
-
-	Log(StrF(_T("TargetActiveWindow Active: %d Focus: %d"), m_ActiveWnd, m_FocusWnd));
-	
-	return true;
-}
-
-bool CCP_MainApp::ActivateTarget()
-{
-	SetForegroundWindow(m_ActiveWnd);
-
-	AttachThreadInput(GetWindowThreadProcessId(m_ActiveWnd, NULL), GetCurrentThreadId(), TRUE);
-	SetFocus(m_FocusWnd);
-	AttachThreadInput(GetWindowThreadProcessId(m_ActiveWnd, NULL), GetCurrentThreadId(), FALSE);
-
-	return true;
-}
-
-bool CCP_MainApp::ReleaseFocus()
-{
-	if( IsAppWnd(::GetForegroundWindow()) )
-		return ActivateTarget();
-	return false;
-}
-
-// sends Ctrl-V to the TargetWnd
-void CCP_MainApp::SendPaste(bool bActivateTarget)
-{
-	CSendKeys send;
-	send.AllKeysUp();
-
-	CString csPasteToApp = GetProcessName(m_ActiveWnd);
-	CString csPasteString = g_Opt.GetPasteString(csPasteToApp);
-	DWORD delay = g_Opt.SendKeysDelay();
-
-	if(bActivateTarget && !ActivateTarget())
-	{
-		SetStatus(_T("SendPaste FAILED!"), TRUE);
-		return;
-	}
-	
-	PumpMessageEx();
-
-	Log(StrF(_T("Sending paste to app %s key stroke: %s, Delay: %d"), csPasteToApp, csPasteString, delay));
-
-	//give the app some time to take focus before sending paste
-	Sleep(delay);
-	send.SetKeyDownUpDelay(delay);
-	
-	send.SendKeys(csPasteString);
-}
-
-// sends Ctrl-V to the TargetWnd
-void CCP_MainApp::SendCopy()
-{
-	CSendKeys send;
-	send.AllKeysUp();
-
-	CString csToApp = GetProcessName(m_ActiveWnd);
-	CString csString = g_Opt.GetCopyString(csToApp);
-	DWORD delay = g_Opt.SendKeysDelay();
-
-	Sleep(delay);
-
-	PumpMessageEx();
-
-	Log(StrF(_T("Sending copy to app %s key stroke: %s, Delay: %d"), csToApp, csString, delay));
-
-	//give the app some time to take focus before sending paste
-	Sleep(delay);
-	send.SetKeyDownUpDelay(delay);
-
-	send.SendKeys(csString);
-}
-
-// sends Ctrl-X to the TargetWnd
-void CCP_MainApp::SendCut()
-{
-	CSendKeys send;
-	send.AllKeysUp();
-
-	CString csToApp = GetProcessName(m_ActiveWnd);
-	CString csString = g_Opt.GetCopyString(csToApp);
-	DWORD delay = g_Opt.SendKeysDelay();
-
-	Sleep(delay);
-
-	PumpMessageEx();
-
-	Log(StrF(_T("Sending cut to app %s key stroke: %s, Delay: %d"), csToApp, csString, delay));
-
-	//give the app some time to take focus before sending paste
-	Sleep(delay);
-	send.SetKeyDownUpDelay(delay);
-
-	send.SendKeys(csString);
 }
 
 void CCP_MainApp::StartCopyThread()
@@ -893,34 +742,6 @@ BOOL CCP_MainApp::OnIdle(LONG lCount)
 	return FALSE;
 }
 
-CString CCP_MainApp::GetTargetName() 
-{
-	TCHAR cWindowText[200];
-	HWND hParent = m_ActiveWnd;
-
-	::GetWindowText(hParent, cWindowText, 100);
-
-	int nCount = 0;
-	
-	while(STRLEN(cWindowText) <= 0)
-	{
-		hParent = ::GetParent(hParent);
-		if(hParent == NULL)
-			break;
-
-		::GetWindowText(hParent, cWindowText, 100);
-
-		nCount++;
-		if(nCount > 100)
-		{
-			Log(_T("GetTargetName reached maximum search depth of 100"));
-			break;
-		}
-	}
-
-	return cWindowText; 
-}
-
 void CCP_MainApp::SetConnectCV(bool bConnect)
 { 
 	m_CopyThread.SetConnectCV(bConnect); 
@@ -944,7 +765,6 @@ void CCP_MainApp::OnDeleteID(long lID)
 		QPasteWnd()->PostMessage(NM_ITEM_DELETED, lID, 0);
 	}
 }
-
 
 bool CCP_MainApp::ImportClips(HWND hWnd)
 {

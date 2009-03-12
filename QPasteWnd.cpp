@@ -428,9 +428,9 @@ BOOL CQPasteWnd::HideQPasteWindow()
 		m_bStopQuery = true;
 	m_CritSection.Unlock();
 
-	//Reset the flag
+	//Reset the flagShell_TrayWnd
 	theApp.m_bShowingQuickPaste = false;
-	theApp.ReleaseFocus();
+	theApp.m_activeWnd.ReleaseFocus();
 	
 	SetEvent(m_Events[THREAD_DESTROY_ACCELERATORS]);
 //	m_lstHeader.DestroyAndCreateAccelerator(FALSE);
@@ -584,7 +584,7 @@ BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_T
 	theApp.OnPasteCompleted();
 
 	if(g_Opt.m_bSendPasteMessageAfterSelection == FALSE)
-		theApp.ActivateTarget();
+		theApp.m_activeWnd.ActivateTarget();
 
 	if(g_Opt.m_bShowPersistent && g_Opt.GetAutoHide())
 		MinMaxWindow(FORCE_MIN);
@@ -621,7 +621,7 @@ BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_TEXT
 	theApp.OnPasteCompleted();
 
 	if(g_Opt.m_bSendPasteMessageAfterSelection == FALSE)
-		theApp.ActivateTarget();
+		theApp.m_activeWnd.ActivateTarget();
 
 	if(g_Opt.m_bShowPersistent && g_Opt.GetAutoHide())
 		MinMaxWindow(FORCE_MIN);
@@ -801,8 +801,8 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 		title += " - ";
 	}
 	
-	if( ::IsWindow(theApp.m_ActiveWnd) )
-		title += theApp.GetTargetName();
+	if(::IsWindow(theApp.m_activeWnd.ActiveWnd()))
+		title += theApp.m_activeWnd.ActiveWndName();
 	else
 		title += theApp.m_Language.GetString("No_Target", "No target");
 	

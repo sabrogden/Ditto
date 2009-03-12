@@ -59,12 +59,12 @@ BOOL CProcessPaste::DoPaste()
 //#ifndef _DEBUG
 		if(m_bSendPaste)
 		{
-			theApp.SendPaste(m_bActivateTarget);
+			theApp.m_activeWnd.SendPaste(m_bActivateTarget);
 		}
 //#else
 		if(m_bActivateTarget)
 		{
-			theApp.ActivateTarget();
+			theApp.m_activeWnd.ActivateTarget();
 		}
 //#endif
 		return TRUE;

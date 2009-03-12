@@ -94,8 +94,6 @@ Root: HKCU; Subkey: Software\Ditto\CutStrings; ValueType: string; ValueName: gvi
 Root: HKCU; Subkey: Software\Ditto\PasteStrings; ValueType: string; ValueName: cmd.exe; ValueData: % {{Delay100}ep
 Root: HKCU; Subkey: Software\Ditto\CopyStrings; ValueType: string; ValueName: cmd.exe; ValueData: % {{Delay100}ey
 
-Root: HKCU; Subkey: Software\Ditto\PasteStrings; ValueType: string; ValueName: opera.exe; ValueData: {{Delay100}^v
-
 ;associate .dto with Ditto
 Root: HKCR; Subkey: .dto; ValueType: string; ValueName: ; ValueData: Ditto; Flags: uninsdeletevalue
 Root: HKCR; Subkey: Ditto; ValueType: string; ValueName: ; ValueData: Ditto; Flags: uninsdeletekey

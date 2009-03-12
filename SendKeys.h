@@ -9,7 +9,7 @@ class CSendKeys
 {
 private:
   bool m_bWait, m_bUsingParens, m_bShiftDown, m_bAltDown, m_bControlDown, m_bWinDown;
-  DWORD  m_nDelayAlways, m_nDelayNow, m_keyDowUpDelay;
+  DWORD  m_nDelayAlways, m_nDelayNow, m_keyDownDelay;
 
   static BOOL CALLBACK enumwindowsProc(HWND hwnd, LPARAM lParam);
   void   CarryDelay();
@@ -31,7 +31,7 @@ private:
   enum
   {
     MaxSendKeysRecs  = 71,
-    MaxExtendedVKeys = 10
+    MaxExtendedVKeys = 12
   };
 
   /*
@@ -72,7 +72,7 @@ public:
   static bool AppActivate(HWND wnd);
   static bool AppActivate(LPCTSTR WindowTitle, LPCTSTR WindowClass = 0);
   void SetDelay(const DWORD delay) { m_nDelayAlways = delay; }
-  void SetKeyDownUpDelay(const DWORD delay) { m_keyDowUpDelay = delay; }
+  void SetKeyDownDelay(const DWORD delay) { m_keyDownDelay = delay; }
   CSendKeys();
 };
 

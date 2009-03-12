@@ -1875,5 +1875,10 @@ DWORD CGetSetOptions::GetDittoHotKey()
 
 DWORD CGetSetOptions::SendKeysDelay()
 {
-	return (DWORD)GetProfileLong(_T("SendKeysDelay"), 100);
+	return (DWORD)GetProfileLong(_T("SendKeysDelay"), 50);
+}
+
+DWORD CGetSetOptions::WaitForFocusTimeout()
+{
+	return (DWORD)GetProfileLong(_T("WaitForFocusTimeout"), 100);
 }

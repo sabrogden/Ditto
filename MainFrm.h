@@ -25,6 +25,7 @@
 #define REMOVE_OLD_REMOTE_COPIES		9
 #define END_DITTO_BUFFER_CLIPBOARD_TIMER	10
 #define KEY_STATE_MODIFIERS				11
+#define ACTIVE_WINDOW_TIMER				12
 
 class CMainFrame : public CFrameWnd
 {

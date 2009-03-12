@@ -76,12 +76,14 @@ const BYTE CSendKeys::ExtendedVKeys[MaxExtendedVKeys] =
     VK_PRIOR, // PgUp
     VK_NEXT,  //  PgDn
     VK_INSERT,
-    VK_DELETE
+    VK_DELETE,
+	VK_CONTROL,
+	VK_SHIFT,
 };
 
 CSendKeys::CSendKeys()
 {
-  m_nDelayNow = m_nDelayAlways = 0;
+  m_nDelayNow = m_nDelayAlways = m_keyDownDelay = 0;
 }
 
 // Delphi port regexps:
@@ -168,21 +170,21 @@ CSendKeys::key_desc_t CSendKeys::KeyNames[CSendKeys::MaxSendKeysRecs] =
 };
 
 
+
 // calls keybd_event() and waits, if needed, till the sent input is processed
 void CSendKeys::KeyboardEvent(BYTE VKey, BYTE ScanCode, LONG Flags)
 {
-  MSG KeyboardMsg;
+	keybd_event(VKey, ScanCode, Flags, 0);
 
-  keybd_event(VKey, ScanCode, Flags, 0);
-
-  if (m_bWait)
-  {
-    while (::PeekMessage(&KeyboardMsg, 0, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE))
-    {
-      ::TranslateMessage(&KeyboardMsg);
-      ::DispatchMessage(&KeyboardMsg);
-    }
-  }
+	if (m_bWait)
+	{
+		MSG KeyboardMsg;
+		while (::PeekMessage(&KeyboardMsg, 0, WM_KEYFIRST, WM_KEYLAST, PM_REMOVE))
+		{
+			::TranslateMessage(&KeyboardMsg);
+			::DispatchMessage(&KeyboardMsg);
+		}
+	}
 }
 
 // Checks whether the specified VKey is an extended key or not
@@ -282,9 +284,9 @@ void CSendKeys::SendKeyDown(BYTE VKey, WORD NumTimes, bool GenUpMsg, bool bDelay
 
     KeyboardEvent(VKey, ScanCode, IsVkExtended(VKey) ? KEYEVENTF_EXTENDEDKEY : 0);
     
-	if(m_keyDowUpDelay > 0)
+	if(m_keyDownDelay > 0)
 	{
-		Sleep(m_keyDowUpDelay);
+		Sleep(m_keyDownDelay);
 	}
 
 	if (GenUpMsg)
@@ -367,13 +369,22 @@ void CSendKeys::PopUpShiftKeys()
   if (!m_bUsingParens)
   {
     if (m_bShiftDown)
+	{
       SendKeyUp(VK_SHIFT);
+	}
     if (m_bControlDown)
+	{
       SendKeyUp(VK_CONTROL);
+	}
     if (m_bAltDown)
+	{
       SendKeyUp(VK_MENU);
+	}
     if (m_bWinDown)
+	{
       SendKeyUp(VK_LWIN);
+	}
+
     m_bWinDown = m_bShiftDown = m_bControlDown = m_bAltDown = false;
   }
 }

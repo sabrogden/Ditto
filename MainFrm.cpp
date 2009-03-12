@@ -126,7 +126,13 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	SetWindowText(_T(""));
 
 	if(g_Opt.m_bUseHookDllForFocus)
+	{
 		MonitorFocusChanges(m_hWnd, WM_FOCUS_CHANGED);
+	}
+	else
+	{
+		SetTimer(ACTIVE_WINDOW_TIMER, 5000, 0);
+	}
 	
 	SetWindowText(_T("Ditto"));
 
@@ -265,7 +271,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 			m_startKeyStateTime = GetTickCount();
 			m_keyStateModifiers = GetKeyStateModifiers();
 			SetTimer(KEY_STATE_MODIFIERS, 50, NULL);
-			theApp.TargetActiveWindow();
+			theApp.m_activeWnd.TrackActiveWnd();
 			QuickPaste.ShowQPasteWnd(this, false, true, FALSE);
 		}		
 	}
@@ -277,7 +283,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 			{
 				theApp.m_QuickPasteMode = CCP_MainApp::ADDING_QUICK_PASTE;
 
-				theApp.SendCopy();
+				theApp.m_activeWnd.SendCopy();
 
 				m_pTypingToolTip = new CToolTipEx;
 				m_pTypingToolTip->Create(this);
@@ -293,7 +299,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 				if(m_ToolTipPoint.x < 0 || m_ToolTipPoint.y < 0)
 				{
 					CRect cr;
-					::GetWindowRect(theApp.m_FocusWnd, cr);
+					::GetWindowRect(theApp.m_activeWnd.FocusWnd(), cr);
 					m_ToolTipPoint = cr.CenterPoint();
 				}
 				m_ToolTipPoint.Offset(-15, 15);
@@ -327,7 +333,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 				if(m_ToolTipPoint.x < 0 || m_ToolTipPoint.y < 0)
 				{
 					CRect cr;
-					::GetWindowRect(theApp.m_FocusWnd, cr);
+					::GetWindowRect(theApp.m_activeWnd.FocusWnd(), cr);
 					m_ToolTipPoint = cr.CenterPoint();
 				}
 				m_ToolTipPoint.Offset(-15, 15);
@@ -587,6 +593,9 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 			KillTimer(KEY_STATE_MODIFIERS);
 		}
 		break;
+	case ACTIVE_WINDOW_TIMER:
+		theApp.m_activeWnd.TrackActiveWnd();
+		break;
 	}
 
 	CFrameWnd::OnTimer(nIDEvent);
@@ -687,7 +696,7 @@ BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 	if( theApp.m_bShowingQuickPaste &&
 		WM_MOUSEFIRST <= pMsg->message && pMsg->message <= WM_MOUSELAST )
 	{	
-		theApp.TargetActiveWindow(); 
+		theApp.m_activeWnd.TrackActiveWnd();
 	}
 
 	return CFrameWnd::PreTranslateMessage(pMsg);
@@ -903,7 +912,7 @@ LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 	if(g_Opt.m_bUseHookDllForFocus == FALSE)
 		return TRUE;
 	
-	theApp.TargetActiveWindow();
+	theApp.m_activeWnd.TrackActiveWnd();
 
 	return TRUE;
 }

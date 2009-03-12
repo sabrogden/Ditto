@@ -26,6 +26,7 @@
 #include "DittoCopyBuffer.h"
 #include "sqlite\CppSQLite3.h"
 #include "DittoAddins.h"
+#include "externalwindowtracker.h"
 
 //#define GET_APP ((CMainWnd*)theApp)
 extern class CCP_MainApp theApp;
@@ -81,17 +82,8 @@ public:
 	CHotKey		*m_pPasteBuffer3;
 	CHotKey		*m_pCutBuffer3;
 
-// Focus Tracking
-	HWND m_ActiveWnd;
-	HWND m_FocusWnd;
-	bool TargetActiveWindow();
-	bool ActivateTarget();
-	bool ReleaseFocus(); // activate the target only if we are the active window
-	CString GetTargetName();
-	void SendPaste(bool bActivateTarget); // Activates the Target and sends Ctrl-V
-	void SendCopy();
-	void SendCut();
-
+	ExternalWindowTracker m_activeWnd;
+	
 // CopyThread and ClipViewer (Copy and Paste Management)
 	CCopyThread	m_CopyThread;
 	void StartCopyThread();
@@ -188,8 +180,6 @@ public:
 
 	eQuickPasteMode m_QuickPasteMode;
 	CClipList* m_pQuickPasteClip;
-	
-	bool m_bDittoHasFocus;
 
 	CDittoCopyBuffer m_CopyBuffer;
 	void PumpMessageEx(HWND hWnd = NULL);

@@ -31,11 +31,11 @@ bool CDittoCopyBuffer::StartCopy(long lCopyBuffer, bool bCut)
 	{
 		if(bCut)
 		{
-			theApp.SendCut();
+			theApp.m_activeWnd.SendCut();
 		}
 		else
 		{
-			theApp.SendCopy();
+			theApp.m_activeWnd.SendCopy();
 		}
 
 		//Create a thread to track if they have copied anything, if thread has exited before they have

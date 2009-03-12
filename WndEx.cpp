@@ -374,11 +374,10 @@ void CWndEx::OnTimer(UINT nIDEvent)
 			
 			if(cr.PtInRect(cp) == false)        
 			{
-				//theApp.m_bDittoHasFocus is only set when we are using the 
 				//hook dll
 				if(g_Opt.m_bUseHookDllForFocus)
 				{
-					if(theApp.m_bDittoHasFocus == false)
+					if(theApp.m_activeWnd.DittoHasFocus() == false)
 					{
 						MinMaxWindow(FORCE_MIN);
 					}
