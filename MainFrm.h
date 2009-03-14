@@ -26,6 +26,7 @@
 #define END_DITTO_BUFFER_CLIPBOARD_TIMER	10
 #define KEY_STATE_MODIFIERS				11
 #define ACTIVE_WINDOW_TIMER				12
+#define FOCUS_CHANGED_TIMER				13
 
 class CMainFrame : public CFrameWnd
 {
@@ -70,6 +71,7 @@ public:
 	DWORD m_startKeyStateTime;
 	bool m_bMovedSelectionMoveKeyState;
 	short m_keyModifiersTimerCount;
+	HWND m_tempFocusWnd;
 
 	void DoDittoCopyBufferPaste(int nCopyBuffer);
 	void DoFirstTenPositionsPaste(int nPos);

@@ -254,8 +254,6 @@ BOOL CCP_MainApp::InitInstance()
 	CMainFrame* pFrame = new CMainFrame;
 	m_pMainWnd = m_pMainFrame = pFrame;
 
-	m_activeWnd.TrackActiveWnd();
-
 	pFrame->LoadFrame(IDR_MAINFRAME, WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, NULL, NULL);
 	pFrame->ShowWindow(SW_SHOW);
 	pFrame->UpdateWindow();

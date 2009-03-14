@@ -16,12 +16,16 @@ ExternalWindowTracker::~ExternalWindowTracker(void)
 {
 }
 
-bool ExternalWindowTracker::TrackActiveWnd()
+bool ExternalWindowTracker::TrackActiveWnd(HWND focus)
 {
+	HWND newFocus = focus;
 	HWND newActive = ::GetForegroundWindow();
-	AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), TRUE);
-	HWND newFocus = GetFocus();
-	AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), FALSE);
+	if(newFocus == NULL)
+	{
+		AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), TRUE);
+		newFocus = GetFocus();
+		AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), FALSE);
+	}
 
 	if(newFocus == 0 && newActive != 0)
 	{
@@ -224,4 +228,27 @@ bool ExternalWindowTracker::ReleaseFocus()
 	}
 
 	return false;
+}
+
+CPoint ExternalWindowTracker::FocusCaret()
+{
+	CPoint pt(-1, -1);
+
+	if(m_activeWnd)
+	{
+		GUITHREADINFO guiThreadInfo;
+		guiThreadInfo.cbSize = sizeof(GUITHREADINFO);
+		DWORD OtherThreadID = GetWindowThreadProcessId(m_activeWnd, NULL);
+		if(GetGUIThreadInfo(OtherThreadID, &guiThreadInfo))
+		{
+			CRect rc(guiThreadInfo.rcCaret);
+			if(rc.IsRectEmpty() == FALSE)
+			{
+				pt = rc.BottomRight();
+				::ClientToScreen(m_focusWnd, &pt);
+			}
+		}
+	}
+
+	return pt;
 }

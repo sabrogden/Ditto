@@ -128,7 +128,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 		CGetSetOptions::GetQuickPasteSize(csSize);
 	}
 
-	CPoint ptCaret = GetFocusedCaretPos();
+	CPoint ptCaret = theApp.m_activeWnd.FocusCaret();
 	if(ptCaret.x <= 0 || ptCaret.y <= 0)
 	{
 		CRect cr;

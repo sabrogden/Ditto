@@ -11,15 +11,14 @@ public:
 	bool DittoHasFocus() const { return m_dittoHasFocus; }
 
 	CString ActiveWndName();
-	bool TrackActiveWnd();
+	bool TrackActiveWnd(HWND focus);
 	bool ActivateTarget();
 	bool ReleaseFocus();
+	CPoint FocusCaret();
 
 	void SendPaste(bool activateTarget);
 	void SendCut();
 	void SendCopy();
-
-	
 
 protected:
 	HWND m_activeWnd;

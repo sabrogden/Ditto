@@ -162,7 +162,7 @@ void CGetSetOptions::LoadSettings()
 	GetExtraNetworkPassword(true);
 
 #ifdef _DEBUG
-	m_bUseHookDllForFocus = FALSE;
+	//m_bUseHookDllForFocus = FALSE;
 #endif
 
 	for(int i = 0; i < MAX_SEND_CLIENTS; i++)
@@ -1881,4 +1881,9 @@ DWORD CGetSetOptions::SendKeysDelay()
 DWORD CGetSetOptions::WaitForFocusTimeout()
 {
 	return (DWORD)GetProfileLong(_T("WaitForFocusTimeout"), 100);
+}
+
+DWORD CGetSetOptions::FocusChangedDelay()
+{
+	return (DWORD)GetProfileLong(_T("FocusChangedDelay"), 100);
 }

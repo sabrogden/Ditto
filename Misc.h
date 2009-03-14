@@ -66,8 +66,6 @@ CString RemoveEscapes( const TCHAR* str );
 CString GetWndText( HWND hWnd );
 // returns true if the given window is owned by this process
 bool IsAppWnd( HWND hWnd );
-// returns the current Focus window even if it is not owned by our thread.
-CPoint GetFocusedCaretPos();
 
 // Global Memory Helper Functions
 BOOL IsValid( HGLOBAL hGlobal );

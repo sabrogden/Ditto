@@ -385,6 +385,7 @@ public:
 	static DWORD	GetDittoHotKey();
 	static DWORD	SendKeysDelay();
 	static DWORD	WaitForFocusTimeout();
+	static DWORD	FocusChangedDelay();
 };
 
 // global for easy access and for initialization of fast access variables

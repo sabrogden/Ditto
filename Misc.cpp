@@ -203,29 +203,6 @@ bool IsAppWnd( HWND hWnd )
 	return dwMyPID == dwTestPID;
 }
 
-CPoint GetFocusedCaretPos()
-{
-	CPoint pt(-1, -1);
-
-	if(theApp.m_activeWnd.ActiveWnd())
-	{
-		GUITHREADINFO guiThreadInfo;
-		guiThreadInfo.cbSize = sizeof(GUITHREADINFO);
-		DWORD OtherThreadID = GetWindowThreadProcessId(theApp.m_activeWnd.ActiveWnd(), NULL);
-		if(GetGUIThreadInfo(OtherThreadID, &guiThreadInfo))
-		{
-			CRect rc(guiThreadInfo.rcCaret);
-			if(rc.IsRectEmpty() == FALSE)
-			{
-				pt = rc.BottomRight();
-				::ClientToScreen(theApp.m_activeWnd.FocusWnd(), &pt);
-			}
-		}
-	}
-	
-	return pt;
-}
-
 /*----------------------------------------------------------------------------*\
 Global Memory Helper Functions
 \*----------------------------------------------------------------------------*/

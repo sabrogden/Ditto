@@ -102,7 +102,7 @@ CMainFrame::CMainFrame()
 
 CMainFrame::~CMainFrame()
 {
-	if(g_Opt.m_bUseHookDllForFocus)
+	//if(g_Opt.m_bUseHookDllForFocus)
 		StopMonitoringFocusChanges();
 	
 	CGetSetOptions::SetMainHWND(0);
@@ -125,14 +125,14 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	SetWindowText(_T(""));
 
-	if(g_Opt.m_bUseHookDllForFocus)
+	//if(g_Opt.m_bUseHookDllForFocus)
 	{
 		MonitorFocusChanges(m_hWnd, WM_FOCUS_CHANGED);
 	}
-	else
-	{
-		SetTimer(ACTIVE_WINDOW_TIMER, 5000, 0);
-	}
+	//else
+	//{
+	//	SetTimer(ACTIVE_WINDOW_TIMER, 5000, 0);
+	//}
 	
 	SetWindowText(_T("Ditto"));
 
@@ -271,7 +271,10 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 			m_startKeyStateTime = GetTickCount();
 			m_keyStateModifiers = GetKeyStateModifiers();
 			SetTimer(KEY_STATE_MODIFIERS, 50, NULL);
-			theApp.m_activeWnd.TrackActiveWnd();
+			if(g_Opt.m_bUseHookDllForFocus == false)
+			{
+				theApp.m_activeWnd.TrackActiveWnd(NULL);
+			}
 			QuickPaste.ShowQPasteWnd(this, false, true, FALSE);
 		}		
 	}
@@ -295,7 +298,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 				CRect rcScreen;
 				GetMonitorRect(0, &rcScreen);
 
-				m_ToolTipPoint = GetFocusedCaretPos();
+				m_ToolTipPoint = theApp.m_activeWnd.FocusCaret();
 				if(m_ToolTipPoint.x < 0 || m_ToolTipPoint.y < 0)
 				{
 					CRect cr;
@@ -329,7 +332,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 
 				CRect rcScreen;
 
-				m_ToolTipPoint = GetFocusedCaretPos();
+				m_ToolTipPoint = theApp.m_activeWnd.FocusCaret();
 				if(m_ToolTipPoint.x < 0 || m_ToolTipPoint.y < 0)
 				{
 					CRect cr;
@@ -594,7 +597,13 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		}
 		break;
 	case ACTIVE_WINDOW_TIMER:
-		theApp.m_activeWnd.TrackActiveWnd();
+		theApp.m_activeWnd.TrackActiveWnd(NULL);
+		break;
+
+	case FOCUS_CHANGED_TIMER:
+		KillTimer(FOCUS_CHANGED_TIMER);
+		//Log(StrF(_T("Focus Timer %d"), m_tempFocusWnd));
+		theApp.m_activeWnd.TrackActiveWnd(m_tempFocusWnd);
 		break;
 	}
 
@@ -696,7 +705,10 @@ BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 	if( theApp.m_bShowingQuickPaste &&
 		WM_MOUSEFIRST <= pMsg->message && pMsg->message <= WM_MOUSELAST )
 	{	
-		theApp.m_activeWnd.TrackActiveWnd();
+		if(g_Opt.m_bUseHookDllForFocus == false)
+		{
+			theApp.m_activeWnd.TrackActiveWnd(NULL);
+		}
 	}
 
 	return CFrameWnd::PreTranslateMessage(pMsg);
@@ -909,10 +921,34 @@ LRESULT CMainFrame::OnKeyBoardChanged(WPARAM wParam, LPARAM lParam)
 
 LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 {
-	if(g_Opt.m_bUseHookDllForFocus == FALSE)
+	//if(g_Opt.m_bUseHookDllForFocus == FALSE)
+	//	return TRUE;
+
+	HWND focus = (HWND)wParam;
+	static DWORD dLastDittoHasFocusTick = 0;
+
+	//Sometimes when we bring ditto up there will come a null focus 
+	//rite after that
+	if(focus == NULL && (GetTickCount() - dLastDittoHasFocusTick < 500))
+	{
+		Log(_T("NULL focus within 500 ticks of bringing up ditto"));
 		return TRUE;
-	
-	theApp.m_activeWnd.TrackActiveWnd();
+	}
+	else if(focus == NULL)
+	{
+		Log(_T("NULL focus received"));
+	}
+
+	if(theApp.m_activeWnd.DittoHasFocus())
+	{
+		dLastDittoHasFocusTick = GetTickCount();
+	}
+
+	//Log(StrF(_T("OnFocusChanged %d"), focus));
+	m_tempFocusWnd = focus;
+
+	KillTimer(FOCUS_CHANGED_TIMER);
+	SetTimer(FOCUS_CHANGED_TIMER, g_Opt.FocusChangedDelay(), NULL);
 
 	return TRUE;
 }
