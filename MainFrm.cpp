@@ -102,7 +102,7 @@ CMainFrame::CMainFrame()
 
 CMainFrame::~CMainFrame()
 {
-	//if(g_Opt.m_bUseHookDllForFocus)
+	if(g_Opt.m_bUseHookDllForFocus)
 		StopMonitoringFocusChanges();
 	
 	CGetSetOptions::SetMainHWND(0);
@@ -125,14 +125,14 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	SetWindowText(_T(""));
 
-	//if(g_Opt.m_bUseHookDllForFocus)
+	if(g_Opt.m_bUseHookDllForFocus)
 	{
 		MonitorFocusChanges(m_hWnd, WM_FOCUS_CHANGED);
 	}
-	//else
-	//{
-	//	SetTimer(ACTIVE_WINDOW_TIMER, 5000, 0);
-	//}
+	else
+	{
+		SetTimer(ACTIVE_WINDOW_TIMER, 5000, 0);
+	}
 	
 	SetWindowText(_T("Ditto"));
 
@@ -921,9 +921,6 @@ LRESULT CMainFrame::OnKeyBoardChanged(WPARAM wParam, LPARAM lParam)
 
 LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 {
-	//if(g_Opt.m_bUseHookDllForFocus == FALSE)
-	//	return TRUE;
-
 	HWND focus = (HWND)wParam;
 	static DWORD dLastDittoHasFocusTick = 0;
 

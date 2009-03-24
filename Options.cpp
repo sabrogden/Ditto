@@ -1878,9 +1878,9 @@ DWORD CGetSetOptions::SendKeysDelay()
 	return (DWORD)GetProfileLong(_T("SendKeysDelay"), 50);
 }
 
-DWORD CGetSetOptions::WaitForFocusTimeout()
+DWORD CGetSetOptions::WaitForActiveWndTimeout()
 {
-	return (DWORD)GetProfileLong(_T("WaitForFocusTimeout"), 100);
+	return (DWORD)GetProfileLong(_T("WaitForActiveWndTimeout"), 100);
 }
 
 DWORD CGetSetOptions::FocusChangedDelay()

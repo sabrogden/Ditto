@@ -81,12 +81,12 @@ bool ExternalWindowTracker::TrackActiveWnd(HWND focus)
 	return true;
 }
 
-bool ExternalWindowTracker::WaitForFocus(HWND focusWnd, int timeout)
+bool ExternalWindowTracker::WaitForActiveWnd(HWND activeWnd, int timeout)
 {
 	DWORD start = GetTickCount();
 	while(((int)(GetTickCount() - start)) < timeout)
 	{
-		if(::GetForegroundWindow() == focusWnd)
+		if(::GetForegroundWindow() == activeWnd)
 		{
 			Log(StrF(_T("found focus wait %d"), GetTickCount()-start));
 			return true;
@@ -126,7 +126,7 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	{
 		ActivateTarget();
 		theApp.PumpMessageEx();
-		WaitForFocus(m_activeWnd, max(25, g_Opt.WaitForFocusTimeout()));
+		WaitForActiveWnd(m_activeWnd, max(25, g_Opt.WaitForActiveWndTimeout()));
 	}
 	else
 	{

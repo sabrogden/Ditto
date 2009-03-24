@@ -384,7 +384,7 @@ public:
 
 	static DWORD	GetDittoHotKey();
 	static DWORD	SendKeysDelay();
-	static DWORD	WaitForFocusTimeout();
+	static DWORD	WaitForActiveWndTimeout();
 	static DWORD	FocusChangedDelay();
 };
 

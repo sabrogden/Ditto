@@ -2754,6 +2754,12 @@
 				RelativePath="HyperLink.h">
 			</File>
 			<File
+				RelativePath=".\Shared\IAddinExports.h">
+			</File>
+			<File
+				RelativePath=".\Shared\IClip.h">
+			</File>
+			<File
 				RelativePath=".\IClipAggregator.h">
 			</File>
 			<File
@@ -2875,9 +2881,6 @@
 				RelativePath="res\bitmap1.bmp">
 			</File>
 			<File
-				RelativePath=".\res\bitmap2.bmp">
-			</File>
-			<File
 				RelativePath="res\bmp00001.bmp">
 			</File>
 			<File
@@ -2885,9 +2888,6 @@
 			</File>
 			<File
 				RelativePath="res\bmp00003.bmp">
-			</File>
-			<File
-				RelativePath=".\res\bmp00004.bmp">
 			</File>
 			<File
 				RelativePath="res\closed_f.bmp">
@@ -2908,18 +2908,6 @@
 				RelativePath="res\Ditto_NoCopyCb.ico">
 			</File>
 			<File
-				RelativePath="res\HorizontalScrollBarLeftArrow.bmp">
-			</File>
-			<File
-				RelativePath="res\HorizontalScrollBarRightArrow.bmp">
-			</File>
-			<File
-				RelativePath="res\HorizontalScrollBarSpan.bmp">
-			</File>
-			<File
-				RelativePath="res\HorizontalScrollBarThumb.bmp">
-			</File>
-			<File
 				RelativePath=".\res\mainfram.bmp">
 			</File>
 			<File
@@ -2930,18 +2918,6 @@
 			</File>
 			<File
 				RelativePath=".\res\toolbar1.bmp">
-			</File>
-			<File
-				RelativePath="res\VerticleScrollBarDownArrow.bmp">
-			</File>
-			<File
-				RelativePath="res\VerticleScrollBarSpan.bmp">
-			</File>
-			<File
-				RelativePath="res\VerticleScrollBarThumb.bmp">
-			</File>
-			<File
-				RelativePath="res\VerticleScrollBarUpArrow.bmp">
 			</File>
 		</Filter>
 		<Filter
@@ -3002,7 +2978,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Debug\focus.dll">
+				RelativePath="Release\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">
@@ -3029,7 +3005,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Release\focus.dll">
+				RelativePath="Debug\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">

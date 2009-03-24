@@ -26,5 +26,5 @@ protected:
 	bool m_dittoHasFocus;
 	
 protected:
-	bool WaitForFocus(HWND hwndToHaveFocus, int timeout);
+	bool WaitForActiveWnd(HWND hwndToHaveFocus, int timeout);
 };
