@@ -9,10 +9,10 @@
     <body>
         
          <div id="sidebar">
-            <h2><a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Setup_3_15_4_0.exe?download">Download</a></h2>
+            <h2><a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Setup_3_16_5_0.exe?download">Download</a></h2>
             <ul>
-                <li><a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Portable_3_15_4_0.zip?download">Portable (zip file)</a></li>
-                <li><a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Source_3_15_4_0.zip?download">Source</a></li>
+                <li><a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Portable_3_16_5_0.zip?download">Portable (zip file)</a></li>
+                <li><a href="http://prdownloads.sourceforge.net/ditto-cp/Ditto_Source_3_16_5_0.zip?download">Source</a></li>
                 <li><a href="https://sourceforge.net/project/screenshots.php?group_id=84084">Screenshot</a></li>
           </ul>
           
