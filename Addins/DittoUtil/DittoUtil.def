@@ -1,0 +1,6 @@
+; DittoUtil.def : Declares the module parameters for the DLL.
+
+LIBRARY      "DittoUtil"
+
+EXPORTS
+    ; Explicit exports can go here
