@@ -16,6 +16,8 @@ public:
 	bool PrePasteFunction(const CDittoInfo &DittoInfo, CStringA Function, IClip *pClip);
 
 	CString DisplayName() { return m_DittoAddinInfo.m_Name; }
+	int Version() { return m_DittoAddinInfo.m_AddinVersion; }
+	int PrivateVersion() { return m_DittoAddinInfo.PrivateVersion(); }
 	CString LastError()	{ return m_csLastError; }
 
 protected:

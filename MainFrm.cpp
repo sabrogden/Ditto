@@ -131,7 +131,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 	else
 	{
-		SetTimer(ACTIVE_WINDOW_TIMER, 5000, 0);
+		SetTimer(ACTIVE_WINDOW_TIMER, g_Opt.FocusWndTimerTimeout(), 0);
 	}
 	
 	SetWindowText(_T("Ditto"));
@@ -250,19 +250,19 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 	if(theApp.m_pDittoHotKey && wParam == theApp.m_pDittoHotKey->m_Atom)
 	{
 		//If they still have the shift/ctrl keys down
-		if(m_keyStateModifiers != 0 && QuickPaste.IsWindowVisibleEx())
+		if(m_keyStateModifiers != 0 && m_quickPaste.IsWindowVisibleEx())
 		{
 			if(m_bMovedSelectionMoveKeyState == false)
 			{
 				Log(_T("Setting flag m_bMovedSelectionMoveKeyState to true, will paste when modifer keys are up"));
 			}
 
-			QuickPaste.MoveSelection(true);
+			m_quickPaste.MoveSelection(true);
 			m_bMovedSelectionMoveKeyState = true;
 		}
-		else if(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown && QuickPaste.IsWindowVisibleEx())
+		else if(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown && m_quickPaste.IsWindowVisibleEx())
 		{
-			QuickPaste.HideQPasteWnd();
+			m_quickPaste.HideQPasteWnd();
 		}
 		else
 		{
@@ -271,11 +271,10 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 			m_startKeyStateTime = GetTickCount();
 			m_keyStateModifiers = GetKeyStateModifiers();
 			SetTimer(KEY_STATE_MODIFIERS, 50, NULL);
-			if(g_Opt.m_bUseHookDllForFocus == false)
-			{
-				theApp.m_activeWnd.TrackActiveWnd(NULL);
-			}
-			QuickPaste.ShowQPasteWnd(this, false, true, FALSE);
+			
+			theApp.m_activeWnd.TrackActiveWnd(NULL);
+			
+			m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
 		}		
 	}
 	else if(theApp.m_pNamedCopy && wParam == theApp.m_pNamedCopy->m_Atom)
@@ -497,7 +496,7 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		}
 	case CLOSE_WINDOW_TIMER:
 		{
-			QuickPaste.CloseQPasteWnd();
+			m_quickPaste.CloseQPasteWnd();
 			break;
 		}
 	case REMOVE_OLD_ENTRIES_TIMER:
@@ -578,12 +577,12 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 				if(m_bMovedSelectionMoveKeyState || m_keyModifiersTimerCount > g_Opt.GetKeyStateWaitTimerCount())
 				{
 					Log(StrF(_T("Timer KEY_STATE_MODIFIERS timeout count hit(%d), count (%d), time (%d), Move Selection from Modifer (%d) sending paste"), g_Opt.GetKeyStateWaitTimerCount(), m_keyModifiersTimerCount, waitTime, m_bMovedSelectionMoveKeyState));
-					QuickPaste.OnKeyStateUp();
+					m_quickPaste.OnKeyStateUp();
 				}				
 				else
 				{
 					Log(StrF(_T("Timer KEY_STATE_MODIFIERS count NOT hit(%d), count (%d) time (%d)"), g_Opt.GetKeyStateWaitTimerCount(), m_keyModifiersTimerCount, waitTime));
-					QuickPaste.SetKeyModiferState(false);
+					m_quickPaste.SetKeyModiferState(false);
 				}
 
 				m_keyStateModifiers = 0;
@@ -597,7 +596,10 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		}
 		break;
 	case ACTIVE_WINDOW_TIMER:
-		theApp.m_activeWnd.TrackActiveWnd(NULL);
+		if(m_quickPaste.IsWindowVisibleEx())
+		{
+			theApp.m_activeWnd.TrackActiveWnd(NULL);
+		}
 		break;
 
 	case FOCUS_CHANGED_TIMER:
@@ -653,7 +655,7 @@ LRESULT CMainFrame::OnShowTrayIcon(WPARAM wParam, LPARAM lParam)
 
 void CMainFrame::OnFirstShowquickpaste() 
 {
-	QuickPaste.ShowQPasteWnd(this, true, false, FALSE);
+	m_quickPaste.ShowQPasteWnd(this, true, false, FALSE);
 }
 
 void CMainFrame::OnFirstToggleConnectCV()
@@ -794,7 +796,7 @@ LRESULT CMainFrame::OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam)
 			CProcessPaste paste;
 			//Don't send the paste just load it into memory
 			paste.m_bSendPaste = false;
-			paste.m_pOle->PutFormatOnClipboard(&NewClip.m_Formats, false);
+			paste.m_pOle->PutFormatOnClipboard(&NewClip.m_Formats);
 			paste.m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
 
 			LogSendRecieveInfo("---------After LoadFormats");
@@ -919,33 +921,63 @@ LRESULT CMainFrame::OnKeyBoardChanged(WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
+CString WndName(HWND hParent) 
+{
+	TCHAR cWindowText[200];
+
+	::GetWindowText(hParent, cWindowText, 100);
+
+	int nCount = 0;
+
+	while(STRLEN(cWindowText) <= 0)
+	{
+		hParent = ::GetParent(hParent);
+		if(hParent == NULL)
+			break;
+
+		::GetWindowText(hParent, cWindowText, 100);
+
+		nCount++;
+		if(nCount > 100)
+		{
+			Log(_T("GetTargetName reached maximum search depth of 100"));
+			break;
+		}
+	}
+
+	return cWindowText; 
+}
+
 LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
 {
-	HWND focus = (HWND)wParam;
-	static DWORD dLastDittoHasFocusTick = 0;
-
-	//Sometimes when we bring ditto up there will come a null focus 
-	//rite after that
-	if(focus == NULL && (GetTickCount() - dLastDittoHasFocusTick < 500))
+	if(m_quickPaste.IsWindowVisibleEx())
 	{
-		Log(_T("NULL focus within 500 ticks of bringing up ditto"));
-		return TRUE;
-	}
-	else if(focus == NULL)
-	{
-		Log(_T("NULL focus received"));
-	}
+		HWND focus = (HWND)wParam;
+		static DWORD dLastDittoHasFocusTick = 0;
 
-	if(theApp.m_activeWnd.DittoHasFocus())
-	{
-		dLastDittoHasFocusTick = GetTickCount();
+		//Sometimes when we bring ditto up there will come a null focus 
+		//rite after that
+		if(focus == NULL && (GetTickCount() - dLastDittoHasFocusTick < 500))
+		{
+			Log(_T("NULL focus within 500 ticks of bringing up ditto"));
+			return TRUE;
+		}
+		else if(focus == NULL)
+		{
+			Log(_T("NULL focus received"));
+		}
+
+		if(theApp.m_activeWnd.DittoHasFocus())
+		{
+			dLastDittoHasFocusTick = GetTickCount();
+		}
+
+		//Log(StrF(_T("OnFocusChanged %d, title %s"), focus, WndName(focus)));
+		m_tempFocusWnd = focus;
+
+		KillTimer(FOCUS_CHANGED_TIMER);
+		SetTimer(FOCUS_CHANGED_TIMER, g_Opt.FocusChangedDelay(), NULL);
 	}
-
-	//Log(StrF(_T("OnFocusChanged %d"), focus));
-	m_tempFocusWnd = focus;
-
-	KillTimer(FOCUS_CHANGED_TIMER);
-	SetTimer(FOCUS_CHANGED_TIMER, g_Opt.FocusChangedDelay(), NULL);
 
 	return TRUE;
 }
@@ -985,7 +1017,7 @@ bool CMainFrame::PasteQuickPasteEntry(CString csQuickPaste)
 			if(Clip.LoadFormats(q.getIntField(_T("lID"))))
 			{
 				CProcessPaste paste;
-				paste.m_pOle->PutFormatOnClipboard(&Clip.m_Formats, false);
+				paste.m_pOle->PutFormatOnClipboard(&Clip.m_Formats);
 				paste.m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
 					
 				if(paste.DoPaste())

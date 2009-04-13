@@ -340,7 +340,6 @@ BEGIN
         MENUITEM "View Full Description",       32793,MFT_STRING,MFS_ENABLED
         MENUITEM "View Groups",                 32819,MFT_STRING,MFS_ENABLED
         MENUITEM "Paste Plain Text Only",       32841,MFT_STRING,MFS_ENABLED
-        MENUITEM "Paste HTML as Plain Text",    32851,MFT_STRING,MFS_ENABLED
         MENUITEM MFT_SEPARATOR
         MENUITEM "Delete Entry",                32801,MFT_STRING,MFS_ENABLED
         MENUITEM MFT_SEPARATOR
@@ -752,14 +751,14 @@ BEGIN
     LTEXT           "Quick Paste Text",IDC_STATIC,7,56,62,13,SS_CENTERIMAGE
 END
 
-IDD_ABOUT DIALOG  0, 0, 292, 153
+IDD_ABOUT DIALOGEX 0, 0, 329, 153
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
     WS_SYSMENU
 CAPTION "About"
-FONT 8, "MS Shell Dlg"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
-    LISTBOX         IDC_LIST,7,16,271,86,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | 
-                    WS_TABSTOP
+    LISTBOX         IDC_LIST,7,16,315,86,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | 
+                    WS_HSCROLL | WS_TABSTOP
     LTEXT           "E-mail Scott Brogden",IDC_HYPER_LINK,7,108,67,8
     LTEXT           "Ditto Home Page - ditto-cp.sf.net",IDC_STATIC_LINK,7,
                     126,104,8
@@ -919,8 +918,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,16,5,0
- PRODUCTVERSION 3,16,5,0
+ FILEVERSION 3,16,6,0
+ PRODUCTVERSION 3,16,6,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -936,12 +935,12 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "FileDescription", "Ditto"
-            VALUE "FileVersion", "3, 16, 5, 0"
+            VALUE "FileVersion", "3, 16, 6, 0"
             VALUE "InternalName", "CP_Main"
             VALUE "LegalCopyright", "Copyright (C) 2003"
             VALUE "OriginalFilename", "Ditto"
             VALUE "ProductName", "Ditto"
-            VALUE "ProductVersion", "3, 16, 5, 0"
+            VALUE "ProductVersion", "3, 16, 6, 0"
         END
     END
     BLOCK "VarFileInfo"
@@ -1034,7 +1033,7 @@ BEGIN
     IDD_ABOUT, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 285
+        RIGHTMARGIN, 322
         TOPMARGIN, 7
         BOTTOMMARGIN, 146
     END

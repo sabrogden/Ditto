@@ -143,7 +143,6 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_FINDASYOUTYPE, OnMenuQuickoptionsFindasyoutype)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_ENSUREENTIREWINDOWISVISIBLE, OnMenuQuickoptionsEnsureentirewindowisvisible)
 	ON_COMMAND(ID_MENU_QUICKOPTIONS_SHOWCLIPSTHATAREINGROUPSINMAINLIST, OnMenuQuickoptionsShowclipsthatareingroupsinmainlist)
-	ON_COMMAND(ID_MENU_PASTEHTMLASPLAINTEXT, OnMenuPastehtmlasplaintext)
 	ON_UPDATE_COMMAND_UI(ID_MENU_NEWGROUP, OnUpdateMenuNewgroup)
 	ON_UPDATE_COMMAND_UI(ID_MENU_NEWGROUPSELECTION, OnUpdateMenuNewgroupselection)
 	ON_UPDATE_COMMAND_UI(ID_MENU_ALLWAYSONTOP, OnUpdateMenuAllwaysontop)
@@ -552,7 +551,7 @@ bool CQPasteWnd::Add(const CString &csHeader, const CString &csText, int nID)
 	return true;
 }
 
-BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_TEXT, CClipFormats *pPasteFormats)
+BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT, CClipFormats *pPasteFormats)
 {
 	if(pPasteFormats == NULL)
 	{
@@ -570,7 +569,6 @@ BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_T
 	
 	paste.m_bSendPaste = g_Opt.m_bSendPasteMessageAfterSelection == TRUE ? true : false;
 	paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;
-	paste.m_bPasteHTMLFormatAs_CF_TEXT = bPasteHTMLAs_CF_TEXT;
 
 	if(pPasteFormats != NULL)
 	{
@@ -592,7 +590,7 @@ BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_T
 	return TRUE;
 }
 
-BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_TEXT)
+BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT)
 {
 	ARRAY IDs;
 	m_lstHeader.GetSelectionItemData( IDs );
@@ -603,7 +601,7 @@ BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_TEXT
 		return FALSE;
 	
 	if(count == 1)
-		return OpenID(IDs[0], bOnlyLoad_CF_TEXT, bPasteHTMLAs_CF_TEXT);
+		return OpenID(IDs[0], bOnlyLoad_CF_TEXT);
 
 	if(GetKeyState(VK_SHIFT) & 0x8000)
 	{
@@ -614,7 +612,6 @@ BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT, bool bPasteHTMLAs_CF_TEXT
 
 	paste.m_bSendPaste = g_Opt.m_bSendPasteMessageAfterSelection == TRUE ? true : false;
 	paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;
-	paste.m_bPasteHTMLFormatAs_CF_TEXT = bPasteHTMLAs_CF_TEXT;
 	
 	paste.GetClipIDs().Copy(IDs);
 	paste.DoPaste();
@@ -720,7 +717,7 @@ LRESULT CQPasteWnd::OnListSelect(WPARAM wParam, LPARAM lParam)
 	int nCount = (int) wParam;
 	long *pItems = (long*) lParam;
 	
-	OpenSelection(false, false);
+	OpenSelection(false);
 	
 	return TRUE;
 }
@@ -1675,12 +1672,7 @@ void CQPasteWnd::OnMenuGroupsMovetogroup()
 
 void CQPasteWnd::OnMenuPasteplaintextonly() 
 {
-	OpenSelection(true, false);	
-}
-
-void CQPasteWnd::OnMenuPastehtmlasplaintext() 
-{
-	OpenSelection(false, true);
+	OpenSelection(true);	
 }
 
 void CQPasteWnd::OnPromptToDeleteClip() 
@@ -3083,7 +3075,7 @@ void CQPasteWnd::OnTimer(UINT_PTR nIDEvent)
 		if(m_bModifersMoveActive)
 		{
 			Log(_T("Open Selection\n"));
-			OpenSelection(false, false);
+			OpenSelection(false);
 		}
 		else
 		{
@@ -3096,21 +3088,6 @@ void CQPasteWnd::OnTimer(UINT_PTR nIDEvent)
 
 void CQPasteWnd::OnAddinSelect(UINT id)
 {
-	/*if((GetKeyState(VK_SHIFT) & 0x8000) &&
-		(GetKeyState(VK_CONTROL) & 0x8000))
-	{
-		if(theApp.m_Addins.Loaded())
-		{
-			theApp.m_Addins.UnloadAll();
-			MessageBox(_T("Addin Unloaded"));
-		}
-		else
-		{
-			theApp.m_Addins.LoadAll();
-			MessageBox(_T("Addin Loaded"));
-		}
-	}*/
-
 	ARRAY IDs;
 	m_lstHeader.GetSelectionItemData(IDs);
 
@@ -3125,7 +3102,7 @@ void CQPasteWnd::OnAddinSelect(UINT id)
 				bool bCont = theApp.m_Addins.CallPrePasteFunction(id, &clip);
 				if(bCont)
 				{
-					OpenID(-1, false, false, &clip.m_Formats);
+					OpenID(-1, false, &clip.m_Formats);
 				}
 			}
 		}

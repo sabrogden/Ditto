@@ -13,7 +13,6 @@ public:
 	CClipIDs	m_ClipIDs;
 	bool		m_bLoadedFormats;
 	bool		m_bOnlyPaste_CF_TEXT;
-	bool		m_bPasteHTMLFormatAs_CF_TEXT;
 	CClipFormats *m_pCustomPasteFormats;
 
 	COleClipSource();
@@ -21,7 +20,7 @@ public:
 
 	BOOL DoDelayRender();
 	BOOL DoImmediateRender();
-	long PutFormatOnClipboard(CClipFormats *pFormats, bool bPasteHTMLFormatAs_CF_TEXT);
+	long PutFormatOnClipboard(CClipFormats *pFormats);
 
 public:
 	virtual BOOL OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlobal);

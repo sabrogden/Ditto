@@ -17,6 +17,7 @@ public:
 
 	bool AddPrePasteAddinsToMenu(CMenu *pMenu);
 	bool CallPrePasteFunction(int Id, IClip *pClip);
+	void AboutScreenText(CStringArray &arr);
 
 protected:
 	std::vector<CDittoAddin*> m_Addins;

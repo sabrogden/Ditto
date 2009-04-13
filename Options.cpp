@@ -134,12 +134,23 @@ void CGetSetOptions::LoadSettings()
 	m_csIPListToPutOnClipboard = GetListToPutOnClipboard();
 	m_bLogSendReceiveErrors = GetLogSendReceiveErrors();
 	
-	//If running from U3 then we can't use the hook dll because we are unable
-	//to delete the hook dll, it's loaded by other processes
-	if(m_bU3)
-		m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", FALSE);
+	if(IsRunningLimited() == false)
+	{
+		//If running from U3 then we can't use the hook dll because we are unable
+		//to delete the hook dll, it's loaded by other processes
+		if(m_bU3)
+		{
+			m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", FALSE);
+		}
+		else
+		{
+			m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", TRUE);
+		}
+	}
 	else
-		m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", TRUE);
+	{
+		m_bUseHookDllForFocus = false;
+	}
 
 	m_HideDittoOnHotKeyIfAlreadyShown = GetHideDittoOnHotKeyIfAlreadyShown();
 	m_lPort = GetPort();
@@ -160,10 +171,6 @@ void CGetSetOptions::LoadSettings()
 	m_bOutputDebugString = false;
 
 	GetExtraNetworkPassword(true);
-
-#ifdef _DEBUG
-	//m_bUseHookDllForFocus = FALSE;
-#endif
 
 	for(int i = 0; i < MAX_SEND_CLIENTS; i++)
 	{
@@ -330,28 +337,36 @@ CString CGetSetOptions::GetIniFileName(bool bLocalIniFile)
 		}
 		else
 		{
-			LPMALLOC pMalloc;
-
-			if(SUCCEEDED(::SHGetMalloc(&pMalloc))) 
-			{ 
-				LPITEMIDLIST pidlPrograms;
-
-				SHGetSpecialFolderLocation(NULL, CSIDL_APPDATA, &pidlPrograms);
-
-				TCHAR string[MAX_PATH];
-				SHGetPathFromIDList(pidlPrograms, string);
-
-				pMalloc->Free(pidlPrograms);
-				pMalloc->Release();
-
-				csPath = string;		
-			}
-			FIX_CSTRING_PATH(csPath);
-			csPath += "Ditto\\";
+			csPath = GetAppDataPath();
 		}
 	}
 
 	csPath += "Ditto.Settings";
+
+	return csPath;
+}
+
+CString CGetSetOptions::GetAppDataPath()
+{
+	CString csPath;
+	LPMALLOC pMalloc;
+
+	if(SUCCEEDED(::SHGetMalloc(&pMalloc))) 
+	{ 
+		LPITEMIDLIST pidlPrograms;
+
+		SHGetSpecialFolderLocation(NULL, CSIDL_APPDATA, &pidlPrograms);
+
+		TCHAR string[MAX_PATH];
+		SHGetPathFromIDList(pidlPrograms, string);
+
+		pMalloc->Free(pidlPrograms);
+		pMalloc->Release();
+
+		csPath = string;		
+	}
+	FIX_CSTRING_PATH(csPath);
+	csPath += "Ditto\\";
 
 	return csPath;
 }
@@ -1662,9 +1677,12 @@ CString CGetSetOptions::GetPath(long lPathID)
 			csDir = GETENV(_T("U3_HOST_EXEC_PATH"));
 			FIX_CSTRING_PATH(csDir);
 		}
+		else
+		{
+			csDir = GetAppDataPath();
+		}
 
 		break;
-
 
 	case PATH_UPDATE_FILE:
 		//same path as the executable
@@ -1886,4 +1904,9 @@ DWORD CGetSetOptions::WaitForActiveWndTimeout()
 DWORD CGetSetOptions::FocusChangedDelay()
 {
 	return (DWORD)GetProfileLong(_T("FocusChangedDelay"), 100);
+}
+
+DWORD CGetSetOptions::FocusWndTimerTimeout()
+{
+	return (DWORD)GetProfileLong(_T("FocusWndTimerTimeout"), 2000);
 }

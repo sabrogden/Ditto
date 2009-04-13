@@ -16,7 +16,6 @@ COleClipSource::COleClipSource()
 {
 	m_bLoadedFormats = false;
 	m_bOnlyPaste_CF_TEXT = false;
-	m_bPasteHTMLFormatAs_CF_TEXT = false;
 	m_pCustomPasteFormats = NULL;
 }
 
@@ -48,7 +47,7 @@ BOOL COleClipSource::DoImmediateRender()
 
 	if(m_pCustomPasteFormats != NULL)
 	{
-		return PutFormatOnClipboard(m_pCustomPasteFormats, m_bPasteHTMLFormatAs_CF_TEXT);
+		return PutFormatOnClipboard(m_pCustomPasteFormats);
 	}
 	
 	int count = m_ClipIDs.GetSize();
@@ -107,65 +106,23 @@ BOOL COleClipSource::DoImmediateRender()
 
 		clip.LoadFormats(m_ClipIDs[0], m_bOnlyPaste_CF_TEXT);
 		
-		return PutFormatOnClipboard(&clip.m_Formats, m_bPasteHTMLFormatAs_CF_TEXT);
+		return PutFormatOnClipboard(&clip.m_Formats);
 	}		
 
 	return bProcessedMult;
 }
 
-long COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats, bool bPasteHTMLFormatAs_CF_TEXT)
+long COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 {
 	CClipFormat* pCF;
-	bool bDelayedRenderCF_HDROP = false;
 	int	count = pFormats->GetSize();
 	int i = 0;
 
-	//see if the html format is in the list
-	//if it is the list we will not paste CF_TEXT
 	for(i = 0; i < count; i++)
 	{
 		pCF = &pFormats->ElementAt(i);
 
-		if(bPasteHTMLFormatAs_CF_TEXT)
-		{
-			if(pCF->m_cfType == theApp.m_HTML_Format)
-				break;
-		}
-
-		if(pCF->m_cfType == theApp.m_RemoteCF_HDROP)
-		{
-			bDelayedRenderCF_HDROP = true;
-		}
-	}
-
-	//Didn't find html format
-	if(i == count)
-		bPasteHTMLFormatAs_CF_TEXT = false;
-	
-	for(i = 0; i < count; i++)
-	{
-		pCF = &pFormats->ElementAt(i);
-
-		if(bDelayedRenderCF_HDROP)
-		{
-			if(pCF->m_cfType == CF_HDROP)
-			{
-				DelayRenderData(pCF->m_cfType);
-			}
-
-			continue;
-		}
-		
-		if(bPasteHTMLFormatAs_CF_TEXT)
-		{
-			if(pCF->m_cfType == CF_TEXT)
-				continue;
-
-			if(pCF->m_cfType == theApp.m_HTML_Format)
-				pCF->m_cfType = CF_TEXT;
-		}
-
-		CacheGlobalData( pCF->m_cfType, pCF->m_hgData );
+		CacheGlobalData(pCF->m_cfType, pCF->m_hgData);
 		pCF->m_hgData = 0; // OLE owns it now
 	}
 
@@ -238,7 +195,7 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 		}
 
 		CClipFormat format(lpFormatEtc->cfFormat, hCopy);
-		format.bDeleteData = false; //owned by m_DelayRenderedFormats
+		format.m_autoDeleteData = false; //owned by m_DelayRenderedFormats
 		m_DelayRenderedFormats.Add(format);
 	}
 

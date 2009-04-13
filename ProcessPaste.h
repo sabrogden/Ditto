@@ -25,7 +25,6 @@ public:
 	bool m_bSendPaste;
 	bool m_bActivateTarget;
 	bool m_bOnlyPaste_CF_TEXT;
-	bool m_bPasteHTMLFormatAs_CF_TEXT;
 
 	CProcessPaste();
 	~CProcessPaste();

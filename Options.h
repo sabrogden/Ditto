@@ -75,6 +75,7 @@ public:
 	static void LoadSettings();
 	static CString GetIniFileName(bool bLocalIniFile);
 	static void ConverSettingsToIni();
+	static CString GetAppDataPath();
 
 	static CString GetExeFileName();
 	static CString GetAppName();
@@ -386,6 +387,7 @@ public:
 	static DWORD	SendKeysDelay();
 	static DWORD	WaitForActiveWndTimeout();
 	static DWORD	FocusChangedDelay();
+	static DWORD	FocusWndTimerTimeout();
 };
 
 // global for easy access and for initialization of fast access variables

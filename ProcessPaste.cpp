@@ -15,7 +15,6 @@ CProcessPaste::CProcessPaste()
 	m_bSendPaste = true;
 	m_bActivateTarget = true;
 	m_bOnlyPaste_CF_TEXT = false;
-	m_bPasteHTMLFormatAs_CF_TEXT = false;
 }
 
 CProcessPaste::~CProcessPaste()
@@ -26,7 +25,6 @@ CProcessPaste::~CProcessPaste()
 BOOL CProcessPaste::DoPaste()
 {
 	m_pOle->m_bOnlyPaste_CF_TEXT = m_bOnlyPaste_CF_TEXT;
-	m_pOle->m_bPasteHTMLFormatAs_CF_TEXT = m_bPasteHTMLFormatAs_CF_TEXT;
 
 	if(m_pOle->DoImmediateRender())
 	{

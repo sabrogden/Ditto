@@ -904,7 +904,7 @@ int CCP_MainApp::ShowOptionsDlg()
 		int nRet = Sheet.DoModal();
 		if(nRet == IDOK)
 		{
-			m_pMainFrame->QuickPaste.ShowQPasteWnd(m_pMainFrame, false, false, TRUE);	
+			m_pMainFrame->m_quickPaste.ShowQPasteWnd(m_pMainFrame, false, false, TRUE);	
 		}
 		bShowingOptions = false;
 	}
@@ -926,9 +926,9 @@ HWND CCP_MainApp::QPastehWnd()
 { 
 	if(m_pMainFrame != NULL)
 	{
-		if(m_pMainFrame->QuickPaste.m_pwndPaste != NULL)
+		if(m_pMainFrame->m_quickPaste.m_pwndPaste != NULL)
 		{
-			return m_pMainFrame->QuickPaste.m_pwndPaste->GetSafeHwnd();
+			return m_pMainFrame->m_quickPaste.m_pwndPaste->GetSafeHwnd();
 		}
 	}
 

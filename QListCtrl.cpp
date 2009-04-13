@@ -623,7 +623,7 @@ BOOL CQListCtrl::DrawBitMap(int nItem, CRect &crRect, CDC *pDC)
 		HPALETTE hPal = NULL;
 		pThumbnail->m_hgData = CBitmapHelper::hBitmapToDIB( (HBITMAP)Bitmap, BI_RGB, hPal );
 
-		ASSERT( pThumbnail->bDeleteData ); // the map owns the data.
+		ASSERT( pThumbnail->m_autoDeleteData ); // the map owns the data.
 
 		Bitmap.DeleteObject();
 	}

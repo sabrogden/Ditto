@@ -1,4 +1,7 @@
-3.16.2.0  1-25-09
+3.16.6.0  3-12-09
+- Added DittoUtil Addin, adds the ability to paste any clip type as text
+
+3.16.5.0  3-23-09
 - Fixed SetFocus fix in ActivateTarget -- needed AttachThreadInput
 - Added the ability to create add-ins, called before an item is pasted
 - Fixed issue with getting the currently focused window when not using the hook dll

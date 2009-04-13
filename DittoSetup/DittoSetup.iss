@@ -43,8 +43,6 @@ Name: Korean; MessagesFile: Korean.isl
 Name: RunAtStartup; Description: Run Ditto on Windows Startup
 ;Name: UseFocusDll; Description: Use System Hook to track currently focused window
 
-Name: OutlookExpressAddIn; Description: Outlook Express Add-in; GroupDescription: Add-Ins
-
 [Files]
 ;Unicode for 2000 and later
 Source: ..\Release\DittoU.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; MinVersion: 0, 4.0
@@ -67,7 +65,12 @@ Source: mfc-crt\*; DestDir: {app}
 ;Add help files
 Source: ..\Help\*.htm; DestDir: {app}\Help; Flags: ignoreversion
 
-Source: ..\Addins\OutlookExpress\Release\OutlookExpress.dll; DestDir: {app}\Addins; Flags: ignoreversion; Tasks: OutlookExpressAddIn
+;Addins and the mfc dlls to the addins folder
+Source: ..\Addins\DittoUtil\Release\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
+Source: {app}\MFC71.dll; DestDir: {app}\Addins; Flags: ignoreversion external
+Source: {app}\mfc71u.dll; DestDir: {app}\Addins; Flags: ignoreversion external
+Source: {app}\msvcp71.dll; DestDir: {app}\Addins; Flags: ignoreversion external
+Source: {app}\msvcr71.dll; DestDir: {app}\Addins; Flags: ignoreversion external
 
 [Icons]
 Name: {group}\Ditto; Filename: {app}\Ditto.exe
@@ -83,10 +86,6 @@ Filename: {app}\Changes.txt; Description: View Change History; Flags: nowait pos
 Root: HKCU; Subkey: Software\Ditto; Flags: uninsdeletekey
 Root: HKCU; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: Ditto; flags: uninsdeletevalue; ValueData: {app}\Ditto.exe; Tasks: RunAtStartup
 Root: HKCU; Subkey: Software\Ditto; ValueType: string; ValueName: LanguageFile; ValueData: {language}
-
-;Always set UseHookdll to false then to true only if the task is set
-;Root: HKCU; Subkey: Software\Ditto; ValueType: dword; ValueName: UseHookDllForFocus; ValueData: 0
-;Root: HKCU; Subkey: Software\Ditto; ValueType: dword; ValueName: UseHookDllForFocus; ValueData: 1; Tasks: UseFocusDll
 
 Root: HKCU; Subkey: Software\Ditto\PasteStrings; ValueType: string; ValueName: gvim.exe; ValueData: """{{PLUS}gP"
 Root: HKCU; Subkey: Software\Ditto\CopyStrings; ValueType: string; ValueName: gvim.exe; ValueData: """{{PLUS}y"

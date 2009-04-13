@@ -1075,6 +1075,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\HListBox.cpp">
+			</File>
+			<File
 				RelativePath=".\HTMLFormatAggregator.cpp">
 			</File>
 			<File
@@ -2748,6 +2751,9 @@
 				RelativePath="GroupTree.h">
 			</File>
 			<File
+				RelativePath=".\HListBox.h">
+			</File>
+			<File
 				RelativePath=".\HTMLFormatAggregator.h">
 			</File>
 			<File
@@ -2978,7 +2984,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Release\focus.dll">
+				RelativePath="Debug\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">
@@ -3005,7 +3011,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="Debug\focus.dll">
+				RelativePath="Release\focus.dll">
 				<FileConfiguration
 					Name="Release|Win32"
 					ExcludedFromBuild="TRUE">

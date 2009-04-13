@@ -59,7 +59,7 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	CQuickPaste QuickPaste;
+	CQuickPaste m_quickPaste;
 	CSystemTray m_TrayIcon;
 	ULONG m_ulCopyGap;
 	CString m_csKeyboardPaste;

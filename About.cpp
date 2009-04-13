@@ -90,6 +90,19 @@ BOOL CAbout::OnInitDialog()
 	cs = "            - Kevin Edwards, ingenuus@users.sourceforge.net";
 	m_List.AddString(cs);
 
+	m_List.AddString(_T(""));
+
+	m_List.AddString(_T("Addins"));
+
+	//Show what addins are loaded
+	CStringArray arr;
+	theApp.m_Addins.AboutScreenText(arr);
+	int count = arr.GetCount();
+	for(int i = 0; i < count; i++)
+	{
+		m_List.AddString(_T("    ") + arr[i]);
+	}
+
 	CRect rect;
 	GetClientRect(rect);
 	

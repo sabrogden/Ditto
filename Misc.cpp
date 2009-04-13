@@ -1506,3 +1506,49 @@ CString GetProcessName(HWND hWnd)
 
 	return "";
 }
+
+BOOL IsVista()
+{
+	OSVERSIONINFO osver;
+
+	osver.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
+
+	if (::GetVersionEx( &osver ) && 
+		osver.dwPlatformId == VER_PLATFORM_WIN32_NT && 
+		(osver.dwMajorVersion >= 6 ) )
+	{
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+bool IsRunningLimited()
+{
+	LPCTSTR pszSubKey = _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System");
+	LPCTSTR pszValue = _T("EnableLUA");
+	DWORD dwType = 0;
+	DWORD dwValue = 0;
+	DWORD dwValueSize = sizeof(DWORD);
+
+	if(ERROR_SUCCESS != SHGetValue(HKEY_LOCAL_MACHINE, pszSubKey, pszValue, &dwType, &dwValue, &dwValueSize))
+	{
+		//failed to read the reg key, either it's not there or we don't have access to the registry
+		//If we are vista then assume we don't have access and we are running as a limited app
+		//otherwise we are xp and the reg key probably doesn't exist and we are not a limited running app
+		if(IsVista())
+		{
+			OutputDebugString(_T("Ditto - Failed to read registry entry finding UAC, Running as limited application"));
+			return true;
+		}
+	}
+
+	if(dwValue == 1)
+	{
+		OutputDebugString(_T("Ditto - UAC ENABLED, Running as limited application"));
+		return true;
+	}
+
+	OutputDebugString(_T("Ditto - Running as standard application"));	
+	return false;
+}

@@ -82,7 +82,7 @@ bool CDittoAddins::AddPrePasteAddinsToMenu(CMenu *pMenu)
 		if(pAddin)
 		{
 			int nSubCount = pAddin->m_PrePasteFunctions.size();
-			if(nSubCount > 0)
+			if(nSubCount > 1)
 			{
 				HMENU AddinMenu = ::CreateMenu();
 				for(int x = 0; x < nSubCount; x++)
@@ -98,6 +98,21 @@ bool CDittoAddins::AddPrePasteAddinsToMenu(CMenu *pMenu)
 
 				::AppendMenu(AllAddinsMenu, MF_ENABLED|MF_POPUP, (UINT)AddinMenu, pAddin->DisplayName());
 				bRet = true;
+			}
+			else if(nSubCount == 1)
+			{
+				//If there is only 1 function for this add in then just show one menu with addin name - function
+				CFunctionLookup lookup;
+				lookup.m_csFunctionName = pAddin->m_PrePasteFunctions[0].m_csFunction;
+				lookup.m_pAddin = pAddin;
+				m_FunctionMap.SetAt(nMenuId, lookup);
+
+				CString menuName;
+				menuName.Format(_T("%s - %s"), pAddin->DisplayName(), pAddin->m_PrePasteFunctions[0].m_csDisplayName);
+
+				::AppendMenu(AllAddinsMenu, MF_ENABLED, nMenuId, menuName);
+				bRet = true;
+				nMenuId++;
 			}
 		}
 	}
@@ -133,4 +148,27 @@ void CDittoAddins::LoadDittoInfo(CDittoInfo &DittoInfo)
 	DittoInfo.m_nVersion = update.GetRunningVersion();
 	DittoInfo.m_csSqliteVersion = sqlite3_libversion();
 	DittoInfo.m_hWndDitto = theApp.QPastehWnd();
+}
+
+void CDittoAddins::AboutScreenText(CStringArray &arr)
+{
+	int nCount = m_Addins.size();
+	for(int i = 0; i < nCount; i++)
+	{
+		CDittoAddin *pAddin = m_Addins[i];
+		if(pAddin)
+		{
+			CString csLine;
+			csLine.Format(_T("%s Ver: %d, Ver2: %d"), pAddin->DisplayName(), pAddin->Version(), pAddin->PrivateVersion());
+			arr.Add(csLine);
+			int nSubCount = pAddin->m_PrePasteFunctions.size();
+			for(int x = 0; x < nSubCount; x++)
+			{
+				CString csLine2;
+				csLine2.Format(_T("    %s (%s)"), pAddin->m_PrePasteFunctions[x].m_csDisplayName, pAddin->m_PrePasteFunctions[x].m_csDetailDescription);
+				arr.Add(csLine2);
+			}
+			arr.Add("");
+		}
+	}
 }

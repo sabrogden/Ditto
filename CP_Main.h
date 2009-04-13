@@ -143,7 +143,7 @@ public:
 	bool	m_bRefreshView;
 
 	CString m_Status;
-	CQPasteWnd* QPasteWnd() { return m_pMainFrame->QuickPaste.m_pwndPaste; }
+	CQPasteWnd* QPasteWnd() { return m_pMainFrame->m_quickPaste.m_pwndPaste; }
 	HWND QPastehWnd();
 	void SetStatus(const TCHAR* status = NULL, bool bRepaintImmediately = false);
 

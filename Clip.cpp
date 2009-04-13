@@ -101,7 +101,7 @@ CClipFormat::CClipFormat(CLIPFORMAT cfType, HGLOBAL hgData, long lDBID)
 {
 	m_cfType = cfType;
 	m_hgData = hgData;
-	bDeleteData = true;
+	m_autoDeleteData = true;
 	m_lDBID = lDBID;
 }
 
@@ -119,7 +119,7 @@ void CClipFormat::Clear()
 
 void CClipFormat::Free()
 {
-	if(bDeleteData)
+	if(m_autoDeleteData)
 	{
 		if(m_hgData)
 		{

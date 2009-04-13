@@ -36,7 +36,7 @@ class CClipFormat : public IClipFormat
 public:
 	CLIPFORMAT	m_cfType;
     HGLOBAL		m_hgData;
-	bool		bDeleteData;
+	bool		m_autoDeleteData;
 	long		m_lDBID;
 
 	CClipFormat(CLIPFORMAT cfType = 0, HGLOBAL hgData = 0, long lDBID = -1);
@@ -49,6 +49,8 @@ public:
 	virtual HGLOBAL Data() { return m_hgData; }
 	virtual void Type(CLIPFORMAT type) { m_cfType = type; }
 	virtual void Data(HGLOBAL data) { m_hgData = data; }
+	virtual void AutoDeleteData(bool autoDeleteData) { m_autoDeleteData = autoDeleteData; }
+	virtual bool AutoDeleteData()	{ return m_autoDeleteData; }
 };
 
 /*----------------------------------------------------------------------------*\
@@ -65,7 +67,7 @@ public:
 	virtual IClipFormat *GetAt(int nPos) { return &this->ElementAt(nPos); }
 	virtual void DeleteAt(int nPos) { this->RemoveAt(nPos); }
 	virtual void DeleteAll() { this->RemoveAll(); }
-	virtual int AddNew(CLIPFORMAT type, HGLOBAL data) {CClipFormat ft(type, data, -1); ft.bDeleteData = false; return this->Add(ft); }
+	virtual int AddNew(CLIPFORMAT type, HGLOBAL data) {CClipFormat ft(type, data, -1); ft.m_autoDeleteData = false; return this->Add(ft); }
 	virtual IClipFormat *FindFormatEx(CLIPFORMAT type)	{ return FindFormat((UINT)type); }
 };
 

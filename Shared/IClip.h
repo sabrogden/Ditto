@@ -8,8 +8,10 @@ class IClipFormat
 public:
 	virtual CLIPFORMAT Type() = 0;
 	virtual HGLOBAL Data() = 0;
+	virtual bool AutoDeleteData() = 0;
 	virtual void Type(CLIPFORMAT type) = 0;
 	virtual void Data(HGLOBAL data) = 0;
+	virtual void AutoDeleteData(bool autoDelete) = 0;
 };
 
 //Contains a list of IClipFormats
