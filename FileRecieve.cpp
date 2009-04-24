@@ -47,7 +47,11 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 		{
 		case MyEnums::START:
 			nNumFiles = Info.m_lParameter1;
-			m_pProgress->SetNumFiles(nNumFiles);
+			if(m_pProgress != NULL)
+			{
+				m_pProgress->SetNumFiles(nNumFiles);
+			}
+			LogSendRecieveInfo(StrF(_T("Start recieving files File Count: %d"), nNumFiles));
 			break;
 		case MyEnums::DATA_START:
 		{
@@ -55,18 +59,23 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 			nFilesRecieved++;
 			CTextConvert::ConvertFromUTF8(Info.m_cDesc, csFileName);
 
-			m_pProgress->StepAllFiles();
-			m_pProgress->SetMessage(StrF(_T("Copying File %d of %d"), nFilesRecieved, nNumFiles));
-			m_pProgress->SetFileMessage(StrF(_T("Copying %s"), csFileName));
-			m_pProgress->PumpMessages();
-			if(m_pProgress->Cancelled())
+			if(m_pProgress != NULL)
 			{
-				lRet = USER_CANCELED;
-				bBreak = true;
-				break;
+				m_pProgress->StepAllFiles();
+				m_pProgress->SetMessage(StrF(_T("Copying File %d of %d"), nFilesRecieved, nNumFiles));
+				m_pProgress->SetFileMessage(StrF(_T("Copying %s"), csFileName));
+				m_pProgress->PumpMessages();
+				if(m_pProgress->Cancelled())
+				{
+					lRet = USER_CANCELED;
+					bBreak = true;
+					break;
+				}
 			}
 
 			ULONG lFileSize = (ULONG)Info.m_lParameter1;
+
+			LogSendRecieveInfo(StrF(_T("START of recieving the file %s, size: %d, File %d of %d"), csFileName, lFileSize, nFilesRecieved, nNumFiles));
 
 			long lRecieveRet = RecieveFileData(lFileSize, csFileName);
 			if(lRecieveRet == USER_CANCELED)
@@ -81,6 +90,7 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 			}
 			else
 			{
+				LogSendRecieveInfo(StrF(_T("END of recieving the file %s, size: %d"), csFileName, lFileSize));
 				lRet = TRUE;
 			}
 		}
@@ -196,7 +206,10 @@ HGLOBAL CFileRecieve::CreateCF_HDROPBuffer()
 {
 	int nFileArraySize = m_RecievedFiles.GetSize();
 	if(nFileArraySize <= 0)
+	{
+		LogSendRecieveInfo(_T("Recieved files array is empty not creating cf_hdrop structure"));
 		return NULL;
+	}
 
 	TCHAR *pBuff = NULL;
 	int	 nBuffSize = 0;
@@ -223,6 +236,8 @@ HGLOBAL CFileRecieve::CreateCF_HDROPBuffer()
 	for(int n = 0; n < nFileArraySize; n++)
 	{
 		STRCPY(pCurrent, (LPCTSTR)m_RecievedFiles[n]);
+
+		LogSendRecieveInfo(StrF(_T("CreateCF_HDROPBuffer adding the file '%s' to local cf_hdrop structure"), pCurrent));
 
 		pCurrent += m_RecievedFiles[n].GetLength(); 
 		*pCurrent = 0;

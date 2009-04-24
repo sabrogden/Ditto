@@ -136,10 +136,10 @@ BOOL CRecieveSocket::RecieveExactSize(char *pData, long lSize)
 			return FALSE;
 		}
 
-		LogSendRecieveInfo(StrF(_T("RecieveExactSize:: ------Bytes Read %d Total Recieved %d"), lReceiveCount, lOffset));
-
 		lWanted -= lReceiveCount;
 		lOffset += lReceiveCount;
+
+		LogSendRecieveInfo(StrF(_T("RecieveExactSize:: ------Bytes Read %d Total Recieved %d"), lReceiveCount, lOffset));
 	}
 
 //	LogSendRecieveInfo(StrF(_T("RecieveExactSize:: ------END RecieveExactSize Recieved %d"), lOffset));

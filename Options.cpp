@@ -1667,6 +1667,10 @@ CString CGetSetOptions::GetPath(long lPathID)
 			csDir = GETENV(_T("U3_HOST_EXEC_PATH"));
 			FIX_CSTRING_PATH(csDir);
 		}
+		else
+		{
+			csDir = GetAppDataPath();
+		}
 
 		csDir += "ReceivedFiles\\";
 		break;

@@ -772,6 +772,8 @@ bool CMainFrame::CloseAllOpenDialogs()
 LRESULT CMainFrame::OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam)
 {
 	LogSendRecieveInfo("---------Start of OnAddToDatabaseFromSocket");
+	
+	CProcessPaste paste;
 	CClipList *pClipList = (CClipList*)wParam;
 	if(pClipList == NULL)
 	{
@@ -793,15 +795,12 @@ LRESULT CMainFrame::OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam)
 
 			LogSendRecieveInfo("---------After =");
 
-			CProcessPaste paste;
 			//Don't send the paste just load it into memory
 			paste.m_bSendPaste = false;
 			paste.m_pOle->PutFormatOnClipboard(&NewClip.m_Formats);
 			paste.m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
 
 			LogSendRecieveInfo("---------After LoadFormats");
-		
-			paste.DoPaste();
 		}
 		else
 		{
@@ -820,6 +819,14 @@ LRESULT CMainFrame::OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam)
 	if(pClip)
 	{
 		theApp.m_FocusID = pClip->m_ID;
+
+		//Wait till after we add the clip to the db before we call DoPaste
+		if(bSetToClipBoard)
+		{
+			LogSendRecieveInfo(StrF(_T("---------Setting clip id: %d on ole clipboard"), pClip->m_ID));
+			paste.GetClipIDs().Add(pClip->m_ID);
+			paste.DoPaste();
+		}
 	}
 
 	theApp.RefreshView();

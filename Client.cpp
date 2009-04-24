@@ -381,6 +381,8 @@ HGLOBAL CClient::RequestCopiedFiles(CClipFormat &HDropFormat, CString csIP, CStr
 	if(pProgress == NULL)
 		return NULL;
 
+	LogSendRecieveInfo(StrF(_T("************** START of requesting files from cpu %s, ip: %s **************"), csComputerName, csIP));
+
 	pProgress->Create(IDD_DIALOG_REMOTE_FILE);
 	pProgress->ShowWindow(SW_SHOW);
 	pProgress->SetMessage(StrF(_T("Opening Connection to %s (%s)"), csComputerName, csIP));
@@ -432,6 +434,8 @@ HGLOBAL CClient::RequestCopiedFiles(CClipFormat &HDropFormat, CString csIP, CStr
 	}
 
 	pProgress->DestroyWindow();
+
+	LogSendRecieveInfo(StrF(_T("************** END of requesting files from cpu %s, ip: %s **************************"), csComputerName, csIP));
 
 	return hReturn;
 }

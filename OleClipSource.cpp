@@ -116,11 +116,35 @@ long COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 {
 	CClipFormat* pCF;
 	int	count = pFormats->GetSize();
+	bool bDelayedRenderCF_HDROP = false;
 	int i = 0;
+
+	//see if the html format is in the list
+	//if it is the list we will not paste CF_TEXT
+	for(i = 0; i < count; i++)
+	{
+		pCF = &pFormats->ElementAt(i);
+
+		if(pCF->m_cfType == theApp.m_RemoteCF_HDROP)
+		{
+			bDelayedRenderCF_HDROP = true;
+		}
+	}
 
 	for(i = 0; i < count; i++)
 	{
 		pCF = &pFormats->ElementAt(i);
+
+		if(bDelayedRenderCF_HDROP)
+		{
+			if(pCF->m_cfType == CF_HDROP)
+			{
+				LogSendRecieveInfo("Added delayed cf_hdrop to clipboard");
+				DelayRenderData(pCF->m_cfType);
+			}
+
+			continue;
+		}
 
 		CacheGlobalData(pCF->m_cfType, pCF->m_hgData);
 		pCF->m_hgData = 0; // OLE owns it now
@@ -156,33 +180,38 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 	}
 	else
 	{
+		LogSendRecieveInfo("Delayed Render, getting data from remote machine");
+
 		CClip clip;
 
-		clip.LoadFormats(m_ClipIDs[0]);
-
-		CClipFormat *pDittoDelayCF_HDROP = clip.m_Formats.FindFormat(theApp.m_RemoteCF_HDROP);
-		CClipFormat *pCF_HDROP = clip.m_Formats.FindFormat(CF_HDROP);
-
-		if(pDittoDelayCF_HDROP && pCF_HDROP)
+		if(m_ClipIDs.GetCount() > 0)
 		{
-			CDittoCF_HDROP *pData = (CDittoCF_HDROP*)GlobalLock(pDittoDelayCF_HDROP->m_hgData);
-			if(pData)
+			clip.LoadFormats(m_ClipIDs[0]);
+
+			CClipFormat *pDittoDelayCF_HDROP = clip.m_Formats.FindFormat(theApp.m_RemoteCF_HDROP);
+			CClipFormat *pCF_HDROP = clip.m_Formats.FindFormat(CF_HDROP);
+
+			if(pDittoDelayCF_HDROP && pCF_HDROP)
 			{
-				CString csComputerName;
-				CString csIP;
+				CDittoCF_HDROP *pData = (CDittoCF_HDROP*)GlobalLock(pDittoDelayCF_HDROP->m_hgData);
+				if(pData)
+				{
+					CString csComputerName;
+					CString csIP;
 
-				CTextConvert::ConvertFromUTF8(pData->m_cIP, csIP);
-				CTextConvert::ConvertFromUTF8(pData->m_cComputerName, csComputerName);
-				
-				GlobalUnlock(pDittoDelayCF_HDROP->m_hgData);
+					CTextConvert::ConvertFromUTF8(pData->m_cIP, csIP);
+					CTextConvert::ConvertFromUTF8(pData->m_cComputerName, csComputerName);
+					
+					GlobalUnlock(pDittoDelayCF_HDROP->m_hgData);
 
-				CClient cl;
-				hData = cl.RequestCopiedFiles(*pCF_HDROP, csIP, csComputerName);
+					CClient cl;
+					hData = cl.RequestCopiedFiles(*pCF_HDROP, csIP, csComputerName);
+				}
 			}
-		}
-		else
-		{
-			hData = m_ClipIDs.Render(lpFormatEtc->cfFormat);
+			else
+			{
+				hData = m_ClipIDs.Render(lpFormatEtc->cfFormat);
+			}
 		}
 
 		//Add to a cache of already rendered data
@@ -210,7 +239,9 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 		{
 			UINT len = min(::GlobalSize(*phGlobal), ::GlobalSize(hData));
 			if(len)
+			{
 				CopyToGlobalHH(*phGlobal, hData, len);
+			}
 			::GlobalFree(hData);
 		}
 		bRet = TRUE;
