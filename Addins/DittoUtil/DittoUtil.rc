@@ -113,6 +113,8 @@ BEGIN
                     WS_VSCROLL | WS_TABSTOP
     LTEXT           "Select the clip to paste the clip data as text",
                     IDC_STATIC,9,8,335,15
+    CONTROL         "Paste as Unicode",IDC_CHECK_PASTE_AS_UNICODE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,7,172,76,9
 END
 
 

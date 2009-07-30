@@ -15,6 +15,7 @@ CSelectPasteFormat::CSelectPasteFormat(CWnd* pParent, IClipFormats *clipFormats)
 {
 	m_pClipFormats = clipFormats;
 	m_selectedFormat = 0;
+	m_pasteAsUnicode = false;
 }
 
 CSelectPasteFormat::~CSelectPasteFormat()
@@ -53,6 +54,7 @@ BOOL CSelectPasteFormat::OnInitDialog()
 	m_Resize.AddControl(IDC_LIST1, DR_SizeHeight | DR_SizeWidth);
 	m_Resize.AddControl(IDOK, DR_MoveTop | DR_MoveLeft);
 	m_Resize.AddControl(IDCANCEL, DR_MoveTop | DR_MoveLeft);
+	m_Resize.AddControl(IDC_CHECK_PASTE_AS_UNICODE, DR_MoveTop);
 
 	return TRUE;
 }
@@ -64,6 +66,8 @@ void CSelectPasteFormat::OnOK()
 	{
 		m_selectedFormat = (CLIPFORMAT)m_Formats.GetItemData(pos);
 	}
+
+	m_pasteAsUnicode = (::IsDlgButtonChecked(m_hWnd, IDC_CHECK_PASTE_AS_UNICODE) == BST_CHECKED);
 
 	CDialog::OnOK();
 }

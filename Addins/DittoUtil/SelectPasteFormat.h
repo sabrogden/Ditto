@@ -16,6 +16,7 @@ public:
 
 	CLIPFORMAT SelectedFormat() const { return m_selectedFormat; }
 	void SelectedFormat(CLIPFORMAT val) { m_selectedFormat = val; }
+	bool PasteAsUnicode() { return m_pasteAsUnicode; }
 
 // Dialog Data
 	enum { IDD = IDD_DIALOG_SELECT_FORMAT };
@@ -25,6 +26,7 @@ protected:
 	IClipFormats *m_pClipFormats;
 	CLIPFORMAT m_selectedFormat;
 	CDialogResizer m_Resize;
+	bool m_pasteAsUnicode;
 	
 	DECLARE_MESSAGE_MAP()
 	CListBox m_Formats;
