@@ -1,3 +1,8 @@
+set arg1=%1
+
+IF (%1) == () set arg1="DittoPortable"
+
+
 Rmdir Ditto /s /q
 
 MkDir Ditto
@@ -24,9 +29,8 @@ copy ..\Debug\themes\*.xml Ditto\themes\
 
 copy ..\AccessToSqlite\Release\AccessToSqlite.dl Ditto\Addins\AccessToSqlite.dll
 
-7za.exe a -tzip Output\Ditto_Portable.zip "Ditto\*" -r
+7za.exe a -tzip Output\%arg1%.zip "Ditto\*" -r
 
 Rmdir Ditto /s /q
-
 
 

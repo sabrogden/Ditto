@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='utf-8'?>
+<project version='7' encrypted='1'>
+	<steps type='0'>
+		<step action='Group'>
+			<name>Project steps</name>
+		</step>
+		<step action='Set Macro'>
+			<MacroName>version</MacroName>
+			<MacroValue>3.16.8.0</MacroValue>
+			<indent type='3'>1</indent>
+			<name>Set Version</name>
+		</step>
+		<step action='Delete Folder'>
+			<Path>%workDir%</Path>
+			<Recurse type='11'>-1</Recurse>
+			<indent type='3'>1</indent>
+			<name>Delete work directory</name>
+		</step>
+		<step action='Delete Folder'>
+			<Path>%testBuildWorkDir%</Path>
+			<Recurse type='11'>-1</Recurse>
+			<indent type='3'>1</indent>
+			<name>Delete temp work directory</name>
+		</step>
+		<step action='Subversion'>
+			<Files>%branch%</Files>
+			<Host>ditto-cp.svn.sourceforge.net</Host>
+			<LocalPath>%workDir%</LocalPath>
+			<Password encrypted='1'>MM3MPOs8MuGmarG4tqE=</Password>
+			<Port>443</Port>
+			<Protocol>https</Protocol>
+			<Repository>/svnroot/ditto-cp</Repository>
+			<Subcommand>checkout</Subcommand>
+			<Username>sabrogden</Username>
+			<indent type='3'>1</indent>
+			<name>Get Latest</name>
+		</step>
+		<step action='Make VS.NET'>
+			<AssemblyVer type='11'>-1</AssemblyVer>
+			<Attr type='11'>0</Attr>
+			<FileVer type='11'>-1</FileVer>
+			<Filename>%workDir%\%branch%\CP_Main.sln</Filename>
+			<ProdVer type='11'>-1</ProdVer>
+			<Version>%version%</Version>
+			<VersionSel type='3'>2</VersionSel>
+			<indent type='3'>1</indent>
+			<name>Build Ditto</name>
+		</step>
+		<step action='Group'>
+			<indent type='3'>1</indent>
+			<name>Zip Source</name>
+		</step>
+		<step action='Run Program'>
+			<command>ProjectZip.exe /q %workDir%\%branch%\cp_main.sln</command>
+			<indent type='3'>2</indent>
+			<name>Zip source code</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='UNZIP Files'>
+			<Action type='3'>0</Action>
+			<Ansi type='11'>-1</Ansi>
+			<Dest>%testBuildWorkDir%</Dest>
+			<LogDetail type='11'>-1</LogDetail>
+			<PathInfo type='11'>-1</PathInfo>
+			<Recurse type='11'>-1</Recurse>
+			<Source>%testBuildWorkDir%\%branch%\cp_main.zip</Source>
+			<UNTAR type='11'>-1</UNTAR>
+			<indent type='3'>2</indent>
+			<name>UNZIP Files</name>
+		</step>
+		<step action='Make VS.NET'>
+			<AssemblyVer type='11'>-1</AssemblyVer>
+			<Attr type='11'>0</Attr>
+			<FileVer type='11'>-1</FileVer>
+			<Filename>%testBuildWorkDir%\%branch%\cp_main.sln</Filename>
+			<ProdVer type='11'>-1</ProdVer>
+			<Version>%version%</Version>
+			<VersionSel type='3'>2</VersionSel>
+			<indent type='3'>2</indent>
+			<name>Build Ditto</name>
+		</step>
+		<step action='Inno Setup'>
+			<Filename>%workDir%\%branch%\DittoSetup\DittoSetup.iss</Filename>
+			<ISPPCompat type='11'>-1</ISPPCompat>
+			<OutputFilename>DittoSetup_%versionFileName%</OutputFilename>
+			<indent type='3'>1</indent>
+			<name>Inno Setup</name>
+		</step>
+		<step action='Run Program'>
+			<command>"%workDir%\%branch%\DittoSetup\Build Portable ZIP.bat" "DittoPortable_%versionFileName%"</command>
+			<indent type='3'>1</indent>
+			<name>Build Portable</name>
+			<outputfrom type='3'>1</outputfrom>
+			<startin>%workDir%\%branch%\DittoSetup\</startin>
+		</step></steps>
+	<macros>
+		<macro name='branch'>
+			<value>trunk</value>
+		</macro>
+		<macro name='testBuildWorkDir'>
+			<value>%temp%\DittoTestBuild</value>
+		</macro>
+		<macro name='verBuild'>
+			<value>8</value>
+		</macro>
+		<macro name='verMajor'>
+			<value>3</value>
+		</macro>
+		<macro name='verMinor'>
+			<value>16</value>
+		</macro>
+		<macro name='verRevision'>
+			<value>0</value>
+		</macro>
+		<macro name='version'>
+			<value>%verMajor%.%verMinor%.%verBuild%.%verRevision%</value>
+		</macro>
+		<macro name='versionFileName'>
+			<value>%verMajor%_%verMinor%_%verBuild%_%verRevision%</value>
+		</macro>
+		<macro name='workDir'>
+			<value>%temp%\Ditto</value>
+		</macro></macros>
+</project>
