@@ -4,12 +4,6 @@
 		<step action='Group'>
 			<name>Project steps</name>
 		</step>
-		<step action='Set Macro'>
-			<MacroName>version</MacroName>
-			<MacroValue>3.16.8.0</MacroValue>
-			<indent type='3'>1</indent>
-			<name>Set Version</name>
-		</step>
 		<step action='Delete Folder'>
 			<Path>%workDir%</Path>
 			<Recurse type='11'>-1</Recurse>
@@ -63,7 +57,7 @@
 			<LogDetail type='11'>-1</LogDetail>
 			<PathInfo type='11'>-1</PathInfo>
 			<Recurse type='11'>-1</Recurse>
-			<Source>%testBuildWorkDir%\%branch%\cp_main.zip</Source>
+			<Source>%workDir%\%branch%\cp_main.zip</Source>
 			<UNTAR type='11'>-1</UNTAR>
 			<indent type='3'>2</indent>
 			<name>UNZIP Files</name>
@@ -72,7 +66,7 @@
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>0</Attr>
 			<FileVer type='11'>-1</FileVer>
-			<Filename>%testBuildWorkDir%\%branch%\cp_main.sln</Filename>
+			<Filename>%testBuildWorkDir%\cp_main.sln</Filename>
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
@@ -92,6 +86,21 @@
 			<name>Build Portable</name>
 			<outputfrom type='3'>1</outputfrom>
 			<startin>%workDir%\%branch%\DittoSetup\</startin>
+		</step>
+		<step action='Subversion'>
+			<Files><![CDATA[%branch%
+tags/%versionFileName%
+]]></Files>
+			<Host>ditto-cp.svn.sourceforge.net</Host>
+			<Message>%branch%_%versionFileName%</Message>
+			<Password encrypted='1'>MM3MPOs8MuGmarG4tqE=</Password>
+			<Port>443</Port>
+			<Protocol>https</Protocol>
+			<Repository>/svnroot/ditto-cp</Repository>
+			<Subcommand>copy</Subcommand>
+			<Username>sabrogden</Username>
+			<indent type='3'>1</indent>
+			<name>Tag build</name>
 		</step></steps>
 	<macros>
 		<macro name='branch'>
