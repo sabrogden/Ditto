@@ -73,6 +73,32 @@
 			<indent type='3'>2</indent>
 			<name>Build Ditto</name>
 		</step>
+		<step action='Copy Files'>
+			<Converted type='11'>-1</Converted>
+			<Delay>15</Delay>
+			<DestDir>%workDir%\%branch%\DittoSetup\Output\</DestDir>
+			<Ext>cp_main.zip</Ext>
+			<Incremental type='11'>-1</Incremental>
+			<LogCopied type='11'>-1</LogCopied>
+			<ReadOnly type='11'>-1</ReadOnly>
+			<Retries>10</Retries>
+			<SourceDir>%workDir%\%branch%\</SourceDir>
+			<TBD type='11'>-1</TBD>
+			<indent type='3'>2</indent>
+			<name>Move source code</name>
+		</step>
+		<step action='Rename Files'>
+			<Dir>%workDir%\%branch%\DittoSetup\Output</Dir>
+			<Ext>cp_main.zip</Ext>
+			<Find>cp_main.zip</Find>
+			<FirstOnly type='11'>-1</FirstOnly>
+			<HideOn type='11'>-1</HideOn>
+			<LogRenamed type='11'>-1</LogRenamed>
+			<Replace>DittoSource_%versionFileName%.zip</Replace>
+			<SysOn type='11'>-1</SysOn>
+			<indent type='3'>2</indent>
+			<name>Rename source code zip</name>
+		</step>
 		<step action='Inno Setup'>
 			<Filename>%workDir%\%branch%\DittoSetup\DittoSetup.iss</Filename>
 			<ISPPCompat type='11'>-1</ISPPCompat>
