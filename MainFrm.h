@@ -72,6 +72,7 @@ public:
 	bool m_bMovedSelectionMoveKeyState;
 	short m_keyModifiersTimerCount;
 	HWND m_tempFocusWnd;
+	bool m_deletingEntries;
 
 	void DoDittoCopyBufferPaste(int nCopyBuffer);
 	void DoFirstTenPositionsPaste(int nPos);

@@ -173,7 +173,10 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	
 	// Show the window
 	m_pwndPaste->ShowWindow(SW_SHOW);
-	m_pwndPaste->ShowQPasteWindow(bReFillList);
+	if(bReFillList)
+	{
+		m_pwndPaste->ShowQPasteWindow(bReFillList);
+	}
 	m_pwndPaste->SetForegroundWindow();
 }
 

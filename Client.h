@@ -12,6 +12,7 @@
 #include "Server.h"
 #include "Encryption.h"
 #include "SendSocket.h"
+#include "Popup.h"
 
 class CSendToFriendInfo
 {

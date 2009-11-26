@@ -15,6 +15,7 @@
 #include "AlphaBlend.h"
 #include "Sqlite\CppSQLite3.h"
 #include <vector>
+#include <map>
 #include <afxmt.h>
 
 class CMainTable
@@ -25,17 +26,23 @@ public:
 		m_bDontAutoDelete(false),
 		m_bIsGroup(false),
 		m_bHasShortCut(false),
-		m_bHasParent(false)
+		m_bHasParent(false),
+		m_listIndex(-1)
 	{
 	}
-	long	m_lID;
+	long m_lID;
 	CString m_Desc;
-	bool	m_bDontAutoDelete;
-	bool	m_bIsGroup;
-	bool	m_bHasShortCut;	
-	bool	m_bHasParent;
+	bool m_bDontAutoDelete;
+	bool m_bIsGroup;
+	bool m_bHasShortCut;	
+	bool m_bHasParent;
 	CString m_QuickPaste;
+	int m_listIndex;
 };
+
+
+typedef std::map<int, CMainTable> MainTypeMap;
+
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -96,7 +103,8 @@ public:
 	long			m_lItemsPerPage;
 	bool			m_bModifersMoveActive;
 
-	std::vector<CMainTable> m_Cache;
+	MainTypeMap m_mapCache;
+	std::vector<CPoint> m_loadItems;
 
 	HANDLE m_Events[4];
 	HANDLE m_ExitEvent;
@@ -119,8 +127,6 @@ public:
 	BOOL OpenSelection(bool bOnlyLoad_CF_TEXT = false);
 	BOOL OpenIndex( long nItem );
 	BOOL NewGroup( bool bGroupSelection = true );
-	// moves the caret to the given ID, selects it, and ensures it is visible.
-	long SetListID( long lID );
 
 	CString LoadDescription( int nItem );
 	bool SaveDescription( int nItem, CString text );
@@ -243,7 +249,7 @@ protected:
 	afx_msg LRESULT OnRefreshView(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGroupTreeMessage(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnFillRestOfList(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnRefeshVisibleRows(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnRefeshRow(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSetListCount(WPARAM wParam, LPARAM lParam);
 	afx_msg HBRUSH CtlColor(CDC* pDC, UINT nCtlColor) ;
 	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
@@ -272,6 +278,7 @@ protected:
 	afx_msg void OnUpdateMenuEdititem(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateMenuNewclip(CCmdUI *pCmdUI);
 	afx_msg void CQPasteWnd::OnAddinSelect(UINT id);
+	afx_msg LRESULT OnSelectAll(WPARAM wParam, LPARAM lParam);
 //}}AFX_MSG
 };
 

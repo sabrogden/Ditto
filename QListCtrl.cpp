@@ -52,6 +52,7 @@ CQListCtrl::CQListCtrl()
 	m_bStartTop = true;
 	m_pToolTip = NULL;
 	m_pFormatter = NULL;
+	m_allSelected = false;
 }
 
 CQListCtrl::~CQListCtrl()
@@ -651,6 +652,11 @@ void CQListCtrl::RefreshVisibleRows()
 	::UpdateWindow(m_hWnd);
 }
 
+void CQListCtrl::RefreshRow(int row)
+{
+	RedrawItems(row, row);
+}
+
 void CQListCtrl::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
 	if(GetKeyState(VK_RETURN) & 0x800)
@@ -1219,7 +1225,7 @@ BOOL CQListCtrl::SetItemCountEx(int iCount, DWORD dwFlags /* = LVSICF_NOINVALIDA
 void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NMLISTVIEW *pnmv = (NMLISTVIEW *) pNMHDR;
-	
+
 	if((pnmv->uNewState == 3) ||
 		(pnmv->uNewState == 1))
 	{
@@ -1230,6 +1236,22 @@ void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 		}
 		if(GetSelectedCount() > 0 )
 			theApp.SetStatus(NULL, FALSE);
+	}
+
+	if(GetSelectedCount() == this->GetItemCount())
+	{
+		if(m_allSelected == false)
+		{
+			Log(StrF(_T("List box Select All")));
+
+			GetParent()->SendMessage(NM_ALL_SELECTED, 0, 0);
+			m_allSelected = true;
+		}
+	}
+	else if(m_allSelected == true)
+	{
+		Log(StrF(_T("List box REMOVED Select All")));
+		m_allSelected = false;
 	}
 }
 

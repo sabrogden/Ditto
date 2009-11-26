@@ -451,6 +451,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="Popup.cpp" />
     <ClCompile Include="sqlite\CppSQLite3.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -1292,6 +1293,7 @@
     <ClInclude Include="GroupStatic.h" />
     <ClInclude Include="memdc.h" />
     <ClInclude Include="NumberEdit.h" />
+    <ClInclude Include="Popup.h" />
     <ClInclude Include="QListCtrl.h" />
     <ClInclude Include="RichEditCtrlEx.h" />
     <ClInclude Include="SearchEditBox.h" />

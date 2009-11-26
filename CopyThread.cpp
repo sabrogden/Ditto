@@ -66,6 +66,8 @@ END_MESSAGE_MAP()
 // Called within Copy Thread:
 void CCopyThread::OnClipboardChange()
 {
+	Log(_T("OnClipboardChange - Start"));
+
 	SyncConfig(); // synchronize with the main thread's copy configuration
 	
 	// if we are told not to copy on change, then we have nothing to do.
@@ -81,6 +83,8 @@ void CCopyThread::OnClipboardChange()
 	//just like you were using Ctrl-V
 	if(theApp.m_CopyBuffer.Active())
 	{
+		Log(_T("LoadFromClipboard - Copy buffer Active Start"));
+
 		pSupportedTypes = new CClipTypes;
 		if(pSupportedTypes)
 		{
@@ -104,9 +108,13 @@ void CCopyThread::OnClipboardChange()
 		{
 			pSupportedTypes = m_LocalConfig.m_pSupportedTypes;
 		}
+
+		Log(_T("LoadFromClipboard - Copy buffer Active End"));
 	}
 
+	Log(_T("LoadFromClipboard - Before"));
 	bool bResult = pClip->LoadFromClipboard(pSupportedTypes);
+	Log(_T("LoadFromClipboard - End"));
 
 	if(bDeleteMemory)
 	{
@@ -126,7 +134,8 @@ void CCopyThread::OnClipboardChange()
 		::PostMessage(m_LocalConfig.m_hClipHandler, WM_CLIPBOARD_COPIED, (WPARAM)pClip, 0);
 	else
 		::SendMessage(m_LocalConfig.m_hClipHandler, WM_CLIPBOARD_COPIED, (WPARAM)pClip, 0);
-	
+
+	Log(_T("OnClipboardChange - End"));
 }
 
 void CCopyThread::SyncConfig()

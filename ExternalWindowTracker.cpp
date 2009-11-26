@@ -18,6 +18,7 @@ ExternalWindowTracker::~ExternalWindowTracker(void)
 
 bool ExternalWindowTracker::TrackActiveWnd(HWND focus)
 {
+	BOOL fromHook = true
 	HWND newFocus = focus;
 	HWND newActive = ::GetForegroundWindow();
 	if(newFocus == NULL)
@@ -25,6 +26,8 @@ bool ExternalWindowTracker::TrackActiveWnd(HWND focus)
 		AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), TRUE);
 		newFocus = GetFocus();
 		AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), FALSE);
+
+		fromHook = false;
 	}
 
 	if(newFocus == 0 && newActive != 0)
@@ -76,7 +79,7 @@ bool ExternalWindowTracker::TrackActiveWnd(HWND focus)
 	if(theApp.QPasteWnd())
 		theApp.QPasteWnd()->UpdateStatus(true);
 
-	Log(StrF(_T("TargetActiveWindow Active: %d Focus: %d"), m_activeWnd, m_focusWnd));
+	Log(StrF(_T("TargetActiveWindow Active: %d, Focus: %d, FromHook %d"), m_activeWnd, m_focusWnd, fromHook));
 
 	return true;
 }

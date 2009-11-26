@@ -26,9 +26,7 @@ copy Ditto.Settings Ditto\Ditto.Settings
 copy ..\Help\*.* Ditto\Help\
 copy ..\Debug\language\*.xml Ditto\language\
 copy ..\Debug\themes\*.xml Ditto\themes\
-copy ..\Debug\Addins\*.dll Ditto\Addins\
-
-copy ..\AccessToSqlite\Release\AccessToSqlite.dl Ditto\Addins\AccessToSqlite.dll
+copy ..\Release\Addins\*.dll Ditto\Addins\
 
 7za.exe a -tzip Output\%arg1%.zip "Ditto\*" -r
 

@@ -248,14 +248,14 @@ extern "C"
 /* FIPS-180, different variables are 'rotated' on each round, returning     */
 /* to their starting positions every eight rounds                           */
 
-#define h2(i) p[i & 15] += \
-    g256_1(p[(i + 14) & 15]) + p[(i + 9) & 15] + g256_0(p[(i + 1) & 15])
+#define h2(index) p[index & 15] += \
+    g256_1(p[(index + 14) & 15]) + p[(index + 9) & 15] + g256_0(p[(index + 1) & 15])
 
-#define h2_cycle(i,j)  \
-    v[(7 - i) & 7] += (j ? h2(i) : p[i & 15]) + k256[i + j] \
-        + s256_1(v[(4 - i) & 7]) + ch(v[(4 - i) & 7], v[(5 - i) & 7], v[(6 - i) & 7]); \
-    v[(3 - i) & 7] += v[(7 - i) & 7]; \
-    v[(7 - i) & 7] += s256_0(v[(0 - i) & 7]) + maj(v[(0 - i) & 7], v[(1 - i) & 7], v[(2 - i) & 7])
+#define h2_cycle(index,j)  \
+    v[(7 - index) & 7] += (j ? h2(index) : p[index & 15]) + k256[index + j] \
+        + s256_1(v[(4 - index) & 7]) + ch(v[(4 - index) & 7], v[(5 - index) & 7], v[(6 - index) & 7]); \
+    v[(3 - index) & 7] += v[(7 - index) & 7]; \
+    v[(7 - index) & 7] += s256_0(v[(0 - index) & 7]) + maj(v[(0 - index) & 7], v[(1 - index) & 7], v[(2 - index) & 7])
 
 /* SHA256 mixing data   */
 
@@ -428,14 +428,14 @@ sha2_void sha256(unsigned char hval[], const unsigned char data[], unsigned long
 /* FIPS-180, different variables are 'rotated' on each round, returning     */
 /* to their starting positions every eight rounds                           */
 
-#define h5(i) ctx->wbuf[i & 15] += \
-    g512_1(ctx->wbuf[(i + 14) & 15]) + ctx->wbuf[(i + 9) & 15] + g512_0(ctx->wbuf[(i + 1) & 15])
+#define h5(index) ctx->wbuf[index & 15] += \
+    g512_1(ctx->wbuf[(index + 14) & 15]) + ctx->wbuf[(index + 9) & 15] + g512_0(ctx->wbuf[(index + 1) & 15])
 
-#define h5_cycle(i,j)  \
-    v[(7 - i) & 7] += (j ? h5(i) : ctx->wbuf[i & 15]) + k512[i + j] \
-        + s512_1(v[(4 - i) & 7]) + ch(v[(4 - i) & 7], v[(5 - i) & 7], v[(6 - i) & 7]); \
-    v[(3 - i) & 7] += v[(7 - i) & 7]; \
-    v[(7 - i) & 7] += s512_0(v[(0 - i) & 7]) + maj(v[(0 - i) & 7], v[(1 - i) & 7], v[(2 - i) & 7])
+#define h5_cycle(index,j)  \
+    v[(7 - index) & 7] += (j ? h5(index) : ctx->wbuf[index & 15]) + k512[index + j] \
+        + s512_1(v[(4 - index) & 7]) + ch(v[(4 - index) & 7], v[(5 - index) & 7], v[(6 - index) & 7]); \
+    v[(3 - index) & 7] += v[(7 - index) & 7]; \
+    v[(7 - index) & 7] += s512_0(v[(0 - index) & 7]) + maj(v[(0 - index) & 7], v[(1 - index) & 7], v[(2 - index) & 7])
 
 /* SHA384/SHA512 mixing data    */
 

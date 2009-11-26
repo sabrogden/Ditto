@@ -9,6 +9,7 @@
 #include "CF_TextAggregator.h"
 #include "richtextaggregator.h"
 #include "htmlformataggregator.h"
+#include "Popup.h"
 
 // allocate an HGLOBAL of the given Format Type representing these Clip IDs.
 HGLOBAL CClipIDs::Render(UINT cfType)
@@ -288,7 +289,7 @@ BOOL CClipIDs::CopyTo(long lParentID)
 	return TRUE;
 }
 
-BOOL CClipIDs::DeleteIDs()
+BOOL CClipIDs::DeleteIDs(bool fromClipWindow, CppSQLite3DB& db)
 {
 	CPopup status(0, 0, ::GetForegroundWindow());
 	bool bAllowShow;
@@ -296,31 +297,99 @@ BOOL CClipIDs::DeleteIDs()
 	
 	BOOL bRet = TRUE;
 	int count = GetSize();
+	int batchCount = 25;
+
+	Log(StrF(_T("Begin delete clips, Count: %d from Window: %d"), count, fromClipWindow));
 	
 	if(count <= 0)
 		return FALSE;
 
 	try
 	{
-		theApp.m_db.execDML(_T("begin transaction;"));
-		for(int i=0; i < count; i++)
+		CString sql = _T("DELETE FROM Main where lId in(");
+		CString sqlIn = _T("");
+		CString workingString = _T("Deleting clips, building query statement");
+		int startIndex = 0;
+		int index = 0;
+
+		if(bAllowShow)
 		{
-			if(bAllowShow)
-				status.Show(StrF(_T("Deleting %d out of %d..."), i+1, count));
-
-			if(i && i % 50)
-			{
-				theApp.m_db.execDML(_T("commit transaction;"));
-				theApp.m_db.execDML(_T("begin transaction;"));
-			}
-
-			bRet = bRet && DeleteID(ElementAt(i));
+			status.Show(workingString);
 		}
 
-		theApp.m_db.execDML(_T("commit transaction;"));
+		for(index = 0; index < count; index++)
+		{
+			int clipId = ElementAt(index);
+			if(clipId <= 0)
+				continue;
+
+			Log(StrF(_T("Delete clip Id: %d"), clipId));
+
+			bool cont = false;
+			bool bGroup = false;
+			{
+				CppSQLite3Query q = db.execQueryEx(_T("SELECT bIsGroup FROM Main WHERE lId = %d"), clipId);
+				cont = !q.eof();
+				if(cont)
+				{
+					bGroup = q.getIntField(_T("bIsGroup")) > 0;
+				}
+			}
+
+			if(cont)
+			{			
+				if(bGroup)
+				{
+					db.execDMLEx(_T("UPDATE Main SET lParentID = -1 WHERE lParentID = %d;"), clipId);
+				}
+
+				if(sqlIn.GetLength() > 0)
+				{
+					sqlIn += ", ";
+				}
+				sqlIn += StrF(_T("%d"), clipId);
+			}
+
+			if(index > 0 && 
+				(index % batchCount) == 0)
+			{
+				if(bAllowShow)
+				{
+					status.Show(StrF(_T("Deleting %d - %d of %d..."), startIndex+1, index, count));
+				}
+				startIndex = index;
+
+				db.execDMLEx(sql + sqlIn + _T(")"));
+				sqlIn = "";
+				bRet = TRUE;
+
+				if(bAllowShow)
+				{
+					status.Show(workingString);
+				}
+			}
+
+			if(fromClipWindow == false)
+			{
+				theApp.OnDeleteID(clipId);
+			}
+		}
+
+		if(sqlIn.GetLength() > 0)
+		{
+			if(bAllowShow)
+			{
+				status.Show(StrF(_T("Deleting %d - %d of %d..."), startIndex+1, index, count));
+			}
+
+			db.execDMLEx(sql + sqlIn + _T(")"));
+			bRet = TRUE;
+		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 	
+	Log(StrF(_T("End delete clips, Count: %d"), count));
+
 	return bRet;
 }
 

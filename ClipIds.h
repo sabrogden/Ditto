@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IClipAggregator.h"
+#include "sqlite\CppSQLite3.h"
 
 class CClipIDs : public CArrayEx<int>
 {
@@ -32,7 +33,7 @@ public:
 
 	BOOL CopyTo(long lParentID);
 
-	BOOL DeleteIDs();
+	BOOL DeleteIDs(bool fromClipWindow, CppSQLite3DB& db);
 
 	BOOL Export(CString csFilePath);
 	

@@ -907,6 +907,8 @@ CClipList::~CClipList()
 // while this does empty the Format Data, it does not delete the Clips.
 int CClipList::AddToDB(bool bLatestTime, bool bShowStatus)
 {
+	Log(_T("AddToDB - Start"));
+
 	int savedCount = 0;
 	int nRemaining = 0;
 	CClip* pClip;
@@ -917,11 +919,13 @@ int CClipList::AddToDB(bool bLatestTime, bool bShowStatus)
 	pos = GetHeadPosition();
 	while(pos)
 	{
+		Log(StrF(_T("AddToDB - while(pos), Start Remaining %d"), nRemaining));
+
 		if(bShowStatus)
 		{
-			theApp.SetStatus(StrF(_T("%d"),nRemaining), true);
-			nRemaining--;
+			theApp.SetStatus(StrF(_T("%d"), nRemaining), true);
 		}
+		nRemaining--;
 		
 		pClip = GetNext(pos);
 		ASSERT(pClip);
@@ -932,10 +936,14 @@ int CClipList::AddToDB(bool bLatestTime, bool bShowStatus)
 		bResult = pClip->AddToDB();
 		if( bResult )
 			savedCount++;
+
+		Log(StrF(_T("AddToDB - while(pos), End Remaining %d, save count: %d"), nRemaining, savedCount));
 	}
 	
 	if(bShowStatus)
 		theApp.SetStatus(NULL, true);
+
+	Log(StrF(_T("AddToDB - Start, count: %d"), savedCount));
 	
 	return savedCount;
 }

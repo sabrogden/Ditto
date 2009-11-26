@@ -42,6 +42,7 @@ static char THIS_FILE[] = __FILE__;
 #define THREAD_EXIT_THREAD			1
 #define THREAD_FILL_ACCELERATORS	2
 #define THREAD_DESTROY_ACCELERATORS	3
+#define THREAD_LOAD_ITEMS			4
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -181,7 +182,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_MESSAGE(CB_UPDOWN, OnUpDown)
 	ON_MESSAGE(NM_INACTIVE_TOOLTIPWND, OnToolTipWndInactive)
 	ON_MESSAGE(NM_SET_LIST_COUNT, OnSetListCount)
-	ON_MESSAGE(NM_REFRESH_VISIBLE_ROWS, OnRefeshVisibleRows)
+	ON_MESSAGE(NM_REFRESH_ROW, OnRefeshRow)
 	ON_MESSAGE(NM_ITEM_DELETED, OnItemDeleted)
 	ON_WM_TIMER()
 	ON_COMMAND(ID_MENU_EXPORT, OnMenuExport)
@@ -193,6 +194,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_UPDATE_COMMAND_UI(ID_MENU_NEWCLIP, OnUpdateMenuNewclip)
 	ON_WM_CTLCOLOR_REFLECT()
 	ON_COMMAND_RANGE(3000, 4000, OnAddinSelect)
+	ON_MESSAGE(NM_ALL_SELECTED, OnSelectAll)
 	END_MESSAGE_MAP()
 
 
@@ -352,7 +354,7 @@ void CQPasteWnd::MoveControls()
 	}
 	
 	// Resize the list control
-	m_lstHeader.MoveWindow(0, lTopOfListBox, cx, cy - 23 - lTopOfListBox);
+	m_lstHeader.MoveWindow(0, lTopOfListBox, cx, cy - 25 - lTopOfListBox);
 	
 	int nWidth = cx;
 	
@@ -365,7 +367,7 @@ void CQPasteWnd::MoveControls()
 	else
 		m_btCancel.ShowWindow(SW_HIDE);
 	
-	m_Search.MoveWindow(18, cy - 20, nWidth-20, 18);
+	m_Search.MoveWindow(18, cy - 20, nWidth-20, 19);
 	
 	m_ShowGroupsFolderBottom.MoveWindow(0, cy - 19, 18, 16);
 	
@@ -408,9 +410,9 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 	}
 	else if (nState == WA_ACTIVE || nState == WA_CLICKACTIVE)
 	{
-		if(!theApp.m_bShowingQuickPaste)
+		if(theApp.m_bShowingQuickPaste == false)
 		{
-			ShowQPasteWindow(m_Cache.size() == 0);
+			ShowQPasteWindow(m_mapCache.size() == 0);
 		}
 
 		//Unregister the global hot keys for the last ten copies
@@ -420,6 +422,8 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 
 BOOL CQPasteWnd::HideQPasteWindow()
 {
+	Log(_T("HideQPasteWindow"));
+
 	if(!theApp.m_bShowingQuickPaste) 
 		return FALSE;
 
@@ -432,7 +436,6 @@ BOOL CQPasteWnd::HideQPasteWindow()
 	theApp.m_activeWnd.ReleaseFocus();
 	
 	SetEvent(m_Events[THREAD_DESTROY_ACCELERATORS]);
-//	m_lstHeader.DestroyAndCreateAccelerator(FALSE);
 	
 	KillTimer(TIMER_FILL_CACHE);
 	
@@ -463,9 +466,10 @@ BOOL CQPasteWnd::HideQPasteWindow()
 
 		m_CritSection.Lock();
 		{
-			m_Cache.clear();
+			m_mapCache.clear();
 		}
 		m_CritSection.Unlock();
+
 	}
 	
 	return TRUE;
@@ -473,11 +477,13 @@ BOOL CQPasteWnd::HideQPasteWindow()
 
 BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 {
+	theApp.m_bShowingQuickPaste = true;
+
+	Log(StrF(_T("ShowQPasteWindow - %d %d"), bFillList, theApp.m_bShowingQuickPaste));
+
 	//Ensure we have the latest theme file, this checks the last write time so it doesn't read the file each time
 	g_Opt.m_Theme.Load(g_Opt.GetTheme(), false, true);
 
-	//Set the flag so we can't open this up again
-	theApp.m_bShowingQuickPaste = true;
 	SetCaptionColorActive(g_Opt.m_bShowPersistent, theApp.GetConnectCV());
 	
 	// use invalidation to avoid unnecessary repainting
@@ -508,11 +514,6 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 	
 	m_lstHeader.SetShowTextForFirstTenHotKeys(CGetSetOptions::GetShowTextForFirstTenHotKeys());
 
-	m_CritSection.Lock();
-		if(m_Cache.size() == 0)
-			bFillList = TRUE;
-	m_CritSection.Unlock();
-	
 	if(bFillList)
 		FillList();	// FillList calls MoveControls
 	else
@@ -671,31 +672,6 @@ BOOL CQPasteWnd::NewGroup( bool bGroupSelection )
 	return TRUE;
 }
 
-long CQPasteWnd::SetListID(long lID)
-{
-	long lRet = -1;
-
-	m_CritSection.Lock();
-	{
-		int nCount = m_Cache.size();
-		for(int i = 0; i < nCount; i++)
-		{
-			CMainTable table = m_Cache[i];
-
-			if(table.m_lID == lID)
-			{
-				m_lstHeader.SetListPos(i);
-				lRet = i;
-				break;
-			}
-		}
-	}
-	m_CritSection.Unlock();
-
-	return lRet;
-}
-
-
 LRESULT CQPasteWnd::OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam)
 {
 	OpenID(wParam);
@@ -749,7 +725,7 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 
 		m_CritSection.Lock();
 		{
-			m_Cache.clear();
+			m_mapCache.clear();
 		}
 		m_CritSection.Unlock();
 	}
@@ -882,7 +858,6 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 
 		m_strSQLSearch = strFilter;
 	}
-	
 
 	m_CritSection.Lock();
 		//Format the count and select sql queries for the thread
@@ -892,6 +867,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch/*=""*/)
 						_T("lShortCut, bIsGroup, QuickPasteText FROM Main where %s order by %s"), strFilter, csSort);
 
 		m_lItemsPerPage = m_lstHeader.GetCountPerPage();
+		
 	m_CritSection.Unlock();
 
 	SetEvent(m_Events[THREAD_DO_QUERY]);
@@ -1275,17 +1251,13 @@ void CQPasteWnd::OnMenuProperties()
 	{
 		m_CritSection.Lock();
 		{
-			if(nRow >= 0 && nRow < (int)m_Cache.size())
+			MainTypeMap::iterator iter = m_mapCache.find(nRow);
+			if(iter != m_mapCache.end())
 			{
-				CMainTable table;
-				table = m_Cache[nRow];
-
 				CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), lID);
 				if(!q.eof())
 				{
-					FillMainTable(table, q);
-
-					m_Cache[nRow] = table;
+					FillMainTable(iter->second, q);
 				}
 			}
 		}
@@ -1448,12 +1420,13 @@ void CQPasteWnd::OnMenuQuickpropertiesSettoneverautodelete()
 	m_CritSection.Lock();
 	{
 		count = Indexs.GetSize();
-		for(int i = 0; i < count; i++)
+		for(int row = 0; row < count; row++)
 		{
-			CMainTable table;
-			table = m_Cache[Indexs[i]];
-			table.m_bDontAutoDelete = true;
-			m_Cache[Indexs[i]] = table;
+			MainTypeMap::iterator iter = m_mapCache.find(row);
+			if(iter != m_mapCache.end())
+			{
+				iter->second.m_bDontAutoDelete = true;
+			}
 		}
 	}
 	m_CritSection.Unlock();
@@ -1483,12 +1456,13 @@ void CQPasteWnd::OnMenuQuickpropertiesAutodelete()
 	m_CritSection.Lock();
 	{
 		count = Indexs.GetSize();
-		for(int i = 0; i < count; i++)
+		for(int row = 0; row < count; row++)
 		{
-			CMainTable table;
-			table = m_Cache[Indexs[i]];
-			table.m_bDontAutoDelete = false;
-			m_Cache[Indexs[i]] = table;
+			MainTypeMap::iterator iter = m_mapCache.find(row);
+			if(iter != m_mapCache.end())
+			{
+				iter->second.m_bDontAutoDelete = false;
+			}
 		}
 	}
 	m_CritSection.Unlock();
@@ -1518,12 +1492,13 @@ void CQPasteWnd::OnMenuQuickpropertiesRemovehotkey()
 	m_CritSection.Lock();
 	{
 		count = Indexs.GetSize();
-		for(int i = 0; i < count; i++)
+		for(int row = 0; row < count; row++)
 		{
-			CMainTable table;
-			table = m_Cache[Indexs[i]];
-			table.m_bHasShortCut = false;
-			m_Cache[Indexs[i]] = table;
+			MainTypeMap::iterator iter = m_mapCache.find(row);
+			if(iter != m_mapCache.end())
+			{
+				iter->second.m_bHasShortCut = false;
+			}
 		}
 	}
 	m_CritSection.Unlock();
@@ -1553,12 +1528,13 @@ void CQPasteWnd::OnQuickpropertiesRemovequickpaste()
 	m_CritSection.Lock();
 	{
 		count = Indexs.GetSize();
-		for(int i = 0; i < count; i++)
+		for(int row = 0; row < count; row++)
 		{
-			CMainTable table;
-			table = m_Cache[Indexs[i]];
-			table.m_QuickPaste.Empty();
-			m_Cache[Indexs[i]] = table;
+			MainTypeMap::iterator iter = m_mapCache.find(row);
+			if(iter != m_mapCache.end())
+			{
+				iter->second.m_QuickPaste.Empty();
+			}
 		}
 	}
 	m_CritSection.Unlock();
@@ -1924,21 +1900,29 @@ void CQPasteWnd::DeleteSelectedRows()
 	m_lstHeader.GetSelectionItemData(IDs);
 	m_lstHeader.GetSelectionIndexes(Indexs);
 
-	IDs.DeleteIDs();
+	IDs.DeleteIDs(true, theApp.m_db);
 
 	Indexs.SortDescending();
 	int nCount = Indexs.GetSize();
+
+	int erasedCount = 0;
 
 	m_CritSection.Lock();
 	{
 		for(int i = 0; i < nCount; i++)
 		{
-			m_Cache.erase(m_Cache.begin() + Indexs[i]);
+			MainTypeMap::iterator iter = m_mapCache.find(Indexs[i]);
+			if(iter != m_mapCache.end() &&
+				iter->second.m_lID > 0)
+			{
+				m_mapCache.erase(iter);
+				erasedCount++;
+			}
 		}
 	}
 	m_CritSection.Unlock();
 
-	m_lstHeader.SetItemCountEx(m_lstHeader.GetItemCount() - nCount);
+	m_lstHeader.SetItemCountEx(m_lstHeader.GetItemCount() - erasedCount);
 	
 	// if there are no items after the one we deleted, then select the last one.
 	if(nFirstSel >= m_lstHeader.GetItemCount())
@@ -2027,15 +2011,6 @@ void CQPasteWnd::SetKeyModiferState(bool bActive)
 
 BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg) 
 {
-	//DWORD dID;
-	//if(m_MainAccels.OnMsg(pMsg, dID))
-	//{
-	//	switch(dID)
-	//	{
-	//	
-	//	}
-	//}
-
 	switch(pMsg->message) 
 	{
 	case WM_KEYDOWN:
@@ -2260,8 +2235,7 @@ void CQPasteWnd::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 
 void CQPasteWnd::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult) 
-{
-	
+{	
 	LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
 	LV_ITEM* pItem= &(pDispInfo)->item;
 	
@@ -2274,32 +2248,55 @@ void CQPasteWnd::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 			{
 				m_CritSection.Lock();
 				{
-					if(pItem->iItem >= 0 && pItem->iItem < (int)m_Cache.size())
-					{
-						CMainTable table = m_Cache[pItem->iItem];
-				
+					MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
+					if(iter != m_mapCache.end())
+					{				
 						CString cs;
-						if(table.m_bDontAutoDelete)
+						if(iter->second.m_bDontAutoDelete)
 							cs += "*";
 						
-						if(table.m_bHasShortCut)
+						if(iter->second.m_bHasShortCut)
 							cs += "s";
                 
-						if(table.m_bIsGroup)
+						if(iter->second.m_bIsGroup)
 							cs += "G";
 						
 						// attached to a group
-						if(table.m_bHasParent)
+						if(iter->second.m_bHasParent)
 							cs += "!";
 
-						if(table.m_QuickPaste.IsEmpty() == FALSE)
+						if(iter->second.m_QuickPaste.IsEmpty() == FALSE)
 							cs += "Q";
 						
 						// pipe is the "end of symbols" marker
-						cs += "|" + CMainTableFunctions::GetDisplayText(g_Opt.m_nLinesPerRow, table.m_Desc);
+						cs += "|" + CMainTableFunctions::GetDisplayText(g_Opt.m_nLinesPerRow, iter->second.m_Desc);
 						
 						lstrcpyn(pItem->pszText, cs, pItem->cchTextMax);
 						pItem->pszText[pItem->cchTextMax-1] = '\0';
+					}
+					else
+					{
+						lstrcpyn(pItem->pszText, _T("Loading..."), pItem->cchTextMax);
+						pItem->pszText[pItem->cchTextMax-1] = '\0';
+
+						bool addToLoadItems = true;
+
+						for(UINT y = 0; y < m_loadItems.size(); y++)
+						{
+							if(pItem->iItem >= m_loadItems[y].x && pItem->iItem <= m_loadItems[y].y)
+							{
+								addToLoadItems = false;
+								break;
+							}
+						}
+
+						if(addToLoadItems)
+						{
+							CPoint loadItem(pItem->iItem, (m_lstHeader.GetTopIndex() + m_lstHeader.GetCountPerPage() + 2));
+							m_loadItems.push_back(loadItem);
+						}
+						
+						SetEvent(m_Events[THREAD_LOAD_ITEMS]);
 					}
 				}
 				m_CritSection.Unlock();
@@ -2319,10 +2316,10 @@ void CQPasteWnd::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 			{
 				m_CritSection.Lock();
 				{
-					if(pItem->iItem >= 0 && pItem->iItem < (int)m_Cache.size())
+					MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
+					if(iter != m_mapCache.end())
 					{
-						CMainTable table = m_Cache[pItem->iItem];
-						pItem->lParam = table.m_lID;
+						pItem->lParam = iter->second.m_lID;
 					}
 				}
 				m_CritSection.Unlock();
@@ -2778,13 +2775,14 @@ void CQPasteWnd::OnUpdateMenuNewclip(CCmdUI *pCmdUI)
 	}
 }
 
-
 LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 {
 	m_lstHeader.SetItemCountEx(wParam);
+	m_lstHeader.RefreshVisibleRows();
 
 	MoveControls();
 	UpdateStatus(false);
+	RedrawWindow();
 
 	return TRUE;
 }
@@ -2795,63 +2793,33 @@ LRESULT CQPasteWnd::OnItemDeleted(WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-LRESULT CQPasteWnd::OnRefeshVisibleRows(WPARAM wParam, LPARAM lParam)
+LRESULT CQPasteWnd::OnRefeshRow(WPARAM wParam, LPARAM lParam)
 {
-	BOOL bRet = FALSE;
-
-	BOOL bLastRefresh = wParam;
-	BOOL bRefreshRows = lParam;
-
-	m_CritSection.Lock();
-		bool bFoundFocusItem = m_bFoundClipToSetFocusTo;
-	m_CritSection.Unlock();
+	int clipId = wParam;
+	int listPos = lParam;
 	
-//	Log(StrF(_T("RefreshRows RefreshRows = %d Focus ID = %d found focus = %d"), 
-//			bRefreshRows, theApp.m_FocusID, bFoundFocusItem));
-
-	if(bFoundFocusItem == false)
+	if(m_bFoundClipToSetFocusTo == false)
 	{
 		long lFocusIndex = -1;
-		if(theApp.m_FocusID >= 0 && ((lFocusIndex = SetListID(theApp.m_FocusID)) >= 0))
+		if(theApp.m_FocusID == clipId ||
+			clipId == -1)
 		{
-			m_CritSection.Lock();
 			m_bFoundClipToSetFocusTo = true;
-			m_CritSection.Unlock();
-
 			theApp.m_FocusID = -1;
-			bRet = TRUE;
-			UpdateStatus(false);
-		}
-		else if(theApp.m_FocusID < 0 || bLastRefresh)
-		{
-			if(m_lstHeader.m_bStartTop)
-			{
-				m_lstHeader.SetListPos(0);
-			}
-			else
-			{
-				int idx = m_lstHeader.GetItemCount() - 1;
-				// if there are elements
-				if(idx >= 0)
-					m_lstHeader.SetListPos(idx);
-			}
-			
-			m_CritSection.Lock();
-				m_bFoundClipToSetFocusTo = true;
-			m_CritSection.Unlock();
-			theApp.m_FocusID = -1;
-			bRet = TRUE;
+			m_lstHeader.SetListPos(listPos);
 			UpdateStatus(false);
 		}
 	}
 
-	if(bRefreshRows)
+	int topIndex = m_lstHeader.GetTopIndex();
+	int lastIndex = topIndex + m_lstHeader.GetCountPerPage();
+
+	if(listPos >= topIndex && listPos <= lastIndex)
 	{
-		Invalidate();
-		m_lstHeader.RefreshVisibleRows();
+		m_lstHeader.RefreshRow(listPos);
 	}
-
-	return bRet;
+	
+	return true;
 }
 
 void CQPasteWnd::FillMainTable(CMainTable &table, CppSQLite3Query &q)
@@ -2882,7 +2850,7 @@ void CQPasteWnd::RunThread()
 
 		while(true)
 		{
-			DWORD dwEvent = WaitForMultipleObjects(4, m_Events, FALSE, ONE_MINUTE*10);
+			DWORD dwEvent = WaitForMultipleObjects(5, m_Events, FALSE, ONE_MINUTE*10);
 
 			if(dwEvent == WAIT_FAILED)
 			{
@@ -2956,73 +2924,104 @@ void CQPasteWnd::RunThread()
 					DWORD dRet = WaitForSingleObject(UpdateTimeEvent, 2000);
 
 					long lTick = GetTickCount();
-					BOOL bRefreshedRows = false;
 
 					m_CritSection.Lock();
 						m_bFoundClipToSetFocusTo = false;
 						CString CountSQL(m_CountSQL);
-						CString SQL(m_SQL);
-						m_Cache.clear();
+						m_mapCache.clear();
+						m_loadItems.clear();
 						m_bStopQuery = false;
-						int nRefreshInterval = m_lItemsPerPage;
-						if(nRefreshInterval <= 0)
-							nRefreshInterval = 10;
 					m_CritSection.Unlock();
 
-					int nNumRows = 0;
-					bool bFoundFocusItem = false;
-					bool bStopQuerySet = false;
-					
+					long lRecordCount = 0;
+
 					try
 					{
-						long lRecordCount = db.execScalar(CountSQL);
+						lRecordCount = db.execScalar(CountSQL);
 						::PostMessage(m_hWnd, NM_SET_LIST_COUNT, lRecordCount, 0);
+					}
+					CATCH_SQLITE_EXCEPTION	
+					
+					SetEvent(m_SearchingEvent);
+					Log(StrF(_T("Set list count = %d, time = %d"), lRecordCount, GetTickCount() - lTick));
+				}
+				break;
+
+				case THREAD_LOAD_ITEMS:
+				{
+					ResetEvent(m_SearchingEvent);
+
+					long startTick = GetTickCount();
+					int loadItemsIndex = 0;
+					int loadItemsCount = 0;
+					int loadCount = 0;
+					CString localSql;
+					bool clearFirstLoadItem = false;
+
+					m_CritSection.Lock();
+						if(m_loadItems.size() > 0)
+						{
+							loadItemsIndex = m_loadItems[0].x;
+							loadItemsCount = m_loadItems[0].y - m_loadItems[0].x;
+							localSql = m_SQL;
+							m_bStopQuery = false;
+							clearFirstLoadItem = true;
+						}
+					m_CritSection.Unlock();
+
+					if(clearFirstLoadItem)
+					{
+						Log(StrF(_T("Load Items start = %d, count = %d"), loadItemsIndex, loadItemsCount));
+
+						CString limit;
+						limit.Format(_T(" LIMIT %d OFFSET %d"), loadItemsCount, loadItemsIndex);
+						localSql += limit;
 
 						CMainTable table;
 
-						CppSQLite3Query q = db.execQuery(SQL);
+						CppSQLite3Query q = db.execQuery(localSql);
 						while(!q.eof())
 						{
 							FillMainTable(table, q);
+							table.m_listIndex = loadItemsIndex;
 
 							m_CritSection.Lock();
 							{
-								m_Cache.push_back(table);
-
-								if(m_bStopQuery)
-								{
-									Log(StrF(_T("StopQuery called exiting filling cache count = %d"), nNumRows));
-									m_CritSection.Unlock();
-									bStopQuerySet = true;
-									break;
-								}
-
-								bFoundFocusItem = m_bFoundClipToSetFocusTo;
+								m_mapCache[loadItemsIndex] = table;
 							}
 							m_CritSection.Unlock();
 
-							q.nextRow();
-							
-							nNumRows++;
-
-							if(bFoundFocusItem == false && nNumRows && ((nNumRows % nRefreshInterval) == 0))
+							if(m_bStopQuery)
 							{
-								::PostMessage(m_hWnd, NM_REFRESH_VISIBLE_ROWS, FALSE, !bRefreshedRows);
-
-								nRefreshInterval = 100;
-								bRefreshedRows = TRUE;
+								Log(StrF(_T("StopQuery called exiting filling cache count = %d"), loadItemsIndex));
+								break;
 							}
-						}
-					}
-					CATCH_SQLITE_EXCEPTION	
 
-					if(bStopQuerySet == false)
-					{
-						::PostMessage(m_hWnd, NM_REFRESH_VISIBLE_ROWS, TRUE, !bRefreshedRows);
+							q.nextRow();
+
+							loadItemsIndex++;
+							loadCount++;
+
+							::PostMessage(m_hWnd, NM_REFRESH_ROW, table.m_lID, table.m_listIndex);
+						}
+
+						::PostMessage(m_hWnd, NM_REFRESH_ROW, -1, 0);
+
+						if(clearFirstLoadItem)
+						{
+							m_CritSection.Lock();
+								m_loadItems.erase(m_loadItems.begin());
+							m_CritSection.Unlock();
+						}
+
+						Log(StrF(_T("Load items End count = %d, time = %d"), loadCount, GetTickCount() - startTick));
 					}
-					
+					else
+					{
+						Log(_T("No load items in array not loading any clips"));
+					}
+
 					SetEvent(m_SearchingEvent);
-					Log(StrF(_T("List filled count = %d, time = %d"), nNumRows, GetTickCount() - lTick));
 				}
 				break;
 
@@ -3107,4 +3106,28 @@ void CQPasteWnd::OnAddinSelect(UINT id)
 			}
 		}
 	}
+}
+
+LRESULT CQPasteWnd::OnSelectAll(WPARAM wParam, LPARAM lParam)
+{
+	BOOL ret = FALSE;
+	m_CritSection.Lock();
+
+	if(m_mapCache.size() < m_lstHeader.GetItemCount())
+	{
+		Log(_T("All items selected loading all items from the db"));
+
+		CPoint loadItem(0, m_lstHeader.GetItemCount());
+		m_loadItems.push_back(loadItem);
+
+		SetEvent(m_Events[THREAD_LOAD_ITEMS]);
+
+		ret = TRUE;
+
+		UpdateStatus(false);
+	}
+
+	m_CritSection.Unlock();
+
+	return ret;
 }

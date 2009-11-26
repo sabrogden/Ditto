@@ -28,8 +28,9 @@
 #define NM_FILL_REST_OF_LIST		WM_USER+0x115
 
 #define NM_SET_LIST_COUNT			WM_USER+0x116
-#define NM_REFRESH_VISIBLE_ROWS		WM_USER+0x117
 #define NM_ITEM_DELETED				WM_USER+0x118
+#define NM_ALL_SELECTED				WM_USER+0x119
+#define NM_REFRESH_ROW				WM_USER+0x120
 
 #define COPY_BUFFER_HOT_KEY_1_ID	-100
 #define COPY_BUFFER_HOT_KEY_2_ID	-101
@@ -89,6 +90,7 @@ public:
 	void GetSelectionIndexes(ARRAY &arr);
 	void GetSelectionItemData(ARRAY &arr);
 	void RefreshVisibleRows();
+	void RefreshRow(int row);
 	void RemoveAllSelection();
 	BOOL SetSelection(int nRow, BOOL bSelect = TRUE);
 	BOOL SetText(int nRow, int nCol, CString cs);
@@ -131,20 +133,14 @@ protected:
 		
 	WCHAR *m_pwchTip;
 	TCHAR *m_pchTip;
-
 	HFONT m_SmallFont;
-
-	//Accelerator
 	CAccels	m_Accels;
-
 	CMapIDtoCF m_ThumbNails;
 	CMapIDtoCF m_RTFData;
-
 	CToolTipEx *m_pToolTip;
-
 	CFont m_Font;
-
 	IFormattedTextDraw *m_pFormatter;
+	bool m_allSelected;
 	
 	// Generated message map functions
 protected:

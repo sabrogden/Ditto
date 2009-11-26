@@ -26,6 +26,22 @@ static char THIS_FILE[] = __FILE__;
 
 bool CShowMainFrame::m_bShowingMainFrame = false;
 
+UINT RemoveDeletedItemsThread(LPVOID pParam)
+{
+	CMainFrame *mainWindow = (CMainFrame*)pParam;
+	if(mainWindow != NULL)
+	{
+		if(mainWindow->m_deletingEntries == false)
+		{
+			mainWindow->m_deletingEntries = true;
+			RemoveOldEntries();
+			mainWindow->m_deletingEntries = false;
+		}
+	}
+
+	return true;
+}
+
 CShowMainFrame::CShowMainFrame() : 
 	m_bHideMainFrameOnExit(false), 
 	m_hWnd(NULL)
@@ -98,12 +114,16 @@ CMainFrame::CMainFrame()
 	m_startKeyStateTime = 0;
 	m_bMovedSelectionMoveKeyState = false;
 	m_keyModifiersTimerCount = 0;
+	m_deletingEntries = false;
 }
 
 CMainFrame::~CMainFrame()
 {
 	if(g_Opt.m_bUseHookDllForFocus)
+	{
+		Log(_T("Unloading focus dll for tracking focus changes"));
 		StopMonitoringFocusChanges();
+	}
 	
 	CGetSetOptions::SetMainHWND(0);
 }
@@ -127,10 +147,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	if(g_Opt.m_bUseHookDllForFocus)
 	{
+		Log(_T("Loading hook dll to track focus changes"));
 		MonitorFocusChanges(m_hWnd, WM_FOCUS_CHANGED);
 	}
 	else
 	{
+		Log(_T("Setting polling timer to track focus"));
 		SetTimer(ACTIVE_WINDOW_TIMER, g_Opt.FocusWndTimerTimeout(), 0);
 	}
 	
@@ -172,8 +194,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	SetTimer(CLOSE_WINDOW_TIMER, ONE_MINUTE*60, 0);
 	SetTimer(REMOVE_OLD_REMOTE_COPIES, ONE_DAY, 0);
-
-	theApp.Delayed_RemoveOldEntries(ONE_MINUTE*2);
+	SetTimer(REMOVE_OLD_ENTRIES_TIMER, 2000, 0);
 
 	m_ulCopyGap = CGetSetOptions::GetCopyGap();
 
@@ -501,9 +522,10 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		}
 	case REMOVE_OLD_ENTRIES_TIMER:
 		{
-			theApp.m_bRemoveOldEntriesPending = false;
-			RemoveOldEntries();
-			KillTimer(REMOVE_OLD_ENTRIES_TIMER);
+			if(m_deletingEntries == false)
+			{
+				AfxBeginThread(RemoveDeletedItemsThread, this);
+			}
 			break;
 		}
 	case CHECK_FOR_UPDATE:
@@ -695,9 +717,12 @@ LRESULT CMainFrame::OnShutDown(WPARAM wParam, LPARAM lParam)
 
 LRESULT CMainFrame::OnClipboardCopied(WPARAM wParam, LPARAM lParam)
 {
+	Log(_T("Start of function OnClipboardCopied"));
 	// if the delay is undesirable, this could be altered to save one at a time,
 	//  allowing the processing of other messages between saving clips.
 	theApp.SaveCopyClips();
+
+	Log(_T("End of function OnClipboardCopied"));
 	return TRUE;
 }
 
@@ -836,8 +861,6 @@ LRESULT CMainFrame::OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam)
 
 	LogSendRecieveInfo("---------End of OnAddToDatabaseFromSocket");
 
-	theApp.Delayed_RemoveOldEntries(60000);
-	
 	return TRUE;
 }
 

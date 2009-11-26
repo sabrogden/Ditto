@@ -231,16 +231,34 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 
 		db.execQuery(_T("SELECT lID, TypeText FROM Types"));
 
+		try
+		{
+			db.execDML(_T("DROP TRIGGER delete_data_trigger"));
+		}
+		catch(CppSQLite3Exception& e)
+		{
+			e.errorCode();
+		}
+
+		try
+		{
+			db.execDML(_T("DROP TRIGGER delete_copy_buffer_trigger"));
+		}
+		catch(CppSQLite3Exception& e)
+		{
+			e.errorCode();
+		}
+
 		//This was added later so try to add each time and catch the exception here
  		try
  		{
- 			db.execDML(_T("CREATE TRIGGER delete_data_trigger BEFORE DELETE ON Main FOR EACH ROW\n")
- 						_T("BEGIN\n")
- 							_T("DELETE FROM Data WHERE lParentID = old.lID;\n")
- 						_T("END\n"));
+			db.execDML(_T("CREATE TRIGGER delete_data_trigger BEFORE DELETE ON Main FOR EACH ROW\n")
+				_T("BEGIN\n")
+					_T("INSERT INTO MainDeletes VALUES(old.lID, datetime('now'));\n")
+				_T("END\n"));
  		}
- 		catch(CppSQLite3Exception& e)
- 		{
+		catch(CppSQLite3Exception& e)
+		{
  			e.errorCode();
  		}
 
@@ -257,10 +275,25 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 				_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")
 				_T("lClipID INTEGER,")
 				_T("lCopyBuffer INTEGER)"));
+		}
 
-			db.execDML(_T("CREATE TRIGGER delete_copy_buffer_trigger BEFORE DELETE ON Main FOR EACH ROW\n")
+		//This was added later so try to add each time and catch the exception here
+		try
+		{
+			db.execQuery(_T("SELECT clipId FROM MainDeletes"));
+		}
+		catch(CppSQLite3Exception& e)
+		{
+			e.errorCode();
+
+			db.execDML(_T("CREATE TABLE MainDeletes(")
+				_T("clipID INTEGER,")
+				_T("modifiedDate)"));
+
+			db.execDML(_T("CREATE TRIGGER MainDeletes_delete_data_trigger BEFORE DELETE ON MainDeletes FOR EACH ROW\n")
 				_T("BEGIN\n")
-				_T("DELETE FROM CopyBuffers WHERE lClipID = old.lID;\n")
+				_T("DELETE FROM CopyBuffers WHERE lClipID = old.clipID;\n")
+				_T("DELETE FROM Data WHERE lParentID = old.clipID;\n")
 				_T("END\n"));
 		}
 	}
@@ -304,18 +337,23 @@ BOOL CreateDB(CString csFile)
 		db.execDML(_T("CREATE INDEX Main_Date on Main(lDate DESC)"));
 
 		db.execDML(_T("CREATE TRIGGER delete_data_trigger BEFORE DELETE ON Main FOR EACH ROW\n")
-						_T("BEGIN\n")
-							_T("DELETE FROM Data WHERE lParentID = old.lID;\n")
-						_T("END\n"));
+			_T("BEGIN\n")
+				_T("INSERT INTO MainDeletes VALUES(old.lID, datetime('now'));\n")
+			_T("END\n"));
 
 		db.execDML(_T("CREATE TABLE CopyBuffers(")
 			_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")
 			_T("lClipID INTEGER, ")
 			_T("lCopyBuffer INTEGER)"));
 
-		db.execDML(_T("CREATE TRIGGER delete_copy_buffer_trigger BEFORE DELETE ON Main FOR EACH ROW\n")
+		db.execDML(_T("CREATE TABLE MainDeletes(")
+			_T("clipID INTEGER,")
+			_T("modifiedDate)"));
+
+		db.execDML(_T("CREATE TRIGGER MainDeletes_delete_data_trigger BEFORE DELETE ON MainDeletes FOR EACH ROW\n")
 			_T("BEGIN\n")
-			_T("DELETE FROM CopyBuffers WHERE lClipID = old.lID;\n")
+				_T("DELETE FROM CopyBuffers WHERE lClipID = old.clipID;\n")
+				_T("DELETE FROM Data WHERE lParentID = old.clipID;\n")
 			_T("END\n"));
 
 		db.close();
@@ -396,8 +434,14 @@ BOOL RepairDatabase()
 
 BOOL RemoveOldEntries()
 {
+	Log(StrF(_T("Beginning of RemoveOldEntries MaxEntries: %d - Keep days: %d"), CGetSetOptions::GetMaxEntries(), CGetSetOptions::GetExpiredEntries()));
+
 	try
 	{
+		CppSQLite3DB db;
+		CString csDbPath = CGetSetOptions::GetDBPath();
+		db.open(csDbPath);
+
 		if(CGetSetOptions::GetCheckForMaxEntries())
 		{
 			long lMax = CGetSetOptions::GetMaxEntries();
@@ -405,17 +449,22 @@ BOOL RemoveOldEntries()
 			{
 				CClipIDs IDs;
 				
-				CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, lShortCut, lDontAutoDelete FROM Main ORDER BY lDate DESC LIMIT -1 OFFSET %d"), lMax);			
+				CppSQLite3Query q = db.execQueryEx(_T("SELECT lID, lShortCut, lDontAutoDelete FROM Main ORDER BY lDate DESC LIMIT -1 OFFSET %d"), lMax);			
 				while(q.eof() == false)
 				{
 					//Only delete entries that have no shortcut and don't have the flag set
 					if(q.getIntField(_T("lShortCut")) == 0 && q.getIntField(_T("lDontAutoDelete")) == 0)
 						IDs.Add(q.getIntField(_T("lID")));
 
+					Log(StrF(_T("From MaxEntries - Deleting Id: %d"), q.getIntField(_T("lID"))));
+
 					q.nextRow();
 				}
 
-				IDs.DeleteIDs();
+				if(IDs.GetCount() > 0)
+				{
+					IDs.DeleteIDs(false, db);
+				}
 			}
 		}
 		
@@ -430,22 +479,38 @@ BOOL RemoveOldEntries()
 				
 				CClipIDs IDs;
 				
-				CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID FROM Main ")
+				CppSQLite3Query q = db.execQueryEx(_T("SELECT lID FROM Main ")
 													_T("WHERE lDate < %d AND ")
 													_T("lShortCut = 0 AND lDontAutoDelete = 0"), now.GetTime());
 
 				while(q.eof() == false)
 				{
 					IDs.Add(q.getIntField(_T("lID")));
+
+					Log(StrF(_T("From Clips Expire - Deleting Id: %d"), q.getIntField(_T("lID"))));
+
 					q.nextRow();
 				}
 				
-				IDs.DeleteIDs();
+				if(IDs.GetCount() > 0)
+				{
+					IDs.DeleteIDs(false, db);
+				}
 			}
 		}
+
+		Log(_T("Before Deleting emptied out data"));
+
+		//delete any data items sitting out there that the main table data was deleted
+		//this was done to speed up deleted from the main table
+		int deleteCount = db.execDML(_T("DELETE FROM MainDeletes"));
+
+		Log(StrF(_T("After Deleting emptied out data rows, Count: %d"), deleteCount));
 	}
 	CATCH_SQLITE_EXCEPTION
 	
+	Log(_T("End of RemoveOldEntries"));
+
 	return TRUE;
 }
 

@@ -95,12 +95,11 @@ CCP_MainApp::CCP_MainApp()
 {
 	m_bAppRunning = false;
 	m_bAppExiting = false;
-
+	m_bStartupDisconnected = false;
 	m_MainhWnd = NULL;
 	m_pMainFrame = NULL;
 
 	m_bShowingQuickPaste = false;
-	m_bRemoveOldEntriesPending = false;
 
 	m_IC_bCopy = false;
 
@@ -147,6 +146,13 @@ BOOL CCP_MainApp::InitInstance()
 
 	DittoCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
+
+	//if starting from a u3 device we will pass in -U3Start
+	if(cmdInfo.m_bU3)
+		g_Opt.m_bU3 = cmdInfo.m_bU3 ? TRUE : FALSE;
+
+	g_Opt.LoadSettings();
+
 	if(cmdInfo.m_strFileName.IsEmpty() == FALSE)
 	{
 		try
@@ -180,18 +186,20 @@ BOOL CCP_MainApp::InitInstance()
 	}
 	else if(cmdInfo.m_bConnect || cmdInfo.m_bDisconnect)
 	{
+		int ret = 0;
 		HWND hWnd = (HWND)CGetSetOptions::GetMainHWND();
 		if(hWnd)
-			::SendMessage(hWnd, WM_SET_CONNECTED, cmdInfo.m_bConnect, cmdInfo.m_bDisconnect);
+		{
+			ret = ::SendMessage(hWnd, WM_SET_CONNECTED, cmdInfo.m_bConnect, cmdInfo.m_bDisconnect);
+		}
 
-		return FALSE;
+		if(ret == 1)
+		{
+			return FALSE;
+		}
+		
+		m_bStartupDisconnected = true;
 	}
-
-	//if starting from a u3 device we will pass in -U3Start
-	if(cmdInfo.m_bU3)
-		g_Opt.m_bU3 = cmdInfo.m_bU3 ? TRUE : FALSE;
-
-	g_Opt.LoadSettings();
 
 	CInternetUpdate update;
 
@@ -362,6 +370,13 @@ void CCP_MainApp::StartCopyThread()
 
 	VERIFY( m_CopyThread.CreateThread(CREATE_SUSPENDED) );
 	m_CopyThread.ResumeThread();
+	
+	if(m_bStartupDisconnected)
+	{
+		Sleep(2000);
+		Log(_T("Starting Ditto up disconnected from the clipboard"));
+		SetConnectCV(false);
+	}
 }
 
 void CCP_MainApp::StopCopyThread()
@@ -448,6 +463,8 @@ void CCP_MainApp::ReloadTypes()
 
 long CCP_MainApp::SaveCopyClips()
 {
+	Log(_T("Start of function SaveCopyClips"));
+
 	long lID = 0;
 	int count;
 
@@ -471,6 +488,8 @@ long CCP_MainApp::SaveCopyClips()
 
 	if(m_QuickPasteMode == ADDING_QUICK_PASTE)
 	{
+		Log(_T("SaveCopyclips from Quick Paste - Start"));
+
 		//this will be added when they are done entering the quick paste text
 		m_pQuickPasteClip = pClips;
 		
@@ -478,15 +497,26 @@ long CCP_MainApp::SaveCopyClips()
 
 		//go ahead and send the clips out even though it won't be added for a bit
 		count = 1;
+
+		Log(_T("SaveCopyclips from Quick Paste - End"));
 	}
 	else
 	{
+		Log(_T("SaveCopyClips Before AddToDb")); 
+
 		count = pClips->AddToDB(true);
+
+		Log(StrF(_T("SaveCopyclips After AddToDb, Count: %d"), count));
 
 		if(count > 0)
 		{
 			lID = pClips->GetTail()->m_ID;
+
+			Log(StrF(_T("SaveCopyclips After AddToDb, Id: %d Before OnCopyCopyCompleted"), lID));
+
 			OnCopyCompleted(lID, count);
+
+			Log(StrF(_T("SaveCopyclips After AddToDb, Id: %d After OnCopyCopyCompleted"), lID));
 
 			if(m_CopyBuffer.Active())
 			{
@@ -499,6 +529,7 @@ long CCP_MainApp::SaveCopyClips()
 	{
 		if(g_Opt.m_lAutoSendClientCount > 0)
 		{
+			Log(_T("Starting thread to send clip to friends"));
 			AfxBeginThread(SendClientThread, pCopyOfClips);
 			bEnteredThread = true;
 		}
@@ -509,6 +540,8 @@ long CCP_MainApp::SaveCopyClips()
 
 	if(bDeletepClips)
 		delete pClips;
+
+	Log(_T("Start of function SaveCopyClips"));
 
 	return lID;
 }
@@ -536,9 +569,6 @@ void CCP_MainApp::OnCopyCompleted(long lLastID, int count)
 {
 	if(count <= 0)
 		return;
-
-	// queue a message to RemoveOldEntries
-	Delayed_RemoveOldEntries(60000);
 
 	// update copy statistics
 	CGetSetOptions::SetTripCopyCount(-count);
@@ -694,15 +724,6 @@ void CCP_MainApp::ShowPersistent( bool bVal )
 		ASSERT( QPasteWnd() );
 		QPasteWnd()->SetCaptionColorActive(g_Opt.m_bShowPersistent, theApp.GetConnectCV());
 		QPasteWnd()->RefreshNc();
-	}
-}
-
-void CCP_MainApp::Delayed_RemoveOldEntries( UINT delay )
-{
-	if( !m_bRemoveOldEntriesPending )
-	{
-		m_bRemoveOldEntriesPending = true;
-		((CMainFrame*)theApp.m_pMainWnd)->SetTimer( REMOVE_OLD_ENTRIES_TIMER, delay, 0 );
 	}
 }
 

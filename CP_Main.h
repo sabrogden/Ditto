@@ -47,6 +47,7 @@ public:
 	// track stages of startup / shutdown
 	bool	m_bAppRunning;
 	bool	m_bAppExiting;
+	bool 	m_bStartupDisconnected;
 
 	bool	m_bExitServerThread;
 
@@ -148,9 +149,6 @@ public:
 	void SetStatus(const TCHAR* status = NULL, bool bRepaintImmediately = false);
 
 	void ShowPersistent(bool bVal);
-
-	bool	m_bRemoveOldEntriesPending;
-	void Delayed_RemoveOldEntries(UINT delay);
 
 	bool	m_bAsynchronousRefreshView;
 
