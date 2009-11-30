@@ -34,10 +34,10 @@ public:
 class CClipFormat : public IClipFormat
 {
 public:
-	CLIPFORMAT	m_cfType;
-    HGLOBAL		m_hgData;
-	bool		m_autoDeleteData;
-	long		m_lDBID;
+	CLIPFORMAT m_cfType;
+    HGLOBAL m_hgData;
+	bool m_autoDeleteData;
+	long m_lDBID;
 
 	CClipFormat(CLIPFORMAT cfType = 0, HGLOBAL hgData = 0, long lDBID = -1);
 	~CClipFormat();

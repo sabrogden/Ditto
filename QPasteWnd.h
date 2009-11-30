@@ -17,6 +17,8 @@
 #include <vector>
 #include <map>
 #include <afxmt.h>
+#include "ClipFormatQListCtrl.h"
+#include "QPasteWndThread.h"
 
 class CMainTable
 {
@@ -27,9 +29,17 @@ public:
 		m_bIsGroup(false),
 		m_bHasShortCut(false),
 		m_bHasParent(false),
-		m_listIndex(-1)
+		m_listIndex(-1),
+		m_hasCF_Dib(true),
+		m_hasCF_Rtf(true)
 	{
 	}
+	
+	~CMainTable()
+	{
+		
+	}
+
 	long m_lID;
 	CString m_Desc;
 	bool m_bDontAutoDelete;
@@ -38,10 +48,13 @@ public:
 	bool m_bHasParent;
 	CString m_QuickPaste;
 	int m_listIndex;
+	bool m_hasCF_Dib;
+	bool m_hasCF_Rtf;
 };
 
 
 typedef std::map<int, CMainTable> MainTypeMap;
+typedef std::map<int, CClipFormatQListCtrl> CF_DibTypeMap;
 
 
 
@@ -103,13 +116,12 @@ public:
 	long			m_lItemsPerPage;
 	bool			m_bModifersMoveActive;
 
+	CQPasteWndThread m_thread;
 	MainTypeMap m_mapCache;
 	std::vector<CPoint> m_loadItems;
-
-	HANDLE m_Events[4];
-	HANDLE m_ExitEvent;
-	HANDLE m_SearchingEvent;
-
+	std::vector<CClipFormatQListCtrl> m_ExtraDataLoadItems;
+	CF_DibTypeMap m_cf_dibCache;
+	CF_DibTypeMap m_cf_rtfCache;
 	CCriticalSection m_CritSection;
 
 	CAccels m_MainAccels;

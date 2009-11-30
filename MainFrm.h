@@ -13,6 +13,7 @@
 #include "QuickPaste.h"
 #include "ToolTipEx.h"
 #include "EditFrameWnd.h"
+#include "MainFrmThread.h"
 
 
 #define CLOSE_WINDOW_TIMER				1	
@@ -72,7 +73,10 @@ public:
 	bool m_bMovedSelectionMoveKeyState;
 	short m_keyModifiersTimerCount;
 	HWND m_tempFocusWnd;
-	bool m_deletingEntries;
+	CMainFrmThread m_thread;
+
+	CMenu m_TrayMenu;
+	NOTIFYICONDATA tnd;
 
 	void DoDittoCopyBufferPaste(int nCopyBuffer);
 	void DoFirstTenPositionsPaste(int nPos);
@@ -122,6 +126,7 @@ public:
 	afx_msg void OnFirstImport();
 	afx_msg void OnDestroy();
 	afx_msg void OnFirstNewclip();
+	afx_msg LRESULT OnTrayNotify(WPARAM wParam, LPARAM lParam);
 };
 
 class CShowMainFrame

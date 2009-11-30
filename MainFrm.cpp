@@ -22,25 +22,10 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #define	WM_ICON_NOTIFY			WM_APP+10
+#define MYWM_NOTIFYICON (WM_USER+1)
 
 
 bool CShowMainFrame::m_bShowingMainFrame = false;
-
-UINT RemoveDeletedItemsThread(LPVOID pParam)
-{
-	CMainFrame *mainWindow = (CMainFrame*)pParam;
-	if(mainWindow != NULL)
-	{
-		if(mainWindow->m_deletingEntries == false)
-		{
-			mainWindow->m_deletingEntries = true;
-			RemoveOldEntries();
-			mainWindow->m_deletingEntries = false;
-		}
-	}
-
-	return true;
-}
 
 CShowMainFrame::CShowMainFrame() : 
 	m_bHideMainFrameOnExit(false), 
@@ -55,6 +40,7 @@ CShowMainFrame::CShowMainFrame() :
 
 	m_hWnd = theApp.m_pMainFrame->GetSafeHwnd();
 }
+
 CShowMainFrame::~CShowMainFrame()
 {
 	if(m_bHideMainFrameOnExit && m_hWnd && ::IsWindow(m_hWnd))
@@ -94,6 +80,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_DESTROY()
 	ON_COMMAND(ID_FIRST_NEWCLIP, OnFirstNewclip)
 	ON_MESSAGE(WM_SET_CONNECTED, OnSetConnected)
+	ON_MESSAGE(MYWM_NOTIFYICON, OnTrayNotify)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -114,7 +101,6 @@ CMainFrame::CMainFrame()
 	m_startKeyStateTime = 0;
 	m_bMovedSelectionMoveKeyState = false;
 	m_keyModifiersTimerCount = 0;
-	m_deletingEntries = false;
 }
 
 CMainFrame::~CMainFrame()
@@ -134,7 +120,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	//Center the main window so message boxes are in the center
-	CRect rcScreen;
+		CRect rcScreen;
 	GetMonitorRect(0, &rcScreen);
 	CPoint cpCenter = rcScreen.CenterPoint();
 	MoveWindow(cpCenter.x,cpCenter.x, -2, -2);
@@ -155,13 +141,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		Log(_T("Setting polling timer to track focus"));
 		SetTimer(ACTIVE_WINDOW_TIMER, g_Opt.FocusWndTimerTimeout(), 0);
 	}
-	
+
 	SetWindowText(_T("Ditto"));
 
 	HICON hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
-	m_TrayIcon.Create(
-						NULL,				// Let icon deal with its own messages
+	m_TrayIcon.Create(NULL,				// Let icon deal with its own messages
 						WM_ICON_NOTIFY,	// Icon notify message to use
 						_T("Ditto"),	// tooltip
 						hIcon,
@@ -194,11 +179,13 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	SetTimer(CLOSE_WINDOW_TIMER, ONE_MINUTE*60, 0);
 	SetTimer(REMOVE_OLD_REMOTE_COPIES, ONE_DAY, 0);
-	SetTimer(REMOVE_OLD_ENTRIES_TIMER, 2000, 0);
+	SetTimer(REMOVE_OLD_ENTRIES_TIMER, 3000, 0);
 
 	m_ulCopyGap = CGetSetOptions::GetCopyGap();
 
 	theApp.AfterMainCreate();
+
+	m_thread.Start(this);
 
 	return 0;
 }
@@ -522,10 +509,7 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 		}
 	case REMOVE_OLD_ENTRIES_TIMER:
 		{
-			if(m_deletingEntries == false)
-			{
-				AfxBeginThread(RemoveDeletedItemsThread, this);
-			}
+			m_thread.FireDeleteEntries();
 			break;
 		}
 	case CHECK_FOR_UPDATE:
@@ -751,7 +735,12 @@ void CMainFrame::OnClose()
 			return;
 	}
 
+	Log(_T("OnClose - before stop MainFrm thread"));
+	m_thread.Stop();
+	Log(_T("OnClose - after stop MainFrm thread"));
+
 	theApp.BeforeMainClose();
+
 	CFrameWnd::OnClose();
 }
 
@@ -1270,6 +1259,9 @@ LRESULT CMainFrame::OnSetConnected(WPARAM wParam, LPARAM lParam)
 
 void CMainFrame::OnDestroy()
 {
+	Shell_NotifyIcon(NIM_DELETE, &tnd);
+	m_TrayMenu.DestroyMenu();
+
 	CFrameWnd::OnDestroy();
 
 	if(m_pEditFrameWnd)
@@ -1283,4 +1275,23 @@ void CMainFrame::OnFirstNewclip()
 	CClipIDs IDs;
 	IDs.Add(-1);
 	theApp.EditItems(IDs, true);
+}
+
+LRESULT CMainFrame::OnTrayNotify(WPARAM wParam, LPARAM lParam)
+{
+	UINT uMsg = (UINT) lParam; 
+	switch (uMsg ) 
+	{ 
+	case WM_LBUTTONDBLCLK:
+		//this->ShowWindow(SW_SHOW);
+		m_TrayMenu.DestroyMenu();
+		this->OnClose();
+		break;
+	case WM_RBUTTONUP:
+		CPoint pt;	
+		GetCursorPos(&pt);
+		m_TrayMenu.GetSubMenu(0)->TrackPopupMenu(TPM_RIGHTALIGN|TPM_LEFTBUTTON|TPM_RIGHTBUTTON,pt.x,pt.y,this);
+		break;
+	} 
+	return TRUE;
 }

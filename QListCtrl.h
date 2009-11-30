@@ -10,6 +10,7 @@
 #include "ToolTipEx.h"
 #include "FormattedTextDraw.h"
 #include "sqlite/CppSQLite3.h"
+#include "ClipFormatQListCtrl.h"
 
 #define NM_SELECT					WM_USER+0x100
 #define NM_RIGHT					WM_USER+0x101
@@ -31,10 +32,14 @@
 #define NM_ITEM_DELETED				WM_USER+0x118
 #define NM_ALL_SELECTED				WM_USER+0x119
 #define NM_REFRESH_ROW				WM_USER+0x120
+#define NM_REFRESH_ROW_EXTRA_DATA	WM_USER+0x121
 
 #define COPY_BUFFER_HOT_KEY_1_ID	-100
 #define COPY_BUFFER_HOT_KEY_2_ID	-101
 #define COPY_BUFFER_HOT_KEY_3_ID	-102
+
+#define LVIF_CF_DIB 0x10000000
+#define LVIF_CF_RICHTEXT 0x10000000
 
 
 //#define NM_LIST_CUT			        WM_USER+0x111
@@ -49,6 +54,8 @@ public:
 	LPTSTR pszText; 
 	int cchTextMax; 
 };
+
+
 
 typedef CMap<long, long, CClipFormat, CClipFormat&> CMapIDtoCF;
 
@@ -102,6 +109,8 @@ public:
 	bool PutSelectedItemOnDittoCopyBuffer(long lBuffer);
 
 	DWORD GetItemData(int nItem);
+	CClipFormatQListCtrl* GetItem_CF_DIB_ClipFormat(int nItem);
+	CClipFormatQListCtrl* GetItem_CF_RTF_ClipFormat(int nItem);
 	void GetToolTipText(int nItem, CString &csText);
 
 	void SetShowTextForFirstTenHotKeys(BOOL bVal)	{ m_bShowTextForFirstTenHotKeys = bVal;	}
@@ -126,16 +135,15 @@ protected:
 	void LoadCopyOrCutToClipboard();
 	void SendSelection(ARRAY &arrItems);
 	BOOL GetClipData(int nItem, CClipFormat &Clip);
-	BOOL DrawBitMap(int nItem, CRect &crRect, CDC *pDC);
+	BOOL DrawBitMap(int nItem, CRect &crRect, CDC *pDC, const CString &csDescription);
 	void LoadDittoCopyBufferHotkeys();
 
-	BOOL DrawText(int nItem, CRect &crRect, CDC *pDC);
+	BOOL DrawRtfText(int nItem, CRect &crRect, CDC *pDC);
 		
 	WCHAR *m_pwchTip;
 	TCHAR *m_pchTip;
 	HFONT m_SmallFont;
 	CAccels	m_Accels;
-	CMapIDtoCF m_ThumbNails;
 	CMapIDtoCF m_RTFData;
 	CToolTipEx *m_pToolTip;
 	CFont m_Font;

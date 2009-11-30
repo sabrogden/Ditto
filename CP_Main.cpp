@@ -266,7 +266,7 @@ BOOL CCP_MainApp::InitInstance()
 	pFrame->ShowWindow(SW_SHOW);
 	pFrame->UpdateWindow();
 
-	m_Addins.LoadAll();
+	//m_Addins.LoadAll();
 
 	return TRUE;
 }
@@ -319,10 +319,7 @@ void CCP_MainApp::AfterMainCreate()
 	m_pCutBuffer3 = new CHotKey("CopyBufferCutHotKey_2", 0, true);
 
 	g_HotKeys.RegisterAll();
-
-	// CopyThread initialization
 	StartCopyThread();
-	
 	StartStopServerThread();
 
 	m_bAppRunning = true;
@@ -349,12 +346,12 @@ void CCP_MainApp::StopServerThread()
 
 void CCP_MainApp::BeforeMainClose()
 {
-	ASSERT( m_bAppRunning && !m_bAppExiting );
+	/*ASSERT( m_bAppRunning && !m_bAppExiting );
 	m_bAppRunning = false;
 	m_bAppExiting = true;
 	g_HotKeys.UnregisterAll();
 	StopServerThread();
-	StopCopyThread();
+	StopCopyThread();*/
 }
 
 void CCP_MainApp::StartCopyThread()
@@ -402,10 +399,13 @@ bool CCP_MainApp::ToggleConnectCV()
 //   lose that connection, "Disconnect from Clipboard" will have a check next to it.
 void CCP_MainApp::UpdateMenuConnectCV(CMenu* pMenu, UINT nMenuID)
 {
+	//CString b=_T("Scott");
+	//pMenu->ModifyMenu(nMenuID, MF_BYCOMMAND, nMenuID, b);
 	if(pMenu == NULL)
 		return;
 
-	bool bConnect = theApp.GetConnectCV();
+	bool bConnect = false;
+	bool b = theApp.GetConnectCV();
 	CString cs;
 
 	if(bConnect)
@@ -470,7 +470,10 @@ long CCP_MainApp::SaveCopyClips()
 
 	CClipList* pClips = m_CopyThread.GetClips(); // we now own pClips
 	if(!pClips)
+	{
+		Log(_T("End of function SaveCopyClips, no clips to save"));
 		return 0;
+	}
 
 	CClipList* pCopyOfClips = NULL;
 	if(g_Opt.m_lAutoSendClientCount > 0)

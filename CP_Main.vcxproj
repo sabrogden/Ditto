@@ -369,6 +369,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="ClipFormatQListCtrl.cpp" />
     <ClCompile Include="Clip_ImportExport.cpp" />
     <ClCompile Include="ClipboardSaveRestore.cpp" />
     <ClCompile Include="ClipboardViewer.cpp">
@@ -451,7 +452,11 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="EventThread.cpp" />
+    <ClCompile Include="MainFrmThread.cpp" />
+    <ClCompile Include="MessagePumpThread.cpp" />
     <ClCompile Include="Popup.cpp" />
+    <ClCompile Include="QPasteWndThread.cpp" />
     <ClCompile Include="sqlite\CppSQLite3.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -1289,12 +1294,17 @@
   <ItemGroup>
     <ClInclude Include="AlphaBlend.h" />
     <ClInclude Include="ArrayEx.h" />
+    <ClInclude Include="ClipFormatQListCtrl.h" />
+    <ClInclude Include="EventThread.h" />
     <ClInclude Include="FormattedTextDraw.h" />
     <ClInclude Include="GroupStatic.h" />
+    <ClInclude Include="MainFrmThread.h" />
     <ClInclude Include="memdc.h" />
+    <ClInclude Include="MessagePumpThread.h" />
     <ClInclude Include="NumberEdit.h" />
     <ClInclude Include="Popup.h" />
     <ClInclude Include="QListCtrl.h" />
+    <ClInclude Include="QPasteWndThread.h" />
     <ClInclude Include="RichEditCtrlEx.h" />
     <ClInclude Include="SearchEditBox.h" />
     <ClInclude Include="ToolTipEx.h" />

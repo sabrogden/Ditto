@@ -452,7 +452,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 				strSymbols.Delete(nFlag);
 		}
 		
-		DrawBitMap(nItem, rcText, pDC);
+		DrawBitMap(nItem, rcText, pDC, csText);
 
 		// draw the symbol box
 		if( strSymbols.GetLength() > 0 )
@@ -482,8 +482,10 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			rcText.left += rectSym.Width() + 2;
 		}
 		
-		if(DrawText(nItem, rcText, pDC) == FALSE)
+		if(DrawRtfText(nItem, rcText, pDC) == FALSE)
+		{
 			pDC->DrawText(csText, rcText, DT_VCENTER|DT_EXPANDTABS|DT_NOPREFIX);
+		}
 		
         // Draw a focus rect around the item if necessary.
         if(bListHasFocus && (rItem.state & LVIS_FOCUSED))
@@ -529,32 +531,19 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 }
 
-BOOL CQListCtrl::DrawText(int nItem, CRect &crRect, CDC *pDC)
+BOOL CQListCtrl::DrawRtfText(int nItem, CRect &crRect, CDC *pDC)
 {
 	if(g_Opt.m_bDrawRTF == FALSE)
 		return FALSE;
 	
-	static CLIPFORMAT clFormat = GetFormatID(_T("Rich Text Format"));
-
 	BOOL bRet = FALSE;
 
-	long lDatabaseID = GetItemData(nItem);
-
-	CClipFormat* pThumbnail = &(m_RTFData[lDatabaseID]);
+	CClipFormat* pThumbnail = GetItem_CF_RTF_ClipFormat(nItem);
 	if(pThumbnail == NULL)
 		return FALSE;
 
-	//If it has not been read in
-	if(pThumbnail->m_cfType != clFormat)
-	{
-		pThumbnail->m_cfType = clFormat;
-
-		//Get the data from the database
-		GetClipData(nItem, *pThumbnail);
-	}
-
 	// if there's no data, then we're done.
-	if( pThumbnail->m_hgData == NULL )
+	if(pThumbnail->m_hgData == NULL)
 		return FALSE;
 
 	if(m_pFormatter == NULL)
@@ -586,59 +575,29 @@ BOOL CQListCtrl::DrawText(int nItem, CRect &crRect, CDC *pDC)
 // DrawBitMap loads a DIB from the DB, draws a crRect thumbnail of the image
 //  to pDC and caches that thumbnail as a DIB in m_ThumbNails[ ItemID ].
 // ALL items are cached in m_ThumbNails (those without images are cached with NULL m_hgData)
-BOOL CQListCtrl::DrawBitMap(int nItem, CRect &crRect, CDC *pDC)
+BOOL CQListCtrl::DrawBitMap(int nItem, CRect &crRect, CDC *pDC, const CString &csDescription)
 {
 	if(g_Opt.m_bDrawThumbnail == FALSE)
 		return FALSE;
-	
-	bool bFromDB = false;
-	long lDatabaseID = GetItemData(nItem);
 
-	CClipFormat* pThumbnail = &(m_ThumbNails[lDatabaseID]);
-	if(pThumbnail == NULL)
-		return FALSE;
-
-	//If it has not been read in
-	if(pThumbnail->m_cfType != CF_DIB)
+	CClipFormatQListCtrl *format = GetItem_CF_DIB_ClipFormat(nItem);
+	if(format != NULL)
 	{
-		pThumbnail->m_cfType = CF_DIB;
-
-		//Get the data from the database
-		GetClipData(nItem, *pThumbnail);
-		
-		//convert to a small bitmap
-		CBitmap Bitmap;
-		if( !CBitmapHelper::GetCBitmap(pThumbnail, pDC, &Bitmap, crRect.Height()) )
+		HGLOBAL smallImage = format->GetDib(pDC, crRect.Height());
+		if(smallImage != NULL)
 		{
-			Bitmap.DeleteObject();
-			// the data is useless, so free it.
-			pThumbnail->Free(); 
-			return FALSE;
+			//Will return the width of the bitmap in nWidth
+			int nWidth = 0;
+			if(CBitmapHelper::DrawDIB(pDC, smallImage, crRect.left, crRect.top, nWidth))
+			{
+				// adjust the rect so other information can be drawn next to the thumbnail
+				crRect.left += nWidth + 3;
+			}
 		}
-
-		// delete the large image data loaded from the db
-		pThumbnail->Free();
-		pThumbnail->m_cfType = CF_DIB;
-
-		//Convert the smaller bitmap back to a dib
-		HPALETTE hPal = NULL;
-		pThumbnail->m_hgData = CBitmapHelper::hBitmapToDIB( (HBITMAP)Bitmap, BI_RGB, hPal );
-
-		ASSERT( pThumbnail->m_autoDeleteData ); // the map owns the data.
-
-		Bitmap.DeleteObject();
 	}
-
-	// if there's no data, then we're done.
-	if( pThumbnail->m_hgData == NULL )
-		return TRUE;
-
-	//Will return the width of the bitmap in nWidth
-	int nWidth = 0;
-	if(CBitmapHelper::DrawDIB(pDC, pThumbnail->m_hgData, crRect.left, crRect.top, nWidth))
+	else if(csDescription.Find(_T("CF_DIB")) == 0)
 	{
-		// adjust the rect so other information can be drawn next to the thumbnail
-		crRect.left += nWidth + 3;
+		crRect.left += crRect.Height();
 	}
 
 	return TRUE;
@@ -1154,6 +1113,62 @@ DWORD CQListCtrl::GetItemData(int nItem)
 	return CListCtrl::GetItemData(nItem);
 }
 
+CClipFormatQListCtrl* CQListCtrl::GetItem_CF_DIB_ClipFormat(int nItem)
+{
+	CClipFormatQListCtrl *format = NULL;
+
+	CWnd* pParent=GetParent();
+	if(pParent && (pParent->GetSafeHwnd() != NULL))
+	{
+		LV_DISPINFO info;
+		memset(&info, 0, sizeof(info));
+		info.hdr.code = LVN_GETDISPINFO;
+		info.hdr.hwndFrom = GetSafeHwnd();
+		info.hdr.idFrom = GetDlgCtrlID();
+
+		info.item.iItem = nItem;
+		info.item.lParam = NULL;
+		info.item.mask = LVIF_CF_DIB;
+
+		pParent->SendMessage(WM_NOTIFY,(WPARAM)info.hdr.idFrom,(LPARAM)&info);
+
+		if(info.item.lParam != NULL)
+		{
+			format = (CClipFormatQListCtrl *)info.item.lParam;
+		}
+	}
+
+	return format;
+}
+
+CClipFormatQListCtrl* CQListCtrl::GetItem_CF_RTF_ClipFormat(int nItem)
+{
+	CClipFormatQListCtrl *format = NULL;
+
+	CWnd* pParent=GetParent();
+	if(pParent && (pParent->GetSafeHwnd() != NULL))
+	{
+		LV_DISPINFO info;
+		memset(&info, 0, sizeof(info));
+		info.hdr.code = LVN_GETDISPINFO;
+		info.hdr.hwndFrom = GetSafeHwnd();
+		info.hdr.idFrom = GetDlgCtrlID();
+
+		info.item.iItem = nItem;
+		info.item.lParam = NULL;
+		info.item.mask = LVIF_CF_RICHTEXT;
+
+		pParent->SendMessage(WM_NOTIFY, (WPARAM)info.hdr.idFrom, (LPARAM)&info);
+
+		if(info.item.lParam != NULL)
+		{
+			format = (CClipFormatQListCtrl *)info.item.lParam;
+		}
+	}
+
+	return format;
+}
+
 void CQListCtrl::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) 
 {	
 	CListCtrl::OnHScroll(nSBCode, nPos, pScrollBar);
@@ -1309,8 +1324,7 @@ BOOL CQListCtrl::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESU
 
 BOOL CQListCtrl::OnItemDeleted(long lID)
 {
-	BOOL bRet = m_ThumbNails.RemoveKey(lID);
 	BOOL bRet2 = m_RTFData.RemoveKey(lID);
 
-	return (bRet || bRet2);
+	return (bRet2);
 }
