@@ -3,6 +3,7 @@
 #include "TextConvert.h"
 #include "Misc.h"
 #include "Options.h"
+#include "Tokenizer.h"
 
 CTheme::CTheme(void)
 {

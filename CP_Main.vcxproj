@@ -302,6 +302,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="Accels.cpp" />
     <ClCompile Include="AccessToSqlite.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -334,6 +335,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="AutoSendToClientThread.cpp" />
     <ClCompile Include="BitmapHelper.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -453,6 +455,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="EventThread.cpp" />
+    <ClCompile Include="HotKeys.cpp" />
     <ClCompile Include="MainFrmThread.cpp" />
     <ClCompile Include="MessagePumpThread.cpp" />
     <ClCompile Include="Popup.cpp" />
@@ -1139,6 +1142,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="Tokenizer.cpp" />
     <ClCompile Include="ToolTipEx.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -1292,12 +1296,15 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Accels.h" />
     <ClInclude Include="AlphaBlend.h" />
     <ClInclude Include="ArrayEx.h" />
+    <ClInclude Include="AutoSendToClientThread.h" />
     <ClInclude Include="ClipFormatQListCtrl.h" />
     <ClInclude Include="EventThread.h" />
     <ClInclude Include="FormattedTextDraw.h" />
     <ClInclude Include="GroupStatic.h" />
+    <ClInclude Include="HotKeys.h" />
     <ClInclude Include="MainFrmThread.h" />
     <ClInclude Include="memdc.h" />
     <ClInclude Include="MessagePumpThread.h" />
@@ -1307,6 +1314,7 @@
     <ClInclude Include="QPasteWndThread.h" />
     <ClInclude Include="RichEditCtrlEx.h" />
     <ClInclude Include="SearchEditBox.h" />
+    <ClInclude Include="Tokenizer.h" />
     <ClInclude Include="ToolTipEx.h" />
     <ClInclude Include="WndEx.h" />
     <ClInclude Include="Client.h" />

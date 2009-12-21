@@ -43,6 +43,7 @@ bool CEventThread::FireEvent(int eventId)
 		if(it->second == eventId)
 		{
 			eventHandle = it->first;
+			break;
 		}
 	}
 
@@ -55,10 +56,32 @@ bool CEventThread::FireEvent(int eventId)
 	return false;
 }
 
+bool CEventThread::UndoFireEvent(int eventId)
+{
+	HANDLE eventHandle = NULL;
+	for(EventMapType::iterator it = m_eventMap.begin(); it != m_eventMap.end(); it++)
+	{
+		if(it->second == eventId)
+		{
+			eventHandle = it->first;
+			break;
+		}
+	}
+
+	if(eventHandle != NULL)
+	{
+		ResetEvent(eventHandle);
+		return true;
+	}
+
+	return false;
+}
+
 void CEventThread::Start(void *param) 
 {
 	if(m_threadRunning == false)
 	{
+		ResetEvent(m_hEvt);
 		m_exitThread = false;
 		m_param = param;
 		m_thread = (HANDLE)_beginthreadex(NULL, 0, EventThreadFnc, this, 0, &m_threadID);
@@ -66,18 +89,26 @@ void CEventThread::Start(void *param)
 		// now wait until the thread is up and really running
 		WaitForSingleObject(m_hEvt, 1000);
 	}
+	else
+	{
+		UndoFireEvent(EXIT_EVENT);
+	}
 }
 
 void CEventThread::Stop(int waitTime) 
 {
-	m_exitThread = true;
-	FireEvent(EXIT_EVENT);
-
-	if (WAIT_OBJECT_0 != WaitForSingleObject(m_hEvt, waitTime))
+	if(m_threadRunning)
 	{
-		if(TerminateThread(m_thread, 0))
+		m_exitThread = true;	
+		FireEvent(EXIT_EVENT);
+
+		if(waitTime > 0)
 		{
-			m_threadRunning = false;
+			if (WAIT_OBJECT_0 != WaitForSingleObject(m_hEvt, waitTime))
+			{
+				TerminateThread(m_thread, 0);
+				m_threadRunning = false;
+			}
 		}
 	}
 };
@@ -95,6 +126,7 @@ void CEventThread::RunThread()
 	}
 
 	SetEvent(m_hEvt);
+	ResetEvent(m_hEvt);
 
 	while(true)
 	{

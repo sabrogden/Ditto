@@ -222,7 +222,9 @@ void CServer::OnDataStart(CSendInfo &info)
 		if(m_cf.m_hgData)
 		{
 			if(m_pClip)
+			{
 				m_pClip->m_lTotalCopySize += lOutSize;
+			}
 
 			LPVOID pvData = GlobalLock(m_cf.m_hgData);
 			if(pvData)

@@ -27,7 +27,6 @@ public:
 // Dialog Data
 	//{{AFX_DATA(COptionsKeyBoard)
 	enum { IDD = IDD_OPTIONS_KEYSTROKES };
-	CHotKeyCtrl	m_NamedPaste;
 	CButton	m_btSendPaste;
 	CHotKeyCtrl	m_Nine;
 	CHotKeyCtrl	m_Eight;
@@ -39,7 +38,6 @@ public:
 	CHotKeyCtrl	m_Two;
 	CHotKeyCtrl	m_Ten;
 	CHotKeyCtrl	m_One;
-	CHotKeyCtrl	m_NamedCopy;
 	CHotKeyCtrl	m_HotKey;
 	//}}AFX_DATA
 

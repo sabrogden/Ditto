@@ -7,7 +7,6 @@
 #endif // _MSC_VER > 1000
 
 #include "ArrayEx.h"
-#include <vector>
 
 #define ONE_MINUTE				60000
 #define ONE_HOUR				3600000
@@ -101,7 +100,6 @@ CString GetProcessName(HWND hWnd);
 #define WM_SHOW_TRAY_ICON		WM_USER + 200
 #define WM_SETCONNECT			WM_USER + 201
 #define WM_CV_IS_CONNECTED		WM_USER + 202
-#define WM_COPYPROPERTIES		WM_USER + 203
 #define WM_CLOSE_APP			WM_USER + 204
 #define WM_REFRESH_VIEW			WM_USER + 205
 #define WM_CLIPBOARD_COPIED		WM_USER + 206
@@ -111,156 +109,13 @@ CString GetProcessName(HWND hWnd);
 #define WM_CV_GETCONNECT		WM_USER + 211
 #define WM_EDIT_WND_CLOSING		WM_USER	+ 212
 #define WM_SET_CONNECTED		WM_USER	+ 213
+#define WM_LOAD_ClIP_ON_CLIPBOARD		WM_USER	+ 214
 //defined in tray icon #define WM_CUSTOMIZE_TRAY_MENU	WM_USER + 211
-
-
-
-/*------------------------------------------------------------------*\
-	CHotKey - a single system-wide hotkey
-\*------------------------------------------------------------------*/
-
-class CHotKey
-{
-public:
-	CString	m_Name;
-	ATOM	m_Atom;
-	DWORD	m_Key; //704 is ctrl-tilda
-	bool	m_bIsRegistered;
-	bool	m_bUnRegisterOnShowDitto;
-	
-	CHotKey( CString name, DWORD defKey = 0, bool bUnregOnShowDitto = false );
-	~CHotKey();
-
-	bool	IsRegistered() { return m_bIsRegistered; }
-	CString GetName()      { return m_Name; }
-	DWORD   GetKey()       { return m_Key; }
-
-	void SetKey( DWORD key, bool bSave = false );
-	// profile
-	void LoadKey();
-	bool SaveKey();
-
-	void CopyFromCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID);
-	void CopyToCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID);
-
-//	CString GetKeyAsText();
-//	void SetKeyFromText( CString text );
-
-	static BOOL ValidateHotKey(DWORD dwHotKey);
-	static UINT GetModifier(DWORD dwHotKey);
-	UINT GetModifier() { return GetModifier(m_Key); }
-
-	bool Register();
-	bool Unregister(bool bOnShowingDitto = false);
-};
-
-
-/*------------------------------------------------------------------*\
-	CHotKeys - Manages system-wide hotkeys
-\*------------------------------------------------------------------*/
-
-class CHotKeys : public CArray<CHotKey*,CHotKey*>
-{
-public:
-	HWND	m_hWnd;
-
-	CHotKeys();
-	~CHotKeys();
-
-	void Init( HWND hWnd ) { m_hWnd = hWnd; }
-
-	int Find( CHotKey* pHotKey );
-	bool Remove( CHotKey* pHotKey ); // pHotKey is NOT deleted.
-
-	// profile load / save
-	void LoadAllKeys();
-	void SaveAllKeys();
-
-	void RegisterAll(bool bMsgOnError = false);
-	void UnregisterAll(bool bMsgOnError = false, bool bOnShowDitto = false);
-
-	void GetKeys( ARRAY& keys );
-	void SetKeys( ARRAY& keys, bool bSave = false ); // caution! this alters hotkeys based upon corresponding indexes
-
-	static bool FindFirstConflict( ARRAY& keys, int* pX = NULL, int* pY = NULL );
-	// if true, pX and pY (if valid) are set to the index of the conflicting hotkeys.
-	bool FindFirstConflict( int* pX = NULL, int* pY = NULL );
-};
-
-extern CHotKeys g_HotKeys;
-
-/*------------------------------------------------------------------*\
-	CAccel - an Accelerator (in-app hotkey)
-
-    - the win32 CreateAcceleratorTable using ACCEL was insufficient
-    because it only allowed a WORD for the cmd associated with it.
-\*------------------------------------------------------------------*/
-
-#define ACCEL_VKEY(key)			LOBYTE(key)
-#define ACCEL_MOD(key)			HIBYTE(key)
-#define ACCEL_MAKEKEY(vkey,mod) ((mod << 8) | vkey)
-
-class CAccel
-{
-public:
-	DWORD	Key; // directly uses the CHotKeyCtrl format
-	DWORD	Cmd;
-	CAccel( DWORD key=0, DWORD cmd=0 ) { Key = key;  Cmd = cmd; } 
-};
-
-/*------------------------------------------------------------------*\
-	CAccels - Manages a set of CAccel
-\*------------------------------------------------------------------*/
-class CAccels
-{
-public:
-	CAccels();
-
-	CMap<DWORD, DWORD, DWORD, DWORD> m_Map;
-
-	void AddAccel( CAccel& a );
-
-	// handles a key's first WM_KEYDOWN or WM_SYSKEYDOWN message.
-	// it uses GetKeyState to test for modifiers.
-	// returns a pointer to the internal CAccel if it matches the given key or NULL
-	bool OnMsg( MSG* pMsg , DWORD &dID );
-};
-
-// returns a BYTE representing the current GetKeyState modifiers:
-//  HOTKEYF_SHIFT, HOTKEYF_CONTROL, HOTKEYF_ALT
-BYTE GetKeyStateModifiers();
-
-/*------------------------------------------------------------------*\
-	CTokenizer - Tokenizes a string using given delimiters
-\*------------------------------------------------------------------*/
-// Based upon:
-// Date:        Monday, October 22, 2001
-// Autor:       Eduardo Velasquez
-// Description: Tokenizer class for CStrings. Works like strtok.
-///////////////
 
 #if !defined(_BITSET_)
 #	include <bitset>
 #endif // !defined(_BITSET_)
 
-class CTokenizer
-{
-public:
-	CString m_cs;
-	CArrayEx<TCHAR> m_delim;
-	int m_nCurPos;
-
-	CTokenizer(const CString& cs, const CString& csDelim);
-	void SetDelimiters(const CString& csDelim);
-
-	bool Next(CString& cs);
-	CString	Tail();
-};
-
-
-/*------------------------------------------------------------------*\
-	ID based Globals
-\*------------------------------------------------------------------*/
 long NewGroupID(long lParentID = 0, CString text = "");
 BOOL DeleteAllIDs();
 BOOL DeleteFormats(long lDataID, ARRAY& formatIDs);
@@ -272,6 +127,8 @@ __inline BOOL FileExists(LPCTSTR pszFile)
 
 bool IsRunningLimited();
 BOOL IsVista();
+
+void DeleteReceivedFiles(CString csDir);
 
 
 #endif // !defined(AFX_CP_GUI_GLOBALS__FBCDED09_A6F2_47EB_873F_50A746EBC86B__INCLUDED_)

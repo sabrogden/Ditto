@@ -1,8 +1,4 @@
-// CP_Main.cpp : Defines the class behaviors for the application.
-//
-
 #include "stdafx.h"
-//#include "vld.h"
 #include "CP_Main.h"
 #include "MainFrm.h"
 #include "Misc.h"
@@ -23,9 +19,6 @@
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CCP_MainApp object
 
 class DittoCommandLineInfo : public CCommandLineInfo
 {
@@ -77,19 +70,12 @@ public:
 
 CCP_MainApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CCP_MainApp
-
 BEGIN_MESSAGE_MAP(CCP_MainApp, CWinApp)
 	//{{AFX_MSG_MAP(CCP_MainApp)
 		// NOTE - the ClassWizard will add and remove mapping macros here.
 		//    DO NOT EDIT what you see in these blocks of generated code!
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
-
-/////////////////////////////////////////////////////////////////////////////
-// CCP_MainApp construction
-
 
 CCP_MainApp::CCP_MainApp()
 {
@@ -125,18 +111,12 @@ CCP_MainApp::CCP_MainApp()
 	m_cfIgnoreClipboard = ::RegisterClipboardFormat(_T("Clipboard Viewer Ignore"));
 	m_cfDelaySavingData = ::RegisterClipboardFormat(_T("Ditto Delay Saving Data"));
 	m_RemoteCF_HDROP = ::RegisterClipboardFormat(_T("Ditto Remote CF_HDROP"));
-
-	m_QuickPasteMode = NONE_QUICK_PASTE;
-	m_pQuickPasteClip = NULL;
 }
 
 CCP_MainApp::~CCP_MainApp()
 {
 	
 }
-
-/////////////////////////////////////////////////////////////////////////////
-// CCP_MainApp initialization
 
 BOOL CCP_MainApp::InitInstance()
 {
@@ -288,13 +268,6 @@ void CCP_MainApp::AfterMainCreate()
 	// create hotkeys here.  They are automatically deleted on exit
 	m_pDittoHotKey = new CHotKey(CString("DittoHotKey"), 704); //704 is ctrl-tilda
 
-	//A U3 device is unable to use the keyboard hooks, so named paste and copy 
-	//can't be used
-	if(!g_Opt.m_bU3)
-	{
-		m_pNamedCopy = new CHotKey("CopyHotKey");
-		m_pNamedPaste = new CHotKey("NamedPaste");
-	}
 	m_pPosOne = new CHotKey("Position1", 0, true);
 	m_pPosTwo = new CHotKey("Position2", 0, true);
 	m_pPosThree = new CHotKey("Position3", 0, true);
@@ -346,12 +319,12 @@ void CCP_MainApp::StopServerThread()
 
 void CCP_MainApp::BeforeMainClose()
 {
-	/*ASSERT( m_bAppRunning && !m_bAppExiting );
+	ASSERT( m_bAppRunning && !m_bAppExiting );
 	m_bAppRunning = false;
 	m_bAppExiting = true;
 	g_HotKeys.UnregisterAll();
 	StopServerThread();
-	StopCopyThread();*/
+	StopCopyThread();
 }
 
 void CCP_MainApp::StartCopyThread()
@@ -363,9 +336,9 @@ void CCP_MainApp::StartCopyThread()
 	// - true = use Asynchronous communication (PostMessage)
 	// - true = enable copying on clipboard changes
 	// - pTypes = the supported types to use
-	m_CopyThread.Init( CCopyConfig( m_MainhWnd, true, true, pTypes ) );
+	m_CopyThread.Init(CCopyConfig(m_MainhWnd, true, true, pTypes));
 
-	VERIFY( m_CopyThread.CreateThread(CREATE_SUSPENDED) );
+	VERIFY(m_CopyThread.CreateThread(CREATE_SUSPENDED));
 	m_CopyThread.ResumeThread();
 	
 	if(m_bStartupDisconnected)
@@ -380,7 +353,6 @@ void CCP_MainApp::StopCopyThread()
 {
 	EnableCbCopy(false);
 	m_CopyThread.Quit();
-	SaveCopyClips();
 }
 
 // returns the current Clipboard Viewer Connect state (though it might not yet
@@ -399,8 +371,6 @@ bool CCP_MainApp::ToggleConnectCV()
 //   lose that connection, "Disconnect from Clipboard" will have a check next to it.
 void CCP_MainApp::UpdateMenuConnectCV(CMenu* pMenu, UINT nMenuID)
 {
-	//CString b=_T("Scott");
-	//pMenu->ModifyMenu(nMenuID, MF_BYCOMMAND, nMenuID, b);
 	if(pMenu == NULL)
 		return;
 
@@ -457,96 +427,10 @@ void CCP_MainApp::ReloadTypes()
 {
 	CClipTypes* pTypes = LoadTypesFromDB();
 
-	if( pTypes )
-		m_CopyThread.SetSupportedTypes( pTypes );
-}
-
-long CCP_MainApp::SaveCopyClips()
-{
-	Log(_T("Start of function SaveCopyClips"));
-
-	long lID = 0;
-	int count;
-
-	CClipList* pClips = m_CopyThread.GetClips(); // we now own pClips
-	if(!pClips)
+	if(pTypes)
 	{
-		Log(_T("End of function SaveCopyClips, no clips to save"));
-		return 0;
+		m_CopyThread.SetSupportedTypes(pTypes);
 	}
-
-	CClipList* pCopyOfClips = NULL;
-	if(g_Opt.m_lAutoSendClientCount > 0)
-	{
-		//The thread will free these
-		pCopyOfClips = new CClipList;
-		if(pCopyOfClips != NULL)
-		{
-			*pCopyOfClips = *pClips;
-		}
-	}
-
-	bool bEnteredThread = false;
-	bool bDeletepClips = true;
-
-	if(m_QuickPasteMode == ADDING_QUICK_PASTE)
-	{
-		Log(_T("SaveCopyclips from Quick Paste - Start"));
-
-		//this will be added when they are done entering the quick paste text
-		m_pQuickPasteClip = pClips;
-		
-		bDeletepClips = false;
-
-		//go ahead and send the clips out even though it won't be added for a bit
-		count = 1;
-
-		Log(_T("SaveCopyclips from Quick Paste - End"));
-	}
-	else
-	{
-		Log(_T("SaveCopyClips Before AddToDb")); 
-
-		count = pClips->AddToDB(true);
-
-		Log(StrF(_T("SaveCopyclips After AddToDb, Count: %d"), count));
-
-		if(count > 0)
-		{
-			lID = pClips->GetTail()->m_ID;
-
-			Log(StrF(_T("SaveCopyclips After AddToDb, Id: %d Before OnCopyCopyCompleted"), lID));
-
-			OnCopyCompleted(lID, count);
-
-			Log(StrF(_T("SaveCopyclips After AddToDb, Id: %d After OnCopyCopyCompleted"), lID));
-
-			if(m_CopyBuffer.Active())
-			{
-				m_CopyBuffer.EndCopy(lID);
-			}
-		}
-	}
-
-	if(count > 0)
-	{
-		if(g_Opt.m_lAutoSendClientCount > 0)
-		{
-			Log(_T("Starting thread to send clip to friends"));
-			AfxBeginThread(SendClientThread, pCopyOfClips);
-			bEnteredThread = true;
-		}
-	}
-	
-	if(bEnteredThread == false)
-		delete pCopyOfClips;
-
-	if(bDeletepClips)
-		delete pClips;
-
-	Log(_T("Start of function SaveCopyClips"));
-
-	return lID;
 }
 
 void CCP_MainApp::RefreshView()
@@ -555,9 +439,13 @@ void CCP_MainApp::RefreshView()
 	if(pWnd)
 	{
 		if(m_bAsynchronousRefreshView)
+		{
 			pWnd->PostMessage(WM_REFRESH_VIEW);
+		}
 		else
+		{
 			pWnd->SendMessage(WM_REFRESH_VIEW);
+		}
 	}
 }
 
@@ -565,17 +453,26 @@ void CCP_MainApp::OnPasteCompleted()
 {
 	// the list only changes if UpdateTimeOnPaste is true (updated time)
 	if(g_Opt.m_bUpdateTimeOnPaste)
+	{
 		RefreshView();
+	}
 }
 
 void CCP_MainApp::OnCopyCompleted(long lLastID, int count)
 {
 	if(count <= 0)
+	{
 		return;
+	}
 
 	// update copy statistics
 	CGetSetOptions::SetTripCopyCount(-count);
 	CGetSetOptions::SetTotalCopyCount(-count);
+
+	if(m_CopyBuffer.Active())
+	{
+		m_CopyBuffer.EndCopy(lLastID);
+	}
 
 	RefreshView();
 }
@@ -585,20 +482,28 @@ void CCP_MainApp::OnCopyCompleted(long lLastID, int count)
 // if NULL, this uses the current QPaste selection
 void CCP_MainApp::IC_Cut(ARRAY* pIDs)
 {
-	if( pIDs == NULL )
+	if(pIDs == NULL)
 	{
-		if( QPasteWnd() )
-			QPasteWnd()->m_lstHeader.GetSelectionItemData( m_IC_IDs );
+		if(QPasteWnd())
+		{
+			QPasteWnd()->m_lstHeader.GetSelectionItemData(m_IC_IDs);
+		}
 		else
+		{
 			m_IC_IDs.SetSize(0);
+		}
 	}
 	else
-		m_IC_IDs.Copy( *pIDs );
+	{
+		m_IC_IDs.Copy(*pIDs);
+	}
 
 	m_IC_bCopy = false;
 
-	if( QPasteWnd() )
+	if(QPasteWnd())
+	{
 		QPasteWnd()->UpdateStatus();
+	}
 }
 
 // if NULL, this uses the current QPaste selection
@@ -607,28 +512,39 @@ void CCP_MainApp::IC_Copy(ARRAY* pIDs)
 	if(pIDs == NULL)
 	{
 		if(QPasteWnd())
+		{
 			QPasteWnd()->m_lstHeader.GetSelectionItemData(m_IC_IDs);
+		}
 		else
+		{
 			m_IC_IDs.SetSize(0);
+		}
 	}
 	else
+	{
 		m_IC_IDs.Copy(*pIDs);
+	}
 
 	m_IC_bCopy = true;
 
-	if(QPasteWnd())
-		QPasteWnd()->UpdateStatus();
+	RefreshView();
 }
 
 void CCP_MainApp::IC_Paste()
 {
 	if(m_IC_IDs.GetSize() <= 0)
+	{
 		return;
+	}
 
 	if(m_IC_bCopy)
+	{
 		m_IC_IDs.CopyTo(GetValidGroupID());
+	}
 	else // Move
+	{
 		m_IC_IDs.MoveTo(GetValidGroupID());
+	}
 
 	// don't process the same items twice.
 	m_IC_IDs.SetSize(0);
@@ -667,8 +583,6 @@ BOOL CCP_MainApp::EnterGroupID(long lID)
 				{
 					m_GroupID = lID;
 					m_GroupParentID = q.getIntField(_T("lParentID"));
-//					if( m_GroupParentID == 0 )
-//				      m_GroupParentID = -1; // back out into "all top-level groups" list.
 					m_GroupText = q.getStringField(_T("mText"));
 					bResult = TRUE;
 				}
@@ -695,36 +609,45 @@ long CCP_MainApp::GetValidGroupID()
 }
 
 // sets a valid id
-void CCP_MainApp::SetGroupDefaultID( long lID )
+void CCP_MainApp::SetGroupDefaultID(long lID)
 {
-	if( m_GroupDefaultID == lID )
+	if(m_GroupDefaultID == lID)
+	{
 		return;
+	}
 
-	if( lID <= 0 )
+	if(lID <= 0)
+	{
 		m_GroupDefaultID = 0;
+	}
 	else
+	{
 		m_GroupDefaultID = lID;
+	}
 
-	if( QPasteWnd() )
+	if(QPasteWnd())
+	{
 		QPasteWnd()->UpdateStatus();
+	}
 }
 
-// Window States
-
-void CCP_MainApp::SetStatus( const TCHAR* status, bool bRepaintImmediately )
+void CCP_MainApp::SetStatus(const TCHAR* status, bool bRepaintImmediately)
 {
 	m_Status = status;
-	if( QPasteWnd() )
-		QPasteWnd()->UpdateStatus( bRepaintImmediately );
+	if(QPasteWnd())
+	{
+		QPasteWnd()->UpdateStatus(bRepaintImmediately);
+	}
 }
 
-void CCP_MainApp::ShowPersistent( bool bVal )
+void CCP_MainApp::ShowPersistent(bool bVal)
 {
-	g_Opt.SetShowPersistent( bVal );
+	g_Opt.SetShowPersistent(bVal);
+
 	// give some visual indication
-	if( m_bShowingQuickPaste )
+	if(m_bShowingQuickPaste)
 	{
-		ASSERT( QPasteWnd() );
+		ASSERT(QPasteWnd());
 		QPasteWnd()->SetCaptionColorActive(g_Opt.m_bShowPersistent, theApp.GetConnectCV());
 		QPasteWnd()->RefreshNc();
 	}
@@ -739,18 +662,6 @@ int CCP_MainApp::ExitInstance()
 
 	m_db.close();
 
-//	if(g_Opt.m_bU3)
-//	{
-//		if(g_Opt.IsU3DeviceAvailable())
-//		{
-//			CopyUpDatabase();
-//		}
-//		else
-//		{
-//			Log(_T("Needed to copy up database but device was not available to copy to"));
-//		}
-//	}
-
 	return CWinApp::ExitInstance();
 }
 
@@ -758,7 +669,7 @@ int CCP_MainApp::ExitInstance()
 BOOL CCP_MainApp::OnIdle(LONG lCount)
 {
 	// let winapp handle its idle processing
-	if( CWinApp::OnIdle(lCount) )
+	if(CWinApp::OnIdle(lCount))
 		return TRUE;
 
 	return FALSE;
@@ -769,9 +680,13 @@ void CCP_MainApp::SetConnectCV(bool bConnect)
 	m_CopyThread.SetConnectCV(bConnect); 
 	
 	if(bConnect)
+	{
 		m_pMainFrame->m_TrayIcon.SetIcon(IDR_MAINFRAME);
+	}
 	else
+	{
 		m_pMainFrame->m_TrayIcon.SetIcon(IDI_DITTO_NOCOPYCB);
+	}
 
 	if(QPasteWnd())
 	{
@@ -811,7 +726,9 @@ bool CCP_MainApp::ImportClips(HWND hWnd)
 	FileName.lpstrDefExt = _T("dto");
 
 	if(GetOpenFileName(&FileName) == 0)
+	{
 		return false;
+	}
 
 	using namespace nsPath;
 	CPath path(FileName.lpstrFile);

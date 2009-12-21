@@ -57,11 +57,13 @@ BOOL CProcessPaste::DoPaste()
 //#ifndef _DEBUG
 		if(m_bSendPaste)
 		{
+			Log(_T("Sending Paste to active window"));
 			theApp.m_activeWnd.SendPaste(m_bActivateTarget);
 		}
 //#else
 		if(m_bActivateTarget)
 		{
+			Log(_T("Activating active window"));
 			theApp.m_activeWnd.ActivateTarget();
 		}
 //#endif
@@ -84,7 +86,7 @@ BOOL CProcessPaste::DoDrag()
 
 void CProcessPaste::MarkAsPasted()
 {
-//	Log(_T("start of MarkAsPasted"));
+	Log(_T("start of MarkAsPasted"));
 
 	CClipIDs& clips = GetClipIDs();
 	if(clips.GetSize() == 1)
@@ -100,7 +102,7 @@ void CProcessPaste::MarkAsPasted()
 		AfxBeginThread(CProcessPaste::MarkAsPastedThread, (LPVOID)lID, THREAD_PRIORITY_LOWEST);
 	}
 
-//	Log(_T("End of MarkAsPasted"));
+	Log(_T("End of MarkAsPasted"));
 }
 
 UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
@@ -108,7 +110,7 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 	static CEvent UpdateTimeEvent(TRUE, TRUE, _T("Ditto_Update_Clip_Time"), NULL);
 	UpdateTimeEvent.ResetEvent();
 
-//	Log(_T("Start of MarkAsPastedThread"));
+	Log(_T("Start of MarkAsPastedThread"));
 
 	//If running from a U3 device then wait a little before updating the db
 	//updating the db can take a second or two and it delays the act of pasting
@@ -141,17 +143,17 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 				}
 			}
 		}
-
 		CATCH_SQLITE_EXCEPTION
+
+		Log(StrF(_T("Setting clipId: %d, time: %d"), lID, now.GetTime()));
 
 		Local_db.execDMLEx(_T("UPDATE Main SET lDate = %d where lID = %d;"), (long)now.GetTime(), lID);
 		Local_db.close();
 		bRet = TRUE;
 	}
-
 	CATCH_SQLITE_EXCEPTION
 
-//	Log(_T("End of MarkAsPastedThread"));
+	Log(_T("End of MarkAsPastedThread"));
 
 	UpdateTimeEvent.SetEvent();
 	return bRet;

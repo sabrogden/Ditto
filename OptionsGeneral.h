@@ -29,21 +29,20 @@ public:
 	enum { IDD = IDD_OPTIONS_GENERAL };
 	CButton	m_EnsureConnected;
 	CNumberEdit	m_SaveDelay;
-	CComboBox	m_cbLanguage;
-	CEdit	m_MaxClipSize;
+	CComboBox m_cbLanguage;
+	CEdit m_MaxClipSize;
 	CButton	m_btSendPasteMessage;
 	CButton	m_btHideDittoOnHotKey;
 	CNumberEdit	m_DescTextSize;
 	CButton	m_btGetPath;
-	CEdit	m_ePath;
+	CEdit m_ePath;
 	CButton	m_btSetDatabasePath;
-	CButton	m_btCheckForUpdates;
 	CNumberEdit	m_eExpireAfter;
 	CNumberEdit	m_eMaxSavedCopies;
 	CButton	m_btMaximumCheck;
 	CButton	m_btExpire;
-	CButton		m_btShowIconInSysTray;
-	CButton		m_btRunOnStartup;
+	CButton m_btShowIconInSysTray;
+	CButton	m_btRunOnStartup;
 	CButton m_btAllowDuplicates;
 	CButton m_btUpdateTimeOnPaste;
 	CButton m_btSaveMultiPaste;
@@ -75,7 +74,6 @@ protected:
 	//{{AFX_MSG(COptionsGeneral)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnBtCompactAndRepair();
-	afx_msg void OnCheckForUpdates();
 	afx_msg void OnSetDbPath();
 	afx_msg void OnGetPath();
 	afx_msg void OnSelectSound();

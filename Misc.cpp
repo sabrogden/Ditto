@@ -6,9 +6,6 @@
 #include "AlphaBlend.h"
 #include "Tlhelp32.h"
 
-// Debug Functions
-
-
 CString GetIPAddress()
 {
 	WORD wVersionRequested;
@@ -126,10 +123,7 @@ CString GetErrorString( int err )
 	//  ::MessageBox( NULL, lpMsgBuf, "GetLastError", MB_OK|MB_ICONINFORMATION );
 	::LocalFree( lpMsgBuf );
 	return str;
-	
 }
-
-// Utility Functions
 
 CString StrF(const TCHAR * pszFormat, ...)
 {
@@ -425,307 +419,6 @@ CString GetFileName(CString csFileName)
 }
 
 
-/*------------------------------------------------------------------*\
-CHotKey - a single system-wide hotkey
-\*------------------------------------------------------------------*/
-
-CHotKey::CHotKey( CString name, DWORD defKey, bool bUnregOnShowDitto ) 
-: m_Name(name), m_bIsRegistered(false), m_bUnRegisterOnShowDitto(bUnregOnShowDitto)
-{
-	m_Atom = ::GlobalAddAtom( m_Name );
-	ASSERT( m_Atom );
-	m_Key = (DWORD) g_Opt.GetProfileLong( m_Name, (long) defKey );
-	g_HotKeys.Add( this );
-}
-CHotKey::~CHotKey()
-{
-	Unregister();
-}
-
-void CHotKey::SetKey( DWORD key, bool bSave )
-{
-	if( m_Key == key )
-		return;
-	if( m_bIsRegistered )
-		Unregister();
-	m_Key = key;
-	if( bSave )
-		SaveKey();
-}
-
-void CHotKey::LoadKey()
-{
-	SetKey( (DWORD) g_Opt.GetProfileLong( m_Name, 0 ) );
-}
-
-bool CHotKey::SaveKey()
-{
-	return g_Opt.SetProfileLong( m_Name, (long) m_Key ) != FALSE;
-}
-
-//	CString GetKeyAsText();
-//	void SetKeyFromText( CString text );
-
-BOOL CHotKey::ValidateHotKey(DWORD dwHotKey)
-{
-	ATOM id = ::GlobalAddAtom(_T("HK_VALIDATE"));
-	BOOL bResult = ::RegisterHotKey( g_HotKeys.m_hWnd,
-		id,
-		GetModifier(dwHotKey),
-		LOBYTE(dwHotKey) );
-	
-	if(bResult)
-		::UnregisterHotKey(g_HotKeys.m_hWnd, id);
-	
-	::GlobalDeleteAtom(id);
-	
-	return bResult;
-}
-
-void CHotKey::CopyFromCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID) 
-{ 
-	long lHotKey = ctrl.GetHotKey();
-
-	short sKeyKode = LOBYTE(lHotKey);
-	short sModifers = HIBYTE(lHotKey);
-
-	if(lHotKey && ::IsDlgButtonChecked(hParent, nWindowsCBID))
-	{
-		sModifers |= HOTKEYF_EXT;
-	}
-
-	SetKey(MAKEWORD(sKeyKode, sModifers)); 
-}
-
-void CHotKey::CopyToCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID)
-{
-	long lModifiers = HIBYTE(m_Key);
-
-	ctrl.SetHotKey(LOBYTE(m_Key), (WORD)lModifiers); 
-
-	if(lModifiers & HOTKEYF_EXT)
-	{
-		::CheckDlgButton(hParent, nWindowsCBID, BST_CHECKED);
-	}
-}
-
-UINT CHotKey::GetModifier(DWORD dwHotKey)
-{
-	UINT uMod = 0;
-	if( HIBYTE(dwHotKey) & HOTKEYF_SHIFT )   uMod |= MOD_SHIFT;
-	if( HIBYTE(dwHotKey) & HOTKEYF_CONTROL ) uMod |= MOD_CONTROL;
-	if( HIBYTE(dwHotKey) & HOTKEYF_ALT )     uMod |= MOD_ALT;
-	if( HIBYTE(dwHotKey) & HOTKEYF_EXT )     uMod |= MOD_WIN;
-	
-	return uMod;
-}
-
-bool CHotKey::Register()
-{
-	if(m_Key)
-	{
-		if(m_bIsRegistered == false)
-		{
-			ASSERT(g_HotKeys.m_hWnd);
-			m_bIsRegistered = ::RegisterHotKey(g_HotKeys.m_hWnd,
-												m_Atom,
-												GetModifier(),
-												LOBYTE(m_Key) ) == TRUE;
-		}
-	}
-	else
-		m_bIsRegistered = true;
-	
-	return m_bIsRegistered;
-}
-bool CHotKey::Unregister(bool bOnShowingDitto)
-{
-	if(!m_bIsRegistered)
-		return true;
-	
-	if(bOnShowingDitto)
-	{
-		if(m_bUnRegisterOnShowDitto == false)
-			return true;
-	}
-
-	if(m_Key)
-	{
-		ASSERT(g_HotKeys.m_hWnd);
-		if(::UnregisterHotKey( g_HotKeys.m_hWnd, m_Atom))
-		{
-			m_bIsRegistered = false;
-			return true;
-		}
-		else
-		{
-			Log(_T("Unregister FAILED!"));
-			ASSERT(0);
-		}
-	}
-	else
-	{
-		m_bIsRegistered = false;
-		return true;
-	}
-	
-	return false;
-}
-
-
-/*------------------------------------------------------------------*\
-CHotKeys - Manages system-wide hotkeys
-\*------------------------------------------------------------------*/
-
-CHotKeys g_HotKeys;
-
-CHotKeys::CHotKeys() : m_hWnd(NULL) {}
-CHotKeys::~CHotKeys()
-{
-	CHotKey* pHotKey;
-	int count = GetSize();
-	for(int i=0; i < count; i++)
-	{
-		pHotKey = ElementAt(i);
-		if(pHotKey)
-			delete pHotKey;
-	}
-}
-
-int CHotKeys::Find( CHotKey* pHotKey )
-{
-	int count = GetSize();
-	for(int i=0; i < count; i++)
-	{
-		if( pHotKey == ElementAt(i) )
-			return i;
-	}
-	return -1;
-}
-
-bool CHotKeys::Remove( CHotKey* pHotKey )
-{
-	int i = Find(pHotKey);
-	if(i >= 0)
-	{
-		RemoveAt(i);
-		return true;
-	}
-	return false;
-}
-
-void CHotKeys::LoadAllKeys()
-{
-	int count = GetSize();
-	for(int i=0; i < count; i++)
-		ElementAt(i)->LoadKey();
-}
-
-void CHotKeys::SaveAllKeys()
-{
-	int count = GetSize();
-	for(int i=0; i < count; i++)
-		ElementAt(i)->SaveKey();
-}
-
-void CHotKeys::RegisterAll(bool bMsgOnError)
-{
-	CString str;
-	CHotKey* pHotKey;
-	int count = GetSize();
-	for(int i = 0; i < count; i++)
-	{
-		pHotKey = ElementAt(i);
-		if(!pHotKey->Register())
-		{
-			str =  "Error Registering ";
-			str += pHotKey->GetName();
-			Log(str);
-			if(bMsgOnError)
-				AfxMessageBox(str);
-		}
-	}
-}
-
-void CHotKeys::UnregisterAll(bool bMsgOnError, bool bOnShowDitto)
-{
-	CString str;
-	CHotKey* pHotKey;
-	int count = GetSize();
-	for(int i = 0; i < count; i++)
-	{
-		pHotKey = ElementAt(i);
-		if(!pHotKey->Unregister(bOnShowDitto))
-		{
-			str = "Error Unregistering ";
-			str += pHotKey->GetName();
-			Log(str);
-			if(bMsgOnError)
-				AfxMessageBox(str);
-		}
-	}
-}
-
-void CHotKeys::GetKeys(ARRAY& keys)
-{
-	int count = GetSize();
-	keys.SetSize(count);
-	for(int i=0; i < count; i++)
-		keys[i] = ElementAt(i)->GetKey();
-}
-
-// caution! this alters hotkeys based upon corresponding indexes
-void CHotKeys::SetKeys(ARRAY& keys, bool bSave)
-{
-	int count = GetSize();
-	ASSERT(count == keys.GetSize());
-	for(int i=0; i < count; i++)
-		ElementAt(i)->SetKey(keys[i], bSave);
-}
-
-bool CHotKeys::FindFirstConflict(ARRAY& keys, int* pX, int* pY)
-{
-	bool bConflict = false;
-	int i, j;
-	int count = keys.GetSize();
-	DWORD key;
-	for(i = 0; i < count && !bConflict; i++)
-	{
-		key = keys.ElementAt(i);
-		// only check valid keys
-		if(key == 0)
-			continue;
-
-		// scan the array for a duplicate
-		for(j = i+1; j < count; j++ )
-		{
-			if(keys.ElementAt(j) == key)
-			{
-				bConflict = true;
-				break;
-			}
-		}
-	}
-	
-	if(bConflict)
-	{
-		if(pX)
-			*pX = i-1;
-		if(pY)
-			*pY = j;
-	}
-	
-	return bConflict;
-}
-
-// if true, pX and pY (if valid) are set to the indexes of the conflicting hotkeys.
-bool CHotKeys::FindFirstConflict(int* pX, int* pY)
-{
-	ARRAY keys;
-	GetKeys(keys);
-	return FindFirstConflict(keys, pX, pY);
-}
-
 /****************************************************************************************************
 BOOL CALLBACK MyMonitorEnumProc(HMONITOR hMonitor, HDC hdcMonitor, LPRECT lprcMonitor, LPARAM dwData)
 ***************************************************************************************************/
@@ -923,141 +616,6 @@ void GetMonitorRect(int iMonitor, LPRECT lpDestRect)
 		lpDestRect->right = GetScreenWidth();
 		lpDestRect->bottom = GetScreenHeight();
 	}
-}
-
-
-/*------------------------------------------------------------------*\
-CAccel - an Accelerator (in-app hotkey)
-
-  - the win32 CreateAcceleratorTable using ACCEL was insufficient
-  because it only allowed a WORD for the cmd associated with it.
-\*------------------------------------------------------------------*/
-
-/*------------------------------------------------------------------*\
-CAccels - Manages a set of CAccel
-\*------------------------------------------------------------------*/
-
-int CompareAccel( const void* pLeft, const void* pRight )
-{
-	WORD w;
-	int l,r;
-	// swap bytes: place the VirtualKey in the MSB and the modifier in the LSB
-	//  so that Accels based upon the same vkey are grouped together.
-	// this is required by our use of m_Index
-	// alternatively, we could store them this way in CAccel.
-	w = (WORD) ((CAccel*)pLeft)->Key;
-	l = (ACCEL_VKEY(w) << 8) | ACCEL_MOD(w);
-	w = (WORD) ((CAccel*)pRight)->Key;
-	r = (ACCEL_VKEY(w) << 8) | ACCEL_MOD(w);
-	return l - r;
-}
-
-CAccels::CAccels()
-{}
-
-void CAccels::AddAccel( CAccel& a )
-{
-	m_Map.SetAt(a.Key, a.Cmd);
-	
-}
-
-bool CAccels::OnMsg( MSG* pMsg, DWORD &dID)
-{
-	// bit 30 (0x40000000) is 1 if this is NOT the first msg of the key
-	//  i.e. auto-repeat may cause multiple msgs of the same key
-	if( (pMsg->lParam & 0x40000000) ||
-		(pMsg->message != WM_KEYDOWN &&
-		pMsg->message != WM_SYSKEYDOWN) )
-	{	
-		return NULL; 
-	}
-	
-	if( !pMsg || m_Map.GetCount() <= 0 )
-		return NULL;
-	
-	BYTE vkey = LOBYTE(pMsg->wParam);
-	BYTE mod  = GetKeyStateModifiers();
-	DWORD key = ACCEL_MAKEKEY( vkey, mod );
-
-	CString cs;
-	cs.Format(_T("Key: %d, Mod: %d, vkey: %d"), key, mod, vkey);
-	OutputDebugString(cs);
-	
-	if(m_Map.Lookup(key, dID))
-		return true;;
-	
-	return false;
-}
-
-BYTE GetKeyStateModifiers()
-{
-	BYTE m=0;
-	if( GetKeyState(VK_SHIFT) & 0x8000 )
-		m |= HOTKEYF_SHIFT;
-	if( GetKeyState(VK_CONTROL) & 0x8000 )
-		m |= HOTKEYF_CONTROL;
-	if( GetKeyState(VK_MENU) & 0x8000 )
-		m |= HOTKEYF_ALT;
-	if( GetKeyState(VK_LWIN) & 0x8000 )
-		m |= HOTKEYF_EXT;
-	if( GetKeyState(VK_RWIN) & 0x8000 )
-		m |= HOTKEYF_EXT;
-	return m;
-}
-
-/*------------------------------------------------------------------*\
-CTokenizer - Tokenizes a string using given delimiters
-\*------------------------------------------------------------------*/
-
-CTokenizer::CTokenizer(const CString& cs, const CString& csDelim):
-m_cs(cs),
-m_nCurPos(0)
-{
-	SetDelimiters(csDelim);
-}
-
-void CTokenizer::SetDelimiters(const CString& csDelim)
-{
-	for(int i = 0; i < csDelim.GetLength(); ++i)
-		m_delim.Add(csDelim[i]);
-
-	m_delim.SortAscending();
-}
-
-bool CTokenizer::Next(CString& cs)
-{
-	cs.Empty();
-	int len = m_cs.GetLength();
-
-	while (m_nCurPos < len && m_delim.Find(m_cs[m_nCurPos]))
-		++ m_nCurPos;
-
-	if (m_nCurPos >= len)
-		return false;
-
-	int nStartPos = m_nCurPos;
-
-	while (m_nCurPos < len && !m_delim.Find(m_cs[m_nCurPos]))
-		++ m_nCurPos;
-
-	cs = m_cs.Mid(nStartPos, m_nCurPos - nStartPos);
-
-	return true;
-}
-
-CString	CTokenizer::Tail()
-{
-	int len = m_cs.GetLength();
-	int nCurPos = m_nCurPos;
-	
-	while(nCurPos < len && m_delim.Find(m_cs[nCurPos]))
-		++nCurPos;
-	
-	CString csResult;
-	if(nCurPos < len)
-		csResult = m_cs.Mid(nCurPos);
-	
-	return csResult;
 }
 
 /*------------------------------------------------------------------*\
@@ -1271,4 +829,50 @@ bool IsRunningLimited()
 
 	OutputDebugString(_T("Ditto - Running as standard application"));	
 	return false;
+}
+
+void DeleteReceivedFiles(CString csDir)
+{
+	if(csDir.Find(_T("\\ReceivedFiles\\")) == -1)
+		return;
+
+	FIX_CSTRING_PATH(csDir);
+
+	CTime ctOld = CTime::GetCurrentTime();
+	CTime ctFile;
+	ctOld -= CTimeSpan(0, 0, 0, 1);
+
+	CFileFind Find;
+
+	CString csFindString;
+	csFindString.Format(_T("%s*.*"), csDir);
+
+	BOOL bFound = Find.FindFile(csFindString);
+	while(bFound)
+	{
+		bFound = Find.FindNextFile();
+
+		if(Find.IsDots())
+			continue;
+
+		if(Find.IsDirectory())
+		{
+			CString csDir(Find.GetFilePath());
+			DeleteReceivedFiles(csDir);
+			RemoveDirectory(csDir);
+		}
+
+		if(Find.GetLastAccessTime(ctFile))
+		{
+			//Delete the remote copied file if it has'nt been used for the last day
+			if(ctFile < ctOld)
+			{
+				DeleteFile(Find.GetFilePath());
+			}
+		}
+		else
+		{
+			DeleteFile(Find.GetFilePath());
+		}
+	}
 }

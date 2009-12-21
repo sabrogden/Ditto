@@ -114,6 +114,8 @@ BOOL COleClipSource::DoImmediateRender()
 
 long COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 {
+	Log(_T("Start of put format on clipboard"));
+
 	CClipFormat* pCF;
 	int	count = pFormats->GetSize();
 	bool bDelayedRenderCF_HDROP = false;
@@ -146,6 +148,8 @@ long COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 			continue;
 		}
 
+		Log(StrF(_T("Setting clipboard type: %s to the clipboard"), GetFormatName(pCF->m_cfType)));
+
 		CacheGlobalData(pCF->m_cfType, pCF->m_hgData);
 		pCF->m_hgData = 0; // OLE owns it now
 	}
@@ -153,6 +157,8 @@ long COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 	pFormats->RemoveAll();
 
 	m_bLoadedFormats = true;
+
+	Log(_T("End of put format on clipboard"));
 
 	return count;
 }  

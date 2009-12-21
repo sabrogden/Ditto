@@ -97,6 +97,7 @@ public:
 	BOOL m_bIsGroup;
 	DWORD m_CRC;
 	CString m_csQuickPaste;
+	int m_param1;
 
 	virtual CString Description() { return m_Desc; }
 	virtual void Description(CString csValue) { m_Desc = csValue; }
@@ -149,7 +150,7 @@ public:
 	~CClipList();
 	// returns the number of clips actually saved
 	// while this does empty the Format Data, it does not delete the Clips.
-	int AddToDB( bool bLatestTime = false, bool bShowStatus = true );
+	int AddToDB( bool bLatestTime = false);
 
 	const CClipList& operator=(const CClipList &cliplist);
 };

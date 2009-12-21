@@ -11,6 +11,7 @@
 #include "FormattedTextDraw.h"
 #include "sqlite/CppSQLite3.h"
 #include "ClipFormatQListCtrl.h"
+#include "Accels.h"
 
 #define NM_SELECT					WM_USER+0x100
 #define NM_RIGHT					WM_USER+0x101

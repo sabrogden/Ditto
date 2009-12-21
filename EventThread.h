@@ -17,6 +17,7 @@ protected:
 	virtual void OnEvent(int eventId, void *param)	{ return; }
 	virtual void OnTimeOut(void *param) { return; }
 	void RunThread();
+	bool UndoFireEvent(int eventId);
 
 	UINT m_threadID;
 	HANDLE m_thread;

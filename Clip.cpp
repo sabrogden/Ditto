@@ -164,7 +164,8 @@ CClip::CClip() :
 	m_lParent(-1),
 	m_lDontAutoDelete(FALSE),
 	m_lShortCut(0),
-	m_bIsGroup(FALSE)
+	m_bIsGroup(FALSE),
+	m_param1(0)
 {
 }
 
@@ -184,6 +185,7 @@ void CClip::Clear()
 	m_lShortCut = 0;
 	m_bIsGroup = FALSE;
 	m_csQuickPaste = "";
+	m_param1 = 0;
 	
 	EmptyFormats();
 }
@@ -507,17 +509,8 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 			int nID = FindDuplicate();
 			if(nID >= 0)
 			{
-				CString csQuickPasteSQL;
-				if(m_csQuickPaste.IsEmpty() == FALSE)
-				{
-					m_csQuickPaste.Replace(_T("'"), _T("''"));
-					csQuickPasteSQL.Format(_T(", QuickPasteText = '%s'"), m_csQuickPaste);
-				}
-
-				theApp.m_db.execDMLEx(_T("UPDATE Main SET lDate = %d%s where lID = %d;"), 
-										(long)m_Time.GetTime(), csQuickPasteSQL, nID);
-				
-				EmptyFormats();
+				theApp.m_db.execDMLEx(_T("UPDATE Main SET lDate = %d where lID = %d;"), 
+										(long)m_Time.GetTime(), nID);
 
 				m_ID = nID;
 
@@ -540,7 +533,7 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 	}
 	
 	// should be emptied by AddToDataTable
-	ASSERT(m_Formats.GetSize() == 0);
+	//ASSERT(m_Formats.GetSize() == 0);
 	
 	return bResult;
 }
@@ -687,8 +680,8 @@ bool CClip::AddToDataTable()
 			
 			stmt.execDML();
 			stmt.reset();
-  
-			m_Formats.RemoveAt(i);
+
+			pCF->m_lDBID = theApp.m_db.lastRowId();
 		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)
@@ -905,7 +898,7 @@ CClipList::~CClipList()
 
 // returns the number of clips actually saved
 // while this does empty the Format Data, it does not delete the Clips.
-int CClipList::AddToDB(bool bLatestTime, bool bShowStatus)
+int CClipList::AddToDB(bool bLatestTime)
 {
 	Log(_T("AddToDB - Start"));
 
@@ -920,11 +913,6 @@ int CClipList::AddToDB(bool bLatestTime, bool bShowStatus)
 	while(pos)
 	{
 		Log(StrF(_T("AddToDB - while(pos), Start Remaining %d"), nRemaining));
-
-		if(bShowStatus)
-		{
-			theApp.SetStatus(StrF(_T("%d"), nRemaining), true);
-		}
 		nRemaining--;
 		
 		pClip = GetNext(pos);
@@ -939,9 +927,6 @@ int CClipList::AddToDB(bool bLatestTime, bool bShowStatus)
 
 		Log(StrF(_T("AddToDB - while(pos), End Remaining %d, save count: %d"), nRemaining, savedCount));
 	}
-	
-	if(bShowStatus)
-		theApp.SetStatus(NULL, true);
 
 	Log(StrF(_T("AddToDB - Start, count: %d"), savedCount));
 	

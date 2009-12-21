@@ -1,12 +1,4 @@
-// CP_Main.h : main header file for the CP_MAIN application
-//
-
-#if !defined(AFX_CP_MAIN_H__DAB2F753_2CC1_4FED_8095_763987961026__INCLUDED_)
-#define AFX_CP_MAIN_H__DAB2F753_2CC1_4FED_8095_763987961026__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
@@ -27,14 +19,10 @@
 #include "sqlite\CppSQLite3.h"
 #include "DittoAddins.h"
 #include "externalwindowtracker.h"
+#include "HotKeys.h"
 
-//#define GET_APP ((CMainWnd*)theApp)
 extern class CCP_MainApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CCP_MainApp:
-// See CP_Main.cpp for the implementation of this class
-//
 class CCP_MainApp : public CWinApp
 {
 public:
@@ -59,9 +47,7 @@ public:
 
 // System-wide HotKeys
 	CHotKey*	m_pDittoHotKey; // activate ditto's qpaste window
-	CHotKey*	m_pNamedPaste;
-	CHotKey*	m_pNamedCopy;
-
+	
 	CHotKey*	m_pPosOne;
 	CHotKey*	m_pPosTwo;
 	CHotKey*	m_pPosThree;
@@ -91,10 +77,8 @@ public:
 	void StopCopyThread();
 	// for posting messages
 	HWND GetClipboardViewer()			{ return m_CopyThread.m_pClipboardViewer->m_hWnd; }
-	// enables or disables copying the clipboard when it changes
 	bool EnableCbCopy(bool bState)		{ return m_CopyThread.SetCopyOnChange(bState); }
 	bool IsClipboardViewerConnected()	{ return m_CopyThread.IsClipboardViewerConnected(); }
-	// user control over being in the clipboard viewer chain.
 	bool GetConnectCV()					{ return m_CopyThread.GetConnectCV(); }
 	void SetConnectCV(bool bConnect);
 	bool ToggleConnectCV();
@@ -103,15 +87,8 @@ public:
 	int ShowOptionsDlg();
 
 	void OnDeleteID(long lID);
-
 	BOOL GetClipData(long lID, CClipFormat &Clip);
-
-	bool EditItems(CClipIDs &Ids, bool bShowError);
-
-//	CClipList	m_SaveClipQueue; 
-	// Retrieves all clips from CopyThread and Saves them.
-	// returns the ID of the last Clip saved (or 0 if none)
-	long SaveCopyClips(); 
+	bool EditItems(CClipIDs &Ids, bool bShowError); 
 
 	CClipTypes* LoadTypesFromDB(); // returns a "new" allocated object
 	void ReloadTypes();
@@ -171,46 +148,21 @@ public:
 
 	COleDateTime m_oldtStartUp;
 
-	//Mulitlange Support
 	CMultiLanguage m_Language;
-
-	enum eQuickPasteMode{NONE_QUICK_PASTE, ADDING_QUICK_PASTE, PASTING_QUICK_PASTE, DITTO_BUFFER_QUICK_PASTE};
-
-	eQuickPasteMode m_QuickPasteMode;
-	CClipList* m_pQuickPasteClip;
 
 	CDittoCopyBuffer m_CopyBuffer;
 	void PumpMessageEx(HWND hWnd = NULL);
 
 	CDittoAddins m_Addins;
 
-protected:
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CCP_MainApp)
-	public:
+public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
-	//}}AFX_VIRTUAL
 	
-
-// Implementation
-	//{{AFX_MSG(CCP_MainApp)
 	afx_msg void OnAppAbout();
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 	virtual BOOL OnIdle(LONG lCount);
 
 protected:
 	void ShowCommandLineError(CString csTitle, CString csMessage);
 };
-
-
-/////////////////////////////////////////////////////////////////////////////
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
-
-#endif // !defined(AFX_CP_MAIN_H__DAB2F753_2CC1_4FED_8095_763987961026__INCLUDED_)

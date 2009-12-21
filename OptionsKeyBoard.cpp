@@ -34,7 +34,6 @@ void COptionsKeyBoard::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionsKeyBoard)
-	DDX_Control(pDX, IDC_NAMED_PASTE, m_NamedPaste);
 	DDX_Control(pDX, IDC_CHECK_SEND_PASTE, m_btSendPaste);
 	DDX_Control(pDX, IDC_HOTKEY9, m_Nine);
 	DDX_Control(pDX, IDC_HOTKEY8, m_Eight);
@@ -46,7 +45,6 @@ void COptionsKeyBoard::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_HOTKEY2, m_Two);
 	DDX_Control(pDX, IDC_HOTKEY10, m_Ten);
 	DDX_Control(pDX, IDC_HOTKEY1, m_One);
-	DDX_Control(pDX, IDC_NAMED_COPY, m_NamedCopy);
 	DDX_Control(pDX, IDC_HOTKEY, m_HotKey);
 	//}}AFX_DATA_MAP
 	DDX_Control(pDX, IDC_STATIC_CUSTOM_KEYS, m_CustomeKeysHelp);
@@ -71,14 +69,6 @@ BOOL COptionsKeyBoard::OnInitDialog()
 	m_pParent = (COptionsSheet *)GetParent();
 
 	theApp.m_pDittoHotKey->CopyToCtrl(m_HotKey, m_hWnd, IDC_CHECK_WIN_DITTO);
-
-	//A U3 device is unable to use the keyboard hooks, so named paste and copy 
-	//can't be used
-	if(!g_Opt.m_bU3)
-	{
-		theApp.m_pNamedCopy->CopyToCtrl(m_NamedCopy, m_hWnd, IDC_CHECK_WIN_NAMED_COPY);
-		theApp.m_pNamedPaste->CopyToCtrl(m_NamedPaste, m_hWnd, IDC_CHECK_WIN_NAMED_PASTE);
-	}
 
 	theApp.m_pPosOne->CopyToCtrl(m_One, m_hWnd, IDC_CHECK_WIN1);
 	theApp.m_pPosTwo->CopyToCtrl(m_Two, m_hWnd, IDC_CHECK_WIN2);
@@ -137,14 +127,6 @@ BOOL COptionsKeyBoard::OnApply()
 	g_HotKeys.GetKeys( keys ); // save old keys just in case new ones are invalid
 	
 	theApp.m_pDittoHotKey->CopyFromCtrl(m_HotKey, m_hWnd, IDC_CHECK_WIN_DITTO);
-	
-	//A U3 device is unable to use the keyboard hooks, so named paste and copy 
-	//can't be used
-	if(!g_Opt.m_bU3)
-	{
-		theApp.m_pNamedCopy->CopyFromCtrl(m_NamedCopy, m_hWnd, IDC_CHECK_WIN_NAMED_COPY);
-		theApp.m_pNamedPaste->CopyFromCtrl(m_NamedPaste, m_hWnd, IDC_CHECK_WIN_NAMED_PASTE);
-	}
 	
 	theApp.m_pPosOne->CopyFromCtrl(m_One, m_hWnd, IDC_CHECK_WIN1);
 	theApp.m_pPosTwo->CopyFromCtrl(m_Two, m_hWnd, IDC_CHECK_WIN2);

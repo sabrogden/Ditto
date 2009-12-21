@@ -1231,7 +1231,6 @@ HWND CQListCtrl::GetToolTipHWnd()
 
 BOOL CQListCtrl::SetItemCountEx(int iCount, DWORD dwFlags /* = LVSICF_NOINVALIDATEALL */)
 {
-	theApp.SetStatus(NULL, TRUE);
 	return CListCtrl::SetItemCountEx(iCount, dwFlags);
 }
 

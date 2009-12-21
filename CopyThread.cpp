@@ -19,12 +19,9 @@ IMPLEMENT_DYNCREATE(CCopyThread, CWinThread)
 CCopyThread::CCopyThread():
 	m_bQuit(false),
 	m_bConfigChanged(false),
-	m_pClips(NULL),
 	m_pClipboardViewer(NULL)
 {
-	m_bAutoDelete = false,
-
-	::InitializeCriticalSection(&m_CS);
+	m_bAutoDelete = false;
 }
 
 CCopyThread::~CCopyThread()
@@ -32,8 +29,6 @@ CCopyThread::~CCopyThread()
 	m_LocalConfig.DeleteTypes();
 	m_SharedConfig.DeleteTypes();
 	DELETE_PTR(m_pClipboardViewer);
-	DELETE_PTR(m_pClips);
-	::DeleteCriticalSection(&m_CS);
 }
 
 BOOL CCopyThread::InitInstance()
@@ -52,16 +47,6 @@ int CCopyThread::ExitInstance()
 
 	return CWinThread::ExitInstance();
 }
-
-BEGIN_MESSAGE_MAP(CCopyThread, CWinThread)
-	//{{AFX_MSG_MAP(CCopyThread)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-/////////////////////////////////////////////////////////////////////////////
-// CCopyThread message handlers
-
 
 // Called within Copy Thread:
 void CCopyThread::OnClipboardChange()
@@ -128,8 +113,6 @@ void CCopyThread::OnClipboardChange()
 		return; // error
 	}
 	
-	AddToClips(pClip);
-	
 	if(m_LocalConfig.m_bAsyncCopy)
 		::PostMessage(m_LocalConfig.m_hClipHandler, WM_CLIPBOARD_COPIED, (WPARAM)pClip, 0);
 	else
@@ -144,7 +127,8 @@ void CCopyThread::SyncConfig()
 	if(m_bConfigChanged)
 	{
 		CClipTypes* pTypes = NULL;
-		Hold();
+		
+		ATL::CCritSecLock csLock(m_cs.m_sect);
 		
 		pTypes = m_LocalConfig.m_pSupportedTypes;
 		
@@ -159,23 +143,12 @@ void CCopyThread::SyncConfig()
 		else
 			m_SharedConfig.m_pSupportedTypes = NULL; // now owned by LocalConfig
 		
-		Release();
 		// delete old types
 		if( pTypes )
+		{
 			delete pTypes;
+		}
 	}
-}
-
-void CCopyThread::AddToClips(CClip* pClip)
-{
-	Hold();
-
-	if(!m_pClips)
-		m_pClips = new CClipList;
-
-	m_pClips->AddTail(pClip); // m_pClips now owns pClip
-
-	Release();
 }
 
 bool CCopyThread::IsClipboardViewerConnected()
@@ -194,20 +167,9 @@ void CCopyThread::SetConnectCV(bool bConnect)
 	::SendMessage( m_pClipboardViewer->m_hWnd, WM_SETCONNECT, bConnect, 0 );
 }
 
-CClipList* CCopyThread::GetClips()
-{
-	Hold();
-	
-	CClipList* pRet = m_pClips;
-	m_pClips = NULL;
-
-	Release();
-	return pRet;
-}
-
 void CCopyThread::SetSupportedTypes( CClipTypes* pTypes )
 {
-	Hold();
+	ATL::CCritSecLock csLock(m_cs.m_sect);
 
 	if(m_SharedConfig.m_pSupportedTypes)
 	{
@@ -216,67 +178,59 @@ void CCopyThread::SetSupportedTypes( CClipTypes* pTypes )
 
 	m_SharedConfig.m_pSupportedTypes = pTypes;
 	m_bConfigChanged = true;
-
-	Release();
 }
 
 HWND CCopyThread::SetClipHandler(HWND hWnd)
 {
-	Hold();
+	ATL::CCritSecLock csLock(m_cs.m_sect);
 
 	HWND hRet = m_SharedConfig.m_hClipHandler;
 	m_SharedConfig.m_hClipHandler = hWnd;
 	m_bConfigChanged = (hRet != hWnd);
 
-	Release();
-
 	return hRet;
 }
 HWND CCopyThread::GetClipHandler()
 {
-	Hold();
+	ATL::CCritSecLock csLock(m_cs.m_sect);
 
 	HWND hRet = m_SharedConfig.m_hClipHandler;
-
-	Release();
 
 	return hRet;
 }
 bool CCopyThread::SetCopyOnChange(bool bVal)
 {
-	Hold();
+	ATL::CCritSecLock csLock(m_cs.m_sect);
 
 	bool bRet = m_SharedConfig.m_bCopyOnChange;
 	m_SharedConfig.m_bCopyOnChange = bVal;
 	m_bConfigChanged = (bRet != bVal);
 
-	Release();
-
 	return bRet;
 }
 bool CCopyThread::GetCopyOnChange()
 {
-	Hold();
+	ATL::CCritSecLock csLock(m_cs.m_sect);
+
 	bool bRet = m_SharedConfig.m_bCopyOnChange;
-	Release();
 
 	return bRet;
 }
 bool CCopyThread::SetAsyncCopy(bool bVal)
 {
-	Hold();
+	ATL::CCritSecLock csLock(m_cs.m_sect);
+
 	bool bRet = m_SharedConfig.m_bAsyncCopy;
 	m_SharedConfig.m_bAsyncCopy = bVal;
 	m_bConfigChanged = (bRet != bVal);
-	Release();
 
 	return bRet;
 }
 bool CCopyThread::GetAsyncCopy()
 {
-	Hold();
+	ATL::CCritSecLock csLock(m_cs.m_sect);
+
 	bool bRet = m_SharedConfig.m_bAsyncCopy;
-	Release();
 
 	return bRet;
 }

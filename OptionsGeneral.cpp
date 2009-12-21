@@ -52,7 +52,6 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_GET_PATH, m_btGetPath);
 	DDX_Control(pDX, IDC_PATH, m_ePath);
 	DDX_Control(pDX, IDC_SET_DB_PATH, m_btSetDatabasePath);
-	DDX_Control(pDX, IDC_CHECK_UPDATES, m_btCheckForUpdates);
 	DDX_Control(pDX, IDC_EXPIRE_AFTER, m_eExpireAfter);
 	DDX_Control(pDX, IDC_MAX_SAVED_COPIES, m_eMaxSavedCopies);
 	DDX_Control(pDX, IDC_MAXIMUM, m_btMaximumCheck);
@@ -71,7 +70,6 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(COptionsGeneral, CPropertyPage)
 	//{{AFX_MSG_MAP(COptionsGeneral)
 	ON_BN_CLICKED(IDC_BT_COMPACT_AND_REPAIR, OnBtCompactAndRepair)
-	ON_BN_CLICKED(IDC_CHECK_FOR_UPDATES, OnCheckForUpdates)
 	ON_BN_CLICKED(IDC_SET_DB_PATH, OnSetDbPath)
 	ON_BN_CLICKED(IDC_GET_PATH, OnGetPath)
 	ON_BN_CLICKED(IDC_SELECT_SOUND, OnSelectSound)
@@ -93,7 +91,6 @@ BOOL COptionsGeneral::OnInitDialog()
 	m_btShowIconInSysTray.SetCheck(CGetSetOptions::GetShowIconInSysTray());
 	m_btMaximumCheck.SetCheck(CGetSetOptions::GetCheckForMaxEntries());
 	m_btExpire.SetCheck(CGetSetOptions::GetCheckForExpiredEntries());
-	m_btCheckForUpdates.SetCheck(CGetSetOptions::GetCheckForUpdates());
 	
 	m_eExpireAfter.SetNumber(CGetSetOptions::GetExpiredEntries());
 	m_eMaxSavedCopies.SetNumber(CGetSetOptions::GetMaxEntries());
@@ -146,7 +143,6 @@ BOOL COptionsGeneral::OnInitDialog()
 		m_btSetDatabasePath.EnableWindow(FALSE);
 		m_btGetPath.EnableWindow(FALSE);
 		m_ePath.SetWindowText(_T("U3 Device"));
-		m_btCheckForUpdates.ShowWindow(SW_HIDE);
 		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_FOR_UPDATES), SW_HIDE);
 	}
 
@@ -201,7 +197,6 @@ BOOL COptionsGeneral::OnApply()
 	CGetSetOptions::SetRunOnStartUp(m_btRunOnStartup.GetCheck());
 	CGetSetOptions::SetCheckForMaxEntries(m_btMaximumCheck.GetCheck());
 	CGetSetOptions::SetCheckForExpiredEntries(m_btExpire.GetCheck());
-	CGetSetOptions::SetCheckForUpdates(m_btCheckForUpdates.GetCheck());
 	CGetSetOptions::SetHideDittoOnHotKeyIfAlreadyShown(m_btHideDittoOnHotKey.GetCheck());
 	CGetSetOptions::SetSendPasteAfterSelection(m_btSendPasteMessage.GetCheck());
 	CGetSetOptions::SetEnsureConnectToClipboard(m_EnsureConnected.GetCheck());
@@ -316,17 +311,6 @@ void COptionsGeneral::OnBtCompactAndRepair()
 		theApp.m_db.execQuery(_T("VACUUM"));
 	}
 	CATCH_SQLITE_EXCEPTION
-}
-
-void COptionsGeneral::OnCheckForUpdates() 
-{
-	CInternetUpdate update;
-
-	if(update.CheckForUpdate(m_hWnd, FALSE, TRUE))
-	{
-		::PostMessage(theApp.m_MainhWnd, WM_CLOSE_APP, 0, 0);
-		m_pParent->EndDialog(-1);
-	}
 }
 
 void COptionsGeneral::OnSetDbPath() 
