@@ -388,6 +388,9 @@ public:
 	static DWORD	WaitForActiveWndTimeout();
 	static DWORD	FocusChangedDelay();
 	static DWORD	FocusWndTimerTimeout();
+
+	static BOOL		GetConnectedToClipboard();
+	static void		SetConnectedToClipboard(BOOL val);
 };
 
 // global for easy access and for initialization of fast access variables

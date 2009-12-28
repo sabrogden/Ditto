@@ -681,7 +681,7 @@ bool CClip::AddToDataTable()
 			stmt.execDML();
 			stmt.reset();
 
-			pCF->m_lDBID = theApp.m_db.lastRowId();
+			pCF->m_lDBID = (long)theApp.m_db.lastRowId();
 		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)

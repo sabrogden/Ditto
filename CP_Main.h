@@ -35,7 +35,7 @@ public:
 	// track stages of startup / shutdown
 	bool	m_bAppRunning;
 	bool	m_bAppExiting;
-	bool 	m_bStartupDisconnected;
+	int 	m_connectOnStartup;
 
 	bool	m_bExitServerThread;
 

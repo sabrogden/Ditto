@@ -19,7 +19,8 @@ IMPLEMENT_DYNCREATE(CCopyThread, CWinThread)
 CCopyThread::CCopyThread():
 	m_bQuit(false),
 	m_bConfigChanged(false),
-	m_pClipboardViewer(NULL)
+	m_pClipboardViewer(NULL),
+	m_connectOnStartup(true)
 {
 	m_bAutoDelete = false;
 }
@@ -34,6 +35,7 @@ CCopyThread::~CCopyThread()
 BOOL CCopyThread::InitInstance()
 {
 	m_pClipboardViewer = new CClipboardViewer(this);
+	m_pClipboardViewer->m_connectOnStartup = m_connectOnStartup;
 
 	// the window is created within this thread and therefore uses its message queue
 	m_pClipboardViewer->Create();
@@ -163,8 +165,10 @@ bool CCopyThread::GetConnectCV()
 
 void CCopyThread::SetConnectCV(bool bConnect)
 {
-	ASSERT( m_pClipboardViewer && m_pClipboardViewer->m_hWnd );
-	::SendMessage( m_pClipboardViewer->m_hWnd, WM_SETCONNECT, bConnect, 0 );
+	if(m_pClipboardViewer != NULL && m_pClipboardViewer->m_hWnd != NULL)
+	{
+		::SendMessage( m_pClipboardViewer->m_hWnd, WM_SETCONNECT, bConnect, 0 );
+	}
 }
 
 void CCopyThread::SetSupportedTypes( CClipTypes* pTypes )

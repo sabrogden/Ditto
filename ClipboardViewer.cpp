@@ -22,7 +22,8 @@ CClipboardViewer::CClipboardViewer(CCopyThread* pHandler) :
 	m_bHandlingClipChange(false),
 	m_bIsConnected(false),
 	m_bConnect(false),
-	m_dwLastCopy(0)
+	m_dwLastCopy(0),
+	m_connectOnStartup(true)
 {
 
 }
@@ -51,7 +52,10 @@ void CClipboardViewer::Create()
 	CString strParentClass = AfxRegisterWndClass(0);
 	CWnd::CreateEx(0, strParentClass, _T("Ditto Clipboard Viewer"), 0, -1, -1, 0, 0, 0, 0);
 
-	SetConnect(true);
+	if(m_connectOnStartup)
+	{
+		SetConnect(true);
+	}
 }
 
 // connects as a clipboard viewer
@@ -145,7 +149,10 @@ int CClipboardViewer::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	
 	//Set up the clip board viewer
-	Connect();
+	if(m_connectOnStartup)
+	{
+		Connect();
+	}
 	
 	return 0;
 }

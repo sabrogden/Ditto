@@ -52,6 +52,7 @@ public:
 public:
 
 	bool m_bQuit;
+	bool m_connectOnStartup;
 
 	CCriticalSection m_cs;
 

@@ -81,7 +81,7 @@ CCP_MainApp::CCP_MainApp()
 {
 	m_bAppRunning = false;
 	m_bAppExiting = false;
-	m_bStartupDisconnected = false;
+	m_connectOnStartup = -1;
 	m_MainhWnd = NULL;
 	m_pMainFrame = NULL;
 
@@ -166,6 +166,11 @@ BOOL CCP_MainApp::InitInstance()
 	}
 	else if(cmdInfo.m_bConnect || cmdInfo.m_bDisconnect)
 	{
+		//First get the saved hwnd and send it a message
+		//If ditt is running then this will return 1, meening the running ditto process
+		//handled this message
+		//If it didn't handle the message(ditto is not running) then startup this processes of ditto 
+		//disconnected from the clipboard
 		int ret = 0;
 		HWND hWnd = (HWND)CGetSetOptions::GetMainHWND();
 		if(hWnd)
@@ -173,12 +178,20 @@ BOOL CCP_MainApp::InitInstance()
 			ret = ::SendMessage(hWnd, WM_SET_CONNECTED, cmdInfo.m_bConnect, cmdInfo.m_bDisconnect);
 		}
 
+		//passed off to the running instance of ditto, exit this instance
 		if(ret == 1)
 		{
 			return FALSE;
 		}
 		
-		m_bStartupDisconnected = true;
+		if(cmdInfo.m_bConnect)
+		{
+			m_connectOnStartup = TRUE;
+		}
+		else if(cmdInfo.m_bDisconnect)
+		{
+			m_connectOnStartup = FALSE;
+		}
 	}
 
 	CInternetUpdate update;
@@ -245,8 +258,6 @@ BOOL CCP_MainApp::InitInstance()
 	pFrame->LoadFrame(IDR_MAINFRAME, WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, NULL, NULL);
 	pFrame->ShowWindow(SW_SHOW);
 	pFrame->UpdateWindow();
-
-	//m_Addins.LoadAll();
 
 	return TRUE;
 }
@@ -337,16 +348,21 @@ void CCP_MainApp::StartCopyThread()
 	// - true = enable copying on clipboard changes
 	// - pTypes = the supported types to use
 	m_CopyThread.Init(CCopyConfig(m_MainhWnd, true, true, pTypes));
+	
+	if(m_connectOnStartup == FALSE || g_Opt.GetConnectedToClipboard() == FALSE)
+	{
+		m_CopyThread.m_connectOnStartup = false;
+		Log(StrF(_T("Starting Ditto up disconnected from the clipboard, commandLine: %d, saved value: %d"), m_connectOnStartup, g_Opt.GetConnectedToClipboard()));
+		SetConnectCV(false);
+	}
+	else if(m_connectOnStartup == TRUE)
+	{
+		SetConnectCV(true);
+		Log(_T("Starting Ditto up connected from the clipboard, passed in true from command line to start connected"));
+	}
 
 	VERIFY(m_CopyThread.CreateThread(CREATE_SUSPENDED));
 	m_CopyThread.ResumeThread();
-	
-	if(m_bStartupDisconnected)
-	{
-		Sleep(2000);
-		Log(_T("Starting Ditto up disconnected from the clipboard"));
-		SetConnectCV(false);
-	}
 }
 
 void CCP_MainApp::StopCopyThread()
@@ -374,8 +390,7 @@ void CCP_MainApp::UpdateMenuConnectCV(CMenu* pMenu, UINT nMenuID)
 	if(pMenu == NULL)
 		return;
 
-	bool bConnect = false;
-	bool b = theApp.GetConnectCV();
+	bool bConnect = theApp.GetConnectCV();
 	CString cs;
 
 	if(bConnect)
@@ -678,7 +693,8 @@ BOOL CCP_MainApp::OnIdle(LONG lCount)
 void CCP_MainApp::SetConnectCV(bool bConnect)
 { 
 	m_CopyThread.SetConnectCV(bConnect); 
-	
+	g_Opt.SetConnectedToClipboard(bConnect == true);
+
 	if(bConnect)
 	{
 		m_pMainFrame->m_TrayIcon.SetIcon(IDR_MAINFRAME);

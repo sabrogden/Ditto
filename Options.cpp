@@ -1914,3 +1914,13 @@ DWORD CGetSetOptions::FocusWndTimerTimeout()
 {
 	return (DWORD)GetProfileLong(_T("FocusWndTimerTimeout"), 2000);
 }
+
+BOOL CGetSetOptions::GetConnectedToClipboard()
+{
+	return GetProfileLong("ConnectedToClipboard", TRUE);
+}
+
+void CGetSetOptions::SetConnectedToClipboard(BOOL val)
+{
+	SetProfileLong("ConnectedToClipboard", val);
+}
