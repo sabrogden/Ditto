@@ -66,9 +66,10 @@ bool ExternalWindowTracker::TrackActiveWnd(HWND focus)
 		return false;
 	}
 
-	if(IsAppWnd(newFocus))
+	if(IsAppWnd(newFocus) || IsAppWnd(newActive))
 	{
 		m_dittoHasFocus = true;
+		Log(StrF(_T("Ditto has focus - Active: %s (%d), Focus: %s (%d), FromHook %d"), WndName(m_activeWnd), m_activeWnd, WndName(m_focusWnd), m_focusWnd, fromHook));
 		return false;
 	}
 
@@ -79,7 +80,7 @@ bool ExternalWindowTracker::TrackActiveWnd(HWND focus)
 	if(theApp.QPasteWnd())
 		theApp.QPasteWnd()->UpdateStatus(true);
 
-	Log(StrF(_T("TargetActiveWindow Active: %d, Focus: %d, FromHook %d"), m_activeWnd, m_focusWnd, fromHook));
+	Log(StrF(_T("TargetActiveWindow Active: %s (%d), Focus: %s (%d), FromHook %d"), WndName(m_activeWnd), m_activeWnd, WndName(m_focusWnd), m_focusWnd, fromHook));
 
 	return true;
 }
@@ -197,8 +198,13 @@ void ExternalWindowTracker::SendCut()
 
 CString ExternalWindowTracker::ActiveWndName() 
 {
+	return WndName(m_activeWnd);
+}
+
+CString ExternalWindowTracker::WndName(HWND hWnd) 
+{
 	TCHAR cWindowText[200];
-	HWND hParent = m_activeWnd;
+	HWND hParent = hWnd;
 
 	::GetWindowText(hParent, cWindowText, 100);
 

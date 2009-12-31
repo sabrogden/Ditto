@@ -11,6 +11,7 @@ public:
 	bool DittoHasFocus() const { return m_dittoHasFocus; }
 
 	CString ActiveWndName();
+	CString WndName(HWND hWnd);
 	bool TrackActiveWnd(HWND focus);
 	bool ActivateTarget();
 	bool ReleaseFocus();
