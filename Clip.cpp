@@ -605,7 +605,7 @@ bool CClip::AddToMainTable()
 		m_csQuickPaste.Replace(_T("'"), _T("''"));
 
 		CString cs;
-		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s', NULL);"),
+		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s');"),
 							(long)m_Time.GetTime(),
 							m_Desc,
 							m_lShortCut,
