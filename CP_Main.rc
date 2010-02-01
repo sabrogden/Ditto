@@ -271,12 +271,6 @@ BEGIN
             MENUITEM "Prompt for IP",               32839,MFT_STRING,MFS_ENABLED
         END
         MENUITEM "View Full Description",       32793,MFT_STRING,MFS_ENABLED
-        POPUP "Sticky Clips",                   65535,MFT_STRING,MFS_ENABLED
-        BEGIN
-            MENUITEM "Toggle Sticky",               ID_STICKYCLIPS_TOGGLESTICKY,MFT_STRING,MFS_ENABLED
-            MENUITEM "Move Up",                     ID_STICKYCLIPS_MOVEUP,MFT_STRING,MFS_ENABLED
-            MENUITEM "Move Down",                   ID_STICKYCLIPS_MOVEDOWN,MFT_STRING,MFS_ENABLED
-        END
         MENUITEM "View Groups",                 32819,MFT_STRING,MFS_ENABLED
         MENUITEM "Paste Plain Text Only",       32841,MFT_STRING,MFS_ENABLED
         MENUITEM MFT_SEPARATOR

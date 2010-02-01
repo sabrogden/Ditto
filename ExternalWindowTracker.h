@@ -21,6 +21,8 @@ public:
 	void SendCut();
 	void SendCopy();
 
+	CString ExternalWindowTracker::WndName(HWND hWnd);
+
 protected:
 	HWND m_activeWnd;
 	HWND m_focusWnd;

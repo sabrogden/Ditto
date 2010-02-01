@@ -98,6 +98,7 @@
 #define IDC_HOTKEY                      2002
 #define IDC_DISPLAY_IN_SYSTEMTRAY       2003
 #define IDD_OPTIONS_GENERAL             2003
+#define IDC_HOTKEY_TEXT_ONLY            2003
 #define IDD_OPTIONS_TYPES               2004
 #define IDC_START_ON_STARTUP            2004
 #define IDR_QUICK_PASTE                 2005
@@ -143,6 +144,8 @@
 #define IDC_CHECK_WIN_DITTO             2035
 #define IDC_CHECK_WIN_NAMED_COPY        2036
 #define IDC_CHECK_FIND_AS_YOU_TYPE      2036
+#define IDC_CHECK_WIN_TEXT              2036
+#define IDC_CHECK_WIN_TEXT_ONLY         2036
 #define IDC_CHECK_WIN6                  2037
 #define IDC_CHECK_ENTIRE_WINDOW_IS_VISIBLE 2037
 #define IDC_EDIT_ADDITIONAL             2037
@@ -170,6 +173,7 @@
 #define IDC_CHECK_WIN_NAMED_PASTE       2047
 #define IDC_STATIC_ACTIVATE             2048
 #define IDC_STATIC_NAMED_COPY           2049
+#define IDC_STATIC_ACTIVATE2            2049
 #define IDC_STATIC_WIN                  2050
 #define IDC_STATIC_GROUP                2051
 #define IDC_STATIC_1                    2052
@@ -327,6 +331,7 @@
 #define ID_FIRST_NEWCLIP                32868
 #define ID_BUTTON_SAVE_CLOSE_CLIPBOARD  32869
 #define ID_FIRST_COPYTODEVICE           32870
+#define ID_PASTE_PLAIN_TEXT             32871
 
 // Next default values for new objects
 // 
@@ -334,7 +339,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        167
-#define _APS_NEXT_COMMAND_VALUE         32871
+#define _APS_NEXT_COMMAND_VALUE         32872
 #define _APS_NEXT_CONTROL_VALUE         2095
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
