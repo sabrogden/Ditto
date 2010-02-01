@@ -116,17 +116,19 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Shared\TextConvert.cpp" />
+    <ClCompile Include="..\..\Shared\Tokenizer.cpp" />
     <ClCompile Include="DialogResizer.cpp" />
     <ClCompile Include="DittoUtil.cpp" />
     <ClCompile Include="Exports.cpp" />
     <ClCompile Include="PasteAnyAsText.cpp" />
     <ClCompile Include="PasteImageAsHtmlImage.cpp" />
+    <ClCompile Include="ReadOnlyFlag.cpp" />
     <ClCompile Include="SelectPasteFormat.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TextConvert.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DittoUtil.def" />
@@ -134,15 +136,17 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Shared\TextConvert.h" />
+    <ClInclude Include="..\..\Shared\Tokenizer.h" />
     <ClInclude Include="DialogResizer.h" />
     <ClInclude Include="DittoUtil.h" />
     <ClInclude Include="Exports.h" />
     <ClInclude Include="PasteAnyAsText.h" />
     <ClInclude Include="PasteImageAsHtmlImage.h" />
+    <ClInclude Include="ReadOnlyFlag.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SelectPasteFormat.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="TextConvert.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="DittoUtil.rc" />

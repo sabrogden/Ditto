@@ -2,6 +2,7 @@
 #include ".\exports.h"
 #include "PasteAnyAsText.h"
 #include ".\pasteimageashtmlimage.h"
+#include "ReadOnlyFlag.h"
 
 
 bool DittoAddin(const CDittoInfo &DittoInfo, CDittoAddinInfo &info)
@@ -39,6 +40,20 @@ bool SupportedFunctions(const CDittoInfo &DittoInfo, FunctionType type, std::vec
 			func2.m_csDetailDescription = _T("Converts a CF_DIB or CF_HDROP to a html format for pasting into outlook express");
 
 			Functions.push_back(func2);
+
+			CFunction func3;
+			func3.m_csFunction = _T("ClearReadOnlyFlag");
+			func3.m_csDisplayName = _T("Clear read only flag");
+			func3.m_csDetailDescription = _T("Clears read only flag on the types CF_HDROP, or files paths in text");
+
+			Functions.push_back(func3);
+
+			CFunction func4;
+			func4.m_csFunction = _T("SetReadOnlyFlag");
+			func4.m_csDisplayName = _T("Set read only flag");
+			func4.m_csDetailDescription = _T("Sets the read only flag on the types CF_HDROP, or files paths in text");
+
+			Functions.push_back(func4);
 		}
 		break;
 	}
@@ -55,4 +70,22 @@ bool ConvertPathToHtmlImageTag(const CDittoInfo &DittoInfo, IClip *pClip)
 {
 	CPasteImageAsHtmlImage convert;
 	return convert.ConvertPathToHtmlImageTag(DittoInfo, pClip);
+}
+
+bool ClearReadOnlyFlag(const CDittoInfo &DittoInfo, IClip *pClip)
+{
+	CReadOnlyFlag readOnly;
+	readOnly.ResetReadOnlyFlag(DittoInfo, pClip, true);
+
+	//return false so the clip is not pasted
+	return false;
+}
+
+bool SetReadOnlyFlag(const CDittoInfo &DittoInfo, IClip *pClip)
+{
+	CReadOnlyFlag readOnly;
+	readOnly.ResetReadOnlyFlag(DittoInfo, pClip, false);
+
+	//return false so the clip is not pasted
+	return false;
 }

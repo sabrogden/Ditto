@@ -1,6 +1,6 @@
 #include "StdAfx.h"
 #include ".\pasteimageashtmlimage.h"
-#include "TextConvert.h"
+#include "../../shared/TextConvert.h"
 
 CString g_csDIBImagePath = _T("");
 int g_nDIBImageName = 1;

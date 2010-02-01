@@ -10,4 +10,6 @@ extern "C"
 	bool __declspec(dllexport) SupportedFunctions(const CDittoInfo &DittoInfo, FunctionType type, std::vector<CFunction> &Functions);
 	bool __declspec(dllexport) PasteAnyAsText(const CDittoInfo &DittoInfo, IClip *pClip);	
 	bool __declspec(dllexport) ConvertPathToHtmlImageTag(const CDittoInfo &DittoInfo, IClip *pClip);
+	bool __declspec(dllexport) ClearReadOnlyFlag(const CDittoInfo &DittoInfo, IClip *pClip);
+	bool __declspec(dllexport) SetReadOnlyFlag(const CDittoInfo &DittoInfo, IClip *pClip);
 }
