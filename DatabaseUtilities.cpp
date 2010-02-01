@@ -322,7 +322,7 @@ BOOL CreateDB(CString csFile)
 								_T("CRC INTEGER, ")
 								_T("bIsGroup INTEGER, ")
 								_T("lParentID INTEGER, ")
-								_T("QuickPasteText TEXT"));
+								_T("QuickPasteText TEXT);"));
 
 		db.execDML(_T("CREATE TABLE Data(")
 							_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")
@@ -332,7 +332,7 @@ BOOL CreateDB(CString csFile)
 
 		db.execDML(_T("CREATE TABLE Types(")
 							_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")
-							_T("TypeText TEXT)"));
+							_T("TypeText TEXT);"));
 
 		db.execDML(_T("CREATE UNIQUE INDEX Main_ID on Main(lID ASC)"));
 		db.execDML(_T("CREATE UNIQUE INDEX Data_ID on Data(lID ASC)"));
