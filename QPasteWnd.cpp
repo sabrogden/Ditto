@@ -146,6 +146,7 @@ ON_UPDATE_COMMAND_UI(ID_MENU_DELETE, OnUpdateMenuDelete)
 ON_UPDATE_COMMAND_UI(ID_MENU_PROPERTIES, OnUpdateMenuProperties)
 ON_COMMAND(ID_QUICKOPTIONS_PROMPTTODELETECLIP, OnPromptToDeleteClip)
 ON_WM_DESTROY()
+
 //}}AFX_MSG_MAP
 ON_MESSAGE(NM_SELECT, OnListSelect)
 ON_MESSAGE(NM_END, OnListEnd)
@@ -915,7 +916,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 
     m_CritSection.Lock();
     //Format the count and select sql queries for the thread
-    m_CountSQL.Format(_T("SELECT COUNT(lID) FROM Main where %s ORDER by lDate"), strFilter);
+    m_CountSQL.Format(_T("SELECT COUNT(lID) FROM Main where %s"), strFilter);
 
     m_SQL.Format(_T("SELECT lID, mText, lParentID, lDontAutoDelete, ")_T("lShortCut, bIsGroup, QuickPasteText FROM Main where %s order by %s"), strFilter, csSort);
 

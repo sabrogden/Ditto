@@ -11,6 +11,7 @@ public:
 	bool Save();
 	bool Restore();
 	void Clear()	{ m_Clipboard.RemoveAll(); }
+	bool RestoreTextOnly();
 
 	CClipFormats m_Clipboard;
 };

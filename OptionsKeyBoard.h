@@ -39,6 +39,7 @@ public:
 	CHotKeyCtrl	m_Ten;
 	CHotKeyCtrl	m_One;
 	CHotKeyCtrl	m_HotKey;
+	CHotKeyCtrl m_TextOnlyKey;
 	//}}AFX_DATA
 
 

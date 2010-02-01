@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include ".\htmlformataggregator.h"
 #include "Misc.h"
-#include "Tokenizer.h"
+#include "shared/Tokenizer.h"
 
 CHTMLFormatAggregator::CHTMLFormatAggregator(CStringA csSepator) :
 	m_csSeparator(csSepator)

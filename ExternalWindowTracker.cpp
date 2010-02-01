@@ -119,10 +119,17 @@ bool ExternalWindowTracker::ActivateTarget()
 
 void ExternalWindowTracker::SendPaste(bool activateTarget)
 {
+	HWND activeWnd = m_activeWnd;
+
 	CSendKeys send;
 	send.AllKeysUp();
 
-	CString csPasteToApp = GetProcessName(m_activeWnd);
+	if(activateTarget == false)
+	{
+		activeWnd = ::GetForegroundWindow();
+	}
+
+	CString csPasteToApp = GetProcessName(activeWnd);
 	CString csPasteString = g_Opt.GetPasteString(csPasteToApp);
 	DWORD delay = g_Opt.SendKeysDelay();
 
@@ -130,7 +137,7 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	{
 		ActivateTarget();
 		theApp.PumpMessageEx();
-		WaitForActiveWnd(m_activeWnd, max(25, g_Opt.WaitForActiveWndTimeout()));
+		WaitForActiveWnd(activeWnd, max(25, g_Opt.WaitForActiveWndTimeout()));
 	}
 	else
 	{

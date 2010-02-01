@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "CP_Main.h"
 #include "OptionsTypes.h"
-#include "ArrayEx.h"
+#include "Shared/ArrayEx.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

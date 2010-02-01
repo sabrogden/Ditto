@@ -6,7 +6,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "ArrayEx.h"
+#include "Shared/ArrayEx.h"
 
 #define ONE_MINUTE				60000
 #define ONE_HOUR				3600000

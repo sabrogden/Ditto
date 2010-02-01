@@ -9,7 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "ArrayEx.h"
+#include "Shared/ArrayEx.h"
 #include "Clip.h"
 #include "ClipIds.h"
 #include "OleClipSource.h"

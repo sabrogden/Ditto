@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DittoAddin.h"
 #include "Misc.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 
 CDittoAddin::CDittoAddin() :
 	m_hModule(NULL)

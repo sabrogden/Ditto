@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "clip.h"
 #include "CP_Main.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 #include ".\dittorulerricheditctrl.h"
 #include "CopyProperties.h"
 

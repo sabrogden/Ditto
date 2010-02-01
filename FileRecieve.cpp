@@ -6,7 +6,7 @@
 #include "cp_main.h"
 #include "FileRecieve.h"
 #include "RecieveSocket.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 #include "Path.h"
 #include "UnicodeMacros.h"
 

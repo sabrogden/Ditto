@@ -84,3 +84,45 @@ bool CClipboardSaveRestore::Restore()
 
 	return bRet;
 }
+
+bool CClipboardSaveRestore::RestoreTextOnly()
+{
+	bool bRet = false;
+
+	if(::OpenClipboard(theApp.m_MainhWnd))
+	{
+		::EmptyClipboard();
+
+		SetClipboardData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
+
+		int nSize = m_Clipboard.GetSize();
+		for(int nPos = 0; nPos < nSize; nPos++)
+		{
+			CClipFormat *pCF = &m_Clipboard.ElementAt(nPos);
+			if(pCF && pCF->m_hgData)
+			{
+				if(pCF->m_cfType == CF_TEXT || pCF->m_cfType == CF_UNICODETEXT)
+				{
+					//Make a copy of the data we are putting on the clipboard so we can still
+					//restore all clips later in Restore()
+					LPVOID localData = ::GlobalLock(pCF->m_hgData);
+
+					HGLOBAL newData = NewGlobalP(localData, ::GlobalSize(pCF->m_hgData));	
+					::SetClipboardData(pCF->m_cfType, newData);
+
+					::GlobalUnlock(pCF->m_hgData);
+				}
+			}
+		}
+
+		bRet = TRUE;
+		::CloseClipboard();
+	}
+
+	if(bRet == FALSE)
+	{
+		Log(_T("CClipboardSaveRestore::Restore failed to restore clipboard"));
+	}
+
+	return bRet;
+}

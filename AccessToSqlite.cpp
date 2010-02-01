@@ -2,7 +2,7 @@
 #include "AccessToSqlite.h"
 #include "Options.h"
 #include "Misc.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 
 
 BOOL CAccessToSqlite::ConvertDatabase(const TCHAR *pNewDatabase, const TCHAR *pOldDatabase)

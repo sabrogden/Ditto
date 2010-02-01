@@ -2,7 +2,7 @@
 #include "CP_Main.h"
 #include "ClipIds.h"
 #include "tinyxml.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 #include "Clip_ImportExport.h"
 #include "CF_HDropAggregator.h"
 #include "CF_UnicodeTextAggregator.h"

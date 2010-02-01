@@ -5,8 +5,8 @@
 #include "stdafx.h"
 #include "cp_main.h"
 #include "MultiLanguage.h"
-#include "TextConvert.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
+#include "shared/TextConvert.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

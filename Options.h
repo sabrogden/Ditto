@@ -391,6 +391,9 @@ public:
 
 	static BOOL		GetConnectedToClipboard();
 	static void		SetConnectedToClipboard(BOOL val);
+
+	static DWORD	GetTextOnlyRestoreDelay();
+	static DWORD 	GetTextOnlyPasteDelay();
 };
 
 // global for easy access and for initialization of fast access variables

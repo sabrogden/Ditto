@@ -4,3 +4,4 @@ Portable = 1
 DisableRecieve = 1
 CheckForMaxEntries=1
 MaxEntries=100
+UseHookDllForFocus=0

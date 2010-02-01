@@ -190,7 +190,9 @@ BOOL CheckDBExists(CString csDBPath)
 			bRet = CreateDB(csDBPath);
 		}
 		else
+		{
 			bRet = TRUE;
+		}
 	}
 
 	if(bRet)
@@ -320,7 +322,7 @@ BOOL CreateDB(CString csFile)
 								_T("CRC INTEGER, ")
 								_T("bIsGroup INTEGER, ")
 								_T("lParentID INTEGER, ")
-								_T("QuickPasteText TEXT)"));
+								_T("QuickPasteText TEXT"));
 
 		db.execDML(_T("CREATE TABLE Data(")
 							_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")

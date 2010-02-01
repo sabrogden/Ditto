@@ -5,7 +5,7 @@
 #include "stdafx.h"
 #include "cp_main.h"
 #include "SendSocket.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

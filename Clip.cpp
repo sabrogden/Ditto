@@ -8,7 +8,7 @@
 #include "DatabaseUtilities.h"
 #include "Crc32Dynamic.h"
 #include "sqlite\CppSQLite3.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 #include "zlib/zlib.h"
 
 #include <Mmsystem.h>
@@ -605,7 +605,7 @@ bool CClip::AddToMainTable()
 		m_csQuickPaste.Replace(_T("'"), _T("''"));
 
 		CString cs;
-		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s');"),
+		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s', NULL);"),
 							(long)m_Time.GetTime(),
 							m_Desc,
 							m_lShortCut,

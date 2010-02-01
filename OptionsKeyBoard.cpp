@@ -46,6 +46,7 @@ void COptionsKeyBoard::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_HOTKEY10, m_Ten);
 	DDX_Control(pDX, IDC_HOTKEY1, m_One);
 	DDX_Control(pDX, IDC_HOTKEY, m_HotKey);
+	DDX_Control(pDX, IDC_HOTKEY_TEXT_ONLY, m_TextOnlyKey);
 	//}}AFX_DATA_MAP
 	DDX_Control(pDX, IDC_STATIC_CUSTOM_KEYS, m_CustomeKeysHelp);
 }
@@ -80,6 +81,7 @@ BOOL COptionsKeyBoard::OnInitDialog()
 	theApp.m_pPosEight->CopyToCtrl(m_Eight, m_hWnd, IDC_CHECK_WIN8);
 	theApp.m_pPosNine->CopyToCtrl(m_Nine, m_hWnd, IDC_CHECK_WIN9);
 	theApp.m_pPosTen->CopyToCtrl(m_Ten, m_hWnd, IDC_CHECK_WIN10);
+	theApp.m_pTextOnlyPaste->CopyToCtrl(m_TextOnlyKey, m_hWnd, IDC_CHECK_WIN_TEXT_ONLY);
 
 	//Unregister hotkeys and Reregister them on cancel or ok
 	g_HotKeys.UnregisterAll();
@@ -88,20 +90,7 @@ BOOL COptionsKeyBoard::OnInitDialog()
 
 	m_HotKey.SetFocus();
 
-	theApp.m_Language.UpdateOptionShortcuts(this);
-
-	//A U3 device is unable to use the keyboard hooks, so named paste and copy 
-	//can't be used
-	if(g_Opt.m_bU3)
-	{
-		::ShowWindow(::GetDlgItem(m_hWnd, IDC_STATIC_NAMED_COPY), SW_HIDE);
-		::ShowWindow(::GetDlgItem(m_hWnd, IDC_STATIC_NAMED_COPY2), SW_HIDE);
-		::ShowWindow(::GetDlgItem(m_hWnd, IDC_NAMED_COPY), SW_HIDE);
-		::ShowWindow(::GetDlgItem(m_hWnd, IDC_NAMED_PASTE), SW_HIDE);
-		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_WIN_NAMED_COPY), SW_HIDE);
-		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_WIN_NAMED_PASTE), SW_HIDE);
-	}
-	
+	theApp.m_Language.UpdateOptionShortcuts(this);	
 		
 	return FALSE;
 }
@@ -138,6 +127,7 @@ BOOL COptionsKeyBoard::OnApply()
 	theApp.m_pPosEight->CopyFromCtrl(m_Eight, m_hWnd, IDC_CHECK_WIN8);
 	theApp.m_pPosNine->CopyFromCtrl(m_Nine, m_hWnd, IDC_CHECK_WIN9);
 	theApp.m_pPosTen->CopyFromCtrl(m_Ten, m_hWnd, IDC_CHECK_WIN10);
+	theApp.m_pTextOnlyPaste->CopyFromCtrl(m_TextOnlyKey, m_hWnd, IDC_CHECK_WIN_TEXT_ONLY);
 
 	ARRAY NewKeys;
 	g_HotKeys.GetKeys(NewKeys);
@@ -158,21 +148,6 @@ BOOL COptionsKeyBoard::OnApply()
 	
 	return CPropertyPage::OnApply();
 }
-
-/*
-BOOL COptionsKeyBoard::ValidateHotKey(WORD wHotKey)
-{
-	ATOM id = GlobalAddAtom("HK_VALIDATE");
-	BOOL bResult = CGetSetOptions::RegisterHotKey(theApp.m_MainhWnd, wHotKey, FALSE);
-	
-	if(bResult)
-		UnregisterHotKey(GetSafeHwnd(), id);
-
-	GlobalDeleteAtom(id);
-
-	return bResult;
-}
-*/
 
 void COptionsKeyBoard::OnCancel() 
 {

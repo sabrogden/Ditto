@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ArrayEx.h"
+#include "Shared/ArrayEx.h"
 
 class CHotKey
 {

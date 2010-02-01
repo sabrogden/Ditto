@@ -2,7 +2,7 @@
 #include "Options.h"
 #include "AlphaBlend.h"
 #include "Misc.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 #include "sqlite\CppSQLite3.h"
 #include "Path.h"
 
@@ -1923,4 +1923,14 @@ BOOL CGetSetOptions::GetConnectedToClipboard()
 void CGetSetOptions::SetConnectedToClipboard(BOOL val)
 {
 	SetProfileLong("ConnectedToClipboard", val);
+}
+
+DWORD CGetSetOptions::GetTextOnlyRestoreDelay()
+{
+	return (DWORD)GetProfileLong(_T("TextOnlyRestoreDelay"), 2000);
+}
+
+DWORD CGetSetOptions::GetTextOnlyPasteDelay()
+{
+	return (DWORD)GetProfileLong(_T("TextOnlyPasteDelay"), 500);
 }

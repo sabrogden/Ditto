@@ -2,7 +2,7 @@
 
 #include "Winsock2.h"
 #include "Encryption.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 #include "RecieveSocket.h"
 #include "FileSend.h"
 #include "ServerDefines.h"

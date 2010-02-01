@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CP_Main.h"
 #include ".\clip_importexport.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 #include "sqlite/CppSQLite3.h"
 #include "zlib/zlib.h"
 #include "Misc.h"

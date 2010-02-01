@@ -5,7 +5,7 @@
 #include "stdafx.h"
 #include "cp_main.h"
 #include "Client.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 #include "RecieveSocket.h"
 #include "FileRecieve.h"
 #include "FileTransferProgressDlg.h"

@@ -9,7 +9,7 @@
 #include "DatabaseUtilities.h"
 #include "Misc.h"
 #include "Options.h"
-#include "ArrayEx.h"
+#include "Shared/ArrayEx.h"
 #include "MainFrm.h"
 #include "ProcessPaste.h"
 #include "MultiLanguage.h"
@@ -68,6 +68,7 @@ public:
 	CHotKey		*m_pCopyBuffer3;
 	CHotKey		*m_pPasteBuffer3;
 	CHotKey		*m_pCutBuffer3;
+	CHotKey		*m_pTextOnlyPaste;
 
 	ExternalWindowTracker m_activeWnd;
 	

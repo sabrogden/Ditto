@@ -6,7 +6,7 @@
 #endif // _MSC_VER > 1000
 // QListCtrl.h : header file
 //
-#include "ArrayEx.h"
+#include "Shared/ArrayEx.h"
 #include "ToolTipEx.h"
 #include "FormattedTextDraw.h"
 #include "sqlite/CppSQLite3.h"

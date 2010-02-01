@@ -18,7 +18,7 @@
 
 #include "stdafx.h"
 #include "HyperLink.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

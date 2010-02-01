@@ -302,9 +302,15 @@ void CCP_MainApp::AfterMainCreate()
 	m_pPasteBuffer3 = new CHotKey("CopyBufferPasteHotKey_2", 0, true);
 	m_pCutBuffer3 = new CHotKey("CopyBufferCutHotKey_2", 0, true);
 
+	m_pTextOnlyPaste = new CHotKey("TextOnlyPaste", 0, true);
+
 	g_HotKeys.RegisterAll();
 	StartCopyThread();
 	StartStopServerThread();
+
+#ifdef UNICODE
+	m_Addins.LoadAll();
+#endif
 
 	m_bAppRunning = true;
 }

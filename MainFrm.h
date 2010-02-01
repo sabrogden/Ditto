@@ -5,6 +5,7 @@
 #include "ToolTipEx.h"
 #include "EditFrameWnd.h"
 #include "MainFrmThread.h"
+#include "ClipboardSaveRestore.h"
 
 
 #define CLOSE_WINDOW_TIMER				1	
@@ -15,6 +16,7 @@
 #define KEY_STATE_MODIFIERS				8
 #define ACTIVE_WINDOW_TIMER				9
 #define FOCUS_CHANGED_TIMER				10
+#define TEXT_ONLY_PASTE					11
 
 class CMainFrame: public CFrameWnd
 {
@@ -58,6 +60,7 @@ public:
     short m_keyModifiersTimerCount;
     HWND m_tempFocusWnd;
     CMainFrmThread m_thread;
+	CClipboardSaveRestore m_textOnlyPaste;
 
     void DoDittoCopyBufferPaste(int nCopyBuffer);
     void DoFirstTenPositionsPaste(int nPos);
@@ -65,6 +68,7 @@ public:
     bool SaveQuickPasteEntry(CString csQuickPaste, CClipList *pClipList);
     void ShowErrorMessage(CString csTitle, CString csMessage);
     bool CloseAllOpenDialogs();
+	void DoTextOnlyPaste();
 
     void ShowEditWnd(CClipIDs &Ids);
     CEditFrameWnd *m_pEditFrameWnd;

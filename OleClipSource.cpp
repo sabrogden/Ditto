@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CP_Main.h"
 #include "OleClipSource.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 #include "CF_HDropAggregator.h"
 #include "CF_UnicodeTextAggregator.h"
 #include "CF_TextAggregator.h"

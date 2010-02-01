@@ -3,7 +3,7 @@
 #include "Options.h"
 #include "Misc.h"
 #include "CP_Main.h"
-#include "TextConvert.h"
+#include "shared/TextConvert.h"
 
 CRecieveSocket::CRecieveSocket(SOCKET sock)
 {
