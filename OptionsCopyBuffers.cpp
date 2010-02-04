@@ -60,6 +60,8 @@ BOOL COptionsCopyBuffers::OnInitDialog()
 	theApp.m_pCutBuffer3->CopyToCtrl(m_CutBuffer3, m_hWnd, IDC_WIN_CUT_3);
 	CheckDlgButton(IDC_PLAY_SOUND_3, Item.m_bPlaySoundOnCopy);
 
+	theApp.m_Language.UpdateOptionCopyBuffers(this);
+
 	return TRUE;
 }
 

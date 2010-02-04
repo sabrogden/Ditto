@@ -153,6 +153,9 @@
 		
 		//New item added in 3.15.1 8/18/07
 		<Item English_Text = "Send custom strokes Per Application" ID = "2091"></Item>
+		
+		//Added in 9-11-09
+		<Item English_Text = "Named Paste" ID = "2062">test</Item>
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Quick_Paste>
 		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042"></Item>
@@ -194,6 +197,11 @@
 		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057"></Item>
 		<Item English_Text = "Log Send Receive Commands" ID = "1042"></Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true"></Item>
+		
+		//Added in 9-11-09
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">test</Item>
+        <Item English_Text = "IP/Name" ID = "IP_Name">test</Item>
+        <Item English_Text = "Descriptions" ID = "Descriptions">test</Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015"></Item>
@@ -305,4 +313,34 @@
 		<Item English_Text = "New Clip" ID = "32868"></Item>
 		
 	</Ditto_Tray_Icon_Menu>
+	
+	//Added in 9-11-09
+	<Ditto_Options_CopyBuffers>
+		<Item English_Text = "Copy Buffer 1" ID = "2088">Copy Buffer 1-test</Item>
+		<Item English_Text = "Copy" ID = "2079">Copy-test</Item>
+		<Item English_Text = "Paste" ID = "2080">Paste-test</Item>
+		<Item English_Text = "Cut" ID = "2081">Cut-test</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042">Play Sound on Copy-test</Item>
+		<Item English_Text = "Win" ID = "2085">Win1Copy-test</Item>
+		<Item English_Text = "Win" ID = "2086">Win1Paste-test</Item>
+		<Item English_Text = "Win" ID = "2087">Win1Cut-test</Item>
+		
+		<Item English_Text = "Copy Buffer 2" ID = "2098">Copy Buffer 1-test</Item>
+		<Item English_Text = "Copy" ID = "2093">Copy-test</Item>
+		<Item English_Text = "Paste" ID = "2094">Paste-test</Item>
+		<Item English_Text = "Cut" ID = "2097">Cut-test</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043">Play Sound on Copy-test</Item>
+		<Item English_Text = "Win" ID = "2090">Win2Copy-test</Item>
+		<Item English_Text = "Win" ID = "2092">Win2Paste-test</Item>
+		<Item English_Text = "Win" ID = "2096">Win2Cut-test</Item>
+		
+		<Item English_Text = "Copy Buffer 3" ID = "2108">Copy Buffer 1-test</Item>
+		<Item English_Text = "Copy" ID = "2103">Copy-test</Item>
+		<Item English_Text = "Paste" ID = "2104">Paste-test</Item>
+		<Item English_Text = "Cut" ID = "2107">Cut-test</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044">Play Sound on Copy-test</Item>
+		<Item English_Text = "Win" ID = "2100">Win3Copy-test</Item>
+		<Item English_Text = "Win" ID = "2102">Win3Paste-test</Item>
+		<Item English_Text = "Win" ID = "2106">Win3Cut-test</Item>
+	</Ditto_Options_CopyBuffers>
 </Ditto_Language_File>

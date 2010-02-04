@@ -51,6 +51,7 @@ void CMultiLanguage::ClearArrays()
 	ClearArray(m_MoveToGroups);
 	ClearArray(m_TrayIconRightClickMenu);
 	ClearArray(m_OptionsSheet);
+	ClearArray(m_OptionsCopyBuffers);
 
 	ClearMap(m_StringMap);
 }
@@ -168,6 +169,11 @@ bool CMultiLanguage::UpdateMoveToGroups(CWnd *pParent)
 bool CMultiLanguage::UpdateOptionsSheet(CWnd *pParent)
 {
 	return UpdateWindowToLanguage(pParent, m_OptionsSheet);
+}
+
+bool CMultiLanguage::UpdateOptionCopyBuffers(CWnd *pParent)
+{
+	return UpdateWindowToLanguage(pParent, m_OptionsCopyBuffers);
 }
 
 bool CMultiLanguage::UpdateMenuToLanguage(CMenu *pMenu, LANGUAGE_ARRAY &Array)
@@ -314,6 +320,7 @@ bool CMultiLanguage::LoadLanguageFile(CString csFile)
 	bRet = LoadSection(*ItemHeader, m_MoveToGroups, "Ditto_Move_To_Groups");
 	bRet = LoadSection(*ItemHeader, m_OptionsSheet, "Ditto_Options_Sheet");
 	bRet = LoadSection(*ItemHeader, m_TrayIconRightClickMenu, "Ditto_Tray_Icon_Menu");
+	bRet = LoadSection(*ItemHeader, m_OptionsCopyBuffers, "Ditto_Options_CopyBuffers");
 	
 	bRet = LoadStringTableSection(*ItemHeader, m_StringMap, "Ditto_String_Table");
 

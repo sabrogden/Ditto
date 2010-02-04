@@ -54,6 +54,7 @@ public:
 	bool UpdateOptionSupportedTypesAdd(CWnd *pParent);
 	bool UpdateMoveToGroups(CWnd *pParent);
 	bool UpdateOptionsSheet(CWnd *pParent);
+	bool UpdateOptionCopyBuffers(CWnd *pParent);
 
 	CString GetString(CString csID, CString csDefault);
 
@@ -81,6 +82,7 @@ protected:
 	LANGUAGE_ARRAY m_OptionsSupportedTypesAdd;
 	LANGUAGE_ARRAY m_MoveToGroups;
 	LANGUAGE_ARRAY m_OptionsSheet;
+	LANGUAGE_ARRAY m_OptionsCopyBuffers;
 
 	LANGUAGE_MAP	m_StringMap;
 
