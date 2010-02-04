@@ -15,6 +15,47 @@
         <div id="content">
           
             <a name="Change History"></a>
+			<div class="post">
+                <h1 class="title">3.16.8.0 08-16-09</h1>
+                <div class="entry">
+                    <ul>
+						<li>Added DittoUtil Addin, adds the ability to paste any clip type as text</li>
+						<li>Fixed SetFocus fix in ActivateTarget -- needed AttachThreadInput</li>
+						<li>Added the ability to create add-ins, called before an item is pasted</li> 
+						<li>Fixed issue with getting the currently focused window when not using the hook dll</li> 
+						<li>Updated italiano language file</li> 
+						<li>Added option to paste from hot key, press multiple times to move the selection, release the modifer key (control, shift, alt) to paste</li> 
+						<li>Fixed word wrap option to reload correctly</li> 
+						<li>Fixed issues with loading cut copy buffer 3 correctly from config on restart</li> 
+						<li>Check if key is up before sending key up command. This was causing problems if an app is listening to global key up commands</li> 
+						<li>Updated to sqlite version 3.16.10</li> 
+                    </ul>
+              </div>
+              <div class="meta">
+				<p class="byline"><a href="changeHistory.php" class="more">Full Change History</a></p>
+			  </div>
+          </div>
+		  
+			<div class="post">
+                <h1 class="title">3.16.5.0 03-23-098</h1>
+                <div class="entry">
+                    <ul>
+						<li>Fixed SetFocus fix in ActivateTarget -- needed AttachThreadInput -- wait for window to gain focus</li>
+						<li>Added the ability to create add-ins, called before an item is pasted</li>
+						<li>Fixed issue with getting the currently focused window when not using the hook dll</li>
+						<li>Updated italiano language file</li>
+						<li>Added option to paste from hot key, press multiple times to move the selection, release the modifer key (control, shift, alt) to paste</li>
+						<li>Fixed word wrap option to reload correctly</li>
+						<li>Fixed issues with loading cut copy buffer 3 correctly from config on restart</li>
+						<li>Check if key is up before sending key up command.  This was causing problems if an app is listening to global key up commands</li>
+						<li>Updated to sqlite version 3.16.10</li>
+                    </ul>
+              </div>
+              <div class="meta">
+				<p class="byline"><a href="changeHistory.php" class="more">Full Change History</a></p>
+			  </div>
+          </div>
+		  
             <div class="post">
                 <h1 class="title">3.15.4.0 01-16-08</h1>
                 <div class="entry">

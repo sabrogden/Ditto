@@ -52,8 +52,29 @@
           </div>
           
             <a name="Change History"></a>
+			<div class="post">
+                <h1 class="title">3.16.8.0 08-16-09</h1>
+                <div class="entry">
+                    <ul>
+						<li>Added DittoUtil Addin, adds the ability to paste any clip type as text</li>
+						<li>Fixed SetFocus fix in ActivateTarget -- needed AttachThreadInput</li>
+						<li>Added the ability to create add-ins, called before an item is pasted</li> 
+						<li>Fixed issue with getting the currently focused window when not using the hook dll</li> 
+						<li>Updated italiano language file</li> 
+						<li>Added option to paste from hot key, press multiple times to move the selection, release the modifer key (control, shift, alt) to paste</li> 
+						<li>Fixed word wrap option to reload correctly</li> 
+						<li>Fixed issues with loading cut copy buffer 3 correctly from config on restart</li> 
+						<li>Check if key is up before sending key up command. This was causing problems if an app is listening to global key up commands</li> 
+						<li>Updated to sqlite version 3.16.10</li> 
+                    </ul>
+              </div>
+              <div class="meta">
+				<p class="byline"><a href="changeHistory.php" class="more">Full Change History</a></p>
+			  </div>
+          </div>
+		  
             <div class="post">
-                <h1 class="title">3.16.5.0 03-23-09</h1>
+                <h1 class="title">3.16.5.0 03-23-08</h1>
                 <div class="entry">
                     <ul>
 						<li>Fixed SetFocus fix in ActivateTarget -- needed AttachThreadInput -- wait for window to gain focus</li>
@@ -86,79 +107,6 @@
 				<p class="byline"><a href="changeHistory.php" class="more">Full Change History</a></p>
 			  </div>
           </div>
-            
-            <div class="post">
-                <h1 class="title">3.15.1.0 8-19-07</h1>
-                <div class="entry">
-                    <ul>
-                      <li>Custom Key strokes per application (http://ditto-cp.wiki.sourceforge.net/Custom+key+strokes)</li>
-                      <li>Added option to hide friends, via registry setting only (http://ditto-cp.wiki.sourceforge.net/Disable+Friends)</li>
-                      <li>Change some default values on new installs, limit copies to 500, disable friends, show at caret</li>
-                      <li>Save word wrap option</li>
-                      <li>Editor hot keys, added keys for undo, redo, wrap, bold, underline</li>
-                    </ul>
-              </div>
-              <div class="meta">
-				<p class="byline"><a href="changeHistory.php" class="more">Full Change History</a></p>
-			  </div>
-          </div>
-            
-            <div class="post">
-                <h1 class="title">3.14.0.0 2-18-06</h1>
-                <div class="entry">
-                    <ul>
-                        <li>Added new feature, "Ditto copy buffers" Options - Copy buffers. Can assign short cut keys for extra copy buffers. These copy buffers work just like Ctrl-C and Ctrl-V. Things can be copied and pasted without affecting the standard clipboard data.</li>
-                        <li>Updated to latest sqlite db version. This fixed the problem with foreign characters in the current user's name.</li>
-                        <li>Added CF_HDROP (copied files), Rich Text, Html Format to multi-paste support. (will group those types on multi-paste)</li>
-                        <li>Added option for what separater is put between multi-pasted clips. (Options - General)</li>
-                        <li>Added "Word Wrap" setting in clip editor</li>
-                        <li>When searching in a group only search the clips in that group.</li>
-                        <li>Hide apply button in options. The button didn't do anything.</li>
-                        <li>Don't underline the character following an ampersand(&) when displaying clip text.</li>
-                    </ul>
-              </div>
-              <div class="meta">
-				<p class="byline"><a href="changeHistory.php" class="more">Full Change History</a></p>
-			  </div>
-            </div>
-            
-            <div class="post">
-                <h1 class="title">3.9.0.0 8-03-06</h1>
-                <div class="entry">
-                    <ul>
-	                    <li>Fixed issue that could cause Ditto to not disconnect from the clipboard</li>
-                    </ul>
-              </div>
-              <div class="meta">
-				<p class="byline"><a href="changeHistory.php" class="more">Full Change History</a></p>
-			  </div>
-            </div>
-            
-            <div class="post">
-                <h1 class="title">3.8.0.0 7-27-06</h1>
-                <div class="entry">
-                    <ul>
-	                    <li>Added the command line parameters "-disconnect" and "-connect" to control if ditto is connected to the clipboard or not</li>
-						<li>Added option to output debug strings(F5) to file(Ctrl-F5) or debugview.exe (F5/Ctrl - F5 in quick paste window)</li>
-						<li>Fixed error that caused some foreign characters as line feeds in Ditto</li>
-                    </ul>
-              </div>
-              <div class="meta">
-				<p class="byline"><a href="changeHistory.php" class="more">Full Change History</a></p>
-			  </div>
-            </div>
-            
-            <div class="post">
-                <h1 class="title">3.6.0.0 6-06-06</h1>
-                <div class="entry">
-                    <ul>
-                    	<li>Added the ability to edit clips</li>
-                    </ul>
-              </div>
-              <div class="meta">
-				<p class="byline"><a href="changeHistory.php" class="more">Full Change History</a></p>
-			  </div>
-            </div>
 
                <!-- Start of StatCounter Code -->
 <script type="text/javascript">
