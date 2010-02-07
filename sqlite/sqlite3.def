@@ -2,6 +2,11 @@ EXPORTS
 sqlite3_aggregate_context
 sqlite3_aggregate_count
 sqlite3_auto_extension
+sqlite3_backup_finish
+sqlite3_backup_init
+sqlite3_backup_pagecount
+sqlite3_backup_remaining
+sqlite3_backup_step
 sqlite3_bind_blob
 sqlite3_bind_double
 sqlite3_bind_int
@@ -140,10 +145,12 @@ sqlite3_shutdown
 sqlite3_sleep
 sqlite3_snprintf
 sqlite3_soft_heap_limit
+sqlite3_sourceid
 sqlite3_sql
 sqlite3_status
 sqlite3_step
 sqlite3_stmt_status
+sqlite3_strnicmp
 sqlite3_table_column_metadata
 sqlite3_test_control
 sqlite3_thread_cleanup
