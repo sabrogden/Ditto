@@ -412,9 +412,11 @@ BOOL CQPasteWnd::HideQPasteWindow()
         return FALSE;
     }
 
-    m_CritSection.Lock();
-    m_bStopQuery = true;
-    m_CritSection.Unlock();
+	{
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+    	
+		m_bStopQuery = true;
+	}
 
     //Reset the flagShell_TrayWnd
     theApp.m_bShowingQuickPaste = false;
@@ -440,21 +442,21 @@ BOOL CQPasteWnd::HideQPasteWindow()
 
     if(m_strSQLSearch.IsEmpty() == FALSE)
     {
-        m_CritSection.Lock();
         {
-            m_bStopQuery = true;
+			ATL::CCritSecLock csLock(m_CritSection.m_sect);
+          
+			m_bStopQuery = true;
         }
-        m_CritSection.Unlock();
 
         //Wait for the thread to stop fill the cache so we can clear it
         WaitForSingleObject(m_thread.m_SearchingEvent, 5000);
 
-        m_CritSection.Lock();
         {
-            m_mapCache.clear();
+			ATL::CCritSecLock csLock(m_CritSection.m_sect);
+            
+			m_mapCache.clear();
             m_lstHeader.SetItemCountEx(0);
         }
-        m_CritSection.Unlock();
     }
 
     Log(_T("End of HideQPasteWindow"));
@@ -748,11 +750,10 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
         //Wait for the thread to stop fill the cache so we can clear it
         WaitForSingleObject(m_thread.m_SearchingEvent, 5000);
 
-		m_CritSection.Lock();		
 		{
+			ATL::CCritSecLock csLock(m_CritSection.m_sect);
 			m_mapCache.clear();
 		}
-		m_CritSection.Unlock();
 
 		m_lstHeader.SetItemCountEx(0);
 		m_lstHeader.RefreshVisibleRows();
@@ -836,9 +837,10 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 
     Log(StrF(_T("Fill List - %s"), csSQLSearch));
 
-    m_CritSection.Lock();
-    m_bStopQuery = true;
-    m_CritSection.Unlock();
+	{
+	    ATL::CCritSecLock csLock(m_CritSection.m_sect);
+	    m_bStopQuery = true;
+	}
 
     CString strFilter;
     CString strParentFilter;
@@ -914,15 +916,16 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
         m_strSQLSearch = strFilter;
     }
 
-    m_CritSection.Lock();
-    //Format the count and select sql queries for the thread
-    m_CountSQL.Format(_T("SELECT COUNT(lID) FROM Main where %s"), strFilter);
+	{
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
-    m_SQL.Format(_T("SELECT lID, mText, lParentID, lDontAutoDelete, ")_T("lShortCut, bIsGroup, QuickPasteText FROM Main where %s order by %s"), strFilter, csSort);
+	    //Format the count and select sql queries for the thread
+	    m_CountSQL.Format(_T("SELECT COUNT(lID) FROM Main where %s"), strFilter);
 
-    m_lItemsPerPage = m_lstHeader.GetCountPerPage();
+	    m_SQL.Format(_T("SELECT lID, mText, lParentID, lDontAutoDelete, ")_T("lShortCut, bIsGroup, QuickPasteText FROM Main where %s order by %s"), strFilter, csSort);
 
-    m_CritSection.Unlock();
+	    m_lItemsPerPage = m_lstHeader.GetCountPerPage();
+	}
 
     m_thread.FireDoQuery();
 
@@ -1392,8 +1395,9 @@ void CQPasteWnd::OnMenuProperties()
 
     if(nDo == IDOK)
     {
-        m_CritSection.Lock();
         {
+			ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
             MainTypeMap::iterator iter = m_mapCache.find(nRow);
             if(iter != m_mapCache.end())
             {
@@ -1404,7 +1408,6 @@ void CQPasteWnd::OnMenuProperties()
                 }
             }
         }
-        m_CritSection.Unlock();
 
         m_thread.FireLoadAccelerators();
 
@@ -1559,8 +1562,9 @@ void CQPasteWnd::OnMenuQuickpropertiesSettoneverautodelete()
         CATCH_SQLITE_EXCEPTION
     }
 
-    m_CritSection.Lock();
     {
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
         count = Indexs.GetSize();
         for(int row = 0; row < count; row++)
         {
@@ -1571,7 +1575,6 @@ void CQPasteWnd::OnMenuQuickpropertiesSettoneverautodelete()
             }
         }
     }
-    m_CritSection.Unlock();
 
     m_lstHeader.RefreshVisibleRows();
 }
@@ -1595,8 +1598,8 @@ void CQPasteWnd::OnMenuQuickpropertiesAutodelete()
         CATCH_SQLITE_EXCEPTION
     }
 
-    m_CritSection.Lock();
     {
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
         count = Indexs.GetSize();
         for(int row = 0; row < count; row++)
         {
@@ -1607,7 +1610,6 @@ void CQPasteWnd::OnMenuQuickpropertiesAutodelete()
             }
         }
     }
-    m_CritSection.Unlock();
 
     m_lstHeader.RefreshVisibleRows();
 }
@@ -1631,8 +1633,9 @@ void CQPasteWnd::OnMenuQuickpropertiesRemovehotkey()
         CATCH_SQLITE_EXCEPTION
     }
 
-    m_CritSection.Lock();
     {
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
         count = Indexs.GetSize();
         for(int row = 0; row < count; row++)
         {
@@ -1643,7 +1646,6 @@ void CQPasteWnd::OnMenuQuickpropertiesRemovehotkey()
             }
         }
     }
-    m_CritSection.Unlock();
 
     m_lstHeader.RefreshVisibleRows();
 }
@@ -1667,8 +1669,9 @@ void CQPasteWnd::OnQuickpropertiesRemovequickpaste()
         CATCH_SQLITE_EXCEPTION
     }
 
-    m_CritSection.Lock();
     {
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
         count = Indexs.GetSize();
         for(int row = 0; row < count; row++)
         {
@@ -1679,7 +1682,6 @@ void CQPasteWnd::OnQuickpropertiesRemovequickpaste()
             }
         }
     }
-    m_CritSection.Unlock();
 
     m_lstHeader.RefreshVisibleRows();
 }
@@ -2065,8 +2067,9 @@ void CQPasteWnd::DeleteSelectedRows()
 
     int erasedCount = 0;
 
-    m_CritSection.Lock();
     {
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
         for(int i = 0; i < nCount; i++)
         {
             MainTypeMap::iterator iter = m_mapCache.find(Indexs[i]);
@@ -2077,7 +2080,6 @@ void CQPasteWnd::DeleteSelectedRows()
             }
         }
     }
-    m_CritSection.Unlock();
 
     m_lstHeader.SetItemCountEx(m_lstHeader.GetItemCount() - erasedCount);
 
@@ -2428,68 +2430,69 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
             case 0:
                 try
                 {
-                    m_CritSection.Lock();
+					ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
+                    int c = m_lstHeader.GetItemCount();
+                    MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
+                    if(iter != m_mapCache.end())
                     {
-                        int c = m_lstHeader.GetItemCount();
-                        MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
-                        if(iter != m_mapCache.end())
+                        CString cs;
+                        if(iter->second.m_bDontAutoDelete)
                         {
-                            CString cs;
-                            if(iter->second.m_bDontAutoDelete)
-                            {
-                                cs += "*";
-                            }
-
-                            if(iter->second.m_bHasShortCut)
-                            {
-                                cs += "s";
-                            }
-
-                            if(iter->second.m_bIsGroup)
-                            {
-                                cs += "G";
-                            }
-
-                            // attached to a group
-                            if(iter->second.m_bHasParent)
-                            {
-                                cs += "!";
-                            }
-
-                            if(iter->second.m_QuickPaste.IsEmpty() == FALSE)
-                            {
-                                cs += "Q";
-                            }
-
-                            // pipe is the "end of symbols" marker
-                            cs += "|" + CMainTableFunctions::GetDisplayText(g_Opt.m_nLinesPerRow, iter->second.m_Desc);
-
-                            lstrcpyn(pItem->pszText, cs, pItem->cchTextMax);
-                            pItem->pszText[pItem->cchTextMax - 1] = '\0';
+                            cs += "*";
                         }
-                        else
+
+                        if(iter->second.m_bHasShortCut)
                         {
-                            bool addToLoadItems = true;
-
-                            for(UINT y = 0; y < m_loadItems.size(); y++)
-                            {
-                                if(pItem->iItem >= m_loadItems[y].x && pItem->iItem <= m_loadItems[y].y)
-                                {
-                                    addToLoadItems = false;
-                                    break;
-                                }
-                            }
-
-                            if(addToLoadItems)
-                            {
-                                CPoint loadItem(pItem->iItem, (m_lstHeader.GetTopIndex() + m_lstHeader.GetCountPerPage() + 2));
-                                m_loadItems.push_back(loadItem);
-                            }
-
-                            m_thread.FireLoadItems();
+                            cs += "s";
                         }
+
+                        if(iter->second.m_bIsGroup)
+                        {
+                            cs += "G";
+                        }
+
+                        // attached to a group
+                        if(iter->second.m_bHasParent)
+                        {
+                            cs += "!";
+                        }
+
+                        if(iter->second.m_QuickPaste.IsEmpty() == FALSE)
+                        {
+                            cs += "Q";
+                        }
+
+                        // pipe is the "end of symbols" marker
+                        cs += "|" + CMainTableFunctions::GetDisplayText(g_Opt.m_nLinesPerRow, iter->second.m_Desc);
+
+                        lstrcpyn(pItem->pszText, cs, pItem->cchTextMax);
+                        pItem->pszText[pItem->cchTextMax - 1] = '\0';
                     }
-                    m_CritSection.Unlock();
+                    else
+                    {
+						
+                        bool addToLoadItems = true;
+
+						for (std::list<CPoint>::iterator it = m_loadItems.begin(); it != m_loadItems.end(); it++)
+						{
+							if(pItem->iItem >= it->x && pItem->iItem <= it->y)
+							{
+								addToLoadItems = false;
+								break;
+							}
+						}
+
+						//Log(StrF(_T("DrawItem index %d, add: %d"), pItem->iItem, addToLoadItems));
+
+                        if(addToLoadItems)
+                        {
+                            CPoint loadItem(pItem->iItem, (m_lstHeader.GetTopIndex() + m_lstHeader.GetCountPerPage() + 2));
+                            m_loadItems.push_back(loadItem);
+                        }
+
+                        m_thread.FireLoadItems();
+                    }
                 }
                 CATCH_SQLITE_EXCEPTION 
 
@@ -2502,15 +2505,15 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
         switch(pItem->iSubItem)
         {
             case 0:
-                m_CritSection.Lock();
                 {
+					ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
                     MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
                     if(iter != m_mapCache.end())
                     {
                         pItem->lParam = iter->second.m_lID;
                     }
                 }
-                m_CritSection.Unlock();
 
                 break;
         }
@@ -2518,24 +2521,24 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
 
     if(pItem->mask &LVIF_CF_DIB)
     {
-        m_CritSection.Lock();
         {
-            MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
+			ATL::CCritSecLock csLock(m_CritSection.m_sect);
+         
+			MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
             if(iter != m_mapCache.end())
             {
                 CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(iter->second.m_lID);
                 if(iterDib == m_cf_dibCache.end())
                 {
                     bool exists = false;
-                    int count = m_ExtraDataLoadItems.size();
-                    for(int i = 0; i < count; i++)
-                    {
-                        if(m_ExtraDataLoadItems[i].m_cfType == CF_DIB && m_ExtraDataLoadItems[i].m_lDBID == iter->second.m_lID)
-                        {
-                            exists = true;
-                            break;
-                        }
-                    }
+					for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
+					{
+						if(it->m_cfType == CF_DIB && it->m_lDBID == iter->second.m_lID)
+						{
+							exists = true;
+							break;
+						}
+					}
 
                     if(exists == false)
                     {
@@ -2558,13 +2561,13 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 }
             }
         }
-        m_CritSection.Unlock();
     }
 
-    if(pItem->mask &LVIF_CF_RICHTEXT)
+    if(pItem->mask & LVIF_CF_RICHTEXT)
     {
-        m_CritSection.Lock();
         {
+			ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
             MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
             if(iter != m_mapCache.end())
             {
@@ -2572,15 +2575,14 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 if(iterDib == m_cf_rtfCache.end())
                 {
                     bool exists = false;
-                    int count = m_ExtraDataLoadItems.size();
-                    for(int i = 0; i < count; i++)
-                    {
-                        if(m_ExtraDataLoadItems[i].m_cfType == theApp.m_RTFFormat && m_ExtraDataLoadItems[i].m_lDBID == iter->second.m_lID)
-                        {
-                            exists = true;
-                            break;
-                        }
-                    }
+					for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
+					{
+						if(it->m_cfType == CF_DIB && it->m_lDBID == iter->second.m_lID)
+						{
+							exists = true;
+							break;
+						}
+					}
 
                     if(exists == false)
                     {
@@ -2603,7 +2605,6 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 }
             }
         }
-        m_CritSection.Unlock();
     }
 }
 
@@ -3217,7 +3218,7 @@ void CQPasteWnd::OnAddinSelect(UINT id)
 LRESULT CQPasteWnd::OnSelectAll(WPARAM wParam, LPARAM lParam)
 {
     BOOL ret = FALSE;
-    m_CritSection.Lock();
+    ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
     if((int)m_mapCache.size() < m_lstHeader.GetItemCount())
     {
@@ -3232,8 +3233,6 @@ LRESULT CQPasteWnd::OnSelectAll(WPARAM wParam, LPARAM lParam)
 
         UpdateStatus(false);
     }
-
-    m_CritSection.Unlock();
 
     return ret;
 }

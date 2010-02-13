@@ -68,8 +68,12 @@ bool ExternalWindowTracker::TrackActiveWnd(HWND focus)
 
 	if(IsAppWnd(newFocus) || IsAppWnd(newActive))
 	{
+		if(m_dittoHasFocus == false)
+		{
+			Log(StrF(_T("Ditto has focus - Active: %s (%d), Focus: %s (%d), FromHook %d"), WndName(m_activeWnd), m_activeWnd, WndName(m_focusWnd), m_focusWnd, fromHook));
+		}
+
 		m_dittoHasFocus = true;
-		Log(StrF(_T("Ditto has focus - Active: %s (%d), Focus: %s (%d), FromHook %d"), WndName(m_activeWnd), m_activeWnd, WndName(m_focusWnd), m_focusWnd, fromHook));
 		return false;
 	}
 

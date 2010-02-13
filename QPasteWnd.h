@@ -8,6 +8,7 @@
 #include "AlphaBlend.h"
 #include "Sqlite\CppSQLite3.h"
 #include <vector>
+#include <list>
 #include <map>
 #include <afxmt.h>
 #include "ClipFormatQListCtrl.h"
@@ -99,8 +100,9 @@ public:
 
     CQPasteWndThread m_thread;
     MainTypeMap m_mapCache;
-    std::vector < CPoint > m_loadItems;
-    std::vector < CClipFormatQListCtrl > m_ExtraDataLoadItems;
+
+	std::list<CPoint> m_loadItems;
+    std::list<CClipFormatQListCtrl> m_ExtraDataLoadItems;
     CF_DibTypeMap m_cf_dibCache;
     CF_DibTypeMap m_cf_rtfCache;
     CCriticalSection m_CritSection;
