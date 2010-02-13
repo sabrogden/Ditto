@@ -269,9 +269,15 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
             m_keyStateModifiers = CAccels::GetKeyStateModifiers();
             SetTimer(KEY_STATE_MODIFIERS, 50, NULL);
 
-            theApp.m_activeWnd.TrackActiveWnd(NULL);
+			theApp.m_activeWnd.TrackActiveWnd(NULL);
+			bool firstRun = (m_quickPaste.m_pwndPaste == NULL);
 
             m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
+
+			if(firstRun)
+			{
+				m_quickPaste.m_pwndPaste->UpdateStatus();
+			}
         }
 
         KillTimer(CLOSE_WINDOW_TIMER);
