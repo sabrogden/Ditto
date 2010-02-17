@@ -24,7 +24,6 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CCopyProperties)
 	enum { IDD = IDD_COPY_PROPERTIES };
-	CEdit	m_QuickPasteText;
 	CRichEditCtrlEx	m_RichEdit;
 	CGroupCombo	m_GroupCombo;
 	CHotKeyCtrl	m_HotKey;

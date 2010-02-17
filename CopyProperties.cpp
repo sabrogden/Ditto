@@ -40,7 +40,6 @@ void CCopyProperties::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CCopyProperties)
-	DDX_Control(pDX, IDC_EDIT_QUICK_PASTE, m_QuickPasteText);
 	DDX_Control(pDX, IDC_RICHEDIT1, m_RichEdit);
 	DDX_Control(pDX, IDC_COMBO1, m_GroupCombo);
 	DDX_Control(pDX, IDC_HOTKEY, m_HotKey);
@@ -136,8 +135,6 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 	m_HotKey.SetHotKey(LOBYTE(Clip.m_lShortCut), HIBYTE(Clip.m_lShortCut));
 	m_HotKey.SetRules(HKCOMB_A, 0);
 
-	m_QuickPasteText.SetWindowText(Clip.m_csQuickPaste);
-
 	CString cs;
 	CClipFormat* pCF;
 	int nCount = Clip.m_Formats.GetSize();
@@ -154,6 +151,15 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 			else
 				m_lCopyData.SetItemData(nIndex, pCF->m_lDBID);
 		}
+	}
+
+	int selectedRow = m_lCopyData.GetCount()-1;
+	if(selectedRow >= 0 && selectedRow < m_lCopyData.GetCount())
+	{
+		m_lCopyData.SetSel(selectedRow);
+		m_lCopyData.SetCurSel(selectedRow);
+		m_lCopyData.SetCaretIndex(selectedRow);
+		m_lCopyData.SetAnchorIndex(selectedRow);
 	}
 }
 
@@ -232,10 +238,6 @@ void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
 	Clip.m_Desc = m_RichEdit.GetText();
 	Clip.m_Desc.Replace(_T("'"), _T("''"));
 
-	m_QuickPasteText.GetWindowText(Clip.m_csQuickPaste);
-	Clip.m_csQuickPaste.MakeUpper();
-	Clip.m_csQuickPaste.Replace(_T("'"), _T("''"));
-
 	//remove any other that have the same quick paste text
 	if(Clip.m_csQuickPaste.IsEmpty() == FALSE)
 	{
@@ -273,8 +275,23 @@ void CCopyProperties::OnDeleteCopyData()
 		//Get the selected itemdata
 		for(int i = 0; i < nCount; i++)
 		{
-			m_DeletedData.Add(m_lCopyData.GetItemData(items[i]));
-			m_lCopyData.DeleteString(items[i]);
+			int row = items[i];
+			m_DeletedData.Add(m_lCopyData.GetItemData(row));
+			m_lCopyData.DeleteString(row);
+
+			int newRow = row-1;
+			if(newRow < 0)
+			{
+				newRow = 0;
+			}
+
+			if(newRow >= 0 && newRow < m_lCopyData.GetCount())
+			{
+				m_lCopyData.SetSel(newRow);
+				m_lCopyData.SetCurSel(newRow);
+				m_lCopyData.SetCaretIndex(newRow);
+				m_lCopyData.SetAnchorIndex(newRow);
+			}
 		}		
 	}
 }
