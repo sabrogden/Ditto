@@ -87,6 +87,9 @@
       <ProgramDatabaseFile>.\Release/focus.pdb</ProgramDatabaseFile>
       <ImportLibrary>.\Release/focus.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>.\Release/focus.map</MapFileName>
+      <MapExports>true</MapExports>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -134,6 +137,9 @@ copy $(TargetDir)*.dll ..\Release
       <ProgramDatabaseFile>.\Debug/focus.pdb</ProgramDatabaseFile>
       <ImportLibrary>.\Debug/focus.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>.\Debug/focus.map</MapFileName>
+      <MapExports>true</MapExports>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>

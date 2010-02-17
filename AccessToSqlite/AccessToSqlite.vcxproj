@@ -77,6 +77,9 @@
       <SubSystem>Windows</SubSystem>
       <ImportLibrary>.\Debug/AccessToSqlite.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>.\Debug/AccessToSqlite.map</MapFileName>
+      <MapExports>true</MapExports>
     </Link>
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -120,6 +123,9 @@
       <SubSystem>Windows</SubSystem>
       <ImportLibrary>.\Release/AccessToSqlite.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>.\Release/AccessToSqlite.map</MapFileName>
+      <MapExports>true</MapExports>
     </Link>
     <Midl>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

@@ -4,17 +4,45 @@
 		<step action='Group'>
 			<name>Project steps</name>
 		</step>
-		<step action='Delete Folder'>
-			<Path>%workDir%</Path>
+		<step action='Copy Files'>
+			<Converted type='11'>-1</Converted>
+			<Delay>15</Delay>
+			<DestDir>%workDir%</DestDir>
+			<ExclExt>\boost</ExclExt>
+			<HideOn type='11'>-1</HideOn>
+			<IgnoreSrc type='11'>-1</IgnoreSrc>
+			<Incremental type='11'>0</Incremental>
+			<LogCopied type='11'>-1</LogCopied>
+			<Purge type='11'>-1</Purge>
+			<ReadOnly type='11'>-1</ReadOnly>
 			<Recurse type='11'>-1</Recurse>
+			<Restartable type='11'>-1</Restartable>
+			<Retries>10</Retries>
+			<SysOn type='11'>-1</SysOn>
+			<TBD type='11'>-1</TBD>
 			<indent type='3'>1</indent>
-			<name>Delete work directory</name>
+			<name>Delete Source Files</name>
+			<nologging type='11'>-1</nologging>
 		</step>
-		<step action='Delete Folder'>
-			<Path>%testBuildWorkDir%</Path>
+		<step action='Copy Files'>
+			<Converted type='11'>-1</Converted>
+			<Delay>15</Delay>
+			<DestDir>%testBuildWorkDir%</DestDir>
+			<ExclExt>\boost</ExclExt>
+			<HideOn type='11'>-1</HideOn>
+			<IgnoreSrc type='11'>-1</IgnoreSrc>
+			<Incremental type='11'>0</Incremental>
+			<LogCopied type='11'>-1</LogCopied>
+			<Purge type='11'>-1</Purge>
+			<ReadOnly type='11'>-1</ReadOnly>
 			<Recurse type='11'>-1</Recurse>
+			<Restartable type='11'>-1</Restartable>
+			<Retries>10</Retries>
+			<SysOn type='11'>-1</SysOn>
+			<TBD type='11'>-1</TBD>
 			<indent type='3'>1</indent>
-			<name>Delete temp work directory</name>
+			<name>Delete Temp Source Files</name>
+			<nologging type='11'>-1</nologging>
 		</step>
 		<step action='Subversion'>
 			<Files>%branch%</Files>
@@ -24,31 +52,90 @@
 			<Port>443</Port>
 			<Protocol>https</Protocol>
 			<Repository>/svnroot/ditto-cp</Repository>
+			<SVNPath>C:\Program Files (x86)\Subversion\bin</SVNPath>
 			<Subcommand>checkout</Subcommand>
 			<Username>sabrogden</Username>
 			<indent type='3'>1</indent>
 			<name>Get Latest</name>
 		</step>
-		<step action='Make VS.NET'>
+		<step action='Run Program'>
+			<command>attrib -R %workDir%\* /S</command>
+			<indent type='3'>1</indent>
+			<name>Make writable</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='Run Script'>
+			<Language>VBScript</Language>
+			<Script><![CDATA[' increment the build number in the global macro BUILD_NUM, creating
+' the macro and initializing to 1 if it doesn't exist
+Const BLD_MACRO = "verRevision"
+
+' retrieve global macros collection
+Set macros = Application.Macros(vbldGlobal) 
+
+' see if our macro exists
+Set macro = macros.Item(BLD_MACRO)
+
+If macro Is Nothing Then
+	' create the macro if not found
+	macros.Add BLD_MACRO, "1"
+	Builder.LogMessage "Created BUILD_NUM macro"
+Else
+	macro.Value = CLng(macro.Value)+1
+	Builder.LogMessage "Incremented BUILD_NUM macro to " & macro.Value
+End If
+]]></Script>
+			<description><![CDATA[Get the next build number
+]]></description>
+			<indent type='3'>1</indent>
+			<name>Increment Build Number</name>
+		</step>
+		<step action='Make VS 2010'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
-			<Attr type='11'>0</Attr>
+			<Attr type='11'>-1</Attr>
+			<Config>Unicode Release|Win32</Config>
 			<FileVer type='11'>-1</FileVer>
-			<Filename>%workDir%\%branch%\CP_Main.sln</Filename>
+			<Filename>%workDir%\%branch%\CP_Main_10.sln</Filename>
+			<ProdVer type='11'>-1</ProdVer>
+			<Version>%version%</Version>
+			<VersionSel type='3'>2</VersionSel>
+			<indent type='3'>1</indent>
+			<name>Build Ditto Unicode</name>
+		</step>
+		<step action='Make VS 2010'>
+			<AssemblyVer type='11'>-1</AssemblyVer>
+			<Attr type='11'>-1</Attr>
+			<Config>Release|Win32</Config>
+			<FileVer type='11'>-1</FileVer>
+			<Filename>%workDir%\%branch%\CP_Main_10.sln</Filename>
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
 			<indent type='3'>1</indent>
 			<name>Build Ditto</name>
 		</step>
+		<step action='ZIP Files'>
+			<Action type='3'>2</Action>
+			<Compression>5</Compression>
+			<Dest>%workDir%\trunk\dittosetup\output\DittoSource_%versionFileName%.zip</Dest>
+			<ExclExt><![CDATA[*.tlog
+*.pch
+*.obj
+*.asm
+*.lastbuildstate
+*.pdb
+*.exp]]></ExclExt>
+			<Ext>*</Ext>
+			<Hidden type='11'>-1</Hidden>
+			<LogDetail type='11'>-1</LogDetail>
+			<Recurse type='11'>-1</Recurse>
+			<Source>%workDir%</Source>
+			<indent type='3'>1</indent>
+			<name>ZIP Files</name>
+		</step>
 		<step action='Group'>
 			<indent type='3'>1</indent>
 			<name>Zip Source</name>
-		</step>
-		<step action='Run Program'>
-			<command>ProjectZip.exe /q %workDir%\%branch%\cp_main.sln</command>
-			<indent type='3'>2</indent>
-			<name>Zip source code</name>
-			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='UNZIP Files'>
 			<Action type='3'>0</Action>
@@ -57,47 +144,34 @@
 			<LogDetail type='11'>-1</LogDetail>
 			<PathInfo type='11'>-1</PathInfo>
 			<Recurse type='11'>-1</Recurse>
-			<Source>%workDir%\%branch%\cp_main.zip</Source>
+			<Source>%workDir%\trunk\dittosetup\output\DittoSource_%versionFileName%.zip</Source>
 			<UNTAR type='11'>-1</UNTAR>
 			<indent type='3'>2</indent>
 			<name>UNZIP Files</name>
 		</step>
-		<step action='Make VS.NET'>
+		<step action='Make VS 2010'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
-			<Attr type='11'>0</Attr>
+			<Attr type='11'>-1</Attr>
+			<Config>Unicode Release|Win32</Config>
 			<FileVer type='11'>-1</FileVer>
-			<Filename>%testBuildWorkDir%\cp_main.sln</Filename>
+			<Filename>%testBuildWorkDir%\%branch%\CP_Main_10.sln</Filename>
+			<ProdVer type='11'>-1</ProdVer>
+			<Version>%version%</Version>
+			<VersionSel type='3'>2</VersionSel>
+			<indent type='3'>2</indent>
+			<name>Build Ditto Unicode</name>
+		</step>
+		<step action='Make VS 2010'>
+			<AssemblyVer type='11'>-1</AssemblyVer>
+			<Attr type='11'>-1</Attr>
+			<Config>Release|Win32</Config>
+			<FileVer type='11'>-1</FileVer>
+			<Filename>%testBuildWorkDir%\%branch%\CP_Main_10.sln</Filename>
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
 			<indent type='3'>2</indent>
 			<name>Build Ditto</name>
-		</step>
-		<step action='Copy Files'>
-			<Converted type='11'>-1</Converted>
-			<Delay>15</Delay>
-			<DestDir>%workDir%\%branch%\DittoSetup\Output\</DestDir>
-			<Ext>cp_main.zip</Ext>
-			<Incremental type='11'>-1</Incremental>
-			<LogCopied type='11'>-1</LogCopied>
-			<ReadOnly type='11'>-1</ReadOnly>
-			<Retries>10</Retries>
-			<SourceDir>%workDir%\%branch%\</SourceDir>
-			<TBD type='11'>-1</TBD>
-			<indent type='3'>2</indent>
-			<name>Move source code</name>
-		</step>
-		<step action='Rename Files'>
-			<Dir>%workDir%\%branch%\DittoSetup\Output</Dir>
-			<Ext>cp_main.zip</Ext>
-			<Find>cp_main.zip</Find>
-			<FirstOnly type='11'>-1</FirstOnly>
-			<HideOn type='11'>-1</HideOn>
-			<LogRenamed type='11'>-1</LogRenamed>
-			<Replace>DittoSource_%versionFileName%.zip</Replace>
-			<SysOn type='11'>-1</SysOn>
-			<indent type='3'>2</indent>
-			<name>Rename source code zip</name>
 		</step>
 		<step action='Inno Setup'>
 			<Filename>%workDir%\%branch%\DittoSetup\DittoSetup.iss</Filename>
@@ -107,7 +181,7 @@
 			<name>Inno Setup</name>
 		</step>
 		<step action='Run Program'>
-			<command>"%workDir%\%branch%\DittoSetup\Build Portable ZIP.bat" "DittoPortable_%versionFileName%"</command>
+			<command>"%workDir%\%branch%\DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_%versionFileName%"</command>
 			<indent type='3'>1</indent>
 			<name>Build Portable</name>
 			<outputfrom type='3'>1</outputfrom>
@@ -125,8 +199,29 @@ tags/%versionFileName%
 			<Repository>/svnroot/ditto-cp</Repository>
 			<Subcommand>copy</Subcommand>
 			<Username>sabrogden</Username>
+			<checked type='11'>0</checked>
 			<indent type='3'>1</indent>
 			<name>Tag build</name>
+		</step>
+		<step action='FTP'>
+			<Ext><![CDATA[DittoPortable_%versionFileName%.zip
+DittoSetup_%versionFileName%.exe
+DittoSource_%versionFileName%.zip]]></Ext>
+			<Filename>%workDir%\%branch%\DittoSetup\output\</Filename>
+			<Incremental type='11'>-1</Incremental>
+			<Logging type='3'>6</Logging>
+			<Password encrypted='1'>MM3MPOs8MuGmarG4tqE=</Password>
+			<Percent>10</Percent>
+			<Port>22</Port>
+			<Retries>0</Retries>
+			<Server>web.sourceforge.net</Server>
+			<ServerPath>/home/groups/d/di/ditto-cp/htdocs/beta</ServerPath>
+			<Timeout>30</Timeout>
+			<TransferType type='3'>1</TransferType>
+			<UserName>sabrogden,ditto-cp</UserName>
+			<checked type='11'>0</checked>
+			<indent type='3'>1</indent>
+			<name>Copy to beta folder</name>
 		</step></steps>
 	<macros>
 		<macro name='branch'>
@@ -136,13 +231,13 @@ tags/%versionFileName%
 			<value>%temp%\DittoTestBuild</value>
 		</macro>
 		<macro name='verBuild'>
-			<value>8</value>
+			<value>0</value>
 		</macro>
 		<macro name='verMajor'>
 			<value>3</value>
 		</macro>
 		<macro name='verMinor'>
-			<value>16</value>
+			<value>17</value>
 		</macro>
 		<macro name='verRevision'>
 			<value>0</value>
