@@ -608,7 +608,7 @@ void CQListCtrl::RefreshVisibleRows()
 	int nTopIndex = GetTopIndex();
 	int nLastIndex = nTopIndex + GetCountPerPage();
 	RedrawItems(nTopIndex, nLastIndex);
-	::UpdateWindow(m_hWnd);
+	this->Invalidate();
 }
 
 void CQListCtrl::RefreshRow(int row)

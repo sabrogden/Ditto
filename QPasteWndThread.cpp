@@ -53,6 +53,8 @@ void CQPasteWndThread::OnDoQuery(void *param)
 {
     CQPasteWnd *pasteWnd = (CQPasteWnd*)param;
 
+	OpenDatabase();
+
     static CEvent UpdateTimeEvent(TRUE, TRUE, _T("Ditto_Update_Clip_Time"), NULL);
     //If we pasted then wait for the time on the pasted event to be updated before we query the db
     DWORD dRet = WaitForSingleObject(UpdateTimeEvent, 2000);
@@ -90,6 +92,8 @@ void CQPasteWndThread::OnLoadItems(void *param)
     CQPasteWnd *pasteWnd = (CQPasteWnd*)param;
 
     ResetEvent(m_SearchingEvent);
+
+	OpenDatabase();
 
 	while(true)
 	{
@@ -149,7 +153,7 @@ void CQPasteWndThread::OnLoadItems(void *param)
 	            ::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, table.m_lID, table.m_listIndex);
 	        }
 
-	        ::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW,  - 1, 0);
+	        ::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -1, 0);
 
 	        if(clearFirstLoadItem)
 	        {
@@ -172,6 +176,8 @@ void CQPasteWndThread::OnLoadItems(void *param)
 void CQPasteWndThread::OnLoadExtraData(void *param)
 {
     ResetEvent(m_SearchingEvent);
+
+	OpenDatabase();
 
     CQPasteWnd *pasteWnd = (CQPasteWnd*)param;
 
