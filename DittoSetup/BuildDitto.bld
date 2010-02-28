@@ -28,7 +28,6 @@
 			<Converted type='11'>-1</Converted>
 			<Delay>15</Delay>
 			<DestDir>%testBuildWorkDir%</DestDir>
-			<ExclExt>\boost</ExclExt>
 			<HideOn type='11'>-1</HideOn>
 			<IgnoreSrc type='11'>-1</IgnoreSrc>
 			<Incremental type='11'>0</Incremental>
@@ -58,9 +57,13 @@
 			<indent type='3'>1</indent>
 			<name>Get Latest</name>
 		</step>
+		<step action='Group'>
+			<indent type='3'>1</indent>
+			<name>Build Ditto</name>
+		</step>
 		<step action='Run Program'>
 			<command>attrib -R %workDir%\* /S</command>
-			<indent type='3'>1</indent>
+			<indent type='3'>2</indent>
 			<name>Make writable</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
@@ -85,9 +88,10 @@ Else
 	Builder.LogMessage "Incremented BUILD_NUM macro to " & macro.Value
 End If
 ]]></Script>
+			<checked type='11'>0</checked>
 			<description><![CDATA[Get the next build number
 ]]></description>
-			<indent type='3'>1</indent>
+			<indent type='3'>2</indent>
 			<name>Increment Build Number</name>
 		</step>
 		<step action='Make VS 2010'>
@@ -99,7 +103,7 @@ End If
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
-			<indent type='3'>1</indent>
+			<indent type='3'>2</indent>
 			<name>Build Ditto Unicode</name>
 		</step>
 		<step action='Make VS 2010'>
@@ -111,8 +115,12 @@ End If
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
-			<indent type='3'>1</indent>
+			<indent type='3'>2</indent>
 			<name>Build Ditto</name>
+		</step>
+		<step action='Group'>
+			<indent type='3'>1</indent>
+			<name>Zip Source</name>
 		</step>
 		<step action='ZIP Files'>
 			<Action type='3'>2</Action>
@@ -124,18 +132,20 @@ End If
 *.asm
 *.lastbuildstate
 *.pdb
-*.exp]]></ExclExt>
+*.exp
+*.svn-base
+*.map
+*.tlh
+Ditto*.exe
+Ditto*.zip
+]]></ExclExt>
 			<Ext>*</Ext>
 			<Hidden type='11'>-1</Hidden>
 			<LogDetail type='11'>-1</LogDetail>
 			<Recurse type='11'>-1</Recurse>
 			<Source>%workDir%</Source>
-			<indent type='3'>1</indent>
+			<indent type='3'>2</indent>
 			<name>ZIP Files</name>
-		</step>
-		<step action='Group'>
-			<indent type='3'>1</indent>
-			<name>Zip Source</name>
 		</step>
 		<step action='UNZIP Files'>
 			<Action type='3'>0</Action>
@@ -174,7 +184,7 @@ End If
 			<name>Build Ditto</name>
 		</step>
 		<step action='Inno Setup'>
-			<Filename>%workDir%\%branch%\DittoSetup\DittoSetup.iss</Filename>
+			<Filename>%workDir%\%branch%\DittoSetup\DittoSetup_10.iss</Filename>
 			<ISPPCompat type='11'>-1</ISPPCompat>
 			<OutputFilename>DittoSetup_%versionFileName%</OutputFilename>
 			<indent type='3'>1</indent>
@@ -186,6 +196,19 @@ End If
 			<name>Build Portable</name>
 			<outputfrom type='3'>1</outputfrom>
 			<startin>%workDir%\%branch%\DittoSetup\</startin>
+		</step>
+		<step action='ZIP Files'>
+			<Action type='3'>2</Action>
+			<Compression>5</Compression>
+			<Dest>%workDir%\%branch%\DittoSetup\output\DittoDebug_%versionFileName%.zip</Dest>
+			<Ext><![CDATA[*.map
+*.pdb]]></Ext>
+			<Hidden type='11'>-1</Hidden>
+			<LogDetail type='11'>-1</LogDetail>
+			<Recurse type='11'>-1</Recurse>
+			<Source>%workDir%</Source>
+			<indent type='3'>1</indent>
+			<name>Zip Debug files</name>
 		</step>
 		<step action='Subversion'>
 			<Files><![CDATA[%branch%
@@ -206,7 +229,8 @@ tags/%versionFileName%
 		<step action='FTP'>
 			<Ext><![CDATA[DittoPortable_%versionFileName%.zip
 DittoSetup_%versionFileName%.exe
-DittoSource_%versionFileName%.zip]]></Ext>
+DittoSource_%versionFileName%.zip
+DittoDebug_%versionFileName%.zip]]></Ext>
 			<Filename>%workDir%\%branch%\DittoSetup\output\</Filename>
 			<Incremental type='11'>-1</Incremental>
 			<Logging type='3'>6</Logging>
@@ -219,7 +243,6 @@ DittoSource_%versionFileName%.zip]]></Ext>
 			<Timeout>30</Timeout>
 			<TransferType type='3'>1</TransferType>
 			<UserName>sabrogden,ditto-cp</UserName>
-			<checked type='11'>0</checked>
 			<indent type='3'>1</indent>
 			<name>Copy to beta folder</name>
 		</step></steps>
@@ -238,9 +261,6 @@ DittoSource_%versionFileName%.zip]]></Ext>
 		</macro>
 		<macro name='verMinor'>
 			<value>17</value>
-		</macro>
-		<macro name='verRevision'>
-			<value>0</value>
 		</macro>
 		<macro name='version'>
 			<value>%verMajor%.%verMinor%.%verBuild%.%verRevision%</value>
