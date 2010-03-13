@@ -34,7 +34,7 @@ CWndEx::~CWndEx()
 
 void CWndEx::InvalidateNc()
 {
-	::RedrawWindow( m_hWnd, NULL, NULL, RDW_INVALIDATE | RDW_FRAME | RDW_NOCHILDREN );
+	::SetWindowPos(m_hWnd, NULL, 0, 0, 0, 0, SWP_DRAWFRAME | SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
 }
 
 void CWndEx::GetWindowRectEx(LPRECT lpRect)

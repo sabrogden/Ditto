@@ -79,6 +79,8 @@ END_MESSAGE_MAP()
 
 CCP_MainApp::CCP_MainApp()
 {
+	theApp.m_activeWnd.TrackActiveWnd(NULL);
+
 	m_bAppRunning = false;
 	m_bAppExiting = false;
 	m_connectOnStartup = -1;
@@ -313,7 +315,7 @@ void CCP_MainApp::AfterMainCreate()
 #ifdef UNICODE
 	m_Addins.LoadAll();
 #endif
-
+	
 	m_bAppRunning = true;
 }
 
@@ -895,6 +897,16 @@ HWND CCP_MainApp::QPastehWnd()
 		{
 			return m_pMainFrame->m_quickPaste.m_pwndPaste->GetSafeHwnd();
 		}
+	}
+
+	return NULL;
+}
+
+CQPasteWnd* CCP_MainApp::QPasteWnd() 
+{ 
+	if(m_pMainFrame != NULL)
+	{
+		return m_pMainFrame->m_quickPaste.m_pwndPaste; 
 	}
 
 	return NULL;

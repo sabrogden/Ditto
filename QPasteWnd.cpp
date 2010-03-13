@@ -2092,9 +2092,7 @@ void CQPasteWnd::DeleteSelectedRows()
     }
 
     m_lstHeader.SetListPos(nFirstSel);
-
-    m_lstHeader.RefreshVisibleRows();
-    RedrawWindow(0, 0, RDW_INVALIDATE);
+	UpdateStatus();
 }
 
 CString CQPasteWnd::LoadDescription(int nItem)
@@ -2469,6 +2467,8 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
 
                         lstrcpyn(pItem->pszText, cs, pItem->cchTextMax);
                         pItem->pszText[pItem->cchTextMax - 1] = '\0';
+
+						//Log(StrF(_T("DrawItem index %d - %s"), pItem->iItem, pItem->pszText));
                     }
                     else
                     {
@@ -3095,10 +3095,7 @@ LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 {
     m_lstHeader.SetItemCountEx(wParam);
     m_lstHeader.RefreshVisibleRows();
-
-    MoveControls();
     UpdateStatus(false);
-    RedrawWindow();
 
     return TRUE;
 }
