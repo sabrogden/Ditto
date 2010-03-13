@@ -23,7 +23,7 @@ ChangesAssociations=yes
 
 [Languages]
 Name: English; MessagesFile: compiler:Default.isl
-Name: German; MessagesFile: German.isl
+Name: Deutsch; MessagesFile: German.isl
 Name: Italiano; MessagesFile: Italian.isl
 Name: French; MessagesFile: French.isl
 Name: Portuguese; MessagesFile: Portuguese.isl
@@ -127,3 +127,4 @@ begin
 
     RenameFile(sDir+'\Language\Italian.xml', sDir+'\Language\Italian.xml.old')
 end;
+

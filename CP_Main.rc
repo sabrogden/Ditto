@@ -167,7 +167,7 @@ BEGIN
         MENUITEM "Show Quick Paste",            ID_FIRST_SHOWQUICKPASTE
         MENUITEM "Options",                     ID_FIRST_OPTION
         MENUITEM SEPARATOR
-        MENUITEM "Import",                      ID_FIRST_IMPORT
+        MENUITEM "Import Clip(s)",              ID_FIRST_IMPORT
         MENUITEM "New Clip",                    ID_FIRST_NEWCLIP
         MENUITEM SEPARATOR
         MENUITEM "Help",                        ID_FIRST_HELP
@@ -190,7 +190,7 @@ BEGIN
         END
         POPUP "Quick Options",                  65535,MFT_STRING,MFS_ENABLED
         BEGIN
-            POPUP "Lines Per Row",                  65535,MFT_STRING,MFS_ENABLED
+            POPUP "Lines Per Clip",                 65535,MFT_STRING,MFS_ENABLED
             BEGIN
                 MENUITEM "1",                           32807,MFT_STRING,MFS_ENABLED
                 MENUITEM "2",                           32786,MFT_STRING,MFS_ENABLED
@@ -227,7 +227,7 @@ BEGIN
                 MENUITEM "Bottom",                      32781,MFT_STRING,MFS_ENABLED
                 MENUITEM "Left",                        32782,MFT_STRING,MFS_ENABLED
             END
-            POPUP "Sort",                           65535,MFT_STRING,MFS_ENABLED
+            POPUP "Order",                          65535,MFT_STRING,MFS_ENABLED
             BEGIN
                 MENUITEM "Ascending (Latest on the Top)", 32795,MFT_STRING,MFS_ENABLED
                 MENUITEM "Descending (Latest on the Bottom)", 32797,MFT_STRING,MFS_ENABLED
@@ -288,8 +288,8 @@ BEGIN
             MENUITEM "Remove Quick Paste",          32856,MFT_STRING | MFT_RIGHTJUSTIFY,MFS_ENABLED
         END
         MENUITEM MFT_SEPARATOR
-        MENUITEM "Import",                      32855,MFT_STRING,MFS_ENABLED
-        MENUITEM "Export",                      32853,MFT_STRING,MFS_ENABLED
+        MENUITEM "Import Clip(s)",              32855,MFT_STRING,MFS_ENABLED
+        MENUITEM "Export Clip(s)",              32853,MFT_STRING,MFS_ENABLED
         MENUITEM MFT_SEPARATOR
         MENUITEM "Options...",                  32805,MFT_STRING,MFS_ENABLED
         MENUITEM MFT_SEPARATOR
@@ -377,7 +377,7 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,30,335,10
     CONTROL         "Show leading whitespace",IDC_DESC_SHOW_LEADING_WHITESPACE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,41,335,10
-    LTEXT           "Text Lines per Row",IDC_STATIC_LINES,18,54,93,8
+    LTEXT           "Text Lines per Clip",IDC_STATIC_LINES,18,54,93,8
     EDITTEXT        IDC_LINES_ROW,114,52,19,12,ES_AUTOHSCROLL
     CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,67,155,10
@@ -498,7 +498,7 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,215,306,10
     LTEXT           "Days",IDC_STATIC_DAYS,201,53,51,12,SS_CENTERIMAGE
     CONTROL         "Set Database Path",IDC_SET_DB_PATH,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,79,320,10
-    LTEXT           "Lanuage",IDC_STATIC_LANGUAGE,23,65,36,12,SS_CENTERIMAGE
+    LTEXT           "Language",IDC_STATIC_LANGUAGE,23,65,36,12,SS_CENTERIMAGE
 END
 
 IDD_SELECT_DB DIALOGEX 0, 0, 276, 46
@@ -588,7 +588,7 @@ END
 
 IDD_ABOUT DIALOGEX 0, 0, 329, 153
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "About"
+CAPTION "About Ditto"
 FONT 8, "MS Shell Dlg", 0, 0, 0x0
 BEGIN
     LISTBOX         IDC_LIST,7,16,315,86,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP

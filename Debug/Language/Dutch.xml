@@ -6,7 +6,7 @@
 		<Item English_Text = "New Group Selection F7" ID = "32812">Nieuwe Groep selectie</Item>		
 		<Item English_Text = "Move to Group" ID = "32840">Verplaats naar Groep</Item>		
 		<Item English_Text = "Quick Options" ID = "-1">Spoed Opties</Item>		
-		<Item English_Text = "Lines Per Row" ID = "-1">Regels per Rij</Item>		
+		<Item English_Text = "Lines Per Clip" ID = "-1">Regels per Rij</Item>		
 		<Item English_Text = "1" ID = "32807">1</Item>		
 		<Item English_Text = "2" ID = "32786">2</Item>		
 		<Item English_Text = "3" ID = "32787">3</Item>		
@@ -33,7 +33,7 @@
 		<Item English_Text = "Right" ID = "32780">Rechts</Item>		
 		<Item English_Text = "Bottom" ID = "32781">Onder</Item>		
 		<Item English_Text = "Left" ID = "32782">Links</Item>		
-		<Item English_Text = "Sort" ID = "-1">Sorteren</Item>		
+		<Item English_Text = "Order" ID = "-1">Sorteren</Item>		
 		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">Opklimmend (Laatste boven)</Item>		
 		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">Afdalend Laatste onder)</Item>		
 		<Item English_Text = "Double Clicking on Caption" ID = "-1">Dubbelklik op Titelbalk</Item>		
@@ -116,6 +116,9 @@
 		<Item English_Text = "About Language" ID = "2073">Kommentaar vertaling</Item>		
 		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Verkrijg zekerheid dat Ditto altijd verbinding maakt met het klembord</Item>		
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Algemeen</Item>	
+		
+		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090"></Item>
+		
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>			
 		<Item English_Text = "&Add" ID = "1015">&Toevoegen</Item>		
@@ -290,6 +293,9 @@
 		<Item English_Text = "IP/Name" ID = "IP_Name">IP_Naam</Item>
 		<Item English_Text = "Descriptions" ID = "Descriptions">Omschrijvingen</Item> 
 		
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Add-Ins" ID = "Add_Ins"></Item> 
+		
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>			
 		<Item English_Text = "OK" ID = "1">OK</Item>		
@@ -307,4 +313,35 @@
 		<Item English_Text = "New Clip" ID = "32868">Nieuwe Clip</Item>
 		
 	</Ditto_Tray_Icon_Menu>
+	
+		//Added in 9-11-09
+	<Ditto_Options_CopyBuffers>
+		<Item English_Text = "Copy Buffer 1" ID = "2088"></Item>
+		<Item English_Text = "Copy" ID = "2079"></Item>
+		<Item English_Text = "Paste" ID = "2080"></Item>
+		<Item English_Text = "Cut" ID = "2081"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042"></Item>
+		<Item English_Text = "Win" ID = "2085"></Item>
+		<Item English_Text = "Win" ID = "2086"></Item>
+		<Item English_Text = "Win" ID = "2087"></Item>
+		
+		<Item English_Text = "Copy Buffer 2" ID = "2098"></Item>
+		<Item English_Text = "Copy" ID = "2093"></Item>
+		<Item English_Text = "Paste" ID = "2094"></Item>
+		<Item English_Text = "Cut" ID = "2097"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043"></Item>
+		<Item English_Text = "Win" ID = "2090"></Item>
+		<Item English_Text = "Win" ID = "2092"></Item>
+		<Item English_Text = "Win" ID = "2096"></Item>
+		
+		<Item English_Text = "Copy Buffer 3" ID = "2108"></Item>
+		<Item English_Text = "Copy" ID = "2103"></Item>
+		<Item English_Text = "Paste" ID = "2104"></Item>
+		<Item English_Text = "Cut" ID = "2107"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044"></Item>
+		<Item English_Text = "Win" ID = "2100"></Item>
+		<Item English_Text = "Win" ID = "2102"></Item>
+		<Item English_Text = "Win" ID = "2106"></Item>
+	</Ditto_Options_CopyBuffers>
+	
 </Ditto_Language_File>

@@ -150,7 +150,8 @@ protected:
 	CFont m_Font;
 	IFormattedTextDraw *m_pFormatter;
 	bool m_allSelected;
-	
+	int m_linesPerRow;
+
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CQListCtrl)

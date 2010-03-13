@@ -28,6 +28,7 @@ CQListCtrl::CQListCtrl()
 {
 	m_pchTip = NULL;
 	m_pwchTip = NULL;
+	m_linesPerRow = 0;
 	
 	LOGFONT lf;
 	
@@ -320,26 +321,31 @@ BOOL CQListCtrl::SetFormattedText(int nRow, int nCol, LPCTSTR lpszFormat,...)
 
 void CQListCtrl::SetNumberOfLinesPerRow(int nLines)
 {
-	CDC *pDC = GetDC();
-	
-	CRect crRect(0, 0, 0, 0);
-	
-	CFont *pOldFont = pDC->SelectObject(GetFont());
-	
-	//Get the height to draw one character
-	pDC->DrawText("W", crRect, DT_VCENTER | DT_EXPANDTABS | DT_CALCRECT);
-	
-	pDC->SelectObject(pOldFont);
-	
-	//Get the total height of each row
-	int nHeight = (crRect.Height() * nLines) + ROW_BOTTOM_BORDER;
-	
-	//Create a image list of that height and set it to the list box
-	CImageList imglist;
-	imglist.Create(DUMMY_COL_WIDTH, nHeight, ILC_COLOR16 | ILC_MASK, 1, 1);
-	SetImageList(&imglist, LVSIL_SMALL );
+	if(m_linesPerRow != nLines)
+	{
+		m_linesPerRow = nLines;
 
-	ReleaseDC(pDC);
+		CDC *pDC = GetDC();
+	
+		CRect crRect(0, 0, 0, 0);
+		
+		CFont *pOldFont = pDC->SelectObject(GetFont());
+		
+		//Get the height to draw one character
+		pDC->DrawText("W", crRect, DT_VCENTER | DT_EXPANDTABS | DT_CALCRECT);
+		
+		pDC->SelectObject(pOldFont);
+		
+		//Get the total height of each row
+		int nHeight = (crRect.Height() * nLines) + ROW_BOTTOM_BORDER;
+		
+		//Create a image list of that height and set it to the list box
+		CImageList imglist;
+		imglist.Create(DUMMY_COL_WIDTH, nHeight, ILC_COLOR16 | ILC_MASK, 1, 1);
+		SetImageList(&imglist, LVSIL_SMALL );
+
+		ReleaseDC(pDC);
+	}
 }
 
 void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
@@ -638,7 +644,7 @@ BOOL CQListCtrl::OnEraseBkgnd(CDC* pDC)
 	// However, for some reason, bulk erasure is very noticeable when
 	//	shift-scrolling the page to select a block of items, so
 	//	I made a special case for that:
-	if( GetSelectedCount() >= 2 )
+	if(GetSelectedCount() >= 2)
 		return TRUE;
 	return CListCtrl::OnEraseBkgnd(pDC);
 }

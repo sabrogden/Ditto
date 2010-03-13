@@ -509,7 +509,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
     }
     else
     {
-        MoveControls();
+        //MoveControls();
     }
 
     // from now on, for interactive use, we can repaint immediately
@@ -735,11 +735,11 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 {
     MSG msg;
     // remove all additional refresh view messages from the queue
-    while(::PeekMessage(&msg, m_hWnd, WM_REFRESH_VIEW, WM_REFRESH_VIEW, PM_REMOVE)){}
+	while(::PeekMessage(&msg, m_hWnd, WM_REFRESH_VIEW, WM_REFRESH_VIEW, PM_REMOVE)){}
 
-    Log(_T("OnRefreshView - Start"));
+	Log(_T("OnRefreshView - Start"));
 
-    theApp.m_FocusID =  - 1;
+	theApp.m_FocusID =  - 1;
 
 	if(theApp.m_bShowingQuickPaste)
 	{
@@ -758,6 +758,8 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 		m_lstHeader.SetItemCountEx(0);
 		m_lstHeader.RefreshVisibleRows();
     }
+
+    Log(_T("OnRefreshView - End"));
 
     return TRUE;
 }
@@ -2423,7 +2425,6 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
     LV_ITEM *pItem = &(pDispInfo)->item;
 
     if(pItem->mask &LVIF_TEXT)
-    //valid text buffer?
     {
         switch(pItem->iSubItem)
         {
@@ -2519,89 +2520,85 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
         }
     }
 
-    if(pItem->mask &LVIF_CF_DIB)
+    if(pItem->mask & LVIF_CF_DIB && g_Opt.m_bDrawThumbnail)
     {
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+     
+		MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
+        if(iter != m_mapCache.end())
         {
-			ATL::CCritSecLock csLock(m_CritSection.m_sect);
-         
-			MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
-            if(iter != m_mapCache.end())
+            CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(iter->second.m_lID);
+            if(iterDib == m_cf_dibCache.end())
             {
-                CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(iter->second.m_lID);
-                if(iterDib == m_cf_dibCache.end())
-                {
-                    bool exists = false;
-					for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
+                bool exists = false;
+				for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
+				{
+					if(it->m_cfType == CF_DIB && it->m_lDBID == iter->second.m_lID)
 					{
-						if(it->m_cfType == CF_DIB && it->m_lDBID == iter->second.m_lID)
-						{
-							exists = true;
-							break;
-						}
+						exists = true;
+						break;
 					}
+				}
 
-                    if(exists == false)
-                    {
-                        CClipFormatQListCtrl format;
-                        format.m_cfType = CF_DIB;
-                        format.m_lDBID = iter->second.m_lID;
-                        format.m_clipRow = pItem->iItem;
-                        format.m_autoDeleteData = false;
-                        m_ExtraDataLoadItems.push_back(format);
-
-                        m_thread.FireLoadExtraData();
-                    }
-                }
-                else
+                if(exists == false)
                 {
-                    if(iterDib->second.m_hgData != NULL)
-                    {
-                        pItem->lParam = (LPARAM) &(iterDib->second);
-                    }
+                    CClipFormatQListCtrl format;
+                    format.m_cfType = CF_DIB;
+                    format.m_lDBID = iter->second.m_lID;
+                    format.m_clipRow = pItem->iItem;
+                    format.m_autoDeleteData = false;
+                    m_ExtraDataLoadItems.push_back(format);
+
+                    m_thread.FireLoadExtraData();
+                }
+            }
+            else
+            {
+                if(iterDib->second.m_hgData != NULL)
+                {
+                    pItem->lParam = (LPARAM) &(iterDib->second);
                 }
             }
         }
     }
 
-    if(pItem->mask & LVIF_CF_RICHTEXT)
+    if(pItem->mask & LVIF_CF_RICHTEXT && g_Opt.m_bDrawRTF)
     {
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
+        MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
+        if(iter != m_mapCache.end())
         {
-			ATL::CCritSecLock csLock(m_CritSection.m_sect);
-
-            MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
-            if(iter != m_mapCache.end())
+            CF_DibTypeMap::iterator iterDib = m_cf_rtfCache.find(iter->second.m_lID);
+            if(iterDib == m_cf_rtfCache.end())
             {
-                CF_DibTypeMap::iterator iterDib = m_cf_rtfCache.find(iter->second.m_lID);
-                if(iterDib == m_cf_rtfCache.end())
-                {
-                    bool exists = false;
-					for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
+                bool exists = false;
+				for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
+				{
+					if(it->m_cfType == CF_DIB && it->m_lDBID == iter->second.m_lID)
 					{
-						if(it->m_cfType == CF_DIB && it->m_lDBID == iter->second.m_lID)
-						{
-							exists = true;
-							break;
-						}
+						exists = true;
+						break;
 					}
+				}
 
-                    if(exists == false)
-                    {
-                        CClipFormatQListCtrl format;
-                        format.m_cfType = theApp.m_RTFFormat;
-                        format.m_lDBID = iter->second.m_lID;
-                        format.m_clipRow = pItem->iItem;
-                        format.m_autoDeleteData = false;
-                        m_ExtraDataLoadItems.push_back(format);
-
-                        m_thread.FireLoadExtraData();
-                    }
-                }
-                else
+                if(exists == false)
                 {
-                    if(iterDib->second.m_hgData != NULL)
-                    {
-                        pItem->lParam = (LPARAM) &(iterDib->second);
-                    }
+                    CClipFormatQListCtrl format;
+                    format.m_cfType = theApp.m_RTFFormat;
+                    format.m_lDBID = iter->second.m_lID;
+                    format.m_clipRow = pItem->iItem;
+                    format.m_autoDeleteData = false;
+                    m_ExtraDataLoadItems.push_back(format);
+
+                    m_thread.FireLoadExtraData();
+                }
+            }
+            else
+            {
+                if(iterDib->second.m_hgData != NULL)
+                {
+                    pItem->lParam = (LPARAM) &(iterDib->second);
                 }
             }
         }

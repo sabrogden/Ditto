@@ -6,7 +6,7 @@
 		<Item English_Text = "New Group Selection	F7" ID = "32812"></Item>
 		<Item English_Text = "Move to Group" ID = "32840"></Item>
 		<Item English_Text = "Quick Options" ID = "-1"></Item>
-		<Item English_Text = "Lines Per Row" ID = "-1"></Item>
+		<Item English_Text = "Lines Per Clip" ID = "-1"></Item>
 		<Item English_Text = "1" ID = "32807"></Item>
 		<Item English_Text = "2" ID = "32786"></Item>
 		<Item English_Text = "3" ID = "32787"></Item>
@@ -33,14 +33,14 @@
 		<Item English_Text = "Right" ID = "32780"></Item>
 		<Item English_Text = "Bottom" ID = "32781"></Item>
 		<Item English_Text = "Left" ID = "32782"></Item>
-		<Item English_Text = "Sort" ID = "-1"></Item>
+		<Item English_Text = "Order" ID = "-1"></Item>
 		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795"></Item>
 		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797"></Item>
 		<Item English_Text = "Double Clicking on Caption" ID = "-1"></Item>
 		<Item English_Text = "Toggles Always on Top" ID = "32814"></Item>
 		<Item English_Text = "Rolls-up Window" ID = "32815"></Item>
 		<Item English_Text = "Toggles Always Show Description" ID = "32816"></Item>
-		<Item English_Text = "Always on Top	Ctrl-Space" ID = "32784"></Item>
+		<Item English_Text = "Always on Top" ID = "32784"></Item>
 		<Item English_Text = "Auto Roll-up" ID = "32791"></Item>
 		<Item English_Text = "Always Show Description" ID = "32813"></Item>
 		<Item English_Text = "Prompt For New Group Names" ID = "32817"></Item>
@@ -54,11 +54,11 @@
 		<Item English_Text = "Send To" ID = "-1"></Item>
 		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824"></Item>
 		<Item English_Text = "View Full Description	F3" ID = "32793"></Item>
-		<Item English_Text = "View Groups	Ctrl-G" ID = "32819"></Item>
+		<Item English_Text = "View Groups" ID = "32819"></Item>
 		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841"></Item>
 		<Item English_Text = "Paste HTML as Plain Text" ID = "32851"></Item>
-		<Item English_Text = "Delete Entry	Del" ID = "32801"></Item>
-		<Item English_Text = "Properties	Alt-Enter" ID = "32776"></Item>
+		<Item English_Text = "Delete Entry" ID = "32801"></Item>
+		<Item English_Text = "Properties" ID = "32776"></Item>
 		<Item English_Text = "Quick Properties" ID = "-1"></Item>
 		<Item English_Text = "Never Auto Delete" ID = "32820"></Item>
 		<Item English_Text = "Auto Delete" ID = "32821"></Item>
@@ -70,8 +70,8 @@
 		
 		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Prompt to Delete Clip" ID = "32852"></Item>	
-		<Item English_Text = "Import" ID = "32855"></Item>
-		<Item English_Text = "Export" ID = "32853"></Item>
+		<Item English_Text = "Import Clip(s)" ID = "32855"></Item>
+		<Item English_Text = "Export Clip(s)" ID = "32853"></Item>
 		<Item English_Text = "Remove Quick Paste" ID = "32856"></Item>	
 		<Item English_Text = "Edit Clip" ID = "32860"></Item>
 		<Item English_Text = "New Clip" ID = "32867"></Item>	
@@ -97,7 +97,6 @@
 		<Item English_Text = "Paste Entries Expire after" ID = "2009"></Item>
 		<Item English_Text = "Days" ID = "2043"></Item>
 		<Item English_Text = "Compact and Repair" ID = "1028"></Item>
-		<Item English_Text = "Automatically check for updates online" ID = "1029"></Item>
 		<Item English_Text = "Check Now" ID = "1030"></Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037"></Item>
 		<Item English_Text = "Update Clip Time On Paste" ID = "1038"></Item>
@@ -107,7 +106,7 @@
 		<Item English_Text = "On copy play the sound" ID = "2045"></Item>
 		<Item English_Text = "Play" ID = "2034"></Item>
 		<Item English_Text = "Paste Clip in active window after selection" ID = "1041"></Item>
-		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046"></Item>
+		<Item English_Text = "Maximum Clip Size (in Bytes)" ID = "2046"></Item>
 		<Item English_Text = "(Leave blank for no limit)" ID = "2047"></Item>
 		<Item English_Text = "Set Database Path" ID = "1034"></Item>
 		<Item English_Text = "Language" ID = "2069"></Item>
@@ -115,6 +114,7 @@
 		<Item English_Text = "About Language" ID = "2073"></Item>
 		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042"></Item>
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true"></Item>
+		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090"></Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "&Add" ID = "1015"></Item>
@@ -153,16 +153,13 @@
 		
 		//New item added in 3.15.1 8/18/07
 		<Item English_Text = "Send custom strokes Per Application" ID = "2091"></Item>
-		
-		//Added in 9-11-09
-		<Item English_Text = "Named Paste" ID = "2062">test</Item>
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Quick_Paste>
 		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042"></Item>
 		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033"></Item>
 		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034"></Item>
 		<Item English_Text = "Show leading whitespace" ID = "2021"></Item>
-		<Item English_Text = "Text Lines per Row" ID = "2062"></Item>
+		<Item English_Text = "Text Lines per Entry" ID = "2062"></Item>
 		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006"></Item>
 		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022"></Item>
 		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023"></Item>
@@ -191,12 +188,12 @@
 		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052"></Item>
 		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053"></Item>
 		<Item English_Text = "Disable Recieving Clips" ID = "2026"></Item>
-		<Item English_Text = "Network Password" ID = "2054"></Item>
-		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055"></Item>
+		<Item English_Text = "Group Password" ID = "2054"></Item>
+		<Item English_Text = "If you are receiving clips from computers where your group password does not match, enter additional group passwords separated by commas" ID = "2055"></Item>
 		<Item English_Text = "Receive Passwords" ID = "2056"></Item>
 		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057"></Item>
 		<Item English_Text = "Log Send Receive Commands" ID = "1042"></Item>
-		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true"></Item>
+			<Item English_Text = "Friends" ID = "-1" PropertyPage = "true"></Item>
 		
 		//Added in 9-11-09
 		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">test</Item>
@@ -247,10 +244,10 @@
 		<Item English_Text = "General" ID = "GeneralTitle"></Item>
 		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle"></Item>
 		<Item English_Text = "Stats" ID = "StatsTitle"></Item>
-		<Item English_Text = "Friends" ID = "FriendsTitle"></Item>
+		<Item English_Text = "NetwFriendsork" ID = "FriendsTitle"></Item>
 		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle"></Item>
 		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle"></Item>
-		<Item English_Text = "About" ID = "AboutTitle"></Item>
+		<Item English_Text = "About Ditto" ID = "AboutTitle"></Item>
 		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database"></Item>
 		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao"></Item>
 		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format"></Item>
@@ -295,6 +292,9 @@
 		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1"></Item>
 		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2"></Item>
 		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3"></Item> 
+		
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Add-Ins" ID = "Add_Ins"></Item> 
 				
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
@@ -313,34 +313,34 @@
 		<Item English_Text = "New Clip" ID = "32868"></Item>
 		
 	</Ditto_Tray_Icon_Menu>
-	
+
 	//Added in 9-11-09
 	<Ditto_Options_CopyBuffers>
-		<Item English_Text = "Copy Buffer 1" ID = "2088">Copy Buffer 1-test</Item>
-		<Item English_Text = "Copy" ID = "2079">Copy-test</Item>
-		<Item English_Text = "Paste" ID = "2080">Paste-test</Item>
-		<Item English_Text = "Cut" ID = "2081">Cut-test</Item>
-		<Item English_Text = "Play Sound on Copy" ID = "1042">Play Sound on Copy-test</Item>
-		<Item English_Text = "Win" ID = "2085">Win1Copy-test</Item>
-		<Item English_Text = "Win" ID = "2086">Win1Paste-test</Item>
-		<Item English_Text = "Win" ID = "2087">Win1Cut-test</Item>
+		<Item English_Text = "Copy Buffer 1" ID = "2088"></Item>
+		<Item English_Text = "Copy" ID = "2079"></Item>
+		<Item English_Text = "Paste" ID = "2080"></Item>
+		<Item English_Text = "Cut" ID = "2081"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042"></Item>
+		<Item English_Text = "Win" ID = "2085"></Item>
+		<Item English_Text = "Win" ID = "2086"></Item>
+		<Item English_Text = "Win" ID = "2087"></Item>
 		
-		<Item English_Text = "Copy Buffer 2" ID = "2098">Copy Buffer 1-test</Item>
-		<Item English_Text = "Copy" ID = "2093">Copy-test</Item>
-		<Item English_Text = "Paste" ID = "2094">Paste-test</Item>
-		<Item English_Text = "Cut" ID = "2097">Cut-test</Item>
-		<Item English_Text = "Play Sound on Copy" ID = "1043">Play Sound on Copy-test</Item>
-		<Item English_Text = "Win" ID = "2090">Win2Copy-test</Item>
-		<Item English_Text = "Win" ID = "2092">Win2Paste-test</Item>
-		<Item English_Text = "Win" ID = "2096">Win2Cut-test</Item>
+		<Item English_Text = "Copy Buffer 2" ID = "2098"></Item>
+		<Item English_Text = "Copy" ID = "2093"></Item>
+		<Item English_Text = "Paste" ID = "2094"></Item>
+		<Item English_Text = "Cut" ID = "2097"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043"></Item>
+		<Item English_Text = "Win" ID = "2090"></Item>
+		<Item English_Text = "Win" ID = "2092"></Item>
+		<Item English_Text = "Win" ID = "2096"></Item>
 		
-		<Item English_Text = "Copy Buffer 3" ID = "2108">Copy Buffer 1-test</Item>
-		<Item English_Text = "Copy" ID = "2103">Copy-test</Item>
-		<Item English_Text = "Paste" ID = "2104">Paste-test</Item>
-		<Item English_Text = "Cut" ID = "2107">Cut-test</Item>
-		<Item English_Text = "Play Sound on Copy" ID = "1044">Play Sound on Copy-test</Item>
-		<Item English_Text = "Win" ID = "2100">Win3Copy-test</Item>
-		<Item English_Text = "Win" ID = "2102">Win3Paste-test</Item>
-		<Item English_Text = "Win" ID = "2106">Win3Cut-test</Item>
+		<Item English_Text = "Copy Buffer 3" ID = "2108"></Item>
+		<Item English_Text = "Copy" ID = "2103"></Item>
+		<Item English_Text = "Paste" ID = "2104"></Item>
+		<Item English_Text = "Cut" ID = "2107"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044"></Item>
+		<Item English_Text = "Win" ID = "2100"></Item>
+		<Item English_Text = "Win" ID = "2102"></Item>
+		<Item English_Text = "Win" ID = "2106"></Item>
 	</Ditto_Options_CopyBuffers>
 </Ditto_Language_File>

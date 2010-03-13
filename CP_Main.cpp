@@ -227,11 +227,13 @@ BOOL CCP_MainApp::InitInstance()
 	}
 
 	CString csFile = CGetSetOptions::GetLanguageFile();
-	if(csFile.GetLength() > 0 && !m_Language.LoadLanguageFile(csFile))
+	if(m_Language.LoadLanguageFile(csFile) == false)
 	{
 		CString cs;
 		cs.Format(_T("Error loading language file - %s - \n\n%s"), csFile, m_Language.m_csLastError);
 		Log(cs);
+
+		m_Language.LoadLanguageFile(_T("English.xml"));
 	}
 
 	//The first time we run Ditto on U3 show a web page about ditto
