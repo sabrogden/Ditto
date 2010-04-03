@@ -215,6 +215,7 @@ void CSendKeys::SendKeyUp(BYTE VKey)
 {
   BYTE ScanCode = LOBYTE(::MapVirtualKey(VKey, 0));
 
+
   KeyboardEvent(VKey, 
                 ScanCode, 
                 KEYEVENTF_KEYUP | (IsVkExtended(VKey) ? KEYEVENTF_EXTENDEDKEY : 0));
@@ -283,14 +284,17 @@ void CSendKeys::SendKeyDown(BYTE VKey, WORD NumTimes, bool GenUpMsg, bool bDelay
       CarryDelay();
 
     KeyboardEvent(VKey, ScanCode, IsVkExtended(VKey) ? KEYEVENTF_EXTENDEDKEY : 0);
-    
+
 	if(m_keyDownDelay > 0)
 	{
 		Sleep(m_keyDownDelay);
 	}
 
 	if (GenUpMsg)
-      KeyboardEvent(VKey, ScanCode, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP);
+	{
+		SendKeyUp(VKey);
+	}
+
   }
 }
 

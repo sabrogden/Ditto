@@ -23,9 +23,15 @@ bool ExternalWindowTracker::TrackActiveWnd(HWND focus)
 	HWND newActive = ::GetForegroundWindow();
 	if(newFocus == NULL)
 	{
-		AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), TRUE);
-		newFocus = GetFocus();
-		AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), FALSE);
+		if(AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), TRUE))
+		{
+			newFocus = GetFocus();
+			AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), FALSE);
+		}
+		else
+		{
+			//Log(_T("TrackActiveWnd - AttachThreadInput failed"));
+		}
 
 		fromHook = false;
 	}
@@ -112,12 +118,36 @@ bool ExternalWindowTracker::ActivateTarget()
 {
 	Log(StrF(_T("Activate Target - Active: %d Focus: %d"), m_activeWnd, m_focusWnd));
 
-	SetForegroundWindow(m_activeWnd);
+	if (IsIconic(m_activeWnd))
+	{
+		ShowWindow(m_activeWnd, SW_RESTORE);
+	}
 
-	AttachThreadInput(GetWindowThreadProcessId(m_activeWnd, NULL), GetCurrentThreadId(), TRUE);
-	SetFocus(m_focusWnd);
-	AttachThreadInput(GetWindowThreadProcessId(m_activeWnd, NULL), GetCurrentThreadId(), FALSE);
+	// Save specified timeout period...
+	DWORD dwTimeoutMS;
+	SystemParametersInfo(SPI_GETFOREGROUNDLOCKTIMEOUT, 0, &dwTimeoutMS, 0);
 
+	// ... then set it to zero to disable it
+	SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, (PVOID)0, 0);
+
+	DWORD foregroundProcessId = GetWindowThreadProcessId(GetForegroundWindow(), NULL);
+	DWORD hwndProcessId = GetWindowThreadProcessId(m_activeWnd, NULL);
+	if(AttachThreadInput(hwndProcessId, GetCurrentThreadId(), TRUE))
+	{
+		BringWindowToTop(m_activeWnd);
+		SetForegroundWindow(m_activeWnd);
+		SetFocus(m_focusWnd);
+		AttachThreadInput(hwndProcessId, GetCurrentThreadId(), FALSE);
+	}
+	else
+	{
+		BringWindowToTop(m_activeWnd);
+		SetForegroundWindow(m_activeWnd);
+		Log(_T("Attach thread input failed forground"));
+	}
+
+	SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, (PVOID)dwTimeoutMS, 0);
+	
 	return true;
 }
 
@@ -150,6 +180,8 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 
 	m_dittoHasFocus = false;
 	Log(StrF(_T("Sending paste to app %s key stroke: %s, SeDelay: %d"), csPasteToApp, csPasteString, delay));
+
+	Sleep(delay);
 
 	send.SetKeyDownDelay(max(50, delay));
 

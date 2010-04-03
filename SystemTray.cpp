@@ -825,6 +825,13 @@ LRESULT CSystemTray::OnTrayNotification(UINT wParam, LONG lParam)
     if (!pTargetWnd)
         return 0L;
 
+	// target before mouse messages change the focus
+	if(WM_MOUSEFIRST <= LOWORD(lParam) && LOWORD(lParam) <= WM_MOUSELAST)
+	{
+		pTargetWnd->SendMessage(WM_TRAY_MENU_MOUSE_MOVE, 0, 0);
+	}
+
+
     // Clicking with right button brings up a context menu
 #if defined(_WIN32_WCE) //&& _WIN32_WCE < 211
     BOOL bAltPressed = ((GetKeyState(VK_MENU) & (1 << (sizeof(SHORT)*8-1))) != 0);

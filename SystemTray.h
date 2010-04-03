@@ -41,7 +41,8 @@
 #define NIIF_NONE 0
 #endif
 
-#define WM_CUSTOMIZE_TRAY_MENU	WM_USER + 211
+#define WM_CUSTOMIZE_TRAY_MENU	WM_USER + 215
+#define WM_TRAY_MENU_MOUSE_MOVE	WM_USER + 216
 
 // #include <afxwin.h>
 #include <afxtempl.h>

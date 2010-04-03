@@ -76,6 +76,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_FIRST_NEWCLIP, OnFirstNewclip)
 	ON_MESSAGE(WM_SET_CONNECTED, OnSetConnected)
 	ON_MESSAGE(WM_LOAD_ClIP_ON_CLIPBOARD, OnLoadClipOnClipboard)
+	ON_MESSAGE(WM_TRAY_MENU_MOUSE_MOVE, OnSystemTrayMouseMove)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -269,6 +270,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
             m_keyStateModifiers = CAccels::GetKeyStateModifiers();
             SetTimer(KEY_STATE_MODIFIERS, 50, NULL);
 
+			//Before we show our window find the current focused window for paste into
 			theApp.m_activeWnd.TrackActiveWnd(NULL);
 
             m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
@@ -672,6 +674,12 @@ bool CMainFrame::CloseAllOpenDialogs()
     }
 
     return bRet;
+}
+
+LRESULT CMainFrame::OnSystemTrayMouseMove(WPARAM wParam, LPARAM lParam)
+{
+	theApp.m_activeWnd.TrackActiveWnd(NULL);
+	return 0;
 }
 
 LRESULT CMainFrame::OnLoadClipOnClipboard(WPARAM wParam, LPARAM lParam)

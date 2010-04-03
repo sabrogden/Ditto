@@ -110,7 +110,8 @@ CString GetProcessName(HWND hWnd);
 #define WM_EDIT_WND_CLOSING		WM_USER	+ 212
 #define WM_SET_CONNECTED		WM_USER	+ 213
 #define WM_LOAD_ClIP_ON_CLIPBOARD		WM_USER	+ 214
-//defined in tray icon #define WM_CUSTOMIZE_TRAY_MENU	WM_USER + 211
+//defined in tray icon #define WM_CUSTOMIZE_TRAY_MENU	WM_USER + 215
+//defined in tray icon #define WM_TRAY_MENU_MOUSE_MOVE	WM_USER + 216
 
 #if !defined(_BITSET_)
 #	include <bitset>

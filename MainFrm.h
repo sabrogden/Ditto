@@ -97,6 +97,7 @@ protected:
     afx_msg LRESULT OnEditWndClose(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnSetConnected(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnLoadClipOnClipboard(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnSystemTrayMouseMove(WPARAM wParam, LPARAM lParam);
 DECLARE_MESSAGE_MAP()public:
     virtual BOOL PreTranslateMessage(MSG *pMsg);
     afx_msg void OnClose();
