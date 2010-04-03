@@ -123,30 +123,9 @@ bool ExternalWindowTracker::ActivateTarget()
 		ShowWindow(m_activeWnd, SW_RESTORE);
 	}
 
-	// Save specified timeout period...
-	DWORD dwTimeoutMS;
-	SystemParametersInfo(SPI_GETFOREGROUNDLOCKTIMEOUT, 0, &dwTimeoutMS, 0);
-
-	// ... then set it to zero to disable it
-	SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, (PVOID)0, 0);
-
-	DWORD foregroundProcessId = GetWindowThreadProcessId(GetForegroundWindow(), NULL);
-	DWORD hwndProcessId = GetWindowThreadProcessId(m_activeWnd, NULL);
-	if(AttachThreadInput(hwndProcessId, GetCurrentThreadId(), TRUE))
-	{
-		BringWindowToTop(m_activeWnd);
-		SetForegroundWindow(m_activeWnd);
-		SetFocus(m_focusWnd);
-		AttachThreadInput(hwndProcessId, GetCurrentThreadId(), FALSE);
-	}
-	else
-	{
-		BringWindowToTop(m_activeWnd);
-		SetForegroundWindow(m_activeWnd);
-		Log(_T("Attach thread input failed forground"));
-	}
-
-	SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, (PVOID)dwTimeoutMS, 0);
+	BringWindowToTop(m_activeWnd);
+	SetForegroundWindow(m_activeWnd);
+	SetFocus(m_focusWnd);
 	
 	return true;
 }
@@ -166,6 +145,7 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	CString csPasteToApp = GetProcessName(activeWnd);
 	CString csPasteString = g_Opt.GetPasteString(csPasteToApp);
 	DWORD delay = g_Opt.SendKeysDelay();
+	AutoAttachDetachFromProcess autoAttach(activateTarget);
 
 	if(activateTarget)
 	{
@@ -276,6 +256,7 @@ bool ExternalWindowTracker::ReleaseFocus()
 {
 	if( IsAppWnd(::GetForegroundWindow()) )
 	{
+		AutoAttachDetachFromProcess autoAttach(true);
 		return ActivateTarget();
 	}
 
