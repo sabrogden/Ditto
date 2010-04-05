@@ -54,4 +54,5 @@ protected:
 
     CppSQLite3DB m_db;
     CString m_dbPath;
+	bool m_firstLoad;
 };

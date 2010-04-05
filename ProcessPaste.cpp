@@ -54,19 +54,17 @@ BOOL CProcessPaste::DoPaste()
 		// when new data is put on the Clipboard
 		m_pOle = NULL; // m_pOle should not be accessed past this point
 
-//#ifndef _DEBUG
 		if(m_bSendPaste)
 		{
 			Log(_T("Sending Paste to active window"));
 			theApp.m_activeWnd.SendPaste(m_bActivateTarget);
 		}
-//#else
-		if(m_bActivateTarget)
+		else if(m_bActivateTarget)
 		{
 			Log(_T("Activating active window"));
 			theApp.m_activeWnd.ActivateTarget();
 		}
-//#endif
+		
 		return TRUE;
 	}
 	return FALSE;

@@ -144,7 +144,7 @@ void CGetSetOptions::LoadSettings()
 		}
 		else
 		{
-			m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", TRUE);
+			m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", FALSE);
 		}
 	}
 	else
@@ -1933,4 +1933,12 @@ DWORD CGetSetOptions::GetTextOnlyRestoreDelay()
 DWORD CGetSetOptions::GetTextOnlyPasteDelay()
 {
 	return (DWORD)GetProfileLong(_T("TextOnlyPasteDelay"), 500);
+}
+
+BOOL CGetSetOptions::GetSetFocusToApp(CString csAppName)
+{
+	CString focusCheck;
+	focusCheck = "SetFocus_";
+	focusCheck += csAppName;
+	return GetProfileLong(focusCheck, FALSE);
 }

@@ -7,6 +7,7 @@
 
 CQPasteWndThread::CQPasteWndThread(void)
 {
+	m_firstLoad = false;
     m_waitTimeout = ONE_HOUR * 12;
 
     m_SearchingEvent = CreateEvent(NULL, TRUE, FALSE, _T(""));
@@ -71,6 +72,7 @@ void CQPasteWndThread::OnDoQuery(void *param)
 	    pasteWnd->m_mapCache.clear();
 	    pasteWnd->m_loadItems.clear();
 	    pasteWnd->m_bStopQuery = false;
+		m_firstLoad = true;
 	}
 
     long lRecordCount = 0;
@@ -150,10 +152,22 @@ void CQPasteWndThread::OnLoadItems(void *param)
 	            loadItemsIndex++;
 	            loadCount++;
 
-	            ::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, table.m_lID, table.m_listIndex);
+				if(m_firstLoad == false)
+				{
+	            	::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, table.m_lID, table.m_listIndex);
+				}
 	        }
 
-	        ::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -1, 0);
+			if(m_firstLoad)
+			{
+	        	::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -2, 0);
+			}
+			else
+			{
+				::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -1, 0);
+			}
+
+			m_firstLoad = false;
 
 	        if(clearFirstLoadItem)
 	        {

@@ -51,20 +51,13 @@ bool ExternalWindowTracker::TrackActiveWnd(HWND focus)
 		return false;
 	}
 
-	if(newFocus == m_focusWnd)
+	if(newActive == m_activeWnd)
 	{
 //			Log(_T("TargetActiveWindow window the same"));
 		return false;
 	}
 
-	TCHAR className[50];
-	GetClassName(newFocus, className, (sizeof(className) / sizeof(TCHAR)));
-	if(STRCMP(className, _T("Shell_TrayWnd")) == 0)
-	{
-		Log(_T("TargetActiveWindow shell tray icon has focus"));
-		return false;
-	}
-
+	TCHAR className[100];
 	GetClassName(newActive, className, (sizeof(className) / sizeof(TCHAR)));
 	if(STRCMP(className, _T("Shell_TrayWnd")) == 0)
 	{
@@ -114,19 +107,69 @@ bool ExternalWindowTracker::WaitForActiveWnd(HWND activeWnd, int timeout)
 	return false;
 }
 
+void ExternalWindowTracker::ActivateFocus(const HWND activeHwnd, const HWND focushWnd)
+{
+	CString csApp = GetProcessName(m_activeWnd);
+	Log(StrF(_T("SetFocus - AppName: %s, Active: %d, Focus: %d"), csApp, m_activeWnd, m_focusWnd));
+
+	if (focushWnd != NULL) 
+	{
+		AttachThreadInput(GetWindowThreadProcessId(activeHwnd, NULL), GetCurrentThreadId(), TRUE);
+		if (GetFocus() != focushWnd) 
+		{
+			SetFocus(focushWnd);
+		}
+		AttachThreadInput(GetWindowThreadProcessId(activeHwnd, NULL), GetCurrentThreadId(), FALSE);
+	}
+}
+
 bool ExternalWindowTracker::ActivateTarget()
 {
-	Log(StrF(_T("Activate Target - Active: %d Focus: %d"), m_activeWnd, m_focusWnd));
+	Log(StrF(_T("Activate Target - Active: %d, Focus: %d"), m_activeWnd, m_focusWnd));
 
 	if (IsIconic(m_activeWnd))
 	{
 		ShowWindow(m_activeWnd, SW_RESTORE);
 	}
 
+	// Save specified timeout period...
+	DWORD timeoutMS = 0;
+	SystemParametersInfo(SPI_GETFOREGROUNDLOCKTIMEOUT, 0, &timeoutMS, 0);
+	// ... then set it to zero to disable it
+	SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, (PVOID)0, 0);
+
+	//If we are doing this and we are not the current foreground window then attach to the current bef 
+	//setting the focus window
+	//this shouldn't happen that much, most of the time we are the foreground window
+	bool detach = false;
+	DWORD foreGroundProcessId = GetWindowThreadProcessId(::GetForegroundWindow(), NULL);
+	if(foreGroundProcessId != GetCurrentThreadId())
+	{
+		Log(_T("Attach to process, calling set foreground from non forground window"));
+		if(AttachThreadInput(foreGroundProcessId, GetCurrentThreadId(), TRUE))
+		{
+			detach = true;
+		}
+	}
+
 	BringWindowToTop(m_activeWnd);
 	SetForegroundWindow(m_activeWnd);
-	SetFocus(m_focusWnd);
 	
+	if(detach)
+	{
+		AttachThreadInput(foreGroundProcessId, GetCurrentThreadId(), FALSE);
+	}
+
+	//check to see if this app should set focus
+	//this is off by default
+	CString csApp = GetProcessName(m_activeWnd);
+	if(g_Opt.GetSetFocusToApp(csApp))
+	{
+		ActivateFocus(m_activeWnd, m_focusWnd);
+	}
+
+	SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, (PVOID)timeoutMS, 0);
+
 	return true;
 }
 
@@ -145,7 +188,6 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	CString csPasteToApp = GetProcessName(activeWnd);
 	CString csPasteString = g_Opt.GetPasteString(csPasteToApp);
 	DWORD delay = g_Opt.SendKeysDelay();
-	AutoAttachDetachFromProcess autoAttach(activateTarget);
 
 	if(activateTarget)
 	{
@@ -256,7 +298,6 @@ bool ExternalWindowTracker::ReleaseFocus()
 {
 	if( IsAppWnd(::GetForegroundWindow()) )
 	{
-		AutoAttachDetachFromProcess autoAttach(true);
 		return ActivateTarget();
 	}
 

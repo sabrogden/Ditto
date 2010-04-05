@@ -212,9 +212,9 @@ BOOL CQPasteWnd::Create(const POINT &ptStart, CWnd *pParentWnd)
 
 int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-    if(CWndEx::OnCreate(lpCreateStruct) ==  - 1)
+    if(CWndEx::OnCreate(lpCreateStruct) == -1)
     {
-        return  - 1;
+        return -1;
     }
 
     SetWindowText(_T(QPASTE_TITLE));
@@ -225,7 +225,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     if(!m_lstHeader.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | LVS_NOCOLUMNHEADER | LVS_REPORT | LVS_SHOWSELALWAYS | LVS_OWNERDATA, CRect(0, 0, 0, 0), this, ID_LIST_HEADER))
     {
         ASSERT(FALSE);
-        return  - 1;
+        return -1;
     }
 
     ((CWnd*) &m_GroupTree)->CreateEx(NULL, _T("SysTreeView32"), NULL, WS_BORDER | TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS, CRect(0, 0, 100, 100), this, 0);
@@ -263,18 +263,18 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     if(m_lstHeader.InsertColumn(0, _T(""), LVCFMT_LEFT, 2500, 0) != 0)
     {
         ASSERT(FALSE);
-        return  - 1;
+        return -1;
     }
 
     #ifdef AFTER_98
         m_Alpha.SetWindowHandle(m_hWnd);
     #endif 
 
-    m_TitleFont.CreateFont(14, 0,  - 900, 0, 400, FALSE, FALSE, 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, _T("Arial"));
+    m_TitleFont.CreateFont(14, 0,  -900, 0, 400, FALSE, FALSE, 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, _T("Arial"));
 
     m_SearchFont.CreatePointFont(80, _T("@Arial Unicode MS"));
 
-    GroupFont.CreateFont( - 11, 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("MS Sans Serif"));
+    GroupFont.CreateFont(-11, 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("MS Sans Serif"));
 
     m_Search.SetFont(&m_SearchFont);
     m_btCancel.SetFont(&m_SearchFont);
@@ -531,14 +531,14 @@ bool CQPasteWnd::Add(const CString &csHeader, const CString &csText, int nID)
     if(g_Opt.m_bHistoryStartTop)
     {
         // Insert the item in the list control
-        if((nNewIndex = m_lstHeader.InsertItem(m_lstHeader.GetItemCount(), csHeader)) ==  - 1)
+        if((nNewIndex = m_lstHeader.InsertItem(m_lstHeader.GetItemCount(), csHeader)) == -1)
         {
             return false;
         }
     }
     else
     {
-        if((nNewIndex = m_lstHeader.InsertItem(m_lstHeader.GetItemCount(), csHeader)) ==  - 1)
+        if((nNewIndex = m_lstHeader.InsertItem(m_lstHeader.GetItemCount(), csHeader)) == -1)
         {
             return false;
         }
@@ -739,7 +739,7 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 
 	Log(_T("OnRefreshView - Start"));
 
-	theApp.m_FocusID =  - 1;
+	theApp.m_FocusID = -1;
 
 	if(theApp.m_bShowingQuickPaste)
 	{
@@ -982,7 +982,7 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
     else
     {
         int nTrans = CGetSetOptions::GetTransparencyPercent();
-        int nCheckID =  - 1;
+        int nCheckID = -1;
         switch(nTrans)
         {
             case 5:
@@ -1015,7 +1015,7 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 
     //Set the lines per row check
     int nLinesPerRow = CGetSetOptions::GetLinesPerRow();
-    int nCheckID =  - 1;
+    int nCheckID = -1;
     switch(nLinesPerRow)
     {
         case 1:
@@ -1041,7 +1041,7 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 
     //Set the position check
     int nPosition = CGetSetOptions::GetQuickPastePosition();
-    nCheckID =  - 1;
+    nCheckID = -1;
     switch(nPosition)
     {
         case POS_AT_CARET:
@@ -1183,7 +1183,7 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
     if(g_Opt.GetAllowFriends() == false)
     {
         CString csText("Send To");
-        int nPos =  - 1;
+        int nPos = -1;
         CMultiLanguage::GetMenuPos(pMenu, csText, nPos);
         if(nPos >= 0)
         {
@@ -1226,7 +1226,7 @@ LRESULT CQPasteWnd::OnSearch(WPARAM wParam, LPARAM lParam)
 
     MoveControls();
 
-    m_Search.SetSel( - 1, 0);
+    m_Search.SetSel(-1, 0);
 
     return TRUE;
 }
@@ -1942,7 +1942,7 @@ void CQPasteWnd::OnMenuEdititem()
 void CQPasteWnd::OnMenuNewclip()
 {
     CClipIDs IDs;
-    IDs.Add( - 1);
+    IDs.Add(-1);
     theApp.EditItems(IDs, true);
 
     HideQPasteWindow();
@@ -2358,7 +2358,7 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
                 return TRUE;
 
             case VK_HOME:
-                theApp.EnterGroupID( - 1); // History
+                theApp.EnterGroupID(-1); // History
                 return TRUE;
             }
             // end switch( pMsg->wParam )
@@ -2731,7 +2731,7 @@ void CQPasteWnd::OnFindItem(NMHDR *pNMHDR, LRESULT *pResult)
         return ;
     }
 
-    *pResult =  - 1; // Default action.
+    *pResult = -1; // Default action.
 }
 
 void CQPasteWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
@@ -2851,7 +2851,7 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
 
     MoveControls();
 
-    if(lID >=  - 1)
+    if(lID >= -1)
     {
         //Set the app flag so it does a send message to refresh the list
         //We need to do this because we set the list pos to 0 and with Post
@@ -3113,11 +3113,11 @@ LRESULT CQPasteWnd::OnRefeshRow(WPARAM wParam, LPARAM lParam)
 
     if(m_bFoundClipToSetFocusTo == false)
     {
-        long lFocusIndex =  - 1;
-        if(theApp.m_FocusID == clipId || clipId ==  - 1)
+        long lFocusIndex = -1;
+        if(theApp.m_FocusID == clipId || clipId < 0)
         {
             m_bFoundClipToSetFocusTo = true;
-            theApp.m_FocusID =  - 1;
+            theApp.m_FocusID =  -1;
             m_lstHeader.SetListPos(listPos);
             UpdateStatus(false);
         }
@@ -3130,6 +3130,11 @@ LRESULT CQPasteWnd::OnRefeshRow(WPARAM wParam, LPARAM lParam)
     {
         m_lstHeader.RefreshRow(listPos);
     }
+
+	if(clipId == -2)
+	{
+		m_lstHeader.RefreshVisibleRows();
+	}
 
     return true;
 }
@@ -3202,7 +3207,7 @@ void CQPasteWnd::OnAddinSelect(UINT id)
                 bool bCont = theApp.m_Addins.CallPrePasteFunction(id, &clip);
                 if(bCont)
                 {
-                    OpenID( - 1, false, &clip.m_Formats);
+                    OpenID(-1, false, &clip.m_Formats);
                 }
             }
         }
