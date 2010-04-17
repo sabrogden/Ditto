@@ -54,13 +54,16 @@ void AppendToFile(const TCHAR* fn, const TCHAR* msg)
 
 	ASSERT( file );
 
-#ifdef _UNICODE
-	fwprintf(file, msg);
-#else
-	fprintf(file, msg);
-#endif
+	if(file != NULL)
+	{
+		#ifdef _UNICODE
+			fwprintf(file, msg);
+		#else
+			fprintf(file, msg);
+		#endif
 
-	fclose(file);
+		fclose(file);	
+	}
 }
 
 void log(const TCHAR* msg, bool bFromSendRecieve, CString csFile, long lLine)

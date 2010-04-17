@@ -1667,7 +1667,7 @@ CString CGetSetOptions::GetPath(long lPathID)
 			csDir = GETENV(_T("U3_HOST_EXEC_PATH"));
 			FIX_CSTRING_PATH(csDir);
 		}
-		else
+		else if(CGetSetOptions::GetIsPortableDitto() == false)
 		{
 			csDir = GetAppDataPath();
 		}
@@ -1681,7 +1681,7 @@ CString CGetSetOptions::GetPath(long lPathID)
 			csDir = GETENV(_T("U3_HOST_EXEC_PATH"));
 			FIX_CSTRING_PATH(csDir);
 		}
-		else
+		else if(CGetSetOptions::GetIsPortableDitto() == false)
 		{
 			csDir = GetAppDataPath();
 		}
@@ -1725,11 +1725,11 @@ CString CGetSetOptions::GetPath(long lPathID)
 		}
 
 		csDir += "Addins\\";
-
-		//csDir = _T("C:\\Documents and Settings\\Brogdens\\Desktop\\ditto\\Addins\\OutlookExpress\\Debug\\");
-
+		
 		break;
 	}
+
+	CreateDirectory(csDir, NULL);
 
 	return csDir;
 }
