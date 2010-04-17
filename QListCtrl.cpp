@@ -1234,7 +1234,7 @@ HWND CQListCtrl::GetToolTipHWnd()
 	return m_pToolTip->GetSafeHwnd();
 }
 
-BOOL CQListCtrl::SetItemCountEx(int iCount, DWORD dwFlags /* = LVSICF_NOINVALIDATEALL */)
+BOOL CQListCtrl::SetItemCountEx(int iCount, DWORD dwFlags /* = 0 */)
 {
 	return CListCtrl::SetItemCountEx(iCount, dwFlags);
 }

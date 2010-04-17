@@ -756,7 +756,7 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 		}
 
 		m_lstHeader.SetItemCountEx(0);
-		m_lstHeader.RefreshVisibleRows();
+		UpdateStatus();
     }
 
     Log(_T("OnRefreshView - End"));
@@ -2084,7 +2084,7 @@ void CQPasteWnd::DeleteSelectedRows()
     }
 
     m_lstHeader.SetItemCountEx(m_lstHeader.GetItemCount() - erasedCount);
-
+	
     // if there are no items after the one we deleted, then select the last one.
     if(nFirstSel >= m_lstHeader.GetItemCount())
     {
@@ -2428,7 +2428,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
         {
             case 0:
                 try
-                {
+				{
 					ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
                     int c = m_lstHeader.GetItemCount();
@@ -3094,7 +3094,6 @@ void CQPasteWnd::OnUpdateMenuNewclip(CCmdUI *pCmdUI)
 LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 {
     m_lstHeader.SetItemCountEx(wParam);
-    m_lstHeader.RefreshVisibleRows();
     UpdateStatus(false);
 
     return TRUE;

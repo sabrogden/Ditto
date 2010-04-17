@@ -119,7 +119,7 @@ public:
 	void DestroyAndCreateAccelerator(BOOL bCreate, CppSQLite3DB &db);
 
 	void ShowFullDescription(bool bFromAuto = false);
-	BOOL SetItemCountEx(int iCount, DWORD dwFlags = LVSICF_NOINVALIDATEALL);
+	BOOL SetItemCountEx(int iCount, DWORD dwFlags = 0);
 
 	void HidePopup()	{ if(m_pToolTip) m_pToolTip->Hide();	}
 
