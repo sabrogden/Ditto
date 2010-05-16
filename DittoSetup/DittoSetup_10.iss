@@ -23,6 +23,8 @@ ChangesAssociations=yes
 
 [Languages]
 Name: English; MessagesFile: compiler:Default.isl
+
+
 Name: Deutsch; MessagesFile: German.isl
 Name: Italiano; MessagesFile: Italian.isl
 Name: French; MessagesFile: French.isl
@@ -37,7 +39,7 @@ Name: Japanese; MessagesFile: Japanese.isl
 Name: Chinese; MessagesFile: ChineseSimp.isl
 Name: Romanian; MessagesFile: Romanian.isl
 Name: Korean; MessagesFile: Korean.isl
-
+Name: Russian; MessagesFile: Russian.isl
 
 [Tasks]
 Name: RunAtStartup; Description: Run Ditto on Windows Startup
@@ -127,4 +129,6 @@ begin
 
     RenameFile(sDir+'\Language\Italian.xml', sDir+'\Language\Italian.xml.old')
 end;
+
+
 
