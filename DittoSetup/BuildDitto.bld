@@ -88,7 +88,6 @@ Else
 	Builder.LogMessage "Incremented BUILD_NUM macro to " & macro.Value
 End If
 ]]></Script>
-			<checked type='11'>0</checked>
 			<description><![CDATA[Get the next build number
 ]]></description>
 			<indent type='3'>2</indent>
@@ -202,9 +201,12 @@ Ditto*.zip
 			<Compression>5</Compression>
 			<Dest>%workDir%\%branch%\DittoSetup\output\DittoDebug_%versionFileName%.zip</Dest>
 			<Ext><![CDATA[*.map
-*.pdb]]></Ext>
+*.pdb
+*.dll
+*.exe]]></Ext>
 			<Hidden type='11'>-1</Hidden>
 			<LogDetail type='11'>-1</LogDetail>
+			<NoPaths type='11'>-1</NoPaths>
 			<Recurse type='11'>-1</Recurse>
 			<Source>%workDir%</Source>
 			<indent type='3'>1</indent>
