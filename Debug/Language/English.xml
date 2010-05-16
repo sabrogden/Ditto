@@ -197,8 +197,8 @@
 		
 		//Added in 9-11-09
 		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">test</Item>
-        <Item English_Text = "IP/Name" ID = "IP_Name">test</Item>
-        <Item English_Text = "Descriptions" ID = "Descriptions">test</Item>
+        	<Item English_Text = "IP/Name" ID = "IP_Name">test</Item>
+        	<Item English_Text = "Descriptions" ID = "Descriptions">test</Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015"></Item>
