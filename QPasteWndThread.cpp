@@ -121,63 +121,72 @@ void CQPasteWndThread::OnLoadItems(void *param)
 
 	    if(clearFirstLoadItem)
 	    {
-	        Log(StrF(_T("Load Items start = %d, count = %d"), loadItemsIndex, loadItemsCount));
+			try
+			{
+				Log(StrF(_T("Load Items start = %d, count = %d"), loadItemsIndex, loadItemsCount));
 
-	        CString limit;
-	        limit.Format(_T(" LIMIT %d OFFSET %d"), loadItemsCount, loadItemsIndex);
-	        localSql += limit;
+				CString limit;
+				limit.Format(_T(" LIMIT %d OFFSET %d"), loadItemsCount, loadItemsIndex);
+				localSql += limit;
 
-	        CMainTable table;
+				CMainTable table;
 
-	        CppSQLite3Query q = m_db.execQuery(localSql);
-	        while(!q.eof())
-	        {
-	            pasteWnd->FillMainTable(table, q);
-	            table.m_listIndex = loadItemsIndex;
+				CppSQLite3Query q = m_db.execQuery(localSql);
+				while(!q.eof())
+				{
+					pasteWnd->FillMainTable(table, q);
+					table.m_listIndex = loadItemsIndex;
 
-	            {
+					{
+						ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
+
+						pasteWnd->m_mapCache[loadItemsIndex] = table;
+					}
+
+					if(pasteWnd->m_bStopQuery)
+					{
+						Log(StrF(_T("StopQuery called exiting filling cache count = %d"), loadItemsIndex));
+						break;
+					}
+
+					q.nextRow();
+
+					loadItemsIndex++;
+					loadCount++;
+
+					if(m_firstLoad == false)
+					{
+	            		::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, table.m_lID, table.m_listIndex);
+					}
+				}
+
+				if(m_firstLoad)
+				{
+	        		::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -2, 0);
+				}
+				else
+				{
+					::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -1, 0);
+				}
+
+				m_firstLoad = false;
+
+				if(clearFirstLoadItem)
+				{
 					ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
 
-	                pasteWnd->m_mapCache[loadItemsIndex] = table;
-	            }
-
-	            if(pasteWnd->m_bStopQuery)
-	            {
-	                Log(StrF(_T("StopQuery called exiting filling cache count = %d"), loadItemsIndex));
-	                break;
-	            }
-
-	            q.nextRow();
-
-	            loadItemsIndex++;
-	            loadCount++;
-
-				if(m_firstLoad == false)
-				{
-	            	::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, table.m_lID, table.m_listIndex);
+					pasteWnd->m_loadItems.erase(pasteWnd->m_loadItems.begin());
 				}
-	        }
 
-			if(m_firstLoad)
-			{
-	        	::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -2, 0);
+				Log(StrF(_T("Load items End count = %d, time = %d"), loadCount, GetTickCount() - startTick));
 			}
-			else
-			{
-				::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -1, 0);
-			}
-
-			m_firstLoad = false;
-
-	        if(clearFirstLoadItem)
-	        {
-	            ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
-
-	            pasteWnd->m_loadItems.erase(pasteWnd->m_loadItems.begin());
-	        }
-
-	        Log(StrF(_T("Load items End count = %d, time = %d"), loadCount, GetTickCount() - startTick));
-	    }
+			catch (CppSQLite3Exception& e)	\
+			{								\
+				Log(StrF(_T("ONLoadItems - SQLITE Exception %d - %s"), e.errorCode(), e.errorMessage()));	\
+				ASSERT(FALSE);				\
+				break;
+			}	
+		}
 		else
 		{
 			break;

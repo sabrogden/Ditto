@@ -854,20 +854,20 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
         m_lstHeader.m_bStartTop = g_Opt.m_bHistoryStartTop;
         if(g_Opt.m_bHistoryStartTop)
         {
-            csSort = "bIsGroup ASC, lDate DESC";
+            csSort = "Main.bIsGroup ASC, Main.lDate DESC";
         }
         else
         {
-            csSort = "bIsGroup ASC, lDate ASC";
+            csSort = "Main.bIsGroup ASC, Main.lDate ASC";
         }
 
         if(g_Opt.m_bShowAllClipsInMainList)
         {
-            strFilter = "((bIsGroup = 1 AND lParentID = -1) OR bIsGroup = 0)";
+            strFilter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR Main.bIsGroup = 0)";
         }
         else
         {
-            strFilter = "((bIsGroup = 1 AND lParentID = -1) OR (bIsGroup = 0 AND lParentID = -1))";
+            strFilter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR (Main.bIsGroup = 0 AND Main.lParentID = -1))";
         }
     }
     else
@@ -877,16 +877,16 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 
         if(g_Opt.m_bHistoryStartTop)
         {
-            csSort = "bIsGroup DESC, lDate DESC";
+            csSort = "Main.bIsGroup DESC, Main.lDate DESC";
         }
         else
         {
-            csSort = "bIsGroup ASC, lDate ASC";
+            csSort = "Main.bIsGroup ASC, Main.lDate ASC";
         }
 
         if(theApp.m_GroupID >= 0)
         {
-            strFilter.Format(_T("lParentID = %d"), theApp.m_GroupID);
+            strFilter.Format(_T("Main.lParentID = %d"), theApp.m_GroupID);
             strParentFilter = strFilter;
         }
 
@@ -897,6 +897,8 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     GetClientRect(crRect);
 
     CString csSQL;
+	CString dataJoin;
+
     if(csSQLSearch == "")
     {
         m_strSQLSearch = "";
@@ -904,10 +906,48 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     else
     {
         CFormatSQL SQLFormat;
-        SQLFormat.SetVariable("mText");
+		CString preSql;
+
+		if(csSQLSearch.Left(3) == _T("/q ") ||
+			csSQLSearch.Left(3) == _T("\\q "))
+		{
+			SQLFormat.SetVariable("Main.QuickPasteText");
+			csSQLSearch.TrimLeft(_T("/q "));
+			csSQLSearch.TrimLeft(_T("\\q "));
+
+			if(csSQLSearch == "")
+			{
+				return FALSE;
+			}
+		}
+		else if(csSQLSearch.Left(3) == _T("/f ") ||
+			csSQLSearch.Left(3) == _T("\\f "))
+		{
+			preSql = _T("Data.strClipBoardFormat = 'CF_UNICODETEXT' AND ");
+			dataJoin = _T("INNER JOIN Data on Data.lParentID = Main.lID");
+
+			SQLFormat.SetVariable("Data.ooData");
+			csSQLSearch.TrimLeft(_T("/f "));
+			csSQLSearch.TrimLeft(_T("\\f "));
+
+			if(csSQLSearch == "")
+			{
+				return FALSE;
+			}
+		}
+		else
+		{
+			SQLFormat.SetVariable("Main.mText");
+		}
+
         SQLFormat.Parse(csSQLSearch);
 
         strFilter = SQLFormat.GetSQLString();
+
+		if(preSql.IsEmpty() == FALSE)
+		{
+			strFilter.Insert(0, preSql);
+		}
 
         if(strParentFilter.IsEmpty() == FALSE)
         {
@@ -922,9 +962,11 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 		ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
 	    //Format the count and select sql queries for the thread
-	    m_CountSQL.Format(_T("SELECT COUNT(lID) FROM Main where %s"), strFilter);
+	    m_CountSQL.Format(_T("SELECT COUNT(Main.lID) FROM Main %s where %s"), dataJoin, strFilter);
 
-	    m_SQL.Format(_T("SELECT lID, mText, lParentID, lDontAutoDelete, ")_T("lShortCut, bIsGroup, QuickPasteText FROM Main where %s order by %s"), strFilter, csSort);
+	    m_SQL.Format(_T("SELECT Main.lID, Main.mText, Main.lParentID, Main.lDontAutoDelete, ")
+			_T("Main.lShortCut, Main.bIsGroup, Main.QuickPasteText FROM Main %s ")
+			_T("where %s order by %s"), dataJoin, strFilter, csSort);
 
 	    m_lItemsPerPage = m_lstHeader.GetCountPerPage();
 	}
