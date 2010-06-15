@@ -314,23 +314,21 @@ void CQPasteWnd::MoveControls()
         m_ShowGroupsFolderTop.ShowWindow(SW_SHOW);
         m_BackButton.ShowWindow(SW_SHOW);
 
-        m_BackButton.MoveWindow(0, 0, 18, 16);
-        m_ShowGroupsFolderTop.MoveWindow(22, 0, 18, 16);
-        m_stGroup.MoveWindow(44, 0, cx, 16);
+		m_BackButton.MoveWindow(0, 0, 18, 16);
+		m_ShowGroupsFolderTop.MoveWindow(22, 0, 18, 16);
+		m_stGroup.MoveWindow(44, 0, cx, 16);
 
-        lTopOfListBox = 16;
-    }
-    else
-    {
-        m_BackButton.ShowWindow(SW_HIDE);
-        m_stGroup.ShowWindow(SW_HIDE);
-        m_ShowGroupsFolderTop.ShowWindow(SW_HIDE);
-    }
-
-    // Resize the list control
-    m_lstHeader.MoveWindow(0, lTopOfListBox, cx, cy - 25-lTopOfListBox);
+		lTopOfListBox = 16;
+	}
+	else
+	{
+		m_BackButton.ShowWindow(SW_HIDE);
+		m_stGroup.ShowWindow(SW_HIDE);
+		m_ShowGroupsFolderTop.ShowWindow(SW_HIDE);
+	}
 
     int nWidth = cx;
+	int listBoxBottomOffset = 23;
 
     if(m_strSQLSearch.IsEmpty() == FALSE)
     {
@@ -340,9 +338,10 @@ void CQPasteWnd::MoveControls()
     }
     else
     {
-        m_btCancel.ShowWindow(SW_HIDE);
+		m_btCancel.ShowWindow(SW_HIDE);
     }
 
+	m_lstHeader.MoveWindow(0, lTopOfListBox, cx, cy - listBoxBottomOffset-lTopOfListBox);
     m_Search.MoveWindow(18, cy - 20, nWidth - 20, 19);
 
     m_ShowGroupsFolderBottom.MoveWindow(0, cy - 19, 18, 16);
@@ -972,6 +971,8 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 	}
 
     m_thread.FireDoQuery();
+
+	MoveControls();
 
     return TRUE;
 }
