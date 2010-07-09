@@ -69,8 +69,12 @@ void AppendToFile(const TCHAR* fn, const TCHAR* msg)
 void log(const TCHAR* msg, bool bFromSendRecieve, CString csFile, long lLine)
 {
 	ASSERT(AfxIsValidString(msg));
-	CTime	time = CTime::GetCurrentTime();
-	CString	csText = time.Format("[%Y/%m/%d %I:%M:%S %p - ");
+
+	SYSTEMTIME st;
+	GetSystemTime(&st);
+	
+	CString	csText;
+	csText.Format(_T("[%d/%d/%d %02d:%02d:%02d.%03d - "), st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
 
 	CString csFileLine;
 	csFile = GetFileName(csFile);

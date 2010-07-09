@@ -10,7 +10,11 @@ public:
 
     enum eCQPasteWndThreadEvents
     {
-        DO_QUERY, LOAD_ACCELERATORS, UNLOAD_ACCELERATORS, LOAD_ITEMS, LOAD_EXTRA_DATA, 
+		DO_QUERY, 
+		LOAD_ACCELERATORS, 
+		UNLOAD_ACCELERATORS, 
+		LOAD_ITEMS, 
+		LOAD_EXTRA_DATA, 
 
         ECQPASTEWNDTHREADEVENTS_COUNT  //must be last
 
@@ -51,6 +55,8 @@ protected:
 
     void OpenDatabase();
     void CloseDatabase();
+
+	CString EnumName(eCQPasteWndThreadEvents e);
 
     CppSQLite3DB m_db;
     CString m_dbPath;

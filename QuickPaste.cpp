@@ -75,6 +75,8 @@ BOOL CQuickPaste::CloseQPasteWnd()
 
 void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboard, BOOL bReFillList)
 {		
+	Log(StrF(_T("Start of ShowQPasteWnd, AtPrevPos: %d, FromKeyboard: %d, RefillList: %d"), bAtPrevPos, bFromKeyboard, bReFillList));
+
 	if(bFromKeyboard == false && GetKeyState(VK_SHIFT) & 0x8000 && GetKeyState(VK_CONTROL) & 0x8000)
 	{
 		if(m_pwndPaste)
@@ -178,6 +180,8 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 		m_pwndPaste->ShowQPasteWindow(bReFillList);
 	}
 	m_pwndPaste->SetForegroundWindow();
+
+	Log(StrF(_T("END of ShowQPasteWnd, AtPrevPos: %d, FromKeyboard: %d, RefillList: %d"), bAtPrevPos, bFromKeyboard, bReFillList));
 }
 
 void CQuickPaste::MoveSelection(bool down)

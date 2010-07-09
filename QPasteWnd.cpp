@@ -432,6 +432,7 @@ BOOL CQPasteWnd::HideQPasteWindow()
     CGetSetOptions::SetQuickPastePoint(rect.TopLeft());
 
     // Hide the window when the focus is lost
+	m_lstHeader.ShowWindow(SW_HIDE);
     ShowWindow(SW_HIDE);
 
     //Reset the selection in the search combo
@@ -458,7 +459,8 @@ BOOL CQPasteWnd::HideQPasteWindow()
         }
     }
 
-    Log(_T("End of HideQPasteWindow"));
+
+    Log(StrF(_T("End of HideQPasteWindow, ItemCount: %d"), m_mapCache.size()));
 
     return TRUE;
 }
@@ -467,7 +469,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 {
     theApp.m_bShowingQuickPaste = true;
 
-    Log(StrF(_T("ShowQPasteWindow - Fill List: %d"), bFillList));
+    Log(StrF(_T("Start - ShowQPasteWindow - Fill List: %d, array count: %d"), bFillList, m_mapCache.size()));
 
     //Ensure we have the latest theme file, this checks the last write time so it doesn't read the file each time
     g_Opt.m_Theme.Load(g_Opt.GetTheme(), false, true);
@@ -478,7 +480,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
     m_bAllowRepaintImmediately = false;
     UpdateStatus();
 
-    m_thread.FireLoadAccelerators();
+    //m_thread.FireLoadAccelerators();
 
     m_bHideWnd = true;
 
@@ -508,7 +510,8 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
     }
     else
     {
-        //MoveControls();
+        MoveControls();
+		m_lstHeader.ShowWindow(SW_SHOW);
     }
 
     // from now on, for interactive use, we can repaint immediately
@@ -519,6 +522,8 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
     ::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
 
     SetKeyModiferState(true);
+
+	Log(StrF(_T("END - ShowQPasteWindow - Fill List: %d, array count: %d"), bFillList, m_mapCache.size()));
 
     return TRUE;
 }
@@ -737,12 +742,14 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 	while(::PeekMessage(&msg, m_hWnd, WM_REFRESH_VIEW, WM_REFRESH_VIEW, PM_REMOVE)){}
 
 	Log(_T("OnRefreshView - Start"));
+	CString action;
 
 	theApp.m_FocusID = -1;
 
 	if(theApp.m_bShowingQuickPaste)
 	{
 		FillList();
+		action = _T("Filled List");
 	}
     else
     {
@@ -756,9 +763,11 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 
 		m_lstHeader.SetItemCountEx(0);
 		UpdateStatus();
+
+		action = _T("Cleared Items");
     }
 
-    Log(_T("OnRefreshView - End"));
+    Log(StrF(_T("OnRefreshView - End - Count: %d, Action: %s"), m_mapCache.size(), action));
 
     return TRUE;
 }
@@ -836,7 +845,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 {
     KillTimer(TIMER_DO_SEARCH);
 
-    Log(StrF(_T("Fill List - %s"), csSQLSearch));
+    Log(StrF(_T("Start Fill List - %s"), csSQLSearch));
 
 	{
 	    ATL::CCritSecLock csLock(m_CritSection.m_sect);
@@ -973,6 +982,8 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     m_thread.FireDoQuery();
 
 	MoveControls();
+
+	Log(StrF(_T("Start Fill List - Count SQL: %s, Query SQL: %s"), m_CountSQL, m_SQL));
 
     return TRUE;
 }
@@ -1454,7 +1465,7 @@ void CQPasteWnd::OnMenuProperties()
             }
         }
 
-        m_thread.FireLoadAccelerators();
+        //m_thread.FireLoadAccelerators();
 
         m_lstHeader.RefreshVisibleRows();
 
@@ -3138,6 +3149,8 @@ LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 {
     m_lstHeader.SetItemCountEx(wParam);
     UpdateStatus(false);
+
+	m_lstHeader.ShowWindow(SW_SHOW);
 
     return TRUE;
 }

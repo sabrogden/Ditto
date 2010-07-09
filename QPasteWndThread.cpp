@@ -30,6 +30,9 @@ void CQPasteWndThread::OnTimeOut(void *param)
 
 void CQPasteWndThread::OnEvent(int eventId, void *param)
 {
+	DWORD startTick = GetTickCount();
+	Log(StrF(_T("Start of OnEvent, eventId: %s"), EnumName((eCQPasteWndThreadEvents)eventId)));
+
     switch((eCQPasteWndThreadEvents)eventId)
     {
         case DO_QUERY:
@@ -48,6 +51,9 @@ void CQPasteWndThread::OnEvent(int eventId, void *param)
             OnLoadExtraData(param);
             break;
     }
+
+	DWORD length = GetTickCount() - startTick;
+	Log(StrF(_T("End of OnEvent, eventId: %s, Time: %d(ms)"), EnumName((eCQPasteWndThreadEvents)eventId), length));
 }
 
 void CQPasteWndThread::OnDoQuery(void *param)
@@ -308,4 +314,23 @@ void CQPasteWndThread::CloseDatabase()
         m_db.close();
     }
     CATCH_SQLITE_EXCEPTION
+}
+
+CString CQPasteWndThread::EnumName(eCQPasteWndThreadEvents e)
+{
+	switch(e)
+	{
+	case DO_QUERY:
+		return _T("Load List Count");
+	case LOAD_ACCELERATORS:
+		return _T("Load Accelerators");
+	case UNLOAD_ACCELERATORS:
+		return _T("Unload Accelerators");
+	case LOAD_ITEMS:
+		return _T("Load clips");
+	case LOAD_EXTRA_DATA:
+		return _T("Load Extra Data (rtf/bitmaps)");
+	}
+
+	return _T("");
 }
