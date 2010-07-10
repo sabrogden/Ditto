@@ -24,8 +24,9 @@ public:
     {
         FireEvent(DO_QUERY);
     }
-    void FireLoadItems()
+    void FireLoadItems(bool firstLoad)
     {
+		m_firstLoad = firstLoad;
         FireEvent(LOAD_ITEMS);
     }
     void FireLoadExtraData()

@@ -298,6 +298,17 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 				_T("DELETE FROM Data WHERE lParentID = old.clipID;\n")
 				_T("END\n"));
 		}
+
+		try
+		{
+			db.execDML(_T("CREATE INDEX Main_ParentId on Main(lParentID DESC)"));
+			db.execDML(_T("CREATE INDEX Main_IsGroup on Main(bIsGroup DESC)"));
+			db.execDML(_T("CREATE INDEX Main_ShortCut on Main(lShortCut DESC)"));
+		}
+		catch(CppSQLite3Exception& e)
+		{
+			e.errorCode();
+		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 
@@ -337,6 +348,9 @@ BOOL CreateDB(CString csFile)
 		db.execDML(_T("CREATE UNIQUE INDEX Main_ID on Main(lID ASC)"));
 		db.execDML(_T("CREATE UNIQUE INDEX Data_ID on Data(lID ASC)"));
 		db.execDML(_T("CREATE INDEX Main_Date on Main(lDate DESC)"));
+		db.execDML(_T("CREATE INDEX Main_ParentId on Main(lParentID DESC)"));
+		db.execDML(_T("CREATE INDEX Main_IsGroup on Main(bIsGroup DESC)"));
+        db.execDML(_T("CREATE INDEX Main_ShortCut on Main(lShortCut DESC)"));
 
 		db.execDML(_T("CREATE TRIGGER delete_data_trigger BEFORE DELETE ON Main FOR EACH ROW\n")
 			_T("BEGIN\n")

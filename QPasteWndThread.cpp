@@ -78,7 +78,6 @@ void CQPasteWndThread::OnDoQuery(void *param)
 	    pasteWnd->m_mapCache.clear();
 	    pasteWnd->m_loadItems.clear();
 	    pasteWnd->m_bStopQuery = false;
-		m_firstLoad = true;
 	}
 
     long lRecordCount = 0;
@@ -111,13 +110,15 @@ void CQPasteWndThread::OnLoadItems(void *param)
 	    int loadCount = 0;
 	    CString localSql;
 	    bool clearFirstLoadItem = false;
+		bool firstLoad = false;
 
 		{
 			ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
 
 		    if(pasteWnd->m_loadItems.size() > 0)
 		    {
-		        loadItemsIndex = pasteWnd->m_loadItems.begin()->x;
+				firstLoad = (pasteWnd->m_loadItems.begin()->x == -1);
+		        loadItemsIndex = max(pasteWnd->m_loadItems.begin()->x, 0);
 		        loadItemsCount = pasteWnd->m_loadItems.begin()->y - pasteWnd->m_loadItems.begin()->x;
 		        localSql = pasteWnd->m_SQL;
 		        pasteWnd->m_bStopQuery = false;
@@ -160,13 +161,13 @@ void CQPasteWndThread::OnLoadItems(void *param)
 					loadItemsIndex++;
 					loadCount++;
 
-					if(m_firstLoad == false)
+					if(firstLoad == false)
 					{
 	            		::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, table.m_lID, table.m_listIndex);
 					}
 				}
 
-				if(m_firstLoad)
+				if(firstLoad)
 				{
 	        		::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -2, 0);
 				}
@@ -175,7 +176,7 @@ void CQPasteWndThread::OnLoadItems(void *param)
 					::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -1, 0);
 				}
 
-				m_firstLoad = false;
+				//m_firstLoad = false;
 
 				if(clearFirstLoadItem)
 				{

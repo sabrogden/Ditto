@@ -421,8 +421,6 @@ BOOL CQPasteWnd::HideQPasteWindow()
     theApp.m_bShowingQuickPaste = false;
     theApp.m_activeWnd.ReleaseFocus();
 
-    m_thread.FireUnloadAccelerators();
-
     KillTimer(TIMER_FILL_CACHE);
 
     //Save the size
@@ -479,8 +477,6 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
     // use invalidation to avoid unnecessary repainting
     m_bAllowRepaintImmediately = false;
     UpdateStatus();
-
-    //m_thread.FireLoadAccelerators();
 
     m_bHideWnd = true;
 
@@ -979,7 +975,10 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 	    m_lItemsPerPage = m_lstHeader.GetCountPerPage();
 	}
 
-    m_thread.FireDoQuery();
+	OnSetListCount(m_lstHeader.GetCountPerPage() + 2, 0);
+	CPoint loadItem(-1, m_lstHeader.GetCountPerPage() + 2);
+	m_loadItems.push_back(loadItem);
+	m_thread.FireLoadItems(true);
 
 	MoveControls();
 
@@ -1465,7 +1464,7 @@ void CQPasteWnd::OnMenuProperties()
             }
         }
 
-        //m_thread.FireLoadAccelerators();
+        m_thread.FireLoadAccelerators();
 
         m_lstHeader.RefreshVisibleRows();
 
@@ -2522,7 +2521,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                         lstrcpyn(pItem->pszText, cs, pItem->cchTextMax);
                         pItem->pszText[pItem->cchTextMax - 1] = '\0';
 
-						//Log(StrF(_T("DrawItem index %d - %s"), pItem->iItem, pItem->pszText));
+//						Log(StrF(_T("DrawItem index %d - "), pItem->iItem));//, pItem->pszText));
                     }
                     else
                     {
@@ -2546,7 +2545,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                             m_loadItems.push_back(loadItem);
                         }
 
-                        m_thread.FireLoadItems();
+                        m_thread.FireLoadItems(false);
                     }
                 }
                 CATCH_SQLITE_EXCEPTION 
@@ -2950,7 +2949,7 @@ void CQPasteWnd::OnSearchEditChange()
     }
 
     KillTimer(TIMER_DO_SEARCH);
-    SetTimer(TIMER_DO_SEARCH, 100, NULL);
+    SetTimer(TIMER_DO_SEARCH, 250, NULL);
 
     return ;
 }
@@ -3150,7 +3149,7 @@ LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
     m_lstHeader.SetItemCountEx(wParam);
     UpdateStatus(false);
 
-	m_lstHeader.ShowWindow(SW_SHOW);
+	//m_lstHeader.ShowWindow(SW_SHOW);
 
     return TRUE;
 }
@@ -3188,7 +3187,10 @@ LRESULT CQPasteWnd::OnRefeshRow(WPARAM wParam, LPARAM lParam)
 
 	if(clipId == -2)
 	{
-		m_lstHeader.RefreshVisibleRows();
+		Log(_T("End of first load, showing listbox and loading actual count, then accelerators"));
+		m_lstHeader.ShowWindow(SW_SHOW);
+		m_thread.FireDoQuery();
+		m_thread.FireLoadAccelerators();
 	}
 
     return true;
@@ -3281,7 +3283,7 @@ LRESULT CQPasteWnd::OnSelectAll(WPARAM wParam, LPARAM lParam)
         CPoint loadItem(0, m_lstHeader.GetItemCount());
         m_loadItems.push_back(loadItem);
 
-        m_thread.FireLoadItems();
+        m_thread.FireLoadItems(false);
 
         ret = TRUE;
 
