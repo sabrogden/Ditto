@@ -26,7 +26,6 @@ public:
     }
     void FireLoadItems(bool firstLoad)
     {
-		m_firstLoad = firstLoad;
         FireEvent(LOAD_ITEMS);
     }
     void FireLoadExtraData()
@@ -61,5 +60,4 @@ protected:
 
     CppSQLite3DB m_db;
     CString m_dbPath;
-	bool m_firstLoad;
 };

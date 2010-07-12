@@ -1263,25 +1263,25 @@ void CQPasteWnd::SetSendToMenu(CMenu *pMenu, int nMenuID, int nArrayPos)
 
 LRESULT CQPasteWnd::OnSearch(WPARAM wParam, LPARAM lParam)
 {
-    m_lstHeader.HidePopup();
+	m_lstHeader.HidePopup();
 
     CString csText;
     m_Search.GetWindowText(csText);
 
     if(csText == "")
     {
-        return FALSE;
-    }
+		return FALSE;
+	}
 
-    FillList(csText);
+	FillList(csText);
 
-    m_lstHeader.SetFocus();
+	m_lstHeader.SetFocus();
 
-    MoveControls();
+	MoveControls();
 
-    m_Search.SetSel(-1, 0);
+	m_Search.SetSel(-1, 0);
 
-    return TRUE;
+	return TRUE;
 }
 
 
@@ -1462,6 +1462,18 @@ void CQPasteWnd::OnMenuProperties()
                     FillMainTable(iter->second, q);
                 }
             }
+
+			CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(lID);
+			if(iterDib != m_cf_dibCache.end())
+			{
+				m_cf_dibCache.erase(iterDib);
+			}
+
+			CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(lID);
+			if(iterRtf != m_cf_rtfCache.end())
+			{
+				m_cf_rtfCache.erase(iterRtf);
+			}
         }
 
         m_thread.FireLoadAccelerators();
@@ -2622,13 +2634,13 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
         MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
         if(iter != m_mapCache.end())
         {
-            CF_DibTypeMap::iterator iterDib = m_cf_rtfCache.find(iter->second.m_lID);
-            if(iterDib == m_cf_rtfCache.end())
+            CF_DibTypeMap::iterator iterRTF = m_cf_rtfCache.find(iter->second.m_lID);
+            if(iterRTF == m_cf_rtfCache.end())
             {
                 bool exists = false;
 				for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
 				{
-					if(it->m_cfType == CF_DIB && it->m_lDBID == iter->second.m_lID)
+					if(it->m_cfType == theApp.m_RTFFormat && it->m_lDBID == iter->second.m_lID)
 					{
 						exists = true;
 						break;
@@ -2649,9 +2661,9 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
             }
             else
             {
-                if(iterDib->second.m_hgData != NULL)
+                if(iterRTF->second.m_hgData != NULL)
                 {
-                    pItem->lParam = (LPARAM) &(iterDib->second);
+                    pItem->lParam = (LPARAM) &(iterRTF->second);
                 }
             }
         }
@@ -3217,7 +3229,7 @@ void CQPasteWnd::OnTimer(UINT_PTR nIDEvent)
 {
     if(nIDEvent == TIMER_DO_SEARCH)
     {
-        KillTimer(TIMER_DO_SEARCH);
+		KillTimer(TIMER_DO_SEARCH);
 
         CString csText;
         m_Search.GetWindowText(csText);

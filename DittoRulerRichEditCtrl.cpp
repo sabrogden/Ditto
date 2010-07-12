@@ -7,7 +7,7 @@
 
 CDittoRulerRichEditCtrl::CDittoRulerRichEditCtrl(void)
 {
-	m_SaveTypes = stNONE;
+	m_SaveTypes = stCF_UNICODETEXT|stCF_TEXT|stRTF;
 	m_lID = -1;
 }
 
@@ -25,26 +25,6 @@ bool CDittoRulerRichEditCtrl::LoadItem(long lID, CString csDesc)
 	//If creating a new clip
 	if(m_lID < 0)
 	{
-		m_SaveTypes = stCF_UNICODETEXT|stRTF;
-		m_rtf.SetModify(FALSE);
-		return false;
-	}
-
-	m_SaveTypes = GetTypeFlags(m_lID);
-
-	if(m_SaveTypes == stNONE)
-	{
-		CString csFirst = theApp.m_Language.GetString("NotEditable", "Current Item is not editable.  A clip must have one of the clip types");
-		CString csSecond = theApp.m_Language.GetString("Editable", "to be editable");
-
-		CString cs;
-		cs.Format(_T("%s\n\n")
-					_T("- Rich Text\n")
-					_T("- CF_TEXT\n")
-					_T("- CF_UNICODETEXT\n\n")
-					_T("%s."), csFirst, csSecond);
-		SetText(cs);
-		SetReadOnly(TRUE);
 		m_rtf.SetModify(FALSE);
 		return false;
 	}

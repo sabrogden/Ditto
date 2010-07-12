@@ -19,15 +19,17 @@ bool CCF_UnicodeTextAggregator::AddClip(LPVOID lpData, int nDataSize, int nPos, 
 		return false;
 	}
 
+	int stringLen = nDataSize/sizeof(wchar_t);
+
 	//Ensure it's null terminated
-	if(pText[nDataSize-1] != '\0')
+	if(pText[stringLen-1] != '\0')
 	{
 		int len = 0;
-		for(len = 0; len < nDataSize && pText[len] != '\0'; len++ )
+		for(len = 0; len < stringLen && pText[len] != '\0'; len++ )
 		{
 		}
 		// if it is not null terminated, skip this item
-		if(len >= nDataSize)
+		if(len >= stringLen)
 			return false;
 	}
 

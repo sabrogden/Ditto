@@ -7,7 +7,6 @@
 
 CQPasteWndThread::CQPasteWndThread(void)
 {
-	m_firstLoad = false;
     m_waitTimeout = ONE_HOUR * 12;
 
     m_SearchingEvent = CreateEvent(NULL, TRUE, FALSE, _T(""));
@@ -175,8 +174,6 @@ void CQPasteWndThread::OnLoadItems(void *param)
 				{
 					::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -1, 0);
 				}
-
-				//m_firstLoad = false;
 
 				if(clearFirstLoadItem)
 				{

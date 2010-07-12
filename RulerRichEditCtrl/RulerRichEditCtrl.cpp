@@ -87,11 +87,11 @@ static DWORD CALLBACK StreamOut( DWORD dwCookie, LPBYTE pbBuff, LONG cb, LONG *p
 
 	// We want to convert the buff to wide chars
 	int length = ::MultiByteToWideChar( CP_UTF8, 0, buff, max, NULL, 0 );
-	if( length )
+	if(length)
 	{
-		TCHAR* wBuff = new TCHAR[ length ];
-		::MultiByteToWideChar( CP_UTF8, 0, buff, max, wBuff, length );
-
+		TCHAR* wBuff = new TCHAR[length+1];
+		::MultiByteToWideChar(CP_UTF8, 0, buff, max, wBuff, length);
+		wBuff[length] = 0;
 		*str += wBuff;
 		delete[] wBuff;
 	}
