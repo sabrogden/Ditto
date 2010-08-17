@@ -63,17 +63,28 @@ bool CReadOnlyFlag::ResetReadOnlyFlag(const CDittoInfo &DittoInfo, IClip *pClip,
 							file = file.Mid(pos);
 							break;
 						}
+
+						csDrive =  drive;
+						csDrive += _T(":/");
+
+						pos = file.Find(csDrive);
+						if(pos >= 0)
+						{
+							file = file.Mid(pos);
+							break;
+						}
 					}
 				}
 			}
 
+			BOOL success = FALSE;
 			if(resetFlag)
 			{
-				::SetFileAttributes(file, FILE_ATTRIBUTE_NORMAL);
+				success = ::SetFileAttributes(file, FILE_ATTRIBUTE_NORMAL);
 			}
 			else
 			{
-				::SetFileAttributes(file, FILE_ATTRIBUTE_READONLY);
+				success = ::SetFileAttributes(file, FILE_ATTRIBUTE_READONLY);
 			}
 		}
 	}

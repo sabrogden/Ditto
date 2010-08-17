@@ -24,7 +24,6 @@ CQPasteWndThread::~CQPasteWndThread(void)
 
 void CQPasteWndThread::OnTimeOut(void *param)
 {
-    CloseDatabase();
 }
 
 void CQPasteWndThread::OnEvent(int eventId, void *param)
@@ -59,8 +58,6 @@ void CQPasteWndThread::OnDoQuery(void *param)
 {
     CQPasteWnd *pasteWnd = (CQPasteWnd*)param;
 
-	OpenDatabase();
-
     static CEvent UpdateTimeEvent(TRUE, TRUE, _T("Ditto_Update_Clip_Time"), NULL);
     //If we pasted then wait for the time on the pasted event to be updated before we query the db
     DWORD dRet = WaitForSingleObject(UpdateTimeEvent, 2000);
@@ -83,7 +80,7 @@ void CQPasteWndThread::OnDoQuery(void *param)
 
     try
     {
-        lRecordCount = m_db.execScalar(CountSQL);
+        lRecordCount = theApp.m_db.execScalar(CountSQL);
         ::PostMessage(pasteWnd->m_hWnd, NM_SET_LIST_COUNT, lRecordCount, 0);
     }
     CATCH_SQLITE_EXCEPTION 
@@ -98,8 +95,6 @@ void CQPasteWndThread::OnLoadItems(void *param)
     CQPasteWnd *pasteWnd = (CQPasteWnd*)param;
 
     ResetEvent(m_SearchingEvent);
-
-	OpenDatabase();
 
 	while(true)
 	{
@@ -137,7 +132,7 @@ void CQPasteWndThread::OnLoadItems(void *param)
 
 				CMainTable table;
 
-				CppSQLite3Query q = m_db.execQuery(localSql);
+				CppSQLite3Query q = theApp.m_db.execQuery(localSql);
 				while(!q.eof())
 				{
 					pasteWnd->FillMainTable(table, q);
@@ -204,8 +199,6 @@ void CQPasteWndThread::OnLoadExtraData(void *param)
 {
     ResetEvent(m_SearchingEvent);
 
-	OpenDatabase();
-
     CQPasteWnd *pasteWnd = (CQPasteWnd*)param;
 
     Log(_T("Start of load extra data, Bitmaps/rtf"));
@@ -268,50 +261,13 @@ void CQPasteWndThread::OnLoadExtraData(void *param)
 void CQPasteWndThread::OnLoadAccelerators(void *param)
 {
     CQPasteWnd *pasteWnd = (CQPasteWnd*)param;
-    OpenDatabase();
-    pasteWnd->m_lstHeader.DestroyAndCreateAccelerator(TRUE, m_db);
+    pasteWnd->m_lstHeader.DestroyAndCreateAccelerator(TRUE, theApp.m_db);
 }
 
 void CQPasteWndThread::OnUnloadAccelerators(void *param)
 {
     CQPasteWnd *pasteWnd = (CQPasteWnd*)param;
-    OpenDatabase();
-    pasteWnd->m_lstHeader.DestroyAndCreateAccelerator(FALSE, m_db);
-}
-
-void CQPasteWndThread::OpenDatabase()
-{
-    try
-    {
-        if(m_dbPath.IsEmpty() == FALSE)
-        {
-            if(m_dbPath != CGetSetOptions::GetDBPath())
-            {
-                CloseDatabase();
-            }
-            else
-            {
-                return ;
-            }
-        }
-
-        m_dbPath = CGetSetOptions::GetDBPath();
-
-        DWORD dStart = GetTickCount();
-        m_db.open(m_dbPath);
-        Log(StrF(_T("Thread RunThread is starting time to open the database - %d"), GetTickCount() - dStart));
-    }
-    CATCH_SQLITE_EXCEPTION
-}
-
-void CQPasteWndThread::CloseDatabase()
-{
-    try
-    {
-        m_dbPath.Empty();
-        m_db.close();
-    }
-    CATCH_SQLITE_EXCEPTION
+    pasteWnd->m_lstHeader.DestroyAndCreateAccelerator(FALSE, theApp.m_db);
 }
 
 CString CQPasteWndThread::EnumName(eCQPasteWndThreadEvents e)

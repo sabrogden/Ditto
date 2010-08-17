@@ -53,11 +53,5 @@ protected:
     void OnLoadAccelerators(void *param);
     void OnUnloadAccelerators(void *param);
 
-    void OpenDatabase();
-    void CloseDatabase();
-
 	CString EnumName(eCQPasteWndThreadEvents e);
-
-    CppSQLite3DB m_db;
-    CString m_dbPath;
 };
