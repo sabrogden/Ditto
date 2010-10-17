@@ -12,4 +12,5 @@ extern "C"
 	bool __declspec(dllexport) ConvertPathToHtmlImageTag(const CDittoInfo &DittoInfo, IClip *pClip);
 	bool __declspec(dllexport) ClearReadOnlyFlag(const CDittoInfo &DittoInfo, IClip *pClip);
 	bool __declspec(dllexport) SetReadOnlyFlag(const CDittoInfo &DittoInfo, IClip *pClip);
+	bool __declspec(dllexport) RemoveLineFeeds(const CDittoInfo &DittoInfo, IClip *pClip);
 }

@@ -37,8 +37,8 @@ void CGroupCombo::FillCombo()
 {
 	ResetContent();
 
-	int nIndex = AddString(_T("--NONE--"));
-	SetItemData(nIndex, 0);
+	int nIndex = AddString(_T("-No Group-"));
+	SetItemData(nIndex, -1);
 
 	FillCombo(-1, 1);
 }

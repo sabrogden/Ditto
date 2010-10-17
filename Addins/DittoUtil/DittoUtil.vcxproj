@@ -130,6 +130,7 @@
     <ClCompile Include="PasteAnyAsText.cpp" />
     <ClCompile Include="PasteImageAsHtmlImage.cpp" />
     <ClCompile Include="ReadOnlyFlag.cpp" />
+    <ClCompile Include="RemoveLineFeeds.cpp" />
     <ClCompile Include="SelectPasteFormat.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -150,6 +151,7 @@
     <ClInclude Include="PasteAnyAsText.h" />
     <ClInclude Include="PasteImageAsHtmlImage.h" />
     <ClInclude Include="ReadOnlyFlag.h" />
+    <ClInclude Include="RemoveLineFeeds.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SelectPasteFormat.h" />
     <ClInclude Include="stdafx.h" />

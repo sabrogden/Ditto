@@ -41,6 +41,7 @@ public:
 	void GetWindowRectEx(LPRECT lpRect);
 	bool SetCaptionColorActive(BOOL bPersistant, BOOL ConnectedToClipboard);
 	void SetAutoMaxDelay(long lDelay)	{ m_lDelayMaxSeconds = lDelay; }
+	bool GetMinimized()	{ return m_DittoWindow.m_bMinimized; }
 
 protected:
 	CDittoWindow m_DittoWindow;

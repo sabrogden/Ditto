@@ -354,7 +354,7 @@ void CQPasteWnd::OnSetFocus(CWnd *pOldWnd)
 {
     CWndEx::OnSetFocus(pOldWnd);
 
-    ::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+    //::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
 
     // Set the focus to the list control
     if(::IsWindow(m_lstHeader.m_hWnd))
@@ -374,12 +374,18 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
 
     if(nState == WA_INACTIVE)
     {
+		SaveWindowSize();
+
         m_bModifersMoveActive = false;
 
         if(!g_Opt.m_bShowPersistent)
         {
             HideQPasteWindow();
         }
+		else if(g_Opt.GetAutoHide())
+		{
+			MinMaxWindow(FORCE_MIN);
+		}
 
         //re register the global hot keys for the last ten
         if(theApp.m_bAppExiting == false)
@@ -424,10 +430,7 @@ BOOL CQPasteWnd::HideQPasteWindow()
     KillTimer(TIMER_FILL_CACHE);
 
     //Save the size
-    CRect rect;
-    GetWindowRectEx(&rect);
-    CGetSetOptions::SetQuickPasteSize(rect.Size());
-    CGetSetOptions::SetQuickPastePoint(rect.TopLeft());
+    SaveWindowSize();
 
     // Hide the window when the focus is lost
 	m_lstHeader.ShowWindow(SW_HIDE);
@@ -461,6 +464,14 @@ BOOL CQPasteWnd::HideQPasteWindow()
     Log(StrF(_T("End of HideQPasteWindow, ItemCount: %d"), m_mapCache.size()));
 
     return TRUE;
+}
+
+void CQPasteWnd::SaveWindowSize()
+{
+	CRect rect;
+	GetWindowRectEx(&rect);
+	CGetSetOptions::SetQuickPasteSize(rect.Size());
+	CGetSetOptions::SetQuickPastePoint(rect.TopLeft());
 }
 
 BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
@@ -515,7 +526,10 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 
     // always on top... for persistent showing (g_Opt.m_bShowPersistent)
     // SHOWWINDOW was also integrated into this function rather than calling it separately
-    ::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+	if(g_Opt.GetShowPersistent())
+	{
+		::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+	}
 
     SetKeyModiferState(true);
 
@@ -727,7 +741,7 @@ LRESULT CQPasteWnd::OnListSelect(WPARAM wParam, LPARAM lParam)
 
 LRESULT CQPasteWnd::OnListEnd(WPARAM wParam, LPARAM lParam)
 {
-    HideQPasteWindow();
+    //HideQPasteWindow();
     return 0;
 }
 
@@ -1844,7 +1858,7 @@ void CQPasteWnd::OnMenuGroupsMovetogroup()
     if(nRet == IDOK)
     {
         int nGroup = dlg.GetSelectedGroup();
-        if(nGroup >= 0)
+        if(nGroup >= -1)
         {
             CClipIDs IDs;
             m_lstHeader.GetSelectionItemData(IDs);
@@ -2317,11 +2331,18 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
                             }
                             else
                             {
-                                if(m_GroupTree.IsWindowVisible() == FALSE)
-                                {
-                                    HideQPasteWindow();
-                                    return TRUE;
-                                }
+								if(g_Opt.GetShowPersistent() && this->GetMinimized() == false)
+								{
+									MinMaxWindow(FORCE_MIN);
+								}
+								else
+								{
+									if(m_GroupTree.IsWindowVisible() == FALSE)
+									{
+										HideQPasteWindow();
+										return TRUE;
+									}
+								}
                             }
                         }
                     }

@@ -145,6 +145,7 @@ public:
     void MoveSelection(bool down);
     void OnKeyStateUp();
     void SetKeyModiferState(bool bActive);
+	void SaveWindowSize();
 
     // Generated message map functions
 protected:

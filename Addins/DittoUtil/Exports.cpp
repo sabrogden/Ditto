@@ -3,6 +3,7 @@
 #include "PasteAnyAsText.h"
 #include ".\pasteimageashtmlimage.h"
 #include "ReadOnlyFlag.h"
+#include "RemoveLineFeeds.h"
 
 
 bool DittoAddin(const CDittoInfo &DittoInfo, CDittoAddinInfo &info)
@@ -36,7 +37,7 @@ bool SupportedFunctions(const CDittoInfo &DittoInfo, FunctionType type, std::vec
 
 			CFunction func2;
 			func2.m_csFunction = _T("ConvertPathToHtmlImageTag");
-			func2.m_csDisplayName = _T("Past As html image link");
+			func2.m_csDisplayName = _T("Paste As html image link");
 			func2.m_csDetailDescription = _T("Converts a CF_DIB or CF_HDROP to a html format for pasting into outlook express");
 
 			Functions.push_back(func2);
@@ -54,6 +55,13 @@ bool SupportedFunctions(const CDittoInfo &DittoInfo, FunctionType type, std::vec
 			func4.m_csDetailDescription = _T("Sets the read only flag on the types CF_HDROP, or files paths in text");
 
 			Functions.push_back(func4);
+
+			CFunction func5;
+			func5.m_csFunction = _T("RemoveLineFeeds");
+			func5.m_csDisplayName = _T("Paste Removing Line Feeds");
+			func5.m_csDetailDescription = _T("Removes all line feeds from text and rich text entries");
+
+			Functions.push_back(func5);
 		}
 		break;
 	}
@@ -88,4 +96,13 @@ bool SetReadOnlyFlag(const CDittoInfo &DittoInfo, IClip *pClip)
 
 	//return false so the clip is not pasted
 	return false;
+}
+
+bool RemoveLineFeeds(const CDittoInfo &DittoInfo, IClip *pClip)
+{
+	CRemoveLineFeeds remove;
+
+	bool didSomething = remove.RemoveLineFeeds(DittoInfo, pClip);
+	//return false so the clip is not pasted
+	return didSomething;
 }

@@ -207,12 +207,13 @@ BOOL CClipIDs::MoveTo(long lParentID, double dFirst, double dIncrement)
 		int nCount = GetSize();
 		for(int i = 0; i < nCount; i++)
 		{
-			theApp.m_db.execDMLEx(_T("UPDATE Main SET lParentID = %d, ")
-									_T("lDontAutoDelete = %d WHERE lID = %d AND lID <> %d;"), 
-									lParentID, 
-									(long)CTime::GetCurrentTime().GetTime(),
-									ElementAt(i),
-									lParentID);
+			CString sql = StrF(_T("UPDATE Main SET lParentID = %d ")
+								_T("WHERE lID = %d AND lID <> %d;"), 
+								lParentID,
+								ElementAt(i),
+								lParentID);
+
+			theApp.m_db.execDMLEx(sql);
 		}
 	}
 	CATCH_SQLITE_EXCEPTION

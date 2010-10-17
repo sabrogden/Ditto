@@ -24,7 +24,6 @@ CCopyProperties::CCopyProperties(long lCopyID, CWnd* pParent, CClip *pMemoryClip
 	m_bChangedText = false;
 	m_bHandleKillFocus = false;
 	m_bHideOnKillFocus = false;
-	m_bInGroup = false;
 	m_lGroupChangedTo = -1;
 	m_pMemoryClip = pMemoryClip;
 	m_bSetToTopMost = true;
@@ -131,9 +130,6 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 	}
 
 	m_GroupCombo.SetCurSelOnItemData(Clip.m_lParent);
-
-	if(Clip.m_lParent >= 0)
-		m_bInGroup = true;
 
 	m_HotKey.SetHotKey(LOBYTE(Clip.m_lShortCut), HIBYTE(Clip.m_lShortCut));
 	m_HotKey.SetRules(HKCOMB_A, 0);
@@ -257,7 +253,7 @@ void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
 
 	//If we are going from no group to a group or the
 	//don't auto delete check box is checked
-	if(m_bInGroup == false && Clip.m_lParent >= 0 || m_bNeverAutoDelete)
+	if(m_bNeverAutoDelete)
 	{
 		Clip.m_lDontAutoDelete = (long)CTime::GetCurrentTime().GetTime();
 	}

@@ -74,8 +74,9 @@ void CGroupTree::FillTree()
 	DeleteAllItems();
 	m_bSendAllready = false;
 
-	HTREEITEM hItem = InsertItem(_T("Root"), TVI_ROOT);
+	HTREEITEM hItem = InsertItem(_T("-No Group-"), TVI_ROOT);
 	SetItemData(hItem, -1);
+
 	SetItemState(hItem, TVIS_EXPANDED, TVIS_EXPANDED);
 
 	if(m_lSelectedFolderID < 0)

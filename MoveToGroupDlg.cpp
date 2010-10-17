@@ -64,7 +64,7 @@ BOOL CMoveToGroupDlg::OnInitDialog()
 LRESULT CMoveToGroupDlg::OnTreeSelect(WPARAM wParam, LPARAM lParam)
 {
 	int nID = (int)wParam;
-	if(nID >= 0)
+	if(nID != 0)
 	{
 		m_nSelectedGroup = nID;
 		OnOK();

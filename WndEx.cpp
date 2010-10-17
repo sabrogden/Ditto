@@ -223,6 +223,7 @@ void CWndEx::MinMaxWindow(long lOption)
 			m_crFullSizeWindow.SetRectEmpty();
 			m_DittoWindow.m_bMinimized = false;
 			m_TimeMaximized = COleDateTime::GetCurrentTime();
+			::SetForegroundWindow(this->GetSafeHwnd());
 			OnNcPaint();
 		}
 	}
@@ -248,6 +249,7 @@ void CWndEx::MinMaxWindow(long lOption)
 			m_crFullSizeWindow.SetRectEmpty();
 			m_DittoWindow.m_bMinimized = false;
 			m_TimeMaximized = COleDateTime::GetCurrentTime();
+			::SetForegroundWindow(this->GetSafeHwnd());
 			OnNcPaint();
 		}
 	}
@@ -274,6 +276,7 @@ void CWndEx::MinMaxWindow(long lOption)
 			m_crFullSizeWindow.SetRectEmpty();
 			m_DittoWindow.m_bMinimized = false;
 			m_TimeMaximized = COleDateTime::GetCurrentTime();
+			::SetForegroundWindow(this->GetSafeHwnd());
 			OnNcPaint();
 		}
 	}
@@ -301,6 +304,7 @@ void CWndEx::MinMaxWindow(long lOption)
 			m_crFullSizeWindow.SetRectEmpty();
 			m_DittoWindow.m_bMinimized = false;
 			m_TimeMaximized = COleDateTime::GetCurrentTime();
+			::SetForegroundWindow(this->GetSafeHwnd());
 			OnNcPaint();
 		}
 	}

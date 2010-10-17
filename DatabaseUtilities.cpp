@@ -464,15 +464,24 @@ BOOL RemoveOldEntries()
 			if(lMax >= 0)
 			{
 				CClipIDs IDs;
+				int clipId;
 				
-				CppSQLite3Query q = db.execQueryEx(_T("SELECT lID, lShortCut, lDontAutoDelete FROM Main ORDER BY lDate DESC LIMIT -1 OFFSET %d"), lMax);			
+				CppSQLite3Query q = db.execQueryEx(_T("SELECT lID, lShortCut, lParentID, lDontAutoDelete FROM Main WHERE bIsGroup = 0 ORDER BY lDate DESC LIMIT -1 OFFSET %d"), lMax);
 				while(q.eof() == false)
 				{
-					//Only delete entries that have no shortcut and don't have the flag set
-					if(q.getIntField(_T("lShortCut")) == 0 && q.getIntField(_T("lDontAutoDelete")) == 0)
-						IDs.Add(q.getIntField(_T("lID")));
+					int shortcut = q.getIntField(_T("lShortCut"));
+					int dontDelete = q.getIntField(_T("lDontAutoDelete"));
+					int parentId = q.getIntField(_T("lParentID"));
 
-					Log(StrF(_T("From MaxEntries - Deleting Id: %d"), q.getIntField(_T("lID"))));
+					//Only delete entries that have no shortcut and don't have the flag set
+					if(shortcut == 0 && 
+						dontDelete == 0 &&
+						parentId <= 0)
+					{
+						clipId = q.getIntField(_T("lID"));
+						IDs.Add(clipId);
+						Log(StrF(_T("From MaxEntries - Deleting Id: %d"), clipId));
+					}
 
 					q.nextRow();
 				}
@@ -497,7 +506,7 @@ BOOL RemoveOldEntries()
 				
 				CppSQLite3Query q = db.execQueryEx(_T("SELECT lID FROM Main ")
 													_T("WHERE lDate < %d AND ")
-													_T("lShortCut = 0 AND lDontAutoDelete = 0"), now.GetTime());
+													_T("bIsGroup = 0 AND lShortCut = 0 AND lParentID <= 0 AND lDontAutoDelete = 0"), now.GetTime());
 
 				while(q.eof() == false)
 				{
