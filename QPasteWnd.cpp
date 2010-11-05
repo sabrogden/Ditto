@@ -996,6 +996,8 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 
 	MoveControls();
 
+	m_CountSQL.Replace(_T("%"), _T("%%"));
+	m_SQL.Replace(_T("%"), _T("%%"));
 	Log(StrF(_T("Start Fill List - Count SQL: %s, Query SQL: %s"), m_CountSQL, m_SQL));
 
     return TRUE;
