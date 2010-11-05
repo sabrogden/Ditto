@@ -14,8 +14,6 @@
                 <li><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.16.8/DittoPortable_3_16_8_0.zip/download">Portable (zip file)</a></li>
                 <li><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.16.8/DittoSource_3_16_8_0.zip/download">Source</a></li>
                 <li><a href="https://sourceforge.net/project/screenshots.php?group_id=84084">Screenshot</a></li>
-				<br>
-				<li><h3><a href="#Project Reviews"><img src="ThumsUp.png"/>Project Reviews</a></h3></li>
           </ul>
           
           <br /><br />

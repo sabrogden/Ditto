@@ -19,7 +19,16 @@
               </div>
             </div>
 
-          <div class="post">
+			<a name="Project Reviews"></a>
+			<div class="post">
+				<h1 class="title"><a href="http://sourceforge.net/projects/ditto-cp/reviews/">Project Reviews</a></h1>
+				<script language="JavaScript" src="http://itde.vccs.edu/rss2js/feed2js.php?src=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fditto-cp%2Freviews_feed.rss&chan=n&num=5&desc=1&date=n&targ=n" type="text/javascript"></script>
+				<noscript>
+				<a href="http://itde.vccs.edu/rss2js/feed2js.php?src=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fditto-cp%2Freviews_feed.rss&chan=n&num=10&desc=1&date=n&targ=n&html=y">View RSS feed</a>
+				</noscript>
+			</div>
+		  
+			<div class="post">
                 <h1 class="title">Features</h1>
                 <div class="entry">
                     <ul>
@@ -36,16 +45,7 @@
                       <li>Uses sqlite database (<a href="http://www.sqlite.org">www.sqlite.org</a>)</li>
                     </ul>
               </div>
-          </div>
-		  
-		  <a name="Project Reviews"></a>
-		  <div class="post">
-			<h1 class="title"><a href="http://sourceforge.net/projects/ditto-cp/reviews/">Project Reviews</a></h1>
-			<script language="JavaScript" src="http://itde.vccs.edu/rss2js/feed2js.php?src=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fditto-cp%2Freviews_feed.rss&chan=n&num=5&desc=1&date=n&targ=n" type="text/javascript"></script>
-			<noscript>
-			<a href="http://itde.vccs.edu/rss2js/feed2js.php?src=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fditto-cp%2Freviews_feed.rss&chan=n&num=10&desc=1&date=n&targ=n&html=y">View RSS feed</a>
-			</noscript>
-		  </div>
+			</div>
  
           <div class="post">
                 <h1 class="title">Why not use built in Copy bins in Office or VS.Net</h1>
