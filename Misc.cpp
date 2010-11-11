@@ -57,9 +57,9 @@ void AppendToFile(const TCHAR* fn, const TCHAR* msg)
 	if(file != NULL)
 	{
 		#ifdef _UNICODE
-			fwprintf(file, msg);
+			fwprintf(file, _T("%s"), msg);
 		#else
-			fprintf(file, msg);
+			fprintf(file, _T("%s"),msg);
 		#endif
 
 		fclose(file);	

@@ -284,25 +284,6 @@ BOOL CQListCtrl::SetListPos( int index )
 	SetSelection(index);
 	EnsureVisible(index,FALSE);
 
-	//similutate a click on the selected item
-	//I was having a problem with the previous selection still be there
-	//when you shift selected it would still have the previous selection as the anchor
-
-	CWnd *pFocus = GetFocus();
-	if(pFocus == NULL || pFocus == this)
-	{
-		CRect rect;
-		if(GetItemRect(index, rect, LVIR_BOUNDS))
-		{
-			CPoint pt(rect.TopLeft());
-			pt.x += 2;
-			pt.y += 2;
-
-			PostMessage(WM_LBUTTONDOWN, MK_LBUTTON, MAKELPARAM(pt.x, pt.y));
-			PostMessage(WM_LBUTTONUP, MK_LBUTTON, MAKELPARAM(pt.x, pt.y));
-		}
-	}
-
 	return TRUE;
 }
 
