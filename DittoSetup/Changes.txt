@@ -11,6 +11,7 @@
 - Save connected to the clipboard state to config settings
 - Search full cf_unicode clip data with /f in the search text ex) /f text
 - Include correct version of mfc and c++ runtime files
+- Removed auto update feature
 
 3.16.8.0 08-16-09
 - Added DittoUtil Addin, adds the ability to paste any clip type as text
