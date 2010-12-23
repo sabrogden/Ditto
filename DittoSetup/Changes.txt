@@ -1,3 +1,29 @@
+3.17.00.17 12-23-10
+- Removed named paste, named paste items can be searched by entering /q text
+- Added add-in to set/remove read only flag on clip containing cf_hdrop items or just text of file names
+- Added add-in to remove all line feeds then paste the clip
+- Fixed issue with ditto taking focus back, happened when always on-top was selected
+- Reverted to previous method for setting the focus
+- Fixed issue where 'v' was pasted instead of the actual clip
+- Changed default method for tracking focus to polling
+- Sped up clip deletes, delete of the large clipboard data now happens in the background
+- Sped up filling of the list, only items in view are loaded
+- Save connected to the clipboard state to config settings
+- Search full cf_unicode clip data with /f in the search text ex) /f text
+- Include correct version of mfc and c++ runtime files
+
+3.16.8.0 08-16-09
+- Added DittoUtil Addin, adds the ability to paste any clip type as text
+- Fixed SetFocus fix in ActivateTarget -- needed AttachThreadInput
+- Added the ability to create add-ins, called before an item is pasted
+- Fixed issue with getting the currently focused window when not using the hook dll
+- Updated italiano language file
+- Added option to paste from hot key, press multiple times to move the selection, release the modifer key (control, shift, alt) to paste
+- Fixed word wrap option to reload correctly
+- Fixed issues with loading cut copy buffer 3 correctly from config on restart
+- Check if key is up before sending key up command. This was causing problems if an app is listening to global key up commands
+- Updated to sqlite version 3.16.10
+
 3.16.6.0  3-12-09
 - Added DittoUtil Addin, adds the ability to paste any clip type as text
 
