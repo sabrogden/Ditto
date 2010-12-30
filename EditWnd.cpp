@@ -41,7 +41,7 @@ int CEditWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	
 	m_Tabs.Create(WS_CHILD|WS_VISIBLE|WS_TABSTOP|SCS_TOP, CRect(0, 0, 0, 0), this, 101);
 	
-	m_Font.CreatePointFont(90, _T("@Arial Unicode MS"));
+	m_Font.CreatePointFont(90, _T("Arial Unicode MS"));
 	m_cbUpdateDescription.Create(theApp.m_Language.GetString("Update_Desc", "Update clip description on save?"), WS_CHILD|WS_VISIBLE|BS_AUTOCHECKBOX, CRect(0,0,0,0), this, 101);
 	m_cbUpdateDescription.SetFont(&m_Font);
 

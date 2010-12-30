@@ -272,7 +272,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     m_TitleFont.CreateFont(14, 0,  -900, 0, 400, FALSE, FALSE, 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, _T("Arial"));
 
-    m_SearchFont.CreatePointFont(80, _T("@Arial Unicode MS"));
+    m_SearchFont.CreatePointFont(80, _T("Arial Unicode MS"));
 
     GroupFont.CreateFont(-11, 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("MS Sans Serif"));
 

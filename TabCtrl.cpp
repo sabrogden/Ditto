@@ -152,7 +152,7 @@ void CTabCtrlEx::SetTabHeight(int nTabHeight)
 	{
 		// Set the regular font
 		m_pFntText->CreateFont(-(m_nTabHeight*7/10), 0, 0, 0, FW_LIGHT, FALSE, FALSE, 0, DEFAULT_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, _T("@Arial Unicode MS"));
+			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, _T("Arial Unicode MS"));
 	}
 
 	// Delete the old font and create a new one
@@ -164,7 +164,7 @@ void CTabCtrlEx::SetTabHeight(int nTabHeight)
 	{
 		// Set the bold font
 		m_pFntBoldText->CreateFont(-(m_nTabHeight*7/10), 0, 0, 0, FW_SEMIBOLD, FALSE, FALSE, 0, DEFAULT_CHARSET,
-			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, _T("@Arial Unicode MS"));
+			OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, _T("Arial Unicode MS"));
 	}
 }
 

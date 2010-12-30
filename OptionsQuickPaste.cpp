@@ -199,7 +199,7 @@ void COptionsQuickPaste::OnButtonDefaultFault()
 	m_LogFont.lfHeight = -11;
 	m_LogFont.lfWeight = 400;
 	m_LogFont.lfCharSet = 1;
-	STRCPY(m_LogFont.lfFaceName, _T("@Arial Unicode MS"));
+	STRCPY(m_LogFont.lfFaceName, _T("Arial Unicode MS"));
 
 	m_Font.DeleteObject();
 	m_Font.CreateFontIndirect(&m_LogFont);

@@ -1338,7 +1338,7 @@ BOOL CGetSetOptions::GetFont(LOGFONT &font)
 	font.lfHeight = -11;
 	font.lfWeight = 400;
 	font.lfCharSet = 1;
-	STRCPY(font.lfFaceName, _T("@Arial Unicode MS"));
+	STRCPY(font.lfFaceName, _T("Arial Unicode MS"));
 	return TRUE;
 }
 
