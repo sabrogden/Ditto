@@ -61,6 +61,32 @@
           </div>
           
             <a name="Change History"></a>
+			
+			<div class="post">
+                <h1 class="title">3.17.00.17 12-23-10</h1>
+                <div class="entry">
+                    <ul>
+						<li>Removed named paste, named paste items can be searched by entering /q text</li>
+						<li>Added add-in to set/remove read only flag on clip containing cf_hdrop items or just text of file names</li>
+						<li>Added add-in to remove all line feeds then paste the clip</li>
+						<li>Fixed issue with ditto taking focus back, happened when always on-top was selected</li>
+						<li>Reverted to previous method for setting the focus</li>
+						<li>Fixed issue where 'v' was pasted instead of the actual clip</li>
+						<li>Changed default method for tracking focus to polling</li>
+						<li>Sped up clip deletes, delete of the large clipboard data now happens in the background</li>
+						<li>Sped up filling of the list, only items in view are loaded</li>
+						<li>Save connected to the clipboard state to config settings</li>
+						<li>Search full cf_unicode clip data with /f in the search text ex) /f text</li>
+						<li>Include correct version of mfc and c++ runtime files</li>
+						<li>Removed auto update feature</li>
+                    </ul>
+              </div>
+              <div class="meta">
+				<p class="byline"><a href="changeHistory.php" class="more">Full Change History</a></p>
+			  </div>
+          </div>
+			
+			
 			<div class="post">
                 <h1 class="title">3.16.8.0 08-16-09</h1>
                 <div class="entry">
