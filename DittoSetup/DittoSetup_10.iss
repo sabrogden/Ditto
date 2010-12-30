@@ -41,6 +41,7 @@ Name: Romanian; MessagesFile: Romanian.isl
 Name: Korean; MessagesFile: Korean.isl
 Name: Russian; MessagesFile: Russian.isl
 Name: Slovenian; MessagesFile: Slovenian.isl
+Name: Czech; MessagesFile: Czech.isl
 
 [Tasks]
 Name: RunAtStartup; Description: Run Ditto on Windows Startup
@@ -130,6 +131,7 @@ begin
 
     RenameFile(sDir+'\Language\Italian.xml', sDir+'\Language\Italian.xml.old')
 end;
+
 
 
 

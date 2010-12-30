@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<Ditto_Language_File Version = "1.2" Author = "Guido Schroeder" Notes = "based on file German.xml by Stephan Jaeger" LanguageCode="ger">
+<Ditto_Language_File Version = "2.0" Author = "Guido Schroeder" Notes = "based on file German.xml by Stephan Jaeger" LanguageCode="ger">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Gruppen</Item>
 		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Neue Gruppe anlegen</Item>
-		<Item English_Text = "New Group Selection	F7" ID = "32812">Neue Gruppenauswahl</Item>
+		<Item English_Text = "New Group Selection	F7" ID = "32812">Neue Gruppe auswählen</Item>
 		<Item English_Text = "Move to Group" ID = "32840">In Gruppe verschieben</Item>
 		<Item English_Text = "Quick Options" ID = "-1">Kurzoptionen</Item>
 		<Item English_Text = "Lines Per Clip" ID = "-1">Zeilen pro Eintrag</Item>
@@ -14,20 +14,20 @@
 		<Item English_Text = "5" ID = "32789">5</Item>
 		<Item English_Text = "Transparency" ID = "-1">Transparenz der Listenansicht</Item>
 		<Item English_Text = "None" ID = "32800">Keine</Item>
-		<Item English_Text = "5 " ID = "32808">5</Item>
-		<Item English_Text = "10 " ID = "32792">10</Item>
-		<Item English_Text = "15 " ID = "32794">15</Item>
-		<Item English_Text = "20 " ID = "32796">20</Item>
-		<Item English_Text = "25 " ID = "32798">25</Item>
-		<Item English_Text = "30 " ID = "32799">30</Item>
-		<Item English_Text = "40 " ID = "32790">40</Item>
+		<Item English_Text = "5 " ID = "32808">5 %</Item>
+		<Item English_Text = "10 " ID = "32792">10 %</Item>
+		<Item English_Text = "15 " ID = "32794">15 %</Item>
+		<Item English_Text = "20 " ID = "32796">20 %</Item>
+		<Item English_Text = "25 " ID = "32798">25 %</Item>
+		<Item English_Text = "30 " ID = "32799">30 %</Item>
+		<Item English_Text = "40 " ID = "32790">40 %</Item>
 		<Item English_Text = "Positioning" ID = "-1">Position der Listenansicht</Item>
 		<Item English_Text = "At Caret" ID = "32802">Cursor</Item>
 		<Item English_Text = "At Cursor" ID = "32803">Mauszeiger</Item>
 		<Item English_Text = "At Previous Position" ID = "32804">Letzte Fensterposition</Item>
-		<Item English_Text = "First Ten Hot Keys" ID = "-1">Ersten zehn Tastenkürzels</Item>
+		<Item English_Text = "First Ten Hot Keys" ID = "-1">Erste zehn Einträge</Item>
 		<Item English_Text = "Use Ctrl - Num" ID = "32777">STRG-Num verwenden</Item>
-		<Item English_Text = "Show Hot Key Text" ID = "32778">Tastenkürzeltext anzeigen</Item>
+		<Item English_Text = "Show Hot Key Text" ID = "32778">Tastenkürzel anzeigen</Item>
 		<Item English_Text = "View Caption Bar On" ID = "-1">Position der Titelleiste</Item>
 		<Item English_Text = "Top" ID = "32783">Oben</Item>
 		<Item English_Text = "Right" ID = "32780">Rechts</Item>
@@ -44,13 +44,13 @@
 		<Item English_Text = "Auto Roll-up" ID = "32791">Automatisch aufrollen</Item>
 		<Item English_Text = "Always Show Description" ID = "32813">Kurzansicht immer anzeigen</Item>
 		<Item English_Text = "Prompt For New Group Names" ID = "32817">Neuen Gruppennamen abfragen</Item>
-		<Item English_Text = "Select Font" ID = "32844">Schriftart wählen</Item>
-		<Item English_Text = "Show Thumbnails" ID = "32845">Bildvorschau anzeigen</Item>
-		<Item English_Text = "Draw RTF Text" ID = "32846">RTF Text einfügen</Item>
+		<Item English_Text = "Select Font" ID = "32844">Schriftart wählen...</Item>
+		<Item English_Text = "Show Thumbnails" ID = "32845">Grafische Vorschau von Bildern</Item>
+		<Item English_Text = "Draw RTF Text" ID = "32846">Grafische Vorschau von Rich Text</Item>
 		<Item English_Text = "Paste Clip after selection" ID = "32847">Eintrag nach Auswahl einfügen</Item>
 		<Item English_Text = "Find As You Type" ID = "32848">Inkrementelle Suche</Item>
 		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Listenansicht immer ganz sichtbar</Item>
-		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Gruppeneinträge in Hauptliste anzeigen</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Einträge in Gruppen in Hauptliste anzeigen</Item>
 		<Item English_Text = "Sent To" ID = "-1">Senden an</Item>
 		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">(192.168.1.101) - selber Computer</Item>
 		<Item English_Text = "View Full Description	F3" ID = "32793">Kurzansicht anzeigen</Item>
@@ -73,7 +73,7 @@
 		<Item English_Text = "Import" ID = "32855">Einträge importieren</Item>
 		<Item English_Text = "Export" ID = "32853">Einträge exportieren</Item>
 		<Item English_Text = "Remove Quick Paste" ID = "32856">Kein direktes Einfügen</Item>	
-		<Item English_Text = "Edit Clip" ID = "32860">Eintrag editieren</Item>
+		<Item English_Text = "Edit Clip" ID = "32860">Einträge editieren</Item>
 		<Item English_Text = "New Clip" ID = "32867">Neuer Eintrag</Item>	
 		
 	</Ditto_Right_Click_Menu>
@@ -112,10 +112,11 @@
 		<Item English_Text = "(Leave blank for no limit)" ID = "2047">(Leer = kein Maximum)</Item>
 		<Item English_Text = "Set Database Path" ID = "1034">Pfad der Datenbank ändern</Item>
 		<Item English_Text = "Language" ID = "2069">Sprache</Item>
+		<Item English_Text = "About Language" ID = "2073">Über Sprache</Item>
 		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">Weitere Kopien ignorieren für Millisekunden (= 1/1000 Sekunden)</Item>
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Allgemein</Item>
+		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090">Trenner beim Einfügen mehrerer Einträge ([LF]= Zeilenumbruch)</Item>
 		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Verbindung mit Zwischenablage überwachen</Item>
-		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090"></Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "&Add" ID = "1015">&Hinzufügen</Item>
@@ -159,11 +160,11 @@
 		<Item English_Text = "Show leading whitespace" ID = "2021">Führende Leerzeichen anzeigen</Item>
 		<Item English_Text = "Text Lines per Row" ID = "2062">Zeilen pro Eintrag</Item>
 		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">Transparenz für Listenansicht aktivieren</Item>
-		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">Bildvorschau anzeigen (beim Typ CF_DIB) (Evtl. mehr Speicherbedarf/langsame Ausgabe)</Item>
-		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">RTF Text in Liste malen (beim Typ RTF) (Evtl. mehr Speicherbedarf/langsame Ausgabe)</Item>
+		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">Grafische Vorschau von Bildern (beim Typ CF_DIB) (Evtl. mehr Speicherbedarf/langsame Ausgabe)</Item>
+		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">Grafische Vorschau von Rich Text Einträgen (beim Typ RTF) (Evtl. mehr Speicherbedarf/langsame Ausgabe)</Item>
 		<Item English_Text = "Find As You Type" ID = "2036">Inkrementelle Suche</Item>
 		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">Listenansicht immer ganz sichtbar</Item>
-		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">Gruppeneinträge in Hauptliste anzeigen</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">Einträge in Gruppen in Hauptliste anzeigen</Item>
 		<Item English_Text = "Font" ID = "1040">Zeichensatz</Item>
 		<Item English_Text = "Default Font" ID = "2031">Voreinstellung</Item>
 		<Item English_Text = "Popup Positioning" ID = "2063">Position der Listenansicht</Item>
@@ -178,8 +179,8 @@
 		<Item English_Text = "Prompt when deleting clips" ID = "2039">Löschen von Einträgen bestätigen</Item>
 		
 		//New strings added in 3.15.2 10-6-07
-		<Item English_Text = "Theme" ID = "2092"></Item>
-		<Item English_Text = "About Theme" ID = "2094"></Item>
+		<Item English_Text = "Theme" ID = "2092">Design</Item>
+		<Item English_Text = "About Theme" ID = "2094">Über Design</Item>
 		
 	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>
@@ -248,12 +249,12 @@
 		<Item English_Text = "the file will be renamed" ID = "File_Renamed">die Datei wird umbenannt</Item>
 		<Item English_Text = "and a new database will be created" ID = "New_Database">und eine neue Datenbank erstellt</Item>
 		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">Updates für Ditto verfügbar\nFür Details -> ditto-cp.sourceforge.net\n\nInstallierte Version</Item>
-		<Item English_Text = "Update Version" ID = "Update_Version">Updateversion</Item>
-		<Item English_Text = "Download updated version?" ID = "Download_Update">Neueste Version herunterladen?</Item>			
+		<Item English_Text = "Update Version" ID = "Update_Version">Neue Version</Item>
+		<Item English_Text = "Download updated version?" ID = "Download_Update">Neue Version herunterladen?</Item>			
 		<Item English_Text = "No updates available" ID = "No_Updates">Keine neuere Version verfügbar</Item>			
 		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Alle Einträge werden gelöscht!\n\nFortsetzen?</Item>
 		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Verbindung zur Zwischenablage trennen</Item>			
-		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Zur Zwischenablage verbinden</Item>			
+		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Mit Zwischenablage verbinden</Item>			
 		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">DAO/Jet db Engine konnte nicht initialisiert werden. DAO wird installiert\n\nBitte starten sie Ditto nach Installation von DAO neu." ID = " Error_Init_Dao_Intall"</Item>
 		
 		//New strings added in 3.6 6-9-06
@@ -269,14 +270,14 @@
 		<Item English_Text = "New Clip" ID = "New_Clip">Neuer Eintrag</Item>
 		<Item English_Text = "Save" ID = "Save">Speichern</Item>
 		<Item English_Text = "Save All" ID = "Save_All">Alle speichern</Item>
-		<Item English_Text = "Close Current Tab" ID = "Close">Aktuellen Reiter schließen</Item>
-		<Item English_Text = "NotEditable" ID = "Current Item is not editable.  A clip must have one of the clip types">Aktueller Eintrag ist nicht editierbar. Ein Eintrag muss aus einem der Eintragtypen bestehen</Item>
-		<Item English_Text = "Editable" ID = "to be editable">editierbar</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">Tab schließen</Item>
+		<Item English_Text = "NotEditable" ID = "Current Item is not editable.  A clip must have one of the clip types">Aktueller Eintrag ist nicht editierbar. Nur die Typen</Item>
+		<Item English_Text = "Editable" ID = "to be editable">sind editierbar.</Item>
 		<Item English_Text = "SaveChanges" ID = "Do you want to save changes to">Änderungen speichern</Item>
 		<Item English_Text = "ErrorSaving" ID = "Error saving clip">Fehler beim Speichern des Eintrags</Item>
 		<Item English_Text = "New" ID = "New">Neu</Item>
 		<Item English_Text = "Save_Close" ID = "Save, Close and place on clipboard">Speichern, schließen und in Zwischenablage ablegen</Item>
-		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit"></Item>
+		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">Ditto Editor</Item>
 		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title"></Item>
 		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1"></Item>
 		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2"></Item>
@@ -287,7 +288,7 @@
 		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3"></Item> 
 		
 		//New strings added in 3.17 2-28-10
-		<Item English_Text = "Add-Ins" ID = "Add_Ins"></Item> 
+		<Item English_Text = "Add-Ins" ID = "Add_Ins">Erweiterungen</Item> 
 		
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
@@ -297,7 +298,7 @@
 	</Ditto_Options_Sheet>
 	<Ditto_Tray_Icon_Menu>
 		<Item English_Text = "Show Quick Paste" ID = "32773">Listenansicht anzeigen</Item>
-		<Item English_Text = "Options" ID = "32771">Optionen</Item>
+		<Item English_Text = "Options" ID = "32771">Optionen...</Item>
 		<Item English_Text = "Help" ID = "32843">Online-Hilfe</Item>
 		<Item English_Text = "Exit" ID = "32772">Beenden</Item>	
 		
@@ -307,32 +308,33 @@
 		
 	</Ditto_Tray_Icon_Menu>
 	
+	//Added in 9-11-09
 	<Ditto_Options_CopyBuffers>
-		<Item English_Text = "Copy Buffer 1" ID = "2088">Copy Buffer 1-test</Item>
-		<Item English_Text = "Copy" ID = "2079">Copy-test</Item>
-		<Item English_Text = "Paste" ID = "2080">Paste-test</Item>
-		<Item English_Text = "Cut" ID = "2081">Cut-test</Item>
-		<Item English_Text = "Play Sound on Copy" ID = "1042">Play Sound on Copy-test</Item>
-		<Item English_Text = "Win" ID = "2085">Win1Copy-test</Item>
-		<Item English_Text = "Win" ID = "2086">Win1Paste-test</Item>
-		<Item English_Text = "Win" ID = "2087">Win1Cut-test</Item>
+		<Item English_Text = "Copy Buffer 1" ID = "2088">1. Kopierpuffer</Item>
+		<Item English_Text = "Copy" ID = "2079">Kopieren</Item>
+		<Item English_Text = "Paste" ID = "2080">Einfügen</Item>
+		<Item English_Text = "Cut" ID = "2081">Ausschneiden</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042">Klang beim Kopieren abspielen</Item>
+		<Item English_Text = "Win" ID = "2085">WIN</Item>
+		<Item English_Text = "Win" ID = "2086">WIN</Item>
+		<Item English_Text = "Win" ID = "2087">WIN</Item>
 		
-		<Item English_Text = "Copy Buffer 2" ID = "2098">Copy Buffer 1-test</Item>
-		<Item English_Text = "Copy" ID = "2093">Copy-test</Item>
-		<Item English_Text = "Paste" ID = "2094">Paste-test</Item>
-		<Item English_Text = "Cut" ID = "2097">Cut-test</Item>
-		<Item English_Text = "Play Sound on Copy" ID = "1043">Play Sound on Copy-test</Item>
-		<Item English_Text = "Win" ID = "2090">Win2Copy-test</Item>
-		<Item English_Text = "Win" ID = "2092">Win2Paste-test</Item>
-		<Item English_Text = "Win" ID = "2096">Win2Cut-test</Item>
+		<Item English_Text = "Copy Buffer 2" ID = "2098">2. Kopierpuffer</Item>
+		<Item English_Text = "Copy" ID = "2093">Kopieren</Item>
+		<Item English_Text = "Paste" ID = "2094">Einfügen</Item>
+		<Item English_Text = "Cut" ID = "2097">Ausschneiden</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043">Klang beim Kopieren abspielen</Item>
+		<Item English_Text = "Win" ID = "2090">WIN</Item>
+		<Item English_Text = "Win" ID = "2092">WIN</Item>
+		<Item English_Text = "Win" ID = "2096">WIN</Item>
 		
-		<Item English_Text = "Copy Buffer 3" ID = "2108">Copy Buffer 1-test</Item>
-		<Item English_Text = "Copy" ID = "2103">Copy-test</Item>
-		<Item English_Text = "Paste" ID = "2104">Paste-test</Item>
-		<Item English_Text = "Cut" ID = "2107">Cut-test</Item>
-		<Item English_Text = "Play Sound on Copy" ID = "1044">Play Sound on Copy-test</Item>
-		<Item English_Text = "Win" ID = "2100">Win3Copy-test</Item>
-		<Item English_Text = "Win" ID = "2102">Win3Paste-test</Item>
-		<Item English_Text = "Win" ID = "2106">Win3Cut-test</Item>
+		<Item English_Text = "Copy Buffer 3" ID = "2108">3. Kopierpuffer</Item>
+		<Item English_Text = "Copy" ID = "2103">Kopieren</Item>
+		<Item English_Text = "Paste" ID = "2104">Einfügen</Item>
+		<Item English_Text = "Cut" ID = "2107">Ausschneiden</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044">Klang beim Kopieren abspielen</Item>
+		<Item English_Text = "Win" ID = "2100">WIN</Item>
+		<Item English_Text = "Win" ID = "2102">WIN</Item>
+		<Item English_Text = "Win" ID = "2106">WIN</Item>
 	</Ditto_Options_CopyBuffers>
 </Ditto_Language_File>
