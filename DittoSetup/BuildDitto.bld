@@ -105,18 +105,6 @@ End If
 			<indent type='3'>2</indent>
 			<name>Build Ditto Unicode</name>
 		</step>
-		<step action='Make VS 2010'>
-			<AssemblyVer type='11'>-1</AssemblyVer>
-			<Attr type='11'>-1</Attr>
-			<Config>Release|Win32</Config>
-			<FileVer type='11'>-1</FileVer>
-			<Filename>%workDir%\%branch%\CP_Main_10.sln</Filename>
-			<ProdVer type='11'>-1</ProdVer>
-			<Version>%version%</Version>
-			<VersionSel type='3'>2</VersionSel>
-			<indent type='3'>2</indent>
-			<name>Build Ditto</name>
-		</step>
 		<step action='Group'>
 			<indent type='3'>1</indent>
 			<name>Zip Source</name>
@@ -169,18 +157,6 @@ Ditto*.zip
 			<VersionSel type='3'>2</VersionSel>
 			<indent type='3'>2</indent>
 			<name>Build Ditto Unicode</name>
-		</step>
-		<step action='Make VS 2010'>
-			<AssemblyVer type='11'>-1</AssemblyVer>
-			<Attr type='11'>-1</Attr>
-			<Config>Release|Win32</Config>
-			<FileVer type='11'>-1</FileVer>
-			<Filename>%testBuildWorkDir%\%branch%\CP_Main_10.sln</Filename>
-			<ProdVer type='11'>-1</ProdVer>
-			<Version>%version%</Version>
-			<VersionSel type='3'>2</VersionSel>
-			<indent type='3'>2</indent>
-			<name>Build Ditto</name>
 		</step>
 		<step action='Inno Setup'>
 			<Filename>%workDir%\%branch%\DittoSetup\DittoSetup_10.iss</Filename>
