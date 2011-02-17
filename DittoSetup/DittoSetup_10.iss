@@ -48,11 +48,7 @@ Name: RunAtStartup; Description: Run Ditto on Windows Startup
 ;Name: UseFocusDll; Description: Use System Hook to track currently focused window
 
 [Files]
-;Unicode for 2000 and later
-Source: ..\Release\DittoU.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; MinVersion: 0, 4.0
-
-;Non unicode for pre 2000
-Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; MinVersion: 4.0, 0
+Source: ..\Release\DittoU.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
 
 Source: ..\Release\focus.dll; DestDir: {app}; BeforeInstall: BeforeFocusInstall(); Flags: ignoreversion restartreplace
 Source: ..\Release\sqlite3.dll; DestDir: {app}; Flags: ignoreversion
@@ -131,6 +127,7 @@ begin
 
     RenameFile(sDir+'\Language\Italian.xml', sDir+'\Language\Italian.xml.old')
 end;
+
 
 
 
