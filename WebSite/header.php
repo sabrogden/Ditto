@@ -22,6 +22,8 @@
                         <li><a href="http://ditto-cp.sourceforge.net/Help">Help</a></li>
                         <li class=<?php GetActiveFlag('History', $focusTab)?>><a href="#Change History">Change History</a></li>
                         <li class="last"><a href="http://sourceforge.net/forum/?group_id=84084">Forums</a></li>
+						
+						<li class="last"><b><a href="http://sourceforge.net/project/project_donations.php?group_id=84084">Donote</a></b></li>
                     </ul>
                 </div>
             </div>
