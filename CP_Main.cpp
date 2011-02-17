@@ -125,6 +125,7 @@ BOOL CCP_MainApp::InitInstance()
 	AfxEnableControlContainer();
 	AfxOleInit();
 	AfxInitRichEditEx();
+	afxAmbientActCtx = FALSE; 
 
 	DittoCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
@@ -476,11 +477,6 @@ void CCP_MainApp::RefreshView()
 
 void CCP_MainApp::OnPasteCompleted()
 {
-	// the list only changes if UpdateTimeOnPaste is true (updated time)
-	if(g_Opt.m_bUpdateTimeOnPaste)
-	{
-		RefreshView();
-	}
 }
 
 void CCP_MainApp::OnCopyCompleted(long lLastID, int count)

@@ -520,16 +520,16 @@ void CMainFrame::OnTimer(UINT nIDEvent)
 
         case ACTIVE_WINDOW_TIMER:
 			{
-	            if(m_quickPaste.IsWindowVisibleEx())
-	            {
-	                theApp.m_activeWnd.TrackActiveWnd(NULL);
-	            }
+				if(m_TrayIcon.Visible())
+				{
+					theApp.m_activeWnd.TrackActiveWnd(NULL);
+				}
 			}
-            break;
+			break;
 
-        case FOCUS_CHANGED_TIMER:
+		case FOCUS_CHANGED_TIMER:
 			{
-	            KillTimer(FOCUS_CHANGED_TIMER);
+				KillTimer(FOCUS_CHANGED_TIMER);
 	            //Log(StrF(_T("Focus Timer %d"), m_tempFocusWnd));
 	            theApp.m_activeWnd.TrackActiveWnd(m_tempFocusWnd);
 			}

@@ -754,7 +754,7 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 	theApp.m_FocusID = -1;
 
 	if(theApp.m_bShowingQuickPaste)
-	{
+	{		
 		FillList();
 		action = _T("Filled List");
 	}
@@ -986,7 +986,13 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 	    m_lItemsPerPage = m_lstHeader.GetCountPerPage();
 	}
 
-	OnSetListCount(m_lstHeader.GetCountPerPage() + 2, 0);
+	{
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+		m_mapCache.clear();
+	}
+	
+	m_lstHeader.Invalidate();
+	m_lstHeader.RedrawWindow();
 	CPoint loadItem(-1, m_lstHeader.GetCountPerPage() + 2);
 	m_loadItems.push_back(loadItem);
 	m_thread.FireLoadItems(true);
@@ -3181,8 +3187,6 @@ LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
     m_lstHeader.SetItemCountEx(wParam);
     UpdateStatus(false);
 
-	//m_lstHeader.ShowWindow(SW_SHOW);
-
     return TRUE;
 }
 
@@ -3209,18 +3213,20 @@ LRESULT CQPasteWnd::OnRefeshRow(WPARAM wParam, LPARAM lParam)
         }
     }
 
-    int topIndex = m_lstHeader.GetTopIndex();
-    int lastIndex = topIndex + m_lstHeader.GetCountPerPage();
+	int topIndex = m_lstHeader.GetTopIndex();
+	int lastIndex = topIndex + m_lstHeader.GetCountPerPage();
 
-    if(listPos >= topIndex && listPos <= lastIndex)
-    {
-        m_lstHeader.RefreshRow(listPos);
-    }
+	if(listPos >= topIndex && listPos <= lastIndex)
+	{
+		m_lstHeader.RefreshRow(listPos);
+	}
 
 	if(clipId == -2)
 	{
-		Log(_T("End of first load, showing listbox and loading actual count, then accelerators"));
-		m_lstHeader.ShowWindow(SW_SHOW);
+		m_lstHeader.Invalidate();
+		m_lstHeader.RedrawWindow();
+		
+		//Log(_T("End of first load, showing listbox and loading actual count, then accelerators"));
 		m_thread.FireDoQuery();
 		m_thread.FireLoadAccelerators();
 	}

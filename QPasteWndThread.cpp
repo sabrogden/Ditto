@@ -71,8 +71,6 @@ void CQPasteWndThread::OnDoQuery(void *param)
 
 	    pasteWnd->m_bFoundClipToSetFocusTo = false;
 	    CountSQL = pasteWnd->m_CountSQL;
-	    pasteWnd->m_mapCache.clear();
-	    pasteWnd->m_loadItems.clear();
 	    pasteWnd->m_bStopQuery = false;
 	}
 

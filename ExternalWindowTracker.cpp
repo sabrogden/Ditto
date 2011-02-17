@@ -57,9 +57,7 @@ bool ExternalWindowTracker::TrackActiveWnd(HWND focus)
 		return false;
 	}
 
-	TCHAR className[100];
-	GetClassName(newActive, className, (sizeof(className) / sizeof(TCHAR)));
-	if(STRCMP(className, _T("Shell_TrayWnd")) == 0)
+	if(NotifyTrayhWnd(newActive) || NotifyTrayhWnd(newFocus))
 	{
 		Log(_T("TargetActiveWindow shell tray icon has active"));
 		return false;
@@ -121,6 +119,39 @@ void ExternalWindowTracker::ActivateFocus(const HWND activeHwnd, const HWND focu
 		}
 		AttachThreadInput(GetWindowThreadProcessId(activeHwnd, NULL), GetCurrentThreadId(), FALSE);
 	}
+}
+
+bool ExternalWindowTracker::NotifyTrayhWnd(HWND hWnd)
+{
+	HWND hParent = hWnd;
+
+	int nCount = 0;
+
+	while(hParent != NULL)
+	{
+		TCHAR className[100];
+		GetClassName(hParent, className, (sizeof(className) / sizeof(TCHAR)));
+
+		if((STRCMP(className, _T("Shell_TrayWnd")) == 0) || 
+			(STRCMP(className, _T("NotifyIconOverflowWindow")) == 0) ||
+			(STRCMP(className, _T("TrayNotifyWnd")) == 0))
+		{
+			return true;
+		}
+
+		hParent = ::GetParent(hParent);
+		if(hParent == NULL)
+			break;
+
+		nCount++;
+		if(nCount > 100)
+		{
+			Log(_T("GetTargetName reached maximum search depth of 100"));
+			break;
+		}
+	}
+
+	return false;
 }
 
 bool ExternalWindowTracker::ActivateTarget()

@@ -122,15 +122,12 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 
 	try
 	{
-		CppSQLite3DB Local_db;
-		Local_db.open(CGetSetOptions::GetDBPath());
-
 		//Update the time it was copied so that it appears at the top of the
 		//paste list. Items are sorted by this time.
 		CTime now = CTime::GetCurrentTime();
 		try
 		{
-			CppSQLite3Query q = Local_db.execQuery(_T("SELECT lDate FROM Main ORDER BY lDate DESC LIMIT 1"));
+			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT lDate FROM Main ORDER BY lDate DESC LIMIT 1"));
 
 			if(q.eof() == false)
 			{
@@ -145,8 +142,11 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 
 		Log(StrF(_T("Setting clipId: %d, time: %d"), lID, now.GetTime()));
 
-		Local_db.execDMLEx(_T("UPDATE Main SET lDate = %d where lID = %d;"), (long)now.GetTime(), lID);
-		Local_db.close();
+		theApp.m_db.execDMLEx(_T("UPDATE Main SET lDate = %d where lID = %d;"), (long)now.GetTime(), lID);
+		if(g_Opt.m_bShowPersistent)
+		{
+			theApp.RefreshView();
+		}
 		bRet = TRUE;
 	}
 	CATCH_SQLITE_EXCEPTION
