@@ -54,9 +54,7 @@ CQPasteWnd::CQPasteWnd()
     m_Title = QPASTE_TITLE;
     m_bHideWnd = true;
     m_strSQLSearch = "";
-    m_bAllowRepaintImmediately = true;
     m_bHandleSearchTextChange = true;
-    m_lItemsPerPage = 0;
     m_bModifersMoveActive = false;
 }
 
@@ -227,6 +225,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
         ASSERT(FALSE);
         return -1;
     }
+	m_lstHeader.ShowWindow(SW_SHOW);
 
     ((CWnd*) &m_GroupTree)->CreateEx(NULL, _T("SysTreeView32"), NULL, WS_BORDER | TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS, CRect(0, 0, 100, 100), this, 0);
     m_GroupTree.ModifyStyle(WS_CAPTION, WS_BORDER);
@@ -429,8 +428,6 @@ BOOL CQPasteWnd::HideQPasteWindow()
     //Save the size
     SaveWindowSize();
 
-    // Hide the window when the focus is lost
-	m_lstHeader.ShowWindow(SW_HIDE);
     ShowWindow(SW_HIDE);
 
     //Reset the selection in the search combo
@@ -482,8 +479,6 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 
     SetCaptionColorActive(g_Opt.m_bShowPersistent, theApp.GetConnectCV());
 
-    // use invalidation to avoid unnecessary repainting
-    m_bAllowRepaintImmediately = false;
     UpdateStatus();
 
     m_bHideWnd = true;
@@ -515,11 +510,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
     else
     {
         MoveControls();
-		m_lstHeader.ShowWindow(SW_SHOW);
     }
-
-    // from now on, for interactive use, we can repaint immediately
-    m_bAllowRepaintImmediately = true;
 
     // always on top... for persistent showing (g_Opt.m_bShowPersistent)
     // SHOWWINDOW was also integrated into this function rather than calling it separately
@@ -779,21 +770,14 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-void CQPasteWnd::RefreshNc(bool bRepaintImmediately)
+void CQPasteWnd::RefreshNc()
 {
     if(!theApp.m_bShowingQuickPaste)
     {
         return ;
     }
 
-    if(bRepaintImmediately && m_bAllowRepaintImmediately)
-    {
-        OnNcPaint();
-    }
-    else
-    {
-        InvalidateNc();
-    }
+	InvalidateNc();
 }
 
 void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
@@ -844,7 +828,7 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
     if(title != prev)
     {
         SetWindowText(title);
-        RefreshNc(bRepaintImmediately);
+        RefreshNc();
     }
 }
 
@@ -982,17 +966,18 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 	    m_SQL.Format(_T("SELECT Main.lID, Main.mText, Main.lParentID, Main.lDontAutoDelete, ")
 			_T("Main.lShortCut, Main.bIsGroup, Main.QuickPasteText FROM Main %s ")
 			_T("where %s order by %s"), dataJoin, strFilter, csSort);
-
-	    m_lItemsPerPage = m_lstHeader.GetCountPerPage();
 	}
 
 	{
 		ATL::CCritSecLock csLock(m_CritSection.m_sect);
 		m_mapCache.clear();
 	}
+
+	if(m_lstHeader.GetItemCount() <= 0)
+	{
+		m_lstHeader.SetItemCount(m_lstHeader.GetCountPerPage() + 2);
+	}
 	
-	m_lstHeader.Invalidate();
-	m_lstHeader.RedrawWindow();
 	CPoint loadItem(-1, m_lstHeader.GetCountPerPage() + 2);
 	m_loadItems.push_back(loadItem);
 	m_thread.FireLoadItems(true);
@@ -2111,7 +2096,6 @@ BOOL CQPasteWnd::SendToFriendbyPos(int nPos)
 LRESULT CQPasteWnd::OnDelete(WPARAM wParam, LPARAM lParam)
 {
     DeleteSelectedRows();
-
     return TRUE;
 }
 
@@ -2833,6 +2817,7 @@ void CQPasteWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
         switch(g_Opt.m_bDoubleClickingOnCaptionDoes)
         {
             case TOGGLES_ALLWAYS_ON_TOP:
+				::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
                 theApp.ShowPersistent(!g_Opt.m_bShowPersistent);
                 break;
             case TOGGLES_ALLWAYS_SHOW_DESCRIPTION:
@@ -3185,6 +3170,7 @@ void CQPasteWnd::OnUpdateMenuNewclip(CCmdUI *pCmdUI)
 LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 {
     m_lstHeader.SetItemCountEx(wParam);
+	SelectFocusID();
     UpdateStatus(false);
 
     return TRUE;
@@ -3201,18 +3187,6 @@ LRESULT CQPasteWnd::OnRefeshRow(WPARAM wParam, LPARAM lParam)
     int clipId = wParam;
     int listPos = lParam;
 
-    if(m_bFoundClipToSetFocusTo == false)
-    {
-        long lFocusIndex = -1;
-        if(theApp.m_FocusID == clipId || clipId < 0)
-        {
-            m_bFoundClipToSetFocusTo = true;
-            theApp.m_FocusID =  -1;
-            m_lstHeader.SetListPos(listPos);
-            UpdateStatus(false);
-        }
-    }
-
 	int topIndex = m_lstHeader.GetTopIndex();
 	int lastIndex = topIndex + m_lstHeader.GetCountPerPage();
 
@@ -3225,13 +3199,38 @@ LRESULT CQPasteWnd::OnRefeshRow(WPARAM wParam, LPARAM lParam)
 	{
 		m_lstHeader.Invalidate();
 		m_lstHeader.RedrawWindow();
-		
+
 		//Log(_T("End of first load, showing listbox and loading actual count, then accelerators"));
 		m_thread.FireDoQuery();
 		m_thread.FireLoadAccelerators();
 	}
 
     return true;
+}
+
+void CQPasteWnd::SelectFocusID() 
+{
+	ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
+	bool selectedItem = false;
+	int index = 0;
+	MainTypeMap::iterator iter = m_mapCache.begin();
+	while(iter != m_mapCache.end())
+	{
+		if(iter->second.m_lID == theApp.m_FocusID)
+		{
+			m_lstHeader.SetListPos(index);
+			selectedItem = true;
+			break;
+		}
+		iter++;
+		index++;
+	}
+
+	if(selectedItem == false)
+	{
+		m_lstHeader.SetListPos(g_Opt.SelectedIndex());
+	}
 }
 
 void CQPasteWnd::FillMainTable(CMainTable &table, CppSQLite3Query &q)
@@ -3261,7 +3260,7 @@ void CQPasteWnd::OnTimer(UINT_PTR nIDEvent)
         m_Search.GetWindowText(csText);
 
         int nCaretPos = m_lstHeader.GetCaret();
-        if(nCaretPos >= 0 && theApp.m_FocusID < 0)
+        if(nCaretPos >= 0)
         {
             theApp.m_FocusID = m_lstHeader.GetItemData(nCaretPos);
         }

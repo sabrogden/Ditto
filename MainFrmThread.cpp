@@ -160,8 +160,6 @@ void CMainFrmThread::OnSaveRemoteClips()
 	CClip *pLastClip = pLocalClips->GetTail();
 	if(pLastClip && pLastClip->m_param1 == TRUE)
 	{
-		theApp.m_FocusID = pLastClip->m_ID;
-
 		LogSendRecieveInfo("---------OnSaveRemoteClips - Before Posting msg to main thread to set clipboard");
 
 		//set the clipboard on the main thread, i was having a problem with setting the clipboard on a thread

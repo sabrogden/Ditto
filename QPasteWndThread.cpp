@@ -68,10 +68,7 @@ void CQPasteWndThread::OnDoQuery(void *param)
 	CString CountSQL;
 	{
 		ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
-
-	    pasteWnd->m_bFoundClipToSetFocusTo = false;
 	    CountSQL = pasteWnd->m_CountSQL;
-	    pasteWnd->m_bStopQuery = false;
 	}
 
     long lRecordCount = 0;

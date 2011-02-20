@@ -87,15 +87,12 @@ public:
     CBitmapButton m_ShowGroupsFolderBottom;
     CBitmapButton m_ShowGroupsFolderTop;
     CBitmapButton m_BackButton;
-    bool m_bAllowRepaintImmediately;
 
     CString m_SQL;
     CString m_CountSQL;
     long m_lRecordCount;
     bool m_bStopQuery;
     bool m_bHandleSearchTextChange;
-    bool m_bFoundClipToSetFocusTo;
-    long m_lItemsPerPage;
     bool m_bModifersMoveActive;
 
     CQPasteWndThread m_thread;
@@ -109,7 +106,7 @@ public:
 
     CAccels m_MainAccels;
 
-    void RefreshNc(bool bRepaintImmediately = false);
+    void RefreshNc();
     void UpdateStatus(bool bRepaintImmediately = false); // regenerates the status (caption) text
     BOOL FillList(CString csSQLSearch = "");
     BOOL HideQPasteWindow();
@@ -146,6 +143,7 @@ public:
     void OnKeyStateUp();
     void SetKeyModiferState(bool bActive);
 	void SaveWindowSize();
+	void SelectFocusID();
 
     // Generated message map functions
 protected:
@@ -245,7 +243,7 @@ protected:
     afx_msg LRESULT OnGroupTreeMessage(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnFillRestOfList(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnRefeshRow(WPARAM wParam, LPARAM lParam);
-    afx_msg LRESULT OnSetListCount(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnSetListCount(WPARAM wParam, LPARAM lParam);
     afx_msg HBRUSH CtlColor(CDC *pDC, UINT nCtlColor);
     afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
     afx_msg void OnWindowPosChanging(WINDOWPOS *lpwndpos);

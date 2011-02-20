@@ -396,6 +396,8 @@ public:
 	static DWORD 	GetTextOnlyPasteDelay();
 
 	static BOOL		GetSetFocusToApp(CString csAppName);
+
+	static DWORD	SelectedIndex();
 };
 
 // global for easy access and for initialization of fast access variables

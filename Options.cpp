@@ -1942,3 +1942,8 @@ BOOL CGetSetOptions::GetSetFocusToApp(CString csAppName)
 	focusCheck += csAppName;
 	return GetProfileLong(focusCheck, FALSE);
 }
+
+DWORD CGetSetOptions::SelectedIndex()
+{
+	return (DWORD)GetProfileLong(_T("SelectedIndex"), 0);
+}
