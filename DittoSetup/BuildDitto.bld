@@ -4,44 +4,23 @@
 		<step action='Group'>
 			<name>Project steps</name>
 		</step>
-		<step action='Copy Files'>
-			<Converted type='11'>-1</Converted>
-			<Delay>15</Delay>
-			<DestDir>%workDir%</DestDir>
-			<ExclExt>\boost</ExclExt>
+		<step action='Delete Files'>
+			<DelDirs type='11'>-1</DelDirs>
 			<HideOn type='11'>-1</HideOn>
-			<IgnoreSrc type='11'>-1</IgnoreSrc>
-			<Incremental type='11'>0</Incremental>
-			<LogCopied type='11'>-1</LogCopied>
-			<Purge type='11'>-1</Purge>
-			<ReadOnly type='11'>-1</ReadOnly>
+			<LogDel type='11'>-1</LogDel>
+			<Path>%workdir%</Path>
 			<Recurse type='11'>-1</Recurse>
-			<Restartable type='11'>-1</Restartable>
-			<Retries>10</Retries>
-			<SysOn type='11'>-1</SysOn>
-			<TBD type='11'>-1</TBD>
+			<SysOn type='11'>0</SysOn>
 			<indent type='3'>1</indent>
-			<name>Delete Source Files</name>
-			<nologging type='11'>-1</nologging>
+			<name>Delete Files</name>
 		</step>
-		<step action='Copy Files'>
-			<Converted type='11'>-1</Converted>
-			<Delay>15</Delay>
-			<DestDir>%testBuildWorkDir%</DestDir>
+		<step action='Delete Files'>
 			<HideOn type='11'>-1</HideOn>
-			<IgnoreSrc type='11'>-1</IgnoreSrc>
-			<Incremental type='11'>0</Incremental>
-			<LogCopied type='11'>-1</LogCopied>
-			<Purge type='11'>-1</Purge>
-			<ReadOnly type='11'>-1</ReadOnly>
-			<Recurse type='11'>-1</Recurse>
-			<Restartable type='11'>-1</Restartable>
-			<Retries>10</Retries>
+			<LogDel type='11'>-1</LogDel>
+			<Path>%testBuildWorkDir%</Path>
 			<SysOn type='11'>-1</SysOn>
-			<TBD type='11'>-1</TBD>
 			<indent type='3'>1</indent>
-			<name>Delete Temp Source Files</name>
-			<nologging type='11'>-1</nologging>
+			<name>Delete Temp Source</name>
 		</step>
 		<step action='Subversion'>
 			<Files>%branch%</Files>
@@ -158,12 +137,11 @@ Ditto*.zip
 			<indent type='3'>2</indent>
 			<name>Build Ditto Unicode</name>
 		</step>
-		<step action='Inno Setup'>
-			<Filename>%workDir%\%branch%\DittoSetup\DittoSetup_10.iss</Filename>
-			<ISPPCompat type='11'>-1</ISPPCompat>
-			<OutputFilename>DittoSetup_%versionFileName%</OutputFilename>
+		<step action='Run Program'>
+			<command>"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /F"DittoSetup_%versionFileName%" "%workDir%\%branch%\DittoSetup\DittoSetup_10.iss"</command>
 			<indent type='3'>1</indent>
-			<name>Inno Setup</name>
+			<name>Build Installer</name>
+			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
 			<command>"%workDir%\%branch%\DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_%versionFileName%"</command>
