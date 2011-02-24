@@ -42,6 +42,7 @@ Name: Korean; MessagesFile: Korean.isl
 Name: Russian; MessagesFile: Russian.isl
 Name: Slovenian; MessagesFile: Slovenian.isl
 Name: Czech; MessagesFile: Czech.isl
+Name: Danish; MessagesFile: Danish.isl
 
 [Tasks]
 Name: RunAtStartup; Description: Run Ditto on Windows Startup
