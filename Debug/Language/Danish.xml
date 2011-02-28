@@ -34,7 +34,7 @@
 		<Item English_Text = "Bottom" ID = "32781">Nederst</Item>
 		<Item English_Text = "Left" ID = "32782">Venstre</Item>
 		<Item English_Text = "Sort" ID = "-1">Sortere</Item>
-		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">Stigande (sidste øverst)</Item>
+		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">Stigende (sidste øverst)</Item>
 		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">Faldende (sidste nederst)</Item>
 		<Item English_Text = "Double Clicking on Caption" ID = "-1">Dobbeltklik på tekst</Item>
 		<Item English_Text = "Toggles Always on Top" ID = "32814">Skifter tilstanden 'Altid Synlig'</Item>
@@ -210,20 +210,20 @@
 		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true">Statistik</Item>
 	</Ditto_Options_Stats>
 	<Ditto_Options_Supported_Types_Add>
-		<Item English_Text = "Main Types" ID = "2052">Huvudtyper</Item>
-		<Item English_Text = "Custom Type" ID = "2053">Användardefinierad typ</Item>
-		<Item English_Text = "Add" ID = "1020">Lägg till</Item>
-		<Item English_Text = "Currently on the Clipboard" ID = "2054">Nu i Urklipp</Item>
-		<Item English_Text = "Add" ID = "1019">Lägg till</Item>
-		<Item English_Text = "Add" ID = "1021">Lägg till</Item>
-		<Item English_Text = "Cancel" ID = "2">Avbryt</Item>
-		<Item English_Text = "Add Supported Type" ID = "-1">Lägg till understödd typ</Item>
+		<Item English_Text = "Main Types" ID = "2052">Hovedtyper</Item>
+		<Item English_Text = "Custom Type" ID = "2053">Brugerdefineret type</Item>
+		<Item English_Text = "Add" ID = "1020">Tilføj</Item>
+		<Item English_Text = "Currently on the Clipboard" ID = "2054">Nu i Klippebordet</Item>
+		<Item English_Text = "Add" ID = "1019">Tilføj</Item>
+		<Item English_Text = "Add" ID = "1021">Tilføj</Item>
+		<Item English_Text = "Cancel" ID = "2">Afbryd</Item>
+		<Item English_Text = "Add Supported Type" ID = "-1">Tilføj understøttede type</Item>
 	</Ditto_Options_Supported_Types_Add>
 	<Ditto_Move_To_Groups>
-		<Item English_Text = "New Group" ID = "1040">Ny grupp</Item>
+		<Item English_Text = "New Group" ID = "1040">Ny gruppe</Item>
 		<Item English_Text = "OK" ID = "1">OK</Item>
-		<Item English_Text = "Cancel" ID = "2">Avbryt</Item>
-		<Item English_Text = "Move to Group" ID = "-1">Flytta till grupp</Item>
+		<Item English_Text = "Cancel" ID = "2">Afbryd</Item>
+		<Item English_Text = "Move to Group" ID = "-1">Flyt til gruppe</Item>
 	</Ditto_Move_To_Groups>
 	<Ditto_String_Table>
 		<Item English_Text = "General" ID = "GeneralTitle">Generelt</Item>
