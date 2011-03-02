@@ -1947,3 +1947,34 @@ DWORD CGetSetOptions::SelectedIndex()
 {
 	return (DWORD)GetProfileLong(_T("SelectedIndex"), 0);
 }
+
+void CGetSetOptions::SetCopyAppInclude(CString csAppName)
+{
+	SetProfileString(_T("CopyAppInclude"), csAppName);
+}
+
+CString CGetSetOptions::GetCopyAppInclude()
+{
+	CString includeApp = GetProfileString(_T("CopyAppInclude"), "*");
+	if(includeApp == "")
+	{
+		includeApp = "*";
+	}
+
+	return includeApp;
+}
+
+void CGetSetOptions::SetCopyAppExclude(CString csAppName)
+{
+	SetProfileString(_T("CopyAppExclude"), csAppName);
+}
+
+CString CGetSetOptions::GetCopyAppExclude()
+{
+	return GetProfileString(_T("CopyAppExclude"), "");
+}
+
+CString CGetSetOptions::GetCopyAppSeparator()
+{
+	return GetProfileString(_T("CopyAppSeparator"), ";");
+}

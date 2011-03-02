@@ -4,6 +4,9 @@
 #include "stdafx.h"
 #include "cp_main.h"
 #include "ClipboardViewer.h"
+#include "Misc.h"
+#include "shared/Tokenizer.h"
+#include "WildCardMatch.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -202,10 +205,13 @@ void CClipboardViewer::OnDrawClipboard()
 		{
 			if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
 			{
-				Log(StrF(_T("OnDrawClipboard:: *** SetTimer *** %d"), GetTickCount()));
-				
-				KillTimer(TIMER_DRAW_CLIPBOARD);
-				SetTimer(TIMER_DRAW_CLIPBOARD, g_Opt.m_lProcessDrawClipboardDelay, NULL);		
+				if(ValidActiveWnd())
+				{
+					Log(StrF(_T("OnDrawClipboard:: *** SetTimer *** %d"), GetTickCount()));
+
+					KillTimer(TIMER_DRAW_CLIPBOARD);
+					SetTimer(TIMER_DRAW_CLIPBOARD, g_Opt.m_lProcessDrawClipboardDelay, NULL);		
+				}
 			}
 		}
 		else
@@ -226,6 +232,67 @@ void CClipboardViewer::OnDrawClipboard()
 			m_hNextClipboardViewer = NULL;
 		}
 	}
+}
+
+bool CClipboardViewer::ValidActiveWnd()
+{
+	HWND active = ::GetForegroundWindow();
+	CString activeApp = GetProcessName(active).MakeLower();
+
+	CString includeApps = CGetSetOptions::GetCopyAppInclude().MakeLower();
+
+	Log(StrF(_T("INCLUDE app names: %s, Active App: %s"), includeApps, activeApp));
+
+	bool tokenMatch = false;
+
+	CTokenizer token(includeApps, CGetSetOptions::GetCopyAppSeparator());
+	CString line;
+
+	while(token.Next(line))
+	{
+		if(line != "")
+		{
+			if(CWildCardMatch::WildMatch(line, activeApp, ""))
+			{
+				Log(StrF(_T("Inlclude app names Found Match %s - %s"), line, activeApp));
+
+				tokenMatch = true;
+				break;
+			}
+		}
+	}				
+
+	if(tokenMatch)
+	{
+		CString excludeApps = CGetSetOptions::GetCopyAppExclude().MakeLower();
+
+		if(excludeApps != "")
+		{
+			Log(StrF(_T("EXCLUDE app names %s, Active App: %s"), excludeApps, activeApp));
+
+			CTokenizer token2(excludeApps, CGetSetOptions::GetCopyAppSeparator());
+			CString line2;
+			while(token2.Next(line2))
+			{
+				if(line2 != "")
+				{
+					if(CWildCardMatch::WildMatch(line2, activeApp, ""))
+					{
+						Log(StrF(_T("Exclude app names Found Match %s - %s - NOT SAVING COPY"), line2, activeApp));
+
+						return false;
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		Log(StrF(_T("Didn't find a match to INCLUDE match %s, NOT SAVING COPY"), includeApps));
+		return false;
+	}
+
+	return true;
 }
 
 void CClipboardViewer::OnTimer(UINT nIDEvent) 

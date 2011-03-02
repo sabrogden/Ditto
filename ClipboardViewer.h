@@ -44,6 +44,7 @@ public:
 	bool GetConnect()				{ return m_bConnect; }
 	void SetConnect(bool bConnect);
 	void SetEnsureConnectedTimer();
+	bool ValidActiveWnd();
 
 	DWORD m_dwLastCopy;
 	bool m_bHandlingClipChange;

@@ -1152,6 +1152,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Unicode Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="WildCardMatch.cpp" />
     <ClCompile Include="WndEx.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -1310,6 +1311,7 @@
     <ClInclude Include="Shared\TextConvert.h" />
     <ClInclude Include="Shared\Tokenizer.h" />
     <ClInclude Include="ToolTipEx.h" />
+    <ClInclude Include="WildCardMatch.h" />
     <ClInclude Include="WndEx.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="FileRecieve.h" />

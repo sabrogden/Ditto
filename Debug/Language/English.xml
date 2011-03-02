@@ -115,6 +115,12 @@
 		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042"></Item>
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true"></Item>
 		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090"></Item>
+		
+		//New item added 3/1/11
+		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098"></Item>
+		<Item English_Text = "Include" ID = "2097"></Item>
+		<Item English_Text = "Exclude" ID = "2096"></Item>
+		
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "&Add" ID = "1015"></Item>

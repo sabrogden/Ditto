@@ -64,6 +64,8 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_ALLOW_DUPLICATES, m_btAllowDuplicates);
 	DDX_Control(pDX, IDC_UPDATE_TIME_ON_PASTE, m_btUpdateTimeOnPaste);
 	DDX_Control(pDX, IDC_SAVE_MULTIPASTE, m_btSaveMultiPaste);
+	DDX_Control(pDX, IDC_EDIT_APP_COPY_INCLUDE, m_copyAppInclude);
+	DDX_Control(pDX, IDC_EDIT_APP_COPY_EXCLUDE, m_copyAppExclude);
 }
 
 
@@ -103,6 +105,9 @@ BOOL COptionsGeneral::OnInitDialog()
 	m_btHideDittoOnHotKey.SetCheck(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown);
 	m_btSendPasteMessage.SetCheck(g_Opt.m_bSendPasteMessageAfterSelection);
 	m_EnsureConnected.SetCheck(g_Opt.m_bEnsureConnectToClipboard);
+	
+	m_copyAppInclude.SetWindowText(g_Opt.GetCopyAppInclude());
+	m_copyAppExclude.SetWindowText(g_Opt.GetCopyAppExclude());
 
 	m_ClipSeparator.SetWindowText(g_Opt.GetMultiPasteSeparator(false));
 
@@ -211,9 +216,17 @@ BOOL COptionsGeneral::OnApply()
 	g_Opt.SetAllowDuplicates(m_btAllowDuplicates.GetCheck());
 	g_Opt.SetUpdateTimeOnPaste(m_btUpdateTimeOnPaste.GetCheck());
 	g_Opt.SetSaveMultiPaste(m_btSaveMultiPaste.GetCheck());
-	CString csSep;
-	m_ClipSeparator.GetWindowText(csSep);
-	g_Opt.SetMultiPasteSeparator(csSep);
+	
+	CString stringVal;
+
+	m_ClipSeparator.GetWindowText(stringVal);
+	g_Opt.SetMultiPasteSeparator(stringVal);
+
+	m_copyAppInclude.GetWindowText(stringVal);
+	g_Opt.SetCopyAppInclude(stringVal);
+
+	m_copyAppExclude.GetWindowText(stringVal);
+	g_Opt.SetCopyAppExclude(stringVal);
 
 	CString csLanguage;
 	if(m_cbLanguage.GetCurSel() >= 0)

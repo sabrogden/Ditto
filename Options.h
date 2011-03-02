@@ -398,6 +398,14 @@ public:
 	static BOOL		GetSetFocusToApp(CString csAppName);
 
 	static DWORD	SelectedIndex();
+
+	static void		SetCopyAppInclude(CString csAppName);
+	static CString  GetCopyAppInclude();
+
+	static void		SetCopyAppExclude(CString csAppName);
+	static CString  GetCopyAppExclude();
+
+	static CString  GetCopyAppSeparator();
 };
 
 // global for easy access and for initialization of fast access variables

@@ -48,6 +48,8 @@ public:
 	CButton m_btSaveMultiPaste;
 	CString	m_csPlaySound;
 	CEdit m_ClipSeparator;
+	CEdit m_copyAppInclude;
+	CEdit m_copyAppExclude;
 	//}}AFX_DATA
 
 
