@@ -55,6 +55,7 @@
 #define IDC_EDIT_DESCRIPTION            1017
 #define IDC_LAST_STARTED                1017
 #define IDC_LIST2                       1018
+#define IDC_EDIT_APP_COPY_EXCLUDE       1018
 #define IDC_ADD_1                       1019
 #define IDC_ADD_2                       1020
 #define IDC_EDIT_DISPLAY_TEXT           1020
@@ -227,9 +228,13 @@
 #define IDC_STATIC_PASTE_2              2094
 #define IDC_BUTTON_THEME                2094
 #define IDC_CUT_2                       2095
+#define IDC_STATIC_INCLUDE_APPS         2095
 #define IDC_WIN_CUT_2                   2096
+#define IDC_STATIC_EXCLUDE_APPS         2096
 #define IDC_STATIC_CUT_2                2097
+#define IDC_EDIT_APP_COPY_INCLUDE       2097
 #define IDC_BUFFER_GROUP_2              2098
+#define IDC_STATIC_APP_SEP_DESC         2098
 #define IDC_COPY_3                      2099
 #define IDC_WIN_COPY_3                  2100
 #define IDC_PASTE_3                     2101
@@ -340,7 +345,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        167
 #define _APS_NEXT_COMMAND_VALUE         32872
-#define _APS_NEXT_CONTROL_VALUE         2095
+#define _APS_NEXT_CONTROL_VALUE         2099
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
