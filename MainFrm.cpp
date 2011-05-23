@@ -456,7 +456,7 @@ void CMainFrame::DoDittoCopyBufferPaste(int nCopyBuffer)
     CATCH_SQLITE_EXCEPTION
 }
 
-void CMainFrame::OnTimer(UINT nIDEvent)
+void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 {
     switch(nIDEvent)
     {
@@ -703,11 +703,11 @@ LRESULT CMainFrame::OnLoadClipOnClipboard(WPARAM wParam, LPARAM lParam)
 
 		LogSendRecieveInfo("---------OnLoadClipOnClipboard - After PutFormats on clipboard");
 
-		LogSendRecieveInfo(StrF(_T("---------OnLoadClipOnClipboard - Setting clip id: %d on ole clipboard"), pClip->m_ID));
-		paste.GetClipIDs().Add(pClip->m_ID);
+		LogSendRecieveInfo(StrF(_T("---------OnLoadClipOnClipboard - Setting clip id: %d on ole clipboard"), pClip->m_id));
+		paste.GetClipIDs().Add(pClip->m_id);
 		paste.DoPaste();
 
-		LogSendRecieveInfo(StrF(_T("---------OnLoadClipOnClipboard - After paste clip id: %d on ole clipboard"), pClip->m_ID));
+		LogSendRecieveInfo(StrF(_T("---------OnLoadClipOnClipboard - After paste clip id: %d on ole clipboard"), pClip->m_id));
 	}
 
 	delete pClip;

@@ -109,7 +109,7 @@ BOOL COptionsKeyBoard::OnApply()
 {
 	CGetSetOptions::SetSendPasteOnFirstTenHotKeys(m_btSendPaste.GetCheck());
 					
-	int x,y;
+	INT_PTR x,y;
 	CString str;
 	ARRAY keys;
 	

@@ -204,7 +204,7 @@ long CFileRecieve::RecieveFileData(ULONG lFileSize, CString csFileName)
 
 HGLOBAL CFileRecieve::CreateCF_HDROPBuffer()
 {
-	int nFileArraySize = m_RecievedFiles.GetSize();
+	int nFileArraySize = (int)m_RecievedFiles.GetSize();
 	if(nFileArraySize <= 0)
 	{
 		LogSendRecieveInfo(_T("Recieved files array is empty not creating cf_hdrop structure"));

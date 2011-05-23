@@ -25,13 +25,13 @@ BOOL SendToFriend(CSendToFriendInfo &Info)
 {
 	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - START OF Send To Friend - @@@@@@@@@@@@@@@");
 
-	if(Info.m_lPos > -1 && Info.m_lPos < MAX_SEND_CLIENTS)
+	if(Info.m_pos > -1 && Info.m_pos < MAX_SEND_CLIENTS)
 	{
-		Info.m_csIP = g_Opt.m_SendClients[Info.m_lPos].csIP;
+		Info.m_csIP = g_Opt.m_SendClients[Info.m_pos].csIP;
 	}
 	else
 	{
-		Info.m_csErrorText = StrF(_T("ERROR getting ip position - %d"), Info.m_lPos);
+		Info.m_csErrorText = StrF(_T("ERROR getting ip position - %d"), Info.m_pos);
 		LogSendRecieveInfo(Info.m_csErrorText);
 		return FALSE;
 	}
@@ -46,7 +46,7 @@ BOOL SendToFriend(CSendToFriendInfo &Info)
 		return FALSE;
 	}
 
-	long lCount = Info.m_pClipList->GetCount();
+	INT_PTR count = Info.m_pClipList->GetCount();
 	int i = -1;
 
 	CClip* pClip;
@@ -64,7 +64,7 @@ BOOL SendToFriend(CSendToFriendInfo &Info)
 
 		if(Info.m_pPopup)
 		{
-			Info.m_pPopup->SendToolTipText(StrF(_T("Sending %d of %d"), i+1, lCount));
+			Info.m_pPopup->SendToolTipText(StrF(_T("Sending %d of %d"), i+1, count));
 		}
 
 		MSG	msg;
@@ -74,7 +74,7 @@ BOOL SendToFriend(CSendToFriendInfo &Info)
 			DispatchMessage(&msg);
 		}
 
-		LogSendRecieveInfo(StrF(_T("Sending %d of %d clip to %s"), i+1, lCount, Info.m_csIP));
+		LogSendRecieveInfo(StrF(_T("Sending %d of %d clip to %s"), i+1, count, Info.m_csIP));
 
 		if(client.SendItem(pClip) == FALSE)
 		{
@@ -211,10 +211,10 @@ BOOL CClient::SendItem(CClip *pClip)
 	
 	CClipFormat* pCF;
 	
-	int nCount = pClip->m_Formats.GetSize();
+	INT_PTR count = pClip->m_Formats.GetSize();
 
 	//For each data type
-	for( int i=0; i < nCount; i++ )
+	for(int i=0; i < count; i++)
 	{
 		pCF = &pClip->m_Formats.GetData()[i];
 		
@@ -233,17 +233,17 @@ BOOL CClient::SendClipFormat(CClipFormat* pCF)
 {
 	CSendInfo Info;
 	LPVOID pvData = GlobalLock(pCF->m_hgData);
-	long lLength = GlobalSize(pCF->m_hgData);
+	INT_PTR length = GlobalSize(pCF->m_hgData);
 	UCHAR* pOutput = NULL;
 	int nLenOutput = 0;
 	CTextConvert Convert;
 	BOOL bRet = FALSE;
 
-	LogSendRecieveInfo(StrF(_T("BEFORE Encrypt clip data %d"), lLength));
+	LogSendRecieveInfo(StrF(_T("BEFORE Encrypt clip data %d"), length));
 
 	if(m_SendSocket.m_pEncryptor)
 	{
-		if(m_SendSocket.m_pEncryptor->Encrypt((UCHAR*)pvData, lLength, g_Opt.m_csPassword, pOutput, nLenOutput))
+		if(m_SendSocket.m_pEncryptor->Encrypt((UCHAR*)pvData, (int)length, g_Opt.m_csPassword, pOutput, nLenOutput))
 		{
 			LogSendRecieveInfo(StrF(_T("AFTER Encrypt clip data %d"), nLenOutput));
 

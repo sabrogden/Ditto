@@ -127,6 +127,7 @@ CString CInternetUpdate::GetVersionString(long lVersion)
 
 long CInternetUpdate::GetRunningVersion()
 {
+	return 0;
 	CString csFileName = CGetSetOptions::GetExeFileName();
 
     DWORD dwSize, dwHandle;
@@ -135,15 +136,15 @@ long CInternetUpdate::GetRunningVersion()
     VS_FIXEDFILEINFO *lpFFI;
     long ver;
 
-    dwSize = GetFileVersionInfoSize(csFileName.GetBuffer(csFileName.GetLength()), &dwHandle);
+    //dwSize = GetFileVersionInfoSize(csFileName.GetBuffer(csFileName.GetLength()), &dwHandle);
     if(dwSize != 0)
     {
 		csFileName.ReleaseBuffer();
 		if((lpData=(unsigned char *)malloc(dwSize)) != NULL)
 		{
-			if(GetFileVersionInfo(csFileName.GetBuffer(csFileName.GetLength()), dwHandle, dwSize, lpData) != 0)
+			//if(GetFileVersionInfo(csFileName.GetBuffer(csFileName.GetLength()), dwHandle, dwSize, lpData) != 0)
 			{
-				if(VerQueryValue(lpData, _T("\\"), (LPVOID*)&lpFFI, &iBuffSize) != 0)
+				//if(VerQueryValue(lpData, _T("\\"), (LPVOID*)&lpFFI, &iBuffSize) != 0)
 				{
 					if(iBuffSize > 0)
 					{

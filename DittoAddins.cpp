@@ -16,8 +16,8 @@ bool CDittoAddins::UnloadAll()
 {
 	Log(StrF(_T("Ditto Addin - Unloading all addins Count: %d"), m_Addins.size()));
 
-	int nCount = m_Addins.size();
-	for(int i = 0; i < nCount; i++)
+	INT_PTR count = m_Addins.size();
+	for(int i = 0; i < count; i++)
 	{
 		CDittoAddin *pAddin = m_Addins[i];
 		if(pAddin)
@@ -75,17 +75,17 @@ bool CDittoAddins::AddPrePasteAddinsToMenu(CMenu *pMenu)
 
 	HMENU AllAddinsMenu = ::CreateMenu();
 
-	int nCount = m_Addins.size();
-	for(int i = 0; i < nCount; i++)
+	INT_PTR count = m_Addins.size();
+	for(int i = 0; i < count; i++)
 	{
 		CDittoAddin *pAddin = m_Addins[i];
 		if(pAddin)
 		{
-			int nSubCount = pAddin->m_PrePasteFunctions.size();
-			if(nSubCount > 1)
+			INT_PTR subCount = pAddin->m_PrePasteFunctions.size();
+			if(subCount > 1)
 			{
 				HMENU AddinMenu = ::CreateMenu();
-				for(int x = 0; x < nSubCount; x++)
+				for(int x = 0; x < subCount; x++)
 				{
 					::AppendMenu(AddinMenu, MF_ENABLED, nMenuId, pAddin->m_PrePasteFunctions[x].m_csDisplayName);
 
@@ -99,7 +99,7 @@ bool CDittoAddins::AddPrePasteAddinsToMenu(CMenu *pMenu)
 				::AppendMenu(AllAddinsMenu, MF_ENABLED|MF_POPUP, (UINT)AddinMenu, pAddin->DisplayName());
 				bRet = true;
 			}
-			else if(nSubCount == 1)
+			else if(subCount == 1)
 			{
 				//If there is only 1 function for this add in then just show one menu with addin name - function
 				CFunctionLookup lookup;
@@ -152,8 +152,8 @@ void CDittoAddins::LoadDittoInfo(CDittoInfo &DittoInfo)
 
 void CDittoAddins::AboutScreenText(CStringArray &arr)
 {
-	int nCount = m_Addins.size();
-	for(int i = 0; i < nCount; i++)
+	INT_PTR count = m_Addins.size();
+	for(int i = 0; i < count; i++)
 	{
 		CDittoAddin *pAddin = m_Addins[i];
 		if(pAddin)
@@ -161,8 +161,8 @@ void CDittoAddins::AboutScreenText(CStringArray &arr)
 			CString csLine;
 			csLine.Format(_T("%s Ver: %d, Ver2: %d"), pAddin->DisplayName(), pAddin->Version(), pAddin->PrivateVersion());
 			arr.Add(csLine);
-			int nSubCount = pAddin->m_PrePasteFunctions.size();
-			for(int x = 0; x < nSubCount; x++)
+			INT_PTR subCount = pAddin->m_PrePasteFunctions.size();
+			for(int x = 0; x < subCount; x++)
 			{
 				CString csLine2;
 				csLine2.Format(_T("    %s (%s)"), pAddin->m_PrePasteFunctions[x].m_csDisplayName, pAddin->m_PrePasteFunctions[x].m_csDetailDescription);

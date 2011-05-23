@@ -128,26 +128,26 @@ extern "C"
 #define BRG_LITTLE_ENDIAN   1234 /* byte 0 is least significant (i386) */
 #define BRG_BIG_ENDIAN      4321 /* byte 0 is most significant (mc68k) */
 
-#if defined( __alpha__ ) || defined( __alpha ) || defined( i386 )       ||   \
-    defined( __i386__ )  || defined( _M_I86 )  || defined( _M_IX86 )    ||   \
-    defined( __OS2__ )   || defined( sun386 )  || defined( __TURBOC__ ) ||   \
-    defined( vax )       || defined( vms )     || defined( VMS )        ||   \
-    defined( __VMS )     || defined( _WIN32_WCE )
+//#if defined( __alpha__ ) || defined( __alpha ) || defined( i386 )       ||   \
+//    defined( __i386__ )  || defined( _M_I86 )  || defined( _M_IX86 )    ||   \
+//    defined( __OS2__ )   || defined( sun386 )  || defined( __TURBOC__ ) ||   \
+//    defined( vax )       || defined( vms )     || defined( VMS )        ||   \
+//    defined( __VMS )     || defined( _WIN32_WCE )
 
 #define PLATFORM_BYTE_ORDER BRG_LITTLE_ENDIAN
 
-#endif
-
-#if defined( AMIGA )    || defined( applec )  || defined( __AS400__ )  ||   \
-    defined( _CRAY )    || defined( __hppa )  || defined( __hp9000 )   ||   \
-    defined( ibm370 )   || defined( mc68000 ) || defined( m68k )       ||   \
-    defined( __MRC__ )  || defined( __MVS__ ) || defined( __MWERKS__ ) ||   \
-    defined( sparc )    || defined( __sparc)  || defined( SYMANTEC_C ) ||   \
-    defined( __TANDEM ) || defined( THINK_C ) || defined( __VMCMS__ )
-    
-#define PLATFORM_BYTE_ORDER BRG_BIG_ENDIAN
-
-#endif
+//#endif
+//
+//#if defined( AMIGA )    || defined( applec )  || defined( __AS400__ )  ||   \
+//    defined( _CRAY )    || defined( __hppa )  || defined( __hp9000 )   ||   \
+//    defined( ibm370 )   || defined( mc68000 ) || defined( m68k )       ||   \
+//    defined( __MRC__ )  || defined( __MVS__ ) || defined( __MWERKS__ ) ||   \
+//    defined( sparc )    || defined( __sparc)  || defined( SYMANTEC_C ) ||   \
+//    defined( __TANDEM ) || defined( THINK_C ) || defined( __VMCMS__ )
+//    
+//#define PLATFORM_BYTE_ORDER BRG_BIG_ENDIAN
+//
+//#endif
 
 /*  if the platform is still not known, try to find its byte order  */
 /*  from commonly used definitions in the headers included earlier  */

@@ -81,7 +81,7 @@ protected:
     afx_msg void OnFirstExit();
     afx_msg void OnChangeCbChain(HWND hWndRemove, HWND hWndAfter);
     afx_msg void OnDrawClipboard();
-    afx_msg void OnTimer(UINT nIDEvent);
+    afx_msg void OnTimer(UINT_PTR nIDEvent);
     afx_msg void OnFirstShowquickpaste();
     afx_msg void OnFirstToggleConnectCV();
     afx_msg void OnUpdateFirstToggleConnectCV(CCmdUI *pCmdUI);

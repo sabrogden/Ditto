@@ -28,6 +28,7 @@
 #include "StdAfx.h"
 #include "CppSQLite3.h"
 #include <cstdlib>
+#include "..\UnicodeMacros.h"
 
 
 // Named constant for passing to CppSQLite3Exception when passing it a string
@@ -372,6 +373,7 @@ int CppSQLite3Query::fieldIndex(const TCHAR* szField)
 			}
 		}
 	}
+
 
 	throw CppSQLite3Exception(CPPSQLITE_ERROR,
 							_T("Invalid field name requested"),
@@ -905,7 +907,6 @@ int CppSQLite3DB::execScalar(const TCHAR* szSQL)
 								_T("Invalid scalar query"),
 								DONT_DELETE_MSG);
 	}
-
 	return ATOI(q.fieldValue(0));
 }
 

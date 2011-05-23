@@ -339,7 +339,7 @@ BOOL CWndEx::OnEraseBkgnd(CDC* pDC)
 	return CWnd::OnEraseBkgnd(pDC);
 }
 
-void CWndEx::OnTimer(UINT nIDEvent)
+void CWndEx::OnTimer(UINT_PTR nIDEvent)
 {
 	if(nIDEvent == TIMER_AUTO_MAX)
 	{
@@ -348,7 +348,7 @@ void CWndEx::OnTimer(UINT nIDEvent)
 			CPoint cp;
 			GetCursorPos(&cp);
 			
-			UINT nHitTest = OnNcHitTest(cp);
+			UINT nHitTest = (UINT)OnNcHitTest(cp);
 			
 			ScreenToClient(&cp);
 			

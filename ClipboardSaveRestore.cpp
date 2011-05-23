@@ -27,11 +27,11 @@ bool CClipboardSaveRestore::Save()
 			LPVOID pvData = GlobalLock(hGlobal);
 			if(pvData)
 			{
-				ULONG Size = GlobalSize(hGlobal);
-				if(Size > 0)
+				INT_PTR size = GlobalSize(hGlobal);
+				if(size > 0)
 				{
 					//Copy the data locally
-					cf.m_hgData = NewGlobalP(pvData, Size);	
+					cf.m_hgData = NewGlobalP(pvData, size);	
 					cf.m_cfType = nFormat;
 
 					m_Clipboard.Add(cf);
@@ -60,8 +60,8 @@ bool CClipboardSaveRestore::Restore()
 
 		SetClipboardData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
 
-		int nSize = m_Clipboard.GetSize();
-		for(int nPos = 0; nPos < nSize; nPos++)
+		INT_PTR size = m_Clipboard.GetSize();
+		for(int nPos = 0; nPos < size; nPos++)
 		{
 			CClipFormat *pCF = &m_Clipboard.ElementAt(nPos);
 			if(pCF && pCF->m_hgData)
@@ -95,10 +95,10 @@ bool CClipboardSaveRestore::RestoreTextOnly()
 
 		SetClipboardData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
 
-		int nSize = m_Clipboard.GetSize();
-		for(int nPos = 0; nPos < nSize; nPos++)
+		INT_PTR size = m_Clipboard.GetSize();
+		for(int pos = 0; pos < size; pos++)
 		{
-			CClipFormat *pCF = &m_Clipboard.ElementAt(nPos);
+			CClipFormat *pCF = &m_Clipboard.ElementAt(pos);
 			if(pCF && pCF->m_hgData)
 			{
 				if(pCF->m_cfType == CF_TEXT || pCF->m_cfType == CF_UNICODETEXT)

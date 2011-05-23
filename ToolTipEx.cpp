@@ -33,9 +33,12 @@ CToolTipEx::~CToolTipEx()
 
 BEGIN_MESSAGE_MAP(CToolTipEx, CWnd)
 //{{AFX_MSG_MAP(CToolTipEx)
-ON_WM_PAINT()ON_WM_SIZE()ON_WM_NCHITTEST()ON_WM_ACTIVATE()
-//}}AFX_MSG_MAP
-ON_WM_TIMER()END_MESSAGE_MAP()
+ON_WM_PAINT()
+ON_WM_SIZE()
+ON_WM_NCHITTEST()
+ON_WM_ACTIVATE()
+ON_WM_TIMER()
+END_MESSAGE_MAP() 
 
 
 /////////////////////////////////////////////////////////////////////////////

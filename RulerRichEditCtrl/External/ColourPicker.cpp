@@ -82,55 +82,55 @@ BEGIN_MESSAGE_MAP(CColourPicker, CButton)
     ON_CONTROL_REFLECT_EX(BN_CLICKED, OnClicked)
     ON_WM_CREATE()
     //}}AFX_MSG_MAP
-    ON_MESSAGE(CPN_SELENDOK,     OnSelEndOK)
-    ON_MESSAGE(CPN_SELENDCANCEL, OnSelEndCancel)
-    ON_MESSAGE(CPN_SELCHANGE,    OnSelChange)
+    //ON_MESSAGE(CPN_SELENDOK,     OnSelEndOK)
+    //ON_MESSAGE(CPN_SELENDCANCEL, OnSelEndCancel)
+    //ON_MESSAGE(CPN_SELCHANGE,    OnSelChange)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CColourPicker message handlers
 
-LONG CColourPicker::OnSelEndOK(UINT lParam, LONG /*wParam*/)
-{
-    COLORREF crNewColour = (COLORREF) lParam;
-    m_bActive = FALSE;
-    SetColour(crNewColour);
-
-    CWnd *pParent = GetParent();
-    if (pParent) {
-        pParent->SendMessage(CPN_CLOSEUP, lParam, (WPARAM) GetDlgCtrlID());
-        pParent->SendMessage(CPN_SELENDOK, lParam, (WPARAM) GetDlgCtrlID());
-    }
-
-    if (crNewColour != GetColour())
-        if (pParent) pParent->SendMessage(CPN_SELCHANGE, lParam, (WPARAM) GetDlgCtrlID());
-
-    return TRUE;
-}
-
-LONG CColourPicker::OnSelEndCancel(UINT lParam, LONG /*wParam*/)
-{
-    m_bActive = FALSE;
-    SetColour((COLORREF) lParam);
-
-    CWnd *pParent = GetParent();
-    if (pParent) {
-        pParent->SendMessage(CPN_CLOSEUP, lParam, (WPARAM) GetDlgCtrlID());
-        pParent->SendMessage(CPN_SELENDCANCEL, lParam, (WPARAM) GetDlgCtrlID());
-    }
-
-    return TRUE;
-}
-
-LONG CColourPicker::OnSelChange(UINT lParam, LONG /*wParam*/)
-{
-    if (m_bTrackSelection) SetColour((COLORREF) lParam);
-
-    CWnd *pParent = GetParent();
-    if (pParent) pParent->SendMessage(CPN_SELCHANGE, lParam, (WPARAM) GetDlgCtrlID());
-
-    return TRUE;
-}
+//LRESULT CColourPicker::OnSelEndOK(LPARAM lParam, WPARAM wParam)
+//{
+//    COLORREF crNewColour = (COLORREF) lParam;
+//    m_bActive = FALSE;
+//    SetColour(crNewColour);
+//
+//    CWnd *pParent = GetParent();
+//    if (pParent) {
+//        pParent->SendMessage(CPN_CLOSEUP, lParam, (WPARAM) GetDlgCtrlID());
+//        pParent->SendMessage(CPN_SELENDOK, lParam, (WPARAM) GetDlgCtrlID());
+//    }
+//
+//    if (crNewColour != GetColour())
+//        if (pParent) pParent->SendMessage(CPN_SELCHANGE, lParam, (WPARAM) GetDlgCtrlID());
+//
+//    return TRUE;
+//}
+//
+//LRESULT CColourPicker::OnSelEndCancel(LPARAM lParam, WPARAM wParam)
+//{
+//    m_bActive = FALSE;
+//    SetColour((COLORREF) lParam);
+//
+//    CWnd *pParent = GetParent();
+//    if (pParent) {
+//        pParent->SendMessage(CPN_CLOSEUP, lParam, (WPARAM) GetDlgCtrlID());
+//        pParent->SendMessage(CPN_SELENDCANCEL, lParam, (WPARAM) GetDlgCtrlID());
+//    }
+//
+//    return TRUE;
+//}
+//
+//LRESULT CColourPicker::OnSelChange(LPARAM lParam, WPARAM wParam)
+//{
+//    if (m_bTrackSelection) SetColour((COLORREF) lParam);
+//
+//    CWnd *pParent = GetParent();
+//    if (pParent) pParent->SendMessage(CPN_SELCHANGE, lParam, (WPARAM) GetDlgCtrlID());
+//
+//    return TRUE;
+//}
 
 int CColourPicker::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {

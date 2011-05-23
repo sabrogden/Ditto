@@ -124,7 +124,7 @@ void CRRECRuler::OnPaint()
 	CPaintDC mainDC(this);
 
 	// Set up data
-	int pos = GetParent()->SendMessage( urm_GETSCROLLPOS );
+	int pos = (int)GetParent()->SendMessage( urm_GETSCROLLPOS );
 
 	CRect rect;
 	GetClientRect( rect );
@@ -234,7 +234,7 @@ void CRRECRuler::OnPaint()
 	CStdGrfx::drawdoublesunken3dFrame( &dc, winRect );
 
 	// Draw tab markers
-	int max = m_tabs.GetSize();
+	int max = (int)m_tabs.GetSize();
 	for( t = 0 ; t < max ; t++ )
 	{
 
@@ -373,10 +373,10 @@ void CRRECRuler::SetTabStops( const CDWordArray& arr )
 {
 
 	m_tabs.RemoveAll();
-	int max = arr.GetSize();
-	for ( int t = 0 ; t < max ; t++ )
+	int max = (int)arr.GetSize();
+	for (int t = 0 ; t < max ; t++)
 	{
-		m_tabs.Add( arr[ t ] );
+		m_tabs.Add(arr[ t ]);
 	}
 
 }

@@ -28,10 +28,10 @@ protected:
 
 protected:
 	void MoveControls();
-	long IsIDAlreadyInEdit(long lID, bool bSetFocus);
-	bool AddItem(long lID);
+	int IsIDAlreadyInEdit(int id, bool bSetFocus);
+	bool AddItem(int id);
 	bool DoSave();
-	bool DoSaveItem(long lIndex);
+	bool DoSaveItem(int index);
 
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);

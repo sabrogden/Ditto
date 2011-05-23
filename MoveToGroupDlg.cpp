@@ -51,7 +51,7 @@ BOOL CMoveToGroupDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	m_Tree.m_lSelectedFolderID = m_nSelectedGroup;
+	m_Tree.m_selectedFolderID = m_nSelectedGroup;
 	m_Tree.SetNotificationWndEx(m_hWnd);
 	m_Tree.FillTree();
 

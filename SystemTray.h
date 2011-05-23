@@ -188,7 +188,7 @@ protected:
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CSystemTray)
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	//}}AFX_MSG
 #ifndef _WIN32_WCE
 	afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);

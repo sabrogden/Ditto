@@ -97,7 +97,7 @@ BOOL CAbout::OnInitDialog()
 	//Show what addins are loaded
 	CStringArray arr;
 	theApp.m_Addins.AboutScreenText(arr);
-	int count = arr.GetCount();
+	INT_PTR count = arr.GetCount();
 	for(int i = 0; i < count; i++)
 	{
 		m_List.AddString(_T("    ") + arr[i]);

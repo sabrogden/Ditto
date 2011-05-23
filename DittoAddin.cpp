@@ -76,7 +76,7 @@ bool CDittoAddin::SupportedFunctions(const CDittoInfo &DittoInfo, FunctionType t
 		bRet = m_SupportedFunctions(DittoInfo, type, Functions);
 		if(bRet)
 		{
-			int nCount = Functions.size();
+			INT_PTR nCount = Functions.size();
 			for(int i = 0; i < nCount; i++)
 			{
 				CFunction func = Functions[i];

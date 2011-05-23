@@ -109,7 +109,7 @@ void CMainFrmThread::OnSaveClips()
 
 	if(count > 0)
 	{
-		int Id = pLocalClips->GetTail()->m_ID;
+		int Id = pLocalClips->GetTail()->m_id;
 
 		Log(StrF(_T("SaveCopyclips After AddToDb, Id: %d Before OnCopyCopyCompleted"), Id));
 

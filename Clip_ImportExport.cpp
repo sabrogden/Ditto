@@ -9,7 +9,7 @@
 #define CURRENT_EXPORT_VERSION 1
 
 CClip_ImportExport::CClip_ImportExport(void) :
-	m_lImportCount(0)
+	m_importCount(0)
 {
 
 }
@@ -32,27 +32,27 @@ bool CClip_ImportExport::ExportToSqliteDB(CppSQLite3DB &db)
 		CClipFormat* pCF;
 		CppSQLite3Statement stmt = db.compileStatement(_T("insert into Data values (NULL, ?, ?, ?, ?);"));
 
-		for(int i = m_Formats.GetSize()-1; i >= 0 ; i--)
+		for(INT_PTR i = m_Formats.GetSize()-1; i >= 0 ; i--)
 		{
 			pCF = & m_Formats.ElementAt(i);
 
 			stmt.bind(1, lId);
 			stmt.bind(2, GetFormatName(pCF->m_cfType));
-			long lOriginalSize = GlobalSize(pCF->m_hgData);
-			stmt.bind(3, lOriginalSize);
+			INT_PTR originalSize = GlobalSize(pCF->m_hgData);
+			stmt.bind(3, (int)originalSize);
 
 			const unsigned char *Data = (const unsigned char *)GlobalLock(pCF->m_hgData);
 			if(Data)
 			{
 				//First compress the data
-				long lZippedSize = compressBound(lOriginalSize);
-				Bytef *pZipped = new Bytef[lZippedSize];
+				INT_PTR zippedSize = compressBound((ULONG)originalSize);
+				Bytef *pZipped = new Bytef[zippedSize];
 				if(pZipped)
 				{				
-					int nZipReturn = compress(pZipped, (uLongf *)&lZippedSize, (const Bytef *)Data, lOriginalSize);
-					if(nZipReturn == Z_OK)
+					INT_PTR zipReturn = compress(pZipped, (uLongf *)&zippedSize, (const Bytef *)Data, (ULONG)originalSize);
+					if(zipReturn == Z_OK)
 					{
-						stmt.bind(4, pZipped, lZippedSize);
+						stmt.bind(4, pZipped, (int)zippedSize);
 					}
 
 					delete []pZipped;
@@ -105,7 +105,7 @@ bool CClip_ImportExport::ImportFromSqliteDB(CppSQLite3DB &db, bool bAddToDB, boo
 				}
 			}
 
-			m_lImportCount++;
+			m_importCount++;
 
 			//If putting on the clipboard and there are multiple
 			//then append cf_text and cf_unicodetext
@@ -121,7 +121,7 @@ bool CClip_ImportExport::ImportFromSqliteDB(CppSQLite3DB &db, bool bAddToDB, boo
 		{
 			theApp.RefreshView();
 		}
-		else if(bRet && m_lImportCount == 1 && bPutOnClipboard)
+		else if(bRet && m_importCount == 1 && bPutOnClipboard)
 		{
 			PlaceFormatsOnclipboard();
 		}
@@ -180,8 +180,8 @@ bool CClip_ImportExport::PlaceFormatsOnclipboard()
 	{
 		EmptyClipboard();
 
-		int nFormatCount = m_Formats.GetSize();
-		for(int i = 0; i < nFormatCount; i++)
+		INT_PTR formatCount = m_Formats.GetSize();
+		for(int i = 0; i < formatCount; i++)
 		{
 			CClipFormat *pCF;
 			pCF = &m_Formats.ElementAt(i);
@@ -286,8 +286,8 @@ bool CClip_ImportExport::Append_CF_TEXT_AND_CF_UNICODETEXT(CStringA &csCF_TEXT, 
 {
 	bool bRet = false;
 	CClipFormat *pCF;
-	int nCount = m_Formats.GetSize();
-	for(int i = 0; i < nCount; i++)
+	INT_PTR count = m_Formats.GetSize();
+	for(int i = 0; i < count; i++)
 	{
 		pCF = &m_Formats.ElementAt(i);
 

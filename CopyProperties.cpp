@@ -120,7 +120,7 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 	m_eDate = dtTime.Format();
 	m_RichEdit.SetText(Clip.m_Desc);
 
-	if(Clip.m_lDontAutoDelete)
+	if(Clip.m_dontAutoDelete)
 	{
 		m_bNeverAutoDelete = TRUE;
 	}
@@ -129,17 +129,17 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 		m_bNeverAutoDelete = FALSE;
 	}
 
-	m_GroupCombo.SetCurSelOnItemData(Clip.m_lParent);
+	m_GroupCombo.SetCurSelOnItemData(Clip.m_parentId);
 
-	m_HotKey.SetHotKey(LOBYTE(Clip.m_lShortCut), HIBYTE(Clip.m_lShortCut));
+	m_HotKey.SetHotKey(LOBYTE(Clip.m_shortCut), HIBYTE(Clip.m_shortCut));
 	m_HotKey.SetRules(HKCOMB_A, 0);
 
 	m_QuickPasteText.SetWindowText(Clip.m_csQuickPaste);
 
 	CString cs;
 	CClipFormat* pCF;
-	int nCount = Clip.m_Formats.GetSize();
-	for(int i = 0; i < nCount; i++)
+	INT_PTR count = Clip.m_Formats.GetSize();
+	for(int i = 0; i < count; i++)
 	{
 		pCF = &Clip.m_Formats.GetData()[i];
 		if(pCF)
@@ -147,10 +147,10 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 			cs.Format(_T("%s, %d"), GetFormatName(pCF->m_cfType), GlobalSize(pCF->m_hgData));
 			int nIndex = m_lCopyData.AddString(cs);
 			
-			if(m_lCopyID == -1 && pCF->m_lDBID == -1)
+			if(m_lCopyID == -1 && pCF->m_dbId == -1)
 				m_lCopyData.SetItemData(nIndex, i);
 			else
-				m_lCopyData.SetItemData(nIndex, pCF->m_lDBID);
+				m_lCopyData.SetItemData(nIndex, pCF->m_dbId);
 		}
 	}
 
@@ -197,8 +197,8 @@ void CCopyProperties::OnOK()
 			LoadDataIntoCClip(*m_pMemoryClip);
 
 			m_DeletedData.SortDescending();
-			int nCount = m_DeletedData.GetSize();
-			for(int i = 0; i < nCount; i++)
+			INT_PTR count = m_DeletedData.GetSize();
+			for(int i = 0; i < count; i++)
 			{
 				m_pMemoryClip->m_Formats.RemoveAt(m_DeletedData[i]);
 			}
@@ -228,12 +228,12 @@ void CCopyProperties::OnOK()
 
 void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
 {
-	Clip.m_lShortCut = m_HotKey.GetHotKey();
+	Clip.m_shortCut = m_HotKey.GetHotKey();
 
 	//remove any others that have the same hot key
-	if(Clip.m_lShortCut > 0)
+	if(Clip.m_shortCut > 0)
 	{
-		theApp.m_db.execDMLEx(_T("UPDATE Main SET lShortCut = 0 where lShortCut = %d AND lID <> %d;"), Clip.m_lShortCut, m_lCopyID);
+		theApp.m_db.execDMLEx(_T("UPDATE Main SET lShortCut = 0 where lShortCut = %d AND lID <> %d;"), Clip.m_shortCut, m_lCopyID);
 	}
 
 	Clip.m_Desc = m_RichEdit.GetText();
@@ -249,17 +249,17 @@ void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
 		theApp.m_db.execDMLEx(_T("UPDATE Main SET QuickPasteText = '' WHERE QuickPasteText = '%s' AND lID <> %d;"), Clip.m_csQuickPaste, m_lCopyID);
 	}
 
-	Clip.m_lParent = m_GroupCombo.GetItemDataFromCursel();
+	Clip.m_parentId = m_GroupCombo.GetItemDataFromCursel();
 
 	//If we are going from no group to a group or the
 	//don't auto delete check box is checked
 	if(m_bNeverAutoDelete)
 	{
-		Clip.m_lDontAutoDelete = (long)CTime::GetCurrentTime().GetTime();
+		Clip.m_dontAutoDelete = (long)CTime::GetCurrentTime().GetTime();
 	}
 	else if(m_bNeverAutoDelete == FALSE)
 	{
-		Clip.m_lDontAutoDelete = FALSE;
+		Clip.m_dontAutoDelete = FALSE;
 	}
 }
 
@@ -281,7 +281,7 @@ void CCopyProperties::OnDeleteCopyData()
 		for(int i = 0; i < nCount; i++)
 		{
 			int row = items[i];
-			m_DeletedData.Add(m_lCopyData.GetItemData(row));
+			m_DeletedData.Add((int)m_lCopyData.GetItemData(row));
 			m_lCopyData.DeleteString(row);
 
 			int newRow = row-1;

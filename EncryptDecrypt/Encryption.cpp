@@ -68,7 +68,7 @@ bool CEncryption::Encrypt(const unsigned char* pInput, int nLenInput, const char
 		m_random.GetRandomBuffer(hdr.aMasterSeed2, 32);
 
 		// Create MasterKey by hashing szPassword
-		uKeyLen = strlen(szPassword);
+		uKeyLen = (unsigned long)strlen(szPassword);
 		ASSERT(0 != uKeyLen);
 		if(0 != uKeyLen)
 		{
@@ -172,7 +172,7 @@ bool CEncryption::Decrypt(const unsigned char* pInput, int nLenInput, const char
 			if(NULL != pOutput)
 			{
 				memset(pOutput, 0, nLenInput);
-				unsigned long uKeyLen = strlen(szPassword);
+				unsigned long uKeyLen = (unsigned long)strlen(szPassword);
 
 				// Create MasterKey by hashing szPassword
 				ASSERT(0 != uKeyLen);

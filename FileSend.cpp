@@ -66,7 +66,7 @@ BOOL CFileSend::SendClientFiles(SOCKET sock, CClipList *pClipList)
 		GlobalUnlock(pFormat->m_hgData);
 	}
 
-	Info.m_lParameter1 = CopyFiles.GetSize();
+	Info.m_lParameter1 = (long)CopyFiles.GetSize();
 	if(Info.m_lParameter1 > 0)
 	{
 		if(m_Send.SendCSendData(Info, MyEnums::START))

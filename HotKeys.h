@@ -52,7 +52,7 @@ public:
 
 	void Init( HWND hWnd ) { m_hWnd = hWnd; }
 
-	int Find( CHotKey* pHotKey );
+	INT_PTR Find( CHotKey* pHotKey );
 	bool Remove( CHotKey* pHotKey ); // pHotKey is NOT deleted.
 
 	// profile load / save
@@ -65,9 +65,9 @@ public:
 	void GetKeys( ARRAY& keys );
 	void SetKeys( ARRAY& keys, bool bSave = false ); // caution! this alters hotkeys based upon corresponding indexes
 
-	static bool FindFirstConflict( ARRAY& keys, int* pX = NULL, int* pY = NULL );
+	static bool FindFirstConflict( ARRAY& keys, INT_PTR* pX = NULL, INT_PTR* pY = NULL );
 	// if true, pX and pY (if valid) are set to the index of the conflicting hotkeys.
-	bool FindFirstConflict( int* pX = NULL, int* pY = NULL );
+	bool FindFirstConflict( INT_PTR* pX = NULL, INT_PTR* pY = NULL );
 };
 
 extern CHotKeys g_HotKeys;

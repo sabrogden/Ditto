@@ -63,7 +63,7 @@ void CDialogResizer::MoveControls(CSize csNewSize)
 
 	m_DlgSize = csNewSize;
 
-	int nCount = m_Controls.GetSize();
+	INT_PTR nCount = m_Controls.GetSize();
 	CRect rc;
 	CRect rcParent;
 

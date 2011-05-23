@@ -122,6 +122,8 @@ CCP_MainApp::~CCP_MainApp()
 
 BOOL CCP_MainApp::InitInstance()
 {
+	LoadLibrary(TEXT("riched20.dll"));
+
 	AfxEnableControlContainer();
 	AfxOleInit();
 	AfxInitRichEditEx();
@@ -174,7 +176,7 @@ BOOL CCP_MainApp::InitInstance()
 		//handled this message
 		//If it didn't handle the message(ditto is not running) then startup this processes of ditto 
 		//disconnected from the clipboard
-		int ret = 0;
+		LRESULT ret = 0;
 		HWND hWnd = (HWND)CGetSetOptions::GetMainHWND();
 		if(hWnd)
 		{
@@ -769,8 +771,8 @@ bool CCP_MainApp::ImportClips(HWND hWnd)
 
 			CString cs;
 			
-			cs.Format(_T("%s %d "), theApp.m_Language.GetString("Import_Successfully", "Successfully imported"), clip.m_lImportCount);
-			if(clip.m_lImportCount = 1)
+			cs.Format(_T("%s %d "), theApp.m_Language.GetString("Import_Successfully", "Successfully imported"), clip.m_importCount);
+			if(clip.m_importCount = 1)
 				cs += theApp.m_Language.GetString("Clip", "clip");
 			else
 				cs += theApp.m_Language.GetString("Clips", "clips");
@@ -864,7 +866,7 @@ int CCP_MainApp::ShowOptionsDlg()
 
 		CShowMainFrame Show;
 		COptionsSheet Sheet(_T(""), m_pMainFrame);
-		int nRet = Sheet.DoModal();
+		INT_PTR nRet = Sheet.DoModal();
 		if(nRet == IDOK)
 		{
 			m_pMainFrame->m_quickPaste.ShowQPasteWnd(m_pMainFrame, false, false, TRUE);	

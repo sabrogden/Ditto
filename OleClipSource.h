@@ -20,7 +20,7 @@ public:
 
 	BOOL DoDelayRender();
 	BOOL DoImmediateRender();
-	long PutFormatOnClipboard(CClipFormats *pFormats);
+	INT_PTR PutFormatOnClipboard(CClipFormats *pFormats);
 
 public:
 	virtual BOOL OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlobal);

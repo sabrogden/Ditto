@@ -220,31 +220,29 @@ BOOL CTextFile::WriteTextFile( CString& filename, const CStringArray& contents )
 	CFileException feError;
 	BOOL result = TRUE;
 
-	if( filename.IsEmpty() )
-		result = GetFilename( TRUE, filename );
+	if(filename.IsEmpty())
+		result = GetFilename(TRUE, filename);
 
-	if( result )
+	if(result)
 	{
 		// Write file
-		if( file.Open( filename, CFile::modeWrite | CFile::modeCreate , &feError ) )
+		if(file.Open( filename, CFile::modeWrite | CFile::modeCreate , &feError))
 		{
-
-			int max = contents.GetSize();
-			for( int t = 0 ; t < max ; t++ )
-				file.WriteString( contents[ t ] + m_eol );
+			INT_PTR max = contents.GetSize();
+			for(int t = 0 ; t < max ; t++)
+			{
+				file.WriteString(contents[t] + m_eol);
+			}
 
 			file.Close();
-
 		}
 		else
 		{
-
 			// Set error message
 			TCHAR	errBuff[256];
-			feError.GetErrorMessage( errBuff, 256 );
+			feError.GetErrorMessage(errBuff, 256);
 			m_error = errBuff;
 			result = FALSE;
-
 		}
 	}
 
@@ -387,30 +385,28 @@ BOOL CTextFile::AppendFile( CString& filename, const CStringArray& contents )
 	CFileException feError;
 	BOOL result = TRUE;
 
-	if( filename.IsEmpty() )
-		result = GetFilename( TRUE, filename );
+	if(filename.IsEmpty())
+		result = GetFilename(TRUE, filename);
 
-	if( result )
+	if(result)
 	{
 		// Write the file
-		if( file.Open( filename, CFile::modeWrite | CFile::modeCreate | CFile::modeNoTruncate, &feError ) ) 
+		if(file.Open(filename, CFile::modeWrite | CFile::modeCreate | CFile::modeNoTruncate, &feError)) 
 		{
 
 			file.SeekToEnd();
 
-			int max = contents.GetSize();
-			for( int t = 0 ; t < max ; t++ )
-				file.WriteString( contents[ t ] + m_eol );
+			INT_PTR max = contents.GetSize();
+			for(int t = 0 ; t < max ; t++)
+				file.WriteString(contents[t] + m_eol);
 
 			file.Close();
-
 		}
 		else
 		{
-
 			// Set error message
-			TCHAR	errBuff[256];
-			feError.GetErrorMessage( errBuff, 256 );
+			TCHAR errBuff[256];
+			feError.GetErrorMessage(errBuff, 256);
 			m_error = errBuff;
 			result = FALSE;
 
@@ -486,23 +482,25 @@ BOOL CTextFile::Load( CString& filename, CListBox* list )
 	BOOL result = FALSE;
 
 	// Error checking
-	if( ValidParam( list ) )
+	if(ValidParam(list))
 	{
 
 		// Read the file
 		CStringArray contents;
-		if( ReadTextFile( filename, contents ) )
+		if(ReadTextFile( filename, contents))
 		{
-
 			// Set to listbox
-			int max = contents.GetSize();
-			for( int t = 0 ; t < max ; t++ )
-				if( contents[ t ].GetLength() )
-					list->AddString( contents[ t ] );
+			INT_PTR max = contents.GetSize();
+			for(int t = 0 ; t < max ; t++)
+			{
+				if(contents[t].GetLength())
+				{
+					list->AddString(contents[t]);
+				}
+			}
+
 			result = TRUE;
-
 		}
-
 	}
 
 	return result;

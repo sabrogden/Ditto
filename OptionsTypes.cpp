@@ -137,7 +137,7 @@ void COptionsTypes::OnAdd()
 
 	if(add.DoModal() == IDOK)
 	{
-		int nCount = add.m_csSelectedTypes.GetSize();
+		INT_PTR nCount = add.m_csSelectedTypes.GetSize();
 		if(nCount)
 		{
 			m_bSave = true;

@@ -426,7 +426,7 @@ ERootType GetRootType(LPCTSTR path, int * pLen, bool greedy)
       }
 
       // position of next backslash or colon
-      int len = 2 + _tcscspn(path+2, invalidChars);
+      int len = 2 + (int)_tcscspn(path+2, invalidChars);
       TCHAR const * end = path+len;
 
       // server only, no backslash
@@ -443,7 +443,7 @@ ERootType GetRootType(LPCTSTR path, int * pLen, bool greedy)
           if (!greedy)  // return server only
               return GRT_Return(rtServer, len, pLen);
 
-         len += 1 + _tcscspn(end+1, invalidChars);
+         len += 1 + (int)_tcscspn(end+1, invalidChars);
          end = path + len;
 
          // server, share, no backslash
@@ -457,7 +457,7 @@ ERootType GetRootType(LPCTSTR path, int * pLen, bool greedy)
       // fall through to other tests
    }
 
-   int len = _tcscspn(path, invalidChars);
+   int len = (int)_tcscspn(path, invalidChars);
    TCHAR const * end = path + len;
 
    // (pseudo) protocol:
@@ -851,7 +851,7 @@ CPath & CPath::Append(LPCTSTR rhs)
     }
     else
     {
-        int rhsLen = rhs ? _tcslen(rhs) : 0;
+        int rhsLen = rhs ? (int)_tcslen(rhs) : 0;
         CStringLock buffer(m_path, m_path.GetLength()+rhsLen+1);
         PathAppend(buffer, rhs);
     }
@@ -883,7 +883,7 @@ CString CPath::ShellGetRoot() const
     if (rootEnd == NULL)
         return CString();
 
-    return m_path.Left(rootEnd - path);
+    return m_path.Left((int)(rootEnd - path));
 }
 
 
@@ -1002,9 +1002,9 @@ CPath CPath::GetPath(bool includeRoot ) const
 
     CPath ret;
     if (rootEnd == NULL)  // NULL if root should be included, or no root is found
-        return m_path.Left(fileName-path);
+        return m_path.Left((int)(fileName-path));
     else
-        return m_path.Mid(rootEnd-path, fileName-rootEnd);
+        return m_path.Mid((int)(rootEnd-path), (int)(fileName-rootEnd));
 }
 
 // ==================================================================
@@ -1028,7 +1028,7 @@ CString CPath::GetName() const
     if (fileName == NULL)
         return CString();
 
-    return m_path.Mid(fileName-path);
+    return m_path.Mid((int)(fileName-path));
 }
 
 // ==================================================================
@@ -1047,9 +1047,9 @@ CString CPath::GetTitle() const
         return CString();
 
     if (ext == NULL)
-        return m_path.Mid(fileName-path);
+        return m_path.Mid((int)(fileName-path));
 
-    return m_path.Mid(fileName-path, ext-fileName);
+    return m_path.Mid((int)(fileName-path), (int)(ext-fileName));
 
 
 }
@@ -1073,7 +1073,7 @@ CString CPath::GetExtension() const
     if (*ext == '.')        // skip "."
         ++ext;
 
-    return m_path.Mid(ext-path);
+    return m_path.Mid((int)(ext-path));
 }
 
 
@@ -1106,7 +1106,7 @@ CPath & CPath::AddExtension(LPCTSTR extension, int len)
     }
 
     if (len < 0)
-        return AddExtension(extension, _tcslen(extension));
+        return AddExtension(extension, (int)_tcslen(extension));
 
     int totalLen = m_path.GetLength() + len;  // already counts the period
 
@@ -1148,7 +1148,7 @@ CPath & CPath::RenameExtension(LPCTSTR newExt)
         return AddExtension(newExt);
     }
 
-    int maxLen = m_path.GetLength() + _tcslen(newExt) + 1;
+    int maxLen = m_path.GetLength() + (int)_tcslen(newExt) + 1;
     PathRenameExtension(CStringLock(m_path, maxLen), newExt);
     return *this;
 }
@@ -1355,7 +1355,7 @@ CPath CPath::RelativePathTo(LPCTSTR pathTo,bool srcIsDir)
 
     // maximum length estimate: 
     // going up to the root of a path like "c:\a\b\c\d\e", and then append the entire to path
-    int maxLen = 3*m_path.GetLength() / 2 +1  + _tcslen(pathTo); 
+    int maxLen = 3*m_path.GetLength() / 2 +1  + (int)_tcslen(pathTo); 
 
     PathRelativePathTo( CStringLock(path, maxLen), 
                         m_path, 

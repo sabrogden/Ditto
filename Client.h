@@ -20,7 +20,7 @@ public:
 	CSendToFriendInfo()
 	{
 		m_pPopup = NULL;
-		m_lPos = -1;
+		m_pos = -1;
 		m_pClipList = NULL;
 		m_pPopup = NULL;
 	}
@@ -34,7 +34,7 @@ public:
 	}
 
 	CClipList *m_pClipList;
-	long m_lPos;
+	int m_pos;
 	CString m_csIP;
 	CPopup *m_pPopup;
 	CString m_csErrorText;

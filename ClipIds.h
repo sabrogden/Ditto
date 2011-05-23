@@ -17,7 +17,7 @@ public:
 // MANAGEMENT FUNCTIONS
 
 	// returns the address of the given id in this array or NULL.
-	long* FindID(long lID);
+	int* FindID(int id);
 
 	// Blindly Moves IDs into the lParentID Group sequentially with the given order
 	// (i.e. this does not check to see if the IDs' order conflict)
@@ -29,9 +29,9 @@ public:
 //	BOOL ReorderGroupInsert( long lParentID, long lInsertBeforeID = 0 );
 
 	// Empties this array and fills it with the elements of the given group ID
-	BOOL LoadElementsOf(long lGroupID);
+	BOOL LoadElementsOf(int groupId);
 
-	BOOL CopyTo(long lParentID);
+	BOOL CopyTo(int parentId);
 
 	BOOL DeleteIDs(bool fromClipWindow, CppSQLite3DB& db);
 

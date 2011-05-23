@@ -10,7 +10,7 @@ public:
 	bool ExportToSqliteDB(CppSQLite3DB &m_db);
 	bool ImportFromSqliteDB(CppSQLite3DB &db, bool bAddToDB, bool bPutOnClipboard);
 	
-	long m_lImportCount;
+	int m_importCount;
 
 protected:
 	bool ImportFromSqliteV1(CppSQLite3DB &db, CppSQLite3Query &qMain);

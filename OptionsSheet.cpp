@@ -61,7 +61,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // COptionsSheet message handlers
 
-int COptionsSheet::DoModal() 
+INT_PTR COptionsSheet::DoModal() 
 {
 	EnableStackedTabs(TRUE);
 

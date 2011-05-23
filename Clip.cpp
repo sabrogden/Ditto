@@ -97,12 +97,12 @@ HGLOBAL COleDataObjectEx::GetGlobalData(CLIPFORMAT cfFormat, LPFORMATETC lpForma
 /*----------------------------------------------------------------------------*\
 CClipFormat - holds the data of one clip format.
 \*----------------------------------------------------------------------------*/
-CClipFormat::CClipFormat(CLIPFORMAT cfType, HGLOBAL hgData, long lDBID)
+CClipFormat::CClipFormat(CLIPFORMAT cfType, HGLOBAL hgData, int dbId)
 {
 	m_cfType = cfType;
 	m_hgData = hgData;
 	m_autoDeleteData = true;
-	m_lDBID = lDBID;
+	m_dbId = dbId;
 }
 
 CClipFormat::~CClipFormat() 
@@ -114,7 +114,7 @@ void CClipFormat::Clear()
 {
 	m_cfType = 0;
 	m_hgData = 0;
-	m_lDBID = -1;
+	m_dbId = -1;
 }
 
 void CClipFormat::Free()
@@ -139,7 +139,7 @@ CClipFormats - holds an array of CClipFormat
 CClipFormat* CClipFormats::FindFormat(UINT cfType)
 {
 	CClipFormat* pCF;
-	int count = GetSize();
+	INT_PTR count = GetSize();
 
 	for(int i=0; i < count; i++)
 	{
@@ -156,14 +156,14 @@ CClip - holds multiple CClipFormats and CopyClipboard() statistics
 \*----------------------------------------------------------------------------*/
 
 DWORD CClip::m_LastAddedCRC = 0;
-long CClip::m_LastAddedID = -1;
+int CClip::m_lastAddedID = -1;
 
 CClip::CClip() : 
-	m_ID(0), 
+	m_id(0), 
 	m_CRC(0),
-	m_lParent(-1),
-	m_lDontAutoDelete(FALSE),
-	m_lShortCut(0),
+	m_parentId(-1),
+	m_dontAutoDelete(FALSE),
+	m_shortCut(0),
 	m_bIsGroup(FALSE),
 	m_param1(0)
 {
@@ -176,13 +176,13 @@ CClip::~CClip()
 
 void CClip::Clear()
 {
-	m_ID = -1;
+	m_id = -1;
 	m_Time = 0;
 	m_Desc = "";
 	m_CRC = 0;
-	m_lParent = -1;
-	m_lDontAutoDelete = FALSE;
-	m_lShortCut = 0;
+	m_parentId = -1;
+	m_dontAutoDelete = FALSE;
+	m_shortCut = 0;
 	m_bIsGroup = FALSE;
 	m_csQuickPaste = "";
 	m_param1 = 0;
@@ -194,16 +194,16 @@ const CClip& CClip::operator=(const CClip &clip)
 {
 	const CClipFormat* pCF;
 
-	m_ID = clip.m_ID;
+	m_id = clip.m_id;
 	m_Time = clip.m_Time;
 	m_CRC = clip.m_CRC;
-	m_lParent = clip.m_lParent;
-	m_lDontAutoDelete = clip.m_lDontAutoDelete;
-	m_lShortCut = clip.m_lShortCut;
+	m_parentId = clip.m_parentId;
+	m_dontAutoDelete = clip.m_dontAutoDelete;
+	m_shortCut = clip.m_shortCut;
 	m_bIsGroup = clip.m_bIsGroup;
 	m_csQuickPaste = clip.m_csQuickPaste;
 
-	int nCount = clip.m_Formats.GetSize();
+	INT_PTR nCount = clip.m_Formats.GetSize();
 	
 	for(int i = 0; i < nCount; i++)
 	{
@@ -212,7 +212,7 @@ const CClip& CClip::operator=(const CClip &clip)
 		LPVOID pvData = GlobalLock(pCF->m_hgData);
 		if(pvData)
 		{
-			AddFormat(pCF->m_cfType, pvData, GlobalSize(pCF->m_hgData));
+			AddFormat(pCF->m_cfType, pvData, (UINT)GlobalSize(pCF->m_hgData));
 		}
 		GlobalUnlock(pCF->m_hgData);
 	}
@@ -226,10 +226,10 @@ const CClip& CClip::operator=(const CClip &clip)
 void CClip::EmptyFormats()
 {
 	// free global memory in m_Formats
-	for(int i = m_Formats.GetSize()-1; i >= 0; i--)
+	for(INT_PTR i = m_Formats.GetSize()-1; i >= 0; i--)
 	{
 		m_Formats[i].Free();
-		m_Formats.RemoveAt( i );
+		m_Formats.RemoveAt(i);
 	}
 }
 
@@ -333,9 +333,9 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 		bIsDescSet = SetDescFromText(cfDesc.m_hgData);
 	}
 
-	UINT nSize;
+	INT_PTR nSize;
 	CClipFormat cf;
-	int numTypes = pTypes->GetSize();
+	INT_PTR numTypes = pTypes->GetSize();
 
 	Log(StrF(_T("Begin enumerating over supported types, Count: %d"), numTypes));
 
@@ -428,12 +428,12 @@ bool CClip::SetDescFromText(HGLOBAL hgData)
 	
 	bool bRet = false;
 	TCHAR* text = (TCHAR *) GlobalLock(hgData);
-	long ulBufLen = GlobalSize(hgData);
+	INT_PTR bufLen = GlobalSize(hgData);
 	
 	m_Desc = text;
 	bRet = true;
 		
-	if(ulBufLen > g_Opt.m_bDescTextSize)
+	if(bufLen > g_Opt.m_bDescTextSize)
 	{
 		m_Desc = m_Desc.Left(g_Opt.m_bDescTextSize);
 	}
@@ -446,14 +446,14 @@ bool CClip::SetDescFromText(HGLOBAL hgData)
 
 bool CClip::SetDescFromType()
 {
-	int nSize = m_Formats.GetSize();
-	if(nSize <= 0)
+	INT_PTR size = m_Formats.GetSize();
+	if(size <= 0)
 	{
 		return false;
 	}
 
 	int nCF_HDROPIndex = -1;
-	for(int i = 0; i < nSize; i++)
+	for(int i = 0; i < size; i++)
 	{
 		if(m_Formats[i].m_cfType == CF_HDROP)
 		{
@@ -512,7 +512,7 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 				theApp.m_db.execDMLEx(_T("UPDATE Main SET lDate = %d where lID = %d;"), 
 										(long)m_Time.GetTime(), nID);
 
-				m_ID = nID;
+				m_id = nID;
 
 				return true;
 			}
@@ -548,7 +548,7 @@ int CClip::FindDuplicate()
 		if(g_Opt.m_bAllowDuplicates)
 		{
 			if(m_CRC == m_LastAddedCRC)
-				return m_LastAddedID;
+				return m_lastAddedID;
 		}
 		else
 		{
@@ -575,15 +575,15 @@ DWORD CClip::GenerateCRC()
 	{
 		//Generate a CRC value for all copied data
 
-		int nSize = m_Formats.GetSize();
-		for(int i = 0; i < nSize ; i++)
+		INT_PTR size = m_Formats.GetSize();
+		for(int i = 0; i < size ; i++)
 		{
 			pCF = & m_Formats.ElementAt(i);
 			
 			const unsigned char *Data = (const unsigned char *)GlobalLock(pCF->m_hgData);
 			if(Data)
 			{
-				pCrc32->GenerateCrc32((const LPBYTE)Data, GlobalSize(pCF->m_hgData), dwCRC);
+				pCrc32->GenerateCrc32((const LPBYTE)Data, (DWORD)GlobalSize(pCF->m_hgData), dwCRC);
 			}
 			GlobalUnlock(pCF->m_hgData);
 		}
@@ -608,19 +608,19 @@ bool CClip::AddToMainTable()
 		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s');"),
 							(long)m_Time.GetTime(),
 							m_Desc,
-							m_lShortCut,
-							m_lDontAutoDelete,
+							m_shortCut,
+							m_dontAutoDelete,
 							m_CRC,
 							m_bIsGroup,
-							m_lParent,
+							m_parentId,
 							m_csQuickPaste);
 
 		theApp.m_db.execDML(cs);
 
-		m_ID = (long)theApp.m_db.lastRowId();
+		m_id = (long)theApp.m_db.lastRowId();
 
 		m_LastAddedCRC = m_CRC;
-		m_LastAddedID = m_ID;
+		m_lastAddedID = m_id;
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)
 	
@@ -641,12 +641,12 @@ bool CClip::ModifyMainTable()
 			_T("lDontAutoDelete = %d, ")
 			_T("QuickPasteText = '%s' ")
 			_T("WHERE lID = %d;"), 
-			m_lShortCut, 
+			m_shortCut, 
 			m_Desc, 
-			m_lParent, 
-			m_lDontAutoDelete, 
+			m_parentId, 
+			m_dontAutoDelete, 
 			m_csQuickPaste,
-			m_ID);
+			m_id);
 
 		bRet = true;
 	}
@@ -664,24 +664,24 @@ bool CClip::AddToDataTable()
 	{
 		CppSQLite3Statement stmt = theApp.m_db.compileStatement(_T("insert into Data values (NULL, ?, ?, ?);"));
 		
-		for(int i = m_Formats.GetSize()-1; i >= 0 ; i--)
+		for(INT_PTR i = m_Formats.GetSize()-1; i >= 0 ; i--)
 		{
-			pCF = & m_Formats.ElementAt(i);
+			pCF = &m_Formats.ElementAt(i);
 			
-			stmt.bind(1, m_ID);
+			stmt.bind(1, m_id);
 			stmt.bind(2, GetFormatName(pCF->m_cfType));
 
 			const unsigned char *Data = (const unsigned char *)GlobalLock(pCF->m_hgData);
 			if(Data)
 			{
-				stmt.bind(3, Data, GlobalSize(pCF->m_hgData));
+				stmt.bind(3, Data, (int)GlobalSize(pCF->m_hgData));
 			}
 			GlobalUnlock(pCF->m_hgData);
 			
 			stmt.execDML();
 			stmt.reset();
 
-			pCF->m_lDBID = (long)theApp.m_db.lastRowId();
+			pCF->m_dbId = (long)theApp.m_db.lastRowId();
 		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)
@@ -709,25 +709,25 @@ void CClip::MakeLatestTime()
 	CATCH_SQLITE_EXCEPTION
 }
 
-BOOL CClip::LoadMainTable(long lID)
+BOOL CClip::LoadMainTable(int id)
 {
 	bool bRet = false;
 	try
 	{
-		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), lID);
+		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), id);
 
 		if(q.eof() == false)
 		{
 			m_Time = q.getIntField(_T("lDate"));
 			m_Desc = q.getStringField(_T("mText"));
 			m_CRC = q.getIntField(_T("CRC"));
-			m_lParent = q.getIntField(_T("lParentID"));
-			m_lDontAutoDelete = q.getIntField(_T("lDontAutoDelete"));
-			m_lShortCut = q.getIntField(_T("lShortCut"));
+			m_parentId = q.getIntField(_T("lParentID"));
+			m_dontAutoDelete = q.getIntField(_T("lDontAutoDelete"));
+			m_shortCut = q.getIntField(_T("lShortCut"));
 			m_bIsGroup = q.getIntField(_T("bIsGroup"));
 			m_csQuickPaste = q.getStringField(_T("QuickPasteText"));
 
-			m_ID = lID;
+			m_id = id;
 
 			bRet = true;
 		}
@@ -740,7 +740,7 @@ BOOL CClip::LoadMainTable(long lID)
 // STATICS
 
 // Allocates a Global containing the requested Clip Format Data
-HGLOBAL CClip::LoadFormat(long lID, UINT cfType)
+HGLOBAL CClip::LoadFormat(int id, UINT cfType)
 {
 	HGLOBAL hGlobal = 0;
 	try
@@ -752,7 +752,7 @@ HGLOBAL CClip::LoadFormat(long lID, UINT cfType)
 			_T("INNER JOIN Main ON Main.lID = Data.lParentID ")
 			_T("WHERE Main.lID = %d ")
 			_T("AND Data.strClipBoardFormat = \'%s\'"),
-			lID,
+			id,
 			GetFormatName(cfType));
 
 		CppSQLite3Query q = theApp.m_db.execQuery(csSQL);
@@ -774,7 +774,7 @@ HGLOBAL CClip::LoadFormat(long lID, UINT cfType)
 	return hGlobal;
 }
 
-bool CClip::LoadFormats(long lID, bool bOnlyLoad_CF_TEXT)
+bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT)
 {
 	CClipFormat cf;
 	HGLOBAL hGlobal = 0;
@@ -790,13 +790,13 @@ bool CClip::LoadFormats(long lID, bool bOnlyLoad_CF_TEXT)
 		csSQL.Format(
 			_T("SELECT Data.lID, strClipBoardFormat, ooData FROM Data ")
 			_T("INNER JOIN Main ON Main.lID = Data.lParentID ")
-			_T("WHERE Main.lID = %d ORDER BY Data.lID desc"), lID);
+			_T("WHERE Main.lID = %d ORDER BY Data.lID desc"), id);
 
 		CppSQLite3Query q = theApp.m_db.execQuery(csSQL);
 
 		while(q.eof() == false)
 		{
-			cf.m_lDBID = q.getIntField(_T("lID"));
+			cf.m_dbId = q.getIntField(_T("lID"));
 			cf.m_cfType = GetFormatID(q.getStringField(_T("strClipBoardFormat")));
 			
 			if(bOnlyLoad_CF_TEXT)
@@ -829,7 +829,7 @@ bool CClip::LoadFormats(long lID, bool bOnlyLoad_CF_TEXT)
 	return m_Formats.GetSize() > 0;
 }
 
-void CClip::LoadTypes(long lID, CClipTypes& types)
+void CClip::LoadTypes(int id, CClipTypes& types)
 {
 	types.RemoveAll();
 	try
@@ -842,7 +842,7 @@ void CClip::LoadTypes(long lID, CClipTypes& types)
 		csSQL.Format(
 			_T("SELECT strClipBoardFormat FROM Data ")
 			_T("INNER JOIN Main ON Main.lID = Data.lParentID ")
-			_T("WHERE Main.lID = %d ORDER BY Data.lID desc"), lID);
+			_T("WHERE Main.lID = %d ORDER BY Data.lID desc"), id);
 
 		CppSQLite3Query q = theApp.m_db.execQuery(csSQL);			
 
@@ -861,18 +861,18 @@ bool CClip::SaveFromEditWnd(BOOL bUpdateDesc)
 
 	try
 	{
-		theApp.m_db.execDMLEx(_T("DELETE FROM Data WHERE lParentID = %d;"), m_ID);
+		theApp.m_db.execDMLEx(_T("DELETE FROM Data WHERE lParentID = %d;"), m_id);
 
 		DWORD CRC = GenerateCRC();
 
 		AddToDataTable();
 
-		theApp.m_db.execDMLEx(_T("UPDATE Main SET CRC = %d WHERE lID = %d"), CRC, m_ID);
+		theApp.m_db.execDMLEx(_T("UPDATE Main SET CRC = %d WHERE lID = %d"), CRC, m_id);
 		
 		if(bUpdateDesc)
 		{
 			m_Desc.Replace(_T("'"), _T("''"));
-			theApp.m_db.execDMLEx(_T("UPDATE Main SET mText = '%s' WHERE lID = %d"), m_Desc, m_ID);
+			theApp.m_db.execDMLEx(_T("UPDATE Main SET mText = '%s' WHERE lID = %d"), m_Desc, m_id);
 		}
 
 		bRet = true;
@@ -903,29 +903,32 @@ int CClipList::AddToDB(bool bLatestTime)
 	Log(_T("AddToDB - Start"));
 
 	int savedCount = 0;
-	int nRemaining = 0;
 	CClip* pClip;
 	POSITION pos;
 	bool bResult;
 	
-	nRemaining = GetCount();
+	INT_PTR remaining = GetCount();
 	pos = GetHeadPosition();
 	while(pos)
 	{
-		Log(StrF(_T("AddToDB - while(pos), Start Remaining %d"), nRemaining));
-		nRemaining--;
+		Log(StrF(_T("AddToDB - while(pos), Start Remaining %d"), remaining));
+		remaining--;
 		
 		pClip = GetNext(pos);
 		ASSERT(pClip);
 		
 		if(bLatestTime)
+		{
 			pClip->MakeLatestTime();
-		
-		bResult = pClip->AddToDB();
-		if( bResult )
-			savedCount++;
+		}
 
-		Log(StrF(_T("AddToDB - while(pos), End Remaining %d, save count: %d"), nRemaining, savedCount));
+		bResult = pClip->AddToDB();
+		if(bResult)
+		{
+			savedCount++;
+		}
+
+		Log(StrF(_T("AddToDB - while(pos), End Remaining %d, save count: %d"), remaining, savedCount));
 	}
 
 	Log(StrF(_T("AddToDB - Start, count: %d"), savedCount));

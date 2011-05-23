@@ -67,14 +67,14 @@ CString GetWndText( HWND hWnd );
 bool IsAppWnd( HWND hWnd );
 
 // Global Memory Helper Functions
-BOOL IsValid( HGLOBAL hGlobal );
-void CopyToGlobalHP( HGLOBAL hDest, LPVOID pBuf, ULONG ulBufLen );
-void CopyToGlobalHH( HGLOBAL hDest, HGLOBAL hSource, ULONG ulBufLen );
-HGLOBAL NewGlobalP( LPVOID pBuf, UINT nLen );
-HGLOBAL NewGlobalH( HGLOBAL hSource, UINT nLen );
-HGLOBAL NewGlobal(UINT nLen);
-int CompareGlobalHP( HGLOBAL hLeft, LPVOID pBuf, ULONG ulBufLen );
-int CompareGlobalHH( HGLOBAL hLeft, HGLOBAL hRight, ULONG ulBufLen );
+BOOL IsValid(HGLOBAL hGlobal);
+void CopyToGlobalHP(HGLOBAL hDest, LPVOID pBuf, SIZE_T ulBufLen);
+void CopyToGlobalHH(HGLOBAL hDest, HGLOBAL hSource, SIZE_T ulBufLen);
+HGLOBAL NewGlobalP(LPVOID pBuf, SIZE_T nLen);
+HGLOBAL NewGlobalH(HGLOBAL hSource, SIZE_T nLen);
+HGLOBAL NewGlobal(SIZE_T nLen);
+int CompareGlobalHP(HGLOBAL hLeft, LPVOID pBuf, SIZE_T ulBufLen);
+int CompareGlobalHH(HGLOBAL hLeft, HGLOBAL hRight, SIZE_T ulBufLen);
 
 BOOL EncryptString(CString &csString, UCHAR*& pOutput, int &nLenOutput);
 BOOL DecryptString(UCHAR *pData, int nLenIn, UCHAR*& pOutput, int &nLenOutput);
@@ -117,9 +117,9 @@ CString GetProcessName(HWND hWnd);
 #	include <bitset>
 #endif // !defined(_BITSET_)
 
-long NewGroupID(long lParentID = 0, CString text = "");
+long NewGroupID(int parentID = 0, CString text = "");
 BOOL DeleteAllIDs();
-BOOL DeleteFormats(long lDataID, ARRAY& formatIDs);
+BOOL DeleteFormats(int parentID, ARRAY& formatIDs);
 
 __inline BOOL FileExists(LPCTSTR pszFile)
 { 

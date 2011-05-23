@@ -130,7 +130,7 @@ void CEventThread::RunThread()
 
 	while(true)
 	{
-		DWORD event = WaitForMultipleObjects(m_eventMap.size(), pHandleArray, FALSE, m_waitTimeout);
+		DWORD event = WaitForMultipleObjects((DWORD)m_eventMap.size(), pHandleArray, FALSE, m_waitTimeout);
 
 		if(event == WAIT_FAILED)
 		{

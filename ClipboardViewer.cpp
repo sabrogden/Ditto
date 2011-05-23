@@ -295,7 +295,7 @@ bool CClipboardViewer::ValidActiveWnd()
 	return true;
 }
 
-void CClipboardViewer::OnTimer(UINT nIDEvent) 
+void CClipboardViewer::OnTimer(UINT_PTR nIDEvent) 
 {
 	switch(nIDEvent)
 	{

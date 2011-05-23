@@ -14,7 +14,7 @@
 // allocate an HGLOBAL of the given Format Type representing these Clip IDs.
 HGLOBAL CClipIDs::Render(UINT cfType)
 {
-	int count = GetSize();
+	INT_PTR count = GetSize();
 	if(count <= 0)
 	{
 		return 0;
@@ -74,33 +74,33 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 
 void CClipIDs::GetTypes(CClipTypes& types)
 {
-	int IDCount = GetSize();
+	INT_PTR count = GetSize();
 	types.RemoveAll();
 
-	if(IDCount == 1)
+	if(count == 1)
 	{
 		CClip::LoadTypes(ElementAt(0), types);
 	}
-	else if(IDCount > 1)
+	else if(count > 1)
 	{
-		//Add the types that are common accross all paste ids
+		//Add the types that are common across all paste ids
 		long lCount;
 		CMap<CLIPFORMAT, CLIPFORMAT, long, long> RenderTypes;
 
-		for(int nIDPos = 0; nIDPos < IDCount; nIDPos++)
+		for(int nIDPos = 0; nIDPos < count; nIDPos++)
 		{
 			CClipTypes CurrTypes;
 			CClip::LoadTypes(ElementAt(nIDPos), CurrTypes);
 
-			int nTypeCount = CurrTypes.GetSize();
+			INT_PTR typeCount = CurrTypes.GetSize();
 
-			for(int nType = 0; nType < nTypeCount; nType++)
+			for(int type = 0; type < typeCount; type++)
 			{	
 				lCount = 0;
-				if(nIDPos == 0 || RenderTypes.Lookup(CurrTypes[nType], lCount) == TRUE)
+				if(nIDPos == 0 || RenderTypes.Lookup(CurrTypes[type], lCount) == TRUE)
 				{
 					lCount++;
-					RenderTypes.SetAt(CurrTypes[nType], lCount);
+					RenderTypes.SetAt(CurrTypes[type], lCount);
 				}
 			}
 		}
@@ -110,7 +110,7 @@ void CClipIDs::GetTypes(CClipTypes& types)
 		while(pos)
 		{
 			RenderTypes.GetNextAssoc(pos, Format, lCount);
-			if(lCount == IDCount)
+			if(lCount == count)
 			{
 				types.Add(Format);
 			}			
@@ -129,13 +129,12 @@ bool CClipIDs::AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bRev
 	CString csSQL;
 	LPWSTR Text = NULL;
 	int nTextSize = 0;
-	int numIDs = GetSize();
-	int* pIDs = GetData();
+	INT_PTR numIDs = GetSize();
 	bool bRet = false;
 
 	try
 	{
-		int nIndex;
+		INT_PTR nIndex;
 		for(int i=0; i < numIDs; i++)
 		{
 			nIndex = i;
@@ -149,7 +148,7 @@ bool CClipIDs::AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bRev
 				_T("WHERE Data.strClipBoardFormat = '%s' ")
 				_T("AND Main.lID = %d"),
 				GetFormatName(cfType),
-				pIDs[nIndex]);
+				this[nIndex]);
 
 			CppSQLite3Query q = theApp.m_db.execQuery(csSQL);
 
@@ -162,7 +161,7 @@ bool CClipIDs::AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bRev
 					continue;
 				}
 
-				if(Aggregator.AddClip(pData, nDataLen, i, numIDs))
+				if(Aggregator.AddClip(pData, nDataLen, (int)i, (int)numIDs))
 				{
 					bRet = true;
 				}
@@ -183,14 +182,14 @@ bool CClipIDs::AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bRev
 //----------------------------------------------
 
 // returns the address of the given id in this array or NULL.
-long* CClipIDs::FindID(long lID)
+int* CClipIDs::FindID(int id)
 {
-	int count = GetSize();
-	long* pID = (long*) GetData();
+	INT_PTR count = GetSize();
+	int* pID = GetData();
 
 	for(int i=0; i < count; i++)
 	{
-		if(*pID == lID)
+		if(*pID == id)
 		{
 			return pID;
 		}
@@ -204,8 +203,8 @@ BOOL CClipIDs::MoveTo(long lParentID, double dFirst, double dIncrement)
 {
 	try
 	{
-		int nCount = GetSize();
-		for(int i = 0; i < nCount; i++)
+		INT_PTR count = GetSize();
+		for(int i = 0; i < count; i++)
 		{
 			CString sql = StrF(_T("UPDATE Main SET lParentID = %d ")
 								_T("WHERE lID = %d AND lID <> %d;"), 
@@ -222,13 +221,13 @@ BOOL CClipIDs::MoveTo(long lParentID, double dFirst, double dIncrement)
 }
 
 // Empties this array and fills it with the elements of the given group ID
-BOOL CClipIDs::LoadElementsOf(long lGroupID)
+BOOL CClipIDs::LoadElementsOf(int groupId)
 {
 	SetSize(0);
 	
 	try
 	{
-		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID FROM Main WHERE lParentID = %d"), lGroupID);
+		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID FROM Main WHERE lParentID = %d"), groupId);
 		while(q.eof() == false)
 		{
 			Add(q.getIntField(_T("lID")));
@@ -237,7 +236,7 @@ BOOL CClipIDs::LoadElementsOf(long lGroupID)
 	}
 	CATCH_SQLITE_EXCEPTION
 		
-	return GetSize();
+	return GetSize() > 0;
 }
 
 // Creates copies (duplicates) of all items in this array and assigns the
@@ -249,9 +248,9 @@ BOOL CClipIDs::LoadElementsOf(long lGroupID)
 //   an alternative design would be to have one CMainTable per level deep,
 //   but I thought that might be too costly, so I implemented it this way.
 
-BOOL CClipIDs::CopyTo(long lParentID)
+BOOL CClipIDs::CopyTo(int parentId)
 {
-	int count = GetSize();
+	INT_PTR count = GetSize();
 	if(count == 0)
 		return TRUE;
 		
@@ -271,8 +270,8 @@ BOOL CClipIDs::CopyTo(long lParentID)
 				{
 					clip.MakeLatestTime();
 
-					clip.m_lShortCut = 0;
-					clip.m_lParent = lParentID;
+					clip.m_shortCut = 0;
+					clip.m_parentId = parentId;
 					clip.m_csQuickPaste = "";
 
 					if(clip.AddToDB(false) == false)
@@ -297,7 +296,7 @@ BOOL CClipIDs::DeleteIDs(bool fromClipWindow, CppSQLite3DB& db)
 	bAllowShow = IsAppWnd(::GetForegroundWindow());
 	
 	BOOL bRet = TRUE;
-	int count = GetSize();
+	INT_PTR count = GetSize();
 	int batchCount = 25;
 
 	Log(StrF(_T("Begin delete clips, Count: %d from Window: %d"), count, fromClipWindow));
@@ -310,8 +309,8 @@ BOOL CClipIDs::DeleteIDs(bool fromClipWindow, CppSQLite3DB& db)
 		CString sql = _T("DELETE FROM Main where lId in(");
 		CString sqlIn = _T("");
 		CString workingString = _T("Deleting clips, building query statement");
-		int startIndex = 0;
-		int index = 0;
+		INT_PTR startIndex = 0;
+		INT_PTR index = 0;
 
 		if(bAllowShow)
 		{
@@ -428,7 +427,7 @@ BOOL CClipIDs::CreateExportSqliteDB(CppSQLite3DB &db)
 
 BOOL CClipIDs::Export(CString csFilePath)
 {    
-	int count = GetSize();
+	INT_PTR count = GetSize();
 	if(count == 0)
 		return TRUE;
 

@@ -95,8 +95,8 @@ BOOL COptionsCopyBuffers::OnApply()
 	Item.m_bPlaySoundOnCopy = IsDlgButtonChecked(IDC_PLAY_SOUND_3);
 	g_Opt.SetCopyBufferItem(2, Item);
 
-	int x;
-	int y;
+	INT_PTR x;
+	INT_PTR y;
 	ARRAY NewKeys;
 	g_HotKeys.GetKeys(NewKeys);
 

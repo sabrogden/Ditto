@@ -289,7 +289,7 @@ void CServer::OnExit(CSendInfo &info)
 
 	if(m_pClipList && m_pClipList->GetCount() > 0)
 	{
-		theApp.m_lClipsRecieved += m_pClipList->GetCount();
+		theApp.m_lClipsRecieved += (long)m_pClipList->GetCount();
 
 		//Post a message pClipList will be freed by the reciever
 		::PostMessage(theApp.m_MainhWnd, WM_ADD_TO_DATABASE_FROM_SOCKET, (WPARAM)m_pClipList, m_bSetToClipBoard);

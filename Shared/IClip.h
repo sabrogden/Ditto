@@ -23,7 +23,7 @@ public:
 	virtual IClipFormat *GetAt(int nPos) = 0;
 	virtual void DeleteAt(int nPos) = 0;
 	virtual void DeleteAll() = 0;
-	virtual int AddNew(CLIPFORMAT type, HGLOBAL data) = 0;
+	virtual INT_PTR AddNew(CLIPFORMAT type, HGLOBAL data) = 0;
 	virtual IClipFormat *FindFormatEx(CLIPFORMAT type) = 0;
 };
 

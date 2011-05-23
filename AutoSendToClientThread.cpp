@@ -98,7 +98,7 @@ bool CAutoSendToClientThread::SendToClient(CClipList *pClipList)
 		return FALSE;
 	}
 
-	long lCount = pClipList->GetCount();
+	INT_PTR lCount = pClipList->GetCount();
 
 	LogSendRecieveInfo(StrF(_T("Start of Send ClientThread Count - %d"), lCount));
 

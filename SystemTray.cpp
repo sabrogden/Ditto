@@ -504,7 +504,7 @@ BOOL CSystemTray::Animate(UINT nDelayMilliSeconds, int nNumSeconds /*=-1*/)
     m_hSavedIcon = GetIcon();
 
 	// Setup a timer for the animation
-	m_uIDTimer = SetTimer(m_nTimerID, nDelayMilliSeconds, NULL);
+	m_uIDTimer = (UINT)SetTimer(m_nTimerID, nDelayMilliSeconds, NULL);
 
     return (m_uIDTimer != 0);
 }
@@ -775,7 +775,7 @@ BEGIN_MESSAGE_MAP(CSystemTray, CWnd)
     ON_REGISTERED_MESSAGE(CSystemTray::m_nTaskbarCreatedMsg, OnTaskbarCreated)
 END_MESSAGE_MAP()
 
-void CSystemTray::OnTimer(UINT nIDEvent) 
+void CSystemTray::OnTimer(UINT_PTR nIDEvent) 
 {
     if (nIDEvent != m_uIDTimer)
     {
@@ -814,7 +814,7 @@ void CSystemTray::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 }
 #endif
 
-LRESULT CSystemTray::OnTrayNotification(UINT wParam, LONG lParam) 
+LRESULT CSystemTray::OnTrayNotification(WPARAM wParam, LPARAM lParam) 
 {
     //Return quickly if its not for this tray icon
     if (wParam != m_tnd.uID)

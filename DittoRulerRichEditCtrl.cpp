@@ -149,7 +149,7 @@ int CDittoRulerRichEditCtrl::SaveToDB(BOOL bUpdateDesc)
 	try
 	{
 		CClip Clip;
-		Clip.m_ID = m_lID;
+		Clip.m_id = m_lID;
 		if(m_SaveTypes & stRTF)
 		{
 			LoadRTFData(Clip);
@@ -182,7 +182,7 @@ int CDittoRulerRichEditCtrl::SaveToDB(BOOL bUpdateDesc)
 			{
 				Clip.AddToDB();
 				m_csDescription = Clip.m_Desc;
-				m_lID = Clip.m_ID;
+				m_lID = Clip.m_id;
 				bUpdateDesc = TRUE;
 				bSetModifyToFalse = true;
 			}

@@ -33,7 +33,7 @@ void CHListBox::updateWidth(LPCTSTR s)
      CClientDC dc(this);
      CFont * f = CListBox::GetFont();
      dc.SelectObject(f);
-     CSize sz = dc.GetTextExtent(s, _tcslen(s));
+     CSize sz = dc.GetTextExtent(s, (int)_tcslen(s));
      sz.cx += 3 * ::GetSystemMetrics(SM_CXBORDER);
      if(sz.cx > width)
 	 { /* extend */

@@ -56,7 +56,7 @@ protected:
 	afx_msg void OnDestroy();
 	afx_msg void OnChangeCbChain(HWND hWndRemove, HWND hWndAfter);
 	afx_msg void OnDrawClipboard();
-	afx_msg void OnTimer(UINT nIDEvent);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	//}}AFX_MSG
 	afx_msg LRESULT OnSetConnect(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()

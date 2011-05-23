@@ -104,10 +104,10 @@ void CEditWnd::MoveControls()
 void CEditWnd::OnSaveAll() 
 {
 	BOOL bUpdateDesc = m_cbUpdateDescription.GetCheck();
-	int nSize = m_Edits.size();
-	for(int nTab = 0; nTab < nSize; nTab++)
+	INT_PTR size = m_Edits.size();
+	for(int tab = 0; tab < size; tab++)
 	{
-		DoSaveItem(nTab);
+		DoSaveItem(tab);
 	}
 }
 
@@ -128,12 +128,12 @@ bool CEditWnd::DoSave()
 	return bRet;
 }
 
-bool CEditWnd::DoSaveItem(long lIndex)
+bool CEditWnd::DoSaveItem(int index)
 {
 	bool bRet = false;
 	BOOL bUpdateDesc = m_cbUpdateDescription.GetCheck();
 
-	CDittoRulerRichEditCtrl *pEdit = m_Edits[lIndex];
+	CDittoRulerRichEditCtrl *pEdit = m_Edits[index];
 	if(pEdit)
 	{
 		int nRet = pEdit->SaveToDB(bUpdateDesc);
@@ -141,7 +141,7 @@ bool CEditWnd::DoSaveItem(long lIndex)
 		{
 			if(bUpdateDesc)
 			{
-				m_Tabs.SetTabTitle(lIndex, pEdit->GetDesc());
+				m_Tabs.SetTabTitle(index, pEdit->GetDesc());
 			}
 
 			if(nRet == SAVED_CLIP_TO_DB)
@@ -160,7 +160,7 @@ bool CEditWnd::DoSaveItem(long lIndex)
 		else
 		{
 			CString cs;
-			cs.Format(_T("%s '%s'"), theApp.m_Language.GetString("ErrorSaving", "Error saving clip"), m_Tabs.GetTabTitle(lIndex));
+			cs.Format(_T("%s '%s'"), theApp.m_Language.GetString("ErrorSaving", "Error saving clip"), m_Tabs.GetTabTitle(index));
 			MessageBox(cs, _T("Ditto"), MB_OK);
 		}
 	}
@@ -170,8 +170,8 @@ bool CEditWnd::DoSaveItem(long lIndex)
 
 bool CEditWnd::EditIds(CClipIDs &Ids)
 {
-	int nCount = min(Ids.GetSize(), 10);
-	for(int i = 0; i < nCount; i++)
+	INT_PTR count = min(Ids.GetSize(), 10);
+	for(int i = 0; i < count; i++)
 	{
 		if(IsIDAlreadyInEdit(Ids[i], true) < 0)
 		{
@@ -184,7 +184,7 @@ bool CEditWnd::EditIds(CClipIDs &Ids)
 	return true;
 }
 
-bool CEditWnd::AddItem(long lID)
+bool CEditWnd::AddItem(int id)
 {
 	bool bRet = false;
 	CDittoRulerRichEditCtrl *pEdit = new CDittoRulerRichEditCtrl;
@@ -192,11 +192,11 @@ bool CEditWnd::AddItem(long lID)
 	{
 		CString csTitle;
 
-		if(lID >= 0)
+		if(id >= 0)
 		{
 			try
 			{				
-				CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT mText FROM Main where lID = %d"), lID);
+				CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT mText FROM Main where lID = %d"), id);
 				if(q.eof() == false)
 				{
 					csTitle = q.getStringField(_T("mText"));
@@ -213,7 +213,7 @@ bool CEditWnd::AddItem(long lID)
 		pEdit->Create(WS_TABSTOP|WS_CHILD|WS_VISIBLE, CRect(100, 100, 105, 105), this, 100, TRUE);
 		pEdit->ShowRuler();
 		pEdit->ShowToolbar();
-		pEdit->LoadItem(lID, csTitle);		
+		pEdit->LoadItem(id, csTitle);		
 
 		m_Tabs.AddItem(csTitle, pEdit);
 		int nTab = m_Tabs.GetTabCount();
@@ -227,21 +227,21 @@ bool CEditWnd::AddItem(long lID)
 
 }
 
-long CEditWnd::IsIDAlreadyInEdit(long lID, bool bSetFocus)
+int CEditWnd::IsIDAlreadyInEdit(int id, bool bSetFocus)
 {
-	int nSize = m_Edits.size();
-	for(int i = 0; i < nSize; i++)
+	INT_PTR size = m_Edits.size();
+	for(int i = 0; i < size; i++)
 	{
 		CDittoRulerRichEditCtrl *pEdit = m_Edits[i];
 		if(pEdit)
 		{
-			if(pEdit->GetDBID() == lID)
+			if(pEdit->GetDBID() == id)
 			{
 				if(bSetFocus)
 				{
 					m_Tabs.SetActiveTab(i);
 				}
-				return i;
+				return (int)i;
 			}
 		}
 	}
@@ -252,8 +252,8 @@ void CEditWnd::OnDestroy()
 {
 	CWnd::OnDestroy();
 
-	int nSize = m_Edits.size();
-	for(int i = 0; i < nSize; i++)
+	INT_PTR size = m_Edits.size();
+	for(int i = 0; i < size; i++)
 	{
 		CDittoRulerRichEditCtrl *pEdit = m_Edits[i];
 		if(pEdit)

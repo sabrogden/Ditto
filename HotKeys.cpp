@@ -158,29 +158,33 @@ CHotKeys::CHotKeys() : m_hWnd(NULL)
 CHotKeys::~CHotKeys()
 {
 	CHotKey* pHotKey;
-	int count = GetSize();
+	INT_PTR count = GetSize();
 	for(int i=0; i < count; i++)
 	{
 		pHotKey = ElementAt(i);
 		if(pHotKey)
+		{
 			delete pHotKey;
+		}
 	}
 }
 
-int CHotKeys::Find( CHotKey* pHotKey )
+INT_PTR CHotKeys::Find(CHotKey* pHotKey)
 {
-	int count = GetSize();
+	INT_PTR count = GetSize();
 	for(int i=0; i < count; i++)
 	{
-		if( pHotKey == ElementAt(i) )
+		if(pHotKey == ElementAt(i))
+		{
 			return i;
+		}
 	}
 	return -1;
 }
 
-bool CHotKeys::Remove( CHotKey* pHotKey )
+bool CHotKeys::Remove(CHotKey* pHotKey)
 {
-	int i = Find(pHotKey);
+	INT_PTR i = Find(pHotKey);
 	if(i >= 0)
 	{
 		RemoveAt(i);
@@ -191,23 +195,27 @@ bool CHotKeys::Remove( CHotKey* pHotKey )
 
 void CHotKeys::LoadAllKeys()
 {
-	int count = GetSize();
+	INT_PTR count = GetSize();
 	for(int i=0; i < count; i++)
+	{
 		ElementAt(i)->LoadKey();
+	}
 }
 
 void CHotKeys::SaveAllKeys()
 {
-	int count = GetSize();
+	INT_PTR count = GetSize();
 	for(int i=0; i < count; i++)
+	{
 		ElementAt(i)->SaveKey();
+	}
 }
 
 void CHotKeys::RegisterAll(bool bMsgOnError)
 {
 	CString str;
 	CHotKey* pHotKey;
-	int count = GetSize();
+	INT_PTR count = GetSize();
 	for(int i = 0; i < count; i++)
 	{
 		pHotKey = ElementAt(i);
@@ -226,7 +234,7 @@ void CHotKeys::UnregisterAll(bool bMsgOnError, bool bOnShowDitto)
 {
 	CString str;
 	CHotKey* pHotKey;
-	int count = GetSize();
+	INT_PTR count = GetSize();
 	for(int i = 0; i < count; i++)
 	{
 		pHotKey = ElementAt(i);
@@ -243,26 +251,30 @@ void CHotKeys::UnregisterAll(bool bMsgOnError, bool bOnShowDitto)
 
 void CHotKeys::GetKeys(ARRAY& keys)
 {
-	int count = GetSize();
+	INT_PTR count = GetSize();
 	keys.SetSize(count);
 	for(int i=0; i < count; i++)
+	{
 		keys[i] = ElementAt(i)->GetKey();
+	}
 }
 
 // caution! this alters hotkeys based upon corresponding indexes
 void CHotKeys::SetKeys(ARRAY& keys, bool bSave)
 {
-	int count = GetSize();
+	INT_PTR count = GetSize();
 	ASSERT(count == keys.GetSize());
 	for(int i=0; i < count; i++)
-		ElementAt(i)->SetKey(keys[i], bSave);
+	{
+		ElementAt(i)->SetKey(keys[(INT)i], bSave);
+	}
 }
 
-bool CHotKeys::FindFirstConflict(ARRAY& keys, int* pX, int* pY)
+bool CHotKeys::FindFirstConflict(ARRAY& keys, INT_PTR* pX, INT_PTR* pY)
 {
 	bool bConflict = false;
-	int i, j;
-	int count = keys.GetSize();
+	INT_PTR i, j;
+	INT_PTR count = keys.GetSize();
 	DWORD key;
 	for(i = 0; i < count && !bConflict; i++)
 	{
@@ -294,7 +306,7 @@ bool CHotKeys::FindFirstConflict(ARRAY& keys, int* pX, int* pY)
 }
 
 // if true, pX and pY (if valid) are set to the indexes of the conflicting hotkeys.
-bool CHotKeys::FindFirstConflict(int* pX, int* pY)
+bool CHotKeys::FindFirstConflict(INT_PTR* pX, INT_PTR* pY)
 {
 	ARRAY keys;
 	GetKeys(keys);

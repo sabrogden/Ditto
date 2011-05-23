@@ -168,7 +168,7 @@ CString RemoveEscapes( const TCHAR* str )
 	ASSERT( str );
 	CString ret;
 	TCHAR* pSrc = (TCHAR*) str;
-	TCHAR* pDest = ret.GetBuffer(STRLEN(pSrc));
+	TCHAR* pDest = ret.GetBuffer((int)STRLEN(pSrc));
 	TCHAR* pStart = pDest;
 	while( *pSrc != '\0' )
 	{
@@ -182,7 +182,7 @@ CString RemoveEscapes( const TCHAR* str )
 		pSrc++;
 		pDest++;
 	}
-	ret.ReleaseBuffer( pDest - pStart );
+	ret.ReleaseBuffer((int)(pDest - pStart));
 	return ret;
 }
 
@@ -209,63 +209,63 @@ Global Memory Helper Functions
 \*----------------------------------------------------------------------------*/
 
 // make sure the given HGLOBAL is valid.
-BOOL IsValid( HGLOBAL hGlobal )
+BOOL IsValid(HGLOBAL hGlobal)
 {
-	void* pvData = ::GlobalLock( hGlobal );
-	::GlobalUnlock( hGlobal );
-	return ( pvData != NULL );
+	void* pvData = ::GlobalLock(hGlobal);
+	::GlobalUnlock(hGlobal);
+	return (pvData != NULL);
 }
 
 // asserts if hDest isn't big enough
-void CopyToGlobalHP( HGLOBAL hDest, LPVOID pBuf, ULONG ulBufLen )
+void CopyToGlobalHP(HGLOBAL hDest, LPVOID pBuf, SIZE_T ulBufLen)
 {
-	ASSERT( hDest && pBuf && ulBufLen );
+	ASSERT(hDest && pBuf && ulBufLen);
 	LPVOID pvData = GlobalLock(hDest);
-	ASSERT( pvData );
-	ULONG size = GlobalSize(hDest);
-	ASSERT( size >= ulBufLen );	// assert if hDest isn't big enough
+	ASSERT(pvData);
+	SIZE_T size = GlobalSize(hDest);
+	ASSERT(size >= ulBufLen);	// assert if hDest isn't big enough
 	memcpy(pvData, pBuf, ulBufLen);
 	GlobalUnlock(hDest);
 }
 
-void CopyToGlobalHH( HGLOBAL hDest, HGLOBAL hSource, ULONG ulBufLen )
+void CopyToGlobalHH(HGLOBAL hDest, HGLOBAL hSource, SIZE_T ulBufLen)
 {
-	ASSERT( hDest && hSource && ulBufLen );
+	ASSERT(hDest && hSource && ulBufLen);
 	LPVOID pvData = GlobalLock(hSource);
-	ASSERT( pvData );
-	ULONG size = GlobalSize(hSource);
-	ASSERT( size >= ulBufLen );	// assert if hSource isn't big enough
+	ASSERT(pvData );
+	SIZE_T size = GlobalSize(hSource);
+	ASSERT(size >= ulBufLen);	// assert if hSource isn't big enough
 	CopyToGlobalHP(hDest, pvData, ulBufLen);
 	GlobalUnlock(hSource);
 }
 
 
-HGLOBAL NewGlobalP( LPVOID pBuf, UINT nLen )
+HGLOBAL NewGlobalP(LPVOID pBuf, SIZE_T nLen)
 {
-	ASSERT( pBuf && nLen );
-	HGLOBAL hDest = GlobalAlloc( GMEM_MOVEABLE | GMEM_SHARE, nLen );
-	ASSERT( hDest );
-	CopyToGlobalHP( hDest, pBuf, nLen );
+	ASSERT(pBuf && nLen);
+	HGLOBAL hDest = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, nLen);
+	ASSERT(hDest );
+	CopyToGlobalHP(hDest, pBuf, nLen);
 	return hDest;
 }
 
-HGLOBAL NewGlobal(UINT nLen)
+HGLOBAL NewGlobal(SIZE_T nLen)
 {
 	ASSERT(nLen);
 	HGLOBAL hDest = GlobalAlloc(GMEM_MOVEABLE | GMEM_SHARE, nLen);
 	return hDest;
 }
 
-HGLOBAL NewGlobalH( HGLOBAL hSource, UINT nLen )
+HGLOBAL NewGlobalH(HGLOBAL hSource, SIZE_T nLen)
 {
-	ASSERT( hSource && nLen );
-	LPVOID pvData = GlobalLock( hSource );
-	HGLOBAL hDest = NewGlobalP( pvData, nLen );
-	GlobalUnlock( hSource );
+	ASSERT(hSource && nLen);
+	LPVOID pvData = GlobalLock(hSource);
+	HGLOBAL hDest = NewGlobalP(pvData, nLen);
+	GlobalUnlock(hSource);
 	return hDest;
 }
 
-int CompareGlobalHP(HGLOBAL hLeft, LPVOID pBuf, ULONG ulBufLen)
+int CompareGlobalHP(HGLOBAL hLeft, LPVOID pBuf, SIZE_T ulBufLen)
 {
 	ASSERT(hLeft && pBuf && ulBufLen);
 
@@ -281,14 +281,14 @@ int CompareGlobalHP(HGLOBAL hLeft, LPVOID pBuf, ULONG ulBufLen)
 	return result;
 }
 
-int CompareGlobalHH( HGLOBAL hLeft, HGLOBAL hRight, ULONG ulBufLen )
+int CompareGlobalHH( HGLOBAL hLeft, HGLOBAL hRight, SIZE_T ulBufLen)
 {
-	ASSERT( hLeft && hRight && ulBufLen );
-	ASSERT( ulBufLen <= GlobalSize(hRight) );
+	ASSERT(hLeft && hRight && ulBufLen);
+	ASSERT(ulBufLen <= GlobalSize(hRight));
 	LPVOID pvData = GlobalLock(hRight);
-	ASSERT( pvData );
-	int result = CompareGlobalHP( hLeft, pvData, ulBufLen );
-	GlobalUnlock( hLeft );
+	ASSERT(pvData);
+	int result = CompareGlobalHP(hLeft, pvData, ulBufLen);
+	GlobalUnlock(hLeft);
 	return result;
 }
 
@@ -629,7 +629,7 @@ void GetMonitorRect(int iMonitor, LPRECT lpDestRect)
 ID based Globals
 \*------------------------------------------------------------------*/
 
-long NewGroupID(long lParentID, CString text)
+long NewGroupID(int parentID, CString text)
 {
 	long lID=0;
 	CTime time;
@@ -647,7 +647,7 @@ long NewGroupID(long lParentID, CString text)
 							(long)time.GetTime(),
 							text,
 							(long)time.GetTime(),
-							lParentID);
+							parentID);
 
 		theApp.m_db.execDML(cs);
 
@@ -670,7 +670,7 @@ BOOL DeleteAllIDs()
 	return TRUE;
 }
 
-BOOL DeleteFormats(long lParentID, ARRAY& formatIDs)
+BOOL DeleteFormats(int parentID, ARRAY& formatIDs)
 {	
 	if(formatIDs.GetSize() <= 0)
 		return TRUE;
@@ -678,19 +678,19 @@ BOOL DeleteFormats(long lParentID, ARRAY& formatIDs)
 	try
 	{
 		//Delete the requested data formats
-		int nCount = formatIDs.GetSize();
-		for(int i = 0; i < nCount; i++)
+		INT_PTR count = formatIDs.GetSize();
+		for(int i = 0; i < count; i++)
 		{
 			theApp.m_db.execDMLEx(_T("DELETE FROM Data WHERE lID = %d;"), formatIDs[i]);
 		}
 
 		CClip clip;
-		if(clip.LoadFormats(lParentID))
+		if(clip.LoadFormats(parentID))
 		{
 			DWORD CRC = clip.GenerateCRC();
 
 			//Update the main table with new size
-			theApp.m_db.execDMLEx(_T("UPDATE Main SET CRC = %d WHERE lID = %d"), CRC, lParentID);
+			theApp.m_db.execDMLEx(_T("UPDATE Main SET CRC = %d WHERE lID = %d"), CRC, parentID);
 		}
 	}
 	CATCH_SQLITE_EXCEPTION

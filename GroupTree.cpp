@@ -17,7 +17,7 @@ static char THIS_FILE[] = __FILE__;
 CGroupTree::CGroupTree()
 {
 	m_bHide = true;
-	m_lSelectedFolderID = -1;
+	m_selectedFolderID = -1;
 	m_bSendAllready = false;
 }
 
@@ -79,18 +79,18 @@ void CGroupTree::FillTree()
 
 	SetItemState(hItem, TVIS_EXPANDED, TVIS_EXPANDED);
 
-	if(m_lSelectedFolderID < 0)
+	if(m_selectedFolderID < 0)
 		SelectItem(hItem);
 	
 	FillTree(-1, hItem);
 }
 
 
-void CGroupTree::FillTree(long lParentID, HTREEITEM hParent)
+void CGroupTree::FillTree(int parentID, HTREEITEM hParent)
 {	
 	try
 	{
-		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText FROM Main WHERE bIsGroup = 1 AND lParentID = %d"), lParentID);
+		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText FROM Main WHERE bIsGroup = 1 AND lParentID = %d"), parentID);
 			
 		if(q.eof() == false)
 		{
@@ -98,7 +98,7 @@ void CGroupTree::FillTree(long lParentID, HTREEITEM hParent)
 
 			while(!q.eof())
 			{
-				if(q.getIntField(_T("lID")) == m_lSelectedFolderID)
+				if(q.getIntField(_T("lID")) == m_selectedFolderID)
 				{
 					hItem = InsertItem(q.getStringField(_T("mText")), 1, 1, hParent);
 					SelectItem(hItem);
@@ -154,16 +154,16 @@ void CGroupTree::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	HTREEITEM hItem =  GetNextItem(TVI_ROOT, TVGN_CARET);
 	if(hItem)
-		SendToParent(GetItemData(hItem));
+		SendToParent((int)GetItemData(hItem));
 			
 	*pResult = 1;
 }
 
-long CGroupTree::GetSelectedTree()
+int CGroupTree::GetSelectedTree()
 {
 	HTREEITEM hItem =  GetNextItem(TVI_ROOT, TVGN_CARET);
 	if(hItem)
-		return (long)GetItemData(hItem);
+		return (int)GetItemData(hItem);
 
 	return -1;
 }
@@ -178,7 +178,7 @@ void CGroupTree::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 	{	
 		HTREEITEM hItem =  GetNextItem(TVI_ROOT, TVGN_CARET);
 		if(hItem)
-			SendToParent(GetItemData(hItem));
+			SendToParent((int)GetItemData(hItem));
 		
 		break;
 	}
@@ -193,16 +193,16 @@ void CGroupTree::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-void CGroupTree::SendToParent(long lID)
+void CGroupTree::SendToParent(int parentId)
 {
 	if(m_bSendAllready == false)
 	{
 		m_bSendAllready = true;
-		::PostMessage(m_NotificationWnd, NM_GROUP_TREE_MESSAGE, lID, 0);
+		::PostMessage(m_NotificationWnd, NM_GROUP_TREE_MESSAGE, parentId, 0);
 	}
 }
 
-bool CGroupTree::AddNode(CString csText, long lID)
+bool CGroupTree::AddNode(CString csText, int id)
 {
 	HTREEITEM hItem;
 
@@ -213,7 +213,7 @@ bool CGroupTree::AddNode(CString csText, long lID)
 	hItem = InsertItem(csText, 1, 1, hParent);
 	SelectItem(hItem);
 
-	SetItemData(hItem, lID);
+	SetItemData(hItem, id);
 
 	return true;
 }

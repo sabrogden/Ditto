@@ -175,7 +175,8 @@ ON_MESSAGE(NM_INACTIVE_TOOLTIPWND, OnToolTipWndInactive)
 ON_MESSAGE(NM_SET_LIST_COUNT, OnSetListCount)
 ON_MESSAGE(NM_REFRESH_ROW, OnRefeshRow)
 ON_MESSAGE(NM_ITEM_DELETED, OnItemDeleted)
-ON_WM_TIMER()ON_COMMAND(ID_MENU_EXPORT, OnMenuExport)
+ON_WM_TIMER()
+ON_COMMAND(ID_MENU_EXPORT, OnMenuExport)
 ON_COMMAND(ID_MENU_IMPORT, OnMenuImport)
 ON_COMMAND(ID_QUICKPROPERTIES_REMOVEQUICKPASTE, OnQuickpropertiesRemovequickpaste)
 ON_COMMAND(ID_MENU_EDITITEM, OnMenuEdititem)
@@ -608,7 +609,7 @@ BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT)
     ARRAY IDs;
     m_lstHeader.GetSelectionItemData(IDs);
 
-    int count = IDs.GetSize();
+    INT_PTR count = IDs.GetSize();
 
     if(count <= 0)
     {
@@ -666,7 +667,7 @@ BOOL CQPasteWnd::NewGroup(bool bGroupSelection)
     {
         m_bHideWnd = false;
 
-        int nRet = Name.DoModal();
+        INT_PTR nRet = Name.DoModal();
 
         m_bHideWnd = true;
 
@@ -701,7 +702,7 @@ BOOL CQPasteWnd::NewGroup(bool bGroupSelection)
 
 LRESULT CQPasteWnd::OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam)
 {
-    OpenID(wParam);
+    OpenID((long)wParam);
     return TRUE;
 }
 
@@ -712,7 +713,7 @@ LRESULT CQPasteWnd::OnListSelect_Index(WPARAM wParam, LPARAM lParam)
         return FALSE;
     }
 
-    OpenIndex(wParam);
+    OpenIndex((long)wParam);
 
     return TRUE;
 }
@@ -1191,10 +1192,15 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
         pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_SHOWTHUMBNAILS, MF_CHECKED);
     }
 
+	//this only works under 32 bit build
+#ifdef _M_IX86
     if(g_Opt.m_bDrawRTF)
     {
         pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_DRAWRTFTEXT, MF_CHECKED);
     }
+#else
+	pMenu->RemoveMenu(ID_MENU_QUICKOPTIONS_DRAWRTFTEXT, MF_BYCOMMAND);
+#endif
 
     if(g_Opt.m_bSendPasteMessageAfterSelection)
     {
@@ -1432,7 +1438,7 @@ void CQPasteWnd::OnMenuProperties()
     m_lstHeader.GetSelectionItemData(IDs);
     m_lstHeader.GetSelectionIndexes(Indexes);
 
-    int nSize = IDs.GetSize();
+    INT_PTR nSize = IDs.GetSize();
     if(nSize < 1)
     {
         return ;
@@ -1450,7 +1456,7 @@ void CQPasteWnd::OnMenuProperties()
     m_lstHeader.SetSelection(nRow);
 
     CCopyProperties props(lID, this);
-    int nDo = props.DoModal();
+    INT_PTR nDo = props.DoModal();
 
     if(nDo == IDOK)
     {
@@ -1622,7 +1628,7 @@ void CQPasteWnd::OnMenuQuickpropertiesSettoneverautodelete()
     m_lstHeader.GetSelectionItemData(IDs);
     m_lstHeader.GetSelectionIndexes(Indexs);
 
-    int count = IDs.GetSize();
+    INT_PTR count = IDs.GetSize();
 
     for(int i = 0; i < count; i++)
     {
@@ -1658,7 +1664,7 @@ void CQPasteWnd::OnMenuQuickpropertiesAutodelete()
     m_lstHeader.GetSelectionItemData(IDs);
     m_lstHeader.GetSelectionIndexes(Indexs);
 
-    int count = IDs.GetSize();
+    INT_PTR count = IDs.GetSize();
 
     for(int i = 0; i < count; i++)
     {
@@ -1693,7 +1699,7 @@ void CQPasteWnd::OnMenuQuickpropertiesRemovehotkey()
     m_lstHeader.GetSelectionItemData(IDs);
     m_lstHeader.GetSelectionIndexes(Indexs);
 
-    int count = IDs.GetSize();
+    INT_PTR count = IDs.GetSize();
 
     for(int i = 0; i < count; i++)
     {
@@ -1729,7 +1735,7 @@ void CQPasteWnd::OnQuickpropertiesRemovequickpaste()
     m_lstHeader.GetSelectionItemData(IDs);
     m_lstHeader.GetSelectionIndexes(Indexs);
 
-    int count = IDs.GetSize();
+    INT_PTR count = IDs.GetSize();
 
     for(int i = 0; i < count; i++)
     {
@@ -1844,7 +1850,7 @@ void CQPasteWnd::OnMenuGroupsMovetogroup()
 
     CMoveToGroupDlg dlg;
 
-    int nRet = dlg.DoModal();
+    INT_PTR nRet = dlg.DoModal();
     if(nRet == IDOK)
     {
         int nGroup = dlg.GetSelectedGroup();
@@ -1874,7 +1880,7 @@ void CQPasteWnd::OnPromptToDeleteClip()
 void CQPasteWnd::OnMenuExport()
 {
     CClipIDs IDs;
-    long lCount = m_lstHeader.GetSelectedCount();
+    INT_PTR lCount = m_lstHeader.GetSelectedCount();
     if(lCount <= 0)
     {
         return ;
@@ -1966,8 +1972,11 @@ void CQPasteWnd::OnMenuQuickoptionsShowthumbnails()
 
 void CQPasteWnd::OnMenuQuickoptionsDrawrtftext()
 {
+	//this only works under 32 bit build
+#ifdef _M_IX86
     CGetSetOptions::SetDrawRTF(!g_Opt.m_bDrawRTF);
     m_lstHeader.RefreshVisibleRows();
+#endif
 }
 
 void CQPasteWnd::OnMenuQuickoptionsPasteclipafterselection()
@@ -2035,21 +2044,21 @@ BOOL CQPasteWnd::SendToFriendbyPos(int nPos)
     m_bHideWnd = false;
 
     CClipIDs IDs;
-    long lCount = m_lstHeader.GetSelectedCount();
-    if(lCount <= 0)
+    INT_PTR count = m_lstHeader.GetSelectedCount();
+    if(count <= 0)
     {
         return FALSE;
     }
 
     m_lstHeader.GetSelectionItemData(IDs);
-    lCount = IDs.GetSize();
-    if(lCount <= 0)
+    count = IDs.GetSize();
+    if(count <= 0)
     {
         return FALSE;
     }
 
     CSendToFriendInfo Info;
-    Info.m_lPos = nPos;
+    Info.m_pos = nPos;
 
     BOOL bRet = FALSE;
 
@@ -2061,7 +2070,7 @@ BOOL CQPasteWnd::SendToFriendbyPos(int nPos)
         Info.m_pPopup = &Popup;
 
         Info.m_pClipList = new CClipList;
-        for(int i = 0; i < lCount; i++)
+        for(int i = 0; i < count; i++)
         {
             CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT mText FROM Main WHERE lID = %d"), IDs[i]);
             if(q.eof() == false)
@@ -2071,7 +2080,7 @@ BOOL CQPasteWnd::SendToFriendbyPos(int nPos)
                 {
                     pClip->LoadFormats(IDs[i]);
                     pClip->m_Desc = q.getStringField(0);
-                    pClip->m_ID = IDs[i];
+                    pClip->m_id = IDs[i];
                     Info.m_pClipList->AddTail(pClip);
                 }
             }
@@ -2133,14 +2142,14 @@ void CQPasteWnd::DeleteSelectedRows()
     IDs.DeleteIDs(true, theApp.m_db);
 
     Indexs.SortDescending();
-    int nCount = Indexs.GetSize();
+    INT_PTR count = Indexs.GetSize();
 
     int erasedCount = 0;
 
     {
 		ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
-        for(int i = 0; i < nCount; i++)
+        for(int i = 0; i < count; i++)
         {
             MainTypeMap::iterator iter = m_mapCache.find(Indexs[i]);
             if(iter != m_mapCache.end() && iter->second.m_lID > 0)
@@ -2250,7 +2259,7 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
             {
             case VK_APPS:
                 {
-                    long lRet;
+                    LRESULT lRet;
                     OnRclickQuickPaste(NULL, &lRet);
                     return 0;
                 }
@@ -2608,7 +2617,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 bool exists = false;
 				for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
 				{
-					if(it->m_cfType == CF_DIB && it->m_lDBID == iter->second.m_lID)
+					if(it->m_cfType == CF_DIB && it->m_dbId == iter->second.m_lID)
 					{
 						exists = true;
 						break;
@@ -2619,7 +2628,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 {
                     CClipFormatQListCtrl format;
                     format.m_cfType = CF_DIB;
-                    format.m_lDBID = iter->second.m_lID;
+                    format.m_dbId = iter->second.m_lID;
                     format.m_clipRow = pItem->iItem;
                     format.m_autoDeleteData = false;
                     m_ExtraDataLoadItems.push_back(format);
@@ -2650,7 +2659,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 bool exists = false;
 				for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
 				{
-					if(it->m_cfType == theApp.m_RTFFormat && it->m_lDBID == iter->second.m_lID)
+					if(it->m_cfType == theApp.m_RTFFormat && it->m_dbId == iter->second.m_lID)
 					{
 						exists = true;
 						break;
@@ -2661,7 +2670,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 {
                     CClipFormatQListCtrl format;
                     format.m_cfType = theApp.m_RTFFormat;
-                    format.m_lDBID = iter->second.m_lID;
+                    format.m_dbId = iter->second.m_lID;
                     format.m_clipRow = pItem->iItem;
                     format.m_autoDeleteData = false;
                     m_ExtraDataLoadItems.push_back(format);
@@ -2885,7 +2894,7 @@ void CQPasteWnd::OnShowGroupsTop()
     CRect cr(crList.left, crList.top, crList.left + crList.Width(), crList.top + 200);
 
     m_GroupTree.MoveWindow(cr);
-    m_GroupTree.m_lSelectedFolderID = theApp.m_GroupID;
+    m_GroupTree.m_selectedFolderID = theApp.m_GroupID;
     m_GroupTree.FillTree();
     m_GroupTree.ShowWindow(SW_SHOW);
 
@@ -2905,7 +2914,7 @@ void CQPasteWnd::OnShowGroupsBottom()
     CRect cr(crWindow.left, crWindow.bottom, crWindow.left + crWindow.Width(), crWindow.bottom + 200);
 
     m_GroupTree.MoveWindow(cr);
-    m_GroupTree.m_lSelectedFolderID = theApp.m_GroupID;
+    m_GroupTree.m_selectedFolderID = theApp.m_GroupID;
     m_GroupTree.FillTree();
     m_GroupTree.ShowWindow(SW_SHOW);
 
@@ -3169,7 +3178,7 @@ void CQPasteWnd::OnUpdateMenuNewclip(CCmdUI *pCmdUI)
 
 LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 {
-    m_lstHeader.SetItemCountEx(wParam);
+    m_lstHeader.SetItemCountEx((int)wParam);
 	SelectFocusID();
     UpdateStatus(false);
 
@@ -3178,14 +3187,14 @@ LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 
 LRESULT CQPasteWnd::OnItemDeleted(WPARAM wParam, LPARAM lParam)
 {
-    m_lstHeader.OnItemDeleted(wParam);
+    m_lstHeader.OnItemDeleted((int)wParam);
     return TRUE;
 }
 
 LRESULT CQPasteWnd::OnRefeshRow(WPARAM wParam, LPARAM lParam)
 {
-    int clipId = wParam;
-    int listPos = lParam;
+    int clipId = (int)wParam;
+    int listPos = (int)lParam;
 
 	int topIndex = m_lstHeader.GetTopIndex();
 	int lastIndex = topIndex + m_lstHeader.GetCountPerPage();

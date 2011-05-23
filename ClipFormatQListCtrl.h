@@ -8,7 +8,7 @@ public:
 	CClipFormatQListCtrl(void);
 	~CClipFormatQListCtrl(void);
 
-	long m_clipRow;
+	int m_clipRow;
 	bool m_convertedToSmallImage;
 
 	HGLOBAL GetDib(CDC *pDc, int height);

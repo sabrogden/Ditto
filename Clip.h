@@ -37,9 +37,9 @@ public:
 	CLIPFORMAT m_cfType;
     HGLOBAL m_hgData;
 	bool m_autoDeleteData;
-	long m_lDBID;
+	int m_dbId;
 
-	CClipFormat(CLIPFORMAT cfType = 0, HGLOBAL hgData = 0, long lDBID = -1);
+	CClipFormat(CLIPFORMAT cfType = 0, HGLOBAL hgData = 0, int dbId = -1);
 	~CClipFormat();
 
 	void Clear();
@@ -63,11 +63,11 @@ public:
 	//  or NULL if that type doesn't exist in this array.
 	CClipFormat* FindFormat(UINT cfType); 
 
-	virtual int Size() { return this->GetCount(); }
+	virtual int Size() { return (int)this->GetCount(); }
 	virtual IClipFormat *GetAt(int nPos) { return &this->ElementAt(nPos); }
 	virtual void DeleteAt(int nPos) { this->RemoveAt(nPos); }
 	virtual void DeleteAll() { this->RemoveAll(); }
-	virtual int AddNew(CLIPFORMAT type, HGLOBAL data) {CClipFormat ft(type, data, -1); ft.m_autoDeleteData = false; return this->Add(ft); }
+	virtual INT_PTR AddNew(CLIPFORMAT type, HGLOBAL data) {CClipFormat ft(type, data, -1); ft.m_autoDeleteData = false; return this->Add(ft); }
 	virtual IClipFormat *FindFormatEx(CLIPFORMAT type)	{ return FindFormat((UINT)type); }
 };
 
@@ -84,16 +84,16 @@ public:
 	const CClip& operator=(const CClip &clip);
 
 	static DWORD m_LastAddedCRC;
-	static long m_LastAddedID;
+	static int m_lastAddedID;
 
-	long m_ID;
+	int m_id;
 	CClipFormats m_Formats;
 	CTime m_Time;
 	CString m_Desc;
 	ULONG m_lTotalCopySize;
-	long m_lParent;
-	long m_lDontAutoDelete;
-	long m_lShortCut;
+	int m_parentId;
+	int m_dontAutoDelete;
+	int m_shortCut;
 	BOOL m_bIsGroup;
 	DWORD m_CRC;
 	CString m_csQuickPaste;
@@ -102,11 +102,11 @@ public:
 	virtual CString Description() { return m_Desc; }
 	virtual void Description(CString csValue) { m_Desc = csValue; }
 	virtual CTime PasteTime() { return m_Time; }
-	virtual int ID() { return m_ID; }
-	virtual int Parent() { return m_lParent; }
-	virtual void Parent(int nParent) { m_lParent = nParent; }
-	virtual int DontAutoDelete() { return m_lDontAutoDelete; }
-	virtual void DontAutoDelete(int Dont) { m_lDontAutoDelete = Dont; }
+	virtual int ID() { return m_id; }
+	virtual int Parent() { return m_parentId; }
+	virtual void Parent(int nParent) { m_parentId = nParent; }
+	virtual int DontAutoDelete() { return m_dontAutoDelete; }
+	virtual void DontAutoDelete(int Dont) { m_dontAutoDelete = Dont; }
 	virtual CString QuickPaste() { return m_csQuickPaste; }
 	virtual void QuickPaste(CString csValue) { m_csQuickPaste = csValue; }
 
@@ -122,15 +122,15 @@ public:
 	bool ModifyMainTable();
 	bool SaveFromEditWnd(BOOL bUpdateDesc);
 	void MakeLatestTime();
-	BOOL LoadMainTable(long lID);
+	BOOL LoadMainTable(int id);
 	DWORD GenerateCRC();
 
 	// Allocates a Global containing the requested Clip's Format Data
-	static HGLOBAL LoadFormat(long lID, UINT cfType);
+	static HGLOBAL LoadFormat(int id, UINT cfType);
 	// Fills "formats" with the Data of all Formats in the db for the given Clip ID
-	bool LoadFormats(long lID, bool bOnlyLoad_CF_TEXT = false);
+	bool LoadFormats(int id, bool bOnlyLoad_CF_TEXT = false);
 	// Fills "types" with all Types in the db for the given Clip ID
-	static void LoadTypes(long lID, CClipTypes& types);
+	static void LoadTypes(int id, CClipTypes& types);
 
 	
 protected:

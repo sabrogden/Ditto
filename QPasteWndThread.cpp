@@ -159,6 +159,7 @@ void CQPasteWndThread::OnLoadItems(void *param)
 				if(firstLoad)
 				{
 	        		::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -2, 0);
+					break;
 				}
 				else
 				{
@@ -211,26 +212,26 @@ void CQPasteWndThread::OnLoadExtraData(void *param)
 
 	for (std::list<CClipFormatQListCtrl>::iterator it = localFormats.begin(); it != localFormats.end(); it++)
     {
-        if(theApp.GetClipData(it->m_lDBID, *it))
+        if(theApp.GetClipData(it->m_dbId, *it))
         {
-            Log(StrF(_T("Loaded, extra data for clip %d, type: %d"), it->m_lDBID, it->m_cfType));
+            Log(StrF(_T("Loaded, extra data for clip %d, type: %d"), it->m_dbId, it->m_cfType));
 
 			ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
 
             if(it->m_cfType == CF_DIB)
             {
-                pasteWnd->m_cf_dibCache[it->m_lDBID] = *it;
+                pasteWnd->m_cf_dibCache[it->m_dbId] = *it;
                 //the cache now owns the format data, set it to delete the data in the destructor
-                pasteWnd->m_cf_dibCache[it->m_lDBID].m_autoDeleteData = true;
+                pasteWnd->m_cf_dibCache[it->m_dbId].m_autoDeleteData = true;
             }
             else if(it->m_cfType == theApp.m_RTFFormat)
             {
-                pasteWnd->m_cf_rtfCache[it->m_lDBID] = *it;
+                pasteWnd->m_cf_rtfCache[it->m_dbId] = *it;
                 //the cache now owns the format data, set it to delete the data in the destructor
-                pasteWnd->m_cf_rtfCache[it->m_lDBID].m_autoDeleteData = true;
+                pasteWnd->m_cf_rtfCache[it->m_dbId].m_autoDeleteData = true;
             }
 
-            ::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, it->m_lDBID, it->m_clipRow);
+            ::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, it->m_dbId, it->m_clipRow);
         }
         else
         {
@@ -239,12 +240,12 @@ void CQPasteWndThread::OnLoadExtraData(void *param)
             if(it->m_cfType == CF_DIB)
             {
                 CClipFormatQListCtrl localFormat;
-                pasteWnd->m_cf_dibCache[it->m_lDBID] = *it;
+                pasteWnd->m_cf_dibCache[it->m_dbId] = *it;
             }
             else if(it->m_cfType == theApp.m_RTFFormat)
             {
                 CClipFormatQListCtrl localFormat;
-                pasteWnd->m_cf_rtfCache[it->m_lDBID] = *it;
+                pasteWnd->m_cf_rtfCache[it->m_dbId] = *it;
             }
         }
     }

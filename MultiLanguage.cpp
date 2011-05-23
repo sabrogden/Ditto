@@ -58,8 +58,8 @@ void CMultiLanguage::ClearArrays()
 
 void CMultiLanguage::ClearArray(LANGUAGE_ARRAY &Array)
 {
-	int nSize = Array.GetSize();
-	for(int i = 0; i < nSize; i++)
+	INT_PTR size = Array.GetSize();
+	for(int i = 0; i < size; i++)
 	{
 		CLangItem *plItem = Array[i];
 
@@ -178,8 +178,8 @@ bool CMultiLanguage::UpdateOptionCopyBuffers(CWnd *pParent)
 
 bool CMultiLanguage::UpdateMenuToLanguage(CMenu *pMenu, LANGUAGE_ARRAY &Array)
 {
-	int nSize = Array.GetSize();
-	for(int i = 0; i < nSize; i++)
+	INT_PTR size = Array.GetSize();
+	for(int i = 0; i < size; i++)
 	{
 		CLangItem *plItem = Array[i];
 
@@ -208,8 +208,8 @@ bool CMultiLanguage::UpdateMenuToLanguage(CMenu *pMenu, LANGUAGE_ARRAY &Array)
 
 bool CMultiLanguage::UpdateWindowToLanguage(CWnd *pParent, LANGUAGE_ARRAY &Array)
 {
-	int nSize = Array.GetSize();
-	for(int i = 0; i < nSize; i++)
+	INT_PTR size = Array.GetSize();
+	for(int i = 0; i < size; i++)
 	{
 		CLangItem *plItem = Array[i];
 

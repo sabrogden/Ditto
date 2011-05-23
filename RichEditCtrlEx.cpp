@@ -27,7 +27,7 @@ BOOL PASCAL AfxInitRichEditEx()
 
     if( l_pState->m_hInstRichEdit20 == NULL )
     {
-#ifdef _UNICODE
+#ifdef _UNICODE 
         l_pState->m_hInstRichEdit20 = LoadLibraryW(_T("RICHED20.DLL"));
 #else
 		l_pState->m_hInstRichEdit20 = LoadLibraryA(_T("RICHED20.DLL"));
@@ -194,7 +194,7 @@ void CRichEditCtrlEx::SetText(CString sText)
 /*
 	Callback function to stream an RTF string into the rich edit control.
 */
-DWORD CALLBACK CRichEditCtrlEx::CBStreamIn(DWORD dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb)
+DWORD CALLBACK CRichEditCtrlEx::CBStreamIn(DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb)
 {
 	// We insert the rich text here.
 
@@ -226,7 +226,7 @@ DWORD CALLBACK CRichEditCtrlEx::CBStreamIn(DWORD dwCookie, LPBYTE pbBuff, LONG c
 /*
 	Callback function to stream the RTF string out of the rich edit control.
 */
-DWORD CALLBACK CRichEditCtrlEx::CBStreamOut(DWORD dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb)
+DWORD CALLBACK CRichEditCtrlEx::CBStreamOut(DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb)
 {
 	// Address of our string var is in psEntry
 	CString *psEntry = (CString*) dwCookie;

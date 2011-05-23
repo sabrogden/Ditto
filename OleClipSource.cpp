@@ -29,11 +29,13 @@ BOOL COleClipSource::DoDelayRender()
 	CClipTypes types;
 	m_ClipIDs.GetTypes(types);
 	
-	int count = types.GetSize();
+	INT_PTR count = types.GetSize();
 	for(int i=0; i < count; i++)
+	{
 		DelayRenderData(types[i]);
-	
-	return count;
+	}
+
+	return count > 0;
 }
 
 #include "Client.h"
@@ -47,10 +49,10 @@ BOOL COleClipSource::DoImmediateRender()
 
 	if(m_pCustomPasteFormats != NULL)
 	{
-		return PutFormatOnClipboard(m_pCustomPasteFormats);
+		return PutFormatOnClipboard(m_pCustomPasteFormats) > 0;
 	}
 	
-	int count = m_ClipIDs.GetSize();
+	INT_PTR count = m_ClipIDs.GetSize();
 	if(count <= 0)
 		return 0;
 
@@ -106,20 +108,20 @@ BOOL COleClipSource::DoImmediateRender()
 
 		clip.LoadFormats(m_ClipIDs[0], m_bOnlyPaste_CF_TEXT);
 		
-		return PutFormatOnClipboard(&clip.m_Formats);
+		return PutFormatOnClipboard(&clip.m_Formats) > 0;
 	}		
 
 	return bProcessedMult;
 }
 
-long COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
+INT_PTR COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 {
 	Log(_T("Start of put format on clipboard"));
 
 	CClipFormat* pCF;
-	int	count = pFormats->GetSize();
+	INT_PTR	count = pFormats->GetSize();
 	bool bDelayedRenderCF_HDROP = false;
-	int i = 0;
+	INT_PTR i = 0;
 
 	//see if the html format is in the list
 	//if it is the list we will not paste CF_TEXT
@@ -240,10 +242,12 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 		// if phGlobal is null, we can just give the allocated mem
 		// else, our data must fit within the GlobalSize(*phGlobal)
 		if(*phGlobal == 0)
+		{
 			*phGlobal = hData;
+		}
 		else
 		{
-			UINT len = min(::GlobalSize(*phGlobal), ::GlobalSize(hData));
+			SIZE_T len = min(::GlobalSize(*phGlobal), ::GlobalSize(hData));
 			if(len)
 			{
 				CopyToGlobalHH(*phGlobal, hData, len);

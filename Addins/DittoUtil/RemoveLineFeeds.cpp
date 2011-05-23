@@ -44,7 +44,7 @@ bool CRemoveLineFeeds::Handle_CF_TEXT(IClipFormats *pFormats)
 
 			int count = string.Replace("\r\n", " ");
 
-			int size = GlobalSize(pFormat->Data());
+			//INT_PTR size = GlobalSize(pFormat->Data());
 			strcpy_s(stringData, GlobalSize(pFormat->Data()), string);
 
 			GlobalUnlock(pFormat->Data());

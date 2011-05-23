@@ -170,7 +170,7 @@ void CTabCtrlEx::SetTabHeight(int nTabHeight)
 
 bool CTabCtrlEx::AddItem(const CString& csTabTitle, CWnd* pTabWnd)
 {
-	return InsertItem(m_Tabs.GetSize(), csTabTitle, pTabWnd);
+	return InsertItem((int)m_Tabs.GetSize(), csTabTitle, pTabWnd);
 }
 
 bool CTabCtrlEx::InsertItem(int nTab, const CString& csTabTitle, CWnd* pTabWnd)
@@ -439,7 +439,7 @@ int CTabCtrlEx::GetActiveTab()
 
 int CTabCtrlEx::GetTabCount()
 {
-	return m_Tabs.GetSize();
+	return (int)m_Tabs.GetSize();
 }
 
 void CTabCtrlEx::SetActiveTab(int nTab, bool bNotify)
@@ -866,7 +866,7 @@ void CTabCtrlEx::OnLButtonDown(UINT nFlags, CPoint point)
 	CWnd::OnLButtonDown(nFlags, point);
 }
 
-void CTabCtrlEx::OnTimer(UINT nIDEvent) 
+void CTabCtrlEx::OnTimer(UINT_PTR nIDEvent) 
 {
 	if (nIDEvent == ID_SCROLL_TIMER)
 	{
@@ -1035,7 +1035,7 @@ BOOL CTabCtrlEx::PreTranslateMessage(MSG* pMsg)
 			else if (((pMsg->wParam - '1') >= 0) && ((pMsg->wParam - '1') < (UINT) m_Tabs.GetSize()))
 			{
 				// Set the new active tab
-				ActivateTab(pMsg->wParam - '1', true);
+				ActivateTab((int)pMsg->wParam - '1', true);
 				return TRUE;
 			}
 		}
@@ -1054,7 +1054,7 @@ void CTabCtrlEx::SwitchTabs(bool bNext)
 		nNewTab--;
 
 	if (nNewTab < 0)
-		nNewTab = m_Tabs.GetSize()-1;
+		nNewTab = (int)m_Tabs.GetSize()-1;
 	else if (nNewTab >= m_Tabs.GetSize())
 		nNewTab = 0;
 

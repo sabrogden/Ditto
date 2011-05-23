@@ -214,7 +214,7 @@ bool CQListCtrl::PutSelectedItemOnDittoCopyBuffer(long lBuffer)
 	bool bRet = false;
 	ARRAY arr;
 	GetSelectionItemData(arr);
-	int nCount = arr.GetSize();
+	INT_PTR nCount = arr.GetSize();
 	if(nCount > 0 && arr[0])
 	{
 		CDittoCopyBuffer::PutClipOnDittoCopyBuffer(arr[0], lBuffer);
@@ -636,7 +636,7 @@ BOOL CQListCtrl::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 	TOOLTIPTEXTW* pTTTW = (TOOLTIPTEXTW*)pNMHDR;
 	CString strTipText;
 	
-	UINT nID = pNMHDR->idFrom;
+	UINT_PTR nID = pNMHDR->idFrom;
 	
 	if(nID == 0)	  	// Notification in NT from automatically
 		return FALSE;   	// created tooltip
@@ -645,7 +645,7 @@ BOOL CQListCtrl::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 	
 	// Use Item's name as the tool tip. Change this for something different.
 	// Like use its file size, etc.
-	GetToolTipText(nID-1, strTipText);
+	GetToolTipText((int)nID-1, strTipText);
 	
 	//Replace the tabs with spaces, the tooltip didn't like the \t s
 	strTipText.Replace(_T("\t"), _T("  "));
@@ -700,7 +700,7 @@ BOOL CQListCtrl::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 	return TRUE;    // message was handled
 }
 
-int CQListCtrl::OnToolHitTest(CPoint point, TOOLINFO * pTI) const
+INT_PTR CQListCtrl::OnToolHitTest(CPoint point, TOOLINFO * pTI) const
 {
 	CRect rect;
 	GetClientRect(&rect);
@@ -810,7 +810,7 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 		if(g_Opt.m_bUseCtrlNumAccel && !(GetKeyState(VK_CONTROL) & 0x8000))
 			return FALSE;
 		
-		int index = vk - '0';
+		int index = (int)vk - '0';
 		// '0' is actually 10 in the ditto window
 		if(index == 0)
 			index = 10;
@@ -826,7 +826,7 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 		if( g_Opt.m_bUseCtrlNumAccel && !(GetKeyState(VK_CONTROL) & 0x8000) )
 			return FALSE;
 		
-		int index = vk - VK_NUMPAD0;
+		int index = (int)vk - VK_NUMPAD0;
 		// '0' is actually 10 in the ditto window
 		if(index == 0)
 			index = 10;
@@ -903,8 +903,8 @@ void CQListCtrl::LoadCopyOrCutToClipboard()
 {
 	ARRAY arr;
 	GetSelectionItemData(arr);
-	int nCount = arr.GetSize();
-	if(nCount <= 0)
+	INT_PTR count = arr.GetSize();
+	if(count <= 0)
 		return;
 	
 	CProcessPaste paste;
@@ -912,7 +912,7 @@ void CQListCtrl::LoadCopyOrCutToClipboard()
 	//Don't send the paste just load it into memory
 	paste.m_bSendPaste = false;
 		
-	if(nCount > 1)
+	if(count > 1)
 		paste.GetClipIDs().Copy(arr);
 	else
 		paste.GetClipIDs().Add(arr[0]);
@@ -1092,11 +1092,11 @@ DWORD CQListCtrl::GetItemData(int nItem)
 			
 			pParent->SendMessage(WM_NOTIFY,(WPARAM)info.hdr.idFrom,(LPARAM)&info);
 			
-			return info.item.lParam;
+			return (DWORD)info.item.lParam;
 		}
 	}
 	
-	return CListCtrl::GetItemData(nItem);
+	return (DWORD)CListCtrl::GetItemData(nItem);
 }
 
 CClipFormatQListCtrl* CQListCtrl::GetItem_CF_DIB_ClipFormat(int nItem)
@@ -1255,7 +1255,7 @@ void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 }
 
-void CQListCtrl::OnTimer(UINT nIDEvent) 
+void CQListCtrl::OnTimer(UINT_PTR nIDEvent) 
 {
 	if(nIDEvent == TIMER_SHOW_PROPERTIES)
 	{

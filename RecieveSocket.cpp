@@ -57,9 +57,9 @@ LPVOID CRecieveSocket::ReceiveEncryptedData(long lInSize, long &lOutSize)
 
 		int nOut = 0;
 		CStringA csPassword;
-		int nCount = g_Opt.m_csNetworkPasswordArray.GetSize();
-		int nIndex;
-		for(int i = -2; i < nCount; i++)
+		INT_PTR count = g_Opt.m_csNetworkPasswordArray.GetSize();
+		INT_PTR nIndex;
+		for(int i = -2; i < count; i++)
 		{
 			csPassword.Empty();
 			nIndex = i;
@@ -78,12 +78,14 @@ LPVOID CRecieveSocket::ReceiveEncryptedData(long lInSize, long &lOutSize)
 			}
 			else
 			{
-				if(nIndex >= 0 && nIndex < nCount)
+				if(nIndex >= 0 && nIndex < count)
 				{
 					CTextConvert::ConvertToUTF8(g_Opt.m_csNetworkPasswordArray[nIndex], csPassword);
 				}
 				else
+				{
 					continue;
+				}
 			}
 
 			if(m_pEncryptor->Decrypt((UCHAR*)pInput, lInSize, csPassword, pOutput, nOut) == FALSE)
@@ -92,7 +94,7 @@ LPVOID CRecieveSocket::ReceiveEncryptedData(long lInSize, long &lOutSize)
 			}
 			else
 			{
-				theApp.m_lLastGoodIndexForNextworkPassword = nIndex;
+				theApp.m_lLastGoodIndexForNextworkPassword = (long)nIndex;
 				break;
 			}
 		}

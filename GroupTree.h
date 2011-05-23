@@ -24,13 +24,13 @@ public:
 	void FillTree();
 	void SetNotificationWndEx(HWND hWnd)	{ m_NotificationWnd = hWnd;	}
 	bool m_bHide;
-	long m_lSelectedFolderID;
-	long GetSelectedTree();
-	bool AddNode(CString csText, long lID);
+	int m_selectedFolderID;
+	int GetSelectedTree();
+	bool AddNode(CString csText, int id);
 
 protected:
-	void FillTree(long lParentID, HTREEITEM hParent);
-	void SendToParent(long lID);
+	void FillTree(int parentId, HTREEITEM hParent);
+	void SendToParent(int parentId);
 
 	HWND m_NotificationWnd;
 	CBitmap m_bmOpenFolder;

@@ -69,7 +69,7 @@ CString CMainTableFunctions::GetDisplayText(int nMaxLines, const CString &OrigTe
 	// remove each line's indent
 	TCHAR chFirst;
 	CString line;
-	int count = tokens.GetSize();
+	INT_PTR count = tokens.GetSize();
 	text = "";
 	for(int i=0; i < count; i++)
 	{

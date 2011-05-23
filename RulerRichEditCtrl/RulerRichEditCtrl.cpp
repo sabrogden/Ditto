@@ -71,22 +71,22 @@ UINT urm_SETCURRENTFONTCOLOR = ::RegisterWindowMessage( _T( "_RULERRICHEDITCTRL_
 // Stream callback functions
 // Callbacks to the Save and Load functions.
 
-static DWORD CALLBACK StreamOut( DWORD dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb )
+static DWORD CALLBACK StreamOut( DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb )
 {
 
 	// Setting up temp buffer
 	char*	buff;
-	buff = new char[ cb + 1 ];
-	buff[ cb ] = ( char ) 0;
-	strncpy( buff, ( LPCSTR ) pbBuff, cb );
-	int max = strlen( buff );
+	buff = new char[cb + 1];
+	buff[cb] = ( char ) 0;
+	strncpy(buff, (LPCSTR)pbBuff, cb);
+	int max = (int)strlen(buff);
 
-	CString* str = ( CString* ) dwCookie;
+	CString* str = (CString*) dwCookie;
 
 #ifdef _UNICODE
 
 	// We want to convert the buff to wide chars
-	int length = ::MultiByteToWideChar( CP_UTF8, 0, buff, max, NULL, 0 );
+	int length = ::MultiByteToWideChar(CP_UTF8, 0, buff, max, NULL, 0);
 	if(length)
 	{
 		TCHAR* wBuff = new TCHAR[length+1];
@@ -109,7 +109,7 @@ static DWORD CALLBACK StreamOut( DWORD dwCookie, LPBYTE pbBuff, LONG cb, LONG *p
 
 }
 
-static DWORD CALLBACK StreamIn( DWORD dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb )
+static DWORD CALLBACK StreamIn( DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG *pcb )
 {
 
 	CString* str = ( ( CString* ) dwCookie );
@@ -848,7 +848,7 @@ void CRulerRichEditCtrl::SetText(CString sText)
 	// Read the text in
 	EDITSTREAM es;
 	es.dwError = 0;
-	es.pfnCallback = StreamIn;
+//	es.pfnCallback = StreamIn;
 #ifdef _UNICODE
 	CString cs;
 	es.dwCookie = (DWORD) &cs;
@@ -968,7 +968,7 @@ BOOL CRulerRichEditCtrl::Load( CString& filename )
 	{
 		EDITSTREAM	es;
 		es.dwCookie = ( DWORD ) str;
-		es.pfnCallback = StreamIn;
+//		es.pfnCallback = StreamIn;
 		m_rtf.StreamIn( SF_RTF, es );
 	}
 
@@ -1588,7 +1588,7 @@ LRESULT CRulerRichEditCtrl::OnSetCurrentFontName( WPARAM font, LPARAM )
 	
 }
 
-LRESULT CRulerRichEditCtrl::OnSetCurrentFontSize( WPARAM, LPARAM size )
+LRESULT CRulerRichEditCtrl::OnSetCurrentFontSize(WPARAM, LPARAM size)
 /* ============================================================
 	Function :		CRulerRichEditCtrl::OnSetCurrentFontSize
 	Description :	Handler for the registered message 
@@ -1606,12 +1606,12 @@ LRESULT CRulerRichEditCtrl::OnSetCurrentFontSize( WPARAM, LPARAM size )
    ============================================================*/
 {
 
-	SetCurrentFontSize( size );
+	SetCurrentFontSize((int)size);
 	return 0;
 	
 }
 
-LRESULT CRulerRichEditCtrl::OnSetCurrentFontColor( WPARAM, LPARAM color )
+LRESULT CRulerRichEditCtrl::OnSetCurrentFontColor(WPARAM, LPARAM color)
 /* ============================================================
 	Function :		CRulerRichEditCtrl::OnSetCurrentFontColor
 	Description :	Handler for the registered message 
