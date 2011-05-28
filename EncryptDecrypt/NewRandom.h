@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include "sha2.h"
 
-#define INTRAND_SIZE 264
+#define INTRAND_SIZE 350
 
 class CNewRandom
 {

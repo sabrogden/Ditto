@@ -95,9 +95,9 @@ void CProcessPaste::MarkAsPasted()
 		if(!g_Opt.m_bUpdateTimeOnPaste)
 			return;
 
-		long lID = (long)clips.ElementAt(0);
+		int id = clips.ElementAt(0);
 		//Moved to a thread because when running from from U3 devices the write is time consuming
-		AfxBeginThread(CProcessPaste::MarkAsPastedThread, (LPVOID)lID, THREAD_PRIORITY_LOWEST);
+		AfxBeginThread(CProcessPaste::MarkAsPastedThread, (LPVOID)id, THREAD_PRIORITY_LOWEST);
 	}
 
 	Log(_T("End of MarkAsPasted"));
@@ -117,36 +117,29 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 		Sleep(350);
 	}
 
-	long lID = (long)pParam;
+	int id = (int)pParam;
 	BOOL bRet = FALSE;
 
 	try
 	{
-		//Update the time it was copied so that it appears at the top of the
-		//paste list. Items are sorted by this time.
-		CTime now = CTime::GetCurrentTime();
 		try
 		{
-			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT lDate FROM Main ORDER BY lDate DESC LIMIT 1"));
+			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipOrder FROM Main ORDER BY clipOrder DESC LIMIT 1"));
 
 			if(q.eof() == false)
 			{
-				long lLatestDate = q.getIntField(_T("lDate"));
-				if(now.GetTime() <= lLatestDate)
-				{
-					now = lLatestDate + 1;
-				}
+				double latestDate = q.getFloatField(_T("clipOrder"));
+				latestDate += 1;
+
+				Log(StrF(_T("Setting clipId: %d, order: %f"), id, latestDate));
+
+				theApp.m_db.execDMLEx(_T("UPDATE Main SET clipOrder = %f where lID = %d;"), latestDate, id);
+
+				theApp.RefreshClipOrder(id);
 			}
 		}
 		CATCH_SQLITE_EXCEPTION
 
-		Log(StrF(_T("Setting clipId: %d, time: %d"), lID, now.GetTime()));
-
-		theApp.m_db.execDMLEx(_T("UPDATE Main SET lDate = %d where lID = %d;"), (long)now.GetTime(), lID);
-		if(g_Opt.m_bShowPersistent)
-		{
-			theApp.RefreshView();
-		}
 		bRet = TRUE;
 	}
 	CATCH_SQLITE_EXCEPTION

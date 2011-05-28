@@ -13,6 +13,7 @@
 #include "FormatSQL.h"
 #include "MainTableFunctions.h"
 #include "Path.h"
+#include <algorithm>
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -155,6 +156,7 @@ ON_NOTIFY(NM_GETTOOLTIPTEXT, ID_LIST_HEADER, OnGetToolTipText)
 ON_MESSAGE(NM_SELECT_DB_ID, OnListSelect_DB_ID)
 ON_MESSAGE(NM_SELECT_INDEX, OnListSelect_Index)
 ON_MESSAGE(WM_REFRESH_VIEW, OnRefreshView)
+ON_MESSAGE(WM_RELOAD_CLIP_ORDER, OnReloadClipOrder)
 ON_WM_NCLBUTTONDBLCLK()
 ON_WM_WINDOWPOSCHANGING()
 ON_COMMAND(ID_VIEWCAPTIONBARON_RIGHT, OnViewcaptionbaronRight)
@@ -306,7 +308,7 @@ void CQPasteWnd::MoveControls()
     int cx = crRect.Width();
     int cy = crRect.Height();
 
-    long lTopOfListBox = 0;
+    int topOfListBox = 0;
 
     if(theApp.m_GroupID > 0)
     {
@@ -318,7 +320,7 @@ void CQPasteWnd::MoveControls()
 		m_ShowGroupsFolderTop.MoveWindow(22, 0, 18, 16);
 		m_stGroup.MoveWindow(44, 0, cx, 16);
 
-		lTopOfListBox = 16;
+		topOfListBox = 16;
 	}
 	else
 	{
@@ -341,7 +343,7 @@ void CQPasteWnd::MoveControls()
 		m_btCancel.ShowWindow(SW_HIDE);
     }
 
-	m_lstHeader.MoveWindow(0, lTopOfListBox, cx, cy - listBoxBottomOffset-lTopOfListBox);
+	m_lstHeader.MoveWindow(0, topOfListBox, cx, cy - listBoxBottomOffset-topOfListBox);
     m_Search.MoveWindow(18, cy - 20, nWidth - 20, 19);
 
     m_ShowGroupsFolderBottom.MoveWindow(0, cy - 19, 18, 16);
@@ -396,7 +398,7 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
     {
         if(theApp.m_bShowingQuickPaste == false)
         {
-            ShowQPasteWindow(m_mapCache.size() == 0);
+            ShowQPasteWindow(m_listItems.size() == 0);
         }
 
         //Unregister the global hot keys for the last ten copies
@@ -450,13 +452,13 @@ BOOL CQPasteWnd::HideQPasteWindow()
         {
 			ATL::CCritSecLock csLock(m_CritSection.m_sect);
             
-			m_mapCache.clear();
+			m_listItems.clear();
             m_lstHeader.SetItemCountEx(0);
         }
     }
 
 
-    Log(StrF(_T("End of HideQPasteWindow, ItemCount: %d"), m_mapCache.size()));
+    Log(StrF(_T("End of HideQPasteWindow, ItemCount: %d"), m_listItems.size()));
 
     return TRUE;
 }
@@ -473,7 +475,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 {
     theApp.m_bShowingQuickPaste = true;
 
-    Log(StrF(_T("Start - ShowQPasteWindow - Fill List: %d, array count: %d"), bFillList, m_mapCache.size()));
+    Log(StrF(_T("Start - ShowQPasteWindow - Fill List: %d, array count: %d"), bFillList, m_listItems.size()));
 
     //Ensure we have the latest theme file, this checks the last write time so it doesn't read the file each time
     g_Opt.m_Theme.Load(g_Opt.GetTheme(), false, true);
@@ -522,7 +524,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 
     SetKeyModiferState(true);
 
-	Log(StrF(_T("END - ShowQPasteWindow - Fill List: %d, array count: %d"), bFillList, m_mapCache.size()));
+	Log(StrF(_T("END - ShowQPasteWindow - Fill List: %d, array count: %d"), bFillList, m_listItems.size()));
 
     return TRUE;
 }
@@ -552,13 +554,13 @@ bool CQPasteWnd::Add(const CString &csHeader, const CString &csText, int nID)
     return true;
 }
 
-BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT, CClipFormats *pPasteFormats)
+BOOL CQPasteWnd::OpenID(int id, bool bOnlyLoad_CF_TEXT, CClipFormats *pPasteFormats)
 {
-    Log(StrF(_T("Start OpenId, Id: %d, Only CF_TEXT: %d"), lID, bOnlyLoad_CF_TEXT));
+    Log(StrF(_T("Start OpenId, Id: %d, Only CF_TEXT: %d"), id, bOnlyLoad_CF_TEXT));
 
     if(pPasteFormats == NULL)
     {
-        if(theApp.EnterGroupID(lID))
+        if(theApp.EnterGroupID(id))
         {
             Log(_T("Entered group"));
             return TRUE;
@@ -583,7 +585,7 @@ BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT, CClipFormats *pPasteFo
     }
     else
     {
-        paste.GetClipIDs().Add(lID);
+        paste.GetClipIDs().Add(id);
     }
     paste.DoPaste();
     theApp.OnPasteCompleted();
@@ -598,7 +600,7 @@ BOOL CQPasteWnd::OpenID(long lID, bool bOnlyLoad_CF_TEXT, CClipFormats *pPasteFo
         MinMaxWindow(FORCE_MIN);
     }
 
-    Log(StrF(_T("End OpenId, Id: %d, Only CF_TEXT: %d"), lID, bOnlyLoad_CF_TEXT));
+    Log(StrF(_T("End OpenId, Id: %d, Only CF_TEXT: %d"), id, bOnlyLoad_CF_TEXT));
 
     return TRUE;
 }
@@ -649,9 +651,9 @@ BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT)
     return TRUE;
 }
 
-BOOL CQPasteWnd::OpenIndex(long nItem)
+BOOL CQPasteWnd::OpenIndex(int item)
 {
-    return OpenID(m_lstHeader.GetItemData(nItem));
+    return OpenID(m_lstHeader.GetItemData(item));
 }
 
 BOOL CQPasteWnd::NewGroup(bool bGroupSelection)
@@ -681,28 +683,28 @@ BOOL CQPasteWnd::NewGroup(bool bGroupSelection)
         }
     }
 
-    long lID = NewGroupID(theApp.GetValidGroupID(), csName);
+    int id = NewGroupID(theApp.GetValidGroupID(), csName);
 
-    if(lID <= 0)
+    if(id <= 0)
     {
         return FALSE;
     }
 
     if(!bGroupSelection)
     {
-        theApp.m_FocusID = lID; // focus on the new group
+        theApp.m_FocusID = id; // focus on the new group
         FillList();
         return TRUE;
     }
 
-    IDs.MoveTo(lID);
-    theApp.EnterGroupID(lID);
+    IDs.MoveTo(id);
+    theApp.EnterGroupID(id);
     return TRUE;
 }
 
 LRESULT CQPasteWnd::OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam)
 {
-    OpenID((long)wParam);
+    OpenID((int)wParam);
     return TRUE;
 }
 
@@ -713,16 +715,13 @@ LRESULT CQPasteWnd::OnListSelect_Index(WPARAM wParam, LPARAM lParam)
         return FALSE;
     }
 
-    OpenIndex((long)wParam);
+    OpenIndex((int)wParam);
 
     return TRUE;
 }
 
 LRESULT CQPasteWnd::OnListSelect(WPARAM wParam, LPARAM lParam)
 {
-    int nCount = (int)wParam;
-    long *pItems = (long*)lParam;
-
     OpenSelection(false);
 
     return TRUE;
@@ -730,8 +729,43 @@ LRESULT CQPasteWnd::OnListSelect(WPARAM wParam, LPARAM lParam)
 
 LRESULT CQPasteWnd::OnListEnd(WPARAM wParam, LPARAM lParam)
 {
-    //HideQPasteWindow();
     return 0;
+}
+
+LRESULT CQPasteWnd::OnReloadClipOrder(WPARAM wParam, LPARAM lParam)
+{
+	BOOL foundClip = FALSE;
+	int clipId = (int)wParam;
+
+	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipOrder FROM Main WHERE lID = %d"), clipId);			
+	if(q.eof() == false)
+	{
+		double order = q.getFloatField(_T("clipOrder"));
+
+		std::vector<CMainTable>::iterator iter = m_listItems.begin();
+		while(iter != m_listItems.end())
+		{
+			if(iter->m_lID == clipId)
+			{
+				iter->m_clipOrder = order;
+
+				theApp.m_FocusID = clipId;
+				std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::SortDesc);
+				foundClip = TRUE;
+				
+				SelectFocusID();
+
+				m_lstHeader.RefreshVisibleRows();
+				m_lstHeader.RedrawWindow();
+
+				break;
+			}
+
+			iter++;
+		}
+	}
+
+	return foundClip;
 }
 
 LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
@@ -757,7 +791,7 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 
 		{
 			ATL::CCritSecLock csLock(m_CritSection.m_sect);
-			m_mapCache.clear();
+			m_listItems.clear();
 		}
 
 		m_lstHeader.SetItemCountEx(0);
@@ -766,7 +800,7 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 		action = _T("Cleared Items");
     }
 
-    Log(StrF(_T("OnRefreshView - End - Count: %d, Action: %s"), m_mapCache.size(), action));
+    Log(StrF(_T("OnRefreshView - End - Count: %d, Action: %s"), m_listItems.size(), action));
 
     return TRUE;
 }
@@ -854,11 +888,11 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
         m_lstHeader.m_bStartTop = g_Opt.m_bHistoryStartTop;
         if(g_Opt.m_bHistoryStartTop)
         {
-            csSort = "Main.bIsGroup ASC, Main.lDate DESC";
+            csSort = "Main.bIsGroup ASC, Main.clipOrder DESC";
         }
         else
         {
-            csSort = "Main.bIsGroup ASC, Main.lDate ASC";
+            csSort = "Main.bIsGroup ASC, Main.clipOrder ASC";
         }
 
         if(g_Opt.m_bShowAllClipsInMainList)
@@ -877,11 +911,11 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 
         if(g_Opt.m_bHistoryStartTop)
         {
-            csSort = "Main.bIsGroup DESC, Main.lDate DESC";
+            csSort = "Main.bIsGroup DESC, Main.clipGroupOrder DESC";
         }
         else
         {
-            csSort = "Main.bIsGroup ASC, Main.lDate ASC";
+            csSort = "Main.bIsGroup ASC, Main.clipGroupOrder ASC";
         }
 
         if(theApp.m_GroupID >= 0)
@@ -965,13 +999,13 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 	    m_CountSQL.Format(_T("SELECT COUNT(Main.lID) FROM Main %s where %s"), dataJoin, strFilter);
 
 	    m_SQL.Format(_T("SELECT Main.lID, Main.mText, Main.lParentID, Main.lDontAutoDelete, ")
-			_T("Main.lShortCut, Main.bIsGroup, Main.QuickPasteText FROM Main %s ")
+			_T("Main.lShortCut, Main.bIsGroup, Main.QuickPasteText, Main.clipOrder, Main.clipGroupOrder FROM Main %s ")
 			_T("where %s order by %s"), dataJoin, strFilter, csSort);
 	}
 
 	{
 		ATL::CCritSecLock csLock(m_CritSection.m_sect);
-		m_mapCache.clear();
+		m_listItems.clear();
 	}
 
 	if(m_lstHeader.GetItemCount() <= 0)
@@ -1323,10 +1357,10 @@ void CQPasteWnd::OnMenuLinesperrow5()
     SetLinesPerRow(5);
 }
 
-void CQPasteWnd::SetLinesPerRow(long lLines)
+void CQPasteWnd::SetLinesPerRow(int lines)
 {
-    CGetSetOptions::SetLinesPerRow(lLines);
-    m_lstHeader.SetNumberOfLinesPerRow(lLines);
+    CGetSetOptions::SetLinesPerRow(lines);
+    m_lstHeader.SetNumberOfLinesPerRow(lines);
 
     FillList();
 }
@@ -1371,17 +1405,17 @@ void CQPasteWnd::OnMenuTransparency40()
     SetTransparency(40);
 }
 
-void CQPasteWnd::SetTransparency(long lPercent)
+void CQPasteWnd::SetTransparency(int percent)
 {
     #ifdef AFTER_98
-        if(lPercent)
+        if(percent)
         {
-            CGetSetOptions::SetTransparencyPercent(lPercent);
+            CGetSetOptions::SetTransparencyPercent(percent);
             CGetSetOptions::SetEnableTransparency(TRUE);
 
             m_Alpha.SetTransparent(TRUE);
 
-            float fPercent = lPercent / (float)100.0;
+            float fPercent = percent / (float)100.0;
 
             m_Alpha.SetOpacity(OPACITY_MAX - (int)(fPercent *OPACITY_MAX));
         }
@@ -1438,48 +1472,47 @@ void CQPasteWnd::OnMenuProperties()
     m_lstHeader.GetSelectionItemData(IDs);
     m_lstHeader.GetSelectionIndexes(Indexes);
 
-    INT_PTR nSize = IDs.GetSize();
-    if(nSize < 1)
+    INT_PTR size = IDs.GetSize();
+    if(size < 1)
     {
         return ;
     }
 
-    long lID = IDs[0];
-    int nRow = Indexes[0];
+    int id = IDs[0];
+    int row = Indexes[0];
 
-    if(lID < 0)
+    if(id < 0)
     {
         return ;
     }
 
     m_lstHeader.RemoveAllSelection();
-    m_lstHeader.SetSelection(nRow);
+    m_lstHeader.SetSelection(row);
 
-    CCopyProperties props(lID, this);
-    INT_PTR nDo = props.DoModal();
+    CCopyProperties props(id, this);
+    INT_PTR doModalRet = props.DoModal();
 
-    if(nDo == IDOK)
+    if(doModalRet == IDOK)
     {
         {
 			ATL::CCritSecLock csLock(m_CritSection.m_sect);
-
-            MainTypeMap::iterator iter = m_mapCache.find(nRow);
-            if(iter != m_mapCache.end())
+            
+            if(row < m_listItems.size())
             {
-                CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), lID);
+                CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), id);
                 if(!q.eof())
                 {
-                    FillMainTable(iter->second, q);
+                    FillMainTable(m_listItems[row], q);
                 }
             }
 
-			CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(lID);
+			CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(id);
 			if(iterDib != m_cf_dibCache.end())
 			{
 				m_cf_dibCache.erase(iterDib);
 			}
 
-			CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(lID);
+			CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(id);
 			if(iterRtf != m_cf_rtfCache.end())
 			{
 				m_cf_rtfCache.erase(iterRtf);
@@ -1496,7 +1529,7 @@ void CQPasteWnd::OnMenuProperties()
         }
 
         m_lstHeader.SetFocus();
-        m_lstHeader.SetListPos(nRow);
+        m_lstHeader.SetListPos(row);
     }
 
     m_bHideWnd = true;
@@ -1634,7 +1667,7 @@ void CQPasteWnd::OnMenuQuickpropertiesSettoneverautodelete()
     {
         try
         {
-            theApp.m_db.execDMLEx(_T("UPDATE Main SET lDontAutoDelete = %d where lID = %d;"), (long)CTime::GetCurrentTime().GetTime(), IDs[i]);
+            theApp.m_db.execDMLEx(_T("UPDATE Main SET lDontAutoDelete = %d where lID = %d;"), (int)CTime::GetCurrentTime().GetTime(), IDs[i]);
         }
         CATCH_SQLITE_EXCEPTION
     }
@@ -1645,11 +1678,10 @@ void CQPasteWnd::OnMenuQuickpropertiesSettoneverautodelete()
         count = Indexs.GetSize();
         for(int row = 0; row < count; row++)
         {
-            MainTypeMap::iterator iter = m_mapCache.find(row);
-            if(iter != m_mapCache.end())
-            {
-                iter->second.m_bDontAutoDelete = true;
-            }
+			if(Indexs[row] < m_listItems.size())
+			{
+				m_listItems[Indexs[row]].m_bDontAutoDelete = true;
+			}
         }
     }
 
@@ -1680,11 +1712,10 @@ void CQPasteWnd::OnMenuQuickpropertiesAutodelete()
         count = Indexs.GetSize();
         for(int row = 0; row < count; row++)
         {
-            MainTypeMap::iterator iter = m_mapCache.find(row);
-            if(iter != m_mapCache.end())
-            {
-                iter->second.m_bDontAutoDelete = false;
-            }
+			if(Indexs[row] < m_listItems.size())
+			{
+				m_listItems[Indexs[row]].m_bDontAutoDelete = false;
+			}
         }
     }
 
@@ -1716,11 +1747,10 @@ void CQPasteWnd::OnMenuQuickpropertiesRemovehotkey()
         count = Indexs.GetSize();
         for(int row = 0; row < count; row++)
         {
-            MainTypeMap::iterator iter = m_mapCache.find(row);
-            if(iter != m_mapCache.end())
-            {
-                iter->second.m_bHasShortCut = false;
-            }
+			if(Indexs[row] < m_listItems.size())
+			{
+				m_listItems[Indexs[row]].m_bHasShortCut = false;
+			}
         }
     }
 
@@ -1752,11 +1782,10 @@ void CQPasteWnd::OnQuickpropertiesRemovequickpaste()
         count = Indexs.GetSize();
         for(int row = 0; row < count; row++)
         {
-            MainTypeMap::iterator iter = m_mapCache.find(row);
-            if(iter != m_mapCache.end())
-            {
-                iter->second.m_QuickPaste.Empty();
-            }
+			if(Indexs[row] < m_listItems.size())
+			{
+				m_listItems[Indexs[row]].m_QuickPaste.Empty();
+			}
         }
     }
 
@@ -2151,11 +2180,22 @@ void CQPasteWnd::DeleteSelectedRows()
 
         for(int i = 0; i < count; i++)
         {
-            MainTypeMap::iterator iter = m_mapCache.find(Indexs[i]);
-            if(iter != m_mapCache.end() && iter->second.m_lID > 0)
-            {
-                m_mapCache.erase(iter);
+			if(Indexs[i] < m_listItems.size())
+			{
+				m_listItems.erase(m_listItems.begin( ) + Indexs[i]);
                 erasedCount++;
+
+				CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(m_lstHeader.GetItemData(Indexs[i]));
+				if(iterDib != m_cf_dibCache.end())
+				{
+					m_cf_dibCache.erase(iterDib);
+				}
+
+				CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(m_lstHeader.GetItemData(Indexs[i]));
+				if(iterRtf != m_cf_rtfCache.end())
+				{
+					m_cf_rtfCache.erase(iterRtf);
+				}
             }
         }
     }
@@ -2182,9 +2222,9 @@ CString CQPasteWnd::LoadDescription(int nItem)
     CString cs;
     try
     {
-        long lID = m_lstHeader.GetItemData(nItem);
+        int id = m_lstHeader.GetItemData(nItem);
 
-        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT mText FROM Main WHERE lID = %d"), lID);
+        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT mText FROM Main WHERE lID = %d"), id);
         if(q.eof() == false)
         {
             cs = q.getStringField(0);
@@ -2516,38 +2556,37 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
 					ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
                     int c = m_lstHeader.GetItemCount();
-                    MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
-                    if(iter != m_mapCache.end())
+					if(m_listItems.size() > pItem->iItem)
                     {
                         CString cs;
-                        if(iter->second.m_bDontAutoDelete)
+                        if(m_listItems[pItem->iItem].m_bDontAutoDelete)
                         {
                             cs += "*";
                         }
 
-                        if(iter->second.m_bHasShortCut)
+                        if(m_listItems[pItem->iItem].m_bHasShortCut)
                         {
                             cs += "s";
                         }
 
-                        if(iter->second.m_bIsGroup)
+                        if(m_listItems[pItem->iItem].m_bIsGroup)
                         {
                             cs += "G";
                         }
 
                         // attached to a group
-                        if(iter->second.m_bHasParent)
+                        if(m_listItems[pItem->iItem].m_bHasParent)
                         {
                             cs += "!";
                         }
 
-                        if(iter->second.m_QuickPaste.IsEmpty() == FALSE)
+                        if(m_listItems[pItem->iItem].m_QuickPaste.IsEmpty() == FALSE)
                         {
                             cs += "Q";
                         }
 
                         // pipe is the "end of symbols" marker
-                        cs += "|" + CMainTableFunctions::GetDisplayText(g_Opt.m_nLinesPerRow, iter->second.m_Desc);
+                        cs += "|" + CMainTableFunctions::GetDisplayText(g_Opt.m_nLinesPerRow, m_listItems[pItem->iItem].m_Desc);
 
                         lstrcpyn(pItem->pszText, cs, pItem->cchTextMax);
                         pItem->pszText[pItem->cchTextMax - 1] = '\0';
@@ -2593,10 +2632,9 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 {
 					ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
-                    MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
-                    if(iter != m_mapCache.end())
+                    if(m_listItems.size() > pItem->iItem)
                     {
-                        pItem->lParam = iter->second.m_lID;
+                        pItem->lParam = m_listItems[pItem->iItem].m_lID;
                     }
                 }
 
@@ -2608,16 +2646,15 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
     {
 		ATL::CCritSecLock csLock(m_CritSection.m_sect);
      
-		MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
-        if(iter != m_mapCache.end())
+		if(m_listItems.size() > pItem->iItem)
         {
-            CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(iter->second.m_lID);
+            CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(m_listItems[pItem->iItem].m_lID);
             if(iterDib == m_cf_dibCache.end())
             {
                 bool exists = false;
 				for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
 				{
-					if(it->m_cfType == CF_DIB && it->m_dbId == iter->second.m_lID)
+					if(it->m_cfType == CF_DIB && it->m_dbId == m_listItems[pItem->iItem].m_lID)
 					{
 						exists = true;
 						break;
@@ -2628,7 +2665,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 {
                     CClipFormatQListCtrl format;
                     format.m_cfType = CF_DIB;
-                    format.m_dbId = iter->second.m_lID;
+                    format.m_dbId = m_listItems[pItem->iItem].m_lID;
                     format.m_clipRow = pItem->iItem;
                     format.m_autoDeleteData = false;
                     m_ExtraDataLoadItems.push_back(format);
@@ -2650,16 +2687,15 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
     {
 		ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
-        MainTypeMap::iterator iter = m_mapCache.find(pItem->iItem);
-        if(iter != m_mapCache.end())
+        if(m_listItems.size() > pItem->iItem)
         {
-            CF_DibTypeMap::iterator iterRTF = m_cf_rtfCache.find(iter->second.m_lID);
+            CF_DibTypeMap::iterator iterRTF = m_cf_rtfCache.find(m_listItems[pItem->iItem].m_lID);
             if(iterRTF == m_cf_rtfCache.end())
             {
                 bool exists = false;
 				for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
 				{
-					if(it->m_cfType == theApp.m_RTFFormat && it->m_dbId == iter->second.m_lID)
+					if(it->m_cfType == theApp.m_RTFFormat && it->m_dbId == m_listItems[pItem->iItem].m_lID)
 					{
 						exists = true;
 						break;
@@ -2670,7 +2706,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 {
                     CClipFormatQListCtrl format;
                     format.m_cfType = theApp.m_RTFFormat;
-                    format.m_dbId = iter->second.m_lID;
+                    format.m_dbId = m_listItems[pItem->iItem].m_lID;
                     format.m_clipRow = pItem->iItem;
                     format.m_autoDeleteData = false;
                     m_ExtraDataLoadItems.push_back(format);
@@ -2689,32 +2725,32 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
     }
 }
 
-CString CQPasteWnd::GetDisplayText(long lDontAutoDelete, long lShortCut, bool bIsGroup, long lParentID, CString csText)
+CString CQPasteWnd::GetDisplayText(int dontAutoDelete, int shortCut, bool isGroup, int parentID, CString text)
 {
     CString cs;
-    if(lDontAutoDelete)
+    if(dontAutoDelete)
     {
         cs += "*";
     }
 
-    if(lShortCut > 0)
+    if(shortCut > 0)
     {
         cs += "s";
     }
 
-    if(bIsGroup)
+    if(isGroup)
     {
         cs += "G";
     }
 
     // attached to a group
-    if(lParentID > 0)
+    if(parentID > 0)
     {
         cs += "!";
     }
 
     // pipe is the "end of symbols" marker
-    cs += "|" + CMainTableFunctions::GetDisplayText(g_Opt.m_nLinesPerRow, csText);
+    cs += "|" + CMainTableFunctions::GetDisplayText(g_Opt.m_nLinesPerRow, text);
 
     return cs;
 }
@@ -2744,8 +2780,8 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
     {
         CString cs;
 
-        long lID = m_lstHeader.GetItemData(pInfo->lItem);
-        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText, lDate, lShortCut, lDontAutoDelete, QuickPasteText FROM Main WHERE lID = %d"), lID);
+        int id = m_lstHeader.GetItemData(pInfo->lItem);
+        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText, lDate, lShortCut, lDontAutoDelete, QuickPasteText FROM Main WHERE lID = %d"), id);
         if(q.eof() == false)
         {
             cs = q.getStringField(1);
@@ -2772,25 +2808,25 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
                 cs += csQuickPaste;
             }
 
-            long lShortCut = q.getIntField(_T("lShortCut"));
-            if(lShortCut > 0)
+            int shortCut = q.getIntField(_T("lShortCut"));
+            if(shortCut > 0)
             {
                 cs += "\n";
 
-                if(HIBYTE(lShortCut) &HOTKEYF_CONTROL)
+                if(HIBYTE(shortCut) &HOTKEYF_CONTROL)
                 {
                     cs += "Ctrl + ";
                 }
-                if(HIBYTE(lShortCut) &HOTKEYF_SHIFT)
+                if(HIBYTE(shortCut) &HOTKEYF_SHIFT)
                 {
                     cs += "Shift + ";
                 }
-                if(HIBYTE(lShortCut) &HOTKEYF_ALT)
+                if(HIBYTE(shortCut) &HOTKEYF_ALT)
                 {
                     cs += "Alt + ";
                 }
 
-                cs += (char)LOBYTE(lShortCut);
+                cs += (char)LOBYTE(shortCut);
             }
         }
 
@@ -2926,7 +2962,7 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
 {
     m_bHideWnd = false;
 
-    long lID = (long)wParam;
+    int id = (int)wParam;
 
     m_GroupTree.ShowWindow(SW_HIDE);
 
@@ -2936,7 +2972,7 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
 
     MoveControls();
 
-    if(lID >= -1)
+    if(id >= -1)
     {
         //Set the app flag so it does a send message to refresh the list
         //We need to do this because we set the list pos to 0 and with Post
@@ -2944,7 +2980,7 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
         bool bItWas = theApp.m_bAsynchronousRefreshView;
         theApp.m_bAsynchronousRefreshView = false;
 
-        OpenID(lID);
+        OpenID(id);
 
         theApp.m_bAsynchronousRefreshView = bItWas;
 
@@ -3223,10 +3259,10 @@ void CQPasteWnd::SelectFocusID()
 
 	bool selectedItem = false;
 	int index = 0;
-	MainTypeMap::iterator iter = m_mapCache.begin();
-	while(iter != m_mapCache.end())
+	std::vector<CMainTable>::iterator iter = m_listItems.begin();
+	while(iter != m_listItems.end())
 	{
-		if(iter->second.m_lID == theApp.m_FocusID)
+		if(iter->m_lID == theApp.m_FocusID)
 		{
 			m_lstHeader.SetListPos(index);
 			selectedItem = true;
@@ -3251,6 +3287,8 @@ void CQPasteWnd::FillMainTable(CMainTable &table, CppSQLite3Query &q)
     table.m_bHasShortCut = q.getIntField(_T("lShortCut")) > 0;
     table.m_bIsGroup = q.getIntField(_T("bIsGroup")) > 0;
     table.m_QuickPaste = q.fieldValue(_T("QuickPasteText"));
+	table.m_clipOrder = q.getFloatField(_T("clipOrder"));
+	table.m_clipGroupOrder = q.getFloatField(_T("clipGroupOrder"));
 }
 
 void CQPasteWnd::OnDestroy()
@@ -3294,20 +3332,20 @@ void CQPasteWnd::OnTimer(UINT_PTR nIDEvent)
     CWndEx::OnTimer(nIDEvent);
 }
 
-void CQPasteWnd::OnAddinSelect(UINT id)
+void CQPasteWnd::OnAddinSelect(UINT idIn)
 {
     ARRAY IDs;
     m_lstHeader.GetSelectionItemData(IDs);
 
     if(IDs.GetCount() > 0)
     {
-        long lID = IDs[0];
+        int id = IDs[0];
         CClip clip;
-        if(clip.LoadMainTable(lID))
+        if(clip.LoadMainTable(id))
         {
-            if(clip.LoadFormats(lID, false))
+            if(clip.LoadFormats(id, false))
             {
-                bool bCont = theApp.m_Addins.CallPrePasteFunction(id, &clip);
+                bool bCont = theApp.m_Addins.CallPrePasteFunction(idIn, &clip);
                 if(bCont)
                 {
                     OpenID(-1, false, &clip.m_Formats);
@@ -3322,7 +3360,7 @@ LRESULT CQPasteWnd::OnSelectAll(WPARAM wParam, LPARAM lParam)
     BOOL ret = FALSE;
     ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
-    if((int)m_mapCache.size() < m_lstHeader.GetItemCount())
+    if((int)m_listItems.size() < m_lstHeader.GetItemCount())
     {
         Log(_T("All items selected loading all items from the db"));
 

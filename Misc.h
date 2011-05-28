@@ -112,6 +112,7 @@ CString GetProcessName(HWND hWnd);
 #define WM_LOAD_ClIP_ON_CLIPBOARD		WM_USER	+ 214
 //defined in tray icon #define WM_CUSTOMIZE_TRAY_MENU	WM_USER + 215
 //defined in tray icon #define WM_TRAY_MENU_MOUSE_MOVE	WM_USER + 216
+#define WM_RELOAD_CLIP_ORDER	WM_USER	+ 217
 
 #if !defined(_BITSET_)
 #	include <bitset>

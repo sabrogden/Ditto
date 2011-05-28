@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Tinyxml.h"
-#include "tinystr.h"
+#include "tinyxml\Tinyxml.h"
+#include "tinyxml\tinystr.h"
 
 class CTheme
 {

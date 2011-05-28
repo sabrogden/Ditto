@@ -10,7 +10,7 @@
 #endif // _MSC_VER > 1000
 #include <afxole.h>
 #include <afxtempl.h>
-#include "tinyxml.h"
+#include "tinyxml\tinyxml.h"
 #include "Shared\IClip.h"
 
 class CClip;
@@ -98,6 +98,8 @@ public:
 	DWORD m_CRC;
 	CString m_csQuickPaste;
 	int m_param1;
+	double m_clipOrder;
+	double m_clipGroupOrder;
 
 	virtual CString Description() { return m_Desc; }
 	virtual void Description(CString csValue) { m_Desc = csValue; }

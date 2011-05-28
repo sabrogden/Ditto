@@ -309,6 +309,25 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		{
 			e.errorCode();
 		}
+
+		try
+		{
+			db.execQuery(_T("SELECT clipOrder, clipGroupOrder FROM Main"));
+		}
+		catch(CppSQLite3Exception& e)
+		{
+			db.execDML(_T("ALTER TABLE Main ADD clipOrder REAL"));
+			db.execDML(_T("ALTER TABLE Main ADD clipGroupOrder REAL"));
+
+			db.execDML(_T("Update Main set clipOrder = lDate, clipGroupOrder = lDate"));
+
+			db.execDML(_T("CREATE INDEX Main_ClipOrder on Main(clipOrder DESC)"));
+			db.execDML(_T("CREATE INDEX Main_ClipGroupOrder on Main(clipGroupOrder DESC)"));
+
+			db.execDML(_T("DROP INDEX Main_Date"));
+
+			e.errorCode();
+		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 
@@ -333,7 +352,9 @@ BOOL CreateDB(CString csFile)
 								_T("CRC INTEGER, ")
 								_T("bIsGroup INTEGER, ")
 								_T("lParentID INTEGER, ")
-								_T("QuickPasteText TEXT);"));
+								_T("QuickPasteText TEXT, ")
+								_T("clipOrder REAL, ")
+								_T("clipGroupOrder REAL);"));
 
 		db.execDML(_T("CREATE TABLE Data(")
 							_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")
@@ -347,7 +368,8 @@ BOOL CreateDB(CString csFile)
 
 		db.execDML(_T("CREATE UNIQUE INDEX Main_ID on Main(lID ASC)"));
 		db.execDML(_T("CREATE UNIQUE INDEX Data_ID on Data(lID ASC)"));
-		db.execDML(_T("CREATE INDEX Main_Date on Main(lDate DESC)"));
+		db.execDML(_T("CREATE INDEX Main_ClipOrder on Main(clipOrder DESC)"));
+		db.execDML(_T("CREATE INDEX Main_ClipGroupOrder on Main(clipGroupOrder DESC)"));
 		db.execDML(_T("CREATE INDEX Main_ParentId on Main(lParentID DESC)"));
 		db.execDML(_T("CREATE INDEX Main_IsGroup on Main(bIsGroup DESC)"));
         db.execDML(_T("CREATE INDEX Main_ShortCut on Main(lShortCut DESC)"));
@@ -466,7 +488,7 @@ BOOL RemoveOldEntries()
 				CClipIDs IDs;
 				int clipId;
 				
-				CppSQLite3Query q = db.execQueryEx(_T("SELECT lID, lShortCut, lParentID, lDontAutoDelete FROM Main WHERE bIsGroup = 0 ORDER BY lDate DESC LIMIT -1 OFFSET %d"), lMax);
+				CppSQLite3Query q = db.execQueryEx(_T("SELECT lID, lShortCut, lParentID, lDontAutoDelete FROM Main WHERE bIsGroup = 0 ORDER BY clipOrder DESC LIMIT -1 OFFSET %d"), lMax);
 				while(q.eof() == false)
 				{
 					int shortcut = q.getIntField(_T("lShortCut"));

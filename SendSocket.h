@@ -9,7 +9,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "Encryption.h"
+#include "EncryptDecrypt\Encryption.h"
 #include "ServerDefines.h"
 
 class CSendSocket  

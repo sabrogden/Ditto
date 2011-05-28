@@ -57,7 +57,6 @@ void CNewRandom::Reset()
 void CNewRandom::Initialize()
 {
 	DWORD inx;
-
 	WORD ww;
 	DWORD dw;
 	LARGE_INTEGER li;

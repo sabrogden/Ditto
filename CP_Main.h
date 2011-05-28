@@ -94,6 +94,7 @@ public:
 	CClipTypes* LoadTypesFromDB(); // returns a "new" allocated object
 	void ReloadTypes();
 	void RefreshView(); // refreshes the view if it is visible
+	void RefreshClipOrder(int clipId);
 	void OnCopyCompleted( long lLastID, int count = 1 );
 	void OnPasteCompleted();
 

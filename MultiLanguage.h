@@ -5,8 +5,8 @@
 #if !defined(AFX_MULTILANGUAGE_H__DA57BA64_C421_4368_9498_1EFCE49A5C52__INCLUDED_)
 #define AFX_MULTILANGUAGE_H__DA57BA64_C421_4368_9498_1EFCE49A5C52__INCLUDED_
 
-#include "Tinyxml.h"
-#include "tinystr.h"
+#include "tinyxml\Tinyxml.h"
+#include "tinyxml\tinystr.h"
 
 #if _MSC_VER > 1000
 #pragma once

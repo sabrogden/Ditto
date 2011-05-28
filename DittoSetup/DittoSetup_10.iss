@@ -2,6 +2,9 @@
 #define MyAppVersion GetFileVersion("..\Release\DittoU.exe")
 #define MyAppVerName MyAppName + " " + MyAppVersion
 
+#define bit64
+  
+
 [Setup]
 AppName={#MyAppName}
 AppVerName={#MyAppVerName}
@@ -10,6 +13,10 @@ AppPublisher=Scott Brogden
 AppPublisherURL=ditto-cp.sourceforge.net
 AppSupportURL=ditto-cp.sourceforge.net
 AppUpdatesURL=ditto-cp.sourceforge.net
+#ifdef bit64
+  ArchitecturesInstallIn64BitMode=x64
+  ArchitecturesAllowed=x64
+#endif
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AppMutex=Ditto Is Now Running
@@ -46,33 +53,24 @@ Name: Danish; MessagesFile: Danish.isl
 
 [Tasks]
 Name: RunAtStartup; Description: Run Ditto on Windows Startup
-;Name: UseFocusDll; Description: Use System Hook to track currently focused window
 
 [Files]
-Source: ..\Release\DittoU.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
-
-Source: ..\Release\focus.dll; DestDir: {app}; BeforeInstall: BeforeFocusInstall(); Flags: ignoreversion restartreplace
-Source: ..\Release\sqlite3.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\Release\AccessToSqlite.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\zlib\zlib1.dll; DestDir: {app}; Flags: ignoreversion
+#ifdef bit64
+	Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
+	Source: ..\Release64\focus64.dll; DestDir: {app}; BeforeInstall: BeforeFocusInstall(); Flags: ignoreversion restartreplace
+	Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
+	Source: mfc-crt64\*; DestDir: {app}
+#elif
+	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
+	Source: ..\Release\focus.dll; DestDir: {app}; BeforeInstall: BeforeFocusInstall(); Flags: ignoreversion restartreplace
+	Source: ..\Addins\DittoUtil\Release64\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
+	Source: mfc-crt\*; DestDir: {app}
+#endif
 
 Source: Changes.txt; DestDir: {app}
-
 Source: ..\Debug\Language\*; DestDir: {app}\Language; BeforeInstall: BeforeLanguageInstall()
 Source: ..\Debug\Themes\*; DestDir: {app}\Themes
-
-Source: mfc-crt_10\*; DestDir: {app}
-
-;Add help files
 Source: ..\Help\*.htm; DestDir: {app}\Help; Flags: ignoreversion
-
-;Addins and the mfc dlls to the addins folder
-Source: ..\Addins\DittoUtil\Release\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
-Source: {app}\MFC100.dll; DestDir: {app}\Addins; Flags: ignoreversion external
-Source: {app}\mfc100u.dll; DestDir: {app}\Addins; Flags: ignoreversion external
-Source: {app}\mfcm100u.dll; DestDir: {app}\Addins; Flags: ignoreversion external
-Source: {app}\msvcp100.dll; DestDir: {app}\Addins; Flags: ignoreversion external
-Source: {app}\msvcr100.dll; DestDir: {app}\Addins; Flags: ignoreversion external
 
 [Icons]
 Name: {group}\Ditto; Filename: {app}\Ditto.exe

@@ -509,8 +509,9 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 			int nID = FindDuplicate();
 			if(nID >= 0)
 			{
-				theApp.m_db.execDMLEx(_T("UPDATE Main SET lDate = %d where lID = %d;"), 
-										(long)m_Time.GetTime(), nID);
+				MakeLatestTime();
+				theApp.m_db.execDMLEx(_T("UPDATE Main SET clipOrder = %f where lID = %d;"), 
+										m_clipOrder, nID);
 
 				m_id = nID;
 
@@ -605,7 +606,7 @@ bool CClip::AddToMainTable()
 		m_csQuickPaste.Replace(_T("'"), _T("''"));
 
 		CString cs;
-		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s');"),
+		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s', %f, %f);"),
 							(long)m_Time.GetTime(),
 							m_Desc,
 							m_shortCut,
@@ -613,7 +614,9 @@ bool CClip::AddToMainTable()
 							m_CRC,
 							m_bIsGroup,
 							m_parentId,
-							m_csQuickPaste);
+							m_csQuickPaste,
+							m_clipOrder,
+							m_clipGroupOrder);
 
 		theApp.m_db.execDML(cs);
 
@@ -640,12 +643,16 @@ bool CClip::ModifyMainTable()
 			_T("lParentID = %d, ")
 			_T("lDontAutoDelete = %d, ")
 			_T("QuickPasteText = '%s' ")
+			_T("clipOrder = %f, ")
+			_T("clipGroupOrder = %f, ")
 			_T("WHERE lID = %d;"), 
 			m_shortCut, 
 			m_Desc, 
 			m_parentId, 
 			m_dontAutoDelete, 
 			m_csQuickPaste,
+			m_clipOrder,
+			m_clipGroupOrder,
 			m_id);
 
 		bRet = true;
@@ -696,14 +703,11 @@ void CClip::MakeLatestTime()
 {
 	try
 	{
-		CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT lDate FROM Main ORDER BY lDate DESC LIMIT 1"));			
+		CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipOrder FROM Main ORDER BY clipOrder DESC LIMIT 1"));			
 		if(q.eof() == false)
 		{
-			long lLatestDate = q.getIntField(_T("lDate"));
-			if(m_Time.GetTime() <= lLatestDate)
-			{
-				m_Time = lLatestDate + 1;
-			}
+			double order = q.getFloatField(_T("clipOrder"));
+			m_clipOrder = order + 1;
 		}
 	}
 	CATCH_SQLITE_EXCEPTION
@@ -726,6 +730,8 @@ BOOL CClip::LoadMainTable(int id)
 			m_shortCut = q.getIntField(_T("lShortCut"));
 			m_bIsGroup = q.getIntField(_T("bIsGroup"));
 			m_csQuickPaste = q.getStringField(_T("QuickPasteText"));
+			m_clipOrder = q.getFloatField(_T("clipOrder"));
+			m_clipGroupOrder = q.getFloatField(_T("clipGroupOrder"));
 
 			m_id = id;
 

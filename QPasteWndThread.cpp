@@ -131,12 +131,11 @@ void CQPasteWndThread::OnLoadItems(void *param)
 				while(!q.eof())
 				{
 					pasteWnd->FillMainTable(table, q);
-					table.m_listIndex = loadItemsIndex;
 
 					{
 						ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
 
-						pasteWnd->m_mapCache[loadItemsIndex] = table;
+						pasteWnd->m_listItems.push_back(table);
 					}
 
 					if(pasteWnd->m_bStopQuery)
@@ -147,23 +146,13 @@ void CQPasteWndThread::OnLoadItems(void *param)
 
 					q.nextRow();
 
-					loadItemsIndex++;
-					loadCount++;
-
 					if(firstLoad == false)
 					{
-	            		::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, table.m_lID, table.m_listIndex);
+	            		::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, table.m_lID, loadItemsIndex);
 					}
-				}
 
-				if(firstLoad)
-				{
-	        		::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -2, 0);
-					break;
-				}
-				else
-				{
-					::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -1, 0);
+					loadItemsIndex++;
+					loadCount++;
 				}
 
 				if(clearFirstLoadItem)
@@ -171,6 +160,17 @@ void CQPasteWndThread::OnLoadItems(void *param)
 					ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
 
 					pasteWnd->m_loadItems.erase(pasteWnd->m_loadItems.begin());
+				}
+
+				if(firstLoad)
+				{
+					::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -2, 0);
+					//allow the next thread message to process, this should be the message to set the list count
+					break;
+				}
+				else
+				{
+					::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -1, 0);
 				}
 
 				Log(StrF(_T("Load items End count = %d, time = %d"), loadCount, GetTickCount() - startTick));

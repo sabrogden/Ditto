@@ -17,7 +17,15 @@
 class CMainTable
 {
 public:
-    CMainTable(): m_lID( - 1), m_bDontAutoDelete(false), m_bIsGroup(false), m_bHasShortCut(false), m_bHasParent(false), m_listIndex( - 1){}
+    CMainTable(): 
+		m_lID( - 1), 
+		m_bDontAutoDelete(false), 
+		m_bIsGroup(false), 
+		m_bHasShortCut(false), 
+		m_bHasParent(false)
+	{
+
+	}
 
     ~CMainTable()
 	{
@@ -31,7 +39,13 @@ public:
     bool m_bHasShortCut;
     bool m_bHasParent;
     CString m_QuickPaste;
-    int m_listIndex;
+	double m_clipOrder;
+	double m_clipGroupOrder;
+
+	static bool SortDesc(const CMainTable& d1, const CMainTable& d2)
+	{
+		return d1.m_clipOrder > d2.m_clipOrder;
+	}
 };
 
 
@@ -96,7 +110,7 @@ public:
     bool m_bModifersMoveActive;
 
     CQPasteWndThread m_thread;
-    MainTypeMap m_mapCache;
+	std::vector<CMainTable> m_listItems;
 
 	std::list<CPoint> m_loadItems;
     std::list<CClipFormatQListCtrl> m_ExtraDataLoadItems;
@@ -115,17 +129,17 @@ public:
 
     void DeleteSelectedRows();
 
-    BOOL OpenID(long lID, bool bOnlyLoad_CF_TEXT = false, CClipFormats *pPasteFormats = NULL);
+    BOOL OpenID(int id, bool bOnlyLoad_CF_TEXT = false, CClipFormats *pPasteFormats = NULL);
     BOOL OpenSelection(bool bOnlyLoad_CF_TEXT = false);
-    BOOL OpenIndex(long nItem);
+    BOOL OpenIndex(int item);
     BOOL NewGroup(bool bGroupSelection = true);
 
     CString LoadDescription(int nItem);
     bool SaveDescription(int nItem, CString text);
 
     //Menu Items
-    void SetLinesPerRow(long lLines);
-    void SetTransparency(long lPercent);
+    void SetLinesPerRow(int lines);
+    void SetTransparency(int percent);
     void OnUpdateLinesPerRow(CCmdUI *pCmdUI, int nValue);
     void OnUpdateTransparency(CCmdUI *pCmdUI, int nValue);
     void SetMenuChecks(CMenu *pMenu);
@@ -135,7 +149,7 @@ public:
 
     bool InsertNextNRecords(int nEnd);
 
-    CString GetDisplayText(long lDontAutoDelete, long lShortCut, bool bIsGroup, long lParentID, CString csText);
+    CString GetDisplayText(int lDontAutoDelete, int lShortCut, bool bIsGroup, int lParentID, CString csText);
 
     void FillMainTable(CMainTable &table, CppSQLite3Query &q);
     void RunThread();
@@ -240,6 +254,7 @@ protected:
     afx_msg LRESULT OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnListSelect_Index(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnRefreshView(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnReloadClipOrder(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnGroupTreeMessage(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnFillRestOfList(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnRefeshRow(WPARAM wParam, LPARAM lParam);

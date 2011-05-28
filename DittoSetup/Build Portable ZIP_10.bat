@@ -11,22 +11,33 @@ MkDir Ditto\Language
 MkDir Ditto\Themes
 MkDir Ditto\Addins
 
-copy ..\Release\DittoU.exe Ditto\Ditto.exe
-copy ..\Release\sqlite3.dll Ditto\sqlite3.dll
-copy ..\Release\AccessToSqlite.dll Ditto\AccessToSqlite.dll
+if "%2" == "bit64" goto bit64
+
+copy ..\Release\Ditto.exe Ditto\Ditto.exe
 copy ..\Release\focus.dll Ditto\focus.dll
-copy ..\zlib\zlib1.dll Ditto\zlib1.dll
+copy ..\Release\Addins\*.dll Ditto\Addins\
+copy mfc-crt\* Ditto\
+
+if "%2"=="" GOTO skipBit64
+if "%2"=="bit32" GOTO skipBit64	
+:bit64
+
+copy ..\Release64\Ditto.exe Ditto\Ditto.exe
+copy ..\Release64\focus64.dll Ditto\focus.dll
+copy ..\Release64\Addins\*.dll Ditto\Addins\
+copy mfc-crt64\* Ditto\
+
+:skipBit64
 
 copy Changes.txt Ditto\Changes.txt
-
-copy mfc-crt_10\* Ditto\
 
 copy Ditto.Settings Ditto\Ditto.Settings
 
 copy ..\Help\*.* Ditto\Help\
 copy ..\Debug\language\*.xml Ditto\language\
 copy ..\Debug\themes\*.xml Ditto\themes\
-copy ..\Release\Addins\*.dll Ditto\Addins\
+
+pause
 
 7za.exe a -tzip Output\%arg1%.zip "Ditto\*" -r
 
