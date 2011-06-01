@@ -133,9 +133,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Release\DittoU.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>.\Release\Ditto.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>.\Release\DittoU.map</MapFileName>
+      <MapFileName>.\Release\Ditto.map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>wWinMainCRTStartup</EntryPointSymbol>
       <TargetMachine>MachineX86</TargetMachine>
@@ -281,11 +281,11 @@
       <OutputFile>debug64\Ditto.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug64/DittoU.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>.\Debug64/Ditto.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>wWinMainCRTStartup</EntryPointSymbol>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>.\Debug64/DittoU.map</MapFileName>
+      <MapFileName>.\Debug64/Ditto.map</MapFileName>
       <MapExports>true</MapExports>
     </Link>
     <Midl>
