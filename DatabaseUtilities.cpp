@@ -328,6 +328,17 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 
 			e.errorCode();
 		}
+
+		try
+		{
+			db.execQuery(_T("SELECT globalShortCut FROM Main"));
+		}
+		catch(CppSQLite3Exception& e)
+		{
+			db.execDML(_T("ALTER TABLE Main ADD globalShortCut INTEGER"));
+
+			e.errorCode();
+		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 

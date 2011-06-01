@@ -10,6 +10,7 @@ public:
 	DWORD	m_Key; //704 is ctrl-tilda
 	bool	m_bIsRegistered;
 	bool	m_bUnRegisterOnShowDitto;
+	int		m_clipId;
 	
 	CHotKey( CString name, DWORD defKey = 0, bool bUnregOnShowDitto = false );
 	~CHotKey();
@@ -54,6 +55,10 @@ public:
 
 	INT_PTR Find( CHotKey* pHotKey );
 	bool Remove( CHotKey* pHotKey ); // pHotKey is NOT deleted.
+
+	bool Remove(int clipId);
+
+	BOOL ValidateClip(int clipId, DWORD key, CString desc);
 
 	// profile load / save
 	void LoadAllKeys();

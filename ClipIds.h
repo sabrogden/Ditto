@@ -16,9 +16,6 @@ public:
 
 // MANAGEMENT FUNCTIONS
 
-	// returns the address of the given id in this array or NULL.
-	int* FindID(int id);
-
 	// Blindly Moves IDs into the lParentID Group sequentially with the given order
 	// (i.e. this does not check to see if the IDs' order conflict)
 	// if( dIncrement < 0 ), this does not change the order

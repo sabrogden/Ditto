@@ -46,6 +46,7 @@ void CCopyProperties::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COPY_DATA, m_lCopyData);
 	DDX_Text(pDX, IDC_DATE, m_eDate);
 	DDX_Check(pDX, IDC_NEVER_AUTO_DELETE, m_bNeverAutoDelete);
+	DDX_Check(pDX, IDC_HOT_KEY_GLOBAL, m_hotKeyGlobal);
 	//}}AFX_DATA_MAP
 }
 
@@ -129,10 +130,16 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 		m_bNeverAutoDelete = FALSE;
 	}
 
+	m_hotKeyGlobal = Clip.m_globalShortCut;
+
 	m_GroupCombo.SetCurSelOnItemData(Clip.m_parentId);
 
 	m_HotKey.SetHotKey(LOBYTE(Clip.m_shortCut), HIBYTE(Clip.m_shortCut));
 	m_HotKey.SetRules(HKCOMB_A, 0);
+	if(HIBYTE(Clip.m_shortCut) & HOTKEYF_EXT)
+	{
+		::CheckDlgButton(m_hWnd, IDC_CHECK_WIN, BST_CHECKED);
+	}
 
 	m_QuickPasteText.SetWindowText(Clip.m_csQuickPaste);
 
@@ -205,16 +212,23 @@ void CCopyProperties::OnOK()
 		}
 		else
 		{
-			CClip Clip;
-			if(Clip.LoadMainTable(m_lCopyID))
+			CClip clip;
+			if(clip.LoadMainTable(m_lCopyID))
 			{
-				LoadDataIntoCClip(Clip);
+				LoadDataIntoCClip(clip);
 
-				Clip.ModifyMainTable();
-			
-				if(m_bDeletedData)
+				if(clip.ModifyMainTable())
 				{
-					DeleteFormats(m_lCopyID, m_DeletedData);
+					if(m_bDeletedData)
+					{    
+						DeleteFormats(m_lCopyID, m_DeletedData);
+					}
+
+					if(CheckGlobalHotKey(clip) == FALSE)
+					{
+						MessageBox(_T("Error registering global hot key"));
+						return;
+					}
 				}
 			}
 		}
@@ -226,9 +240,36 @@ void CCopyProperties::OnOK()
 	CDialog::OnOK();
 }
 
+BOOL CCopyProperties::CheckGlobalHotKey(CClip &clip)
+{
+	BOOL ret = FALSE;
+
+	if(clip.m_globalShortCut)
+	{
+		ret = g_HotKeys.ValidateClip(clip.m_id, clip.m_shortCut, clip.m_Desc);
+	}
+	else
+	{
+		g_HotKeys.Remove(clip.m_id);
+		ret = TRUE;
+	}
+
+	return ret;
+}
+
 void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
 {
-	Clip.m_shortCut = m_HotKey.GetHotKey();
+	long lHotKey = m_HotKey.GetHotKey();
+
+	short sKeyKode = LOBYTE(m_HotKey.GetHotKey());
+	short sModifers = HIBYTE(m_HotKey.GetHotKey());
+
+	if(sKeyKode && ::IsDlgButtonChecked(m_hWnd, IDC_CHECK_WIN))
+	{
+		sModifers |= HOTKEYF_EXT;
+	}
+
+	Clip.m_shortCut = MAKEWORD(sKeyKode, sModifers); 
 
 	//remove any others that have the same hot key
 	if(Clip.m_shortCut > 0)
@@ -261,6 +302,8 @@ void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
 	{
 		Clip.m_dontAutoDelete = FALSE;
 	}
+
+	Clip.m_globalShortCut = m_hotKeyGlobal;
 }
 
 void CCopyProperties::OnDeleteCopyData() 

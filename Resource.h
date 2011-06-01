@@ -29,6 +29,7 @@
 #define IDD_DIALOG_REMOTE_FILE          157
 #define IDR_FILE_COPY                   158
 #define IDD_OPTIONS_COPY_BUFFERS        166
+#define IDI_ICON1                       167
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -65,6 +66,7 @@
 #define IDC_COPY_DATA                   1023
 #define IDC_NEVER_AUTO_DELETE           1025
 #define IDC_NAMED_COPY                  1026
+#define IDC_HOT_KEY_GLOBAL              1026
 #define IDC_COMPACT_REPAIR              1027
 #define IDC_NAMED_PASTE                 1027
 #define IDC_BT_COMPACT_AND_REPAIR       1028
@@ -236,6 +238,7 @@
 #define IDC_BUFFER_GROUP_2              2098
 #define IDC_STATIC_APP_SEP_DESC         2098
 #define IDC_COPY_3                      2099
+#define IDC_CHECK_WIN                   2099
 #define IDC_WIN_COPY_3                  2100
 #define IDC_PASTE_3                     2101
 #define IDC_WIN_PASTE_3                 2102
@@ -343,9 +346,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        167
+#define _APS_NEXT_RESOURCE_VALUE        168
 #define _APS_NEXT_COMMAND_VALUE         32872
-#define _APS_NEXT_CONTROL_VALUE         2099
+#define _APS_NEXT_CONTROL_VALUE         2100
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

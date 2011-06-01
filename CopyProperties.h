@@ -31,6 +31,7 @@ public:
 	CListBox	m_lCopyData;
 	CString	m_eDate;
 	BOOL	m_bNeverAutoDelete;
+	BOOL m_hotKeyGlobal;
 	//}}AFX_DATA
 
 
@@ -63,6 +64,7 @@ protected:
 
 	void LoadDataIntoCClip(CClip &Clip);
 	void LoadDataFromCClip(CClip &Clip);
+	BOOL CheckGlobalHotKey(CClip &clip);
 
 	// Generated message map functions
 	//{{AFX_MSG(CCopyProperties)

@@ -100,6 +100,7 @@ public:
 	int m_param1;
 	double m_clipOrder;
 	double m_clipGroupOrder;
+	BOOL m_globalShortCut;
 
 	virtual CString Description() { return m_Desc; }
 	virtual void Description(CString csValue) { m_Desc = csValue; }

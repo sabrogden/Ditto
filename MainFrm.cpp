@@ -14,6 +14,7 @@
 #include "tinyxml\tinyxml.h"
 #include "Path.h"
 #include "DittoCopyBuffer.h"
+#include "HotKeys.h"
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -377,6 +378,26 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 	else if(theApp.m_pTextOnlyPaste && wParam == theApp.m_pTextOnlyPaste->m_Atom)
 	{
 		DoTextOnlyPaste();
+	}
+	else
+	{
+		for(int i = 0; i < g_HotKeys.GetCount(); i++)
+		{
+			if(g_HotKeys[i] != NULL && 
+				g_HotKeys[i]->m_Atom == wParam && 
+				g_HotKeys[i]->m_clipId > 0)
+			{
+				Log(StrF(_T("Pasting clip from global shortcut, clipId: %d"), g_HotKeys[i]->m_clipId));
+				CProcessPaste paste;
+				paste.GetClipIDs().Add(g_HotKeys[i]->m_clipId);
+				paste.m_bActivateTarget = false;
+				paste.m_bSendPaste = true;
+				paste.DoPaste();
+				theApp.OnPasteCompleted();
+
+				break;
+			}
+		}
 	}
 
     return TRUE;

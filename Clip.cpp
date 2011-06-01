@@ -165,7 +165,10 @@ CClip::CClip() :
 	m_dontAutoDelete(FALSE),
 	m_shortCut(0),
 	m_bIsGroup(FALSE),
-	m_param1(0)
+	m_param1(0),
+	m_clipOrder(0),
+	m_clipGroupOrder(0),
+	m_globalShortCut(FALSE)
 {
 }
 
@@ -606,7 +609,7 @@ bool CClip::AddToMainTable()
 		m_csQuickPaste.Replace(_T("'"), _T("''"));
 
 		CString cs;
-		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s', %f, %f);"),
+		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s', %f, %f, %d);"),
 							(long)m_Time.GetTime(),
 							m_Desc,
 							m_shortCut,
@@ -616,7 +619,8 @@ bool CClip::AddToMainTable()
 							m_parentId,
 							m_csQuickPaste,
 							m_clipOrder,
-							m_clipGroupOrder);
+							m_clipGroupOrder,
+							m_globalShortCut);
 
 		theApp.m_db.execDML(cs);
 
@@ -642,9 +646,10 @@ bool CClip::ModifyMainTable()
 			_T("mText = '%s', ")
 			_T("lParentID = %d, ")
 			_T("lDontAutoDelete = %d, ")
-			_T("QuickPasteText = '%s' ")
+			_T("QuickPasteText = '%s', ")
 			_T("clipOrder = %f, ")
 			_T("clipGroupOrder = %f, ")
+			_T("globalShortCut = %d ")
 			_T("WHERE lID = %d;"), 
 			m_shortCut, 
 			m_Desc, 
@@ -653,6 +658,7 @@ bool CClip::ModifyMainTable()
 			m_csQuickPaste,
 			m_clipOrder,
 			m_clipGroupOrder,
+			m_globalShortCut,
 			m_id);
 
 		bRet = true;
@@ -732,6 +738,7 @@ BOOL CClip::LoadMainTable(int id)
 			m_csQuickPaste = q.getStringField(_T("QuickPasteText"));
 			m_clipOrder = q.getFloatField(_T("clipOrder"));
 			m_clipGroupOrder = q.getFloatField(_T("clipGroupOrder"));
+			m_globalShortCut = q.getIntField(_T("globalShortCut"));
 
 			m_id = id;
 

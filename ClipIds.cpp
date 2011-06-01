@@ -148,7 +148,7 @@ bool CClipIDs::AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bRev
 				_T("WHERE Data.strClipBoardFormat = '%s' ")
 				_T("AND Main.lID = %d"),
 				GetFormatName(cfType),
-				this[nIndex]);
+				ElementAt(nIndex));
 
 			CppSQLite3Query q = theApp.m_db.execQuery(csSQL);
 
@@ -175,27 +175,6 @@ bool CClipIDs::AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bRev
 	}
 
 	return bRet;
-}
-
-//----------------------------------------------
-// ELEMENT (Clip or Group) MANAGEMENT FUNCTIONS
-//----------------------------------------------
-
-// returns the address of the given id in this array or NULL.
-int* CClipIDs::FindID(int id)
-{
-	INT_PTR count = GetSize();
-	int* pID = GetData();
-
-	for(int i=0; i < count; i++)
-	{
-		if(*pID == id)
-		{
-			return pID;
-		}
-		pID++;
-	}
-	return NULL;
 }
 
 // Blindly Moves IDs into the lParentID Group sequentially with the given order
@@ -368,6 +347,7 @@ BOOL CClipIDs::DeleteIDs(bool fromClipWindow, CppSQLite3DB& db)
 					status.Show(workingString);
 				}
 			}
+
 
 			if(fromClipWindow == false)
 			{
