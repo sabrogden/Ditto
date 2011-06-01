@@ -2,7 +2,7 @@
 #define MyAppVersion GetFileVersion("..\Release\DittoU.exe")
 #define MyAppVerName MyAppName + " " + MyAppVersion
 
-#define bit64
+;#define bit64
   
 
 [Setup]
@@ -59,8 +59,9 @@ Name: RunAtStartup; Description: Run Ditto on Windows Startup
 	Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
 	Source: ..\Release64\focus64.dll; DestDir: {app}; BeforeInstall: BeforeFocusInstall(); Flags: ignoreversion restartreplace
 	Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
-	Source: mfc-crt64\*; DestDir: {app}
-#elif
+	Source: mfc-crt64\*; DestDir: {app}      
+#endif
+#ifndef bit64
 	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
 	Source: ..\Release\focus.dll; DestDir: {app}; BeforeInstall: BeforeFocusInstall(); Flags: ignoreversion restartreplace
 	Source: ..\Addins\DittoUtil\Release64\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
