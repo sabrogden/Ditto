@@ -136,9 +136,8 @@
       <OutputFile>.\Release/focus.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib ..\
-copy $(TargetDir)*.dll ..\Release
-</Command>
+      <Command>copy $(TargetDir)*.lib $(SolutionDir)
+copy $(TargetDir)*.dll $(SolutionDir)Release</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -184,9 +183,9 @@ copy $(TargetDir)*.dll ..\Release
       <OutputFile>.\Release/focus64.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>mkdir ..\..\Release64
-copy $(TargetDir)*.lib $(TargetDir)..\..\
-copy $(TargetDir)*.dll $(TargetDir)..\..\Release64
+      <Command>mkdir $(SolutionDir)Release64
+copy $(TargetDir)*.lib $(SolutionDir)
+copy $(TargetDir)*.dll $(SolutionDir)Release64
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -235,8 +234,8 @@ copy $(TargetDir)*.dll $(TargetDir)..\..\Release64
       <OutputFile>.\Debug/focus.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib $(TargetDir)..\..\
-copy $(TargetDir)*.dll $(TargetDir)..\..\Debug64
+      <Command>copy $(TargetDir)*.lib $(SolutionDir)
+copy $(TargetDir)*.dll $(SolutionDir)Debug
 </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -283,10 +282,9 @@ copy $(TargetDir)*.dll $(TargetDir)..\..\Debug64
       <OutputFile>.\Debug64/focus64.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>mkdir ..\..\Debug64
-copy $(TargetDir)*.lib $(TargetDir)..\..\
-copy $(TargetDir)*.dll $(TargetDir)..\..\Debug64
-</Command>
+      <Command>mkdir $(SolutionDir)Debug64
+copy $(TargetDir)*.lib $(SolutionDir)
+copy $(TargetDir)*.dll $(SolutionDir)Debug64</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

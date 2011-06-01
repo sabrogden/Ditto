@@ -120,7 +120,7 @@
       <OutputFile>.\EncryptDecrypt___Win32_Unicode_Debug/EncryptDecrypt.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib $(TargetDir)..\..\</Command>
+      <Command>copy $(TargetDir)*.lib $(SolutionDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -156,7 +156,7 @@
       <OutputFile>.\EncryptDecrypt___Win32_Unicode_Release/EncryptDecrypt.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib $(TargetDir)..\..\</Command>
+      <Command>copy $(TargetDir)*.lib $(SolutionDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -192,7 +192,7 @@
       <OutputFile>.\EncryptDecrypt___Win32_Unicode_Release/EncryptDecrypt.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib $(TargetDir)..\..\</Command>
+      <Command>copy $(TargetDir)*.lib $(SolutionDir)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -200,7 +200,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib $(TargetDir)..\..\</Command>
+      <Command>copy $(TargetDir)*.lib $(SolutionDir)</Command>
     </PostBuildEvent>
     <Lib>
       <TargetMachine>MachineX64</TargetMachine>
