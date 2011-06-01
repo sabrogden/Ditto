@@ -148,7 +148,9 @@
       <MkTypLibCompatible>false</MkTypLibCompatible>
     </Midl>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.dll ..\..\Debug64\Addins</Command>
+      <Command>mkdir ..\..\Debug64
+mkdir ..\..\Debug64\Addins
+copy $(TargetDir)*.dll ..\..\Debug64\Addins</Command>
     </PostBuildEvent>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -217,7 +219,9 @@
       <MkTypLibCompatible>false</MkTypLibCompatible>
     </Midl>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.dll ..\..\Release64\Addins</Command>
+      <Command>mkdir ..\..\Release64
+mkdir ..\..\Release64\Addins
+copy $(TargetDir)*.dll ..\..\Release64\Addins</Command>
     </PostBuildEvent>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

@@ -184,7 +184,8 @@ copy $(TargetDir)*.dll ..\Release
       <OutputFile>.\Release/focus64.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib $(TargetDir)..\..\
+      <Command>mkdir ..\..\Release64
+copy $(TargetDir)*.lib $(TargetDir)..\..\
 copy $(TargetDir)*.dll $(TargetDir)..\..\Release64
 </Command>
     </PostBuildEvent>
@@ -282,7 +283,8 @@ copy $(TargetDir)*.dll $(TargetDir)..\..\Debug64
       <OutputFile>.\Debug64/focus64.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib $(TargetDir)..\..\
+      <Command>mkdir ..\..\Debug64
+copy $(TargetDir)*.lib $(TargetDir)..\..\
 copy $(TargetDir)*.dll $(TargetDir)..\..\Debug64
 </Command>
     </PostBuildEvent>

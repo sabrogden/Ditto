@@ -63,8 +63,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
+ FILEVERSION 3,18,0,0
+ PRODUCTVERSION 3,18,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -81,12 +81,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Ditto Utility Addin"
             VALUE "FileDescription", "Ditto Utility Addin"
-            VALUE "FileVersion", "1.0.0.1"
+            VALUE "FileVersion", "3.18.0.0"
             VALUE "InternalName", "DittoUtil.dll"
             VALUE "LegalCopyright", "Ditto.  All rights reserved."
             VALUE "OriginalFilename", "DittoUtil.dll"
             VALUE "ProductName", "Ditto Utility Addin"
-            VALUE "ProductVersion", "1.0.0.1"
+            VALUE "ProductVersion", "3.18.0.0"
         END
     END
     BLOCK "VarFileInfo"
