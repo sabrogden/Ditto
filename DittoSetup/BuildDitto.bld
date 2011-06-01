@@ -4,29 +4,26 @@
 		<step action='Group'>
 			<name>Project steps</name>
 		</step>
-		<step action='Run Program'>
-			<command>attrib -R %workDir%\* /S</command>
+		<step action='Delete Files'>
+			<ContinueFail type='11'>-1</ContinueFail>
+			<DelDirs type='11'>-1</DelDirs>
+			<Ext>*</Ext>
+			<HideOn type='11'>-1</HideOn>
+			<LogDel type='11'>-1</LogDel>
+			<Path>%workdir%</Path>
+			<Recurse type='11'>-1</Recurse>
+			<SysOn type='11'>-1</SysOn>
 			<indent type='3'>1</indent>
-			<name>Make writable</name>
-			<outputfrom type='3'>1</outputfrom>
+			<name>Delete Files</name>
 		</step>
 		<step action='Delete Files'>
 			<ContinueFail type='11'>-1</ContinueFail>
 			<DelDirs type='11'>-1</DelDirs>
 			<Ext>*</Ext>
-			<HideOn type='11'>0</HideOn>
-			<LogDel type='11'>-1</LogDel>
-			<Path>%workdir%</Path>
-			<Recurse type='11'>-1</Recurse>
-			<SysOn type='11'>0</SysOn>
-			<indent type='3'>1</indent>
-			<name>Delete Files</name>
-		</step>
-		<step action='Delete Files'>
-			<Ext>*</Ext>
 			<HideOn type='11'>-1</HideOn>
 			<LogDel type='11'>-1</LogDel>
 			<Path>%testBuildWorkDir%</Path>
+			<Recurse type='11'>-1</Recurse>
 			<SysOn type='11'>-1</SysOn>
 			<indent type='3'>1</indent>
 			<name>Delete Temp Source</name>
@@ -45,21 +42,11 @@
 			<indent type='3'>1</indent>
 			<name>Get Latest</name>
 		</step>
-		<step action='Group'>
-			<indent type='3'>1</indent>
-			<name>Build Ditto</name>
-		</step>
-		<step action='Run Program'>
-			<command>attrib -R %workDir%\* /S</command>
-			<indent type='3'>2</indent>
-			<name>Make writable</name>
-			<outputfrom type='3'>1</outputfrom>
-		</step>
 		<step action='Run Script'>
 			<Language>VBScript</Language>
 			<Script><![CDATA[' increment the build number in the global macro BUILD_NUM, creating
 ' the macro and initializing to 1 if it doesn't exist
-Const BLD_MACRO = "verRevision"
+Const BLD_MACRO = "verBuild"
 
 ' retrieve global macros collection
 Set macros = Application.Macros(vbldGlobal) 
@@ -78,24 +65,8 @@ End If
 ]]></Script>
 			<description><![CDATA[Get the next build number
 ]]></description>
-			<indent type='3'>2</indent>
-			<name>Increment Build Number</name>
-		</step>
-		<step action='Make VS 2010'>
-			<AssemblyVer type='11'>-1</AssemblyVer>
-			<Attr type='11'>-1</Attr>
-			<Config>Unicode Release|Win32</Config>
-			<FileVer type='11'>-1</FileVer>
-			<Filename>%workDir%\%branch%\CP_Main_10.sln</Filename>
-			<ProdVer type='11'>-1</ProdVer>
-			<Version>%version%</Version>
-			<VersionSel type='3'>2</VersionSel>
-			<indent type='3'>2</indent>
-			<name>Build Ditto Unicode</name>
-		</step>
-		<step action='Group'>
 			<indent type='3'>1</indent>
-			<name>Zip Source</name>
+			<name>Increment Build Number</name>
 		</step>
 		<step action='ZIP Files'>
 			<Action type='3'>2</Action>
@@ -111,16 +82,46 @@ End If
 *.svn-base
 *.map
 *.tlh
-Ditto*.exe
-Ditto*.zip
 ]]></ExclExt>
 			<Ext>*</Ext>
 			<Hidden type='11'>-1</Hidden>
 			<LogDetail type='11'>-1</LogDetail>
 			<Recurse type='11'>-1</Recurse>
 			<Source>%workDir%</Source>
-			<indent type='3'>2</indent>
+			<indent type='3'>1</indent>
 			<name>ZIP Files</name>
+		</step>
+		<step action='Group'>
+			<indent type='3'>1</indent>
+			<name>Build Ditto</name>
+		</step>
+		<step action='Make VS 2010'>
+			<AssemblyVer type='11'>-1</AssemblyVer>
+			<Attr type='11'>-1</Attr>
+			<Config>Release|x64</Config>
+			<FileVer type='11'>-1</FileVer>
+			<Filename>%workDir%\%branch%\CP_Main_10.sln</Filename>
+			<ProdVer type='11'>-1</ProdVer>
+			<Version>%version%</Version>
+			<VersionSel type='3'>2</VersionSel>
+			<indent type='3'>2</indent>
+			<name>Build Ditto 64</name>
+		</step>
+		<step action='Make VS 2010'>
+			<AssemblyVer type='11'>-1</AssemblyVer>
+			<Attr type='11'>-1</Attr>
+			<Config>Release|Win32</Config>
+			<FileVer type='11'>-1</FileVer>
+			<Filename>%workDir%\%branch%\CP_Main_10.sln</Filename>
+			<ProdVer type='11'>-1</ProdVer>
+			<Version>%version%</Version>
+			<VersionSel type='3'>2</VersionSel>
+			<indent type='3'>2</indent>
+			<name>Build Ditto 32</name>
+		</step>
+		<step action='Group'>
+			<indent type='3'>1</indent>
+			<name>Zip Source</name>
 		</step>
 		<step action='UNZIP Files'>
 			<Action type='3'>0</Action>
@@ -128,6 +129,7 @@ Ditto*.zip
 			<Dest>%testBuildWorkDir%</Dest>
 			<LogDetail type='11'>-1</LogDetail>
 			<PathInfo type='11'>-1</PathInfo>
+			<ReadOnly type='11'>-1</ReadOnly>
 			<Recurse type='11'>-1</Recurse>
 			<Source>%workDir%\trunk\dittosetup\output\DittoSource_%versionFileName%.zip</Source>
 			<UNTAR type='11'>-1</UNTAR>
@@ -137,63 +139,77 @@ Ditto*.zip
 		<step action='Make VS 2010'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
-			<Config>Unicode Release|Win32</Config>
+			<Config>Release|x64</Config>
 			<FileVer type='11'>-1</FileVer>
 			<Filename>%testBuildWorkDir%\%branch%\CP_Main_10.sln</Filename>
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
 			<indent type='3'>2</indent>
-			<name>Build Ditto Unicode</name>
+			<name>Build Ditto 64</name>
+		</step>
+		<step action='Make VS 2010'>
+			<AssemblyVer type='11'>-1</AssemblyVer>
+			<Attr type='11'>-1</Attr>
+			<Config>Release|x64</Config>
+			<FileVer type='11'>-1</FileVer>
+			<Filename>%testBuildWorkDir%\%branch%\CP_Main_10.sln</Filename>
+			<ProdVer type='11'>-1</ProdVer>
+			<Version>%version%</Version>
+			<VersionSel type='3'>2</VersionSel>
+			<indent type='3'>2</indent>
+			<name>Build Ditto 32</name>
 		</step>
 		<step action='Run Program'>
 			<command>"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /F"DittoSetup_%versionFileName%" "%workDir%\%branch%\DittoSetup\DittoSetup_10.iss"</command>
 			<indent type='3'>1</indent>
-			<name>Build Installer</name>
+			<name>Build Installer 32</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
-			<command>"%workDir%\%branch%\DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_%versionFileName%"</command>
+			<command>"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /F"DittoSetup_64bit_%versionFileName%" "%workDir%\%branch%\DittoSetup\DittoSetup_10.iss" "/dbit64=1"</command>
 			<indent type='3'>1</indent>
-			<name>Build Portable</name>
+			<name>Build Installer 64</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='Run Program'>
+			<command>"%workDir%\%branch%\DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_%versionFileName%" bit32</command>
+			<indent type='3'>1</indent>
+			<name>Build Portable 32</name>
 			<outputfrom type='3'>1</outputfrom>
 			<startin>%workDir%\%branch%\DittoSetup\</startin>
 		</step>
-		<step action='ZIP Files'>
-			<Action type='3'>2</Action>
-			<Compression>5</Compression>
-			<Dest>%workDir%\%branch%\DittoSetup\output\DittoDebug_%versionFileName%.zip</Dest>
-			<Ext><![CDATA[*.map
+		<step action='Run Program'>
+			<command>"%workDir%\%branch%\DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_64bit_%versionFileName%" bit64</command>
+			<indent type='3'>1</indent>
+			<name>Build Portable 64</name>
+			<outputfrom type='3'>1</outputfrom>
+			<startin>%workDir%\%branch%\DittoSetup\</startin>
+		</step>
+		<step action='7-Zip'>
+			<Action>Update</Action>
+			<Filename>%workDir%\%branch%\DittoSetup\output\DittoDebug_%versionFileName%.7z</Filename>
+			<I><![CDATA[*.map
 *.pdb
 *.dll
-*.exe]]></Ext>
-			<Hidden type='11'>-1</Hidden>
-			<LogDetail type='11'>-1</LogDetail>
-			<NoPaths type='11'>-1</NoPaths>
-			<Recurse type='11'>-1</Recurse>
-			<Source>%workDir%</Source>
+*.exe]]></I>
+			<O>%workDir%</O>
+			<R type='11'>-1</R>
+			<T>7z</T>
+			<X><![CDATA[mfc*
+msp*
+msv*
+u3*
+DittoSetup*]]></X>
+			<Y type='11'>-1</Y>
 			<indent type='3'>1</indent>
-			<name>Zip Debug files</name>
-		</step>
-		<step action='Subversion'>
-			<Files><![CDATA[%branch%
-tags/%versionFileName%
-]]></Files>
-			<Host>ditto-cp.svn.sourceforge.net</Host>
-			<Message>%branch%_%versionFileName%</Message>
-			<Password encrypted='1'>MM3MPOs8MuGmarG4tqE=</Password>
-			<Port>443</Port>
-			<Protocol>https</Protocol>
-			<Repository>/svnroot/ditto-cp</Repository>
-			<Subcommand>copy</Subcommand>
-			<Username>sabrogden</Username>
-			<checked type='11'>0</checked>
-			<indent type='3'>1</indent>
-			<name>Tag build</name>
+			<name>Zip Debug Files</name>
 		</step>
 		<step action='FTP'>
 			<Ext><![CDATA[DittoPortable_%versionFileName%.zip
+DittoPortable_64ibt_%versionFileName%.zip
 DittoSetup_%versionFileName%.exe
+DittoSetup_64bit_%versionFileName%.exe
 DittoSource_%versionFileName%.zip
 DittoDebug_%versionFileName%.zip]]></Ext>
 			<Filename>%workDir%\%branch%\DittoSetup\output\</Filename>
@@ -218,14 +234,14 @@ DittoDebug_%versionFileName%.zip]]></Ext>
 		<macro name='testBuildWorkDir'>
 			<value>%temp%\DittoTestBuild</value>
 		</macro>
-		<macro name='verBuild'>
-			<value>0</value>
-		</macro>
 		<macro name='verMajor'>
 			<value>3</value>
 		</macro>
 		<macro name='verMinor'>
-			<value>17</value>
+			<value>18</value>
+		</macro>
+		<macro name='verRevision'>
+			<value>0</value>
 		</macro>
 		<macro name='version'>
 			<value>%verMajor%.%verMinor%.%verBuild%.%verRevision%</value>
