@@ -365,7 +365,8 @@ BOOL CreateDB(CString csFile)
 								_T("lParentID INTEGER, ")
 								_T("QuickPasteText TEXT, ")
 								_T("clipOrder REAL, ")
-								_T("clipGroupOrder REAL);"));
+								_T("clipGroupOrder REAL, ")
+								_T("globalShortCut INTEGER);"));
 
 		db.execDML(_T("CREATE TABLE Data(")
 							_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")

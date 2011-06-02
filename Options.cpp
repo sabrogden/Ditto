@@ -1985,3 +1985,8 @@ CString CGetSetOptions::GetCopyAppSeparator()
 {
 	return GetProfileString(_T("CopyAppSeparator"), ";");
 }
+
+DWORD CGetSetOptions::GetNoFormatsRetryDelay()
+{
+	return GetProfileLong(_T("NoFormatsRetryDelay"), 200);
+}

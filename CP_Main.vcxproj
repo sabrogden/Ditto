@@ -1865,6 +1865,7 @@
     <None Include="res\CP_Main.rc2" />
     <None Include="res\CP_MainDoc.ico" />
     <None Include="res\Ditto.ico" />
+    <None Include="res\Ditto2_NoCopyCb.ico" />
     <None Include="res\DittoNew.ico" />
     <None Include="res\Ditto_NoCopyCb.ico" />
     <None Include="res\mainfram.bmp" />

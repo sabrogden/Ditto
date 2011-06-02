@@ -101,7 +101,25 @@ void CCopyThread::OnClipboardChange()
 
 	Log(_T("LoadFromClipboard - Before"));
 	bool bResult = pClip->LoadFromClipboard(pSupportedTypes);
-	Log(_T("LoadFromClipboard - End"));
+	Log(_T("LoadFromClipboard - After"));
+
+	if(!bResult)
+	{
+		DWORD delay = CGetSetOptions::GetNoFormatsRetryDelay();
+		if(delay > 0)
+		{
+			Log(StrF(_T("LoadFromClipboard didn't find any clips to save, sleeping %dms, then trying again"), delay));
+			Sleep(delay);
+
+			Log(_T("LoadFromClipboard #2 - Before"));
+			bResult = pClip->LoadFromClipboard(pSupportedTypes);
+			Log(_T("LoadFromClipboard #2 - After"));
+		}
+		else
+		{
+			Log(_T("LoadFromClipboard didn't find any clips to save, retry setting is not set, not retrying"));
+		}
+	}
 
 	if(bDeleteMemory)
 	{

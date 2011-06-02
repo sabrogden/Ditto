@@ -406,6 +406,8 @@ public:
 	static CString  GetCopyAppExclude();
 
 	static CString  GetCopyAppSeparator();
+
+	static DWORD	GetNoFormatsRetryDelay();
 };
 
 // global for easy access and for initialization of fast access variables

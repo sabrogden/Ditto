@@ -67,7 +67,7 @@ END
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\Ditto2.ico"
 IDR_CP_MAITYPE          ICON                    "res\\CP_MainDoc.ico"
-IDI_DITTO_NOCOPYCB      ICON                    "res\\Ditto_NoCopyCb.ico"
+IDI_DITTO_NOCOPYCB      ICON                    "res\\Ditto2_NoCopyCb.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -417,7 +417,7 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 	
 	if(m_Formats.GetSize() == 0)
 	{
-		Log(_T("Not clip types were in supported types array"));
+		Log(_T("No clip types were in supported types array"));
 		return false;
 	}
 
