@@ -18,6 +18,7 @@ public:
 	bool	IsRegistered() { return m_bIsRegistered; }
 	CString GetName()      { return m_Name; }
 	DWORD   GetKey()       { return m_Key; }
+	CString GetHotKeyDisplay();
 
 	void SetKey( DWORD key, bool bSave = false );
 	// profile
@@ -32,7 +33,7 @@ public:
 
 	static BOOL ValidateHotKey(DWORD dwHotKey);
 	static UINT GetModifier(DWORD dwHotKey);
-	UINT GetModifier() { return GetModifier(m_Key); }
+	UINT GetModifier() { return GetModifier(HIBYTE(m_Key)); }
 
 	bool Register();
 	bool Unregister(bool bOnShowingDitto = false);

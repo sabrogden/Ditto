@@ -73,6 +73,7 @@ public:
   static bool AppActivate(LPCTSTR WindowTitle, LPCTSTR WindowClass = 0);
   void SetDelay(const DWORD delay) { m_nDelayAlways = delay; }
   void SetKeyDownDelay(const DWORD delay) { m_keyDownDelay = delay; }
+  static CString VkString(BYTE VKey);
   CSendKeys();
 };
 

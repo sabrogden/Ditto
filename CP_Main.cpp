@@ -911,10 +911,7 @@ int CCP_MainApp::ShowOptionsDlg()
 		CShowMainFrame Show;
 		COptionsSheet Sheet(_T(""), m_pMainFrame);
 		INT_PTR nRet = Sheet.DoModal();
-		if(nRet == IDOK)
-		{
-			m_pMainFrame->m_quickPaste.ShowQPasteWnd(m_pMainFrame, false, false, TRUE);	
-		}
+		
 		bShowingOptions = false;
 	}
 

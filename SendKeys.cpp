@@ -198,6 +198,16 @@ bool CSendKeys::IsVkExtended(BYTE VKey)
   return false;
 }
 
+CString CSendKeys::VkString(BYTE VKey)
+{
+	for (int i = 0; i < MaxSendKeysRecs; i++)
+	{
+		if (KeyNames[i].VKey == VKey)
+			return KeyNames[i].keyName;
+	}
+	return _T("");
+}
+
 void CSendKeys::AllKeysUp()
 {
 	for(int key = 0; key < 256; key++)

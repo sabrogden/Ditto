@@ -545,6 +545,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="EventThread.cpp" />
+    <ClCompile Include="GlobalClips.cpp" />
     <ClCompile Include="HotKeys.cpp" />
     <ClCompile Include="MainFrmThread.cpp" />
     <ClCompile Include="MessagePumpThread.cpp" />
@@ -1739,6 +1740,7 @@
     <ClInclude Include="ClipFormatQListCtrl.h" />
     <ClInclude Include="EventThread.h" />
     <ClInclude Include="FormattedTextDraw.h" />
+    <ClInclude Include="GlobalClips.h" />
     <ClInclude Include="GroupStatic.h" />
     <ClInclude Include="HotKeys.h" />
     <ClInclude Include="MainFrmThread.h" />

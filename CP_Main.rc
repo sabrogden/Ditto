@@ -167,6 +167,7 @@ BEGIN
         MENUITEM "Show Quick Paste",            ID_FIRST_SHOWQUICKPASTE
         MENUITEM "Options",                     ID_FIRST_OPTION
         MENUITEM SEPARATOR
+        MENUITEM "Global Hot Keys",             ID_FIRST_GLOBALHOTKEYS
         MENUITEM "Import Clip(s)",              ID_FIRST_IMPORT
         MENUITEM "New Clip",                    ID_FIRST_NEWCLIP
         MENUITEM SEPARATOR
@@ -716,6 +717,15 @@ BEGIN
     GROUPBOX        "Copy Buffer 3",IDC_BUFFER_GROUP_3,7,139,273,61
 END
 
+IDD_GLOBAL_CLIPS DIALOGEX 0, 0, 369, 202
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Global Hot Keys"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Close",IDCANCEL,312,181,50,14
+    CONTROL         "",IDC_LIST2,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,355,166
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -893,6 +903,14 @@ BEGIN
         RIGHTMARGIN, 280
         TOPMARGIN, 7
         BOTTOMMARGIN, 243
+    END
+
+    IDD_GLOBAL_CLIPS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 362
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 195
     END
 END
 #endif    // APSTUDIO_INVOKED

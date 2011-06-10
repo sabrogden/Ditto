@@ -2,6 +2,7 @@
 #include "HotKeys.h"
 #include "Options.h"
 #include "Misc.h"
+#include "SendKeys.h"
 
 CHotKeys g_HotKeys;
 
@@ -20,6 +21,41 @@ CHotKey::CHotKey(CString name, DWORD defKey, bool bUnregOnShowDitto)
 CHotKey::~CHotKey()
 {
 	Unregister();
+}
+
+CString CHotKey::GetHotKeyDisplay()
+{
+	CString keyDisplay;
+	UINT modifiers = GetModifier();
+	if(modifiers & MOD_SHIFT)
+	{
+		keyDisplay += _T("Shift + ");
+	}
+
+	if(modifiers & MOD_CONTROL)
+	{
+		keyDisplay += _T("Ctrl + ");
+	}
+
+	if(modifiers & MOD_ALT)
+	{
+		keyDisplay += _T("Alt + ");
+	}
+
+	if(modifiers & MOD_WIN)
+	{
+		keyDisplay += _T("Win + ");
+	}
+
+	BYTE KeyboardState[256];
+	GetKeyboardState(KeyboardState);
+	WORD CharValue;
+
+	ToAscii(LOBYTE(m_Key), 0, KeyboardState, &CharValue, 0);
+	
+	keyDisplay += (char)CharValue;
+
+	return keyDisplay;
 }
 
 void CHotKey::SetKey( DWORD key, bool bSave )
@@ -97,10 +133,15 @@ void CHotKey::CopyToCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID)
 UINT CHotKey::GetModifier(DWORD dwHotKey)
 {
 	UINT uMod = 0;
-	if( HIBYTE(dwHotKey) & HOTKEYF_SHIFT )   uMod |= MOD_SHIFT;
-	if( HIBYTE(dwHotKey) & HOTKEYF_CONTROL ) uMod |= MOD_CONTROL;
-	if( HIBYTE(dwHotKey) & HOTKEYF_ALT )     uMod |= MOD_ALT;
-	if( HIBYTE(dwHotKey) & HOTKEYF_EXT )     uMod |= MOD_WIN;
+
+	if(dwHotKey & HOTKEYF_SHIFT)   
+		uMod |= MOD_SHIFT;
+	if(dwHotKey & HOTKEYF_CONTROL) 
+		uMod |= MOD_CONTROL;
+	if(dwHotKey & HOTKEYF_ALT)     
+		uMod |= MOD_ALT;
+	if(dwHotKey & HOTKEYF_EXT)     
+		uMod |= MOD_WIN;
 
 	return uMod;
 }
@@ -119,7 +160,9 @@ bool CHotKey::Register()
 		}
 	}
 	else
-		m_bIsRegistered = true;
+	{
+		m_bIsRegistered = false;
+	}
 
 	return m_bIsRegistered;
 }
@@ -277,7 +320,7 @@ void CHotKeys::RegisterAll(bool bMsgOnError)
 	for(int i = 0; i < count; i++)
 	{
 		pHotKey = ElementAt(i);
-		if(!pHotKey->Register())
+		if(!pHotKey->Register() && pHotKey->m_Key > 0)
 		{
 			str =  "Error Registering ";
 			str += pHotKey->GetName();

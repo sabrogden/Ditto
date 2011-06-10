@@ -15,6 +15,7 @@
 #include "Path.h"
 #include "DittoCopyBuffer.h"
 #include "HotKeys.h"
+#include "GlobalClips.h"
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -28,7 +29,9 @@
 
 bool CShowMainFrame::m_bShowingMainFrame = false;
 
-CShowMainFrame::CShowMainFrame(): m_bHideMainFrameOnExit(false), m_hWnd(NULL)
+CShowMainFrame::CShowMainFrame(): 
+	m_bHideMainFrameOnExit(false), 
+	m_hWnd(NULL)
 {
     if(m_bShowingMainFrame == false)
     {
@@ -78,6 +81,8 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_SET_CONNECTED, OnSetConnected)
 	ON_MESSAGE(WM_LOAD_ClIP_ON_CLIPBOARD, OnLoadClipOnClipboard)
 	ON_MESSAGE(WM_TRAY_MENU_MOUSE_MOVE, OnSystemTrayMouseMove)
+	ON_COMMAND(ID_FIRST_GLOBALHOTKEYS, &CMainFrame::OnFirstGlobalhotkeys)
+	ON_MESSAGE(WM_GLOBAL_CLIPS_CLOSED, OnGlobalClipsClosed)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -96,6 +101,7 @@ CMainFrame::CMainFrame()
     m_startKeyStateTime = 0;
     m_bMovedSelectionMoveKeyState = false;
     m_keyModifiersTimerCount = 0;
+	m_pGlobalClips = NULL;
 }
 
 CMainFrame::~CMainFrame()
@@ -948,4 +954,31 @@ void CMainFrame::OnFirstNewclip()
     CClipIDs IDs;
     IDs.Add( - 1);
     theApp.EditItems(IDs, true);
+}
+
+void CMainFrame::OnFirstGlobalhotkeys()
+{
+	if(m_pGlobalClips != NULL && ::IsWindow(m_pGlobalClips->m_hWnd) == FALSE)
+	{
+		delete m_pGlobalClips;
+		m_pGlobalClips = NULL;
+	}
+	if(m_pGlobalClips == NULL)
+	{
+		m_pGlobalClips = new GlobalClips();
+	}
+
+	if(m_pGlobalClips != NULL)
+	{
+		((GlobalClips*)m_pGlobalClips)->SetNotifyWnd(m_hWnd);
+		m_pGlobalClips->Create(IDD_GLOBAL_CLIPS, NULL);
+		m_pGlobalClips->ShowWindow(SW_SHOW);
+	}
+}
+
+LRESULT CMainFrame::OnGlobalClipsClosed(WPARAM wParam, LPARAM lParam)
+{
+	m_pGlobalClips = NULL;
+
+	return 0;
 }
