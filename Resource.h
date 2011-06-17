@@ -30,6 +30,8 @@
 #define IDR_FILE_COPY                   158
 #define IDD_OPTIONS_COPY_BUFFERS        166
 #define IDI_ICON1                       167
+#define IDD_DIALOG1                     168
+#define IDD_GLOBAL_CLIPS                168
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -340,14 +342,15 @@
 #define ID_BUTTON_SAVE_CLOSE_CLIPBOARD  32869
 #define ID_FIRST_COPYTODEVICE           32870
 #define ID_PASTE_PLAIN_TEXT             32871
+#define ID_FIRST_GLOBALHOTKEYS          32872
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        168
-#define _APS_NEXT_COMMAND_VALUE         32872
+#define _APS_NEXT_RESOURCE_VALUE        169
+#define _APS_NEXT_COMMAND_VALUE         32873
 #define _APS_NEXT_CONTROL_VALUE         2100
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
