@@ -12,6 +12,7 @@
 #include "About.h"
 #include "OptionFriends.h"
 #include "OptionsCopyBuffers.h"
+#include "Misc.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -37,38 +38,14 @@ COptionsSheet::COptionsSheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT iSelectP
 	m_pAbout = NULL;
 	m_pFriends = NULL;
 	m_pCopyBuffers = NULL;
-}
+	m_hWndParent = NULL;
 
-COptionsSheet::~COptionsSheet()
-{
-	DELETE_PTR(m_pKeyBoardOptions);
-	DELETE_PTR(m_pGeneralOptions);
-	DELETE_PTR(m_pQuickPasteOptions);
-	DELETE_PTR(m_pUtilites);
-	DELETE_PTR(m_pStats);
-	DELETE_PTR(m_pTypes);
-	DELETE_PTR(m_pAbout);
-	DELETE_PTR(m_pFriends);
-	DELETE_PTR(m_pCopyBuffers);
-}
-
-BEGIN_MESSAGE_MAP(COptionsSheet, CPropertySheet)
-	//{{AFX_MSG_MAP(COptionsSheet)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
-/////////////////////////////////////////////////////////////////////////////
-// COptionsSheet message handlers
-
-INT_PTR COptionsSheet::DoModal() 
-{
 	EnableStackedTabs(TRUE);
 
 	m_pGeneralOptions = new COptionsGeneral;
 	m_pKeyBoardOptions = new COptionsKeyBoard;
 	m_pQuickPasteOptions = new COptionsQuickPaste;
-	
+
 	m_pCopyBuffers = new COptionsCopyBuffers;
 	m_pStats = new COptionsStats;
 	m_pTypes = new COptionsTypes;
@@ -86,19 +63,58 @@ INT_PTR COptionsSheet::DoModal()
 	}
 	AddPage(m_pStats);
 	AddPage(m_pAbout);
-	
-	return CPropertySheet::DoModal();
+}
+
+COptionsSheet::~COptionsSheet()
+{
+	delete m_pKeyBoardOptions;
+	delete m_pGeneralOptions;
+	delete m_pQuickPasteOptions;
+	delete m_pUtilites;
+	delete m_pStats;
+	delete m_pTypes;
+	delete m_pAbout;
+	delete m_pFriends;
+	delete m_pCopyBuffers;
+}
+
+BEGIN_MESSAGE_MAP(COptionsSheet, CPropertySheet)
+	//{{AFX_MSG_MAP(COptionsSheet)
+		// NOTE - the ClassWizard will add and remove mapping macros here.
+	ON_WM_DESTROY()
+	//ON_WM_CLOSE()
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// COptionsSheet message handlers
+
+void COptionsSheet::OnDestroy()
+{
+	::SendMessage(m_hWndParent, WM_OPTIONS_CLOSED, 0, 0);
+	CPropertySheet::OnDestroy();
+}
+
+void COptionsSheet::SetNotifyWnd(HWND hWnd)
+{
+	m_hWndParent = hWnd;
 }
 
 BOOL COptionsSheet::OnInitDialog() 
 {
+	m_bModeless = FALSE;   
+	m_nFlags |= WF_CONTINUEMODAL;
+
 	BOOL bResult = CPropertySheet::OnInitDialog();
-	
+
 	SetWindowText(_T("Ditto"));
 
 	theApp.m_Language.UpdateOptionsSheet(this);
 
 	::ShowWindow(::GetDlgItem(m_hWnd, ID_APPLY_NOW), SW_HIDE);
-	
+
+	m_bModeless = TRUE;
+	m_nFlags &= ~WF_CONTINUEMODAL;
+
 	return bResult;
 }

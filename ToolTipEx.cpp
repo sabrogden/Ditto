@@ -12,7 +12,7 @@
 #define DELETE_BITMAP	if(m_pBitmap)					\
 {								\
 m_pBitmap->DeleteObject();	\
-DELETE_PTR(m_pBitmap);		\
+delete m_pBitmap;		\
 }
 
 

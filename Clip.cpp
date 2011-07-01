@@ -905,7 +905,7 @@ CClipList::~CClipList()
 	while(GetCount())
 	{
 		pClip = RemoveHead();
-		DELETE_PTR(pClip);
+		delete pClip;
 	}
 }
 

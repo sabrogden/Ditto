@@ -19,7 +19,7 @@ CProcessPaste::CProcessPaste()
 
 CProcessPaste::~CProcessPaste()
 {	
-	DELETE_PTR(m_pOle);
+	delete m_pOle;
 }
 
 BOOL CProcessPaste::DoPaste()

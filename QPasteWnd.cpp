@@ -422,9 +422,8 @@ BOOL CQPasteWnd::HideQPasteWindow()
 		m_bStopQuery = true;
 	}
 
-    //Reset the flagShell_TrayWnd
     theApp.m_bShowingQuickPaste = false;
-    theApp.m_activeWnd.ReleaseFocus();
+    //theApp.m_activeWnd.ReleaseFocus();
 
     KillTimer(TIMER_FILL_CACHE);
 
@@ -1449,7 +1448,7 @@ void CQPasteWnd::OnMenuPositioningAtpreviousposition()
 
 void CQPasteWnd::OnMenuOptions()
 {
-    theApp.ShowOptionsDlg();
+	theApp.m_pMainFrame->SendMessage(WM_SHOW_OPTIONS, 0, 0);
 }
 
 void CQPasteWnd::OnMenuExitprogram()
@@ -3246,8 +3245,6 @@ LRESULT CQPasteWnd::OnRefeshRow(WPARAM wParam, LPARAM lParam)
 		m_lstHeader.RedrawWindow();
 
 		//Log(_T("End of first load, showing listbox and loading actual count, then accelerators"));
-		m_thread.FireDoQuery();
-		m_thread.FireLoadAccelerators();
 	}
 
     return true;

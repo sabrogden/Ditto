@@ -92,7 +92,7 @@ BOOL CHotKey::ValidateHotKey(DWORD dwHotKey)
 	ATOM id = ::GlobalAddAtom(_T("HK_VALIDATE"));
 	BOOL bResult = ::RegisterHotKey( g_HotKeys.m_hWnd,
 		id,
-		GetModifier(dwHotKey),
+		GetModifier(HIBYTE(dwHotKey)),
 		LOBYTE(dwHotKey) );
 
 	if(bResult)

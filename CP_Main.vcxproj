@@ -553,6 +553,7 @@
     <ClCompile Include="QPasteWndThread.cpp" />
     <ClCompile Include="Shared\TextConvert.cpp" />
     <ClCompile Include="Shared\Tokenizer.cpp" />
+    <ClCompile Include="ShowTaskBarIcon.cpp" />
     <ClCompile Include="sqlite\CppSQLite3.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -1754,6 +1755,7 @@
     <ClInclude Include="SearchEditBox.h" />
     <ClInclude Include="Shared\TextConvert.h" />
     <ClInclude Include="Shared\Tokenizer.h" />
+    <ClInclude Include="ShowTaskBarIcon.h" />
     <ClInclude Include="sqlite\sqlite3.h" />
     <ClInclude Include="sqlite\sqlite3ext.h" />
     <ClInclude Include="ToolTipEx.h" />

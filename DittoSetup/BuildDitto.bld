@@ -206,12 +206,7 @@ DittoSetup*]]></X>
 			<name>Zip Debug Files</name>
 		</step>
 		<step action='FTP'>
-			<Ext><![CDATA[DittoPortable_%versionFileName%.zip
-DittoPortable_64ibt_%versionFileName%.zip
-DittoSetup_%versionFileName%.exe
-DittoSetup_64bit_%versionFileName%.exe
-DittoSource_%versionFileName%.zip
-DittoDebug_%versionFileName%.zip]]></Ext>
+			<Ext>*.*</Ext>
 			<Filename>%workDir%\%branch%\DittoSetup\output\</Filename>
 			<Incremental type='11'>-1</Incremental>
 			<Logging type='3'>6</Logging>

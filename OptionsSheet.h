@@ -6,6 +6,7 @@
 #endif // _MSC_VER > 1000
 // OptionsSheet.h : header file
 //
+//#include "ShowTaskBarIcon.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // COptionsSheet
@@ -18,6 +19,8 @@ class COptionsSheet : public CPropertySheet
 public:
 	COptionsSheet(LPCTSTR pszCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0);
 
+	void SetNotifyWnd(HWND hWnd);
+
 // Attributes
 public:
 
@@ -28,7 +31,6 @@ public:
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(COptionsSheet)
 	public:
-	virtual INT_PTR DoModal();
 	virtual BOOL OnInitDialog();
 	//}}AFX_VIRTUAL
 
@@ -38,6 +40,8 @@ public:
 
 	// Generated message map functions
 protected:
+
+	HWND m_hWndParent;
 
 	CPropertyPage *m_pKeyBoardOptions;
 	CPropertyPage *m_pGeneralOptions;
@@ -49,9 +53,12 @@ protected:
 	CPropertyPage *m_pFriends;
 	CPropertyPage *m_pCopyBuffers;
 
+	//CShowTaskBarIcon m_taskBar;
+
 
 	//{{AFX_MSG(COptionsSheet)
 		// NOTE - the ClassWizard will add and remove member functions here.
+	afx_msg void OnDestroy();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -226,8 +226,10 @@ void CCopyProperties::OnOK()
 
 					if(CheckGlobalHotKey(clip) == FALSE)
 					{
-						MessageBox(_T("Error registering global hot key"));
-						return;
+						if(MessageBox(_T("Error registering global hot key\n\nContinue?"), _T(""), MB_YESNO|MB_ICONWARNING) == IDNO)
+						{
+							return;
+						}
 					}
 				}
 			}

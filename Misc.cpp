@@ -643,7 +643,8 @@ long NewGroupID(int parentID, CString text)
 		text.Replace(_T("'"), _T("''"));
 
 		CString cs;
-		cs.Format(_T("insert into Main values(NULL, %d, '%s', 0, %d, 0, 1, %d, '');"),
+
+		cs.Format(_T("insert into Main (lDate, mText, lDontAutoDelete, bIsGroup, lParentID) values(%d, '%s', %d, 1, %d);"),
 							(long)time.GetTime(),
 							text,
 							(long)time.GetTime(),

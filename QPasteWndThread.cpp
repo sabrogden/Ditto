@@ -33,8 +33,8 @@ void CQPasteWndThread::OnEvent(int eventId, void *param)
 
     switch((eCQPasteWndThreadEvents)eventId)
     {
-        case DO_QUERY:
-            OnDoQuery(param);
+        case DO_SET_LIST_COUNT:
+            OnSetListCount(param);
             break;
         case LOAD_ACCELERATORS:
             OnLoadAccelerators(param);
@@ -54,7 +54,7 @@ void CQPasteWndThread::OnEvent(int eventId, void *param)
 	Log(StrF(_T("End of OnEvent, eventId: %s, Time: %d(ms)"), EnumName((eCQPasteWndThreadEvents)eventId), length));
 }
 
-void CQPasteWndThread::OnDoQuery(void *param)
+void CQPasteWndThread::OnSetListCount(void *param)
 {
     CQPasteWnd *pasteWnd = (CQPasteWnd*)param;
 
@@ -155,22 +155,24 @@ void CQPasteWndThread::OnLoadItems(void *param)
 					loadCount++;
 				}
 
+				if(firstLoad)
+				{
+					::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -2, 0);
+					//allow the next thread message to process, this should be the message to set the list count
+
+					OnSetListCount(param);
+					OnLoadAccelerators(param);
+				}
+				else
+				{
+					::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -1, 0);
+				}
+
 				if(clearFirstLoadItem)
 				{
 					ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
 
 					pasteWnd->m_loadItems.erase(pasteWnd->m_loadItems.begin());
-				}
-
-				if(firstLoad)
-				{
-					::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -2, 0);
-					//allow the next thread message to process, this should be the message to set the list count
-					break;
-				}
-				else
-				{
-					::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -1, 0);
 				}
 
 				Log(StrF(_T("Load items End count = %d, time = %d"), loadCount, GetTickCount() - startTick));
@@ -270,7 +272,7 @@ CString CQPasteWndThread::EnumName(eCQPasteWndThreadEvents e)
 {
 	switch(e)
 	{
-	case DO_QUERY:
+	case DO_SET_LIST_COUNT:
 		return _T("Load List Count");
 	case LOAD_ACCELERATORS:
 		return _T("Load Accelerators");

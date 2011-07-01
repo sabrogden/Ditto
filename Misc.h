@@ -12,8 +12,6 @@
 #define ONE_HOUR				3600000
 #define ONE_DAY					86400000
 
-#define DELETE_PTR(ptr) {  if(ptr) {delete ptr; ptr = NULL;}  }
-
 #define CATCH_SQLITE_EXCEPTION		\
 	catch (CppSQLite3Exception& e)	\
     {								\
@@ -114,6 +112,8 @@ CString GetProcessName(HWND hWnd);
 //defined in tray icon #define WM_TRAY_MENU_MOUSE_MOVE	WM_USER + 216
 #define WM_RELOAD_CLIP_ORDER	WM_USER	+ 217
 #define WM_GLOBAL_CLIPS_CLOSED	WM_USER	+ 218
+#define WM_OPTIONS_CLOSED	WM_USER	+ 219
+#define WM_SHOW_OPTIONS	WM_USER	+ 220
 
 #if !defined(_BITSET_)
 #	include <bitset>

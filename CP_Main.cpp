@@ -14,6 +14,7 @@
 #include "DittoCopyBuffer.h"
 #include "SendKeys.h"
 #include "MainTableFunctions.h"
+#include "ShowTaskBarIcon.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -811,7 +812,7 @@ bool CCP_MainApp::ImportClips(HWND hWnd)
 		CClip_ImportExport clip;
 		if(clip.ImportFromSqliteDB(db, true, false))
 		{
-			CShowMainFrame Show;
+			CShowTaskBarIcon show;
 
 			CString cs;
 			
@@ -825,7 +826,7 @@ bool CCP_MainApp::ImportClips(HWND hWnd)
 		}
 		else
 		{
-			CShowMainFrame Show;
+			CShowTaskBarIcon show;
 			MessageBox(hWnd, theApp.m_Language.GetString("Error_Importing", "Error importing exported clip"), _T("Ditto"), MB_OK);
 		}
 	}
@@ -897,25 +898,6 @@ bool CCP_MainApp::EditItems(CClipIDs &Ids, bool bShowError)
 	m_pMainFrame->ShowEditWnd(Ids);
 
 	return true;
-}
-
-int CCP_MainApp::ShowOptionsDlg()
-{
-	static bool bShowingOptions = false;
-	int nRet = IDABORT;
-
-	if(bShowingOptions == false)
-	{
-		bShowingOptions = true;
-
-		CShowMainFrame Show;
-		COptionsSheet Sheet(_T(""), m_pMainFrame);
-		INT_PTR nRet = Sheet.DoModal();
-		
-		bShowingOptions = false;
-	}
-
-	return nRet;
 }
 
 void CCP_MainApp::PumpMessageEx(HWND hWnd)

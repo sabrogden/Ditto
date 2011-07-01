@@ -62,6 +62,7 @@ public:
     CMainFrmThread m_thread;
 	CClipboardSaveRestore m_textOnlyPaste;
 	CDialog *m_pGlobalClips;
+	CPropertySheet *m_pOptions;
 
     void DoDittoCopyBufferPaste(int nCopyBuffer);
     void DoFirstTenPositionsPaste(int nPos);
@@ -100,6 +101,8 @@ protected:
 	afx_msg LRESULT OnLoadClipOnClipboard(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSystemTrayMouseMove(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGlobalClipsClosed(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnOptionsClosed(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnShowOptions(WPARAM wParam, LPARAM lParam);
 DECLARE_MESSAGE_MAP()public:
     virtual BOOL PreTranslateMessage(MSG *pMsg);
     afx_msg void OnClose();
@@ -107,14 +110,4 @@ DECLARE_MESSAGE_MAP()public:
     afx_msg void OnDestroy();
     afx_msg void OnFirstNewclip();
 	afx_msg void OnFirstGlobalhotkeys();
-};
-
-class CShowMainFrame
-{
-public:
-    CShowMainFrame();
-    ~CShowMainFrame();
-    static bool m_bShowingMainFrame;
-    bool m_bHideMainFrameOnExit;
-    HWND m_hWnd;
 };

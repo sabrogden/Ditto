@@ -16,6 +16,7 @@
 #include "DittoCopyBuffer.h"
 #include "HotKeys.h"
 #include "GlobalClips.h"
+#include "OptionsSheet.h"
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -25,32 +26,6 @@
 
 #define WM_ICON_NOTIFY			WM_APP+10
 #define MYWM_NOTIFYICON (WM_USER+1)
-
-
-bool CShowMainFrame::m_bShowingMainFrame = false;
-
-CShowMainFrame::CShowMainFrame(): 
-	m_bHideMainFrameOnExit(false), 
-	m_hWnd(NULL)
-{
-    if(m_bShowingMainFrame == false)
-    {
-        theApp.m_pMainFrame->m_TrayIcon.MaximiseFromTray(theApp.m_pMainFrame);
-        m_bHideMainFrameOnExit = true;
-        m_bShowingMainFrame = true;
-    }
-
-    m_hWnd = theApp.m_pMainFrame->GetSafeHwnd();
-}
-
-CShowMainFrame::~CShowMainFrame()
-{
-    if(m_bHideMainFrameOnExit && m_hWnd && ::IsWindow(m_hWnd))
-    {
-        theApp.m_pMainFrame->m_TrayIcon.MinimiseToTray(theApp.m_pMainFrame);
-        m_bShowingMainFrame = false;
-    }
-}
 
 
 IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
@@ -83,6 +58,8 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_TRAY_MENU_MOUSE_MOVE, OnSystemTrayMouseMove)
 	ON_COMMAND(ID_FIRST_GLOBALHOTKEYS, &CMainFrame::OnFirstGlobalhotkeys)
 	ON_MESSAGE(WM_GLOBAL_CLIPS_CLOSED, OnGlobalClipsClosed)
+	ON_MESSAGE(WM_OPTIONS_CLOSED, OnOptionsClosed)
+	ON_MESSAGE(WM_SHOW_OPTIONS, OnShowOptions)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -102,6 +79,7 @@ CMainFrame::CMainFrame()
     m_bMovedSelectionMoveKeyState = false;
     m_keyModifiersTimerCount = 0;
 	m_pGlobalClips = NULL;
+	m_pOptions = NULL;
 }
 
 CMainFrame::~CMainFrame()
@@ -235,10 +213,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT &cs)
 // CMainFrame message handlers
 
 
-void CMainFrame::OnFirstOption()
-{
-    theApp.ShowOptionsDlg();
-}
+
 
 void CMainFrame::OnFirstExit()
 {
@@ -956,28 +931,61 @@ void CMainFrame::OnFirstNewclip()
     theApp.EditItems(IDs, true);
 }
 
+void CMainFrame::OnFirstOption()
+{
+	if(m_pOptions != NULL)
+	{
+		::SetForegroundWindow(m_pOptions->m_hWnd);
+	}
+	else
+	{
+		m_pOptions = new COptionsSheet(_T(""));
+
+		if(m_pOptions != NULL)
+		{
+			((COptionsSheet*)m_pOptions)->SetNotifyWnd(m_hWnd);
+			m_pOptions->Create();
+			m_pOptions->ShowWindow(SW_SHOW);
+		}
+	}
+}
+
 void CMainFrame::OnFirstGlobalhotkeys()
 {
-	if(m_pGlobalClips != NULL && ::IsWindow(m_pGlobalClips->m_hWnd) == FALSE)
-	{
-		delete m_pGlobalClips;
-		m_pGlobalClips = NULL;
-	}
-	if(m_pGlobalClips == NULL)
-	{
-		m_pGlobalClips = new GlobalClips();
-	}
-
 	if(m_pGlobalClips != NULL)
 	{
-		((GlobalClips*)m_pGlobalClips)->SetNotifyWnd(m_hWnd);
-		m_pGlobalClips->Create(IDD_GLOBAL_CLIPS, NULL);
-		m_pGlobalClips->ShowWindow(SW_SHOW);
+		::SetForegroundWindow(m_pGlobalClips->m_hWnd);
 	}
+	else
+	{
+		m_pGlobalClips = new GlobalClips();
+
+		if(m_pGlobalClips != NULL)
+		{
+			((GlobalClips*)m_pGlobalClips)->SetNotifyWnd(m_hWnd);
+			m_pGlobalClips->Create(IDD_GLOBAL_CLIPS, NULL);
+			m_pGlobalClips->ShowWindow(SW_SHOW);
+		}
+	}
+}
+
+LRESULT CMainFrame::OnShowOptions(WPARAM wParam, LPARAM lParam)
+{
+	OnFirstOption();
+	return 0;
+}
+
+LRESULT CMainFrame::OnOptionsClosed(WPARAM wParam, LPARAM lParam)
+{
+	delete m_pOptions;
+	m_pOptions = NULL;
+
+	return 0;
 }
 
 LRESULT CMainFrame::OnGlobalClipsClosed(WPARAM wParam, LPARAM lParam)
 {
+	delete m_pGlobalClips;
 	m_pGlobalClips = NULL;
 
 	return 0;

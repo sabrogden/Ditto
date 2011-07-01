@@ -10,7 +10,7 @@ public:
 
     enum eCQPasteWndThreadEvents
     {
-		DO_QUERY, 
+		DO_SET_LIST_COUNT, 
 		LOAD_ACCELERATORS, 
 		UNLOAD_ACCELERATORS, 
 		LOAD_ITEMS, 
@@ -20,9 +20,9 @@ public:
 
     };
 
-    void FireDoQuery()
+    void FireSetListCount()
     {
-        FireEvent(DO_QUERY);
+        FireEvent(DO_SET_LIST_COUNT);
     }
     void FireLoadItems(bool firstLoad)
     {
@@ -47,7 +47,7 @@ protected:
     virtual void OnEvent(int eventId, void *param);
     virtual void OnTimeOut(void *param);
 
-    void OnDoQuery(void *param);
+    void OnSetListCount(void *param);
     void OnLoadItems(void *param);
     void OnLoadExtraData(void *param);
     void OnLoadAccelerators(void *param);

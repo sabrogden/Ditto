@@ -85,7 +85,6 @@ public:
 	bool ToggleConnectCV();
 	void UpdateMenuConnectCV(CMenu* pMenu, UINT nMenuID);
 	bool ImportClips(HWND hWnd);
-	int ShowOptionsDlg();
 	void LoadGlobalClips();
 
 	void OnDeleteID(long lID);

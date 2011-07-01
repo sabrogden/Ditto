@@ -29,7 +29,7 @@ CCopyThread::~CCopyThread()
 {
 	m_LocalConfig.DeleteTypes();
 	m_SharedConfig.DeleteTypes();
-	DELETE_PTR(m_pClipboardViewer);
+	delete m_pClipboardViewer;
 }
 
 BOOL CCopyThread::InitInstance()
@@ -195,7 +195,7 @@ void CCopyThread::SetSupportedTypes( CClipTypes* pTypes )
 
 	if(m_SharedConfig.m_pSupportedTypes)
 	{
-		DELETE_PTR(m_SharedConfig.m_pSupportedTypes);
+		delete m_SharedConfig.m_pSupportedTypes;
 	}
 
 	m_SharedConfig.m_pSupportedTypes = pTypes;

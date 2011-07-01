@@ -29,32 +29,28 @@ void GlobalClips::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(GlobalClips, CDialogEx)
-	ON_WM_DESTROY()
 	ON_WM_CLOSE()
 	ON_WM_SIZE()
+	ON_BN_CLICKED(IDC_BUTTON_REFRESH, &GlobalClips::OnBnClickedButtonRefresh)
 END_MESSAGE_MAP()
 
 BOOL GlobalClips::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	ModifyStyle(0,WS_SYSMENU);
-
-	
-
-	this->SetIcon(AfxGetApp()->LoadIcon(IDR_MAINFRAME), TRUE);
-
-	// 0 in WPARAM is 'small version'
-//	::SendMessage(GetSafeHwnd(), WM_SETICON, 0, (LPARAM)hIcon);
-
-
 	m_Resize.SetParent(m_hWnd);
 	m_Resize.AddControl(IDC_LIST2, DR_SizeHeight | DR_SizeWidth);
 	m_Resize.AddControl(IDCANCEL, DR_MoveTop | DR_MoveLeft);
 
-
 	InitListCtrlCols();
 
+	LoadItems();
+
+	return TRUE;
+}
+
+void GlobalClips::LoadItems()
+{
 	m_List.DeleteAllItems();
 
 	// Use the LV_ITEM structure to insert the items
@@ -78,6 +74,11 @@ BOOL GlobalClips::OnInitDialog()
 
 		strItem = pHotKey->m_Name;
 
+		if(pHotKey->m_clipId > 0)
+		{
+			strItem.Insert(0, _T("(Clip) "));
+		}
+
 		lvi.iSubItem = 0;
 		lvi.pszText = (LPTSTR)(LPCTSTR)(strItem);
 		m_List.InsertItem(&lvi);
@@ -95,8 +96,6 @@ BOOL GlobalClips::OnInitDialog()
 
 		row++;
 	}
-
-	return TRUE;
 }
 
 void GlobalClips::InitListCtrlCols()
@@ -113,19 +112,16 @@ void GlobalClips::SetNotifyWnd(HWND hWnd)
 	m_hWndParent = hWnd;
 }
 
-void GlobalClips::OnDestroy()
-{
-	CDialogEx::OnDestroy();
-
-	
-}
-
-
 void GlobalClips::OnClose()
 {
 	::SendMessage(m_hWndParent, WM_GLOBAL_CLIPS_CLOSED, 0, 0);
 
 	CDialogEx::OnClose();
+}
+
+void GlobalClips::OnCancel()
+{
+	::SendMessage(m_hWndParent, WM_GLOBAL_CLIPS_CLOSED, 0, 0);
 }
 
 
@@ -134,4 +130,9 @@ void GlobalClips::OnSize(UINT nType, int cx, int cy)
 	CDialogEx::OnSize(nType, cx, cy);
 
 	m_Resize.MoveControls(CSize(cx, cy));
+}
+
+void GlobalClips::OnBnClickedButtonRefresh()
+{
+	LoadItems();
 }
