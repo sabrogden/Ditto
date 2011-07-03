@@ -183,13 +183,25 @@ BOOL CClipIDs::MoveTo(long lParentID, double dFirst, double dIncrement)
 	try
 	{
 		INT_PTR count = GetSize();
-		for(int i = 0; i < count; i++)
+		for(int i = count-1; i >= 0; i--)
 		{
-			CString sql = StrF(_T("UPDATE Main SET lParentID = %d ")
-								_T("WHERE lID = %d AND lID <> %d;"), 
-								lParentID,
-								ElementAt(i),
-								lParentID);
+			CString sql;
+
+			if(lParentID > 0)
+			{
+				sql = StrF(_T("UPDATE Main SET lParentID = %d, clipGroupOrder = %d WHERE lID = %d AND lID <> %d;"), 
+							lParentID,
+							CClip::GetNewOrder(lParentID),
+							ElementAt(i),
+							lParentID);
+			}
+			else
+			{
+				sql = StrF(_T("UPDATE Main SET lParentID = %d WHERE lID = %d AND lID <> %d;"), 
+							lParentID,
+							ElementAt(i),
+							lParentID);
+			}
 
 			theApp.m_db.execDMLEx(sql);
 		}

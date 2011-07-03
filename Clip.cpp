@@ -707,16 +707,36 @@ bool CClip::AddToDataTable()
 // old times can happen on fast copies (<1 sec).
 void CClip::MakeLatestTime()
 {
+	m_clipOrder = GetNewOrder(-1);
+}
+
+int CClip::GetNewOrder(int parentId)
+{
+	int newOrder = 0;
 	try
 	{
-		CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipOrder FROM Main ORDER BY clipOrder DESC LIMIT 1"));			
-		if(q.eof() == false)
+		if(parentId < 0)
 		{
-			double order = q.getFloatField(_T("clipOrder"));
-			m_clipOrder = order + 1;
+			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipOrder FROM Main ORDER BY clipOrder DESC LIMIT 1"));			
+			if(q.eof() == false)
+			{
+				double order = q.getFloatField(_T("clipOrder"));
+				newOrder = order + 1;
+			}
+		}
+		else
+		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipGroupOrder FROM Main WHERE lParentID = %d ORDER BY clipOrder DESC LIMIT 1"), parentId);			
+			if(q.eof() == false)
+			{
+				double order = q.getFloatField(_T("clipGroupOrder"));
+				newOrder = order + 1;
+			}
 		}
 	}
 	CATCH_SQLITE_EXCEPTION
+
+	return newOrder;
 }
 
 BOOL CClip::LoadMainTable(int id)
