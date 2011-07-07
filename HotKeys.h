@@ -11,6 +11,8 @@ public:
 	bool	m_bIsRegistered;
 	bool	m_bUnRegisterOnShowDitto;
 	int		m_clipId;
+	int		m_globalId;
+	static int m_nextId;
 	
 	CHotKey( CString name, DWORD defKey = 0, bool bUnregOnShowDitto = false );
 	~CHotKey();
@@ -37,6 +39,8 @@ public:
 
 	bool Register();
 	bool Unregister(bool bOnShowingDitto = false);
+
+	CString GetVirKeyName(unsigned int virtualKey);
 };
 
 

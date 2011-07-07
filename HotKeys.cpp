@@ -6,21 +6,62 @@
 
 CHotKeys g_HotKeys;
 
+int CHotKey::m_nextId = 0;
 
 CHotKey::CHotKey(CString name, DWORD defKey, bool bUnregOnShowDitto) 
 	: m_Name(name), 
 	m_bIsRegistered(false), 
-	m_bUnRegisterOnShowDitto(bUnregOnShowDitto)
+	m_bUnRegisterOnShowDitto(bUnregOnShowDitto),
+	m_clipId(0)
 {
 	m_Atom = ::GlobalAddAtom(m_Name);
 	ASSERT(m_Atom);
 	m_Key = (DWORD)g_Opt.GetProfileLong(m_Name, (long) defKey);
+	m_globalId = m_nextId;
+	m_nextId++;
 	g_HotKeys.Add(this);
 }
 
 CHotKey::~CHotKey()
 {
 	Unregister();
+}
+
+//http://www.ffuts.org/blog/mapvirtualkey-getkeynametext-and-a-story-of-how-to/
+CString CHotKey::GetVirKeyName(unsigned int virtualKey)
+{
+	unsigned int scanCode = MapVirtualKey(virtualKey, MAPVK_VK_TO_VSC);
+
+	// because MapVirtualKey strips the extended bit for some keys
+	switch (virtualKey)
+	{
+		case VK_LEFT: 
+		case VK_UP: 
+		case VK_RIGHT: 
+		case VK_DOWN: // arrow keys
+		case VK_PRIOR: 
+		case VK_NEXT: // page up and page down
+		case VK_END: 
+		case VK_HOME:
+		case VK_INSERT: 
+		case VK_DELETE:
+		case VK_DIVIDE: // numpad slash
+		case VK_NUMLOCK:
+		{
+			scanCode |= 0x100; // set extended bit
+			break;
+		}
+	}
+
+	wchar_t keyName[50];
+	if (GetKeyNameText(scanCode << 16, keyName, sizeof(keyName)) != 0)
+	{
+		return keyName;
+	}
+	else
+	{
+		return "[Error]";
+	}
 }
 
 CString CHotKey::GetHotKeyDisplay()
@@ -46,14 +87,9 @@ CString CHotKey::GetHotKeyDisplay()
 	{
 		keyDisplay += _T("Win + ");
 	}
-
-	BYTE KeyboardState[256];
-	GetKeyboardState(KeyboardState);
-	WORD CharValue;
-
-	ToAscii(LOBYTE(m_Key), 0, KeyboardState, &CharValue, 0);
 	
-	keyDisplay += (char)CharValue;
+	int key = LOBYTE(m_Key);
+	keyDisplay += GetVirKeyName(key);
 
 	return keyDisplay;
 }
