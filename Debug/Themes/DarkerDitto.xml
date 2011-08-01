@@ -1,0 +1,17 @@
+<Ditto_Theme_File Version="1" Author="Zigboom" Notes="DarkTheme">
+<CaptionLeft>RGB(0,0,0)</CaptionLeft>
+<CaptionRight>RGB(68,68,68)</CaptionRight>
+<CaptionLeftTopMost>RGB(68,68,68)</CaptionLeftTopMost>
+<CaptionRightTopMost>RGB(68,68,68)</CaptionRightTopMost>
+<CaptionLeftNotConnected>RGB(102,102,102)</CaptionLeftNotConnected>
+<CaptionRightNotConnected>RGB(102,102,102)</CaptionRightNotConnected>
+<CaptionTextColor>RGB(204,204,204)</CaptionTextColor>
+<ListBoxOddRowsBG>RGB(24,24,24)</ListBoxOddRowsBG>
+<ListBoxEvenRowsBG>RGB(0,0,0)</ListBoxEvenRowsBG>
+<ListBoxOddRowsText>RGB(153,153,153)</ListBoxOddRowsText>
+<ListBoxEvenRowsText>RGB(153,153,153)</ListBoxEvenRowsText>
+<ListBoxSelectedBG>RGB(51,51,51)</ListBoxSelectedBG>
+<ListBoxSelectedNoFocusBG>RGB(0,0,0)</ListBoxSelectedNoFocusBG>
+<ListBoxSelectedText>RGB(238,238,238)</ListBoxSelectedText>
+<ListBoxSelectedNoFocusText>RGB(220,220,220)</ListBoxSelectedNoFocusText>
+</Ditto_Theme_File>
