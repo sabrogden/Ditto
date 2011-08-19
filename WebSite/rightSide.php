@@ -5,6 +5,17 @@
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <link href="default.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript">
+/* <![CDATA[ */
+    (function() {
+        var s = document.createElement('script'), t = document.getElementsByTagName('script')[0];
+        s.type = 'text/javascript';
+        s.async = true;
+        s.src = 'http://api.flattr.com/js/0.6/load.js?mode=auto';
+        t.parentNode.insertBefore(s, t);
+    })();
+/* ]]> */
+</script>
     </head>
     <body>
         
@@ -16,10 +27,19 @@
                 <li><a href="https://sourceforge.net/project/screenshots.php?group_id=84084">Screenshot</a></li>
           </ul>
           
-          <br /><br />
-		  
 		  <div>
+		  
+		  
+		  <a class="FlattrButton" style="display:none;" href="http://ditto-cp.sourceforge.net/"></a>
+			<noscript><a href="http://flattr.com/thing/377771/Ditto" target="_blank">
+			<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
+			<br /><br/>
+			
+		  </div>
+			
+			<div>
 		  <a href="http://www2.clustrmaps.com/counter/maps.php?url=http://ditto-cp.sourceforge.net" id="clustrMapsLink"><img src="http://www2.clustrmaps.com/counter/index2.php?url=http://ditto-cp.sourceforge.net" style="border:0px;" alt="Locations of visitors to this page" title="Locations of visitors to this page" id="clustrMapsImg" onerror="this.onerror=null; this.src='http://clustrmaps.com/images/clustrmaps-back-soon.jpg'; document.getElementById('clustrMapsLink').href='http://clustrmaps.com';" /></a>
+		  <br /><br/><br /><br/>
 		  </div>
           
           <div id="google">
