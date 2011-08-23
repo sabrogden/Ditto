@@ -100,7 +100,7 @@
 		<Item English_Text = "Automatically check for updates online" ID = "1029">更新を自動的にオンライン チェックする</Item>
 		<Item English_Text = "Check Now" ID = "1030">今すぐチェック</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">重複を許可する</Item>
-		<Item English_Text = "Update Clip Time On Paste" ID = "1038">貼り付け時にクリップの時間を更新する</Item>
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">貼り付け時にクリップの時間を更新する</Item>
 		<Item English_Text = "Save Multi-Pastes" ID = "1039">複数貼り付けを保存する</Item>
 		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Ditto が可視の場合はホット キーで Ditto を非表示にする</Item>
 		<Item English_Text = "Amount of text to save for description" ID = "2044">説明を保存するテキストの量</Item>

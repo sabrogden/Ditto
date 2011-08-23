@@ -100,7 +100,7 @@
 		<Item English_Text = "Automatically check for updates online" ID = "1029">Samodejno preveri, èe so v spletu posodobitve</Item>
 		<Item English_Text = "Check Now" ID = "1030">Preveri zdaj</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">Dovoli podvojitve</Item>
-		<Item English_Text = "Update Clip Time On Paste" ID = "1038">Posodobi èas kopije ob lepljenju</Item>
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">Posodobi èas kopije ob lepljenju</Item>
 		<Item English_Text = "Save Multi-Pastes" ID = "1039">Shrani veèkratna lepljenja</Item>
 		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Z bližnjico skrij Ditto, èe je le-ta viden</Item>
 		<Item English_Text = "Amount of text to save for description" ID = "2044">Kolièina besedila, ki se shrani za opis</Item>

@@ -100,7 +100,7 @@
 		<Item English_Text = "Automatically check for updates online" ID = "1029">自动检查在线更新</Item>
 		<Item English_Text = "Check Now" ID = "1030">现在检查</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">允许重复条目</Item>
-		<Item English_Text = "Update Clip Time On Paste" ID = "1038">在粘贴时更新剪贴的时间</Item>
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">在粘贴时更新剪贴的时间</Item>
 		<Item English_Text = "Save Multi-Pastes" ID = "1039">保存多重粘贴</Item>
 		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">在Ditto可见时通过热键隐藏</Item>
 		<Item English_Text = "Amount of text to save for description" ID = "2044">保存的文本说明数量</Item>

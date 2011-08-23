@@ -100,7 +100,7 @@
 		<Item English_Text = "Automatically check for updates online" ID = "1029">Caută automat pe internet actualizări ale softului</Item>
 		<Item English_Text = "Check Now" ID = "1030">Verifică Acum</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">Permite dublurile (clipuri cu același conținut)</Item>
-		<Item English_Text = "Update Clip Time On Paste" ID = "1038">La lipirea clipului modifică-i data în cea curentă și pune-l primul pe listă</Item>
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">La lipirea clipului modifică-i data în cea curentă și pune-l primul pe listă</Item>
 		<Item English_Text = "Save Multi-Pastes" ID = "1039">Salvează multi-lipirile (după lipirea mai multor itemuri deodată creează un item alcătuit din clipurile unite)</Item>
 		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Arată/Ascunde cu tasta rapidă dacă fereastra softului e vizibilă</Item>
 		<Item English_Text = "Amount of text to save for description" ID = "2044">Nr. max. de caractere din textul clipului utilizate pt. descriere</Item>

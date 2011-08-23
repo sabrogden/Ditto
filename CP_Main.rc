@@ -475,7 +475,7 @@ BEGIN
     EDITTEXT        IDC_PATH,23,89,248,12,ES_AUTOHSCROLL
     PUSHBUTTON      "....",IDC_GET_PATH,272,89,14,12
     CONTROL         "Allow Duplicates",IDC_ALLOW_DUPLICATES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,105,320,10
-    CONTROL         "Update Clip Time On Paste",IDC_UPDATE_TIME_ON_PASTE,
+    CONTROL         "Update Clip Order On Paste",IDC_UPDATE_TIME_ON_PASTE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,117,321,10
     CONTROL         "Save Multi-Pastes",IDC_SAVE_MULTIPASTE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,129,321,10
     CONTROL         "Hide Ditto on Hot Key if Ditto is Visible",IDC_HIDE_DITO_ON_HOT_KEY,

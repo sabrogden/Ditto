@@ -99,7 +99,7 @@
 		<Item English_Text = "Compact and Repair" ID = "1028">Zkonsolidovat a opravit</Item>
 		<Item English_Text = "Check Now" ID = "1030">Ovìøit nyní</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">Povolit duplikáty</Item>
-		<Item English_Text = "Update Clip Time On Paste" ID = "1038">Aktualizovat èas klipu pøi vložení</Item>
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">Aktualizovat èas klipu pøi vložení</Item>
 		<Item English_Text = "Save Multi-Pastes" ID = "1039">Ukládat vícenásobná vložení (více-vložení)</Item>
 		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Skrýt Ditto klávesovou zkratkou pokud je viditelné</Item>
 		<Item English_Text = "Amount of text to save for description" ID = "2044">Množství textu k uložení pro popis</Item>

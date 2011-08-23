@@ -101,7 +101,7 @@
 		<Item English_Text = "Automatically check for updates online" ID = "1029">Updates automatisch online zoeken</Item>		
 		<Item English_Text = "Check Now" ID = "1030">Check Nu</Item>		
 		<Item English_Text = "Allow Duplicates" ID = "1037">Duplicaten toestaan</Item>		
-		<Item English_Text = "Update Clip Time On Paste" ID = "1038">Tijdstip van plakken bepaalt volgorde cliplijst</Item>		
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">Tijdstip van plakken bepaalt volgorde cliplijst</Item>		
 		<Item English_Text = "Save Multi-Pastes" ID = "1039">Diverse geslecteerde clips gelijktijdig plakken</Item>		
 		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Verberg Ditto met een sneltoets</Item>		
 		<Item English_Text = "Amount of text to save for description" ID = "2044">Hoeveel tekst opslaan in de omschrijving? </Item>		

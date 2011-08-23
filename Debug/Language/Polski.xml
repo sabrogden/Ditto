@@ -101,7 +101,7 @@
 		<Item English_Text = "Automatically check for updates online" ID = "1029">Sprawdz automatycznie dostepnosc nowych wersji online</Item>
 		<Item English_Text = "Check Now" ID = "1030">Sprawdz teraz</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">Pozwol na duplikaty</Item>
-		<Item English_Text = "Update Clip Time On Paste" ID = "1038">Aktualizuj czas klipu przy wklejeniu</Item>
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">Aktualizuj czas klipu przy wklejeniu</Item>
 		<Item English_Text = "Save Multi-Pastes" ID = "1039">Zachowuj multi-wklejenia</Item>
 		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Ukryj Ditto klawiszem skrotu jezeli jest widoczny</Item>
 		<Item English_Text = "Amount of text to save for description" ID = "2044">Ilosc tektu do zachowania dla opisu</Item>

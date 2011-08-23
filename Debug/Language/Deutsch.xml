@@ -101,7 +101,7 @@
 		<Item English_Text = "Automatically check for updates online" ID = "1029">Automatisch auf aktuellere Version prüfen</Item>
 		<Item English_Text = "Check Now" ID = "1030">Jetzt prüfen</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">Doppelte Einträge erlauben</Item>
-		<Item English_Text = "Update Clip Time On Paste" ID = "1038">Beim Einfügen Zeitstempel (und Listenposition) des Eintrags aktualisieren</Item>
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">Beim Einfügen Zeitstempel (und Listenposition) des Eintrags aktualisieren</Item>
 		<Item English_Text = "Save Multi-Pastes" ID = "1039">Einfügen mehrerer Einträge als neuen Eintrag speichern</Item>
 		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Listenansicht nach Tastenkürzel minimieren</Item>
 		<Item English_Text = "Amount of text to save for description" ID = "2044">Umfang des Textes in der Kurzansicht</Item>
