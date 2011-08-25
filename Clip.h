@@ -101,6 +101,7 @@ public:
 	double m_clipOrder;
 	double m_clipGroupOrder;
 	BOOL m_globalShortCut;
+	CTime m_lastPasteDate;
 
 	virtual CString Description() { return m_Desc; }
 	virtual void Description(CString csValue) { m_Desc = csValue; }
@@ -124,7 +125,7 @@ public:
 	bool AddToDB(bool bCheckForDuplicates = true);
 	bool ModifyMainTable();
 	bool SaveFromEditWnd(BOOL bUpdateDesc);
-	void MakeLatestTime();
+	void MakeLatestOrder();
 	BOOL LoadMainTable(int id);
 	DWORD GenerateCRC();
 
@@ -154,7 +155,7 @@ public:
 	~CClipList();
 	// returns the number of clips actually saved
 	// while this does empty the Format Data, it does not delete the Clips.
-	int AddToDB( bool bLatestTime = false);
+	int AddToDB( bool bLatestOrder = false);
 
 	const CClipList& operator=(const CClipList &cliplist);
 };

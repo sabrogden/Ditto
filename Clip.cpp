@@ -199,6 +199,7 @@ const CClip& CClip::operator=(const CClip &clip)
 
 	m_id = clip.m_id;
 	m_Time = clip.m_Time;
+	m_lastPasteDate = clip.m_lastPasteDate;
 	m_CRC = clip.m_CRC;
 	m_parentId = clip.m_parentId;
 	m_dontAutoDelete = clip.m_dontAutoDelete;
@@ -512,9 +513,9 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 			int nID = FindDuplicate();
 			if(nID >= 0)
 			{
-				MakeLatestTime();
-				theApp.m_db.execDMLEx(_T("UPDATE Main SET clipOrder = %f where lID = %d;"), 
-										m_clipOrder, nID);
+				MakeLatestOrder();
+				theApp.m_db.execDMLEx(_T("UPDATE Main SET clipOrder = %f, lastPasteDate = %d where lID = %d;"), 
+										m_clipOrder, CTime::GetCurrentTime().GetTime(), nID);
 
 				m_id = nID;
 
@@ -609,7 +610,7 @@ bool CClip::AddToMainTable()
 		m_csQuickPaste.Replace(_T("'"), _T("''"));
 
 		CString cs;
-		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s', %f, %f, %d);"),
+		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s', %f, %f, %d, %d);"),
 							(long)m_Time.GetTime(),
 							m_Desc,
 							m_shortCut,
@@ -620,7 +621,8 @@ bool CClip::AddToMainTable()
 							m_csQuickPaste,
 							m_clipOrder,
 							m_clipGroupOrder,
-							m_globalShortCut);
+							m_globalShortCut,
+							CTime::GetCurrentTime().GetTime());
 
 		theApp.m_db.execDML(cs);
 
@@ -705,7 +707,7 @@ bool CClip::AddToDataTable()
 // changes m_Time to be later than the latest clip entry in the db
 // ensures that pClip's time is not older than the last clip added
 // old times can happen on fast copies (<1 sec).
-void CClip::MakeLatestTime()
+void CClip::MakeLatestOrder()
 {
 	m_clipOrder = GetNewOrder(-1);
 }
@@ -759,6 +761,7 @@ BOOL CClip::LoadMainTable(int id)
 			m_clipOrder = q.getFloatField(_T("clipOrder"));
 			m_clipGroupOrder = q.getFloatField(_T("clipGroupOrder"));
 			m_globalShortCut = q.getIntField(_T("globalShortCut"));
+			m_lastPasteDate = q.getIntField(_T("lastPasteDate"));
 
 			m_id = id;
 
@@ -931,7 +934,7 @@ CClipList::~CClipList()
 
 // returns the number of clips actually saved
 // while this does empty the Format Data, it does not delete the Clips.
-int CClipList::AddToDB(bool bLatestTime)
+int CClipList::AddToDB(bool bLatestOrder)
 {
 	Log(_T("AddToDB - Start"));
 
@@ -950,10 +953,12 @@ int CClipList::AddToDB(bool bLatestTime)
 		pClip = GetNext(pos);
 		ASSERT(pClip);
 		
-		if(bLatestTime)
+		if(bLatestOrder)
 		{
-			pClip->MakeLatestTime();
+			pClip->MakeLatestOrder();
 		}
+
+		pClip->m_Time = CTime::GetCurrentTime().GetTime();
 
 		bResult = pClip->AddToDB();
 		if(bResult)

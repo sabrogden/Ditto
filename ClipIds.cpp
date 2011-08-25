@@ -182,7 +182,7 @@ BOOL CClipIDs::MoveTo(long lParentID, double dFirst, double dIncrement)
 {
 	try
 	{
-		INT_PTR count = GetSize();
+		int count = (int)GetSize();
 		for(int i = count-1; i >= 0; i--)
 		{
 			CString sql;
@@ -259,7 +259,7 @@ BOOL CClipIDs::CopyTo(int parentId)
 			{
 				if(clip.LoadFormats(nID))
 				{
-					clip.MakeLatestTime();
+					clip.MakeLatestOrder();
 
 					clip.m_shortCut = 0;
 					clip.m_parentId = parentId;

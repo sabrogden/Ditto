@@ -30,6 +30,7 @@ CCopyProperties::CCopyProperties(long lCopyID, CWnd* pParent, CClip *pMemoryClip
 
 	//{{AFX_DATA_INIT(CCopyProperties)
 	m_eDate = _T("");
+	m_lastPasteDate = _T("");
 	m_bNeverAutoDelete = FALSE;
 	//}}AFX_DATA_INIT
 }
@@ -45,6 +46,7 @@ void CCopyProperties::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_HOTKEY, m_HotKey);
 	DDX_Control(pDX, IDC_COPY_DATA, m_lCopyData);
 	DDX_Text(pDX, IDC_DATE, m_eDate);
+	DDX_Text(pDX, IDC_DATE_LAST_USED, m_lastPasteDate);
 	DDX_Check(pDX, IDC_NEVER_AUTO_DELETE, m_bNeverAutoDelete);
 	DDX_Check(pDX, IDC_HOT_KEY_GLOBAL, m_hotKeyGlobal);
 	//}}AFX_DATA_MAP
@@ -119,6 +121,10 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 {
 	COleDateTime dtTime(Clip.m_Time.GetTime());
 	m_eDate = dtTime.Format();
+	
+	COleDateTime lastPasteDate(Clip.m_lastPasteDate.GetTime());
+	m_lastPasteDate = lastPasteDate.Format();
+
 	m_RichEdit.SetText(Clip.m_Desc);
 
 	if(Clip.m_dontAutoDelete)

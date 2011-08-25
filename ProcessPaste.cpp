@@ -15,6 +15,7 @@ CProcessPaste::CProcessPaste()
 	m_bSendPaste = true;
 	m_bActivateTarget = true;
 	m_bOnlyPaste_CF_TEXT = false;
+	m_pastedFromGroup = false;
 }
 
 CProcessPaste::~CProcessPaste()
@@ -92,12 +93,12 @@ void CProcessPaste::MarkAsPasted()
 		CGetSetOptions::SetTripPasteCount(-1);
 		CGetSetOptions::SetTotalPasteCount(-1);
 
-		if(!g_Opt.m_bUpdateTimeOnPaste)
-			return;
+		MarkAsPastedData* pData = new MarkAsPastedData();
+		pData->clipId = clips.ElementAt(0);
+		pData->pastedFromGroup = m_pastedFromGroup;
 
-		int id = clips.ElementAt(0);
 		//Moved to a thread because when running from from U3 devices the write is time consuming
-		AfxBeginThread(CProcessPaste::MarkAsPastedThread, (LPVOID)id, THREAD_PRIORITY_LOWEST);
+		AfxBeginThread(CProcessPaste::MarkAsPastedThread, (LPVOID)pData, THREAD_PRIORITY_LOWEST);
 	}
 
 	Log(_T("End of MarkAsPasted"));
@@ -117,30 +118,62 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 		Sleep(350);
 	}
 
-	int id = (int)pParam;
 	BOOL bRet = FALSE;
 
 	try
 	{
-		try
+		MarkAsPastedData* pData = (MarkAsPastedData*)pParam;
+		if(pData)
 		{
-			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipOrder FROM Main ORDER BY clipOrder DESC LIMIT 1"));
-
-			if(q.eof() == false)
+			if(g_Opt.m_bUpdateTimeOnPaste)
 			{
-				double latestDate = q.getFloatField(_T("clipOrder"));
-				latestDate += 1;
+				try
+				{
+					if(pData->pastedFromGroup)
+					{
+						CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipGroupOrder FROM Main ORDER BY clipGroupOrder DESC LIMIT 1"));
 
-				Log(StrF(_T("Setting clipId: %d, order: %f"), id, latestDate));
+						if(q.eof() == false)
+						{
+							double latestDate = q.getFloatField(_T("clipGroupOrder"));
+							latestDate += 1;
 
-				theApp.m_db.execDMLEx(_T("UPDATE Main SET clipOrder = %f where lID = %d;"), latestDate, id);
+							Log(StrF(_T("Setting clipId: %d, GroupOrder: %f"), pData->clipId, latestDate));
 
-				theApp.RefreshClipOrder(id);
+							theApp.m_db.execDMLEx(_T("UPDATE Main SET clipGroupOrder = %f where lID = %d;"), latestDate, pData->clipId);
+
+							theApp.RefreshClipOrder(pData->clipId);
+						}
+					}
+					else
+					{
+						CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipOrder FROM Main ORDER BY clipOrder DESC LIMIT 1"));
+
+						if(q.eof() == false)
+						{
+							double latestDate = q.getFloatField(_T("clipOrder"));
+							latestDate += 1;
+
+							Log(StrF(_T("Setting clipId: %d, order: %f"), pData->clipId, latestDate));
+
+							theApp.m_db.execDMLEx(_T("UPDATE Main SET clipOrder = %f where lID = %d;"), latestDate, pData->clipId);
+
+							theApp.RefreshClipOrder(pData->clipId);
+						}
+					}
+				}
+				CATCH_SQLITE_EXCEPTION
 			}
-		}
-		CATCH_SQLITE_EXCEPTION
 
-		bRet = TRUE;
+			try
+			{
+				theApp.m_db.execDMLEx(_T("UPDATE Main SET lastPasteDate = %d where lID = %d;"), CTime::GetCurrentTime().GetTime(), pData);
+			}
+			CATCH_SQLITE_EXCEPTION
+
+			delete pData;
+			bRet = TRUE;
+		}
 	}
 	CATCH_SQLITE_EXCEPTION
 

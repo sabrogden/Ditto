@@ -21,7 +21,7 @@ public:
 	CString GetName()      { return m_Name; }
 	DWORD   GetKey()       { return m_Key; }
 	CString GetHotKeyDisplay();
-
+	
 	void SetKey( DWORD key, bool bSave = false );
 	// profile
 	void LoadKey();
@@ -30,17 +30,15 @@ public:
 	void CopyFromCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID);
 	void CopyToCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID);
 
-//	CString GetKeyAsText();
-//	void SetKeyFromText( CString text );
-
-	static BOOL ValidateHotKey(DWORD dwHotKey);
-	static UINT GetModifier(DWORD dwHotKey);
 	UINT GetModifier() { return GetModifier(HIBYTE(m_Key)); }
 
 	bool Register();
 	bool Unregister(bool bOnShowingDitto = false);
 
-	CString GetVirKeyName(unsigned int virtualKey);
+	static BOOL ValidateHotKey(DWORD dwHotKey);
+	static UINT GetModifier(DWORD dwHotKey);
+	static CString GetHotKeyDisplayStatic(DWORD dwHotKey);
+	static CString GetVirKeyName(unsigned int virtualKey);
 };
 
 

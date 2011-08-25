@@ -33,4 +33,5 @@ public:
 	afx_msg void OnClose();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnBnClickedButtonRefresh();
+	afx_msg void OnNMDblclkList2(NMHDR *pNMHDR, LRESULT *pResult);
 };

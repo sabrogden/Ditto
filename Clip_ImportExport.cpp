@@ -94,7 +94,7 @@ bool CClip_ImportExport::ImportFromSqliteDB(CppSQLite3DB &db, bool bAddToDB, boo
 				{
 					if(bAddToDB)
 					{
-						MakeLatestTime();
+						MakeLatestOrder();
 						AddToDB(true);
 						bRet = true;
 					}

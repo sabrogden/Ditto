@@ -339,6 +339,19 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 
 			e.errorCode();
 		}
+
+		try
+		{
+			db.execQuery(_T("SELECT lastPasteDate FROM Main"));
+		}
+		catch(CppSQLite3Exception& e)
+		{
+			db.execDML(_T("ALTER TABLE Main ADD lastPasteDate INTEGER"));
+			db.execDML(_T("Update Main set lastPasteDate = lDate"));
+			db.execDMLEx(_T("Update Main set lastPasteDate = %d where lastPasteDate <= 0"), CTime::GetCurrentTime().GetTime());
+
+			e.errorCode();
+		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 
@@ -366,7 +379,8 @@ BOOL CreateDB(CString csFile)
 								_T("QuickPasteText TEXT, ")
 								_T("clipOrder REAL, ")
 								_T("clipGroupOrder REAL, ")
-								_T("globalShortCut INTEGER);"));
+								_T("globalShortCut INTEGER), ")
+								_T("lastPasteDate INTEGER;"));
 
 		db.execDML(_T("CREATE TABLE Data(")
 							_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")
@@ -539,7 +553,7 @@ BOOL RemoveOldEntries()
 				CClipIDs IDs;
 				
 				CppSQLite3Query q = db.execQueryEx(_T("SELECT lID FROM Main ")
-													_T("WHERE lDate < %d AND ")
+													_T("WHERE lastPasteDate < %d AND ")
 													_T("bIsGroup = 0 AND lShortCut = 0 AND lParentID <= 0 AND lDontAutoDelete = 0"), now.GetTime());
 
 				while(q.eof() == false)

@@ -174,7 +174,7 @@ int CDittoRulerRichEditCtrl::SaveToDB(BOOL bUpdateDesc)
 		else
 		{
 			bSetModifyToFalse = false;
-			Clip.MakeLatestTime();
+			Clip.MakeLatestOrder();
 			CCopyProperties Prop(-1, this, &Clip);
 			Prop.SetHandleKillFocus(true);
 			Prop.SetToTopMost(false);

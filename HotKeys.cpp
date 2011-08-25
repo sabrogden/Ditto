@@ -27,47 +27,15 @@ CHotKey::~CHotKey()
 	Unregister();
 }
 
-//http://www.ffuts.org/blog/mapvirtualkey-getkeynametext-and-a-story-of-how-to/
-CString CHotKey::GetVirKeyName(unsigned int virtualKey)
-{
-	unsigned int scanCode = MapVirtualKey(virtualKey, MAPVK_VK_TO_VSC);
-
-	// because MapVirtualKey strips the extended bit for some keys
-	switch (virtualKey)
-	{
-		case VK_LEFT: 
-		case VK_UP: 
-		case VK_RIGHT: 
-		case VK_DOWN: // arrow keys
-		case VK_PRIOR: 
-		case VK_NEXT: // page up and page down
-		case VK_END: 
-		case VK_HOME:
-		case VK_INSERT: 
-		case VK_DELETE:
-		case VK_DIVIDE: // numpad slash
-		case VK_NUMLOCK:
-		{
-			scanCode |= 0x100; // set extended bit
-			break;
-		}
-	}
-
-	wchar_t keyName[50];
-	if (GetKeyNameText(scanCode << 16, keyName, sizeof(keyName)) != 0)
-	{
-		return keyName;
-	}
-	else
-	{
-		return "[Error]";
-	}
-}
-
 CString CHotKey::GetHotKeyDisplay()
 {
+	return GetHotKeyDisplayStatic(m_Key);
+}
+
+CString CHotKey::GetHotKeyDisplayStatic(DWORD dwHotKey)
+{
 	CString keyDisplay;
-	UINT modifiers = GetModifier();
+	UINT modifiers = GetModifier(HIBYTE(dwHotKey));
 	if(modifiers & MOD_SHIFT)
 	{
 		keyDisplay += _T("Shift + ");
@@ -87,11 +55,63 @@ CString CHotKey::GetHotKeyDisplay()
 	{
 		keyDisplay += _T("Win + ");
 	}
-	
-	int key = LOBYTE(m_Key);
-	keyDisplay += GetVirKeyName(key);
+
+	keyDisplay += GetVirKeyName(LOBYTE(dwHotKey));
 
 	return keyDisplay;
+}
+
+//http://www.ffuts.org/blog/mapvirtualkey-getkeynametext-and-a-story-of-how-to/
+CString CHotKey::GetVirKeyName(unsigned int virtualKey)
+{
+	unsigned int scanCode = MapVirtualKey(virtualKey, MAPVK_VK_TO_VSC);
+
+	// because MapVirtualKey strips the extended bit for some keys
+	switch (virtualKey)
+	{
+	case VK_LEFT: 
+	case VK_UP: 
+	case VK_RIGHT: 
+	case VK_DOWN: // arrow keys
+	case VK_PRIOR: 
+	case VK_NEXT: // page up and page down
+	case VK_END: 
+	case VK_HOME:
+	case VK_INSERT: 
+	case VK_DELETE:
+	case VK_DIVIDE: // numpad slash
+	case VK_NUMLOCK:
+		{
+			scanCode |= 0x100; // set extended bit
+			break;
+		}
+	}
+
+	wchar_t keyName[50];
+	if (GetKeyNameText(scanCode << 16, keyName, sizeof(keyName)) != 0)
+	{
+		return keyName;
+	}
+	else
+	{
+		return "[Error]";
+	}
+}
+
+UINT CHotKey::GetModifier(DWORD dwHotKey)
+{
+	UINT uMod = 0;
+
+	if(dwHotKey & HOTKEYF_SHIFT)   
+		uMod |= MOD_SHIFT;
+	if(dwHotKey & HOTKEYF_CONTROL) 
+		uMod |= MOD_CONTROL;
+	if(dwHotKey & HOTKEYF_ALT)     
+		uMod |= MOD_ALT;
+	if(dwHotKey & HOTKEYF_EXT)     
+		uMod |= MOD_WIN;
+
+	return uMod;
 }
 
 void CHotKey::SetKey( DWORD key, bool bSave )
@@ -164,22 +184,6 @@ void CHotKey::CopyToCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID)
 	{
 		::CheckDlgButton(hParent, nWindowsCBID, BST_CHECKED);
 	}
-}
-
-UINT CHotKey::GetModifier(DWORD dwHotKey)
-{
-	UINT uMod = 0;
-
-	if(dwHotKey & HOTKEYF_SHIFT)   
-		uMod |= MOD_SHIFT;
-	if(dwHotKey & HOTKEYF_CONTROL) 
-		uMod |= MOD_CONTROL;
-	if(dwHotKey & HOTKEYF_ALT)     
-		uMod |= MOD_ALT;
-	if(dwHotKey & HOTKEYF_EXT)     
-		uMod |= MOD_WIN;
-
-	return uMod;
 }
 
 bool CHotKey::Register()

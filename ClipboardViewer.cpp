@@ -206,7 +206,7 @@ void CClipboardViewer::OnDrawClipboard()
 			if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
 			{
 				if(ValidActiveWnd())
-				{
+				{          
 					Log(StrF(_T("OnDrawClipboard:: *** SetTimer *** %d"), GetTickCount()));
 
 					KillTimer(TIMER_DRAW_CLIPBOARD);

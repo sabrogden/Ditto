@@ -5,6 +5,7 @@
 #include "CP_Main.h"
 #include "GlobalClips.h"
 #include "afxdialogex.h"
+#include "CopyProperties.h"
 
 
 // GlobalClips dialog
@@ -32,6 +33,7 @@ BEGIN_MESSAGE_MAP(GlobalClips, CDialogEx)
 	ON_WM_CLOSE()
 	ON_WM_SIZE()
 	ON_BN_CLICKED(IDC_BUTTON_REFRESH, &GlobalClips::OnBnClickedButtonRefresh)
+	ON_NOTIFY(NM_DBLCLK, IDC_LIST2, &GlobalClips::OnNMDblclkList2)
 END_MESSAGE_MAP()
 
 BOOL GlobalClips::OnInitDialog()
@@ -56,7 +58,7 @@ void GlobalClips::LoadItems()
 	// Use the LV_ITEM structure to insert the items
 	LVITEM lvi;
 	CString strItem;
-	int count = g_HotKeys.GetCount();
+	int count = (int)g_HotKeys.GetCount();
 
 	int row = 0;
 	for (int i = 0; i < count; i++)
@@ -93,6 +95,8 @@ void GlobalClips::LoadItems()
 		}
 
 		m_List.SetItemText(row, 2, strItem);
+
+		m_List.SetItemData(row, pHotKey->m_globalId);
 
 		row++;
 	}
@@ -135,4 +139,42 @@ void GlobalClips::OnSize(UINT nType, int cx, int cy)
 void GlobalClips::OnBnClickedButtonRefresh()
 {
 	LoadItems();
+}
+
+
+void GlobalClips::OnNMDblclkList2(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: Add your control notification handler code here
+
+	int id = (int)m_List.GetItemData(pNMItemActivate->iItem);
+
+	int count = (int)g_HotKeys.GetCount();
+
+	int row = 0;
+	for (int i = 0; i < count; i++)
+	{
+		CHotKey *pHotKey = g_HotKeys[i];
+
+		if(pHotKey->m_globalId == id)
+		{
+			if(pHotKey->m_clipId > 0)
+			{
+				CCopyProperties props(pHotKey->m_clipId, this);
+				props.SetToTopMost(false);
+				INT_PTR doModalRet = props.DoModal();
+
+				if(doModalRet == IDOK)
+				{
+				}
+			}
+			else
+			{
+
+			}
+			break;
+		}
+	}
+	
+	*pResult = 0;
 }

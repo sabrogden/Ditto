@@ -577,6 +577,7 @@ BOOL CQPasteWnd::OpenID(int id, bool bOnlyLoad_CF_TEXT, CClipFormats *pPasteForm
 
     paste.m_bSendPaste = g_Opt.m_bSendPasteMessageAfterSelection == TRUE ? true : false;
     paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;
+	paste.m_pastedFromGroup = (theApp.m_GroupID > 0);
 
     if(pPasteFormats != NULL)
     {
@@ -631,6 +632,7 @@ BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT)
 
     paste.m_bSendPaste = g_Opt.m_bSendPasteMessageAfterSelection == TRUE ? true : false;
     paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;
+	paste.m_pastedFromGroup = (theApp.m_GroupID > 0);
 
     paste.GetClipIDs().Copy(IDs);
     paste.DoPaste();
@@ -736,10 +738,11 @@ LRESULT CQPasteWnd::OnReloadClipOrder(WPARAM wParam, LPARAM lParam)
 	BOOL foundClip = FALSE;
 	int clipId = (int)wParam;
 
-	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipOrder FROM Main WHERE lID = %d"), clipId);			
+	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipOrder, clipGroupOrder FROM Main WHERE lID = %d"), clipId);			
 	if(q.eof() == false)
 	{
 		double order = q.getFloatField(_T("clipOrder"));
+		double orderGroup = q.getFloatField(_T("clipGroupOrder"));
 
 		std::vector<CMainTable>::iterator iter = m_listItems.begin();
 		while(iter != m_listItems.end())
@@ -747,9 +750,19 @@ LRESULT CQPasteWnd::OnReloadClipOrder(WPARAM wParam, LPARAM lParam)
 			if(iter->m_lID == clipId)
 			{
 				iter->m_clipOrder = order;
+				iter->m_clipGroupOrder = orderGroup;
 
 				theApp.m_FocusID = clipId;
-				std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::SortDesc);
+
+				if(theApp.m_GroupID > 0)
+				{
+					std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::GroupSortDesc);
+				}
+				else
+				{
+					std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::SortDesc);
+				}
+				
 				foundClip = TRUE;
 				
 				SelectFocusID();
@@ -2520,6 +2533,7 @@ void CQPasteWnd::OnBegindrag(NMHDR *pNMHDR, LRESULT *pResult)
 {
     NM_LISTVIEW *pLV = (NM_LISTVIEW*)pNMHDR;
     CProcessPaste paste;
+	paste.m_pastedFromGroup = (theApp.m_GroupID > 0);
     CClipIDs &clips = paste.GetClipIDs();
 
     m_lstHeader.GetSelectionItemData(clips);
@@ -2780,7 +2794,7 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
         CString cs;
 
         int id = m_lstHeader.GetItemData(pInfo->lItem);
-        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText, lDate, lShortCut, lDontAutoDelete, QuickPasteText FROM Main WHERE lID = %d"), id);
+        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText, lDate, lShortCut, lDontAutoDelete, QuickPasteText, lastPasteDate, globalShortCut FROM Main WHERE lID = %d"), id);
         if(q.eof() == false)
         {
             cs = q.getStringField(1);
@@ -2791,12 +2805,14 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
             #endif 
 
             COleDateTime time((time_t)q.getIntField(_T("lDate")));
-            cs += time.Format();
+            cs += "\nAdded: " + time.Format();
+
+			COleDateTime modified((time_t)q.getIntField(_T("lastPasteDate")));
+			cs += "\nLast Used: " + modified.Format();
 
             if(q.getIntField(_T("lDontAutoDelete")) > 0)
             {
-                cs += "\n";
-                cs += "Never Auto Delete";
+                cs += "\nNever Auto Delete";
             }
 
             CString csQuickPaste = q.getStringField(_T("QuickPasteText"));
@@ -2810,22 +2826,14 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
             int shortCut = q.getIntField(_T("lShortCut"));
             if(shortCut > 0)
             {
-                cs += "\n";
+                cs += "\n\n";
+                cs += CHotKey::GetHotKeyDisplayStatic(shortCut);
 
-                if(HIBYTE(shortCut) &HOTKEYF_CONTROL)
-                {
-                    cs += "Ctrl + ";
-                }
-                if(HIBYTE(shortCut) &HOTKEYF_SHIFT)
-                {
-                    cs += "Shift + ";
-                }
-                if(HIBYTE(shortCut) &HOTKEYF_ALT)
-                {
-                    cs += "Alt + ";
-                }
-
-                cs += (char)LOBYTE(shortCut);
+				BOOL globalShortCut = q.getIntField(_T("globalShortCut"));
+				if(globalShortCut)
+				{
+					cs += " - Global Shortcut Key";
+				}
             }
         }
 

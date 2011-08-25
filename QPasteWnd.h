@@ -46,6 +46,11 @@ public:
 	{
 		return d1.m_clipOrder > d2.m_clipOrder;
 	}
+
+	static bool GroupSortDesc(const CMainTable& d1, const CMainTable& d2)
+	{
+		return d1.m_clipGroupOrder > d2.m_clipGroupOrder;
+	}
 };
 
 

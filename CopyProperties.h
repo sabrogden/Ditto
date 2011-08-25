@@ -30,6 +30,7 @@ public:
 	CHotKeyCtrl	m_HotKey;
 	CListBox	m_lCopyData;
 	CString	m_eDate;
+	CString m_lastPasteDate;
 	BOOL	m_bNeverAutoDelete;
 	BOOL m_hotKeyGlobal;
 	//}}AFX_DATA

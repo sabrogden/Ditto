@@ -25,7 +25,14 @@ public:
 	bool m_bSendPaste;
 	bool m_bActivateTarget;
 	bool m_bOnlyPaste_CF_TEXT;
+	bool m_pastedFromGroup;
 
+	struct MarkAsPastedData 
+	{
+		int clipId;
+		bool pastedFromGroup;
+	};
+	
 	CProcessPaste();
 	~CProcessPaste();
 
