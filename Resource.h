@@ -66,6 +66,8 @@
 #define IDC_DELETE_COPY_DATA            1021
 #define IDC_DATE                        1022
 #define IDC_COPY_DATA                   1023
+#define IDC_DATE2                       1024
+#define IDC_DATE_LAST_USED              1024
 #define IDC_NEVER_AUTO_DELETE           1025
 #define IDC_NAMED_COPY                  1026
 #define IDC_HOT_KEY_GLOBAL              1026
@@ -92,7 +94,6 @@
 #define IDC_BUTTON_REFRESH              1040
 #define IDC_PARSE_EDIT                  1041
 #define IDC_SEND_PASTE_MESSAGE          1041
-#define IDC_BUTTON_REFRESH2             1041
 #define IDC_BUTTON_PROPERTIES           1041
 #define IDC_CHECK1                      1042
 #define IDC_HISTORY_START_TOP           1042
@@ -171,6 +172,7 @@
 #define IDC_STATIC_TITLE                2042
 #define IDC_CHECK_WIN2                  2043
 #define IDC_STATIC_DAYS                 2043
+#define IDC_STATIC_DATE2                2043
 #define IDC_CHECK_WIN3                  2044
 #define IDC_STATIC_AMOUNT               2044
 #define IDC_CHECK_WIN4                  2045

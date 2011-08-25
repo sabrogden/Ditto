@@ -223,19 +223,19 @@ void CCopyProperties::OnOK()
 			{
 				LoadDataIntoCClip(clip);
 
+				if(CheckGlobalHotKey(clip) == FALSE)
+				{
+					if(MessageBox(_T("Error registering global hot key\n\nContinue?"), _T(""), MB_YESNO|MB_ICONWARNING) == IDNO)
+					{
+						return;
+					}
+				}
+
 				if(clip.ModifyMainTable())
 				{
 					if(m_bDeletedData)
 					{    
 						DeleteFormats(m_lCopyID, m_DeletedData);
-					}
-
-					if(CheckGlobalHotKey(clip) == FALSE)
-					{
-						if(MessageBox(_T("Error registering global hot key\n\nContinue?"), _T(""), MB_YESNO|MB_ICONWARNING) == IDNO)
-						{
-							return;
-						}
 					}
 				}
 			}
