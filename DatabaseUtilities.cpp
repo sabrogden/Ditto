@@ -379,8 +379,8 @@ BOOL CreateDB(CString csFile)
 								_T("QuickPasteText TEXT, ")
 								_T("clipOrder REAL, ")
 								_T("clipGroupOrder REAL, ")
-								_T("globalShortCut INTEGER), ")
-								_T("lastPasteDate INTEGER;"));
+								_T("globalShortCut INTEGER, ")
+								_T("lastPasteDate INTEGER);"));
 
 		db.execDML(_T("CREATE TABLE Data(")
 							_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")
