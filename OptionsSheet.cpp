@@ -32,12 +32,14 @@ COptionsSheet::COptionsSheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT iSelectP
 	m_pKeyBoardOptions = NULL;
 	m_pGeneralOptions = NULL;
 	m_pQuickPasteOptions = NULL;
-	m_pUtilites = NULL;
+	m_pCopyBuffers = NULL;
 	m_pStats = NULL;
 	m_pTypes = NULL;
 	m_pAbout = NULL;
 	m_pFriends = NULL;
 	m_pCopyBuffers = NULL;
+	
+	m_pUtilites = NULL;
 	m_hWndParent = NULL;
 
 	EnableStackedTabs(TRUE);
@@ -67,21 +69,24 @@ COptionsSheet::COptionsSheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT iSelectP
 
 COptionsSheet::~COptionsSheet()
 {
-	delete m_pKeyBoardOptions;
 	delete m_pGeneralOptions;
+	delete m_pKeyBoardOptions;
 	delete m_pQuickPasteOptions;
-	delete m_pUtilites;
+	delete m_pCopyBuffers;
 	delete m_pStats;
 	delete m_pTypes;
-	delete m_pAbout;
+	delete m_pAbout;	
 	delete m_pFriends;
-	delete m_pCopyBuffers;
+
+	delete m_pUtilites;
+	
 }
 
 BEGIN_MESSAGE_MAP(COptionsSheet, CPropertySheet)
 	//{{AFX_MSG_MAP(COptionsSheet)
 		// NOTE - the ClassWizard will add and remove mapping macros here.
 	ON_WM_DESTROY()
+	ON_WM_NCDESTROY()
 	//ON_WM_CLOSE()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -91,7 +96,6 @@ END_MESSAGE_MAP()
 
 void COptionsSheet::OnDestroy()
 {
-	::SendMessage(m_hWndParent, WM_OPTIONS_CLOSED, 0, 0);
 	CPropertySheet::OnDestroy();
 }
 
@@ -117,4 +121,10 @@ BOOL COptionsSheet::OnInitDialog()
 	m_nFlags &= ~WF_CONTINUEMODAL;
 
 	return bResult;
+}
+
+void COptionsSheet::OnNcDestroy()
+{
+	CPropertySheet::OnNcDestroy();
+	::PostMessage(m_hWndParent, WM_OPTIONS_CLOSED, 0, 0);
 }

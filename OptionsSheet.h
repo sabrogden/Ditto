@@ -59,6 +59,7 @@ protected:
 	//{{AFX_MSG(COptionsSheet)
 		// NOTE - the ClassWizard will add and remove member functions here.
 	afx_msg void OnDestroy();
+	afx_msg void OnNcDestroy();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

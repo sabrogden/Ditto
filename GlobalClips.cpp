@@ -34,6 +34,7 @@ BEGIN_MESSAGE_MAP(GlobalClips, CDialogEx)
 	ON_WM_SIZE()
 	ON_BN_CLICKED(IDC_BUTTON_REFRESH, &GlobalClips::OnBnClickedButtonRefresh)
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST2, &GlobalClips::OnNMDblclkList2)
+	ON_WM_NCDESTROY()
 END_MESSAGE_MAP()
 
 BOOL GlobalClips::OnInitDialog()
@@ -118,16 +119,13 @@ void GlobalClips::SetNotifyWnd(HWND hWnd)
 
 void GlobalClips::OnClose()
 {
-	::SendMessage(m_hWndParent, WM_GLOBAL_CLIPS_CLOSED, 0, 0);
-
-	CDialogEx::OnClose();
+	DestroyWindow();
 }
 
 void GlobalClips::OnCancel()
 {
-	::SendMessage(m_hWndParent, WM_GLOBAL_CLIPS_CLOSED, 0, 0);
+	DestroyWindow();
 }
-
 
 void GlobalClips::OnSize(UINT nType, int cx, int cy)
 {
@@ -140,7 +138,6 @@ void GlobalClips::OnBnClickedButtonRefresh()
 {
 	LoadItems();
 }
-
 
 void GlobalClips::OnNMDblclkList2(NMHDR *pNMHDR, LRESULT *pResult)
 {
@@ -177,4 +174,10 @@ void GlobalClips::OnNMDblclkList2(NMHDR *pNMHDR, LRESULT *pResult)
 	}
 	
 	*pResult = 0;
+}
+
+void GlobalClips::OnNcDestroy()
+{
+	CDialogEx::OnNcDestroy();
+	::PostMessage(m_hWndParent, WM_GLOBAL_CLIPS_CLOSED, 0, 0);
 }
