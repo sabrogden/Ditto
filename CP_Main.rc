@@ -252,7 +252,7 @@ BEGIN
             MENUITEM "Show Clips That are in Groups in Main List", 32850,MFT_STRING,MFS_ENABLED
             MENUITEM "Prompt to Delete Clip",       32852,MFT_STRING,MFS_ENABLED
         END
-        POPUP "Sent To",                        65535,MFT_STRING,MFS_ENABLED
+        POPUP "Send To",                        65535,MFT_STRING,MFS_ENABLED
         BEGIN
             MENUITEM "Friend One",                  32824,MFT_STRING,MFS_ENABLED
             MENUITEM "Friend Two",                  32825,MFT_STRING,MFS_ENABLED
