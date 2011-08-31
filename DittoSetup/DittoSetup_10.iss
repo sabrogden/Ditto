@@ -64,7 +64,7 @@ Name: RunAtStartup; Description: Run Ditto on Windows Startup
 #ifndef bit64
 	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
 	Source: ..\Release\focus.dll; DestDir: {app}; BeforeInstall: BeforeFocusInstall(); Flags: ignoreversion restartreplace
-	Source: ..\Addins\DittoUtil\Release64\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
+	Source: ..\Addins\DittoUtil\Release\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 	Source: mfc-crt\*; DestDir: {app}
 #endif
 
