@@ -65,7 +65,7 @@ Name: RunAtStartup; Description: Run Ditto on Windows Startup
 	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
 	Source: ..\Release\focus.dll; DestDir: {app}; BeforeInstall: BeforeFocusInstall(); Flags: ignoreversion restartreplace
 	Source: ..\Addins\DittoUtil\Release\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
-	Source: mfc-crt\*; DestDir: {app}
+	Source: mfc-crt_10\*; DestDir: {app}
 #endif
 
 Source: Changes.txt; DestDir: {app}
