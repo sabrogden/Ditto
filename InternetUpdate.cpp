@@ -127,39 +127,39 @@ CString CInternetUpdate::GetVersionString(long lVersion)
 
 long CInternetUpdate::GetRunningVersion()
 {
-	return 0;
 	CString csFileName = CGetSetOptions::GetExeFileName();
 
-    DWORD dwSize, dwHandle;
-    LPBYTE lpData;
-    UINT iBuffSize;
-    VS_FIXEDFILEINFO *lpFFI;
-    long ver;
+	DWORD dwSize, dwHandle;
+	LPBYTE lpData;
+	UINT iBuffSize;
+	VS_FIXEDFILEINFO *lpFFI;
+	long ver;
 
-    //dwSize = GetFileVersionInfoSize(csFileName.GetBuffer(csFileName.GetLength()), &dwHandle);
-    if(dwSize != 0)
-    {
+	dwSize = GetFileVersionInfoSize(csFileName.GetBuffer(csFileName.GetLength()), &dwHandle);
+
+	if(dwSize != 0)
+	{
 		csFileName.ReleaseBuffer();
 		if((lpData=(unsigned char *)malloc(dwSize)) != NULL)
 		{
-			//if(GetFileVersionInfo(csFileName.GetBuffer(csFileName.GetLength()), dwHandle, dwSize, lpData) != 0)
+			if(GetFileVersionInfo(csFileName.GetBuffer(csFileName.GetLength()), dwHandle, dwSize, lpData) != 0)
 			{
-				//if(VerQueryValue(lpData, _T("\\"), (LPVOID*)&lpFFI, &iBuffSize) != 0)
+				if(VerQueryValue(lpData, _T("\\"), (LPVOID*)&lpFFI, &iBuffSize) != 0)
 				{
 					if(iBuffSize > 0)
 					{
-					ver =        (HIWORD(lpFFI->dwFileVersionMS) & 0x00ff) << 24;
-					ver = ver + ((LOWORD(lpFFI->dwFileVersionMS) & 0x00ff) << 16);
-					ver = ver + ((HIWORD(lpFFI->dwFileVersionLS) & 0x00ff) << 8);
-					ver = ver +   LOWORD(lpFFI->dwFileVersionLS);
-					free(lpData);
-					return(ver);
+						ver =        (HIWORD(lpFFI->dwFileVersionMS) & 0x00ff) << 24;
+						ver = ver + ((LOWORD(lpFFI->dwFileVersionMS) & 0x00ff) << 16);
+						ver = ver + ((HIWORD(lpFFI->dwFileVersionLS) & 0x00ff) << 8);
+						ver = ver +   LOWORD(lpFFI->dwFileVersionLS);
+						free(lpData);
+						return(ver);
 					}
 				}
 			}
 			free(lpData);
 		}
-    }
+	}
 
     return(0);
 }
