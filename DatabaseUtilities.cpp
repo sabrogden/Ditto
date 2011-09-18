@@ -229,9 +229,6 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		CppSQLite3DB db;
 		db.open(csPath);
 
-		if(didBackup == FALSE)
-			didBackup = BackupDB(csPath, backupFilePrefix);
-
 		db.execQuery(_T("SELECT lID, lDate, mText, lShortCut, lDontAutoDelete, ")
 								_T("CRC, bIsGroup, lParentID, QuickPasteText ")
 								_T("FROM Main"));
