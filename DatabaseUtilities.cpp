@@ -258,9 +258,6 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		//This was added later so try to add each time and catch the exception here
  		try
  		{
-			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix);
-
 			db.execDML(_T("CREATE TRIGGER delete_data_trigger BEFORE DELETE ON Main FOR EACH ROW\n")
 				_T("BEGIN\n")
 					_T("INSERT INTO MainDeletes VALUES(old.lID, datetime('now'));\n")
@@ -268,6 +265,9 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
  		}
 		catch(CppSQLite3Exception& e)
 		{
+			if(didBackup == FALSE)
+				didBackup = BackupDB(csPath, backupFilePrefix);
+
  			e.errorCode();
  		}
 
