@@ -392,7 +392,19 @@ BOOL BackupDB(CString dbPath, CString prefix)
 	backup += GetFileName(dbPath) += _T("_") + prefix + _T("_") + versionString;
 	backup.Replace(_T(".db"), _T(""));
 	backup.Replace(_T("."), _T("_"));
-	backup +=  + _T(".db");
+
+	CString temp = backup;
+
+	temp += _T(".db");
+
+	int i = 1;
+	while(FileExists(temp))
+	{
+		temp.Format(_T("%s_%d.db"), backup, i);
+		i++;
+	}
+
+	backup = temp;
 
 	BOOL ret = CopyFile(dbPath, backup, TRUE);
 
