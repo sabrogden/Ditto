@@ -31,7 +31,7 @@ copy mfc-crt64\* Ditto\
 
 copy Changes.txt Ditto\Changes.txt
 
-copy Ditto.Settings Ditto\portable
+copy portable Ditto\portable
 
 copy ..\Help\*.* Ditto\Help\
 copy ..\Debug\language\*.xml Ditto\language\
