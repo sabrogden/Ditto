@@ -76,7 +76,7 @@ CGetSetOptions::~CGetSetOptions()
 
 void CGetSetOptions::LoadSettings()
 {
-	m_csIniFileName = GetIniFileName(false);
+	m_csIniFileName = GetIniFileName(true);
 
 	if(m_bU3)
 	{
@@ -84,18 +84,36 @@ void CGetSetOptions::LoadSettings()
 	}
 	else
 	{
-		//First check to see if they have an ini file in my docs&settings - ditto
+		//first check if ini file is in app directory
 		if(FileExists(m_csIniFileName))
 		{
 			m_bFromIni = true;
 		}
 		else
 		{
-			//next check if they have an ini file in the application directory
-			m_csIniFileName = GetIniFileName(true);
-			if(FileExists(m_csIniFileName))
+			CString portable = GetFilePath(m_csIniFileName);
+			portable += _T("portable");
+			if(FileExists(portable))
 			{
 				m_bFromIni = true;
+
+				//local ini file doesn't exist but portable file does, create the ini file with defaults
+				//This is done so they can copy the entire directory for portable zip files and not overright there settings file
+				SetProfileLong(_T("SetCurrentDirectory"), 1);
+				SetProfileLong(_T("Portable"), 1);
+				SetProfileLong(_T("DisableRecieve"), 1);
+				SetProfileLong(_T("CheckForMaxEntries"), 1);
+				SetProfileLong(_T("MaxEntries"), 100);
+				SetProfileLong(_T("UseHookDllForFocus"), 0);
+			}
+			else
+			{
+				//next check if it's in app data
+				m_csIniFileName = GetIniFileName(false);
+				if(FileExists(m_csIniFileName))
+				{
+					m_bFromIni = true;
+				}
 			}
 		}
 	}

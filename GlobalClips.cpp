@@ -32,8 +32,6 @@ void GlobalClips::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(GlobalClips, CDialogEx)
 	ON_WM_CLOSE()
 	ON_WM_SIZE()
-	ON_BN_CLICKED(IDC_BUTTON_REFRESH, &GlobalClips::OnBnClickedButtonRefresh)
-	ON_NOTIFY(NM_DBLCLK, IDC_LIST2, &GlobalClips::OnNMDblclkList2)
 	ON_WM_NCDESTROY()
 END_MESSAGE_MAP()
 
@@ -134,47 +132,47 @@ void GlobalClips::OnSize(UINT nType, int cx, int cy)
 	m_Resize.MoveControls(CSize(cx, cy));
 }
 
-void GlobalClips::OnBnClickedButtonRefresh()
-{
-	LoadItems();
-}
-
-void GlobalClips::OnNMDblclkList2(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
-	// TODO: Add your control notification handler code here
-
-	int id = (int)m_List.GetItemData(pNMItemActivate->iItem);
-
-	int count = (int)g_HotKeys.GetCount();
-
-	int row = 0;
-	for (int i = 0; i < count; i++)
-	{
-		CHotKey *pHotKey = g_HotKeys[i];
-
-		if(pHotKey->m_globalId == id)
-		{
-			if(pHotKey->m_clipId > 0)
-			{
-				CCopyProperties props(pHotKey->m_clipId, this);
-				props.SetToTopMost(false);
-				INT_PTR doModalRet = props.DoModal();
-
-				if(doModalRet == IDOK)
-				{
-				}
-			}
-			else
-			{
-
-			}
-			break;
-		}
-	}
-	
-	*pResult = 0;
-}
+//void GlobalClips::OnBnClickedButtonRefresh()
+//{
+//	LoadItems();
+//}
+//
+//void GlobalClips::OnNMDblclkList2(NMHDR *pNMHDR, LRESULT *pResult)
+//{
+//	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+//	// TODO: Add your control notification handler code here
+//
+//	int id = (int)m_List.GetItemData(pNMItemActivate->iItem);
+//
+//	int count = (int)g_HotKeys.GetCount();
+//
+//	int row = 0;
+//	for (int i = 0; i < count; i++)
+//	{
+//		CHotKey *pHotKey = g_HotKeys[i];
+//
+//		if(pHotKey->m_globalId == id)
+//		{
+//			if(pHotKey->m_clipId > 0)
+//			{
+//				CCopyProperties props(pHotKey->m_clipId, this);
+//				props.SetToTopMost(false);
+//				INT_PTR doModalRet = props.DoModal();
+//
+//				if(doModalRet == IDOK)
+//				{
+//				}
+//			}
+//			else
+//			{
+//
+//			}
+//			break;
+//		}
+//	}
+//	
+//	*pResult = 0;
+//}
 
 void GlobalClips::OnNcDestroy()
 {

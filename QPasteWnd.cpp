@@ -1066,14 +1066,63 @@ void CQPasteWnd::OnRclickQuickPaste(NMHDR *pNMHDR, LRESULT *pResult)
 
         theApp.m_Addins.AddPrePasteAddinsToMenu(cmSubMenu);
 
-        theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
+		//HideMenuGroup(cmSubMenu, "Groups");
+		//HideMenuGroup(cmSubMenu, "Quick Options");
+		//HideMenuGroup(cmSubMenu, "Send To");
+		//HideMenuGroup(cmSubMenu, "Add-Ins");
+		//HideMenuGroup(cmSubMenu, "Quick Properties");
+        
+		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 
         SetMenuChecks(cmSubMenu);
+
+		//cmSubMenu->RemoveMenu(32860, MF_BYCOMMAND);
+		//cmSubMenu->RemoveMenu(32775, MF_BYCOMMAND);
+		//cmSubMenu->RemoveMenu(32867, MF_BYCOMMAND); 
+		//cmSubMenu->RemoveMenu(32855, MF_BYCOMMAND);
+		//cmSubMenu->RemoveMenu(32853, MF_BYCOMMAND);
+		//cmSubMenu->RemoveMenu(32819, MF_BYCOMMAND);
+
+		//CString csMenuText;
+		//int nCount = cmSubMenu->GetMenuItemCount();
+		//int pos = 0;
+		//bool lastMenuEmpty = false;
+		//for(int i = 0; i < nCount; i++)
+		//{
+		//	cmSubMenu->GetMenuString(pos, csMenuText, MF_BYPOSITION);
+		//	if(csMenuText.IsEmpty())
+		//	{
+		//		if(lastMenuEmpty)
+		//		{
+		//			cmSubMenu->RemoveMenu(pos, MF_BYPOSITION);
+		//		}
+		//		else
+		//		{
+		//			pos++;
+		//			lastMenuEmpty = true;
+		//		}
+		//	}
+		//	else
+		//	{
+		//		pos++;
+		//		lastMenuEmpty = false;
+		//	}
+		//}
 
         cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
     }
 
     *pResult = 0;
+}
+
+void CQPasteWnd::HideMenuGroup(CMenu* menu, CString text)
+{
+	int nMenuPos;
+	CMenu *pNewMenu = CMultiLanguage::GetMenuPos(menu, text, nMenuPos);
+	if(pNewMenu)
+	{
+		menu->RemoveMenu(nMenuPos, MF_BYPOSITION);
+	}
 }
 
 void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
@@ -1509,7 +1558,7 @@ void CQPasteWnd::OnMenuProperties()
         {
 			ATL::CCritSecLock csLock(m_CritSection.m_sect);
             
-            if(row < m_listItems.size())
+            if(row < (int)m_listItems.size())
             {
                 CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), id);
                 if(!q.eof())
@@ -1690,7 +1739,7 @@ void CQPasteWnd::OnMenuQuickpropertiesSettoneverautodelete()
         count = Indexs.GetSize();
         for(int row = 0; row < count; row++)
         {
-			if(Indexs[row] < m_listItems.size())
+			if(Indexs[row] < (int)m_listItems.size())
 			{
 				m_listItems[Indexs[row]].m_bDontAutoDelete = true;
 			}
@@ -1724,7 +1773,7 @@ void CQPasteWnd::OnMenuQuickpropertiesAutodelete()
         count = Indexs.GetSize();
         for(int row = 0; row < count; row++)
         {
-			if(Indexs[row] < m_listItems.size())
+			if(Indexs[row] < (int)m_listItems.size())
 			{
 				m_listItems[Indexs[row]].m_bDontAutoDelete = false;
 			}
@@ -1759,7 +1808,7 @@ void CQPasteWnd::OnMenuQuickpropertiesRemovehotkey()
         count = Indexs.GetSize();
         for(int row = 0; row < count; row++)
         {
-			if(Indexs[row] < m_listItems.size())
+			if(Indexs[row] < (int)m_listItems.size())
 			{
 				m_listItems[Indexs[row]].m_bHasShortCut = false;
 			}
@@ -1794,7 +1843,7 @@ void CQPasteWnd::OnQuickpropertiesRemovequickpaste()
         count = Indexs.GetSize();
         for(int row = 0; row < count; row++)
         {
-			if(Indexs[row] < m_listItems.size())
+			if(Indexs[row] < (int)m_listItems.size())
 			{
 				m_listItems[Indexs[row]].m_QuickPaste.Empty();
 			}
@@ -2192,7 +2241,7 @@ void CQPasteWnd::DeleteSelectedRows()
 
         for(int i = 0; i < count; i++)
         {
-			if(Indexs[i] < m_listItems.size())
+			if(Indexs[i] < (int)m_listItems.size())
 			{
 				m_listItems.erase(m_listItems.begin( ) + Indexs[i]);
                 erasedCount++;
@@ -2569,7 +2618,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
 					ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
                     int c = m_lstHeader.GetItemCount();
-					if(m_listItems.size() > pItem->iItem)
+					if((int)m_listItems.size() > pItem->iItem)
                     {
                         CString cs;
                         if(m_listItems[pItem->iItem].m_bDontAutoDelete)
@@ -2645,7 +2694,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 {
 					ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
-                    if(m_listItems.size() > pItem->iItem)
+                    if((int)m_listItems.size() > pItem->iItem)
                     {
                         pItem->lParam = m_listItems[pItem->iItem].m_lID;
                     }
@@ -2659,7 +2708,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
     {
 		ATL::CCritSecLock csLock(m_CritSection.m_sect);
      
-		if(m_listItems.size() > pItem->iItem)
+		if((int)m_listItems.size() > pItem->iItem)
         {
             CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(m_listItems[pItem->iItem].m_lID);
             if(iterDib == m_cf_dibCache.end())
@@ -2700,7 +2749,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
     {
 		ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
-        if(m_listItems.size() > pItem->iItem)
+        if((int)m_listItems.size() > pItem->iItem)
         {
             CF_DibTypeMap::iterator iterRTF = m_cf_rtfCache.find(m_listItems[pItem->iItem].m_lID);
             if(iterRTF == m_cf_rtfCache.end())

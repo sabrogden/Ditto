@@ -316,8 +316,10 @@
     <ClCompile Include="Misc.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="GlobalClips.cpp" />
     <ClCompile Include="ShowTaskBarIcon.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalClips.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -679,8 +681,10 @@
     <ClInclude Include="TinyXml\tinystr.h">
       <Filter>tineyxml</Filter>
     </ClInclude>
-    <ClInclude Include="GlobalClips.h" />
     <ClInclude Include="ShowTaskBarIcon.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalClips.h">
       <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>

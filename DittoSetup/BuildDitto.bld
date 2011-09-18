@@ -9,7 +9,7 @@
 			<DelDirs type='11'>-1</DelDirs>
 			<Ext>*</Ext>
 			<HideOn type='11'>-1</HideOn>
-			<LogDel type='11'>-1</LogDel>
+			<LogDel type='11'>0</LogDel>
 			<Path>%workdir%</Path>
 			<Recurse type='11'>-1</Recurse>
 			<SysOn type='11'>-1</SysOn>
@@ -21,7 +21,7 @@
 			<DelDirs type='11'>-1</DelDirs>
 			<Ext>*</Ext>
 			<HideOn type='11'>-1</HideOn>
-			<LogDel type='11'>-1</LogDel>
+			<LogDel type='11'>0</LogDel>
 			<Path>%testBuildWorkDir%</Path>
 			<Recurse type='11'>-1</Recurse>
 			<SysOn type='11'>-1</SysOn>
@@ -204,6 +204,38 @@ DittoSetup*]]></X>
 			<Y type='11'>-1</Y>
 			<indent type='3'>1</indent>
 			<name>Zip Debug Files</name>
+		</step>
+		<step action='Write File'>
+			<Filename>%workDir%\%branch%\DittoSetup\output\index.php</Filename>
+			<Text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Ditto clipboard manager - Beta %version%</title>
+<meta name="description" content="" />
+</head>
+
+<body>       
+%DATETIME%
+<br>
+<br>
+<b>Ditto beta, version %version%</b>
+<br><br>
+<a href="DittoSetup_%versionFileName%.exe">Ditto Setup</a><br>
+<a href="DittoSetup_64bit_%versionFileName%.exe">Ditto Setup 64bit</a><br>
+<a href="DittoPortable_%versionFileName%.zip">Ditto Portable</a><br>
+<a href="DittoPortable_64bit_%versionFileName%.zip">Ditto Portable 64</a><br>
+
+<br>
+<a href="DittoDebug_%versionFileName%.7z">Ditto Debug Files</a><br>
+<a href="DittoSource_%versionFileName%.zip">Ditto Source</a><br>
+
+<br><br>
+
+<a href="AllFiles.php">Previouse Builds</a><br>
+</body>]]></Text>
+			<indent type='3'>1</indent>
+			<name>Beta web page</name>
 		</step>
 		<step action='FTP'>
 			<Ext>*.*</Ext>

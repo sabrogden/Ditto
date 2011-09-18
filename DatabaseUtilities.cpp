@@ -9,6 +9,7 @@
 #include <io.h>
 #include "AccessToSqlite.h"
 #include "Path.h"
+#include "InternetUpdate.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -222,8 +223,14 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 {
 	try
 	{
+		BOOL didBackup = FALSE;
+		CString backupFilePrefix = _T("Before_Update_To");
+
 		CppSQLite3DB db;
 		db.open(csPath);
+
+		if(didBackup == FALSE)
+			didBackup = BackupDB(csPath, backupFilePrefix);
 
 		db.execQuery(_T("SELECT lID, lDate, mText, lShortCut, lDontAutoDelete, ")
 								_T("CRC, bIsGroup, lParentID, QuickPasteText ")
@@ -254,6 +261,9 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		//This was added later so try to add each time and catch the exception here
  		try
  		{
+			if(didBackup == FALSE)
+				didBackup = BackupDB(csPath, backupFilePrefix);
+
 			db.execDML(_T("CREATE TRIGGER delete_data_trigger BEFORE DELETE ON Main FOR EACH ROW\n")
 				_T("BEGIN\n")
 					_T("INSERT INTO MainDeletes VALUES(old.lID, datetime('now'));\n")
@@ -271,6 +281,9 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		}
 		catch(CppSQLite3Exception& e)
 		{
+			if(didBackup == FALSE)
+				didBackup = BackupDB(csPath, backupFilePrefix);
+
 			e.errorCode();
 
 			db.execDML(_T("CREATE TABLE CopyBuffers(")
@@ -286,6 +299,9 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		}
 		catch(CppSQLite3Exception& e)
 		{
+			if(didBackup == FALSE)
+				didBackup = BackupDB(csPath, backupFilePrefix);
+
 			e.errorCode();
 
 			db.execDML(_T("CREATE TABLE MainDeletes(")
@@ -316,6 +332,9 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		}
 		catch(CppSQLite3Exception& e)
 		{
+			if(didBackup == FALSE)
+				didBackup = BackupDB(csPath, backupFilePrefix);
+
 			db.execDML(_T("ALTER TABLE Main ADD clipOrder REAL"));
 			db.execDML(_T("ALTER TABLE Main ADD clipGroupOrder REAL"));
 
@@ -335,6 +354,9 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		}
 		catch(CppSQLite3Exception& e)
 		{
+			if(didBackup == FALSE)
+				didBackup = BackupDB(csPath, backupFilePrefix);
+
 			db.execDML(_T("ALTER TABLE Main ADD globalShortCut INTEGER"));
 
 			e.errorCode();
@@ -346,6 +368,9 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		}
 		catch(CppSQLite3Exception& e)
 		{
+			if(didBackup == FALSE)
+				didBackup = BackupDB(csPath, backupFilePrefix);
+
 			db.execDML(_T("ALTER TABLE Main ADD lastPasteDate INTEGER"));
 			db.execDML(_T("Update Main set lastPasteDate = lDate"));
 			db.execDMLEx(_T("Update Main set lastPasteDate = %d where lastPasteDate <= 0"), CTime::GetCurrentTime().GetTime());
@@ -356,6 +381,25 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 
 	return TRUE;                                                     
+}
+
+BOOL BackupDB(CString dbPath, CString prefix)
+{
+	CString backup = GetFilePath(dbPath);
+
+	CInternetUpdate update;
+
+	long runningVersion = update.GetRunningVersion();
+	CString versionString = update.GetVersionString(runningVersion);
+
+	backup += GetFileName(dbPath) += _T("_") + prefix + _T("_") + versionString;
+	backup.Replace(_T(".db"), _T(""));
+	backup.Replace(_T("."), _T("_"));
+	backup +=  + _T(".db");
+
+	BOOL ret = CopyFile(dbPath, backup, TRUE);
+
+	return ret;
 }
 
 BOOL CreateDB(CString csFile)

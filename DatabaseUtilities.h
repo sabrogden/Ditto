@@ -27,6 +27,8 @@ BOOL RemoveOldEntries();
 
 BOOL EnsureDirectory(CString csPath);
 
+BOOL BackupDB(CString dbPath, CString prefix);
+
 //BOOL CopyDownDatabase();
 //BOOL CopyUpDatabase();
 

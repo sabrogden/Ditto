@@ -163,6 +163,7 @@ public:
     void SetKeyModiferState(bool bActive);
 	void SaveWindowSize();
 	void SelectFocusID();
+	void HideMenuGroup(CMenu* menu, CString text);
 
     // Generated message map functions
 protected:
