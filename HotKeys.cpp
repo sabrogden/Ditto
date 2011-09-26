@@ -135,10 +135,11 @@ void CHotKey::LoadKey()
 
 bool CHotKey::SaveKey()
 {
-	if(m_clipId > 0)
+	if(m_clipId <= 0)
 	{
 		return g_Opt.SetProfileLong( m_Name, (long) m_Key ) != FALSE;
 	}
+
 
 	return false;
 }
@@ -319,7 +320,7 @@ BOOL CHotKeys::ValidateClip(int clipId, DWORD key, CString desc)
 	{
 		pKey = new CHotKey(desc, key, true);
 	}
-
+	   
 	BOOL ret = FALSE;
 
 	if(pKey != NULL)
