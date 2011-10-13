@@ -28,7 +28,7 @@ CQListCtrl::CQListCtrl()
 {
 	m_pchTip = NULL;
 	m_pwchTip = NULL;
-	m_linesPerRow = 0;
+	m_linesPerRow = 1;
 	
 	LOGFONT lf;
 	
@@ -130,7 +130,8 @@ BEGIN_MESSAGE_MAP(CQListCtrl, CListCtrl)
 	//}}AFX_MSG_MAP
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
-ON_WM_KILLFOCUS()
+	ON_WM_KILLFOCUS()
+	ON_WM_MEASUREITEM_REFLECT()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -306,27 +307,27 @@ void CQListCtrl::SetNumberOfLinesPerRow(int nLines)
 	{
 		m_linesPerRow = nLines;
 
-		CDC *pDC = GetDC();
-	
-		CRect crRect(0, 0, 0, 0);
-		
-		CFont *pOldFont = pDC->SelectObject(GetFont());
-		
-		//Get the height to draw one character
-		pDC->DrawText("W", crRect, DT_VCENTER | DT_EXPANDTABS | DT_CALCRECT);
-		
-		pDC->SelectObject(pOldFont);
-		
-		//Get the total height of each row
-		int nHeight = (crRect.Height() * nLines) + ROW_BOTTOM_BORDER;
-		
-		//Create a image list of that height and set it to the list box
-		CImageList imglist;
-		imglist.Create(DUMMY_COL_WIDTH, nHeight, ILC_COLOR16 | ILC_MASK, 1, 1);
-		SetImageList(&imglist, LVSIL_SMALL );
-
-		ReleaseDC(pDC);
+		CRect rc;
+		GetWindowRect( &rc );
+		WINDOWPOS wp;
+		wp.hwnd  = m_hWnd;
+		wp.cx    = rc.Width();
+		wp.cy    = rc.Height();
+		wp.flags = SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER;
+		SendMessage( WM_WINDOWPOSCHANGED, 0, (LPARAM)&wp );
 	}
+}
+
+void CQListCtrl::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
+{
+	TEXTMETRIC tm;
+	HDC hDC = ::GetDC(NULL);
+	CFont* pFont = GetFont();
+	HFONT hFontOld = (HFONT)SelectObject(hDC, pFont->GetSafeHandle());
+	GetTextMetrics(hDC, &tm);
+	lpMeasureItemStruct->itemHeight = ((tm.tmHeight + tm.tmExternalLeading) * m_linesPerRow) + ROW_BOTTOM_BORDER;
+	SelectObject(hDC, hFontOld);
+	::ReleaseDC(NULL, hDC);
 }
 
 void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
@@ -1206,8 +1207,8 @@ void CQListCtrl::OnKillFocus(CWnd* pNewWnd)
 {
 	CListCtrl::OnKillFocus(pNewWnd);
 
-//	if(FocusOnToolTip() == FALSE)
-//		m_pToolTip->Hide();
+	//if(FocusOnToolTip() == FALSE)
+		//m_pToolTip->Hide();
 }
 
 HWND CQListCtrl::GetToolTipHWnd()

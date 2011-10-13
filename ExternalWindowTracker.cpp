@@ -280,7 +280,7 @@ void ExternalWindowTracker::SendCut()
 	Sleep(delay);
 
 	theApp.PumpMessageEx();
-
+	  
 	Log(StrF(_T("Sending cut to app %s key stroke: %s, Delay: %d"), csToApp, csString, delay));
 
 	//give the app some time to take focus before sending paste
@@ -300,7 +300,7 @@ CString ExternalWindowTracker::ActiveWndName()
 CString ExternalWindowTracker::WndName(HWND hWnd) 
 {
 	TCHAR cWindowText[200];
-	HWND hParent = hWnd;
+	HWND hParent = hWnd;   
 
 	::GetWindowText(hParent, cWindowText, 100);
 

@@ -62,7 +62,7 @@ BOOL CQuickPaste::CloseQPasteWnd()
 		}
 		
 		if(m_pwndPaste)
-			m_pwndPaste->DestroyWindow();
+			m_pwndPaste->CloseWindow();
 
 		Log(_T("CloseQPasteWnd called closing qpastewnd"));
 		
