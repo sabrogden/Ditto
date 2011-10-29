@@ -13,6 +13,7 @@
 {								\
 m_pBitmap->DeleteObject();	\
 delete m_pBitmap;		\
+m_pBitmap = NULL;		\
 }
 
 
