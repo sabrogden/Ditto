@@ -199,12 +199,12 @@
 		<Item English_Text = "Receive Passwords" ID = "2056"></Item>
 		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057"></Item>
 		<Item English_Text = "Log Send Receive Commands" ID = "1042"></Item>
-			<Item English_Text = "Friends" ID = "-1" PropertyPage = "true"></Item>
+		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true"></Item>
 		
 		//Added in 9-11-09
-		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">test</Item>
-        	<Item English_Text = "IP/Name" ID = "IP_Name">test</Item>
-        	<Item English_Text = "Descriptions" ID = "Descriptions">test</Item>
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies"></Item>
+        <Item English_Text = "IP/Name" ID = "IP_Name"></Item>
+        <Item English_Text = "Descriptions" ID = "Descriptions"></Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015"></Item>
@@ -301,6 +301,8 @@
 		
 		//New strings added in 3.17 2-28-10
 		<Item English_Text = "Add-Ins" ID = "Add_Ins"></Item> 
+		
+		<Item English_Text = "Copy Buffers" ID = "CopyBuffers"></Item>
 				
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>

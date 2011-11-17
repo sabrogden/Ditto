@@ -12,6 +12,9 @@ IMPLEMENT_DYNCREATE(COptionsCopyBuffers, CPropertyPage)
 
 COptionsCopyBuffers::COptionsCopyBuffers() : CPropertyPage(COptionsCopyBuffers::IDD)
 {
+	m_csTitle = theApp.m_Language.GetString("CopyBuffers", "Copy Buffers");
+	m_psp.pszTitle = m_csTitle;
+	m_psp.dwFlags |= PSP_USETITLE; 
 }
 
 COptionsCopyBuffers::~COptionsCopyBuffers()

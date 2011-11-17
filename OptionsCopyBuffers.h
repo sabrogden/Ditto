@@ -18,6 +18,8 @@ public:
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
+	CString m_csTitle;
+
 	// Generated message map functions
 	//{{AFX_MSG(COptionsCopyBuffers)
 	virtual BOOL OnInitDialog();
