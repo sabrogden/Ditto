@@ -1,5 +1,6 @@
 #include "StdAfx.h"
 #include "EventThread.h"
+#include "Misc.h"
 
 #define EXIT_EVENT -1
 
@@ -7,7 +8,7 @@ CEventThread::CEventThread(void)
 {
 	AddEvent(EXIT_EVENT);
 	m_hEvt = CreateEvent(NULL, FALSE, FALSE, NULL);
-	m_waitTimeout = 1000;
+	m_waitTimeout = INFINITE;
 	m_threadRunning = false;
 	m_exitThread = false;
 }
@@ -97,6 +98,8 @@ void CEventThread::Start(void *param)
 
 void CEventThread::Stop(int waitTime) 
 {
+	Log(_T("Start of CEventThread::Stop(int waitTime) "));
+
 	if(m_threadRunning)
 	{
 		m_exitThread = true;	
@@ -106,15 +109,21 @@ void CEventThread::Stop(int waitTime)
 		{
 			if (WAIT_OBJECT_0 != WaitForSingleObject(m_hEvt, waitTime))
 			{
+				Log(_T("Start of TerminateThread CEventThread::Stop(int waitTime) "));
 				TerminateThread(m_thread, 0);
+				Log(_T("End of TerminateThread CEventThread::Stop(int waitTime) "));
 				m_threadRunning = false;
 			}
 		}
 	}
+
+	Log(_T("End of CEventThread::Stop(int waitTime) "));
 };
 
 void CEventThread::RunThread()
 {
+	Log(_T("Start of CEventThread::RunThread()"));
+
 	m_threadRunning = true;
 	HANDLE *pHandleArray = new HANDLE[m_eventMap.size()];
 
@@ -164,10 +173,14 @@ void CEventThread::RunThread()
 			}
 			else
 			{
+				Log(StrF(_T("Start of CEventThread::RunThread() - OnEvent %d"), eventId));
 				OnEvent(eventId, m_param);
+				Log(StrF(_T("End of CEventThread::RunThread() - OnEvent %d"), eventId));
 			}
 		}
 	}
+
+	Log(_T("Start of CEventThread::RunThread()"));
 
 	m_threadRunning = false;
 }

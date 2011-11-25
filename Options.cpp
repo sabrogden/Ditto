@@ -2008,3 +2008,8 @@ DWORD CGetSetOptions::GetNoFormatsRetryDelay()
 {
 	return GetProfileLong(_T("NoFormatsRetryDelay"), 200);
 }
+
+DWORD CGetSetOptions::GetMainDeletesDeleteCount()
+{
+	return GetProfileLong(_T("MainDeletesDeleteCount"), 5);
+}

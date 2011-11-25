@@ -144,9 +144,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         }
     #endif 
 
-    SetTimer(CLOSE_WINDOW_TIMER, ONE_HOUR *24, 0);
+    SetTimer(CLOSE_WINDOW_TIMER, ONE_HOUR*24, 0);
     SetTimer(REMOVE_OLD_REMOTE_COPIES, ONE_DAY, 0);
-    SetTimer(REMOVE_OLD_ENTRIES_TIMER, ONE_MINUTE *15, 0);
+    SetTimer(REMOVE_OLD_ENTRIES_TIMER, ONE_MINUTE*15, 0);
 
     m_ulCopyGap = CGetSetOptions::GetCopyGap();
 

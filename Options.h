@@ -408,6 +408,8 @@ public:
 	static CString  GetCopyAppSeparator();
 
 	static DWORD	GetNoFormatsRetryDelay();
+
+	static DWORD	GetMainDeletesDeleteCount();
 };
 
 // global for easy access and for initialization of fast access variables

@@ -625,13 +625,27 @@ BOOL RemoveOldEntries()
 			}
 		}
 
-		Log(_T("Before Deleting emptied out data"));
+		int toDeleteCount = db.execScalar(_T("SELECT COUNT(clipID) FROM MainDeletes"));
 
-		//delete any data items sitting out there that the main table data was deleted
-		//this was done to speed up deleted from the main table
-		int deleteCount = db.execDML(_T("DELETE FROM MainDeletes"));
+		Log(StrF(_T("Before Deleting emptied out data, count: %d"), toDeleteCount));
 
-		Log(StrF(_T("After Deleting emptied out data rows, Count: %d"), deleteCount));
+		//Only delete 1 at a time, was finding that it was taking a long time to delete clips, locking the db and causing other queries
+		//to lock up
+		CppSQLite3Query q = db.execQueryEx(_T("SELECT * FROM MainDeletes LIMIT %d"), CGetSetOptions::GetMainDeletesDeleteCount());
+		int deleteCount = 0;
+
+		while(q.eof() == false)
+		{
+			//delete any data items sitting out there that the main table data was deleted
+			//this was done to speed up deleted from the main table
+			deleteCount = db.execDMLEx(_T("DELETE FROM MainDeletes WHERE clipID=%d"), q.getIntField(_T("clipID")));
+
+			q.nextRow();
+		}		
+
+		toDeleteCount = db.execScalar(_T("SELECT COUNT(clipID) FROM MainDeletes"));
+
+		Log(StrF(_T("After Deleting emptied out data rows, Count: %d, toDelete: %d"), deleteCount, toDeleteCount));
 	}
 	CATCH_SQLITE_EXCEPTION
 	
