@@ -2010,6 +2010,16 @@ DWORD CGetSetOptions::GetNoFormatsRetryDelay()
 }
 
 DWORD CGetSetOptions::GetMainDeletesDeleteCount()
-{
-	return GetProfileLong(_T("MainDeletesDeleteCount"), 5);
+{  
+	return GetProfileLong(_T("MainDeletesDeleteCount"), 100);
+}
+
+DWORD CGetSetOptions::GetIdleSecondsBeforeDelete()
+{  
+	return GetProfileLong(_T("IdleSecondsBeforeDelete"), 60*10);
+}
+
+DWORD CGetSetOptions::GetDbTimeout()
+{  
+	return GetProfileLong(_T("DbTimeout"), 5000);
 }

@@ -71,7 +71,7 @@ void log(const TCHAR* msg, bool bFromSendRecieve, CString csFile, long lLine)
 	ASSERT(AfxIsValidString(msg));
 
 	SYSTEMTIME st;
-	GetSystemTime(&st);
+	GetLocalTime(&st);
 	
 	CString	csText;
 	csText.Format(_T("[%d/%d/%d %02d:%02d:%02d.%03d - "), st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
@@ -130,6 +130,17 @@ CString GetErrorString( int err )
 	//  ::MessageBox( NULL, lpMsgBuf, "GetLastError", MB_OK|MB_ICONINFORMATION );
 	::LocalFree( lpMsgBuf );
 	return str;
+}
+
+DWORD IdleSeconds()
+{
+	LASTINPUTINFO info; 
+	info.cbSize = sizeof(info);
+	GetLastInputInfo(&info);   
+	ULONGLONG currentTick  = GetTickCount64();
+	DWORD idleSeconds = (currentTick - info.dwTime)/1000;
+
+	return idleSeconds;
 }
 
 CString StrF(const TCHAR * pszFormat, ...)

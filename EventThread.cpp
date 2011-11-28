@@ -38,6 +38,10 @@ void CEventThread::AddEvent(int eventId)
 
 bool CEventThread::FireEvent(int eventId)
 {
+	//Log(StrF(_T("Begin FireEvent, eventId: %d"), eventId));
+
+	bool ret = false;
+
 	HANDLE eventHandle = NULL;
 	for(EventMapType::iterator it = m_eventMap.begin(); it != m_eventMap.end(); it++)
 	{
@@ -51,9 +55,11 @@ bool CEventThread::FireEvent(int eventId)
 	if(eventHandle != NULL)
 	{
 		SetEvent(eventHandle);
-		return true;
+		ret = true;
 	}
 	
+	//Log(StrF(_T("End FireEvent, eventId: %d"), eventId));
+
 	return false;
 }
 

@@ -212,6 +212,8 @@ BOOL OpenDatabase(CString csDB)
 		theApp.m_db.open(csDB);
 		CGetSetOptions::SetDBPath(csDB);
 
+		theApp.m_db.setBusyTimeout(CGetSetOptions::GetDbTimeout());
+
 		return TRUE;
 	}
 	CATCH_SQLITE_EXCEPTION
@@ -627,7 +629,7 @@ BOOL RemoveOldEntries()
 
 		int toDeleteCount = db.execScalar(_T("SELECT COUNT(clipID) FROM MainDeletes"));
 
-		Log(StrF(_T("Before Deleting emptied out data, count: %d"), toDeleteCount));
+		Log(StrF(_T("Before Deleting emptied out data, count: %d, Idle Seconds: %d"), toDeleteCount, IdleSeconds()));
 
 		//Only delete 1 at a time, was finding that it was taking a long time to delete clips, locking the db and causing other queries
 		//to lock up
@@ -636,10 +638,20 @@ BOOL RemoveOldEntries()
 
 		while(q.eof() == false)
 		{
-			//delete any data items sitting out there that the main table data was deleted
-			//this was done to speed up deleted from the main table
-			deleteCount = db.execDMLEx(_T("DELETE FROM MainDeletes WHERE clipID=%d"), q.getIntField(_T("clipID")));
+			DWORD idleSeconds = IdleSeconds();
+			if(idleSeconds > CGetSetOptions::GetIdleSecondsBeforeDelete())
+			{
+				//delete any data items sitting out there that the main table data was deleted
+				//this was done to speed up deleted from the main table
+				deleteCount = db.execDMLEx(_T("DELETE FROM MainDeletes WHERE clipID=%d"), q.getIntField(_T("clipID")));
+			}
+			else
+			{
+				Log(StrF(_T("Computer has not been idle long enough to delete clips, Min Idle: %d, current Idle: %d"), 
+												CGetSetOptions::GetIdleSecondsBeforeDelete(), idleSeconds));
 
+				break;
+			}
 			q.nextRow();
 		}		
 

@@ -410,6 +410,10 @@ public:
 	static DWORD	GetNoFormatsRetryDelay();
 
 	static DWORD	GetMainDeletesDeleteCount();
+
+	static DWORD	GetIdleSecondsBeforeDelete();
+
+	static DWORD	GetDbTimeout();
 };
 
 // global for easy access and for initialization of fast access variables

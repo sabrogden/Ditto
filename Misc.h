@@ -51,6 +51,8 @@ void AppendToFile(const TCHAR* fn, const TCHAR *msg);
 void log(const TCHAR* msg, bool bFromSendRecieve = false, CString csFile = _T(""), long lLine = -1);
 CString GetErrorString(int err);
 
+DWORD IdleSeconds();
+
 #define LogSendRecieveInfo(cs) logsendrecieveinfo(cs, __FILE__, __LINE__)
 void logsendrecieveinfo(CString cs, CString csFile = _T(""), long lLine = -1);
 
