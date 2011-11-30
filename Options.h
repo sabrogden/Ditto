@@ -71,6 +71,7 @@ public:
 	static bool m_bInConversion;
 	static bool m_bU3;
 	static CTheme m_Theme;
+	static bool m_portable;
 
 	static void LoadSettings();
 	static CString GetIniFileName(bool bLocalIniFile);
@@ -414,6 +415,8 @@ public:
 	static DWORD	GetIdleSecondsBeforeDelete();
 
 	static DWORD	GetDbTimeout();
+
+	static DWORD	GetFunnyTickCountAdjustment();
 };
 
 // global for easy access and for initialization of fast access variables

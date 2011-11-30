@@ -132,12 +132,33 @@ CString GetErrorString( int err )
 	return str;
 }
 
+int g_funnyGetTickCountAdjustment = -1;
+
 DWORD IdleSeconds()
 {
 	LASTINPUTINFO info; 
 	info.cbSize = sizeof(info);
 	GetLastInputInfo(&info);   
-	ULONGLONG currentTick  = GetTickCount64();
+	DWORD currentTick  = GetTickCount();
+
+	if(g_funnyGetTickCountAdjustment == -1)
+	{
+		if(currentTick < info.dwTime)
+		{
+			g_funnyGetTickCountAdjustment = 1;
+		}
+		else
+		{
+			g_funnyGetTickCountAdjustment = 0;
+		}		
+	}
+	
+	if(g_funnyGetTickCountAdjustment == 1)
+	{
+		Log(StrF(_T("Adjusting time of get tickcount by: %d, on startup we found GetTickCount to be less than last input"), CGetSetOptions::GetFunnyTickCountAdjustment()));
+		currentTick += CGetSetOptions::GetFunnyTickCountAdjustment();
+	}
+
 	DWORD idleSeconds = (currentTick - info.dwTime)/1000;
 
 	return idleSeconds;

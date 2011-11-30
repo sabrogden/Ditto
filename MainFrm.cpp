@@ -148,6 +148,10 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     SetTimer(REMOVE_OLD_REMOTE_COPIES, ONE_DAY, 0);
     SetTimer(REMOVE_OLD_ENTRIES_TIMER, ONE_MINUTE*15, 0);
 
+	//found on some computers GetTickCount gettickcount returns a smaller value than other, can't explain
+	//check here to see if we need to make an adjustment
+	IdleSeconds();
+
     m_ulCopyGap = CGetSetOptions::GetCopyGap();
 
     theApp.AfterMainCreate();
@@ -476,7 +480,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 			break;
 
         case REMOVE_OLD_ENTRIES_TIMER:
-            {
+			{
                 m_thread.FireDeleteEntries();
             }
 			break;

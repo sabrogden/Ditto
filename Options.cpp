@@ -59,6 +59,7 @@ bool CGetSetOptions::m_bOutputDebugString;
 bool CGetSetOptions::m_bU3 = false;
 bool CGetSetOptions::m_bInConversion = false;
 bool CGetSetOptions::m_bFromIni = false;
+bool CGetSetOptions::m_portable = false;
 CString CGetSetOptions::m_csIniFileName;
 __int64 CGetSetOptions::nLastDbWriteTime = 0;
 CTheme CGetSetOptions::m_Theme;
@@ -93,14 +94,13 @@ void CGetSetOptions::LoadSettings()
 		{
 			CString portable = GetFilePath(m_csIniFileName);
 			portable += _T("portable");
-			if(FileExists(portable))
+			if(FileExists(portable)) 
 			{
 				m_bFromIni = true;
+				m_portable = true;
 
 				//local ini file doesn't exist but portable file does, create the ini file with defaults
 				//This is done so they can copy the entire directory for portable zip files and not overright there settings file
-				SetProfileLong(_T("SetCurrentDirectory"), 1);
-				SetProfileLong(_T("Portable"), 1);
 				SetProfileLong(_T("DisableRecieve"), 1);
 				SetProfileLong(_T("CheckForMaxEntries"), 1);
 				SetProfileLong(_T("MaxEntries"), 100);
@@ -1812,20 +1812,19 @@ void CGetSetOptions::SetMultiPasteSeparator(CString csSep)
 
 BOOL CGetSetOptions::GetSetCurrentDirectory()
 {
-	BOOL bRet = GetProfileLong(_T("SetCurrentDirectory"), FALSE);
-	if(bRet)
+	if(m_portable)
 	{
 		CString csExePath = GetFilePath(GetExeFileName());
 		FIX_CSTRING_PATH(csExePath);
 		::SetCurrentDirectory(csExePath);
 	}
 
-	return bRet;
+	return m_portable == true;
 }
 
 bool CGetSetOptions::GetIsPortableDitto()
 {
-	return GetProfileLong(_T("Portable"), FALSE) == TRUE;
+	return m_portable;
 }
 
 CString CGetSetOptions::GetPasteString(CString csAppName)
@@ -2022,4 +2021,9 @@ DWORD CGetSetOptions::GetIdleSecondsBeforeDelete()
 DWORD CGetSetOptions::GetDbTimeout()
 {  
 	return GetProfileLong(_T("DbTimeout"), 5000);
+}
+
+DWORD CGetSetOptions::GetFunnyTickCountAdjustment()
+{  
+	return GetProfileLong(_T("FunnyTickCountAdjustment"), 300001);
 }
