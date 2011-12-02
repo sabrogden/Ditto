@@ -186,7 +186,7 @@ void CEventThread::RunThread()
 		}
 	}
 
-	Log(_T("Start of CEventThread::RunThread()"));
+	Log(_T("End of CEventThread::RunThread()"));
 
 	m_threadRunning = false;
 }

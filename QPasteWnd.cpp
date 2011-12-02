@@ -371,6 +371,8 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
         return ;
     }
 
+	Log(StrF(_T("CQPasteWnd::OnActivate, nState: %d, Other: %d, Minimized: %d"), nState, pWndOther, bMinimized));
+
     if(nState == WA_INACTIVE)
     {
 		SaveWindowSize();
@@ -396,13 +398,16 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
     }
     else if(nState == WA_ACTIVE || nState == WA_CLICKACTIVE)
     {
-        if(theApp.m_bShowingQuickPaste == false)
-        {
-            ShowQPasteWindow(m_listItems.size() == 0);
-        }
+		if(bMinimized == FALSE)
+		{
+			if(theApp.m_bShowingQuickPaste == false)
+			{
+				ShowQPasteWindow(m_listItems.size() == 0);
+			}
 
-        //Unregister the global hot keys for the last ten copies
-        g_HotKeys.UnregisterAll(false, true);
+			//Unregister the global hot keys for the last ten copies
+			g_HotKeys.UnregisterAll(false, true);
+		}
     }
 }
 
