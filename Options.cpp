@@ -79,6 +79,13 @@ void CGetSetOptions::LoadSettings()
 {
 	m_csIniFileName = GetIniFileName(true);
 
+	CString portable = GetFilePath(m_csIniFileName);
+	portable += _T("portable");
+	if(FileExists(portable)) 
+	{
+		m_portable = true;
+	}
+
 	if(m_bU3)
 	{
 		m_bFromIni = true;
@@ -86,34 +93,17 @@ void CGetSetOptions::LoadSettings()
 	else
 	{
 		//first check if ini file is in app directory
-		if(FileExists(m_csIniFileName))
+		if(m_portable || FileExists(m_csIniFileName))
 		{
 			m_bFromIni = true;
 		}
 		else
 		{
-			CString portable = GetFilePath(m_csIniFileName);
-			portable += _T("portable");
-			if(FileExists(portable)) 
+			//next check if it's in app data
+			m_csIniFileName = GetIniFileName(false);
+			if(FileExists(m_csIniFileName))
 			{
 				m_bFromIni = true;
-				m_portable = true;
-
-				//local ini file doesn't exist but portable file does, create the ini file with defaults
-				//This is done so they can copy the entire directory for portable zip files and not overright there settings file
-				SetProfileLong(_T("DisableRecieve"), 1);
-				SetProfileLong(_T("CheckForMaxEntries"), 1);
-				SetProfileLong(_T("MaxEntries"), 100);
-				SetProfileLong(_T("UseHookDllForFocus"), 0);
-			}
-			else
-			{
-				//next check if it's in app data
-				m_csIniFileName = GetIniFileName(false);
-				if(FileExists(m_csIniFileName))
-				{
-					m_bFromIni = true;
-				}
 			}
 		}
 	}
@@ -123,15 +113,6 @@ void CGetSetOptions::LoadSettings()
 		CString csPath = GetFilePath(m_csIniFileName);
 		if(FileExists(csPath) == FALSE)
 			CreateDirectory(csPath, NULL);
-	}
-
-	//first time running set some defaults
-	if(GetTotalCopyCount() <= 0)
-	{
-		SetMaxEntries(500);
-		SetCheckForMaxEntries(TRUE);
-		SetQuickPastePosition(POS_AT_CARET);
-		SetDisableRecieve(TRUE);
 	}
 
 	GetSetCurrentDirectory();
@@ -737,7 +718,7 @@ BOOL CGetSetOptions::SetQuickPastePosition(long lPosition)
 
 long CGetSetOptions::GetQuickPastePosition()
 {
-	return GetProfileLong("ShowQuickPastePosition", POS_AT_PREVIOUS);
+	return GetProfileLong("ShowQuickPastePosition", POS_AT_CURSOR);
 }
 
 BOOL CGetSetOptions::SetQuickPasteSize(CSize size)
@@ -875,6 +856,8 @@ BOOL CGetSetOptions::GetCheckForMaxEntries()
 	BOOL bDefault = FALSE;
 	if(m_bU3)
 		bDefault = TRUE;
+	if(GetIsPortableDitto())
+		bDefault = TRUE;
 
 	return GetProfileLong("CheckForMaxEntries", bDefault);
 }
@@ -899,6 +882,8 @@ long CGetSetOptions::GetMaxEntries()
 	long lMax = 500;
 	if(m_bU3)
 		lMax = 75;
+	if(GetIsPortableDitto())
+		lMax = 100;
 	return GetProfileLong("MaxEntries", lMax);
 }
 
@@ -1302,6 +1287,8 @@ BOOL CGetSetOptions::GetDisableRecieve()
 {
 	BOOL bDefault = FALSE;
 	if(m_bU3)
+		bDefault = TRUE;
+	if(GetIsPortableDitto())
 		bDefault = TRUE;
 
 	return GetProfileLong("DisableRecieve", bDefault);
