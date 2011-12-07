@@ -121,7 +121,7 @@ BOOL CFileSend::SendFile(CString csFile)
 	try
 	{
 		CFileException ex;
-		if(file.Open(csFile, CFile::modeRead|CFile::typeBinary, &ex))
+		if(file.Open(csFile, CFile::modeRead|CFile::typeBinary|CFile::shareDenyNone, &ex))
 		{
 			CStringA dest;
 			if(CTextConvert::ConvertToUTF8(csFile, dest))
