@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Ascii"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "2" Author = "Rob Meijer" Notes = "robmeyer@hetnet.nl" LanguageCode = "dut">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Groepen</Item>		
@@ -85,11 +85,11 @@
 		<Item English_Text = "Parse" ID = "1040">Analyseren</Item>		
 		<Item English_Text = "Move To Group" ID = "2041">Verplaatsen naar Groep</Item>		
 		<Item English_Text = "Item Title" ID = "2042">Titel clip</Item>		
-		<Item English_Text = "Copy Formats" ID = "2029">Kopiëer tekstformaat</Item>	
+		<Item English_Text = "Copy Formats" ID = "2029">KopiÃ«er tekstformaat</Item>	
 		<Item English_Text = "Delete" ID = "1021">Wissen</Item>		
 		<Item English_Text = "OK" ID = "1">OK</Item>		
 		<Item English_Text = "Cancel" ID = "2">Cancel</Item>		
-		<Item English_Text = "Copy Properties" ID = "-1">Kopiëer Eigenschappen</Item>	
+		<Item English_Text = "Copy Properties" ID = "-1">KopiÃ«er Eigenschappen</Item>	
 	</Ditto_Clip_Properties>
 	<Ditto_Options_General>			
 		<Item English_Text = "Start Ditto on System Startup" ID = "2004">Start Ditto als systeem start</Item>		
@@ -105,7 +105,7 @@
 		<Item English_Text = "Save Multi-Pastes" ID = "1039">Diverse geslecteerde clips gelijktijdig plakken</Item>		
 		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Verberg Ditto met een sneltoets</Item>		
 		<Item English_Text = "Amount of text to save for description" ID = "2044">Hoeveel tekst opslaan in de omschrijving? </Item>		
-		<Item English_Text = "On copy play the sound" ID = "2045">Speel geluidje af bij kopiëren</Item>		
+		<Item English_Text = "On copy play the sound" ID = "2045">Speel geluidje af bij kopiÃ«ren</Item>		
 		<Item English_Text = "Play" ID = "2034">Speel</Item>		
 		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">Geselecteerde clip plakken in het actieve venster</Item>		
 		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">Maximale clipgrootte in bytes</Item>		
@@ -254,7 +254,7 @@
 		<Item English_Text = "Download updated version?" ID = "Download_Update">downloade update versie</Item>		
 		<Item English_Text = "No updates available" ID = "No_Updates">Geen updates beschikbaar</Item>		
 		<Item English_Text = "This will remove all Copy Entries!\\n\\nContinue?" ID = "Remove_All">Alle clip ingangen worden verwijderd</Item>		
-		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Verbinding met klembord beëindigd</Item>		
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Verbinding met klembord beÃ«indigd</Item>		
 		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Met klembord verbinden</Item>		
 		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">Niet mogenlijk DAO/Jet db machine te initialiseren. DAO wordt nu geinstalleerd.\\n\\n Herstart Ditto na installatie van DAO.</Item>		
 		<Item English_Text = "NO TARGET" ID = "No_Target">geen bestemming</Item>	
@@ -262,8 +262,8 @@
 		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Prompt when deleting clips" ID = "2039">Waarschuwen wanneer clips gewist worden</Item>
 		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">Geselecteerde clips wissen?</Item>
-		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">Foute import van geëxporteerde clip</Item>
-		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing">Foute analyse van geëxporteerde clip</Item>
+		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">Foute import van geÃ«xporteerde clip</Item>
+		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing">Foute analyse van geÃ«xporteerde clip</Item>
 		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good">Clip op klembord geplaatst </Item>
 		<Item English_Text = "Successfully imported" ID = "Import_Successfully">Importeren geslaagd</Item>
 		<Item English_Text = "clip" ID = "Clip">Clip</Item>

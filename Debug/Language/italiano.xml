@@ -49,7 +49,7 @@
 		<Item English_Text = "Draw RTF Text" ID = "32846">Scrivi Testo RTF</Item>
 		<Item English_Text = "Paste Clip after selection" ID = "32847">Incolla Clip Dopo Selezione</Item>
 		<Item English_Text = "Find As You Type" ID = "32848">Trova Come Proprio Tipo</Item>
-		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Assicura Visibilit‡ Finestra</Item>
+		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Assicura Visibilit√† Finestra</Item>
 		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Mostra Clip Nei Gruppi Lista</Item>
 		<Item English_Text = "Sent To" ID = "-1">Invia A</Item>
 		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">Altri Computer</Item>
@@ -172,7 +172,7 @@
 		<Item English_Text = "Network Password" ID = "2054">Password Di Rete</Item>
 		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">Se Hai Ricevuto Clip Da Un Copmuter Dove La Tua Password Di Rete Non Corrisponde Inserisci Una Password Addizionale Separata Da Comma</Item>
 		<Item English_Text = "Receive Passwords" ID = "2056">Password Ricevuta</Item>
-		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Se "invia tutte le Copie" Ë Selezionato allora tutte le copie di questo computer verranno inviate ad un altro computer. invece se non Ë selezionata questa opzione puoi usare il tasto destro per inviare ad un computer specifico </Item>
+		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Se "invia tutte le Copie" √® Selezionato allora tutte le copie di questo computer verranno inviate ad un altro computer. invece se non √® selezionata questa opzione puoi usare il tasto destro per inviare ad un computer specifico </Item>
 		<Item English_Text = "Log Send Receive Commands" ID = "1042">Log Comandi Inviati e Ricevuti</Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Amici</Item>
 	</Ditto_Options_Friends>
@@ -226,7 +226,7 @@
 		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">Keyboard Shortcuts</Item>
 		<Item English_Text = "About" ID = "AboutTitle">About</Item>
 		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">Errore nell'apertura del db</Item>
-		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">Non Ë stato possibile inizilizare il DAO/Jet db engine</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">Non √® stato possibile inizilizare il DAO/Jet db engine</Item>
 		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format">Formato db non riconosciuto</Item>
 		<Item English_Text = "the file will be renamed" ID = "File_Renamed">Il File Rinominato</Item>
 		<Item English_Text = "and a new database will be created" ID = "New_Database">Crea Nuovo db</Item>
@@ -237,7 +237,7 @@
 		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Rimuovi Tutto/i</Item>
 		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Disconnetti Dalla Clipboard</Item>			
 		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Connetti Alla Clipboard</Item>			
-		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">Non Ë stato possibile inizializare il DAO/Jet db engine</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">Non √® stato possibile inizializare il DAO/Jet db engine</Item>
 		<Item English_Text = "NO TARGET" ID = "No_Target">NO TARGET</Item>		
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>

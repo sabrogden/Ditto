@@ -1,12 +1,12 @@
-<?xml version="1.0" encoding="Ascii"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "1" Author = "Carsten Bo Svitzer" Notes = "cbsvitzer@mail.dk" LanguageCode = "dan">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Grupper</Item>
 		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Ny gruppe Ctrl-F7</Item>
-		<Item English_Text = "New Group Selection	F7" ID = "32812">Vælg ny gruppe</Item>
+		<Item English_Text = "New Group Selection	F7" ID = "32812">VÃ¦lg ny gruppe</Item>
 		<Item English_Text = "Move to Group" ID = "32840">Flyt til gruppe</Item>
 		<Item English_Text = "Quick Options" ID = "-1">Hurtigvalg</Item>
-		<Item English_Text = "Lines Per Row" ID = "-1">Antal linier per række (row)</Item>
+		<Item English_Text = "Lines Per Row" ID = "-1">Antal linier per rÃ¦kke (row)</Item>
 		<Item English_Text = "1" ID = "32807">1</Item>
 		<Item English_Text = "2" ID = "32786">2</Item>
 		<Item English_Text = "3" ID = "32787">3</Item>
@@ -22,41 +22,41 @@
 		<Item English_Text = "30 " ID = "32799">30</Item>
 		<Item English_Text = "40 " ID = "32790">40</Item>
 		<Item English_Text = "Positioning" ID = "-1">Placering</Item>
-		<Item English_Text = "At Caret" ID = "32802">Ved tekst-cursoren (indsætningspunktet)</Item>
+		<Item English_Text = "At Caret" ID = "32802">Ved tekst-cursoren (indsÃ¦tningspunktet)</Item>
 		<Item English_Text = "At Cursor" ID = "32803">Ved cursoren</Item>
 		<Item English_Text = "At Previous Position" ID = "32804">Ved tidligere position</Item>
-		<Item English_Text = "First Ten Hot Keys" ID = "-1">De ti første hotkeys</Item>
+		<Item English_Text = "First Ten Hot Keys" ID = "-1">De ti fÃ¸rste hotkeys</Item>
 		<Item English_Text = "Use Ctrl - Num" ID = "32777">Brug Ctrl-Numerisk tastatur</Item>
 		<Item English_Text = "Show Hot Key Text" ID = "32778">Vis hotkey-tekst</Item>
 		<Item English_Text = "View Caption Bar On" ID = "-1">Vis beskrivelsesliste</Item>
-		<Item English_Text = "Top" ID = "32783">Øverst</Item>
-		<Item English_Text = "Right" ID = "32780">Højre</Item>
+		<Item English_Text = "Top" ID = "32783">Ã˜verst</Item>
+		<Item English_Text = "Right" ID = "32780">HÃ¸jre</Item>
 		<Item English_Text = "Bottom" ID = "32781">Nederst</Item>
 		<Item English_Text = "Left" ID = "32782">Venstre</Item>
 		<Item English_Text = "Sort" ID = "-1">Sortere</Item>
-		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">Stigende (sidste øverst)</Item>
+		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">Stigende (sidste Ã¸verst)</Item>
 		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">Faldende (sidste nederst)</Item>
-		<Item English_Text = "Double Clicking on Caption" ID = "-1">Dobbeltklik på tekst</Item>
+		<Item English_Text = "Double Clicking on Caption" ID = "-1">Dobbeltklik pÃ¥ tekst</Item>
 		<Item English_Text = "Toggles Always on Top" ID = "32814">Skifter tilstanden 'Altid Synlig'</Item>
 		<Item English_Text = "Rolls-up Window" ID = "32815">Opruller Vindue</Item>
 		<Item English_Text = "Toggles Always Show Description" ID = "32816">Skifter tilstanden 'Vis altid beskrivelse'</Item>
 		<Item English_Text = "Always on Top	Ctrl-Space" ID = "32784">Altid synlig: Ctrl-Mellemrum</Item>
 		<Item English_Text = "Auto Roll-up" ID = "32791">Automatisk vinduesoprulning</Item>
 		<Item English_Text = "Always Show Description" ID = "32813">Vis altid beskrivelse: til/fra</Item>
-		<Item English_Text = "Prompt For New Group Names" ID = "32817">Spørg efter nyt gruppenavn</Item>
-		<Item English_Text = "Select Font" ID = "32844">Vælg font</Item>
+		<Item English_Text = "Prompt For New Group Names" ID = "32817">SpÃ¸rg efter nyt gruppenavn</Item>
+		<Item English_Text = "Select Font" ID = "32844">VÃ¦lg font</Item>
 		<Item English_Text = "Show ikoner" ID = "32845">Vis miniaturer</Item>
-		<Item English_Text = "Draw RTF Text" ID = "32846">Tilføj RTF-tekst</Item>
-		<Item English_Text = "Paste Clip after selection" ID = "32847">Indsæt klip efter valg</Item>
+		<Item English_Text = "Draw RTF Text" ID = "32846">TilfÃ¸j RTF-tekst</Item>
+		<Item English_Text = "Paste Clip after selection" ID = "32847">IndsÃ¦t klip efter valg</Item>
 		<Item English_Text = "Find As You Type" ID = "32848">Find mens du skriver</Item>
 		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Hele vinduet synligt</Item>
-		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Vis klip i grupper på hovedlisten</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Vis klip i grupper pÃ¥ hovedlisten</Item>
 		<Item English_Text = "Send To" ID = "-1">Send til</Item>
 		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824"> - samme computer</Item>
 		<Item English_Text = "View Full Description	F3" ID = "32793">Vis hele indholdet</Item>
 		<Item English_Text = "View Groups	Ctrl-G" ID = "32819">Se grupper: Ctrl-G</Item>
-		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">Indsæt ren tekst: Shift-Enter</Item>
-		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">Indsæt HTML som ren tekst</Item>
+		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">IndsÃ¦t ren tekst: Shift-Enter</Item>
+		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">IndsÃ¦t HTML som ren tekst</Item>
 		<Item English_Text = "Delete Entry	Del" ID = "32801">Fjern klip: Del</Item>
 		<Item English_Text = "Properties	Alt-Enter" ID = "32776">Egenskaper: Alt-Enter</Item>
 		<Item English_Text = "Quick Properties" ID = "-1">Hurtigkommando</Item>
@@ -64,16 +64,16 @@
 		<Item English_Text = "Auto Delete" ID = "32821">Fjern automatisk</Item>
 		<Item English_Text = "Remove Hot Key" ID = "32822">Fjern hotkey</Item>
 		<Item English_Text = "Options..." ID = "32805">Indstillinger...</Item>
-		<Item English_Text = "Help" ID = "32842">Hjælp</Item>
-		<Item English_Text = "Disconnect from Clipboard" ID = "32775">Deaktivér Ditto</Item>
+		<Item English_Text = "Help" ID = "32842">HjÃ¦lp</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "32775">DeaktivÃ©r Ditto</Item>
 		<Item English_Text = "Exit Program" ID = "32806">Afslut programmet</Item>
 		
 		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Prompt to Delete Clip" ID = "32852">Fjern klip</Item>	
-		<Item English_Text = "Import" ID = "32855">Importér</Item>
-		<Item English_Text = "Export" ID = "32853">Eksportér</Item>
-		<Item English_Text = "Remove Quick Paste" ID = "32856">Fjern hurtigindsættelse</Item>	
-		<Item English_Text = "Edit Clip" ID = "32860">Redigér klip</Item>
+		<Item English_Text = "Import" ID = "32855">ImportÃ©r</Item>
+		<Item English_Text = "Export" ID = "32853">EksportÃ©r</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">Fjern hurtigindsÃ¦ttelse</Item>	
+		<Item English_Text = "Edit Clip" ID = "32860">RedigÃ©r klip</Item>
 		<Item English_Text = "New Clip" ID = "32867">Nyt klip</Item>	
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
@@ -81,51 +81,51 @@
 		<Item English_Text = "Date" ID = "2040">Dato</Item>
 		<Item English_Text = "&Never Auto Delete" ID = "1025">&Auto-Slet aldrig</Item>
 		<Item English_Text = "Move To Group" ID = "2041">Flyt til gruppe</Item>
-		<Item English_Text = "Item Title" ID = "2042">Navn på klip</Item>
-		<Item English_Text = "Copy Formats" ID = "2029">Kopiér formatet</Item>
+		<Item English_Text = "Item Title" ID = "2042">Navn pÃ¥ klip</Item>
+		<Item English_Text = "Copy Formats" ID = "2029">KopiÃ©r formatet</Item>
 		<Item English_Text = "Delete" ID = "1021">Fjern</Item>
 		<Item English_Text = "OK" ID = "1">OK</Item>
-		<Item English_Text = "Cancel" ID = "2">Annullér</Item>
-		<Item English_Text = "Copy Properties" ID = "-1">Kopiér egenskaber</Item>
+		<Item English_Text = "Cancel" ID = "2">AnnullÃ©r</Item>
+		<Item English_Text = "Copy Properties" ID = "-1">KopiÃ©r egenskaber</Item>
 	</Ditto_Clip_Properties>
 	<Ditto_Options_General>
 		<Item English_Text = "Start Ditto on System Startup" ID = "2004">Start Ditto ved systemstart</Item>
-		<Item English_Text = "Display Icon in System Tray" ID = "2003">Vis ikon på proceslinien</Item>
+		<Item English_Text = "Display Icon in System Tray" ID = "2003">Vis ikon pÃ¥ proceslinien</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Maks antal gemte klip</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">Klip fjernes efter</Item>
 		<Item English_Text = "Days" ID = "2043">Dage</Item>
-		<Item English_Text = "Compact and Repair" ID = "1028">Komprimér och reparér</Item>
-		<Item English_Text = "Automatically check for updates online" ID = "1029">Søg automatisk efter opdateringer</Item>
-		<Item English_Text = "Check Now" ID = "1030">Søg nu</Item>
+		<Item English_Text = "Compact and Repair" ID = "1028">KomprimÃ©r och reparÃ©r</Item>
+		<Item English_Text = "Automatically check for updates online" ID = "1029">SÃ¸g automatisk efter opdateringer</Item>
+		<Item English_Text = "Check Now" ID = "1030">SÃ¸g nu</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">Tillad duplikater</Item>
-		<Item English_Text = "Update Clip Order On Paste" ID = "1038">Opdatér klippets dato efter indsættelse</Item>
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">OpdatÃ©r klippets dato efter indsÃ¦ttelse</Item>
 		<Item English_Text = "Save Multi-Pastes" ID = "1039">Gem multi-klip</Item>
 		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Skjul Ditto med hotkey hvis Ditto er synlig</Item>
-		<Item English_Text = "Amount of text to save for description" ID = "2044">Tekstmængde som gemmes til beskrivelse</Item>
+		<Item English_Text = "Amount of text to save for description" ID = "2044">TekstmÃ¦ngde som gemmes til beskrivelse</Item>
 		<Item English_Text = "On copy play the sound" ID = "2045">Afspil lyd under kopiering</Item>
 		<Item English_Text = "Play" ID = "2034">Spil</Item>
-		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">Indsæt klip i aktivt vindue efter valg</Item>
-		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">Maks klipstørrelse i bytes</Item>
-		<Item English_Text = "(Leave blank for no limit)" ID = "2047">(Tomt = ingen grænse)</Item>
+		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">IndsÃ¦t klip i aktivt vindue efter valg</Item>
+		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">Maks klipstÃ¸rrelse i bytes</Item>
+		<Item English_Text = "(Leave blank for no limit)" ID = "2047">(Tomt = ingen grÃ¦nse)</Item>
 		<Item English_Text = "Set Database Path" ID = "1034">Angiv database-sti</Item>
 		<Item English_Text = "Language" ID = "2069">Sprog</Item>
-		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">Ignorér klip som kommer x millisekunder (1000 ms = 1 sek) efter senaste klip</Item>
+		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">IgnorÃ©r klip som kommer x millisekunder (1000 ms = 1 sek) efter senaste klip</Item>
 		<Item English_Text = "About Language" ID = "2073">Om sprog</Item>
 		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Ditto er altid tilknyttet klippebordet</Item>
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Generelt</Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
-		<Item English_Text = "&Add" ID = "1015">&Tilføj</Item>
+		<Item English_Text = "&Add" ID = "1015">&TilfÃ¸j</Item>
 		<Item English_Text = "&Delete" ID = "1016">&Fjern</Item>
-		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">Understøttede typer</Item>
+		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">UnderstÃ¸ttede typer</Item>
 	</Ditto_Options_Supported_Types>
 	<Ditto_Options_Shortcuts>
-		<Item English_Text = "Activate Ditto" ID = "2048">Aktivér Ditto</Item>
+		<Item English_Text = "Activate Ditto" ID = "2048">AktivÃ©r Ditto</Item>
 		<Item English_Text = "Win" ID = "2035">Win</Item>
-		<Item English_Text = "Named Copy" ID = "2049">Indsæt ren tekst</Item>
+		<Item English_Text = "Named Copy" ID = "2049">IndsÃ¦t ren tekst</Item>
 		<Item English_Text = "Win" ID = "2036">Win</Item>
 		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">Globale hotkeys for de sidste 10 klip</Item>
-		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Send klip (ellers indsættes klip i Klippebordet)</Item>
+		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Send klip (ellers indsÃ¦ttes klip i Klippebordet)</Item>
 		<Item English_Text = "Position 1" ID = "2052">Position 1</Item>
 		<Item English_Text = "Position 2" ID = "2053">Position 2</Item>
 		<Item English_Text = "Position 3" ID = "2054">Position 3</Item>
@@ -151,37 +151,37 @@
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Quick_Paste>
 		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">Historie begynder i toppen af listen (resp. nederst)</Item>
-		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">Brug Ctrl-Numerisk tastatur for de første 10 kopierede hotkeys</Item>
-		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">Vis tekst for de 10 førsta hotkeys</Item>
+		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">Brug Ctrl-Numerisk tastatur for de fÃ¸rste 10 kopierede hotkeys</Item>
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">Vis tekst for de 10 fÃ¸rsta hotkeys</Item>
 		<Item English_Text = "Show leading whitespace" ID = "2021">Vis indledende blanktegn</Item>
-		<Item English_Text = "Text Lines per Row" ID = "2062">Tekstlinier per række</Item>
-		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">Aktivér transparens for hurtigindsættelse</Item>
-		<Item English_Text = "Show ikoner (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">Vis ikoner (for CF_DIB typer) (Kan sløve pc'en)</Item>
-		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">Vis RTF-tekst i listen (for RTF-typer) (kan sløve pc'en)</Item>
+		<Item English_Text = "Text Lines per Row" ID = "2062">Tekstlinier per rÃ¦kke</Item>
+		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">AktivÃ©r transparens for hurtigindsÃ¦ttelse</Item>
+		<Item English_Text = "Show ikoner (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">Vis ikoner (for CF_DIB typer) (Kan slÃ¸ve pc'en)</Item>
+		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">Vis RTF-tekst i listen (for RTF-typer) (kan slÃ¸ve pc'en)</Item>
 		<Item English_Text = "Find As You Type" ID = "2036">Find mens du skriver</Item>
-		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">Gør hele vinduet synligt</Item>
+		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">GÃ¸r hele vinduet synligt</Item>
 		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">Vis klip som er i grupper i hovedlisten</Item>
 		<Item English_Text = "Font" ID = "1040">Font</Item>
 		<Item English_Text = "Default Font" ID = "2031">Standard font</Item>
 		<Item English_Text = "Popup Positioning" ID = "2063">Popup-position</Item>
 		<Item English_Text = "At Caret" ID = "2015">Ved tekst-cursoren</Item>
 		<Item English_Text = "At Cursor" ID = "2016">Ved cursoren</Item>
-		<Item English_Text = "At Previous Position" ID = "2017">Ved forgående position</Item>
+		<Item English_Text = "At Previous Position" ID = "2017">Ved forgÃ¥ende position</Item>
 		<Item English_Text = "List Item Prefix Legend" ID = "2064">Vis ved klip-prefiks</Item>
 		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">* = Auto-slet ikke\n s = genvej findes\n G = Klip er en gruppe\n ! = Klip  findes i en gruppe</Item>
-		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Hurtigindsættelse</Item>
+		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">HurtigindsÃ¦ttelse</Item>
 		
 		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Prompt when deleting clips" ID = "2039">Spørg når klip slettes</Item>
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">SpÃ¸rg nÃ¥r klip slettes</Item>
 	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>
-		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Når du modtager et sendt klip fra en IP-adresse eller pc som er på listen, vil det blive sat ind i Klippebordet. Ellers vil det blive gemt til senere brug</Item>
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">NÃ¥r du modtager et sendt klip fra en IP-adresse eller pc som er pÃ¥ listen, vil det blive sat ind i Klippebordet. Ellers vil det blive gemt til senere brug</Item>
 		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP/Computernavn adskilt med komma</Item>
-		<Item English_Text = "Disable Recieving Clips" ID = "2026">Deaktivér modtagelse af klip</Item>
-		<Item English_Text = "Network Password" ID = "2054">Netværkskode</Item>
-		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">Hvis du modtager klip fra andre pc'er hvor koden ikke matcher så indtast ekstra netværkskoder, adskilt med komma</Item>
+		<Item English_Text = "Disable Recieving Clips" ID = "2026">DeaktivÃ©r modtagelse af klip</Item>
+		<Item English_Text = "Network Password" ID = "2054">NetvÃ¦rkskode</Item>
+		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">Hvis du modtager klip fra andre pc'er hvor koden ikke matcher sÃ¥ indtast ekstra netvÃ¦rkskoder, adskilt med komma</Item>
 		<Item English_Text = "Receive Passwords" ID = "2056">Modtag koder</Item>
-		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Hvis Send Alle Klip er valgt så vil alle klip fra denne pc blive sendt til andre pc'er. Hvis det ikke vælges så vil klip kun sendes via højreklik-menuen til en given pc</Item>
+		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Hvis Send Alle Klip er valgt sÃ¥ vil alle klip fra denne pc blive sendt til andre pc'er. Hvis det ikke vÃ¦lges sÃ¥ vil klip kun sendes via hÃ¸jreklik-menuen til en given pc</Item>
 		<Item English_Text = "Log Send Receive Commands" ID = "1042">Log Send/Modtag kommandoer'</Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Venner</Item>
 	</Ditto_Options_Friends>
@@ -192,18 +192,18 @@
 		<Item English_Text = "Friend Details" ID = "-1">Detaljer for venner</Item>
 	</Ditto_Options_Friends_Detail>
 	<Ditto_Options_Stats>
-		<Item English_Text = "Odometer" ID = "2052">Tæller</Item>
-		<Item English_Text = "Trip Odometer" ID = "2053">Triptæller</Item>
+		<Item English_Text = "Odometer" ID = "2052">TÃ¦ller</Item>
+		<Item English_Text = "Trip Odometer" ID = "2053">TriptÃ¦ller</Item>
 		<Item English_Text = "Copies" ID = "2054">Klip</Item>
-		<Item English_Text = "Pastes" ID = "2055">Indsættelser</Item>
+		<Item English_Text = "Pastes" ID = "2055">IndsÃ¦ttelser</Item>
 		<Item English_Text = "Copies" ID = "2056">Klip</Item>
-		<Item English_Text = "Pastes" ID = "2057">Indsættelser</Item>
+		<Item English_Text = "Pastes" ID = "2057">IndsÃ¦ttelser</Item>
 		<Item English_Text = "Reset" ID = "1006">Nulstil</Item>
 		<Item English_Text = "Saved Copies" ID = "2058">Gemte klip</Item>
 		<Item English_Text = "Saved Copy Data" ID = "2059">Gemte klipdata</Item>
 		<Item English_Text = "Remove All" ID = "1013">Fjern alle</Item>
 		<Item English_Text = "Last Started" ID = "2060">Sidst startet</Item>
-		<Item English_Text = "Database Size" ID = "2061">Database-størrelse</Item>
+		<Item English_Text = "Database Size" ID = "2061">Database-stÃ¸rrelse</Item>
 		<Item English_Text = "Clips Sent" ID = "2066">Sendte klip</Item>
 		<Item English_Text = "Clips received" ID = "2067">Modtagne klip</Item>
 		<Item English_Text = "Since Last Start" ID = "2068">Efter seneste start</Item>
@@ -212,12 +212,12 @@
 	<Ditto_Options_Supported_Types_Add>
 		<Item English_Text = "Main Types" ID = "2052">Hovedtyper</Item>
 		<Item English_Text = "Custom Type" ID = "2053">Brugerdefineret type</Item>
-		<Item English_Text = "Add" ID = "1020">Tilføj</Item>
+		<Item English_Text = "Add" ID = "1020">TilfÃ¸j</Item>
 		<Item English_Text = "Currently on the Clipboard" ID = "2054">Nu i Klippebordet</Item>
-		<Item English_Text = "Add" ID = "1019">Tilføj</Item>
-		<Item English_Text = "Add" ID = "1021">Tilføj</Item>
+		<Item English_Text = "Add" ID = "1019">TilfÃ¸j</Item>
+		<Item English_Text = "Add" ID = "1021">TilfÃ¸j</Item>
 		<Item English_Text = "Cancel" ID = "2">Afbryd</Item>
-		<Item English_Text = "Add Supported Type" ID = "-1">Tilføj understøttede type</Item>
+		<Item English_Text = "Add Supported Type" ID = "-1">TilfÃ¸j understÃ¸ttede type</Item>
 	</Ditto_Options_Supported_Types_Add>
 	<Ditto_Move_To_Groups>
 		<Item English_Text = "New Group" ID = "1040">Ny gruppe</Item>
@@ -227,29 +227,29 @@
 	</Ditto_Move_To_Groups>
 	<Ditto_String_Table>
 		<Item English_Text = "General" ID = "GeneralTitle">Generelt</Item>
-		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">Understøttede typer</Item>
+		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">UnderstÃ¸ttede typer</Item>
 		<Item English_Text = "Stats" ID = "StatsTitle">Statistik</Item>
 		<Item English_Text = "Friends" ID = "FriendsTitle">Venner</Item>
-		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">Hurtigindsættelse</Item>
+		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">HurtigindsÃ¦ttelse</Item>
 		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">Tastaturgenveje</Item>
 		<Item English_Text = "About" ID = "AboutTitle">Om</Item>
-		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">Fejl ved åbning af databasen</Item>
-		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">Kan ikke starte DAO/Jet-databasen. \nVælg JA for at hente DAO fra http://ditto-cp.sourceforge.net/dao_setup.exe\n\nGenstart Ditto efter installation af DAO</Item>
+		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">Fejl ved Ã¥bning af databasen</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">Kan ikke starte DAO/Jet-databasen. \nVÃ¦lg JA for at hente DAO fra http://ditto-cp.sourceforge.net/dao_setup.exe\n\nGenstart Ditto efter installation af DAO</Item>
 		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format">Database-format ikke genkendt</Item>
-		<Item English_Text = "the file will be renamed" ID = "File_Renamed">Filen vil blive omdøbt</Item>
+		<Item English_Text = "the file will be renamed" ID = "File_Renamed">Filen vil blive omdÃ¸bt</Item>
 		<Item English_Text = "and a new database will be created" ID = "New_Database">og en ny database vil blive oprettet</Item>
-		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">Der er en opdatering til Ditto. \nGå til: ditto-cp.sourceforge.net for detaljer\n\nInstalleret version</Item>
+		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">Der er en opdatering til Ditto. \nGÃ¥ til: ditto-cp.sourceforge.net for detaljer\n\nInstalleret version</Item>
 		<Item English_Text = "Update Version" ID = "Update_Version">Opdaterings-version</Item>
 		<Item English_Text = "Download updated version?" ID = "Download_Update">Download opdateret version?</Item>		
 		<Item English_Text = "No updates available" ID = "No_Updates">Der findes ingen opdatering</Item>			
-		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Dette vil fjerne alle klip!\n\nFortsæt?</Item>
-		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Deaktivér Ditto</Item>
-		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Aktivér Ditto</Item>
+		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Dette vil fjerne alle klip!\n\nFortsÃ¦t?</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">DeaktivÃ©r Ditto</Item>
+		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">AktivÃ©r Ditto</Item>
 		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Install">DAO/Jet-databasen kan ikke startes. DAO vil nu blive installeret.\n\nGenstart Ditto efter installation af DAO</Item>
-		<Item English_Text = "NO TARGET" ID = "No_Target">INTET MÅL</Item>
+		<Item English_Text = "NO TARGET" ID = "No_Target">INTET MÃ…L</Item>
 		
 		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Prompt when deleting clips" ID = "2039">Spørg ved sletning af klip</Item>
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">SpÃ¸rg ved sletning af klip</Item>
 		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">Fjern valgte klip?</Item>
 		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">Fejl ved import af eksporterede klip</Item>
 		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing">Fejl ved analyse af eksporterede klip</Item>
@@ -257,40 +257,40 @@
 		<Item English_Text = "Successfully imported" ID = "Import_Successfully">Klippet blev importeret</Item>
 		<Item English_Text = "clip" ID = "Clip">Klip</Item>
 		<Item English_Text = "clips" ID = "Clips">Klip</Item>
-		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">Opdatér beskrivelse af klippet når der gemmes?</Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">OpdatÃ©r beskrivelse af klippet nÃ¥r der gemmes?</Item>
 		<Item English_Text = "New Clip" ID = "New_Clip">Nyt klip</Item>
 		<Item English_Text = "Save" ID = "Save">Gem</Item>
 		<Item English_Text = "Save All" ID = "Save_All">Gem alle</Item>
-		<Item English_Text = "Close Current Tab" ID = "Close">Luk nuværende Tab</Item>
-		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable">Dette klip kan ikke redigeres. Et klipp måste være et af disse klip-typer</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">Luk nuvÃ¦rende Tab</Item>
+		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable">Dette klip kan ikke redigeres. Et klipp mÃ¥ste vÃ¦re et af disse klip-typer</Item>
 		<Item English_Text = "to be editable" ID = "Editable">for at kunne redigeres</Item>
-		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">Ønsker du at gemme ændringer?</Item>
-		<Item English_Text = "Error saving clip" ID = "ErrorSaving">Fejl når klip gemmes</Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">Ã˜nsker du at gemme Ã¦ndringer?</Item>
+		<Item English_Text = "Error saving clip" ID = "ErrorSaving">Fejl nÃ¥r klip gemmes</Item>
 		<Item English_Text = "New" ID = "New">Nyt</Item>
-		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">Gem, luk og læg på Klippebordet</Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">Gem, luk og lÃ¦g pÃ¥ Klippebordet</Item>
 		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">Rediger Ditto</Item>
-		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title">Ditto - indsættelse med navn</Item>
-		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">Fejl ved indlæsning af data</Item>
-		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2">Fejl - klip kan ikke findes under hurtigindsættelse</Item>
-		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">Undtagelse når klippet skal findes</Item>
+		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title">Ditto - indsÃ¦ttelse med navn</Item>
+		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">Fejl ved indlÃ¦sning af data</Item>
+		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2">Fejl - klip kan ikke findes under hurtigindsÃ¦ttelse</Item>
+		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">Undtagelse nÃ¥r klippet skal findes</Item>
 		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title">Ditto - klip med navn</Item>
-		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">Fejl når klip med navn skal gemmes i databasen</Item>
-		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">Undtagelse når klip med navn gemmes</Item>
+		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">Fejl nÃ¥r klip med navn skal gemmes i databasen</Item>
+		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">Undtagelse nÃ¥r klip med navn gemmes</Item>
 		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">Ditto modtog ikke et klip</Item> 
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">OK</Item>
-		<Item English_Text = "Cancel" ID = "2">Annullér</Item>
+		<Item English_Text = "Cancel" ID = "2">AnnullÃ©r</Item>
 		<Item English_Text = "Apply" ID = "12321">Anvend</Item>
 	</Ditto_Options_Sheet>
 	<Ditto_Tray_Icon_Menu>
 		<Item English_Text = "Show Quick Paste" ID = "32773">Vis Klippebordet</Item>
 		<Item English_Text = "Options" ID = "32771">Indstillinger</Item>
-		<Item English_Text = "Help" ID = "32843">Hjælp</Item>
+		<Item English_Text = "Help" ID = "32843">HjÃ¦lp</Item>
 		<Item English_Text = "Exit" ID = "32772">Afslut</Item>
 
 		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Import" ID = "32854">Importér</Item>
+		<Item English_Text = "Import" ID = "32854">ImportÃ©r</Item>
 		<Item English_Text = "New Clip" ID = "32868">Nyt klip</Item>
 		
 	</Ditto_Tray_Icon_Menu>

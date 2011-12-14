@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "1.0" Author = "Pavel Maryanov" Notes = "acid@jack.kiev.ua">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Группы</Item>
