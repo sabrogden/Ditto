@@ -320,6 +320,8 @@
 		<Item English_Text = "Import" ID = "32854"></Item>
 		<Item English_Text = "New Clip" ID = "32868"></Item>
 		
+		//Added 12/10/11
+		<Item English_Text = "Global Hot Keys" ID = "32872"></Item>
 	</Ditto_Tray_Icon_Menu>
 
 	//Added in 9-11-09
@@ -351,4 +353,14 @@
 		<Item English_Text = "Win" ID = "2102"></Item>
 		<Item English_Text = "Win" ID = "2106"></Item>
 	</Ditto_Options_CopyBuffers>
+	<Ditto_GlobalHotKeys>
+		<Item English_Text = "Global Hot Keys" ID = "-1"></Item>
+		<Item English_Text = "Close" ID = "2"></Item>
+		<Item English_Text = "(Clip) " ID = "(Clip)"></Item>
+		<Item English_Text = "Error" ID = "Error"></Item>
+		<Item English_Text = "Yes" ID = "Yes"></Item>
+		<Item English_Text = "Description" ID = "Description"></Item>
+		<Item English_Text = "HotKey" ID = "HotKey"></Item>
+		<Item English_Text = "Registered" ID = "Registered"></Item>
+	</Ditto_GlobalHotKeys>
 </Ditto_Language_File>

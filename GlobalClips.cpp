@@ -39,6 +39,8 @@ BOOL GlobalClips::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
+	theApp.m_Language.UpdateGlobalHotKeys(this);
+
 	m_Resize.SetParent(m_hWnd);
 	m_Resize.AddControl(IDC_LIST2, DR_SizeHeight | DR_SizeWidth);
 	m_Resize.AddControl(IDCANCEL, DR_MoveTop | DR_MoveLeft);
@@ -77,7 +79,7 @@ void GlobalClips::LoadItems()
 
 		if(pHotKey->m_clipId > 0)
 		{
-			strItem.Insert(0, _T("(Clip) "));
+			strItem.Insert(0, theApp.m_Language.GetGlobalHotKeyString("(Clip)", "(Clip) "));
 		}
 
 		lvi.iSubItem = 0;
@@ -87,10 +89,10 @@ void GlobalClips::LoadItems()
 		strItem = pHotKey->GetHotKeyDisplay();
 		m_List.SetItemText(row, 1, strItem);
 
-		strItem = _T("Error");
+		strItem = theApp.m_Language.GetGlobalHotKeyString("Error", "Error");
 		if(pHotKey->IsRegistered())
 		{
-			strItem = _T("Yes");
+			strItem = theApp.m_Language.GetGlobalHotKeyString("Yes", "Yes");
 		}
 
 		m_List.SetItemText(row, 2, strItem);
@@ -105,9 +107,9 @@ void GlobalClips::InitListCtrlCols()
 {
 	m_List.SetExtendedStyle(LVS_EX_FULLROWSELECT);
 	
-	m_List.InsertColumn(0, theApp.m_Language.GetString("GlobalKeyDesc", "Description"), LVCFMT_LEFT, 200);
-	m_List.InsertColumn(1, theApp.m_Language.GetString("GlobalKeyHotKey", "Hot Key"), LVCFMT_LEFT, 100);
-	m_List.InsertColumn(2, theApp.m_Language.GetString("GlobalKeyRegistered", "Registered"), LVCFMT_LEFT, 100);
+	m_List.InsertColumn(0, theApp.m_Language.GetGlobalHotKeyString("Description", "Description"), LVCFMT_LEFT, 200);
+	m_List.InsertColumn(1, theApp.m_Language.GetGlobalHotKeyString("HotKey", "Hot Key"), LVCFMT_LEFT, 100);
+	m_List.InsertColumn(2, theApp.m_Language.GetGlobalHotKeyString("Registered", "Registered"), LVCFMT_LEFT, 100);
 }
 
 void GlobalClips::SetNotifyWnd(HWND hWnd)

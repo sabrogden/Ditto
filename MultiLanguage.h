@@ -55,6 +55,9 @@ public:
 	bool UpdateMoveToGroups(CWnd *pParent);
 	bool UpdateOptionsSheet(CWnd *pParent);
 	bool UpdateOptionCopyBuffers(CWnd *pParent);
+	bool UpdateGlobalHotKeys(CWnd *pParent);
+
+	CString GetGlobalHotKeyString(CString csID, CString csDefault);
 
 	CString GetString(CString csID, CString csDefault);
 
@@ -83,6 +86,7 @@ protected:
 	LANGUAGE_ARRAY m_MoveToGroups;
 	LANGUAGE_ARRAY m_OptionsSheet;
 	LANGUAGE_ARRAY m_OptionsCopyBuffers;
+	LANGUAGE_ARRAY m_GlobalHotKeys;
 
 	LANGUAGE_MAP	m_StringMap;
 

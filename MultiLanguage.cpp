@@ -52,6 +52,7 @@ void CMultiLanguage::ClearArrays()
 	ClearArray(m_TrayIconRightClickMenu);
 	ClearArray(m_OptionsSheet);
 	ClearArray(m_OptionsCopyBuffers);
+	ClearArray(m_GlobalHotKeys);
 
 	ClearMap(m_StringMap);
 }
@@ -103,7 +104,23 @@ CString CMultiLanguage::GetString(CString csID, CString csDefault)
 		return csDefault;
 
 	return pItem->m_csForeignLang;
-	return "";
+}
+
+CString CMultiLanguage::GetGlobalHotKeyString(CString csID, CString csDefault)
+{
+	CLangItem *pItem;
+
+	INT_PTR size = m_GlobalHotKeys.GetSize();
+	for(int i = 0; i < size; i++)
+	{
+		CLangItem *plItem = m_GlobalHotKeys[i];
+		if(plItem->m_csID == csID)
+		{
+			return plItem->m_csForeignLang;
+		}
+	}
+
+	return csDefault;
 }
 
 bool CMultiLanguage::UpdateRightClickMenu(CMenu *pMenu)
@@ -174,6 +191,11 @@ bool CMultiLanguage::UpdateOptionsSheet(CWnd *pParent)
 bool CMultiLanguage::UpdateOptionCopyBuffers(CWnd *pParent)
 {
 	return UpdateWindowToLanguage(pParent, m_OptionsCopyBuffers);
+}
+
+bool CMultiLanguage::UpdateGlobalHotKeys(CWnd *pParent)
+{
+	return UpdateWindowToLanguage(pParent, m_GlobalHotKeys);
 }
 
 bool CMultiLanguage::UpdateMenuToLanguage(CMenu *pMenu, LANGUAGE_ARRAY &Array)
@@ -321,6 +343,7 @@ bool CMultiLanguage::LoadLanguageFile(CString csFile)
 	bRet = LoadSection(*ItemHeader, m_OptionsSheet, "Ditto_Options_Sheet");
 	bRet = LoadSection(*ItemHeader, m_TrayIconRightClickMenu, "Ditto_Tray_Icon_Menu");
 	bRet = LoadSection(*ItemHeader, m_OptionsCopyBuffers, "Ditto_Options_CopyBuffers");
+	bRet = LoadSection(*ItemHeader, m_GlobalHotKeys, "Ditto_GlobalHotKeys");
 	
 	bRet = LoadStringTableSection(*ItemHeader, m_StringMap, "Ditto_String_Table");
 
@@ -359,6 +382,10 @@ bool CMultiLanguage::LoadSection(TiXmlNode &doc, LANGUAGE_ARRAY &Array, CString 
 				plItem->m_csEnglishLang = ItemElement->Attribute("English_Text");
 				csID = ItemElement->Attribute("ID");
 				plItem->m_nID = ATOI(csID);
+				if(plItem->m_nID == 0)
+				{
+					plItem->m_csID = csID;
+				}
  				
 				LPCSTR Value = ForeignNode->Value();
 				CTextConvert::ConvertFromUTF8(Value, plItem->m_csForeignLang);
