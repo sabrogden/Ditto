@@ -115,6 +115,12 @@
 		<Item English_Text = "About Language" ID = "2073">Informații despre Traducere</Item>
 		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Asigură-te că Ditto e mereu conectat la cliplanșetă</Item>
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Generale</Item>
+		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090"></Item>
+		
+		//New item added 3/1/11
+		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098"></Item>
+		<Item English_Text = "Include" ID = "2097"></Item>
+		<Item English_Text = "Exclude" ID = "2096"></Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "&Add" ID = "1015">&Adaugă</Item>
@@ -179,6 +185,9 @@
 		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Prompt when deleting clips" ID = "2039">Ștergerea itemurilor trebuie confirmată</Item>
 		
+		//New strings added in 3.15.2 10-6-07
+		<Item English_Text = "Theme" ID = "2092"></Item>
+		<Item English_Text = "About Theme" ID = "2094"></Item>
 	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>
 		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Atunci cînd primiți un clip ce v-a fost trimis, dacă adresa IP sau numele calculatorului sînt în această listă, atunci clipul va fi pus în cliplanșetă.  În caz contrar va fi pus între clipurile salvate pentru o utilizare ulterioară.</Item>
@@ -190,6 +199,10 @@
 		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Dacă opțiunea "Trimite Toate Clipurile" e selectată, atunci toate clipurile de pe acest calculator vor fi trimise la celălalt calculator.  Dacă opțiunea nu e selectată atunci folosiți comanda din meniul contextual pentru a trimite un clip la alt calculator.</Item>
 		<Item English_Text = "Log Send Receive Commands" ID = "1042">Loghează comenzile de primire/trimitere (opțiune utilă numai pentru debugarea softului)</Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Prieteni</Item>
+		//Added in 9-11-09
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies"></Item>
+        	<Item English_Text = "IP/Name" ID = "IP_Name"></Item>
+        	<Item English_Text = "Descriptions" ID = "Descriptions"></Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015">Trimite toate copierile acestui prieten</Item>
@@ -283,6 +296,10 @@
 		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">Eroare la salvarea în baza de date a etichetei copierii</Item>
 		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">Excepție la salvarea etichetei copierii</Item>
 		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">Ditto nu a recepționat o etichetă a copierii</Item> 
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Add-Ins" ID = "Add_Ins"></Item> 
+		
+		<Item English_Text = "Copy Buffers" ID = "CopyBuffers"></Item>
 				
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
@@ -300,5 +317,47 @@
 		<Item English_Text = "Import" ID = "32854">Importă</Item>
 		<Item English_Text = "New Clip" ID = "32868">Clip Nou</Item>
 		
+		//Added 12/10/11
+		<Item English_Text = "Global Hot Keys" ID = "32872"></Item>
 	</Ditto_Tray_Icon_Menu>
+	//Added in 9-11-09
+	<Ditto_Options_CopyBuffers>
+		<Item English_Text = "Copy Buffer 1" ID = "2088"></Item>
+		<Item English_Text = "Copy" ID = "2079"></Item>
+		<Item English_Text = "Paste" ID = "2080"></Item>
+		<Item English_Text = "Cut" ID = "2081"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042"></Item>
+		<Item English_Text = "Win" ID = "2085"></Item>
+		<Item English_Text = "Win" ID = "2086"></Item>
+		<Item English_Text = "Win" ID = "2087"></Item>
+		
+		<Item English_Text = "Copy Buffer 2" ID = "2098"></Item>
+		<Item English_Text = "Copy" ID = "2093"></Item>
+		<Item English_Text = "Paste" ID = "2094"></Item>
+		<Item English_Text = "Cut" ID = "2097"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043"></Item>
+		<Item English_Text = "Win" ID = "2090"></Item>
+		<Item English_Text = "Win" ID = "2092"></Item>
+		<Item English_Text = "Win" ID = "2096"></Item>
+		
+		<Item English_Text = "Copy Buffer 3" ID = "2108"></Item>
+		<Item English_Text = "Copy" ID = "2103"></Item>
+		<Item English_Text = "Paste" ID = "2104"></Item>
+		<Item English_Text = "Cut" ID = "2107"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044"></Item>
+		<Item English_Text = "Win" ID = "2100"></Item>
+		<Item English_Text = "Win" ID = "2102"></Item>
+		<Item English_Text = "Win" ID = "2106"></Item>
+	</Ditto_Options_CopyBuffers>
+	
+	<Ditto_GlobalHotKeys>
+		<Item English_Text = "Global Hot Keys" ID = "-1"></Item>
+		<Item English_Text = "Close" ID = "2"></Item>
+		<Item English_Text = "(Clip) " ID = "(Clip)"></Item>
+		<Item English_Text = "Error" ID = "Error"></Item>
+		<Item English_Text = "Yes" ID = "Yes"></Item>
+		<Item English_Text = "Description" ID = "Description"></Item>
+		<Item English_Text = "HotKey" ID = "HotKey"></Item>
+		<Item English_Text = "Registered" ID = "Registered"></Item>
+	</Ditto_GlobalHotKeys>
 </Ditto_Language_File>

@@ -203,8 +203,8 @@
 		
 		//Added in 9-11-09
 		<Item English_Text = "Send All Copies" ID = "Send_All_Copies"></Item>
-        <Item English_Text = "IP/Name" ID = "IP_Name"></Item>
-        <Item English_Text = "Descriptions" ID = "Descriptions"></Item>
+        	<Item English_Text = "IP/Name" ID = "IP_Name"></Item>
+        	<Item English_Text = "Descriptions" ID = "Descriptions"></Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015"></Item>
@@ -353,6 +353,7 @@
 		<Item English_Text = "Win" ID = "2102"></Item>
 		<Item English_Text = "Win" ID = "2106"></Item>
 	</Ditto_Options_CopyBuffers>
+	
 	<Ditto_GlobalHotKeys>
 		<Item English_Text = "Global Hot Keys" ID = "-1"></Item>
 		<Item English_Text = "Close" ID = "2"></Item>

@@ -67,6 +67,13 @@
 		<Item English_Text = "Help" ID = "32842">Help</Item>
 		<Item English_Text = "Disconnect from Clipboard" ID = "32775">Disconetti dalla Clpiboard</Item>
 		<Item English_Text = "Exit Program" ID = "32806">Esci da Ditto</Item>
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt to Delete Clip" ID = "32852"></Item>	
+		<Item English_Text = "Import Clip(s)" ID = "32855"></Item>
+		<Item English_Text = "Export Clip(s)" ID = "32853"></Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856"></Item>	
+		<Item English_Text = "Edit Clip" ID = "32860"></Item>
+		<Item English_Text = "New Clip" ID = "32867"></Item>	
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039">Hot Key</Item>
@@ -107,6 +114,11 @@
 		<Item English_Text = "About Language" ID = "2073">About Linguaggio </Item>
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Generale</Item>
 		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Assicura che ditto sia sempre connesso alla clpboard</Item>
+
+		//New item added 3/1/11
+		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098"></Item>
+		<Item English_Text = "Include" ID = "2097"></Item>
+		<Item English_Text = "Exclude" ID = "2096"></Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "&Add" ID = "1015">Aggiungi</Item>
@@ -142,6 +154,8 @@
 		<Item English_Text = "Win" ID = "2041">Win</Item>
 		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Clicca Il Bottone "Win" Per Includere La Windows Keyboard Key Nelle Tue Hot Key</Item>
 		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">Scorciatoie Tastiera</Item>
+		//New item added in 3.15.1 8/18/07
+		<Item English_Text = "Send custom strokes Per Application" ID = "2091"></Item>
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Quick_Paste>
 		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">La History Parte Dall'inizio Lista</Item>
@@ -164,6 +178,12 @@
 		<Item English_Text = "List Item Prefix Legend" ID = "2064">Lista dei Prefissi</Item>
 		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065"></Item>
 		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Incolla Veloce</Item>
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039"></Item>
+		
+		//New strings added in 3.15.2 10-6-07
+		<Item English_Text = "Theme" ID = "2092"></Item>
+		<Item English_Text = "About Theme" ID = "2094"></Item>
 	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>
 		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Se se tu ricevi una copia inviata da un IP o Computer che sono nella lista allora metti nella clipboard senno mettilo nelle Clip salvate per usarle in un secondo momento</Item>
@@ -175,6 +195,10 @@
 		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Se "invia tutte le Copie" è Selezionato allora tutte le copie di questo computer verranno inviate ad un altro computer. invece se non è selezionata questa opzione puoi usare il tasto destro per inviare ad un computer specifico </Item>
 		<Item English_Text = "Log Send Receive Commands" ID = "1042">Log Comandi Inviati e Ricevuti</Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Amici</Item>
+		//Added in 9-11-09
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies"></Item>
+        	<Item English_Text = "IP/Name" ID = "IP_Name"></Item>
+        	<Item English_Text = "Descriptions" ID = "Descriptions"></Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015">Invia tutte Le Copie A Questi Amici</Item>
@@ -239,6 +263,40 @@
 		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Connetti Alla Clipboard</Item>			
 		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">Non è stato possibile inizializare il DAO/Jet db engine</Item>
 		<Item English_Text = "NO TARGET" ID = "No_Target">NO TARGET</Item>		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039"></Item>
+		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip"></Item>
+		<Item English_Text = "Error importing exported clip" ID = "Error_Importing"></Item>
+		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing"></Item>
+		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good"></Item>
+		<Item English_Text = "Successfully imported" ID = "Import_Successfully"></Item>
+		<Item English_Text = "clip" ID = "Clip"></Item>
+		<Item English_Text = "clips" ID = "Clips"></Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc"></Item>
+		<Item English_Text = "New Clip" ID = "New_Clip"></Item>
+		<Item English_Text = "Save" ID = "Save"></Item>
+		<Item English_Text = "Save All" ID = "Save_All"></Item>
+		<Item English_Text = "Close Current Tab" ID = "Close"></Item>
+		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable"></Item>
+		<Item English_Text = "to be editable" ID = "Editable"></Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges"></Item>
+		<Item English_Text = "Error saving clip" ID = "ErrorSaving"></Item>
+		<Item English_Text = "New" ID = "New"></Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close"></Item>
+		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit"></Item>
+		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title"></Item>
+		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1"></Item>
+		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2"></Item>
+		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3"></Item>
+		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title"></Item>
+		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1"></Item>
+		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2"></Item>
+		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3"></Item> 
+		
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Add-Ins" ID = "Add_Ins"></Item> 
+		
+		<Item English_Text = "Copy Buffers" ID = "CopyBuffers"></Item>
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">OK</Item>
@@ -250,5 +308,51 @@
 		<Item English_Text = "Options" ID = "32771">Opzioni</Item>
 		<Item English_Text = "Help" ID = "32843">Help</Item>
 		<Item English_Text = "Exit" ID = "32772">Esci</Item>	
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Import" ID = "32854"></Item>
+		<Item English_Text = "New Clip" ID = "32868"></Item>
+		
+		//Added 12/10/11
+		<Item English_Text = "Global Hot Keys" ID = "32872"></Item>
 	</Ditto_Tray_Icon_Menu>
+	//Added in 9-11-09
+	<Ditto_Options_CopyBuffers>
+		<Item English_Text = "Copy Buffer 1" ID = "2088"></Item>
+		<Item English_Text = "Copy" ID = "2079"></Item>
+		<Item English_Text = "Paste" ID = "2080"></Item>
+		<Item English_Text = "Cut" ID = "2081"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042"></Item>
+		<Item English_Text = "Win" ID = "2085"></Item>
+		<Item English_Text = "Win" ID = "2086"></Item>
+		<Item English_Text = "Win" ID = "2087"></Item>
+		
+		<Item English_Text = "Copy Buffer 2" ID = "2098"></Item>
+		<Item English_Text = "Copy" ID = "2093"></Item>
+		<Item English_Text = "Paste" ID = "2094"></Item>
+		<Item English_Text = "Cut" ID = "2097"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043"></Item>
+		<Item English_Text = "Win" ID = "2090"></Item>
+		<Item English_Text = "Win" ID = "2092"></Item>
+		<Item English_Text = "Win" ID = "2096"></Item>
+		
+		<Item English_Text = "Copy Buffer 3" ID = "2108"></Item>
+		<Item English_Text = "Copy" ID = "2103"></Item>
+		<Item English_Text = "Paste" ID = "2104"></Item>
+		<Item English_Text = "Cut" ID = "2107"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044"></Item>
+		<Item English_Text = "Win" ID = "2100"></Item>
+		<Item English_Text = "Win" ID = "2102"></Item>
+		<Item English_Text = "Win" ID = "2106"></Item>
+	</Ditto_Options_CopyBuffers>
+	
+	<Ditto_GlobalHotKeys>
+		<Item English_Text = "Global Hot Keys" ID = "-1"></Item>
+		<Item English_Text = "Close" ID = "2"></Item>
+		<Item English_Text = "(Clip) " ID = "(Clip)"></Item>
+		<Item English_Text = "Error" ID = "Error"></Item>
+		<Item English_Text = "Yes" ID = "Yes"></Item>
+		<Item English_Text = "Description" ID = "Description"></Item>
+		<Item English_Text = "HotKey" ID = "HotKey"></Item>
+		<Item English_Text = "Registered" ID = "Registered"></Item>
+	</Ditto_GlobalHotKeys>
 </Ditto_Language_File>

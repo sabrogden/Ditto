@@ -116,6 +116,10 @@
 		<Item English_Text = "About Language" ID = "2073">A propos de la traduction</Item>
 		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">S'assurer que Dito est toujours connecté au presse-papier</Item>
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Général</Item>
+		//New item added 3/1/11
+		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098"></Item>
+		<Item English_Text = "Include" ID = "2097"></Item>
+		<Item English_Text = "Exclude" ID = "2096"></Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "&Add" ID = "1015">Ajouter</Item>
@@ -151,6 +155,8 @@
 		<Item English_Text = "Win" ID = "2041">Win</Item>
 		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Cochez le bouton 'Win' pour utiliser la touche Windows dans vos raccourcis</Item>
 		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">Raccourcis clavier</Item>
+		//New item added in 3.15.1 8/18/07
+		<Item English_Text = "Send custom strokes Per Application" ID = "2091"></Item>
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Quick_Paste>
 		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">L'historique débute en haut de la liste</Item>
@@ -175,8 +181,11 @@
 		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Collage rapide</Item>
 		
 		//New strings added in 3.6 6-9-06
-<Item English_Text = "Prompt when deleting clips" ID = "2039">Confirmer les suppressions de copies</Item>
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Confirmer les suppressions de copies</Item>
 				
+		//New strings added in 3.15.2 10-6-07
+		<Item English_Text = "Theme" ID = "2092"></Item>
+		<Item English_Text = "About Theme" ID = "2094"></Item>
 	</Ditto_Options_Quick_Paste>
 	<Ditto_Options_Friends>
 		<Item English_Text = "When you receive a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Quand vous recevez une copie, si l'adresse IP ou le nom de l'ordinateur est dans la liste, celle-ci sera mise dans le presse-papier.  Sinon, elle sera enregistrée pour utilisation ultérieure.</Item>
@@ -188,6 +197,10 @@
 		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Si 'Envoyer toutes les copies' est sélectionné, alors toutes les copies de votre ordinateur seront envoyées au contact concerné.  Si cette option n'est pas sélectionnée, il sera alors possible, à l'aide du menu de clic-droit, de l'envoyer à ce contact.</Item>
 		<Item English_Text = "Log Send Receive Commands" ID = "1042">Enregistrement dans un log des commandes d'envoi et de réception</Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Contacts</Item>
+		//Added in 9-11-09
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies"></Item>
+        	<Item English_Text = "IP/Name" ID = "IP_Name"></Item>
+        	<Item English_Text = "Descriptions" ID = "Descriptions"></Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015">Envoyer toutes les copies à ce contact</Item>
@@ -283,6 +296,10 @@
 		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2"></Item>
 		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3"></Item> 
 		
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Add-Ins" ID = "Add_Ins"></Item> 
+		
+		<Item English_Text = "Copy Buffers" ID = "CopyBuffers"></Item>
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">OK</Item>
@@ -299,5 +316,47 @@
 		<Item English_Text = "Import" ID = "32854">Importer</Item>
 		<Item English_Text = "New Clip" ID = "32868">Nouvelle copie</Item>
 		
+		//Added 12/10/11
+		<Item English_Text = "Global Hot Keys" ID = "32872"></Item>
 	</Ditto_Tray_Icon_Menu>
+	//Added in 9-11-09
+	<Ditto_Options_CopyBuffers>
+		<Item English_Text = "Copy Buffer 1" ID = "2088"></Item>
+		<Item English_Text = "Copy" ID = "2079"></Item>
+		<Item English_Text = "Paste" ID = "2080"></Item>
+		<Item English_Text = "Cut" ID = "2081"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042"></Item>
+		<Item English_Text = "Win" ID = "2085"></Item>
+		<Item English_Text = "Win" ID = "2086"></Item>
+		<Item English_Text = "Win" ID = "2087"></Item>
+		
+		<Item English_Text = "Copy Buffer 2" ID = "2098"></Item>
+		<Item English_Text = "Copy" ID = "2093"></Item>
+		<Item English_Text = "Paste" ID = "2094"></Item>
+		<Item English_Text = "Cut" ID = "2097"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043"></Item>
+		<Item English_Text = "Win" ID = "2090"></Item>
+		<Item English_Text = "Win" ID = "2092"></Item>
+		<Item English_Text = "Win" ID = "2096"></Item>
+		
+		<Item English_Text = "Copy Buffer 3" ID = "2108"></Item>
+		<Item English_Text = "Copy" ID = "2103"></Item>
+		<Item English_Text = "Paste" ID = "2104"></Item>
+		<Item English_Text = "Cut" ID = "2107"></Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044"></Item>
+		<Item English_Text = "Win" ID = "2100"></Item>
+		<Item English_Text = "Win" ID = "2102"></Item>
+		<Item English_Text = "Win" ID = "2106"></Item>
+	</Ditto_Options_CopyBuffers>
+	
+	<Ditto_GlobalHotKeys>
+		<Item English_Text = "Global Hot Keys" ID = "-1"></Item>
+		<Item English_Text = "Close" ID = "2"></Item>
+		<Item English_Text = "(Clip) " ID = "(Clip)"></Item>
+		<Item English_Text = "Error" ID = "Error"></Item>
+		<Item English_Text = "Yes" ID = "Yes"></Item>
+		<Item English_Text = "Description" ID = "Description"></Item>
+		<Item English_Text = "HotKey" ID = "HotKey"></Item>
+		<Item English_Text = "Registered" ID = "Registered"></Item>
+	</Ditto_GlobalHotKeys>
 </Ditto_Language_File>

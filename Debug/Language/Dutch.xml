@@ -119,6 +119,10 @@
 		
 		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090"></Item>
 		
+		//New item added 3/1/11
+		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098"></Item>
+		<Item English_Text = "Include" ID = "2097"></Item>
+		<Item English_Text = "Exclude" ID = "2096"></Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>			
 		<Item English_Text = "&Add" ID = "1015">&Toevoegen</Item>		
@@ -155,7 +159,8 @@
 		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Vink de  Win-knop aan om de windowstoets te betrekken bij de sneltoetsen. </Item>		
 		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">Sneltoetsen</Item>	
 
-		<Item English_Text = "Named Paste" ID = "2062">Benoemd Plakken</Item>	
+		//New item added in 3.15.1 8/18/07
+		<Item English_Text = "Send custom strokes Per Application" ID = "2091"></Item>
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Quick_Paste>			
 		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">Historie begint bovenaan de lijst (vs. onderaan)</Item>		
@@ -182,6 +187,9 @@
 		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Prompt when deleting clips" ID = "2039">Waarschuwen bij wissen clips</Item>
 		
+		//New strings added in 3.15.2 10-6-07
+		<Item English_Text = "Theme" ID = "2092"></Item>
+		<Item English_Text = "About Theme" ID = "2094"></Item>
 	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>			
 		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Bij ontvangst van een IP of een computernaam uit deze lijst, wordt deze op het klembord gezet. In andere gevallen wordt de IP opgeslagen bij de bestaande clips, voor later gebruik.</Item>		
@@ -193,7 +201,10 @@
 		<Item English_Text =  "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Als ''Send all Copies'' geselecteerd is, zullen alle clips van deze computer worden verzonden naar de andere computer. Is dat commando niet geselecteerd, dan staat het alsnog in het rechtermuisklikmenu. </Item>	
 		<Item English_Text =  "Log Send Receive Commands" ID = "1042">Overzicht (log) van verzonden en ontvangen opdrachten </Item>	
 		<Item English_Text = "Receive Passwords" ID = "2056">Wachtwoorden ontvangen</Item>
-		<Item English_Text =  "Friends" ID = "-1" PropertyPage = "true"> Vrienden </Item>	
+		//Added in 9-11-09
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies"></Item>
+        	<Item English_Text = "IP/Name" ID = "IP_Name"></Item>
+        	<Item English_Text = "Descriptions" ID = "Descriptions"></Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>		
 		<Item English_Text =  "Send All Copies to this friend" ID = "1015">Alle clips verzenden</Item>	
@@ -296,6 +307,7 @@
 		//New strings added in 3.17 2-28-10
 		<Item English_Text = "Add-Ins" ID = "Add_Ins"></Item> 
 		
+		<Item English_Text = "Copy Buffers" ID = "CopyBuffers"></Item>
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>			
 		<Item English_Text = "OK" ID = "1">OK</Item>		
@@ -312,6 +324,8 @@
 		<Item English_Text = "Import" ID = "32854">Importeren</Item>
 		<Item English_Text = "New Clip" ID = "32868">Nieuwe Clip</Item>
 		
+		//Added 12/10/11
+		<Item English_Text = "Global Hot Keys" ID = "32872"></Item>
 	</Ditto_Tray_Icon_Menu>
 	
 		//Added in 9-11-09
@@ -344,4 +358,14 @@
 		<Item English_Text = "Win" ID = "2106"></Item>
 	</Ditto_Options_CopyBuffers>
 	
+	<Ditto_GlobalHotKeys>
+		<Item English_Text = "Global Hot Keys" ID = "-1"></Item>
+		<Item English_Text = "Close" ID = "2"></Item>
+		<Item English_Text = "(Clip) " ID = "(Clip)"></Item>
+		<Item English_Text = "Error" ID = "Error"></Item>
+		<Item English_Text = "Yes" ID = "Yes"></Item>
+		<Item English_Text = "Description" ID = "Description"></Item>
+		<Item English_Text = "HotKey" ID = "HotKey"></Item>
+		<Item English_Text = "Registered" ID = "Registered"></Item>
+	</Ditto_GlobalHotKeys>
 </Ditto_Language_File>
