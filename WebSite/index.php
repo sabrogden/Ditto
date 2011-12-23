@@ -63,6 +63,27 @@
             <a name="Change History"></a>
 			
 			<div class="post">
+                <h1 class="title">3.18.20.0 12-23-11</h1>
+                <div class="entry">
+                    <ul>
+						<li>64bit build
+						<li>Clip shortcut keys can be global (you don't need to open ditto for your clip shortcut keys to work).  New check box on the clip properties window.</li>
+						<li>New shortcut key window (right click on icon - Global hot keys) so you can see what clips are available globally and was ditto able to register the shortcut key.</li>
+						<li>Updated icon</li>
+						<li>Removed draw rich text option (was finding this didn't work with office 2010 rtf text)</li>
+						<li>Fixed crash when viewing images through F3</li>
+						<li>Portable setting is now based off of the file "portable" not a setting in the config file</li>
+						<li>Backup the db when running an update script</li>
+						<li>Fixed crash when automatically closing ditto's window</li>
+						<li>Fixed issue with displaying chinease language</li>
+                    </ul>
+              </div>
+              <div class="meta">
+				<p class="byline"><a href="changeHistory.php" class="more">Full Change History</a></p>
+			  </div>
+          </div>
+		  
+			<div class="post">
                 <h1 class="title">3.17.00.17 12-23-10</h1>
                 <div class="entry">
                     <ul>
