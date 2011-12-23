@@ -178,8 +178,9 @@ void CHotKey::CopyFromCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID)
 void CHotKey::CopyToCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID)
 {
 	long lModifiers = HIBYTE(m_Key);
+	long keys = LOBYTE(m_Key);
 
-	ctrl.SetHotKey(LOBYTE(m_Key), (WORD)lModifiers); 
+	ctrl.SetHotKey(keys, (WORD)lModifiers & ~HOTKEYF_EXT); 
 
 	if(lModifiers & HOTKEYF_EXT)
 	{
