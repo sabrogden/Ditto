@@ -655,6 +655,30 @@ void GetMonitorRect(int iMonitor, LPRECT lpDestRect)
 		lpDestRect->right = GetScreenWidth();
 		lpDestRect->bottom = GetScreenHeight();
 	}
+
+	//adjust the rect for the taskbar
+	APPBARDATA appBarData;
+	appBarData.cbSize=sizeof(appBarData);
+	if (SHAppBarMessage(ABM_GETTASKBARPOS, &appBarData))
+	{
+		switch(appBarData.uEdge)
+		{
+		case ABE_LEFT:
+			lpDestRect->left += appBarData.rc.right - appBarData.rc.left;
+			break;
+		case ABE_RIGHT:
+			lpDestRect->right -= appBarData.rc.right - appBarData.rc.left;
+			break;
+		case ABE_TOP:
+			lpDestRect->top += appBarData.rc.bottom - appBarData.rc.top;
+			break;
+		case ABE_BOTTOM:
+			lpDestRect->bottom -= appBarData.rc.bottom - appBarData.rc.top;
+			break;
+		}
+		return;
+	}
+
 }
 
 /*------------------------------------------------------------------*\
