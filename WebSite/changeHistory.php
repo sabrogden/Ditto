@@ -17,6 +17,21 @@
             <a name="Change History"></a>
 			
 			<div class="post">
+                <h1 class="title">3.18.24.0 1-3-12</h1>
+                <div class="entry">
+                    <ul>
+						<li>Fixed issue with pasting last 10 pastes through global shortcut keys</li>
+						<li>Fixed issue with chinese language files</li>
+						<li>Take the windows task bar into account when ensuring entire Ditto window is visible</li>
+						<li>Show correct shortcut key text in [Options - Keyboard Shortcuts] when Win is checked</li>
+                    </ul>
+              </div>
+              <div class="meta">
+				<p class="byline"><a href="changeHistory.php" class="more">Full Change History</a></p>
+			  </div>
+          </div>
+			
+			<div class="post">
                 <h1 class="title">3.18.20.0 12-23-11</h1>
                 <div class="entry">
                     <ul>

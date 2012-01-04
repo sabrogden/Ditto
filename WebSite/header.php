@@ -10,7 +10,7 @@
         <div id="wrapper">
             <div id="logo">
                 <h1><a href="index.php">Ditto</a></h1>
-                <h2><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.18.20.0/DittoSetup_3_18_20_0.exe/download"> &raquo;&nbsp;&nbsp;&nbsp;Clipboard Manager &raquo; 3.18.20.0</a></h2>
+                <h2><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.18.24.0/DittoSetup_3_18_24_0.exe/download"> &raquo;&nbsp;&nbsp;&nbsp;Clipboard Manager &raquo; 3.18.24.0</a></h2>
             </div>
             <div id="header">
                 <div id="menu">

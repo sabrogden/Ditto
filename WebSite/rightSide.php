@@ -9,12 +9,12 @@
     <body>
         
          <div id="sidebar">
-            <h2><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.18.20.0/DittoSetup_3_18_20_0.exe/download">Download</a></h2>
+            <h2><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.18.24.0/DittoSetup_3_18_24_0.exe/download">Download</a></h2>
             <ul>
-				<li><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.18.20.0/DittoSetup_64bit_3_18_20_0.exe/download">Download 64bit</a></li>
-                <li><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.18.20.0/DittoPortable_3_18_20_0.zip/download">Portable (zip file)</a></li>
-				<li><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.18.20.0/DittoPortable_64bit_3_18_20_0.zip/download">Portable 64bit (zip file)</a></li>
-                <li><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.18.20.0/DittoSource_3_18_20_0.zip/download">Source</a></li>
+				<li><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.18.24.0/DittoSetup_64bit_3_18_24_0.exe/download">Download 64bit</a></li>
+                <li><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.18.24.0/DittoPortable_3_18_24_0.zip/download">Portable (zip file)</a></li>
+				<li><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.18.24.0/DittoPortable_64bit_3_18_24_0.zip/download">Portable 64bit (zip file)</a></li>
+                <li><a href="https://sourceforge.net/projects/ditto-cp/files/Ditto/3.18.24.0/DittoSource_3_18_24_0.zip/download">Source</a></li>
                 <li><a href="https://sourceforge.net/project/screenshots.php?group_id=84084">Screenshot</a></li>
           </ul>
           			
