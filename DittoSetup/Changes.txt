@@ -1,3 +1,20 @@
+3.18.24.0 1-3-12
+- Fixed issue with pasting last 10 pastes through global shortcut keys
+- Fixed issue with chinese language files
+- Take the windows task bar into account when ensuring entire Ditto window is visible
+
+3.18.20.0 12-23-11
+- 64bit build
+- Clip shortcut keys can be global (you don't need to open ditto for your clip shortcut keys to work). New check box on the clip properties window.
+- New shortcut key window (right click on icon - Global hot keys) so you can see what clips are available globally and was ditto able to register the shortcut key.
+- Updated icon
+- Removed draw rich text option (was finding this didn't work with office 2010 rtf text)
+- Fixed crash when viewing images through F3
+- Portable setting is now based off of the file "portable" not a setting in the config file
+- Backup the db when running an update script
+- Fixed crash when automatically closing ditto's window
+- Fixed issue with displaying chinease language
+
 3.17.00.17 12-23-10
 - Removed named paste, named paste items can be searched by entering /q text
 - Added add-in to set/remove read only flag on clip containing cf_hdrop items or just text of file names
