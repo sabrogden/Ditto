@@ -2,6 +2,7 @@
 - Fixed issue with pasting last 10 pastes through global shortcut keys
 - Fixed issue with chinese language files
 - Take the windows task bar into account when ensuring entire Ditto window is visible
+- Show correct shortcut key text in [Options - Keyboard Shortcuts] when Win is checked
 
 3.18.20.0 12-23-11
 - 64bit build
