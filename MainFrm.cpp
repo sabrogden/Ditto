@@ -414,7 +414,14 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 {
     try
     {
-        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, bIsGroup FROM Main WHERE ((bIsGroup = 1 AND lParentID = -1) OR bIsGroup = 0) ORDER BY bIsGroup ASC, clipOrder DESC LIMIT 1 OFFSET %d"), nPos);
+		CString filter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR (Main.bIsGroup = 0 AND Main.lParentID = -1))";
+
+		if(g_Opt.m_bShowAllClipsInMainList)
+		{
+			filter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR Main.bIsGroup = 0)";
+		}
+
+        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, bIsGroup FROM Main WHERE %s ORDER BY bIsGroup ASC, clipOrder DESC LIMIT 1 OFFSET %d"), filter, nPos);
 
         if(q.eof() == false)
         {
