@@ -12,7 +12,7 @@ public:
 
 	CString ActiveWndName();
 	CString WndName(HWND hWnd);
-	bool TrackActiveWnd(HWND focus);
+	bool TrackActiveWnd(HWND focus, bool force);
 	bool ActivateTarget();
 	bool ReleaseFocus();
 	CPoint FocusCaret();

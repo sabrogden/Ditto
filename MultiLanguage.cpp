@@ -108,8 +108,6 @@ CString CMultiLanguage::GetString(CString csID, CString csDefault)
 
 CString CMultiLanguage::GetGlobalHotKeyString(CString csID, CString csDefault)
 {
-	CLangItem *pItem;
-
 	INT_PTR size = m_GlobalHotKeys.GetSize();
 	for(int i = 0; i < size; i++)
 	{

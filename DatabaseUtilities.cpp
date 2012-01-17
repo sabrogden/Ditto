@@ -629,7 +629,7 @@ BOOL RemoveOldEntries()
 
 		int toDeleteCount = db.execScalar(_T("SELECT COUNT(clipID) FROM MainDeletes"));
 
-		Log(StrF(_T("Before Deleting emptied out data, count: %d, Idle Seconds: %d"), toDeleteCount, IdleSeconds()));
+		Log(StrF(_T("Before Deleting emptied out data, count: %d, Idle Seconds: %f"), toDeleteCount, IdleSeconds()));
 
 		//Only delete 1 at a time, was finding that it was taking a long time to delete clips, locking the db and causing other queries
 		//to lock up
@@ -638,7 +638,7 @@ BOOL RemoveOldEntries()
 
 		while(q.eof() == false)
 		{
-			DWORD idleSeconds = IdleSeconds();
+			double idleSeconds = IdleSeconds();
 			if(idleSeconds > CGetSetOptions::GetIdleSecondsBeforeDelete())
 			{
 				//delete any data items sitting out there that the main table data was deleted

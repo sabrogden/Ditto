@@ -257,7 +257,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
             SetTimer(KEY_STATE_MODIFIERS, 50, NULL);
 
 			//Before we show our window find the current focused window for paste into
-			theApp.m_activeWnd.TrackActiveWnd(NULL);
+			theApp.m_activeWnd.TrackActiveWnd(NULL, true);
 
             m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
         }
@@ -535,7 +535,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 			{
 				if(m_TrayIcon.Visible())
 				{
-					theApp.m_activeWnd.TrackActiveWnd(NULL);
+					theApp.m_activeWnd.TrackActiveWnd(NULL, false);
 				}
 			}
 			break;
@@ -544,7 +544,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 			{
 				KillTimer(FOCUS_CHANGED_TIMER);
 	            //Log(StrF(_T("Focus Timer %d"), m_tempFocusWnd));
-	            theApp.m_activeWnd.TrackActiveWnd(m_tempFocusWnd);
+	            theApp.m_activeWnd.TrackActiveWnd(m_tempFocusWnd, false);
 			}
             break;
 
@@ -620,7 +620,7 @@ BOOL CMainFrame::PreTranslateMessage(MSG *pMsg)
     {
         if(g_Opt.m_bUseHookDllForFocus == false)
         {
-            theApp.m_activeWnd.TrackActiveWnd(NULL);
+            theApp.m_activeWnd.TrackActiveWnd(NULL, false);
         }
     }
 
@@ -691,7 +691,7 @@ bool CMainFrame::CloseAllOpenDialogs()
 
 LRESULT CMainFrame::OnSystemTrayMouseMove(WPARAM wParam, LPARAM lParam)
 {
-	theApp.m_activeWnd.TrackActiveWnd(NULL);
+	theApp.m_activeWnd.TrackActiveWnd(NULL, false);
 	return 0;
 }
 

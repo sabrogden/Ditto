@@ -2014,3 +2014,8 @@ DWORD CGetSetOptions::GetFunnyTickCountAdjustment()
 {  
 	return GetProfileLong(_T("FunnyTickCountAdjustment"), 300001);
 }
+
+DWORD CGetSetOptions::GetMinIdleTimeBeforeTrackFocus()
+{
+	return GetProfileLong(_T("MinIdleTimeBeforeTrackFocus"), 100);
+}

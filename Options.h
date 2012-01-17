@@ -417,6 +417,8 @@ public:
 	static DWORD	GetDbTimeout();
 
 	static DWORD	GetFunnyTickCountAdjustment();
+
+	static DWORD	GetMinIdleTimeBeforeTrackFocus();
 };
 
 // global for easy access and for initialization of fast access variables

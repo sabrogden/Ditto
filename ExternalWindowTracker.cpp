@@ -16,8 +16,14 @@ ExternalWindowTracker::~ExternalWindowTracker(void)
 {
 }
 
-bool ExternalWindowTracker::TrackActiveWnd(HWND focus)
+bool ExternalWindowTracker::TrackActiveWnd(HWND focus, bool force)
 {
+	if(force == false && IdleSeconds() < (CGetSetOptions::GetMinIdleTimeBeforeTrackFocus() / 1000.0))
+	{
+		Log(StrF(_T("Not Idle for long enough, IdleTime: %f, MinIdle %f"), IdleSeconds(), (CGetSetOptions::GetMinIdleTimeBeforeTrackFocus() / 1000.0)));
+		return false;
+	}
+
 	BOOL fromHook = true;
 	HWND newFocus = focus;
 	HWND newActive = ::GetForegroundWindow();
@@ -81,7 +87,7 @@ bool ExternalWindowTracker::TrackActiveWnd(HWND focus)
 	if(theApp.QPasteWnd())
 		theApp.QPasteWnd()->UpdateStatus(true);
 
-	Log(StrF(_T("TargetActiveWindow Active: %s (%d), Focus: %s (%d), FromHook %d"), WndName(m_activeWnd), m_activeWnd, WndName(m_focusWnd), m_focusWnd, fromHook));
+	Log(StrF(_T("TargetActiveWindow Active: %s (%d), Focus: %s (%d), FromHook %d, IdleTime: %f"), WndName(m_activeWnd), m_activeWnd, WndName(m_focusWnd), m_focusWnd, fromHook, IdleSeconds()));
 
 	return true;
 }
