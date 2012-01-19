@@ -1,0 +1,17 @@
+<Ditto_Theme_File Version = "1" Author = "Rom" Notes = "Brown-GreyTheme">
+	<CaptionLeft>RGB(70, 35, 0)</CaptionLeft>
+	<CaptionRight>RGB(111, 55, 0)</CaptionRight>
+	<CaptionLeftTopMost>RGB(111, 55, 0)</CaptionLeftTopMost>
+	<CaptionRightTopMost>RGB(210, 105, 0)</CaptionRightTopMost>
+	<CaptionLeftNotConnected>RGB(255, 0, 0)</CaptionLeftNotConnected>
+	<CaptionRightNotConnected>RGB(255, 0, 0)</CaptionRightNotConnected>
+	<CaptionTextColor>RGB(217, 254, 211)</CaptionTextColor>
+	<ListBoxOddRowsBG>RGB(194, 194, 194)</ListBoxOddRowsBG>
+	<ListBoxEvenRowsBG>RGB(171, 171, 171)</ListBoxEvenRowsBG>
+	<ListBoxOddRowsText>RGB(0, 0, 0)</ListBoxOddRowsText>
+	<ListBoxEvenRowsText>RGB(0, 0, 0)</ListBoxEvenRowsText>
+	<ListBoxSelectedBG>RGB(164, 112, 77)</ListBoxSelectedBG>
+	<ListBoxSelectedNoFocusBG>RGB(97, 130, 97)</ListBoxSelectedNoFocusBG>
+	<ListBoxSelectedText>RGB(250, 242, 146)</ListBoxSelectedText>
+	<ListBoxSelectedNoFocusText>RGB(0, 0, 0)</ListBoxSelectedNoFocusText>
+</Ditto_Theme_File>

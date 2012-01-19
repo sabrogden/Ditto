@@ -149,7 +149,7 @@ double IdleSeconds()
 		}
 		else
 		{
-			g_funnyGetTickCountAdjustment = 0;
+			g_funnyGetTickCountAdjustment = 0; 
 		}		
 	}
 	
