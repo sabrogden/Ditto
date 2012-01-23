@@ -241,7 +241,7 @@ void CQuickPaste::HideQPasteWnd()
 	if(m_pwndPaste)
 	{
 		if (IsWindow(m_pwndPaste->m_hWnd))
-			m_pwndPaste->HideQPasteWindow();
+			m_pwndPaste->HideQPasteWindow(true);
 	}
 }
 

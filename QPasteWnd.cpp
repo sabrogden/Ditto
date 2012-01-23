@@ -381,7 +381,7 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
 
         if(!g_Opt.m_bShowPersistent)
         {
-            HideQPasteWindow();
+            HideQPasteWindow(false);
         }
 		else if(g_Opt.GetAutoHide())
 		{
@@ -411,7 +411,7 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
     }
 }
 
-BOOL CQPasteWnd::HideQPasteWindow()
+BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus)
 {
     Log(_T("Start of HideQPasteWindow"));
 
@@ -428,7 +428,6 @@ BOOL CQPasteWnd::HideQPasteWindow()
 	}
 
     theApp.m_bShowingQuickPaste = false;
-    //theApp.m_activeWnd.ReleaseFocus();
 
     KillTimer(TIMER_FILL_CACHE);
 
@@ -461,6 +460,10 @@ BOOL CQPasteWnd::HideQPasteWindow()
         }
     }
 
+	if(releaseFocus)
+	{
+		theApp.m_activeWnd.ReleaseFocus();
+	}
 
     Log(StrF(_T("End of HideQPasteWindow, ItemCount: %d"), m_listItems.size()));
 
@@ -2109,7 +2112,7 @@ void CQPasteWnd::OnMenuEdititem()
     m_lstHeader.GetSelectionItemData(IDs);
     theApp.EditItems(IDs, true);
 
-    HideQPasteWindow();
+    HideQPasteWindow(false);
 }
 
 void CQPasteWnd::OnMenuNewclip()
@@ -2118,7 +2121,7 @@ void CQPasteWnd::OnMenuNewclip()
     IDs.Add(-1);
     theApp.EditItems(IDs, true);
 
-    HideQPasteWindow();
+    HideQPasteWindow(false);
 }
 
 
@@ -2438,12 +2441,13 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 								if(g_Opt.GetShowPersistent() && this->GetMinimized() == false)
 								{
 									MinMaxWindow(FORCE_MIN);
+									theApp.m_activeWnd.ReleaseFocus();
 								}
 								else
 								{
 									if(m_GroupTree.IsWindowVisible() == FALSE)
 									{
-										HideQPasteWindow();
+										HideQPasteWindow(true);
 										return TRUE;
 									}
 								}
@@ -2580,7 +2584,7 @@ LRESULT CQPasteWnd::OnProperties(WPARAM wParam, LPARAM lParam)
 
 void CQPasteWnd::OnClose()
 {
-    HideQPasteWindow();
+    HideQPasteWindow(true);
 }
 
 void CQPasteWnd::OnBegindrag(NMHDR *pNMHDR, LRESULT *pResult)
@@ -3051,7 +3055,7 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
     CWnd *p = GetFocus();
     if(p == NULL)
     {
-        HideQPasteWindow();
+        HideQPasteWindow(false);
     }
 
     m_bHideWnd = true;
@@ -3102,7 +3106,7 @@ LRESULT CQPasteWnd::OnToolTipWndInactive(WPARAM wParam, LPARAM lParam)
         CWnd *p = GetFocus();
         if(p == NULL)
         {
-            HideQPasteWindow();
+            HideQPasteWindow(false);
         }
     }
 
