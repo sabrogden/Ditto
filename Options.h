@@ -419,6 +419,8 @@ public:
 	static DWORD	GetFunnyTickCountAdjustment();
 
 	static DWORD	GetMinIdleTimeBeforeTrackFocus();
+
+	static DWORD	GetTimeBeforeExpandWindow();
 };
 
 // global for easy access and for initialization of fast access variables

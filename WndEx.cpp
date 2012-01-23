@@ -319,7 +319,7 @@ void CWndEx::OnNcMouseMove(UINT nHitTest, CPoint point)
 		COleDateTimeSpan sp = COleDateTime::GetCurrentTime() - m_TimeMinimized;
 		if(sp.GetTotalSeconds() >= m_lDelayMaxSeconds)
 		{
-			SetTimer(TIMER_AUTO_MAX, 250, NULL);
+			SetTimer(TIMER_AUTO_MAX, CGetSetOptions::GetTimeBeforeExpandWindow(), NULL);
 			m_bMaxSetTimer = true;
 		}
 	}

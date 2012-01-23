@@ -2019,3 +2019,8 @@ DWORD CGetSetOptions::GetMinIdleTimeBeforeTrackFocus()
 {
 	return GetProfileLong(_T("MinIdleTimeBeforeTrackFocus"), 100);
 }
+
+DWORD CGetSetOptions::GetTimeBeforeExpandWindow()
+{
+	return GetProfileLong(_T("TimeBeforeExpandWindow"), 250);
+}
