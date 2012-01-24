@@ -195,10 +195,6 @@ public:
 	static void		SetShowPersistent(BOOL bVal);
 	static BOOL		GetShowPersistent();
 
-	static BOOL		m_bHistoryStartTop;
-	static void		SetHistoryStartTop(BOOL bVal);
-	static BOOL		GetHistoryStartTop();
-
 	static void		SetShowTextForFirstTenHotKeys(BOOL bVal);
 	static BOOL		GetShowTextForFirstTenHotKeys();
 
@@ -248,8 +244,6 @@ public:
 	static BOOL		m_bLogSendReceiveErrors;
 	static void		SetLogSendReceiveErrors(BOOL bOption);
 	static BOOL		GetLogSendReceiveErrors();
-
-	static BOOL		m_bUseHookDllForFocus;
 
 	static BOOL		m_HideDittoOnHotKeyIfAlreadyShown;
 	static BOOL		GetHideDittoOnHotKeyIfAlreadyShown();

@@ -275,8 +275,6 @@ protected:
     afx_msg void OnMenuAutohide();
     afx_msg void OnMenuViewfulldescription();
     afx_msg void OnMenuAllwaysontop();
-    afx_msg void OnSortAscending();
-    afx_msg void OnSortDescending();
     afx_msg void OnMenuNewGroup();
     afx_msg void OnMenuNewGroupSelection();
     afx_msg void OnBackButton();

@@ -9,7 +9,6 @@
 #include "CopyProperties.h"
 #include "InternetUpdate.h"
 #include ".\mainfrm.h"
-#include "focusdll\focusdll.h"
 #include "HyperLink.h"
 #include "tinyxml\tinyxml.h"
 #include "Path.h"
@@ -84,12 +83,6 @@ CMainFrame::CMainFrame()
 
 CMainFrame::~CMainFrame()
 {
-    if(g_Opt.m_bUseHookDllForFocus)
-    {
-        Log(_T("Unloading focus dll for tracking focus changes"));
-        StopMonitoringFocusChanges();
-    }
-
     CGetSetOptions::SetMainHWND(0);
 }
 
@@ -112,16 +105,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     SetWindowText(_T(""));
 
-    if(g_Opt.m_bUseHookDllForFocus)
-    {
-        Log(_T("Loading hook dll to track focus changes"));
-        MonitorFocusChanges(m_hWnd, WM_FOCUS_CHANGED);
-    }
-    else
-    {
-        Log(_T("Setting polling timer to track focus"));
-        SetTimer(ACTIVE_WINDOW_TIMER, g_Opt.FocusWndTimerTimeout(), 0);
-    }
+    Log(_T("Setting polling timer to track focus"));
+    SetTimer(ACTIVE_WINDOW_TIMER, g_Opt.FocusWndTimerTimeout(), 0);
 
     SetWindowText(_T("Ditto"));
 
@@ -618,10 +603,7 @@ BOOL CMainFrame::PreTranslateMessage(MSG *pMsg)
     // target before mouse messages change the focus
     if(theApp.m_bShowingQuickPaste && WM_MOUSEFIRST <= pMsg->message && pMsg->message <= WM_MOUSELAST)
     {
-        if(g_Opt.m_bUseHookDllForFocus == false)
-        {
-            theApp.m_activeWnd.TrackActiveWnd(NULL, false);
-        }
+        theApp.m_activeWnd.TrackActiveWnd(NULL, false);
     }
 
     return CFrameWnd::PreTranslateMessage(pMsg);

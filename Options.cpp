@@ -26,7 +26,6 @@ BOOL CGetSetOptions::m_bAllowDuplicates;
 BOOL CGetSetOptions::m_bUpdateTimeOnPaste;
 BOOL CGetSetOptions::m_bSaveMultiPaste;
 BOOL CGetSetOptions::m_bShowPersistent;
-BOOL CGetSetOptions::m_bHistoryStartTop;
 long CGetSetOptions::m_bDescTextSize;
 BOOL CGetSetOptions::m_bDescShowLeadingWhiteSpace;
 BOOL CGetSetOptions::m_bAllwaysShowDescription;
@@ -37,7 +36,6 @@ CSendClients CGetSetOptions::m_SendClients[MAX_SEND_CLIENTS];
 long CGetSetOptions::m_lAutoSendClientCount;
 CString CGetSetOptions::m_csIPListToPutOnClipboard;
 BOOL CGetSetOptions::m_bLogSendReceiveErrors;
-BOOL CGetSetOptions::m_bUseHookDllForFocus;
 BOOL CGetSetOptions::m_HideDittoOnHotKeyIfAlreadyShown;
 long CGetSetOptions::m_lPort;
 BOOL CGetSetOptions::m_bDrawThumbnail;
@@ -123,7 +121,6 @@ void CGetSetOptions::LoadSettings()
 	m_bUpdateTimeOnPaste = GetUpdateTimeOnPaste();
 	m_bSaveMultiPaste = GetSaveMultiPaste();
 	m_bShowPersistent = GetShowPersistent();
-	m_bHistoryStartTop = GetHistoryStartTop();
 	m_bDescTextSize = GetDescTextSize();
 	m_bDescShowLeadingWhiteSpace = GetDescShowLeadingWhiteSpace();
 	m_bAllwaysShowDescription = GetAllwaysShowDescription();
@@ -132,25 +129,6 @@ void CGetSetOptions::LoadSettings()
 	m_bSendPasteOnFirstTenHotKeys = GetSendPasteOnFirstTenHotKeys();
 	m_csIPListToPutOnClipboard = GetListToPutOnClipboard();
 	m_bLogSendReceiveErrors = GetLogSendReceiveErrors();
-	
-	if(IsRunningLimited() == false)
-	{
-		//If running from U3 then we can't use the hook dll because we are unable
-		//to delete the hook dll, it's loaded by other processes
-		if(m_bU3)
-		{
-			m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", FALSE);
-		}
-		else
-		{
-			m_bUseHookDllForFocus = GetProfileLong("UseHookDllForFocus", FALSE);
-		}
-	}
-	else
-	{
-		m_bUseHookDllForFocus = false;
-	}
-
 	m_HideDittoOnHotKeyIfAlreadyShown = GetHideDittoOnHotKeyIfAlreadyShown();
 	m_lPort = GetPort();
 	m_bDrawThumbnail = GetDrawThumbnail();
@@ -264,7 +242,6 @@ void CGetSetOptions::ConverSettingsToIni()
 	SetUpdateTimeOnPaste(GetUpdateTimeOnPaste());
 	SetSaveMultiPaste(GetSaveMultiPaste());
 	SetShowPersistent(GetShowPersistent());
-	SetHistoryStartTop(GetHistoryStartTop());
 	SetShowTextForFirstTenHotKeys(GetShowTextForFirstTenHotKeys());
 	SetMainHWND(GetMainHWND());
 	SetCaptionPos(GetCaptionPos());
@@ -1075,16 +1052,6 @@ void CGetSetOptions::SetShowPersistent(BOOL bVal)
 BOOL CGetSetOptions::GetShowPersistent()			
 {	
 	return GetProfileLong("ShowPersistent", 0); 
-}
-
-void CGetSetOptions::SetHistoryStartTop(BOOL bVal)	
-{	
-	SetProfileLong("HistoryStartTop", bVal); 
-	m_bHistoryStartTop = bVal; 
-}
-BOOL CGetSetOptions::GetHistoryStartTop()			
-{	
-	return GetProfileLong("HistoryStartTop", TRUE); 
 }
 
 void CGetSetOptions::SetShowTextForFirstTenHotKeys(BOOL bVal)	

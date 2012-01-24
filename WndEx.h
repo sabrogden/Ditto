@@ -36,7 +36,6 @@ public:
 public:
 	void InvalidateNc();
 	void SetCaptionOn(int nPos, bool bOnstartup = false);
-	void SetAutoHide(BOOL bAutoHide);
 	void MinMaxWindow(long lOption = SWAP_MIN_MAX);
 	void GetWindowRectEx(LPRECT lpRect);
 	bool SetCaptionColorActive(BOOL bPersistant, BOOL ConnectedToClipboard);

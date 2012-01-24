@@ -166,8 +166,6 @@ ON_COMMAND(ID_VIEWCAPTIONBARON_TOP, OnViewcaptionbaronTop)
 ON_COMMAND(ID_MENU_AUTOHIDE, OnMenuAutohide)
 ON_COMMAND(ID_MENU_VIEWFULLDESCRIPTION, OnMenuViewfulldescription)
 ON_COMMAND(ID_MENU_ALLWAYSONTOP, OnMenuAllwaysontop)
-ON_COMMAND(ID_SORT_ASCENDING, OnSortAscending)
-ON_COMMAND(ID_SORT_DESCENDING, OnSortDescending)
 ON_COMMAND(ID_MENU_NEWGROUP, OnMenuNewGroup)
 ON_COMMAND(ID_MENU_NEWGROUPSELECTION, OnMenuNewGroupSelection)
 ON_MESSAGE(NM_GROUP_TREE_MESSAGE, OnGroupTreeMessage)
@@ -540,21 +538,10 @@ bool CQPasteWnd::Add(const CString &csHeader, const CString &csText, int nID)
 {
     int nNewIndex;
 
-    if(g_Opt.m_bHistoryStartTop)
-    {
-        // Insert the item in the list control
-        if((nNewIndex = m_lstHeader.InsertItem(m_lstHeader.GetItemCount(), csHeader)) == -1)
-        {
-            return false;
-        }
-    }
-    else
-    {
-        if((nNewIndex = m_lstHeader.InsertItem(m_lstHeader.GetItemCount(), csHeader)) == -1)
-        {
-            return false;
-        }
-    }
+    if((nNewIndex = m_lstHeader.InsertItem(m_lstHeader.GetItemCount(), csHeader)) == -1)
+	{
+		return false;
+	}
 
     m_lstHeader.SetItemData(nNewIndex, nID);
 
@@ -905,15 +892,9 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     // History Group
     if(theApp.m_GroupID < 0)
     {
-        m_lstHeader.m_bStartTop = g_Opt.m_bHistoryStartTop;
-        if(g_Opt.m_bHistoryStartTop)
-        {
-            csSort = "Main.bIsGroup ASC, Main.clipOrder DESC";
-        }
-        else
-        {
-            csSort = "Main.bIsGroup ASC, Main.clipOrder ASC";
-        }
+        m_lstHeader.m_bStartTop = true;
+        
+		csSort = "Main.bIsGroup ASC, Main.clipOrder DESC";
 
         if(g_Opt.m_bShowAllClipsInMainList)
         {
@@ -929,15 +910,8 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     {
         m_lstHeader.m_bStartTop = true;
 
-        if(g_Opt.m_bHistoryStartTop)
-        {
-            csSort = "Main.bIsGroup DESC, Main.clipGroupOrder DESC";
-        }
-        else
-        {
-            csSort = "Main.bIsGroup ASC, Main.clipGroupOrder ASC";
-        }
-
+        csSort = "Main.bIsGroup DESC, Main.clipGroupOrder DESC";
+        
         if(theApp.m_GroupID >= 0)
         {
             strFilter.Format(_T("Main.lParentID = %d"), theApp.m_GroupID);
@@ -1240,15 +1214,6 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
     if(CGetSetOptions::GetAutoHide())
     {
         pMenu->CheckMenuItem(ID_MENU_AUTOHIDE, MF_CHECKED);
-    }
-
-    if(g_Opt.m_bHistoryStartTop)
-    {
-        pMenu->CheckMenuItem(ID_SORT_ASCENDING, MF_CHECKED);
-    }
-    else
-    {
-        pMenu->CheckMenuItem(ID_SORT_DESCENDING, MF_CHECKED);
     }
 
     switch(CGetSetOptions::GetCaptionPos())
@@ -1654,7 +1619,6 @@ void CQPasteWnd::OnMenuAutohide()
 {
     bool bAutoHide = !CGetSetOptions::GetAutoHide();
     CGetSetOptions::SetAutoHide(bAutoHide);
-    SetAutoHide(bAutoHide);
 }
 
 void CQPasteWnd::OnMenuViewfulldescription()
@@ -1665,18 +1629,6 @@ void CQPasteWnd::OnMenuViewfulldescription()
 void CQPasteWnd::OnMenuAllwaysontop()
 {
     theApp.ShowPersistent(!g_Opt.m_bShowPersistent);
-}
-
-void CQPasteWnd::OnSortAscending()
-{
-    g_Opt.SetHistoryStartTop(TRUE);
-    FillList();
-}
-
-void CQPasteWnd::OnSortDescending()
-{
-    g_Opt.SetHistoryStartTop(FALSE);
-    FillList();
 }
 
 void CQPasteWnd::OnMenuNewGroup()

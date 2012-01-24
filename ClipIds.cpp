@@ -31,7 +31,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	if(cfType == CF_TEXT)
 	{
 		CCF_TextAggregator CFText(SepA);
-		if(AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		if(AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse))
 		{
 			return CFText.GetHGlobal();
 		}
@@ -39,7 +39,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	else if(cfType == CF_UNICODETEXT)
 	{
 		CCF_UnicodeTextAggregator CFUnicodeText(SepW);
-		if(AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		if(AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse))
 		{
 			return CFUnicodeText.GetHGlobal();
 		}
@@ -47,7 +47,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	else if(cfType == CF_HDROP)
 	{
 		CCF_HDropAggregator HDrop;
-		if(AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		if(AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
 		{
 			return HDrop.GetHGlobal();
 		}
@@ -55,7 +55,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	else if(cfType == theApp.m_HTML_Format)
 	{
 		CHTMLFormatAggregator Html(SepA);
-		if(AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		if(AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse))
 		{
 			return Html.GetHGlobal();
 		}
@@ -63,7 +63,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	else if(cfType == theApp.m_RTFFormat)
 	{
 		CRichTextAggregator RichText(SepA);
-		if(AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		if(AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse))
 		{
 			return RichText.GetHGlobal();
 		}

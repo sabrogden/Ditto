@@ -62,7 +62,7 @@ BOOL COleClipSource::DoImmediateRender()
 	{
 		CStringA SepA = CTextConvert::ConvertToChar(g_Opt.GetMultiPasteSeparator());
 		CCF_TextAggregator CFText(SepA);
-		if(m_ClipIDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		if(m_ClipIDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse))
 		{
 			CacheGlobalData(CF_TEXT, CFText.GetHGlobal());
 			bProcessedMult = TRUE;
@@ -70,7 +70,7 @@ BOOL COleClipSource::DoImmediateRender()
 
 		CStringW SepW = CTextConvert::ConvertToUnicode(g_Opt.GetMultiPasteSeparator());
 		CCF_UnicodeTextAggregator CFUnicodeText(SepW);
-		if(m_ClipIDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+		if(m_ClipIDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse))
 		{
 			CacheGlobalData(CF_UNICODETEXT, CFUnicodeText.GetHGlobal());
 			bProcessedMult = TRUE;
@@ -79,21 +79,21 @@ BOOL COleClipSource::DoImmediateRender()
 		if(m_bOnlyPaste_CF_TEXT == false)
 		{
 			CCF_HDropAggregator HDrop;
-			if(m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+			if(m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
 			{
 				CacheGlobalData(CF_HDROP, HDrop.GetHGlobal());
 				bProcessedMult = TRUE;
 			}
 
 			CRichTextAggregator RichText(SepA);
-			if(m_ClipIDs.AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+			if(m_ClipIDs.AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse))
 			{
 				CacheGlobalData(theApp.m_RTFFormat, RichText.GetHGlobal());
 				bProcessedMult = TRUE;
 			}
 
 			CHTMLFormatAggregator Html(SepA);
-			if(m_ClipIDs.AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse && g_Opt.m_bHistoryStartTop))
+			if(m_ClipIDs.AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse))
 			{
 				CacheGlobalData(theApp.m_HTML_Format, Html.GetHGlobal());
 				bProcessedMult = TRUE;

@@ -57,13 +57,11 @@ Name: RunAtStartup; Description: Run Ditto on Windows Startup
 [Files]
 #ifdef bit64
 	Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
-	Source: ..\Release64\focus64.dll; DestDir: {app}; BeforeInstall: BeforeFocusInstall(); Flags: ignoreversion restartreplace
 	Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 	Source: mfc-crt64\*; DestDir: {app}      
 #endif
 #ifndef bit64
 	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
-	Source: ..\Release\focus.dll; DestDir: {app}; BeforeInstall: BeforeFocusInstall(); Flags: ignoreversion restartreplace
 	Source: ..\Addins\DittoUtil\Release\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 	Source: mfc-crt_10\*; DestDir: {app}
 #endif
@@ -103,22 +101,6 @@ Root: HKCR; Subkey: Ditto\shell\open\command; ValueType: string; ValueName: ; Va
 
 
 [Code]
-procedure BeforeFocusInstall();
-var
-  sDir: String;
-begin
-    sDir := ExpandConstant('{app}');
-
-    DeleteFile(sDir+'\focus.dll')
-    DeleteFile(sDir+'\focus.dll.old')
-    DeleteFile(sDir+'\focus.dll.old.old')
-    DeleteFile(sDir+'\focus.dll.old.old.old')
-
-    RenameFile(sDir+'\focus.dll', sDir+'\focus.dll.old')
-    RenameFile(sDir+'\focus.dll', sDir+'\focus.dll.old.old')
-    RenameFile(sDir+'\focus.dll', sDir+'\focus.dll.old.old.old')
-end;
-
 procedure BeforeLanguageInstall();
 var
   sDir: String;

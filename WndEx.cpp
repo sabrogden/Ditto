@@ -19,7 +19,6 @@ static char THIS_FILE[] = __FILE__;
 #define CLOSE_HEIGHT		11
 #define CLOSE_BORDER		2
 #define TIMER_AUTO_MAX		5
-#define TIMER_AUTO_MIN		6
 
 CWndEx::CWndEx()
 {	
@@ -100,7 +99,6 @@ int CWndEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_DittoWindow.m_bDrawMinimize = false;
 	m_DittoWindow.m_bDrawMaximize = false;
 
-	SetAutoHide(CGetSetOptions::GetAutoHide());
 	SetCaptionColorActive(false, theApp.GetConnectCV());
 	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true);
 	SetAutoMaxDelay(CGetSetOptions::GetAutoMaxDelay());
@@ -131,18 +129,6 @@ bool CWndEx::SetCaptionColorActive(BOOL bPersistant, BOOL ConnectedToClipboard)
 	m_DittoWindow.SetCaptionTextColor(g_Opt.m_Theme.CaptionTextColor());
 
 	return bResult;
-}
-
-void CWndEx::SetAutoHide(BOOL bAutoHide)
-{
-	if(bAutoHide)
-	{
-		SetTimer(TIMER_AUTO_MIN, 500, NULL);
-	}
-	else
-	{
-		KillTimer(TIMER_AUTO_MIN);
-	}
 }
 
 void CWndEx::SetCaptionOn(int nPos, bool bOnstartup)
@@ -365,29 +351,6 @@ void CWndEx::OnTimer(UINT_PTR nIDEvent)
 		}
 		KillTimer(TIMER_AUTO_MAX);
 		m_bMaxSetTimer = false;
-	}
-	else if(nIDEvent == TIMER_AUTO_MIN)
-	{
-		if((m_DittoWindow.m_bMinimized == false) && (g_Opt.m_bShowPersistent))
-		{
-			CPoint cp;
-			CRect cr;
-			
-			GetCursorPos(&cp);
-			GetWindowRect(&cr);
-			
-			if(cr.PtInRect(cp) == false)        
-			{
-				//hook dll
-				if(g_Opt.m_bUseHookDllForFocus)
-				{
-					if(theApp.m_activeWnd.DittoHasFocus() == false)
-					{
-						MinMaxWindow(FORCE_MIN);
-					}
-				}
-			}
-		}
 	}
 	
 	CWnd::OnTimer(nIDEvent);
