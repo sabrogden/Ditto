@@ -2579,7 +2579,8 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
 					ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
                     int c = m_lstHeader.GetItemCount();
-					if((int)m_listItems.size() > pItem->iItem)
+					if((int)m_listItems.size() > pItem->iItem &&
+						m_listItems[pItem->iItem].m_lID > 0)
                     {
                         CString cs;
                         if(m_listItems[pItem->iItem].m_bDontAutoDelete)
@@ -2628,13 +2629,13 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
 								addToLoadItems = false;
 								break;
 							}
-						}
-
-						//Log(StrF(_T("DrawItem index %d, add: %d"), pItem->iItem, addToLoadItems));
+						}						
 
                         if(addToLoadItems)
                         {
                             CPoint loadItem(pItem->iItem, (m_lstHeader.GetTopIndex() + m_lstHeader.GetCountPerPage() + 2));
+
+							//Log(StrF(_T("DrawItem index %d, add: %d"), loadItem.x, loadItem.y));
                             m_loadItems.push_back(loadItem);
                         }
 

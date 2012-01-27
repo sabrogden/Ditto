@@ -121,6 +121,7 @@ void CQPasteWndThread::OnLoadItems(void *param)
 			{
 				Log(StrF(_T("Load Items start = %d, count = %d"), loadItemsIndex, loadItemsCount));
 
+				int pos = loadItemsIndex;
 				CString limit;
 				limit.Format(_T(" LIMIT %d OFFSET %d"), loadItemsCount, loadItemsIndex);
 				localSql += limit;
@@ -135,7 +136,25 @@ void CQPasteWndThread::OnLoadItems(void *param)
 					{
 						ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
 
-						pasteWnd->m_listItems.push_back(table);
+						if(pos < pasteWnd->m_listItems.size())
+						{
+							pasteWnd->m_listItems[pos] = table;
+						}
+						else if(pos == pasteWnd->m_listItems.size())
+						{
+							pasteWnd->m_listItems.push_back(table);
+						}
+						else if(pos > pasteWnd->m_listItems.size())
+						{
+							for(int toAdd = pasteWnd->m_listItems.size(); toAdd < pos-1; toAdd++)
+							{
+								CMainTable empty;
+								empty.m_lID = -1;
+								pasteWnd->m_listItems.push_back(empty);
+							}
+
+							pasteWnd->m_listItems.push_back(table);
+						}						
 					}
 
 					if(pasteWnd->m_bStopQuery)
@@ -153,6 +172,7 @@ void CQPasteWndThread::OnLoadItems(void *param)
 
 					loadItemsIndex++;
 					loadCount++;
+					pos++;
 				}
 
 				if(firstLoad)

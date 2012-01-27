@@ -1,6 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <project version='7' encrypted='1'>
 	<steps type='0'>
+		<step action='Set Macro'>
+			<MacroName>LOGFILE</MacroName>
+			<MacroValue>%workDir%\%branch%\Log.txt</MacroValue>
+			<name>Default Log File</name>
+		</step>
 		<step action='Group'>
 			<name>Project steps</name>
 		</step>
@@ -205,6 +210,10 @@ DittoSetup*]]></X>
 			<indent type='3'>1</indent>
 			<name>Zip Debug Files</name>
 		</step>
+		<step action='Group'>
+			<indent type='3'>1</indent>
+			<name>Create Web Page</name>
+		</step>
 		<step action='Write File'>
 			<Filename>%workDir%\%branch%\DittoSetup\output\index.php</Filename>
 			<Text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -229,13 +238,60 @@ DittoSetup*]]></X>
 <br>
 <a href="DittoDebug_%versionFileName%.7z">Ditto Debug Files</a><br>
 <a href="DittoSource_%versionFileName%.zip">Ditto Source</a><br>
+<a href="changes.php">Change Log</a><br>
 
-<br><br>
+<br>
 
 <a href="AllFiles.php">Previouse Builds</a><br>
+<br>
+
 </body>]]></Text>
-			<indent type='3'>1</indent>
+			<indent type='3'>2</indent>
 			<name>Beta web page</name>
+		</step>
+		<step action='Set Macro'>
+			<MacroName>LOGFILE</MacroName>
+			<MacroValue>%workDir%\%branch%\DittoSetup\output\changes.php</MacroValue>
+			<indent type='3'>2</indent>
+			<name>Log Changes to File</name>
+			<nologging type='11'>-1</nologging>
+		</step>
+		<step action='Subversion'>
+			<Files>%branch%</Files>
+			<Host>ditto-cp.svn.sourceforge.net</Host>
+			<LocalPath>%workDir%</LocalPath>
+			<Password encrypted='1'>MM3MPOs8MuGmarG4tqE=</Password>
+			<Port>443</Port>
+			<Protocol>https</Protocol>
+			<Repository>/svnroot/ditto-cp</Repository>
+			<SVNPath>C:\Program Files (x86)\Subversion\bin</SVNPath>
+			<Subcommand>log</Subcommand>
+			<Switches>-r {2012-1-5}:{2012-12-31}</Switches>
+			<Username>sabrogden</Username>
+			<indent type='3'>2</indent>
+			<name>SVN Log Messages</name>
+		</step>
+		<step action='Set Macro'>
+			<MacroName>LOGFILE</MacroName>
+			<MacroValue>%workDir%\%branch%\Log.txt</MacroValue>
+			<indent type='3'>2</indent>
+			<name>Default Log File</name>
+			<nologging type='11'>-1</nologging>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%workDir%\%branch%\DittoSetup\output\changes.php</FileIn>
+			<Find>Starting Build.*--------------------</Find>
+			<NoModS type='11'>-1</NoModS>
+			<indent type='3'>2</indent>
+			<name>Replace "Starting Build"</name>
+		</step>
+		<step action='Replace in File'>
+			<FileIn>%workDir%\%branch%\DittoSetup\output\changes.php</FileIn>
+			<Find>\r\n</Find>
+			<NoModS type='11'>-1</NoModS>
+			<Replace><![CDATA[<br>\r\n]]></Replace>
+			<indent type='3'>2</indent>
+			<name><![CDATA[Replace Line Feeds with <br>]]></name>
 		</step>
 		<step action='FTP'>
 			<Ext>*.*</Ext>
