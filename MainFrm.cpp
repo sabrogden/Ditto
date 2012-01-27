@@ -518,7 +518,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 
         case ACTIVE_WINDOW_TIMER:
 			{
-				if(m_TrayIcon.Visible())
+				if(theApp.m_bShowingQuickPaste)
 				{
 					theApp.m_activeWnd.TrackActiveWnd(NULL, false);
 				}
@@ -601,10 +601,10 @@ LRESULT CMainFrame::OnClipboardCopied(WPARAM wParam, LPARAM lParam)
 BOOL CMainFrame::PreTranslateMessage(MSG *pMsg)
 {
     // target before mouse messages change the focus
-    if(theApp.m_bShowingQuickPaste && WM_MOUSEFIRST <= pMsg->message && pMsg->message <= WM_MOUSELAST)
-    {
-        theApp.m_activeWnd.TrackActiveWnd(NULL, false);
-    }
+	/*if(theApp.m_bShowingQuickPaste && WM_MOUSEFIRST <= pMsg->message && pMsg->message <= WM_MOUSELAST)
+	{
+	theApp.m_activeWnd.TrackActiveWnd(NULL, true);
+	}*/
 
     return CFrameWnd::PreTranslateMessage(pMsg);
 }
@@ -673,7 +673,7 @@ bool CMainFrame::CloseAllOpenDialogs()
 
 LRESULT CMainFrame::OnSystemTrayMouseMove(WPARAM wParam, LPARAM lParam)
 {
-	theApp.m_activeWnd.TrackActiveWnd(NULL, false);
+	theApp.m_activeWnd.TrackActiveWnd(NULL, true);
 	return 0;
 }
 
