@@ -167,7 +167,7 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 
 			try
 			{
-				theApp.m_db.execDMLEx(_T("UPDATE Main SET lastPasteDate = %d where lID = %d;"), CTime::GetCurrentTime().GetTime(), pData);
+				theApp.m_db.execDMLEx(_T("UPDATE Main SET lastPasteDate = %d where lID = %d;"), CTime::GetCurrentTime().GetTime(), pData->clipId);
 			}
 			CATCH_SQLITE_EXCEPTION
 
