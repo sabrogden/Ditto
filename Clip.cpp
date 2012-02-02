@@ -727,21 +727,23 @@ double CClip::GetNewOrder(int parentId, int clipId)
 {
 	double newOrder = 0;
 	double existingMaxOrder = 0;
+	CString existingDesc = _T("");
 
 	try
 	{
 		if(parentId < 0)
 		{
-			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipOrder FROM Main ORDER BY clipOrder DESC LIMIT 1"));			
+			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipOrder, mText FROM Main ORDER BY clipOrder DESC LIMIT 1"));			
 			if(q.eof() == false)
 			{
 				existingMaxOrder = q.getFloatField(_T("clipOrder"));
+				existingDesc = q.getStringField(_T("mText"));
 				newOrder = existingMaxOrder + 1;
 			}
 		}
 		else
 		{
-			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipGroupOrder FROM Main WHERE lParentID = %d ORDER BY clipOrder DESC LIMIT 1"), parentId);			
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipGroupOrder, mText FROM Main WHERE lParentID = %d ORDER BY clipOrder DESC LIMIT 1"), parentId);			
 			if(q.eof() == false)
 			{
 				existingMaxOrder = q.getFloatField(_T("clipGroupOrder"));
@@ -749,7 +751,7 @@ double CClip::GetNewOrder(int parentId, int clipId)
 			}
 		}
 
-		Log(StrF(_T("GetNewOrder, Id: %d, parentId: %d, CurrentMax: %f, NewMax: %f"), clipId, parentId, existingMaxOrder, newOrder));
+		Log(StrF(_T("GetNewOrder, Id: %d, parentId: %d, CurrentMax: %f, CurrentDesc: %s, NewMax: %f"), clipId, parentId, existingMaxOrder, existingDesc, newOrder));
 	}
 	CATCH_SQLITE_EXCEPTION
 
