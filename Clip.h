@@ -136,7 +136,7 @@ public:
 	// Fills "types" with all Types in the db for the given Clip ID
 	static void LoadTypes(int id, CClipTypes& types);
 
-	static int GetNewOrder(int parentId);
+	static double GetNewOrder(int parentId, int clipId);
 	
 protected:
 	bool AddToMainTable();

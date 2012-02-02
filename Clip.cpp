@@ -514,10 +514,13 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 			if(nID >= 0)
 			{
 				MakeLatestOrder();
+
 				theApp.m_db.execDMLEx(_T("UPDATE Main SET clipOrder = %f, lastPasteDate = %d where lID = %d;"), 
 										m_clipOrder, CTime::GetCurrentTime().GetTime(), nID);
 
 				m_id = nID;
+
+				Log(StrF(_T("Found duplicate clip in db, Id: %d, crc: %d, NewOrder: %f"), nID, m_CRC, m_clipOrder));
 
 				return true;
 			}
@@ -527,7 +530,7 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 	
 	bResult = false;
 	if(AddToMainTable())
-	{
+	{		
 		bResult = AddToDataTable();
 	}
 
@@ -628,6 +631,8 @@ bool CClip::AddToMainTable()
 
 		m_id = (long)theApp.m_db.lastRowId();
 
+		Log(StrF(_T("Added clip to main table, Id: %d, Desc: %s, Order: %f, GroupOrder: %f"), m_id, m_Desc, m_clipOrder, m_clipGroupOrder));
+
 		m_LastAddedCRC = m_CRC;
 		m_lastAddedID = m_id;
 	}
@@ -682,14 +687,18 @@ bool CClip::AddToDataTable()
 		for(INT_PTR i = m_Formats.GetSize()-1; i >= 0 ; i--)
 		{
 			pCF = &m_Formats.ElementAt(i);
+
+			CString formatName = GetFormatName(pCF->m_cfType);
+			int clipSize = 0;
 			
 			stmt.bind(1, m_id);
-			stmt.bind(2, GetFormatName(pCF->m_cfType));
+			stmt.bind(2, formatName);
 
 			const unsigned char *Data = (const unsigned char *)GlobalLock(pCF->m_hgData);
 			if(Data)
 			{
-				stmt.bind(3, Data, (int)GlobalSize(pCF->m_hgData));
+				clipSize = (int)GlobalSize(pCF->m_hgData);
+				stmt.bind(3, Data, clipSize);
 			}
 			GlobalUnlock(pCF->m_hgData);
 			
@@ -697,6 +706,8 @@ bool CClip::AddToDataTable()
 			stmt.reset();
 
 			pCF->m_dbId = (long)theApp.m_db.lastRowId();
+
+			Log(StrF(_T("Added ClipData to DB, Id: %d, ParentId: %d Type: %s, size: %d"), pCF->m_dbId, m_id, formatName, clipSize));
 		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)
@@ -709,12 +720,14 @@ bool CClip::AddToDataTable()
 // old times can happen on fast copies (<1 sec).
 void CClip::MakeLatestOrder()
 {
-	m_clipOrder = GetNewOrder(-1);
+	m_clipOrder = GetNewOrder(-1, m_id);
 }
 
-int CClip::GetNewOrder(int parentId)
+double CClip::GetNewOrder(int parentId, int clipId)
 {
-	int newOrder = 0;
+	double newOrder = 0;
+	double existingMaxOrder = 0;
+
 	try
 	{
 		if(parentId < 0)
@@ -722,8 +735,8 @@ int CClip::GetNewOrder(int parentId)
 			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipOrder FROM Main ORDER BY clipOrder DESC LIMIT 1"));			
 			if(q.eof() == false)
 			{
-				double order = q.getFloatField(_T("clipOrder"));
-				newOrder = order + 1;
+				existingMaxOrder = q.getFloatField(_T("clipOrder"));
+				newOrder = existingMaxOrder + 1;
 			}
 		}
 		else
@@ -731,10 +744,12 @@ int CClip::GetNewOrder(int parentId)
 			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipGroupOrder FROM Main WHERE lParentID = %d ORDER BY clipOrder DESC LIMIT 1"), parentId);			
 			if(q.eof() == false)
 			{
-				double order = q.getFloatField(_T("clipGroupOrder"));
-				newOrder = order + 1;
+				existingMaxOrder = q.getFloatField(_T("clipGroupOrder"));
+				newOrder = existingMaxOrder + 1;
 			}
 		}
+
+		Log(StrF(_T("GetNewOrder, Id: %d, parentId: %d, CurrentMax: %f, NewMax: %f"), clipId, parentId, existingMaxOrder, newOrder));
 	}
 	CATCH_SQLITE_EXCEPTION
 
