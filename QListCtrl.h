@@ -139,8 +139,9 @@ protected:
 	BOOL GetClipData(int nItem, CClipFormat &Clip);
 	BOOL DrawBitMap(int nItem, CRect &crRect, CDC *pDC, const CString &csDescription);
 	void LoadDittoCopyBufferHotkeys();
-
+	bool MouseInScrollBarArea(CRect crWindow, CPoint point);
 	BOOL DrawRtfText(int nItem, CRect &crRect, CDC *pDC);
+	void StopHideScrollBarTimer();
 		
 	WCHAR *m_pwchTip;
 	TCHAR *m_pchTip;
@@ -152,6 +153,8 @@ protected:
 	IFormattedTextDraw *m_pFormatter;
 	bool m_allSelected;
 	int m_linesPerRow;
+	DWORD m_mouseOverScrollAreaStart;
+	bool m_timerToHideScrollAreaSet;
 
 	// Generated message map functions
 protected:

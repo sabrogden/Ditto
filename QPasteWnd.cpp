@@ -343,7 +343,7 @@ void CQPasteWnd::MoveControls(bool showVScroll)
     }
 
 	//If not showing the v-scroll bar then move it off of the screen
-	int scrollBarWidth = GetSystemMetrics (SM_CXVSCROLL);
+	int scrollBarWidth = GetSystemMetrics(SM_CXVSCROLL);
 	if(showVScroll)
 	{
 		scrollBarWidth = 0;

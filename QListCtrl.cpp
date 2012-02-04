@@ -22,7 +22,9 @@ static char THIS_FILE[] = __FILE__;
 #define DUMMY_COL_WIDTH			1
 
 #define TIMER_SHOW_PROPERTIES	1
-#define TIMER_SHOW_HIDE_VSCROL	2
+#define TIMER_HIDE_SCROL	2
+#define TIMER_SHOW_SCROLL	3
+
 
 /////////////////////////////////////////////////////////////////////////////
 // CQListCtrl
@@ -57,6 +59,8 @@ CQListCtrl::CQListCtrl()
 	m_pToolTip = NULL;
 	m_pFormatter = NULL;
 	m_allSelected = false;
+
+	m_mouseOverScrollAreaStart = 0;
 }
 
 CQListCtrl::~CQListCtrl()
@@ -1276,27 +1280,47 @@ void CQListCtrl::OnTimer(UINT_PTR nIDEvent)
 			}
 			break;
 
-		case TIMER_SHOW_HIDE_VSCROL:
+		case TIMER_HIDE_SCROL:
 			{
 				CPoint cursorPos;
 				GetCursorPos(&cursorPos);
 
-				CRect crRight;
-				this->GetWindowRect(&crRight);
+				CRect crWindow;
+				this->GetWindowRect(&crWindow);
 
-				crRight.left = crRight.right - 30;
-
-				CRect crBottom;
-				this->GetWindowRect(&crBottom);
-
-				crBottom.top = crBottom.bottom - 30;
-
-				if(crRight.PtInRect(cursorPos) == false && crBottom.PtInRect(cursorPos) == false)
+				//check and see if they moved out of the scroll area
+				//If they did tell our parent so
+				if(MouseInScrollBarArea(crWindow, cursorPos) == false)
 				{
-					GetParent()->SendMessage(NM_SHOW_HIDE_SCROLLBARS, 0, 0);
-
-					KillTimer(TIMER_SHOW_HIDE_VSCROL);
+					StopHideScrollBarTimer();
 				}
+
+				callBase = false;
+			}
+			break;
+
+		case TIMER_SHOW_SCROLL:
+			{
+				CPoint cursorPos;
+				GetCursorPos(&cursorPos);
+
+				CRect crWindow;
+				this->GetWindowRect(&crWindow);
+
+				//Adjust for the v-scroll bar being off of the screen
+				crWindow.right -= GetSystemMetrics(SM_CXVSCROLL);
+
+				//Check and see if we are still in the cursor area
+				if(MouseInScrollBarArea(crWindow, cursorPos))
+				{
+					m_timerToHideScrollAreaSet = true;
+					GetParent()->SendMessage(NM_SHOW_HIDE_SCROLLBARS, 1, 0);
+
+					//Start looking to hide the scroll bars
+					SetTimer(TIMER_HIDE_SCROL, 1000, NULL);
+				}
+
+				KillTimer(TIMER_SHOW_SCROLL);
 
 				callBase = false;
 			}
@@ -1358,25 +1382,51 @@ BOOL CQListCtrl::OnItemDeleted(long lID)
 
 void CQListCtrl::OnMouseMove(UINT nFlags, CPoint point)
 {
-	CRect crRight;
-	this->GetWindowRect(&crRight);
-	ScreenToClient(&crRight);
+	CRect crWindow;
+	this->GetWindowRect(&crWindow);
+	ScreenToClient(&crWindow);
+
+	if(MouseInScrollBarArea(crWindow, point))
+	{
+		if((GetTickCount() - m_mouseOverScrollAreaStart) > 500)
+		{
+			SetTimer(TIMER_SHOW_SCROLL, 500, NULL);
+
+			m_mouseOverScrollAreaStart = GetTickCount();
+		}
+	}
+	else
+	{
+		if(m_timerToHideScrollAreaSet)
+		{
+			StopHideScrollBarTimer();
+		}		
+		KillTimer(TIMER_SHOW_SCROLL);
+	}
+}
+
+bool CQListCtrl::MouseInScrollBarArea(CRect crWindow, CPoint point)
+{
+	CRect crRight(crWindow);
+	CRect crBottom(crWindow);
+
+	
 
 	crRight.left = crRight.right - 30;
-
-	CRect crBottom;
-	this->GetWindowRect(&crBottom);
-	ScreenToClient(&crBottom);
-
 	crBottom.top = crBottom.bottom - 30;
 
 	if(crRight.PtInRect(point) || crBottom.PtInRect(point))
 	{
-		GetParent()->SendMessage(NM_SHOW_HIDE_SCROLLBARS, 1, 0);
-		SetTimer(TIMER_SHOW_HIDE_VSCROL, 1000, NULL);
+		return true;
 	}
-	else
-	{
-		GetParent()->SendMessage(NM_SHOW_HIDE_SCROLLBARS, 0, 0);
-	}
+
+	return false;
+}
+
+void CQListCtrl::StopHideScrollBarTimer() 
+{
+	GetParent()->SendMessage(NM_SHOW_HIDE_SCROLLBARS, 0, 0);
+
+	m_timerToHideScrollAreaSet = false;
+	KillTimer(TIMER_HIDE_SCROL);
 }
