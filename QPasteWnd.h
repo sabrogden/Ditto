@@ -107,6 +107,7 @@ public:
     CBitmapButton m_ShowGroupsFolderTop;
     CBitmapButton m_BackButton;
 
+
     CString m_SQL;
     CString m_CountSQL;
     long m_lRecordCount;
@@ -122,7 +123,6 @@ public:
     CF_DibTypeMap m_cf_dibCache;
     CF_DibTypeMap m_cf_rtfCache;
     CCriticalSection m_CritSection;
-
     CAccels m_MainAccels;
 
     void RefreshNc();
@@ -130,7 +130,7 @@ public:
     BOOL FillList(CString csSQLSearch = "");
     BOOL HideQPasteWindow(bool releaseFocus);
     BOOL ShowQPasteWindow(BOOL bFillList = TRUE);
-    void MoveControls();
+    void MoveControls(bool showVScroll);
 
     void DeleteSelectedRows();
 
@@ -291,5 +291,6 @@ protected:
     afx_msg void OnUpdateMenuNewclip(CCmdUI *pCmdUI);
     afx_msg void CQPasteWnd::OnAddinSelect(UINT id);
     afx_msg LRESULT OnSelectAll(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnShowHideScrollBar(WPARAM wParam, LPARAM lParam);
     //}}AFX_MSG
 };

@@ -186,6 +186,7 @@ ON_UPDATE_COMMAND_UI(ID_MENU_NEWCLIP, OnUpdateMenuNewclip)
 ON_WM_CTLCOLOR_REFLECT()
 ON_COMMAND_RANGE(3000, 4000, OnAddinSelect)
 ON_MESSAGE(NM_ALL_SELECTED, OnSelectAll)
+ON_MESSAGE(NM_SHOW_HIDE_SCROLLBARS, OnShowHideScrollBar)
 END_MESSAGE_MAP()
 
 
@@ -296,10 +297,10 @@ void CQPasteWnd::OnSize(UINT nType, int cx, int cy)
         return ;
     }
 
-    MoveControls();
+    MoveControls(false);
 }
 
-void CQPasteWnd::MoveControls()
+void CQPasteWnd::MoveControls(bool showVScroll)
 {
     CRect crRect;
     GetClientRect(crRect);
@@ -341,8 +342,16 @@ void CQPasteWnd::MoveControls()
 		m_btCancel.ShowWindow(SW_HIDE);
     }
 
-	m_lstHeader.MoveWindow(0, topOfListBox, cx, cy - listBoxBottomOffset-topOfListBox);
+	//If not showing the v-scroll bar then move it off of the screen
+	int scrollBarWidth = GetSystemMetrics (SM_CXVSCROLL);
+	if(showVScroll)
+	{
+		scrollBarWidth = 0;
+	}
+
+	m_lstHeader.MoveWindow(0, topOfListBox, cx+scrollBarWidth, cy - listBoxBottomOffset-topOfListBox);
     m_Search.MoveWindow(18, cy - 20, nWidth - 20, 19);
+
 
     m_ShowGroupsFolderBottom.MoveWindow(0, cy - 19, 18, 16);
 
@@ -517,7 +526,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
     }
     else
     {
-        MoveControls();
+        MoveControls(false);
     }
 
     // always on top... for persistent showing (g_Opt.m_bShowPersistent)
@@ -1011,7 +1020,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 	m_loadItems.push_back(loadItem);
 	m_thread.FireLoadItems(true);
 
-	MoveControls();
+	MoveControls(false);
 
 	m_CountSQL.Replace(_T("%"), _T("%%"));
 	m_SQL.Replace(_T("%"), _T("%%"));
@@ -1355,7 +1364,7 @@ LRESULT CQPasteWnd::OnSearch(WPARAM wParam, LPARAM lParam)
 
 	m_lstHeader.SetFocus();
 
-	MoveControls();
+	MoveControls(false);
 
 	m_Search.SetSel(-1, 0);
 
@@ -2523,7 +2532,7 @@ void CQPasteWnd::OnCancelFilter()
     m_Search.SetWindowText(_T(""));
     m_bHandleSearchTextChange = true;
 
-    MoveControls();
+    MoveControls(false);
 
     m_lstHeader.SetFocus();
 }
@@ -2988,7 +2997,7 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
     m_Search.SetWindowText(_T(""));
     m_bHandleSearchTextChange = true;
 
-    MoveControls();
+    MoveControls(false);
 
     if(id >= -1)
     {
@@ -3317,6 +3326,8 @@ void CQPasteWnd::OnTimer(UINT_PTR nIDEvent)
 {
     if(nIDEvent == TIMER_DO_SEARCH)
     {
+		Log(_T("TIMER_DO_SEARCH timer\n"));
+
 		KillTimer(TIMER_DO_SEARCH);
 
         CString csText;
@@ -3391,4 +3402,28 @@ LRESULT CQPasteWnd::OnSelectAll(WPARAM wParam, LPARAM lParam)
     }
 
     return ret;
+}
+
+LRESULT CQPasteWnd::OnShowHideScrollBar(WPARAM wParam, LPARAM lParam)
+{
+	if(wParam == 1)
+	{
+		Log(_T("OnShowHideScrollBar Showing ScrollBars"));
+	
+		//For the virtical scroll hide the scrollbar by moving it off of the screen
+		//If you hide it using ShowScrollBar the scroll wheel is disabled
+		MoveControls(true);
+
+		//Horizontal scroll bar can be hidden this way, doesn't seem to affect things
+		m_lstHeader.ShowScrollBar(SB_HORZ, 1);
+	}
+	else
+	{
+		Log(_T("OnShowHideScrollBar Hiding ScrollBars"));
+			
+		MoveControls(false);
+		m_lstHeader.ShowScrollBar(SB_HORZ, 0);
+	}
+
+	return 1;
 }

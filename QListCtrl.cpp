@@ -21,6 +21,9 @@ static char THIS_FILE[] = __FILE__;
 #define COLOR_SHADOW			RGB(245, 245, 245)
 #define DUMMY_COL_WIDTH			1
 
+#define TIMER_SHOW_PROPERTIES	1
+#define TIMER_SHOW_HIDE_VSCROL	2
+
 /////////////////////////////////////////////////////////////////////////////
 // CQListCtrl
 
@@ -118,6 +121,7 @@ BEGIN_MESSAGE_MAP(CQListCtrl, CListCtrl)
 	ON_NOTIFY_REFLECT(LVN_KEYDOWN, OnKeydown)
 	ON_NOTIFY_REFLECT(NM_DBLCLK, OnDblclk)
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, OnCustomdrawList)
+	ON_WM_MOUSEMOVE()
 	ON_WM_SYSKEYDOWN()
 	ON_WM_ERASEBKGND()
 	ON_WM_CREATE()
@@ -1221,8 +1225,6 @@ BOOL CQListCtrl::SetItemCountEx(int iCount, DWORD dwFlags /* = 0 */)
 	return CListCtrl::SetItemCountEx(iCount, dwFlags);
 }
 
-#define TIMER_SHOW_PROPERTIES	1
-
 void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NMLISTVIEW *pnmv = (NMLISTVIEW *) pNMHDR;
@@ -1258,14 +1260,53 @@ void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CQListCtrl::OnTimer(UINT_PTR nIDEvent) 
 {
-	if(nIDEvent == TIMER_SHOW_PROPERTIES)
+	//http://support.microsoft.com/kb/200054
+	//OnTimer() Is Not Called Repeatedly for a List Control
+	bool callBase = true;
+
+	switch(nIDEvent)
 	{
-		if( theApp.m_bShowingQuickPaste )
-			ShowFullDescription(true);
-		KillTimer(TIMER_SHOW_PROPERTIES);
+		case TIMER_SHOW_PROPERTIES:
+			{
+				if( theApp.m_bShowingQuickPaste )
+					ShowFullDescription(true);
+				KillTimer(TIMER_SHOW_PROPERTIES);
+
+				callBase = false;
+			}
+			break;
+
+		case TIMER_SHOW_HIDE_VSCROL:
+			{
+				CPoint cursorPos;
+				GetCursorPos(&cursorPos);
+
+				CRect crRight;
+				this->GetWindowRect(&crRight);
+
+				crRight.left = crRight.right - 30;
+
+				CRect crBottom;
+				this->GetWindowRect(&crBottom);
+
+				crBottom.top = crBottom.bottom - 30;
+
+				if(crRight.PtInRect(cursorPos) == false && crBottom.PtInRect(cursorPos) == false)
+				{
+					GetParent()->SendMessage(NM_SHOW_HIDE_SCROLLBARS, 0, 0);
+
+					KillTimer(TIMER_SHOW_HIDE_VSCROL);
+				}
+
+				callBase = false;
+			}
+			break;
 	}
 	
-	CListCtrl::OnTimer(nIDEvent);
+	if(callBase)
+	{
+		CListCtrl::OnTimer(nIDEvent);
+	}
 }
 
 void CQListCtrl::SetLogFont(LOGFONT &font)
@@ -1313,4 +1354,29 @@ BOOL CQListCtrl::OnItemDeleted(long lID)
 	BOOL bRet2 = m_RTFData.RemoveKey(lID);
 
 	return (bRet2);
+}
+
+void CQListCtrl::OnMouseMove(UINT nFlags, CPoint point)
+{
+	CRect crRight;
+	this->GetWindowRect(&crRight);
+	ScreenToClient(&crRight);
+
+	crRight.left = crRight.right - 30;
+
+	CRect crBottom;
+	this->GetWindowRect(&crBottom);
+	ScreenToClient(&crBottom);
+
+	crBottom.top = crBottom.bottom - 30;
+
+	if(crRight.PtInRect(point) || crBottom.PtInRect(point))
+	{
+		GetParent()->SendMessage(NM_SHOW_HIDE_SCROLLBARS, 1, 0);
+		SetTimer(TIMER_SHOW_HIDE_VSCROL, 1000, NULL);
+	}
+	else
+	{
+		GetParent()->SendMessage(NM_SHOW_HIDE_SCROLLBARS, 0, 0);
+	}
 }

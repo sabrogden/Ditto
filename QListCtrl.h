@@ -34,6 +34,7 @@
 #define NM_ALL_SELECTED				WM_USER+0x119
 #define NM_REFRESH_ROW				WM_USER+0x120
 #define NM_REFRESH_ROW_EXTRA_DATA	WM_USER+0x121
+#define NM_SHOW_HIDE_SCROLLBARS		WM_USER+0x122
 
 #define COPY_BUFFER_HOT_KEY_1_ID	-100
 #define COPY_BUFFER_HOT_KEY_2_ID	-101
@@ -169,6 +170,7 @@ protected:
 	//}}AFX_MSG
 	afx_msg BOOL OnToolTipText(UINT id, NMHDR * pNMHDR, LRESULT * pResult);
 	afx_msg void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
