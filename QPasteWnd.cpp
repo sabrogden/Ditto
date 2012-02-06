@@ -59,7 +59,9 @@ CQPasteWnd::CQPasteWnd()
     m_bModifersMoveActive = false;
 }
 
-CQPasteWnd::~CQPasteWnd(){}
+CQPasteWnd::~CQPasteWnd()
+{
+}
 
 BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 //{{AFX_MSG_MAP(CQPasteWnd)
@@ -187,6 +189,9 @@ ON_WM_CTLCOLOR_REFLECT()
 ON_COMMAND_RANGE(3000, 4000, OnAddinSelect)
 ON_MESSAGE(NM_ALL_SELECTED, OnSelectAll)
 ON_MESSAGE(NM_SHOW_HIDE_SCROLLBARS, OnShowHideScrollBar)
+//ON_WM_CTLCOLOR()
+//ON_WM_ERASEBKGND()
+//ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 
@@ -300,7 +305,7 @@ void CQPasteWnd::OnSize(UINT nType, int cx, int cy)
     MoveControls(false);
 }
 
-void CQPasteWnd::MoveControls(bool showVScroll)
+void CQPasteWnd::MoveControls(bool showScrollBars)
 {
     CRect crRect;
     GetClientRect(crRect);
@@ -344,7 +349,7 @@ void CQPasteWnd::MoveControls(bool showVScroll)
 
 	//If not showing the v-scroll bar then move it off of the screen
 	int scrollBarWidth = GetSystemMetrics(SM_CXVSCROLL);
-	if(showVScroll)
+	if(showScrollBars)
 	{
 		scrollBarWidth = 0;
 	}
@@ -352,11 +357,12 @@ void CQPasteWnd::MoveControls(bool showVScroll)
 	m_lstHeader.MoveWindow(0, topOfListBox, cx+scrollBarWidth, cy - listBoxBottomOffset-topOfListBox);
     m_Search.MoveWindow(18, cy - 20, nWidth - 20, 19);
 
-
     m_ShowGroupsFolderBottom.MoveWindow(0, cy - 19, 18, 16);
 
-    // Set the column widths
-    //m_lstHeader.SetColumnWidth(0, cx);
+	if(showScrollBars == false)
+	{
+		m_lstHeader.ShowScrollBar(SB_HORZ, 0);
+	}
 }
 
 void CQPasteWnd::OnSetFocus(CWnd *pOldWnd)
@@ -3245,6 +3251,8 @@ LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 	SelectFocusID();
     UpdateStatus(false);
 
+	m_lstHeader.ShowScrollBar(SB_HORZ, 0);
+
     return TRUE;
 }
 
@@ -3271,6 +3279,8 @@ LRESULT CQPasteWnd::OnRefeshRow(WPARAM wParam, LPARAM lParam)
 	{
 		m_lstHeader.Invalidate();
 		m_lstHeader.RedrawWindow();
+
+		m_lstHeader.ShowScrollBar(SB_HORZ, 0);
 
 		//Log(_T("End of first load, showing listbox and loading actual count, then accelerators"));
 	}
@@ -3427,3 +3437,67 @@ LRESULT CQPasteWnd::OnShowHideScrollBar(WPARAM wParam, LPARAM lParam)
 
 	return 1;
 }
+
+//HBRUSH CQPasteWnd::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+//{
+	//switch (nCtlColor) 
+	//{
+	//case CTLCOLOR_EDIT:
+	//	{
+	//		/*switch (pWnd->GetDlgCtrlID())
+	//		{
+	//		case ID_EDIT_SEARCH:
+	//		{
+	//		pDC->SetTextColor(RGB(0, 255, 0));
+	//		pDC->SetBkColor(RGB(0, 0, 0));
+	//		return (HBRUSH)(m_searchTextBoxBrush->GetSafeHandle());
+	//		}
+	//		break;
+	//		}*/
+	//	}
+	//	break;
+	//case CTLCOLOR_STATIC:
+	//	switch (pWnd->GetDlgCtrlID())
+	//	{
+	//	case ID_BOTTOM_BACK:
+	//		{
+	//			return (HBRUSH)(m_searchTextBoxBrush->GetSafeHandle());
+	//		}
+	//		break;
+	//	}
+	//}
+
+//	return CWndEx::OnCtlColor(pDC, pWnd, nCtlColor);
+//}
+
+//void CQPasteWnd::OnPaint()
+//{
+//	/*CBrush brush;
+//	brush.CreateSolidBrush(COLORREF(RGB(255, 0, 0)));
+//
+//	CRect clientRect;
+//	GetClientRect(clientRect);
+//
+//	CPaintDC dc(this);
+//	dc.FillRect(clientRect, &brush);*/
+//
+//	
+//		CQPasteWnd::OnPaint();
+//	
+//}
+
+//BOOL CQPasteWnd::OnEraseBkgnd(CDC* pDC)
+//{
+//	CRect rect;
+//	GetClientRect(&rect);
+//	CBrush myBrush(RGB(255, 0, 0));    // dialog background color
+//	CBrush *pOld = pDC->SelectObject(&myBrush);
+//	BOOL bRes  = pDC->PatBlt(0, 0, rect.Width(), rect.Height(), PATCOPY);
+//	pDC->SelectObject(pOld);    // restore old brush
+//	return bRes;                       // CDialog::OnEraseBkgnd(pDC);
+//
+//	//return TRUE;
+//	// TODO: Add your message handler code here and/or call default
+//
+//	//return CWndEx::OnEraseBkgnd(pDC);
+//}

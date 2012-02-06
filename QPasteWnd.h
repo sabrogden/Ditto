@@ -292,5 +292,8 @@ protected:
     afx_msg void CQPasteWnd::OnAddinSelect(UINT id);
     afx_msg LRESULT OnSelectAll(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShowHideScrollBar(WPARAM wParam, LPARAM lParam);
+	//afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	//afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	//afx_msg void OnPaint();
     //}}AFX_MSG
 };
