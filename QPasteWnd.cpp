@@ -57,6 +57,7 @@ CQPasteWnd::CQPasteWnd()
     m_strSQLSearch = "";
     m_bHandleSearchTextChange = true;
     m_bModifersMoveActive = false;
+	m_showScrollBars = false;
 }
 
 CQPasteWnd::~CQPasteWnd()
@@ -302,10 +303,10 @@ void CQPasteWnd::OnSize(UINT nType, int cx, int cy)
         return ;
     }
 
-    MoveControls(false);
+    MoveControls();
 }
 
-void CQPasteWnd::MoveControls(bool showScrollBars)
+void CQPasteWnd::MoveControls()
 {
     CRect crRect;
     GetClientRect(crRect);
@@ -347,22 +348,25 @@ void CQPasteWnd::MoveControls(bool showScrollBars)
 		m_btCancel.ShowWindow(SW_HIDE);
     }
 
-	//If not showing the v-scroll bar then move it off of the screen
-	int scrollBarWidth = GetSystemMetrics(SM_CXVSCROLL);
-	if(showScrollBars)
+	int extraSize = 0;
+
+	if(m_showScrollBars == false)
 	{
-		scrollBarWidth = 0;
+		extraSize = 20;
+
+		CRgn rgnRect;
+		CRect r;
+		m_lstHeader.GetWindowRect(&r);
+
+		rgnRect.CreateRectRgn(0, 0, cx, (cy - listBoxBottomOffset));
+
+		m_lstHeader.SetWindowRgn(rgnRect, TRUE);
 	}
 
-	m_lstHeader.MoveWindow(0, topOfListBox, cx+scrollBarWidth, cy - listBoxBottomOffset-topOfListBox);
+	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize);
     m_Search.MoveWindow(18, cy - 20, nWidth - 20, 19);
 
     m_ShowGroupsFolderBottom.MoveWindow(0, cy - 19, 18, 16);
-
-	if(showScrollBars == false)
-	{
-		m_lstHeader.ShowScrollBar(SB_HORZ, 0);
-	}
 }
 
 void CQPasteWnd::OnSetFocus(CWnd *pOldWnd)
@@ -532,7 +536,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
     }
     else
     {
-        MoveControls(false);
+        MoveControls();
     }
 
     // always on top... for persistent showing (g_Opt.m_bShowPersistent)
@@ -1026,7 +1030,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 	m_loadItems.push_back(loadItem);
 	m_thread.FireLoadItems(true);
 
-	MoveControls(false);
+	MoveControls();
 
 	m_CountSQL.Replace(_T("%"), _T("%%"));
 	m_SQL.Replace(_T("%"), _T("%%"));
@@ -1370,7 +1374,7 @@ LRESULT CQPasteWnd::OnSearch(WPARAM wParam, LPARAM lParam)
 
 	m_lstHeader.SetFocus();
 
-	MoveControls(false);
+	MoveControls();
 
 	m_Search.SetSel(-1, 0);
 
@@ -2538,7 +2542,7 @@ void CQPasteWnd::OnCancelFilter()
     m_Search.SetWindowText(_T(""));
     m_bHandleSearchTextChange = true;
 
-    MoveControls(false);
+    MoveControls();
 
     m_lstHeader.SetFocus();
 }
@@ -3003,7 +3007,7 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
     m_Search.SetWindowText(_T(""));
     m_bHandleSearchTextChange = true;
 
-    MoveControls(false);
+    MoveControls();
 
     if(id >= -1)
     {
@@ -3251,8 +3255,6 @@ LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 	SelectFocusID();
     UpdateStatus(false);
 
-	m_lstHeader.ShowScrollBar(SB_HORZ, 0);
-
     return TRUE;
 }
 
@@ -3279,8 +3281,6 @@ LRESULT CQPasteWnd::OnRefeshRow(WPARAM wParam, LPARAM lParam)
 	{
 		m_lstHeader.Invalidate();
 		m_lstHeader.RedrawWindow();
-
-		m_lstHeader.ShowScrollBar(SB_HORZ, 0);
 
 		//Log(_T("End of first load, showing listbox and loading actual count, then accelerators"));
 	}
@@ -3419,20 +3419,17 @@ LRESULT CQPasteWnd::OnShowHideScrollBar(WPARAM wParam, LPARAM lParam)
 	if(wParam == 1)
 	{
 		Log(_T("OnShowHideScrollBar Showing ScrollBars"));
-	
-		//For the virtical scroll hide the scrollbar by moving it off of the screen
-		//If you hide it using ShowScrollBar the scroll wheel is disabled
-		MoveControls(true);
 
-		//Horizontal scroll bar can be hidden this way, doesn't seem to affect things
-		m_lstHeader.ShowScrollBar(SB_HORZ, 1);
+		m_showScrollBars = true;
+
+		MoveControls();
 	}
 	else
 	{
 		Log(_T("OnShowHideScrollBar Hiding ScrollBars"));
-			
-		MoveControls(false);
-		m_lstHeader.ShowScrollBar(SB_HORZ, 0);
+
+		m_showScrollBars = false;
+		MoveControls();
 	}
 
 	return 1;

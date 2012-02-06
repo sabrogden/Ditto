@@ -1408,9 +1408,7 @@ void CQListCtrl::OnMouseMove(UINT nFlags, CPoint point)
 bool CQListCtrl::MouseInScrollBarArea(CRect crWindow, CPoint point)
 {
 	CRect crRight(crWindow);
-	CRect crBottom(crWindow);
-
-	
+	CRect crBottom(crWindow);	
 
 	crRight.left = crRight.right - 30;
 	crBottom.top = crBottom.bottom - 30;

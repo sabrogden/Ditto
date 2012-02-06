@@ -124,13 +124,14 @@ public:
     CF_DibTypeMap m_cf_rtfCache;
     CCriticalSection m_CritSection;
     CAccels m_MainAccels;
+	bool m_showScrollBars;
 
     void RefreshNc();
     void UpdateStatus(bool bRepaintImmediately = false); // regenerates the status (caption) text
     BOOL FillList(CString csSQLSearch = "");
     BOOL HideQPasteWindow(bool releaseFocus);
     BOOL ShowQPasteWindow(BOOL bFillList = TRUE);
-    void MoveControls(bool showVScroll);
+    void MoveControls();
 
     void DeleteSelectedRows();
 
