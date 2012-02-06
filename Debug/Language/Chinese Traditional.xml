@@ -119,7 +119,7 @@
 		
 		//New item added 3/1/11
 		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098"></Item>
-		<Item English_Text = "Include" ID = "2097"></Item>
+		<Item English_Text = "Include" ID = "2095"></Item>
 		<Item English_Text = "Exclude" ID = "2096"></Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
