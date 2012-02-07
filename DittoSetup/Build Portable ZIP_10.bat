@@ -14,7 +14,6 @@ MkDir Ditto\Addins
 if "%2" == "bit64" goto bit64
 
 copy ..\Release\Ditto.exe Ditto\Ditto.exe
-copy ..\Release\focus.dll Ditto\focus.dll
 copy ..\Release\Addins\*.dll Ditto\Addins\
 copy mfc-crt_10\* Ditto\
 
@@ -23,7 +22,6 @@ if "%2"=="bit32" GOTO skipBit64
 :bit64
 
 copy ..\Release64\Ditto.exe Ditto\Ditto.exe
-copy ..\Release64\focus64.dll Ditto\focus64.dll
 copy ..\Release64\Addins\*.dll Ditto\Addins\
 copy mfc-crt64\* Ditto\
 
