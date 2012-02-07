@@ -13,6 +13,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EncryptDecrypt", "EncryptDe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "focus", "focusdll\focus.vcxproj", "{E4AB8C80-F35F-451E-853B-07CEDD49E500}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FocusHighlight", "FocusHighlight\FocusHighlight.vcxproj", "{385F3F81-896E-41EF-AE32-98D8A026588F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -53,6 +55,12 @@ Global
 		{E4AB8C80-F35F-451E-853B-07CEDD49E500}.Release|Win32.Build.0 = Release|Win32
 		{E4AB8C80-F35F-451E-853B-07CEDD49E500}.Release|x64.ActiveCfg = Release|x64
 		{E4AB8C80-F35F-451E-853B-07CEDD49E500}.Release|x64.Build.0 = Release|x64
+		{385F3F81-896E-41EF-AE32-98D8A026588F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{385F3F81-896E-41EF-AE32-98D8A026588F}.Debug|Win32.Build.0 = Debug|Win32
+		{385F3F81-896E-41EF-AE32-98D8A026588F}.Debug|x64.ActiveCfg = Debug|Win32
+		{385F3F81-896E-41EF-AE32-98D8A026588F}.Release|Win32.ActiveCfg = Release|Win32
+		{385F3F81-896E-41EF-AE32-98D8A026588F}.Release|Win32.Build.0 = Release|Win32
+		{385F3F81-896E-41EF-AE32-98D8A026588F}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
