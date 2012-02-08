@@ -81,7 +81,7 @@ END_MESSAGE_MAP()
 
 CCP_MainApp::CCP_MainApp()
 {
-	theApp.m_activeWnd.TrackActiveWnd(NULL, false);
+	theApp.m_activeWnd.TrackActiveWnd(false);
 
 	m_bAppRunning = false;
 	m_bAppExiting = false;

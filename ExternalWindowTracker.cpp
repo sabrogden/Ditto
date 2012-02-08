@@ -16,7 +16,7 @@ ExternalWindowTracker::~ExternalWindowTracker(void)
 {
 }
 
-bool ExternalWindowTracker::TrackActiveWnd(HWND focus, bool force)
+bool ExternalWindowTracker::TrackActiveWnd(bool force)
 {
 	if(force == false && IdleSeconds() < (CGetSetOptions::GetMinIdleTimeBeforeTrackFocus() / 1000.0))
 	{
@@ -25,21 +25,26 @@ bool ExternalWindowTracker::TrackActiveWnd(HWND focus, bool force)
 	}
 
 	BOOL fromHook = true;
-	HWND newFocus = focus;
+	HWND newFocus = NULL;
 	HWND newActive = ::GetForegroundWindow();
-	if(newFocus == NULL)
+
+	if(CGetSetOptions::GetUseGuiThreadInfoForFocus())
+	{
+		GUITHREADINFO guiThreadInfo;
+		guiThreadInfo.cbSize = sizeof(GUITHREADINFO);
+		DWORD OtherThreadID = GetWindowThreadProcessId(newActive, NULL);
+		if(GetGUIThreadInfo(OtherThreadID, &guiThreadInfo))
+		{
+			newFocus = guiThreadInfo.hwndFocus;
+		}
+	}
+	else
 	{
 		if(AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), TRUE))
 		{
 			newFocus = GetFocus();
 			AttachThreadInput(GetWindowThreadProcessId(newActive, NULL), GetCurrentThreadId(), FALSE);
 		}
-		else
-		{
-			//Log(_T("TrackActiveWnd - AttachThreadInput failed"));
-		}
-
-		fromHook = false;
 	}
 
 	if(newFocus == 0 && newActive != 0)
@@ -54,12 +59,6 @@ bool ExternalWindowTracker::TrackActiveWnd(HWND focus, bool force)
 	if(newFocus == 0 || !IsWindow(newFocus) || newActive == 0 || !IsWindow(newActive))
 	{
 		Log(_T("TargetActiveWindow values invalid"));
-		return false;
-	}
-
-	if(newActive == m_activeWnd)
-	{
-//			Log(_T("TargetActiveWindow window the same"));
 		return false;
 	}
 

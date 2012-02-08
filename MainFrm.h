@@ -15,7 +15,6 @@
 #define END_DITTO_BUFFER_CLIPBOARD_TIMER	7
 #define KEY_STATE_MODIFIERS				8
 #define ACTIVE_WINDOW_TIMER				9
-#define FOCUS_CHANGED_TIMER				10
 #define TEXT_ONLY_PASTE					11
 
 class CMainFrame: public CFrameWnd
@@ -94,7 +93,6 @@ protected:
     afx_msg LRESULT OnClipboardCopied(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnErrorOnSendRecieve(WPARAM wParam, LPARAM lParam);
-    afx_msg LRESULT OnFocusChanged(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnCustomizeTrayMenu(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEditWndClose(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnSetConnected(WPARAM wParam, LPARAM lParam);

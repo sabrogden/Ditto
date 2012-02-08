@@ -46,7 +46,6 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_WM_CLOSE()
 	ON_MESSAGE(WM_ADD_TO_DATABASE_FROM_SOCKET, OnAddToDatabaseFromSocket)
 	ON_MESSAGE(WM_SEND_RECIEVE_ERROR, OnErrorOnSendRecieve)
-	ON_MESSAGE(WM_FOCUS_CHANGED, OnFocusChanged)
 	ON_MESSAGE(WM_CUSTOMIZE_TRAY_MENU, OnCustomizeTrayMenu)
 	ON_COMMAND(ID_FIRST_IMPORT, OnFirstImport)
 	ON_MESSAGE(WM_EDIT_WND_CLOSING, OnEditWndClose)
@@ -242,7 +241,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
             SetTimer(KEY_STATE_MODIFIERS, 50, NULL);
 
 			//Before we show our window find the current focused window for paste into
-			theApp.m_activeWnd.TrackActiveWnd(NULL, true);
+			theApp.m_activeWnd.TrackActiveWnd(true);
 
             m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
         }
@@ -520,18 +519,10 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 			{
 				if(theApp.m_bShowingQuickPaste)
 				{
-					theApp.m_activeWnd.TrackActiveWnd(NULL, false);
+					theApp.m_activeWnd.TrackActiveWnd(false);
 				}
 			}
 			break;
-
-		case FOCUS_CHANGED_TIMER:
-			{
-				KillTimer(FOCUS_CHANGED_TIMER);
-	            //Log(StrF(_T("Focus Timer %d"), m_tempFocusWnd));
-	            theApp.m_activeWnd.TrackActiveWnd(m_tempFocusWnd, false);
-			}
-            break;
 
 		case TEXT_ONLY_PASTE:
 			{
@@ -603,7 +594,7 @@ BOOL CMainFrame::PreTranslateMessage(MSG *pMsg)
     // target before mouse messages change the focus
 	/*if(theApp.m_bShowingQuickPaste && WM_MOUSEFIRST <= pMsg->message && pMsg->message <= WM_MOUSELAST)
 	{
-	theApp.m_activeWnd.TrackActiveWnd(NULL, true);
+	theApp.m_activeWnd.TrackActiveWnd(true);
 	}*/
 
     return CFrameWnd::PreTranslateMessage(pMsg);
@@ -673,7 +664,7 @@ bool CMainFrame::CloseAllOpenDialogs()
 
 LRESULT CMainFrame::OnSystemTrayMouseMove(WPARAM wParam, LPARAM lParam)
 {
-	theApp.m_activeWnd.TrackActiveWnd(NULL, true);
+	theApp.m_activeWnd.TrackActiveWnd(true);
 	return 0;
 }
 
@@ -774,40 +765,6 @@ CString WndName(HWND hParent)
     }
 
     return cWindowText;
-}
-
-LRESULT CMainFrame::OnFocusChanged(WPARAM wParam, LPARAM lParam)
-{
-    if(m_quickPaste.IsWindowVisibleEx())
-    {
-        HWND focus = (HWND)wParam;
-        static DWORD dLastDittoHasFocusTick = 0;
-
-        //Sometimes when we bring ditto up there will come a null focus 
-        //rite after that
-        if(focus == NULL && (GetTickCount() - dLastDittoHasFocusTick < 500))
-        {
-            Log(_T("NULL focus within 500 ticks of bringing up ditto"));
-            return TRUE;
-        }
-        else if(focus == NULL)
-        {
-            Log(_T("NULL focus received"));
-        }
-
-        if(theApp.m_activeWnd.DittoHasFocus())
-        {
-            dLastDittoHasFocusTick = GetTickCount();
-        }
-
-        //Log(StrF(_T("OnFocusChanged %d, title %s"), focus, WndName(focus)));
-        m_tempFocusWnd = focus;
-
-        KillTimer(FOCUS_CHANGED_TIMER);
-        SetTimer(FOCUS_CHANGED_TIMER, g_Opt.FocusChangedDelay(), NULL);
-    }
-
-    return TRUE;
 }
 
 void CMainFrame::OnFirstHelp()

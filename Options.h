@@ -415,6 +415,8 @@ public:
 	static DWORD	GetMinIdleTimeBeforeTrackFocus();
 
 	static DWORD	GetTimeBeforeExpandWindow();
+
+	static DWORD	GetUseGuiThreadInfoForFocus();
 };
 
 // global for easy access and for initialization of fast access variables

@@ -1991,3 +1991,8 @@ DWORD CGetSetOptions::GetTimeBeforeExpandWindow()
 {
 	return GetProfileLong(_T("TimeBeforeExpandWindow"), 250);
 }
+
+DWORD CGetSetOptions::GetUseGuiThreadInfoForFocus()
+{
+	return GetProfileLong(_T("UseGuiThreadInfoForFocus"), 1);
+}
