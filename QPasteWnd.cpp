@@ -1923,6 +1923,9 @@ void CQPasteWnd::OnMenuGroupsMovetogroup()
     if(nRet == IDOK)
     {
         int nGroup = dlg.GetSelectedGroup();
+
+		Log(StrF(_T("Move to Group, GroupId: %d"), nGroup));
+
         if(nGroup >= -1)
         {
             CClipIDs IDs;

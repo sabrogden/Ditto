@@ -183,6 +183,9 @@ BOOL CClipIDs::MoveTo(long lParentID, double dFirst, double dIncrement)
 	try
 	{
 		int count = (int)GetSize();
+
+		Log(StrF(_T("MoveTo, Start, Size: %d, ParentId: %d"), count, lParentID));
+
 		for(int i = count-1; i >= 0; i--)
 		{
 			CString sql;
@@ -203,7 +206,9 @@ BOOL CClipIDs::MoveTo(long lParentID, double dFirst, double dIncrement)
 							lParentID);
 			}
 
-			theApp.m_db.execDMLEx(sql);
+			int ret = theApp.m_db.execDMLEx(sql);
+
+			Log(StrF(_T("MoveTo, Sql Ret: %d, SQL: %s"), ret, sql));
 		}
 	}
 	CATCH_SQLITE_EXCEPTION
