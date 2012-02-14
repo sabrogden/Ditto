@@ -189,7 +189,7 @@ BOOL CClipIDs::MoveTo(long lParentID, double dFirst, double dIncrement)
 
 			if(lParentID > 0)
 			{
-				sql = StrF(_T("UPDATE Main SET lParentID = %d, clipGroupOrder = %d WHERE lID = %d AND lID <> %d;"), 
+				sql = StrF(_T("UPDATE Main SET lParentID = %d, clipGroupOrder = %f WHERE lID = %d AND lID <> %d;"), 
 							lParentID,
 							CClip::GetNewOrder(lParentID, ElementAt(i)),
 							ElementAt(i),
