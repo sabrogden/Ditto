@@ -358,7 +358,7 @@ void CQPasteWnd::MoveControls()
 		CRect r;
 		m_lstHeader.GetWindowRect(&r);
 
-		rgnRect.CreateRectRgn(0, 0, cx, (cy - listBoxBottomOffset));
+		rgnRect.CreateRectRgn(0, 0, cx, (cy - listBoxBottomOffset-topOfListBox));
 
 		m_lstHeader.SetWindowRgn(rgnRect, TRUE);
 	}
