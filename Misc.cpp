@@ -706,9 +706,9 @@ long NewGroupID(int parentID, CString text)
 		CString cs;
 
 		cs.Format(_T("insert into Main (lDate, mText, lDontAutoDelete, bIsGroup, lParentID) values(%d, '%s', %d, 1, %d);"),
-							(long)time.GetTime(),
+							(int)time.GetTime(),
 							text,
-							(long)time.GetTime(),
+							(int)time.GetTime(),
 							parentID);
 
 		theApp.m_db.execDML(cs);

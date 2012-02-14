@@ -515,12 +515,16 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 			{
 				MakeLatestOrder();
 
-				theApp.m_db.execDMLEx(_T("UPDATE Main SET clipOrder = %f, lastPasteDate = %d where lID = %d;"), 
-										m_clipOrder, CTime::GetCurrentTime().GetTime(), nID);
+				CString sql;
+				
+				sql.Format(_T("UPDATE Main SET clipOrder = %f, lastPasteDate = %d where lID = %d;"), 
+								m_clipOrder, (int)CTime::GetCurrentTime().GetTime(), nID);
+
+				int ret = theApp.m_db.execDML(sql);
 
 				m_id = nID;
 
-				Log(StrF(_T("Found duplicate clip in db, Id: %d, crc: %d, NewOrder: %f"), nID, m_CRC, m_clipOrder));
+				Log(StrF(_T("Found duplicate clip in db, Id: %d, crc: %d, NewOrder: %f, Ret: %d, SQL: %s"), nID, m_CRC, m_clipOrder, ret, sql));
 
 				return true;
 			}
@@ -614,7 +618,7 @@ bool CClip::AddToMainTable()
 
 		CString cs;
 		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s', %f, %f, %d, %d);"),
-							(long)m_Time.GetTime(),
+							(int)m_Time.GetTime(),
 							m_Desc,
 							m_shortCut,
 							m_dontAutoDelete,
@@ -625,7 +629,7 @@ bool CClip::AddToMainTable()
 							m_clipOrder,
 							m_clipGroupOrder,
 							m_globalShortCut,
-							CTime::GetCurrentTime().GetTime());
+							(int)CTime::GetCurrentTime().GetTime());
 
 		theApp.m_db.execDML(cs);
 
@@ -715,9 +719,6 @@ bool CClip::AddToDataTable()
 	return true;
 }
 
-// changes m_Time to be later than the latest clip entry in the db
-// ensures that pClip's time is not older than the last clip added
-// old times can happen on fast copies (<1 sec).
 void CClip::MakeLatestOrder()
 {
 	m_clipOrder = GetNewOrder(-1, m_id);

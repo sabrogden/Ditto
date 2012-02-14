@@ -372,7 +372,7 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 
 			db.execDML(_T("ALTER TABLE Main ADD lastPasteDate INTEGER"));
 			db.execDML(_T("Update Main set lastPasteDate = lDate"));
-			db.execDMLEx(_T("Update Main set lastPasteDate = %d where lastPasteDate <= 0"), CTime::GetCurrentTime().GetTime());
+			db.execDMLEx(_T("Update Main set lastPasteDate = %d where lastPasteDate <= 0"), (int)CTime::GetCurrentTime().GetTime());
 
 			e.errorCode();
 		}
@@ -609,7 +609,7 @@ BOOL RemoveOldEntries()
 				
 				CppSQLite3Query q = db.execQueryEx(_T("SELECT lID FROM Main ")
 													_T("WHERE lastPasteDate < %d AND ")
-													_T("bIsGroup = 0 AND lShortCut = 0 AND lParentID <= 0 AND lDontAutoDelete = 0"), now.GetTime());
+													_T("bIsGroup = 0 AND lShortCut = 0 AND lParentID <= 0 AND lDontAutoDelete = 0"), (int)now.GetTime());
 
 				while(q.eof() == false)
 				{

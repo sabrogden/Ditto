@@ -304,7 +304,7 @@ void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
 	//don't auto delete check box is checked
 	if(m_bNeverAutoDelete)
 	{
-		Clip.m_dontAutoDelete = (long)CTime::GetCurrentTime().GetTime();
+		Clip.m_dontAutoDelete = (int)CTime::GetCurrentTime().GetTime();
 	}
 	else if(m_bNeverAutoDelete == FALSE)
 	{
