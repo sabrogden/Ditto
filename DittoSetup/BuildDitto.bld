@@ -126,6 +126,34 @@ End If
 		</step>
 		<step action='Group'>
 			<indent type='3'>1</indent>
+			<name>Sign App Code</name>
+		</step>
+		<step action='Run Program'>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\ScottTanis\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release64\Ditto.exe</command>
+			<indent type='3'>2</indent>
+			<name>Sign Ditto.exe 64</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='Run Program'>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\ScottTanis\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release64\Addins\DittoUtil.dll</command>
+			<indent type='3'>2</indent>
+			<name>Sign DittoUtil.dll 64</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='Run Program'>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\ScottTanis\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release\Ditto.exe</command>
+			<indent type='3'>2</indent>
+			<name>Sign Ditto.exe</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='Run Program'>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\ScottTanis\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release\Addins\DittoUtil.dll</command>
+			<indent type='3'>2</indent>
+			<name>Sign DittoUtil.dll</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='Group'>
+			<indent type='3'>1</indent>
 			<name>Zip Source</name>
 		</step>
 		<step action='UNZIP Files'>
@@ -209,6 +237,22 @@ DittoSetup*]]></X>
 			<Y type='11'>-1</Y>
 			<indent type='3'>1</indent>
 			<name>Zip Debug Files</name>
+		</step>
+		<step action='Group'>
+			<indent type='3'>1</indent>
+			<name>Sign Installers</name>
+		</step>
+		<step action='Run Program'>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\ScottTanis\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\DittoSetup\Output\DittoSetup_%versionFileName%.exe</command>
+			<indent type='3'>2</indent>
+			<name>Sign Ditto Installer</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='Run Program'>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\ScottTanis\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\DittoSetup\Output\DittoSetup_64bit_%versionFileName%.exe</command>
+			<indent type='3'>2</indent>
+			<name>Sign Ditto 64 Installer</name>
+			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Group'>
 			<indent type='3'>1</indent>
