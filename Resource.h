@@ -32,6 +32,10 @@
 #define IDI_ICON1                       167
 #define IDD_DIALOG1                     168
 #define IDD_GLOBAL_CLIPS                168
+#define IDB_BITMAP_SEARCH_NORMAL        170
+#define IDB_BITMAP_SEARCH_CLOSE         171
+#define IDB_BITMAP1                     172
+#define IDB_BITMAP2                     174
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -354,7 +358,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        169
+#define _APS_NEXT_RESOURCE_VALUE        175
 #define _APS_NEXT_COMMAND_VALUE         32873
 #define _APS_NEXT_CONTROL_VALUE         2100
 #define _APS_NEXT_SYMED_VALUE           101

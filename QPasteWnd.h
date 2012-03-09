@@ -13,6 +13,7 @@
 #include <afxmt.h>
 #include "ClipFormatQListCtrl.h"
 #include "QPasteWndThread.h"
+#include "editwithbutton.h"
 
 class CMainTable
 {
@@ -94,9 +95,8 @@ public:
 
     CAlphaBlend m_Alpha;
     CFont m_TitleFont;
-    CSearchEditBox m_Search;
+	CEditWithButton m_search;
     CFont m_SearchFont;
-    CButton m_btCancel;
     bool m_bHideWnd;
     CString m_strSQLSearch;
     CGroupStatic m_stGroup;
@@ -192,7 +192,7 @@ protected:
     afx_msg void OnMenuPositioningAtcursor();
     afx_msg void OnMenuPositioningAtpreviousposition();
     afx_msg void OnMenuOptions();
-    afx_msg void OnCancelFilter();
+    afx_msg LRESULT OnCancelFilter(WPARAM wParam, LPARAM lParam);
     afx_msg void OnMenuExitprogram();
     afx_msg void OnMenuToggleConnectCV();
     afx_msg void OnMenuProperties();

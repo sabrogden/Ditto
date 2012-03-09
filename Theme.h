@@ -61,4 +61,5 @@ protected:
 	CString m_csNotes;
 
 	__int64 m_LastWriteTime;
+	CString m_lastTheme;
 };

@@ -322,6 +322,9 @@
     <ClCompile Include="GlobalClips.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="EditWithButton.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -687,6 +690,9 @@
     <ClInclude Include="GlobalClips.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="EditWithButton.h">
+      <Filter>header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -764,6 +770,14 @@
       <Filter>res</Filter>
     </None>
     <None Include="res\Ditto2_NoCopyCb.ico">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\bmp00004.bmp" />
+    <None Include="res\bitmap2.bmp" />
+    <None Include="res\search_close.bmp">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\search_normal.bmp">
       <Filter>res</Filter>
     </None>
   </ItemGroup>

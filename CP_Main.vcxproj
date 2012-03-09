@@ -547,6 +547,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="EditWithButton.cpp" />
     <ClCompile Include="EventThread.cpp" />
     <ClCompile Include="GlobalClips.cpp" />
     <ClCompile Include="HotKeys.cpp" />
@@ -1742,6 +1743,7 @@
     <ClInclude Include="ArrayEx.h" />
     <ClInclude Include="AutoSendToClientThread.h" />
     <ClInclude Include="ClipFormatQListCtrl.h" />
+    <ClInclude Include="EditWithButton.h" />
     <ClInclude Include="EventThread.h" />
     <ClInclude Include="FormattedTextDraw.h" />
     <ClInclude Include="GlobalClips.h" />
@@ -1864,9 +1866,11 @@
     <None Include="res\back1.bmp" />
     <None Include="res\back2.bmp" />
     <None Include="res\bitmap1.bmp" />
+    <None Include="res\bitmap2.bmp" />
     <None Include="res\bmp00001.bmp" />
     <None Include="res\bmp00002.bmp" />
     <None Include="res\bmp00003.bmp" />
+    <None Include="res\bmp00004.bmp" />
     <None Include="res\closed_f.bmp" />
     <None Include="res\CP_Main.ico" />
     <None Include="res\CP_Main.rc2" />
@@ -1878,6 +1882,8 @@
     <None Include="res\mainfram.bmp" />
     <None Include="res\open_fol.bmp" />
     <None Include="res\Ditto2.ico" />
+    <None Include="res\search_close.bmp" />
+    <None Include="res\search_normal.bmp" />
     <None Include="res\Toolbar.bmp" />
     <None Include="res\toolbar1.bmp" />
     <CustomBuild Include="RulerRichEditCtrl\toolbar.bmp">

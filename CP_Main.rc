@@ -85,6 +85,8 @@ IDB_BACK                BITMAP                  "res\\back.bmp"
 IDB_BACK_PRESSED        BITMAP                  "res\\back1.bmp"
 IDB_BACK_FOCUSED        BITMAP                  "res\\back2.bmp"
 IDR_EDIT_WND            BITMAP                  "res\\mainfram.bmp"
+IDB_BITMAP_SEARCH_NORMAL BITMAP                  "res\\search_normal.bmp"
+IDB_BITMAP_SEARCH_CLOSE BITMAP                  "res\\search_close.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -9,6 +9,7 @@ CTheme::CTheme(void)
 {
 	m_lFileVersion = 0;
 	m_LastWriteTime = 0;
+	m_lastTheme = _T("");
 
 	m_CaptionLeft = RGB(0, 84, 195);
 	m_CaptionRight = RGB(61, 149, 255);
@@ -45,13 +46,15 @@ bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)
 
 	if(bCheckLastWriteTime)
 	{	
-		if(LastWrite == m_LastWriteTime)
+		if(m_lastTheme == csTheme &&
+			LastWrite == m_LastWriteTime)
 		{
 			return true;
 		}
 	}
 
 	m_LastWriteTime = LastWrite;
+	m_lastTheme = csTheme;
 
 	Log(StrF(_T("Loading Theme %s"), csPath));
 
