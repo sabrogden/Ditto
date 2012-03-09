@@ -228,7 +228,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_search.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | ES_MULTILINE, CRect(0, 0, 0, 0), this, ID_EDIT_SEARCH);
 	m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL, IDB_BITMAP_SEARCH_CLOSE);
 
-	CRect rcEditArea(3, 2, 16, 2);
+	CRect rcEditArea(4, 2, 20, 2);
 	m_search.SetBorder(rcEditArea);
 
 	CRect rcCloseArea(85, 3, 99, 15);
@@ -338,7 +338,7 @@ void CQPasteWnd::MoveControls()
 	}
 
     int nWidth = cx;
-	int listBoxBottomOffset = 22;
+	int listBoxBottomOffset = 24;
 
 	int extraSize = 0;
 
@@ -356,7 +356,7 @@ void CQPasteWnd::MoveControls()
 	}
 
 	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize);
-    m_search.MoveWindow(18, cy - 20, cx - 20, 18);
+    m_search.MoveWindow(18, cy - 22, cx - 20, 20);
 
     m_ShowGroupsFolderBottom.MoveWindow(0, cy - 19, 18, 19);
 }
