@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<project version='7' encrypted='1'>
+<project version='8' encrypted='1'>
 	<steps type='0'>
 		<step action='Set Macro'>
 			<MacroName>LOGFILE</MacroName>
@@ -14,7 +14,6 @@
 			<DelDirs type='11'>-1</DelDirs>
 			<Ext>*</Ext>
 			<HideOn type='11'>-1</HideOn>
-			<LogDel type='11'>0</LogDel>
 			<Path>%workdir%</Path>
 			<Recurse type='11'>-1</Recurse>
 			<SysOn type='11'>-1</SysOn>
@@ -26,7 +25,6 @@
 			<DelDirs type='11'>-1</DelDirs>
 			<Ext>*</Ext>
 			<HideOn type='11'>-1</HideOn>
-			<LogDel type='11'>0</LogDel>
 			<Path>%testBuildWorkDir%</Path>
 			<Recurse type='11'>-1</Recurse>
 			<SysOn type='11'>-1</SysOn>
@@ -41,7 +39,7 @@
 			<Port>443</Port>
 			<Protocol>https</Protocol>
 			<Repository>/svnroot/ditto-cp</Repository>
-			<SVNPath>C:\Program Files (x86)\Subversion\bin</SVNPath>
+			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
 			<Subcommand>checkout</Subcommand>
 			<Username>sabrogden</Username>
 			<indent type='3'>1</indent>
@@ -129,25 +127,25 @@ End If
 			<name>Sign App Code</name>
 		</step>
 		<step action='Run Program'>
-			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\ScottTanis\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release64\Ditto.exe</command>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release64\Ditto.exe</command>
 			<indent type='3'>2</indent>
 			<name>Sign Ditto.exe 64</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
-			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\ScottTanis\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release64\Addins\DittoUtil.dll</command>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release64\Addins\DittoUtil.dll</command>
 			<indent type='3'>2</indent>
 			<name>Sign DittoUtil.dll 64</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
-			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\ScottTanis\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release\Ditto.exe</command>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release\Ditto.exe</command>
 			<indent type='3'>2</indent>
 			<name>Sign Ditto.exe</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
-			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\ScottTanis\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release\Addins\DittoUtil.dll</command>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release\Addins\DittoUtil.dll</command>
 			<indent type='3'>2</indent>
 			<name>Sign DittoUtil.dll</name>
 			<outputfrom type='3'>1</outputfrom>
@@ -157,7 +155,6 @@ End If
 			<name>Zip Source</name>
 		</step>
 		<step action='UNZIP Files'>
-			<Action type='3'>0</Action>
 			<Ansi type='11'>-1</Ansi>
 			<Dest>%testBuildWorkDir%</Dest>
 			<LogDetail type='11'>-1</LogDetail>
@@ -221,6 +218,7 @@ End If
 		</step>
 		<step action='7-Zip'>
 			<Action>Update</Action>
+			<Exe>C:\Program Files\7-Zip\7z.exe</Exe>
 			<Filename>%workDir%\%branch%\DittoSetup\output\DittoDebug_%versionFileName%.7z</Filename>
 			<I><![CDATA[*.map
 *.pdb
@@ -243,13 +241,13 @@ DittoSetup*]]></X>
 			<name>Sign Installers</name>
 		</step>
 		<step action='Run Program'>
-			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\ScottTanis\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\DittoSetup\Output\DittoSetup_%versionFileName%.exe</command>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\DittoSetup\Output\DittoSetup_%versionFileName%.exe</command>
 			<indent type='3'>2</indent>
 			<name>Sign Ditto Installer</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
-			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\ScottTanis\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\DittoSetup\Output\DittoSetup_64bit_%versionFileName%.exe</command>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\DittoSetup\Output\DittoSetup_64bit_%versionFileName%.exe</command>
 			<indent type='3'>2</indent>
 			<name>Sign Ditto 64 Installer</name>
 			<outputfrom type='3'>1</outputfrom>
@@ -320,7 +318,7 @@ var sc_security="b3f57099";
 			<Port>443</Port>
 			<Protocol>https</Protocol>
 			<Repository>/svnroot/ditto-cp</Repository>
-			<SVNPath>C:\Program Files (x86)\Subversion\bin</SVNPath>
+			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
 			<Subcommand>log</Subcommand>
 			<Switches>-r {2012-1-5}:{2012-12-31}</Switches>
 			<Username>sabrogden</Username>
