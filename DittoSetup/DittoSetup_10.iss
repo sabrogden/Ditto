@@ -53,7 +53,6 @@ Name: Danish; MessagesFile: Danish.isl
 
 [Tasks]
 Name: RunAtStartup; Description: Run Ditto on Windows Startup
-Name: EnableNetworkClips; Description: Allow Ditto to receive network clip data;
 
 [Files]
 #ifdef bit64
@@ -87,11 +86,6 @@ Root: HKCU; Subkey: Software\Ditto; Flags: uninsdeletekey
 Root: HKCU; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Run; ValueType: string; ValueName: Ditto; flags: uninsdeletevalue; ValueData: {app}\Ditto.exe; Tasks: RunAtStartup
 Root: HKCU; Subkey: Software\Ditto; ValueType: string; ValueName: LanguageFile; ValueData: {language}
 
-Root: HKCU; Subkey: Software\Ditto; ValueType: string; ValueName: LanguageFile; ValueData: {language}; Tasks: EnableNetworkClips
-
-Root: HKCU; Subkey: Software\Ditto; ValueType: dword; ValueName: DisableRecieve; ValueData: 0; Tasks: EnableNetworkClips
-Root: HKCU; Subkey: Software\Ditto; ValueType: dword; ValueName: DisableRecieve; ValueData: 1; Tasks: not EnableNetworkClips
-
 Root: HKCU; Subkey: Software\Ditto\PasteStrings; ValueType: string; ValueName: gvim.exe; ValueData: """{{PLUS}gP"
 Root: HKCU; Subkey: Software\Ditto\CopyStrings; ValueType: string; ValueName: gvim.exe; ValueData: """{{PLUS}y"
 Root: HKCU; Subkey: Software\Ditto\CutStrings; ValueType: string; ValueName: gvim.exe; ValueData: """{{PLUS}x"
@@ -116,33 +110,8 @@ begin
     RenameFile(sDir+'\Language\Italian.xml', sDir+'\Language\Italian.xml.old')
 end;
 
-[Code]
-function DisableNetwork(): Boolean;
-var
-  disabled: Boolean;
-begin
 
-  disabled := RegValueExists(HKCU, 'Software\Ditto\DisableRecieve', '1');
-  Result := disabled;
-  
-end;
 
-procedure CurPageChanged(CurPageID: Integer);
-begin
-  
-if CurPageID=wpSelectTasks then
-begin
-    
-    if DisableNetwork() then
-    begin
-      Wizardform.TasksList.Checked[1] := false;
-    end 
-    else 
-    begin
-      Wizardform.TasksList.Checked[1] := true;
-    end;
 
-end;
-end;
 
 
