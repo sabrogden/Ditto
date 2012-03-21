@@ -251,6 +251,7 @@
 #define IDC_COPY_3                      2099
 #define IDC_CHECK_WIN                   2099
 #define IDC_WIN_COPY_3                  2100
+#define IDC_EDIT_PROPERTIES             2100
 #define IDC_PASTE_3                     2101
 #define IDC_WIN_PASTE_3                 2102
 #define IDC_STATIC_COPY_3               2103
@@ -360,7 +361,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        175
 #define _APS_NEXT_COMMAND_VALUE         32873
-#define _APS_NEXT_CONTROL_VALUE         2100
+#define _APS_NEXT_CONTROL_VALUE         2101
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

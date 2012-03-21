@@ -41,7 +41,7 @@ void CCopyProperties::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CCopyProperties)
 	DDX_Control(pDX, IDC_EDIT_QUICK_PASTE, m_QuickPasteText);
-	DDX_Control(pDX, IDC_RICHEDIT1, m_RichEdit);
+	DDX_Control(pDX, IDC_EDIT_PROPERTIES, m_description);
 	DDX_Control(pDX, IDC_COMBO1, m_GroupCombo);
 	DDX_Control(pDX, IDC_HOTKEY, m_HotKey);
 	DDX_Control(pDX, IDC_COPY_DATA, m_lCopyData);
@@ -99,11 +99,11 @@ BOOL CCopyProperties::OnInitDialog()
 	}
 	else
 	{
-		m_RichEdit.SetFocus();
+		m_description.SetFocus();
 	}
 
 	m_Resize.SetParent(m_hWnd);
-	m_Resize.AddControl(IDC_RICHEDIT1, DR_SizeHeight | DR_SizeWidth);
+	m_Resize.AddControl(IDC_EDIT_PROPERTIES, DR_SizeHeight | DR_SizeWidth);
 	m_Resize.AddControl(IDC_STATIC_FORMATS, DR_MoveTop);
 	m_Resize.AddControl(IDC_COPY_DATA, DR_MoveTop | DR_SizeWidth);
 	m_Resize.AddControl(IDC_DELETE_COPY_DATA, DR_MoveTop);
@@ -125,8 +125,8 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 	COleDateTime lastPasteDate(Clip.m_lastPasteDate.GetTime());
 	m_lastPasteDate = lastPasteDate.Format();
 
-	m_RichEdit.SetText(Clip.m_Desc);
-
+	m_description.SetWindowText(Clip.m_Desc);
+	
 	if(Clip.m_dontAutoDelete)
 	{
 		m_bNeverAutoDelete = TRUE;
@@ -285,7 +285,7 @@ void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
 		theApp.m_db.execDMLEx(_T("UPDATE Main SET lShortCut = 0 where lShortCut = %d AND lID <> %d;"), Clip.m_shortCut, m_lCopyID);
 	}
 
-	Clip.m_Desc = m_RichEdit.GetText();
+	m_description.GetWindowText(Clip.m_Desc);
 	Clip.m_Desc.Replace(_T("'"), _T("''"));
 
 	m_QuickPasteText.GetWindowText(Clip.m_csQuickPaste);

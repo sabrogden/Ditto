@@ -25,7 +25,7 @@ public:
 	//{{AFX_DATA(CCopyProperties)
 	enum { IDD = IDD_COPY_PROPERTIES };
 	CEdit	m_QuickPasteText;
-	CRichEditCtrlEx	m_RichEdit;
+	CEdit m_description;
 	CGroupCombo	m_GroupCombo;
 	CHotKeyCtrl	m_HotKey;
 	CListBox	m_lCopyData;
