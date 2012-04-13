@@ -35,7 +35,14 @@
 #define IDB_BITMAP_SEARCH_NORMAL        170
 #define IDB_BITMAP_SEARCH_CLOSE         171
 #define IDB_BITMAP1                     172
+#define IDB_BITMAP_SEARCH_NORMAL_125    172
+#define IDB_BITMAP_SEARCH_CLOSE_125     173
 #define IDB_BITMAP2                     174
+#define IDB_BITMAP_SEARCH_CLOSE_150     174
+#define IDB_BITMAP_SEARCH_NORMAL_150    175
+#define IDB_BITMAP_SEARCH_CLOSE_200     176
+#define IDB_BITMAP_SEARCH_NORMAL_151    177
+#define IDB_BITMAP_SEARCH_NORMAL_200    177
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
