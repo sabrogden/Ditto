@@ -165,6 +165,7 @@ public:
 	void SaveWindowSize();
 	void SelectFocusID();
 	void HideMenuGroup(CMenu* menu, CString text);
+	void SetSearchImages();
 
     // Generated message map functions
 protected:

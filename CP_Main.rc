@@ -87,6 +87,12 @@ IDB_BACK_FOCUSED        BITMAP                  "res\\back2.bmp"
 IDR_EDIT_WND            BITMAP                  "res\\mainfram.bmp"
 IDB_BITMAP_SEARCH_NORMAL BITMAP                  "res\\search_normal.bmp"
 IDB_BITMAP_SEARCH_CLOSE BITMAP                  "res\\search_close.bmp"
+IDB_BITMAP_SEARCH_NORMAL_125 BITMAP                  "res\\search_normal_125.bmp"
+IDB_BITMAP_SEARCH_CLOSE_125 BITMAP                  "res\\search_close_125.bmp"
+IDB_BITMAP_SEARCH_CLOSE_150 BITMAP                  "res\\search_close_150.bmp"
+IDB_BITMAP_SEARCH_NORMAL_150 BITMAP                  "res\\search_normal_150.bmp"
+IDB_BITMAP_SEARCH_CLOSE_200 BITMAP                  "res\\search_close_200.bmp"
+IDB_BITMAP_SEARCH_NORMAL_200 BITMAP                  "res\\search_normal_200.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

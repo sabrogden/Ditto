@@ -1872,10 +1872,15 @@
     <None Include="res\back2.bmp" />
     <None Include="res\bitmap1.bmp" />
     <None Include="res\bitmap2.bmp" />
+    <None Include="res\bitmap_s.bmp" />
     <None Include="res\bmp00001.bmp" />
     <None Include="res\bmp00002.bmp" />
     <None Include="res\bmp00003.bmp" />
     <None Include="res\bmp00004.bmp" />
+    <None Include="res\bmp00005.bmp" />
+    <None Include="res\bmp00006.bmp" />
+    <None Include="res\bmp00007.bmp" />
+    <None Include="res\bmp00008.bmp" />
     <None Include="res\closed_f.bmp" />
     <None Include="res\CP_Main.ico" />
     <None Include="res\CP_Main.rc2" />
@@ -1889,6 +1894,9 @@
     <None Include="res\Ditto2.ico" />
     <None Include="res\search_close.bmp" />
     <None Include="res\search_normal.bmp" />
+    <None Include="res\search_normal_125.bmp" />
+    <None Include="res\search_normal_150.bmp" />
+    <None Include="res\search_normal_200.bmp" />
     <None Include="res\Toolbar.bmp" />
     <None Include="res\toolbar1.bmp" />
     <CustomBuild Include="RulerRichEditCtrl\toolbar.bmp">

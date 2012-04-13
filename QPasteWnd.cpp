@@ -226,7 +226,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     SetWindowText(_T(QPASTE_TITLE));
 
     m_search.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | ES_MULTILINE, CRect(0, 0, 0, 0), this, ID_EDIT_SEARCH);
-	m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL, IDB_BITMAP_SEARCH_CLOSE);
+	SetSearchImages();
 
 	CRect rcEditArea(theApp.m_metrics.ScaleX(4), theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(2));
 	m_search.SetBorder(rcEditArea);
@@ -297,6 +297,35 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     return 0;
 }
 
+void CQPasteWnd::SetSearchImages()
+{
+	int iSourceImageDPIToUse = 96; // We will assume 96 by default.
+
+	if (theApp.m_metrics.GetDPIX() > 144) 
+		iSourceImageDPIToUse = 192;
+	else if (theApp.m_metrics.GetDPIX() > 120) 
+		iSourceImageDPIToUse = 144;
+	else if (theApp.m_metrics.GetDPIX() > 96) 
+		iSourceImageDPIToUse = 120;
+
+	// Now select the right resource to load.
+	switch(iSourceImageDPIToUse)
+	{
+	case 120: 
+		m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL_125, IDB_BITMAP_SEARCH_CLOSE_125);
+		break;
+	case 144: 
+		m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL_150, IDB_BITMAP_SEARCH_CLOSE_150);
+		break;
+	case 192: 
+		m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL_200, IDB_BITMAP_SEARCH_CLOSE_200);
+		break;						
+	default: // default to 96 DPI
+		m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL, IDB_BITMAP_SEARCH_CLOSE);
+		break;
+	}
+}
+
 void CQPasteWnd::OnSize(UINT nType, int cx, int cy)
 {
     CWndEx::OnSize(nType, cx, cy);
@@ -338,7 +367,7 @@ void CQPasteWnd::MoveControls()
 	}
 
     int nWidth = cx;
-	int listBoxBottomOffset = theApp.m_metrics.ScaleY(30);
+	int listBoxBottomOffset = theApp.m_metrics.ScaleY(22);
 	
 	int extraSize = 0;
 

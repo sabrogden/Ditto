@@ -782,6 +782,14 @@
     <None Include="res\search_normal.bmp">
       <Filter>res</Filter>
     </None>
+    <None Include="res\bitmap_s.bmp" />
+    <None Include="res\bmp00005.bmp" />
+    <None Include="res\bmp00006.bmp" />
+    <None Include="res\bmp00007.bmp" />
+    <None Include="res\bmp00008.bmp" />
+    <None Include="res\search_normal_200.bmp" />
+    <None Include="res\search_normal_125.bmp" />
+    <None Include="res\search_normal_150.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">
