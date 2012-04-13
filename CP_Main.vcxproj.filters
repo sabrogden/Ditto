@@ -325,6 +325,7 @@
     <ClCompile Include="EditWithButton.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="DPI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -693,6 +694,7 @@
     <ClInclude Include="EditWithButton.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="DPI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -800,5 +802,10 @@
     <Filter Include="tineyxml">
       <UniqueIdentifier>{08b8a44d-887f-48e0-8396-e9e9f573f337}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="DeclareDPIAware.manifest">
+      <Filter>header</Filter>
+    </Manifest>
   </ItemGroup>
 </Project>

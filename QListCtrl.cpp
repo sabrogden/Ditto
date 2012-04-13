@@ -1410,8 +1410,8 @@ bool CQListCtrl::MouseInScrollBarArea(CRect crWindow, CPoint point)
 	CRect crRight(crWindow);
 	CRect crBottom(crWindow);	
 
-	crRight.left = crRight.right - 30;
-	crBottom.top = crBottom.bottom - 30;
+	crRight.left = crRight.right - theApp.m_metrics.ScaleX(::GetSystemMetrics(SM_CXVSCROLL));
+	crBottom.top = crBottom.bottom - theApp.m_metrics.ScaleY(::GetSystemMetrics(SM_CYHSCROLL));
 
 	if(crRight.PtInRect(point) || crBottom.PtInRect(point))
 	{

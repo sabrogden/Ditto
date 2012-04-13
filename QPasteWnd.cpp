@@ -228,10 +228,10 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_search.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | ES_MULTILINE, CRect(0, 0, 0, 0), this, ID_EDIT_SEARCH);
 	m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL, IDB_BITMAP_SEARCH_CLOSE);
 
-	CRect rcEditArea(4, 2, 20, 2);
+	CRect rcEditArea(theApp.m_metrics.ScaleX(4), theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(2));
 	m_search.SetBorder(rcEditArea);
 
-	CRect rcCloseArea(85, 3, 99, 15);
+	CRect rcCloseArea(theApp.m_metrics.ScaleX(85), theApp.m_metrics.ScaleY(3), theApp.m_metrics.ScaleX(99), theApp.m_metrics.ScaleY(15));
 	m_search.SetButtonArea(rcCloseArea);
 
     // Create the header control
@@ -324,11 +324,11 @@ void CQPasteWnd::MoveControls()
         m_ShowGroupsFolderTop.ShowWindow(SW_SHOW);
         m_BackButton.ShowWindow(SW_SHOW);
 
-		m_BackButton.MoveWindow(0, 0, 18, 16);
-		m_ShowGroupsFolderTop.MoveWindow(22, 0, 18, 16);
-		m_stGroup.MoveWindow(44, 0, cx, 16);
+		m_BackButton.MoveWindow(0, 0, theApp.m_metrics.ScaleX(18), theApp.m_metrics.ScaleY(16));
+		m_ShowGroupsFolderTop.MoveWindow(theApp.m_metrics.ScaleX(22), 0, theApp.m_metrics.ScaleX(18), theApp.m_metrics.ScaleY(16));
+		m_stGroup.MoveWindow(theApp.m_metrics.ScaleX(44), 0, cx, theApp.m_metrics.ScaleY(16));
 
-		topOfListBox = 16;
+		topOfListBox = theApp.m_metrics.ScaleY(16);
 	}
 	else
 	{
@@ -338,13 +338,13 @@ void CQPasteWnd::MoveControls()
 	}
 
     int nWidth = cx;
-	int listBoxBottomOffset = 24;
-
+	int listBoxBottomOffset = theApp.m_metrics.ScaleY(30);
+	
 	int extraSize = 0;
 
 	if(m_showScrollBars == false)
 	{
-		extraSize = 20;
+		extraSize = ::GetSystemMetrics(SM_CXVSCROLL);
 
 		CRgn rgnRect;
 		CRect r;
@@ -356,9 +356,9 @@ void CQPasteWnd::MoveControls()
 	}
 
 	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize);
-    m_search.MoveWindow(18, cy - 22, cx - 20, 20);
+    m_search.MoveWindow(theApp.m_metrics.ScaleX(18), cy - theApp.m_metrics.ScaleY(21), cx - theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(20));
 
-    m_ShowGroupsFolderBottom.MoveWindow(0, cy - 19, 18, 19);
+    m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleY(2), cy - theApp.m_metrics.ScaleY(15), theApp.m_metrics.ScaleX(18), theApp.m_metrics.ScaleY(19));
 }
 
 void CQPasteWnd::OnSetFocus(CWnd *pOldWnd)

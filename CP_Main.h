@@ -20,6 +20,7 @@
 #include "DittoAddins.h"
 #include "externalwindowtracker.h"
 #include "HotKeys.h"
+#include "DPI.h"
 
 extern class CCP_MainApp theApp;
 
@@ -156,6 +157,8 @@ public:
 	void PumpMessageEx(HWND hWnd = NULL);
 
 	CDittoAddins m_Addins;
+
+	CDPI m_metrics;
 
 public:
 	virtual BOOL InitInstance();
