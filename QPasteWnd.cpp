@@ -249,15 +249,12 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_GroupTree.ShowWindow(SW_HIDE);
 
     m_ShowGroupsFolderBottom.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SHOW_GROUPS_BOTTOM);
-    m_ShowGroupsFolderBottom.LoadBitmaps(IDB_CLOSED_FOLDER, IDB_CLOSED_FOLDER_PRESSED, IDB_CLOSED_FOLDER_FOCUSED);
+    //m_ShowGroupsFolderBottom.LoadBitmaps(IDB_CLOSED_FOLDER, IDB_CLOSED_FOLDER_PRESSED, IDB_CLOSED_FOLDER_FOCUSED);
+	m_ShowGroupsFolderBottom.LoadStdImage(IDB_OPEN_FOLDER_PNG, _T("PNG"));
     m_ShowGroupsFolderBottom.ShowWindow(SW_SHOW);
 
-    m_ShowGroupsFolderTop.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SHOW_GROUPS_TOP);
-    m_ShowGroupsFolderTop.LoadBitmaps(IDB_OPEN_FOLDER, IDB_OPEN_FOLDER_PRESSED, IDB_OPEN_FOLDER_FOCUSED);
-    m_ShowGroupsFolderTop.ShowWindow(SW_SHOW);
-
     m_BackButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_BACK_BUTTON);
-    m_BackButton.LoadBitmaps(IDB_BACK, IDB_BACK_PRESSED, IDB_BACK_FOCUSED);
+    m_BackButton.LoadStdImage(IDB_LEFT_ARROW_PNG, _T("PNG"));
     m_BackButton.ShowWindow(SW_SHOW);
 
     m_stGroup.Create(_T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, ID_GROUP_TEXT);
@@ -350,12 +347,10 @@ void CQPasteWnd::MoveControls()
     if(theApp.m_GroupID > 0)
     {
         m_stGroup.ShowWindow(SW_SHOW);
-        m_ShowGroupsFolderTop.ShowWindow(SW_SHOW);
         m_BackButton.ShowWindow(SW_SHOW);
 
-		m_BackButton.MoveWindow(0, 0, theApp.m_metrics.ScaleX(18), theApp.m_metrics.ScaleY(16));
-		m_ShowGroupsFolderTop.MoveWindow(theApp.m_metrics.ScaleX(22), 0, theApp.m_metrics.ScaleX(18), theApp.m_metrics.ScaleY(16));
-		m_stGroup.MoveWindow(theApp.m_metrics.ScaleX(44), 0, cx, theApp.m_metrics.ScaleY(16));
+		m_BackButton.MoveWindow(theApp.m_metrics.ScaleX(2), 0, theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
+		m_stGroup.MoveWindow(theApp.m_metrics.ScaleX(20), 0, cx-theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(16));
 
 		topOfListBox = theApp.m_metrics.ScaleY(16);
 	}
@@ -363,7 +358,6 @@ void CQPasteWnd::MoveControls()
 	{
 		m_BackButton.ShowWindow(SW_HIDE);
 		m_stGroup.ShowWindow(SW_HIDE);
-		m_ShowGroupsFolderTop.ShowWindow(SW_HIDE);
 	}
 
     int nWidth = cx;
@@ -385,9 +379,9 @@ void CQPasteWnd::MoveControls()
 	}
 
 	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize);
-    m_search.MoveWindow(theApp.m_metrics.ScaleX(18), cy - theApp.m_metrics.ScaleY(21), cx - theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(20));
+    m_search.MoveWindow(theApp.m_metrics.ScaleX(20), cy - theApp.m_metrics.ScaleY(21), cx - theApp.m_metrics.ScaleX(22), theApp.m_metrics.ScaleY(20));
 
-    m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleY(2), cy - theApp.m_metrics.ScaleY(15), theApp.m_metrics.ScaleX(18), theApp.m_metrics.ScaleY(19));
+    m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleY(2), cy - theApp.m_metrics.ScaleY(18), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
 }
 
 void CQPasteWnd::OnSetFocus(CWnd *pOldWnd)

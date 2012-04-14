@@ -159,6 +159,7 @@ public:
 	CDittoAddins m_Addins;
 
 	CDPI m_metrics;
+	ULONG_PTR m_gdiplusToken;
 
 public:
 	virtual BOOL InitInstance();

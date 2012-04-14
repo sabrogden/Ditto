@@ -14,6 +14,7 @@
 #include "ClipFormatQListCtrl.h"
 #include "QPasteWndThread.h"
 #include "editwithbutton.h"
+#include "GdipButton.h"
 
 class CMainTable
 {
@@ -103,10 +104,8 @@ public:
     CFont GroupFont;
     CString m_Title;
     CGroupTree m_GroupTree;
-    CBitmapButton m_ShowGroupsFolderBottom;
-    CBitmapButton m_ShowGroupsFolderTop;
-    CBitmapButton m_BackButton;
-
+    CGdipButton m_ShowGroupsFolderBottom;
+    CGdipButton m_BackButton;
 
     CString m_SQL;
     CString m_CountSQL;

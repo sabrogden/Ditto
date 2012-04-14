@@ -928,6 +928,14 @@ IDR_FILE_COPY           AVI                     "res\\FILECOPY.AVI"
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// PNG
+//
+
+IDB_OPEN_FOLDER_PNG     PNG                     "res\\folder_open.png"
+IDB_LEFT_ARROW_PNG      PNG                     "res\\left-blue.png"
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // String Table
 //
 

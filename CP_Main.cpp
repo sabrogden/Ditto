@@ -131,6 +131,9 @@ BOOL CCP_MainApp::InitInstance()
 	AfxInitRichEditEx();
 	afxAmbientActCtx = FALSE; 
 
+	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+	Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
+
 	DittoCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 
@@ -729,6 +732,8 @@ int CCP_MainApp::ExitInstance()
 	Log(_T("ExitInstance"));
 
 	m_db.close();
+
+	Gdiplus::GdiplusShutdown(m_gdiplusToken);
 
 	return CWinApp::ExitInstance();
 }

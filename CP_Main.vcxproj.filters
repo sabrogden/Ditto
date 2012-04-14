@@ -326,6 +326,7 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="DPI.cpp" />
+    <ClCompile Include="GdipButton.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -695,6 +696,8 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="DPI.h" />
+    <ClInclude Include="CGdiPlusBitmap.h" />
+    <ClInclude Include="GdipButton.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -790,6 +793,11 @@
     <None Include="res\search_normal_200.bmp" />
     <None Include="res\search_normal_125.bmp" />
     <None Include="res\search_normal_150.bmp" />
+    <None Include="res\folder_open.png" />
+    <None Include="res\left-blue.png" />
+    <None Include="res\search_close_125.bmp" />
+    <None Include="res\search_close_150.bmp" />
+    <None Include="res\search_close_200.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">

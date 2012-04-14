@@ -35,14 +35,15 @@
 #define IDB_BITMAP_SEARCH_NORMAL        170
 #define IDB_BITMAP_SEARCH_CLOSE         171
 #define IDB_BITMAP1                     172
-#define IDB_BITMAP_SEARCH_NORMAL_125    172
 #define IDB_BITMAP_SEARCH_CLOSE_125     173
-#define IDB_BITMAP2                     174
 #define IDB_BITMAP_SEARCH_CLOSE_150     174
-#define IDB_BITMAP_SEARCH_NORMAL_150    175
-#define IDB_BITMAP_SEARCH_CLOSE_200     176
-#define IDB_BITMAP_SEARCH_NORMAL_151    177
-#define IDB_BITMAP_SEARCH_NORMAL_200    177
+#define IDB_BITMAP_SEARCH_CLOSE_200     175
+#define IDB_BITMAP_SEARCH_NORMAL_125    176
+#define IDB_BITMAP_SEARCH_NORMAL_150    177
+#define IDB_BITMAP_SEARCH_NORMAL_200    178
+#define IDB_OPEN_FOLDER_PNG             179
+#define IDB_PNG1                        180
+#define IDB_LEFT_ARROW_PNG              180
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -366,7 +367,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        175
+#define _APS_NEXT_RESOURCE_VALUE        181
 #define _APS_NEXT_COMMAND_VALUE         32873
 #define _APS_NEXT_CONTROL_VALUE         2101
 #define _APS_NEXT_SYMED_VALUE           101

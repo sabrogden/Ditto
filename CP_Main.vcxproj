@@ -158,6 +158,9 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <Manifest>
+      <AdditionalManifestFiles>DeclareDPIAware.manifest</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -208,6 +211,9 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <Manifest>
+      <AdditionalManifestFiles>DeclareDPIAware.manifest</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -257,6 +263,9 @@
       <Command>
       </Command>
     </PostBuildEvent>
+    <Manifest>
+      <AdditionalManifestFiles>DeclareDPIAware.manifest</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -553,6 +562,7 @@
     <ClCompile Include="DPI.cpp" />
     <ClCompile Include="EditWithButton.cpp" />
     <ClCompile Include="EventThread.cpp" />
+    <ClCompile Include="GdipButton.cpp" />
     <ClCompile Include="GlobalClips.cpp" />
     <ClCompile Include="HotKeys.cpp" />
     <ClCompile Include="MainFrmThread.cpp" />
@@ -1746,11 +1756,13 @@
     <ClInclude Include="AlphaBlend.h" />
     <ClInclude Include="ArrayEx.h" />
     <ClInclude Include="AutoSendToClientThread.h" />
+    <ClInclude Include="CGdiPlusBitmap.h" />
     <ClInclude Include="ClipFormatQListCtrl.h" />
     <ClInclude Include="DPI.h" />
     <ClInclude Include="EditWithButton.h" />
     <ClInclude Include="EventThread.h" />
     <ClInclude Include="FormattedTextDraw.h" />
+    <ClInclude Include="GdipButton.h" />
     <ClInclude Include="GlobalClips.h" />
     <ClInclude Include="GroupStatic.h" />
     <ClInclude Include="HotKeys.h" />
@@ -1889,10 +1901,15 @@
     <None Include="res\Ditto2_NoCopyCb.ico" />
     <None Include="res\DittoNew.ico" />
     <None Include="res\Ditto_NoCopyCb.ico" />
+    <None Include="res\folder_open.png" />
+    <None Include="res\left-blue.png" />
     <None Include="res\mainfram.bmp" />
     <None Include="res\open_fol.bmp" />
     <None Include="res\Ditto2.ico" />
     <None Include="res\search_close.bmp" />
+    <None Include="res\search_close_125.bmp" />
+    <None Include="res\search_close_150.bmp" />
+    <None Include="res\search_close_200.bmp" />
     <None Include="res\search_normal.bmp" />
     <None Include="res\search_normal_125.bmp" />
     <None Include="res\search_normal_150.bmp" />

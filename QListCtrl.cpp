@@ -1288,6 +1288,8 @@ void CQListCtrl::OnTimer(UINT_PTR nIDEvent)
 				CRect crWindow;
 				this->GetWindowRect(&crWindow);
 
+				
+
 				//check and see if they moved out of the scroll area
 				//If they did tell our parent so
 				if(MouseInScrollBarArea(crWindow, cursorPos) == false)
@@ -1308,7 +1310,8 @@ void CQListCtrl::OnTimer(UINT_PTR nIDEvent)
 				this->GetWindowRect(&crWindow);
 
 				//Adjust for the v-scroll bar being off of the screen
-				crWindow.right -= GetSystemMetrics(SM_CXVSCROLL);
+				crWindow.right -= theApp.m_metrics.ScaleX(GetSystemMetrics(SM_CXVSCROLL));
+				crWindow.bottom -= theApp.m_metrics.ScaleX(::GetSystemMetrics(SM_CXHSCROLL));
 
 				//Check and see if we are still in the cursor area
 				if(MouseInScrollBarArea(crWindow, cursorPos))
@@ -1386,6 +1389,9 @@ void CQListCtrl::OnMouseMove(UINT nFlags, CPoint point)
 	this->GetWindowRect(&crWindow);
 	ScreenToClient(&crWindow);
 
+	crWindow.right -= theApp.m_metrics.ScaleX(::GetSystemMetrics(SM_CXVSCROLL));
+	crWindow.bottom -= theApp.m_metrics.ScaleX(::GetSystemMetrics(SM_CXHSCROLL));
+
 	if(MouseInScrollBarArea(crWindow, point))
 	{
 		if((GetTickCount() - m_mouseOverScrollAreaStart) > 500)
@@ -1412,6 +1418,10 @@ bool CQListCtrl::MouseInScrollBarArea(CRect crWindow, CPoint point)
 
 	crRight.left = crRight.right - theApp.m_metrics.ScaleX(::GetSystemMetrics(SM_CXVSCROLL));
 	crBottom.top = crBottom.bottom - theApp.m_metrics.ScaleY(::GetSystemMetrics(SM_CYHSCROLL));
+
+	/*CString cs;
+	cs.Format(_T("point.x: %d, Width: %d, Height: %d\n"), point.x, crWindow.Width(), crWindow.Height());
+	OutputDebugString(cs);*/
 
 	if(crRight.PtInRect(point) || crBottom.PtInRect(point))
 	{
