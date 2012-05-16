@@ -82,7 +82,7 @@ bool CClip_ImportExport::ImportFromSqliteDB(CppSQLite3DB &db, bool bAddToDB, boo
 
 	try
 	{
-		CppSQLite3Query q = db.execQuery(_T("Select * from Main"));
+		CppSQLite3Query q = db.execQuery(_T("Select * from Main order by lId DESC"));
 		while(q.eof() == false)
 		{
 			Clear();
