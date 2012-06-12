@@ -247,7 +247,7 @@ bool CClip::AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen)
 	// update the Clip statistics
 	m_Time = m_Time.GetCurrentTime();
 
-	if(!SetDescFromText(hGlobal))
+	if(!SetDescFromText(hGlobal, true))
 		SetDescFromType();
 	
 	CClipFormat format(cfType,hGlobal);
@@ -325,16 +325,26 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 	//  for both... i.e. we only fetch the description format type once.
 	CClipFormat cfDesc;
 	bool bIsDescSet = false;
-#ifdef _UNICODE
-	cfDesc.m_cfType = CF_UNICODETEXT;	
-#else
-	cfDesc.m_cfType = CF_TEXT;	
-#endif
 
+	cfDesc.m_cfType = CF_UNICODETEXT;	
 	if(oleData.IsDataAvailable(cfDesc.m_cfType))
 	{
 		cfDesc.m_hgData = oleData.GetGlobalData(cfDesc.m_cfType);
-		bIsDescSet = SetDescFromText(cfDesc.m_hgData);
+		bIsDescSet = SetDescFromText(cfDesc.m_hgData, true);
+
+		Log(StrF(_T("Tried to set description from cf_unicode text, Set: %d, Desc: [%s]"), bIsDescSet, m_Desc.Left(30)));
+	}
+
+	if(bIsDescSet == false)
+	{
+		cfDesc.m_cfType = CF_TEXT;	
+		if(oleData.IsDataAvailable(cfDesc.m_cfType))
+		{
+			cfDesc.m_hgData = oleData.GetGlobalData(cfDesc.m_cfType);
+			bIsDescSet = SetDescFromText(cfDesc.m_hgData, false);
+
+			Log(StrF(_T("Tried to set description from cf_text text, Set: %d, Desc: [%s]"), bIsDescSet, m_Desc.Left(30)));
+		}
 	}
 
 	INT_PTR nSize;
@@ -405,6 +415,8 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 	if(!bIsDescSet)
 	{
 		SetDescFromType();
+
+		Log(StrF(_T("Setting description from type, Desc: [%s]"), m_Desc.Left(30)));
 	}
 	
 	// if the description was in a type that is not supported,
@@ -425,17 +437,30 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
 	return true;
 }
 
-bool CClip::SetDescFromText(HGLOBAL hgData)
+bool CClip::SetDescFromText(HGLOBAL hgData, bool unicode)
 {
 	if(hgData == 0)
 		return false;
 	
 	bool bRet = false;
-	TCHAR* text = (TCHAR *) GlobalLock(hgData);
-	INT_PTR bufLen = GlobalSize(hgData);
+	INT_PTR bufLen = 0;
+
+	if(unicode)
+	{
+		TCHAR* text = (TCHAR *) GlobalLock(hgData);
+		bufLen = GlobalSize(hgData);
+
+		m_Desc = text;
+		bRet = true;
+	}
+	else
+	{
+		char* text = (char *) GlobalLock(hgData);
+		bufLen = GlobalSize(hgData);
 	
-	m_Desc = text;
-	bRet = true;
+		m_Desc = text;
+		bRet = true;
+	}
 		
 	if(bufLen > g_Opt.m_bDescTextSize)
 	{

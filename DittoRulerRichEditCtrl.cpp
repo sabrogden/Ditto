@@ -255,7 +255,7 @@ bool CDittoRulerRichEditCtrl::LoadTextData(CClip &Clip)
 	int nLength = csText.GetLength() * sizeof(TCHAR) + sizeof(TCHAR);
 	format.m_hgData = NewGlobalP(csText.GetBuffer(nLength), nLength);
 
-	Clip.SetDescFromText(format.m_hgData);
+	Clip.SetDescFromText(format.m_hgData, true);
 	m_csDescription = Clip.m_Desc;
 	m_csDescription = m_csDescription.Left(15);
 
