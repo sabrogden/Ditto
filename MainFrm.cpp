@@ -562,7 +562,7 @@ LRESULT CMainFrame::OnShowTrayIcon(WPARAM wParam, LPARAM lParam)
 
 void CMainFrame::OnFirstShowquickpaste()
 {
-    m_quickPaste.ShowQPasteWnd(this, true, false, FALSE);
+    m_quickPaste.ShowQPasteWnd(this, false, false, FALSE);
 }
 
 void CMainFrame::OnFirstToggleConnectCV()
