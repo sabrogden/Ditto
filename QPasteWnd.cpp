@@ -190,6 +190,7 @@ ON_COMMAND_RANGE(3000, 4000, OnAddinSelect)
 ON_MESSAGE(NM_ALL_SELECTED, OnSelectAll)
 ON_MESSAGE(NM_SHOW_HIDE_SCROLLBARS, OnShowHideScrollBar)
 ON_MESSAGE(NM_CANCEL_SEARCH, OnCancelFilter)
+ON_MESSAGE(NM_POST_OPTIONS_WINDOW, OnPostOptions)
 //ON_WM_CTLCOLOR()
 //ON_WM_ERASEBKGND()
 //ON_WM_PAINT()
@@ -2558,6 +2559,13 @@ LRESULT CQPasteWnd::OnCancelFilter(WPARAM wParam, LPARAM lParam)
     MoveControls();
 
     m_lstHeader.SetFocus();
+
+	return 1;
+}
+
+LRESULT CQPasteWnd::OnPostOptions(WPARAM wParam, LPARAM lParam)
+{
+	UpdateFont();
 
 	return 1;
 }

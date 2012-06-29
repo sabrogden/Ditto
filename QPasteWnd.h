@@ -297,4 +297,5 @@ protected:
 	//afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	//afx_msg void OnPaint();
     //}}AFX_MSG
+	afx_msg LRESULT OnPostOptions(WPARAM wParam, LPARAM lParam);
 };

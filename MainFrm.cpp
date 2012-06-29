@@ -931,6 +931,11 @@ LRESULT CMainFrame::OnOptionsClosed(WPARAM wParam, LPARAM lParam)
 	delete m_pOptions;
 	m_pOptions = NULL;
 
+	if(m_quickPaste.m_pwndPaste != NULL)
+	{
+		m_quickPaste.m_pwndPaste->PostMessage(NM_POST_OPTIONS_WINDOW);
+	}
+
 	return 0;
 }
 
