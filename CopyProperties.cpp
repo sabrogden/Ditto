@@ -140,7 +140,7 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 
 	m_GroupCombo.SetCurSelOnItemData(Clip.m_parentId);
 
-	m_HotKey.SetHotKey(LOBYTE(Clip.m_shortCut), HIBYTE(Clip.m_shortCut));
+	m_HotKey.SetHotKey(LOBYTE(Clip.m_shortCut), (HIBYTE(Clip.m_shortCut) & ~HOTKEYF_EXT));
 	m_HotKey.SetRules(HKCOMB_A, 0);
 	if(HIBYTE(Clip.m_shortCut) & HOTKEYF_EXT)
 	{
