@@ -462,6 +462,13 @@ BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus)
 
     theApp.m_bShowingQuickPaste = false;
 
+	//needs to be before we hide our window - inorder to set focus to another window we need to be the foreground window
+	//http://msdn.microsoft.com/en-us/library/windows/desktop/ms632668%28v=vs.85%29.aspx
+	if(releaseFocus)
+	{
+		theApp.m_activeWnd.ReleaseFocus();
+	}
+
     KillTimer(TIMER_FILL_CACHE);
 
     //Save the size
@@ -492,11 +499,6 @@ BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus)
             m_lstHeader.SetItemCountEx(0);
         }
     }
-
-	if(releaseFocus)
-	{
-		theApp.m_activeWnd.ReleaseFocus();
-	}
 
     Log(StrF(_T("End of HideQPasteWindow, ItemCount: %d"), m_listItems.size()));
 

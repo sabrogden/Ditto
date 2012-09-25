@@ -88,6 +88,7 @@ CCP_MainApp::CCP_MainApp()
 	m_connectOnStartup = -1;
 	m_MainhWnd = NULL;
 	m_pMainFrame = NULL;
+	BOOL set = ::AllowSetForegroundWindow(ASFW_ANY);
 
 	m_bShowingQuickPaste = false;
 
