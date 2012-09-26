@@ -40,7 +40,7 @@
 		<Item English_Text = "Toggles Always on Top" ID = "32814">Αλλαγή κατάστασης: Πάντα στην κορυφή</Item>
 		<Item English_Text = "Rolls-up Window" ID = "32815">Μετακύλιση Παραθύρου</Item>
 		<Item English_Text = "Toggles Always Show Description" ID = "32816">Αλλαγή κατάστασης: Πάντα εμφάνιση περιγραφής</Item>
-		<Item English_Text = "Always on Top" ID = "32784">Πάντα στην κορυφή <Ctrl-Space></Item>
+		<Item English_Text = "Always on Top" ID = "32784">Πάντα στην κορυφή 'Ctrl-Space'</Item>
 		<Item English_Text = "Auto Roll-up" ID = "32791">Αυτόματη Μετακύλιση</Item>
 		<Item English_Text = "Always Show Description" ID = "32813">Πάντα εμφάνιση περιγραφής</Item>
 		<Item English_Text = "Prompt For New Group Names" ID = "32817">Ερώτηση για ονόματα νέων ομάδων</Item>
