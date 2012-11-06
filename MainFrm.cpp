@@ -100,7 +100,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     //Then set the main window to transparent so it's never shown
     //if it is shown then only the task tray icon
-    m_Transparency.SetTransparent(m_hWnd, 0, true);
+    //m_Transparency.SetTransparent(m_hWnd, 0, true);
 
     SetWindowText(_T(""));
 
