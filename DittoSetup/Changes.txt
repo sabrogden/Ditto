@@ -1,3 +1,19 @@
+3.18.46.0 11-8-12
+- In paste for last 10 keys handle the option to show group clips in the main list
+- fixed issue that prevented last pasted time from getting saved to the db
+- New Ukrainian language file
+- Hide horizontal and vertical scroll bars unless you mouse over the right or bottom
+- Removed focus dll from portable build
+- Fixed issue with moving clips to group
+- Changed search text box to look better
+- Ditto works better when text is set to be viewed at 125% or 150%
+- Added png icons with transparency to folder and back buttons
+- Reimport clips in the same order as they were exported
+- When opening from right click open show use normal positioning, rather than just where it was
+- Update font after it's changed in the options dialog
+- Updated to latest sqlite 3.7.13
+- Windows 8 changes to better set focus to windows, other windows 8 fixes
+
 3.18.24.0 1-3-12
 - Fixed issue with pasting last 10 pastes through global shortcut keys
 - Fixed issue with chinese language files
