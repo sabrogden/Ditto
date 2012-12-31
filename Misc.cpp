@@ -832,6 +832,7 @@ __int64 GetLastWriteTime(const CString &csFile)
 CString GetProcessName(HWND hWnd) 
 {
 	DWORD Id;
+	CString	strProcessName ;
 	GetWindowThreadProcessId(hWnd, &Id);
 
 	PROCESSENTRY32 processEntry = { 0 };
@@ -845,13 +846,15 @@ CString GetProcessName(HWND hWnd)
 		{
 			if (processEntry.th32ProcessID == Id) 
 			{
-				return processEntry.szExeFile;
+				strProcessName = processEntry.szExeFile;
+				break;
 			}
 		} while(Process32Next(hSnapShot, &processEntry));
 	}
+
 	CloseHandle(hSnapShot);
 
-	return "";
+	return strProcessName;
 }
 
 BOOL IsVista()
