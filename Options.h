@@ -417,6 +417,16 @@ public:
 	static DWORD	GetTimeBeforeExpandWindow();
 
 	static DWORD	GetUseGuiThreadInfoForFocus();
+
+	static void		SetSearchDescription(BOOL val);
+	static BOOL		GetSearchDescription();
+
+	static void		SetSearchFullText(BOOL val);
+	static BOOL		GetSearchFullText();
+
+	static void		SetSearchQuickPaste(BOOL val);
+	static BOOL		GetSearchQuickPaste();
+
 };
 
 // global for easy access and for initialization of fast access variables

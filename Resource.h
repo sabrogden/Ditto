@@ -44,6 +44,10 @@
 #define IDB_OPEN_FOLDER_PNG             179
 #define IDB_PNG1                        180
 #define IDB_LEFT_ARROW_PNG              180
+#define IDR_MENU_SEARCH                 181
+#define IDB_COG_22_22                   182
+#define IDB_PNG2                        183
+#define IDB_COG_16_16                   183
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -361,14 +365,17 @@
 #define ID_FIRST_COPYTODEVICE           32870
 #define ID_PASTE_PLAIN_TEXT             32871
 #define ID_FIRST_GLOBALHOTKEYS          32872
+#define ID_MENU_SEARCHDESCRIPTION       32873
+#define ID_MENU_SEARCHFULLTEXT          32874
+#define ID_MENU_SEARCHQUICKPASTE        32875
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        181
-#define _APS_NEXT_COMMAND_VALUE         32873
+#define _APS_NEXT_RESOURCE_VALUE        184
+#define _APS_NEXT_COMMAND_VALUE         32876
 #define _APS_NEXT_CONTROL_VALUE         2101
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

@@ -1996,3 +1996,33 @@ DWORD CGetSetOptions::GetUseGuiThreadInfoForFocus()
 {
 	return GetProfileLong(_T("UseGuiThreadInfoForFocus"), 1);
 }
+
+void CGetSetOptions::SetSearchDescription(BOOL val)
+{
+	SetProfileLong(_T("SearchDescription"), val);
+}
+
+BOOL CGetSetOptions::GetSearchDescription()
+{
+	return GetProfileLong(_T("SearchDescription"), 1);
+}
+
+void CGetSetOptions::SetSearchFullText(BOOL val)
+{
+	SetProfileLong(_T("SearchFullText"), val);
+}
+
+BOOL CGetSetOptions::GetSearchFullText()
+{
+	return GetProfileLong(_T("SearchFullText"), 0);
+}
+
+void CGetSetOptions::SetSearchQuickPaste(BOOL val)
+{
+	SetProfileLong(_T("SearchQuickPaste"), val);
+}
+
+BOOL CGetSetOptions::GetSearchQuickPaste()
+{
+	return GetProfileLong(_T("SearchQuickPaste"), 0);
+}

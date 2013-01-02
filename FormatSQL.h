@@ -17,7 +17,7 @@ public:
 
 	void Parse(CString cs);
 
-	CString GetSQLString()				{ return m_csWhere; }
+	CString GetSQLString()				{ return _T("(") + m_csWhere + _T(")"); }
 	void	SetVariable(CString cs)		{ m_csVariable = cs;}
 
 protected:

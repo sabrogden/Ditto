@@ -305,6 +305,16 @@ BEGIN
     END
 END
 
+IDR_MENU_SEARCH MENU
+BEGIN
+    POPUP "Menu"
+    BEGIN
+        MENUITEM "Search Description",          ID_MENU_SEARCHDESCRIPTION
+        MENUITEM "Search Full Text",            ID_MENU_SEARCHFULLTEXT
+        MENUITEM "Search Quick Paste",          ID_MENU_SEARCHQUICKPASTE
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -933,6 +943,8 @@ IDR_FILE_COPY           AVI                     "res\\FILECOPY.AVI"
 
 IDB_OPEN_FOLDER_PNG     PNG                     "res\\folder_open.png"
 IDB_LEFT_ARROW_PNG      PNG                     "res\\left-blue.png"
+IDB_COG_22_22           PNG                     "res\\cog_22_22.png"
+IDB_COG_16_16           PNG                     "res\\cog_16_16.png"
 
 /////////////////////////////////////////////////////////////////////////////
 //

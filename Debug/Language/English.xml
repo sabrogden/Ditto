@@ -303,6 +303,9 @@
 		<Item English_Text = "Add-Ins" ID = "Add_Ins"></Item> 
 		
 		<Item English_Text = "Copy Buffers" ID = "CopyBuffers"></Item>
+		
+		<Item English_Text = "Search Options" ID = "SearchOptionsTooltip"></Item>
+		<Item English_Text = "Groups" ID = "GroupsTooltip"></Item>
 				
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>

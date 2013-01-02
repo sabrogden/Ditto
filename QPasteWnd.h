@@ -106,6 +106,7 @@ public:
     CGroupTree m_GroupTree;
     CGdipButton m_ShowGroupsFolderBottom;
     CGdipButton m_BackButton;
+	CGdipButton m_searchOptionsButton;
 
     CString m_SQL;
     CString m_CountSQL;
@@ -279,6 +280,7 @@ protected:
     afx_msg void OnMenuNewGroup();
     afx_msg void OnMenuNewGroupSelection();
     afx_msg void OnBackButton();
+	afx_msg void OnSearchDescription();
     afx_msg LRESULT OnUpDown(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnItemDeleted(WPARAM wParam, LPARAM lParam);
     LRESULT OnToolTipWndInactive(WPARAM wParam, LPARAM lParam);
@@ -293,6 +295,9 @@ protected:
     afx_msg void CQPasteWnd::OnAddinSelect(UINT id);
     afx_msg LRESULT OnSelectAll(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShowHideScrollBar(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnMenuSearchDescription();
+	afx_msg void OnMenuSearchFullText();
+	afx_msg void OnMenuSearchQuickPaste();
 	//afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	//afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	//afx_msg void OnPaint();

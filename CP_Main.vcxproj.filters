@@ -325,8 +325,12 @@
     <ClCompile Include="EditWithButton.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="DPI.cpp" />
-    <ClCompile Include="GdipButton.cpp" />
+    <ClCompile Include="GdipButton.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="DPI.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -695,9 +699,15 @@
     <ClInclude Include="EditWithButton.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="DPI.h" />
-    <ClInclude Include="CGdiPlusBitmap.h" />
-    <ClInclude Include="GdipButton.h" />
+    <ClInclude Include="GdipButton.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="CGdiPlusBitmap.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="DPI.h">
+      <Filter>header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -713,7 +723,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ReadMe.txt" />
     <None Include="res\back.bmp">
       <Filter>res</Filter>
     </None>
@@ -777,27 +786,38 @@
     <None Include="res\Ditto2_NoCopyCb.ico">
       <Filter>res</Filter>
     </None>
-    <None Include="res\bmp00004.bmp" />
-    <None Include="res\bitmap2.bmp" />
     <None Include="res\search_close.bmp">
       <Filter>res</Filter>
     </None>
     <None Include="res\search_normal.bmp">
       <Filter>res</Filter>
     </None>
-    <None Include="res\bitmap_s.bmp" />
-    <None Include="res\bmp00005.bmp" />
-    <None Include="res\bmp00006.bmp" />
-    <None Include="res\bmp00007.bmp" />
-    <None Include="res\bmp00008.bmp" />
-    <None Include="res\search_normal_200.bmp" />
-    <None Include="res\search_normal_125.bmp" />
-    <None Include="res\search_normal_150.bmp" />
-    <None Include="res\folder_open.png" />
-    <None Include="res\left-blue.png" />
-    <None Include="res\search_close_125.bmp" />
-    <None Include="res\search_close_150.bmp" />
-    <None Include="res\search_close_200.bmp" />
+    <None Include="res\folder_open.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\search_close_125.bmp">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\search_normal_200.bmp">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\search_close_150.bmp">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\search_close_200.bmp">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\search_normal_125.bmp">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\search_normal_150.bmp">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\left-blue.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\cog_16_16.png" />
+    <None Include="res\cog_22_22.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">

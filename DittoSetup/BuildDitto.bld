@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<project version='8' encrypted='1'>
+<project version='7' encrypted='1'>
 	<steps type='0'>
 		<step action='Set Macro'>
 			<MacroName>LOGFILE</MacroName>
@@ -33,12 +33,11 @@
 		</step>
 		<step action='Subversion'>
 			<Files>%branch%</Files>
-			<Host>ditto-cp.svn.sourceforge.net</Host>
+			<Host>svn.code.sf.net</Host>
 			<LocalPath>%workDir%</LocalPath>
 			<Password encrypted='1'>MM3MPOs8MuGmarG4tqE=</Password>
-			<Port>443</Port>
-			<Protocol>https</Protocol>
-			<Repository>/svnroot/ditto-cp</Repository>
+			<Protocol>http</Protocol>
+			<Repository>/p/ditto-cp/code/</Repository>
 			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
 			<Subcommand>checkout</Subcommand>
 			<Username>sabrogden</Username>
@@ -123,28 +122,33 @@ End If
 			<name>Build Ditto 32</name>
 		</step>
 		<step action='Group'>
+			<checked type='11'>0</checked>
 			<indent type='3'>1</indent>
 			<name>Sign App Code</name>
 		</step>
 		<step action='Run Program'>
+			<checked type='11'>0</checked>
 			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release64\Ditto.exe</command>
 			<indent type='3'>2</indent>
 			<name>Sign Ditto.exe 64</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
+			<checked type='11'>0</checked>
 			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release64\Addins\DittoUtil.dll</command>
 			<indent type='3'>2</indent>
 			<name>Sign DittoUtil.dll 64</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
+			<checked type='11'>0</checked>
 			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release\Ditto.exe</command>
 			<indent type='3'>2</indent>
 			<name>Sign Ditto.exe</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
+			<checked type='11'>0</checked>
 			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release\Addins\DittoUtil.dll</command>
 			<indent type='3'>2</indent>
 			<name>Sign DittoUtil.dll</name>
@@ -218,7 +222,7 @@ End If
 		</step>
 		<step action='7-Zip'>
 			<Action>Update</Action>
-			<Exe>C:\Program Files\7-Zip\7z.exe</Exe>
+			<Exe>C:\Program Files (x86)\7-Zip\7z.exe</Exe>
 			<Filename>%workDir%\%branch%\DittoSetup\output\DittoDebug_%versionFileName%.7z</Filename>
 			<I><![CDATA[*.map
 *.pdb
@@ -237,16 +241,19 @@ DittoSetup*]]></X>
 			<name>Zip Debug Files</name>
 		</step>
 		<step action='Group'>
+			<checked type='11'>0</checked>
 			<indent type='3'>1</indent>
 			<name>Sign Installers</name>
 		</step>
 		<step action='Run Program'>
+			<checked type='11'>0</checked>
 			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\DittoSetup\Output\DittoSetup_%versionFileName%.exe</command>
 			<indent type='3'>2</indent>
 			<name>Sign Ditto Installer</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
+			<checked type='11'>0</checked>
 			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\DittoSetup\Output\DittoSetup_64bit_%versionFileName%.exe</command>
 			<indent type='3'>2</indent>
 			<name>Sign Ditto 64 Installer</name>
@@ -312,15 +319,14 @@ var sc_security="b3f57099";
 		</step>
 		<step action='Subversion'>
 			<Files>%branch%</Files>
-			<Host>ditto-cp.svn.sourceforge.net</Host>
+			<Host>svn.code.sf.net</Host>
 			<LocalPath>%workDir%</LocalPath>
 			<Password encrypted='1'>MM3MPOs8MuGmarG4tqE=</Password>
-			<Port>443</Port>
-			<Protocol>https</Protocol>
-			<Repository>/svnroot/ditto-cp</Repository>
+			<Protocol>http</Protocol>
+			<Repository>/p/ditto-cp/code/</Repository>
 			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
 			<Subcommand>log</Subcommand>
-			<Switches>-r {2012-1-5}:{2012-12-31}</Switches>
+			<Switches>-r {2012-11-9}:{2013-12-31}</Switches>
 			<Username>sabrogden</Username>
 			<indent type='3'>2</indent>
 			<name>SVN Log Messages</name>
@@ -375,7 +381,7 @@ var sc_security="b3f57099";
 			<value>3</value>
 		</macro>
 		<macro name='verMinor'>
-			<value>18</value>
+			<value>19</value>
 		</macro>
 		<macro name='verRevision'>
 			<value>0</value>

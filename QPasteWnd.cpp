@@ -30,6 +30,7 @@
 #define ID_SHOW_GROUPS_BOTTOM	0x205
 #define ID_SHOW_GROUPS_TOP		0x206
 #define ID_BACK_BUTTON			0x207
+#define ID_SEARCH_DESCRIPTION_BUTTON 0x208
 
 
 #define QPASTE_WIDTH			200
@@ -172,6 +173,7 @@ ON_COMMAND(ID_MENU_NEWGROUP, OnMenuNewGroup)
 ON_COMMAND(ID_MENU_NEWGROUPSELECTION, OnMenuNewGroupSelection)
 ON_MESSAGE(NM_GROUP_TREE_MESSAGE, OnGroupTreeMessage)
 ON_COMMAND(ID_BACK_BUTTON, OnBackButton)
+ON_COMMAND(ID_SEARCH_DESCRIPTION_BUTTON, OnSearchDescription)
 ON_MESSAGE(CB_UPDOWN, OnUpDown)
 ON_MESSAGE(NM_INACTIVE_TOOLTIPWND, OnToolTipWndInactive)
 ON_MESSAGE(NM_SET_LIST_COUNT, OnSetListCount)
@@ -191,6 +193,9 @@ ON_MESSAGE(NM_ALL_SELECTED, OnSelectAll)
 ON_MESSAGE(NM_SHOW_HIDE_SCROLLBARS, OnShowHideScrollBar)
 ON_MESSAGE(NM_CANCEL_SEARCH, OnCancelFilter)
 ON_MESSAGE(NM_POST_OPTIONS_WINDOW, OnPostOptions)
+ON_COMMAND(ID_MENU_SEARCHDESCRIPTION, OnMenuSearchDescription)
+ON_COMMAND(ID_MENU_SEARCHFULLTEXT, OnMenuSearchFullText)
+ON_COMMAND(ID_MENU_SEARCHQUICKPASTE, OnMenuSearchQuickPaste)
 //ON_WM_CTLCOLOR()
 //ON_WM_ERASEBKGND()
 //ON_WM_PAINT()
@@ -253,12 +258,19 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     //m_ShowGroupsFolderBottom.LoadBitmaps(IDB_CLOSED_FOLDER, IDB_CLOSED_FOLDER_PRESSED, IDB_CLOSED_FOLDER_FOCUSED);
 	m_ShowGroupsFolderBottom.LoadStdImage(IDB_OPEN_FOLDER_PNG, _T("PNG"));
     m_ShowGroupsFolderBottom.ShowWindow(SW_SHOW);
+	m_ShowGroupsFolderBottom.SetToolTipText(theApp.m_Language.GetString(_T("GroupsTooltip"), _T("Groups")));
 
     m_BackButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_BACK_BUTTON);
     m_BackButton.LoadStdImage(IDB_LEFT_ARROW_PNG, _T("PNG"));
     m_BackButton.ShowWindow(SW_SHOW);
 
+	m_searchOptionsButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SEARCH_DESCRIPTION_BUTTON);
+	m_searchOptionsButton.LoadStdImage(IDB_COG_16_16, _T("PNG"));
+	m_searchOptionsButton.SetToolTipText(theApp.m_Language.GetString(_T("SearchOptionsTooltip"), _T("Search options")));
+	m_searchOptionsButton.ShowWindow(SW_SHOW);
+
     m_stGroup.Create(_T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, ID_GROUP_TEXT);
+	
 
     //Set the z-order
     m_lstHeader.SetWindowPos(this, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
@@ -380,7 +392,9 @@ void CQPasteWnd::MoveControls()
 	}
 
 	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize);
-    m_search.MoveWindow(theApp.m_metrics.ScaleX(20), cy - theApp.m_metrics.ScaleY(21), cx - theApp.m_metrics.ScaleX(22), theApp.m_metrics.ScaleY(20));
+    m_search.MoveWindow(theApp.m_metrics.ScaleX(20), cy - theApp.m_metrics.ScaleY(21), cx - theApp.m_metrics.ScaleX(40), theApp.m_metrics.ScaleY(20));
+
+	m_searchOptionsButton.MoveWindow(cx - theApp.m_metrics.ScaleX(18), cy - theApp.m_metrics.ScaleY(19), 16, 16);
 
     m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleY(2), cy - theApp.m_metrics.ScaleY(18), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
 }
@@ -970,49 +984,91 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     }
     else
     {
-        CFormatSQL SQLFormat;
-		CString preSql;
+        CFormatSQL descriptionFormat;
+		CString descriptionSql;
+		CFormatSQL quickPasteFormat;
+		CString quickPasteSql;
+		CFormatSQL fullTextFormat;
+		CString fullTextSql;
+
+		//If other are off then always search the description
+		if(CGetSetOptions::GetSearchDescription() ||
+			(CGetSetOptions::GetSearchFullText() == FALSE && CGetSetOptions::GetSearchQuickPaste() == FALSE))
+		{
+			descriptionFormat.SetVariable("Main.mText");
+
+			descriptionFormat.Parse(csSQLSearch);
+			descriptionSql = descriptionFormat.GetSQLString();
+		}
 
 		if(csSQLSearch.Left(3) == _T("/q ") ||
-			csSQLSearch.Left(3) == _T("\\q "))
+			csSQLSearch.Left(3) == _T("\\q ") ||
+			CGetSetOptions::GetSearchQuickPaste())
 		{
-			SQLFormat.SetVariable("Main.QuickPasteText");
+			quickPasteFormat.SetVariable("Main.QuickPasteText");
 			csSQLSearch.TrimLeft(_T("/q "));
 			csSQLSearch.TrimLeft(_T("\\q "));
 
-			if(csSQLSearch == "")
-			{
-				return FALSE;
-			}
+			quickPasteFormat.Parse(csSQLSearch);
+			quickPasteSql = quickPasteFormat.GetSQLString();
 		}
-		else if(csSQLSearch.Left(3) == _T("/f ") ||
-			csSQLSearch.Left(3) == _T("\\f "))
+		
+		if(csSQLSearch.Left(3) == _T("/f ") ||
+			csSQLSearch.Left(3) == _T("\\f ") ||
+			CGetSetOptions::GetSearchFullText())
 		{
-			preSql = _T("Data.strClipBoardFormat = 'CF_UNICODETEXT' AND ");
 			dataJoin = _T("INNER JOIN Data on Data.lParentID = Main.lID");
 
-			SQLFormat.SetVariable("Data.ooData");
 			csSQLSearch.TrimLeft(_T("/f "));
 			csSQLSearch.TrimLeft(_T("\\f "));
 
-			if(csSQLSearch == "")
+			fullTextFormat.SetVariable("Data.ooData");
+			fullTextFormat.Parse(csSQLSearch);
+			fullTextSql = fullTextFormat.GetSQLString();
+
+			fullTextSql.Insert(1, _T("Data.strClipBoardFormat = 'CF_UNICODETEXT' AND "));
+
+			//If we are also search for other formats limit it them to unicode text, otherwise multiple rows could be returned
+			if(descriptionSql != _T(""))
 			{
-				return FALSE;
+				descriptionSql.Insert(1, _T("Data.strClipBoardFormat = 'CF_UNICODETEXT' AND "));
+			}
+
+			if(quickPasteSql != _T(""))
+			{
+				quickPasteSql.Insert(1, _T("Data.strClipBoardFormat = 'CF_UNICODETEXT' AND "));
 			}
 		}
-		else
+
+		strFilter = _T("(");
+
+		if(descriptionSql != _T(""))
 		{
-			SQLFormat.SetVariable("Main.mText");
+			strFilter += descriptionSql;
 		}
 
-        SQLFormat.Parse(csSQLSearch);
-
-        strFilter = SQLFormat.GetSQLString();
-
-		if(preSql.IsEmpty() == FALSE)
+		if(quickPasteSql != _T(""))
 		{
-			strFilter.Insert(0, preSql);
+			if(descriptionSql != _T(""))
+			{
+				strFilter += _T(" OR ");
+			}
+
+			strFilter += quickPasteSql;
 		}
+
+		if(fullTextSql != _T(""))
+		{
+			if(descriptionSql != _T("") ||
+				quickPasteSql != _T(""))
+			{
+				strFilter += _T(" OR ");
+			}
+
+			strFilter += fullTextSql;
+		}
+
+		strFilter += _T(")");		
 
         if(strParentFilter.IsEmpty() == FALSE)
         {
@@ -1084,49 +1140,10 @@ void CQPasteWnd::OnRclickQuickPaste(NMHDR *pNMHDR, LRESULT *pResult)
         }
 
         theApp.m_Addins.AddPrePasteAddinsToMenu(cmSubMenu);
-
-		//HideMenuGroup(cmSubMenu, "Groups");
-		//HideMenuGroup(cmSubMenu, "Quick Options");
-		//HideMenuGroup(cmSubMenu, "Send To");
-		//HideMenuGroup(cmSubMenu, "Add-Ins");
-		//HideMenuGroup(cmSubMenu, "Quick Properties");
         
 		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 
         SetMenuChecks(cmSubMenu);
-
-		//cmSubMenu->RemoveMenu(32860, MF_BYCOMMAND);
-		//cmSubMenu->RemoveMenu(32775, MF_BYCOMMAND);
-		//cmSubMenu->RemoveMenu(32867, MF_BYCOMMAND); 
-		//cmSubMenu->RemoveMenu(32855, MF_BYCOMMAND);
-		//cmSubMenu->RemoveMenu(32853, MF_BYCOMMAND);
-		//cmSubMenu->RemoveMenu(32819, MF_BYCOMMAND);
-
-		//CString csMenuText;
-		//int nCount = cmSubMenu->GetMenuItemCount();
-		//int pos = 0;
-		//bool lastMenuEmpty = false;
-		//for(int i = 0; i < nCount; i++)
-		//{
-		//	cmSubMenu->GetMenuString(pos, csMenuText, MF_BYPOSITION);
-		//	if(csMenuText.IsEmpty())
-		//	{
-		//		if(lastMenuEmpty)
-		//		{
-		//			cmSubMenu->RemoveMenu(pos, MF_BYPOSITION);
-		//		}
-		//		else
-		//		{
-		//			pos++;
-		//			lastMenuEmpty = true;
-		//		}
-		//	}
-		//	else
-		//	{
-		//		pos++;
-		//		lastMenuEmpty = false;
-		//	}
-		//}
 
         cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
     }
@@ -3063,6 +3080,80 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
 void CQPasteWnd::OnBackButton()
 {
     theApp.EnterGroupID(theApp.m_GroupParentID);
+}
+
+void CQPasteWnd::OnSearchDescription()
+{
+	POINT pp;
+	CMenu cmPopUp;
+	CMenu *cmSubMenu = NULL;
+
+	GetCursorPos(&pp);
+	if(cmPopUp.LoadMenu(IDR_MENU_SEARCH) != 0)
+	{
+		cmSubMenu = cmPopUp.GetSubMenu(0);
+		if(!cmSubMenu)
+		{
+			return ;
+		}
+
+		GetCursorPos(&pp);
+
+		if(CGetSetOptions::GetSearchDescription())
+			cmSubMenu->CheckMenuItem(ID_MENU_SEARCHDESCRIPTION, MF_CHECKED);
+
+		if(CGetSetOptions::GetSearchFullText())
+			cmSubMenu->CheckMenuItem(ID_MENU_SEARCHFULLTEXT, MF_CHECKED);
+
+		if(CGetSetOptions::GetSearchQuickPaste())
+			cmSubMenu->CheckMenuItem(ID_MENU_SEARCHQUICKPASTE, MF_CHECKED);
+				
+
+		//theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
+
+		
+
+		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
+	}
+}
+
+void CQPasteWnd::OnMenuSearchDescription()
+{
+	CGetSetOptions::SetSearchDescription(!CGetSetOptions::GetSearchDescription());
+
+	CString csText;
+	m_search.GetWindowText(csText);
+
+	if(csText != _T(""))
+	{
+		FillList(csText);
+	}
+}
+
+void CQPasteWnd::OnMenuSearchFullText()
+{
+	CGetSetOptions::SetSearchFullText(!CGetSetOptions::GetSearchFullText());
+
+	CString csText;
+	m_search.GetWindowText(csText);
+
+	if(csText != _T(""))
+	{
+		FillList(csText);
+	}
+}
+
+void CQPasteWnd::OnMenuSearchQuickPaste()
+{
+	CGetSetOptions::SetSearchQuickPaste(!CGetSetOptions::GetSearchQuickPaste());
+
+	CString csText;
+	m_search.GetWindowText(csText);
+
+	if(csText != _T(""))
+	{
+		FillList(csText);
+	}
 }
 
 void CQPasteWnd::OnSearchEditChange()
