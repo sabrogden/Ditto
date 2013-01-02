@@ -128,7 +128,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         }
     #endif 
 
-    SetTimer(CLOSE_WINDOW_TIMER, ONE_HOUR*24, 0);
+    //SetTimer(CLOSE_WINDOW_TIMER, ONE_HOUR*24, 0);
     SetTimer(REMOVE_OLD_REMOTE_COPIES, ONE_DAY, 0);
     SetTimer(REMOVE_OLD_ENTRIES_TIMER, ONE_MINUTE*15, 0);
 
@@ -246,8 +246,8 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
             m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
         }
 
-        KillTimer(CLOSE_WINDOW_TIMER);
-        SetTimer(CLOSE_WINDOW_TIMER, ONE_HOUR *24, 0);
+        //KillTimer(CLOSE_WINDOW_TIMER);
+        //SetTimer(CLOSE_WINDOW_TIMER, ONE_HOUR *24, 0);
     }
     else if(theApp.m_pPosOne && wParam == theApp.m_pPosOne->m_Atom)
     {
@@ -466,7 +466,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 
         case CLOSE_WINDOW_TIMER:
             {
-                m_quickPaste.CloseQPasteWnd();
+                //m_quickPaste.CloseQPasteWnd();
             }
 			break;
 
