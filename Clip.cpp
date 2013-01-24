@@ -855,6 +855,7 @@ HGLOBAL CClip::LoadFormat(int id, UINT cfType)
 
 bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT)
 {
+	DWORD startTick = GetTickCount();
 	CClipFormat cf;
 	HGLOBAL hGlobal = 0;
 	m_Formats.RemoveAll();
@@ -905,6 +906,10 @@ bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT)
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)
 		
+	DWORD endTick = GetTickCount();
+	if((endTick-startTick) > 150)
+		Log(StrF(_T("Paste Timing LoadFormats: %d, ClipId: %d"), endTick-startTick, id));
+
 	return m_Formats.GetSize() > 0;
 }
 
