@@ -461,6 +461,7 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
 BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus)
 {
     Log(_T("Start of HideQPasteWindow"));
+	DWORD startTick = GetTickCount();
 
     if(!theApp.m_bShowingQuickPaste)
     {
@@ -513,6 +514,10 @@ BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus)
             m_lstHeader.SetItemCountEx(0);
         }
     }
+
+	DWORD endTick = GetTickCount();
+	if((endTick-startTick) > 150)
+		Log(StrF(_T("Paste Timing HideQPasteWindow: %d"), endTick-startTick));
 
     Log(StrF(_T("End of HideQPasteWindow, ItemCount: %d"), m_listItems.size()));
 
@@ -781,6 +786,8 @@ LRESULT CQPasteWnd::OnListEnd(WPARAM wParam, LPARAM lParam)
 
 LRESULT CQPasteWnd::OnReloadClipOrder(WPARAM wParam, LPARAM lParam)
 {
+	DWORD startTick = GetTickCount();
+
 	BOOL foundClip = FALSE;
 	int clipId = (int)wParam;
 
@@ -822,6 +829,10 @@ LRESULT CQPasteWnd::OnReloadClipOrder(WPARAM wParam, LPARAM lParam)
 			iter++;
 		}
 	}
+
+	DWORD endTick = GetTickCount();
+	if((endTick-startTick) > 150)
+		Log(StrF(_T("Paste Timing OnReloadClipOrder: %d, ClipId: %d"), endTick-startTick, clipId));
 
 	return foundClip;
 }

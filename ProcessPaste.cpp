@@ -106,6 +106,8 @@ void CProcessPaste::MarkAsPasted()
 
 UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 {
+	DWORD startTick = GetTickCount();
+
 	static CEvent UpdateTimeEvent(TRUE, TRUE, _T("Ditto_Update_Clip_Time"), NULL);
 	UpdateTimeEvent.ResetEvent();
 
@@ -119,12 +121,14 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 	}
 
 	BOOL bRet = FALSE;
+	int clipId = 0;
 
 	try
 	{
 		MarkAsPastedData* pData = (MarkAsPastedData*)pParam;
 		if(pData)
 		{
+			clipId = pData->clipId;
 			if(g_Opt.m_bUpdateTimeOnPaste)
 			{
 				try
@@ -178,6 +182,10 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 	CATCH_SQLITE_EXCEPTION
 
 	Log(_T("End of MarkAsPastedThread"));
+
+	DWORD endTick = GetTickCount();
+	if((endTick-startTick) > 350)
+		Log(StrF(_T("Paste Timing MarkAsPastedThread: %d, ClipId: %d"), endTick-startTick, clipId));
 
 	UpdateTimeEvent.SetEvent();
 	return bRet;

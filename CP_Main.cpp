@@ -632,6 +632,8 @@ BOOL CCP_MainApp::EnterGroupID(long lID)
 	if(m_GroupID == lID)
 		return TRUE;
 
+	DWORD startTick = GetTickCount();
+
 	// if we are switching to the parent, focus on the previous group
 	if(m_GroupParentID == lID && m_GroupID > 0)
 		m_FocusID = m_GroupID;
@@ -670,6 +672,10 @@ BOOL CCP_MainApp::EnterGroupID(long lID)
 		if(QPasteWnd())
 			QPasteWnd()->UpdateStatus(true);
 	}
+
+	DWORD endTick = GetTickCount();
+	if((endTick-startTick) > 150)
+		Log(StrF(_T("Paste Timing EnterParentId: %d"), endTick-startTick));
 
 	return bResult;
 }
