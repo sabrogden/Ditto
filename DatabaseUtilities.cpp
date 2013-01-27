@@ -551,7 +551,7 @@ BOOL RepairDatabase()
 	return TRUE;
 }
 
-BOOL RemoveOldEntries()
+BOOL RemoveOldEntries(bool checkIdleTime)
 {
 	Log(StrF(_T("Beginning of RemoveOldEntries MaxEntries: %d - Keep days: %d"), CGetSetOptions::GetMaxEntries(), CGetSetOptions::GetExpiredEntries()));
 
@@ -639,7 +639,7 @@ BOOL RemoveOldEntries()
 		while(q.eof() == false)
 		{
 			double idleSeconds = IdleSeconds();
-			if(idleSeconds > CGetSetOptions::GetIdleSecondsBeforeDelete())
+			if(checkIdleTime == false || idleSeconds > CGetSetOptions::GetIdleSecondsBeforeDelete())
 			{
 				//delete any data items sitting out there that the main table data was deleted
 				//this was done to speed up deleted from the main table

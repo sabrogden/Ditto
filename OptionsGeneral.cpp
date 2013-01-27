@@ -320,6 +320,19 @@ void COptionsGeneral::OnBtCompactAndRepair()
 
 	try
 	{
+		try
+		{
+			for(int i = 0; i < 100; i++)
+			{
+				int toDeleteCount = theApp.m_db.execScalar(_T("SELECT COUNT(clipID) FROM MainDeletes"));
+				if(toDeleteCount <= 0)
+					break;
+
+				RemoveOldEntries(false);
+			}
+		}
+		CATCH_SQLITE_EXCEPTION
+
 		theApp.m_db.execDML(_T("PRAGMA auto_vacuum = 1"));
 		theApp.m_db.execQuery(_T("VACUUM"));
 	}

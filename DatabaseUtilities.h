@@ -23,7 +23,7 @@ BOOL CreateDB(CString csPath);
 
 BOOL CompactDatabase();
 BOOL RepairDatabase();
-BOOL RemoveOldEntries();
+BOOL RemoveOldEntries(bool checkIdleTime);
 
 BOOL EnsureDirectory(CString csPath);
 

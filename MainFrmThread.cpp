@@ -67,7 +67,7 @@ void CMainFrmThread::OnEvent(int eventId, void *param)
 
 void CMainFrmThread::OnDeleteEntries()
 {
-    RemoveOldEntries();
+    RemoveOldEntries(true);
 }
 
 void CMainFrmThread::OnRemoveRemoteFiles()
