@@ -61,7 +61,7 @@ bool CGetSetOptions::m_portable = false;
 CString CGetSetOptions::m_csIniFileName;
 __int64 CGetSetOptions::nLastDbWriteTime = 0;
 CTheme CGetSetOptions::m_Theme;
-
+BOOL CGetSetOptions::m_showScrollBar = false;
 CGetSetOptions g_Opt;
 
 CGetSetOptions::CGetSetOptions()
@@ -146,6 +146,7 @@ void CGetSetOptions::LoadSettings()
 	m_bEnableDebugLogging = GetEnableDebugLogging();
 	m_bEnsureConnectToClipboard = GetEnsureConnectToClipboard();
 	m_bOutputDebugString = false;
+	m_showScrollBar = GetShowScrollBar();
 
 	GetExtraNetworkPassword(true);
 
@@ -2025,4 +2026,15 @@ void CGetSetOptions::SetSearchQuickPaste(BOOL val)
 BOOL CGetSetOptions::GetSearchQuickPaste()
 {
 	return GetProfileLong(_T("SearchQuickPaste"), 0);
+}
+
+void CGetSetOptions::SetShowScrollBar(BOOL val)
+{
+	m_showScrollBar = val;
+	SetProfileLong(_T("ShowScrollBar"), val);
+}
+
+BOOL CGetSetOptions::GetShowScrollBar()
+{
+	return GetProfileLong(_T("ShowScrollBar"), 0);
 }

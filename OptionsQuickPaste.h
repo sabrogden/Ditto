@@ -73,6 +73,7 @@ public:
 	CButton m_PromptForDelete;
 	CComboBox m_cbTheme;
 	afx_msg void OnBnClickedButtonTheme();
+	CButton m_alwaysShowScrollBar;
 };
 
 //{{AFX_INSERT_LOCATION}}

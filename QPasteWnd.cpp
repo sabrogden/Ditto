@@ -301,7 +301,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_stGroup.SetFont(&GroupFont);
 
     UpdateFont();
-
+	
     m_thread.Start(this);
 
     return 0;
@@ -378,7 +378,8 @@ void CQPasteWnd::MoveControls()
 	
 	int extraSize = 0;
 
-	if(m_showScrollBars == false)
+	if(m_showScrollBars == false &&
+		g_Opt.m_showScrollBar == false)
 	{
 		extraSize = ::GetSystemMetrics(SM_CXVSCROLL);
 
@@ -564,7 +565,6 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
     #endif 
 
     m_lstHeader.SetNumberOfLinesPerRow(CGetSetOptions::GetLinesPerRow());
-
     m_lstHeader.SetShowTextForFirstTenHotKeys(CGetSetOptions::GetShowTextForFirstTenHotKeys());
 
     if(bFillList)

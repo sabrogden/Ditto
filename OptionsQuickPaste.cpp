@@ -57,6 +57,7 @@ void COptionsQuickPaste::DoDataExchange(CDataExchange* pDX)
 	//}}AFX_DATA_MAP
 	DDX_Control(pDX, IDC_CHECK_PROMPT_DELETE_CLIP, m_PromptForDelete);
 	DDX_Control(pDX, IDC_COMBO_THEME, m_cbTheme);
+	DDX_Control(pDX, IDC_CHECK_SHOW_SCROLL_BAR, m_alwaysShowScrollBar);
 }
 
 
@@ -80,6 +81,7 @@ BOOL COptionsQuickPaste::OnInitDialog()
 	m_btEnableTransparency.SetCheck(CGetSetOptions::GetEnableTransparency());
 	m_eTransparencyPercent.SetNumber(CGetSetOptions::GetTransparencyPercent());
 	m_eLinesPerRow.SetNumber(CGetSetOptions::GetLinesPerRow());
+	m_alwaysShowScrollBar.SetCheck(CGetSetOptions::GetShowScrollBar());
 	m_btShowThumbnails.SetCheck(g_Opt.m_bDrawThumbnail);
 	m_btDrawRTF.SetCheck(g_Opt.m_bDrawRTF);
 
@@ -127,6 +129,7 @@ BOOL COptionsQuickPaste::OnApply()
 	CGetSetOptions::SetEnableTransparency(m_btEnableTransparency.GetCheck());
 	CGetSetOptions::SetTransparencyPercent(m_eTransparencyPercent.GetNumber());
 	CGetSetOptions::SetLinesPerRow(m_eLinesPerRow.GetNumber());
+	CGetSetOptions::SetShowScrollBar(m_alwaysShowScrollBar.GetCheck());
 	
 	if(IsDlgButtonChecked(IDC_AT_CARET))
 		CGetSetOptions::SetQuickPastePosition(POS_AT_CARET);

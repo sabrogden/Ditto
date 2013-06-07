@@ -182,6 +182,8 @@
 #define IDC_CHECK_PROMPT_DELETE_CLIP    2039
 #define IDC_CHECK_WIN9                  2040
 #define IDC_STATIC_DATE                 2040
+#define IDC_CHECK_PROMPT_DELETE_CLIP2   2040
+#define IDC_CHECK_SHOW_SCROLL_BAR       2040
 #define IDC_CHECK_WIN10                 2041
 #define IDC_STATIC_MOVE_TO_GROUP        2041
 #define IDC_CHECK_WIN1                  2042

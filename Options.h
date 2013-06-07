@@ -427,6 +427,10 @@ public:
 	static void		SetSearchQuickPaste(BOOL val);
 	static BOOL		GetSearchQuickPaste();
 
+	static void		SetShowScrollBar(BOOL val);
+	static BOOL		GetShowScrollBar();
+	static BOOL		m_showScrollBar;
+
 };
 
 // global for easy access and for initialization of fast access variables

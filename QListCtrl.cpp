@@ -1385,29 +1385,32 @@ BOOL CQListCtrl::OnItemDeleted(long lID)
 
 void CQListCtrl::OnMouseMove(UINT nFlags, CPoint point)
 {
-	CRect crWindow;
-	this->GetWindowRect(&crWindow);
-	ScreenToClient(&crWindow);
-
-	crWindow.right -= theApp.m_metrics.ScaleX(::GetSystemMetrics(SM_CXVSCROLL));
-	crWindow.bottom -= theApp.m_metrics.ScaleX(::GetSystemMetrics(SM_CXHSCROLL));
-
-	if(MouseInScrollBarArea(crWindow, point))
+	if(g_Opt.m_showScrollBar == FALSE)
 	{
-		if((GetTickCount() - m_mouseOverScrollAreaStart) > 500)
-		{
-			SetTimer(TIMER_SHOW_SCROLL, 500, NULL);
+		CRect crWindow;
+		this->GetWindowRect(&crWindow);
+		ScreenToClient(&crWindow);
 
-			m_mouseOverScrollAreaStart = GetTickCount();
+		crWindow.right -= theApp.m_metrics.ScaleX(::GetSystemMetrics(SM_CXVSCROLL));
+		crWindow.bottom -= theApp.m_metrics.ScaleX(::GetSystemMetrics(SM_CXHSCROLL));
+
+		if(MouseInScrollBarArea(crWindow, point))
+		{
+			if((GetTickCount() - m_mouseOverScrollAreaStart) > 500)
+			{
+				SetTimer(TIMER_SHOW_SCROLL, 500, NULL);
+
+				m_mouseOverScrollAreaStart = GetTickCount();
+			}
 		}
-	}
-	else
-	{
-		if(m_timerToHideScrollAreaSet)
+		else
 		{
-			StopHideScrollBarTimer();
-		}		
-		KillTimer(TIMER_SHOW_SCROLL);
+			if(m_timerToHideScrollAreaSet)
+			{
+				StopHideScrollBarTimer();
+			}		
+			KillTimer(TIMER_SHOW_SCROLL);
+		}
 	}
 }
 
