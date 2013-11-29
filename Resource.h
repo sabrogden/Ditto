@@ -118,6 +118,7 @@
 #define IDC_ENSURE                      1042
 #define IDC_PLAY_SOUND_1                1042
 #define IDC_PLAY_SOUND_2                1043
+#define IDC_CHECK_MOVE_CLIPS_ON_PASTE   1043
 #define IDC_PLAY_SOUND_3                1044
 #define IDD_OPTIONS_KEYSTROKES          2001
 #define IDC_HOTKEY                      2002
@@ -370,6 +371,11 @@
 #define ID_MENU_SEARCHDESCRIPTION       32873
 #define ID_MENU_SEARCHFULLTEXT          32874
 #define ID_MENU_SEARCHQUICKPASTE        32875
+#define ID_MENU_CONTAINSTEXTSEARCHONLY  32876
+#define ID_MENU_STICKYCLIPS             32877
+#define ID_STICKYCLIPS_MAKETOPSTICKYCLIP 32878
+#define ID_STICKYCLIPS_MAKELASTSTICKYCLIP 32879
+#define ID_STICKYCLIPS_REMOVESTICKYSETTING 32880
 
 // Next default values for new objects
 // 
@@ -377,7 +383,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        184
-#define _APS_NEXT_COMMAND_VALUE         32876
+#define _APS_NEXT_COMMAND_VALUE         32881
 #define _APS_NEXT_CONTROL_VALUE         2101
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

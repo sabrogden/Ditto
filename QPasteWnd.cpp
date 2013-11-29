@@ -14,6 +14,7 @@
 #include "MainTableFunctions.h"
 #include "Path.h"
 #include <algorithm>
+//#include "MyDropTarget.h"
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -147,6 +148,10 @@ ON_UPDATE_COMMAND_UI(ID_MENU_PASTEPLAINTEXTONLY, OnUpdateMenuPasteplaintextonly)
 ON_UPDATE_COMMAND_UI(ID_MENU_DELETE, OnUpdateMenuDelete)
 ON_UPDATE_COMMAND_UI(ID_MENU_PROPERTIES, OnUpdateMenuProperties)
 ON_COMMAND(ID_QUICKOPTIONS_PROMPTTODELETECLIP, OnPromptToDeleteClip)
+ON_COMMAND(ID_STICKYCLIPS_MAKETOPSTICKYCLIP, OnMakeTopStickyClip)
+ON_COMMAND(ID_STICKYCLIPS_MAKELASTSTICKYCLIP, OnMakeLastStickyClip)
+ON_COMMAND(ID_STICKYCLIPS_REMOVESTICKYSETTING, OnRemoveStickySetting)
+
 ON_WM_DESTROY()
 
 //}}AFX_MSG_MAP
@@ -196,6 +201,7 @@ ON_MESSAGE(NM_POST_OPTIONS_WINDOW, OnPostOptions)
 ON_COMMAND(ID_MENU_SEARCHDESCRIPTION, OnMenuSearchDescription)
 ON_COMMAND(ID_MENU_SEARCHFULLTEXT, OnMenuSearchFullText)
 ON_COMMAND(ID_MENU_SEARCHQUICKPASTE, OnMenuSearchQuickPaste)
+ON_COMMAND(ID_MENU_CONTAINSTEXTSEARCHONLY, OnMenuSimpleTextSearch)
 //ON_WM_CTLCOLOR()
 //ON_WM_ERASEBKGND()
 //ON_WM_PAINT()
@@ -228,6 +234,9 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     {
         return -1;
     }
+
+	//m_pDropTarget = new CMyDropTarget(this);
+	//m_pDropTarget->Register(this);
 
     SetWindowText(_T(QPASTE_TITLE));
 
@@ -951,12 +960,15 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     CString strParentFilter;
     CString csSort;
 
-    // History Group
+    // History Groupiter->m_stickyClipGroupOrder = clip.m_stickyClipGroupOrder;
     if(theApp.m_GroupID < 0)
     {
         m_lstHeader.m_bStartTop = true;
         
-		csSort = "Main.bIsGroup ASC, Main.clipOrder DESC";
+		csSort = "case when Main.stickyClipOrder = 0 then -9999999 else Main.stickyClipOrder END DESC, "
+				 "case when Main.stickyClipOrder IS NULL then - 9999999 else Main.stickyClipOrder END DESC, "
+				 "Main.bIsGroup ASC, "
+				 "clipOrder DESC";
 
         if(g_Opt.m_bShowAllClipsInMainList)
         {
@@ -972,7 +984,12 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     {
         m_lstHeader.m_bStartTop = true;
 
-        csSort = "Main.bIsGroup DESC, Main.clipGroupOrder DESC";
+		csSort = "case when Main.stickyClipGroupOrder = 0 then -9999999 else Main.stickyClipGroupOrder END DESC, "
+				 "case when Main.stickyClipGroupOrder IS NULL then - 9999999 else Main.stickyClipGroupOrder END DESC, "
+				 "Main.bIsGroup ASC, "
+				 "clipGroupOrder DESC";
+			
+			//Main.stickyClipGroupOrder DESC, Main.clipGroupOrder DESC";//
         
         if(theApp.m_GroupID >= 0)
         {
@@ -1097,7 +1114,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 	    m_CountSQL.Format(_T("SELECT COUNT(Main.lID) FROM Main %s where %s"), dataJoin, strFilter);
 
 	    m_SQL.Format(_T("SELECT Main.lID, Main.mText, Main.lParentID, Main.lDontAutoDelete, ")
-			_T("Main.lShortCut, Main.bIsGroup, Main.QuickPasteText, Main.clipOrder, Main.clipGroupOrder FROM Main %s ")
+			_T("Main.lShortCut, Main.bIsGroup, Main.QuickPasteText, Main.clipOrder, Main.clipGroupOrder, Main.stickyClipOrder, Main.stickyClipGroupOrder FROM Main %s ")
 			_T("where %s order by %s"), dataJoin, strFilter, csSort);
 	}
 
@@ -1990,6 +2007,183 @@ void CQPasteWnd::OnPromptToDeleteClip()
     CGetSetOptions::SetPromptWhenDeletingClips(!CGetSetOptions::GetPromptWhenDeletingClips());
 }
 
+void CQPasteWnd::OnMakeTopStickyClip()
+{
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	if (IDs.GetCount() > 0)
+	{
+		bool sort = false;
+		for (int i = IDs.GetCount() - 1; i >= 0; i--)
+		{
+			int id = IDs[i];
+			CClip clip;
+			if (clip.LoadMainTable(id))
+			{
+				clip.MakeStickyTop(theApp.m_GroupID);
+				clip.ModifyMainTable();
+
+				std::vector<CMainTable>::iterator iter = m_listItems.begin();
+				while (iter != m_listItems.end())
+				{
+					if (iter->m_lID == id)
+					{
+						if (theApp.m_GroupID > 0)
+						{
+							iter->m_stickyClipGroupOrder = clip.m_stickyClipGroupOrder;
+						}
+						else
+						{
+							iter->m_stickyClipOrder = clip.m_stickyClipOrder;							
+						}
+						sort = true;
+						break;
+					}
+					iter++;
+				}
+			}
+		}
+
+			//theApp.m_FocusID = id;
+
+		if(sort)
+		{
+			if (theApp.m_GroupID > 0)
+			{
+				std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::GroupSortDesc);
+			}
+			else
+			{
+				std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::SortDesc);
+			}
+
+			//SelectFocusID();
+
+			m_lstHeader.RefreshVisibleRows();
+			m_lstHeader.RedrawWindow();
+		}
+	}
+}
+
+void CQPasteWnd::OnMakeLastStickyClip()
+{
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	if (IDs.GetCount() > 0)
+	{
+		bool sort = false;
+		for (int i = IDs.GetCount() - 1; i >= 0; i--)
+		{
+			int id = IDs[i];
+			CClip clip;
+			if (clip.LoadMainTable(id))
+			{
+				clip.MakeStickyLast(theApp.m_GroupID);
+				clip.ModifyMainTable();
+
+				std::vector<CMainTable>::iterator iter = m_listItems.begin();
+				while (iter != m_listItems.end())
+				{
+					if (iter->m_lID == id)
+					{
+						if (theApp.m_GroupID > 0)
+						{
+							iter->m_stickyClipGroupOrder = clip.m_stickyClipGroupOrder;
+						}
+						else
+						{
+							iter->m_stickyClipOrder = clip.m_stickyClipOrder;							
+						}
+						sort = true;
+						break;
+					}
+					iter++;
+				}
+			}
+		}
+
+		//theApp.m_FocusID = id;
+
+		if (sort)
+		{
+			if (theApp.m_GroupID > 0)
+			{
+				std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::GroupSortDesc);
+			}
+			else
+			{
+				std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::SortDesc);
+			}
+
+			//SelectFocusID();
+
+			m_lstHeader.RefreshVisibleRows();
+			m_lstHeader.RedrawWindow();
+		}
+	}
+}
+
+void CQPasteWnd::OnRemoveStickySetting()
+{
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	if (IDs.GetCount() > 0)
+	{
+		bool sort = false;
+		for (int i = IDs.GetCount() - 1; i >= 0; i--)
+		{
+			int id = IDs[i];
+			CClip clip;
+			if (clip.LoadMainTable(id))
+			{
+				clip.RemoveStickySetting(theApp.m_GroupID);
+				clip.ModifyMainTable();
+
+				std::vector<CMainTable>::iterator iter = m_listItems.begin();
+				while (iter != m_listItems.end())
+				{
+					if (iter->m_lID == id)
+					{
+						if (theApp.m_GroupID > 0)
+						{
+							iter->m_stickyClipGroupOrder = clip.m_stickyClipGroupOrder;
+						}
+						else
+						{
+							iter->m_stickyClipOrder = clip.m_stickyClipOrder;
+						}
+						sort = true;
+						break;
+					}
+					iter++;
+				}
+			}
+		}
+
+		//theApp.m_FocusID = id;
+
+		if (sort)
+		{
+			if (theApp.m_GroupID > 0)
+			{
+				std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::GroupSortDesc);
+			}
+			else
+			{
+				std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::SortDesc);
+			}
+
+			//SelectFocusID();
+
+			m_lstHeader.RefreshVisibleRows();
+			m_lstHeader.RedrawWindow();
+		}
+	}
+}
+
 void CQPasteWnd::OnMenuExport()
 {
     CClipIDs IDs;
@@ -2631,6 +2825,28 @@ void CQPasteWnd::OnBegindrag(NMHDR *pNMHDR, LRESULT *pResult)
     *pResult = 0;
 }
 
+DROPEFFECT CQPasteWnd::OnDragEnter(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point)
+{
+	int k = 0;
+
+	return DROPEFFECT_COPY;
+}
+
+DROPEFFECT CQPasteWnd::OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point)
+{
+	return DROPEFFECT_COPY;
+}
+
+BOOL CQPasteWnd::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, CPoint point)
+{
+	return TRUE;
+}
+
+void CQPasteWnd::OnDragLeave()
+{
+
+}
+
 void CQPasteWnd::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
     CWndEx::OnSysKeyDown(nChar, nRepCnt, nFlags);
@@ -2669,6 +2885,12 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                         {
                             cs += "G";
                         }
+
+						if (m_listItems[pItem->iItem].m_stickyClipOrder > 0 || 
+							m_listItems[pItem->iItem].m_stickyClipGroupOrder)
+						{
+							cs += "Sticky";
+						}
 
                         // attached to a group
                         if(m_listItems[pItem->iItem].m_bHasParent)
@@ -3118,6 +3340,9 @@ void CQPasteWnd::OnSearchDescription()
 
 		if(CGetSetOptions::GetSearchQuickPaste())
 			cmSubMenu->CheckMenuItem(ID_MENU_SEARCHQUICKPASTE, MF_CHECKED);
+
+		if(CGetSetOptions::GetSimpleTextSearch())
+			cmSubMenu->CheckMenuItem(ID_MENU_CONTAINSTEXTSEARCHONLY, MF_CHECKED);
 				
 
 		//theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
@@ -3165,6 +3390,11 @@ void CQPasteWnd::OnMenuSearchQuickPaste()
 	{
 		FillList(csText);
 	}
+}
+
+void CQPasteWnd::OnMenuSimpleTextSearch()
+{
+	CGetSetOptions::SetSimpleTextSearch(!CGetSetOptions::GetSimpleTextSearch());
 }
 
 void CQPasteWnd::OnSearchEditChange()
@@ -3451,6 +3681,8 @@ void CQPasteWnd::FillMainTable(CMainTable &table, CppSQLite3Query &q)
     table.m_QuickPaste = q.fieldValue(_T("QuickPasteText"));
 	table.m_clipOrder = q.getFloatField(_T("clipOrder"));
 	table.m_clipGroupOrder = q.getFloatField(_T("clipGroupOrder"));
+	table.m_stickyClipOrder = q.getFloatField(_T("stickyClipOrder"));
+	table.m_stickyClipGroupOrder = q.getFloatField(_T("stickyClipGroupOrder"));
 }
 
 void CQPasteWnd::OnDestroy()

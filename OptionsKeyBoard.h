@@ -28,6 +28,7 @@ public:
 	//{{AFX_DATA(COptionsKeyBoard)
 	enum { IDD = IDD_OPTIONS_KEYSTROKES };
 	CButton	m_btSendPaste;
+	CButton	m_btMoveClipOnGlobal10;
 	CHotKeyCtrl	m_Nine;
 	CHotKeyCtrl	m_Eight;
 	CHotKeyCtrl	m_Seven;

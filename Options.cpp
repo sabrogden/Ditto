@@ -115,6 +115,14 @@ void CGetSetOptions::LoadSettings()
 
 	GetSetCurrentDirectory();
 
+	//First time we run, set some defaults
+	if (GetDBPath() == _T("") &&
+		GetTotalCopyCount() == 0)
+	{
+		SetCheckForMaxEntries(TRUE);
+		SetSimpleTextSearch(TRUE);
+	}
+
 	m_nLinesPerRow = GetLinesPerRow();
 	m_bUseCtrlNumAccel = GetUseCtrlNumForFirstTenHotKeys();
 	m_bAllowDuplicates = GetAllowDuplicates();
@@ -2026,6 +2034,25 @@ void CGetSetOptions::SetSearchQuickPaste(BOOL val)
 BOOL CGetSetOptions::GetSearchQuickPaste()
 {
 	return GetProfileLong(_T("SearchQuickPaste"), 0);
+}
+
+void CGetSetOptions::SetSimpleTextSearch(BOOL val)
+{
+	SetProfileLong(_T("SimpleTextSearch"), val);
+}
+
+BOOL CGetSetOptions::GetSimpleTextSearch()
+{
+	return GetProfileLong(_T("SimpleTextSearch"), 0);
+}
+
+void CGetSetOptions::SetMoveClipsOnGlobal10(BOOL val)
+{
+	SetProfileLong(_T("MoveClipsOnGlobal10"), val);
+}
+BOOL CGetSetOptions::GetMoveClipsOnGlobal10()
+{
+	return GetProfileLong(_T("MoveClipsOnGlobal10"), 0);
 }
 
 void CGetSetOptions::SetShowScrollBar(BOOL val)

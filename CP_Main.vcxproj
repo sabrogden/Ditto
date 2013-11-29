@@ -21,6 +21,7 @@
   <PropertyGroup Label="Globals">
     <RootNamespace>CP_Main</RootNamespace>
     <Keyword>MFCProj</Keyword>
+    <ProjectGuid>{8ECC3EF2-AF07-27B6-A773-779874943C0D}</ProjectGuid>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -567,6 +568,7 @@
     <ClCompile Include="HotKeys.cpp" />
     <ClCompile Include="MainFrmThread.cpp" />
     <ClCompile Include="MessagePumpThread.cpp" />
+    <ClCompile Include="MyDropTarget.cpp" />
     <ClCompile Include="Popup.cpp" />
     <ClCompile Include="QPasteWndThread.cpp" />
     <ClCompile Include="Shared\TextConvert.cpp" />
@@ -1769,6 +1771,7 @@
     <ClInclude Include="MainFrmThread.h" />
     <ClInclude Include="memdc.h" />
     <ClInclude Include="MessagePumpThread.h" />
+    <ClInclude Include="MyDropTarget.h" />
     <ClInclude Include="NumberEdit.h" />
     <ClInclude Include="Popup.h" />
     <ClInclude Include="QListCtrl.h" />

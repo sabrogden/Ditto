@@ -427,10 +427,15 @@ public:
 	static void		SetSearchQuickPaste(BOOL val);
 	static BOOL		GetSearchQuickPaste();
 
+	static void		SetSimpleTextSearch(BOOL val);
+	static BOOL		GetSimpleTextSearch();
+
+	static void		SetMoveClipsOnGlobal10(BOOL val);
+	static BOOL		GetMoveClipsOnGlobal10();
+
 	static void		SetShowScrollBar(BOOL val);
 	static BOOL		GetShowScrollBar();
 	static BOOL		m_showScrollBar;
-
 };
 
 // global for easy access and for initialization of fast access variables

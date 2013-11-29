@@ -182,6 +182,11 @@ void CQListCtrl::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 	*pResult = 0;
 }
 
+DROPEFFECT CQListCtrl::OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point)
+{
+	return DROPEFFECT_COPY;
+}
+
 void CQListCtrl::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	LPNMITEMACTIVATE lpnmItem = (LPNMITEMACTIVATE) pNMHDR;
@@ -375,6 +380,20 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		
 		COLORREF OldColor = -1;
 		int nOldBKMode = -1;
+
+		CString csText;
+		LPTSTR lpszText = csText.GetBufferSetLength(g_Opt.m_bDescTextSize);
+		GetItemText(nItem, 0, lpszText, g_Opt.m_bDescTextSize);
+		csText.ReleaseBuffer();
+
+		// extract symbols
+		CString strSymbols;
+		int nSymEnd = csText.Find('|');
+		if (nSymEnd >= 0)
+		{
+			strSymbols = csText.Left(nSymEnd);
+			csText = csText.Mid(nSymEnd + 1);
+		}
 		
 		// Draw the background of the list item.  Colors are selected 
 		// according to the item's state.
@@ -412,24 +431,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
         CRect rcText = rcItem;
         rcText.left += ROW_LEFT_BORDER;
 		rcText.top++;
-		
-        // Draw the text.
-        //CString csText = GetItemText(nItem, 0);
-		
-		CString csText;
-		LPTSTR lpszText = csText.GetBufferSetLength(g_Opt.m_bDescTextSize);
-		GetItemText(nItem, 0, lpszText, g_Opt.m_bDescTextSize);
-		csText.ReleaseBuffer();
-		
-		// extract symbols
-		CString strSymbols;
-		int nSymEnd = csText.Find('|');
-		if( nSymEnd >= 0 )
-		{
-			strSymbols = csText.Left(nSymEnd);  
-			csText = csText.Mid(nSymEnd+1);
-		}
-		
+		        		
 		// set firstTenNum to the first ten number (1-10) corresponding to
 		//  the current nItem.
 		// -1 means that nItem is not in the FirstTen block.

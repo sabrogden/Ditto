@@ -49,6 +49,7 @@ void COptionsKeyBoard::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_HOTKEY_TEXT_ONLY, m_TextOnlyKey);
 	//}}AFX_DATA_MAP
 	DDX_Control(pDX, IDC_STATIC_CUSTOM_KEYS, m_CustomeKeysHelp);
+	DDX_Control(pDX, IDC_CHECK_MOVE_CLIPS_ON_PASTE, m_btMoveClipOnGlobal10);
 }
 
 BEGIN_MESSAGE_MAP(COptionsKeyBoard, CPropertyPage)
@@ -88,6 +89,8 @@ BOOL COptionsKeyBoard::OnInitDialog()
 
 	m_btSendPaste.SetCheck(g_Opt.m_bSendPasteOnFirstTenHotKeys);
 
+	m_btMoveClipOnGlobal10.SetCheck(g_Opt.GetMoveClipsOnGlobal10());
+
 	m_HotKey.SetFocus();
 
 	theApp.m_Language.UpdateOptionShortcuts(this);	
@@ -108,6 +111,7 @@ BOOL COptionsKeyBoard::OnWizardFinish()
 BOOL COptionsKeyBoard::OnApply()
 {
 	CGetSetOptions::SetSendPasteOnFirstTenHotKeys(m_btSendPaste.GetCheck());
+	CGetSetOptions::SetMoveClipsOnGlobal10(m_btMoveClipOnGlobal10.GetCheck());
 					
 	INT_PTR x,y;
 	CString str;

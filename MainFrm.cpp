@@ -413,7 +413,7 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
             {
                 //Don't move these to the top
                 BOOL bItWas = g_Opt.m_bUpdateTimeOnPaste;
-                g_Opt.m_bUpdateTimeOnPaste = FALSE;
+                g_Opt.m_bUpdateTimeOnPaste = CGetSetOptions::GetMoveClipsOnGlobal10();
 
                 CProcessPaste paste;
                 paste.GetClipIDs().Add(q.getIntField(_T("lID")));

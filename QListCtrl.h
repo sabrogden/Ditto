@@ -113,6 +113,8 @@ public:
 	BOOL SetListPos(int index);
 	bool PutSelectedItemOnDittoCopyBuffer(long lBuffer);
 
+	virtual DROPEFFECT OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point);
+
 	DWORD GetItemData(int nItem);
 	CClipFormatQListCtrl* GetItem_CF_DIB_ClipFormat(int nItem);
 	CClipFormatQListCtrl* GetItem_CF_RTF_ClipFormat(int nItem);

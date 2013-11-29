@@ -33,6 +33,13 @@ void CFormatSQL::Parse(CString cs)
 	//Replace all "|" with a space
 	cs.Replace(_T("|"), _T(" "));
 
+	if(CGetSetOptions::GetSimpleTextSearch())
+	{
+		eSpecialTypes invalid = eINVALID;
+		AddToSQL(cs, invalid, invalid);
+		return;
+	}
+
 	cs.Replace(_T("["), _T(" "));
 	cs.Replace(_T("]"), _T(" "));
 
@@ -128,7 +135,11 @@ bool CFormatSQL::AddToSQL(CString cs, eSpecialTypes &eNOTValue, eSpecialTypes &e
 	cs.TrimLeft();
 	cs.TrimRight();
 
-	if(cs.Find(_T("%")) < 0 && cs.Find(_T("?")) < 0)
+	if (CGetSetOptions::GetSimpleTextSearch())
+	{
+		csThisSQL.Format(_T("%s LIKE \'%%%s%%\'"), m_csVariable, cs);
+	}
+	else if(cs.Find(_T("%")) < 0 && cs.Find(_T("?")) < 0)
 	{
 		csThisSQL.Format(_T("%s%sLIKE \'%%%s%%\'"), m_csVariable, GetKeyWordString(eNOTValue), cs);
 	}

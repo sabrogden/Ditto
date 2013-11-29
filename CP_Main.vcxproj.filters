@@ -331,6 +331,7 @@
     <ClCompile Include="DPI.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="MyDropTarget.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -708,6 +709,7 @@
     <ClInclude Include="DPI.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="MyDropTarget.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

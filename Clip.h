@@ -100,6 +100,8 @@ public:
 	int m_param1;
 	double m_clipOrder;
 	double m_clipGroupOrder;
+	double m_stickyClipOrder;
+	double m_stickyClipGroupOrder;
 	BOOL m_globalShortCut;
 	CTime m_lastPasteDate;
 
@@ -126,6 +128,9 @@ public:
 	bool ModifyMainTable();
 	bool SaveFromEditWnd(BOOL bUpdateDesc);
 	void MakeLatestOrder();
+	void MakeStickyTop(int parentId);
+	void MakeStickyLast(int parentId);
+	void RemoveStickySetting(int parentId);
 	BOOL LoadMainTable(int id);
 	DWORD GenerateCRC();
 
@@ -137,6 +142,8 @@ public:
 	static void LoadTypes(int id, CClipTypes& types);
 
 	static double GetNewOrder(int parentId, int clipId);
+	static double GetNewTopSticky(int parentId, int clipId);
+	static double GetNewLastSticky(int parentId, int clipId);
 	
 protected:
 	bool AddToMainTable();

@@ -167,6 +167,8 @@ CClip::CClip() :
 	m_bIsGroup(FALSE),
 	m_param1(0),
 	m_clipOrder(0),
+	m_stickyClipOrder(0),
+	m_stickyClipGroupOrder(0),
 	m_clipGroupOrder(0),
 	m_globalShortCut(FALSE)
 {
@@ -642,7 +644,8 @@ bool CClip::AddToMainTable()
 		m_csQuickPaste.Replace(_T("'"), _T("''"));
 
 		CString cs;
-		cs.Format(_T("INSERT into Main values(NULL, %d, '%s', %d, %d, %d, %d, %d, '%s', %f, %f, %d, %d);"),
+		cs.Format(_T("INSERT into Main (lDate, mText, lShortCut, lDontAutoDelete, CRC, bIsGroup, lParentID, QuickPasteText, clipOrder, clipGroupOrder, globalShortCut, lastPasteDate, stickyClipOrder, stickyClipGroupOrder) ")
+						_T("values(%d, '%s', %d, %d, %d, %d, %d, '%s', %f, %f, %d, %d, %f, %f);"),
 							(int)m_Time.GetTime(),
 							m_Desc,
 							m_shortCut,
@@ -654,7 +657,9 @@ bool CClip::AddToMainTable()
 							m_clipOrder,
 							m_clipGroupOrder,
 							m_globalShortCut,
-							(int)CTime::GetCurrentTime().GetTime());
+							(int)CTime::GetCurrentTime().GetTime(),
+							m_stickyClipOrder,
+							m_stickyClipGroupOrder);
 
 		theApp.m_db.execDML(cs);
 
@@ -685,7 +690,9 @@ bool CClip::ModifyMainTable()
 			_T("QuickPasteText = '%s', ")
 			_T("clipOrder = %f, ")
 			_T("clipGroupOrder = %f, ")
-			_T("globalShortCut = %d ")
+			_T("globalShortCut = %d, ")
+			_T("stickyClipOrder = %f, ")
+			_T("stickyClipGroupOrder = %f ")
 			_T("WHERE lID = %d;"), 
 			m_shortCut, 
 			m_Desc, 
@@ -695,6 +702,8 @@ bool CClip::ModifyMainTable()
 			m_clipOrder,
 			m_clipGroupOrder,
 			m_globalShortCut,
+			m_stickyClipOrder,
+			m_stickyClipGroupOrder,
 			m_id);
 
 		bRet = true;
@@ -742,6 +751,118 @@ bool CClip::AddToDataTable()
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)
 		
 	return true;
+}
+
+void CClip::MakeStickyTop(int parentId)
+{
+	if (parentId < 0)
+	{
+		m_stickyClipOrder = GetNewTopSticky(parentId, m_id);
+	}
+	else
+	{
+		m_stickyClipGroupOrder = GetNewTopSticky(parentId, m_id);
+	}
+}
+
+void CClip::MakeStickyLast(int parentId)
+{
+	if (parentId < 0)
+	{
+		m_stickyClipOrder = GetNewLastSticky(parentId, m_id);
+	}
+	else
+	{
+		m_stickyClipGroupOrder = GetNewLastSticky(parentId, m_id);
+	}
+}
+
+void CClip::RemoveStickySetting(int parentId)
+{
+	if (parentId < 0)
+	{
+		m_stickyClipOrder = 0;
+	}
+	else
+	{
+		m_stickyClipGroupOrder = 0;
+	}
+}
+
+double CClip::GetNewTopSticky(int parentId, int clipId)
+{
+	double newOrder = 1;
+	double existingMaxOrder = 0;
+	CString existingDesc = _T("");
+
+	try
+	{
+		if (parentId < 0)
+		{
+			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT stickyClipOrder, mText FROM Main ORDER BY stickyClipOrder DESC LIMIT 1"));
+			if (q.eof() == false)
+			{
+				existingMaxOrder = q.getFloatField(_T("stickyClipOrder"));
+				existingDesc = q.getStringField(_T("mText"));
+				newOrder = existingMaxOrder + 1;
+			}
+		}
+		else
+		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT stickyClipGroupOrder, mText FROM Main WHERE lParentID = %d ORDER BY stickyClipGroupOrder DESC LIMIT 1"), parentId);
+			if (q.eof() == false)
+			{
+				existingMaxOrder = q.getFloatField(_T("stickyClipGroupOrder"));
+				newOrder = existingMaxOrder + 1;
+			}
+		}
+
+		if (newOrder == 0.0)
+			newOrder += 1;
+
+		Log(StrF(_T("GetNewTopSticky, Id: %d, parentId: %d, CurrentMax: %f, CurrentDesc: %s, NewMax: %f"), clipId, parentId, existingMaxOrder, existingDesc, newOrder));
+	}
+	CATCH_SQLITE_EXCEPTION
+
+	return newOrder;
+}
+
+double CClip::GetNewLastSticky(int parentId, int clipId)
+{
+	double newOrder = 1;
+	double existingMaxOrder = 0;
+	CString existingDesc = _T("");
+
+	try
+	{
+		if (parentId < 0)
+		{
+			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT stickyClipOrder, mText FROM Main ORDER BY stickyClipOrder LIMIT 1"));
+			if (q.eof() == false)
+			{
+				existingMaxOrder = q.getFloatField(_T("stickyClipOrder"));
+				existingDesc = q.getStringField(_T("mText"));
+				newOrder = existingMaxOrder - 1;
+			}
+		}
+		else
+		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT stickyClipGroupOrder, mText FROM Main WHERE lParentID = %d ORDER BY stickyClipGroupOrder LIMIT 1"), parentId);
+			if (q.eof() == false)
+			{
+				existingMaxOrder = q.getFloatField(_T("stickyClipGroupOrder"));
+				newOrder = existingMaxOrder - 1;
+			}
+		}
+
+		if (newOrder == 0.0)
+			newOrder -= 1;
+
+		Log(StrF(_T("GetNewLastSticky, Id: %d, parentId: %d, CurrentMax: %f, CurrentDesc: %s, NewMax: %f"), clipId, parentId, existingMaxOrder, existingDesc, newOrder));
+	}
+	CATCH_SQLITE_EXCEPTION
+
+		return newOrder;
 }
 
 void CClip::MakeLatestOrder()
@@ -805,6 +926,8 @@ BOOL CClip::LoadMainTable(int id)
 			m_clipGroupOrder = q.getFloatField(_T("clipGroupOrder"));
 			m_globalShortCut = q.getIntField(_T("globalShortCut"));
 			m_lastPasteDate = q.getIntField(_T("lastPasteDate"));
+			m_stickyClipOrder = q.getFloatField(_T("stickyClipOrder"));
+			m_stickyClipGroupOrder = q.getFloatField(_T("stickyClipGroupOrder"));
 
 			m_id = id;
 

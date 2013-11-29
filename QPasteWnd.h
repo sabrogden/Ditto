@@ -43,14 +43,44 @@ public:
     CString m_QuickPaste;
 	double m_clipOrder;
 	double m_clipGroupOrder;
+	double m_stickyClipOrder;
+	double m_stickyClipGroupOrder;
 
 	static bool SortDesc(const CMainTable& d1, const CMainTable& d2)
 	{
+		double d1StickyOrder = d1.m_stickyClipOrder;
+		if (d1StickyOrder == 0)
+			d1StickyOrder = -9999999.0;
+
+		double d2StickyOrder = d2.m_stickyClipOrder;
+		if (d2StickyOrder == 0)
+			d2StickyOrder = -9999999.0;
+
+		if (d1StickyOrder != d2StickyOrder)
+			return d1StickyOrder > d2StickyOrder;
+
+		if (d1.m_bIsGroup != d2.m_bIsGroup)
+			return d1.m_bIsGroup < d2.m_bIsGroup;
+
 		return d1.m_clipOrder > d2.m_clipOrder;
 	}
 
 	static bool GroupSortDesc(const CMainTable& d1, const CMainTable& d2)
 	{
+		double d1StickyOrder = d1.m_stickyClipGroupOrder;
+		if (d1StickyOrder == 0)
+			d1StickyOrder = -9999999.0;
+
+		double d2StickyOrder = d2.m_stickyClipGroupOrder;
+		if (d2StickyOrder == 0)
+			d2StickyOrder = -9999999.0;
+
+		if (d1StickyOrder != d2StickyOrder)
+			return d1StickyOrder > d2StickyOrder;
+
+		if (d1.m_bIsGroup != d2.m_bIsGroup)
+			return d1.m_bIsGroup < d2.m_bIsGroup;
+
 		return d1.m_clipGroupOrder > d2.m_clipGroupOrder;
 	}
 };
@@ -166,6 +196,12 @@ public:
 	void SelectFocusID();
 	void HideMenuGroup(CMenu* menu, CString text);
 	void SetSearchImages();
+
+	DROPEFFECT OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point);
+	DROPEFFECT OnDragEnter(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point);
+	BOOL OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, CPoint point);
+	void OnDragLeave();
+	COleDropTarget *m_pDropTarget;
 
     // Generated message map functions
 protected:
@@ -298,9 +334,14 @@ protected:
 	afx_msg void OnMenuSearchDescription();
 	afx_msg void OnMenuSearchFullText();
 	afx_msg void OnMenuSearchQuickPaste();
+	afx_msg void OnMenuSimpleTextSearch();
 	//afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	//afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	//afx_msg void OnPaint();
     //}}AFX_MSG
 	afx_msg LRESULT OnPostOptions(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnMakeTopStickyClip();
+	afx_msg void OnMakeLastStickyClip();
+	afx_msg void OnRemoveStickySetting();
+
 };
