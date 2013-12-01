@@ -953,8 +953,7 @@ IDR_FILE_COPY           AVI                     "res\\FILECOPY.AVI"
 //
 
 IDB_OPEN_FOLDER_PNG     PNG                     "res\\folder_open.png"
-IDB_COG_16_16           PNG                     "C:\\Users\\sbrogden\\Desktop\\Ditto\\root\\res\\cog_16_16.png"
-IDB_SHORTCUT_PNG        PNG                     "res\\shortcut.png"
+IDB_COG_16_16           PNG                     "res\\cog_16_16.png"
 IDB_OPEN_FOLDER_16_16   PNG                     "res\\opened_folder_16_16.png"
 IDB_OPEN_FOLDER_20_20   PNG                     "res\\opened_folder_20_20.png"
 IDB_OPEN_FOLDER_24_24   PNG                     "res\\opened_folder_24_24.png"
