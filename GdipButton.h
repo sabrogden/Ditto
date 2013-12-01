@@ -53,6 +53,8 @@ public:
 	BOOL LoadAltImage(UINT id, LPCTSTR pType);
 	BOOL LoadStdImage(UINT id, LPCTSTR pType);
 
+	BOOL LoadStdImageDPI(UINT id96, UINT id120, UINT id144, UINT id192, LPCTSTR pType);
+
 	// if false, disables the press state and uses grayscale image if it exists
 	void EnableButton(BOOL bEnable = TRUE) { m_bIsDisabled = !bEnable; }
 

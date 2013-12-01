@@ -172,7 +172,7 @@ BOOL COptionsQuickPaste::OnApply()
 
 void COptionsQuickPaste::OnButtonFont() 
 {
-	CFontDialog dlg(&m_LogFont);
+	CFontDialog dlg(&m_LogFont, (CF_TTONLY | CF_SCREENFONTS));
 	if(dlg.DoModal() == IDOK)
 	{	
 		m_Font.DeleteObject();

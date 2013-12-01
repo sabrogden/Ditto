@@ -5,9 +5,6 @@
 #define BUTTON_MINIMIZE 3
 #define BUTTON_MAXIMIZE 4
 
-#define BORDER 2 
-#define CAPTION_BORDER 16 
-
 class CDittoWindow
 {
 public:

@@ -563,6 +563,7 @@
     <ClCompile Include="DPI.cpp" />
     <ClCompile Include="EditWithButton.cpp" />
     <ClCompile Include="EventThread.cpp" />
+    <ClCompile Include="GdiImageDrawer.cpp" />
     <ClCompile Include="GdipButton.cpp" />
     <ClCompile Include="GlobalClips.cpp" />
     <ClCompile Include="HotKeys.cpp" />
@@ -1764,6 +1765,7 @@
     <ClInclude Include="EditWithButton.h" />
     <ClInclude Include="EventThread.h" />
     <ClInclude Include="FormattedTextDraw.h" />
+    <ClInclude Include="GdiImageDrawer.h" />
     <ClInclude Include="GdipButton.h" />
     <ClInclude Include="GlobalClips.h" />
     <ClInclude Include="GroupStatic.h" />
@@ -1891,7 +1893,10 @@
     <None Include="res\bmp00003.bmp" />
     <None Include="res\closed_f.bmp" />
     <None Include="res\cog_16_16.png" />
+    <None Include="res\cog_20_20.png" />
     <None Include="res\cog_22_22.png" />
+    <None Include="res\cog_24_24.png" />
+    <None Include="res\cog_32_32.png" />
     <None Include="res\CP_Main.ico" />
     <None Include="res\CP_Main.rc2" />
     <None Include="res\CP_MainDoc.ico" />
@@ -1901,7 +1906,15 @@
     <None Include="res\Ditto_NoCopyCb.ico" />
     <None Include="res\folder_open.png" />
     <None Include="res\left-blue.png" />
+    <None Include="res\left_arrow_16_16.png" />
+    <None Include="res\left_arrow_20_20.png" />
+    <None Include="res\left_arrow_24_24.png" />
+    <None Include="res\left_arrow_32_32.png" />
     <None Include="res\mainfram.bmp" />
+    <None Include="res\opened_folder_16_16.png" />
+    <None Include="res\opened_folder_20_20.png" />
+    <None Include="res\opened_folder_24_24.png" />
+    <None Include="res\opened_folder_32_32.png" />
     <None Include="res\open_fol.bmp" />
     <None Include="res\Ditto2.ico" />
     <None Include="res\search_close.bmp" />
@@ -1912,6 +1925,7 @@
     <None Include="res\search_normal_125.bmp" />
     <None Include="res\search_normal_150.bmp" />
     <None Include="res\search_normal_200.bmp" />
+    <None Include="res\shortcut.png" />
     <None Include="res\Toolbar.bmp" />
     <None Include="res\toolbar1.bmp" />
     <CustomBuild Include="RulerRichEditCtrl\toolbar.bmp">

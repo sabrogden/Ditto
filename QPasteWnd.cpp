@@ -265,16 +265,16 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     m_ShowGroupsFolderBottom.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SHOW_GROUPS_BOTTOM);
     //m_ShowGroupsFolderBottom.LoadBitmaps(IDB_CLOSED_FOLDER, IDB_CLOSED_FOLDER_PRESSED, IDB_CLOSED_FOLDER_FOCUSED);
-	m_ShowGroupsFolderBottom.LoadStdImage(IDB_OPEN_FOLDER_PNG, _T("PNG"));
+	m_ShowGroupsFolderBottom.LoadStdImageDPI(IDB_OPEN_FOLDER_16_16, IDB_OPEN_FOLDER_20_20, IDB_OPEN_FOLDER_24_24, IDB_OPEN_FOLDER_32_32, _T("PNG"));
     m_ShowGroupsFolderBottom.ShowWindow(SW_SHOW);
 	m_ShowGroupsFolderBottom.SetToolTipText(theApp.m_Language.GetString(_T("GroupsTooltip"), _T("Groups")));
 
     m_BackButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_BACK_BUTTON);
-    m_BackButton.LoadStdImage(IDB_LEFT_ARROW_PNG, _T("PNG"));
+	m_BackButton.LoadStdImageDPI(IDB_LEFT_ARROW_16_16, IDB_LEFT_ARROW_20_20, IDB_LEFT_ARROW_24_24, IDB_LEFT_ARROW_32_32, _T("PNG"));
     m_BackButton.ShowWindow(SW_SHOW);
 
 	m_searchOptionsButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SEARCH_DESCRIPTION_BUTTON);
-	m_searchOptionsButton.LoadStdImage(IDB_COG_16_16, _T("PNG"));
+	m_searchOptionsButton.LoadStdImageDPI(IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, IDB_COG_32_32, _T("PNG"));
 	m_searchOptionsButton.SetToolTipText(theApp.m_Language.GetString(_T("SearchOptionsTooltip"), _T("Search options")));
 	m_searchOptionsButton.ShowWindow(SW_SHOW);
 
@@ -300,11 +300,11 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
         m_Alpha.SetWindowHandle(m_hWnd);
     #endif 
 
-    m_TitleFont.CreateFont(14, 0,  -900, 0, 400, FALSE, FALSE, 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, _T("Arial"));
+	m_TitleFont.CreateFont(theApp.m_metrics.PointsToPixels(10), 0, -900, 0, 400, FALSE, FALSE, 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, _T("Arial"));
 
     m_SearchFont.CreatePointFont(80, _T("Arial Unicode MS"));
 
-    GroupFont.CreateFont(-11, 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("MS Sans Serif"));
+	GroupFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("MS Sans Serif"));
 
     m_search.SetFont(&m_SearchFont);
     m_stGroup.SetFont(&GroupFont);
@@ -404,7 +404,7 @@ void CQPasteWnd::MoveControls()
 	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize);
     m_search.MoveWindow(theApp.m_metrics.ScaleX(20), cy - theApp.m_metrics.ScaleY(21), cx - theApp.m_metrics.ScaleX(40), theApp.m_metrics.ScaleY(20));
 
-	m_searchOptionsButton.MoveWindow(cx - theApp.m_metrics.ScaleX(18), cy - theApp.m_metrics.ScaleY(19), 16, 16);
+	m_searchOptionsButton.MoveWindow(cx - theApp.m_metrics.ScaleX(18), cy - theApp.m_metrics.ScaleY(19), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
 
     m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleY(2), cy - theApp.m_metrics.ScaleY(18), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
 }

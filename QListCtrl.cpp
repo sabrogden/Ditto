@@ -61,6 +61,8 @@ CQListCtrl::CQListCtrl()
 	m_allSelected = false;
 
 	m_mouseOverScrollAreaStart = 0;
+
+	//m_groupFolder.LoadStdImage(IDB_SHORTCUT_PNG, _T("PNG"));
 }
 
 CQListCtrl::~CQListCtrl()
@@ -488,6 +490,8 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
         // Draw a focus rect around the item if necessary.
         if(bListHasFocus && (rItem.state & LVIS_FOCUSED))
 			pDC->DrawFocusRect(rcItem);
+
+		//m_groupFolder.Draw(pDC, rcItem.left, rcItem.top);
 		
 		if( m_bShowTextForFirstTenHotKeys && firstTenNum > 0 )
 		{

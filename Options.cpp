@@ -5,6 +5,7 @@
 #include "shared/TextConvert.h"
 #include "sqlite\CppSQLite3.h"
 #include "Path.h"
+#include "CP_Main.h"
 
 using namespace nsPath;
 
@@ -1316,7 +1317,7 @@ BOOL CGetSetOptions::GetFont(LOGFONT &font)
 	}
 
 	ZeroMemory(&font, sizeof(font));
-	font.lfHeight = -11;
+	font.lfHeight = -theApp.m_metrics.PointsToPixels(8);
 	font.lfWeight = 400;
 	font.lfCharSet = 1;
 	STRCPY(font.lfFaceName, _T("Arial Unicode MS"));

@@ -12,6 +12,7 @@
 #include "sqlite/CppSQLite3.h"
 #include "ClipFormatQListCtrl.h"
 #include "Accels.h"
+#include "GdiImageDrawer.h"
 
 #define NM_SELECT					WM_USER+0x100
 #define NM_RIGHT					WM_USER+0x101
@@ -160,6 +161,7 @@ protected:
 	int m_linesPerRow;
 	DWORD m_mouseOverScrollAreaStart;
 	bool m_timerToHideScrollAreaSet;
+	CGdiImageDrawer m_groupFolder;
 
 	// Generated message map functions
 protected:

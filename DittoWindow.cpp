@@ -39,11 +39,11 @@ CDittoWindow::~CDittoWindow(void)
 
 void CDittoWindow::DoCreate(CWnd *pWnd)
 {
-	m_VertFont.CreateFont(14,0,-900,0,400,FALSE,FALSE,0,ANSI_CHARSET,
+	m_VertFont.CreateFont(theApp.m_metrics.PointsToPixels(10), 0, -900, 0, 400, FALSE, FALSE, 0, ANSI_CHARSET,
 							OUT_DEFAULT_PRECIS,	CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, 
 							DEFAULT_PITCH|FF_SWISS, _T("Arial"));
 
-	m_HorFont.CreateFont(14,0,0,0,400,FALSE,FALSE,0,ANSI_CHARSET,
+	m_HorFont.CreateFont(theApp.m_metrics.PointsToPixels(10), 0, 0, 0, 400, FALSE, FALSE, 0, ANSI_CHARSET,
 						OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
 						DEFAULT_PITCH|FF_SWISS, _T("Arial"));
 }
@@ -296,35 +296,35 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 	{
 		int nTop = 0;
 		if(m_bDrawClose)
-			nTop += 20;
+			nTop += theApp.m_metrics.ScaleY(20);
 		if(m_bDrawMaximize)
-			nTop += 20;
+			nTop += theApp.m_metrics.ScaleY(20);
 		if(m_bDrawMaximize)
-			nTop += 20;
-		cr.SetRect(rcBorder.right-1, nTop, rcBorder.right - 13, rcBorder.bottom - 20);
+			nTop += theApp.m_metrics.ScaleY(20);
+		cr.SetRect(rcBorder.right - 1, nTop, rcBorder.right - theApp.m_metrics.ScaleX(13), rcBorder.bottom - theApp.m_metrics.ScaleY(20));
 		dc.DrawText(csText, cr, DT_SINGLELINE);
 	}
 	else if(m_lBottomBorder == CAPTION_BORDER)
 	{
-		cr.SetRect(20, rcBorder.bottom - 15, rcBorder.right - 20, rcBorder.bottom - 1);
+		cr.SetRect(theApp.m_metrics.ScaleX(20), rcBorder.bottom - theApp.m_metrics.ScaleY(15), rcBorder.right - theApp.m_metrics.ScaleX(20), rcBorder.bottom - 1);
 		dc.DrawText(csText, cr, DT_SINGLELINE);
 	}
 	else if(m_lLeftBorder == CAPTION_BORDER)
 	{
 		int nTop = 0;
 		if(m_bDrawClose)
-			nTop += 20;
+			nTop += theApp.m_metrics.ScaleY(20);
 		if(m_bDrawMaximize)
-			nTop += 20;
+			nTop += theApp.m_metrics.ScaleY(20);
 		if(m_bDrawMaximize)
-			nTop += 20;
+			nTop += theApp.m_metrics.ScaleY(20);
 
-		cr.SetRect(15, nTop, 2, rcBorder.bottom - 20);
+		cr.SetRect(theApp.m_metrics.ScaleX(15) , nTop, 2, rcBorder.bottom - theApp.m_metrics.ScaleY(20));
 		dc.DrawText(csText, cr, DT_SINGLELINE);
 	}
 	else if(m_lTopBorder == CAPTION_BORDER)
 	{
-		cr.SetRect(20, 1, rcBorder.right - 20, 15);
+		cr.SetRect(theApp.m_metrics.ScaleX(20), 1, rcBorder.right - theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(15));
 		dc.DrawText(csText, cr, DT_SINGLELINE);
 	}
 

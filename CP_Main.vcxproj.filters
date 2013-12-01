@@ -332,6 +332,7 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="MyDropTarget.cpp" />
+    <ClCompile Include="GdiImageDrawer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -710,6 +711,7 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="MyDropTarget.h" />
+    <ClInclude Include="GdiImageDrawer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -820,6 +822,20 @@
     </None>
     <None Include="res\cog_16_16.png" />
     <None Include="res\cog_22_22.png" />
+    <None Include="res\shortcut.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\opened_folder_16_16.png" />
+    <None Include="res\opened_folder_20_20.png" />
+    <None Include="res\opened_folder_24_24.png" />
+    <None Include="res\opened_folder_32_32.png" />
+    <None Include="res\cog_20_20.png" />
+    <None Include="res\cog_24_24.png" />
+    <None Include="res\cog_32_32.png" />
+    <None Include="res\left_arrow_16_16.png" />
+    <None Include="res\left_arrow_20_20.png" />
+    <None Include="res\left_arrow_24_24.png" />
+    <None Include="res\left_arrow_32_32.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">
