@@ -404,9 +404,9 @@ void CQPasteWnd::MoveControls()
 	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize);
     m_search.MoveWindow(theApp.m_metrics.ScaleX(20), cy - theApp.m_metrics.ScaleY(21), cx - theApp.m_metrics.ScaleX(40), theApp.m_metrics.ScaleY(20));
 
-	m_searchOptionsButton.MoveWindow(cx - theApp.m_metrics.ScaleX(18), cy - theApp.m_metrics.ScaleY(19), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
+	m_searchOptionsButton.MoveWindow(cx - theApp.m_metrics.ScaleX(18), cy - theApp.m_metrics.ScaleY(19), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
 
-    m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleY(2), cy - theApp.m_metrics.ScaleY(18), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
+    m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleY(2), cy - theApp.m_metrics.ScaleY(19), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
 }
 
 void CQPasteWnd::OnSetFocus(CWnd *pOldWnd)

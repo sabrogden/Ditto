@@ -1891,7 +1891,31 @@
     <None Include="res\bmp00001.bmp" />
     <None Include="res\bmp00002.bmp" />
     <None Include="res\bmp00003.bmp" />
+    <None Include="res\chevron_right_16_16.png" />
+    <None Include="res\chevron_right_10_10.png" />
+    <None Include="res\chevron_right_12_12.png" />
+    <None Include="res\chevron_right_8_8.png" />
+	
+	<None Include="res\chevron_left_16_16.png" />
+    <None Include="res\chevron_left_10_10.png" />
+    <None Include="res\chevron_left_12_12.png" />
+    <None Include="res\chevron_left_8_8.png" />
+	
+	<None Include="res\chevron_top_16_16.png" />
+    <None Include="res\chevron_top_10_10.png" />
+    <None Include="res\chevron_top_12_12.png" />
+    <None Include="res\chevron_top_8_8.png" />
+	
+	<None Include="res\chevron_bottom_16_16.png" />
+    <None Include="res\chevron_bottom_10_10.png" />
+    <None Include="res\chevron_bottom_12_12.png" />
+    <None Include="res\chevron_bottom_8_8.png" />
+	
     <None Include="res\closed_f.bmp" />
+    <None Include="res\close_10_10.png" />
+    <None Include="res\close_12_12.png" />
+    <None Include="res\close_16_16.png" />
+    <None Include="res\close_8_8.png" />
     <None Include="res\cog_16_16.png" />
     <None Include="res\cog_20_20.png" />
     <None Include="res\cog_22_22.png" />

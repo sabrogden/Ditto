@@ -331,8 +331,12 @@
     <ClCompile Include="DPI.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="MyDropTarget.cpp" />
-    <ClCompile Include="GdiImageDrawer.cpp" />
+    <ClCompile Include="GdiImageDrawer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="MyDropTarget.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -710,8 +714,12 @@
     <ClInclude Include="DPI.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="MyDropTarget.h" />
-    <ClInclude Include="GdiImageDrawer.h" />
+    <ClInclude Include="GdiImageDrawer.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="MyDropTarget.h">
+      <Filter>header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -820,22 +828,108 @@
     <None Include="res\left-blue.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\cog_16_16.png" />
-    <None Include="res\cog_22_22.png" />
     <None Include="res\shortcut.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\opened_folder_16_16.png" />
-    <None Include="res\opened_folder_20_20.png" />
-    <None Include="res\opened_folder_24_24.png" />
-    <None Include="res\opened_folder_32_32.png" />
-    <None Include="res\cog_20_20.png" />
-    <None Include="res\cog_24_24.png" />
-    <None Include="res\cog_32_32.png" />
-    <None Include="res\left_arrow_16_16.png" />
-    <None Include="res\left_arrow_20_20.png" />
-    <None Include="res\left_arrow_24_24.png" />
-    <None Include="res\left_arrow_32_32.png" />
+    <None Include="res\chevron_bottom_8_8.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_bottom_10_10.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_bottom_12_12.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_bottom_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_left_8_8.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_left_10_10.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_left_12_12.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_left_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_right_8_8.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_right_10_10.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_right_12_12.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_right_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_top_8_8.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_top_10_10.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_top_12_12.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\chevron_top_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\close_8_8.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\close_10_10.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\close_12_12.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\close_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\cog_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\cog_20_20.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\cog_22_22.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\cog_24_24.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\cog_32_32.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\left_arrow_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\left_arrow_20_20.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\left_arrow_24_24.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\left_arrow_32_32.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\opened_folder_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\opened_folder_20_20.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\opened_folder_24_24.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\opened_folder_32_32.png">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">

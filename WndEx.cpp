@@ -84,7 +84,7 @@ BOOL CWndEx::Create(const CRect& crStart, CWnd* pParentWnd)
 	
 	// Create the QPaste window class
 	if (!AfxRegisterClass(&wc))
-		return FALSE;
+		return FALSE;		
 	
 	return CWndEx::CreateEx(0, _T("QPasteClass"), _T("Quick Paste"), WS_POPUP,
 		crStart, pParentWnd, 0);

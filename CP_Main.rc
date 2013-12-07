@@ -965,6 +965,31 @@ IDB_LEFT_ARROW_16_16    PNG                     "res\\left_arrow_16_16.png"
 IDB_LEFT_ARROW_20_20    PNG                     "res\\left_arrow_20_20.png"
 IDB_LEFT_ARROW_24_24    PNG                     "res\\left_arrow_24_24.png"
 IDB_LEFT_ARROW_32_32    PNG                     "res\\left_arrow_32_32.png"
+IDB_CLOSE_8_8           PNG                     "res\\close_8_8.png"
+
+IDB_CLOSE_10_10         PNG                     "res\\close_10_10.png"
+IDB_CLOSE_12_13         PNG                     "res\\close_12_12.png"
+IDB_CLOSE_16_16         PNG                     "res\\close_16_16.png"
+
+IDB_CHEVRON_RIGHT_8_8   PNG                     "res\\chevron_right_8_8.png"
+IDB_CHEVRON_RIGHT_10_10 PNG                     "res\\chevron_right_10_10.png"
+IDB_CHEVRON_RIGHT_12_12 PNG                     "res\\chevron_right_12_12.png"
+IDB_CHEVRON_RIGHT_16_16 PNG                     "res\\chevron_right_16_16.png"
+
+IDB_CHEVRON_LEFT_8_8   PNG                     "res\\chevron_left_8_8.png"
+IDB_CHEVRON_LEFT_10_10 PNG                     "res\\chevron_left_10_10.png"
+IDB_CHEVRON_LEFT_12_12 PNG                     "res\\chevron_left_12_12.png"
+IDB_CHEVRON_LEFT_16_16 PNG                     "res\\chevron_left_16_16.png"
+
+IDB_CHEVRON_TOP_8_8   PNG                     "res\\chevron_top_8_8.png"
+IDB_CHEVRON_TOP_10_10 PNG                     "res\\chevron_top_10_10.png"
+IDB_CHEVRON_TOP_12_12 PNG                     "res\\chevron_top_12_12.png"
+IDB_CHEVRON_TOP_16_16 PNG                     "res\\chevron_top_16_16.png"
+
+IDB_CHEVRON_BOTTOM_8_8   PNG                     "res\\chevron_bottom_8_8.png"
+IDB_CHEVRON_BOTTOM_10_10 PNG                     "res\\chevron_bottom_10_10.png"
+IDB_CHEVRON_BOTTOM_12_12 PNG                     "res\\chevron_bottom_12_12.png"
+IDB_CHEVRON_BOTTOM_16_16 PNG                     "res\\chevron_bottom_16_16.png"
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -1,5 +1,9 @@
 #pragma once
 
+#include "GdipButton.h"
+
+#include "GdiImageDrawer.h"
+
 #define BUTTON_CLOSE 1
 #define BUTTON_CHEVRON 2
 #define BUTTON_MINIMIZE 3
@@ -12,8 +16,8 @@ public:
 	~CDittoWindow(void);
 
 	void DoNcPaint(CWnd *pWnd);
-	void DrawChevronBtn(CWindowDC &dc);
-	void DrawCloseBtn(CWindowDC &dc);
+	void DrawChevronBtn(CWindowDC &dc, CWnd *pWnd);
+	void DrawCloseBtn(CWindowDC &dc, CWnd *pWnd);
 	void DrawMaximizeBtn(CWindowDC &dc);
 	void DrawMinimizeBtn(CWindowDC &dc);
 
@@ -62,4 +66,10 @@ public:
 	COLORREF m_CaptionColorLeft;
 	COLORREF m_CaptionColorRight;
 	COLORREF m_CaptionTextColor;
+	
+	CGdiImageDrawer m_closeButton;
+	CGdiImageDrawer m_chevronRightButton;
+	CGdiImageDrawer m_chevronLeftButton;
+	CGdiImageDrawer m_chevronTopButton;
+	CGdiImageDrawer m_chevronBottomButton;
 };

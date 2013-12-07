@@ -8,6 +8,7 @@
 //
 
 #include "DittoWindow.h"
+#include "GdipButton.h"
 
 #define	SWAP_MIN_MAX			1
 #define FORCE_MIN				2
@@ -49,7 +50,6 @@ protected:
 	COleDateTime m_TimeMinimized;
 	COleDateTime m_TimeMaximized;
 	int m_lDelayMaxSeconds;
-
 
 // Implementation
 public:

@@ -59,6 +59,36 @@
 #define IDB_LEFT_ARROW_20_20            194
 #define IDB_LEFT_ARROW_24_24            195
 #define IDB_LEFT_ARROW_32_32            196
+#define IDB_CLOSE_12_12                 197
+#define IDB_CLOSE_8_8                   197
+
+#define IDB_CLOSE_10_10                 199
+#define IDB_CLOSE_12_13                 200
+#define IDB_PNG3                        201
+#define IDB_CLOSE_16_16                 201
+
+#define IDB_CHEVRON_RIGHT_8_8            198
+#define IDB_CHEVRON_RIGHT_10_10          202
+#define IDB_CHEVRON_RIGHT_12_12          203
+#define IDB_CHEVRON_RIGHT_16_16          204
+
+#define IDB_CHEVRON_LEFT_8_8            205
+#define IDB_CHEVRON_LEFT_10_10          206
+#define IDB_CHEVRON_LEFT_12_12          207
+#define IDB_CHEVRON_LEFT_16_16          208
+
+#define IDB_CHEVRON_TOP_8_8            209
+#define IDB_CHEVRON_TOP_10_10          210
+#define IDB_CHEVRON_TOP_12_12          211
+#define IDB_CHEVRON_TOP_16_16          212
+
+#define IDB_CHEVRON_BOTTOM_8_8            213
+#define IDB_CHEVRON_BOTTOM_10_10          214
+#define IDB_CHEVRON_BOTTOM_12_12          215
+#define IDB_CHEVRON_BOTTOM_16_16          216
+
+#define IDB_PNG5                        217
+
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -393,7 +423,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        197
+#define _APS_NEXT_RESOURCE_VALUE        218
 #define _APS_NEXT_COMMAND_VALUE         32881
 #define _APS_NEXT_CONTROL_VALUE         2101
 #define _APS_NEXT_SYMED_VALUE           101
