@@ -8,6 +8,7 @@
 //
 #include "RichEditCtrlEx.h"
 #include "WndEx.h"
+#include "DittoWindow.h"
 /////////////////////////////////////////////////////////////////////////////
 // CToolTipEx window
 
@@ -60,6 +61,7 @@ protected:
 
 	CWnd *m_pNotifyWnd;
 
+	CDittoWindow m_DittoWindow;
 	
 
 protected:
@@ -75,6 +77,11 @@ protected:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg HITTEST_RET OnNcHitTest(CPoint point);
 	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
+	afx_msg void OnNcMouseMove(UINT nHitTest, CPoint point);
+	afx_msg void OnNcLButtonUp(UINT nHitTest, CPoint point); 
+	afx_msg void OnNcLButtonDown(UINT nHitTest, CPoint point); 
+	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp); 
+	afx_msg void OnNcPaint();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 public:

@@ -39,6 +39,14 @@ ON_WM_SIZE()
 ON_WM_NCHITTEST()
 ON_WM_ACTIVATE()
 ON_WM_TIMER()
+
+ON_WM_NCPAINT()
+ON_WM_NCCALCSIZE()
+ON_WM_NCLBUTTONDOWN()
+ON_WM_NCMOUSEMOVE()
+ON_WM_NCLBUTTONUP()
+ON_WM_ERASEBKGND()
+
 END_MESSAGE_MAP() 
 
 
@@ -58,6 +66,14 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
     {
         return FALSE;
     }
+
+	m_DittoWindow.DoCreate(this);
+	m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeft(), g_Opt.m_Theme.CaptionRight());
+	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true);
+	m_DittoWindow.m_bDrawMinimize = false;
+	m_DittoWindow.m_bDrawMinimize = false;
+	m_DittoWindow.m_bDrawChevron = false;
+	m_DittoWindow.m_sendWMClose = false;
 
     m_RichEdit.Create(_T(""), _T(""), WS_CHILD | WS_VISIBLE | WS_VSCROLL |
                       WS_HSCROLL | ES_MULTILINE | ES_AUTOVSCROLL |
@@ -187,6 +203,8 @@ void CToolTipEx::OnPaint()
 
         dc.BitBlt(rect.left, rect.top, nWidth, nHeight, &MemDc, 0, 0, SRCCOPY);
 
+		//dc.StretchBlt(rect.left, rect.top, rect.Width(), rect.Height(), &MemDc, 0, 0, nWidth, nHeight, SRCCOPY);
+
         MemDc.SelectObject(oldBitmap);
 
         rect.top += nHeight;
@@ -208,6 +226,8 @@ void CToolTipEx::PostNcDestroy()
 
 BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
 {
+	m_DittoWindow.DoPreTranslateMessage(pMsg);
+
     switch(pMsg->message)
     {
         case WM_KEYDOWN:
@@ -442,10 +462,14 @@ void CToolTipEx::OnSize(UINT nType, int cx, int cy)
         return ;
     }
 
+	m_DittoWindow.DoSetRegion(this);
+
     CRect cr;
     GetClientRect(cr);
     //	cr.DeflateRect(0, 0, 15, 0);
     m_RichEdit.MoveWindow(cr);
+
+	this->Invalidate();
 }
 
 BOOL CToolTipEx::IsCursorInToolTip()
@@ -478,57 +502,6 @@ void CToolTipEx::SetToolTipText(const CString &csText)
     m_RichEdit.SetText(csText);
 }
 
-HITTEST_RET CToolTipEx::OnNcHitTest(CPoint point)
-{
-    CRect crWindow;
-    GetWindowRect(crWindow);
-
-    const static int nBorder = 10;
-
-    if((point.y < crWindow.top + nBorder) && (point.x < crWindow.left + nBorder)
-       )
-    {
-        return HTTOPLEFT;
-    }
-    else if((point.y < crWindow.top + nBorder) && (point.x > crWindow.right -
-            nBorder))
-    {
-        return HTTOPRIGHT;
-    }
-    else if((point.y > crWindow.bottom - nBorder) && (point.x > crWindow.right 
-            - nBorder))
-    {
-        return HTBOTTOMRIGHT;
-    }
-    else if((point.y > crWindow.bottom - nBorder) && (point.x < crWindow.left +
-            nBorder))
-    {
-        return HTBOTTOMLEFT;
-    }
-
-    if(point.y < crWindow.top + nBorder)
-    {
-        return HTTOP;
-    }
-    else if(point.y > crWindow.bottom - nBorder)
-    {
-        return HTBOTTOM;
-    }
-    else if(point.x > crWindow.right - nBorder)
-    {
-        return HTRIGHT;
-    }
-    else if(point.x < crWindow.left + nBorder)
-    {
-        return HTLEFT;
-    }
-
-    //	if(point.x > crWindow.right - 15)
-    //		return HTCAPTION;
-
-    return CWnd::OnNcHitTest(point);
-}
-
 void CToolTipEx::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
 {
     CWnd::OnActivate(nState, pWndOther, bMinimized);
@@ -555,4 +528,54 @@ void CToolTipEx::OnTimer(UINT_PTR nIDEvent)
     }
 
     CWnd::OnTimer(nIDEvent);
+}
+
+
+void CToolTipEx::OnNcPaint()
+{
+	m_DittoWindow.DoNcPaint(this);
+}
+
+void CToolTipEx::OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp) 
+{
+	CWnd::OnNcCalcSize(bCalcValidRects, lpncsp);
+
+	m_DittoWindow.DoNcCalcSize(bCalcValidRects, lpncsp);
+}
+
+HITTEST_RET CToolTipEx::OnNcHitTest(CPoint point) 
+{
+	UINT Ret = m_DittoWindow.DoNcHitTest(this, point);
+	if(Ret == -1)
+		return CWnd::OnNcHitTest(point);
+
+	return Ret;
+}
+
+void CToolTipEx::OnNcLButtonDown(UINT nHitTest, CPoint point) 
+{
+	m_DittoWindow.DoNcLButtonDown(this, nHitTest, point);
+
+	CWnd::OnNcLButtonDown(nHitTest, point);
+}
+
+void CToolTipEx::OnNcLButtonUp(UINT nHitTest, CPoint point) 
+{
+	long lRet = m_DittoWindow.DoNcLButtonUp(this, nHitTest, point);
+
+	switch(lRet)
+	{
+	case BUTTON_CLOSE:
+		Hide();
+		break;
+	}
+
+	CWnd::OnNcLButtonUp(nHitTest, point);
+}
+
+void CToolTipEx::OnNcMouseMove(UINT nHitTest, CPoint point) 
+{
+	m_DittoWindow.DoNcMouseMove(this, nHitTest, point);
+
+	CWnd::OnNcMouseMove(nHitTest, point);
 }

@@ -18,7 +18,7 @@ public:
 	void DoNcPaint(CWnd *pWnd);
 	void DrawChevronBtn(CWindowDC &dc, CWnd *pWnd);
 	void DrawCloseBtn(CWindowDC &dc, CWnd *pWnd);
-	void DrawMaximizeBtn(CWindowDC &dc);
+	void DrawMaximizeBtn(CWindowDC &dc, CWnd *pWnd);
 	void DrawMinimizeBtn(CWindowDC &dc);
 
 	void DoCreate(CWnd *pWnd);
@@ -39,6 +39,7 @@ public:
 	long m_lLeftBorder;
 
 	bool m_bDrawClose;
+	bool m_sendWMClose;
 	bool m_bDrawChevron;
 	bool m_bDrawMaximize;
 	bool m_bDrawMinimize;
@@ -72,4 +73,5 @@ public:
 	CGdiImageDrawer m_chevronLeftButton;
 	CGdiImageDrawer m_chevronTopButton;
 	CGdiImageDrawer m_chevronBottomButton;
+	CGdiImageDrawer m_maximizeButton;
 };

@@ -930,6 +930,10 @@
     <None Include="res\opened_folder_32_32.png">
       <Filter>res</Filter>
     </None>
+    <None Include="res\maximize_8_8.png" />
+    <None Include="res\maximize_10_10.png" />
+    <None Include="res\maximize_12_12.png" />
+    <None Include="res\maximize_16_16.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">
