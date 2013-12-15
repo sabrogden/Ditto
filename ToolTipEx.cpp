@@ -89,6 +89,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 
 BOOL CToolTipEx::Show(CPoint point)
 {
+	m_reducedWindowSize = false;
     if(m_pBitmap)
     {
         m_RichEdit.ShowWindow(SW_HIDE);
@@ -104,16 +105,27 @@ BOOL CToolTipEx::Show(CPoint point)
     rect.right += 20;
     rect.bottom += 20;
 
-    //if showing rtf then increase the size because
-    //rtf will probably draw bigger
-    if(m_csRTF != "")
+	if (m_pBitmap)
+	{
+		int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
+		int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
+
+		rect.right = rect.left + nWidth;
+		rect.bottom = rect.top + nHeight;
+	}
+    else if(m_csRTF != "")
     {
+		//if showing rtf then increase the size because
+		//rtf will probably draw bigger
         long lNewWidth = (long)rect.Width() + (long)(rect.Width() *.3);
         rect.right = rect.left + lNewWidth;
 
         long lNewHeight = rect.Height() + (rect.Height() *1);
         rect.bottom = rect.top + lNewHeight;
     }
+
+	rect.right += CAPTION_BORDER * 2;
+	rect.bottom += CAPTION_BORDER * 2;
 
     CRect rcScreen;
 
@@ -128,10 +140,12 @@ BOOL CToolTipEx::Show(CPoint point)
     if(point.x < 0)
     {
         point.x = 5;
+		m_reducedWindowSize = true;
     }
     if(point.y < 0)
     {
         point.y = 5;
+		m_reducedWindowSize = true;
     }
 
     rcScreen.DeflateRect(0, 0, 5, 5);
@@ -147,10 +161,12 @@ BOOL CToolTipEx::Show(CPoint point)
     if(rect.right > rcScreen.right)
     {
         rect.right = rcScreen.right;
+		m_reducedWindowSize = true;
     }
     if(rect.bottom > rcScreen.bottom)
     {
         rect.bottom = rcScreen.bottom;
+		m_reducedWindowSize = true;
     }
 
     SetWindowPos(&CWnd::wndTopMost, point.x, point.y, rect.Width(), rect.Height
@@ -179,13 +195,7 @@ void CToolTipEx::OnPaint()
     CRect rect;
     GetClientRect(rect);
 
-    //	CBrush  Brush, *pOldBrush;
-    //	Brush.CreateSolidBrush(GetSysColor(COLOR_INFOBK));
-
-    //	pOldBrush = dc.SelectObject(&Brush);
-    //	CFont *pOldFont = dc.SelectObject(&m_Font);
-
-    //  dc.FillRect(&rect, &Brush);
+    
 
     // Draw Text
     //    dc.SetBkMode(TRANSPARENT);
@@ -193,6 +203,14 @@ void CToolTipEx::OnPaint()
 
     if(m_pBitmap)
     {
+		CBrush  Brush, *pOldBrush;
+		Brush.CreateSolidBrush(GetSysColor(COLOR_INFOBK));
+
+		pOldBrush = dc.SelectObject(&Brush);
+		CFont *pOldFont = dc.SelectObject(&m_Font);
+
+		dc.FillRect(&rect, &Brush);
+
         CDC MemDc;
         MemDc.CreateCompatibleDC(&dc);
 
@@ -201,7 +219,14 @@ void CToolTipEx::OnPaint()
         int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
         int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
 
-        dc.BitBlt(rect.left, rect.top, nWidth, nHeight, &MemDc, 0, 0, SRCCOPY);
+		if(m_reducedWindowSize)
+		{
+			dc.StretchBlt(rect.left, rect.top, rect.Width(), rect.Height(), &MemDc, 0, 0, nWidth, nWidth, SRCCOPY);
+		}
+		else
+		{
+			dc.BitBlt(rect.left, rect.top, nWidth, nHeight, &MemDc, 0, 0, SRCCOPY);
+		}
 
 		//dc.StretchBlt(rect.left, rect.top, rect.Width(), rect.Height(), &MemDc, 0, 0, nWidth, nHeight, SRCCOPY);
 
@@ -280,6 +305,14 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
                     m_RichEdit.SetFocus();
                     return TRUE;
                 }
+				else if(vk == 'N')
+				{
+					return FALSE;
+				}
+				else if (vk == 'P')
+				{
+					return FALSE;
+				}
 
                 Hide();
 

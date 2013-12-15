@@ -138,6 +138,8 @@ public:
 
 	BOOL OnItemDeleted(long lID);
 
+	BOOL IsToolTipWindowVisible() { return ::IsWindowVisible(m_toolTipHwnd); }
+
 protected:
 	void SendSelection(int nItem);;
 	void LoadCopyOrCutToClipboard();
@@ -155,6 +157,7 @@ protected:
 	CAccels	m_Accels;
 	CMapIDtoCF m_RTFData;
 	CToolTipEx *m_pToolTip;
+	HWND m_toolTipHwnd;
 	CFont m_Font;
 	IFormattedTextDraw *m_pFormatter;
 	bool m_allSelected;

@@ -13,6 +13,7 @@
 #include "FormatSQL.h"
 #include "MainTableFunctions.h"
 #include "Path.h"
+#include "ActionEnums.h"
 #include <algorithm>
 //#include "MyDropTarget.h"
 
@@ -313,6 +314,29 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	
     m_thread.Start(this);
 
+	m_actions.AddAccel(ActionEnums::SHOWDESCRIPTION, VK_F3);
+	m_actions.AddAccel(ActionEnums::NEXTDESCRIPTION, 'N');
+	m_actions.AddAccel(ActionEnums::PREVDESCRIPTION, 'P');
+	m_actions.AddAccel(ActionEnums::SHOWMENU, VK_APPS);
+	m_actions.AddAccel(ActionEnums::NEWGROUP, ACCEL_MAKEKEY(VK_F7, HOTKEYF_CONTROL));
+	m_actions.AddAccel(ActionEnums::NEWGROUPSELECTION, VK_F7);
+	m_actions.AddAccel(ActionEnums::TOGGLEFILELOGGING, ACCEL_MAKEKEY(VK_F5, HOTKEYF_CONTROL));
+	m_actions.AddAccel(ActionEnums::TOGGLEOUTPUTDEBUGSTRING, VK_F5);
+	m_actions.AddAccel(ActionEnums::CLOSEWINDOW, VK_ESCAPE);
+	m_actions.AddAccel(ActionEnums::NEXTTABCONTROL, VK_TAB);
+	m_actions.AddAccel(ActionEnums::PREVTABCONTROL, ACCEL_MAKEKEY(VK_TAB, HOTKEYF_CONTROL));
+	m_actions.AddAccel(ActionEnums::SHOWGROUPS, ACCEL_MAKEKEY('G', HOTKEYF_CONTROL));
+	m_actions.AddAccel(ActionEnums::NEWCLIP, ACCEL_MAKEKEY('N', HOTKEYF_CONTROL));
+	m_actions.AddAccel(ActionEnums::EDITCLIP, ACCEL_MAKEKEY('E', HOTKEYF_CONTROL));
+	m_actions.AddAccel(ActionEnums::SELECTIONUP, VK_UP);
+	m_actions.AddAccel(ActionEnums::SELECTIONDOWN, VK_DOWN);
+	m_actions.AddAccel(ActionEnums::MOVEFIRST, VK_HOME);
+	m_actions.AddAccel(ActionEnums::MOVELAST, VK_END);
+	m_actions.AddAccel(ActionEnums::CANCELFILTER, ACCEL_MAKEKEY('C', HOTKEYF_ALT));
+	m_actions.AddAccel(ActionEnums::HOMELIST, VK_HOME);
+	m_actions.AddAccel(ActionEnums::BACKGRROUP, VK_BACK);
+	m_actions.AddAccel(ActionEnums::TOGGLESHOWPERSISTANT, ACCEL_MAKEKEY(VK_SPACE, HOTKEYF_CONTROL));
+	
     return 0;
 }
 
@@ -2569,207 +2593,404 @@ void CQPasteWnd::SetKeyModiferState(bool bActive)
 
 BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 {
-    switch(pMsg->message)
-    {
-        case WM_KEYDOWN:
+	DWORD dID;
+	if (m_actions.OnMsg(pMsg, dID))
+	{
+		bool ret = DoAction(dID);
 
-            switch(pMsg->wParam)
-            {
-            case VK_APPS:
-                {
-                    LRESULT lRet;
-                    OnRclickQuickPaste(NULL, &lRet);
-                    return 0;
-                }
-            case VK_F7:
-                if(pMsg->hwnd == m_lstHeader.m_hWnd)
-                {
-                    if(GetKeyState(VK_CONTROL) &0x8000)
-                    {
-                        NewGroup(false);
-                    }
-                    else
-                    {
-                        NewGroup(true);
-                    }
-                    return TRUE;
-                }
-                break;
-
-            case VK_F5:
-                //toggle outputing text to outputdebugstring
-                if(GetKeyState(VK_CONTROL) &0x8000)
-                {
-                    if(CGetSetOptions::m_bEnableDebugLogging)
-                    {
-                        Log(_T("turning file logging OFF"));
-                    }
-
-                    CGetSetOptions::m_bEnableDebugLogging = !CGetSetOptions::m_bEnableDebugLogging;
-
-                    if(CGetSetOptions::m_bEnableDebugLogging)
-                    {
-                        Log(_T("turning file logging ON"));
-                    }
-                }
-                else
-                {
-                    if(CGetSetOptions::m_bEnableDebugLogging)
-                    {
-                        Log(_T("turning DebugString logging OFF"));
-                    }
-
-                    CGetSetOptions::m_bOutputDebugString = !CGetSetOptions::m_bOutputDebugString;
-
-                    if(CGetSetOptions::m_bEnableDebugLogging)
-                    {
-                        Log(_T("turning DebugString logging ON"));
-                    }
-                }
-                return TRUE;
-
-            case VK_ESCAPE:
-                {
-                    if(m_bModifersMoveActive)
-                    {
-                        Log(_T("Escape key hit setting modifers to NOT active"));
-                        m_bModifersMoveActive = false;
-                        return TRUE;
-                    }
-                    else
-                    {
-                        if(m_lstHeader.HandleKeyDown(pMsg->wParam, pMsg->lParam) == FALSE)
-                        {
-                            if(m_strSQLSearch.IsEmpty() == FALSE)
-                            {
-                                OnCancelFilter(0, 0);
-                                return TRUE;
-                            }
-                            else
-                            {
-								if(g_Opt.GetShowPersistent() && this->GetMinimized() == false)
-								{
-									MinMaxWindow(FORCE_MIN);
-									theApp.m_activeWnd.ReleaseFocus();
-								}
-								else
-								{
-									if(m_GroupTree.IsWindowVisible() == FALSE)
-									{
-										HideQPasteWindow(true);
-										return TRUE;
-									}
-								}
-                            }
-                        }
-                    }
-                    break;
-                }
-            case VK_TAB:
-                {
-                    BOOL bPrev = FALSE;
-
-                    if(GetKeyState(VK_SHIFT) &0x8000)
-                    {
-                        bPrev = TRUE;
-                    }
-
-                    CWnd *pFocus = GetFocus();
-                    if(pFocus)
-                    {
-                        CWnd *pNextWnd = GetNextDlgTabItem(pFocus, bPrev);
-                        if(pNextWnd)
-                        {
-                            pNextWnd->SetFocus();
-                        }
-                    }
-                    return TRUE;
-                }
-            case 'G':
-                if(GetKeyState(VK_CONTROL) &0x8000)
-                {
-                    OnShowGroupsTop();
-                    return TRUE;
-                }
-                break;
-            case 'N':
-                if(GetKeyState(VK_CONTROL) &0x8000)
-                {
-                    OnMenuNewclip();
-                    return TRUE;
-                }
-                break;
-            case 'E':
-                if(GetKeyState(VK_CONTROL) &0x8000)
-                {
-                    OnMenuEdititem();
-                    return TRUE;
-                }
-                break;
-
-            case VK_UP:
-                if(m_bModifersMoveActive)
-                {
-                    MoveSelection(false);
-                    return TRUE;
-                }
-                break;
-
-            case VK_DOWN:
-                if(m_bModifersMoveActive)
-                {
-                    MoveSelection(true);
-                    return TRUE;
-                }
-                break;
-
-            case VK_HOME:
-                if(m_bModifersMoveActive)
-                {
-                    m_lstHeader.SetListPos(0);
-                    return TRUE;
-                }
-                break;
-            case VK_END:
-                if(m_bModifersMoveActive)
-                {
-                    if(m_lstHeader.GetItemCount() > 0)
-                    {
-                        m_lstHeader.SetListPos(m_lstHeader.GetItemCount() - 1);
-                    }
-                    return TRUE;
-                }
-                break;
-            }
-            // end switch( pMsg->wParam )
-
-            break; // end case WM_KEYDOWN 
-
-        case WM_SYSKEYDOWN:
-            // ALT key is held down
-
-            switch(pMsg->wParam)
-            {
-            case 'C':
-                // switch to the filter combobox
-                BYTE key[256];
-                GetKeyboardState((LPBYTE)(&key));
-                if(key[VK_MENU] &128)
-                {
-                    OnCancelFilter(0, 0);
-                }
-                return TRUE;
-
-            case VK_HOME:
-                theApp.EnterGroupID(-1); // History
-                return TRUE;
-            }
-            // end switch( pMsg->wParam )
-
-            break; // end case WM_SYSKEYDOWN
-    }
+		if (ret)
+		{
+			return TRUE;
+		}
+	}    
 
     return CWndEx::PreTranslateMessage(pMsg);
+}
+
+bool CQPasteWnd::DoAction(DWORD actionId)
+{
+	bool ret = false;
+
+	switch (actionId)
+	{
+	case ActionEnums::SHOWDESCRIPTION:
+		ret = DoActionShowDescription();
+		break;
+	case ActionEnums::NEXTDESCRIPTION:
+		ret = DoActionNextDescription();
+		break;
+	case ActionEnums::PREVDESCRIPTION:
+		ret = DoActionPrevDescription();
+		break;
+	case ActionEnums::SHOWMENU:
+		ret = DoActionShowMenu();
+		break;
+	case ActionEnums::NEWGROUP:
+		ret = DoActionNewGroup();
+		break;
+	case ActionEnums::NEWGROUPSELECTION:
+		ret = DoActionNewGroupSelection();
+		break;
+	case ActionEnums::TOGGLEFILELOGGING:
+		ret = DoActionToggleFileLogging();
+		break;
+	case ActionEnums::TOGGLEOUTPUTDEBUGSTRING:
+		ret = DoActionToggleOutputDebugString();
+		break;
+	case ActionEnums::CLOSEWINDOW:
+		ret = DoActionCloseWindow();
+		break;
+	case ActionEnums::NEXTTABCONTROL:
+		ret = DoActionNextTabControl();
+		break;
+	case ActionEnums::PREVTABCONTROL:
+		ret = DoActionPrevTabControl();
+		break;
+	case ActionEnums::SHOWGROUPS:
+		ret = DoActionShowGroups();
+		break;
+	case ActionEnums::NEWCLIP:
+		ret = DoActionNewClip();
+		break;
+	case ActionEnums::EDITCLIP:
+		ret = DoActionEditClip();
+		break;
+	case ActionEnums::SELECTIONUP:
+		ret = DoActionSelectionUp();
+		break;
+	case ActionEnums::SELECTIONDOWN:
+		ret = DoActionSelectionDown();
+		break;
+	case ActionEnums::MOVEFIRST:
+		ret = DoActionMoveFirst();
+		break;
+	case ActionEnums::MOVELAST:
+		ret = DoActionMoveLast();
+		break;
+	case ActionEnums::CANCELFILTER:
+		ret = DoActionCancelFilter();
+		break;
+	case ActionEnums::HOMELIST:
+		ret = DoActionHomeList();
+		break;
+	case ActionEnums::BACKGRROUP:
+		ret = DoActionBackGroup();
+		break;
+	case ActionEnums::TOGGLESHOWPERSISTANT:
+		ret = DoActionToggleShowPersistant();
+		break;
+	}
+
+	return ret;
+}
+
+bool CQPasteWnd::DoActionShowDescription()
+{
+	m_lstHeader.ShowFullDescription();
+	return true;
+}
+
+bool CQPasteWnd::DoActionNextDescription()
+{	
+	if (m_lstHeader.IsToolTipWindowVisible() == FALSE)
+		return false;
+
+	ARRAY Indexes;
+	m_lstHeader.GetSelectionIndexes(Indexes);
+
+	long caret = m_lstHeader.GetCaret();
+
+	if(Indexes.GetCount() > 1)
+	{
+		for (int i = 0; i < Indexes.GetCount(); i++)
+		{
+			int index = Indexes[i];
+			if(index == caret)
+			{
+				if(i < Indexes.GetCount()-1)
+				{
+					caret = Indexes[i + 1];
+					break;
+				}
+				else
+				{
+					caret = Indexes[0];
+				}
+			}
+		}
+
+		m_lstHeader.SetCaret(caret);
+	}
+	else
+	{
+		caret++;
+		m_lstHeader.SetListPos(caret);
+	}
+	
+	m_lstHeader.ShowFullDescription();
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionPrevDescription()
+{
+	if (m_lstHeader.IsToolTipWindowVisible() == FALSE)
+		return false;
+
+	ARRAY Indexes;
+	m_lstHeader.GetSelectionIndexes(Indexes);
+
+	long caret = m_lstHeader.GetCaret();
+	
+	if (Indexes.GetCount() > 1)
+	{
+		for (int i = Indexes.GetCount()-1; i >= 0; i--)
+		{
+			int index = Indexes[i];
+			if (index == caret)
+			{
+				if (i > 0)
+				{
+					caret = Indexes[i - 1];
+					break;
+				}
+				else
+				{
+					caret = Indexes[Indexes.GetCount() - 1];
+				}
+			}
+		}
+
+		m_lstHeader.SetCaret(caret);
+	}
+	else
+	{
+		caret--;
+		m_lstHeader.SetListPos(caret);
+	}
+
+	m_lstHeader.ShowFullDescription();
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionShowMenu()
+{
+	LRESULT lRet;
+	OnRclickQuickPaste(NULL, &lRet);
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionNewGroup()
+{
+	NewGroup(false);
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionNewGroupSelection()
+{
+	NewGroup(true);
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionToggleFileLogging()
+{
+	if (CGetSetOptions::m_bEnableDebugLogging)
+	{
+		Log(_T("turning file logging OFF"));
+	}
+
+	CGetSetOptions::m_bEnableDebugLogging = !CGetSetOptions::m_bEnableDebugLogging;
+
+	if (CGetSetOptions::m_bEnableDebugLogging)
+	{
+		Log(_T("turning file logging ON"));
+	}
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionToggleOutputDebugString()
+{
+	if (CGetSetOptions::m_bEnableDebugLogging)
+	{
+		Log(_T("turning DebugString logging OFF"));
+	}
+
+	CGetSetOptions::m_bOutputDebugString = !CGetSetOptions::m_bOutputDebugString;
+
+	if (CGetSetOptions::m_bEnableDebugLogging)
+	{
+		Log(_T("turning DebugString logging ON"));
+	}
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionCloseWindow()
+{
+	bool ret = false;
+	if (m_bModifersMoveActive)
+	{
+		Log(_T("Escape key hit setting modifers to NOT active"));
+		m_bModifersMoveActive = false;
+		ret = true;
+	}
+	else
+	{
+		if (m_strSQLSearch.IsEmpty() == FALSE)
+		{
+			OnCancelFilter(0, 0);
+			ret = true;
+		}
+		else
+		{
+			if (g_Opt.GetShowPersistent() && this->GetMinimized() == false)
+			{
+				MinMaxWindow(FORCE_MIN);
+				theApp.m_activeWnd.ReleaseFocus();
+			}
+			else
+			{
+				if (m_GroupTree.IsWindowVisible() == FALSE)
+				{
+					HideQPasteWindow(true);
+					ret = true;
+				}
+			}
+		}
+	}
+
+	return ret;
+}
+
+bool CQPasteWnd::DoActionNextTabControl()
+{
+	BOOL bPrev = FALSE;
+
+	CWnd *pFocus = GetFocus();
+	if (pFocus)
+	{
+		CWnd *pNextWnd = GetNextDlgTabItem(pFocus, bPrev);
+		if (pNextWnd)
+		{
+			pNextWnd->SetFocus();
+		}
+	}
+	return true;
+}
+
+bool CQPasteWnd::DoActionPrevTabControl()
+{
+	BOOL bPrev = TRUE;
+
+	CWnd *pFocus = GetFocus();
+	if (pFocus)
+	{
+		CWnd *pNextWnd = GetNextDlgTabItem(pFocus, bPrev);
+		if (pNextWnd)
+		{
+			pNextWnd->SetFocus();
+		}
+	}
+	return true;
+}
+
+bool CQPasteWnd::DoActionShowGroups()
+{
+	OnShowGroupsTop();
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionNewClip()
+{
+	OnMenuNewclip();
+	return true;
+}
+
+bool CQPasteWnd::DoActionEditClip()
+{
+	OnMenuEdititem();
+	return true;
+}
+
+bool CQPasteWnd::DoActionSelectionUp()
+{
+	if (m_bModifersMoveActive)
+	{
+		MoveSelection(false);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoActionSelectionDown()
+{
+	if (m_bModifersMoveActive)
+	{
+		MoveSelection(true);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoActionMoveFirst()
+{
+	if (m_bModifersMoveActive)
+	{
+		m_lstHeader.SetListPos(0);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoActionMoveLast()
+{
+	if (m_bModifersMoveActive)
+	{
+		if (m_lstHeader.GetItemCount() > 0)
+		{
+			m_lstHeader.SetListPos(m_lstHeader.GetItemCount() - 1);
+		}
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoActionCancelFilter()
+{
+	OnCancelFilter(0, 0);
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionHomeList()
+{
+	theApp.EnterGroupID(-1); // History
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionBackGroup()
+{
+	theApp.EnterGroupID(theApp.m_GroupParentID);
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionToggleShowPersistant()
+{
+	theApp.ShowPersistent(!g_Opt.m_bShowPersistent);
+
+	return true;
 }
 
 LRESULT CQPasteWnd::OnCancelFilter(WPARAM wParam, LPARAM lParam)

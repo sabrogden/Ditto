@@ -153,7 +153,7 @@ public:
     CF_DibTypeMap m_cf_dibCache;
     CF_DibTypeMap m_cf_rtfCache;
     CCriticalSection m_CritSection;
-    CAccels m_MainAccels;
+    CAccels m_actions;
 	bool m_showScrollBars;
 
     void RefreshNc();
@@ -202,6 +202,30 @@ public:
 	BOOL OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, CPoint point);
 	void OnDragLeave();
 	COleDropTarget *m_pDropTarget;
+
+	bool DoAction(DWORD actionId);
+	bool DoActionShowDescription();
+	bool DoActionNextDescription(); 
+	bool DoActionPrevDescription();
+	bool DoActionShowMenu();
+	bool DoActionNewGroup();
+	bool DoActionNewGroupSelection();
+	bool DoActionToggleFileLogging();
+	bool DoActionToggleOutputDebugString();
+	bool DoActionCloseWindow();
+	bool DoActionNextTabControl();
+	bool DoActionPrevTabControl();
+	bool DoActionShowGroups();
+	bool DoActionNewClip();
+	bool DoActionEditClip();
+	bool DoActionSelectionUp();
+	bool DoActionSelectionDown();
+	bool DoActionMoveFirst();
+	bool DoActionMoveLast();
+	bool DoActionCancelFilter();
+	bool DoActionHomeList();
+	bool DoActionBackGroup();
+	bool DoActionToggleShowPersistant();
 
     // Generated message map functions
 protected:
@@ -335,13 +359,9 @@ protected:
 	afx_msg void OnMenuSearchFullText();
 	afx_msg void OnMenuSearchQuickPaste();
 	afx_msg void OnMenuSimpleTextSearch();
-	//afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
-	//afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-	//afx_msg void OnPaint();
-    //}}AFX_MSG
 	afx_msg LRESULT OnPostOptions(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnMakeTopStickyClip();
 	afx_msg void OnMakeLastStickyClip();
 	afx_msg void OnRemoveStickySetting();
-
+	
 };

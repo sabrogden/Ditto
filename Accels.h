@@ -27,6 +27,7 @@ public:
     CMap < DWORD, DWORD, DWORD, DWORD > m_Map;
 
     void AddAccel(CAccel &a);
+	void AddAccel(DWORD cmd, DWORD key);
 
     // handles a key's first WM_KEYDOWN or WM_SYSKEYDOWN message.
     // it uses GetKeyState to test for modifiers.

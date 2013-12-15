@@ -894,21 +894,6 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 		
-	case VK_F3:
-		{
-			ShowFullDescription();
-			return TRUE;
-		}
-	case VK_BACK:
-		theApp.EnterGroupID( theApp.m_GroupParentID );
-		return TRUE;
-	case VK_SPACE:
-		if(GetKeyState(VK_CONTROL) & 0x8000)
-		{
-			theApp.ShowPersistent( !g_Opt.m_bShowPersistent );
-			return TRUE;
-		}
-		break;
 	} // end switch(vk)
 	
 	return FALSE;
@@ -960,12 +945,23 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto)
 
 	CString csDescription;
 	GetToolTipText(nItem, csDescription);
+		
+	//if (bFromAuto == false ||
+	//	::IsWindow(m_toolTipHwnd) == FALSE)
+	{
+		m_pToolTip->DestroyWindow();
 
-	m_pToolTip->DestroyWindow();
-
-	m_pToolTip = new CToolTipEx;
-	m_pToolTip->Create(this);
-	m_pToolTip->SetNotifyWnd(GetParent());
+		m_pToolTip = new CToolTipEx;
+		m_pToolTip->Create(this);
+		m_toolTipHwnd = m_pToolTip->GetSafeHwnd();
+		m_pToolTip->SetNotifyWnd(GetParent());
+	}
+	//else
+	//{
+	//	CRect r;
+	//	m_pToolTip->GetWindowRect(r);
+	//	pt = r.TopLeft();
+	//}
 	
 	if(m_pToolTip)
 	{
@@ -1055,8 +1051,7 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto)
 
 			Clip.Free();
 			Clip.Clear();
-		}
-			
+		}			
 		
 		m_pToolTip->Show(pt);
 	}

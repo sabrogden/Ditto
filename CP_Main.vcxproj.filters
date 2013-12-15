@@ -337,6 +337,7 @@
     <ClCompile Include="MyDropTarget.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="ActionEnums.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -720,6 +721,7 @@
     <ClInclude Include="MyDropTarget.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="ActionEnums.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

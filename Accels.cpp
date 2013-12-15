@@ -10,6 +10,11 @@ void CAccels::AddAccel(CAccel &a)
     m_Map.SetAt(a.Key, a.Cmd);
 }
 
+void CAccels::AddAccel(DWORD cmd, DWORD key)
+{
+	m_Map.SetAt(key, cmd);
+}
+
 bool CAccels::OnMsg(MSG *pMsg, DWORD &dID)
 {
     // bit 30 (0x40000000) is 1 if this is NOT the first msg of the key

@@ -56,13 +56,11 @@ protected:
 	CFont m_Font;
 	CBitmap *m_pBitmap;
 	CString m_csRTF;
-
 	CRichEditCtrlEx m_RichEdit;
-
 	CWnd *m_pNotifyWnd;
+	bool m_reducedWindowSize;
 
 	CDittoWindow m_DittoWindow;
-	
 
 protected:
 	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);
