@@ -150,36 +150,6 @@ END_MESSAGE_MAP()
 void CQListCtrl::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	LV_KEYDOWN* pLVKeyDown = (LV_KEYDOWN*)pNMHDR;
-		
-	switch (pLVKeyDown->wVKey)
-	{
-	case VK_RETURN:
-		{
-			ARRAY arr;
-			GetSelectionIndexes(arr);
-			SendSelection(arr);
-		}
-		break;
-		
-	case VK_ESCAPE:
-		GetParent()->SendMessage(NM_END, 0, 0);
-		break;
-		
-	case VK_RIGHT:
-		{
-			int nItem = GetNextItem(-1, LVNI_SELECTED);
-			if (nItem != -1)
-				GetParent()->SendMessage(NM_RIGHT, nItem, 0);
-		}
-		break;
-		
-	case VK_LEFT:
-		GetParent()->SendMessage(NM_LEFT, 0, 0);
-		break;
-	case VK_DELETE:
-		GetParent()->SendMessage(NM_DELETE, 0, 0);
-		break;
-	}
 	
 	*pResult = 0;
 }
@@ -619,10 +589,7 @@ void CQListCtrl::RefreshRow(int row)
 
 void CQListCtrl::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-	if(GetKeyState(VK_RETURN) & 0x800)
-		GetParent()->SendMessage(NM_PROPERTIES, 0, 0);
-	else
-		CListCtrl::OnSysKeyDown(nChar, nRepCnt, nFlags);
+	CListCtrl::OnSysKeyDown(nChar, nRepCnt, nFlags);
 }
 
 BOOL CQListCtrl::OnEraseBkgnd(CDC* pDC) 

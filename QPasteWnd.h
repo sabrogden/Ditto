@@ -226,6 +226,11 @@ public:
 	bool DoActionHomeList();
 	bool DoActionBackGroup();
 	bool DoActionToggleShowPersistant();
+	bool DoActionDeleteSelected();
+	bool DoActionPasteSelected();
+	bool DoActionClipProperties();
+	bool DoActionPasteSelectedPlainText();
+	bool DoActionMoveClipToGroup();
 
     // Generated message map functions
 protected:
@@ -317,7 +322,6 @@ protected:
     afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnSearch(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnDelete(WPARAM wParam, LPARAM lParam);
-    afx_msg LRESULT OnProperties(WPARAM wParam, LPARAM lParam);
     afx_msg void OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg LRESULT OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnListSelect_Index(WPARAM wParam, LPARAM lParam);

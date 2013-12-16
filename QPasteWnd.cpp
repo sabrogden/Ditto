@@ -160,7 +160,6 @@ ON_MESSAGE(NM_SELECT, OnListSelect)
 ON_MESSAGE(NM_END, OnListEnd)
 ON_MESSAGE(CB_SEARCH, OnSearch)
 ON_MESSAGE(NM_DELETE, OnDelete)
-ON_MESSAGE(NM_PROPERTIES, OnProperties)
 ON_NOTIFY(NM_GETTOOLTIPTEXT, ID_LIST_HEADER, OnGetToolTipText)
 ON_MESSAGE(NM_SELECT_DB_ID, OnListSelect_DB_ID)
 ON_MESSAGE(NM_SELECT_INDEX, OnListSelect_Index)
@@ -336,6 +335,11 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_actions.AddAccel(ActionEnums::HOMELIST, VK_HOME);
 	m_actions.AddAccel(ActionEnums::BACKGRROUP, VK_BACK);
 	m_actions.AddAccel(ActionEnums::TOGGLESHOWPERSISTANT, ACCEL_MAKEKEY(VK_SPACE, HOTKEYF_CONTROL));
+	m_actions.AddAccel(ActionEnums::PASTE_SELECTED, VK_RETURN);
+	m_actions.AddAccel(ActionEnums::DELETE_SELECTED, VK_DELETE);
+	m_actions.AddAccel(ActionEnums::CLIP_PROPERTIES, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_ALT));
+	m_actions.AddAccel(ActionEnums::PASTE_SELECTED_PLAIN_TEXT, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_SHIFT));
+	m_actions.AddAccel(ActionEnums::MOVE_CLIP_TO_GROUP, 0);
 	
     return 0;
 }
@@ -1601,73 +1605,7 @@ void CQPasteWnd::OnMenuToggleConnectCV()
 
 void CQPasteWnd::OnMenuProperties()
 {
-    m_bHideWnd = false;
-
-    ARRAY IDs, Indexes;
-    m_lstHeader.GetSelectionItemData(IDs);
-    m_lstHeader.GetSelectionIndexes(Indexes);
-
-    INT_PTR size = IDs.GetSize();
-    if(size < 1)
-    {
-        return ;
-    }
-
-    int id = IDs[0];
-    int row = Indexes[0];
-
-    if(id < 0)
-    {
-        return ;
-    }
-
-    m_lstHeader.RemoveAllSelection();
-    m_lstHeader.SetSelection(row);
-
-    CCopyProperties props(id, this);
-    INT_PTR doModalRet = props.DoModal();
-
-    if(doModalRet == IDOK)
-    {
-        {
-			ATL::CCritSecLock csLock(m_CritSection.m_sect);
-            
-            if(row < (int)m_listItems.size())
-            {
-                CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), id);
-                if(!q.eof())
-                {
-                    FillMainTable(m_listItems[row], q);
-                }
-            }
-
-			CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(id);
-			if(iterDib != m_cf_dibCache.end())
-			{
-				m_cf_dibCache.erase(iterDib);
-			}
-
-			CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(id);
-			if(iterRtf != m_cf_rtfCache.end())
-			{
-				m_cf_rtfCache.erase(iterRtf);
-			}
-        }
-
-        m_thread.FireLoadAccelerators();
-
-        m_lstHeader.RefreshVisibleRows();
-
-        if(props.m_lGroupChangedTo >= 0)
-        {
-            OpenID(props.m_lGroupChangedTo);
-        }
-
-        m_lstHeader.SetFocus();
-        m_lstHeader.SetListPos(row);
-    }
-
-    m_bHideWnd = true;
+    this->DoAction(ActionEnums::CLIP_PROPERTIES);
 }
 
 void CQPasteWnd::UpdateFont()
@@ -1724,22 +1662,22 @@ void CQPasteWnd::OnMenuAutohide()
 
 void CQPasteWnd::OnMenuViewfulldescription()
 {
-    m_lstHeader.ShowFullDescription();
+    this->DoAction(ActionEnums::SHOWDESCRIPTION);
 }
 
 void CQPasteWnd::OnMenuAllwaysontop()
 {
-    theApp.ShowPersistent(!g_Opt.m_bShowPersistent);
+	this->DoAction(ActionEnums::TOGGLESHOWPERSISTANT);
 }
 
 void CQPasteWnd::OnMenuNewGroup()
 {
-    NewGroup(false);
+	this->DoAction(ActionEnums::NEWGROUP);
 }
 
 void CQPasteWnd::OnMenuNewGroupSelection()
 {
-    NewGroup(true);
+	this->DoAction(ActionEnums::NEWGROUPSELECTION);
 }
 
 void CQPasteWnd::OnMenuQuickoptionsAllwaysshowdescription()
@@ -1772,7 +1710,7 @@ void CQPasteWnd::OnMenuQuickoptionsPromptfornewgroupnames()
 
 void CQPasteWnd::OnMenuViewgroups()
 {
-    OnShowGroupsTop();
+	this->DoAction(ActionEnums::SHOWGROUPS);
 }
 
 void CQPasteWnd::OnMenuQuickpropertiesSettoneverautodelete()
@@ -1997,33 +1935,12 @@ void CQPasteWnd::OnMenuSenttoPromptforip()
 
 void CQPasteWnd::OnMenuGroupsMovetogroup()
 {
-    m_bHideWnd = false;
-
-    CMoveToGroupDlg dlg;
-
-    INT_PTR nRet = dlg.DoModal();
-    if(nRet == IDOK)
-    {
-        int nGroup = dlg.GetSelectedGroup();
-
-		Log(StrF(_T("Move to Group, GroupId: %d"), nGroup));
-
-        if(nGroup >= -1)
-        {
-            CClipIDs IDs;
-            m_lstHeader.GetSelectionItemData(IDs);
-
-            IDs.MoveTo(nGroup);
-        }
-        FillList();
-    }
-
-    m_bHideWnd = true;
+    this->DoAction(ActionEnums::MOVE_CLIP_TO_GROUP);
 }
 
 void CQPasteWnd::OnMenuPasteplaintextonly()
 {
-    OpenSelection(true);
+    this->DoAction(ActionEnums::PASTE_SELECTED_PLAIN_TEXT);
 }
 
 void CQPasteWnd::OnPromptToDeleteClip()
@@ -2336,25 +2253,12 @@ void CQPasteWnd::OnMenuQuickoptionsShowclipsthatareingroupsinmainlist()
 
 void CQPasteWnd::OnMenuEdititem()
 {
-    if(m_lstHeader.GetSelectedCount() == 0)
-    {
-        return ;
-    }
-
-    CClipIDs IDs;
-    m_lstHeader.GetSelectionItemData(IDs);
-    theApp.EditItems(IDs, true);
-
-    HideQPasteWindow(false);
+	this->DoAction(ActionEnums::EDITCLIP);
 }
 
 void CQPasteWnd::OnMenuNewclip()
 {
-    CClipIDs IDs;
-    IDs.Add(-1);
-    theApp.EditItems(IDs, true);
-
-    HideQPasteWindow(false);
+	this->DoAction(ActionEnums::NEWCLIP);
 }
 
 
@@ -2679,6 +2583,22 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::TOGGLESHOWPERSISTANT:
 		ret = DoActionToggleShowPersistant();
 		break;
+	case ActionEnums::PASTE_SELECTED:
+		ret = DoActionPasteSelected();
+		break;
+	case ActionEnums::DELETE_SELECTED:
+		ret = DoActionDeleteSelected();
+		break;
+	case ActionEnums::CLIP_PROPERTIES:
+		ret = DoActionClipProperties();
+		break;
+	case ActionEnums::PASTE_SELECTED_PLAIN_TEXT:
+		ret = DoActionPasteSelectedPlainText();
+		break;
+	case ActionEnums::MOVE_CLIP_TO_GROUP:
+		ret = DoActionMoveClipToGroup();
+		break;
+
 	}
 
 	return ret;
@@ -2908,13 +2828,26 @@ bool CQPasteWnd::DoActionShowGroups()
 
 bool CQPasteWnd::DoActionNewClip()
 {
-	OnMenuNewclip();
+	CClipIDs IDs;
+	IDs.Add(-1);
+	theApp.EditItems(IDs, true);
+
+	HideQPasteWindow(false);
 	return true;
 }
 
 bool CQPasteWnd::DoActionEditClip()
 {
-	OnMenuEdititem();
+	if(m_lstHeader.GetSelectedCount() == 0)
+	{
+		return false;
+	}
+
+	CClipIDs IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+	theApp.EditItems(IDs, true);
+
+	HideQPasteWindow(false);
 	return true;
 }
 
@@ -2967,7 +2900,15 @@ bool CQPasteWnd::DoActionMoveLast()
 
 bool CQPasteWnd::DoActionCancelFilter()
 {
-	OnCancelFilter(0, 0);
+	FillList();
+
+	m_bHandleSearchTextChange = false;
+	m_search.SetWindowText(_T(""));
+	m_bHandleSearchTextChange = true;
+
+	MoveControls();
+
+	m_lstHeader.SetFocus();
 
 	return true;
 }
@@ -2981,9 +2922,13 @@ bool CQPasteWnd::DoActionHomeList()
 
 bool CQPasteWnd::DoActionBackGroup()
 {
-	theApp.EnterGroupID(theApp.m_GroupParentID);
+	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		theApp.EnterGroupID(theApp.m_GroupParentID);
+		return true;
+	}
 
-	return true;
+	return false;
 }
 
 bool CQPasteWnd::DoActionToggleShowPersistant()
@@ -2993,18 +2938,151 @@ bool CQPasteWnd::DoActionToggleShowPersistant()
 	return true;
 }
 
+bool CQPasteWnd::DoActionPasteSelected()
+{
+	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		OpenSelection(false);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoActionDeleteSelected()
+{
+	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		DeleteSelectedRows();
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoActionClipProperties()
+{
+	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		m_bHideWnd = false;
+
+		ARRAY IDs, Indexes;
+		m_lstHeader.GetSelectionItemData(IDs);
+		m_lstHeader.GetSelectionIndexes(Indexes);
+
+		INT_PTR size = IDs.GetSize();
+		if(size < 1)
+		{
+			return false;
+		}
+
+		int id = IDs[0];
+		int row = Indexes[0];
+
+		if(id < 0)
+		{
+			return false;
+		}
+
+		m_lstHeader.RemoveAllSelection();
+		m_lstHeader.SetSelection(row);
+
+		CCopyProperties props(id, this);
+		INT_PTR doModalRet = props.DoModal();
+
+		if(doModalRet == IDOK)
+		{
+			{
+				ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
+				if(row < (int)m_listItems.size())
+				{
+					CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), id);
+					if(!q.eof())
+					{
+						FillMainTable(m_listItems[row], q);
+					}
+				}
+
+				CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(id);
+				if(iterDib != m_cf_dibCache.end())
+				{
+					m_cf_dibCache.erase(iterDib);
+				}
+
+				CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(id);
+				if(iterRtf != m_cf_rtfCache.end())
+				{
+					m_cf_rtfCache.erase(iterRtf);
+				}
+			}
+
+			m_thread.FireLoadAccelerators();
+
+			m_lstHeader.RefreshVisibleRows();
+
+			if(props.m_lGroupChangedTo >= 0)
+			{
+				OpenID(props.m_lGroupChangedTo);
+			}
+
+			m_lstHeader.SetFocus();
+			m_lstHeader.SetListPos(row);
+		}
+
+		m_bHideWnd = true;
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoActionPasteSelectedPlainText()
+{
+	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		OpenSelection(true);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoActionMoveClipToGroup()
+{
+	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		m_bHideWnd = false;
+
+		CMoveToGroupDlg dlg;
+
+		INT_PTR nRet = dlg.DoModal();
+		if(nRet == IDOK)
+		{
+			int nGroup = dlg.GetSelectedGroup();
+
+			Log(StrF(_T("Move to Group, GroupId: %d"), nGroup));
+
+			if(nGroup >= -1)
+			{
+				CClipIDs IDs;
+				m_lstHeader.GetSelectionItemData(IDs);
+
+				IDs.MoveTo(nGroup);
+			}
+			FillList();
+		}
+
+		m_bHideWnd = true;
+		return true;
+	}
+
+	return false;
+}
+
 LRESULT CQPasteWnd::OnCancelFilter(WPARAM wParam, LPARAM lParam)
 {
-    FillList();
-
-    m_bHandleSearchTextChange = false;
-    m_search.SetWindowText(_T(""));
-    m_bHandleSearchTextChange = true;
-
-    MoveControls();
-
-    m_lstHeader.SetFocus();
-
+	this->DoAction(ActionEnums::CANCELFILTER);
 	return 1;
 }
 
@@ -3013,12 +3091,6 @@ LRESULT CQPasteWnd::OnPostOptions(WPARAM wParam, LPARAM lParam)
 	UpdateFont();
 
 	return 1;
-}
-
-LRESULT CQPasteWnd::OnProperties(WPARAM wParam, LPARAM lParam)
-{
-    OnMenuProperties();
-    return TRUE;
 }
 
 void CQPasteWnd::OnClose()
