@@ -170,11 +170,7 @@ bool CDittoCopyBuffer::PastCopyBuffer(long lCopyBuffer)
 				//then wait a little and restore the original clipboard data
 				if(m_pClipboard->Save())
 				{
-					CProcessPaste paste;
-					paste.m_bSendPaste = true;
-					paste.m_bActivateTarget = false;
-					paste.GetClipIDs().Add(q.getIntField(_T("lID")));
-					paste.DoPaste();
+					theApp.m_pMainFrame->PasteOrShowGroup(q.getIntField(_T("lID")), -1, FALSE, TRUE);
 
 					m_pClipboard->m_lRestoreDelay = g_Opt.GetDittoRestoreClipboardDelay();
 

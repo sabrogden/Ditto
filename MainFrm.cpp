@@ -356,13 +356,9 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 				g_HotKeys[i]->m_Atom == wParam && 
 				g_HotKeys[i]->m_clipId > 0)
 			{
+
 				Log(StrF(_T("Pasting clip from global shortcut, clipId: %d"), g_HotKeys[i]->m_clipId));
-				CProcessPaste paste;
-				paste.GetClipIDs().Add(g_HotKeys[i]->m_clipId);
-				paste.m_bActivateTarget = false;
-				paste.m_bSendPaste = true;
-				paste.DoPaste();
-				theApp.OnPasteCompleted();
+				PasteOrShowGroup(g_HotKeys[i]->m_clipId, -1, FALSE, TRUE);
 
 				break;
 			}
@@ -409,24 +405,51 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 
         if(q.eof() == false)
         {
-            if(q.getIntField(_T("bIsGroup")) == FALSE)
-            {
-                //Don't move these to the top
-                BOOL bItWas = g_Opt.m_bUpdateTimeOnPaste;
-                g_Opt.m_bUpdateTimeOnPaste = CGetSetOptions::GetMoveClipsOnGlobal10();
-
-                CProcessPaste paste;
-                paste.GetClipIDs().Add(q.getIntField(_T("lID")));
-                paste.m_bActivateTarget = false;
-                paste.m_bSendPaste = g_Opt.m_bSendPasteOnFirstTenHotKeys ? true : false;
-                paste.DoPaste();
-                theApp.OnPasteCompleted();
-
-                g_Opt.m_bUpdateTimeOnPaste = bItWas;
-            }
+			PasteOrShowGroup(q.getIntField(_T("lID")), CGetSetOptions::GetMoveClipsOnGlobal10(), false, g_Opt.m_bSendPasteOnFirstTenHotKeys);
         }
     }
     CATCH_SQLITE_EXCEPTION
+}
+
+void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarget, BOOL sendPaste)
+{
+	try
+	{
+		if (theApp.EnterGroupID(dbId))
+		{
+			theApp.m_activeWnd.TrackActiveWnd(true);
+			m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
+		}
+		else
+		{
+			BOOL bItWas = g_Opt.m_bUpdateTimeOnPaste;
+			if (updateClipTime != -1)
+			{				
+				g_Opt.m_bUpdateTimeOnPaste = updateClipTime;
+			}
+
+			CProcessPaste paste;
+			paste.GetClipIDs().Add(dbId);
+
+			if (activeTarget != -1)
+			{
+				paste.m_bActivateTarget = activeTarget ? true : false;;
+			}
+
+			if (sendPaste != -1)
+			{
+				paste.m_bSendPaste = sendPaste ? true : false;
+			}
+			paste.DoPaste();
+			theApp.OnPasteCompleted();
+
+			if (updateClipTime != -1)
+			{
+				g_Opt.m_bUpdateTimeOnPaste = bItWas;
+			}
+		}
+	}
+	CATCH_SQLITE_EXCEPTION
 }
 
 void CMainFrame::DoDittoCopyBufferPaste(int nCopyBuffer)

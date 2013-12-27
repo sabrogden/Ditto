@@ -65,6 +65,7 @@ public:
 
     void DoDittoCopyBufferPaste(int nCopyBuffer);
     void DoFirstTenPositionsPaste(int nPos);
+	void PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarget, BOOL sendPaste);
     bool PasteQuickPasteEntry(CString csQuickPaste);
     bool SaveQuickPasteEntry(CString csQuickPaste, CClipList *pClipList);
     void ShowErrorMessage(CString csTitle, CString csMessage);
