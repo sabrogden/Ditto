@@ -100,6 +100,8 @@ CCP_MainApp::CCP_MainApp()
 	m_GroupText = "History";
 	m_FocusID = -1;
 
+	ClearOldGroupState();
+
 	m_bAsynchronousRefreshView = true;
 
 	m_lClipsSent = 0;
@@ -625,7 +627,43 @@ void CCP_MainApp::IC_Paste()
 
 // Groups
 
-BOOL CCP_MainApp::EnterGroupID(long lID)
+void CCP_MainApp::SaveCurrentGroupState()
+{
+	m_oldGroupID = m_GroupID;
+	m_oldGroupParentID = m_GroupParentID;
+	m_oldGroupText = m_GroupText;
+}
+
+void CCP_MainApp::ClearOldGroupState()
+{
+	m_oldGroupID = -2;
+	m_oldGroupParentID = -2;
+	m_oldGroupText = _T("");
+}
+
+BOOL CCP_MainApp::TryEnterOldGroupState()
+{
+	BOOL enteredGroup = FALSE;
+
+	if(m_oldGroupID > -2)
+	{
+		m_GroupID = m_oldGroupID;
+		m_GroupParentID = m_oldGroupParentID;
+		m_GroupText = m_oldGroupText;
+
+		ClearOldGroupState();
+
+		theApp.RefreshView();
+		if(QPasteWnd())
+			QPasteWnd()->UpdateStatus(true);
+
+		enteredGroup = TRUE;
+	}
+
+	return enteredGroup;
+}
+
+BOOL CCP_MainApp::EnterGroupID(long lID, BOOL clearOldGroupState/* = TRUE*/, BOOL saveCurrentGroupState/* = FALSE*/)
 {
 	BOOL bResult = FALSE;
 
@@ -633,6 +671,16 @@ BOOL CCP_MainApp::EnterGroupID(long lID)
 		return TRUE;
 
 	DWORD startTick = GetTickCount();
+
+	if(clearOldGroupState)
+	{
+		ClearOldGroupState();
+	}
+
+	if(saveCurrentGroupState)
+	{
+		SaveCurrentGroupState();
+	}
 
 	// if we are switching to the parent, focus on the previous group
 	if(m_GroupParentID == lID && m_GroupID > 0)

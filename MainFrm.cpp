@@ -415,8 +415,8 @@ void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarg
 {
 	try
 	{
-		if (theApp.EnterGroupID(dbId))
-		{
+		if (theApp.EnterGroupID(dbId, FALSE, TRUE))
+		{			
 			theApp.m_activeWnd.TrackActiveWnd(true);
 			m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
 		}

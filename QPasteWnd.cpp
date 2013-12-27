@@ -553,6 +553,8 @@ BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus)
         }
     }
 
+	theApp.TryEnterOldGroupState();
+
 	DWORD endTick = GetTickCount();
 	if((endTick-startTick) > 150)
 		Log(StrF(_T("Paste Timing HideQPasteWindow: %d"), endTick-startTick));

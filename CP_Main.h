@@ -115,7 +115,14 @@ public:
 	long		m_GroupParentID;  // current group's parent
 	CString		m_GroupText;      // current group's description
 
-	BOOL EnterGroupID(long lID);
+	long		m_oldGroupID;
+	long		m_oldGroupParentID;
+	CString		m_oldGroupText;
+
+	void SaveCurrentGroupState();
+	void ClearOldGroupState();
+	BOOL TryEnterOldGroupState();
+	BOOL EnterGroupID(long lID, BOOL clearOldGroupState = TRUE, BOOL saveCurrentGroupState = FALSE);
 	long GetValidGroupID(); // returns a valid id (not negative)
 	void SetGroupDefaultID(long lID); // sets a valid id
 
