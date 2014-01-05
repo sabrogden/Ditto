@@ -436,6 +436,9 @@ public:
 	static void		SetShowScrollBar(BOOL val);
 	static BOOL		GetShowScrollBar();
 	static BOOL		m_showScrollBar;
+
+	static void		SetPasteAsAdmin(BOOL val);
+	static BOOL		GetPasteAsAdmin();
 };
 
 // global for easy access and for initialization of fast access variables

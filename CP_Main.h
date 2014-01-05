@@ -21,6 +21,7 @@
 #include "externalwindowtracker.h"
 #include "HotKeys.h"
 #include "DPI.h"
+#include "UAC_Thread.h"
 
 extern class CCP_MainApp theApp;
 
@@ -36,6 +37,7 @@ public:
 	CppSQLite3DB m_db;
 
 	HANDLE	m_hMutex; // for singleton app
+	HANDLE m_adminPasteMutex;
 	// track stages of startup / shutdown
 	bool	m_bAppRunning;
 	bool	m_bAppExiting;
@@ -171,6 +173,9 @@ public:
 	CDPI m_metrics;
 	ULONG_PTR m_gdiplusToken;
 
+	void UACPaste();
+	bool UACThreadRunning();
+
 public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
@@ -181,4 +186,5 @@ public:
 
 protected:
 	void ShowCommandLineError(CString csTitle, CString csMessage);
+	CUAC_Thread *m_pUacPasteThread;
 };

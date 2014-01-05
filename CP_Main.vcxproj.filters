@@ -337,7 +337,15 @@
     <ClCompile Include="MyDropTarget.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="ActionEnums.cpp" />
+    <ClCompile Include="UAC_Helper.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="UAC_Thread.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="ActionEnums.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -721,7 +729,15 @@
     <ClInclude Include="MyDropTarget.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="ActionEnums.h" />
+    <ClInclude Include="UAC_Thread.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="UAC_Helper.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionEnums.h">
+      <Filter>header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -932,10 +948,18 @@
     <None Include="res\opened_folder_32_32.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\maximize_8_8.png" />
-    <None Include="res\maximize_10_10.png" />
-    <None Include="res\maximize_12_12.png" />
-    <None Include="res\maximize_16_16.png" />
+    <None Include="res\maximize_10_10.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\maximize_8_8.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\maximize_12_12.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\maximize_16_16.png">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">

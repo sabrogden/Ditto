@@ -245,11 +245,18 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	m_dittoHasFocus = false;
 	Log(StrF(_T("Sending paste to app %s key stroke: %s, SeDelay: %d"), csPasteToApp, csPasteString, delay));
 
-	Sleep(delay);
-
-	send.SetKeyDownDelay(max(50, delay));
-
-	send.SendKeys(csPasteString, true);
+	if(g_Opt.GetPasteAsAdmin() &&
+		theApp.UACThreadRunning() == false)
+	{
+		Log(StrF(_T("Passing paste off to uac aware app")));
+		theApp.UACPaste();
+	}
+	else
+	{
+		Sleep(delay);
+		send.SetKeyDownDelay(max(50, delay));
+		send.SendKeys(csPasteString, true);
+	}
 
 	Log(_T("Post sending paste"));
 }

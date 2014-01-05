@@ -32,6 +32,7 @@ public:
 		m_bU3 = FALSE;
 		m_bU3Stop = FALSE;
 		m_bU3Install = FALSE;
+		m_uacPID = 0;
 	}
 
  	virtual void ParseParam(const TCHAR* pszParam, BOOL bFlag, BOOL bLast)
@@ -58,6 +59,16 @@ public:
   			{
   				m_bU3Install = TRUE;
   			}
+			else if(wcsncmp(pszParam, _T("uacpaste"), 8) == 0)
+			{
+				CString pidCommand(pszParam);
+				long sep = pidCommand.ReverseFind(':');
+				if(sep > -1)
+				{
+					CString pid = pidCommand.Right(pidCommand.GetLength() - sep - 1);
+					m_uacPID = ATOI(pid);
+				}
+			}
   		}
  
 		CCommandLineInfo::ParseParam(pszParam, bFlag, bLast);
@@ -68,6 +79,7 @@ public:
 	BOOL m_bU3;
 	BOOL m_bU3Stop;
 	BOOL m_bU3Install;
+	int m_uacPID;
 };
 
 CCP_MainApp theApp;
@@ -83,6 +95,7 @@ CCP_MainApp::CCP_MainApp()
 {
 	theApp.m_activeWnd.TrackActiveWnd(false);
 
+	m_pUacPasteThread = NULL;
 	m_bAppRunning = false;
 	m_bAppExiting = false;
 	m_connectOnStartup = -1;
@@ -145,6 +158,21 @@ BOOL CCP_MainApp::InitInstance()
 		g_Opt.m_bU3 = cmdInfo.m_bU3 ? TRUE : FALSE;
 
 	g_Opt.LoadSettings();
+
+	if(cmdInfo.m_uacPID > 0)
+	{
+		Log(StrF(_T("Startup up ditto as admin to paste to admin windows, parent process id: %d"), cmdInfo.m_uacPID));
+
+		CString mutex;
+		mutex.Format(_T("DittoAdminPaste_%d"), cmdInfo.m_uacPID);
+		m_adminPasteMutex = CreateMutex(NULL, FALSE, mutex);
+
+		m_pUacPasteThread = new CUAC_Thread(cmdInfo.m_uacPID);
+		m_pUacPasteThread->Start();
+		m_pUacPasteThread->WaitForThreadToExit(INT_MAX);
+
+		return FALSE;
+	}
 
 	if(cmdInfo.m_strFileName.IsEmpty() == FALSE)
 	{
@@ -788,6 +816,15 @@ int CCP_MainApp::ExitInstance()
 
 	m_db.close();
 
+	if(m_pUacPasteThread != NULL)
+	{
+		if(m_pUacPasteThread->ThreadWasStarted() == false)
+		{
+			m_pUacPasteThread->FireExit();
+		}
+		delete m_pUacPasteThread;
+	}
+
 	Gdiplus::GdiplusShutdown(m_gdiplusToken);
 
 	return CWinApp::ExitInstance();
@@ -991,4 +1028,24 @@ CQPasteWnd* CCP_MainApp::QPasteWnd()
 	}
 
 	return NULL;
+}
+
+void CCP_MainApp::UACPaste()
+{
+	if(m_pUacPasteThread == NULL)
+	{
+		m_pUacPasteThread = new CUAC_Thread(GetCurrentProcessId());
+	}
+
+	m_pUacPasteThread->UACPaste();
+}
+
+bool CCP_MainApp::UACThreadRunning()
+{
+	if(m_pUacPasteThread != NULL)
+	{
+		return m_pUacPasteThread->IsRunning();
+	}
+
+	return false;
 }

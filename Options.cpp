@@ -2066,3 +2066,13 @@ BOOL CGetSetOptions::GetShowScrollBar()
 {
 	return GetProfileLong(_T("ShowScrollBar"), 0);
 }
+
+void CGetSetOptions::SetPasteAsAdmin(BOOL val)
+{
+	SetProfileLong(_T("PasteAsAdmin"), val);
+}
+
+BOOL CGetSetOptions::GetPasteAsAdmin()
+{
+	return GetProfileLong(_T("PasteAsAdmin"), 0);
+}

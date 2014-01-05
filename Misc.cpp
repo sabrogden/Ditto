@@ -948,3 +948,4 @@ void DeleteReceivedFiles(CString csDir)
 		}
 	}
 }
+

@@ -11,6 +11,7 @@ CEventThread::CEventThread(void)
 	m_waitTimeout = INFINITE;
 	m_threadRunning = false;
 	m_exitThread = false;
+	m_threadWasStarted = false;
 }
 
 CEventThread::~CEventThread(void)
@@ -33,6 +34,12 @@ UINT CEventThread::EventThreadFnc(void* thisptr)
 void CEventThread::AddEvent(int eventId)
 {
 	HANDLE handle = CreateEvent(NULL, FALSE, FALSE, _T(""));
+	m_eventMap[handle] = eventId;
+}
+
+void CEventThread::AddEvent(int eventId, CString name)
+{
+	HANDLE handle = CreateEvent(NULL, FALSE, FALSE, name);
 	m_eventMap[handle] = eventId;
 }
 
@@ -102,6 +109,11 @@ void CEventThread::Start(void *param)
 	}
 }
 
+void CEventThread::WaitForThreadToExit(int waitTime)
+{
+	WaitForSingleObject(m_hEvt, waitTime);
+}
+
 void CEventThread::Stop(int waitTime) 
 {
 	Log(_T("Start of CEventThread::Stop(int waitTime) "));
@@ -131,6 +143,7 @@ void CEventThread::RunThread()
 	Log(_T("Start of CEventThread::RunThread()"));
 
 	m_threadRunning = true;
+	m_threadWasStarted = true;
 	HANDLE *pHandleArray = new HANDLE[m_eventMap.size()];
 
 	int indexPos = 0;
@@ -143,7 +156,7 @@ void CEventThread::RunThread()
 	SetEvent(m_hEvt);
 	ResetEvent(m_hEvt);
 
-	while(true)
+	while(m_exitThread == false)
 	{
 		DWORD event = WaitForMultipleObjects((DWORD)m_eventMap.size(), pHandleArray, FALSE, m_waitTimeout);
 
@@ -173,8 +186,7 @@ void CEventThread::RunThread()
 			HANDLE firedHandle = pHandleArray[event - WAIT_OBJECT_0];
 			int eventId = m_eventMap[firedHandle];
 			if(eventId == EXIT_EVENT)
-			{
-				SetEvent(m_hEvt);
+			{				
 				break;
 			}
 			else
@@ -185,6 +197,8 @@ void CEventThread::RunThread()
 			}
 		}
 	}
+
+	SetEvent(m_hEvt);
 
 	Log(_T("End of CEventThread::RunThread()"));
 

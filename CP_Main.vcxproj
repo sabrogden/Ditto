@@ -1565,6 +1565,8 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="UAC_Helper.cpp" />
+    <ClCompile Include="UAC_Thread.cpp" />
     <ClCompile Include="WildCardMatch.cpp" />
     <ClCompile Include="WndEx.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
@@ -1788,6 +1790,8 @@
     <ClInclude Include="sqlite\sqlite3.h" />
     <ClInclude Include="sqlite\sqlite3ext.h" />
     <ClInclude Include="ToolTipEx.h" />
+    <ClInclude Include="UAC_Helper.h" />
+    <ClInclude Include="UAC_Thread.h" />
     <ClInclude Include="WildCardMatch.h" />
     <ClInclude Include="WndEx.h" />
     <ClInclude Include="Client.h" />
