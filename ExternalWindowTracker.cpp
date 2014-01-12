@@ -4,6 +4,7 @@
 #include "SendKeys.h"
 #include "Options.h"
 #include "CP_Main.h"
+#include "UAC_Helper.h"
 
 ExternalWindowTracker::ExternalWindowTracker(void)
 {
@@ -245,13 +246,25 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	m_dittoHasFocus = false;
 	Log(StrF(_T("Sending paste to app %s key stroke: %s, SeDelay: %d"), csPasteToApp, csPasteString, delay));
 
-	if(g_Opt.GetPasteAsAdmin() &&
+	bool pasteAsAdmin = false;
+
+	if (activateTarget &&
+		g_Opt.GetPasteAsAdmin())
+	{
+		pasteAsAdmin = CUAC_Helper::PasteAsAdmin(activeWnd);
+	}
+
+	if(pasteAsAdmin &&
 		theApp.UACThreadRunning() == false)
 	{
 		Log(StrF(_T("Passing paste off to uac aware app")));
-		theApp.UACPaste();
+		if (theApp.UACPaste() == false)
+		{
+			pasteAsAdmin = false;
+		}
 	}
-	else
+	
+	if (pasteAsAdmin == false)
 	{
 		Sleep(delay);
 		send.SetKeyDownDelay(max(50, delay));

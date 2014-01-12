@@ -58,6 +58,7 @@ void COptionsQuickPaste::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK_PROMPT_DELETE_CLIP, m_PromptForDelete);
 	DDX_Control(pDX, IDC_COMBO_THEME, m_cbTheme);
 	DDX_Control(pDX, IDC_CHECK_SHOW_SCROLL_BAR, m_alwaysShowScrollBar);
+	DDX_Control(pDX, IDC_CHECK_ELEVATE_PRIVILEGES, m_elevatedPrivileges);
 }
 
 
@@ -101,6 +102,7 @@ BOOL COptionsQuickPaste::OnInitDialog()
 
 	m_btShowText.SetCheck(CGetSetOptions::GetShowTextForFirstTenHotKeys());
 	m_PromptForDelete.SetCheck(CGetSetOptions::GetPromptWhenDeletingClips());
+	m_elevatedPrivileges.SetCheck(CGetSetOptions::GetPasteAsAdmin());
 
 	if(CGetSetOptions::GetFont(m_LogFont))
 	{		
@@ -138,7 +140,7 @@ BOOL COptionsQuickPaste::OnApply()
 	else if(IsDlgButtonChecked(IDC_AT_PREVIOUS))
 		CGetSetOptions::SetQuickPastePosition(POS_AT_PREVIOUS);
 
-	g_Opt.SetDescShowLeadingWhiteSpace( m_btDescShowLeadingWhiteSpace.GetCheck() );
+	g_Opt.SetDescShowLeadingWhiteSpace(m_btDescShowLeadingWhiteSpace.GetCheck());
 	CGetSetOptions::SetUseCtrlNumForFirstTenHotKeys(m_btUseCtrlNum.GetCheck());
 	CGetSetOptions::SetShowTextForFirstTenHotKeys(m_btShowText.GetCheck());
 	CGetSetOptions::SetDrawThumbnail(m_btShowThumbnails.GetCheck());
@@ -147,6 +149,7 @@ BOOL COptionsQuickPaste::OnApply()
 	CGetSetOptions::SetShowAllClipsInMainList(m_ShowAllInMainList.GetCheck());
 	CGetSetOptions::SetFindAsYouType(m_FindAsYouType.GetCheck());
 	CGetSetOptions::SetPromptWhenDeletingClips(m_PromptForDelete.GetCheck());
+	CGetSetOptions::SetPasteAsAdmin(m_elevatedPrivileges.GetCheck());
 	
 	if(m_LogFont.lfWeight != 0)
 	{

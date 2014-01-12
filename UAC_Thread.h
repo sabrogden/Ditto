@@ -27,7 +27,7 @@ public:
 		FireEvent(UAC_EXIT);
 	}
 
-	void UACPaste();
+	bool UACPaste();
 
 private:
 	virtual void OnEvent(int eventId, void *param);

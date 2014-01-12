@@ -231,6 +231,7 @@ public:
 	bool DoActionClipProperties();
 	bool DoActionPasteSelectedPlainText();
 	bool DoActionMoveClipToGroup();
+	bool DoActionElevatePrivleges();
 
     // Generated message map functions
 protected:
@@ -367,5 +368,6 @@ protected:
 	afx_msg void OnMakeTopStickyClip();
 	afx_msg void OnMakeLastStickyClip();
 	afx_msg void OnRemoveStickySetting();
+	afx_msg void OnElevateAppToPasteIntoElevatedApp();
 	
 };

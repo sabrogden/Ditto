@@ -1030,14 +1030,14 @@ CQPasteWnd* CCP_MainApp::QPasteWnd()
 	return NULL;
 }
 
-void CCP_MainApp::UACPaste()
+bool CCP_MainApp::UACPaste()
 {
 	if(m_pUacPasteThread == NULL)
 	{
 		m_pUacPasteThread = new CUAC_Thread(GetCurrentProcessId());
 	}
 
-	m_pUacPasteThread->UACPaste();
+	return m_pUacPasteThread->UACPaste();
 }
 
 bool CCP_MainApp::UACThreadRunning()

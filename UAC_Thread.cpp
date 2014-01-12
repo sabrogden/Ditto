@@ -57,8 +57,9 @@ CString CUAC_Thread::EnumName(eUacThreadEvents e)
 	return _T("");
 }
 
-void CUAC_Thread::UACPaste()
+bool CUAC_Thread::UACPaste()
 {
+	bool ret = true;
 	CString mutexName;
 	mutexName.Format(_T("DittoAdminPaste_%d"), GetCurrentProcessId());
 
@@ -66,6 +67,7 @@ void CUAC_Thread::UACPaste()
 	DWORD dwError = GetLastError();
 	if(dwError == ERROR_ALREADY_EXISTS)
 	{
+		Log(_T("Paste uac admin exe is already running just signalling paste"));
 	}
 	else
 	{
@@ -83,6 +85,12 @@ void CUAC_Thread::UACPaste()
 
 			if (!ShellExecuteEx(&sei))
 			{
+				Log(_T("Failed to startup paste as admin app, we are not pasting using admin app"));
+				ret = false;
+			}
+			else
+			{
+				Log(_T("Startup up ditto paste as admin app, this will send ctrl-v to the admin app"));
 			}
 		}
 	}
@@ -90,4 +98,6 @@ void CUAC_Thread::UACPaste()
 	FirePaste();
 
 	CloseHandle(mutex);
+
+	return ret;
 }

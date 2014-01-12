@@ -152,6 +152,7 @@ ON_COMMAND(ID_QUICKOPTIONS_PROMPTTODELETECLIP, OnPromptToDeleteClip)
 ON_COMMAND(ID_STICKYCLIPS_MAKETOPSTICKYCLIP, OnMakeTopStickyClip)
 ON_COMMAND(ID_STICKYCLIPS_MAKELASTSTICKYCLIP, OnMakeLastStickyClip)
 ON_COMMAND(ID_STICKYCLIPS_REMOVESTICKYSETTING, OnRemoveStickySetting)
+ON_COMMAND(ID_QUICKOPTIONS_ELEVATEPREVILEGESTOPASTEINTOELEVATEDAPPS, OnElevateAppToPasteIntoElevatedApp)
 
 ON_WM_DESTROY()
 
@@ -1435,6 +1436,11 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
     }
 
     pMenu->DeleteMenu(ID_MENU_SENTTO_PROMPTFORIP, MF_BYCOMMAND);
+
+	if (g_Opt.GetPasteAsAdmin())
+	{
+		pMenu->CheckMenuItem(ID_QUICKOPTIONS_ELEVATEPREVILEGESTOPASTEINTOELEVATEDAPPS, MF_CHECKED);
+	}
 }
 
 void CQPasteWnd::SetSendToMenu(CMenu *pMenu, int nMenuID, int nArrayPos)
@@ -2127,6 +2133,11 @@ void CQPasteWnd::OnRemoveStickySetting()
 	}
 }
 
+void CQPasteWnd::OnElevateAppToPasteIntoElevatedApp()
+{
+	this->DoAction(ActionEnums::ELEVATE_PRIVlEGES);
+}
+
 void CQPasteWnd::OnMenuExport()
 {
     CClipIDs IDs;
@@ -2600,6 +2611,8 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::MOVE_CLIP_TO_GROUP:
 		ret = DoActionMoveClipToGroup();
 		break;
+	case ActionEnums::ELEVATE_PRIVlEGES:
+		ret = DoActionElevatePrivleges();
 
 	}
 
@@ -3082,6 +3095,12 @@ bool CQPasteWnd::DoActionMoveClipToGroup()
 	return false;
 }
 
+bool CQPasteWnd::DoActionElevatePrivleges()
+{
+	g_Opt.SetPasteAsAdmin(!g_Opt.GetPasteAsAdmin());
+
+	return true;
+}
 LRESULT CQPasteWnd::OnCancelFilter(WPARAM wParam, LPARAM lParam)
 {
 	this->DoAction(ActionEnums::CANCELFILTER);

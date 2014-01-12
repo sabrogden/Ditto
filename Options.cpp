@@ -2074,5 +2074,5 @@ void CGetSetOptions::SetPasteAsAdmin(BOOL val)
 
 BOOL CGetSetOptions::GetPasteAsAdmin()
 {
-	return GetProfileLong(_T("PasteAsAdmin"), 0);
+	return GetProfileLong(_T("PasteAsAdmin"), 1);
 }

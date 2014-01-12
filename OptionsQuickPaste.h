@@ -71,6 +71,7 @@ protected:
 
 public:
 	CButton m_PromptForDelete;
+	CButton m_elevatedPrivileges;
 	CComboBox m_cbTheme;
 	afx_msg void OnBnClickedButtonTheme();
 	CButton m_alwaysShowScrollBar;

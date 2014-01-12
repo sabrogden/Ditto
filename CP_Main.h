@@ -173,7 +173,7 @@ public:
 	CDPI m_metrics;
 	ULONG_PTR m_gdiplusToken;
 
-	void UACPaste();
+	bool UACPaste();
 	bool UACThreadRunning();
 
 public:
