@@ -996,8 +996,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     {
         m_lstHeader.m_bStartTop = true;
         
-		csSort = "case when Main.stickyClipOrder = 0 then -9999999 else Main.stickyClipOrder END DESC, "
-				 "case when Main.stickyClipOrder IS NULL then - 9999999 else Main.stickyClipOrder END DESC, "
+		csSort = "case when (Main.stickyClipOrder = 0 OR Main.stickyClipOrder IS NULL) then -9999999 else Main.stickyClipOrder END DESC, "
 				 "Main.bIsGroup ASC, "
 				 "clipOrder DESC";
 
@@ -1015,8 +1014,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     {
         m_lstHeader.m_bStartTop = true;
 
-		csSort = "case when Main.stickyClipGroupOrder = 0 then -9999999 else Main.stickyClipGroupOrder END DESC, "
-				 "case when Main.stickyClipGroupOrder IS NULL then - 9999999 else Main.stickyClipGroupOrder END DESC, "
+		csSort = "case when (Main.stickyClipGroupOrder = 0 OR Main.stickyClipGroupOrder IS NULL) then -9999999 else Main.stickyClipGroupOrder END DESC, "
 				 "Main.bIsGroup ASC, "
 				 "clipGroupOrder DESC";
 			
