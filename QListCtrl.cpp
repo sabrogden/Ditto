@@ -62,7 +62,11 @@ CQListCtrl::CQListCtrl()
 
 	m_mouseOverScrollAreaStart = 0;
 
-	//m_groupFolder.LoadStdImage(IDB_SHORTCUT_PNG, _T("PNG"));
+	m_groupFolder.LoadStdImageDPI(IDB_OPEN_FOLDER_16_16, IDB_OPEN_FOLDER_20_20, IDB_OPEN_FOLDER_24_24, IDB_OPEN_FOLDER_32_32, _T("PNG"));
+	m_dontDeleteImage.LoadStdImageDPI(IDB_YELLOW_STAR_16_16, IDB_YELLOW_STAR_20_20, IDB_YELLOW_STAR_24_24, IDB_YELLOW_STAR_32_32, _T("PNG"));
+	m_inFolderImage.LoadStdImageDPI(IDB_IN_FOLDER_16_16, IDB_IN_FOLDER_20_20, IDB_IN_FOLDER_24_24, IDB_IN_FOLDER_32_32, _T("PNG"));
+	m_shortCutImage.LoadStdImageDPI(IDB_KEY_16_16, IDB_KEY_20_20, IDB_KEY_24_24, IDB_KEY_32_32, _T("PNG"));
+	m_stickyImage.LoadStdImageDPI(IDB_STICKY_16_16, IDB_STICKY_20_20, IDB_STICKY_24_24, IDB_STICKY_32_32, _T("PNG"));
 }
 
 CQListCtrl::~CQListCtrl()
@@ -427,29 +431,36 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		// draw the symbol box
 		if( strSymbols.GetLength() > 0 )
 		{
-			strSymbols = " " + strSymbols + " "; // leave space for box
-			// add spaces to leave room for the symbols
-			CRect rectSym(rcText.left, rcText.top+1, rcText.left, rcText.top+1);
-			CRect rectSpace(0,0,0,0);
-			//Get text bounds
-			pDC->DrawText(" ", &rectSpace, DT_VCENTER | DT_EXPANDTABS | DT_CALCRECT);
-			pDC->DrawText(strSymbols, &rectSym, DT_VCENTER | DT_EXPANDTABS | DT_CALCRECT);
-			VERIFY( rectSpace.Width() > 0 );
-			
-//			int numSpaces = rectSym.Width() / rectSpace.Width();
-//			numSpaces++;
-//			csText = CString(' ',numSpaces) + csText;
-			
-			// draw the symbols
-			pDC->FillSolidRect( rectSym, GetSysColor(COLOR_ACTIVECAPTION) );
-			//pDC->FillSolidRect( rectSym, RGB(0,255,255) );
-			pDC->Draw3dRect(rectSym, GetSysColor(COLOR_3DLIGHT), GetSysColor(COLOR_3DDKSHADOW));
-			//		COLORREF crOld = pDC->SetTextColor(GetSysColor(COLOR_INFOTEXT));
-			COLORREF crOld = pDC->SetTextColor(RGB(255, 255, 255));
-			pDC->DrawText(strSymbols, rectSym, DT_VCENTER|DT_EXPANDTABS|DT_NOPREFIX);
-			pDC->SetTextColor(crOld);
-
-			rcText.left += rectSym.Width() + 2;
+			if(strSymbols.Find('G') >= 0) //group 
+			{
+				m_groupFolder.Draw(pDC, this, rcText.left, rcText.top, false, false);
+				rcText.left += m_groupFolder.ImageWidth() + 2;
+			}
+			if (strSymbols.Find('*') >= 0 &&
+				strSymbols.Find('G') < 0 &&
+				strSymbols.Find(_T("sticky")) < 0) //don't auto delete
+			{
+				m_dontDeleteImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
+				rcText.left += m_dontDeleteImage.ImageWidth() + 2;
+			}
+			if (strSymbols.Find('s') >= 0) // has shortcut
+			{
+				m_shortCutImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
+				rcText.left += m_shortCutImage.ImageWidth() + 2;
+			}
+			if (strSymbols.Find('!') >= 0) // in group
+			{
+				m_inFolderImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
+				rcText.left += m_inFolderImage.ImageWidth() + 2;
+			}
+			if (strSymbols.Find('Q') >= 0) // has quick paste text
+			{
+			}
+			if (strSymbols.Find(_T("Sticky")) >= 0) //sticky clip
+			{
+				m_stickyImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
+				rcText.left += m_stickyImage.ImageWidth() + 2;
+			}			
 		}
 		
 		if(DrawRtfText(nItem, rcText, pDC) == FALSE)
@@ -460,9 +471,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
         // Draw a focus rect around the item if necessary.
         if(bListHasFocus && (rItem.state & LVIS_FOCUSED))
 			pDC->DrawFocusRect(rcItem);
-
-		//m_groupFolder.Draw(pDC, rcItem.left, rcItem.top);
-		
+						
 		if( m_bShowTextForFirstTenHotKeys && firstTenNum > 0 )
 		{
 			CString cs;

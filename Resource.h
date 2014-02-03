@@ -87,6 +87,23 @@
 #define IDB_MAXIMIZE_12_12              220
 #define IDB_PNG7                        221
 #define IDB_MAXIMIZE_16_16              221
+#define IDB_YELLOW_STAR_32_32           222
+#define IDB_YELLOW_STAR_24_24           223
+#define IDB_YELLOW_STAR_20_20           224
+#define IDB_YELLOW_STAR_16_16           225
+#define IDB_IN_FOLDER_32_32             226
+#define IDB_IN_FOLDER_24_24             227
+#define IDB_IN_FOLDER_20_20             228
+#define IDB_IN_FOLDER_16_16             229
+#define IDB_KEY_32_32                   230
+#define IDB_KEY_24_24                   231
+#define IDB_KEY_20_20                   232
+#define IDB_KEY_16_16                   233
+#define IDB_STICKY_32_32                234
+#define IDB_STICKY_24_24                235
+#define IDB_STICKY_20_20                236
+#define IDB_PNG8                        237
+#define IDB_STICKY_16_16                237
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -424,7 +441,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        222
+#define _APS_NEXT_RESOURCE_VALUE        238
 #define _APS_NEXT_COMMAND_VALUE         32882
 #define _APS_NEXT_CONTROL_VALUE         2101
 #define _APS_NEXT_SYMED_VALUE           101

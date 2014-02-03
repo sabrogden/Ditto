@@ -1931,6 +1931,14 @@
     <None Include="res\DittoNew.ico" />
     <None Include="res\Ditto_NoCopyCb.ico" />
     <None Include="res\folder_open.png" />
+    <None Include="res\in_folder_16_16.png" />
+    <None Include="res\in_folder_20_20.png" />
+    <None Include="res\in_folder_24_24.png" />
+    <None Include="res\in_folder_32_32.png" />
+    <None Include="res\key_stroke_16_16.png" />
+    <None Include="res\key_stroke_20_20.png" />
+    <None Include="res\key_stroke_24_24.png" />
+    <None Include="res\key_stroke_32_32.png" />
     <None Include="res\left-blue.png" />
     <None Include="res\left_arrow_16_16.png" />
     <None Include="res\left_arrow_20_20.png" />
@@ -1956,6 +1964,10 @@
     <None Include="res\search_normal_150.bmp" />
     <None Include="res\search_normal_200.bmp" />
     <None Include="res\shortcut.png" />
+    <None Include="res\Sticky_16_16.png" />
+    <None Include="res\Sticky_20_20.png" />
+    <None Include="res\Sticky_24_24.png" />
+    <None Include="res\Sticky_32_32.png" />
     <None Include="res\Toolbar.bmp" />
     <None Include="res\toolbar1.bmp" />
     <CustomBuild Include="RulerRichEditCtrl\toolbar.bmp">
@@ -1967,6 +1979,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <None Include="res\FILECOPY.AVI" />
+    <None Include="res\yellow_star_16_16.png" />
+    <None Include="res\yellow_star_20_20.png" />
+    <None Include="res\yellow_star_24_24.png" />
+    <None Include="res\yellow_star_32_32.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="U3Stop\U3Stop.vcxproj">

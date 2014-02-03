@@ -165,6 +165,11 @@ protected:
 	DWORD m_mouseOverScrollAreaStart;
 	bool m_timerToHideScrollAreaSet;
 	CGdiImageDrawer m_groupFolder;
+	CGdiImageDrawer m_dontDeleteImage;
+	CGdiImageDrawer m_inFolderImage;
+	CGdiImageDrawer m_shortCutImage;
+	CGdiImageDrawer m_stickyImage;
+
 
 	// Generated message map functions
 protected:

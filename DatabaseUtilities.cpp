@@ -595,7 +595,7 @@ BOOL RemoveOldEntries(bool checkIdleTime)
 					double stickyClipOrder = q.getFloatField(_T("stickyClipOrder"));
 					double stickyClipGroupOrder = q.getFloatField(_T("stickyClipGroupOrder"));
 
-					//Only delete entries that have no shortcut and don't have the flag set
+					//Only delete entries that have no shortcut and don't have the flag set and aren't in groups and 
 					if(shortcut == 0 && 
 						dontDelete == 0 &&
 						parentId <= 0 &&
