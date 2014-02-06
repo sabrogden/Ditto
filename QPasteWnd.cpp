@@ -2015,6 +2015,8 @@ void CQPasteWnd::OnMakeTopStickyClip()
 
 void CQPasteWnd::OnMakeLastStickyClip()
 {
+//	OnMoveClipUp();
+//	return;
 	ARRAY IDs;
 	m_lstHeader.GetSelectionItemData(IDs);
 
@@ -2043,6 +2045,60 @@ void CQPasteWnd::OnMakeLastStickyClip()
 						{
 							iter->m_stickyClipOrder = clip.m_stickyClipOrder;							
 						}
+						sort = true;
+						break;
+					}
+					iter++;
+				}
+			}
+		}
+
+		//theApp.m_FocusID = id;
+
+		if (sort)
+		{
+			if (theApp.m_GroupID > 0)
+			{
+				std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::GroupSortDesc);
+			}
+			else
+			{
+				std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::SortDesc);
+			}
+
+			//SelectFocusID();
+
+			m_lstHeader.RefreshVisibleRows();
+			m_lstHeader.RedrawWindow();
+		}
+	}
+}
+
+void CQPasteWnd::OnMoveClipUp()
+{
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	if (IDs.GetCount() > 0)
+	{
+		bool sort = false;
+		for (int i = IDs.GetCount() - 1; i >= 0; i--)
+		{
+			int id = IDs[i];
+			CClip clip;
+			if (clip.LoadMainTable(id))
+			{
+				clip.MoveUp();
+				clip.ModifyMainTable();
+
+				std::vector<CMainTable>::iterator iter = m_listItems.begin();
+				while (iter != m_listItems.end())
+				{
+					if (iter->m_lID == id)
+					{
+						iter->m_clipOrder = clip.m_clipOrder;
+						iter->m_stickyClipOrder = clip.m_stickyClipOrder;
+						
 						sort = true;
 						break;
 					}
@@ -2660,7 +2716,7 @@ bool CQPasteWnd::DoActionNextDescription()
 		m_lstHeader.SetListPos(caret);
 	}
 	
-	m_lstHeader.ShowFullDescription();
+	m_lstHeader.ShowFullDescription(false, true);
 
 	return true;
 }
@@ -2702,7 +2758,7 @@ bool CQPasteWnd::DoActionPrevDescription()
 		m_lstHeader.SetListPos(caret);
 	}
 
-	m_lstHeader.ShowFullDescription();
+	m_lstHeader.ShowFullDescription(false, true);
 
 	return true;
 }
@@ -3411,14 +3467,14 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
         CString cs;
 
         int id = m_lstHeader.GetItemData(pInfo->lItem);
-        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText, lDate, lShortCut, lDontAutoDelete, QuickPasteText, lastPasteDate, globalShortCut FROM Main WHERE lID = %d"), id);
+        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText, lDate, lShortCut, clipOrder, stickyClipOrder, lDontAutoDelete, QuickPasteText, lastPasteDate, globalShortCut FROM Main WHERE lID = %d"), id);
         if(q.eof() == false)
         {
             cs = q.getStringField(1);
             cs += "\n\n";
 
             #ifdef _DEBUG
-                cs += StrF(_T("(Index = %d) (DB ID = %d)\n"), pInfo->lItem, q.getIntField(_T("lID")));
+                cs += StrF(_T("(Index = %d) (DB ID = %d) (Seq = %f) (Sticky Seq = %f)\n"), pInfo->lItem, q.getIntField(_T("lID")), q.getFloatField(_T("clipOrder")), q.getFloatField(_T("stickyClipOrder")));
             #endif 
 
             COleDateTime time((time_t)q.getIntField(_T("lDate")));

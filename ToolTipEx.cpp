@@ -2,6 +2,7 @@
 #include "cp_main.h"
 #include "ToolTipEx.h"
 #include "BitmapHelper.h"
+#include "Options.h"
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -47,6 +48,10 @@ ON_WM_NCMOUSEMOVE()
 ON_WM_NCLBUTTONUP()
 ON_WM_ERASEBKGND()
 
+ON_COMMAND(ID_FIRST_REMEMBERWINDOWPOSITION, &CToolTipEx::OnRememberwindowposition)
+ON_COMMAND(ID_FIRST_SIZEWINDOWTOCONTENT, &CToolTipEx::OnSizewindowtocontent)
+ON_COMMAND(ID_FIRST_SCALEIMAGESTOFITWINDOW, &CToolTipEx::OnScaleimagestofitwindow)
+ON_COMMAND(2, OnOptions)
 END_MESSAGE_MAP() 
 
 
@@ -67,9 +72,11 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
         return FALSE;
     }
 
+	
+
 	m_DittoWindow.DoCreate(this);
 	m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeft(), g_Opt.m_Theme.CaptionRight());
-	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true);
+	m_DittoWindow.SetCaptionOn(this, CAPTION_LEFT, true);
 	m_DittoWindow.m_bDrawMinimize = false;
 	m_DittoWindow.m_bDrawMinimize = false;
 	m_DittoWindow.m_bDrawChevron = false;
@@ -83,6 +90,11 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
     m_RichEdit.SetBackgroundColor(FALSE, GetSysColor(COLOR_INFOBK));
 
     SetLogFont(GetSystemToolTipFont(), FALSE);
+
+	m_optionsButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, 2);
+	m_optionsButton.LoadStdImageDPI(IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, IDB_COG_32_32, _T("PNG"));
+	m_optionsButton.SetToolTipText(theApp.m_Language.GetString(_T("DescriptionOptionsTooltip"), _T("Description Options")));
+	m_optionsButton.ShowWindow(SW_SHOW);
 
     return TRUE;
 }
@@ -99,77 +111,109 @@ BOOL CToolTipEx::Show(CPoint point)
         m_RichEdit.ShowWindow(SW_SHOW);
     }
 
-    CRect rect = GetBoundsRect();
+	CRect rect;
 
-    //account for the scroll bars
-    rect.right += 20;
-    rect.bottom += 20;
-
-	if (m_pBitmap)
+	if(CGetSetOptions::GetSizeDescWindowToContent() == FALSE)
 	{
-		int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
-		int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
+		rect.left = point.x;
+		rect.top = point.y;
+		CSize size;
+		CGetSetOptions::GetDescWndSize(size);
+		rect.right = rect.left + size.cx;
+		rect.bottom = rect.top + size.cy;
 
-		rect.right = rect.left + nWidth;
-		rect.bottom = rect.top + nHeight;
+		EnsureWindowVisible(&rect);
 	}
-    else if(m_csRTF != "")
-    {
-		//if showing rtf then increase the size because
-		//rtf will probably draw bigger
-        long lNewWidth = (long)rect.Width() + (long)(rect.Width() *.3);
-        rect.right = rect.left + lNewWidth;
+	else
+	{
+		rect = GetBoundsRect();
 
-        long lNewHeight = rect.Height() + (rect.Height() *1);
-        rect.bottom = rect.top + lNewHeight;
-    }
+		//account for the scroll bars
+		rect.right += 20;
+		rect.bottom += 20;
 
-	rect.right += CAPTION_BORDER * 2;
-	rect.bottom += CAPTION_BORDER * 2;
+		if (m_pBitmap)
+		{
+			int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
+			int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
 
-    CRect rcScreen;
+			rect.right = rect.left + nWidth;
+			rect.bottom = rect.top + nHeight;
+		}
+		else if(m_csRTF != "")
+		{
+			//if showing rtf then increase the size because
+			//rtf will probably draw bigger
+			long lNewWidth = (long)rect.Width() + (long)(rect.Width() *.3);
+			rect.right = rect.left + lNewWidth;
 
-    ClientToScreen(rect);
+			long lNewHeight = rect.Height() + (rect.Height() *1);
+			rect.bottom = rect.top + lNewHeight;
+		}
 
-    CRect cr(point, point);
+		rect.right += CAPTION_BORDER * 2;
+		rect.bottom += CAPTION_BORDER * 2;
 
-    int nMonitor = GetMonitorFromRect(&cr);
-    GetMonitorRect(nMonitor, &rcScreen);
+		CRect rcScreen;
 
-    //ensure that we don't go outside the screen
-    if(point.x < 0)
-    {
-        point.x = 5;
-		m_reducedWindowSize = true;
-    }
-    if(point.y < 0)
-    {
-        point.y = 5;
-		m_reducedWindowSize = true;
-    }
+		ClientToScreen(rect);
 
-    rcScreen.DeflateRect(0, 0, 5, 5);
+		CRect cr(point, point);
 
-    long lWidth = rect.Width();
-    long lHeight = rect.Height();
+		int nMonitor = GetMonitorFromRect(&cr);
+		GetMonitorRect(nMonitor, &rcScreen);
 
-    rect.left = point.x;
-    rect.top = point.y;
-    rect.right = rect.left + lWidth;
-    rect.bottom = rect.top + lHeight;
+		//ensure that we don't go outside the screen
+		if(point.x < 0)
+		{
+			point.x = 5;
+			m_reducedWindowSize = true;
+		}
+		if(point.y < 0)
+		{
+			point.y = 5;
+			m_reducedWindowSize = true;
+		}
 
-    if(rect.right > rcScreen.right)
-    {
-        rect.right = rcScreen.right;
-		m_reducedWindowSize = true;
-    }
-    if(rect.bottom > rcScreen.bottom)
-    {
-        rect.bottom = rcScreen.bottom;
-		m_reducedWindowSize = true;
-    }
+		rcScreen.DeflateRect(0, 0, 5, 5);
 
-    SetWindowPos(&CWnd::wndTopMost, point.x, point.y, rect.Width(), rect.Height
+		long lWidth = rect.Width();
+		long lHeight = rect.Height();
+
+		rect.left = point.x;
+		rect.top = point.y;
+		rect.right = rect.left + lWidth;
+		rect.bottom = rect.top + lHeight;
+
+		if(rect.right > rcScreen.right)
+		{
+			int diff = rect.right - rcScreen.right;
+
+			int newLeft = rect.left - diff;
+			if(newLeft > 0)
+			{
+				rect.left = newLeft;
+			}
+
+			rect.right = rcScreen.right;
+			m_reducedWindowSize = true;
+		}
+		if(rect.bottom > rcScreen.bottom)
+		{
+			int diff = rect.bottom - rcScreen.bottom;
+
+			int newTop = rect.top - diff;
+			if(newTop > 0)
+			{
+				rect.top = newTop;
+			}
+
+			rect.bottom = rcScreen.bottom;
+			m_reducedWindowSize = true;
+		}
+	}
+
+    SetWindowPos(&CWnd::wndTopMost, rect.left, rect.top, rect.Width(), rect.Height
                  (), SWP_SHOWWINDOW | SWP_NOCOPYBITS | SWP_NOACTIVATE |
                  SWP_NOZORDER);
 
@@ -184,6 +228,11 @@ BOOL CToolTipEx::Hide()
 
     m_csRTF = "";
     m_csText = "";
+
+	CRect rect;
+	this->GetWindowRect(&rect);
+	CGetSetOptions::SetDescWndSize(rect.Size());
+	CGetSetOptions::SetDescWndPoint(rect.TopLeft());
 
     return TRUE;
 }
@@ -201,16 +250,17 @@ void CToolTipEx::OnPaint()
     //    dc.SetBkMode(TRANSPARENT);
     //    rect.DeflateRect(m_rectMargin);
 
-    if(m_pBitmap)
-    {
-		CBrush  Brush, *pOldBrush;
-		Brush.CreateSolidBrush(GetSysColor(COLOR_INFOBK));
+    
+	CBrush  Brush, *pOldBrush;
+	Brush.CreateSolidBrush(GetSysColor(COLOR_INFOBK));
 
-		pOldBrush = dc.SelectObject(&Brush);
-		CFont *pOldFont = dc.SelectObject(&m_Font);
+	pOldBrush = dc.SelectObject(&Brush);
+	CFont *pOldFont = dc.SelectObject(&m_Font);
 
-		dc.FillRect(&rect, &Brush);
+	dc.FillRect(&rect, &Brush);
 
+	if(m_pBitmap)
+	{
         CDC MemDc;
         MemDc.CreateCompatibleDC(&dc);
 
@@ -219,7 +269,7 @@ void CToolTipEx::OnPaint()
         int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
         int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
 
-		if(m_reducedWindowSize)
+		if(CGetSetOptions::GetScaleImagesToDescWindow())
 		{
 			dc.StretchBlt(rect.left, rect.top, rect.Width(), rect.Height(), &MemDc, 0, 0, nWidth, nWidth, SRCCOPY);
 		}
@@ -499,8 +549,10 @@ void CToolTipEx::OnSize(UINT nType, int cx, int cy)
 
     CRect cr;
     GetClientRect(cr);
-    //	cr.DeflateRect(0, 0, 15, 0);
+    cr.DeflateRect(0, 0, 0, theApp.m_metrics.ScaleY(21));
     m_RichEdit.MoveWindow(cr);
+
+	m_optionsButton.MoveWindow(cr.left, cr.bottom + theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
 
 	this->Invalidate();
 }
@@ -611,4 +663,57 @@ void CToolTipEx::OnNcMouseMove(UINT nHitTest, CPoint point)
 	m_DittoWindow.DoNcMouseMove(this, nHitTest, point);
 
 	CWnd::OnNcMouseMove(nHitTest, point);
+}
+
+void CToolTipEx::OnOptions()
+{
+	POINT pp;
+	CMenu cmPopUp;
+	CMenu *cmSubMenu = NULL;
+
+	GetCursorPos(&pp);
+	if(cmPopUp.LoadMenu(IDR_DESC_OPTIONS_MENU) != 0)
+	{
+		cmSubMenu = cmPopUp.GetSubMenu(0);
+		if(!cmSubMenu)
+		{
+			return ;
+		}
+
+		GetCursorPos(&pp);
+
+		if(CGetSetOptions::GetRememberDescPos())
+			cmSubMenu->CheckMenuItem(ID_FIRST_REMEMBERWINDOWPOSITION, MF_CHECKED);
+
+		if(CGetSetOptions::GetSizeDescWindowToContent())
+			cmSubMenu->CheckMenuItem(ID_FIRST_SIZEWINDOWTOCONTENT, MF_CHECKED);
+
+		if(CGetSetOptions::GetScaleImagesToDescWindow())
+			cmSubMenu->CheckMenuItem(ID_FIRST_SCALEIMAGESTOFITWINDOW, MF_CHECKED);
+		
+		//theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
+		
+		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
+	}
+}
+
+void CToolTipEx::OnRememberwindowposition()
+{
+	CGetSetOptions::SetRememberDescPos(!CGetSetOptions::GetRememberDescPos());
+}
+
+void CToolTipEx::OnSizewindowtocontent()
+{
+	CGetSetOptions::SetSizeDescWindowToContent(!CGetSetOptions::GetSizeDescWindowToContent());
+
+	CRect rect;
+	this->GetWindowRect(&rect);
+
+	Show(rect.TopLeft());
+}
+
+void CToolTipEx::OnScaleimagestofitwindow()
+{
+	CGetSetOptions::SetScaleImagesToDescWindow(!CGetSetOptions::GetScaleImagesToDescWindow());
+	Invalidate();
 }

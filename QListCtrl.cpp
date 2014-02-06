@@ -902,7 +902,7 @@ void CQListCtrl::LoadCopyOrCutToClipboard()
 	g_Opt.m_bUpdateTimeOnPaste = bItWas;
 }
 
-void CQListCtrl::ShowFullDescription(bool bFromAuto)
+void CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 {
 	int nItem = GetCaret();
 	CRect rc, crWindow;
@@ -912,18 +912,25 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto)
 
 	CPoint pt;
 	
-	if(bFromAuto == false)
+	if(CGetSetOptions::GetRememberDescPos())
+	{
+		CGetSetOptions::GetDescWndPoint(pt);
+	}
+	else if(bFromAuto == false)
 	{
 		pt = CPoint(rc.left, rc.bottom);
 	}
 	else
+	{
 		pt = CPoint((crWindow.left + (crWindow.right - crWindow.left)/2), rc.bottom);
+	}
 
 	CString csDescription;
 	GetToolTipText(nItem, csDescription);
 		
-	//if (bFromAuto == false ||
-	//	::IsWindow(m_toolTipHwnd) == FALSE)
+	if (m_pToolTip == NULL ||
+		fromNextPrev == false ||
+		::IsWindow(m_toolTipHwnd) == FALSE)
 	{
 		m_pToolTip->DestroyWindow();
 
@@ -932,12 +939,16 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto)
 		m_toolTipHwnd = m_pToolTip->GetSafeHwnd();
 		m_pToolTip->SetNotifyWnd(GetParent());
 	}
-	//else
-	//{
-	//	CRect r;
-	//	m_pToolTip->GetWindowRect(r);
-	//	pt = r.TopLeft();
-	//}
+	else
+	{
+		CRect r;
+		m_pToolTip->GetWindowRect(r);
+		pt = r.TopLeft();
+
+		m_pToolTip->SetBitmap(NULL);
+		m_pToolTip->SetRTFText("");
+		m_pToolTip->SetToolTipText(_T(""));
+	}
 	
 	if(m_pToolTip)
 	{

@@ -369,5 +369,6 @@ protected:
 	afx_msg void OnMakeLastStickyClip();
 	afx_msg void OnRemoveStickySetting();
 	afx_msg void OnElevateAppToPasteIntoElevatedApp();
+	afx_msg void OnMoveClipUp();
 	
 };

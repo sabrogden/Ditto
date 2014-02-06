@@ -753,6 +753,57 @@ bool CClip::AddToDataTable()
 	return true;
 }
 
+void CClip::MoveUp()
+{
+	if(m_stickyClipOrder == 0)
+	{
+		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, clipOrder FROM Main Where clipOrder > %f ORDER BY clipOrder ASC LIMIT 1"), m_clipOrder);
+		if (q.eof() == false)
+		{
+			int idAbove = q.getIntField(_T("lID"));
+			double orderAbove = q.getFloatField(_T("clipOrder"));
+
+			CppSQLite3Query q2 = theApp.m_db.execQueryEx(_T("SELECT lID, clipOrder FROM Main Where clipOrder > %f ORDER BY clipOrder ASC LIMIT 1"), orderAbove);
+			if (q2.eof() == false)
+			{ 
+				int idTwoAbove = q2.getIntField(_T("lID"));
+				double orderTwoAbove = q2.getFloatField(_T("clipOrder"));
+			
+				m_clipOrder = orderAbove + (orderTwoAbove - orderAbove) / 2.0;
+			}
+			else
+			{
+				m_clipOrder = orderAbove + 1;
+			}
+		}
+	}
+	else  
+
+
+
+	{
+		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipOrder FROM Main Where stickyClipOrder > %f ORDER BY clipOrder ASC LIMIT 1"), m_stickyClipOrder);
+		if (q.eof() == false)
+		{
+			int idAbove = q.getIntField(_T("lID"));
+			double orderAbove = q.getFloatField(_T("stickyClipOrder"));
+
+			CppSQLite3Query q2 = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipOrder FROM Main Where stickyClipOrder > %f ORDER BY clipOrder ASC LIMIT 1"), orderAbove);
+			if (q2.eof() == false)
+			{
+				int idTwoAbove = q2.getIntField(_T("lID"));
+				double orderTwoAbove = q2.getFloatField(_T("stickyClipOrder"));
+
+				m_stickyClipOrder = orderAbove + (orderTwoAbove - orderAbove) / 2.0;
+			}
+			else
+			{
+				m_stickyClipOrder = orderAbove + 1;
+			}
+		}
+	}
+}
+
 void CClip::MakeStickyTop(int parentId)
 {
 	if (parentId < 0)

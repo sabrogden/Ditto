@@ -9,6 +9,7 @@
 #include "RichEditCtrlEx.h"
 #include "WndEx.h"
 #include "DittoWindow.h"
+#include "GdipButton.h"
 /////////////////////////////////////////////////////////////////////////////
 // CToolTipEx window
 
@@ -59,6 +60,7 @@ protected:
 	CRichEditCtrlEx m_RichEdit;
 	CWnd *m_pNotifyWnd;
 	bool m_reducedWindowSize;
+	CGdipButton m_optionsButton;
 
 	CDittoWindow m_DittoWindow;
 
@@ -80,10 +82,14 @@ protected:
 	afx_msg void OnNcLButtonDown(UINT nHitTest, CPoint point); 
 	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp); 
 	afx_msg void OnNcPaint();
+	afx_msg void OnOptions();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnRememberwindowposition();
+	afx_msg void OnSizewindowtocontent();
+	afx_msg void OnScaleimagestofitwindow();
 };
 
 /////////////////////////////////////////////////////////////////////////////

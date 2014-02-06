@@ -439,6 +439,21 @@ public:
 
 	static void		SetPasteAsAdmin(BOOL val);
 	static BOOL		GetPasteAsAdmin();
+
+	static void		SetRememberDescPos(BOOL val);
+	static BOOL		GetRememberDescPos();
+
+	static void		SetSizeDescWindowToContent(BOOL val);
+	static BOOL		GetSizeDescWindowToContent();
+
+	static void		SetScaleImagesToDescWindow(BOOL val);
+	static BOOL		GetScaleImagesToDescWindow();
+
+	static void		SetDescWndPoint(CPoint point);
+	static void		GetDescWndPoint(CPoint &point);
+
+	static void		SetDescWndSize(CSize size);
+	static void		GetDescWndSize(CSize &size);
 };
 
 // global for easy access and for initialization of fast access variables

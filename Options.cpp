@@ -715,6 +715,7 @@ BOOL CGetSetOptions::SetQuickPasteSize(CSize size)
 
 	return bRet;
 }
+
 void CGetSetOptions::GetQuickPasteSize(CSize &size)
 {
 	size.cx = GetProfileLong("QuickPasteCX", 300);
@@ -2075,4 +2076,60 @@ void CGetSetOptions::SetPasteAsAdmin(BOOL val)
 BOOL CGetSetOptions::GetPasteAsAdmin()
 {
 	return GetProfileLong(_T("PasteAsAdmin"), 1);
+}
+
+void CGetSetOptions::SetRememberDescPos(BOOL val)
+{
+	SetProfileLong(_T("RememberDescPos"), val);
+}
+BOOL CGetSetOptions::GetRememberDescPos()
+{
+	return GetProfileLong(_T("RememberDescPos"), FALSE);
+}
+
+void CGetSetOptions::SetSizeDescWindowToContent(BOOL val)
+{
+	SetProfileLong(_T("SizeDescWindowToContent"), val);
+}
+BOOL CGetSetOptions::GetSizeDescWindowToContent()
+{
+	return GetProfileLong(_T("SizeDescWindowToContent"), TRUE);
+}
+
+void CGetSetOptions::SetScaleImagesToDescWindow(BOOL val)
+{
+	SetProfileLong(_T("ScaleImagesToDescWindow"), val);
+}
+BOOL CGetSetOptions::GetScaleImagesToDescWindow()
+{
+	return GetProfileLong(_T("ScaleImagesToDescWindow"), TRUE);
+}
+
+void CGetSetOptions::SetDescWndPoint(CPoint point)
+{
+	SetProfileLong("DescWndX", point.x);
+	SetProfileLong("DescWndY", point.y);
+}
+
+void CGetSetOptions::GetDescWndPoint(CPoint &point)
+{
+	point.x = GetProfileLong("DescWndX", 100);
+	point.y = GetProfileLong("DescWndY", 100);
+}
+
+void CGetSetOptions::GetDescWndSize(CSize &size)
+{
+	size.cx = GetProfileLong("DescWndCX", 300);
+	size.cy = GetProfileLong("DescWndCY", 300);
+	if(size.cx <= 0 && size.cy <= 0)
+	{
+		size.cx = 300;
+		size.cy = 300;
+	}
+}
+
+void CGetSetOptions::SetDescWndSize(CSize size)
+{
+	SetProfileLong("DescWndCX", size.cx);
+	SetProfileLong("DescWndCY", size.cy);
 }

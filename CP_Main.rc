@@ -323,6 +323,16 @@ BEGIN
     END
 END
 
+IDR_DESC_OPTIONS_MENU MENU
+BEGIN
+    POPUP "First"
+    BEGIN
+        MENUITEM "Remember window position",    ID_FIRST_REMEMBERWINDOWPOSITION
+        MENUITEM "Size window to content",      ID_FIRST_SIZEWINDOWTOCONTENT
+        MENUITEM "Scale images to fit window",  ID_FIRST_SCALEIMAGESTOFITWINDOW
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

@@ -133,6 +133,7 @@ public:
 	void RemoveStickySetting(int parentId);
 	BOOL LoadMainTable(int id);
 	DWORD GenerateCRC();
+	void MoveUp();
 
 	// Allocates a Global containing the requested Clip's Format Data
 	static HGLOBAL LoadFormat(int id, UINT cfType);
