@@ -949,3 +949,11 @@ void DeleteReceivedFiles(CString csDir)
 	}
 }
 
+__int64 FileSize(const TCHAR *fileName)
+{
+	__stat64 buf;
+	if (_wstat64(fileName, &buf) != 0)
+		return -1; // error, could use errno to find out more
+
+	return buf.st_size;
+}

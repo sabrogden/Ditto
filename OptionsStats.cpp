@@ -73,6 +73,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // COptionsStats message handlers
 
+
 BOOL COptionsStats::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
@@ -108,12 +109,13 @@ BOOL COptionsStats::OnInitDialog()
 	}
 	CATCH_SQLITE_EXCEPTION
 	
+	__int64 size = FileSize(GetDBName());			
 
-	struct _stat buf;
-	int nResult = STAT(GetDBName(), &buf);
-			
-	if(nResult == 0)
-		m_eDatabaseSize.Format(_T("%d KB"), (buf.st_size/1024));
+	const int MAX_FILE_SIZE_BUFFER = 255;
+	TCHAR szFileSize[MAX_FILE_SIZE_BUFFER];
+	StrFormatByteSize(size, szFileSize, MAX_FILE_SIZE_BUFFER);
+
+	m_eDatabaseSize = szFileSize;
 
 	UpdateData(FALSE);
 
