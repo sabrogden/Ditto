@@ -2564,18 +2564,25 @@ void CQPasteWnd::SetKeyModiferState(bool bActive)
 
 BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 {
-	DWORD dID;
-	if (m_actions.OnMsg(pMsg, dID))
+	if(CheckActions(pMsg))
 	{
-		bool ret = DoAction(dID);
-
-		if (ret)
-		{
-			return TRUE;
-		}
-	}    
+		return TRUE;
+	}
 
     return CWndEx::PreTranslateMessage(pMsg);
+}
+
+bool CQPasteWnd::CheckActions(MSG * pMsg) 
+{
+	bool ret = false;
+	DWORD dID;
+
+	if (m_actions.OnMsg(pMsg, dID))
+	{
+		ret = DoAction(dID);
+	}   
+
+	return ret;
 }
 
 bool CQPasteWnd::DoAction(DWORD actionId)
@@ -3790,7 +3797,12 @@ LRESULT CQPasteWnd::OnUpDown(WPARAM wParam, LPARAM lParam)
 
     if(m_lstHeader.HandleKeyDown(wParam, lParam) == FALSE)
     {
-        m_lstHeader.SendMessage(WM_KEYDOWN, wParam, lParam);
+		MSG msg;
+		msg.lParam = lParam;
+		msg.wParam = wParam;
+		msg.message = WM_KEYDOWN;
+
+		CheckActions(&msg);
     }
 
     return TRUE;

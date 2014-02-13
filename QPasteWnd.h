@@ -112,7 +112,10 @@ public:
 public:
     virtual BOOL Create(const POINT &ptStart, CWnd *pParentWnd);
     virtual BOOL PreTranslateMessage(MSG *pMsg);
-    //}}AFX_VIRTUAL
+
+	bool CheckActions(MSG * pMsg);
+
+	//}}AFX_VIRTUAL
 
     // Implementation
 public:

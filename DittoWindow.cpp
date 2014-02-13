@@ -362,6 +362,9 @@ void CDittoWindow::DoSetRegion(CWnd *pWnd)
 	CRgn rgnRect, rgnRect2, rgnRound, rgnFinalA, rgnFinalB;
 	pWnd->GetWindowRect(rect);
 
+	if(rect.Width() < 0)
+		return;
+
 	CRect r;
 	pWnd->GetClientRect(&r);
 

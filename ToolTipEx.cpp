@@ -52,6 +52,8 @@ ON_COMMAND(ID_FIRST_REMEMBERWINDOWPOSITION, &CToolTipEx::OnRememberwindowpositio
 ON_COMMAND(ID_FIRST_SIZEWINDOWTOCONTENT, &CToolTipEx::OnSizewindowtocontent)
 ON_COMMAND(ID_FIRST_SCALEIMAGESTOFITWINDOW, &CToolTipEx::OnScaleimagestofitwindow)
 ON_COMMAND(2, OnOptions)
+ON_WM_RBUTTONDOWN()
+ON_WM_SETFOCUS()
 END_MESSAGE_MAP() 
 
 
@@ -66,13 +68,10 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 
     // Create the window - just don't show it yet.
     if( !CWnd::CreateEx(WS_EX_TOPMOST, szClassName, _T(""), WS_POPUP | WS_BORDER,
-       0, 0, 10, 10,  // size & position updated when needed
-    pParentWnd->GetSafeHwnd(), 0, NULL))
+       0, 0, 0, 0, pParentWnd->GetSafeHwnd(), 0, NULL))
     {
         return FALSE;
-    }
-
-	
+    }	
 
 	m_DittoWindow.DoCreate(this);
 	m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeft(), g_Opt.m_Theme.CaptionRight());
@@ -109,6 +108,7 @@ BOOL CToolTipEx::Show(CPoint point)
     else
     {
         m_RichEdit.ShowWindow(SW_SHOW);
+		//m_RichEdit.SetFocus();
     }
 
 	CRect rect;
@@ -319,6 +319,16 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
                 }
                 break;
             }
+			break;
+		case WM_RBUTTONDOWN:
+			{
+				if (m_RichEdit.m_hWnd == GetFocus()->m_hWnd)
+				{
+					OnOptions();
+					return TRUE;
+				}
+			}
+			break;
     }
 
     return CWnd::PreTranslateMessage(pMsg);
@@ -368,8 +378,8 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 
                 break;
             }
+
         case WM_LBUTTONDBLCLK:
-        case WM_RBUTTONDOWN:
         case WM_RBUTTONDBLCLK:
         case WM_MBUTTONDOWN:
         case WM_MBUTTONDBLCLK:
@@ -545,7 +555,7 @@ void CToolTipEx::OnSize(UINT nType, int cx, int cy)
         return ;
     }
 
-	m_DittoWindow.DoSetRegion(this);
+	
 
     CRect cr;
     GetClientRect(cr);
@@ -555,6 +565,8 @@ void CToolTipEx::OnSize(UINT nType, int cx, int cy)
 	m_optionsButton.MoveWindow(cr.left, cr.bottom + theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
 
 	this->Invalidate();
+
+	m_DittoWindow.DoSetRegion(this);
 }
 
 BOOL CToolTipEx::IsCursorInToolTip()
@@ -716,4 +728,19 @@ void CToolTipEx::OnScaleimagestofitwindow()
 {
 	CGetSetOptions::SetScaleImagesToDescWindow(!CGetSetOptions::GetScaleImagesToDescWindow());
 	Invalidate();
+}
+
+void CToolTipEx::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	OnOptions();
+
+	CWnd::OnRButtonDown(nFlags, point);
+}
+
+
+void CToolTipEx::OnSetFocus(CWnd* pOldWnd)
+{
+	CWnd::OnSetFocus(pOldWnd);
+
+	m_RichEdit.SetFocus();
 }
