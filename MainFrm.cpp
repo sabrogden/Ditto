@@ -393,7 +393,11 @@ void CMainFrame::DoTextOnlyPaste()
 void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 {
     try
-    {
+	{
+		CString csSort = "case when (Main.stickyClipOrder = 0 OR Main.stickyClipOrder IS NULL) then -9999999 else Main.stickyClipOrder END DESC, "
+			"Main.bIsGroup ASC, "
+			"clipOrder DESC";
+
 		CString filter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR (Main.bIsGroup = 0 AND Main.lParentID = -1))";
 
 		if(g_Opt.m_bShowAllClipsInMainList)
@@ -401,7 +405,7 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 			filter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR Main.bIsGroup = 0)";
 		}
 
-        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, bIsGroup FROM Main WHERE %s ORDER BY bIsGroup ASC, clipOrder DESC LIMIT 1 OFFSET %d"), filter, nPos);
+        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, bIsGroup FROM Main WHERE %s ORDER BY %s LIMIT 1 OFFSET %d"), filter, csSort, nPos);
 
         if(q.eof() == false)
         {
