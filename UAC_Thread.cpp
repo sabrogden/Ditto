@@ -11,6 +11,9 @@ CUAC_Thread::CUAC_Thread(int processId)
 	m_processId = processId;
 
 	AddEvent(UAC_PASTE, StrF(_T("Global\\UAC_PASTE_%d"), m_processId));
+	AddEvent(UAC_COPY, StrF(_T("Global\\UAC_COPY_%d"), m_processId));
+	AddEvent(UAC_CUT, StrF(_T("Global\\UAC_CUT_%d"), m_processId));
+
 	AddEvent(UAC_EXIT, StrF(_T("Global\\UAC_EXIT_%d"), m_processId));
 
 	m_waitTimeout = 30000;
@@ -23,6 +26,33 @@ CUAC_Thread::~CUAC_Thread(void)
 
 void CUAC_Thread::OnTimeOut(void *param)
 {
+	bool close = false;
+	DWORD exitCode = 0;
+
+	HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, m_processId);
+	if(hProcess == NULL)
+	{
+		close = true;
+	}
+	else
+	{
+		if(GetExitCodeProcess(hProcess, &exitCode) == 0)
+		{
+			close = true;
+		}
+		else if(exitCode != STILL_ACTIVE)
+		{
+			close = true;
+		}
+	}
+
+	if(close)
+	{
+		Log(StrF(_T("Found parent process id (%d) is not running, Exit Code %d closing uac aware app"), m_processId, exitCode));
+		this->CancelThread();
+	}
+
+	CloseHandle(hProcess);
 }
 
 void CUAC_Thread::OnEvent(int eventId, void *param)
@@ -34,6 +64,12 @@ void CUAC_Thread::OnEvent(int eventId, void *param)
 	{
 	case UAC_PASTE:
 		theApp.m_activeWnd.SendPaste(false);
+		break; 
+	case UAC_COPY:
+		theApp.m_activeWnd.SendCopy();
+		break; 
+	case UAC_CUT:
+		theApp.m_activeWnd.SendCut();
 		break; 
 	case UAC_EXIT:
 		this->CancelThread();
@@ -50,6 +86,10 @@ CString CUAC_Thread::EnumName(eUacThreadEvents e)
 	{
 	case UAC_PASTE:
 		return _T("Paste Elevated");
+	case UAC_COPY:
+		return _T("COPY Elevated");
+	case UAC_CUT:
+		return _T("Cut Elevated");
 	case UAC_EXIT:
 		return _T("Save Startup Elevated");
 	}
@@ -58,6 +98,33 @@ CString CUAC_Thread::EnumName(eUacThreadEvents e)
 }
 
 bool CUAC_Thread::UACPaste()
+{	
+	bool ret = StartProcess();
+
+	FirePaste();
+
+	return ret;
+}
+
+bool CUAC_Thread::UACCopy()
+{	
+	bool ret = StartProcess();
+
+	FireCopy();
+
+	return ret;
+}
+
+bool CUAC_Thread::UACCut()
+{	
+	bool ret = StartProcess();
+
+	FireCut();
+
+	return ret;
+}
+
+bool CUAC_Thread::StartProcess()
 {
 	bool ret = true;
 	CString mutexName;
@@ -94,8 +161,6 @@ bool CUAC_Thread::UACPaste()
 			}
 		}
 	}
-
-	FirePaste();
 
 	CloseHandle(mutex);
 

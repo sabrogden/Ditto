@@ -11,6 +11,8 @@ public:
 	enum eUacThreadEvents
 	{
 		UAC_PASTE, 
+		UAC_COPY,
+		UAC_CUT,
 		UAC_EXIT,
 
 		eUacThreadEvents_COUNT  //must be last
@@ -22,16 +24,30 @@ public:
 	{
 		FireEvent(UAC_PASTE);
 	}
+
+	void FireCopy()
+	{
+		FireEvent(UAC_COPY);
+	}
+
+	void FireCut()
+	{
+		FireEvent(UAC_CUT);
+	}
+
 	void FireExit()
 	{
 		FireEvent(UAC_EXIT);
 	}
 
 	bool UACPaste();
+	bool UACCopy();
+	bool UACCut();
 
 private:
 	virtual void OnEvent(int eventId, void *param);
 	virtual void OnTimeOut(void *param);
 	CString EnumName(eUacThreadEvents e);
+	bool StartProcess();
 };
 

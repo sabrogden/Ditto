@@ -174,6 +174,8 @@ public:
 	ULONG_PTR m_gdiplusToken;
 
 	bool UACPaste();
+	bool UACCopy();
+	bool UACCut();
 	bool UACThreadRunning();
 
 public:

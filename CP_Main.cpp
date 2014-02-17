@@ -1040,6 +1040,26 @@ bool CCP_MainApp::UACPaste()
 	return m_pUacPasteThread->UACPaste();
 }
 
+bool CCP_MainApp::UACCopy()
+{
+	if(m_pUacPasteThread == NULL)
+	{
+		m_pUacPasteThread = new CUAC_Thread(GetCurrentProcessId());
+	}
+
+	return m_pUacPasteThread->UACCopy();
+}
+
+bool CCP_MainApp::UACCut()
+{
+	if(m_pUacPasteThread == NULL)
+	{
+		m_pUacPasteThread = new CUAC_Thread(GetCurrentProcessId());
+	}
+
+	return m_pUacPasteThread->UACCut();
+}
+
 bool CCP_MainApp::UACThreadRunning()
 {
 	if(m_pUacPasteThread != NULL)

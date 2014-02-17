@@ -248,8 +248,7 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 
 	bool pasteAsAdmin = false;
 
-	if (activateTarget &&
-		g_Opt.GetPasteAsAdmin())
+	if (g_Opt.GetPasteAsAdmin())
 	{
 		pasteAsAdmin = CUAC_Helper::PasteAsAdmin(activeWnd);
 	}
@@ -279,7 +278,9 @@ void ExternalWindowTracker::SendCopy()
 	CSendKeys send;
 	send.AllKeysUp();
 
-	CString csToApp = GetProcessName(m_activeWnd);
+	HWND activeWnd = GetForegroundWindow();
+
+	CString csToApp = GetProcessName(activeWnd);
 	CString csString = g_Opt.GetCopyString(csToApp);
 	DWORD delay = g_Opt.SendKeysDelay();
 
@@ -289,11 +290,31 @@ void ExternalWindowTracker::SendCopy()
 
 	Log(StrF(_T("Sending copy to app %s key stroke: %s, Delay: %d"), csToApp, csString, delay));
 
-	//give the app some time to take focus before sending paste
-	Sleep(delay);
-	send.SetKeyDownDelay(max(50, delay));
+	bool pasteAsAdmin = false;
 
-	send.SendKeys(csString, true);
+	if (g_Opt.GetPasteAsAdmin())
+	{
+		pasteAsAdmin = CUAC_Helper::PasteAsAdmin(activeWnd);
+	}
+
+	if(pasteAsAdmin &&
+		theApp.UACThreadRunning() == false)
+	{
+		Log(StrF(_T("Passing copy off to uac aware app")));
+		if (theApp.UACCopy() == false)
+		{
+			pasteAsAdmin = false;
+		}
+	}
+
+	if (pasteAsAdmin == false)
+	{
+		//give the app some time to take focus before sending paste
+		Sleep(delay);
+		send.SetKeyDownDelay(max(50, delay));
+
+		send.SendKeys(csString, true);
+	}	
 
 	Log(_T("Post sending copy"));
 }
@@ -305,7 +326,7 @@ void ExternalWindowTracker::SendCut()
 	send.AllKeysUp();
 
 	CString csToApp = GetProcessName(m_activeWnd);
-	CString csString = g_Opt.GetCopyString(csToApp);
+	CString csString = g_Opt.GetCutString(csToApp);
 	DWORD delay = g_Opt.SendKeysDelay();
 
 	Sleep(delay);
@@ -314,11 +335,32 @@ void ExternalWindowTracker::SendCut()
 	  
 	Log(StrF(_T("Sending cut to app %s key stroke: %s, Delay: %d"), csToApp, csString, delay));
 
-	//give the app some time to take focus before sending paste
-	Sleep(delay);
-	send.SetKeyDownDelay(max(50, delay));
 
-	send.SendKeys(csString, true);
+	bool pasteAsAdmin = false;
+
+	if (g_Opt.GetPasteAsAdmin())
+	{
+		pasteAsAdmin = CUAC_Helper::PasteAsAdmin(m_activeWnd);
+	}
+
+	if(pasteAsAdmin &&
+		theApp.UACThreadRunning() == false)
+	{
+		Log(StrF(_T("Passing copy off to uac aware app")));
+		if (theApp.UACCut() == false)
+		{
+			pasteAsAdmin = false;
+		}
+	}
+
+	if (pasteAsAdmin == false)
+	{
+		//give the app some time to take focus before sending paste
+		Sleep(delay);
+		send.SetKeyDownDelay(max(50, delay));
+
+		send.SendKeys(csString, true);
+	}		
 
 	Log(_T("Post sending cut"));
 }
