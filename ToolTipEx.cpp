@@ -67,7 +67,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
         LoadCursor(NULL, IDC_ARROW));
 
     // Create the window - just don't show it yet.
-    if( !CWnd::CreateEx(WS_EX_TOPMOST, szClassName, _T(""), WS_POPUP | WS_BORDER,
+    if( !CWnd::CreateEx(WS_EX_TOPMOST, szClassName, _T(""), WS_POPUP,
        0, 0, 0, 0, pParentWnd->GetSafeHwnd(), 0, NULL))
     {
         return FALSE;
@@ -564,7 +564,7 @@ void CToolTipEx::OnSize(UINT nType, int cx, int cy)
 
 	m_optionsButton.MoveWindow(cr.left, cr.bottom + theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
 
-	this->Invalidate();
+	//this->Invalidate();
 
 	m_DittoWindow.DoSetRegion(this);
 }

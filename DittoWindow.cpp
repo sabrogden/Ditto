@@ -59,10 +59,10 @@ void CDittoWindow::DoCreate(CWnd *pWnd)
 void CDittoWindow::DoNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp)
 {
 	//Decrease the client area
-	lpncsp->rgrc[0].left+= m_lLeftBorder;
-	lpncsp->rgrc[0].top+= m_lTopBorder;
-	lpncsp->rgrc[0].right-= m_lRightBorder;
-	lpncsp->rgrc[0].bottom-= m_lBottomBorder;
+	lpncsp->rgrc[0].left += m_lLeftBorder;
+	lpncsp->rgrc[0].top += m_lTopBorder;
+	lpncsp->rgrc[0].right -= m_lRightBorder;
+	lpncsp->rgrc[0].bottom -= m_lBottomBorder;
 }
 
 UINT CDittoWindow::DoNcHitTest(CWnd *pWnd, CPoint point) 
