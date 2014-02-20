@@ -3616,10 +3616,13 @@ void CQPasteWnd::OnShowGroupsTop()
 
     CRect cr(crList.left, crList.top, crList.left + crList.Width(), crList.top + 200);
 
+	
+
     m_GroupTree.MoveWindow(cr);
     m_GroupTree.m_selectedFolderID = theApp.m_GroupID;
     m_GroupTree.FillTree();
     m_GroupTree.ShowWindow(SW_SHOW);
+	
 
     m_GroupTree.m_bHide = true;
     m_bHideWnd = true;
@@ -3635,6 +3638,8 @@ void CQPasteWnd::OnShowGroupsBottom()
     GetWindowRect(crWindow);
 
     CRect cr(crWindow.left, crWindow.bottom, crWindow.left + crWindow.Width(), crWindow.bottom + 200);
+
+	EnsureWindowVisible(&cr);
 
     m_GroupTree.MoveWindow(cr);
     m_GroupTree.m_selectedFolderID = theApp.m_GroupID;
@@ -3659,7 +3664,7 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
 
     MoveControls();
 
-    if(id >= -1)
+    if(id >= 0)
     {
         //Set the app flag so it does a send message to refresh the list
         //We need to do this because we set the list pos to 0 and with Post
@@ -3672,6 +3677,7 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
         theApp.m_bAsynchronousRefreshView = bItWas;
 
         m_lstHeader.SetListPos(0);
+		m_lstHeader.SetFocus();
     }
 
     CWnd *p = GetFocus();

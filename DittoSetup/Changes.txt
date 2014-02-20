@@ -1,3 +1,27 @@
+3.9
+
+- sticky clips
+- show groups window on global paste of group clip
+- improved High DPI awarness
+- Added option to always show scroll bars
+- option to move clips to the top if pasted from top 10 shortcut keys
+- changed tooltip description window to look like ditto window and allow moving
+- description window position can be locked to always show in the same position
+- Added next and previous commands for showing description
+
+- fixed handle leak when closing ditto
+- show option to search for description, full text, quick paste
+- updated mfc and crt dlls
+- removed auto closing the main window after 24 hours of inactivity
+- added timing messages around paste to find slowness when pasting with large db
+- delete all clip data before compact and repair
+- simple search (not not or ands)
+- create new sticky fields when creating a new database
+- added better scaling for close and collapse icons
+- When opening a group through a global key save the current group so when we close the group we revert back to the last opened group
+- ensure group window is visible when showing
+
+
 3.18.46.0 11-8-12
 - In paste for last 10 keys handle the option to show group clips in the main list
 - fixed issue that prevented last pasted time from getting saved to the db

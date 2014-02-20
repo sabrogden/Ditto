@@ -960,22 +960,54 @@
     <None Include="res\maximize_16_16.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\yellow_star_32_32.png" />
-    <None Include="res\yellow_star_24_24.png" />
-    <None Include="res\yellow_star_20_20.png" />
-    <None Include="res\yellow_star_16_16.png" />
-    <None Include="res\in_folder_32_32.png" />
-    <None Include="res\in_folder_24_24.png" />
-    <None Include="res\in_folder_20_20.png" />
-    <None Include="res\in_folder_16_16.png" />
-    <None Include="res\key_stroke_32_32.png" />
-    <None Include="res\key_stroke_24_24.png" />
-    <None Include="res\key_stroke_20_20.png" />
-    <None Include="res\key_stroke_16_16.png" />
-    <None Include="res\Sticky_32_32.png" />
-    <None Include="res\Sticky_24_24.png" />
-    <None Include="res\Sticky_20_20.png" />
-    <None Include="res\Sticky_16_16.png" />
+    <None Include="res\in_folder_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\in_folder_20_20.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\in_folder_24_24.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\in_folder_32_32.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\key_stroke_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\key_stroke_20_20.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\key_stroke_24_24.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\key_stroke_32_32.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\Sticky_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\Sticky_20_20.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\Sticky_24_24.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\Sticky_32_32.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\yellow_star_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\yellow_star_20_20.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\yellow_star_24_24.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\yellow_star_32_32.png">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">
