@@ -235,6 +235,7 @@ public:
 	bool DoActionPasteSelectedPlainText();
 	bool DoActionMoveClipToGroup();
 	bool DoActionElevatePrivleges();
+	bool DoShowInTaskBar();
 
     // Generated message map functions
 protected:
@@ -374,4 +375,6 @@ protected:
 	afx_msg void OnElevateAppToPasteIntoElevatedApp();
 	afx_msg void OnMoveClipUp();
 	
+public:
+	afx_msg void OnQuickoptionsShowintaskbar();
 };

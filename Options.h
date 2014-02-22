@@ -454,6 +454,9 @@ public:
 
 	static void		SetDescWndSize(CSize size);
 	static void		GetDescWndSize(CSize &size);
+
+	static void		SetShowInTaskBar(BOOL val);
+	static BOOL		GetShowInTaskBar();
 };
 
 // global for easy access and for initialization of fast access variables

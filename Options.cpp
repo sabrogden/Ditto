@@ -2133,3 +2133,13 @@ void CGetSetOptions::SetDescWndSize(CSize size)
 	SetProfileLong("DescWndCX", size.cx);
 	SetProfileLong("DescWndCY", size.cy);
 }
+
+void CGetSetOptions::SetShowInTaskBar(BOOL val)
+{
+	SetProfileLong(_T("ShowInTaskBar"), val);
+}
+
+BOOL CGetSetOptions::GetShowInTaskBar()
+{
+	return GetProfileLong(_T("ShowInTaskBar"), FALSE);
+}

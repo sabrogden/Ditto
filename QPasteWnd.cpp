@@ -206,6 +206,7 @@ ON_COMMAND(ID_MENU_CONTAINSTEXTSEARCHONLY, OnMenuSimpleTextSearch)
 //ON_WM_CTLCOLOR()
 //ON_WM_ERASEBKGND()
 //ON_WM_PAINT()
+ON_COMMAND(ID_QUICKOPTIONS_SHOWINTASKBAR, &CQPasteWnd::OnQuickoptionsShowintaskbar)
 END_MESSAGE_MAP()
 
 
@@ -528,7 +529,10 @@ BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus)
     //Save the size
     SaveWindowSize();
 
-    ShowWindow(SW_HIDE);
+	if (CGetSetOptions::GetShowInTaskBar() == FALSE)
+	{
+		ShowWindow(SW_HIDE);
+	}
 
     //Reset the selection in the search combo
     m_bHandleSearchTextChange = false;
@@ -650,7 +654,7 @@ BOOL CQPasteWnd::OpenID(int id, bool bOnlyLoad_CF_TEXT, CClipFormats *pPasteForm
 
     if(pPasteFormats == NULL)
     {
-        if(theApp.EnterGroupID(id))
+        if(theApp.EnterGroupID(id, FALSE, FALSE))
         {
             Log(_T("Entered group"));
             return TRUE;
@@ -1438,6 +1442,11 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 	if (g_Opt.GetPasteAsAdmin())
 	{
 		pMenu->CheckMenuItem(ID_QUICKOPTIONS_ELEVATEPREVILEGESTOPASTEINTOELEVATEDAPPS, MF_CHECKED);
+	}
+
+	if(g_Opt.GetShowInTaskBar())
+	{
+		pMenu->CheckMenuItem(ID_QUICKOPTIONS_SHOWINTASKBAR, MF_CHECKED);
 	}
 }
 
@@ -2674,7 +2683,8 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 		break;
 	case ActionEnums::ELEVATE_PRIVlEGES:
 		ret = DoActionElevatePrivleges();
-
+	case ActionEnums::SHOW_IN_TASKBAR:
+		ret = DoShowInTaskBar();
 	}
 
 	return ret;
@@ -3162,6 +3172,16 @@ bool CQPasteWnd::DoActionElevatePrivleges()
 
 	return true;
 }
+
+bool CQPasteWnd::DoShowInTaskBar()
+{
+	g_Opt.SetShowInTaskBar(!g_Opt.GetShowInTaskBar());
+
+	theApp.RefreshShowInTaskBar();
+
+	return true;
+}
+
 LRESULT CQPasteWnd::OnCancelFilter(WPARAM wParam, LPARAM lParam)
 {
 	this->DoAction(ActionEnums::CANCELFILTER);
@@ -4243,3 +4263,8 @@ LRESULT CQPasteWnd::OnShowHideScrollBar(WPARAM wParam, LPARAM lParam)
 //
 //	//return CWndEx::OnEraseBkgnd(pDC);
 //}
+
+void CQPasteWnd::OnQuickoptionsShowintaskbar()
+{
+	DoAction(ActionEnums::SHOW_IN_TASKBAR);
+}

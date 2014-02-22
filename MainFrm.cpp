@@ -225,7 +225,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
             m_quickPaste.MoveSelection(true);
             m_bMovedSelectionMoveKeyState = true;
         }
-        else if(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown && m_quickPaste.IsWindowVisibleEx() && g_Opt.GetShowPersistent() == FALSE)
+        else if(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown && m_quickPaste.IsWindowTopLevel() && g_Opt.GetShowPersistent() == FALSE)
         {
             Log(_T("On Show Ditto HotKey, window is alread visible, hiding window"));
             m_quickPaste.HideQPasteWnd();
@@ -972,4 +972,16 @@ LRESULT CMainFrame::OnGlobalClipsClosed(WPARAM wParam, LPARAM lParam)
 	m_pGlobalClips = NULL;
 
 	return 0;
+}
+
+void CMainFrame::RefreshShowInTaskBar()
+{
+	BOOL windowVisible = m_quickPaste.IsWindowVisibleEx();
+
+	m_quickPaste.CloseQPasteWnd();
+
+	if (windowVisible)
+	{
+		m_quickPaste.ShowQPasteWnd(this, true, false, true);
+	}
 }

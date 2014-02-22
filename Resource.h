@@ -87,7 +87,6 @@
 #define IDB_MAXIMIZE_12_12              220
 #define IDB_PNG7                        221
 #define IDB_MAXIMIZE_16_16              221
-#define IDR_DESC_OPTIONS_MENU           238
 #define IDB_YELLOW_STAR_32_32           222
 #define IDB_YELLOW_STAR_24_24           223
 #define IDB_YELLOW_STAR_20_20           224
@@ -105,7 +104,7 @@
 #define IDB_STICKY_20_20                236
 #define IDB_PNG8                        237
 #define IDB_STICKY_16_16                237
-
+#define IDR_DESC_OPTIONS_MENU           238
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -249,6 +248,8 @@
 #define IDC_CHECK_ELEVATE_PRIVILEGES    2041
 #define IDC_CHECK_WIN1                  2042
 #define IDC_STATIC_TITLE                2042
+#define IDC_CHECK_ELEVATE_PRIVILEGES2   2042
+#define IDC_CHECK_SHOW_IN_TASKBAR       2042
 #define IDC_CHECK_WIN2                  2043
 #define IDC_STATIC_DAYS                 2043
 #define IDC_STATIC_DATE2                2043
@@ -440,19 +441,15 @@
 #define ID_FIRST_REMEMBERWINDOWPOSITION 32882
 #define ID_FIRST_SIZEWINDOWTOCONTENT    32883
 #define ID_FIRST_SCALEIMAGESTOFITWINDOW 32884
+#define ID_QUICKOPTIONS_SHOWINTASKBAR   32885
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-<<<<<<< .mine
-#define _APS_NEXT_RESOURCE_VALUE        223
-#define _APS_NEXT_COMMAND_VALUE         32885
-=======
 #define _APS_NEXT_RESOURCE_VALUE        239
-#define _APS_NEXT_COMMAND_VALUE         32882
->>>>>>> .r690
+#define _APS_NEXT_COMMAND_VALUE         32886
 #define _APS_NEXT_CONTROL_VALUE         2101
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

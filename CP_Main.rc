@@ -255,6 +255,7 @@ BEGIN
             MENUITEM "Show Clips That are in Groups in Main List", 32850,MFT_STRING,MFS_ENABLED
             MENUITEM "Prompt to Delete Clip",       32852,MFT_STRING,MFS_ENABLED
             MENUITEM "Elevated privileges to paste into elevated apps", ID_QUICKOPTIONS_ELEVATEPREVILEGESTOPASTEINTOELEVATEDAPPS,MFT_STRING,MFS_ENABLED
+            MENUITEM "Show In Taskbar",             ID_QUICKOPTIONS_SHOWINTASKBAR,MFT_STRING,MFS_ENABLED
         END
         POPUP "Send To",                        65535,MFT_STRING,MFS_ENABLED
         BEGIN
@@ -396,49 +397,48 @@ BEGIN
     PUSHBUTTON      "&Delete",IDC_DELETE,147,30,50,14
 END
 
-IDD_OPTIONS_QUICK_PASTE DIALOGEX 0, 0, 360, 250
+IDD_OPTIONS_QUICK_PASTE DIALOGEX 0, 0, 367, 258
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Quick Paste"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     CONTROL         "Use Ctrl - Num for first ten copy hot keys",IDC_CTRL_CLICK,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,8,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,8,335,10
     CONTROL         "Show text for first ten copy hot keys",IDC_SHOW_TEXT_FOR_FIRST_TEN_HOT_KEYS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,19,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,19,335,10
     CONTROL         "Show leading whitespace",IDC_DESC_SHOW_LEADING_WHITESPACE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,30,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,30,335,10
     LTEXT           "Text Lines per Clip",IDC_STATIC_LINES,18,43,93,8
     EDITTEXT        IDC_LINES_ROW,114,41,19,12,ES_AUTOHSCROLL
     CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,56,155,10
     EDITTEXT        IDC_TRANS_PERC,177,55,19,12,ES_AUTOHSCROLL
     CONTROL         "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)",IDC_SHOW_THUMBNAILS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,68,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,68,335,10
     CONTROL         "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)",IDC_DRAW_RTF,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,78,335,10
-    CONTROL         "Find As You Type",IDC_CHECK_FIND_AS_YOU_TYPE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,88,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,78,335,10
+    CONTROL         "Find As You Type",IDC_CHECK_FIND_AS_YOU_TYPE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,88,335,10
     CONTROL         "Ensure Entire Window is Visible",IDC_CHECK_ENTIRE_WINDOW_IS_VISIBLE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,98,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,98,335,10
     CONTROL         "Show Clips That are in Groups in Main List",IDC_CHECK_SHOW_ALL_IN_MAIN_LIST,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,108,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,108,335,10
     CONTROL         "Prompt when deleting clips",IDC_CHECK_PROMPT_DELETE_CLIP,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,118,335,10
-    COMBOBOX        IDC_COMBO_THEME,59,152,130,95,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "About Theme",IDC_BUTTON_THEME,198,152,106,12
-    PUSHBUTTON      "Font",IDC_BUTTON_FONT,18,170,143,17
-    PUSHBUTTON      "Default Font",IDC_BUTTON_DEFAULT_FAULT,164,173,70,12
-    CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,22,205,93,10
-    CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,22,215,97,10
-    CONTROL         "At Previous Position",IDC_AT_PREVIOUS,"Button",BS_AUTORADIOBUTTON,22,225,117,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,118,335,10
+    COMBOBOX        IDC_COMBO_THEME,59,161,130,95,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "About Theme",IDC_BUTTON_THEME,198,161,106,12
+    PUSHBUTTON      "Font",IDC_BUTTON_FONT,18,179,143,17
+    PUSHBUTTON      "Default Font",IDC_BUTTON_DEFAULT_FAULT,164,182,70,12
+    CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,22,214,93,10
+    CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,22,224,97,10
+    CONTROL         "At Previous Position",IDC_AT_PREVIOUS,"Button",BS_AUTORADIOBUTTON,22,234,117,10
     LTEXT           "%",IDC_STATIC,199,55,8,12,SS_CENTERIMAGE
-    GROUPBOX        "Popup Positioning",IDC_STATIC_POPUP,10,196,138,41
-    LTEXT           "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group",IDC_STATIC_LEG,158,206,154,36
-    GROUPBOX        "List Item Prefix Legend",IDC_STATIC_LEGEND,153,196,165,50
-    LTEXT           "Theme",IDC_STATIC_THEME,18,152,36,12,SS_CENTERIMAGE
+    GROUPBOX        "Popup Positioning",IDC_STATIC_POPUP,10,205,138,41
+    LTEXT           "Theme",IDC_STATIC_THEME,18,161,36,12,SS_CENTERIMAGE
     CONTROL         "Always Show Scroll Bar",IDC_CHECK_SHOW_SCROLL_BAR,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,128,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,128,335,10
     CONTROL         "Elevated privileges to paste into elevated apps",IDC_CHECK_ELEVATE_PRIVILEGES,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,139,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,139,335,10
+    CONTROL         "Show In Taskbar",IDC_CHECK_SHOW_IN_TASKBAR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,150,335,10
 END
 
 IDD_OPTIONS_KEYSTROKES DIALOGEX 0, 0, 350, 206
@@ -837,9 +837,9 @@ BEGIN
     IDD_OPTIONS_QUICK_PASTE, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 353
+        RIGHTMARGIN, 360
         TOPMARGIN, 7
-        BOTTOMMARGIN, 242
+        BOTTOMMARGIN, 250
     END
 
     IDD_OPTIONS_KEYSTROKES, DIALOG

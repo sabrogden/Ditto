@@ -25,6 +25,7 @@ public:
 	void MoveSelection(bool down);
 	void OnKeyStateUp();
 	void SetKeyModiferState(bool bActive);
+	bool IsWindowTopLevel();
 
 	void UpdateFont()		{ if(m_pwndPaste) m_pwndPaste->UpdateFont();	}
 

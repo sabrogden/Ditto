@@ -54,13 +54,7 @@ void CQuickPaste::Create(CWnd *pParent)
 BOOL CQuickPaste::CloseQPasteWnd()
 {
 	if(m_pwndPaste)
-	{
-		if(m_pwndPaste->IsWindowVisible())
-		{
-			Log(_T("CloseQPasteWnd called but the window is visible"));
-			return FALSE;
-		}
-		
+	{		
 		if(m_pwndPaste)
 			m_pwndPaste->CloseWindow();
 
@@ -175,8 +169,14 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	
 	if( !IsWindow(m_pwndPaste->m_hWnd) )
 	{
-		// Create the window   
-		VERIFY( m_pwndPaste->Create(point, pParent) );
+		CWnd *pLocalParent = pParent;
+
+		if(CGetSetOptions::GetShowInTaskBar())
+		{
+			pLocalParent = NULL;
+		}
+
+		VERIFY( m_pwndPaste->Create(point, pLocalParent) );
 	}
 
 	CRect crRect = CRect(point, csSize);
@@ -251,4 +251,14 @@ BOOL CQuickPaste::IsWindowVisibleEx()
 		return IsWindowVisible(m_pwndPaste->m_hWnd);
 
 	return FALSE;
+}
+
+bool CQuickPaste::IsWindowTopLevel()
+{
+	if(m_pwndPaste)
+	{
+		return ::GetForegroundWindow() == m_pwndPaste->GetSafeHwnd();
+	}
+
+	return false;
 }

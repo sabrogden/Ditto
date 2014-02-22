@@ -59,6 +59,7 @@ void COptionsQuickPaste::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COMBO_THEME, m_cbTheme);
 	DDX_Control(pDX, IDC_CHECK_SHOW_SCROLL_BAR, m_alwaysShowScrollBar);
 	DDX_Control(pDX, IDC_CHECK_ELEVATE_PRIVILEGES, m_elevatedPrivileges);
+	DDX_Control(pDX, IDC_CHECK_SHOW_IN_TASKBAR, m_showInTaskBar);
 }
 
 
@@ -103,6 +104,7 @@ BOOL COptionsQuickPaste::OnInitDialog()
 	m_btShowText.SetCheck(CGetSetOptions::GetShowTextForFirstTenHotKeys());
 	m_PromptForDelete.SetCheck(CGetSetOptions::GetPromptWhenDeletingClips());
 	m_elevatedPrivileges.SetCheck(CGetSetOptions::GetPasteAsAdmin());
+	m_showInTaskBar.SetCheck(CGetSetOptions::GetShowInTaskBar());
 
 	if(CGetSetOptions::GetFont(m_LogFont))
 	{		
@@ -150,6 +152,13 @@ BOOL COptionsQuickPaste::OnApply()
 	CGetSetOptions::SetFindAsYouType(m_FindAsYouType.GetCheck());
 	CGetSetOptions::SetPromptWhenDeletingClips(m_PromptForDelete.GetCheck());
 	CGetSetOptions::SetPasteAsAdmin(m_elevatedPrivileges.GetCheck());
+
+	BOOL prevValue = CGetSetOptions::GetShowInTaskBar();
+	CGetSetOptions::SetShowInTaskBar(m_showInTaskBar.GetCheck());
+	if(CGetSetOptions::GetShowInTaskBar() != prevValue)
+	{
+		theApp.RefreshShowInTaskBar();
+	}
 	
 	if(m_LogFont.lfWeight != 0)
 	{

@@ -178,6 +178,8 @@ public:
 	bool UACCut();
 	bool UACThreadRunning();
 
+	void RefreshShowInTaskBar();
+
 public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();

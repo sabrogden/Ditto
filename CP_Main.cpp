@@ -1069,3 +1069,11 @@ bool CCP_MainApp::UACThreadRunning()
 
 	return false;
 }
+
+void CCP_MainApp::RefreshShowInTaskBar()
+{
+	if(m_pMainFrame != NULL)
+	{
+		m_pMainFrame->RefreshShowInTaskBar();
+	}
+}

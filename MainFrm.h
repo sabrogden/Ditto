@@ -71,6 +71,7 @@ public:
     void ShowErrorMessage(CString csTitle, CString csMessage);
     bool CloseAllOpenDialogs();
 	void DoTextOnlyPaste();
+	void RefreshShowInTaskBar();
 
     void ShowEditWnd(CClipIDs &Ids);
     CEditFrameWnd *m_pEditFrameWnd;
