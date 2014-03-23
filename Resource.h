@@ -165,6 +165,7 @@
 #define IDC_BUTTON_FONT                 1040
 #define IDC_BUTTON_NEW_GROUP            1040
 #define IDC_BUTTON_REFRESH              1040
+#define IDC_BUTTON_SEARCH               1040
 #define IDC_PARSE_EDIT                  1041
 #define IDC_SEND_PASTE_MESSAGE          1041
 #define IDC_BUTTON_PROPERTIES           1041
@@ -174,9 +175,13 @@
 #define IDC_CHECK_LOG_SEND_RECIEVE      1042
 #define IDC_ENSURE                      1042
 #define IDC_PLAY_SOUND_1                1042
+#define IDC_CHECK_CLIP_TITLE            1042
 #define IDC_PLAY_SOUND_2                1043
 #define IDC_CHECK_MOVE_CLIPS_ON_PASTE   1043
+#define IDC_CHECK_CREATE_DATE           1043
 #define IDC_PLAY_SOUND_3                1044
+#define IDC_CHECK_LAST_USE_DATE         1044
+#define IDC_CHECK_DATA_FORMAT           1045
 #define IDD_OPTIONS_KEYSTROKES          2001
 #define IDC_HOTKEY                      2002
 #define IDC_DISPLAY_IN_SYSTEMTRAY       2003
@@ -190,6 +195,8 @@
 #define IDD_OPTIONS_UTILITIES           2007
 #define IDC_TRANS_PERC                  2007
 #define IDC_MAXIMUM                     2008
+#define IDD_DELETE_CLIPS                2008
+#define IDD_DELETE_CLIP_DATA            2008
 #define IDC_EXPIRE                      2009
 #define IDC_EXPIRE_AFTER                2010
 #define IDC_DESC_TEXT_SIZE              2011
@@ -330,12 +337,29 @@
 #define IDC_EDIT_PROPERTIES             2100
 #define IDC_PASTE_3                     2101
 #define IDC_WIN_PASTE_3                 2102
+#define IDC_TIME_CREATE_START           2102
 #define IDC_STATIC_COPY_3               2103
+#define IDC_DATE_CREATE_START           2103
 #define IDC_STATIC_PASTE_3              2104
+#define IDC_TIME_CREATE_END             2104
 #define IDC_CUT_3                       2105
+#define IDC_DATE_CREATE_END             2105
 #define IDC_WIN_CUT_3                   2106
+#define IDC_TIME_USE_START              2106
 #define IDC_STATIC_CUT_3                2107
+#define IDC_DATE_USE_START              2107
 #define IDC_BUFFER_GROUP_3              2108
+#define IDC_TIME_USE_END                2108
+#define IDC_DATE_USE_END                2109
+#define IDC_EDIT_CLIP_TITLE             2110
+#define IDC_COMBO_DATA_FORMAT           2111
+#define IDC_STATIC_DB_SIZE              2112
+#define IDC_STATIC_SELECTED_SIZE        2113
+#define IDC_STATIC_TO_DELETE_SIZE       2114
+#define IDC_STATIC_DB_SIZE_TEXT         2115
+#define IDC_STATIC_SELECTED_SIZE_TEXT   2116
+#define IDC_STATIC_TO_DELETE_TEXT       2117
+#define IDC_BUTTON_APPLY                2118
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -442,6 +466,7 @@
 #define ID_FIRST_SIZEWINDOWTOCONTENT    32883
 #define ID_FIRST_SCALEIMAGESTOFITWINDOW 32884
 #define ID_QUICKOPTIONS_SHOWINTASKBAR   32885
+#define ID_FIRST_DELETECLIPDATA         32886
 
 // Next default values for new objects
 // 
@@ -449,8 +474,8 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        239
-#define _APS_NEXT_COMMAND_VALUE         32886
-#define _APS_NEXT_CONTROL_VALUE         2101
+#define _APS_NEXT_COMMAND_VALUE         32887
+#define _APS_NEXT_CONTROL_VALUE         2119
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

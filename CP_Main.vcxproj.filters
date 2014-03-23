@@ -346,6 +346,7 @@
     <ClCompile Include="ActionEnums.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="DeleteClipData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -738,6 +739,7 @@
     <ClInclude Include="ActionEnums.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="DeleteClipData.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

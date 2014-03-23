@@ -61,6 +61,7 @@ public:
     CMainFrmThread m_thread;
 	CClipboardSaveRestore m_textOnlyPaste;
 	CDialog *m_pGlobalClips;
+	CDialog *m_pDeleteClips;
 	CPropertySheet *m_pOptions;
 
     void DoDittoCopyBufferPaste(int nCopyBuffer);
@@ -101,6 +102,7 @@ protected:
 	afx_msg LRESULT OnLoadClipOnClipboard(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSystemTrayMouseMove(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGlobalClipsClosed(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnDeleteClipDataClosed(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnOptionsClosed(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShowOptions(WPARAM wParam, LPARAM lParam);
 DECLARE_MESSAGE_MAP()public:
@@ -110,4 +112,5 @@ DECLARE_MESSAGE_MAP()public:
     afx_msg void OnDestroy();
     afx_msg void OnFirstNewclip();
 	afx_msg void OnFirstGlobalhotkeys();
+	afx_msg void OnFirstDeleteclipdata();
 };

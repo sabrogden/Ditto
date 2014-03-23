@@ -16,6 +16,7 @@
 #include "HotKeys.h"
 #include "GlobalClips.h"
 #include "OptionsSheet.h"
+#include "DeleteClipData.h"
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -58,6 +59,8 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_GLOBAL_CLIPS_CLOSED, OnGlobalClipsClosed)
 	ON_MESSAGE(WM_OPTIONS_CLOSED, OnOptionsClosed)
 	ON_MESSAGE(WM_SHOW_OPTIONS, OnShowOptions)
+	ON_COMMAND(ID_FIRST_DELETECLIPDATA, &CMainFrame::OnFirstDeleteclipdata)
+	ON_MESSAGE(WM_DELETE_CLIPS_CLOSED, OnDeleteClipDataClosed)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -78,6 +81,7 @@ CMainFrame::CMainFrame()
     m_keyModifiersTimerCount = 0;
 	m_pGlobalClips = NULL;
 	m_pOptions = NULL;
+	m_pDeleteClips = NULL;
 }
 
 CMainFrame::~CMainFrame()
@@ -983,5 +987,32 @@ void CMainFrame::RefreshShowInTaskBar()
 	if (windowVisible)
 	{
 		m_quickPaste.ShowQPasteWnd(this, true, false, true);
+	}
+}
+
+LRESULT CMainFrame::OnDeleteClipDataClosed(WPARAM wParam, LPARAM lParam)
+{
+	delete m_pDeleteClips;
+	m_pDeleteClips = NULL;
+
+	return 0;
+}
+
+void CMainFrame::OnFirstDeleteclipdata()
+{
+	if (m_pDeleteClips != NULL)
+	{
+		::SetForegroundWindow(m_pDeleteClips->m_hWnd);
+	}
+	else
+	{
+		m_pDeleteClips = new CDeleteClipData();
+
+		if (m_pDeleteClips != NULL)
+		{
+			((CDeleteClipData*) m_pDeleteClips)->SetNotifyWnd(m_hWnd);
+			m_pDeleteClips->Create(IDD_DELETE_CLIP_DATA, NULL);
+			m_pDeleteClips->ShowWindow(SW_SHOW);
+		}
 	}
 }
