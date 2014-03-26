@@ -98,4 +98,5 @@ public:
 	afx_msg void OnBnClickedCheckClipTitle();
 	afx_msg void OnBnClickedButtonApply();
 	afx_msg void OnBnClickedCancel();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

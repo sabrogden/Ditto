@@ -3828,7 +3828,12 @@ LRESULT CQPasteWnd::OnUpDown(WPARAM wParam, LPARAM lParam)
 		msg.wParam = wParam;
 		msg.message = WM_KEYDOWN;
 
+		//workaround for applying up/down keys, normally these are only done if you are still holding down modifers, fake this out
+		m_bModifersMoveActive = true;
+
 		CheckActions(&msg);
+
+		m_bModifersMoveActive = false;
     }
 
     return TRUE;

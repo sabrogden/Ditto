@@ -74,6 +74,7 @@ BEGIN_MESSAGE_MAP(CDeleteClipData, CDialog)
 	ON_BN_CLICKED(IDC_CHECK_CLIP_TITLE, &CDeleteClipData::OnBnClickedCheckClipTitle)
 	ON_BN_CLICKED(IDC_BUTTON_APPLY, &CDeleteClipData::OnBnClickedButtonApply)
 	ON_BN_CLICKED(IDCANCEL, &CDeleteClipData::OnBnClickedCancel)
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 BOOL CDeleteClipData::OnInitDialog()
@@ -95,7 +96,7 @@ BOOL CDeleteClipData::OnInitDialog()
 
 	InitListCtrlCols();
 
-	LoadItems();
+	SetTimer(1, 500, 0);
 
 	SetDbSize();
 
@@ -131,6 +132,7 @@ void CDeleteClipData::LoadItems()
 	m_data.clear();	
 	m_filteredOut.clear();
 	m_toDelete.clear();
+	UpdateToDeleteSize();
 
 	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT Main.lID, Main.mText, Main.lDate, Main.lastPasteDate, "
 														  _T("Data.lID AS DataID, Data.strClipBoardFormat, length(Data.ooData) AS DataLength ")
@@ -485,7 +487,7 @@ void CDeleteClipData::OnBnClickedCheckClipTitle()
 
 void CDeleteClipData::OnBnClickedButtonApply()
 {
-	if(MessageBox(_T("Delete items?"), _T(""), MB_YESNO) == IDYES)
+	if(MessageBox(_T("Delete items?  This cannot be undone!"), _T(""), MB_YESNO|MB_ICONWARNING) == IDYES)
 	{
 		ApplyDelete();
 	}
@@ -515,9 +517,7 @@ void CDeleteClipData::ApplyDelete()
 		}
 		CATCH_SQLITE_EXCEPTION
 	}
-
 	
-
 	SetDbSize();
 	LoadItems();
 	FilterItems();
@@ -526,4 +526,18 @@ void CDeleteClipData::ApplyDelete()
 void CDeleteClipData::OnBnClickedCancel()
 {
 	DestroyWindow();
+}
+
+
+void CDeleteClipData::OnTimer(UINT_PTR nIDEvent)
+{
+	switch(nIDEvent)
+	{
+	case 1:
+		LoadItems();
+		KillTimer(1);
+		break;
+	}
+
+	CDialog::OnTimer(nIDEvent);
 }
