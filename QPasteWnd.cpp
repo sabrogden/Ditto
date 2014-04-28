@@ -3001,9 +3001,13 @@ bool CQPasteWnd::DoActionCancelFilter()
 
 bool CQPasteWnd::DoActionHomeList()
 {
-	theApp.EnterGroupID(-1); // History
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		theApp.EnterGroupID(-1); // History
+		return true;
+	}
 
-	return true;
+	return false;
 }
 
 bool CQPasteWnd::DoActionBackGroup()

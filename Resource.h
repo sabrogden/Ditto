@@ -360,6 +360,8 @@
 #define IDC_STATIC_SELECTED_SIZE_TEXT   2116
 #define IDC_STATIC_TO_DELETE_TEXT       2117
 #define IDC_BUTTON_APPLY                2118
+#define IDC_STATIC_GROUP_SEARCH         2120
+#define IDC_MFCPROPERTYGRID1            2121
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -475,7 +477,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        239
 #define _APS_NEXT_COMMAND_VALUE         32887
-#define _APS_NEXT_CONTROL_VALUE         2119
+#define _APS_NEXT_CONTROL_VALUE         2122
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

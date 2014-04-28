@@ -942,6 +942,9 @@ void CMainFrame::OnFirstGlobalhotkeys()
 	{
 		m_pGlobalClips = new GlobalClips();
 
+		CAlphaBlend tran;
+		tran.SetTransparent(m_hWnd, 0, 1);
+
 		if(m_pGlobalClips != NULL)
 		{
 			((GlobalClips*)m_pGlobalClips)->SetNotifyWnd(m_hWnd);
@@ -959,6 +962,10 @@ LRESULT CMainFrame::OnShowOptions(WPARAM wParam, LPARAM lParam)
 
 LRESULT CMainFrame::OnOptionsClosed(WPARAM wParam, LPARAM lParam)
 {
+	m_TrayIcon.MinimiseToTray(this);
+	CAlphaBlend tran;
+	tran.SetTransparent(m_hWnd, 255, 0);
+
 	delete m_pOptions;
 	m_pOptions = NULL;
 
@@ -972,6 +979,10 @@ LRESULT CMainFrame::OnOptionsClosed(WPARAM wParam, LPARAM lParam)
 
 LRESULT CMainFrame::OnGlobalClipsClosed(WPARAM wParam, LPARAM lParam)
 {
+	m_TrayIcon.MinimiseToTray(this);
+	CAlphaBlend tran;
+	tran.SetTransparent(m_hWnd, 255, 0);
+
 	delete m_pGlobalClips;
 	m_pGlobalClips = NULL;
 
@@ -992,6 +1003,10 @@ void CMainFrame::RefreshShowInTaskBar()
 
 LRESULT CMainFrame::OnDeleteClipDataClosed(WPARAM wParam, LPARAM lParam)
 {
+	m_TrayIcon.MinimiseToTray(this);
+	CAlphaBlend tran;
+	tran.SetTransparent(m_hWnd, 255, 0);
+
 	delete m_pDeleteClips;
 	m_pDeleteClips = NULL;
 
@@ -1000,6 +1015,7 @@ LRESULT CMainFrame::OnDeleteClipDataClosed(WPARAM wParam, LPARAM lParam)
 
 void CMainFrame::OnFirstDeleteclipdata()
 {
+	//this->ShowWindow(SW_HIDE);
 	if (m_pDeleteClips != NULL)
 	{
 		::SetForegroundWindow(m_pDeleteClips->m_hWnd);
@@ -1007,6 +1023,9 @@ void CMainFrame::OnFirstDeleteclipdata()
 	else
 	{
 		m_pDeleteClips = new CDeleteClipData();
+
+		CAlphaBlend tran;
+		tran.SetTransparent(m_hWnd, 0, 1);
 
 		if (m_pDeleteClips != NULL)
 		{
