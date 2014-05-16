@@ -94,6 +94,7 @@ public:
 	afx_msg void OnLvnGetdispinfoList2(NMHDR *pNMHDR, LRESULT *pResult);
 	CString m_databaseSize;
 	CString m_selectedSize;
+	CString m_selectedCount;
 	CString m_toDeleteSize;
 	afx_msg void OnBnClickedCheckClipTitle();
 	afx_msg void OnBnClickedButtonApply();

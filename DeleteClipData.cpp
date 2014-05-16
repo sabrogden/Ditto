@@ -30,6 +30,7 @@ CDeleteClipData::CDeleteClipData(CWnd* pParent /*=NULL*/)
 	, m_usedDateEnd(COleDateTime::GetCurrentTime())
 	, m_databaseSize(_T(""))
 	, m_selectedSize(_T(""))
+	, m_selectedCount(_T(""))
 {
 	m_applyingDelete = false;
 	m_cancelDelete = false;
@@ -60,6 +61,7 @@ void CDeleteClipData::DoDataExchange(CDataExchange* pDX)
 	DDX_DateTimeCtrl(pDX, IDC_DATE_USE_END, m_usedDateEnd);
 	DDX_Text(pDX, IDC_STATIC_DB_SIZE, m_databaseSize);
 	DDX_Text(pDX, IDC_STATIC_SELECTED_SIZE, m_selectedSize);
+	DDX_Text(pDX, IDC_STATIC_SELECTED_COUNT, m_selectedCount);
 }
 
 
@@ -398,6 +400,7 @@ void CDeleteClipData::OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult)
 	
 	POSITION pos = m_List.GetFirstSelectedItemPosition();
 	__int64 selectedDataSize = 0;
+	int selectedCount = 0;
 
 	if (pos != NULL)
 	{
@@ -408,6 +411,7 @@ void CDeleteClipData::OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult)
 			if(row >= 0 && row < m_data.size())
 			{
 				selectedDataSize += m_data[row].m_dataSize;
+				selectedCount++;
 			}
 		}
 	}
@@ -417,6 +421,11 @@ void CDeleteClipData::OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult)
 	StrFormatByteSize(selectedDataSize, szFileSize, MAX_FILE_SIZE_BUFFER);
 
 	m_selectedSize = szFileSize;
+
+	CString count;
+	count.Format(_T("%d"), selectedCount);
+
+	m_selectedCount = count;
 
 	UpdateData(0);
 

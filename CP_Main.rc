@@ -796,6 +796,8 @@ BEGIN
     LTEXT           "<  --   >",IDC_STATIC,263,42,27,8
     LTEXT           "<  --   >",IDC_STATIC,263,76,27,8
     GROUPBOX        "Search Options",IDC_STATIC_GROUP_SEARCH,4,15,661,83
+    LTEXT           "Selected Count:",IDC_STATIC_SELECTED_SIZE_TEXT2,207,300,52,8
+    LTEXT           "Count",IDC_STATIC_SELECTED_COUNT,259,300,39,8
 END
 
 
