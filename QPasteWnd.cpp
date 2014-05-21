@@ -627,7 +627,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 		::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
 	}
 
-    SetKeyModiferState(true);
+    //SetKeyModiferState(true);
 
 	Log(StrF(_T("END - ShowQPasteWindow - Fill List: %d, array count: %d"), bFillList, m_listItems.size()));
 

@@ -190,6 +190,8 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	{
 		m_pwndPaste->MoveWindow(crRect);
 	}
+
+	m_pwndPaste->SetKeyModiferState(bFromKeyboard);
 	
 	// Show the window
 	m_pwndPaste->ShowWindow(SW_SHOW);

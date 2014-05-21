@@ -238,11 +238,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
         {
             Log(_T("On Show Ditto HotKey, showing window"));
 
-            m_keyModifiersTimerCount = 0;
-            m_bMovedSelectionMoveKeyState = false;
-            m_startKeyStateTime = GetTickCount();
-            m_keyStateModifiers = CAccels::GetKeyStateModifiers();
-            SetTimer(KEY_STATE_MODIFIERS, 50, NULL);
+			StartKeyModifyerTimer();
 
 			//Before we show our window find the current focused window for paste into
 			theApp.m_activeWnd.TrackActiveWnd(true);
@@ -419,6 +415,15 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
     CATCH_SQLITE_EXCEPTION
 }
 
+void CMainFrame::StartKeyModifyerTimer()
+{
+	m_keyModifiersTimerCount = 0;
+	m_bMovedSelectionMoveKeyState = false;
+	m_startKeyStateTime = GetTickCount();
+	m_keyStateModifiers = CAccels::GetKeyStateModifiers();
+	SetTimer(KEY_STATE_MODIFIERS, 50, NULL);
+}
+
 void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarget, BOOL sendPaste)
 {
 	try
@@ -426,6 +431,9 @@ void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarg
 		if (theApp.EnterGroupID(dbId, FALSE, TRUE))
 		{			
 			theApp.m_activeWnd.TrackActiveWnd(true);
+			
+			StartKeyModifyerTimer();
+
 			m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
 		}
 		else
