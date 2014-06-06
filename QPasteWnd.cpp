@@ -260,7 +260,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_lstHeader.ShowWindow(SW_SHOW);
 
     ((CWnd*) &m_GroupTree)->CreateEx(NULL, _T("SysTreeView32"), NULL, WS_BORDER | TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS, CRect(0, 0, 100, 100), this, 0);
-    m_GroupTree.ModifyStyle(WS_CAPTION, WS_BORDER);
+	m_GroupTree.ModifyStyle(WS_CAPTION | WS_TABSTOP, WS_BORDER);
 
     m_GroupTree.SetNotificationWndEx(m_hWnd);
     m_GroupTree.ShowWindow(SW_HIDE);
@@ -270,14 +270,17 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_ShowGroupsFolderBottom.LoadStdImageDPI(IDB_OPEN_FOLDER_16_16, IDB_OPEN_FOLDER_20_20, IDB_OPEN_FOLDER_24_24, IDB_OPEN_FOLDER_32_32, _T("PNG"));
     m_ShowGroupsFolderBottom.ShowWindow(SW_SHOW);
 	m_ShowGroupsFolderBottom.SetToolTipText(theApp.m_Language.GetString(_T("GroupsTooltip"), _T("Groups")));
+	m_ShowGroupsFolderBottom.ModifyStyle(WS_TABSTOP, 0);
 
     m_BackButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_BACK_BUTTON);
 	m_BackButton.LoadStdImageDPI(IDB_LEFT_ARROW_16_16, IDB_LEFT_ARROW_20_20, IDB_LEFT_ARROW_24_24, IDB_LEFT_ARROW_32_32, _T("PNG"));
+	m_BackButton.ModifyStyle(WS_TABSTOP, 0);
     m_BackButton.ShowWindow(SW_SHOW);
 
 	m_searchOptionsButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SEARCH_DESCRIPTION_BUTTON);
 	m_searchOptionsButton.LoadStdImageDPI(IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, IDB_COG_32_32, _T("PNG"));
 	m_searchOptionsButton.SetToolTipText(theApp.m_Language.GetString(_T("SearchOptionsTooltip"), _T("Search options")));
+	m_searchOptionsButton.ModifyStyle(WS_TABSTOP, 0);
 	m_searchOptionsButton.ShowWindow(SW_SHOW);
 
     m_stGroup.Create(_T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, ID_GROUP_TEXT);
