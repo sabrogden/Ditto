@@ -2686,8 +2686,10 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 		break;
 	case ActionEnums::ELEVATE_PRIVlEGES:
 		ret = DoActionElevatePrivleges();
+		break;
 	case ActionEnums::SHOW_IN_TASKBAR:
 		ret = DoShowInTaskBar();
+		break;
 	}
 
 	return ret;

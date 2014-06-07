@@ -5,7 +5,8 @@ public:
 	ActionEnums();
 	~ActionEnums();
 
-	enum ActionEnumValues{ 
+	enum ActionEnumValues
+	{ 
 		SHOWDESCRIPTION,
 		NEXTDESCRIPTION,
 		PREVDESCRIPTION,

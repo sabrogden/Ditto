@@ -35,7 +35,7 @@
 			<Files>%branch%</Files>
 			<Host>svn.code.sf.net</Host>
 			<LocalPath>%workDir%</LocalPath>
-			<Password encrypted='1'>MM3MPOs8MuGmarG4tqE=</Password>
+			<Password encrypted='1'>Mc3MPOw8Z+GFarW4o6Gvgz39WZWlLg==</Password>
 			<Protocol>http</Protocol>
 			<Repository>/p/ditto-cp/code/</Repository>
 			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
@@ -321,7 +321,7 @@ var sc_security="b3f57099";
 			<Files>%branch%</Files>
 			<Host>svn.code.sf.net</Host>
 			<LocalPath>%workDir%</LocalPath>
-			<Password encrypted='1'>MM3MPOs8MuGmarG4tqE=</Password>
+			<Password encrypted='1'>Mc3MPOw8Z+GFarW4o6Gvgz39WZWlLg==</Password>
 			<Protocol>http</Protocol>
 			<Repository>/p/ditto-cp/code/</Repository>
 			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
@@ -358,7 +358,7 @@ var sc_security="b3f57099";
 			<Filename>%workDir%\%branch%\DittoSetup\output\</Filename>
 			<Incremental type='11'>-1</Incremental>
 			<Logging type='3'>6</Logging>
-			<Password encrypted='1'>Ps3BPOY8ceG7ar24rKGpgw==</Password>
+			<Password encrypted='1'>Mc3MPOw8Z+GFarW4o6Gvgz39WZWlLg==</Password>
 			<Percent>10</Percent>
 			<Port>22</Port>
 			<Retries>0</Retries>
