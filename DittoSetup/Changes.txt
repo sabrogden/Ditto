@@ -1,5 +1,7 @@
 3.9
 
+- elevate ditto privileges if pasting into a higher privileged application (before the paste would fail)
+- Added Delete clip data window (task bar icon - right click - delete clip data)
 - sticky clips
 - show groups window on global paste of group clip
 - improved High DPI awarness
@@ -8,7 +10,6 @@
 - changed tooltip description window to look like ditto window and allow moving
 - description window position can be locked to always show in the same position
 - Added next and previous commands for showing description
-
 - fixed handle leak when closing ditto
 - show option to search for description, full text, quick paste
 - updated mfc and crt dlls
