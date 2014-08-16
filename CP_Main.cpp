@@ -33,6 +33,8 @@ public:
 		m_bU3Stop = FALSE;
 		m_bU3Install = FALSE;
 		m_uacPID = 0;
+		m_bOpenWindow = FALSE;
+		m_bCloseWindow = FALSE;
 	}
 
  	virtual void ParseParam(const TCHAR* pszParam, BOOL bFlag, BOOL bLast)
@@ -69,6 +71,14 @@ public:
 					m_uacPID = ATOI(pid);
 				}
 			}
+			else if(STRICMP(pszParam, _T("open")) == 0)
+			{
+				m_bOpenWindow = TRUE;
+			}
+			else if(STRICMP(pszParam, _T("close")) == 0)
+			{
+				m_bCloseWindow = TRUE;
+			}
   		}
  
 		CCommandLineInfo::ParseParam(pszParam, bFlag, bLast);
@@ -80,6 +90,8 @@ public:
 	BOOL m_bU3Stop;
 	BOOL m_bU3Install;
 	int m_uacPID;
+	BOOL m_bCloseWindow;
+	BOOL m_bOpenWindow;
 };
 
 CCP_MainApp theApp;
@@ -233,6 +245,22 @@ BOOL CCP_MainApp::InitInstance()
 		{
 			m_connectOnStartup = FALSE;
 		}
+	}
+	else if(cmdInfo.m_bOpenWindow || cmdInfo.m_bCloseWindow)
+	{
+		//First get the saved hwnd and send it a message
+		//If ditt is running then this will return 1, meening the running ditto process
+		//handled this message
+		//If it didn't handle the message(ditto is not running) then startup this processes of ditto 
+		//disconnected from the clipboard
+		LRESULT ret = 0;
+		HWND hWnd = (HWND)CGetSetOptions::GetMainHWND();
+		if(hWnd)
+		{
+			ret = ::SendMessage(hWnd, WM_OPEN_CLOSE_WINDWOW, cmdInfo.m_bOpenWindow, cmdInfo.m_bCloseWindow);
+		}
+
+		return FALSE;		
 	}
 
 	CInternetUpdate update;

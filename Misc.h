@@ -117,6 +117,7 @@ CString GetProcessName(HWND hWnd);
 #define WM_OPTIONS_CLOSED	WM_USER	+ 219
 #define WM_SHOW_OPTIONS	WM_USER	+ 220
 #define WM_DELETE_CLIPS_CLOSED	WM_USER	+ 221
+#define WM_OPEN_CLOSE_WINDWOW WM_USER + 222
 
 #if !defined(_BITSET_)
 #	include <bitset>

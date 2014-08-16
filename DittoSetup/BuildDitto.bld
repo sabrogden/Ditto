@@ -6,6 +6,13 @@
 			<MacroValue>%workDir%\%branch%\Log.txt</MacroValue>
 			<name>Default Log File</name>
 		</step>
+		<step action='Read INI'>
+			<Filename>%projdir%\pw.ini</Filename>
+			<Macro>sf_pw</Macro>
+			<Section>sf</Section>
+			<ValueName>pw</ValueName>
+			<name>Read INI</name>
+		</step>
 		<step action='Group'>
 			<name>Project steps</name>
 		</step>
@@ -35,7 +42,7 @@
 			<Files>%branch%</Files>
 			<Host>svn.code.sf.net</Host>
 			<LocalPath>%workDir%</LocalPath>
-			<Password encrypted='1'>Mc3MPOw8Z+GFarW4o6Gvgz39WZWlLg==</Password>
+			<Password encrypted='1'>WM3ePOE8XeG4aqO46qE=</Password>
 			<Protocol>http</Protocol>
 			<Repository>/p/ditto-cp/code/</Repository>
 			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
@@ -321,12 +328,12 @@ var sc_security="b3f57099";
 			<Files>%branch%</Files>
 			<Host>svn.code.sf.net</Host>
 			<LocalPath>%workDir%</LocalPath>
-			<Password encrypted='1'>Mc3MPOw8Z+GFarW4o6Gvgz39WZWlLg==</Password>
+			<Password encrypted='1'>WM3ePOE8XeG4aqO46qE=</Password>
 			<Protocol>http</Protocol>
 			<Repository>/p/ditto-cp/code/</Repository>
 			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
 			<Subcommand>log</Subcommand>
-			<Switches>-r {2012-11-9}:{2013-12-31}</Switches>
+			<Switches>-r {2014-06-06}:{2016-12-31}</Switches>
 			<Username>sabrogden</Username>
 			<indent type='3'>2</indent>
 			<name>SVN Log Messages</name>
@@ -358,7 +365,7 @@ var sc_security="b3f57099";
 			<Filename>%workDir%\%branch%\DittoSetup\output\</Filename>
 			<Incremental type='11'>-1</Incremental>
 			<Logging type='3'>6</Logging>
-			<Password encrypted='1'>Mc3MPOw8Z+GFarW4o6Gvgz39WZWlLg==</Password>
+			<Password encrypted='1'>WM3ePOE8XeG4aqO46qE=</Password>
 			<Percent>10</Percent>
 			<Port>22</Port>
 			<Retries>0</Retries>
@@ -381,7 +388,7 @@ var sc_security="b3f57099";
 			<value>3</value>
 		</macro>
 		<macro name='verMinor'>
-			<value>19</value>
+			<value>20</value>
 		</macro>
 		<macro name='verRevision'>
 			<value>0</value>

@@ -53,6 +53,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_WM_DESTROY()
 	ON_COMMAND(ID_FIRST_NEWCLIP, OnFirstNewclip)
 	ON_MESSAGE(WM_SET_CONNECTED, OnSetConnected)
+	ON_MESSAGE(WM_OPEN_CLOSE_WINDWOW, OnOpenCloseWindow)
 	ON_MESSAGE(WM_LOAD_ClIP_ON_CLIPBOARD, OnLoadClipOnClipboard)
 	ON_MESSAGE(WM_TRAY_MENU_MOUSE_MOVE, OnSystemTrayMouseMove)
 	ON_COMMAND(ID_FIRST_GLOBALHOTKEYS, &CMainFrame::OnFirstGlobalhotkeys)
@@ -902,6 +903,20 @@ LRESULT CMainFrame::OnSetConnected(WPARAM wParam, LPARAM lParam)
     }
 
     return TRUE;
+}
+
+LRESULT CMainFrame::OnOpenCloseWindow(WPARAM wParam, LPARAM lParam)
+{
+	if(wParam)
+	{
+		m_quickPaste.ShowQPasteWnd(this, false, false, FALSE);
+	}
+	else if(lParam)
+	{
+		m_quickPaste.HideQPasteWnd();
+	}
+
+	return TRUE;
 }
 
 void CMainFrame::OnDestroy()

@@ -102,6 +102,7 @@ protected:
     afx_msg LRESULT OnCustomizeTrayMenu(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEditWndClose(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnSetConnected(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnOpenCloseWindow(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnLoadClipOnClipboard(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSystemTrayMouseMove(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGlobalClipsClosed(WPARAM wParam, LPARAM lParam);
