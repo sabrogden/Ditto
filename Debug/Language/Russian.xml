@@ -102,7 +102,7 @@
 		<Item English_Text = "Allow Duplicates" ID = "1037">Допускать дублирование объектов</Item>
 		<Item English_Text = "Update Clip Order On Paste" ID = "1038">Обновлять время объекта при вставке</Item>
 		<Item English_Text = "Save Multi-Pastes" ID = "1039">Сохранять многократные вставки</Item>
-		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Скрывать быструю вставку по горячей клавише, если она открыта</Item>
+		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Скрывать окно Ditto горячей клавишей, если оно открыто</Item>
 		<Item English_Text = "Amount of text to save for description" ID = "2044">Размер текста для описания</Item>
 		<Item English_Text = "On copy play the sound" ID = "2045">Воспроизводить звук после вставки</Item>
 		<Item English_Text = "Play" ID = "2034">Тест</Item>
@@ -114,13 +114,13 @@
 		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">Игнорировать копии, сделанные через Х мс после последней (1000 мс = 1 с)</Item>
 		<Item English_Text = "About Language" ID = "2073">Сведения о языке</Item>
 		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Проверять, чтобы Ditto всегда был подключен к буферу обмена</Item>
-		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Общее</Item>
-		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090"></Item>
+		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Общие</Item>
+		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090">Разделитель для вставок ([LF] = новая строка)</Item>
 		
 		//New item added 3/1/11
-		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098"></Item>
-		<Item English_Text = "Include" ID = "2095"></Item>
-		<Item English_Text = "Exclude" ID = "2096"></Item>
+		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098">Разрешённые приложения для копирования (разделитель — ;)</Item>
+		<Item English_Text = "Include" ID = "2095">Включить</Item>
+		<Item English_Text = "Exclude" ID = "2096">Исключить</Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "&Add" ID = "1015">&Добавить</Item>
@@ -154,7 +154,7 @@
 		<Item English_Text = "Win" ID = "2039">Win</Item>
 		<Item English_Text = "Win" ID = "2040">Win</Item>
 		<Item English_Text = "Win" ID = "2041">Win</Item>
-		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Установите флажок «Win», чтобы добавить в комбинацию клавишу Windows.</Item>
+		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Флажок «Win» добавляет в комбинацию клавишу Windows.</Item>
 		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">Горячие клавиши</Item>
 		
 		//New item added in 3.15.1 8/18/07
@@ -192,7 +192,7 @@
 	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>
 		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Объект будет принят и помещён в буфер обмена, если IP-адрес или имя компьютера-отправителя будет в этом списке. В противном случае объект будет помещён в список сохранённых.</Item>
-		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP-адреса или имена компьютеров (через ',')</Item>
+		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP-адреса или имена компьютеров (через «,»)</Item>
 		<Item English_Text = "Disable Recieving Clips" ID = "2026">отключить приём объектов</Item>
 		<Item English_Text = "Network Password" ID = "2054">Сетевой пароль</Item>
 		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">Чтобы принимать объекты с компьютеров с разными сетевыми паролями, укажите несколько паролей через запятую.</Item>
@@ -201,9 +201,9 @@
 		<Item English_Text = "Log Send Receive Commands" ID = "1042">Записывать в журнал команды приёма-передачи</Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Друзья</Item>
 		//Added in 9-11-09
-		<Item English_Text = "Send All Copies" ID = "Send_All_Copies"></Item>
-        	<Item English_Text = "IP/Name" ID = "IP_Name"></Item>
-        	<Item English_Text = "Descriptions" ID = "Descriptions"></Item>
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">Отправка всех копий</Item>
+        	<Item English_Text = "IP/Name" ID = "IP_Name">IP или имя</Item>
+        	<Item English_Text = "Descriptions" ID = "Descriptions">Описания</Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015">отправлять ему все копии</Item>
@@ -298,9 +298,9 @@
 		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">Исключение при сохранении именованной копии</Item>
 		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">Ditto не получил копию</Item> 
 		//New strings added in 3.17 2-28-10
-		<Item English_Text = "Add-Ins" ID = "Add_Ins"></Item> 
+		<Item English_Text = "Add-Ins" ID = "Add_Ins">Дополнения</Item> 
 		
-		<Item English_Text = "Copy Buffers" ID = "CopyBuffers"></Item>
+		<Item English_Text = "Copy Buffers" ID = "CopyBuffers">Буферы копирования</Item>
 				
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
@@ -309,7 +309,7 @@
 		<Item English_Text = "Apply" ID = "12321">Применить</Item>
 	</Ditto_Options_Sheet>
 	<Ditto_Tray_Icon_Menu>
-		<Item English_Text = "Show Quick Paste" ID = "32773">Показать быструю вставку</Item>
+		<Item English_Text = "Show Quick Paste" ID = "32773">Показать окно вставки</Item>
 		<Item English_Text = "Options" ID = "32771">Параметры</Item>
 		<Item English_Text = "Help" ID = "32843">Справка</Item>
 		<Item English_Text = "Exit" ID = "32772">Выход</Item>
@@ -319,46 +319,46 @@
 		<Item English_Text = "New Clip" ID = "32868">Создать объект</Item>
 		
 		//Added 12/10/11
-		<Item English_Text = "Global Hot Keys" ID = "32872"></Item>
+		<Item English_Text = "Global Hot Keys" ID = "32872">Глобальные горячие клавиши</Item>
 	</Ditto_Tray_Icon_Menu>
 	//Added in 9-11-09
 	<Ditto_Options_CopyBuffers>
-		<Item English_Text = "Copy Buffer 1" ID = "2088"></Item>
-		<Item English_Text = "Copy" ID = "2079"></Item>
-		<Item English_Text = "Paste" ID = "2080"></Item>
-		<Item English_Text = "Cut" ID = "2081"></Item>
-		<Item English_Text = "Play Sound on Copy" ID = "1042"></Item>
-		<Item English_Text = "Win" ID = "2085"></Item>
-		<Item English_Text = "Win" ID = "2086"></Item>
-		<Item English_Text = "Win" ID = "2087"></Item>
+		<Item English_Text = "Copy Buffer 1" ID = "2088">Буфер копирования 1</Item>
+		<Item English_Text = "Copy" ID = "2079">Копировать</Item>
+		<Item English_Text = "Paste" ID = "2080">Вставить</Item>
+		<Item English_Text = "Cut" ID = "2081">Вырезать</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042">Звук копирования</Item>
+		<Item English_Text = "Win" ID = "2085">Win</Item>
+		<Item English_Text = "Win" ID = "2086">Win</Item>
+		<Item English_Text = "Win" ID = "2087">Win</Item>
 		
-		<Item English_Text = "Copy Buffer 2" ID = "2098"></Item>
-		<Item English_Text = "Copy" ID = "2093"></Item>
-		<Item English_Text = "Paste" ID = "2094"></Item>
-		<Item English_Text = "Cut" ID = "2097"></Item>
-		<Item English_Text = "Play Sound on Copy" ID = "1043"></Item>
-		<Item English_Text = "Win" ID = "2090"></Item>
-		<Item English_Text = "Win" ID = "2092"></Item>
-		<Item English_Text = "Win" ID = "2096"></Item>
+		<Item English_Text = "Copy Buffer 2" ID = "2098">Буфер копирования 2</Item>
+		<Item English_Text = "Copy" ID = "2093">Копировать</Item>
+		<Item English_Text = "Paste" ID = "2094">Вставить</Item>
+		<Item English_Text = "Cut" ID = "2097">Вырезать</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043">Звук копирования</Item>
+		<Item English_Text = "Win" ID = "2090">Win</Item>
+		<Item English_Text = "Win" ID = "2092">Win</Item>
+		<Item English_Text = "Win" ID = "2096">Win</Item>
 		
-		<Item English_Text = "Copy Buffer 3" ID = "2108"></Item>
-		<Item English_Text = "Copy" ID = "2103"></Item>
-		<Item English_Text = "Paste" ID = "2104"></Item>
-		<Item English_Text = "Cut" ID = "2107"></Item>
-		<Item English_Text = "Play Sound on Copy" ID = "1044"></Item>
-		<Item English_Text = "Win" ID = "2100"></Item>
-		<Item English_Text = "Win" ID = "2102"></Item>
-		<Item English_Text = "Win" ID = "2106"></Item>
+		<Item English_Text = "Copy Buffer 3" ID = "2108">Буфер копирования 3</Item>
+		<Item English_Text = "Copy" ID = "2103">Копировать</Item>
+		<Item English_Text = "Paste" ID = "2104">Вставить</Item>
+		<Item English_Text = "Cut" ID = "2107">Вырезать</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044">Звук копирования</Item>
+		<Item English_Text = "Win" ID = "2100">Win</Item>
+		<Item English_Text = "Win" ID = "2102">Win</Item>
+		<Item English_Text = "Win" ID = "2106">Win</Item>
 	</Ditto_Options_CopyBuffers>
 	
 	<Ditto_GlobalHotKeys>
-		<Item English_Text = "Global Hot Keys" ID = "-1"></Item>
-		<Item English_Text = "Close" ID = "2"></Item>
-		<Item English_Text = "(Clip) " ID = "(Clip)"></Item>
-		<Item English_Text = "Error" ID = "Error"></Item>
-		<Item English_Text = "Yes" ID = "Yes"></Item>
-		<Item English_Text = "Description" ID = "Description"></Item>
-		<Item English_Text = "HotKey" ID = "HotKey"></Item>
-		<Item English_Text = "Registered" ID = "Registered"></Item>
+		<Item English_Text = "Global Hot Keys" ID = "-1">Глобальные горячие клавиши</Item>
+		<Item English_Text = "Close" ID = "2">Закрыть</Item>
+		<Item English_Text = "(Clip) " ID = "(Clip)">(Фрагмент)</Item>
+		<Item English_Text = "Error" ID = "Error">Ошибка</Item>
+		<Item English_Text = "Yes" ID = "Yes">Да</Item>
+		<Item English_Text = "Description" ID = "Description">Описание</Item>
+		<Item English_Text = "HotKey" ID = "HotKey">Горячая клавиша</Item>
+		<Item English_Text = "Registered" ID = "Registered">Зарегистрировано</Item>
 	</Ditto_GlobalHotKeys>
 </Ditto_Language_File>
