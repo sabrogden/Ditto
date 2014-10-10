@@ -1028,7 +1028,7 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 				
 				CDC *pDC = GetDC();;
 
-				CBitmapHelper::GetCBitmap(&Clip, pDC, pBitMap, (rcItem.Width() * 2));
+				CBitmapHelper::GetCBitmap(&Clip, pDC, pBitMap, MAXINT);
 
 				ReleaseDC(pDC);
 

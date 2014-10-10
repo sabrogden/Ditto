@@ -154,6 +154,8 @@ BOOL CToolTipEx::Show(CPoint point)
 		rect.right += CAPTION_BORDER * 2;
 		rect.bottom += CAPTION_BORDER * 2;
 
+		
+
 		CRect rcScreen;
 
 		ClientToScreen(rect);
@@ -184,26 +186,30 @@ BOOL CToolTipEx::Show(CPoint point)
 		rect.top = point.y;
 		rect.right = rect.left + lWidth;
 		rect.bottom = rect.top + lHeight;
-
-		if(rect.right > rcScreen.right)
+		
+		if (rect.right > rcScreen.right)
 		{
 			int diff = rect.right - rcScreen.right;
 
 			int newLeft = rect.left - diff;
-			if(newLeft > 0)
+			if (newLeft > rcScreen.left)
 			{
 				rect.left = newLeft;
+			}
+			else
+			{
+				rect.left = rcScreen.left;
 			}
 
 			rect.right = rcScreen.right;
 			m_reducedWindowSize = true;
 		}
-		if(rect.bottom > rcScreen.bottom)
+		if (rect.bottom > rcScreen.bottom)
 		{
 			int diff = rect.bottom - rcScreen.bottom;
 
 			int newTop = rect.top - diff;
-			if(newTop > 0)
+			if (newTop > 0)
 			{
 				rect.top = newTop;
 			}
@@ -271,7 +277,8 @@ void CToolTipEx::OnPaint()
 
 		if(CGetSetOptions::GetScaleImagesToDescWindow())
 		{
-			dc.StretchBlt(rect.left, rect.top, rect.Width(), rect.Height(), &MemDc, 0, 0, nWidth, nWidth, SRCCOPY);
+			dc.StretchBlt(rect.left, rect.top, rect.Width(), rect.Height(), &MemDc, 0, 0, nWidth, nHeight, SRCCOPY);
+			/OutputDebugString(StrF(_T("scaling image, window size %d/%d, image %d/%d\n"), min(nWidth, rect.Width()), min(nHeight, rect.Height()), nWidth, nHeight));
 		}
 		else
 		{
@@ -544,6 +551,9 @@ void CToolTipEx::SetBitmap(CBitmap *pBitmap)
     DELETE_BITMAP 
 
     m_pBitmap = pBitmap;
+
+	int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
+	int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
 }
 
 void CToolTipEx::OnSize(UINT nType, int cx, int cy)
@@ -555,8 +565,6 @@ void CToolTipEx::OnSize(UINT nType, int cx, int cy)
         return ;
     }
 
-	
-
     CRect cr;
     GetClientRect(cr);
     cr.DeflateRect(0, 0, 0, theApp.m_metrics.ScaleY(21));
@@ -564,8 +572,7 @@ void CToolTipEx::OnSize(UINT nType, int cx, int cy)
 
 	m_optionsButton.MoveWindow(cr.left, cr.bottom + theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
 
-	//this->Invalidate();
-
+	this->Invalidate();
 	m_DittoWindow.DoSetRegion(this);
 }
 

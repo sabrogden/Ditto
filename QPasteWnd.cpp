@@ -3839,7 +3839,8 @@ LRESULT CQPasteWnd::OnUpDown(WPARAM wParam, LPARAM lParam)
     if(m_lstHeader.HandleKeyDown(wParam, lParam) == FALSE)
     {
 		MSG msg;
-		msg.lParam = lParam;
+		//Workaround for allow holding down arrow keys while in the search control
+		msg.lParam = lParam & (~0x40000000);
 		msg.wParam = wParam;
 		msg.message = WM_KEYDOWN;
 
