@@ -3838,18 +3838,7 @@ LRESULT CQPasteWnd::OnUpDown(WPARAM wParam, LPARAM lParam)
 
     if(m_lstHeader.HandleKeyDown(wParam, lParam) == FALSE)
     {
-		MSG msg;
-		//Workaround for allow holding down arrow keys while in the search control
-		msg.lParam = lParam & (~0x40000000);
-		msg.wParam = wParam;
-		msg.message = WM_KEYDOWN;
-
-		//workaround for applying up/down keys, normally these are only done if you are still holding down modifers, fake this out
-		m_bModifersMoveActive = true;
-
-		CheckActions(&msg);
-
-		m_bModifersMoveActive = false;
+		m_lstHeader.SendMessage(WM_KEYDOWN, wParam, lParam);
     }
 
     return TRUE;
