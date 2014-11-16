@@ -75,7 +75,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 
 	m_DittoWindow.DoCreate(this);
 	m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeft(), g_Opt.m_Theme.CaptionRight());
-	m_DittoWindow.SetCaptionOn(this, CAPTION_LEFT, true);
+	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true);
 	m_DittoWindow.m_bDrawMinimize = false;
 	m_DittoWindow.m_bDrawMinimize = false;
 	m_DittoWindow.m_bDrawChevron = false;

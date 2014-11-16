@@ -377,4 +377,5 @@ protected:
 	
 public:
 	afx_msg void OnQuickoptionsShowintaskbar();
+	afx_msg void OnMenuViewasqrcode();
 };

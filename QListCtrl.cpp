@@ -59,6 +59,7 @@ CQListCtrl::CQListCtrl()
 	m_pToolTip = NULL;
 	m_pFormatter = NULL;
 	m_allSelected = false;
+	m_rowHeight = 50;
 
 	m_mouseOverScrollAreaStart = 0;
 
@@ -315,6 +316,7 @@ void CQListCtrl::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 	HFONT hFontOld = (HFONT)SelectObject(hDC, pFont->GetSafeHandle());
 	GetTextMetrics(hDC, &tm);
 	lpMeasureItemStruct->itemHeight = ((tm.tmHeight + tm.tmExternalLeading) * m_linesPerRow) + ROW_BOTTOM_BORDER;
+	m_rowHeight = lpMeasureItemStruct->itemHeight;
 	SelectObject(hDC, hFontOld);
 	::ReleaseDC(NULL, hDC);
 }

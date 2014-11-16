@@ -472,6 +472,7 @@
 #define ID_FIRST_SCALEIMAGESTOFITWINDOW 32884
 #define ID_QUICKOPTIONS_SHOWINTASKBAR   32885
 #define ID_FIRST_DELETECLIPDATA         32886
+#define ID_MENU_VIEWASQRCODE            32887
 
 // Next default values for new objects
 // 
@@ -479,7 +480,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        239
-#define _APS_NEXT_COMMAND_VALUE         32887
+#define _APS_NEXT_COMMAND_VALUE         32888
 #define _APS_NEXT_CONTROL_VALUE         2122
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

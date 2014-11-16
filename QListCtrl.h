@@ -140,6 +140,8 @@ public:
 
 	BOOL IsToolTipWindowVisible() { return ::IsWindowVisible(m_toolTipHwnd); }
 
+	int GetRowHeight() { return m_rowHeight; }
+
 protected:
 	void SendSelection(int nItem);;
 	void LoadCopyOrCutToClipboard();
@@ -169,6 +171,7 @@ protected:
 	CGdiImageDrawer m_inFolderImage;
 	CGdiImageDrawer m_shortCutImage;
 	CGdiImageDrawer m_stickyImage;
+	int m_rowHeight;
 
 
 	// Generated message map functions

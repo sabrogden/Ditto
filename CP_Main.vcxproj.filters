@@ -346,7 +346,38 @@
     <ClCompile Include="ActionEnums.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="DeleteClipData.cpp" />
+    <ClCompile Include="QRCode\bitstream.c">
+      <Filter>QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="QRCode\mask.c">
+      <Filter>QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="QRCode\mmask.c">
+      <Filter>QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="QRCode\mqrspec.c">
+      <Filter>QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="QRCode\qrencode.c">
+      <Filter>QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="QRCode\qrinput.c">
+      <Filter>QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="QRCode\qrspec.c">
+      <Filter>QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="QRCode\rscode.c">
+      <Filter>QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="QRCode\split.c">
+      <Filter>QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="DeleteClipData.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="QRCodeViewer.cpp" />
+    <ClCompile Include="CreateQRCodeImage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -739,7 +770,44 @@
     <ClInclude Include="ActionEnums.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="DeleteClipData.h" />
+    <ClInclude Include="QRCode\bitstream.h">
+      <Filter>QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="QRCode\config.h">
+      <Filter>QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="QRCode\mask.h">
+      <Filter>QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="QRCode\mmask.h">
+      <Filter>QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="QRCode\mqrspec.h">
+      <Filter>QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="QRCode\qrencode.h">
+      <Filter>QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="QRCode\qrencode_inner.h">
+      <Filter>QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="QRCode\qrinput.h">
+      <Filter>QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="QRCode\qrspec.h">
+      <Filter>QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="QRCode\rscode.h">
+      <Filter>QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="QRCode\split.h">
+      <Filter>QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="DeleteClipData.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="QRCodeViewer.h" />
+    <ClInclude Include="CreateQRCodeImage.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -1029,6 +1097,9 @@
     </Filter>
     <Filter Include="tineyxml">
       <UniqueIdentifier>{08b8a44d-887f-48e0-8396-e9e9f573f337}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="QRCode">
+      <UniqueIdentifier>{3a17864d-e44b-4afe-84b0-a44dee42c591}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

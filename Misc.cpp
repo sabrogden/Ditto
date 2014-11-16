@@ -760,6 +760,32 @@ BOOL DeleteFormats(int parentID, ARRAY& formatIDs)
 	return TRUE;
 }
 
+CRect CenterRect(CRect startingRect)
+{
+	CRect crMonitor;
+	int nMonitor = GetMonitorFromRect(&startingRect);
+	if(nMonitor < 0)
+	{
+		GetMonitorRect(0, crMonitor);
+	}
+	else
+	{
+		GetMonitorRect(nMonitor, crMonitor);
+	}
+
+	
+	CPoint center = crMonitor.CenterPoint();
+
+	CRect centerRect;
+
+	centerRect.left = center.x - (startingRect.Width() / 2);
+	centerRect.top = center.y - (startingRect.Height() / 2);
+	centerRect.right = centerRect.left + startingRect.Width();
+	centerRect.bottom = centerRect.top + startingRect.Height();
+
+	return centerRect;
+}
+
 BOOL EnsureWindowVisible(CRect *pcrRect)
 {
 	int nMonitor = GetMonitorFromRect(pcrRect);

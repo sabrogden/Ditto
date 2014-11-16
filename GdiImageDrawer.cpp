@@ -19,6 +19,12 @@ BOOL CGdiImageDrawer::LoadStdImage(UINT id, LPCTSTR pType)
 	return m_pStdImage->Load(id, pType);
 }
 
+BOOL CGdiImageDrawer::LoadRaw(unsigned char* bitmapData, int imageSize)
+{
+	m_pStdImage = new CGdiPlusBitmapResource;
+	return m_pStdImage->LoadRaw(bitmapData, imageSize);
+}
+
 BOOL CGdiImageDrawer::LoadStdImageDPI(UINT id96, UINT id120, UINT id144, UINT id192, LPCTSTR pType)
 {
 	BOOL ret = FALSE;

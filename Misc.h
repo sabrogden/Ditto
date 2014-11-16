@@ -93,6 +93,8 @@ CString GetFileName(CString csFileName);
 
 BOOL EnsureWindowVisible(CRect *pcrRect);
 
+CRect CenterRect(CRect startingRect);
+
 __int64 GetLastWriteTime(const CString &csFile);
 CString GetProcessName(HWND hWnd);
 

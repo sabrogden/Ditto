@@ -1,4 +1,4 @@
-// QPasteWnd.cpp : implementation file
+﻿// QPasteWnd.cpp : implementation file
 //
 
 #include "stdafx.h"
@@ -15,6 +15,8 @@
 #include "Path.h"
 #include "ActionEnums.h"
 #include <algorithm>
+#include "QRCodeViewer.h"
+#include "CreateQRCodeImage.h"
 //#include "MyDropTarget.h"
 
 #ifdef _DEBUG
@@ -207,6 +209,7 @@ ON_COMMAND(ID_MENU_CONTAINSTEXTSEARCHONLY, OnMenuSimpleTextSearch)
 //ON_WM_ERASEBKGND()
 //ON_WM_PAINT()
 ON_COMMAND(ID_QUICKOPTIONS_SHOWINTASKBAR, &CQPasteWnd::OnQuickoptionsShowintaskbar)
+ON_COMMAND(ID_MENU_VIEWASQRCODE, &CQPasteWnd::OnMenuViewasqrcode)
 END_MESSAGE_MAP()
 
 
@@ -4277,4 +4280,49 @@ LRESULT CQPasteWnd::OnShowHideScrollBar(WPARAM wParam, LPARAM lParam)
 void CQPasteWnd::OnQuickoptionsShowintaskbar()
 {
 	DoAction(ActionEnums::SHOW_IN_TASKBAR);
+}
+
+
+void CQPasteWnd::OnMenuViewasqrcode()
+{
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	if(IDs.GetCount() > 0)
+	{
+		int id = IDs[0];
+		CClip clip;
+		if(clip.LoadMainTable(id))
+		{
+			if(clip.LoadFormats(id, false))
+			{
+				IClipFormat *pFormat = clip.Clips()->FindFormatEx(CF_UNICODETEXT);
+				if(pFormat != NULL)
+				{
+					wchar_t *stringData = (wchar_t *)GlobalLock(pFormat->Data());
+					if(stringData != NULL)
+					{
+						CStringW string(stringData);
+
+						CCreateQRCodeImage p;
+						int imageSize = 0;
+						unsigned char* bitmapData = p.CreateImage(string, imageSize);
+
+						if(bitmapData != NULL)
+						{						
+							GlobalUnlock(pFormat->Data());
+
+							QRCodeViewer *viewer = new QRCodeViewer();
+
+							LOGFONT lf;
+							CGetSetOptions::GetFont(lf);
+
+							viewer->CreateEx(this, bitmapData, imageSize, clip.Description(), m_lstHeader.GetRowHeight(), lf);
+							viewer->ShowWindow(SW_SHOW);
+						}
+					}
+				}				
+			}
+		}
+	}	
 }

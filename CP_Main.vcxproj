@@ -220,7 +220,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_MBCS;AFTER_98;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_MBCS;AFTER_98;UNICODE;HAVE_CONFIG_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -561,6 +561,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="CreateQRCodeImage.cpp" />
     <ClCompile Include="DeleteClipData.cpp" />
     <ClCompile Include="DPI.cpp" />
     <ClCompile Include="EditWithButton.cpp" />
@@ -574,6 +575,34 @@
     <ClCompile Include="MyDropTarget.cpp" />
     <ClCompile Include="Popup.cpp" />
     <ClCompile Include="QPasteWndThread.cpp" />
+    <ClCompile Include="QRCodeViewer.cpp" />
+    <ClCompile Include="QRCode\bitstream.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="QRCode\mask.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="QRCode\mmask.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="QRCode\mqrspec.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="QRCode\qrencode.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="QRCode\qrinput.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="QRCode\qrspec.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="QRCode\rscode.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="QRCode\split.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Shared\TextConvert.cpp" />
     <ClCompile Include="Shared\Tokenizer.cpp" />
     <ClCompile Include="ShowTaskBarIcon.cpp" />
@@ -1766,6 +1795,7 @@
     <ClInclude Include="AutoSendToClientThread.h" />
     <ClInclude Include="CGdiPlusBitmap.h" />
     <ClInclude Include="ClipFormatQListCtrl.h" />
+    <ClInclude Include="CreateQRCodeImage.h" />
     <ClInclude Include="DeleteClipData.h" />
     <ClInclude Include="DPI.h" />
     <ClInclude Include="EditWithButton.h" />
@@ -1784,6 +1814,18 @@
     <ClInclude Include="Popup.h" />
     <ClInclude Include="QListCtrl.h" />
     <ClInclude Include="QPasteWndThread.h" />
+    <ClInclude Include="QRCodeViewer.h" />
+    <ClInclude Include="QRCode\bitstream.h" />
+    <ClInclude Include="QRCode\config.h" />
+    <ClInclude Include="QRCode\mask.h" />
+    <ClInclude Include="QRCode\mmask.h" />
+    <ClInclude Include="QRCode\mqrspec.h" />
+    <ClInclude Include="QRCode\qrencode.h" />
+    <ClInclude Include="QRCode\qrencode_inner.h" />
+    <ClInclude Include="QRCode\qrinput.h" />
+    <ClInclude Include="QRCode\qrspec.h" />
+    <ClInclude Include="QRCode\rscode.h" />
+    <ClInclude Include="QRCode\split.h" />
     <ClInclude Include="RichEditCtrlEx.h" />
     <ClInclude Include="SearchEditBox.h" />
     <ClInclude Include="Shared\TextConvert.h" />
