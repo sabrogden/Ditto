@@ -367,9 +367,6 @@
     <ClCompile Include="QRCode\qrspec.c">
       <Filter>QRCode</Filter>
     </ClCompile>
-    <ClCompile Include="QRCode\rscode.c">
-      <Filter>QRCode</Filter>
-    </ClCompile>
     <ClCompile Include="QRCode\split.c">
       <Filter>QRCode</Filter>
     </ClCompile>
@@ -378,6 +375,9 @@
     </ClCompile>
     <ClCompile Include="QRCodeViewer.cpp" />
     <ClCompile Include="CreateQRCodeImage.cpp" />
+    <ClCompile Include="QRCode\rsecc.c">
+      <Filter>QRCode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -797,9 +797,6 @@
     <ClInclude Include="QRCode\qrspec.h">
       <Filter>QRCode</Filter>
     </ClInclude>
-    <ClInclude Include="QRCode\rscode.h">
-      <Filter>QRCode</Filter>
-    </ClInclude>
     <ClInclude Include="QRCode\split.h">
       <Filter>QRCode</Filter>
     </ClInclude>
@@ -808,6 +805,9 @@
     </ClInclude>
     <ClInclude Include="QRCodeViewer.h" />
     <ClInclude Include="CreateQRCodeImage.h" />
+    <ClInclude Include="QRCode\rsecc.h">
+      <Filter>QRCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
