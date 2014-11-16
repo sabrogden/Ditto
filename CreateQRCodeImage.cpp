@@ -31,7 +31,7 @@ unsigned char* CCreateQRCodeImage::CreateImage(CString text, int &size)
 
 	CStringA a;
 	CTextConvert::ConvertToUTF8(text, a);
-	if (pQRC = QRcode_encodeString("test", 0, QR_ECLEVEL_H, QR_MODE_8, 1))
+	if (pQRC = QRcode_encodeString(a, 0, QR_ECLEVEL_H, QR_MODE_8, 1))
 	{
 		unWidth = pQRC->width;
 		unWidthAdjusted = unWidth * OUT_FILE_PIXEL_PRESCALER * 3;
