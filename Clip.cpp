@@ -1041,16 +1041,22 @@ bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT)
 		//Order by Data.lID so that when generating CRC it's always in the same order as the first time
 		//we generated it
 		CString csSQL;
+
+		CString textFilter = _T("");
+		if(bOnlyLoad_CF_TEXT)
+		{
+			textFilter = _T("(strClipBoardFormat = 'CF_TEXT' OR strClipBoardFormat = 'CF_UNICODETEXT') AND ");
+		}
+
 		csSQL.Format(
-			_T("SELECT Data.lID, strClipBoardFormat, ooData FROM Data ")
-			_T("INNER JOIN Main ON Main.lID = Data.lParentID ")
-			_T("WHERE Main.lID = %d ORDER BY Data.lID desc"), id);
+			_T("SELECT lParentID, strClipBoardFormat, ooData FROM Data ")
+			_T("WHERE %s lParentID = %d ORDER BY Data.lID desc"), textFilter, id);
 
 		CppSQLite3Query q = theApp.m_db.execQuery(csSQL);
 
 		while(q.eof() == false)
 		{
-			cf.m_dbId = q.getIntField(_T("lID"));
+			cf.m_dbId = q.getIntField(_T("lParentID"));
 			cf.m_cfType = GetFormatID(q.getStringField(_T("strClipBoardFormat")));
 			
 			if(bOnlyLoad_CF_TEXT)
@@ -1138,6 +1144,89 @@ bool CClip::SaveFromEditWnd(BOOL bUpdateDesc)
 	CATCH_SQLITE_EXCEPTION
 
 	return bRet;
+}
+
+CStringW CClip::GetUnicodeTextFormat()
+{
+	IClipFormat *pFormat = this->Clips()->FindFormatEx(CF_UNICODETEXT);
+	if(pFormat != NULL)
+	{
+		wchar_t *stringData = (wchar_t *)GlobalLock(pFormat->Data());
+		if(stringData != NULL)
+		{
+			CStringW string(stringData);
+
+			GlobalUnlock(pFormat->Data());
+
+			return string;
+		}
+	}
+
+	return _T("");
+}
+
+CStringA CClip::GetCFTextTextFormat()
+{
+	IClipFormat *pFormat = this->Clips()->FindFormatEx(CF_TEXT);
+	if(pFormat != NULL)
+	{
+		char *stringData = (char *)GlobalLock(pFormat->Data());
+		if(stringData != NULL)
+		{
+			CStringA string(stringData);
+			
+			GlobalUnlock(pFormat->Data());
+
+			return string;
+		}
+	}
+
+	return _T("");
+}
+
+BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL utf8)
+{
+	BOOL ret = false;
+
+	CFile f;
+	if(f.Open(path, CFile::modeWrite|CFile::modeCreate))
+	{
+		CStringW w = GetUnicodeTextFormat();
+		CStringA a = GetCFTextTextFormat();
+		
+		if(utf8 && w != _T(""))
+		{
+			CStringA convToUtf8;
+			CTextConvert::ConvertToUTF8(w, convToUtf8);
+			byte header[2];
+			header[0] = 0xEF;
+			header[1] = 0xBB;
+			f.Write(&header, 2);
+			f.Write(convToUtf8.GetBuffer(), convToUtf8.GetLength());
+
+			ret = true;
+		}
+		else if(unicode && w != _T(""))
+		{
+			byte header[2];
+			header[0] = 0xFF;
+			header[1] = 0xFE;
+			f.Write(&header, 2);
+			f.Write(w.GetBuffer(), w.GetLength() * sizeof(wchar_t));
+
+			ret = true;
+		}
+		else if(asci && a != _T(""))
+		{
+			f.Write(a.GetBuffer(), a.GetLength());
+
+			ret = true;
+		}
+
+		f.Close();
+	}
+
+	return ret;
 }
 
 /*----------------------------------------------------------------------------*\

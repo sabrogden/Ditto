@@ -135,6 +135,11 @@ public:
 	DWORD GenerateCRC();
 	void MoveUp();
 
+	CStringW GetUnicodeTextFormat();
+	CStringA GetCFTextTextFormat();
+
+	BOOL WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL utf8);
+
 	// Allocates a Global containing the requested Clip's Format Data
 	static HGLOBAL LoadFormat(int id, UINT cfType);
 	// Fills "formats" with the Data of all Formats in the db for the given Clip ID

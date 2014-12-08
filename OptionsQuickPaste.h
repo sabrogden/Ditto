@@ -76,6 +76,8 @@ public:
 	CComboBox m_cbTheme;
 	afx_msg void OnBnClickedButtonTheme();
 	CButton m_alwaysShowScrollBar;
+	CEdit m_diffPathEditBox;
+	afx_msg void OnBnClickedButtonDiffBrowse();
 };
 
 //{{AFX_INSERT_LOCATION}}

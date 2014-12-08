@@ -2143,3 +2143,13 @@ BOOL CGetSetOptions::GetShowInTaskBar()
 {
 	return GetProfileLong(_T("ShowInTaskBar"), FALSE);
 }
+
+void CGetSetOptions::SetDiffApp(CString val)
+{
+	SetProfileString(_T("DiffApp"), val);
+}
+
+CString	CGetSetOptions::GetDiffApp()
+{
+	return GetProfileString(_T("DiffApp"), _T(""));
+}

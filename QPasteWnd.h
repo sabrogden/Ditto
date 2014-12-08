@@ -158,6 +158,7 @@ public:
     CCriticalSection m_CritSection;
     CAccels m_actions;
 	bool m_showScrollBars;
+	int m_leftSelectedCompareId;
 
     void RefreshNc();
     void UpdateStatus(bool bRepaintImmediately = false); // regenerates the status (caption) text
@@ -235,7 +236,10 @@ public:
 	bool DoActionPasteSelectedPlainText();
 	bool DoActionMoveClipToGroup();
 	bool DoActionElevatePrivleges();
-	bool DoShowInTaskBar();
+	bool DoShowInTaskBar();	
+	bool DoClipCompare();
+	bool DoSelectLeftSideCompare();
+	bool DoSelectRightSideAndDoCompare();
 
     // Generated message map functions
 protected:
@@ -378,4 +382,8 @@ protected:
 public:
 	afx_msg void OnQuickoptionsShowintaskbar();
 	afx_msg void OnMenuViewasqrcode();
+	afx_msg void OnExportExporttotextfile();
+	afx_msg void OnCompareCompare();
+	afx_msg void OnCompareSelectleftcompare();
+	afx_msg void OnCompareCompareagainst();
 };

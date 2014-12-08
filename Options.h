@@ -457,6 +457,9 @@ public:
 
 	static void		SetShowInTaskBar(BOOL val);
 	static BOOL		GetShowInTaskBar();
+
+	static void		SetDiffApp(CString val);
+	static CString	GetDiffApp();
 };
 
 // global for easy access and for initialization of fast access variables

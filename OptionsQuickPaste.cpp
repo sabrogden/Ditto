@@ -60,6 +60,7 @@ void COptionsQuickPaste::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK_SHOW_SCROLL_BAR, m_alwaysShowScrollBar);
 	DDX_Control(pDX, IDC_CHECK_ELEVATE_PRIVILEGES, m_elevatedPrivileges);
 	DDX_Control(pDX, IDC_CHECK_SHOW_IN_TASKBAR, m_showInTaskBar);
+	DDX_Control(pDX, IDC_EDIT_DIFF_PATH, m_diffPathEditBox);
 }
 
 
@@ -69,6 +70,7 @@ BEGIN_MESSAGE_MAP(COptionsQuickPaste, CPropertyPage)
 	ON_BN_CLICKED(IDC_BUTTON_DEFAULT_FAULT, OnButtonDefaultFault)
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_BUTTON_THEME, OnBnClickedButtonTheme)
+	ON_BN_CLICKED(IDC_BUTTON_DIFF_BROWSE, &COptionsQuickPaste::OnBnClickedButtonDiffBrowse)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -117,9 +119,13 @@ BOOL COptionsQuickPaste::OnInitDialog()
 		ft->GetLogFont(&m_LogFont);
 	}
 
+	m_diffPathEditBox.SetWindowText(CGetSetOptions::GetDiffApp());
+
 	CString cs;
 	cs.Format(_T("Font - %s"), m_LogFont.lfFaceName);
 	m_btFont.SetWindowText(cs);
+
+	
 
 	FillThemes();
 
@@ -178,6 +184,10 @@ BOOL COptionsQuickPaste::OnApply()
 	{
 		g_Opt.SetTheme("");
 	}
+
+	CString diffPath;
+	m_diffPathEditBox.GetWindowText(diffPath);
+	g_Opt.SetDiffApp(diffPath);
 	
 	return CPropertyPage::OnApply();
 }
@@ -284,4 +294,31 @@ void COptionsQuickPaste::OnBnClickedButtonTheme()
 
 		MessageBox(csError, _T("Ditto"), MB_OK);
 	}
+}
+
+
+void COptionsQuickPaste::OnBnClickedButtonDiffBrowse()
+{
+	OPENFILENAME	FileName;
+	TCHAR			szFileName[400];
+	TCHAR			szDir[400];
+
+	memset(&FileName, 0, sizeof(FileName));
+	memset(szFileName, 0, sizeof(szFileName));
+	memset(&szDir, 0, sizeof(szDir));
+	FileName.lStructSize = sizeof(FileName);
+	FileName.lpstrTitle = _T("Diff Application");
+	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST;
+	FileName.nMaxFile = 400;
+	FileName.lpstrFile = szFileName;
+	FileName.lpstrInitialDir = szDir;
+	FileName.lpstrFilter = _T("*.exe");
+	FileName.lpstrDefExt = _T("");
+
+	if(GetOpenFileName(&FileName) == 0)
+		return;
+
+	CString csPath(FileName.lpstrFile);
+
+	m_diffPathEditBox.SetWindowText(csPath);
 }

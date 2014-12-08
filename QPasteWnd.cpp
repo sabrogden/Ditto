@@ -17,6 +17,7 @@
 #include <algorithm>
 #include "QRCodeViewer.h"
 #include "CreateQRCodeImage.h"
+#include "ClipCompare.h"
 //#include "MyDropTarget.h"
 
 #ifdef _DEBUG
@@ -63,6 +64,7 @@ CQPasteWnd::CQPasteWnd()
     m_bHandleSearchTextChange = true;
     m_bModifersMoveActive = false;
 	m_showScrollBars = false;
+	m_leftSelectedCompareId = 0;
 }
 
 CQPasteWnd::~CQPasteWnd()
@@ -210,6 +212,10 @@ ON_COMMAND(ID_MENU_CONTAINSTEXTSEARCHONLY, OnMenuSimpleTextSearch)
 //ON_WM_PAINT()
 ON_COMMAND(ID_QUICKOPTIONS_SHOWINTASKBAR, &CQPasteWnd::OnQuickoptionsShowintaskbar)
 ON_COMMAND(ID_MENU_VIEWASQRCODE, &CQPasteWnd::OnMenuViewasqrcode)
+ON_COMMAND(ID_EXPORT_EXPORTTOTEXTFILE, &CQPasteWnd::OnExportExporttotextfile)
+ON_COMMAND(ID_COMPARE_COMPARE, &CQPasteWnd::OnCompareCompare)
+ON_COMMAND(ID_COMPARE_SELECTLEFTCOMPARE, &CQPasteWnd::OnCompareSelectleftcompare)
+ON_COMMAND(ID_COMPARE_COMPAREAGAINST, &CQPasteWnd::OnCompareCompareagainst)
 END_MESSAGE_MAP()
 
 
@@ -2693,6 +2699,15 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::SHOW_IN_TASKBAR:
 		ret = DoShowInTaskBar();
 		break;
+	case ActionEnums::COMPARE_SELECTED_CLIPS:
+		ret = DoClipCompare();
+		break;
+	case ActionEnums::SELECT_LEFT_SIDE_COMPARE:
+		ret = DoSelectLeftSideCompare();
+		break;
+	case ActionEnums::SELECT_RIGHT_SITE_AND_DO_COMPARE:
+		ret = DoSelectRightSideAndDoCompare();
+		break;
 	}
 
 	return ret;
@@ -3198,6 +3213,83 @@ bool CQPasteWnd::DoShowInTaskBar()
 	theApp.RefreshShowInTaskBar();
 
 	return true;
+}
+
+bool CQPasteWnd::DoClipCompare()
+{
+	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		ARRAY IDs;
+		m_lstHeader.GetSelectionItemData(IDs);
+
+		if(IDs.GetCount() > 1)
+		{
+			CClipCompare compare;
+			compare.Compare(IDs[0], IDs[1]);
+
+			return true;
+		}
+		else
+		{
+			Log(StrF(_T("DoClipCompare, at least 2 clips need to be selected, count: %d"), IDs.GetCount()));
+		}
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoSelectLeftSideCompare()
+{
+	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		ARRAY IDs;
+		m_lstHeader.GetSelectionItemData(IDs);
+
+		if(IDs.GetCount() > 0)
+		{
+			m_leftSelectedCompareId = IDs[0];
+
+			return true;
+		}
+		else
+		{
+			Log(StrF(_T("DoSelectLeftSideCompare, no selected clip, not assigning left side")));
+		}
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoSelectRightSideAndDoCompare()
+{
+	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		if(m_leftSelectedCompareId > 0)
+		{
+			ARRAY IDs;
+			m_lstHeader.GetSelectionItemData(IDs);
+
+			if(IDs.GetCount() > 0)
+			{
+				int rightId = IDs[0];
+
+				CClipCompare compare;
+				compare.Compare(m_leftSelectedCompareId, rightId);
+
+				return true;
+			}
+			else
+			{
+				Log(StrF(_T("DoSelectRightSideAndDoCompare, no selected clips")));
+			}
+		}
+		else
+		{
+			Log(StrF(_T("DoSelectRightSideAndDoCompare, no left side selected, select left side first")));
+		}
+	}
+
+	return false;
 }
 
 LRESULT CQPasteWnd::OnCancelFilter(WPARAM wParam, LPARAM lParam)
@@ -4304,14 +4396,14 @@ void CQPasteWnd::OnMenuViewasqrcode()
 					{
 						CStringW string(stringData);
 
+						GlobalUnlock(pFormat->Data());
+
 						CCreateQRCodeImage p;
 						int imageSize = 0;
 						unsigned char* bitmapData = p.CreateImage(string, imageSize);
 
 						if(bitmapData != NULL)
-						{						
-							GlobalUnlock(pFormat->Data());
-
+						{
 							QRCodeViewer *viewer = new QRCodeViewer();
 
 							LOGFONT lf;
@@ -4325,4 +4417,114 @@ void CQPasteWnd::OnMenuViewasqrcode()
 			}
 		}
 	}	
+}
+
+
+void CQPasteWnd::OnExportExporttotextfile()
+{
+	CClipIDs IDs;
+	INT_PTR lCount = m_lstHeader.GetSelectedCount();
+	if(lCount <= 0)
+	{
+		return ;
+	}
+
+	m_lstHeader.GetSelectionItemData(IDs);
+	lCount = IDs.GetSize();
+	if(lCount <= 0)
+	{
+		return ;
+	}
+
+	OPENFILENAME ofn;
+	TCHAR szFile[400];
+	TCHAR szDir[400];
+
+	memset(&szFile, 0, sizeof(szFile));
+	memset(szDir, 0, sizeof(szDir));
+	memset(&ofn, 0, sizeof(ofn));
+
+	CString csInitialDir = CGetSetOptions::GetLastImportDir();
+	STRCPY(szDir, csInitialDir);
+
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = m_hWnd;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = _T("Exported Ditto Clips (.txt)\0*.txt\0\0");
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = szDir;
+	ofn.lpstrDefExt = _T("txt");
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+
+	m_bHideWnd = false;
+
+	if(GetSaveFileName(&ofn))
+	{
+		using namespace nsPath;
+		CString startingFilePath = ofn.lpstrFile;
+		CPath path(ofn.lpstrFile);
+		CString csPath = path.GetPath();
+		CString csExt = path.GetExtension();
+		path.RemoveExtension();
+		CString csFileName = path.GetName();
+		
+		CGetSetOptions::SetLastExportDir(csPath);
+		
+		for(int i = 0; i < IDs.GetCount(); i++)
+		{
+			int id = IDs[i];
+
+			CClip clip;
+			if(clip.LoadFormats(id, true))
+			{	
+				CString savePath = startingFilePath;
+				if(IDs.GetCount() > 1 ||
+					FileExists(startingFilePath))
+				{
+					savePath = _T("");
+
+					for(int y = 1; y < 1001; y++)
+					{			
+						CString testFilePath;
+						testFilePath.Format(_T("%s%s_%d.%s"), csPath, csFileName, y, csExt);
+						if(FileExists(testFilePath) == FALSE)
+						{				
+							savePath = testFilePath;
+							break;
+						}
+					}
+				}
+				
+				if(savePath != _T(""))
+				{
+					clip.WriteTextToFile(savePath, true, true, false);
+				}
+				else
+				{
+					Log(StrF(_T("Failed to find a valid file name for starting path: %s"), startingFilePath));
+				}
+			}
+		}		
+	}
+
+	m_bHideWnd = true;
+}
+
+
+void CQPasteWnd::OnCompareCompare()
+{
+	DoAction(ActionEnums::COMPARE_SELECTED_CLIPS);
+}
+
+void CQPasteWnd::OnCompareSelectleftcompare()
+{
+	DoAction(ActionEnums::SELECT_LEFT_SIDE_COMPARE);
+}
+
+void CQPasteWnd::OnCompareCompareagainst()
+{
+	DoAction(ActionEnums::SELECT_RIGHT_SITE_AND_DO_COMPARE);
 }

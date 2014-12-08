@@ -365,6 +365,10 @@
 #define IDC_BUTTON_APPLY                2118
 #define IDC_STATIC_GROUP_SEARCH         2120
 #define IDC_MFCPROPERTYGRID1            2121
+#define IDC_STATIC_DIFF                 2122
+#define IDC_EDIT_DIFF_PATH              2123
+#define IDC_BUTTON2                     2124
+#define IDC_BUTTON_DIFF_BROWSE          2124
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -473,6 +477,14 @@
 #define ID_QUICKOPTIONS_SHOWINTASKBAR   32885
 #define ID_FIRST_DELETECLIPDATA         32886
 #define ID_MENU_VIEWASQRCODE            32887
+#define ID_MENU_EXPORT32888             32888
+#define ID_EXPORT_EXPORTTOTEXTFILE      32889
+#define ID_MENU_PASTESPECIAL            32890
+#define ID_PASTESPECIAL_TEXTASFILEDROP  32891
+#define ID_MENU_COMPARE                 32892
+#define ID_COMPARE_SELECTLEFTCOMPARE    32893
+#define ID_COMPARE_COMPAREAGAINST       32894
+#define ID_COMPARE_COMPARE              32895
 
 // Next default values for new objects
 // 
@@ -480,8 +492,8 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        239
-#define _APS_NEXT_COMMAND_VALUE         32888
-#define _APS_NEXT_CONTROL_VALUE         2122
+#define _APS_NEXT_COMMAND_VALUE         32896
+#define _APS_NEXT_CONTROL_VALUE         2125
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

@@ -373,10 +373,17 @@
     <ClCompile Include="DeleteClipData.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="QRCodeViewer.cpp" />
-    <ClCompile Include="CreateQRCodeImage.cpp" />
     <ClCompile Include="QRCode\rsecc.c">
       <Filter>QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="ClipCompare.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateQRCodeImage.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="QRCodeViewer.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -803,10 +810,17 @@
     <ClInclude Include="DeleteClipData.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="QRCodeViewer.h" />
-    <ClInclude Include="CreateQRCodeImage.h" />
     <ClInclude Include="QRCode\rsecc.h">
       <Filter>QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="ClipCompare.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="CreateQRCodeImage.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="QRCodeViewer.h">
+      <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

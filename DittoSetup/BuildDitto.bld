@@ -4,6 +4,7 @@
 		<step action='Set Macro'>
 			<MacroName>LOGFILE</MacroName>
 			<MacroValue>%workDir%\%branch%\Log.txt</MacroValue>
+			<checked type='11'>0</checked>
 			<name>Default Log File</name>
 		</step>
 		<step action='Read INI'>
