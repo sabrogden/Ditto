@@ -216,6 +216,7 @@ ON_COMMAND(ID_EXPORT_EXPORTTOTEXTFILE, &CQPasteWnd::OnExportExporttotextfile)
 ON_COMMAND(ID_COMPARE_COMPARE, &CQPasteWnd::OnCompareCompare)
 ON_COMMAND(ID_COMPARE_SELECTLEFTCOMPARE, &CQPasteWnd::OnCompareSelectleftcompare)
 ON_COMMAND(ID_COMPARE_COMPAREAGAINST, &CQPasteWnd::OnCompareCompareagainst)
+ON_UPDATE_COMMAND_UI(ID_COMPARE_COMPARE, &CQPasteWnd::OnUpdateCompareCompare)
 END_MESSAGE_MAP()
 
 
@@ -327,6 +328,12 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	
     m_thread.Start(this);
 
+	m_actions.AddAccel(ActionEnums::NEXTTABCONTROL, VK_TAB);
+	m_actions.AddAccel(ActionEnums::SELECTIONUP, VK_UP);
+	m_actions.AddAccel(ActionEnums::SELECTIONDOWN, VK_DOWN);
+	m_actions.AddAccel(ActionEnums::MOVEFIRST, VK_HOME);
+	m_actions.AddAccel(ActionEnums::MOVELAST, VK_END);
+
 	m_actions.AddAccel(ActionEnums::SHOWDESCRIPTION, VK_F3);
 	m_actions.AddAccel(ActionEnums::NEXTDESCRIPTION, 'N');
 	m_actions.AddAccel(ActionEnums::PREVDESCRIPTION, 'P');
@@ -335,16 +342,11 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_actions.AddAccel(ActionEnums::NEWGROUPSELECTION, VK_F7);
 	m_actions.AddAccel(ActionEnums::TOGGLEFILELOGGING, ACCEL_MAKEKEY(VK_F5, HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::TOGGLEOUTPUTDEBUGSTRING, VK_F5);
-	m_actions.AddAccel(ActionEnums::CLOSEWINDOW, VK_ESCAPE);
-	m_actions.AddAccel(ActionEnums::NEXTTABCONTROL, VK_TAB);
+	m_actions.AddAccel(ActionEnums::CLOSEWINDOW, VK_ESCAPE);	
 	m_actions.AddAccel(ActionEnums::PREVTABCONTROL, ACCEL_MAKEKEY(VK_TAB, HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::SHOWGROUPS, ACCEL_MAKEKEY('G', HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::NEWCLIP, ACCEL_MAKEKEY('N', HOTKEYF_CONTROL));
-	m_actions.AddAccel(ActionEnums::EDITCLIP, ACCEL_MAKEKEY('E', HOTKEYF_CONTROL));
-	m_actions.AddAccel(ActionEnums::SELECTIONUP, VK_UP);
-	m_actions.AddAccel(ActionEnums::SELECTIONDOWN, VK_DOWN);
-	m_actions.AddAccel(ActionEnums::MOVEFIRST, VK_HOME);
-	m_actions.AddAccel(ActionEnums::MOVELAST, VK_END);
+	m_actions.AddAccel(ActionEnums::EDITCLIP, ACCEL_MAKEKEY('E', HOTKEYF_CONTROL));	
 	m_actions.AddAccel(ActionEnums::CANCELFILTER, ACCEL_MAKEKEY('C', HOTKEYF_ALT));
 	m_actions.AddAccel(ActionEnums::HOMELIST, VK_HOME);
 	m_actions.AddAccel(ActionEnums::BACKGRROUP, VK_BACK);
@@ -353,7 +355,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_actions.AddAccel(ActionEnums::DELETE_SELECTED, VK_DELETE);
 	m_actions.AddAccel(ActionEnums::CLIP_PROPERTIES, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_ALT));
 	m_actions.AddAccel(ActionEnums::PASTE_SELECTED_PLAIN_TEXT, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_SHIFT));
-	m_actions.AddAccel(ActionEnums::MOVE_CLIP_TO_GROUP, 0);
+	m_actions.AddAccel(ActionEnums::COMPARE_SELECTED_CLIPS, ACCEL_MAKEKEY(VK_F2, HOTKEYF_CONTROL));
 	
     return 0;
 }
@@ -2708,6 +2710,12 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::SELECT_RIGHT_SITE_AND_DO_COMPARE:
 		ret = DoSelectRightSideAndDoCompare();
 		break;
+	case ActionEnums::EXPORT_TO_TEXT_FILE:
+		ret = DoExportToTextFile();
+		break;
+	case ActionEnums::EXPORT_TO_QR_CODE:
+		return DoExportToQRCode();
+		break;
 	}
 
 	return ret;
@@ -3290,6 +3298,145 @@ bool CQPasteWnd::DoSelectRightSideAndDoCompare()
 	}
 
 	return false;
+}
+
+bool CQPasteWnd::DoExportToTextFile()
+{
+	bool ret = false;
+
+	CClipIDs IDs;
+	INT_PTR lCount = m_lstHeader.GetSelectedCount();
+	if(lCount <= 0)
+	{
+		return ret;
+	}
+
+	m_lstHeader.GetSelectionItemData(IDs);
+	lCount = IDs.GetSize();
+	if(lCount <= 0)
+	{
+		return ret;
+	}
+
+	OPENFILENAME ofn;
+	TCHAR szFile[400];
+	TCHAR szDir[400];
+
+	memset(&szFile, 0, sizeof(szFile));
+	memset(szDir, 0, sizeof(szDir));
+	memset(&ofn, 0, sizeof(ofn));
+
+	CString csInitialDir = CGetSetOptions::GetLastImportDir();
+	STRCPY(szDir, csInitialDir);
+
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = m_hWnd;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = _T("Exported Ditto Clips (.txt)\0*.txt\0\0");
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = szDir;
+	ofn.lpstrDefExt = _T("txt");
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+
+	m_bHideWnd = false;
+
+	if(GetSaveFileName(&ofn))
+	{
+		using namespace nsPath;
+		CString startingFilePath = ofn.lpstrFile;
+		CPath path(ofn.lpstrFile);
+		CString csPath = path.GetPath();
+		CString csExt = path.GetExtension();
+		path.RemoveExtension();
+		CString csFileName = path.GetName();
+
+		CGetSetOptions::SetLastExportDir(csPath);
+
+		for(int i = 0; i < IDs.GetCount(); i++)
+		{
+			int id = IDs[i];
+
+			CClip clip;
+			if(clip.LoadFormats(id, true))
+			{	
+				CString savePath = startingFilePath;
+				if(IDs.GetCount() > 1 ||
+					FileExists(startingFilePath))
+				{
+					savePath = _T("");
+
+					for(int y = 1; y < 1001; y++)
+					{			
+						CString testFilePath;
+						testFilePath.Format(_T("%s%s_%d.%s"), csPath, csFileName, y, csExt);
+						if(FileExists(testFilePath) == FALSE)
+						{				
+							savePath = testFilePath;
+							break;
+						}
+					}
+				}
+
+				if(savePath != _T(""))
+				{
+					clip.WriteTextToFile(savePath, true, true, false);
+
+					ret = true;
+				}
+				else
+				{
+					Log(StrF(_T("Failed to find a valid file name for starting path: %s"), startingFilePath));
+				}
+			}
+		}		
+	}
+
+	m_bHideWnd = true;
+
+	return ret;
+}
+
+bool CQPasteWnd::DoExportToQRCode()
+{
+	bool ret = false;
+
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	if(IDs.GetCount() > 0)
+	{
+		int id = IDs[0];
+		CClip clip;
+		if(clip.LoadMainTable(id))
+		{
+			if(clip.LoadFormats(id, true))
+			{
+				CString clipText = clip.GetUnicodeTextFormat();				
+
+				CCreateQRCodeImage p;
+				int imageSize = 0;
+				unsigned char* bitmapData = p.CreateImage(clipText, imageSize);
+
+				if(bitmapData != NULL)
+				{
+					QRCodeViewer *viewer = new QRCodeViewer();
+
+					LOGFONT lf;
+					CGetSetOptions::GetFont(lf);
+
+					viewer->CreateEx(this, bitmapData, imageSize, clip.Description(), m_lstHeader.GetRowHeight(), lf);
+					viewer->ShowWindow(SW_SHOW);
+
+					ret = true;
+				}
+			}
+		}
+	}	
+
+	return ret;
 }
 
 LRESULT CQPasteWnd::OnCancelFilter(WPARAM wParam, LPARAM lParam)
@@ -3960,13 +4107,7 @@ void CQPasteWnd::OnUpdateMenuNewgroup(CCmdUI *pCmdUI)
         return ;
     }
 
-    CString cs;
-    pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-    if(cs.Find(_T("Ctrl-F7")) < 0)
-    {
-        cs += "\tCtrl-F7";
-        pCmdUI->SetText(cs);
-    }
+	UpdateMenuShortCut(pCmdUI, ActionEnums::NEWGROUP);
 }
 
 void CQPasteWnd::OnUpdateMenuNewgroupselection(CCmdUI *pCmdUI)
@@ -3976,13 +4117,7 @@ void CQPasteWnd::OnUpdateMenuNewgroupselection(CCmdUI *pCmdUI)
         return ;
     }
 
-    CString cs;
-    pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-    if(cs.Find(_T("F7")) < 0)
-    {
-        cs += "\tF7";
-        pCmdUI->SetText(cs);
-    }
+	UpdateMenuShortCut(pCmdUI, ActionEnums::NEWGROUPSELECTION);
 }
 
 void CQPasteWnd::OnUpdateMenuAllwaysontop(CCmdUI *pCmdUI)
@@ -3992,13 +4127,7 @@ void CQPasteWnd::OnUpdateMenuAllwaysontop(CCmdUI *pCmdUI)
         return ;
     }
 
-    CString cs;
-    pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-    if(cs.Find(_T("Ctrl-Space")) < 0)
-    {
-        cs += "\tCtrl-Space";
-        pCmdUI->SetText(cs);
-    }
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TOGGLESHOWPERSISTANT);
 }
 
 void CQPasteWnd::OnUpdateMenuViewfulldescription(CCmdUI *pCmdUI)
@@ -4008,13 +4137,7 @@ void CQPasteWnd::OnUpdateMenuViewfulldescription(CCmdUI *pCmdUI)
         return ;
     }
 
-    CString cs;
-    pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-    if(cs.Find(_T("F3")) < 0)
-    {
-        cs += "\tF3";
-        pCmdUI->SetText(cs);
-    }
+	UpdateMenuShortCut(pCmdUI, ActionEnums::SHOWDESCRIPTION);
 }
 
 void CQPasteWnd::OnUpdateMenuViewgroups(CCmdUI *pCmdUI)
@@ -4024,13 +4147,7 @@ void CQPasteWnd::OnUpdateMenuViewgroups(CCmdUI *pCmdUI)
         return ;
     }
 
-    CString cs;
-    pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-    if(cs.Find(_T("Ctrl-G")) < 0)
-    {
-        cs += "\tCtrl-G";
-        pCmdUI->SetText(cs);
-    }
+	UpdateMenuShortCut(pCmdUI, ActionEnums::SHOWGROUPS);
 }
 
 void CQPasteWnd::OnUpdateMenuPasteplaintextonly(CCmdUI *pCmdUI)
@@ -4040,13 +4157,7 @@ void CQPasteWnd::OnUpdateMenuPasteplaintextonly(CCmdUI *pCmdUI)
         return ;
     }
 
-    CString cs;
-    pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-    if(cs.Find(_T("Shift-Enter")) < 0)
-    {
-        cs += "\tShift-Enter";
-        pCmdUI->SetText(cs);
-    }
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_SELECTED_PLAIN_TEXT);
 }
 
 void CQPasteWnd::OnUpdateMenuDelete(CCmdUI *pCmdUI)
@@ -4056,14 +4167,7 @@ void CQPasteWnd::OnUpdateMenuDelete(CCmdUI *pCmdUI)
         return ;
     }
 
-    CString cs;
-    pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-
-    if(cs.Find(_T("Del")) < 0)
-    {
-        cs += "\tDel";
-        pCmdUI->SetText(cs);
-    }
+	UpdateMenuShortCut(pCmdUI, ActionEnums::DELETE_SELECTED);
 }
 
 void CQPasteWnd::OnUpdateMenuProperties(CCmdUI *pCmdUI)
@@ -4073,14 +4177,7 @@ void CQPasteWnd::OnUpdateMenuProperties(CCmdUI *pCmdUI)
         return ;
     }
 
-    CString cs;
-    pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-
-    if(cs.Find(_T("tAlt-Enter")) < 0)
-    {
-        cs += "\tAlt-Enter";
-        pCmdUI->SetText(cs);
-    }
+	UpdateMenuShortCut(pCmdUI, ActionEnums::CLIP_PROPERTIES);
 }
 
 void CQPasteWnd::OnUpdateMenuEdititem(CCmdUI *pCmdUI)
@@ -4090,14 +4187,7 @@ void CQPasteWnd::OnUpdateMenuEdititem(CCmdUI *pCmdUI)
         return ;
     }
 
-    CString cs;
-    pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-
-    if(cs.Find(_T("tCtrl-E")) < 0)
-    {
-        cs += "\tCtrl-E";
-        pCmdUI->SetText(cs);
-    }
+	UpdateMenuShortCut(pCmdUI, ActionEnums::EDITCLIP);
 }
 
 void CQPasteWnd::OnUpdateMenuNewclip(CCmdUI *pCmdUI)
@@ -4107,14 +4197,7 @@ void CQPasteWnd::OnUpdateMenuNewclip(CCmdUI *pCmdUI)
         return ;
     }
 
-    CString cs;
-    pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
-
-    if(cs.Find(_T("tCtrl-N")) < 0)
-    {
-        cs += "\tCtrl-N";
-        pCmdUI->SetText(cs);
-    }
+	UpdateMenuShortCut(pCmdUI, ActionEnums::NEWCLIP);
 }
 
 LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
@@ -4377,142 +4460,13 @@ void CQPasteWnd::OnQuickoptionsShowintaskbar()
 
 void CQPasteWnd::OnMenuViewasqrcode()
 {
-	ARRAY IDs;
-	m_lstHeader.GetSelectionItemData(IDs);
-
-	if(IDs.GetCount() > 0)
-	{
-		int id = IDs[0];
-		CClip clip;
-		if(clip.LoadMainTable(id))
-		{
-			if(clip.LoadFormats(id, false))
-			{
-				IClipFormat *pFormat = clip.Clips()->FindFormatEx(CF_UNICODETEXT);
-				if(pFormat != NULL)
-				{
-					wchar_t *stringData = (wchar_t *)GlobalLock(pFormat->Data());
-					if(stringData != NULL)
-					{
-						CStringW string(stringData);
-
-						GlobalUnlock(pFormat->Data());
-
-						CCreateQRCodeImage p;
-						int imageSize = 0;
-						unsigned char* bitmapData = p.CreateImage(string, imageSize);
-
-						if(bitmapData != NULL)
-						{
-							QRCodeViewer *viewer = new QRCodeViewer();
-
-							LOGFONT lf;
-							CGetSetOptions::GetFont(lf);
-
-							viewer->CreateEx(this, bitmapData, imageSize, clip.Description(), m_lstHeader.GetRowHeight(), lf);
-							viewer->ShowWindow(SW_SHOW);
-						}
-					}
-				}				
-			}
-		}
-	}	
+	DoAction(ActionEnums::EXPORT_TO_QR_CODE);
 }
-
 
 void CQPasteWnd::OnExportExporttotextfile()
 {
-	CClipIDs IDs;
-	INT_PTR lCount = m_lstHeader.GetSelectedCount();
-	if(lCount <= 0)
-	{
-		return ;
-	}
-
-	m_lstHeader.GetSelectionItemData(IDs);
-	lCount = IDs.GetSize();
-	if(lCount <= 0)
-	{
-		return ;
-	}
-
-	OPENFILENAME ofn;
-	TCHAR szFile[400];
-	TCHAR szDir[400];
-
-	memset(&szFile, 0, sizeof(szFile));
-	memset(szDir, 0, sizeof(szDir));
-	memset(&ofn, 0, sizeof(ofn));
-
-	CString csInitialDir = CGetSetOptions::GetLastImportDir();
-	STRCPY(szDir, csInitialDir);
-
-	ofn.lStructSize = sizeof(OPENFILENAME);
-	ofn.hwndOwner = m_hWnd;
-	ofn.lpstrFile = szFile;
-	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFilter = _T("Exported Ditto Clips (.txt)\0*.txt\0\0");
-	ofn.nFilterIndex = 1;
-	ofn.lpstrFileTitle = NULL;
-	ofn.nMaxFileTitle = 0;
-	ofn.lpstrInitialDir = szDir;
-	ofn.lpstrDefExt = _T("txt");
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
-
-	m_bHideWnd = false;
-
-	if(GetSaveFileName(&ofn))
-	{
-		using namespace nsPath;
-		CString startingFilePath = ofn.lpstrFile;
-		CPath path(ofn.lpstrFile);
-		CString csPath = path.GetPath();
-		CString csExt = path.GetExtension();
-		path.RemoveExtension();
-		CString csFileName = path.GetName();
-		
-		CGetSetOptions::SetLastExportDir(csPath);
-		
-		for(int i = 0; i < IDs.GetCount(); i++)
-		{
-			int id = IDs[i];
-
-			CClip clip;
-			if(clip.LoadFormats(id, true))
-			{	
-				CString savePath = startingFilePath;
-				if(IDs.GetCount() > 1 ||
-					FileExists(startingFilePath))
-				{
-					savePath = _T("");
-
-					for(int y = 1; y < 1001; y++)
-					{			
-						CString testFilePath;
-						testFilePath.Format(_T("%s%s_%d.%s"), csPath, csFileName, y, csExt);
-						if(FileExists(testFilePath) == FALSE)
-						{				
-							savePath = testFilePath;
-							break;
-						}
-					}
-				}
-				
-				if(savePath != _T(""))
-				{
-					clip.WriteTextToFile(savePath, true, true, false);
-				}
-				else
-				{
-					Log(StrF(_T("Failed to find a valid file name for starting path: %s"), startingFilePath));
-				}
-			}
-		}		
-	}
-
-	m_bHideWnd = true;
+	DoAction(ActionEnums::EXPORT_TO_TEXT_FILE);
 }
-
 
 void CQPasteWnd::OnCompareCompare()
 {
@@ -4527,4 +4481,28 @@ void CQPasteWnd::OnCompareSelectleftcompare()
 void CQPasteWnd::OnCompareCompareagainst()
 {
 	DoAction(ActionEnums::SELECT_RIGHT_SITE_AND_DO_COMPARE);
+}
+
+void CQPasteWnd::OnUpdateCompareCompare(CCmdUI *pCmdUI)
+{
+	if(!pCmdUI->m_pMenu)
+	{
+		return ;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::COMPARE_SELECTED_CLIPS);	
+}
+
+void CQPasteWnd::UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action)
+{
+	CString cs;
+	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
+	CString shortcutText = m_actions.GetCmdKeyText(action);
+	if(shortcutText != _T("") &&
+		cs.Find(shortcutText) < 0)
+	{
+		cs += "\t";
+		cs += shortcutText;
+		pCmdUI->SetText(cs);
+	}
 }

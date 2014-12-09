@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Accels.h"
+#include "HotKeys.h"
 
 CAccels::CAccels(){
 
@@ -13,6 +14,31 @@ void CAccels::AddAccel(CAccel &a)
 void CAccels::AddAccel(DWORD cmd, DWORD key)
 {
 	m_Map.SetAt(key, cmd);
+}
+
+void CAccels::RemoveAll()
+{
+	m_Map.RemoveAll();
+}
+
+CString CAccels::GetCmdKeyText(DWORD cmd)
+{
+	CString cmdShortcutText = _T("");
+	POSITION pos = m_Map.GetStartPosition();
+	DWORD mapShortcut;
+	DWORD mapCmd;
+	while (pos != NULL)
+	{
+		m_Map.GetNextAssoc(pos, mapShortcut, mapCmd);
+
+		if(mapCmd == cmd)
+		{
+			cmdShortcutText = CHotKey::GetHotKeyDisplayStatic(mapShortcut);
+			break;
+		}
+	}
+
+	return cmdShortcutText;
 }
 
 bool CAccels::OnMsg(MSG *pMsg, DWORD &dID)

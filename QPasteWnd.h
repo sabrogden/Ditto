@@ -240,6 +240,10 @@ public:
 	bool DoClipCompare();
 	bool DoSelectLeftSideCompare();
 	bool DoSelectRightSideAndDoCompare();
+	bool DoExportToQRCode();
+	bool DoExportToTextFile();
+
+	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
     // Generated message map functions
 protected:
@@ -386,4 +390,5 @@ public:
 	afx_msg void OnCompareCompare();
 	afx_msg void OnCompareSelectleftcompare();
 	afx_msg void OnCompareCompareagainst();
+	afx_msg void OnUpdateCompareCompare(CCmdUI *pCmdUI);
 };

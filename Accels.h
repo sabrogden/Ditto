@@ -24,10 +24,12 @@ class CAccels
 public:
     CAccels();
 
-    CMap < DWORD, DWORD, DWORD, DWORD > m_Map;
-
     void AddAccel(CAccel &a);
 	void AddAccel(DWORD cmd, DWORD key);
+
+	void RemoveAll();
+
+	CString GetCmdKeyText(DWORD cmd);
 
     // handles a key's first WM_KEYDOWN or WM_SYSKEYDOWN message.
     // it uses GetKeyState to test for modifiers.
@@ -35,4 +37,7 @@ public:
     bool OnMsg(MSG *pMsg, DWORD &dID);
 
     static BYTE GetKeyStateModifiers();
+
+protected:
+	CMap < DWORD, DWORD, DWORD, DWORD > m_Map;
 };

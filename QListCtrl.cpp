@@ -1161,7 +1161,7 @@ void CQListCtrl::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 void CQListCtrl::DestroyAndCreateAccelerator(BOOL bCreate, CppSQLite3DB &db)
 {
-	m_Accels.m_Map.RemoveAll();
+	m_Accels.RemoveAll();
 
 	if(bCreate)
 	{
