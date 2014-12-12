@@ -59,7 +59,6 @@ public:
     short m_keyModifiersTimerCount;
     HWND m_tempFocusWnd;
     CMainFrmThread m_thread;
-	CClipboardSaveRestore m_textOnlyPaste;
 	CDialog *m_pGlobalClips;
 	CDialog *m_pDeleteClips;
 	CPropertySheet *m_pOptions;

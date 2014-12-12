@@ -10,7 +10,7 @@ CClipboardSaveRestore::~CClipboardSaveRestore(void)
 {
 }
 
-bool CClipboardSaveRestore::Save()
+bool CClipboardSaveRestore::Save(BOOL textOnly)
 {
 	m_Clipboard.RemoveAll();
 
@@ -23,23 +23,28 @@ bool CClipboardSaveRestore::Save()
 		int nFormat = EnumClipboardFormats(0);
 		while(nFormat != 0)
 		{
-			HGLOBAL hGlobal = ::GetClipboardData(nFormat);
-			LPVOID pvData = GlobalLock(hGlobal);
-			if(pvData)
+			if(textOnly == false || (nFormat == CF_TEXT || nFormat == CF_UNICODETEXT))
 			{
-				INT_PTR size = GlobalSize(hGlobal);
-				if(size > 0)
+				HGLOBAL hGlobal = ::GetClipboardData(nFormat);
+				LPVOID pvData = GlobalLock(hGlobal);
+				if(pvData)
 				{
-					//Copy the data locally
-					cf.m_hgData = NewGlobalP(pvData, size);	
-					cf.m_cfType = nFormat;
+					INT_PTR size = GlobalSize(hGlobal);
+					if(size > 0)
+					{
+						//Copy the data locally
+						cf.m_hgData = NewGlobalP(pvData, size);	
+						cf.m_cfType = nFormat;
 
-					m_Clipboard.Add(cf);
+						m_Clipboard.Add(cf);
+
+						//m_Clipboard owns the data now
+						cf.m_hgData = NULL;
+					}
+
+					GlobalUnlock(hGlobal);
 				}
-
-				GlobalUnlock(hGlobal);
 			}
-
 			nFormat = EnumClipboardFormats(nFormat);
 		}
 

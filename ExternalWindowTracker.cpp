@@ -234,10 +234,6 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 		theApp.PumpMessageEx();
 		WaitForActiveWnd(activeWnd, max(25, g_Opt.WaitForActiveWndTimeout()));
 	}
-	else
-	{
-		theApp.PumpMessageEx();
-	}
 
 	DWORD endTick = GetTickCount();
 	if((endTick-startTick) > 150)
@@ -265,7 +261,10 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	
 	if (pasteAsAdmin == false)
 	{
-		Sleep(delay);
+		if(activateTarget)
+		{
+			Sleep(delay);
+		}
 		send.SetKeyDownDelay(max(50, delay));
 		send.SendKeys(csPasteString, true);
 	}

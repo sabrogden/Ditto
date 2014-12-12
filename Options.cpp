@@ -1921,7 +1921,7 @@ DWORD CGetSetOptions::GetTextOnlyRestoreDelay()
 
 DWORD CGetSetOptions::GetTextOnlyPasteDelay()
 {
-	return (DWORD)GetProfileLong(_T("TextOnlyPasteDelay"), 500);
+	return (DWORD)GetProfileLong(_T("TextOnlyPasteDelay"), 0);
 }
 
 BOOL CGetSetOptions::GetSetFocusToApp(CString csAppName)

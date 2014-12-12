@@ -857,6 +857,8 @@ __int64 GetLastWriteTime(const CString &csFile)
 
 CString GetProcessName(HWND hWnd) 
 {
+	DWORD startTick = GetTickCount();
+
 	DWORD Id;
 	CString	strProcessName ;
 	GetWindowThreadProcessId(hWnd, &Id);
@@ -879,6 +881,13 @@ CString GetProcessName(HWND hWnd)
 	}
 
 	CloseHandle(hSnapShot);
+
+	DWORD endTick = GetTickCount();
+	DWORD diff = endTick - startTick;
+	if(diff > 5)
+	{
+		Log(StrF(_T("GetProcessName Time (ms): %d"), endTick-startTick));
+	}
 
 	return strProcessName;
 }

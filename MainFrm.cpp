@@ -371,14 +371,15 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 
 void CMainFrame::DoTextOnlyPaste()
 {
+	CClipboardSaveRestore textOnlyPaste;
+
 	Log(_T("Text Only paste, saving clipboard to be restored later"));
-	m_textOnlyPaste.Save();
+	textOnlyPaste.Save(TRUE);
 
 	Log(_T("Text Only paste, Add cf_text or cf_unicodetext to clipboard"));
-	m_textOnlyPaste.RestoreTextOnly();
+	textOnlyPaste.RestoreTextOnly();
 
 	DWORD pasteDelay = g_Opt.GetTextOnlyPasteDelay();
-	DWORD restoreDelay = g_Opt.GetTextOnlyRestoreDelay();
 
 	Log(StrF(_T("Text Only paste, delaying %d ms before sending paste"), pasteDelay));
 
@@ -387,8 +388,7 @@ void CMainFrame::DoTextOnlyPaste()
 	Log(_T("Text Only paste, Sending paste"));
 	theApp.m_activeWnd.SendPaste(false);
 
-	Log(StrF(_T("Text Only paste, delaying %d ms before restoring clipboard to original state"), restoreDelay));
-	SetTimer(TEXT_ONLY_PASTE, restoreDelay, 0);
+	Log(_T("Text Only paste, Post sending paste"));
 }
 
 void CMainFrame::DoFirstTenPositionsPaste(int nPos)
@@ -561,15 +561,6 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 				{
 					theApp.m_activeWnd.TrackActiveWnd(false);
 				}
-			}
-			break;
-
-		case TEXT_ONLY_PASTE:
-			{
-				KillTimer(TEXT_ONLY_PASTE);
-
-				Log(_T("Text Only Paste, restoring original clipboard data"));
-				m_textOnlyPaste.Restore();
 			}
 			break;
     }

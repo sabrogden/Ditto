@@ -8,7 +8,7 @@ public:
 	CClipboardSaveRestore(void);
 	~CClipboardSaveRestore(void);
 
-	bool Save();
+	bool Save(BOOL textOnly);
 	bool Restore();
 	void Clear()	{ m_Clipboard.RemoveAll(); }
 	bool RestoreTextOnly();

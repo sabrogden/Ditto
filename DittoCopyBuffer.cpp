@@ -27,7 +27,7 @@ bool CDittoCopyBuffer::StartCopy(long lCopyBuffer, bool bCut)
 	//Make sure the end copy thread has exited
 	EndRestoreThread();
 
-	if(m_SavedClipboard.Save())
+	if(m_SavedClipboard.Save(FALSE))
 	{
 		if(bCut)
 		{
@@ -168,7 +168,7 @@ bool CDittoCopyBuffer::PastCopyBuffer(long lCopyBuffer)
 				//then put the new data on the clipboard
 				//then send a paste
 				//then wait a little and restore the original clipboard data
-				if(m_pClipboard->Save())
+				if(m_pClipboard->Save(false))
 				{
 					theApp.m_pMainFrame->PasteOrShowGroup(q.getIntField(_T("lID")), -1, FALSE, TRUE);
 
