@@ -2153,3 +2153,15 @@ CString	CGetSetOptions::GetDiffApp()
 {
 	return GetProfileString(_T("DiffApp"), _T(""));
 }
+
+void CGetSetOptions::SetQRCodeBorderPercent(double val)
+{
+	SetProfileLong(_T("QRCodeBorderPercent"), (int)val);
+}
+
+double CGetSetOptions::GetQRCodeBorderPercent()
+{
+	int val = GetProfileLong(_T("QRCodeBorderPercent"), 25);
+
+	return val / 100.0;
+}

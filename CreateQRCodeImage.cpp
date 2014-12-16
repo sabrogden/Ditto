@@ -7,7 +7,7 @@
 #define OUT_FILE					"C:/temp/test.bmp"								// Output file name
 #define OUT_FILE_PIXEL_PRESCALER	8											// Prescaler (number of pixels in bmp file for each QRCode pixel, on each dimension)
 
-#define PIXEL_COLOR_R				0xff											// Color of bmp pixels
+#define PIXEL_COLOR_R				0											// Color of bmp pixels
 #define PIXEL_COLOR_G				0
 #define PIXEL_COLOR_B				0
 

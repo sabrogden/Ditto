@@ -460,6 +460,9 @@ public:
 
 	static void		SetDiffApp(CString val);
 	static CString	GetDiffApp();
+
+	static void		SetQRCodeBorderPercent(double val);
+	static double	GetQRCodeBorderPercent();
 };
 
 // global for easy access and for initialization of fast access variables

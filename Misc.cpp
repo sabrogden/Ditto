@@ -773,8 +773,12 @@ CRect CenterRect(CRect startingRect)
 		GetMonitorRect(nMonitor, crMonitor);
 	}
 
-	
-	CPoint center = crMonitor.CenterPoint();
+	return CenterRectFromRect(startingRect, crMonitor);
+}
+
+CRect CenterRectFromRect(CRect startingRect, CRect outerRect)
+{
+	CPoint center = outerRect.CenterPoint();
 
 	CRect centerRect;
 
