@@ -210,14 +210,28 @@ CString CSendKeys::VkString(BYTE VKey)
 
 void CSendKeys::AllKeysUp()
 {
-	for(int key = 0; key < 256; key++)
+	for (int key = 0; key < 256; key++)
 	{
 		//If the key is pressed, send a key up, having other keys down interferes with sending ctrl-v, -c and -x
-		if(GetKeyState(key) & 0x8000)
+		short val = GetKeyState(key);
+		if (val & 0x8000)
 		{
 			SendKeyUp(key);
+
+			//CString cs;
+			//cs.Format(_T("key was down, sending key up %d, value: %d\n"), key, val);
+			//OutputDebugString(cs);
 		}
 	}
+
+	//Force these to be up, i was having trouble with the right shift key, i think things were
+	//getting confused between the basic shift and lshift, but not sure.
+	SendKeyUp(VK_LSHIFT);
+	SendKeyUp(VK_RSHIFT);
+	SendKeyUp(VK_LCONTROL);
+	SendKeyUp(VK_RCONTROL);
+	SendKeyUp(VK_LMENU);
+	SendKeyUp(VK_RMENU);
 }
 
 // Generates KEYUP
