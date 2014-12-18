@@ -14,7 +14,6 @@ CProcessPaste::CProcessPaste()
 	m_pOle = new COleClipSource;
 	m_bSendPaste = true;
 	m_bActivateTarget = true;
-	m_bOnlyPaste_CF_TEXT = false;
 	m_pastedFromGroup = false;
 }
 
@@ -25,7 +24,7 @@ CProcessPaste::~CProcessPaste()
 
 BOOL CProcessPaste::DoPaste()
 {
-	m_pOle->m_bOnlyPaste_CF_TEXT = m_bOnlyPaste_CF_TEXT;
+	m_pOle->m_pasteOptions = m_pasteOptions;
 
 	if(m_pOle->DoImmediateRender())
 	{

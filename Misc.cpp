@@ -810,14 +810,12 @@ BOOL EnsureWindowVisible(CRect *pcrRect)
 	if(lDiff < 0)
 	{
 		pcrRect->left += abs(lDiff);
-		pcrRect->right += abs(lDiff);
 	}
 
 	//Right side
 	lDiff = pcrRect->right - crMonitor.right;
 	if(lDiff > 0)
 	{
-		pcrRect->left -= abs(lDiff);
 		pcrRect->right -= abs(lDiff);
 	}
 
@@ -826,14 +824,12 @@ BOOL EnsureWindowVisible(CRect *pcrRect)
 	if(lDiff < 0)
 	{
 		pcrRect->top += abs(lDiff);
-		pcrRect->bottom += abs(lDiff);
 	}
 
 	//Bottom
 	lDiff = pcrRect->bottom - crMonitor.bottom;
 	if(lDiff > 0)
 	{
-		pcrRect->top -= abs(lDiff);
 		pcrRect->bottom -= abs(lDiff);
 	}
 

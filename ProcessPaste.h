@@ -13,7 +13,7 @@
 #include "Clip.h"
 #include "ClipIds.h"
 #include "OleClipSource.h"
-
+#include "SpecialPasteOptions.h"
 
 /*------------------------------------------------------------------*\
 	CProcessPaste
@@ -24,7 +24,7 @@ public:
 	COleClipSource*	m_pOle;
 	bool m_bSendPaste;
 	bool m_bActivateTarget;
-	bool m_bOnlyPaste_CF_TEXT;
+	CSpecialPasteOptions m_pasteOptions;
 	bool m_pastedFromGroup;
 
 	struct MarkAsPastedData 
@@ -43,8 +43,6 @@ public:
 
 	void MarkAsPasted();
 	static UINT MarkAsPastedThread(LPVOID pParam);
-
-	void SetCustomPasteFormats(CClipFormats *pFormats) { m_pOle->m_pCustomPasteFormats = pFormats; }
 };
 
 #endif // !defined(AFX_PROCESSPASTE_H__185CBB6F_4B63_4397_8FF9_E18D777DA506__INCLUDED_)

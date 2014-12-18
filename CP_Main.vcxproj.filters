@@ -385,6 +385,7 @@
     <ClCompile Include="QRCodeViewer.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="SpecialPasteOptions.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -822,6 +823,7 @@
     <ClInclude Include="QRCodeViewer.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="SpecialPasteOptions.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

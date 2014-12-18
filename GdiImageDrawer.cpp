@@ -49,10 +49,14 @@ BOOL CGdiImageDrawer::LoadStdImageDPI(UINT id96, UINT id120, UINT id144, UINT id
 	return ret;
 }
 
-void CGdiImageDrawer::Draw(CDC* pScreenDC, CWnd *pWnd, int posX, int posY, bool mouseHover, bool mouseDown)
+void CGdiImageDrawer::Draw(CDC* pScreenDC, CWnd *pWnd, int posX, int posY, bool mouseHover, bool mouseDown, int forceWidth, int forceHeight)
 {
 	int width = m_pStdImage->m_pBitmap->GetWidth();
+	if (forceWidth != INT_MAX)
+		width = forceWidth;
 	int height = m_pStdImage->m_pBitmap->GetHeight();
+	if (forceHeight != INT_MAX)
+		height = forceHeight;
 
 	CRect rectWithBorder(posX, posY, posX + width, posY + height);
 
@@ -68,9 +72,8 @@ void CGdiImageDrawer::Draw(CDC* pScreenDC, CWnd *pWnd, int posX, int posY, bool 
 	bmp.CreateCompatibleBitmap(&clDC, 1, 1);
 	dcBk.SelectObject(&bmp);
 	dcBk.BitBlt(0, 0, 1, 1, &clDC, rectWithBorder.left-1, rectWithBorder.top, SRCCOPY);
-	bmp.DeleteObject();
 	
-	//pScreenDC->StretchBlt(rectWithBorder.left, rectWithBorder.top, rectWithBorder.Width(), rectWithBorder.Height(), &dcBk, 0, 0, 1, 1, SRCCOPY);
+	bmp.DeleteObject();		
 
 	//Draw the png file
 	if (mouseDown)

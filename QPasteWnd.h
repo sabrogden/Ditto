@@ -15,6 +15,7 @@
 #include "QPasteWndThread.h"
 #include "editwithbutton.h"
 #include "GdipButton.h"
+#include "SpecialPasteOptions.h"
 
 class CMainTable
 {
@@ -169,8 +170,8 @@ public:
 
     void DeleteSelectedRows();
 
-    BOOL OpenID(int id, bool bOnlyLoad_CF_TEXT = false, CClipFormats *pPasteFormats = NULL);
-    BOOL OpenSelection(bool bOnlyLoad_CF_TEXT = false);
+	BOOL OpenID(int id, CSpecialPasteOptions pasteOptions);
+	BOOL OpenSelection(CSpecialPasteOptions pasteOptions);
     BOOL OpenIndex(int item);
     BOOL NewGroup(bool bGroupSelection = true);
 

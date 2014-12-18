@@ -2154,14 +2154,12 @@ CString	CGetSetOptions::GetDiffApp()
 	return GetProfileString(_T("DiffApp"), _T(""));
 }
 
-void CGetSetOptions::SetQRCodeBorderPercent(double val)
+void CGetSetOptions::SetQRCodeBorderPixels(int val)
 {
-	SetProfileLong(_T("QRCodeBorderPercent"), (int)val);
+	SetProfileLong(_T("QRCodeBorderPixels"), val);
 }
 
-double CGetSetOptions::GetQRCodeBorderPercent()
+int CGetSetOptions::GetQRCodeBorderPixels()
 {
-	int val = GetProfileLong(_T("QRCodeBorderPercent"), 25);
-
-	return val / 100.0;
+	return GetProfileLong(_T("QRCodeBorderPixels"), 30);
 }

@@ -15,8 +15,6 @@ COleClipSource
 COleClipSource::COleClipSource()
 {
 	m_bLoadedFormats = false;
-	m_bOnlyPaste_CF_TEXT = false;
-	m_pCustomPasteFormats = NULL;
 }
 
 COleClipSource::~COleClipSource()
@@ -47,9 +45,9 @@ BOOL COleClipSource::DoImmediateRender()
 
 	m_bLoadedFormats = true;
 
-	if(m_pCustomPasteFormats != NULL)
+	if(m_pasteOptions.m_pPasteFormats != NULL)
 	{
-		return PutFormatOnClipboard(m_pCustomPasteFormats) > 0;
+		return PutFormatOnClipboard(m_pasteOptions.m_pPasteFormats) > 0;
 	}
 	
 	INT_PTR count = m_ClipIDs.GetSize();
@@ -76,7 +74,7 @@ BOOL COleClipSource::DoImmediateRender()
 			bProcessedMult = TRUE;
 		}
 
-		if(m_bOnlyPaste_CF_TEXT == false)
+		if(m_pasteOptions.m_pasteAsPlainText == false)
 		{
 			CCF_HDropAggregator HDrop;
 			if(m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
@@ -106,7 +104,7 @@ BOOL COleClipSource::DoImmediateRender()
 		CClip clip;
 		CClipFormats formats;
 
-		clip.LoadFormats(m_ClipIDs[0], m_bOnlyPaste_CF_TEXT);
+		clip.LoadFormats(m_ClipIDs[0], m_pasteOptions.m_pasteAsPlainText);
 		
 		return PutFormatOnClipboard(&clip.m_Formats) > 0;
 	}		

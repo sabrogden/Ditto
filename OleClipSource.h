@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ClipIds.h"
+#include "SpecialPasteOptions.h"
 
 /*------------------------------------------------------------------*\
 	COleClipSource
@@ -12,8 +13,7 @@ class COleClipSource : public COleDataSource
 public:
 	CClipIDs	m_ClipIDs;
 	bool		m_bLoadedFormats;
-	bool		m_bOnlyPaste_CF_TEXT;
-	CClipFormats *m_pCustomPasteFormats;
+	CSpecialPasteOptions m_pasteOptions;
 
 	COleClipSource();
 	virtual ~COleClipSource();

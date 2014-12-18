@@ -55,9 +55,7 @@ BOOL QRCodeViewer::CreateEx(CWnd *pParentWnd, unsigned char* bitmapData, int ima
 		BOOL r = m_desc.Create(CMainTableFunctions::GetDisplayText(g_Opt.m_nLinesPerRow, desc), WS_CHILD|WS_VISIBLE, CRect(0,0,0,0), this, 2);
 
 		m_font.CreateFontIndirect(&logFont);
-
-		m_desc.SetFont(&m_font);
-	
+		m_desc.SetFont(&m_font);	
 
 		m_DittoWindow.DoCreate(this);
 		m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeft(), g_Opt.m_Theme.CaptionRight());
@@ -78,13 +76,12 @@ BOOL QRCodeViewer::CreateEx(CWnd *pParentWnd, unsigned char* bitmapData, int ima
 		rect.left = parentRect.left;
 		rect.top = parentRect.top;
 
-		int imageWidthWithExtra = m_qrCodeDrawer.ImageWidth() + (m_qrCodeDrawer.ImageWidth() * CGetSetOptions::GetQRCodeBorderPercent());
-		int imageHeightWithExtra = m_qrCodeDrawer.ImageHeight() + (m_qrCodeDrawer.ImageHeight() * CGetSetOptions::GetQRCodeBorderPercent());
-
-		rect.right = rect.left + imageWidthWithExtra + m_DittoWindow.m_lLeftBorder + m_DittoWindow.m_lRightBorder;
-		rect.bottom = rect.top + imageHeightWithExtra + m_DittoWindow.m_lTopBorder + m_DittoWindow.m_lBottomBorder + rowHeight + 10;	
-
+		rect.right = rect.left + m_DittoWindow.m_lLeftBorder + m_DittoWindow.m_lRightBorder + m_qrCodeDrawer.ImageWidth() + (CGetSetOptions::GetQRCodeBorderPixels() * 2);
+		rect.bottom = rect.top + m_DittoWindow.m_lTopBorder + m_DittoWindow.m_lBottomBorder + rowHeight + 5 + m_qrCodeDrawer.ImageHeight() + (CGetSetOptions::GetQRCodeBorderPixels() * 2);
+		
 		CRect center = CenterRect(rect);
+
+		EnsureWindowVisible(&center);
 
 		::MoveWindow(m_hWnd, center.left, center.top, center.Width(), center.Height(), TRUE);
 
@@ -130,15 +127,17 @@ void QRCodeViewer::OnPaint()
 
 	CRect thisRect;
 	GetClientRect(thisRect);
-
-	int width = m_qrCodeDrawer.ImageWidth();
-	int height = m_qrCodeDrawer.ImageHeight();
-
+	thisRect.bottom -= m_descRowHeight - 5;
+	
+	int width = thisRect.Width() - (CGetSetOptions::GetQRCodeBorderPixels() * 2);
+	int height = min(width, (thisRect.Height() - (CGetSetOptions::GetQRCodeBorderPixels() * 2)));
+	width = min(width, height);
+		
 	CRect imageRect(0, 0, width, height);
 
 	CRect centerRect = CenterRectFromRect(imageRect, thisRect);
 
-	m_qrCodeDrawer.Draw(&dc, this, centerRect.left, centerRect.top, false, false);
+	m_qrCodeDrawer.Draw(&dc, this, centerRect.left, centerRect.top, false, false, width, height);
 }
 
 BOOL QRCodeViewer::PreTranslateMessage(MSG *pMsg)

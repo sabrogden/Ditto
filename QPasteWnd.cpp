@@ -662,11 +662,11 @@ bool CQPasteWnd::Add(const CString &csHeader, const CString &csText, int nID)
     return true;
 }
 
-BOOL CQPasteWnd::OpenID(int id, bool bOnlyLoad_CF_TEXT, CClipFormats *pPasteFormats)
+BOOL CQPasteWnd::OpenID(int id, CSpecialPasteOptions pasteOptions)
 {
-    Log(StrF(_T("Start OpenId, Id: %d, Only CF_TEXT: %d"), id, bOnlyLoad_CF_TEXT));
+	Log(StrF(_T("Start OpenId, Id: %d, Only CF_TEXT: %s"), id, pasteOptions.ToString()));
 
-    if(pPasteFormats == NULL)
+    if(pasteOptions.m_pPasteFormats == NULL)
     {
         if(theApp.EnterGroupID(id, FALSE, FALSE))
         {
@@ -675,27 +675,15 @@ BOOL CQPasteWnd::OpenID(int id, bool bOnlyLoad_CF_TEXT, CClipFormats *pPasteForm
         }
     }
 
-    if(GetKeyState(VK_SHIFT) &0x8000)
-    {
-        Log(_T("Shift key is down, pasting CF_TEXT only"));
-        bOnlyLoad_CF_TEXT = true;
-    }
-
     // else, it is a clip, so paste it
     CProcessPaste paste;
 
     paste.m_bSendPaste = g_Opt.m_bSendPasteMessageAfterSelection == TRUE ? true : false;
-    paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;
+	paste.m_pasteOptions = pasteOptions;
 	paste.m_pastedFromGroup = (theApp.m_GroupID > 0);
 
-    if(pPasteFormats != NULL)
-    {
-        paste.SetCustomPasteFormats(pPasteFormats);
-    }
-    else
-    {
-        paste.GetClipIDs().Add(id);
-    }
+    paste.GetClipIDs().Add(id);
+    
     paste.DoPaste();
     theApp.OnPasteCompleted();
 
@@ -709,12 +697,12 @@ BOOL CQPasteWnd::OpenID(int id, bool bOnlyLoad_CF_TEXT, CClipFormats *pPasteForm
         MinMaxWindow(FORCE_MIN);
     }
 
-    Log(StrF(_T("End OpenId, Id: %d, Only CF_TEXT: %d"), id, bOnlyLoad_CF_TEXT));
+	Log(StrF(_T("End OpenId, Id: %d, Only CF_TEXT: %s"), id, pasteOptions.ToString()));
 
     return TRUE;
 }
 
-BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT)
+BOOL CQPasteWnd::OpenSelection(CSpecialPasteOptions pasteOptions)
 {
     Log(_T("Start Open Selection"));
     ARRAY IDs;
@@ -729,18 +717,13 @@ BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT)
 
     if(count == 1)
     {
-        return OpenID(IDs[0], bOnlyLoad_CF_TEXT);
-    }
-
-    if(GetKeyState(VK_SHIFT) &0x8000)
-    {
-        bOnlyLoad_CF_TEXT = true;
+		return OpenID(IDs[0], pasteOptions);
     }
 
     CProcessPaste paste;
 
     paste.m_bSendPaste = g_Opt.m_bSendPasteMessageAfterSelection == TRUE ? true : false;
-    paste.m_bOnlyPaste_CF_TEXT = bOnlyLoad_CF_TEXT;
+	paste.m_pasteOptions = pasteOptions;
 	paste.m_pastedFromGroup = (theApp.m_GroupID > 0);
 
     paste.GetClipIDs().Copy(IDs);
@@ -763,7 +746,8 @@ BOOL CQPasteWnd::OpenSelection(bool bOnlyLoad_CF_TEXT)
 
 BOOL CQPasteWnd::OpenIndex(int item)
 {
-    return OpenID(m_lstHeader.GetItemData(item));
+	CSpecialPasteOptions pasteOptions;
+    return OpenID(m_lstHeader.GetItemData(item), pasteOptions);
 }
 
 BOOL CQPasteWnd::NewGroup(bool bGroupSelection)
@@ -814,7 +798,8 @@ BOOL CQPasteWnd::NewGroup(bool bGroupSelection)
 
 LRESULT CQPasteWnd::OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam)
 {
-    OpenID((int)wParam);
+	CSpecialPasteOptions pasteOptions;
+	OpenID((int) wParam, pasteOptions);
     return TRUE;
 }
 
@@ -832,7 +817,8 @@ LRESULT CQPasteWnd::OnListSelect_Index(WPARAM wParam, LPARAM lParam)
 
 LRESULT CQPasteWnd::OnListSelect(WPARAM wParam, LPARAM lParam)
 {
-    OpenSelection(false);
+	CSpecialPasteOptions pasteOptions;
+    OpenSelection(pasteOptions);
 
     return TRUE;
 }
@@ -3069,7 +3055,8 @@ bool CQPasteWnd::DoActionPasteSelected()
 {
 	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
 	{
-		OpenSelection(false);
+		CSpecialPasteOptions pasteOptions;
+		OpenSelection(pasteOptions);
 		return true;
 	}
 
@@ -3150,7 +3137,8 @@ bool CQPasteWnd::DoActionClipProperties()
 
 			if(props.m_lGroupChangedTo >= 0)
 			{
-				OpenID(props.m_lGroupChangedTo);
+				CSpecialPasteOptions pasteOptions;
+				OpenID(props.m_lGroupChangedTo, pasteOptions);
 			}
 
 			m_lstHeader.SetFocus();
@@ -3168,7 +3156,9 @@ bool CQPasteWnd::DoActionPasteSelectedPlainText()
 {
 	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
 	{
-		OpenSelection(true);
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteAsPlainText = true;			
+		OpenSelection(pasteOptions);
 		return true;
 	}
 
@@ -3949,7 +3939,8 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
         bool bItWas = theApp.m_bAsynchronousRefreshView;
         theApp.m_bAsynchronousRefreshView = false;
 
-        OpenID(id);
+		CSpecialPasteOptions pasteOptions;
+        OpenID(id, pasteOptions);
 
         theApp.m_bAsynchronousRefreshView = bItWas;
 
@@ -4311,7 +4302,8 @@ void CQPasteWnd::OnTimer(UINT_PTR nIDEvent)
         if(m_bModifersMoveActive)
         {
             Log(_T("Open Selection\n"));
-            OpenSelection(false);
+			CSpecialPasteOptions pasteOptions;
+            OpenSelection(pasteOptions);
         }
         else
         {
@@ -4338,7 +4330,9 @@ void CQPasteWnd::OnAddinSelect(UINT idIn)
                 bool bCont = theApp.m_Addins.CallPrePasteFunction(idIn, &clip);
                 if(bCont)
                 {
-                    OpenID(-1, false, &clip.m_Formats);
+					CSpecialPasteOptions pasteOptions;
+					pasteOptions.m_pPasteFormats = &clip.m_Formats;
+                    OpenID(-1, pasteOptions);
                 }
             }
         }
