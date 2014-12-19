@@ -125,7 +125,7 @@ public:
 
 	void DestroyAndCreateAccelerator(BOOL bCreate, CppSQLite3DB &db);
 
-	void ShowFullDescription(bool bFromAuto = false, bool fromNextPrev = false);
+	bool ShowFullDescription(bool bFromAuto = false, bool fromNextPrev = false);
 	BOOL SetItemCountEx(int iCount, DWORD dwFlags = 0);
 
 	void HidePopup()	{ if(m_pToolTip) m_pToolTip->Hide();	}
@@ -141,6 +141,8 @@ public:
 	BOOL IsToolTipWindowVisible() { return ::IsWindowVisible(m_toolTipHwnd); }
 
 	int GetRowHeight() { return m_rowHeight; }
+
+	void SetSearchText(CString text) { m_searchText = text;  }
 
 protected:
 	void SendSelection(int nItem);;
@@ -172,6 +174,7 @@ protected:
 	CGdiImageDrawer m_shortCutImage;
 	CGdiImageDrawer m_stickyImage;
 	int m_rowHeight;
+	CString m_searchText;
 
 
 	// Generated message map functions

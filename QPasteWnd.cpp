@@ -983,8 +983,11 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 {
     KillTimer(TIMER_DO_SEARCH);
+	m_lstHeader.HidePopup();
 
     Log(StrF(_T("Start Fill List - %s"), csSQLSearch));
+
+	m_lstHeader.SetSearchText(csSQLSearch);
 
 	{
 	    ATL::CCritSecLock csLock(m_CritSection.m_sect);
@@ -1466,8 +1469,6 @@ void CQPasteWnd::SetSendToMenu(CMenu *pMenu, int nMenuID, int nArrayPos)
 
 LRESULT CQPasteWnd::OnSearch(WPARAM wParam, LPARAM lParam)
 {
-	m_lstHeader.HidePopup();
-
     CString csText;
     m_search.GetWindowText(csText);
 
@@ -2709,8 +2710,8 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 
 bool CQPasteWnd::DoActionShowDescription()
 {
-	m_lstHeader.ShowFullDescription();
-	return true;
+	bool ret = m_lstHeader.ShowFullDescription(false, false);
+	return (ret == true);
 }
 
 bool CQPasteWnd::DoActionNextDescription()
@@ -2870,7 +2871,11 @@ bool CQPasteWnd::DoActionCloseWindow()
 	}
 	else
 	{
-		if (m_strSQLSearch.IsEmpty() == FALSE)
+		if (m_lstHeader.IsToolTipWindowVisible())
+		{
+			m_lstHeader.HidePopup();
+		}
+		else if (m_strSQLSearch.IsEmpty() == FALSE)
 		{
 			OnCancelFilter(0, 0);
 			ret = true;
@@ -3836,9 +3841,7 @@ void CQPasteWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
 void CQPasteWnd::OnWindowPosChanging(WINDOWPOS *lpwndpos)
 {
     CWndEx::OnWindowPosChanging(lpwndpos);
-
-    //	m_lstHeader.HidePopup();
-
+	
     CRect rcScreen;
 
     CRect cr(lpwndpos->x, lpwndpos->y, lpwndpos->x + lpwndpos->cx, lpwndpos->y + lpwndpos->cy);
@@ -4067,12 +4070,30 @@ void CQPasteWnd::OnSearchEditChange()
 
 LRESULT CQPasteWnd::OnUpDown(WPARAM wParam, LPARAM lParam)
 {
-    m_lstHeader.HidePopup();
+	if(wParam == VK_F3)
+	{
+		MSG msg;
+		//Workaround for allow holding down arrow keys while in the search control
+		msg.lParam = lParam & (~0x40000000);
+		msg.wParam = wParam;
+		msg.message = WM_KEYDOWN;
+		if(CheckActions(&msg) == false)
+		{
+			if (m_lstHeader.HandleKeyDown(wParam, lParam) == FALSE)
+			{
+				LRESULT res = m_lstHeader.SendMessage(WM_KEYDOWN, wParam, lParam);
+			}
+		}
+	}
+	else
+	{
+		m_lstHeader.HidePopup();
 
-    if(m_lstHeader.HandleKeyDown(wParam, lParam) == FALSE)
-    {
-		m_lstHeader.SendMessage(WM_KEYDOWN, wParam, lParam);
-    }
+		if (m_lstHeader.HandleKeyDown(wParam, lParam) == FALSE)
+		{
+			LRESULT res = m_lstHeader.SendMessage(WM_KEYDOWN, wParam, lParam);
+		}
+	}
 
     return TRUE;
 }

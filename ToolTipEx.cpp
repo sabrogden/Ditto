@@ -3,6 +3,7 @@
 #include "ToolTipEx.h"
 #include "BitmapHelper.h"
 #include "Options.h"
+#include <Richedit.h>
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -23,7 +24,7 @@ m_pBitmap = NULL;		\
 
 CToolTipEx::CToolTipEx(): m_dwTextStyle(DT_EXPANDTABS | DT_EXTERNALLEADING |
                        DT_NOPREFIX | DT_WORDBREAK), m_rectMargin(2, 2, 3, 3),
-                       m_pBitmap(NULL), m_pNotifyWnd(NULL){}
+                       m_pBitmap(NULL), m_pNotifyWnd(NULL), m_clipId(0){}
 
 CToolTipEx::~CToolTipEx()
 {
@@ -82,7 +83,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 	m_DittoWindow.m_sendWMClose = false;
 
     m_RichEdit.Create(_T(""), _T(""), WS_CHILD | WS_VISIBLE | WS_VSCROLL |
-                      WS_HSCROLL | ES_MULTILINE | ES_AUTOVSCROLL |
+		WS_HSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_NOHIDESEL |
                       ES_AUTOHSCROLL, CRect(10, 10, 100, 200), this, 1);
 
     m_RichEdit.SetReadOnly();
@@ -108,7 +109,6 @@ BOOL CToolTipEx::Show(CPoint point)
     else
     {
         m_RichEdit.ShowWindow(SW_SHOW);
-		//m_RichEdit.SetFocus();
     }
 
 	CRect rect;
@@ -144,10 +144,10 @@ BOOL CToolTipEx::Show(CPoint point)
 		{
 			//if showing rtf then increase the size because
 			//rtf will probably draw bigger
-			long lNewWidth = (long)rect.Width() + (long)(rect.Width() *.3);
+			long lNewWidth = (long)rect.Width() + (long)(rect.Width() *1.5);
 			rect.right = rect.left + lNewWidth;
 
-			long lNewHeight = rect.Height() + (rect.Height() *1);
+			long lNewHeight = rect.Height() + (rect.Height() *1.5);
 			rect.bottom = rect.top + lNewHeight;
 		}
 
@@ -234,6 +234,7 @@ BOOL CToolTipEx::Hide()
 
     m_csRTF = "";
     m_csText = "";
+	m_clipId = 0;
 
 	CRect rect;
 	this->GetWindowRect(&rect);
@@ -325,6 +326,39 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
                     m_RichEdit.Copy();
                 }
                 break;
+			case VK_F3:
+			{
+				FINDTEXTEX ft;
+				long n = -1;
+
+				ft.lpstrText = m_searchText;
+
+
+				long start;
+				long end;
+				m_RichEdit.GetSel(start, end);
+
+				ft.chrg.cpMin = end;
+				ft.chrg.cpMax = -1;
+
+				n = m_RichEdit.FindText(FR_DOWN, &ft);
+				if (n != -1)
+				{
+					m_RichEdit.SetSel(ft.chrgText);
+				}
+				else 
+				{
+					ft.chrg.cpMin = 0;
+					ft.chrg.cpMax = -1;
+
+					n = m_RichEdit.FindText(FR_DOWN, &ft);
+					if (n != -1)
+					{
+						m_RichEdit.SetSel(ft.chrgText);
+					}
+				}
+			}
+			break;
             }
 			break;
 		case WM_RBUTTONDOWN:
@@ -378,6 +412,40 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 				}
 				else if (vk == 'P')
 				{
+					return FALSE;
+				}
+				else if(vk == VK_F3)
+				{
+					FINDTEXTEX ft;
+					long n = -1;
+
+					ft.lpstrText = m_searchText;
+
+
+					long start;
+					long end;
+					m_RichEdit.GetSel(start, end);
+
+					ft.chrg.cpMin = end;
+					ft.chrg.cpMax = -1;
+
+					n = m_RichEdit.FindText(FR_DOWN, &ft);
+					if (n != -1)
+					{
+						m_RichEdit.SetSel(ft.chrgText);
+					}
+					else
+					{
+						ft.chrg.cpMin = 0;
+						ft.chrg.cpMax = -1;
+
+						n = m_RichEdit.FindText(FR_DOWN, &ft);
+						if (n != -1)
+						{
+							m_RichEdit.SetSel(ft.chrgText);
+						}
+					}
+
 					return FALSE;
 				}
 
@@ -552,8 +620,11 @@ void CToolTipEx::SetBitmap(CBitmap *pBitmap)
 
     m_pBitmap = pBitmap;
 
-	int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
-	int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
+	if (m_pBitmap != NULL)
+	{
+		int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
+		int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
+	}
 }
 
 void CToolTipEx::OnSize(UINT nType, int cx, int cy)
@@ -591,6 +662,7 @@ void CToolTipEx::SetRTFText(const char *pRTF)
 {
     m_RichEdit.SetRTF(pRTF);
     m_csRTF = pRTF;
+	m_RichEdit.SetSel(0, 0);
 }
 
 //void CToolTipEx::SetRTFText(const CString &csRTF)
@@ -604,6 +676,7 @@ void CToolTipEx::SetToolTipText(const CString &csText)
     m_csText = csText;
     m_RichEdit.SetFont(&m_Font);
     m_RichEdit.SetText(csText);
+	m_RichEdit.SetSel(0, 0);
 }
 
 void CToolTipEx::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)

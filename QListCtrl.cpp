@@ -904,8 +904,24 @@ void CQListCtrl::LoadCopyOrCutToClipboard()
 	g_Opt.m_bUpdateTimeOnPaste = bItWas;
 }
 
-void CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
+bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 {
+	if (this->GetSelectedCount() == 0)
+	{
+		return false;
+	}
+
+	CClipIDs IDs;
+	this->GetSelectionItemData(IDs);
+	int clipId = IDs[0];
+
+	if(m_pToolTip != NULL && 
+		m_pToolTip->GetClipId() == clipId &&
+		::IsWindow(m_toolTipHwnd))
+	{
+		return false;
+	}
+
 	int nItem = GetCaret();
 	CRect rc, crWindow;
 	GetWindowRect(&crWindow);
@@ -950,10 +966,14 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		m_pToolTip->SetBitmap(NULL);
 		m_pToolTip->SetRTFText("");
 		m_pToolTip->SetToolTipText(_T(""));
+		
 	}
 	
 	if(m_pToolTip)
 	{
+		m_pToolTip->SetClipId(clipId);
+		m_pToolTip->SetSearchText(m_searchText);
+
 		m_pToolTip->SetToolTipText(_T(""));  
 		m_pToolTip->SetRTFText("    ");
 		bool bSetPlainText = false;
@@ -1044,6 +1064,8 @@ void CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		
 		m_pToolTip->Show(pt);
 	}
+
+	return true;
 }
 
 void CQListCtrl::GetToolTipText(int nItem, CString &csText)

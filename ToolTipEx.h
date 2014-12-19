@@ -38,6 +38,10 @@ public:
 	void HideWindowInXMilliSeconds(long lms)	{ SetTimer(HIDE_WINDOW_TIMER, lms, NULL); }
 	CRect GetBoundsRect();
 
+	void SetClipId(int clipId) { m_clipId = clipId; }
+	int GetClipId() { return m_clipId; }
+	void SetSearchText(CString text) { m_searchText = text; }
+
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CToolTipEx)
@@ -61,6 +65,8 @@ protected:
 	CWnd *m_pNotifyWnd;
 	bool m_reducedWindowSize;
 	CGdipButton m_optionsButton;
+	int m_clipId;
+	CString m_searchText;
 
 	CDittoWindow m_DittoWindow;
 
