@@ -807,6 +807,7 @@ BOOL EnsureWindowVisible(CRect *pcrRect)
 	CRect crMonitor;
 	GetMonitorRect(nMonitor, crMonitor);
 
+	bool movedLeft = false;
 	//Validate the left
 	long lDiff = pcrRect->left - crMonitor.left;
 	if(lDiff < 0)
@@ -814,17 +815,22 @@ BOOL EnsureWindowVisible(CRect *pcrRect)
 		pcrRect->left += abs(lDiff);
 		pcrRect->right += abs(lDiff);
 		ret = TRUE;
+		movedLeft = true;
 	}
 
 	//Right side
 	lDiff = pcrRect->right - crMonitor.right;
 	if(lDiff > 0)
 	{
-		pcrRect->left -= abs(lDiff);
+		if(movedLeft == false)
+		{
+			pcrRect->left -= abs(lDiff);
+		}
 		pcrRect->right -= abs(lDiff);
 		ret = TRUE;
 	}
 
+	bool movedTop = false;
 	//Top
 	lDiff = pcrRect->top - crMonitor.top;
 	if(lDiff < 0)
@@ -832,14 +838,18 @@ BOOL EnsureWindowVisible(CRect *pcrRect)
 		pcrRect->top += abs(lDiff);
 		pcrRect->bottom += abs(lDiff);
 		ret = TRUE;
+		movedTop = true;
 	}
 
 	//Bottom
 	lDiff = pcrRect->bottom - crMonitor.bottom;
 	if(lDiff > 0)
-	{
-		pcrRect->top -= abs(lDiff);
-		pcrRect->bottom -= abs(lDiff);
+	{		
+		if(movedTop == false)
+		{
+			pcrRect->top -= abs(lDiff);
+		}
+		pcrRect->bottom -= abs(lDiff);		
 		ret = TRUE;
 	}
 
