@@ -565,6 +565,12 @@
     <ClCompile Include="CreateQRCodeImage.cpp" />
     <ClCompile Include="DeleteClipData.cpp" />
     <ClCompile Include="DPI.cpp" />
+    <ClCompile Include="DrawHTML.C">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="EditWithButton.cpp" />
     <ClCompile Include="EventThread.cpp" />
     <ClCompile Include="GdiImageDrawer.cpp" />
@@ -1828,6 +1834,7 @@
     <ClInclude Include="CreateQRCodeImage.h" />
     <ClInclude Include="DeleteClipData.h" />
     <ClInclude Include="DPI.h" />
+    <ClInclude Include="DrawHTML.h" />
     <ClInclude Include="EditWithButton.h" />
     <ClInclude Include="EventThread.h" />
     <ClInclude Include="FormattedTextDraw.h" />

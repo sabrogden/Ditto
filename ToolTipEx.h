@@ -75,6 +75,8 @@ protected:
 	BOOL SetLogFont(LPLOGFONT lpLogFont, BOOL bRedraw /*=TRUE*/);
 	LPLOGFONT GetSystemToolTipFont();
 	BOOL IsCursorInToolTip();
+	void HighlightSearchText();
+	void DoSearch();
 
 	// Generated message map functions
 protected:

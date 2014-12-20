@@ -386,6 +386,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="SpecialPasteOptions.cpp" />
+    <ClCompile Include="DrawHTML.C">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -824,6 +827,9 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="SpecialPasteOptions.h" />
+    <ClInclude Include="DrawHTML.h">
+      <Filter>header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

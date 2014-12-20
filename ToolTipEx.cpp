@@ -235,6 +235,7 @@ BOOL CToolTipEx::Hide()
     m_csRTF = "";
     m_csText = "";
 	m_clipId = 0;
+	m_searchText = _T("");
 
 	CRect rect;
 	this->GetWindowRect(&rect);
@@ -328,35 +329,7 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
                 break;
 			case VK_F3:
 			{
-				FINDTEXTEX ft;
-				long n = -1;
-
-				ft.lpstrText = m_searchText;
-
-
-				long start;
-				long end;
-				m_RichEdit.GetSel(start, end);
-
-				ft.chrg.cpMin = end;
-				ft.chrg.cpMax = -1;
-
-				n = m_RichEdit.FindText(FR_DOWN, &ft);
-				if (n != -1)
-				{
-					m_RichEdit.SetSel(ft.chrgText);
-				}
-				else 
-				{
-					ft.chrg.cpMin = 0;
-					ft.chrg.cpMax = -1;
-
-					n = m_RichEdit.FindText(FR_DOWN, &ft);
-					if (n != -1)
-					{
-						m_RichEdit.SetSel(ft.chrgText);
-					}
-				}
+				DoSearch();
 			}
 			break;
             }
@@ -416,37 +389,9 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 				}
 				else if(vk == VK_F3)
 				{
-					FINDTEXTEX ft;
-					long n = -1;
+					DoSearch();
 
-					ft.lpstrText = m_searchText;
-
-
-					long start;
-					long end;
-					m_RichEdit.GetSel(start, end);
-
-					ft.chrg.cpMin = end;
-					ft.chrg.cpMax = -1;
-
-					n = m_RichEdit.FindText(FR_DOWN, &ft);
-					if (n != -1)
-					{
-						m_RichEdit.SetSel(ft.chrgText);
-					}
-					else
-					{
-						ft.chrg.cpMin = 0;
-						ft.chrg.cpMax = -1;
-
-						n = m_RichEdit.FindText(FR_DOWN, &ft);
-						if (n != -1)
-						{
-							m_RichEdit.SetSel(ft.chrgText);
-						}
-					}
-
-					return FALSE;
+					return TRUE;
 				}
 
                 Hide();
@@ -663,6 +608,8 @@ void CToolTipEx::SetRTFText(const char *pRTF)
     m_RichEdit.SetRTF(pRTF);
     m_csRTF = pRTF;
 	m_RichEdit.SetSel(0, 0);
+
+	HighlightSearchText();
 }
 
 //void CToolTipEx::SetRTFText(const CString &csRTF)
@@ -677,6 +624,89 @@ void CToolTipEx::SetToolTipText(const CString &csText)
     m_RichEdit.SetFont(&m_Font);
     m_RichEdit.SetText(csText);
 	m_RichEdit.SetSel(0, 0);
+
+	HighlightSearchText();
+}
+
+void CToolTipEx::HighlightSearchText()
+{
+	if (m_searchText.GetLength() <= 0)
+		return;
+
+	FINDTEXTEX ft;
+	long n = -1;
+
+	ft.lpstrText = m_searchText;
+
+
+	long start;
+	long end;
+
+	ft.chrg.cpMin = 0;
+	ft.chrg.cpMax = -1;
+
+	CHARFORMAT cf;
+
+	cf.cbSize = sizeof(cf);
+	cf.dwMask = CFM_COLOR;
+	cf.dwEffects = CFE_BOLD | ~CFE_AUTOCOLOR;
+	cf.crTextColor = RGB(255, 0, 0);
+
+	do 
+	{
+		ft.chrg.cpMin = n+1;
+		n = m_RichEdit.FindText(FR_DOWN, &ft);
+		if (n != -1)
+		{
+			m_RichEdit.SetSel(ft.chrgText);
+			m_RichEdit.SetSelectionCharFormat(cf);
+		}
+
+	} while (n != -1);	
+
+	m_RichEdit.SetSel(0, 0);
+}
+
+void CToolTipEx::DoSearch()
+{
+	if (m_searchText.GetLength() <= 0)
+		return;
+
+	FINDTEXTEX ft;
+	long n = -1;
+
+	ft.lpstrText = m_searchText;
+
+	long start;
+	long end;
+	m_RichEdit.GetSel(start, end);
+
+	ft.chrg.cpMin = end;
+	ft.chrg.cpMax = -1;
+
+	int searchDirection = FR_DOWN;
+	if (GetKeyState(VK_SHIFT) & 0x8000)
+	{
+		searchDirection = 0;
+		ft.chrg.cpMin = start;
+	}
+
+	n = m_RichEdit.FindText(searchDirection, &ft);
+	if (n != -1)
+	{
+		m_RichEdit.SetSel(ft.chrgText);
+	}
+	else
+	{
+		ft.chrg.cpMin = 0;
+		ft.chrg.cpMax = -1;
+
+		n = m_RichEdit.FindText(FR_DOWN, &ft);
+		if (n != -1)
+		{
+			m_RichEdit.SetSel(ft.chrgText);
+		}
+	}
 }
 
 void CToolTipEx::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)

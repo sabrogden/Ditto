@@ -9,6 +9,7 @@
 #include "MainTableFunctions.h"
 #include "DittoCopyBuffer.h"
 #include <atlbase.h>
+#include "DrawHTML.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -467,7 +468,16 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		
 		if(DrawRtfText(nItem, rcText, pDC) == FALSE)
 		{
-			pDC->DrawText(csText, rcText, DT_VCENTER|DT_EXPANDTABS|DT_NOPREFIX);
+			if (m_searchText.GetLength() > 0 &&
+				m_searchTextHtml.GetLength() > 0 &&
+				csText.Replace(m_searchText, m_searchTextHtml) > 0)
+			{				
+				DrawHTML(pDC->m_hDC, csText, csText.GetLength(), rcText, DT_VCENTER | DT_EXPANDTABS | DT_NOPREFIX);
+			}
+			else
+			{
+				pDC->DrawText(csText, rcText, DT_VCENTER | DT_EXPANDTABS | DT_NOPREFIX);
+			}
 		}
 		
         // Draw a focus rect around the item if necessary.
@@ -1452,4 +1462,11 @@ void CQListCtrl::StopHideScrollBarTimer()
 
 	m_timerToHideScrollAreaSet = false;
 	KillTimer(TIMER_HIDE_SCROL);
+}
+
+void CQListCtrl::SetSearchText(CString text) 
+{ 
+	m_searchText = text; 
+
+	m_searchTextHtml.Format(_T("<font color='#ff0000'>%s</font>"), text);
 }

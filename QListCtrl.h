@@ -142,7 +142,7 @@ public:
 
 	int GetRowHeight() { return m_rowHeight; }
 
-	void SetSearchText(CString text) { m_searchText = text;  }
+	void SetSearchText(CString text);
 
 protected:
 	void SendSelection(int nItem);;
@@ -175,6 +175,7 @@ protected:
 	CGdiImageDrawer m_stickyImage;
 	int m_rowHeight;
 	CString m_searchText;
+	CString m_searchTextHtml;
 
 
 	// Generated message map functions
