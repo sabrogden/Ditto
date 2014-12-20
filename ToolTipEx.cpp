@@ -393,6 +393,10 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 
 					return TRUE;
 				}
+				else if(vk == VK_SHIFT)
+				{
+					return FALSE;
+				}
 
                 Hide();
 

@@ -3802,6 +3802,8 @@ void CQPasteWnd::OnFindItem(NMHDR *pNMHDR, LRESULT *pResult)
         m_search.SetFocus();
         m_search.SetSel(1, 1);
 
+		OnSearchEditChange();
+
         *pResult = m_lstHeader.GetCaret();
         return ;
     }
