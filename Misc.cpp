@@ -802,6 +802,8 @@ BOOL EnsureWindowVisible(CRect *pcrRect)
 		return TRUE;
 	}
 
+	BOOL ret = FALSE;
+
 	CRect crMonitor;
 	GetMonitorRect(nMonitor, crMonitor);
 
@@ -810,13 +812,17 @@ BOOL EnsureWindowVisible(CRect *pcrRect)
 	if(lDiff < 0)
 	{
 		pcrRect->left += abs(lDiff);
+		pcrRect->right += abs(lDiff);
+		ret = TRUE;
 	}
 
 	//Right side
 	lDiff = pcrRect->right - crMonitor.right;
 	if(lDiff > 0)
 	{
+		pcrRect->left -= abs(lDiff);
 		pcrRect->right -= abs(lDiff);
+		ret = TRUE;
 	}
 
 	//Top
@@ -824,16 +830,20 @@ BOOL EnsureWindowVisible(CRect *pcrRect)
 	if(lDiff < 0)
 	{
 		pcrRect->top += abs(lDiff);
+		pcrRect->bottom += abs(lDiff);
+		ret = TRUE;
 	}
 
 	//Bottom
 	lDiff = pcrRect->bottom - crMonitor.bottom;
 	if(lDiff > 0)
 	{
+		pcrRect->top -= abs(lDiff);
 		pcrRect->bottom -= abs(lDiff);
+		ret = TRUE;
 	}
 
-	return TRUE;
+	return ret;
 }
 
 __int64 GetLastWriteTime(const CString &csFile)

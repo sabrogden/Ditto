@@ -111,7 +111,7 @@ public:
     // ClassWizard generated virtual function overrides
     //{{AFX_VIRTUAL(CQPasteWnd)
 public:
-    virtual BOOL Create(const POINT &ptStart, CWnd *pParentWnd);
+    virtual BOOL Create(CRect rect, CWnd *pParentWnd);
     virtual BOOL PreTranslateMessage(MSG *pMsg);
 
 	bool CheckActions(MSG * pMsg);

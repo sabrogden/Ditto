@@ -43,8 +43,10 @@ void CQuickPaste::Create(CWnd *pParent)
 	// load previous position and size
 	CGetSetOptions::GetQuickPastePoint(point);
 	CGetSetOptions::GetQuickPasteSize(csSize);
+
+	CRect crRect = CRect(point, csSize);
 	// Create the window
-	ASSERT( m_pwndPaste->Create(point, pParent) );
+	ASSERT( m_pwndPaste->Create(crRect, pParent) );
 	// place it at the previous position and size
 	m_pwndPaste->MoveWindow(CRect(point, csSize));
 
@@ -166,6 +168,28 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 		GetCursorPos(&point);
 	else if(nPosition == POS_AT_PREVIOUS)
 		CGetSetOptions::GetQuickPastePoint(point);
+
+	CRect crRect = CRect(point, csSize);
+
+	bool forceMoveWindow = false;
+
+	if(g_Opt.m_bEnsureEntireWindowCanBeSeen)
+	{
+		if(EnsureWindowVisible(&crRect))
+		{
+			forceMoveWindow = true;
+		}
+	}
+	
+	if((crRect.left >= (crRect.right - 20)) ||
+		(crRect.top >= (crRect.bottom - 20)))
+	{
+		CRect orig = crRect;
+		crRect = CRect(ptCaret, CSize(300, 300));
+		forceMoveWindow = true;
+
+		Log(StrF(_T("Invalid initial size %d %d %d %d, Centered Window %d %d %d %d"), orig.left, orig.top, orig.right, orig.bottom, crRect.left, crRect.top, crRect.right, crRect.bottom));
+	}
 	
 	if( !IsWindow(m_pwndPaste->m_hWnd) )
 	{
@@ -176,17 +200,13 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 			pLocalParent = NULL;
 		}
 
-		VERIFY( m_pwndPaste->Create(point, pLocalParent) );
-	}
-
-	CRect crRect = CRect(point, csSize);
-
-	if(g_Opt.m_bEnsureEntireWindowCanBeSeen)
-		EnsureWindowVisible(&crRect);
+		VERIFY( m_pwndPaste->Create(crRect, pLocalParent) );
+	}	
 	
 	if((nPosition == POS_AT_CARET) ||
 		(nPosition == POS_AT_CURSOR) ||
-		(bAtPrevPos))
+		bAtPrevPos ||
+		forceMoveWindow)
 	{
 		m_pwndPaste->MoveWindow(crRect);
 	}
@@ -201,7 +221,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	}
 	m_pwndPaste->SetForegroundWindow();
 
-	Log(StrF(_T("END of ShowQPasteWnd, AtPrevPos: %d, FromKeyboard: %d, RefillList: %d"), bAtPrevPos, bFromKeyboard, bReFillList));
+	Log(StrF(_T("END of ShowQPasteWnd, AtPrevPos: %d, FromKeyboard: %d, RefillList: %d, Position, %d %d %d %d"), bAtPrevPos, bFromKeyboard, bReFillList, crRect.left, crRect.top, crRect.right, crRect.bottom));
 }
 
 void CQuickPaste::MoveSelection(bool down)

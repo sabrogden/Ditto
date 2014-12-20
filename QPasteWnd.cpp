@@ -231,13 +231,9 @@ HBRUSH CQPasteWnd::CtlColor(CDC *pDC, UINT nCtlColor)
     return (HBRUSH)GetStockObject(NULL_BRUSH);
 }
 
-BOOL CQPasteWnd::Create(const POINT &ptStart, CWnd *pParentWnd)
+BOOL CQPasteWnd::Create(CRect rect, CWnd *pParentWnd)
 {
-    // Get the previous size of the QPaste window
-    CSize szWnd;
-    CGetSetOptions::GetQuickPasteSize(szWnd);
-
-    return CWndEx::Create(CRect(ptStart, szWnd), pParentWnd);
+    return CWndEx::Create(rect, pParentWnd);
 }
 
 int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
