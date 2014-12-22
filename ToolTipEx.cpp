@@ -702,10 +702,17 @@ void CToolTipEx::DoSearch()
 	}
 	else
 	{
-		ft.chrg.cpMin = 0;
+		if (searchDirection == 0)
+		{
+			ft.chrg.cpMin = m_RichEdit.GetTextLength();
+		}
+		else
+		{
+			ft.chrg.cpMin = 0;
+		}
 		ft.chrg.cpMax = -1;
 
-		n = m_RichEdit.FindText(FR_DOWN, &ft);
+		n = m_RichEdit.FindText(searchDirection, &ft);
 		if (n != -1)
 		{
 			m_RichEdit.SetSel(ft.chrgText);
