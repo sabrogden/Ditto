@@ -175,7 +175,6 @@ protected:
 	CGdiImageDrawer m_stickyImage;
 	int m_rowHeight;
 	CString m_searchText;
-	CString m_searchTextHtml;
 
 
 	// Generated message map functions

@@ -1012,3 +1012,44 @@ __int64 FileSize(const TCHAR *fileName)
 
 	return buf.st_size;
 }
+
+int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, CString postInsert)
+{
+	int replaceCount = 0;
+
+	//Prevent infinite loop when user tries to replace nothing.
+	if (findStr != "")
+	{
+		int oldLen = findStr.GetLength();
+
+		int nPos = 0;
+		int newPos = 0;
+		int insertedLength = 0;
+
+		//Copies of the main string and the string to be replaced that
+		//are made lower case
+		CString mainStr_low(mainStr);
+		CString findStr_low(findStr);
+		mainStr_low.MakeLower();
+		findStr_low.MakeLower();
+
+		int preLength = preInsert.GetLength();
+		int postLength = postInsert.GetLength();
+
+		while ((nPos = mainStr_low.Find(findStr_low, nPos)) != -1)
+		{
+			newPos = nPos + insertedLength;
+
+			mainStr.Insert(newPos, preInsert);
+			mainStr.Insert(newPos + preLength + oldLen, postInsert);
+
+			nPos += oldLen;
+
+			insertedLength += preLength + postLength;
+
+			replaceCount++;
+		}
+	}
+
+	return replaceCount;
+}

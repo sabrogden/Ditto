@@ -469,8 +469,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		if(DrawRtfText(nItem, rcText, pDC) == FALSE)
 		{
 			if (m_searchText.GetLength() > 0 &&
-				m_searchTextHtml.GetLength() > 0 &&
-				csText.Replace(m_searchText, m_searchTextHtml) > 0)
+				FindNoCaseAndInsert(csText, m_searchText, _T("<font color='#ff0000'>"), _T("</font>")) > 0)
 			{				
 				DrawHTML(pDC->m_hDC, csText, csText.GetLength(), rcText, DT_VCENTER | DT_EXPANDTABS | DT_NOPREFIX);
 			}
@@ -1466,7 +1465,5 @@ void CQListCtrl::StopHideScrollBarTimer()
 
 void CQListCtrl::SetSearchText(CString text) 
 { 
-	m_searchText = text; 
-
-	m_searchTextHtml.Format(_T("<font color='#ff0000'>%s</font>"), text);
+	m_searchText = text;
 }
