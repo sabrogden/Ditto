@@ -16,6 +16,7 @@
 #include "editwithbutton.h"
 #include "GdipButton.h"
 #include "SpecialPasteOptions.h"
+#include "ClipIds.h"
 
 class CMainTable
 {
@@ -173,7 +174,7 @@ public:
 	BOOL OpenID(int id, CSpecialPasteOptions pasteOptions);
 	BOOL OpenSelection(CSpecialPasteOptions pasteOptions);
     BOOL OpenIndex(int item);
-    BOOL NewGroup(bool bGroupSelection = true);
+	BOOL NewGroup(bool bGroupSelection = true, int parentId = -1);
 
     CString LoadDescription(int nItem);
     bool SaveDescription(int nItem, CString text);
@@ -245,6 +246,9 @@ public:
 	bool DoExportToTextFile();
 
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
+
+	bool ShowProperties(int id, int row);
+	bool DeleteClips(CClipIDs &IDs, ARRAY &Indexs);
 
     // Generated message map functions
 protected:
@@ -392,4 +396,7 @@ public:
 	afx_msg void OnCompareSelectleftcompare();
 	afx_msg void OnCompareCompareagainst();
 	afx_msg void OnUpdateCompareCompare(CCmdUI *pCmdUI);
+	afx_msg LRESULT OnShowProperties(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnNewGroup(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnDeleteId(WPARAM wParam, LPARAM lParam);
 };

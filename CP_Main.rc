@@ -351,6 +351,16 @@ BEGIN
     END
 END
 
+IDR_MENU_GROUPS MENU
+BEGIN
+    POPUP "Menu"
+    BEGIN
+        MENUITEM "New Sub Group",               ID_MENU_NEWGROUP32896
+        MENUITEM "Delete Group",                ID_MENU_DELETEGROUP
+        MENUITEM "Properties",                  ID_MENU_PROPERTIES32898
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

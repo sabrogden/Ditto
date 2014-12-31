@@ -217,6 +217,9 @@ ON_COMMAND(ID_COMPARE_COMPARE, &CQPasteWnd::OnCompareCompare)
 ON_COMMAND(ID_COMPARE_SELECTLEFTCOMPARE, &CQPasteWnd::OnCompareSelectleftcompare)
 ON_COMMAND(ID_COMPARE_COMPAREAGAINST, &CQPasteWnd::OnCompareCompareagainst)
 ON_UPDATE_COMMAND_UI(ID_COMPARE_COMPARE, &CQPasteWnd::OnUpdateCompareCompare)
+ON_MESSAGE(NM_SHOW_PROPERTIES, OnShowProperties)
+ON_MESSAGE(NM_NEW_GROUP, OnNewGroup)
+ON_MESSAGE(NM_DELETE_ID, OnDeleteId)
 END_MESSAGE_MAP()
 
 
@@ -329,6 +332,9 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_actions.AddAccel(ActionEnums::SELECTIONDOWN, VK_DOWN);
 	m_actions.AddAccel(ActionEnums::MOVEFIRST, VK_HOME);
 	m_actions.AddAccel(ActionEnums::MOVELAST, VK_END);
+	m_actions.AddAccel(ActionEnums::BACKGRROUP, VK_BACK);
+	m_actions.AddAccel(ActionEnums::PASTE_SELECTED, VK_RETURN);
+	m_actions.AddAccel(ActionEnums::DELETE_SELECTED, VK_DELETE);
 
 	m_actions.AddAccel(ActionEnums::SHOWDESCRIPTION, VK_F3);
 	m_actions.AddAccel(ActionEnums::NEXTDESCRIPTION, 'N');
@@ -345,10 +351,9 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_actions.AddAccel(ActionEnums::EDITCLIP, ACCEL_MAKEKEY('E', HOTKEYF_CONTROL));	
 	m_actions.AddAccel(ActionEnums::CANCELFILTER, ACCEL_MAKEKEY('C', HOTKEYF_ALT));
 	m_actions.AddAccel(ActionEnums::HOMELIST, VK_HOME);
-	m_actions.AddAccel(ActionEnums::BACKGRROUP, VK_BACK);
+	
 	m_actions.AddAccel(ActionEnums::TOGGLESHOWPERSISTANT, ACCEL_MAKEKEY(VK_SPACE, HOTKEYF_CONTROL));
-	m_actions.AddAccel(ActionEnums::PASTE_SELECTED, VK_RETURN);
-	m_actions.AddAccel(ActionEnums::DELETE_SELECTED, VK_DELETE);
+	
 	m_actions.AddAccel(ActionEnums::CLIP_PROPERTIES, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_ALT));
 	m_actions.AddAccel(ActionEnums::PASTE_SELECTED_PLAIN_TEXT, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_SHIFT));
 	m_actions.AddAccel(ActionEnums::COMPARE_SELECTED_CLIPS, ACCEL_MAKEKEY(VK_F2, HOTKEYF_CONTROL));
@@ -746,12 +751,8 @@ BOOL CQPasteWnd::OpenIndex(int item)
     return OpenID(m_lstHeader.GetItemData(item), pasteOptions);
 }
 
-BOOL CQPasteWnd::NewGroup(bool bGroupSelection)
+BOOL CQPasteWnd::NewGroup(bool bGroupSelection, int parentId)
 {
-    //Get the selected ids
-    CClipIDs IDs;
-    m_lstHeader.GetSelectionItemData(IDs);
-
     CGroupName Name;
     CString csName("");
 
@@ -773,7 +774,7 @@ BOOL CQPasteWnd::NewGroup(bool bGroupSelection)
         }
     }
 
-    int id = NewGroupID(theApp.GetValidGroupID(), csName);
+    int id = NewGroupID(parentId, csName);
 
     if(id <= 0)
     {
@@ -787,6 +788,8 @@ BOOL CQPasteWnd::NewGroup(bool bGroupSelection)
         return TRUE;
     }
 
+	CClipIDs IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
     IDs.MoveTo(id);
     theApp.EnterGroupID(id);
     return TRUE;
@@ -2440,55 +2443,63 @@ void CQPasteWnd::DeleteSelectedRows()
     {
         return ;
     }
-
-    POSITION pos = m_lstHeader.GetFirstSelectedItemPosition();
-    int nFirstSel = m_lstHeader.GetNextSelectedItem(pos);
+	   
 
     m_lstHeader.GetSelectionItemData(IDs);
     m_lstHeader.GetSelectionIndexes(Indexs);
 
-    IDs.DeleteIDs(true, theApp.m_db);
+	DeleteClips(IDs, Indexs);   
+}
 
-    Indexs.SortDescending();
-    INT_PTR count = Indexs.GetSize();
+bool CQPasteWnd::DeleteClips(CClipIDs &IDs, ARRAY &Indexs)
+{
+	POSITION pos = m_lstHeader.GetFirstSelectedItemPosition();
+	int nFirstSel = m_lstHeader.GetNextSelectedItem(pos);
 
-    int erasedCount = 0;
+	IDs.DeleteIDs(true, theApp.m_db);
 
-    {
+	Indexs.SortDescending();
+	INT_PTR count = Indexs.GetSize();
+
+	int erasedCount = 0;
+
+	{
 		ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
-        for(int i = 0; i < count; i++)
-        {
-			if(Indexs[i] < (int)m_listItems.size())
+		for (int i = 0; i < count; i++)
+		{
+			if (Indexs[i] < (int) m_listItems.size())
 			{
-				m_listItems.erase(m_listItems.begin( ) + Indexs[i]);
-                erasedCount++;
+				m_listItems.erase(m_listItems.begin() + Indexs[i]);
+				erasedCount++;
 
 				CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(m_lstHeader.GetItemData(Indexs[i]));
-				if(iterDib != m_cf_dibCache.end())
+				if (iterDib != m_cf_dibCache.end())
 				{
 					m_cf_dibCache.erase(iterDib);
 				}
 
 				CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(m_lstHeader.GetItemData(Indexs[i]));
-				if(iterRtf != m_cf_rtfCache.end())
+				if (iterRtf != m_cf_rtfCache.end())
 				{
 					m_cf_rtfCache.erase(iterRtf);
 				}
-            }
-        }
-    }
+			}
+		}
+	}
 
-    m_lstHeader.SetItemCountEx(m_lstHeader.GetItemCount() - erasedCount);
-	
-    // if there are no items after the one we deleted, then select the last one.
-    if(nFirstSel >= m_lstHeader.GetItemCount())
-    {
-        nFirstSel = m_lstHeader.GetItemCount() - 1;
-    }
+	m_lstHeader.SetItemCountEx(m_lstHeader.GetItemCount() - erasedCount);
 
-    m_lstHeader.SetListPos(nFirstSel);
+	// if there are no items after the one we deleted, then select the last one.
+	if (nFirstSel >= m_lstHeader.GetItemCount())
+	{
+		nFirstSel = m_lstHeader.GetItemCount() - 1;
+	}
+
+	m_lstHeader.SetListPos(nFirstSel);
 	UpdateStatus();
+
+	return true;
 }
 
 CString CQPasteWnd::LoadDescription(int nItem)
@@ -2810,14 +2821,14 @@ bool CQPasteWnd::DoActionShowMenu()
 
 bool CQPasteWnd::DoActionNewGroup()
 {
-	NewGroup(false);
+	NewGroup(false, theApp.GetValidGroupID());
 
 	return true;
 }
 
 bool CQPasteWnd::DoActionNewGroupSelection()
 {
-	NewGroup(true);
+	NewGroup(true, theApp.GetValidGroupID());
 
 	return true;
 }
@@ -3077,6 +3088,8 @@ bool CQPasteWnd::DoActionDeleteSelected()
 
 bool CQPasteWnd::DoActionClipProperties()
 {
+	bool ret = false;
+
 	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
 	{
 		m_bHideWnd = false;
@@ -3088,7 +3101,7 @@ bool CQPasteWnd::DoActionClipProperties()
 		INT_PTR size = IDs.GetSize();
 		if(size < 1)
 		{
-			return false;
+			return ret;
 		}
 
 		int id = IDs[0];
@@ -3096,61 +3109,92 @@ bool CQPasteWnd::DoActionClipProperties()
 
 		if(id < 0)
 		{
-			return false;
+			return ret;
 		}
 
 		m_lstHeader.RemoveAllSelection();
 		m_lstHeader.SetSelection(row);
 
-		CCopyProperties props(id, this);
-		INT_PTR doModalRet = props.DoModal();
+		ret = ShowProperties(id, row);
 
-		if(doModalRet == IDOK)
-		{
-			{
-				ATL::CCritSecLock csLock(m_CritSection.m_sect);
-
-				if(row < (int)m_listItems.size())
-				{
-					CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), id);
-					if(!q.eof())
-					{
-						FillMainTable(m_listItems[row], q);
-					}
-				}
-
-				CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(id);
-				if(iterDib != m_cf_dibCache.end())
-				{
-					m_cf_dibCache.erase(iterDib);
-				}
-
-				CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(id);
-				if(iterRtf != m_cf_rtfCache.end())
-				{
-					m_cf_rtfCache.erase(iterRtf);
-				}
-			}
-
-			m_thread.FireLoadAccelerators();
-
-			m_lstHeader.RefreshVisibleRows();
-
-			if(props.m_lGroupChangedTo >= 0)
-			{
-				CSpecialPasteOptions pasteOptions;
-				OpenID(props.m_lGroupChangedTo, pasteOptions);
-			}
-
-			m_lstHeader.SetFocus();
-			m_lstHeader.SetListPos(row);
-		}
-
-		m_bHideWnd = true;
-		return true;
+		m_lstHeader.SetListPos(row);
 	}
 
 	return false;
+}
+
+bool CQPasteWnd::ShowProperties(int id, int row)
+{
+	m_bHideWnd = false;	
+
+	if (id < 0)
+	{
+		return false;
+	}
+
+	CCopyProperties props(id, this);
+	INT_PTR doModalRet = props.DoModal();
+
+	if (doModalRet == IDOK)
+	{
+		{
+			ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
+			if(row < 0)
+			{
+				bool selectedItem = false;
+				int index = 0;
+				std::vector<CMainTable>::iterator iter = m_listItems.begin();
+				while (iter != m_listItems.end())
+				{
+					if (iter->m_lID == id)
+					{
+						row = index;
+						break;
+					}
+					iter++;
+					index++;
+				}
+			}
+
+			if (row >= 0 &&
+				row < (int) m_listItems.size())
+			{
+				CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), id);
+				if (!q.eof())
+				{
+					FillMainTable(m_listItems[row], q);
+				}
+			}
+
+			CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(id);
+			if (iterDib != m_cf_dibCache.end())
+			{
+				m_cf_dibCache.erase(iterDib);
+			}
+
+			CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(id);
+			if (iterRtf != m_cf_rtfCache.end())
+			{
+				m_cf_rtfCache.erase(iterRtf);
+			}
+		}
+
+		m_thread.FireLoadAccelerators();
+
+		m_lstHeader.RefreshVisibleRows();
+
+		if (props.m_lGroupChangedTo >= 0)
+		{
+			CSpecialPasteOptions pasteOptions;
+			OpenID(props.m_lGroupChangedTo, pasteOptions);
+		}
+
+		m_lstHeader.SetFocus();		
+	}
+
+	m_bHideWnd = true;
+	return true;
 }
 
 bool CQPasteWnd::DoActionPasteSelectedPlainText()
@@ -4518,4 +4562,60 @@ void CQPasteWnd::UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action)
 		cs += shortcutText;
 		pCmdUI->SetText(cs);
 	}
+}
+
+LRESULT CQPasteWnd::OnShowProperties(WPARAM wParam, LPARAM lParam)
+{
+	return ShowProperties((int) wParam, -1);
+}
+
+LRESULT CQPasteWnd::OnNewGroup(WPARAM wParam, LPARAM lParam)
+{
+	NewGroup(false, (int) wParam);
+
+	return TRUE;
+}
+
+LRESULT CQPasteWnd::OnDeleteId(WPARAM wParam, LPARAM lParam)
+{
+	if (g_Opt.GetPromptWhenDeletingClips())
+	{
+		bool bStartValue = m_bHideWnd;
+		m_bHideWnd = false;
+
+		int nRet = MessageBox(theApp.m_Language.GetString("Delete_Clip_Groups", "Delete Group?"), _T("Ditto"), MB_YESNO);
+
+		m_bHideWnd = bStartValue;
+
+		if (nRet == IDNO)
+		{
+			return FALSE;
+		}
+	}
+
+	CClipIDs IDs;
+	ARRAY Indexs;
+
+	IDs.Add((int) wParam);
+
+	bool selectedItem = false;
+	int index = 0;
+	{
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+		std::vector<CMainTable>::iterator iter = m_listItems.begin();
+		while (iter != m_listItems.end())
+		{
+			if (iter->m_lID == wParam)
+			{
+				Indexs.Add(index);
+				break;
+			}
+			iter++;
+			index++;
+		}
+	}
+
+	DeleteClips(IDs, Indexs);
+
+	return TRUE;
 }

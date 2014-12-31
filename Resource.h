@@ -105,6 +105,8 @@
 #define IDB_PNG8                        237
 #define IDB_STICKY_16_16                237
 #define IDR_DESC_OPTIONS_MENU           238
+#define IDR_MENU1                       239
+#define IDR_MENU_GROUPS                 239
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -485,14 +487,17 @@
 #define ID_COMPARE_SELECTLEFTCOMPARE    32893
 #define ID_COMPARE_COMPAREAGAINST       32894
 #define ID_COMPARE_COMPARE              32895
+#define ID_MENU_NEWGROUP32896           32896
+#define ID_MENU_DELETEGROUP             32897
+#define ID_MENU_PROPERTIES32898         32898
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        239
-#define _APS_NEXT_COMMAND_VALUE         32896
+#define _APS_NEXT_RESOURCE_VALUE        240
+#define _APS_NEXT_COMMAND_VALUE         32899
 #define _APS_NEXT_CONTROL_VALUE         2125
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

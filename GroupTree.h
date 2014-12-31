@@ -31,6 +31,7 @@ public:
 protected:
 	void FillTree(int parentId, HTREEITEM hParent);
 	void SendToParent(int parentId);
+	UINT GetSelectedCount() const;
 
 	HWND m_NotificationWnd;
 	CBitmap m_bmOpenFolder;
@@ -57,6 +58,8 @@ protected:
 	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
 	afx_msg void OnDblclk(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnKeydown(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnRclickQuickPaste(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()
@@ -64,6 +67,10 @@ protected:
 	//{{AFX_DISPATCH(CGroupTree)
 		// NOTE - the ClassWizard will add and remove member functions here.
 	//}}AFX_DISPATCH
+public:
+	afx_msg void OnMenuNewgroup32896();
+	afx_msg void OnMenuDeletegroup();
+	afx_msg void OnMenuProperties32898();
 };
 
 /////////////////////////////////////////////////////////////////////////////

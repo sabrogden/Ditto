@@ -30,11 +30,16 @@ BEGIN_MESSAGE_MAP(CGroupTree, CTreeCtrl)
 	//{{AFX_MSG_MAP(CGroupTree)
 	ON_WM_CREATE()
 	ON_NOTIFY_REFLECT(TVN_SELCHANGED, OnSelchanged)
+	ON_NOTIFY_REFLECT(NM_RCLICK, OnRclickQuickPaste)
 	ON_WM_KILLFOCUS()
 	ON_WM_ACTIVATE()
 	ON_NOTIFY_REFLECT(NM_DBLCLK, OnDblclk)
 	ON_NOTIFY_REFLECT(TVN_KEYDOWN, OnKeydown)
+	ON_WM_RBUTTONDOWN()
 	//}}AFX_MSG_MAP
+	ON_COMMAND(ID_MENU_NEWGROUP32896, &CGroupTree::OnMenuNewgroup32896)
+	ON_COMMAND(ID_MENU_DELETEGROUP, &CGroupTree::OnMenuDeletegroup)
+	ON_COMMAND(ID_MENU_PROPERTIES32898, &CGroupTree::OnMenuProperties32898)
 END_MESSAGE_MAP()
 
 
@@ -129,7 +134,7 @@ void CGroupTree::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 //		::SendMessage(m_NotificationWnd, NM_GROUP_TREE_MESSAGE, GetItemData(pNMTreeView->itemNew.hItem), 0);
 //	}
 	
-	*pResult = 0;
+	//*pResult = 0;
 }
 
 void CGroupTree::OnKillFocus(CWnd* pNewWnd) 
@@ -216,4 +221,86 @@ bool CGroupTree::AddNode(CString csText, int id)
 	SetItemData(hItem, id);
 
 	return true;
+}
+
+void CGroupTree::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	UINT nHitFlags = 0;
+	HTREEITEM hClickedItem = HitTest(point, &nHitFlags);
+
+	if (nHitFlags&TVHT_ONITEM)
+		if (GetSelectedCount() < 2)
+			SelectItem(hClickedItem);
+
+	CTreeCtrl::OnRButtonDown(nFlags, point);
+}
+
+UINT CGroupTree::GetSelectedCount() const
+{
+	// Only visible items should be selected!
+	UINT uCount = 0;
+	for (HTREEITEM hItem = GetRootItem(); hItem != NULL; hItem = GetNextVisibleItem(hItem))
+		if (GetItemState(hItem, TVIS_SELECTED) & TVIS_SELECTED)
+			uCount++;
+
+	return uCount;
+}
+
+void CGroupTree::OnRclickQuickPaste(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	POINT pp;
+	CMenu cmPopUp;
+	CMenu *cmSubMenu = NULL;
+
+	GetCursorPos(&pp);
+	if (cmPopUp.LoadMenu(IDR_MENU_GROUPS) != 0)
+	{
+		cmSubMenu = cmPopUp.GetSubMenu(0);
+		if (!cmSubMenu)
+		{
+			return;
+		}
+		
+		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
+	}
+
+	*pResult = 0;
+}
+
+void CGroupTree::OnMenuNewgroup32896()
+{
+	HTREEITEM hItem = GetSelectedItem();
+	if (hItem)
+	{
+		int id = (int) GetItemData(hItem);
+		::PostMessage(m_NotificationWnd, NM_NEW_GROUP, id, 0);		
+	}
+}
+
+
+void CGroupTree::OnMenuDeletegroup()
+{
+	HTREEITEM hItem = GetSelectedItem();
+	if (hItem)
+	{
+		int id = (int) GetItemData(hItem);
+		if (id >= 0)
+		{
+			::PostMessage(m_NotificationWnd, NM_DELETE_ID, id, 0);
+		}
+	}
+}
+
+
+void CGroupTree::OnMenuProperties32898()
+{
+	HTREEITEM hItem = GetSelectedItem();
+	if (hItem)
+	{
+		int id = (int) GetItemData(hItem);
+		if (id >= 0)
+		{
+			::PostMessage(m_NotificationWnd, NM_SHOW_PROPERTIES, id, 0);
+		}
+	}	
 }
