@@ -3976,7 +3976,12 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
 
     MoveControls();
 
-    if(id >= 0)
+	if(id == -1)
+	{
+		//go back to the main list
+		theApp.EnterGroupID(-1);
+	}
+	else if(id >= 0)
     {
         //Set the app flag so it does a send message to refresh the list
         //We need to do this because we set the list pos to 0 and with Post
@@ -4556,7 +4561,7 @@ void CQPasteWnd::UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action)
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
 	CString shortcutText = m_actions.GetCmdKeyText(action);
 	if(shortcutText != _T("") &&
-		cs.Find(shortcutText) < 0)
+		cs.Find("\t" + shortcutText) < 0)
 	{
 		cs += "\t";
 		cs += shortcutText;

@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "cp_main.h"
 #include "GroupTree.h"
+#include "ActionEnums.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -40,6 +41,10 @@ BEGIN_MESSAGE_MAP(CGroupTree, CTreeCtrl)
 	ON_COMMAND(ID_MENU_NEWGROUP32896, &CGroupTree::OnMenuNewgroup32896)
 	ON_COMMAND(ID_MENU_DELETEGROUP, &CGroupTree::OnMenuDeletegroup)
 	ON_COMMAND(ID_MENU_PROPERTIES32898, &CGroupTree::OnMenuProperties32898)
+	ON_UPDATE_COMMAND_UI(ID_MENU_NEWGROUP32896, &CGroupTree::OnUpdateMenuNewgroup32896)
+	ON_UPDATE_COMMAND_UI(ID_MENU_DELETEGROUP, &CGroupTree::OnUpdateMenuDeletegroup)
+	ON_UPDATE_COMMAND_UI(ID_MENU_PROPERTIES32898, &CGroupTree::OnUpdateMenuProperties32898)
+	ON_WM_INITMENUPOPUP() 
 END_MESSAGE_MAP()
 
 
@@ -70,8 +75,99 @@ int CGroupTree::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	SetImageList(&iml, TVSIL_NORMAL);
 	iml.Detach();
-		
+
+	m_actions.AddAccel(ActionEnums::NEWGROUP, ACCEL_MAKEKEY(VK_F7, HOTKEYF_CONTROL));
+	m_actions.AddAccel(ActionEnums::CLIP_PROPERTIES, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_ALT));
+	m_actions.AddAccel(ActionEnums::DELETE_SELECTED, VK_DELETE);
+
 	return 0;
+}
+
+BOOL CGroupTree::PreTranslateMessage(MSG *pMsg)
+{
+	if(CheckActions(pMsg))
+	{
+		return TRUE;
+	}
+
+	return CTreeCtrl::PreTranslateMessage(pMsg);
+}
+
+bool CGroupTree::CheckActions(MSG * pMsg) 
+{
+	bool ret = false;
+	DWORD dID;
+
+	if (m_actions.OnMsg(pMsg, dID))
+	{
+		ret = DoAction(dID);
+	}   
+
+	return ret;
+}
+
+bool CGroupTree::DoAction(DWORD actionId)
+{
+	bool ret = false;
+
+	switch (actionId)
+	{
+	case ActionEnums::NEWGROUP:
+		ret = DoActionNewGroup();
+		break;
+	case ActionEnums::DELETE_SELECTED:
+		ret = DoActionDeleteSelected();
+		break;
+	case ActionEnums::CLIP_PROPERTIES:
+		ret = DoActionClipProperties();
+		break;
+	}
+
+	return ret;
+}
+
+bool CGroupTree::DoActionNewGroup()
+{
+	HTREEITEM hItem = GetSelectedItem();
+	if (hItem)
+	{
+		int id = (int) GetItemData(hItem);
+		::PostMessage(m_NotificationWnd, NM_NEW_GROUP, id, 0);	
+		return true;
+	}
+
+	return false;
+}
+
+bool CGroupTree::DoActionDeleteSelected()
+{
+	HTREEITEM hItem = GetSelectedItem();
+	if (hItem)
+	{
+		int id = (int) GetItemData(hItem);
+		if (id >= 0)
+		{
+			::PostMessage(m_NotificationWnd, NM_DELETE_ID, id, 0);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool CGroupTree::DoActionClipProperties()
+{
+	HTREEITEM hItem = GetSelectedItem();
+	if (hItem)
+	{
+		int id = (int) GetItemData(hItem);
+		if (id >= 0)
+		{
+			::PostMessage(m_NotificationWnd, NM_SHOW_PROPERTIES, id, 0);
+			return true;
+		}
+	}
+	return false;
 }
 
 void CGroupTree::FillTree()
@@ -269,38 +365,50 @@ void CGroupTree::OnRclickQuickPaste(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CGroupTree::OnMenuNewgroup32896()
 {
-	HTREEITEM hItem = GetSelectedItem();
-	if (hItem)
-	{
-		int id = (int) GetItemData(hItem);
-		::PostMessage(m_NotificationWnd, NM_NEW_GROUP, id, 0);		
-	}
+	DoAction(ActionEnums::NEWGROUP);
 }
 
 
 void CGroupTree::OnMenuDeletegroup()
 {
-	HTREEITEM hItem = GetSelectedItem();
-	if (hItem)
-	{
-		int id = (int) GetItemData(hItem);
-		if (id >= 0)
-		{
-			::PostMessage(m_NotificationWnd, NM_DELETE_ID, id, 0);
-		}
-	}
+	DoAction(ActionEnums::DELETE_SELECTED);
 }
-
 
 void CGroupTree::OnMenuProperties32898()
 {
-	HTREEITEM hItem = GetSelectedItem();
-	if (hItem)
+	DoAction(ActionEnums::CLIP_PROPERTIES);
+}
+
+void CGroupTree::OnUpdateMenuNewgroup32896(CCmdUI *pCmdUI)
+{
+	UpdateMenuShortCut(pCmdUI, ActionEnums::NEWGROUP);
+}
+
+void CGroupTree::OnUpdateMenuDeletegroup(CCmdUI *pCmdUI)
+{
+	UpdateMenuShortCut(pCmdUI, ActionEnums::DELETE_SELECTED);	
+}
+
+void CGroupTree::OnUpdateMenuProperties32898(CCmdUI *pCmdUI)
+{
+	UpdateMenuShortCut(pCmdUI, ActionEnums::CLIP_PROPERTIES);	
+}
+
+void CGroupTree::UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action)
+{
+	CString cs;
+	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
+	CString shortcutText = m_actions.GetCmdKeyText(action);
+	if(shortcutText != _T("") &&
+		cs.Find("\t" + shortcutText) < 0)
 	{
-		int id = (int) GetItemData(hItem);
-		if (id >= 0)
-		{
-			::PostMessage(m_NotificationWnd, NM_SHOW_PROPERTIES, id, 0);
-		}
-	}	
+		cs += "\t";
+		cs += shortcutText;
+		pCmdUI->SetText(cs);
+	}
+}
+
+void CGroupTree::OnInitMenuPopup(CMenu *pPopupMenu, UINT nIndex,BOOL bSysMenu)
+{
+	OnInitMenuPopupEx(pPopupMenu, nIndex, bSysMenu, this);
 }

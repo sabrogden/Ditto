@@ -144,4 +144,6 @@ __int64 FileSize(const TCHAR *fileName);
 
 int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, CString postInsert);
 
+void OnInitMenuPopupEx(CMenu *pPopupMenu, UINT nIndex, BOOL bSysMenu, CWnd *pWnd);
+
 #endif // !defined(AFX_CP_GUI_GLOBALS__FBCDED09_A6F2_47EB_873F_50A746EBC86B__INCLUDED_)

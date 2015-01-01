@@ -6,6 +6,7 @@
 #endif // _MSC_VER > 1000
 // GroupTree.h : header file
 //
+#include "Accels.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CGroupTree window
@@ -32,17 +33,25 @@ protected:
 	void FillTree(int parentId, HTREEITEM hParent);
 	void SendToParent(int parentId);
 	UINT GetSelectedCount() const;
+	bool CheckActions(MSG * pMsg);
+	bool DoAction(DWORD actionId);
+	bool DoActionNewGroup();
+	bool DoActionDeleteSelected();
+	bool DoActionClipProperties();
+	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
 	HWND m_NotificationWnd;
 	CBitmap m_bmOpenFolder;
 	CBitmap m_bmClosedFolder;
 	bool m_bSendAllready;
+	CAccels m_actions;
 
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CGroupTree)
 	public:
 	virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
+	virtual BOOL PreTranslateMessage(MSG *pMsg);
 	//}}AFX_VIRTUAL
 
 // Implementation
@@ -71,6 +80,10 @@ public:
 	afx_msg void OnMenuNewgroup32896();
 	afx_msg void OnMenuDeletegroup();
 	afx_msg void OnMenuProperties32898();
+	afx_msg void OnUpdateMenuNewgroup32896(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateMenuDeletegroup(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateMenuProperties32898(CCmdUI *pCmdUI);
+	afx_msg void OnInitMenuPopup(CMenu *pPopupMenu, UINT nIndex,BOOL bSysMenu);
 };
 
 /////////////////////////////////////////////////////////////////////////////
