@@ -147,7 +147,7 @@ BOOL CToolTipEx::Show(CPoint point)
 			long lNewWidth = (long)rect.Width() + (long)(rect.Width() *1.5);
 			rect.right = rect.left + lNewWidth;
 
-			long lNewHeight = rect.Height() + (rect.Height() *1.5);
+			long lNewHeight = (long)rect.Height() + (long)(rect.Height() *1.5);
 			rect.bottom = rect.top + lNewHeight;
 		}
 
@@ -641,11 +641,7 @@ void CToolTipEx::HighlightSearchText()
 	long n = -1;
 
 	ft.lpstrText = m_searchText;
-
-
-	long start;
-	long end;
-
+	
 	ft.chrg.cpMin = 0;
 	ft.chrg.cpMax = -1;
 
