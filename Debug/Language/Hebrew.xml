@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ditto_Language_File Version = "1" Author = "RanSasson" Notes = "Twitter: @RanSasson" LanguageCode = "Heb">
+	<Ditto_Right_Click_Menu>
+		<Item English_Text = "Groups" ID = "-1">קבוצות</Item>
+		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">קבוצות חדשות</Item>
+		<Item English_Text = "New Group Selection	F7" ID = "32812">בחירת קבוצות חדשות F7</Item>
+		<Item English_Text = "Move to Group" ID = "32840">העבר לקבוצה</Item>
+		<Item English_Text = "Quick Options" ID = "-1">אפשרויות מהירות</Item>
+		<Item English_Text = "Lines Per Row" ID = "-1">מספר קוים בשורה</Item>
+		<Item English_Text = "1" ID = "32807"></Item>
+		<Item English_Text = "2" ID = "32786"></Item>
+		<Item English_Text = "3" ID = "32787"></Item>
+		<Item English_Text = "4" ID = "32788"></Item>
+		<Item English_Text = "5" ID = "32789"></Item>
+		<Item English_Text = "Transparency" ID = "-1">שקיפות</Item>
+		<Item English_Text = "None" ID = "32800">ללא</Item>
+		<Item English_Text = "5 " ID = "32808"></Item>
+		<Item English_Text = "10 " ID = "32792"></Item>
+		<Item English_Text = "15 " ID = "32794"></Item>
+		<Item English_Text = "20 " ID = "32796"></Item>
+		<Item English_Text = "25 " ID = "32798"></Item>
+		<Item English_Text = "30 " ID = "32799"></Item>
+		<Item English_Text = "40 " ID = "32790"></Item>
+		<Item English_Text = "Positioning" ID = "-1">מיקום</Item>
+		<Item English_Text = "At Caret" ID = "32802">במיקום הסמן</Item>
+		<Item English_Text = "At Cursor" ID = "32803">במיקום החץ</Item>
+		<Item English_Text = "At Previous Position" ID = "32804">במיקום קודם</Item>
+		<Item English_Text = "First Ten Hot Keys" ID = "-1">עשרת המקשים החמים הראשונים</Item>
+		<Item English_Text = "Use Ctrl - Num" ID = "32777">השתמש ב Ctrl - Num</Item>
+		<Item English_Text = "Show Hot Key Text" ID = "32778">הצג טקסט מקש חם</Item>
+		<Item English_Text = "View Caption Bar On" ID = "-1">מיקום שורת כותרת</Item>
+		<Item English_Text = "Top" ID = "32783">למעלה</Item>
+		<Item English_Text = "Right" ID = "32780">ימינה</Item>
+		<Item English_Text = "Bottom" ID = "32781">למטה</Item>
+		<Item English_Text = "Left" ID = "32782">שמאלה</Item>
+		<Item English_Text = "Sort" ID = "-1">סדר</Item>
+		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">עולה - האחרון עליון</Item>
+		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">יורד - האחרון תחתון</Item>
+		<Item English_Text = "Double Clicking on Caption" ID = "-1">לחיצה כפולה על מקש כותרת</Item>
+		<Item English_Text = "Toggles Always on Top" ID = "32814">הפעל תמיד למעלה</Item>
+		<Item English_Text = "Rolls-up Window" ID = "32815">חלון גלילה</Item>
+		<Item English_Text = "Toggles Always Show Description" ID = "32816">הצגת תיאור</Item>
+		<Item English_Text = "Always on Top	Ctrl-Space" ID = "32784">תמיד למעלה</Item>
+		<Item English_Text = "Auto Roll-up" ID = "32791">גלילה אוטומטית</Item>
+		<Item English_Text = "Always Show Description" ID = "32813">תמיד הצג תיאור</Item>
+		<Item English_Text = "Prompt For New Group Names" ID = "32817">שאל לשמות קבוצות חדשות</Item>
+		<Item English_Text = "Select Font" ID = "32844">בחר פונט</Item>
+		<Item English_Text = "Show Thumbnails" ID = "32845">הצג תמונות ממוזערות</Item>
+		<Item English_Text = "Draw RTF Text" ID = "32846">טקסט RTF</Item>
+		<Item English_Text = "Paste Clip after selection" ID = "32847">הדבק קליפ אחרי בחירה</Item>
+		<Item English_Text = "Find As You Type" ID = "32848">חפש תוך כדי הקלדה</Item>
+		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">ודא שכל החלון נראה</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">הצג קליפים שבקבוצות גם בחלון הראשי</Item>
+		<Item English_Text = "Send To" ID = "-1">שלח אל</Item>
+		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">(192.168.1.101) - אותו המחשב</Item>
+		<Item English_Text = "View Full Description	F3" ID = "32793">הצג תיאור מלא -- F3</Item>
+		<Item English_Text = "View Groups	Ctrl-G" ID = "32819">הצג קבוצות -- Ctrl-G</Item>
+		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">הדבק רק טקסט פשוט -- Shift-Enter</Item>
+		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">כטקסט פשוט HTML הדבק</Item>
+		<Item English_Text = "Delete Entry	Del" ID = "32801">מחק קליפ</Item>
+		<Item English_Text = "Properties	Alt-Enter" ID = "32776">מאפיינים</Item>
+		<Item English_Text = "Quick Properties" ID = "-1">מאפיינים מהירים</Item>
+		<Item English_Text = "Never Auto Delete" ID = "32820">לעולם אל תמחק אוטומטית</Item>
+		<Item English_Text = "Auto Delete" ID = "32821">מחק אוטומטית</Item>
+		<Item English_Text = "Remove Hot Key" ID = "32822">הסר מקש חם</Item>
+		<Item English_Text = "Options..." ID = "32805">אפשרויות...</Item>
+		<Item English_Text = "Help" ID = "32842">עזרה</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "32775">התנתק מלוח המחשב</Item>
+		<Item English_Text = "Exit Program" ID = "32806">יציאה מהתוכנה</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt to Delete Clip" ID = "32852">אשר כל מחיקת קליפ</Item>	
+		<Item English_Text = "Import" ID = "32855">יבוא</Item>
+		<Item English_Text = "Export" ID = "32853">יצוא</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">הסר הדבקה מהירה</Item>	
+		<Item English_Text = "Edit Clip" ID = "32860">ערוך קליפ</Item>
+		<Item English_Text = "New Clip" ID = "32867">קליפ חדש</Item>	
+		
+	</Ditto_Right_Click_Menu>
+	<Ditto_Clip_Properties>
+		<Item English_Text = "Hot Key" ID = "2039">מקש חם</Item>
+		<Item English_Text = "Hot Key" ID = "2039">מקש חם</Item>
+		<Item English_Text = "Date" ID = "2040">תאריך</Item>
+		<Item English_Text = "&Never Auto Delete" ID = "1025">&לעולם אל תמחק אוטומטית</Item>
+		<Item English_Text = "Move To Group" ID = "2041">העבר לקבוצה</Item>
+		<Item English_Text = "Item Title" ID = "2042">כותרת פריט</Item>
+		<Item English_Text = "Copy Formats" ID = "2029">פורמט העתקה</Item>
+		<Item English_Text = "Delete" ID = "1021">מחיקה</Item>
+		
+		<Item English_Text = "OK" ID = "1">אישור</Item>
+		<Item English_Text = "Cancel" ID = "2">ביטול</Item>
+		<Item English_Text = "Copy Properties" ID = "-1">העתק מאפיינים</Item>
+	</Ditto_Clip_Properties>
+	<Ditto_Options_General>
+		<Item English_Text = "Start Ditto on System Startup" ID = "2004">הפעל את דיטטו עם איתחול המחשב</Item>
+		<Item English_Text = "Display Icon in System Tray" ID = "2003">הצג צלמית במגש המערכת</Item>
+		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">מספר מקסימלי של העתקים שמורים</Item>
+		<Item English_Text = "Paste Entries Expire after" ID = "2009">זמן תפוגת העתקים אחרי</Item>
+		<Item English_Text = "Days" ID = "2043">ימים</Item>
+		<Item English_Text = "Compact and Repair" ID = "1028">כווץ ותקן</Item>
+		<Item English_Text = "Check Now" ID = "1030">בדוק כעת</Item>
+		<Item English_Text = "Allow Duplicates" ID = "1037">אפשר כפילויות</Item>
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">עדכן את מיקום הקליפ לאחר הדבקה</Item>
+		<Item English_Text = "Save Multi-Pastes" ID = "1039">שמור הדבקות חוזרות</Item>
+		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">הסתר את דיטטו עם מקש חם באם דיטטו מוצגת</Item>
+		<Item English_Text = "Amount of text to save for description" ID = "2044">כמות הטקסט שתישמר לתיאור</Item>
+		<Item English_Text = "On copy play the sound" ID = "2045">השמע צליל בהעתקה</Item>
+		<Item English_Text = "Play" ID = "2034">נגן</Item>
+		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">הדבק קליפ בחלון הפעיל לאחר הבחירה</Item>
+		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">גודל קליפ מקסימלי בבייטים</Item>
+		<Item English_Text = "(Leave blank for no limit)" ID = "2047">(השאר ריק אם ללא הגבלה)</Item>
+		<Item English_Text = "Set Database Path" ID = "1034">בחר את מיקום מסד הנתונים</Item>
+		<Item English_Text = "Language" ID = "2069">Lang שפה</Item>
+		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">התעלם מהעתק המתרחש איקס מילישניות מקודמיו. 1000 מילישניות = 1 שניות</Item>
+		<Item English_Text = "About Language" ID = "2073">אודות התרגום לעברית</Item>
+		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">בדוק שדיטטו תמיד מחובר ללוח המחשב</Item>
+		<Item English_Text = "General" ID = "-1" PropertyPage = "true">כללי</Item>
+		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090">כפתור הפרדה בין הדבקות מרובות</Item>
+
+		//New item added 3/1/11
+		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098">אפליקציות העתקה מורשות</Item>
+		<Item English_Text = "Include" ID = "2097"></Item>
+		<Item English_Text = "Exclude" ID = "2096"></Item>
+
+	</Ditto_Options_General>
+	<Ditto_Options_Supported_Types>
+		<Item English_Text = "&Add" ID = "1015">&הוסף</Item>
+		<Item English_Text = "&Delete" ID = "1016">&מחק</Item>
+		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">סוגים נתמכים</Item>
+	</Ditto_Options_Supported_Types>
+	<Ditto_Options_Shortcuts>
+		<Item English_Text = "Activate Ditto" ID = "2048">הפעל את דיטטו</Item>
+		<Item English_Text = "Win" ID = "2035"></Item>
+		<Item English_Text = "Named Copy" ID = "2049">שם העותק</Item>
+		<Item English_Text = "Win" ID = "2036"></Item>
+		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">מקש חם לעשרת הקליפים האחרונים</Item>
+		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">שלח הדבק - אחרת זה רק יעביר את הפריט ללוח המחשב</Item>
+		<Item English_Text = "Position 1" ID = "2052">מיקום 1</Item>
+		<Item English_Text = "Position 2" ID = "2053">מיקום 2</Item>
+		<Item English_Text = "Position 3" ID = "2054">מיקום 3</Item>
+		<Item English_Text = "Position 4" ID = "2055">מיקום 4</Item>
+		<Item English_Text = "Position 5" ID = "2056">מיקום 5</Item>
+		<Item English_Text = "Position 6" ID = "2057">מיקום 6</Item>
+		<Item English_Text = "Position 7" ID = "2058">מיקום 7</Item>
+		<Item English_Text = "Position 8" ID = "2059">מיקום 8</Item>
+		<Item English_Text = "Position 9" ID = "2060">מיקום 9</Item>
+		<Item English_Text = "Position 10" ID = "2061">מיקום 10</Item>
+		<Item English_Text = "Win" ID = "2042"></Item>
+		<Item English_Text = "Win" ID = "2043"></Item>
+		<Item English_Text = "Win" ID = "2044"></Item>
+		<Item English_Text = "Win" ID = "2045"></Item>
+		<Item English_Text = "Win" ID = "2046"></Item>
+		<Item English_Text = "Win" ID = "2037"></Item>
+		<Item English_Text = "Win" ID = "2038"></Item>
+		<Item English_Text = "Win" ID = "2039"></Item>
+		<Item English_Text = "Win" ID = "2040"></Item>
+		<Item English_Text = "Win" ID = "2041"></Item>
+		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">סמן את מקש 'חלונות' על מנת שישמש במסגרת המקשים החמים</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">מקשי קיצור מקלדת</Item>
+
+		//New item added in 3.15.1 8/18/07
+		<Item English_Text = "Send custom strokes Per Application" ID = "2091"></Item>
+	</Ditto_Options_Shortcuts>
+	<Ditto_Options_Quick_Paste>
+		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">ההיסטוריה תתחיל מראש הרשימה במקום מהסוף</Item>
+		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">לעשרת הפריטים הראשונים השתמש במקש CTRL-NUM</Item>
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">הצג טקסט לעשרת הפריטים הראשונים</Item>
+		<Item English_Text = "Show leading whitespace" ID = "2021">הצג תווים ריקים בהתחלה</Item>
+		<Item English_Text = "Text Lines per Row" ID = "2062">שורות תיאור לכל פריט</Item>
+		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">אפשר שקיפות להדבקה מהירה</Item>
+		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">הצג צלמיות לפריטי תמונה - זהירות, אפשרות זו צורכת הרבה זיכרון</Item>
+		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">הצג פריטים בטקסט עשיר - זהירות, אפשרות זו צורכת הרבה זיכרון</Item>
+		<Item English_Text = "Find As You Type" ID = "2036">חפש תוך כדי הקלדה</Item>
+		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">ודא שכל החלון מוצג</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">הצג פריטים בקבוצות ברשימה הראשית</Item>
+		<Item English_Text = "Font" ID = "1040">גופן</Item>
+		<Item English_Text = "Default Font" ID = "2031">גופן ברירת מחדל</Item>
+		<Item English_Text = "Popup Positioning" ID = "2063">מיקום חלונות קופצים</Item>
+		<Item English_Text = "At Caret" ID = "2015">מיקום הסמן</Item>
+		<Item English_Text = "At Cursor" ID = "2016">מיקום החץ</Item>
+		<Item English_Text = "At Previous Position" ID = "2017">מיקום אחרון</Item>
+		<Item English_Text = "List Item Prefix Legend" ID = "2064">הצג מקרא לפריטים</Item>
+		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">* = לא למחוק באופן אוטומטי\n  s = קיצור קיים\n G = פריט בקבוצה\n  ! = פריט כבר משויך לקבוצה</Item>
+		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">הדבקה מהירה</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">התראה לפני מחיקת קליפים</Item>
+		
+		//New strings added in 3.15.2 10-6-07
+		<Item English_Text = "Theme" ID = "2092">ערכת</Item>
+		<Item English_Text = "About Theme" ID = "2094">אודות ערכת מראה</Item>
+
+	</Ditto_Options_Quick_Paste>	
+	<Ditto_Options_Friends>
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">כשנשלח קליפ ממחשב הנמצא ברשימה - הוא יעבור ללוח המחשב. אחרת הוא ישמר בתוכנה לשימוש מאוחר יותר.</Item>
+		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">כתובות/שמות המחשבים מופרד בפסיק</Item>
+		<Item English_Text = "Disable Recieving Clips" ID = "2026">ביטול קבלת קליפים</Item>
+		<Item English_Text = "Network Password" ID = "2054">סיסמת רשת</Item>
+		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">אם מתקבלים קליפים ממחשבים ברשת בה הסיסמה אינה תואמת, הזן/י סיסמאות רשת נוספות מופרדות בפסיק.</Item>
+		<Item English_Text = "Receive Passwords" ID = "2056">קבל סיסמאות</Item>
+		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">אם נבחרה שליחת כל ההעתקים, אז כל ההעתקים יועברו ממחשב זה אל המחשב האחר. אחרת, תהיה אפשרות בלחיצת עכבר ימנית לשלוח אל המחשב האחר.</Item>
+		<Item English_Text = "Log Send Receive Commands" ID = "1042">תיעוד פקודות שליחה וקבלה</Item>
+		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">חברים</Item>
+
+		//Added in 9-11-09
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">שלח כל ההעתקים</Item>
+        	<Item English_Text = "IP/Name" ID = "IP_Name">IP/שם</Item>
+        	<Item English_Text = "Descriptions" ID = "Descriptions">תיאור</Item>
+	</Ditto_Options_Friends>
+	<Ditto_Options_Friends_Detail>
+		<Item English_Text = "Send All Copies to this friend" ID = "1015">שלח כל ההעתקים לחבר זה</Item>
+		<Item English_Text = "IP/Name" ID = "2052">IP/שם</Item>
+		<Item English_Text = "Description" ID = "2053">תיאור</Item>
+		<Item English_Text = "Friend Details" ID = "-1">פרטי חבר</Item>
+	</Ditto_Options_Friends_Detail>
+	<Ditto_Options_Stats>
+		<Item English_Text = "Odometer" ID = "2052">מד מרחק</Item>
+		<Item English_Text = "Trip Odometer" ID = "2053">נתיב המרחק</Item>
+		<Item English_Text = "Copies" ID = "2054">העתקים</Item>
+		<Item English_Text = "Pastes" ID = "2055">הדבקות</Item>
+		<Item English_Text = "Copies" ID = "2056">העתקים</Item>
+		<Item English_Text = "Pastes" ID = "2057">הדבקות</Item>
+		<Item English_Text = "Reset" ID = "1006">איפוס</Item>
+		<Item English_Text = "Saved Copies" ID = "2058">עותקים שמורים</Item>
+		<Item English_Text = "Saved Copy Data" ID = "2059">נתוני העתקים שמורים</Item>
+		<Item English_Text = "Remove All" ID = "1013">הסר הכל</Item>
+		<Item English_Text = "Last Started" ID = "2060">אותחל לאחרונה</Item>
+		<Item English_Text = "Database Size" ID = "2061">גודל מסד נתונים</Item>
+		<Item English_Text = "Clips Sent" ID = "2066">קליפים שנשלחו</Item>
+		<Item English_Text = "Clips received" ID = "2067">קליפים שנתקבלו</Item>
+		<Item English_Text = "Since Last Start" ID = "2068">מאז איתחול אחרון</Item>
+		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true">נתונים</Item>
+	</Ditto_Options_Stats>
+	<Ditto_Options_Supported_Types_Add>
+		<Item English_Text = "Main Types" ID = "2052">סוגים עיקריים</Item>
+		<Item English_Text = "Custom Type" ID = "2053">סוג חדש</Item>
+		<Item English_Text = "Add" ID = "1020">הוסף</Item>
+		<Item English_Text = "Currently on the Clipboard" ID = "2054">כרגע על לוח המחשב</Item>
+		<Item English_Text = "Add" ID = "1019">הוסף</Item>
+		<Item English_Text = "Add" ID = "1021">הוסף</Item>
+		<Item English_Text = "Cancel" ID = "2">ביטול</Item>
+		<Item English_Text = "Add Supported Type" ID = "-1">הוספת סוג נתמך</Item>
+	</Ditto_Options_Supported_Types_Add>
+	<Ditto_Move_To_Groups>
+		<Item English_Text = "New Group" ID = "1040">קבוצה חדשה</Item>
+		<Item English_Text = "OK" ID = "1">אישור</Item>
+		<Item English_Text = "Cancel" ID = "2">ביטול</Item>
+		<Item English_Text = "Move to Group" ID = "-1">העבר קבוצה</Item>
+	</Ditto_Move_To_Groups>
+	
+	<Ditto_String_Table>
+		<Item English_Text = "General" ID = "GeneralTitle">כללי</Item>
+		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">פורמטים נתמכים</Item>
+		<Item English_Text = "Stats" ID = "StatsTitle">נתונים סטטיסטיים</Item>
+		<Item English_Text = "Friends" ID = "FriendsTitle">חברים</Item>
+		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">הדבקה מהירה</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">מקשי קיצור מקלדת</Item>
+		<Item English_Text = "About" ID = "AboutTitle">אודות</Item>
+		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">שגיאה בפתיחת מסד הנתונים</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">לא מצליח לאתחל את DAO/Jet.\n אשר הורדת DAO מהכתובת http://ditto-cp.sourceforge.net/dao_setup.exe\n\n הפעל מחדש את דיטטו לאחר התקנת DAO.</Item>
+		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format">מסד נתונים בפורמט לא מוכר</Item>
+		<Item English_Text = "the file will be renamed" ID = "File_Renamed">הקובץ ישמר בשם חדש</Item>
+		<Item English_Text = "and a new database will be created" ID = "New_Database">מסד נתונים חדש יווצר</Item>
+		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">יש עידכון תוכנה זמין.\n גלוש אל ditto-cp.sourceforge.net למידע נוסף \n\n גירסה נוכחית</Item>
+		<Item English_Text = "Update Version" ID = "Update_Version">עידכון גירסה</Item>
+		<Item English_Text = "Download updated version?" ID = "Download_Update">האם להוריד עידכון זמין?</Item>			
+		<Item English_Text = "No updates available" ID = "No_Updates">אין עידכונים זמינים</Item>			
+		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">זה יסיר את כל ההעתקים! \n\n להמשיך?</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">ניתוק מלוח המחשב</Item>			
+		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">התחבר אל לוח המחשב</Item>			
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">לא מצליח לאתחל את מנוע DAO/Jet. DAO יותקן כעת.\n\nהפעל את דיטטו מחדש אחרי התקנת DAO.</Item>
+		<Item English_Text = "NO TARGET" ID = "No_Target">חסר יעד</Item>	
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">התרע לפני מחיקת קליפים</Item>
+		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">האם למחוק קליפים נבחרים ? </Item>
+		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">שגיאה ביבוא הקליפ המיוצא</Item>
+		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing">שגיאה בהעברת הקליפ המיוצא</Item>
+		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good">הקליפ הועבר ללוח המחשב</Item>
+		<Item English_Text = "Successfully imported" ID = "Import_Successfully">יובא בהצלחה</Item>
+		<Item English_Text = "clip" ID = "Clip">קליפ</Item>
+		<Item English_Text = "clips" ID = "Clips">קליפים</Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">עדכן את תיאור הקליפ בעת השמירה ?</Item>
+		<Item English_Text = "New Clip" ID = "New_Clip">קליפ חדש</Item>
+		<Item English_Text = "Save" ID = "Save">שמור קליפ</Item>
+		<Item English_Text = "Save All" ID = "Save_All">שמור הכל</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">סגור את הלשונית הנוכחית</Item>
+		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable">הפריט הנוכחי לא ניתן לעריכה. הקליפ חייב להיות אחד מהפורמטים הנתמכים</Item>
+		<Item English_Text = "to be editable" ID = "Editable">לעריכה</Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">תרצה/י לשמור את השינויים אל</Item>
+		<Item English_Text = "Error saving clip" ID = "ErrorSaving">שגיאה בשמירת הקליפ</Item>
+		<Item English_Text = "New" ID = "New">חדש</Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">שמור, סגור ושים על לוח המחשב</Item>
+		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">עורך דיטטו</Item>
+		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title"></Item>
+		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1"></Item>
+		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2"></Item>
+		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">שגיאה במציאת קליפ</Item>
+		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title">דיטטו - שמירת שם</Item>
+		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">שגיאה בשמירה למסד הנתונים</Item>
+		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">שגיאה בשמירת שם</Item>
+		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">דיטטו לא קיבל העתק</Item> 
+		
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Add-Ins" ID = "Add_Ins">תוספים</Item> 
+
+		<Item English_Text = "Copy Buffers" ID = "CopyBuffers">העתקת חוצצים</Item>
+
+
+
+
+	</Ditto_String_Table>
+	<Ditto_Options_Sheet>
+		<Item English_Text = "OK" ID = "1">אישור</Item>
+		<Item English_Text = "Cancel" ID = "2">ביטול</Item>
+		<Item English_Text = "Apply" ID = "12321">ביצוע</Item>
+	</Ditto_Options_Sheet>
+	<Ditto_Tray_Icon_Menu>
+		<Item English_Text = "Show Quick Paste" ID = "32773">הצג הדבקה מהירה</Item>
+		<Item English_Text = "Options" ID = "32771">אפשרויות</Item>
+		<Item English_Text = "Help" ID = "32843">עזרה</Item>
+		<Item English_Text = "Exit" ID = "32772">יציאה</Item>
+
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Import" ID = "32854">יבוא</Item>
+		<Item English_Text = "New Clip" ID = "32868">קליפ חדש</Item>
+		
+		//Added 12/10/11
+		<Item English_Text = "Global Hot Keys" ID = "32872">מקשים חמים ראשיים</Item>
+	</Ditto_Tray_Icon_Menu>
+
+	//Added in 9-11-09
+	<Ditto_Options_CopyBuffers>
+		<Item English_Text = "Copy Buffer 1" ID = "2088">העתקת חוצץ 1</Item>
+		<Item English_Text = "Copy" ID = "2079">העתק</Item>
+		<Item English_Text = "Paste" ID = "2080">הדבק</Item>
+		<Item English_Text = "Cut" ID = "2081">גזור</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042">הפעל צליל בהעתקה</Item>
+		<Item English_Text = "Win" ID = "2085"></Item>
+		<Item English_Text = "Win" ID = "2086"></Item>
+		<Item English_Text = "Win" ID = "2087"></Item>
+		
+		<Item English_Text = "Copy Buffer 2" ID = "2098">העתקת חוצץ 2</Item>
+		<Item English_Text = "Copy" ID = "2093">העתק</Item>
+		<Item English_Text = "Paste" ID = "2094">הדבק</Item>
+		<Item English_Text = "Cut" ID = "2097">גזור</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043">הפעל צליל בהעתקה</Item>
+		<Item English_Text = "Win" ID = "2090"></Item>
+		<Item English_Text = "Win" ID = "2092"></Item>
+		<Item English_Text = "Win" ID = "2096"></Item>
+		
+		<Item English_Text = "Copy Buffer 3" ID = "2108">העתקת חוצץ 3</Item>
+		<Item English_Text = "Copy" ID = "2103">העתק</Item>
+		<Item English_Text = "Paste" ID = "2104">הדבק</Item>
+		<Item English_Text = "Cut" ID = "2107">גזור</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044">הפעל צליל בהעתקה</Item>
+		<Item English_Text = "Win" ID = "2100"></Item>
+		<Item English_Text = "Win" ID = "2102"></Item>
+		<Item English_Text = "Win" ID = "2106"></Item>
+	</Ditto_Options_CopyBuffers>
+
+	<Ditto_GlobalHotKeys>
+		<Item English_Text = "Global Hot Keys" ID = "-1">מקשים חמים ראשיים</Item>
+		<Item English_Text = "Close" ID = "2">סגור</Item>
+		<Item English_Text = "(Clip) " ID = "(Clip)">קליפ</Item>
+		<Item English_Text = "Error" ID = "Error">שגיאה</Item>
+		<Item English_Text = "Yes" ID = "Yes">חיובי</Item>
+		<Item English_Text = "Description" ID = "Description">תיאור</Item>
+		<Item English_Text = "HotKey" ID = "HotKey">מקשים חמים</Item>
+		<Item English_Text = "Registered" ID = "Registered">רשום</Item>
+	</Ditto_GlobalHotKeys>
+</Ditto_Language_File>
