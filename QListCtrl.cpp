@@ -38,7 +38,7 @@ CQListCtrl::CQListCtrl()
 	
 	LOGFONT lf;
 	
-	lf.lfHeight = -9;
+	lf.lfHeight = theApp.m_metrics.PointsToPixels(-7);
 	lf.lfWidth = 0;
 	lf.lfEscapement = 0;
 	lf.lfOrientation = 0;
@@ -418,7 +418,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		
 		if( m_bShowTextForFirstTenHotKeys && firstTenNum > 0 )
 		{
-			rcText.left += 12;
+			rcText.left += theApp.m_metrics.ScaleX(12);
 		}
 		
 		// if we are inside a group, don't display the "in group" flag
@@ -437,24 +437,24 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			if(strSymbols.Find('G') >= 0) //group 
 			{
 				m_groupFolder.Draw(pDC, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_groupFolder.ImageWidth() + 2;
+				rcText.left += m_groupFolder.ImageWidth() + theApp.m_metrics.ScaleX(2);
 			}
 			if (strSymbols.Find('*') >= 0 &&
 				strSymbols.Find('G') < 0 &&
 				strSymbols.Find(_T("sticky")) < 0) //don't auto delete
 			{
 				m_dontDeleteImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_dontDeleteImage.ImageWidth() + 2;
+				rcText.left += m_dontDeleteImage.ImageWidth() + theApp.m_metrics.ScaleX(2);
 			}
 			if (strSymbols.Find('s') >= 0) // has shortcut
 			{
 				m_shortCutImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_shortCutImage.ImageWidth() + 2;
+				rcText.left += m_shortCutImage.ImageWidth() + theApp.m_metrics.ScaleX(2);
 			}
 			if (strSymbols.Find('!') >= 0) // in group
 			{
 				m_inFolderImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_inFolderImage.ImageWidth() + 2;
+				rcText.left += m_inFolderImage.ImageWidth() + theApp.m_metrics.ScaleX(2);
 			}
 			if (strSymbols.Find('Q') >= 0) // has quick paste text
 			{
@@ -462,7 +462,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			if (strSymbols.Find(_T("Sticky")) >= 0) //sticky clip
 			{
 				m_stickyImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_stickyImage.ImageWidth() + 2;
+				rcText.left += m_stickyImage.ImageWidth() + theApp.m_metrics.ScaleX(2);
 			}			
 		}
 		
@@ -498,16 +498,16 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			
 			CRect crHotKey = rcItem;
 			
-			crHotKey.right = crHotKey.left + 11;
-			crHotKey.left += 2;
-			crHotKey.top += 2;
+			crHotKey.right = crHotKey.left + theApp.m_metrics.ScaleX(11);
+			crHotKey.left += theApp.m_metrics.ScaleX(2);
+			crHotKey.top += theApp.m_metrics.ScaleX(2);
 			
 			HFONT hOldFont = (HFONT)pDC->SelectObject(m_SmallFont);
 			
 			pDC->DrawText(cs, crHotKey, DT_BOTTOM);
 			
-			pDC->MoveTo(CPoint(rcItem.left + 11, rcItem.top));
-			pDC->LineTo(CPoint(rcItem.left + 11, rcItem.bottom));
+			pDC->MoveTo(CPoint(rcItem.left + theApp.m_metrics.ScaleX(11), rcItem.top));
+			pDC->LineTo(CPoint(rcItem.left + theApp.m_metrics.ScaleX(11), rcItem.bottom));
 			
 			pDC->SelectObject(hOldFont);
 		}
