@@ -573,6 +573,8 @@ void CToolTipEx::SetBitmap(CBitmap *pBitmap)
 	{
 		int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
 		int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
+
+		Invalidate();
 	}
 }
 
