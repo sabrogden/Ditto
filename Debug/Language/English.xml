@@ -105,6 +105,7 @@
 		<Item English_Text = "Cancel" ID = "2"></Item>
 		<Item English_Text = "Copy Properties" ID = "-1"></Item>
 		
+		//Added 1/10/15
 		<Item English_Text = "Hotkey available globally" ID = "1026"></Item>
 		<Item English_Text = "Last Used" ID = "2043"></Item>
 		<Item English_Text = "Quick Paste Text" ID = "2125"></Item>
