@@ -281,10 +281,6 @@ BEGIN
         MENUITEM "View Full Description",       32793,MFT_STRING,MFS_ENABLED
         MENUITEM "View Groups",                 32819,MFT_STRING,MFS_ENABLED
         MENUITEM "Paste Plain Text Only",       32841,MFT_STRING,MFS_ENABLED
-        POPUP "Paste Special",                  65535,MFT_STRING,MFS_ENABLED
-        BEGIN
-            MENUITEM "Text as File Drop",           ID_PASTESPECIAL_TEXTASFILEDROP,MFT_STRING,MFS_ENABLED
-        END
         POPUP "Compare",                        65535,MFT_STRING,MFS_ENABLED
         BEGIN
             MENUITEM "Select Left Text",            ID_COMPARE_SELECTLEFTCOMPARE,MFT_STRING,MFS_ENABLED
@@ -312,7 +308,7 @@ BEGIN
             MENUITEM "Remove Sticky Setting",       ID_STICKYCLIPS_REMOVESTICKYSETTING,MFT_STRING,MFS_ENABLED
         END
         MENUITEM MFT_SEPARATOR
-        POPUP "Import/Export",                  ID_MENU_EXPORT32888,MFT_STRING,MFS_ENABLED
+        POPUP "Import/Export",                  65535,MFT_STRING,MFS_ENABLED
         BEGIN
             MENUITEM "Import Clip(s)",              32855,MFT_STRING,MFS_ENABLED
             MENUITEM "Export Clip(s)",              32853,MFT_STRING,MFS_ENABLED
@@ -435,10 +431,10 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,19,335,10
     CONTROL         "Show leading whitespace",IDC_DESC_SHOW_LEADING_WHITESPACE,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,30,335,10
-    LTEXT           "Text Lines per Clip",IDC_STATIC_LINES,18,43,93,8
+    LTEXT           "Text Lines per Clip",IDC_STATIC_LINES,25,43,93,8
     EDITTEXT        IDC_LINES_ROW,114,41,19,12,ES_AUTOHSCROLL
     CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,56,155,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,56,155,10
     EDITTEXT        IDC_TRANS_PERC,177,55,19,12,ES_AUTOHSCROLL
     CONTROL         "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)",IDC_SHOW_THUMBNAILS,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,68,335,10
@@ -655,7 +651,7 @@ BEGIN
     LTEXT           "Copy Formats",IDC_STATIC_FORMATS,7,177,226,8
     LTEXT           "Move To Group",IDC_STATIC_MOVE_TO_GROUP,8,75,62,9
     EDITTEXT        IDC_EDIT_QUICK_PASTE,73,55,197,13,ES_AUTOHSCROLL
-    LTEXT           "Quick Paste Text",IDC_STATIC,7,55,62,13,SS_CENTERIMAGE
+    LTEXT           "Quick Paste Text",IDC_STATIC_QUICK_PASTE,7,55,62,13,SS_CENTERIMAGE
     CONTROL         "Hotkey available globally",IDC_HOT_KEY_GLOBAL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,171,7,100,14
     CONTROL         "Win",IDC_CHECK_WIN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,137,7,33,14
     EDITTEXT        IDC_DATE_LAST_USED,51,38,82,13,ES_AUTOHSCROLL | WS_DISABLED | NOT WS_TABSTOP
@@ -820,7 +816,7 @@ BEGIN
     LTEXT           "Selected Size:",IDC_STATIC_SELECTED_SIZE_TEXT,109,300,46,8
     LTEXT           "Size",IDC_STATIC_SELECTED_SIZE,161,300,39,8
     PUSHBUTTON      "Delete",IDC_BUTTON_APPLY,561,295,49,13
-    CTEXT           "Each clip in Ditto is made of multiple clipboard items, all clipboard items in Ditto are listed below.",IDC_STATIC,7,7,661,14
+    CTEXT           "Each clip in Ditto is made of multiple clipboard items, all clipboard items in Ditto are listed below.",IDC_STATIC_DESC,7,7,661,14
     LTEXT           "<  --   >",IDC_STATIC,263,42,27,8
     LTEXT           "<  --   >",IDC_STATIC,263,76,27,8
     GROUPBOX        "Search Options",IDC_STATIC_GROUP_SEARCH,4,15,661,83

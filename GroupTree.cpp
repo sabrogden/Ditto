@@ -356,6 +356,8 @@ void CGroupTree::OnRclickQuickPaste(NMHDR *pNMHDR, LRESULT *pResult)
 		{
 			return;
 		}
+
+		theApp.m_Language.UpdateGroupsRightClickMenu(cmSubMenu);
 		
 		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
 	}

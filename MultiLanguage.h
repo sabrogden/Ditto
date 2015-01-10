@@ -41,6 +41,7 @@ public:
 	bool LoadLanguageFile(CString csFile);
 
 	bool UpdateRightClickMenu(CMenu *pMenu);
+	bool UpdateGroupsRightClickMenu(CMenu *pMenu);
 	bool UpdateTrayIconRightClickMenu(CMenu *pMenu);
 
 	bool UpdateClipProperties(CWnd *pParent);
@@ -56,8 +57,10 @@ public:
 	bool UpdateOptionsSheet(CWnd *pParent);
 	bool UpdateOptionCopyBuffers(CWnd *pParent);
 	bool UpdateGlobalHotKeys(CWnd *pParent);
+	bool UpdateDeleteClipData(CWnd *pParent);
 
 	CString GetGlobalHotKeyString(CString csID, CString csDefault);
+	CString GetDeleteClipDataString(CString csID, CString csDefault);
 
 	CString GetString(CString csID, CString csDefault);
 
@@ -73,6 +76,7 @@ public:
 
 protected:
 	LANGUAGE_ARRAY m_RightClickMenu;
+	LANGUAGE_ARRAY m_GroupsRightClickMenu;
 	LANGUAGE_ARRAY m_TrayIconRightClickMenu;
 	LANGUAGE_ARRAY m_ClipProperties;
 	LANGUAGE_ARRAY m_OptionsGeneral;
@@ -87,6 +91,7 @@ protected:
 	LANGUAGE_ARRAY m_OptionsSheet;
 	LANGUAGE_ARRAY m_OptionsCopyBuffers;
 	LANGUAGE_ARRAY m_GlobalHotKeys;
+	LANGUAGE_ARRAY m_DeleteClipData;
 
 	LANGUAGE_MAP	m_StringMap;
 

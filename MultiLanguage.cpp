@@ -39,6 +39,7 @@ void CMultiLanguage::ClearArrays()
 	m_bOnlyGetHeader = false;
 
 	ClearArray(m_RightClickMenu);
+	ClearArray(m_GroupsRightClickMenu);
 	ClearArray(m_ClipProperties);
 	ClearArray(m_OptionsGeneral);
 	ClearArray(m_OptionsSupportedTypes);
@@ -121,9 +122,29 @@ CString CMultiLanguage::GetGlobalHotKeyString(CString csID, CString csDefault)
 	return csDefault;
 }
 
+CString CMultiLanguage::GetDeleteClipDataString(CString csID, CString csDefault)
+{
+	INT_PTR size = m_DeleteClipData.GetSize();
+	for(int i = 0; i < size; i++)
+	{
+		CLangItem *plItem = m_DeleteClipData[i];
+		if(plItem->m_csID == csID)
+		{
+			return plItem->m_csForeignLang;
+		}
+	}
+
+	return csDefault;
+}
+
 bool CMultiLanguage::UpdateRightClickMenu(CMenu *pMenu)
 {
 	return UpdateMenuToLanguage(pMenu, m_RightClickMenu);
+}
+
+bool CMultiLanguage::UpdateGroupsRightClickMenu(CMenu *pMenu)
+{
+	return UpdateMenuToLanguage(pMenu, m_GroupsRightClickMenu);
 }
 
 bool CMultiLanguage::UpdateTrayIconRightClickMenu(CMenu *pMenu)
@@ -194,6 +215,11 @@ bool CMultiLanguage::UpdateOptionCopyBuffers(CWnd *pParent)
 bool CMultiLanguage::UpdateGlobalHotKeys(CWnd *pParent)
 {
 	return UpdateWindowToLanguage(pParent, m_GlobalHotKeys);
+}
+
+bool CMultiLanguage::UpdateDeleteClipData(CWnd *pParent)
+{
+	return UpdateWindowToLanguage(pParent, m_DeleteClipData);
 }
 
 bool CMultiLanguage::UpdateMenuToLanguage(CMenu *pMenu, LANGUAGE_ARRAY &Array)
@@ -328,6 +354,7 @@ bool CMultiLanguage::LoadLanguageFile(CString csFile)
 		return true;
 
 	bool bRet = LoadSection(*ItemHeader, m_RightClickMenu, "Ditto_Right_Click_Menu");
+	bRet = LoadSection(*ItemHeader, m_GroupsRightClickMenu, "Ditto_Groups_Right_Click_Menu");
 	bRet = LoadSection(*ItemHeader, m_OptionsGeneral, "Ditto_Options_General");
 	bRet = LoadSection(*ItemHeader, m_ClipProperties, "Ditto_Clip_Properties");
 	bRet = LoadSection(*ItemHeader, m_OptionsSupportedTypes, "Ditto_Options_Supported_Types");
@@ -342,6 +369,7 @@ bool CMultiLanguage::LoadLanguageFile(CString csFile)
 	bRet = LoadSection(*ItemHeader, m_TrayIconRightClickMenu, "Ditto_Tray_Icon_Menu");
 	bRet = LoadSection(*ItemHeader, m_OptionsCopyBuffers, "Ditto_Options_CopyBuffers");
 	bRet = LoadSection(*ItemHeader, m_GlobalHotKeys, "Ditto_GlobalHotKeys");
+	bRet = LoadSection(*ItemHeader, m_DeleteClipData, "Ditto_DeleteClipData");
 	
 	bRet = LoadStringTableSection(*ItemHeader, m_StringMap, "Ditto_String_Table");
 

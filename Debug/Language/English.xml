@@ -76,6 +76,21 @@
 		<Item English_Text = "Edit Clip" ID = "32860"></Item>
 		<Item English_Text = "New Clip" ID = "32867"></Item>	
 		
+		//Added 1/10/15
+		<Item English_Text = "Compare" ID = "-1"></Item>	
+		<Item English_Text = "Select Left Text" ID = "32893"></Item>	
+		<Item English_Text = "Select Right Text And Compare Against Left" ID = "32894"></Item>	
+		<Item English_Text = "Compare" ID = "32895"></Item>
+		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "32881"></Item>
+		<Item English_Text = "Show In Taskbar" ID = "32885"></Item>
+		<Item English_Text = "Sticky Clips" ID = "-1"></Item>	
+		<Item English_Text = "Make Top Sticky Clip" ID = "32878"></Item>	
+		<Item English_Text = "Make Last Sticky Clip" ID = "32879"></Item>	
+		<Item English_Text = "Remove Sticky Setting" ID = "32880"></Item>
+		<Item English_Text = "Import/Export" ID = "-1"></Item>	
+		<Item English_Text = "View as QRCode" ID = "32887"></Item>	
+		<Item English_Text = "Export Clip(s) to Text File" ID = "32889"></Item>	
+		
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039"></Item>
@@ -89,6 +104,11 @@
 		<Item English_Text = "OK" ID = "1"></Item>
 		<Item English_Text = "Cancel" ID = "2"></Item>
 		<Item English_Text = "Copy Properties" ID = "-1"></Item>
+		
+		<Item English_Text = "Hotkey available globally" ID = "1026"></Item>
+		<Item English_Text = "Last Used" ID = "2043"></Item>
+		<Item English_Text = "Quick Paste Text" ID = "2125"></Item>
+		
 	</Ditto_Clip_Properties>
 	<Ditto_Options_General>
 		<Item English_Text = "Start Ditto on System Startup" ID = "2004"></Item>
@@ -159,6 +179,10 @@
 		
 		//New item added in 3.15.1 8/18/07
 		<Item English_Text = "Send custom strokes Per Application" ID = "2091"></Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043"></Item>
+		
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Quick_Paste>
 		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042"></Item>
@@ -188,6 +212,12 @@
 		//New strings added in 3.15.2 10-6-07
 		<Item English_Text = "Theme" ID = "2092"></Item>
 		<Item English_Text = "About Theme" ID = "2094"></Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Always Show Scroll Bar" ID = "2040"></Item>
+		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "2041"></Item>
+		<Item English_Text = "Show In Taskbar" ID = "2042"></Item>
+		<Item English_Text = "Diff Application Path" ID = "2122"></Item>
 		
 	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>
@@ -325,6 +355,9 @@
 		
 		//Added 12/10/11
 		<Item English_Text = "Global Hot Keys" ID = "32872"></Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Delete Clip Data" ID = "32886"></Item>
 	</Ditto_Tray_Icon_Menu>
 
 	//Added in 9-11-09
@@ -367,4 +400,34 @@
 		<Item English_Text = "HotKey" ID = "HotKey"></Item>
 		<Item English_Text = "Registered" ID = "Registered"></Item>
 	</Ditto_GlobalHotKeys>
+
+	//Added 1/10/15
+	<Ditto_Groups_Right_Click_Menu>
+		<Item English_Text = "New Sub Group" ID = "32896"></Item>
+		<Item English_Text = "Delete Group" ID = "32897"></Item>
+		<Item English_Text = "Properties" ID = "32898"></Item>	
+	</Ditto_Groups_Right_Click_Menu>
+	
+	//Added 1/10/15
+	<Ditto_DeleteClipData>
+		<Item English_Text = "Delete Clip Data" ID = "-1"></Item>
+		<Item English_Text = "Each clip in Ditto is made of multiple clipboard items, all clipboard items in Ditto are listed below." ID = "2126"></Item>
+		<Item English_Text = "Search Options" ID = "2120"></Item>
+		<Item English_Text = "Title" ID = "1042"></Item>
+		<Item English_Text = "Create Date Range" ID = "1043"></Item>
+		<Item English_Text = "Format" ID = "1045"></Item>
+		<Item English_Text = "Last Used Range" ID = "1044"></Item>
+		<Item English_Text = "Search" ID = "1040"></Item>
+		<Item English_Text = "Database Size" ID = "2115"></Item>
+		<Item English_Text = "Selected Size" ID = "2116"></Item>
+		<Item English_Text = "Selected Count" ID = "2117"></Item>
+		<Item English_Text = "Delete" ID = "2118"></Item>
+		<Item English_Text = "Cancel" ID = "2"></Item>
+		<Item English_Text = "Title" ID = "Title"></Item>
+		<Item English_Text = "Created" ID = "Created"></Item>
+		<Item English_Text = "Last Used" ID = "LastUsed"></Item>
+		<Item English_Text = "Format" ID = "Format"></Item>
+		<Item English_Text = "Data Size" ID = "DataSize"></Item>
+	</Ditto_DeleteClipData>
+	
 </Ditto_Language_File>
