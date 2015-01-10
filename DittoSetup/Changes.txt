@@ -1,4 +1,24 @@
-3.9
+3.20 1-10-15
+
+- View clip as QRCode
+- Open external app to compare apps
+- Save clips to file
+- Show search text in different color in ditto and description window
+- Added command line options to open/close ditto's window
+- F3 finds inside the description window
+- ctrl-c/v/z/x/a work now in the search edit box
+
+- Delete pending Main record deletes before shrinking the database on clip cleanup
+- Press and hold up/down in search box now moves selection correctly
+- Forward key_down message to list control so shift up/down works when up/down from search text box
+- Scale small 1-10 text in each row based on dpi settings
+
+- Added new Persian language file
+- Updated Russian language file
+- Added Hebrew language
+
+
+3.19
 
 - elevate ditto privileges if pasting into a higher privileged application (before the paste would fail)
 - Added Delete clip data window (task bar icon - right click - delete clip data)
