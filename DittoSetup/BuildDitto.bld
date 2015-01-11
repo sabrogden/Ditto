@@ -334,7 +334,7 @@ var sc_security="b3f57099";
 			<Repository>/p/ditto-cp/code/</Repository>
 			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
 			<Subcommand>log</Subcommand>
-			<Switches>-r {2014-06-06}:{2016-12-31}</Switches>
+			<Switches>-r {2015-01-10}:{2016-12-31}</Switches>
 			<Username>sabrogden</Username>
 			<indent type='3'>2</indent>
 			<name>SVN Log Messages</name>
@@ -389,7 +389,7 @@ var sc_security="b3f57099";
 			<value>3</value>
 		</macro>
 		<macro name='verMinor'>
-			<value>20</value>
+			<value>21</value>
 		</macro>
 		<macro name='verRevision'>
 			<value>0</value>
