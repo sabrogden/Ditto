@@ -398,6 +398,12 @@ void CGroupTree::OnUpdateMenuProperties32898(CCmdUI *pCmdUI)
 
 void CGroupTree::UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action)
 {
+	if(pCmdUI == NULL ||
+		pCmdUI->m_pMenu == NULL)
+	{
+		return;
+	}
+
 	CString cs;
 	pCmdUI->m_pMenu->GetMenuString(pCmdUI->m_nID, cs, MF_BYCOMMAND);
 	CString shortcutText = m_actions.GetCmdKeyText(action);
