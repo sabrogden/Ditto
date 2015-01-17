@@ -389,7 +389,7 @@ var sc_security="b3f57099";
 			<value>3</value>
 		</macro>
 		<macro name='verMinor'>
-			<value>21</value>
+			<value>20</value>
 		</macro>
 		<macro name='verRevision'>
 			<value>0</value>

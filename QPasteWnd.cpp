@@ -221,6 +221,7 @@ ON_MESSAGE(NM_SHOW_PROPERTIES, OnShowProperties)
 ON_MESSAGE(NM_NEW_GROUP, OnNewGroup)
 ON_MESSAGE(NM_DELETE_ID, OnDeleteId)
 ON_COMMAND(ID_MENU_REGULAREXPRESSIONSEARCH, &CQPasteWnd::OnMenuRegularexpressionsearch)
+ON_COMMAND(ID_MENU_WILDCARDSEARCH, &CQPasteWnd::OnMenuWildcardsearch)
 END_MESSAGE_MAP()
 
 
@@ -4046,7 +4047,12 @@ void CQPasteWnd::OnSearchDescription()
 
 		if (CGetSetOptions::GetRegExTextSearch())
 			cmSubMenu->CheckMenuItem(ID_MENU_REGULAREXPRESSIONSEARCH, MF_CHECKED);
-				
+
+		if(CGetSetOptions::GetSimpleTextSearch() == FALSE &&
+			CGetSetOptions::GetRegExTextSearch() == FALSE)
+		{
+			cmSubMenu->CheckMenuItem(ID_MENU_WILDCARDSEARCH, MF_CHECKED);
+		}		
 
 		//theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 
@@ -4093,11 +4099,6 @@ void CQPasteWnd::OnMenuSearchQuickPaste()
 	{
 		FillList(csText);
 	}
-}
-
-void CQPasteWnd::OnMenuSimpleTextSearch()
-{
-	CGetSetOptions::SetSimpleTextSearch(!CGetSetOptions::GetSimpleTextSearch());
 }
 
 void CQPasteWnd::OnSearchEditChange()
@@ -4635,8 +4636,20 @@ LRESULT CQPasteWnd::OnDeleteId(WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
+void CQPasteWnd::OnMenuSimpleTextSearch()
+{
+	CGetSetOptions::SetSimpleTextSearch(!CGetSetOptions::GetSimpleTextSearch());
+	CGetSetOptions::SetRegExTextSearch(FALSE);
+}
+
 void CQPasteWnd::OnMenuRegularexpressionsearch()
 {
 	CGetSetOptions::SetSimpleTextSearch(FALSE);
 	CGetSetOptions::SetRegExTextSearch(!CGetSetOptions::GetRegExTextSearch());
+}
+
+void CQPasteWnd::OnMenuWildcardsearch()
+{
+	CGetSetOptions::SetSimpleTextSearch(FALSE);
+	CGetSetOptions::SetRegExTextSearch(FALSE);
 }

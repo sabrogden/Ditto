@@ -336,6 +336,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Contains Text Search",        ID_MENU_CONTAINSTEXTSEARCHONLY
         MENUITEM "Regular Expression Search",   ID_MENU_REGULAREXPRESSIONSEARCH
+        MENUITEM "Wildcard Search",             ID_MENU_WILDCARDSEARCH
     END
 END
 
