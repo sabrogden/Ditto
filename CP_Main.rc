@@ -333,7 +333,9 @@ BEGIN
         MENUITEM "Search Description",          ID_MENU_SEARCHDESCRIPTION
         MENUITEM "Search Full Text",            ID_MENU_SEARCHFULLTEXT
         MENUITEM "Search Quick Paste",          ID_MENU_SEARCHQUICKPASTE
-        MENUITEM "Contains Text Search Only",   ID_MENU_CONTAINSTEXTSEARCHONLY
+        MENUITEM SEPARATOR
+        MENUITEM "Contains Text Search",        ID_MENU_CONTAINSTEXTSEARCHONLY
+        MENUITEM "Regular Expression Search",   ID_MENU_REGULAREXPRESSIONSEARCH
     END
 END
 

@@ -399,4 +399,5 @@ public:
 	afx_msg LRESULT OnShowProperties(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnNewGroup(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnDeleteId(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnMenuRegularexpressionsearch();
 };

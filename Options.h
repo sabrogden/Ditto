@@ -463,6 +463,11 @@ public:
 
 	static void		SetQRCodeBorderPixels(int val);
 	static int	GetQRCodeBorderPixels();
+
+	static BOOL GetRegExTextSearch();
+	static void SetRegExTextSearch(BOOL val);
+
+
 };
 
 // global for easy access and for initialization of fast access variables

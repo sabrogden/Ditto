@@ -2048,6 +2048,16 @@ BOOL CGetSetOptions::GetSimpleTextSearch()
 	return GetProfileLong(_T("SimpleTextSearch"), 0);
 }
 
+void CGetSetOptions::SetRegExTextSearch(BOOL val)
+{
+	SetProfileLong(_T("RegExTextSearch"), val);
+}
+
+BOOL CGetSetOptions::GetRegExTextSearch()
+{
+	return GetProfileLong(_T("RegExTextSearch"), 0);
+}
+
 void CGetSetOptions::SetMoveClipsOnGlobal10(BOOL val)
 {
 	SetProfileLong(_T("MoveClipsOnGlobal10"), val);

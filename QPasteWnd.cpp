@@ -220,6 +220,7 @@ ON_UPDATE_COMMAND_UI(ID_COMPARE_COMPARE, &CQPasteWnd::OnUpdateCompareCompare)
 ON_MESSAGE(NM_SHOW_PROPERTIES, OnShowProperties)
 ON_MESSAGE(NM_NEW_GROUP, OnNewGroup)
 ON_MESSAGE(NM_DELETE_ID, OnDeleteId)
+ON_COMMAND(ID_MENU_REGULAREXPRESSIONSEARCH, &CQPasteWnd::OnMenuRegularexpressionsearch)
 END_MESSAGE_MAP()
 
 
@@ -4042,6 +4043,9 @@ void CQPasteWnd::OnSearchDescription()
 
 		if(CGetSetOptions::GetSimpleTextSearch())
 			cmSubMenu->CheckMenuItem(ID_MENU_CONTAINSTEXTSEARCHONLY, MF_CHECKED);
+
+		if (CGetSetOptions::GetRegExTextSearch())
+			cmSubMenu->CheckMenuItem(ID_MENU_REGULAREXPRESSIONSEARCH, MF_CHECKED);
 				
 
 		//theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
@@ -4629,4 +4633,10 @@ LRESULT CQPasteWnd::OnDeleteId(WPARAM wParam, LPARAM lParam)
 	DeleteClips(IDs, Indexs);
 
 	return TRUE;
+}
+
+void CQPasteWnd::OnMenuRegularexpressionsearch()
+{
+	CGetSetOptions::SetSimpleTextSearch(FALSE);
+	CGetSetOptions::SetRegExTextSearch(!CGetSetOptions::GetRegExTextSearch());
 }

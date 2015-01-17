@@ -29,6 +29,7 @@
 #include "CppSQLite3.h"
 #include <cstdlib>
 #include "..\UnicodeMacros.h"
+#include <regex>
 
 
 // Named constant for passing to CppSQLite3Exception when passing it a string
@@ -750,6 +751,35 @@ CppSQLite3DB& CppSQLite3DB::operator=(const CppSQLite3DB& db)
 	return *this;
 }
 
+void sqlite_regexp(sqlite3_context* context, int argc, sqlite3_value** values)
+{
+	char* reg = (char*) sqlite3_value_text(values[0]);
+	char* text = (char*) sqlite3_value_text(values[1]);
+
+	if (argc != 2 || reg == 0 || text == 0) 
+	{
+		sqlite3_result_error(context, "SQL function regexp() called with invalid arguments.\n", -1);
+		return;
+	}
+
+	try
+	{
+		if (std::regex_search(text, std::regex(reg)))
+		{
+			sqlite3_result_int(context, 1);
+		}
+		else
+		{
+			sqlite3_result_int(context, 0);
+		}
+	}
+	catch (std::regex_error& e) 
+	{
+		CStringA r;
+		r.Format("regex_search exception %d, reg: %s, str: %s", e.code(), reg, text);
+		OutputDebugStringA(r);
+	}
+}
 
 void CppSQLite3DB::open(const TCHAR* szFile)
 {
@@ -765,8 +795,12 @@ void CppSQLite3DB::open(const TCHAR* szFile)
 		throw CppSQLite3Exception(nRet, (TCHAR*)szError, DONT_DELETE_MSG);
 	}
 
+	int ret = sqlite3_create_function(mpDB, "regexp", 2, SQLITE_ANY, 0, &sqlite_regexp, 0, 0);
+
 	setBusyTimeout(mnBusyTimeoutMs);
 }
+
+
 
 
 bool CppSQLite3DB::close()
