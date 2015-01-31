@@ -313,6 +313,7 @@ HGLOBAL CClient::RequestCopiedFiles(CClipFormat &HDropFormat, CString csIP, CStr
 		}
 
 		m_SendSocket.SetSocket(m_Connection);
+		m_SendSocket.SetProgressBar(pProgress);
 
 		if(m_SendSocket.SendCSendData(Info, MyEnums::START) == FALSE)
 			break;
@@ -326,6 +327,8 @@ HGLOBAL CClient::RequestCopiedFiles(CClipFormat &HDropFormat, CString csIP, CStr
 		if(m_SendSocket.SendCSendData(Info, MyEnums::END) == FALSE)
 			break;
 			
+		pProgress->SetMessage(StrF(_T("Requesting Files from %s (%s)"), csComputerName, csIP));
+
 		if(m_SendSocket.SendCSendData(Info, MyEnums::REQUEST_FILES) == FALSE)
 			break;
 
@@ -337,7 +340,14 @@ HGLOBAL CClient::RequestCopiedFiles(CClipFormat &HDropFormat, CString csIP, CStr
 		}
 		else if(lRet == FALSE)
 		{
-			csErrorString = _T("Error recieving files.");
+			if(pProgress != NULL && pProgress->Cancelled())
+			{
+				//Don't show an error message the user canceled things
+			}
+			else	
+			{
+				csErrorString = _T("Error recieving files.");
+			}
 		}
 
 	} while(false);

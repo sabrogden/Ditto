@@ -2173,3 +2173,13 @@ int CGetSetOptions::GetQRCodeBorderPixels()
 {
 	return GetProfileLong(_T("QRCodeBorderPixels"), 30);
 }
+
+void CGetSetOptions::SetNetworkReadTimeoutMS(int val)
+{
+	SetProfileLong(_T("NetworkReadTimeoutMS"), val);
+}
+
+int CGetSetOptions::GetNetworkReadTimeoutMS()
+{
+	return GetProfileLong(_T("NetworkReadTimeoutMS"), 30000);
+}

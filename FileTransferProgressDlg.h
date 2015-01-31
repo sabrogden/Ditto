@@ -29,6 +29,7 @@ public:
 	//}}AFX_DATA
 
 	void SetMessage(CString &cs);
+	CString GetMessage();
 	void SetFileMessage(CString &cs);
 
 	void SetNumFiles(int nFiles);

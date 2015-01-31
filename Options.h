@@ -467,6 +467,9 @@ public:
 	static BOOL GetRegExTextSearch();
 	static void SetRegExTextSearch(BOOL val);
 
+	static void SetNetworkReadTimeoutMS(int val);
+	static int GetNetworkReadTimeoutMS();
+
 
 };
 

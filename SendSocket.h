@@ -11,6 +11,8 @@
 
 #include "EncryptDecrypt\Encryption.h"
 #include "ServerDefines.h"
+#include "FileTransferProgressDlg.h"
+
 
 class CSendSocket  
 {
@@ -19,6 +21,7 @@ public:
 	virtual ~CSendSocket();
 
 	void SetSocket(SOCKET sock)		{ m_Connection = sock;	}
+	void SetProgressBar(CFileTransferProgressDlg *pDlg) { m_pProgress = pDlg; }
 
 	CEncryption *m_pEncryptor;
 
@@ -27,6 +30,8 @@ public:
 
 protected:
 	SOCKET m_Connection;
+
+	CFileTransferProgressDlg *m_pProgress;
 };
 
 #endif // !defined(AFX_SENDSOCKET_H__4A4A5B96_8123_413C_8F86_A2875C9E5E48__INCLUDED_)

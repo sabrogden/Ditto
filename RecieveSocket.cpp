@@ -10,6 +10,7 @@ CRecieveSocket::CRecieveSocket(SOCKET sock)
 	m_pDataReturnedFromDecrypt = NULL;
 	m_Sock = sock;
 	m_pEncryptor = new CEncryption; //CreateEncryptionInterface("encryptdecrypt.dll");
+	m_pProgress = NULL;
 }
 
 CRecieveSocket::~CRecieveSocket()
@@ -53,50 +54,56 @@ LPVOID CRecieveSocket::ReceiveEncryptedData(long lInSize, long &lOutSize)
 	
 	if(pInput)
 	{
-		RecieveExactSize(pInput, lInSize);
-
 		int nOut = 0;
-		CStringA csPassword;
-		INT_PTR count = g_Opt.m_csNetworkPasswordArray.GetSize();
-		INT_PTR nIndex;
-		for(int i = -2; i < count; i++)
+
+		if(RecieveExactSize(pInput, lInSize))
 		{
-			csPassword.Empty();
-			nIndex = i;
+			CStringA csPassword;
+			INT_PTR count = g_Opt.m_csNetworkPasswordArray.GetSize();
+			INT_PTR nIndex;
+			for(int i = -2; i < count; i++)
+			{
+				csPassword.Empty();
+				nIndex = i;
 
-			//First time through try the last index that was valid
-			if(i == -2)
-			{
-				nIndex = theApp.m_lLastGoodIndexForNextworkPassword;
-				if(nIndex == -2)
-					continue;
-			}
-
-			if(nIndex == -1)
-			{
-				csPassword = g_Opt.m_csPassword;
-			}
-			else
-			{
-				if(nIndex >= 0 && nIndex < count)
+				//First time through try the last index that was valid
+				if(i == -2)
 				{
-					CTextConvert::ConvertToUTF8(g_Opt.m_csNetworkPasswordArray[nIndex], csPassword);
+					nIndex = theApp.m_lLastGoodIndexForNextworkPassword;
+					if(nIndex == -2)
+						continue;
+				}
+
+				if(nIndex == -1)
+				{
+					csPassword = g_Opt.m_csPassword;
 				}
 				else
 				{
-					continue;
+					if(nIndex >= 0 && nIndex < count)
+					{
+						CTextConvert::ConvertToUTF8(g_Opt.m_csNetworkPasswordArray[nIndex], csPassword);
+					}
+					else
+					{
+						continue;
+					}
+				}
+
+				if(m_pEncryptor->Decrypt((UCHAR*)pInput, lInSize, csPassword, pOutput, nOut) == FALSE)
+				{
+					LogSendRecieveInfo(StrF(_T("ReceiveEncryptedData:: Failed to Decrypt data password = %s"), g_Opt.m_csPassword));
+				}
+				else
+				{
+					theApp.m_lLastGoodIndexForNextworkPassword = (long)nIndex;
+					break;
 				}
 			}
-
-			if(m_pEncryptor->Decrypt((UCHAR*)pInput, lInSize, csPassword, pOutput, nOut) == FALSE)
-			{
-				LogSendRecieveInfo(StrF(_T("ReceiveEncryptedData:: Failed to Decrypt data password = %s"), g_Opt.m_csPassword));
-			}
-			else
-			{
-				theApp.m_lLastGoodIndexForNextworkPassword = (long)nIndex;
-				break;
-			}
+		}
+		else
+		{
+			LogSendRecieveInfo(StrF(_T("ReceiveEncryptedData:: FAILED"), lInSize));
 		}
 
 		lOutSize = nOut;
@@ -115,6 +122,40 @@ LPVOID CRecieveSocket::ReceiveEncryptedData(long lInSize, long &lOutSize)
 	return pOutput;
 }
 
+int recv_to(int fd, char *buffer, int len, int flags, int to) 
+{
+	fd_set readset;
+	int result, iof = -1;
+	struct timeval tv;
+
+	// Initialize the set
+	FD_ZERO(&readset);
+	FD_SET(fd, &readset);
+
+	// Initialize time out struct
+	tv.tv_sec = 0;
+	tv.tv_usec = to * 1000;
+	// select()
+	result = select(fd+1, &readset, NULL, NULL, &tv);
+
+	// Check status
+	if (result < 0)
+		return -1;
+	else if (result > 0 && FD_ISSET(fd, &readset)) 
+	{
+		// Set non-blocking mode
+		//if ((iof = fcntl(fd, F_GETFL, 0)) != -1)
+		//	fcntl(fd, F_SETFL, iof | O_NONBLOCK);
+		// receive
+		result = recv(fd, buffer, len, flags);
+		// set as before
+		//if (iof != -1)
+		//	fcntl(fd, F_SETFL, iof);
+		return result;
+	}
+	return -2;
+}
+
 BOOL CRecieveSocket::RecieveExactSize(char *pData, long lSize)
 {
 	LogSendRecieveInfo(StrF(_T("RecieveExactSize:: ------ Start wanted size %d"), lSize));
@@ -123,10 +164,53 @@ BOOL CRecieveSocket::RecieveExactSize(char *pData, long lSize)
 
 	long lWanted = lSize;
 	long lOffset = 0;
+	CString originalText = _T("");
 
 	while(lWanted > 0)
-	{
-		lReceiveCount = recv(m_Sock, pData + lOffset, lWanted, 0);
+	{		
+		fd_set readset;
+		int res;
+
+		int timeoutMs = CGetSetOptions::GetNetworkReadTimeoutMS();
+		int loops100msEach = (timeoutMs/100);
+
+		for(int i = 0; i < loops100msEach; i++)
+		{
+			lReceiveCount = recv_to(m_Sock, pData + lOffset, lWanted, 0, 100);
+
+			if(lReceiveCount >= 0)
+			{
+				break;
+			}
+			else if(lReceiveCount == SOCKET_ERROR)
+			{
+				ASSERT(FALSE);
+				LogSendRecieveInfo(StrF(_T("RecieveExactSize:: Socket Error")));
+				return FALSE;
+			}
+
+			if(lReceiveCount == -2 && i > 15)
+			{
+				if(m_pProgress != NULL)
+				{
+					originalText = m_pProgress->GetMessage();
+					m_pProgress->SetMessage(StrF(_T("Requesting data from Server")));					
+					m_pProgress->PumpMessages();
+					if(m_pProgress->Cancelled())
+					{
+						return FALSE;
+					}
+				}
+			}
+		}
+
+		if(lReceiveCount == -2)
+		{
+			ASSERT(FALSE);
+			LogSendRecieveInfo(StrF(_T("RecieveExactSize:: Timeout waiting for server")));
+			return FALSE;
+		}
+
 		if(lReceiveCount == SOCKET_ERROR)
 		{
 			LogSendRecieveInfo("RecieveExactSize:: ********ERROR if(lReceiveCount == SOCKET_ERROR)*******");
@@ -136,6 +220,12 @@ BOOL CRecieveSocket::RecieveExactSize(char *pData, long lSize)
 		{
 			LogSendRecieveInfo("RecieveExactSize:: ********ERROR lRecieveCount == 0");
 			return FALSE;
+		}
+
+		if(m_pProgress != NULL &&
+			originalText != _T(""))
+		{
+			m_pProgress->SetMessage(originalText);					
 		}
 
 		lWanted -= lReceiveCount;

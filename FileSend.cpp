@@ -75,12 +75,12 @@ BOOL CFileSend::SendClientFiles(SOCKET sock, CClipList *pClipList)
 			{
 				SendFile(CopyFiles[nFile]);
 			}
-
-			if(m_Send.SendCSendData(Info, MyEnums::END))
-				bRet = TRUE;
 		}
 	}
-
+	
+	if(m_Send.SendCSendData(Info, MyEnums::END))
+			bRet = TRUE;
+	
 	return bRet;
 }
 

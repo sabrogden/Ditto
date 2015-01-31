@@ -37,6 +37,7 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 	m_pProgress = pProgress;
 	m_csRecievingFromIP = csIP;
 	m_Sock.SetSocket(sock);
+	m_Sock.SetProgressBar(pProgress);
 
 	while(true)
 	{

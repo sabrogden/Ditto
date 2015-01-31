@@ -74,6 +74,13 @@ void CFileTransferProgressDlg::SetMessage(CString &cs)
 	m_Message.SetWindowText(cs);
 }
 
+CString CFileTransferProgressDlg::GetMessage()
+{
+	CString cs;
+	m_Message.GetWindowText(cs);
+	return cs;
+}
+
 void CFileTransferProgressDlg::SetFileMessage(CString &cs)
 {
 	m_CopyingFile.SetWindowText(cs);
