@@ -683,7 +683,7 @@ BEGIN
     LTEXT           "Name",IDC_STATIC,7,1,59,10
 END
 
-IDD_OPTIONS_FRIENDS DIALOGEX 0, 0, 353, 247
+IDD_OPTIONS_FRIENDS DIALOGEX 0, 0, 366, 292
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Friends"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
@@ -692,16 +692,19 @@ BEGIN
     CONTROL         "Disable Recieving Clips",IDC_CHECK_DISABLE_FRIENDS,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,95,53,146,10
     EDITTEXT        IDC_EDIT_PASSWORD,96,66,210,13,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT_ADDITIONAL,95,110,210,12,ES_AUTOHSCROLL
-    CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | WS_BORDER | WS_TABSTOP,7,159,339,68
+    EDITTEXT        IDC_EDIT_ADDITIONAL,95,108,210,12,ES_AUTOHSCROLL
+    CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | WS_BORDER | WS_TABSTOP,7,200,352,76
     CONTROL         "Log Send Receive Commands",IDC_CHECK_LOG_SEND_RECIEVE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,232,339,12
-    LTEXT           "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer.",IDC_STATIC_6,7,126,339,28
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,279,352,12
+    LTEXT           "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer.",IDC_STATIC_6,7,170,352,26
     LTEXT           "IP/Computer Names seperated by commas",IDC_STATIC_2,7,37,84,17
-    LTEXT           "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time.",IDC_STATIC_1,7,10,339,26
+    LTEXT           "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time.",IDC_STATIC_1,7,10,352,26
     LTEXT           "Network Password",IDC_STATIC_3,7,69,79,9
-    LTEXT           "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas",IDC_STATIC_4,7,83,339,22
-    LTEXT           "Receive Passwords",IDC_STATIC_5,7,112,79,9
+    LTEXT           "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas",IDC_STATIC_4,7,83,352,22
+    LTEXT           "Receive Passwords",IDC_STATIC_5,7,110,79,9
+    CONTROL         "Request using IP Address",IDC_RADIO_USE_IP,"Button",BS_AUTORADIOBUTTON,15,136,98,10
+    GROUPBOX        "Remote Files",IDC_STATIC_REMOTE_FILES,7,124,352,39
+    CONTROL         "Request using Host Name",IDC_RADIO_USE_HOST_NAME,"Button",BS_AUTORADIOBUTTON,15,148,98,10
 END
 
 IDD_FRIEND_DETAILS DIALOGEX 0, 0, 203, 79
@@ -969,9 +972,9 @@ BEGIN
     IDD_OPTIONS_FRIENDS, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 346
+        RIGHTMARGIN, 359
         TOPMARGIN, 4
-        BOTTOMMARGIN, 244
+        BOTTOMMARGIN, 289
     END
 
     IDD_FRIEND_DETAILS, DIALOG

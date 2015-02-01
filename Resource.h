@@ -373,6 +373,10 @@
 #define IDC_BUTTON_DIFF_BROWSE          2124
 #define IDC_STATIC_QUICK_PASTE          2125
 #define IDC_STATIC_DESC                 2126
+#define IDC_RADIO_USE_IP                2127
+#define IDC_STATIC_REMOTE_FILES         2128
+#define IDC_RADIO_USE_HOST_NAME         2129
+#define IDC_STATIC_REMOTE_FILE_REQUEST  2130
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -502,7 +506,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        240
 #define _APS_NEXT_COMMAND_VALUE         32901
-#define _APS_NEXT_CONTROL_VALUE         2127
+#define _APS_NEXT_CONTROL_VALUE         2131
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

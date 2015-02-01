@@ -304,9 +304,19 @@ HGLOBAL CClient::RequestCopiedFiles(CClipFormat &HDropFormat, CString csIP, CStr
 	pProgress->SetMessage(StrF(_T("Opening Connection to %s (%s)"), csComputerName, csIP));
 	pProgress->PumpMessages();
 
+	CString requestFrom;
+	if(g_Opt.GetRequestFilesUsingIP())
+	{
+		requestFrom = csIP;
+	}
+	else
+	{
+		requestFrom = csComputerName;
+	}
+
 	do 
 	{
-		if(OpenConnection(csIP) == FALSE)
+		if(OpenConnection(requestFrom) == FALSE)
 		{
 			csErrorString.Format(_T("Error Opening Connection to %s (%s)"), csComputerName, csIP);
 			break;

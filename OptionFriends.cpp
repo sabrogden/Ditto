@@ -80,6 +80,15 @@ BOOL COptionFriends::OnInitDialog()
 	m_csPassword = g_Opt.m_csPassword;
 	m_csAdditionalPasswords = CGetSetOptions::GetExtraNetworkPassword(false);
 
+	if(g_Opt.GetRequestFilesUsingIP())
+	{
+		::CheckDlgButton(m_hWnd, IDC_RADIO_USE_IP, BST_CHECKED);
+	}
+	else
+	{
+		::CheckDlgButton(m_hWnd, IDC_RADIO_USE_HOST_NAME, BST_CHECKED);
+	}
+
 	UpdateData(FALSE);
 
 	theApp.m_Language.UpdateOptionFriends(this);
@@ -123,6 +132,15 @@ BOOL COptionFriends::OnApply()
 	g_Opt.SetExtraNetworkPassword(m_csAdditionalPasswords);
 	//get get to refill the array extra passwords
 	g_Opt.GetExtraNetworkPassword(true);
+
+	if(::IsDlgButtonChecked(m_hWnd, IDC_RADIO_USE_IP) == BST_CHECKED)
+	{
+		g_Opt.SetRequestFilesUsingIP(TRUE);
+	}
+	else if(::IsDlgButtonChecked(m_hWnd, IDC_RADIO_USE_HOST_NAME) == BST_CHECKED)
+	{
+		g_Opt.SetRequestFilesUsingIP(FALSE);
+	}
 	
 	return CPropertyPage::OnApply();
 }

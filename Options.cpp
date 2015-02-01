@@ -2183,3 +2183,13 @@ int CGetSetOptions::GetNetworkReadTimeoutMS()
 {
 	return GetProfileLong(_T("NetworkReadTimeoutMS"), 30000);
 }
+
+void CGetSetOptions::SetRequestFilesUsingIP(int val)
+{
+	SetProfileLong(_T("RequestFilesUsingIP"), val);
+}
+
+int CGetSetOptions::GetRequestFilesUsingIP()
+{
+	return GetProfileLong(_T("RequestFilesUsingIP"), 1);
+}

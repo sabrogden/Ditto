@@ -470,6 +470,9 @@ public:
 	static void SetNetworkReadTimeoutMS(int val);
 	static int GetNetworkReadTimeoutMS();
 
+	static void SetRequestFilesUsingIP(int val);
+	static int GetRequestFilesUsingIP();
+
 
 };
 
