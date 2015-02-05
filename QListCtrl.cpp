@@ -918,11 +918,9 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 	if (this->GetSelectedCount() == 0)
 	{
 		return false;
-	}
+	}	
 
-	CClipIDs IDs;
-	this->GetSelectionItemData(IDs);
-	int clipId = IDs[0];
+	int clipId = this->GetItemData(this->GetCaret());
 
 	if(m_pToolTip != NULL && 
 		m_pToolTip->GetClipId() == clipId &&
