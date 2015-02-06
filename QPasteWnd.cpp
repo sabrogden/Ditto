@@ -546,10 +546,15 @@ BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus)
     //Save the size
     SaveWindowSize();
 
-	if (CGetSetOptions::GetShowInTaskBar() == FALSE)
+	if (CGetSetOptions::GetShowInTaskBar())
+	{
+		ShowWindow(SW_MINIMIZE);
+	}
+	else
 	{
 		ShowWindow(SW_HIDE);
 	}
+	
 
     //Reset the selection in the search combo
     m_bHandleSearchTextChange = false;
