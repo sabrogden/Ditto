@@ -467,13 +467,13 @@ public:
 	static BOOL GetRegExTextSearch();
 	static void SetRegExTextSearch(BOOL val);
 
+	static CString GetTranslateUrl();
+
 	static void SetNetworkReadTimeoutMS(int val);
 	static int GetNetworkReadTimeoutMS();
 
 	static void SetRequestFilesUsingIP(int val);
 	static int GetRequestFilesUsingIP();
-
-
 };
 
 // global for easy access and for initialization of fast access variables

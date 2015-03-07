@@ -221,7 +221,14 @@ ON_MESSAGE(NM_SHOW_PROPERTIES, OnShowProperties)
 ON_MESSAGE(NM_NEW_GROUP, OnNewGroup)
 ON_MESSAGE(NM_DELETE_ID, OnDeleteId)
 ON_COMMAND(ID_MENU_REGULAREXPRESSIONSEARCH, &CQPasteWnd::OnMenuRegularexpressionsearch)
+
+ON_COMMAND(ID_IMPORT_EXPORTTOGOOGLETRANSLATE, &CQPasteWnd::OnImportExporttogoogletranslate)
+ON_UPDATE_COMMAND_UI(ID_IMPORT_EXPORTTOGOOGLETRANSLATE, &CQPasteWnd::OnUpdateImportExporttogoogletranslate)
+ON_COMMAND(ID_IMPORT_EXPORTCLIP_BITMAP, &CQPasteWnd::OnImportExportclipBitmap)
+ON_UPDATE_COMMAND_UI(ID_IMPORT_EXPORTCLIP_BITMAP, &CQPasteWnd::OnUpdateImportExportclipBitmap)
+
 ON_COMMAND(ID_MENU_WILDCARDSEARCH, &CQPasteWnd::OnMenuWildcardsearch)
+
 END_MESSAGE_MAP()
 
 
@@ -2715,7 +2722,13 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 		ret = DoExportToTextFile();
 		break;
 	case ActionEnums::EXPORT_TO_QR_CODE:
-		return DoExportToQRCode();
+		ret = DoExportToQRCode();
+		break;
+	case ActionEnums::EXPORT_TO_GOOGLE_TRANSLATE:
+		ret = DoExportToGoogleTranslate();
+		break;
+	case ActionEnums::EXPORT_TO_BITMAP_FILE:
+		ret = DoExportToBitMapFile();
 		break;
 	}
 
@@ -3276,7 +3289,7 @@ bool CQPasteWnd::DoClipCompare()
 		{
 			CClipCompare compare;
 			compare.Compare(IDs[0], IDs[1]);
-
+			
 			return true;
 		}
 		else
@@ -3477,6 +3490,155 @@ bool CQPasteWnd::DoExportToQRCode()
 			}
 		}
 	}	
+
+	return ret;
+}
+
+bool CQPasteWnd::DoExportToGoogleTranslate()
+{
+	bool ret = false;
+
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	if (IDs.GetCount() > 0)
+	{
+		int id = IDs[0];
+		CClip clip;
+		if (clip.LoadMainTable(id))
+		{
+			if (clip.LoadFormats(id, true))
+			{
+				CString clipText = clip.GetUnicodeTextFormat();
+				if(clipText == _T(""))
+				{
+					CStringA aText = clip.GetCFTextTextFormat();
+					if(aText != _T(""))
+					{
+						clipText = CTextConvert::MultiByteToUnicodeString(aText);
+					}
+				}
+
+				if (clipText != _T(""))
+				{
+					CString clipTextUrlEncoded = InternetEncode(clipText);
+
+					CString url;
+					url.Format(CGetSetOptions::GetTranslateUrl(), clipTextUrlEncoded);
+
+					CHyperLink::GotoURL(url, SW_SHOW);
+
+					ret = true;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+bool CQPasteWnd::DoExportToBitMapFile()
+{
+	bool ret = false;
+
+	CClipIDs IDs;
+	INT_PTR lCount = m_lstHeader.GetSelectedCount();
+	if (lCount <= 0)
+	{
+		return ret;
+	}
+
+	m_lstHeader.GetSelectionItemData(IDs);
+	lCount = IDs.GetSize();
+	if (lCount <= 0)
+	{
+		return ret;
+	}
+
+	OPENFILENAME ofn;
+	TCHAR szFile[400];
+	TCHAR szDir[400];
+
+	memset(&szFile, 0, sizeof(szFile));
+	memset(szDir, 0, sizeof(szDir));
+	memset(&ofn, 0, sizeof(ofn));
+
+	CString csInitialDir = CGetSetOptions::GetLastImportDir();
+	STRCPY(szDir, csInitialDir);
+
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = m_hWnd;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = _T("Exported Ditto Clips (.bmp)\0*.bmp\0\0");
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = szDir;
+	ofn.lpstrDefExt = _T("txt");
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+
+	m_bHideWnd = false;
+
+	if (GetSaveFileName(&ofn))
+	{
+		using namespace nsPath;
+		CString startingFilePath = ofn.lpstrFile;
+		CPath path(ofn.lpstrFile);
+		CString csPath = path.GetPath();
+		CString csExt = path.GetExtension();
+		path.RemoveExtension();
+		CString csFileName = path.GetName();
+
+		CGetSetOptions::SetLastExportDir(csPath);
+
+		for (int i = 0; i < IDs.GetCount(); i++)
+		{
+			int id = IDs[i];
+
+			HGLOBAL dibGlobal = CClip::LoadFormat(id, CF_DIB);
+			if (dibGlobal != NULL)
+			{
+				CString savePath = startingFilePath;
+				if (IDs.GetCount() > 1 ||
+					FileExists(startingFilePath))
+				{
+					savePath = _T("");
+
+					for (int y = 1; y < 1001; y++)
+					{
+						CString testFilePath;
+						testFilePath.Format(_T("%s%s_%d.%s"), csPath, csFileName, y, csExt);
+						if (FileExists(testFilePath) == FALSE)
+						{
+							savePath = testFilePath;
+							break;
+						}
+					}
+				}
+
+				if (savePath != _T(""))
+				{
+					LPVOID pvData = GlobalLock(dibGlobal);
+					ULONG size = (ULONG) GlobalSize(dibGlobal);
+					
+					WriteCF_DIBToFile(savePath, pvData, size);
+
+					GlobalUnlock(dibGlobal);
+
+					ret = true;
+				}
+				else
+				{
+					Log(StrF(_T("Failed to find a valid file name for starting path: %s"), startingFilePath));
+				}
+
+				::GlobalFree(dibGlobal);
+			}
+		}
+	}
+
+	m_bHideWnd = true;
 
 	return ret;
 }
@@ -4653,8 +4815,42 @@ void CQPasteWnd::OnMenuRegularexpressionsearch()
 	CGetSetOptions::SetRegExTextSearch(!CGetSetOptions::GetRegExTextSearch());
 }
 
+
+void CQPasteWnd::OnImportExporttogoogletranslate()
+{
+	DoAction(ActionEnums::EXPORT_TO_GOOGLE_TRANSLATE);
+}
+
+void CQPasteWnd::OnUpdateImportExporttogoogletranslate(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::EXPORT_TO_GOOGLE_TRANSLATE);
+}
+
+
+void CQPasteWnd::OnImportExportclipBitmap()
+{
+	DoAction(ActionEnums::EXPORT_TO_BITMAP_FILE);
+}
+
+
+void CQPasteWnd::OnUpdateImportExportclipBitmap(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::EXPORT_TO_BITMAP_FILE);
+}
+
 void CQPasteWnd::OnMenuWildcardsearch()
 {
 	CGetSetOptions::SetSimpleTextSearch(FALSE);
 	CGetSetOptions::SetRegExTextSearch(FALSE);
 }
+

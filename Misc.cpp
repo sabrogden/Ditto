@@ -5,6 +5,7 @@
 #include "shared/TextConvert.h"
 #include "AlphaBlend.h"
 #include "Tlhelp32.h"
+#include <Wininet.h>
 
 CString GetIPAddress()
 {
@@ -1136,3 +1137,79 @@ void OnInitMenuPopupEx(CMenu *pPopupMenu, UINT nIndex, BOOL bSysMenu, CWnd *pWnd
 		state.m_nIndexMax = nCount;
 	}
 } 
+
+CString InternetEncode(CString text)
+{
+	CString ret = _T("");
+	LPTSTR lpOutputBuffer = new TCHAR[1];
+	DWORD dwSize = 1;
+	BOOL fRes = ::InternetCanonicalizeUrl(text, lpOutputBuffer, &dwSize, ICU_DECODE | ICU_NO_ENCODE);
+	DWORD dwError = ::GetLastError();
+	if (!fRes && dwError == ERROR_INSUFFICIENT_BUFFER)
+	{
+		delete lpOutputBuffer;
+		lpOutputBuffer = new TCHAR[dwSize];
+		fRes = ::InternetCanonicalizeUrl(text, lpOutputBuffer, &dwSize, ICU_DECODE | ICU_NO_ENCODE);
+		if (fRes)
+		{
+			ret = lpOutputBuffer;
+			//lpOutputBuffer has decoded url
+		}
+		else
+		{
+			//failed to decode
+		}
+		if (lpOutputBuffer != NULL)
+		{
+			delete [] lpOutputBuffer;
+			lpOutputBuffer = NULL;
+		}
+	}
+	else
+	{
+		//some other error OR the input string url is just 1 char and was successfully decoded
+	}
+
+	return ret;
+}
+
+bool WriteCF_DIBToFile(CString csPath, LPVOID data, ULONG size)
+{
+	bool bRet = false;
+	CFile file;
+	CFileException ex;
+	if (file.Open(csPath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary, &ex))
+	{
+		BITMAPINFO *lpBI = (BITMAPINFO *) data;
+
+		int nPaletteEntries = 1 << lpBI->bmiHeader.biBitCount;
+		if (lpBI->bmiHeader.biBitCount > 8)
+			nPaletteEntries = 0;
+		else if (lpBI->bmiHeader.biClrUsed != 0)
+			nPaletteEntries = lpBI->bmiHeader.biClrUsed;
+
+		BITMAPFILEHEADER BFH;
+		memset(&BFH, 0, sizeof(BITMAPFILEHEADER));
+		BFH.bfType = 'MB';
+		BFH.bfSize = sizeof(BITMAPFILEHEADER) + size;
+		BFH.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + nPaletteEntries * sizeof(RGBQUAD);
+
+		file.Write(&BFH, sizeof(BITMAPFILEHEADER));
+		file.Write(data, size);
+
+		file.Close();
+
+		bRet = true;
+	}
+	else
+	{
+		CString csError;
+		TCHAR exError[250];
+		ex.GetErrorMessage(exError, sizeof(exError));
+
+		csError.Format(_T("OutLookExpress Addin - Failed to write CF_DIB to file: %s, Error: %s"), csPath, exError);
+		OutputDebugString(csPath);
+	}
+
+	return bRet;
+}

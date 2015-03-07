@@ -497,7 +497,11 @@
 #define ID_MENU_DELETEGROUP             32897
 #define ID_MENU_PROPERTIES32898         32898
 #define ID_MENU_REGULAREXPRESSIONSEARCH 32899
-#define ID_MENU_WILDCARDSEARCH          32900
+#define ID_IMPORT_EXPORTTOGOOGLETRANSLATE 32900
+#define ID_IMPORT_EXPORTCLIP            32901
+#define ID_IMPORT_EXPORTCLIP_BITMAP     32902
+#define ID_MENU_WILDCARDSEARCH          32903
+
 
 // Next default values for new objects
 // 
@@ -505,8 +509,9 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        240
-#define _APS_NEXT_COMMAND_VALUE         32901
-#define _APS_NEXT_CONTROL_VALUE         2131
+
+#define _APS_NEXT_COMMAND_VALUE         32904
+#define _APS_NEXT_CONTROL_VALUE         2127
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

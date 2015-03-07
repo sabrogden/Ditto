@@ -244,6 +244,8 @@ public:
 	bool DoSelectRightSideAndDoCompare();
 	bool DoExportToQRCode();
 	bool DoExportToTextFile();
+	bool DoExportToGoogleTranslate();
+	bool DoExportToBitMapFile();
 
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
@@ -400,5 +402,9 @@ public:
 	afx_msg LRESULT OnNewGroup(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnDeleteId(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnMenuRegularexpressionsearch();
+	afx_msg void OnImportExporttogoogletranslate();
+	afx_msg void OnUpdateImportExporttogoogletranslate(CCmdUI *pCmdUI);
+	afx_msg void OnImportExportclipBitmap();
+	afx_msg void OnUpdateImportExportclipBitmap(CCmdUI *pCmdUI);
 	afx_msg void OnMenuWildcardsearch();
 };

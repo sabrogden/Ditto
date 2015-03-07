@@ -314,6 +314,8 @@ BEGIN
             MENUITEM "Export Clip(s)",              32853,MFT_STRING,MFS_ENABLED
             MENUITEM "View as QRCode",              ID_MENU_VIEWASQRCODE,MFT_STRING,MFS_ENABLED
             MENUITEM "Export Clip(s) to Text File", ID_EXPORT_EXPORTTOTEXTFILE,MFT_STRING,MFS_ENABLED
+            MENUITEM "Export Clip(s) to Bitmap File", ID_IMPORT_EXPORTCLIP_BITMAP,MFT_STRING,MFS_ENABLED
+            MENUITEM "Export to Google Translate",  ID_IMPORT_EXPORTTOGOOGLETRANSLATE,MFT_STRING,MFS_ENABLED
         END
         MENUITEM MFT_SEPARATOR
         MENUITEM "Options...",                  32805,MFT_STRING,MFS_ENABLED
