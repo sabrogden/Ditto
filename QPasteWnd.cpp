@@ -522,7 +522,7 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
     }
 }
 
-BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus)
+BOOL CQPasteWnd::HideQPasteWindow (bool releaseFocus, bool clearSearchData)
 {
     Log(_T("Start of HideQPasteWindow"));
 	DWORD startTick = GetTickCount();
@@ -562,30 +562,32 @@ BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus)
 		ShowWindow(SW_HIDE);
 	}
 	
+	if(clearSearchData)
+	{
+		//Reset the selection in the search combo
+		m_bHandleSearchTextChange = false;
+		m_search.SetWindowText(_T(""));
+		m_bHandleSearchTextChange = true;
 
-    //Reset the selection in the search combo
-    m_bHandleSearchTextChange = false;
-    m_search.SetWindowText(_T(""));
-    m_bHandleSearchTextChange = true;
-
-    if(m_strSQLSearch.IsEmpty() == FALSE)
-    {
-        {
-			ATL::CCritSecLock csLock(m_CritSection.m_sect);
+		if(m_strSQLSearch.IsEmpty() == FALSE)
+		{
+			{
+				ATL::CCritSecLock csLock(m_CritSection.m_sect);
           
-			m_bStopQuery = true;
-        }
+				m_bStopQuery = true;
+			}
 
-        //Wait for the thread to stop fill the cache so we can clear it
-        WaitForSingleObject(m_thread.m_SearchingEvent, 5000);
+			//Wait for the thread to stop fill the cache so we can clear it
+			WaitForSingleObject(m_thread.m_SearchingEvent, 5000);
 
-        {
-			ATL::CCritSecLock csLock(m_CritSection.m_sect);
+			{
+				ATL::CCritSecLock csLock(m_CritSection.m_sect);
             
-			m_listItems.clear();
-            m_lstHeader.SetItemCountEx(0);
-        }
-    }
+				m_listItems.clear();
+				m_lstHeader.SetItemCountEx(0);
+			}
+		}
+	}
 
 	theApp.TryEnterOldGroupState();
 
@@ -3287,6 +3289,15 @@ bool CQPasteWnd::DoClipCompare()
 
 		if(IDs.GetCount() > 1)
 		{
+			if(!g_Opt.m_bShowPersistent)
+			{
+				HideQPasteWindow(false, false);
+			}
+			else if(g_Opt.GetAutoHide())
+			{
+				MinMaxWindow(FORCE_MIN);
+			}
+
 			CClipCompare compare;
 			compare.Compare(IDs[0], IDs[1]);
 			
@@ -3335,6 +3346,15 @@ bool CQPasteWnd::DoSelectRightSideAndDoCompare()
 			if(IDs.GetCount() > 0)
 			{
 				int rightId = IDs[0];
+
+				if(!g_Opt.m_bShowPersistent)
+				{
+					HideQPasteWindow(false, false);
+				}
+				else if(g_Opt.GetAutoHide())
+				{
+					MinMaxWindow(FORCE_MIN);
+				}
 
 				CClipCompare compare;
 				compare.Compare(m_leftSelectedCompareId, rightId);
@@ -3525,6 +3545,15 @@ bool CQPasteWnd::DoExportToGoogleTranslate()
 
 					CString url;
 					url.Format(CGetSetOptions::GetTranslateUrl(), clipTextUrlEncoded);
+
+					if(!g_Opt.m_bShowPersistent)
+					{
+						HideQPasteWindow(false, false);
+					}
+					else if(g_Opt.GetAutoHide())
+					{
+						MinMaxWindow(FORCE_MIN);
+					}
 
 					CHyperLink::GotoURL(url, SW_SHOW);
 
