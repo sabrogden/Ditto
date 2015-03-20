@@ -112,6 +112,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     Log(_T("Setting polling timer to track focus"));
     SetTimer(ACTIVE_WINDOW_TIMER, g_Opt.FocusWndTimerTimeout(), 0);
 
+	SetTimer(READ_RANDOM_DB_FILE, g_Opt.ReadRandomFileInterval() * 1000, 0);
+
     SetWindowText(_T("Ditto"));
 
     HICON hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -563,6 +565,12 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 				}
 			}
 			break;
+
+		case READ_RANDOM_DB_FILE:
+			{
+				m_thread.FireReadDbFile();
+			}
+		break;
     }
 
     CFrameWnd::OnTimer(nIDEvent);

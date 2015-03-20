@@ -51,12 +51,7 @@ public:
 	static bool SortDesc(const CMainTable& d1, const CMainTable& d2)
 	{
 		double d1StickyOrder = d1.m_stickyClipOrder;
-		if (d1StickyOrder == 0)
-			d1StickyOrder = -9999999.0;
-
-		double d2StickyOrder = d2.m_stickyClipOrder;
-		if (d2StickyOrder == 0)
-			d2StickyOrder = -9999999.0;
+		double d2StickyOrder = d2.m_stickyClipOrder;		
 
 		if (d1StickyOrder != d2StickyOrder)
 			return d1StickyOrder > d2StickyOrder;
@@ -70,12 +65,8 @@ public:
 	static bool GroupSortDesc(const CMainTable& d1, const CMainTable& d2)
 	{
 		double d1StickyOrder = d1.m_stickyClipGroupOrder;
-		if (d1StickyOrder == 0)
-			d1StickyOrder = -9999999.0;
 
 		double d2StickyOrder = d2.m_stickyClipGroupOrder;
-		if (d2StickyOrder == 0)
-			d2StickyOrder = -9999999.0;
 
 		if (d1StickyOrder != d2StickyOrder)
 			return d1StickyOrder > d2StickyOrder;

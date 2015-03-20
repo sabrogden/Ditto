@@ -977,9 +977,9 @@ sqlite3_stmt* CppSQLite3DB::compile(const TCHAR* szSQL)
 	sqlite3_stmt* pVM;
 
 #ifdef _UNICODE
-	int nRet = sqlite3_prepare16(mpDB, szSQL, -1, &pVM, (const void**)szTail);
+	int nRet = sqlite3_prepare16_v2(mpDB, szSQL, -1, &pVM, (const void**)szTail);
 #else
-	int nRet = sqlite3_prepare(mpDB, szSQL, -1, &pVM, &szTail);
+	int nRet = sqlite3_prepare_v2(mpDB, szSQL, -1, &pVM, &szTail);
 #endif
 
 	if (nRet != SQLITE_OK)

@@ -10,6 +10,7 @@
 #include "sqlite\CppSQLite3.h"
 #include "shared/TextConvert.h"
 #include "zlib/zlib.h"
+#include "Misc.h"
 
 #include <Mmsystem.h>
 
@@ -167,8 +168,8 @@ CClip::CClip() :
 	m_bIsGroup(FALSE),
 	m_param1(0),
 	m_clipOrder(0),
-	m_stickyClipOrder(0),
-	m_stickyClipGroupOrder(0),
+	m_stickyClipOrder(INVALID_STICKY),
+	m_stickyClipGroupOrder(INVALID_STICKY),
 	m_clipGroupOrder(0),
 	m_globalShortCut(FALSE)
 {
@@ -755,7 +756,7 @@ bool CClip::AddToDataTable()
 
 void CClip::MoveUp()
 {
-	if(m_stickyClipOrder == 0)
+	if (m_stickyClipOrder == INVALID_STICKY)
 	{
 		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, clipOrder FROM Main Where clipOrder > %f ORDER BY clipOrder ASC LIMIT 1"), m_clipOrder);
 		if (q.eof() == false)
@@ -777,10 +778,7 @@ void CClip::MoveUp()
 			}
 		}
 	}
-	else  
-
-
-
+	else 
 	{
 		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipOrder FROM Main Where stickyClipOrder > %f ORDER BY clipOrder ASC LIMIT 1"), m_stickyClipOrder);
 		if (q.eof() == false)
@@ -832,11 +830,11 @@ void CClip::RemoveStickySetting(int parentId)
 {
 	if (parentId < 0)
 	{
-		m_stickyClipOrder = 0;
+		m_stickyClipOrder = INVALID_STICKY;
 	}
 	else
 	{
-		m_stickyClipGroupOrder = 0;
+		m_stickyClipGroupOrder = INVALID_STICKY;
 	}
 }
 
@@ -888,7 +886,7 @@ double CClip::GetNewLastSticky(int parentId, int clipId)
 	{
 		if (parentId < 0)
 		{
-			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT stickyClipOrder, mText FROM Main ORDER BY stickyClipOrder LIMIT 1"));
+			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT stickyClipOrder, mText FROM Main WHERE stickyClipOrder <> -10000000 ORDER BY stickyClipOrder LIMIT 1"));
 			if (q.eof() == false)
 			{
 				existingMaxOrder = q.getFloatField(_T("stickyClipOrder"));

@@ -16,6 +16,7 @@
 #define KEY_STATE_MODIFIERS				8
 #define ACTIVE_WINDOW_TIMER				9
 #define TEXT_ONLY_PASTE					11
+#define READ_RANDOM_DB_FILE				12
 
 class CMainFrame: public CFrameWnd
 {

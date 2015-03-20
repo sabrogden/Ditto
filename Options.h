@@ -474,6 +474,12 @@ public:
 
 	static void SetRequestFilesUsingIP(int val);
 	static int GetRequestFilesUsingIP();
+
+	static int ReadRandomFileInterval();
+	static int ReadRandomFileIdleMin();
+
+	static BOOL GetShowGroupsInMainList();
+	static void SetShowGroupsInMainList(BOOL val);
 };
 
 // global for easy access and for initialization of fast access variables

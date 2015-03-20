@@ -391,6 +391,40 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 
 			e.errorCode();
 		}
+
+		try
+		{			
+			CppSQLite3Query q = db.execQuery(_T("PRAGMA index_info(Main_NoGroup);"));
+			int count = 0;
+			while (q.eof() == false)
+			{
+				count++;
+				q.nextRow();
+			}
+
+			if(count == 0)
+			{
+				if (didBackup == FALSE)
+					didBackup = BackupDB(csPath, backupFilePrefix);				
+
+				db.execDML(_T("Update Main set stickyClipOrder = -(2147483647) where stickyClipOrder IS NULL;"));
+				db.execDML(_T("Update Main set stickyClipGroupOrder = -(2147483647) where stickyClipGroupOrder IS NULL;"));
+				db.execDML(_T("Update Main set stickyClipOrder = -(2147483647) where stickyClipOrder = 0;"));
+				db.execDML(_T("Update Main set stickyClipGroupOrder = -(2147483647) where stickyClipGroupOrder = 0;"));
+
+				db.execDML(_T("CREATE INDEX Main_NoGroup ON Main(bIsGroup ASC, stickyClipOrder DESC, clipOrder DESC);"));
+				db.execDML(_T("CREATE INDEX Main_InGroup ON Main(lParentId ASC, bIsGroup ASC, stickyClipGroupOrder DESC, clipGroupOrder DESC);"));
+				db.execDML(_T("CREATE INDEX Data_ParentId_Format ON Data(lParentID COLLATE BINARY ASC, strClipBoardFormat COLLATE NOCASE ASC);"));
+			}
+		}
+		catch (CppSQLite3Exception& e)
+		{
+			if (didBackup == FALSE)
+				didBackup = BackupDB(csPath, backupFilePrefix);
+
+
+			e.errorCode();
+		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 
@@ -491,6 +525,10 @@ BOOL CreateDB(CString csFile)
 				_T("DELETE FROM CopyBuffers WHERE lClipID = old.clipID;\n")
 				_T("DELETE FROM Data WHERE lParentID = old.clipID;\n")
 			_T("END\n"));
+
+		db.execDML(_T("CREATE INDEX Main_NoGroup ON Main(bIsGroup ASC, stickyClipOrder DESC, clipOrder DESC);"));
+		db.execDML(_T("CREATE INDEX Main_InGroup ON Main(lParentId ASC, bIsGroup ASC, stickyClipGroupOrder DESC, clipGroupOrder DESC);"));
+		db.execDML(_T("CREATE INDEX Data_ParentId_Format ON Data(lParentID COLLATE BINARY ASC, strClipBoardFormat COLLATE NOCASE ASC);"));
 
 		db.close();
 	}

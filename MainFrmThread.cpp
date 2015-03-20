@@ -62,7 +62,37 @@ void CMainFrmThread::OnEvent(int eventId, void *param)
 		case SAVE_REMOTE_CLIPS:
 			OnSaveRemoteClips();
 			break;
+		case READ_DB_FILE:
+			OnReadDbFile();
+			break;
     }
+}
+
+//try and keep our db file in windows cache by randomly reading some data
+//not sure if this does what i think it does but looking into issues with slow access on large dbs
+void CMainFrmThread::OnReadDbFile()
+{
+	double idle = IdleSeconds();
+
+	if (idle < CGetSetOptions::ReadRandomFileIdleMin())
+	{
+		CString dbFile = CGetSetOptions::GetDBPath();
+		__int64 dbSize = FileSize(dbFile);
+
+		srand(time(NULL));
+
+		int random = rand() % (dbSize - 1024) + 1;
+
+		CFile f;
+		if (f.Open(dbFile, CFile::modeRead | CFile::shareDenyNone))
+		{
+			f.Seek(random, 0);
+			char data[1024];
+			f.Read(&data, 1024);
+
+			f.Close();
+		}
+	}
 }
 
 void CMainFrmThread::OnDeleteEntries()

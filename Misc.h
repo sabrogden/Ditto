@@ -12,6 +12,8 @@
 #define ONE_HOUR				3600000
 #define ONE_DAY					86400000
 
+#define INVALID_STICKY	-(2147483647)
+
 #define CATCH_SQLITE_EXCEPTION		\
 	catch (CppSQLite3Exception& e)	\
     {								\

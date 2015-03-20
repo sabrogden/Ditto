@@ -136,17 +136,17 @@ void CQPasteWndThread::OnLoadItems(void *param)
 					{
 						ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
 
-						if(pos < pasteWnd->m_listItems.size())
+						if (pos < pasteWnd->m_listItems.size())
 						{
 							pasteWnd->m_listItems[pos] = table;
 						}
-						else if(pos == pasteWnd->m_listItems.size())
+						else if (pos == pasteWnd->m_listItems.size())
 						{
 							pasteWnd->m_listItems.push_back(table);
 						}
-						else if(pos > pasteWnd->m_listItems.size())
+						else if (pos > pasteWnd->m_listItems.size())
 						{
-							for(int toAdd = pasteWnd->m_listItems.size(); toAdd < pos-1; toAdd++)
+							for (int toAdd = pasteWnd->m_listItems.size(); toAdd < pos - 1; toAdd++)
 							{
 								CMainTable empty;
 								empty.m_lID = -1;
@@ -154,7 +154,7 @@ void CQPasteWndThread::OnLoadItems(void *param)
 							}
 
 							pasteWnd->m_listItems.push_back(table);
-						}						
+						}
 					}
 
 					if(pasteWnd->m_bStopQuery)
@@ -175,13 +175,24 @@ void CQPasteWndThread::OnLoadItems(void *param)
 					pos++;
 				}
 
+				DWORD loadCount = GetTickCount() - startTick;
+				DWORD countCountStart = GetTickCount();
+				DWORD countCount = 0;
+				DWORD acceleratorCount = 0;
+
 				if(firstLoad)
 				{
 					::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, -2, 0);
 					//allow the next thread message to process, this should be the message to set the list count
 
 					OnSetListCount(param);
+					
+					countCount = GetTickCount() - countCountStart;
+					DWORD acceleratorCountStart = GetTickCount();
+					 
 					OnLoadAccelerators(param);
+
+					acceleratorCount = GetTickCount() - acceleratorCountStart;
 				}
 				else
 				{
@@ -195,7 +206,7 @@ void CQPasteWndThread::OnLoadItems(void *param)
 					pasteWnd->m_loadItems.erase(pasteWnd->m_loadItems.begin());
 				}
 
-				Log(StrF(_T("Load items End count = %d, time = %d"), loadCount, GetTickCount() - startTick));
+				Log(StrF(_T("Load items End count = %d, Total Time = %d, LoadItems: %d, Count: %d, Accel: %d"), loadCount, GetTickCount() - startTick, loadCount, countCount, acceleratorCount));
 			}
 			catch (CppSQLite3Exception& e)	\
 			{								\

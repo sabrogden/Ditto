@@ -2198,3 +2198,23 @@ int CGetSetOptions::GetRequestFilesUsingIP()
 {
 	return GetProfileLong(_T("RequestFilesUsingIP"), 1);
 }
+
+int CGetSetOptions::ReadRandomFileInterval()
+{
+	return GetProfileLong(_T("ReadRandomFileInterval"), 60);
+}
+
+int CGetSetOptions::ReadRandomFileIdleMin()
+{
+	return GetProfileLong(_T("ReadRandomFileIdleMin"), 30);
+}
+
+BOOL CGetSetOptions::GetShowGroupsInMainList()
+{
+	return GetProfileLong(_T("ShowGroupsInMainList"), 0);
+}
+
+void CGetSetOptions::SetShowGroupsInMainList(BOOL val)
+{
+	SetProfileLong(_T("ShowGroupsInMainList"), val);
+}

@@ -19,6 +19,7 @@
 #include "CreateQRCodeImage.h"
 #include "ClipCompare.h"
 //#include "MyDropTarget.h"
+#include "Misc.h"
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -1018,13 +1019,22 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     {
         m_lstHeader.m_bStartTop = true;
         
-		csSort = "case when (Main.stickyClipOrder = 0 OR Main.stickyClipOrder IS NULL) then -9999999 else Main.stickyClipOrder END DESC, "
-				 "Main.bIsGroup ASC, "
-				 "clipOrder DESC";
+		//do not change this this directly relates to the views in the Main table
+		csSort = "Main.bIsGroup ASC, " 
+				 "Main.stickyClipOrder DESC, "				 
+				 "Main.clipOrder DESC";
 
         if(g_Opt.m_bShowAllClipsInMainList)
         {
-            strFilter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR Main.bIsGroup = 0)";
+			if (CGetSetOptions::GetShowGroupsInMainList())
+			{
+				//found to be slower on large databases
+				strFilter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR Main.bIsGroup = 0)";
+			}
+			else
+			{
+				strFilter = "(Main.bIsGroup = 0)";
+			}
         }
         else
         {
@@ -1036,9 +1046,10 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     {
         m_lstHeader.m_bStartTop = true;
 
-		csSort = "case when (Main.stickyClipGroupOrder = 0 OR Main.stickyClipGroupOrder IS NULL) then -9999999 else Main.stickyClipGroupOrder END DESC, "
-				 "Main.bIsGroup ASC, "
-				 "clipGroupOrder DESC";
+		//do not change this this directly relates to the views in the Main table
+		csSort = "Main.bIsGroup ASC, "
+				 "Main.stickyClipGroupOrder DESC, "				 
+				 "Main.clipGroupOrder DESC";
 			
 			//Main.stickyClipGroupOrder DESC, Main.clipGroupOrder DESC";//
         
@@ -3771,8 +3782,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                             cs += "G";
                         }
 
-						if (m_listItems[pItem->iItem].m_stickyClipOrder > 0 || 
-							m_listItems[pItem->iItem].m_stickyClipGroupOrder)
+						if (m_listItems[pItem->iItem].m_stickyClipOrder != INVALID_STICKY)
 						{
 							cs += "Sticky";
 						}

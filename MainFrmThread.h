@@ -16,12 +16,14 @@ public:
         REMOVE_REMOTE_FILES, 
 		SAVE_CLIPS,
 		SAVE_REMOTE_CLIPS,
+		READ_DB_FILE,
 
         ECMAINFRMTHREADEVENTS_COUNT  //must be last
     };
 
     void FireDeleteEntries() { FireEvent(DELETE_ENTRIES); }
     void FireRemoveRemoteFiles() { FireEvent(REMOVE_REMOTE_FILES); }
+	void FireReadDbFile() { FireEvent(READ_DB_FILE); }
 
 	void AddClipToSave(CClip *pClip);
 	void AddRemoteClipToSave(CClipList *pClipList);
@@ -33,6 +35,7 @@ protected:
     void OnRemoveRemoteFiles();
 	void OnSaveClips();
 	void OnSaveRemoteClips();
+	void OnReadDbFile();
 
 	CCriticalSection m_cs;
 	CClipList m_saveClips;
