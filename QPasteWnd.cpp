@@ -345,25 +345,23 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_actions.AddAccel(ActionEnums::BACKGRROUP, VK_BACK);
 	m_actions.AddAccel(ActionEnums::PASTE_SELECTED, VK_RETURN);
 	m_actions.AddAccel(ActionEnums::DELETE_SELECTED, VK_DELETE);
+	m_actions.AddAccel(ActionEnums::TOGGLEFILELOGGING, ACCEL_MAKEKEY(VK_F5, HOTKEYF_CONTROL));
+	m_actions.AddAccel(ActionEnums::TOGGLEOUTPUTDEBUGSTRING, VK_F5);
+	m_actions.AddAccel(ActionEnums::HOMELIST, VK_HOME);
 
 	m_actions.AddAccel(ActionEnums::SHOWDESCRIPTION, VK_F3);
 	m_actions.AddAccel(ActionEnums::NEXTDESCRIPTION, 'N');
 	m_actions.AddAccel(ActionEnums::PREVDESCRIPTION, 'P');
 	m_actions.AddAccel(ActionEnums::SHOWMENU, VK_APPS);
 	m_actions.AddAccel(ActionEnums::NEWGROUP, ACCEL_MAKEKEY(VK_F7, HOTKEYF_CONTROL));
-	m_actions.AddAccel(ActionEnums::NEWGROUPSELECTION, VK_F7);
-	m_actions.AddAccel(ActionEnums::TOGGLEFILELOGGING, ACCEL_MAKEKEY(VK_F5, HOTKEYF_CONTROL));
-	m_actions.AddAccel(ActionEnums::TOGGLEOUTPUTDEBUGSTRING, VK_F5);
+	m_actions.AddAccel(ActionEnums::NEWGROUPSELECTION, VK_F7);	
 	m_actions.AddAccel(ActionEnums::CLOSEWINDOW, VK_ESCAPE);	
 	m_actions.AddAccel(ActionEnums::PREVTABCONTROL, ACCEL_MAKEKEY(VK_TAB, HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::SHOWGROUPS, ACCEL_MAKEKEY('G', HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::NEWCLIP, ACCEL_MAKEKEY('N', HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::EDITCLIP, ACCEL_MAKEKEY('E', HOTKEYF_CONTROL));	
 	m_actions.AddAccel(ActionEnums::CANCELFILTER, ACCEL_MAKEKEY('C', HOTKEYF_ALT));
-	m_actions.AddAccel(ActionEnums::HOMELIST, VK_HOME);
-	
-	m_actions.AddAccel(ActionEnums::TOGGLESHOWPERSISTANT, ACCEL_MAKEKEY(VK_SPACE, HOTKEYF_CONTROL));
-	
+	m_actions.AddAccel(ActionEnums::TOGGLESHOWPERSISTANT, ACCEL_MAKEKEY(VK_SPACE, HOTKEYF_CONTROL));	
 	m_actions.AddAccel(ActionEnums::CLIP_PROPERTIES, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_ALT));
 	m_actions.AddAccel(ActionEnums::PASTE_SELECTED_PLAIN_TEXT, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_SHIFT));
 	m_actions.AddAccel(ActionEnums::COMPARE_SELECTED_CLIPS, ACCEL_MAKEKEY(VK_F2, HOTKEYF_CONTROL));
@@ -1838,7 +1836,8 @@ void CQPasteWnd::OnMenuQuickpropertiesRemovehotkey()
     {
         try
         {
-            theApp.m_db.execDMLEx(_T("UPDATE Main SET lShortCut = 0 where lID = %d;"), IDs[i]);
+            theApp.m_db.execDMLEx(_T("UPDATE Main SET lShortCut = 0, globalShortCut = 0 where lID = %d;"), IDs[i]);
+			g_HotKeys.Remove(IDs[i]);
         }
         CATCH_SQLITE_EXCEPTION
     }
