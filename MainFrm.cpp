@@ -397,18 +397,32 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 {
     try
 	{
-		CString csSort = "case when (Main.stickyClipOrder = 0 OR Main.stickyClipOrder IS NULL) then -9999999 else Main.stickyClipOrder END DESC, "
-			"Main.bIsGroup ASC, "
-			"clipOrder DESC";
+		CString csSort = _T("");
 
-		CString filter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR (Main.bIsGroup = 0 AND Main.lParentID = -1))";
+		csSort = "Main.bIsGroup ASC, "
+			"Main.stickyClipOrder DESC, "
+			"Main.clipOrder DESC";
 
-		if(g_Opt.m_bShowAllClipsInMainList)
+		CString strFilter = _T("");
+
+		if (g_Opt.m_bShowAllClipsInMainList)
 		{
-			filter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR Main.bIsGroup = 0)";
+			if (CGetSetOptions::GetShowGroupsInMainList())
+			{
+				//found to be slower on large databases
+				strFilter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR Main.bIsGroup = 0)";
+			}
+			else
+			{
+				strFilter = "(Main.bIsGroup = 0)";
+			}
+		}
+		else
+		{
+			strFilter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR (Main.bIsGroup = 0 AND Main.lParentID = -1))";
 		}
 
-        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, bIsGroup FROM Main WHERE %s ORDER BY %s LIMIT 1 OFFSET %d"), filter, csSort, nPos);
+		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, bIsGroup FROM Main WHERE %s ORDER BY %s LIMIT 1 OFFSET %d"), strFilter, csSort, nPos);
 
         if(q.eof() == false)
         {

@@ -62,11 +62,25 @@ Name: RunAtStartup; Description: Run Ditto on Windows Startup
 	Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
 	Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 	Source: mfc-crt64\*; DestDir: {app}      
+  Source: ..\Release64\icuuc55.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release64\icuin55.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release64\icutu55.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release64\icule55.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release64\iculx55.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release64\icuio55.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release64\icudt55.dll; DestDir: {app}; Flags: ignoreversion
 #endif
 #ifndef bit64
 	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
 	Source: ..\Addins\DittoUtil\Release\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 	Source: mfc-crt_10\*; DestDir: {app}
+  Source: ..\Release\icuuc55.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release\icuin55.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release\icutu55.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release\icule55.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release\iculx55.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release\icuio55.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release\icudt55.dll; DestDir: {app}; Flags: ignoreversion
 #endif
 
 Source: Changes.txt; DestDir: {app}

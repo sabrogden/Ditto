@@ -115,7 +115,8 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	m_pwndPaste->MinMaxWindow(FORCE_MAX);
 	
 	//If it is a window get the rect otherwise get the saved point and size
-	if (IsWindow(m_pwndPaste->m_hWnd))
+	if (IsWindow(m_pwndPaste->m_hWnd) &&
+		m_pwndPaste->IsIconic() == FALSE)
 	{
 		m_pwndPaste->GetWindowRect(rcPrev);
 		csSize = rcPrev.Size();
@@ -189,7 +190,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 		forceMoveWindow = true;
 
 		Log(StrF(_T("Invalid initial size %d %d %d %d, Centered Window %d %d %d %d"), orig.left, orig.top, orig.right, orig.bottom, crRect.left, crRect.top, crRect.right, crRect.bottom));
-	}
+	}	
 	
 	if( !IsWindow(m_pwndPaste->m_hWnd) )
 	{
@@ -202,19 +203,41 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 
 		VERIFY( m_pwndPaste->Create(crRect, pLocalParent) );
 	}	
-	
-	if((nPosition == POS_AT_CARET) ||
-		(nPosition == POS_AT_CURSOR) ||
-		bAtPrevPos ||
-		forceMoveWindow)
+
+	//If minimized
+	if (m_pwndPaste->IsIconic())
 	{
-		m_pwndPaste->MoveWindow(crRect);
+		m_pwndPaste->ShowWindow(SW_RESTORE);
+
+		if ((nPosition == POS_AT_CARET) ||
+			(nPosition == POS_AT_CURSOR) ||
+			bAtPrevPos ||
+			forceMoveWindow)
+		{
+			m_pwndPaste->MoveWindow(crRect);
+		}
 	}
+	else
+	{
+		if ((nPosition == POS_AT_CARET) ||
+			(nPosition == POS_AT_CURSOR) ||
+			bAtPrevPos ||
+			forceMoveWindow)
+		{
+			m_pwndPaste->MoveWindow(crRect);
+		}
+
+
+		// Show the window
+		m_pwndPaste->ShowWindow(SW_SHOW);
+	}
+	
+	
 
 	m_pwndPaste->SetKeyModiferState(bFromKeyboard);
 	
-	// Show the window
-	m_pwndPaste->ShowWindow(SW_SHOW);
+	
+
 	if(bReFillList)
 	{
 		m_pwndPaste->ShowQPasteWindow(bReFillList);

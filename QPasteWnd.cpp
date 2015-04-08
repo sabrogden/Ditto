@@ -601,10 +601,13 @@ BOOL CQPasteWnd::HideQPasteWindow (bool releaseFocus, bool clearSearchData)
 
 void CQPasteWnd::SaveWindowSize()
 {
-	CRect rect;
-	GetWindowRectEx(&rect);
-	CGetSetOptions::SetQuickPasteSize(rect.Size());
-	CGetSetOptions::SetQuickPastePoint(rect.TopLeft());
+	if (this->IsIconic() == FALSE)
+	{
+		CRect rect;
+		GetWindowRectEx(&rect);
+		CGetSetOptions::SetQuickPasteSize(rect.Size());
+		CGetSetOptions::SetQuickPastePoint(rect.TopLeft());
+	}
 }
 
 BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
