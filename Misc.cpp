@@ -1027,6 +1027,10 @@ int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, C
 		int newPos = 0;
 		int insertedLength = 0;
 
+		int k = mainStr.Replace(_T("\r\n"), _T("<br>"));
+		int l = mainStr.Replace(_T("\r"), _T("<br>"));
+		int m = mainStr.Replace(_T("\n"), _T("<br>"));
+
 		//Copies of the main string and the string to be replaced that
 		//are made lower case
 		CString mainStr_low(mainStr);
