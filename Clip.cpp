@@ -98,12 +98,12 @@ HGLOBAL COleDataObjectEx::GetGlobalData(CLIPFORMAT cfFormat, LPFORMATETC lpForma
 /*----------------------------------------------------------------------------*\
 CClipFormat - holds the data of one clip format.
 \*----------------------------------------------------------------------------*/
-CClipFormat::CClipFormat(CLIPFORMAT cfType, HGLOBAL hgData, int dbId)
+CClipFormat::CClipFormat(CLIPFORMAT cfType, HGLOBAL hgData, int parentId)
 {
 	m_cfType = cfType;
 	m_hgData = hgData;
 	m_autoDeleteData = true;
-	m_dbId = dbId;
+	m_parentId = parentId;
 }
 
 CClipFormat::~CClipFormat() 
@@ -115,7 +115,8 @@ void CClipFormat::Clear()
 {
 	m_cfType = 0;
 	m_hgData = 0;
-	m_dbId = -1;
+	m_dataId = -1;
+	m_parentId = -1;
 }
 
 void CClipFormat::Free()
@@ -744,9 +745,9 @@ bool CClip::AddToDataTable()
 			stmt.execDML();
 			stmt.reset();
 
-			pCF->m_dbId = (long)theApp.m_db.lastRowId();
+			pCF->m_dataId = (long)theApp.m_db.lastRowId();
 
-			Log(StrF(_T("Added ClipData to DB, Id: %d, ParentId: %d Type: %s, size: %d"), pCF->m_dbId, m_id, formatName, clipSize));
+			Log(StrF(_T("Added ClipData to DB, Id: %d, ParentId: %d Type: %s, size: %d"), pCF->m_dataId, m_id, formatName, clipSize));
 		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)
@@ -1047,14 +1048,15 @@ bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT)
 		}
 
 		csSQL.Format(
-			_T("SELECT lParentID, strClipBoardFormat, ooData FROM Data ")
+			_T("SELECT lID, lParentID, strClipBoardFormat, ooData FROM Data ")
 			_T("WHERE %s lParentID = %d ORDER BY Data.lID desc"), textFilter, id);
 
 		CppSQLite3Query q = theApp.m_db.execQuery(csSQL);
 
 		while(q.eof() == false)
 		{
-			cf.m_dbId = q.getIntField(_T("lParentID"));
+			cf.m_dataId = q.getIntField(_T("lID"));
+			cf.m_parentId = q.getIntField(_T("lParentID"));
 			cf.m_cfType = GetFormatID(q.getStringField(_T("strClipBoardFormat")));
 			
 			if(bOnlyLoad_CF_TEXT)

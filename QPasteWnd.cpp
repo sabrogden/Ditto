@@ -3869,7 +3869,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 bool exists = false;
 				for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
 				{
-					if(it->m_cfType == CF_DIB && it->m_dbId == m_listItems[pItem->iItem].m_lID)
+					if(it->m_cfType == CF_DIB && it->m_parentId == m_listItems[pItem->iItem].m_lID)
 					{
 						exists = true;
 						break;
@@ -3880,7 +3880,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 {
                     CClipFormatQListCtrl format;
                     format.m_cfType = CF_DIB;
-                    format.m_dbId = m_listItems[pItem->iItem].m_lID;
+                    format.m_parentId = m_listItems[pItem->iItem].m_lID;
                     format.m_clipRow = pItem->iItem;
                     format.m_autoDeleteData = false;
                     m_ExtraDataLoadItems.push_back(format);
@@ -3910,7 +3910,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 bool exists = false;
 				for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
 				{
-					if(it->m_cfType == theApp.m_RTFFormat && it->m_dbId == m_listItems[pItem->iItem].m_lID)
+					if(it->m_cfType == theApp.m_RTFFormat && it->m_parentId == m_listItems[pItem->iItem].m_lID)
 					{
 						exists = true;
 						break;
@@ -3921,7 +3921,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                 {
                     CClipFormatQListCtrl format;
                     format.m_cfType = theApp.m_RTFFormat;
-                    format.m_dbId = m_listItems[pItem->iItem].m_lID;
+                    format.m_parentId = m_listItems[pItem->iItem].m_lID;
                     format.m_clipRow = pItem->iItem;
                     format.m_autoDeleteData = false;
                     m_ExtraDataLoadItems.push_back(format);

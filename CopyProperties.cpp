@@ -160,10 +160,10 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 			cs.Format(_T("%s, %d"), GetFormatName(pCF->m_cfType), GlobalSize(pCF->m_hgData));
 			int nIndex = m_lCopyData.AddString(cs);
 			
-			if(m_lCopyID == -1 && pCF->m_dbId == -1)
+			if(m_lCopyID == -1 && pCF->m_dataId == -1)
 				m_lCopyData.SetItemData(nIndex, i);
 			else
-				m_lCopyData.SetItemData(nIndex, pCF->m_dbId);
+				m_lCopyData.SetItemData(nIndex, pCF->m_dataId);
 		}
 	}
 

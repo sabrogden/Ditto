@@ -37,9 +37,10 @@ public:
 	CLIPFORMAT m_cfType;
     HGLOBAL m_hgData;
 	bool m_autoDeleteData;
-	int m_dbId;
+	int m_dataId;
+	int m_parentId;
 
-	CClipFormat(CLIPFORMAT cfType = 0, HGLOBAL hgData = 0, int dbId = -1);
+	CClipFormat(CLIPFORMAT cfType = 0, HGLOBAL hgData = 0, int parentId = -1);
 	~CClipFormat();
 
 	void Clear();

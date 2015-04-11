@@ -992,13 +992,13 @@ void CCP_MainApp::ShowCommandLineError(CString csTitle, CString csMessage)
 	pErrorWnd->DestroyWindow();
 }
 
-BOOL CCP_MainApp::GetClipData(long lID, CClipFormat &Clip)
+BOOL CCP_MainApp::GetClipData(long parentId, CClipFormat &Clip)
 {
 	BOOL bRet = FALSE;
 
 	try
 	{
-		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT ooData FROM Data WHERE lParentID = %d AND strClipboardFormat = '%s'"), lID, GetFormatName(Clip.m_cfType));
+		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT ooData FROM Data WHERE lParentID = %d AND strClipboardFormat = '%s'"), parentId, GetFormatName(Clip.m_cfType));
 		if(q.eof() == false)
 		{
 			int nDataLen = 0;
