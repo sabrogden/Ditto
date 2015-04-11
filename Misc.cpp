@@ -6,6 +6,7 @@
 #include "AlphaBlend.h"
 #include "Tlhelp32.h"
 #include <Wininet.h>
+#include "sqlite\utext.h"
 
 CString GetIPAddress()
 {
@@ -744,7 +745,8 @@ BOOL DeleteFormats(int parentID, ARRAY& formatIDs)
 		INT_PTR count = formatIDs.GetSize();
 		for(int i = 0; i < count; i++)
 		{
-			theApp.m_db.execDMLEx(_T("DELETE FROM Data WHERE lID = %d;"), formatIDs[i]);
+			int count = theApp.m_db.execDMLEx(_T("DELETE FROM Data WHERE lID = %d;"), formatIDs[i]);
+			int k = 0;
 		}
 
 		CClip clip;
@@ -1014,6 +1016,8 @@ __int64 FileSize(const TCHAR *fileName)
 	return buf.st_size;
 }
 
+
+
 int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, CString postInsert)
 {
 	int replaceCount = 0;
@@ -1023,36 +1027,50 @@ int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, C
 	{
 		int oldLen = findStr.GetLength();
 
-		int nPos = 0;
+		int foundPos = 0;
+		int startFindPos = 0;
 		int newPos = 0;
 		int insertedLength = 0;
 
-		int k = mainStr.Replace(_T("\r\n"), _T("<br>"));
-		int l = mainStr.Replace(_T("\r"), _T("<br>"));
-		int m = mainStr.Replace(_T("\n"), _T("<br>"));
+		//use icu::UnicodeString because it handles upper/lowercase characters for all languages, CSTring only hanldes ascii characters
+		icu::UnicodeString mainLow(mainStr);
+		mainLow.toLower();
 
-		//Copies of the main string and the string to be replaced that
-		//are made lower case
-		CString mainStr_low(mainStr);
-		CString findStr_low(findStr);
-		mainStr_low.MakeLower();
-		findStr_low.MakeLower();
+		icu::UnicodeString findLow(findStr);
+		findLow.toLower();
 
 		int preLength = preInsert.GetLength();
 		int postLength = postInsert.GetLength();
 
-		while ((nPos = mainStr_low.Find(findStr_low, nPos)) != -1)
+		int x = mainLow.indexOf(findLow, 0);
+		
+		while(TRUE)
 		{
-			newPos = nPos + insertedLength;
+			foundPos = mainLow.indexOf(findLow, startFindPos);
+			if (foundPos < 0)
+				break;
+
+			newPos = foundPos + insertedLength;
 
 			mainStr.Insert(newPos, preInsert);
 			mainStr.Insert(newPos + preLength + oldLen, postInsert);
 
-			nPos += oldLen;
+			startFindPos = foundPos + oldLen;
 
 			insertedLength += preLength + postLength;
 
 			replaceCount++;
+
+			//safety check, make sure we don't look forever
+			if (replaceCount > 100)
+				break;
+		}
+
+		if(replaceCount > 0)
+		{
+			mainStr.Replace(_T("\r\n"), _T("<br>"));
+			int l = mainStr.Replace(_T("\r"), _T("<br>"));
+			int m = mainStr.Replace(_T("\n"), _T("<br>"));
 		}
 	}
 
