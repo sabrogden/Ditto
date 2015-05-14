@@ -3094,6 +3094,8 @@ bool CQPasteWnd::DoActionBackGroup()
 bool CQPasteWnd::DoActionToggleShowPersistant()
 {
 	theApp.ShowPersistent(!g_Opt.m_bShowPersistent);
+	if(g_Opt.m_bShowPersistent)
+		::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
 
 	return true;
 }
@@ -4072,12 +4074,11 @@ void CQPasteWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
     {
         switch(g_Opt.m_bDoubleClickingOnCaptionDoes)
         {
-            case TOGGLES_ALLWAYS_ON_TOP:
-				::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
-                theApp.ShowPersistent(!g_Opt.m_bShowPersistent);
+            case TOGGLES_ALLWAYS_ON_TOP:				
+				DoAction(ActionEnums::TOGGLESHOWPERSISTANT);                
                 break;
             case TOGGLES_ALLWAYS_SHOW_DESCRIPTION:
-                CGetSetOptions::SetAllwaysShowDescription(!g_Opt.m_bAllwaysShowDescription);
+				DoAction(ActionEnums::SHOWDESCRIPTION);    
                 break;
             case ROLLES_UP_WINDOW:
                 MinMaxWindow();
