@@ -122,7 +122,7 @@ public:
 	void Clear();
 	void EmptyFormats();
 	bool AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen);
-	bool LoadFromClipboard(CClipTypes* pClipTypes);
+	bool LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore = true);
 	bool SetDescFromText(HGLOBAL hgData, bool unicode);
 	bool SetDescFromType();
 	bool AddToDB(bool bCheckForDuplicates = true);

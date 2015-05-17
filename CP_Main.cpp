@@ -375,6 +375,8 @@ void CCP_MainApp::AfterMainCreate()
 
 	m_pTextOnlyPaste = new CHotKey("TextOnlyPaste", 0, true);
 
+	m_pSaveClipboard = new CHotKey("SaveClipboard", 0, false);
+
 	LoadGlobalClips();
 
 	g_HotKeys.RegisterAll();

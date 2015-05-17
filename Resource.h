@@ -191,6 +191,7 @@
 #define IDC_HOTKEY_TEXT_ONLY            2003
 #define IDD_OPTIONS_TYPES               2004
 #define IDC_START_ON_STARTUP            2004
+#define IDC_HOTKEY_SAVE_CLIPBOARD       2004
 #define IDR_QUICK_PASTE                 2005
 #define IDC_TRANSPARENCY                2006
 #define IDD_OPTIONS_QUICK_PASTE         2006
@@ -270,6 +271,7 @@
 #define IDC_STATIC_MAX_SIZE             2046
 #define IDC_STATIC_NO_LIMIT             2047
 #define IDC_CHECK_WIN_NAMED_PASTE       2047
+#define IDC_CHECK_WIN_SAVE_CLIPBOARD    2047
 #define IDC_STATIC_ACTIVATE             2048
 #define IDC_STATIC_NAMED_COPY           2049
 #define IDC_STATIC_ACTIVATE2            2049
@@ -287,6 +289,7 @@
 #define IDC_STATIC_10                   2061
 #define IDC_STATIC_LINES                2062
 #define IDC_STATIC_NAMED_COPY2          2062
+#define IDC_STATIC_COLLECT_CLIPBOARD    2062
 #define IDC_STATIC_POPUP                2063
 #define IDC_STATIC_LEGEND               2064
 #define IDC_STATIC_LEG                  2065
@@ -501,7 +504,8 @@
 #define ID_IMPORT_EXPORTCLIP            32901
 #define ID_IMPORT_EXPORTCLIP_BITMAP     32902
 #define ID_MENU_WILDCARDSEARCH          32903
-
+#define ID_FIRST_SAVECURRENTCLIPBOARD   32904
+#define ID_MENU_SAVECURRENTCLIPBOARD    32905
 
 // Next default values for new objects
 // 
@@ -509,8 +513,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        240
-
-#define _APS_NEXT_COMMAND_VALUE         32904
+#define _APS_NEXT_COMMAND_VALUE         32906
 #define _APS_NEXT_CONTROL_VALUE         2127
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

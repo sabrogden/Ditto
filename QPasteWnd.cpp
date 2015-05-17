@@ -230,6 +230,8 @@ ON_UPDATE_COMMAND_UI(ID_IMPORT_EXPORTCLIP_BITMAP, &CQPasteWnd::OnUpdateImportExp
 
 ON_COMMAND(ID_MENU_WILDCARDSEARCH, &CQPasteWnd::OnMenuWildcardsearch)
 
+ON_COMMAND(ID_MENU_SAVECURRENTCLIPBOARD, &CQPasteWnd::OnMenuSavecurrentclipboard)
+ON_UPDATE_COMMAND_UI(ID_MENU_SAVECURRENTCLIPBOARD, &CQPasteWnd::OnUpdateMenuSavecurrentclipboard)
 END_MESSAGE_MAP()
 
 
@@ -2745,6 +2747,8 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::EXPORT_TO_BITMAP_FILE:
 		ret = DoExportToBitMapFile();
 		break;
+	case ActionEnums::SAVE_CURRENT_CLIPBOARD:
+		ret = DoSaveCurrentClipboard();
 	}
 
 	return ret;
@@ -3577,6 +3581,13 @@ bool CQPasteWnd::DoExportToGoogleTranslate()
 			}
 		}
 	}
+
+	return true;
+} 
+
+bool CQPasteWnd::DoSaveCurrentClipboard()
+{
+	theApp.m_pMainFrame->PostMessage(WM_SAVE_CLIPBOARD, 0, 0);
 
 	return true;
 }
@@ -4896,3 +4907,18 @@ void CQPasteWnd::OnMenuWildcardsearch()
 	CGetSetOptions::SetRegExTextSearch(FALSE);
 }
 
+void CQPasteWnd::OnMenuSavecurrentclipboard()
+{
+	DoAction(ActionEnums::SAVE_CURRENT_CLIPBOARD);
+}
+
+
+void CQPasteWnd::OnUpdateMenuSavecurrentclipboard(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::SAVE_CURRENT_CLIPBOARD);
+}

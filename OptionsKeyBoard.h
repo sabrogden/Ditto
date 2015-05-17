@@ -11,6 +11,7 @@
 #include "OptionsSheet.h"
 #include "afxwin.h"
 #include "HyperLink.h"
+#include "afxcmn.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // COptionsKeyBoard dialog
@@ -72,6 +73,7 @@ protected:
 
 public:
 	CHyperLink m_CustomeKeysHelp;
+	CHotKeyCtrl m_saveClipboardHotKey;
 };
 
 //{{AFX_INSERT_LOCATION}}

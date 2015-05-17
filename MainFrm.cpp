@@ -62,6 +62,8 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_SHOW_OPTIONS, OnShowOptions)
 	ON_COMMAND(ID_FIRST_DELETECLIPDATA, &CMainFrame::OnFirstDeleteclipdata)
 	ON_MESSAGE(WM_DELETE_CLIPS_CLOSED, OnDeleteClipDataClosed)
+	ON_COMMAND(ID_FIRST_SAVECURRENTCLIPBOARD, &CMainFrame::OnFirstSavecurrentclipboard)
+	ON_MESSAGE(WM_SAVE_CLIPBOARD, &CMainFrame::OnSaveClipboardMessage)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -350,6 +352,10 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 	else if(theApp.m_pTextOnlyPaste && wParam == theApp.m_pTextOnlyPaste->m_Atom)
 	{
 		DoTextOnlyPaste();
+	}
+	else if(theApp.m_pSaveClipboard && wParam == theApp.m_pSaveClipboard->m_Atom)
+	{
+		OnFirstSavecurrentclipboard();
 	}
 	else
 	{
@@ -1070,4 +1076,39 @@ void CMainFrame::OnFirstDeleteclipdata()
 			m_pDeleteClips->ShowWindow(SW_SHOW);
 		}
 	}
+}
+
+LRESULT CMainFrame::OnSaveClipboardMessage(WPARAM wParam, LPARAM lParam)
+{
+	OnFirstSavecurrentclipboard();
+	return TRUE;
+}
+
+void CMainFrame::OnFirstSavecurrentclipboard()
+{
+	Log(_T("Start Saving the current clipboard to the database"));
+	CClip* pClip = new CClip;
+	if(pClip)
+	{
+		CClipTypes* pTypes = theApp.LoadTypesFromDB();
+		if(pTypes)
+		{
+			if(pClip->LoadFromClipboard(pTypes, false))
+			{
+				Log(_T("Loaded clips from the clipboard, sending message to save to the db"));
+				::PostMessage(m_hWnd, WM_CLIPBOARD_COPIED, (WPARAM)pClip, 0);
+			}
+			else
+			{
+				Log(_T("Failed to load clips from the clipboard, not saving to db"));
+				delete pClip;
+				pClip = NULL;
+			}
+		}
+		else
+		{
+			Log(_T("Failed to load supported types from the db, not saving to the db"));
+		}
+	}
+	Log(_T("Start Saving the current clipboard to the database"));
 }

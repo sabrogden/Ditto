@@ -274,7 +274,7 @@ bool CClip::AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen)
 }
 
 // Fills this CClip with the contents of the clipboard.
-bool CClip::LoadFromClipboard(CClipTypes* pClipTypes)
+bool CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore)
 {
 	COleDataObjectEx oleData;
 	CClipTypes defaultTypes;

@@ -50,6 +50,7 @@ void COptionsKeyBoard::DoDataExchange(CDataExchange* pDX)
 	//}}AFX_DATA_MAP
 	DDX_Control(pDX, IDC_STATIC_CUSTOM_KEYS, m_CustomeKeysHelp);
 	DDX_Control(pDX, IDC_CHECK_MOVE_CLIPS_ON_PASTE, m_btMoveClipOnGlobal10);
+	DDX_Control(pDX, IDC_HOTKEY_SAVE_CLIPBOARD, m_saveClipboardHotKey);
 }
 
 BEGIN_MESSAGE_MAP(COptionsKeyBoard, CPropertyPage)
@@ -83,6 +84,8 @@ BOOL COptionsKeyBoard::OnInitDialog()
 	theApp.m_pPosNine->CopyToCtrl(m_Nine, m_hWnd, IDC_CHECK_WIN9);
 	theApp.m_pPosTen->CopyToCtrl(m_Ten, m_hWnd, IDC_CHECK_WIN10);
 	theApp.m_pTextOnlyPaste->CopyToCtrl(m_TextOnlyKey, m_hWnd, IDC_CHECK_WIN_TEXT_ONLY);
+	theApp.m_pSaveClipboard->CopyToCtrl(m_saveClipboardHotKey, m_hWnd, IDC_CHECK_WIN_SAVE_CLIPBOARD);
+
 
 	//Unregister hotkeys and Reregister them on cancel or ok
 	g_HotKeys.UnregisterAll();
@@ -132,6 +135,7 @@ BOOL COptionsKeyBoard::OnApply()
 	theApp.m_pPosNine->CopyFromCtrl(m_Nine, m_hWnd, IDC_CHECK_WIN9);
 	theApp.m_pPosTen->CopyFromCtrl(m_Ten, m_hWnd, IDC_CHECK_WIN10);
 	theApp.m_pTextOnlyPaste->CopyFromCtrl(m_TextOnlyKey, m_hWnd, IDC_CHECK_WIN_TEXT_ONLY);
+	theApp.m_pSaveClipboard->CopyFromCtrl(m_saveClipboardHotKey, m_hWnd, IDC_CHECK_WIN_SAVE_CLIPBOARD);
 
 	ARRAY NewKeys;
 	g_HotKeys.GetKeys(NewKeys);

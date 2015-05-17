@@ -237,6 +237,7 @@ public:
 	bool DoExportToTextFile();
 	bool DoExportToGoogleTranslate();
 	bool DoExportToBitMapFile();
+	bool DoSaveCurrentClipboard();
 
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
@@ -398,4 +399,6 @@ public:
 	afx_msg void OnImportExportclipBitmap();
 	afx_msg void OnUpdateImportExportclipBitmap(CCmdUI *pCmdUI);
 	afx_msg void OnMenuWildcardsearch();
+	afx_msg void OnMenuSavecurrentclipboard();
+	afx_msg void OnUpdateMenuSavecurrentclipboard(CCmdUI *pCmdUI);
 };

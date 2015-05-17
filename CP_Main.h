@@ -75,6 +75,7 @@ public:
 	CHotKey		*m_pPasteBuffer3;
 	CHotKey		*m_pCutBuffer3;
 	CHotKey		*m_pTextOnlyPaste;
+	CHotKey		*m_pSaveClipboard;
 
 	ExternalWindowTracker m_activeWnd;
 	
