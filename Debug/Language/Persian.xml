@@ -2,18 +2,18 @@
 <Ditto_Language_File Version = "1" Author = "[ iriman *at* chmail * ir ]" Notes = "Please read 'Persian_' help files in folder '\Ditto\Help'" LanguageCode = "fa">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">گروه‌ها</Item>
-		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">‫گروه جدید	Ctrl-F7‬</Item>
-		<Item English_Text = "New Group Selection	F7" ID = "32812">‫انتخاب گروه جدید	F7‬</Item>
+		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">گروه جدید</Item>
+		<Item English_Text = "New Group Selection	F7" ID = "32812">انتخاب گروه جدید</Item>
 		<Item English_Text = "Move to Group" ID = "32840">انتقال به گروه</Item>
 		<Item English_Text = "Quick Options" ID = "-1">تنظیمات سریع</Item>
-		<Item English_Text = "Lines Per Clip" ID = "-1">تعداد خطوط قابل نمایش برای هر مورد</Item>
+		<Item English_Text = "Lines Per Clip" ID = "-1">تعداد خطوط قابل نمایش در هر بریده</Item>
 		<Item English_Text = "1" ID = "32807"></Item>
 		<Item English_Text = "2" ID = "32786"></Item>
 		<Item English_Text = "3" ID = "32787"></Item>
 		<Item English_Text = "4" ID = "32788"></Item>
 		<Item English_Text = "5" ID = "32789"></Item>
 		<Item English_Text = "Transparency" ID = "-1">شفافیت</Item>
-		<Item English_Text = "None" ID = "32800"></Item>
+		<Item English_Text = "None" ID = "32800">غیرشفاف</Item>
 		<Item English_Text = "5 " ID = "32808"></Item>
 		<Item English_Text = "10 " ID = "32792"></Item>
 		<Item English_Text = "15 " ID = "32794"></Item>
@@ -26,9 +26,9 @@
 		<Item English_Text = "At Cursor" ID = "32803">در محل مکان‌نما</Item>
 		<Item English_Text = "At Previous Position" ID = "32804">در محل قبلی</Item>
 		<Item English_Text = "First Ten Hot Keys" ID = "-1">میانبر ده مورد اول</Item>
-		<Item English_Text = "Use Ctrl - Num" ID = "32777">‫استفاده از Ctrl - Num‬</Item>
+		<Item English_Text = "Use Ctrl - Num" ID = "32777">‫استفاده از Ctrl - Num</Item>
 		<Item English_Text = "Show Hot Key Text" ID = "32778">میانبر را نشان بده</Item>
-		<Item English_Text = "View Caption Bar On" ID = "-1">قرار گرفتن نوار توضیح در</Item>
+		<Item English_Text = "View Caption Bar On" ID = "-1">محل قرار گرفتن نوار عنوان</Item>
 		<Item English_Text = "Top" ID = "32783">بالا</Item>
 		<Item English_Text = "Right" ID = "32780">راست</Item>
 		<Item English_Text = "Bottom" ID = "32781">پایین</Item>
@@ -37,13 +37,13 @@
 		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">از پایین به بالا (آخری بالا باشد)</Item>
 		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">از بالا به پایین (آخری پایین باشد)</Item>
 		<Item English_Text = "Double Clicking on Caption" ID = "-1">با دوبار کلیک روی نوار عنوان</Item>
-		<Item English_Text = "Toggles Always on Top" ID = "32814">پنجره همیشه رو باشد/نباشد</Item>
+		<Item English_Text = "Toggles Always on Top" ID = "32814"> پنجره همیشه رو باشد/نباشد</Item>
 		<Item English_Text = "Rolls-up Window" ID = "32815">پنجره جمع شود</Item>
-		<Item English_Text = "Toggles Always Show Description" ID = "32816">همیشه توضیحات را نشان بده/نده</Item>
+		<Item English_Text = "Toggles Always Show Description" ID = "32816">همواره توضیحات را نشان بده/نده</Item>
 		<Item English_Text = "Always on Top" ID = "32784">همیشه رو</Item>
 		<Item English_Text = "Auto Roll-up" ID = "32791">جمع شدن خودکار</Item>
-		<Item English_Text = "Always Show Description" ID = "32813">همیشه توضیحات را نشان بده</Item>
-		<Item English_Text = "Prompt For New Group Names" ID = "32817">اعلان برای وارد کردن نام گروه</Item>
+		<Item English_Text = "Always Show Description" ID = "32813">همواره توضیحات را نشان بده</Item>
+		<Item English_Text = "Prompt For New Group Names" ID = "32817">اعلان برای وارد کردن نام گروه جدید</Item>
 		<Item English_Text = "Select Font" ID = "32844">انتخاب قلم</Item>
 		<Item English_Text = "Show Thumbnails" ID = "32845">نمایش تصاویر بندانگشتی</Item>
 		<Item English_Text = "Draw RTF Text" ID = "32846">‫نمایش قالب‌بندی متن RTF‬</Item>
@@ -53,94 +53,112 @@
 		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">بریده‌هایی را که گروه‌بندی شده‌اند در فهرست اصلی نشان بده</Item>
 		<Item English_Text = "Send To" ID = "-1">ارسال به</Item>
 		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">(192.168.1.101) - همان رایانه</Item>
-		<Item English_Text = "View Full Description	F3" ID = "32793">‫نمایش کامل توضیحات	F3‬</Item>
+		<Item English_Text = "View Full Description	F3" ID = "32793">‫نمایش کامل توضیحات</Item>
 		<Item English_Text = "View Groups" ID = "32819">نمایش گروه‌ها</Item>
-		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">‫درج فقط متنی	Shift-Enter‬</Item>
-		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">HTML را به صورت متن ساده درج کن</Item>
+		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">‫درج فقط متنی</Item>
+		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">‫HTML را به صورت متن ساده درج کن‬</Item>
 		<Item English_Text = "Delete Entry" ID = "32801">حذف این مورد</Item>
 		<Item English_Text = "Properties" ID = "32776">خصوصیات</Item>
 		<Item English_Text = "Quick Properties" ID = "-1">خصوصیات سریع</Item>
 		<Item English_Text = "Never Auto Delete" ID = "32820">هرگز خودکار حذف نشود</Item>
 		<Item English_Text = "Auto Delete" ID = "32821">حذف خودکار</Item>
 		<Item English_Text = "Remove Hot Key" ID = "32822">حذف میانبر</Item>
-		<Item English_Text = "Remove Quick Paste" ID = "32856">حذف درج سریع</Item>
-		<Item English_Text = "Sticky Clips" ID = "65535">بریده‌های چسبان</Item>
-		<Item English_Text = "Make Top Sticky Clip" ID = "32878">چسبیدن در بالای فهرست</Item>
-		<Item English_Text = "Make Last Sticky Clip" ID = "32879">چسبیدن در پایین بریده‌های چسبان</Item>
-		<Item English_Text = "Remove Sticky Setting" ID = "32880">حذف تنظیم چسبندگی</Item>
 		<Item English_Text = "Options..." ID = "32805">گزینه‌ها...‏</Item>
 		<Item English_Text = "Help" ID = "32842">راهنما</Item>
 		<Item English_Text = "Disconnect from Clipboard" ID = "32775">قطع اتصال از بُریده‌دان</Item>
 		<Item English_Text = "Exit Program" ID = "32806">خروج از برنامه</Item>
-		<Item English_Text = "Prompt to Delete Clip" ID = "32852">اعلان هنگام حذف بریده</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt to Delete Clip" ID = "32852">اعلان هنگام حذف بریده</Item>	
 		<Item English_Text = "Import Clip(s)" ID = "32855">وارد کردن بریده(ها)</Item>
 		<Item English_Text = "Export Clip(s)" ID = "32853">صادر کردن بریده(ها)</Item>
-		<Item English_Text = "Remove Quick Paste" ID = "32856">حذف درج سریع</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">حذف متن درچ سریع</Item>	
 		<Item English_Text = "Edit Clip" ID = "32860">اصلاح بریده</Item>
-		<Item English_Text = "New Clip" ID = "32867">بریده‌ی جدید</Item>
-		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "32881">سطح دسترسی بالاتر برای برنامه‌های با دسترسی بالا</Item>
+		<Item English_Text = "New Clip" ID = "32867">بریده‌ی جدید</Item>	
+		
+		//Added 1/10/15
+		<Item English_Text = "Compare" ID = "-1">مقایسه</Item>	
+		<Item English_Text = "Select Left Text" ID = "32893">انتخاب متن چپ</Item>	
+		<Item English_Text = "Select Right Text And Compare Against Left" ID = "32894">انتخاب متن راست و مقایسه با متن چپ</Item>	
+		<Item English_Text = "Compare" ID = "32895">مقایسه</Item>
+		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "32881">فعال شدن سطح دسترسی بالاتر برای برنامه‌های با دسترسی بالا</Item>
 		<Item English_Text = "Show In Taskbar" ID = "32885">نمایش در نوار وظیفه</Item>
+		<Item English_Text = "Sticky Clips" ID = "-1">بریده‌های چسبان</Item>	
+		<Item English_Text = "Make Top Sticky Clip" ID = "32878">چسبیدن در بالای فهرست</Item>	
+		<Item English_Text = "Make Last Sticky Clip" ID = "32879">چسبیدن در پایین فهرست</Item>	
+		<Item English_Text = "Remove Sticky Setting" ID = "32880">حذف تنظیم چسبندگی</Item>
+		<Item English_Text = "Import/Export" ID = "-1">ورود/صدور</Item>	
+		<Item English_Text = "View as QRCode" ID = "32887">‫تبدیل به کد QR‬</Item>	
+		<Item English_Text = "Export Clip(s) to Text File" ID = "32889">ذخیره بریده(ها) در قالب فایل متنی</Item>	
+		
+		//Added By IRIman
+		<Item English_Text = "Export Clip(s) to Bitmap File" ID = "32902">ذخیره بریده(ها) در قالب عکس</Item>
+		<Item English_Text = "Export to Google Translate" ID = "32900">ترجمه توسط گوگل</Item>
+		
 	</Ditto_Right_Click_Menu>
-
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039">میانبر</Item>
-		<Item English_Text = "Hotkey available globally" ID = "1026">میانبر سراسری باشد</Item>
-		<Item English_Text = "Date" ID = "2040">تاریخ</Item>
-		<Item English_Text = "Last Used" ID = "2043">استفاده آخر</Item>
+		<Item English_Text = "Hot Key" ID = "2039">میانبر</Item>
+		<Item English_Text = "Date" ID = "2040">تاریخ ایجاد</Item>
 		<Item English_Text = "&Never Auto Delete" ID = "1025">&هرگز خودکار حذف نشود</Item>
 		<Item English_Text = "Move To Group" ID = "2041">انتقال به گروه</Item>
 		<Item English_Text = "Item Title" ID = "2042">عنوان</Item>
-		<Item English_Text = "Copy Formats" ID = "2029">نسخه‌برداری از قالب‌بندی‌ها</Item>
+		<Item English_Text = "Copy Formats" ID = "2029">قالب‌های نسخه‌برداری</Item>
 		<Item English_Text = "Delete" ID = "1021">حذف</Item>
 		<Item English_Text = "OK" ID = "1">قبول</Item>
 		<Item English_Text = "Cancel" ID = "2">لغو</Item>
 		<Item English_Text = "Copy Properties" ID = "-1">خصوصیات بریده</Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Hotkey available globally" ID = "1026">میانبر سراسری</Item>
+		<Item English_Text = "Last Used" ID = "2043">آخرین استفاده</Item>
+		<Item English_Text = "Quick Paste Text" ID = "2125">نام برای درج سریع</Item>
+		
 	</Ditto_Clip_Properties>
-
 	<Ditto_Options_General>
 		<Item English_Text = "Start Ditto on System Startup" ID = "2004">دیتو را همزمان با بالا آمدن رایانه اجرا کن</Item>
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">آیکون برنامه را در سینی سیستم نشان بده</Item>
-		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">حداکثر بریده‌های ذخیره شده</Item>
-		<Item English_Text = "Paste Entries Expire after" ID = "2009">عمر موارد فهرست درج</Item>
+		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">بیشترین تعداد بریده‌های ذخیره شده</Item>
+		<Item English_Text = "Paste Entries Expire after" ID = "2009">تاریخ انقضای بریده‌ها</Item>
 		<Item English_Text = "Days" ID = "2043">روز</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028">فشرده‌سازی و تعمیر پایگاه داده</Item>
 		<Item English_Text = "Check Now" ID = "1030">الآن بررسی کن</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">تکراری مجاز باشد</Item>
 		<Item English_Text = "Update Clip Order On Paste" ID = "1038">بریده‌ها را هنگام درج، دوباره مرتب کن</Item>
 		<Item English_Text = "Save Multi-Pastes" ID = "1039">درج‌های چندتایی را ذخیره کن</Item>
-		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">اگر پنجره‌ی دیتو باز است فشردن کلید میانبر آن را ببندد</Item>
-		<Item English_Text = "Amount of text to save for description" ID = "2044">تعداد نویسه‌های متن توضیحی</Item>
+		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">اگر پنجره‌ی دیتو باز است، با فشردن کلید میانبر بسته شود</Item>
+		<Item English_Text = "Amount of text to save for description" ID = "2044">مقدار متن توضیح</Item>
 		<Item English_Text = "On copy play the sound" ID = "2045">همزمان با نسخه‌برداری صدا پخش کن</Item>
 		<Item English_Text = "Play" ID = "2034">پخش</Item>
 		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">بعد از انتخاب بریده، آن را در پنجره فعال درج کن</Item>
 		<Item English_Text = "Maximum Clip Size (in Bytes)" ID = "2046">بیشترین حجم بریده (به بایت)</Item>
 		<Item English_Text = "(Leave blank for no limit)" ID = "2047">(خالی یعنی بدون محدودیت)</Item>
 		<Item English_Text = "Set Database Path" ID = "1034">تنظیم مسیر پایگاه داده</Item>
-		<Item English_Text = "Language" ID = "2069">Language</Item>
+		<Item English_Text = "Language" ID = "2069">زبان</Item>
 		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">مدت زمان نادیده گرفتن نسخه‌برداری‌ها بعد از آخرین نسخه‌برداری (به هزارم ثانیه)</Item>
 		<Item English_Text = "About Language" ID = "2073">درباره زبان</Item>
 		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">اطمینان از اینکه دیتو همیشه به بریده‌دان متصل است</Item>
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true">عمومی</Item>
-		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090">جداکننده‌ی درج چندتایی ([LF] = line feed)</Item>
-		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098">برنامه‌هایی که نسخه‌برداری در آنها مجاز است (با نقطه‌ویرگول لاتین ; جدا کنید)</Item>
-		<Item English_Text = "Include" ID = "2095">باشند</Item>
-		<Item English_Text = "Exclude" ID = "2096">نباشند</Item>
+		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090">جداکننده‌ی درج چندتایی ([LF] = سطر جدید)</Item>
+		
+		//New item added 3/1/11
+		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098">فعال/غیرفعال کردن نسخه‌برداری در برنامه‌ها (نام برنامه‌ها را با نقطه‌ویرگول لاتین ; جدا کنید)</Item>
+		<Item English_Text = "Include" ID = "2095">فعال</Item>
+		<Item English_Text = "Exclude" ID = "2096">غیرفعال</Item>
+		
 	</Ditto_Options_General>
-
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "&Add" ID = "1015">&افزودن</Item>
 		<Item English_Text = "&Delete" ID = "1016">&حذف</Item>
 		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">قالب‌های پشتیبانی شده</Item>
 	</Ditto_Options_Supported_Types>
-
 	<Ditto_Options_Shortcuts>
 		<Item English_Text = "Activate Ditto" ID = "2048">فعال کردن دیتو</Item>
 		<Item English_Text = "Win" ID = "2035"></Item>
-		<Item English_Text = "Named Copy" ID = "2049">درج فقط متنی</Item>
+		<Item English_Text = "Named Copy" ID = "2049"></Item>
 		<Item English_Text = "Win" ID = "2036"></Item>
-		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">میانبرهای سراسری برای ده تا نسخه‌برداری آخر</Item>
+		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">میانبرهای سراسری برای ده نسخه‌برداری آخر</Item>
 		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">دستور درج بده (در غیر این صورت فقط در بریده‌دان بارگذاری می‌شود)</Item>
-		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043">بعد از درج بریده، آن را به بالای فهرست بیاور</Item>
 		<Item English_Text = "Position 1" ID = "2052">مکان 1</Item>
 		<Item English_Text = "Position 2" ID = "2053">مکان 2</Item>
 		<Item English_Text = "Position 3" ID = "2054">مکان 3</Item>
@@ -161,21 +179,29 @@
 		<Item English_Text = "Win" ID = "2039"></Item>
 		<Item English_Text = "Win" ID = "2040"></Item>
 		<Item English_Text = "Win" ID = "2041"></Item>
-		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">‫Win را علامت بزنید تا از کلید پنجره روی صفحه‌کلید برای میانبرتان استفاده کنید.‬</Item>
+		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">‫Win را علامت بزنید تا از کلید پنجره روی صفحه‌کلید برای ساخت میانبر استفاده کنید.‬</Item>
 		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">کلیدهای میانبر</Item>
+		
+		//New item added in 3.15.1 8/18/07
 		<Item English_Text = "Send custom strokes Per Application" ID = "2091">استفاده از میانبر دلخواه در هر برنامه</Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043">بعد از درج بریده، آن را به بالای فهرست منتقل کن</Item>
+		
+		//Added By IRIman
+		<Item English_Text = "Text Only Paste" ID = "2049">‫درج فقط متنی</Item>
+		
 	</Ditto_Options_Shortcuts>
-
 	<Ditto_Options_Quick_Paste>
 		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">تاریخچه از بالای فهرست شروع می‌شود (مق. پایین)</Item>
-		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">‫استفاده از ترکیب کلیدهای Ctrl و عدد بعنوان میانبر ده نسخه‌برداری اول‬</Item>
+		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">‫استفاده از  میانبر Ctrl + عدد برای ده نسخه‌برداری اول‬</Item>
 		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">نمایش میانبر برای ده مورد اول</Item>
-		<Item English_Text = "Show leading whitespace" ID = "2021">نمایش فاصله سفید پیش از متن</Item>
+		<Item English_Text = "Show leading whitespace" ID = "2021">نمایش فاصله‌های سفیدی که پیش از متن وجود دارد</Item>
 		<Item English_Text = "Text Lines per Entry" ID = "2062">تعداد خطوط برای هر مورد</Item>
 		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">فعال کردن شفافیت پنجره‌ی درج سریع</Item>
-		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">‫نمایش تصاویر بند انگشتی (برای قالب‌های CF_DIB) (بر مصرف حافظه و سرعت نمایش اثر می‌گذارد)‬</Item>
-		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">‫‫نمایش قالب‌بندی متن (برای قالب‌های RTF) (بر مصرف حافظه و سرعت نمایش اثر می‌گذارد)‬</Item>
-		<Item English_Text = "Find As You Type" ID = "2036">هنگامی که می‌نویسم همزمان جستجو کن</Item>
+		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">‫نمایش تصاویر بند انگشتی (برای قالب‌های CF_DIB) (بر مصرف حافظه و سرعت نمایش اثر می‌گذارد)</Item>
+		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">‫نمایش قالب‌بندی متن (برای قالب‌های RTF) (بر مصرف حافظه و سرعت نمایش اثر می‌گذارد)</Item>
+		<Item English_Text = "Find As You Type" ID = "2036">هنگام جستجو، به طور زنده نتایج را نشان بده</Item>
 		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">اطمینان حاصل کن که کل پنجره نمایان باشد</Item>
 		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">بریده‌هایی را که گروه‌بندی شده‌اند در فهرست اصلی نشان بده</Item>
 		<Item English_Text = "Font" ID = "1040">قلم</Item>
@@ -183,20 +209,27 @@
 		<Item English_Text = "Popup Positioning" ID = "2063">جانمایی کادر پرشی</Item>
 		<Item English_Text = "At Caret" ID = "2015">در محل هشتک</Item>
 		<Item English_Text = "At Cursor" ID = "2016">در محل مکان‌نما</Item>
-		<Item English_Text = "At Previous Position" ID = "2017">در محل قبلی</Item>
-		<Item English_Text = "List Item Prefix Legend" ID = "2064">نشان پیش از موارد فهرست</Item>
+		<Item English_Text = "At Previous Position" ID = "2017">در موقعیت قبلی</Item>
+		<Item English_Text = "List Item Prefix Legend" ID = "2064"></Item>
 		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">  * = خودکار حذف نکن\n  s = میانبر وجود دارد\n G = گروه است\n  ! = به یک گروه اضافه شده است</Item>
 		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">درج سریع</Item>
+		
+		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Prompt when deleting clips" ID = "2039">اعلان هنگام حذف بریده‌ها</Item>
+		
+		//New strings added in 3.15.2 10-6-07
+		<Item English_Text = "Theme" ID = "2092">پوسته</Item>
+		<Item English_Text = "About Theme" ID = "2094">درباره پوسته</Item>
+		
+		//Added 1/10/15
 		<Item English_Text = "Always Show Scroll Bar" ID = "2040">همیشه نوار پیمایش را نشان بده</Item>
 		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "2041">سطح دسترسی بالاتر برای برنامه‌های با دسترسی بالا</Item>
 		<Item English_Text = "Show In Taskbar" ID = "2042">نمایش در نوار وظیفه</Item>
-		<Item English_Text = "Theme" ID = "2092">پوسته</Item>
-		<Item English_Text = "About Theme" ID = "2094">درباره پوسته</Item>
-	</Ditto_Options_Quick_Paste>
-
+		<Item English_Text = "Diff Application Path" ID = "2122">مسیر برنامه مقایسه‌کننده</Item>
+		
+	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>
-		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">هنگامی که بریده‌ای دریافت کردم اگر آی‌پی یا نام رایانه در فهرست بود آن را در بریده‌دان قرار بده.‏ در غیر این صورت آن را پیش بریده‌های ذخیره شده بگذار تا بعدا استفاده کنم.‏</Item>
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">هنگامی که بریده‌ای را دریافت می‌کنم، اگر آی‌پی یا نام رایانه‌ی فرستنده در فهرست بود، آن را در بریده‌دان قرار بده.‏ در غیر این صورت آن را کنار بریده‌های ذخیره شده نگه دار تا بعدا استفاده کنم</Item>
 		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">آی‌پی/نام رایانه\n(با ویرگول لاتین , جدا کنید)</Item>
 		<Item English_Text = "Disable Recieving Clips" ID = "2026">غیرفعال کردن دریافت بریده‌ها</Item>
 		<Item English_Text = "Group Password" ID = "2054">رمز گروه</Item>
@@ -205,18 +238,28 @@
 		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">اگر «ارسال همه‌ی بریده‌ها» را انتخاب کرده باشید آنوقت همه‌ی بریده‌های موجود در این رایانه برای رایانه‌ی دیگر فرستاده می‌شود. اگر آن را انتخاب نکرده باشید این گزینه را فقط در منوی کلیک راست می‌بینید تا بتوانید بریده‌ای برای آن رایانه ارسال کنید.‏</Item>
 		<Item English_Text = "Log Send Receive Commands" ID = "1042">ثبت دستورات ارسال و دریافت</Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">دوستان</Item>
+		
+		//Added in 9-11-09
 		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">ارسال همه‌ی بریده‌ها</Item>
         	<Item English_Text = "IP/Name" ID = "IP_Name">آی‌پی/نام</Item>
-        	<Item English_Text = "Descriptions" ID = "Descriptions">توضیح</Item>
+        	<Item English_Text = "Descriptions" ID = "Descriptions">توضیحات</Item>
+			
+		//Added By IRIman
+			<Item English_Text = "Remote Files" ID = "2128">‫فایل‌های دور از دسترس</Item>
+			<Item English_Text = "Request using IP Address" ID = "2127">درخواست از طریق آی‌پی</Item>
+			<Item English_Text = "Request using Host Name" ID = "2129">‫درخواست از طریق نام Host</Item>
 	</Ditto_Options_Friends>
-
 	<Ditto_Options_Friends_Detail>
-		<Item English_Text = "Send All Copies to this friend" ID = "1015">‫«ارسال همه‌ی بریده‌ها» به او</Item>
+		<Item English_Text = "Send All Copies to this friend" ID = "1015">‫«ارسال همه‌ی بریده‌ها» به او‬</Item>
 		<Item English_Text = "IP/Name" ID = "2052">آی‌پی/نام</Item>
-		<Item English_Text = "Description" ID = "2053">توضیح</Item>
+		<Item English_Text = "Description" ID = "2053">توضیحات</Item>
 		<Item English_Text = "Friend Details" ID = "-1">مشخصات دوست</Item>
+		
+		//Added By IRIman
+		<Item English_Text = "OK" ID = "1">‫قبول</Item>
+		<Item English_Text = "Cancel" ID = "2">‫لغو</Item>
+		
 	</Ditto_Options_Friends_Detail>
-
 	<Ditto_Options_Stats>
 		<Item English_Text = "Odometer" ID = "2052">مسافت‌سنج کل</Item>
 		<Item English_Text = "Trip Odometer" ID = "2053">مسافت‌سنج سفر</Item>
@@ -226,7 +269,7 @@
 		<Item English_Text = "Pastes" ID = "2057">درج‌ها</Item>
 		<Item English_Text = "Reset" ID = "1006">از اول</Item>
 		<Item English_Text = "Saved Copies" ID = "2058">بریده‌های ذخیره شده</Item>
-		<Item English_Text = "Saved Copy Data" ID = "2059"> اطلاعات بریده ذخیره شده</Item>
+		<Item English_Text = "Saved Copy Data" ID = "2059">اطلاعات بریده ذخیره شده</Item>
 		<Item English_Text = "Remove All" ID = "1013">حذف همه</Item>
 		<Item English_Text = "Last Started" ID = "2060">آخرین باری که اجرا شده</Item>
 		<Item English_Text = "Database Size" ID = "2061">حجم پایگاه داده</Item>
@@ -235,7 +278,6 @@
 		<Item English_Text = "Since Last Start" ID = "2068">از آخرین باری که اجرا شده</Item>
 		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true">آمار</Item>
 	</Ditto_Options_Stats>
-
 	<Ditto_Options_Supported_Types_Add>
 		<Item English_Text = "Main Types" ID = "2052">قالب‌های اصلی</Item>
 		<Item English_Text = "Custom Type" ID = "2053">قالب‌های دلخواه</Item>
@@ -246,14 +288,12 @@
 		<Item English_Text = "Cancel" ID = "2">لغو</Item>
 		<Item English_Text = "Add Supported Type" ID = "-1">افزودن قالب پشتیبانی شده</Item>
 	</Ditto_Options_Supported_Types_Add>
-
 	<Ditto_Move_To_Groups>
 		<Item English_Text = "New Group" ID = "1040">گروه جدید</Item>
 		<Item English_Text = "OK" ID = "1">قبول</Item>
 		<Item English_Text = "Cancel" ID = "2">لغو</Item>
 		<Item English_Text = "Move to Group" ID = "-1">انتقال به گروه</Item>
 	</Ditto_Move_To_Groups>
-
 	<Ditto_String_Table>
 		<Item English_Text = "General" ID = "GeneralTitle">عمومی</Item>
 		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">قالب‌های پشتیبانی شده</Item>
@@ -262,20 +302,22 @@
 		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">پنجره‌ی درج سریع</Item>
 		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">میانبرها</Item>
 		<Item English_Text = "About Ditto" ID = "AboutTitle">درباره دیتو</Item>
-		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">خطا هنگام باز کردن پایگاه داده</Item>
+		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">خطا هنگام باز کردن پایگاه داده.‏</Item>
 		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">مقداردهی اولیه DAO/Jet db engine با مشکل مواجه شد.\nبرای دریافت DAO از نشانی زیر\nhttp://ditto-cp.sourceforge.net/dao_setup.exe\nروی بله کلیک کنید.‏\n\nدیتو را بعد از نصب DAO دوباره اجرا کنید.‏</Item>
 		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format">قالب پایگاه داده ناشناخته است</Item>
 		<Item English_Text = "the file will be renamed" ID = "File_Renamed">نام فایل تغییر خواهد کرد</Item>
 		<Item English_Text = "and a new database will be created" ID = "New_Database">و پایگاه جدیدی ساخته می‌شود</Item>
 		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">نسخه‌ی جدیدی برای دیتو موجود است.‏\nبرای جزئیات بیشتر از ditto-cp.sourceforge.net بازدید کنید\n\nنسخه‌ی فعلی</Item>
 		<Item English_Text = "Update Version" ID = "Update_Version">به‌روزرسانی</Item>
-		<Item English_Text = "Download updated version?" ID = "Download_Update">نسخه‌ی جدید دریافت شود؟</Item>
-		<Item English_Text = "No updates available" ID = "No_Updates">نسخه‌ی جدیدی وجود ندارد</Item>
+		<Item English_Text = "Download updated version?" ID = "Download_Update">نسخه‌ی جدید دریافت شود؟</Item>			
+		<Item English_Text = "No updates available" ID = "No_Updates">نسخه‌ی جدیدی وجود ندارد</Item>			
 		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">این کار همه‌ی بریده‌ها را حذف می‌کند!‏\n\nادامه می‌دهید؟</Item>
 		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">قطع اتصال از بریده‌دان</Item>
 		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">اتصال به بریده‌دان</Item>
-		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">مقداردهی اولیه DAO/Jet db engine با مشکل مواجه شد.  الآن DAO نصب خواهد شد.‏\n\nدیتو را بعد از نصب DAO دوباره اجرا کنید.‏</Item>
-		<Item English_Text = "NO TARGET" ID = "No_Target">بی‌هدف</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">مقداردهی اولیه DAO/Jet db engine با مشکل مواجه شد.  الآن DAO نصب خواهد شد.‏\n\nدیتو را بعد از نصب DAO دوباره اجرا کنید.</Item>
+		<Item English_Text = "NO TARGET" ID = "No_Target">بدون پنجره هدف</Item>
+		
+		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Prompt when deleting clips" ID = "2039">اعلان هنگام حذف بریده‌ها</Item>
 		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">بریده‌های انتخاب شده حذف شوند؟</Item>
 		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">خطا هنگام وارد کردن بریده</Item>
@@ -288,14 +330,14 @@
 		<Item English_Text = "New Clip" ID = "New_Clip">بریده‌ی جدید</Item>
 		<Item English_Text = "Save" ID = "Save">ذخیره</Item>
 		<Item English_Text = "Save All" ID = "Save_All">ذخیره همه</Item>
-		<Item English_Text = "Close Current Tab" ID = "Close">بستن سربرگ جاری</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">بستن این برگه</Item>
 		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable">مورد جاری فابل اصلاح نیست.  هر بریده باید یکی از قالب‌های بریده را داشته باشد</Item>
 		<Item English_Text = "to be editable" ID = "Editable"> تا بتوان آن را اصلاح کرد</Item>
-		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">آیا می‌خواهید تغییرات را در آن ذخیره کنید؟</Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">آیا می‌خواهید تغییرات این برگه را ذخیره کنید؟‫</Item>
 		<Item English_Text = "Error saving clip" ID = "ErrorSaving">خطا هنگام ذخیره کردن بریده</Item>
 		<Item English_Text = "New" ID = "New">جدید</Item>
-		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">ذخیره کن، ببند و در بریده‌دان قرار بده</Item>
-		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit"></Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">ذخیره بریده، بستن برگه و قرارگرفتن در بریده‌دان</Item>
+		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">ویرایشگر دیتو</Item>
 		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title"></Item>
 		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">خطا هنگام بارگذاری اطلاعات</Item>
 		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2"></Item>
@@ -303,30 +345,40 @@
 		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title"></Item>
 		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1"></Item>
 		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2"></Item>
-		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">دیتو بریده‌ای دریافت نکرد</Item>
-		<Item English_Text = "Add-Ins" ID = "Add_Ins">افزونه‌ها</Item>
+		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3"></Item> 
+		
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Add-Ins" ID = "Add_Ins">افزونه‌ها</Item> 
+		
 		<Item English_Text = "Copy Buffers" ID = "CopyBuffers">حافظه میانجی برای نسخه‌برداری</Item>
+		
 		<Item English_Text = "Search Options" ID = "SearchOptionsTooltip">گزینه‌های جستجو</Item>
 		<Item English_Text = "Groups" ID = "GroupsTooltip">گروه‌ها</Item>
+	
 	</Ditto_String_Table>
-
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">قبول</Item>
 		<Item English_Text = "Cancel" ID = "2">لغو</Item>
 		<Item English_Text = "Apply" ID = "12321">اجرا</Item>
 	</Ditto_Options_Sheet>
-
 	<Ditto_Tray_Icon_Menu>
 		<Item English_Text = "Show Quick Paste" ID = "32773">نمایش پنجره‌ی درج سریع</Item>
 		<Item English_Text = "Options" ID = "32771">گزینه‌ها</Item>
 		<Item English_Text = "Help" ID = "32843">راهنما</Item>
 		<Item English_Text = "Exit" ID = "32772">خروج</Item>
+
+		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Import" ID = "32854">وارد کردن</Item>
 		<Item English_Text = "New Clip" ID = "32868">بریده‌ی جدید</Item>
+		
+		//Added 12/10/11
 		<Item English_Text = "Global Hot Keys" ID = "32872">میانبرهای سراسری</Item>
+		
+		//Added 1/10/15
 		<Item English_Text = "Delete Clip Data" ID = "32886">حذف اطلاعات بریده</Item>
 	</Ditto_Tray_Icon_Menu>
 
+	//Added in 9-11-09
 	<Ditto_Options_CopyBuffers>
 		<Item English_Text = "Copy Buffer 1" ID = "2088">حافظه میانجی 1</Item>
 		<Item English_Text = "Copy" ID = "2079">نسخه‌برداری</Item>
@@ -336,7 +388,8 @@
 		<Item English_Text = "Win" ID = "2085"></Item>
 		<Item English_Text = "Win" ID = "2086"></Item>
 		<Item English_Text = "Win" ID = "2087"></Item>
-		<Item English_Text = "Copy Buffer 2" ID = "2098">حافظه میانجی ۲</Item>
+		
+		<Item English_Text = "Copy Buffer 2" ID = "2098">حافظه میانجی 2</Item>
 		<Item English_Text = "Copy" ID = "2093">نسخه‌برداری</Item>
 		<Item English_Text = "Paste" ID = "2094">درج</Item>
 		<Item English_Text = "Cut" ID = "2097">انتقال</Item>
@@ -344,7 +397,8 @@
 		<Item English_Text = "Win" ID = "2090"></Item>
 		<Item English_Text = "Win" ID = "2092"></Item>
 		<Item English_Text = "Win" ID = "2096"></Item>
-		<Item English_Text = "Copy Buffer 3" ID = "2108">حافظه میانجی ۳</Item>
+		
+		<Item English_Text = "Copy Buffer 3" ID = "2108">حافظه میانجی 3</Item>
 		<Item English_Text = "Copy" ID = "2103">نسخه‌برداری</Item>
 		<Item English_Text = "Paste" ID = "2104">درج</Item>
 		<Item English_Text = "Cut" ID = "2107">انتقال</Item>
@@ -353,7 +407,7 @@
 		<Item English_Text = "Win" ID = "2102"></Item>
 		<Item English_Text = "Win" ID = "2106"></Item>
 	</Ditto_Options_CopyBuffers>
-
+	
 	<Ditto_GlobalHotKeys>
 		<Item English_Text = "Global Hot Keys" ID = "-1">میانبرهای سراسری</Item>
 		<Item English_Text = "Close" ID = "2">بستن</Item>
@@ -365,4 +419,33 @@
 		<Item English_Text = "Registered" ID = "Registered">ثبت شده</Item>
 	</Ditto_GlobalHotKeys>
 
+	//Added 1/10/15
+	<Ditto_Groups_Right_Click_Menu>
+		<Item English_Text = "New Sub Group" ID = "32896">زیرگروه جدید</Item>
+		<Item English_Text = "Delete Group" ID = "32897">حذف گروه</Item>
+		<Item English_Text = "Properties" ID = "32898">خصوصیات</Item>	
+	</Ditto_Groups_Right_Click_Menu>
+	
+	//Added 1/10/15
+	<Ditto_DeleteClipData>
+		<Item English_Text = "Delete Clip Data" ID = "-1">حذف اطلاعات بریده</Item>
+		<Item English_Text = "Each clip in Ditto is made of multiple clipboard items, all clipboard items in Ditto are listed below." ID = "2126"></Item>
+		<Item English_Text = "Search Options" ID = "2120">گزینه‌های جستجو</Item>
+		<Item English_Text = "Title" ID = "1042">عنوان</Item>
+		<Item English_Text = "Create Date Range" ID = "1043">محدوده تاریخ ایجاد</Item>
+		<Item English_Text = "Format" ID = "1045">قالب</Item>
+		<Item English_Text = "Last Used Range" ID = "1044">آخرین استفاده</Item>
+		<Item English_Text = "Search" ID = "1040">جستجو</Item>
+		<Item English_Text = "Database Size" ID = "2115">حجم پایگاه داده</Item>
+		<Item English_Text = "Selected Size" ID = "2116">انتخاب شده</Item>
+		<Item English_Text = "Selected Count" ID = "2117">تعداد</Item>
+		<Item English_Text = "Delete" ID = "2118">حذف</Item>
+		<Item English_Text = "Cancel" ID = "2">لغو</Item>
+		<Item English_Text = "Title" ID = "Title">عنوان</Item>
+		<Item English_Text = "Created" ID = "Created">ایجادشده در</Item>
+		<Item English_Text = "Last Used" ID = "LastUsed">استفاده‌شده در</Item>
+		<Item English_Text = "Format" ID = "Format">قالب</Item>
+		<Item English_Text = "Data Size" ID = "DataSize">حجم اطلاعات</Item>
+	</Ditto_DeleteClipData>
+	
 </Ditto_Language_File>
