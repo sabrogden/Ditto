@@ -97,7 +97,7 @@ IMPLEMENT_DYNAMIC(CSystemTray, CWnd)
 const UINT CSystemTray::m_nTimerID    = 4567;
 UINT CSystemTray::m_nMaxTooltipLength  = 64;     // This may change...
 const UINT CSystemTray::m_nTaskbarCreatedMsg = ::RegisterWindowMessage(_T("TaskbarCreated"));
-CWnd  CSystemTray::m_wndInvisible;
+CTrayWnd  CSystemTray::m_wndInvisible;
 BOOL CSystemTray::m_bShowWndAnimation;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1073,7 +1073,10 @@ BOOL CSystemTray::RemoveTaskbarIcon(CWnd* pWnd)
 		if (!m_wndInvisible.CreateEx(0, pstrOwnerClass, _T(""), WS_POPUP,
 			CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 			NULL, 0))
+		{
 			return FALSE;
+		}
+		
     }
 	
     pWnd->SetParent(&m_wndInvisible);

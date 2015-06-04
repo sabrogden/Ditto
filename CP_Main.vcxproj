@@ -1630,6 +1630,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="TrayWnd.cpp" />
     <ClCompile Include="UAC_Helper.cpp" />
     <ClCompile Include="UAC_Thread.cpp" />
     <ClCompile Include="WildCardMatch.cpp" />
@@ -1872,6 +1873,7 @@
     <ClInclude Include="sqlite\sqlite3.h" />
     <ClInclude Include="sqlite\sqlite3ext.h" />
     <ClInclude Include="ToolTipEx.h" />
+    <ClInclude Include="TrayWnd.h" />
     <ClInclude Include="UAC_Helper.h" />
     <ClInclude Include="UAC_Thread.h" />
     <ClInclude Include="WildCardMatch.h" />

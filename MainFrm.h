@@ -110,6 +110,7 @@ protected:
 	afx_msg LRESULT OnOptionsClosed(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShowOptions(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnSaveClipboardMessage(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnReAddTaskBarIcon(WPARAM wParam, LPARAM lParam);
 DECLARE_MESSAGE_MAP()public:
     virtual BOOL PreTranslateMessage(MSG *pMsg);
     afx_msg void OnClose();

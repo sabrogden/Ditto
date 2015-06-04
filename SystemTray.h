@@ -48,6 +48,8 @@
 #include <afxtempl.h>
 #include <afxdisp.h>    // COleDateTime
 
+#include "TrayWnd.h"
+
 /////////////////////////////////////////////////////////////////////////////
 // CSystemTray window
 
@@ -176,7 +178,7 @@ protected:
     static const UINT m_nTimerID;
     static UINT  m_nMaxTooltipLength;
     static const UINT m_nTaskbarCreatedMsg;
-    static CWnd  m_wndInvisible;
+    static CTrayWnd  m_wndInvisible;
 	static BOOL	 m_bShowWndAnimation;
 
     static BOOL GetW2K();

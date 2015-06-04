@@ -124,6 +124,7 @@ CString GetProcessName(HWND hWnd);
 #define WM_DELETE_CLIPS_CLOSED	WM_USER	+ 221
 #define WM_OPEN_CLOSE_WINDWOW WM_USER + 222
 #define WM_SAVE_CLIPBOARD WM_USER + 223
+#define WM_READD_TASKBAR_ICON WM_USER + 224
 
 
 #if !defined(_BITSET_)

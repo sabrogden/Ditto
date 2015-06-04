@@ -26,8 +26,7 @@
 
 #define WM_ICON_NOTIFY			WM_APP+10
 #define MYWM_NOTIFYICON (WM_USER+1)
-
-
+	
 IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 
 	BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
@@ -64,6 +63,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_DELETE_CLIPS_CLOSED, OnDeleteClipDataClosed)
 	ON_COMMAND(ID_FIRST_SAVECURRENTCLIPBOARD, &CMainFrame::OnFirstSavecurrentclipboard)
 	ON_MESSAGE(WM_SAVE_CLIPBOARD, &CMainFrame::OnSaveClipboardMessage)
+	ON_MESSAGE(WM_READD_TASKBAR_ICON, OnReAddTaskBarIcon)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -103,7 +103,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     CRect rcScreen;
     GetMonitorRect(0, &rcScreen);
     CPoint cpCenter = rcScreen.CenterPoint();
-    MoveWindow(cpCenter.x, cpCenter.x,  - 2,  - 2);
+    //MoveWindow(cpCenter.x, cpCenter.x,  - 2,  - 2);
 
     //Then set the main window to transparent so it's never shown
     //if it is shown then only the task tray icon
@@ -650,6 +650,7 @@ LRESULT CMainFrame::OnClipboardCopied(WPARAM wParam, LPARAM lParam)
 
 BOOL CMainFrame::PreTranslateMessage(MSG *pMsg)
 {
+	
     // target before mouse messages change the focus
 	/*if(theApp.m_bShowingQuickPaste && WM_MOUSEFIRST <= pMsg->message && pMsg->message <= WM_MOUSELAST)
 	{
@@ -1111,4 +1112,13 @@ void CMainFrame::OnFirstSavecurrentclipboard()
 		}
 	}
 	Log(_T("Start Saving the current clipboard to the database"));
+}
+
+LRESULT CMainFrame::OnReAddTaskBarIcon(WPARAM wParam, LPARAM lParam)
+{
+	if(CGetSetOptions::GetShowIconInSysTray())
+	{
+		m_TrayIcon.AddIcon();
+	}
+	return TRUE;
 }
