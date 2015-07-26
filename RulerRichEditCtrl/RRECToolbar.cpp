@@ -307,7 +307,7 @@ void CRRECToolbar::OnSelchangeSize()
 	
 }
 
-LRESULT CRRECToolbar::OnColorButton( WPARAM, LPARAM ) 
+LRESULT CRRECToolbar::OnColorButton( WPARAM w, LPARAM l) 
 /* ============================================================
 	Function :		CRRECToolbar::OnColorButton
 	Description :	Mapped to the color picker defined 
@@ -323,11 +323,7 @@ LRESULT CRRECToolbar::OnColorButton( WPARAM, LPARAM )
 
    ============================================================*/
 {
-
-	COLORREF color = RGB( 0, 0, 0 );
-	color = m_color.GetColour();
-
-	GetParent()->SendMessage( urm_SETCURRENTFONTCOLOR, 0, ( LPARAM ) color );
+	GetParent()->SendMessage( urm_SETCURRENTFONTCOLOR, 0, ( LPARAM ) w );
 	
 	return 0;
 }

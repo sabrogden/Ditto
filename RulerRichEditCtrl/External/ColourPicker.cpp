@@ -81,11 +81,19 @@ BEGIN_MESSAGE_MAP(CColourPicker, CButton)
     //{{AFX_MSG_MAP(CColourPicker)
     ON_CONTROL_REFLECT_EX(BN_CLICKED, OnClicked)
     ON_WM_CREATE()
+	ON_MESSAGE(CPN_SELENDOK, OnColorButton)
     //}}AFX_MSG_MAP
     //ON_MESSAGE(CPN_SELENDOK,     OnSelEndOK)
     //ON_MESSAGE(CPN_SELENDCANCEL, OnSelEndCancel)
     //ON_MESSAGE(CPN_SELCHANGE,    OnSelChange)
 END_MESSAGE_MAP()
+
+LRESULT CColourPicker::OnColorButton(WPARAM w, LPARAM l)
+{
+	GetParent()->SendMessage(CPN_SELENDOK, w, (LPARAM)l);
+
+	return 0;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // CColourPicker message handlers

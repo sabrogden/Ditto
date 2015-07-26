@@ -58,7 +58,7 @@ protected:
 		// NOTE - the ClassWizard will add and remove member functions here.
 	afx_msg void OnSelchangeFont();
 	afx_msg void OnSelchangeSize();
-	afx_msg LRESULT OnColorButton( WPARAM, LPARAM );
+	afx_msg LRESULT OnColorButton( WPARAM w, LPARAM l);
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()

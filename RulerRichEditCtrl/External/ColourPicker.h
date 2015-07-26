@@ -97,6 +97,7 @@ protected:
     //{{AFX_MSG(CColourPicker)
     afx_msg BOOL OnClicked();
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	LRESULT OnColorButton(WPARAM w, LPARAM l);
     //}}AFX_MSG
     /*afx_msg LRESULT OnSelEndOK(LPARAM lParam, WPARAM wParam);
     afx_msg LRESULT OnSelEndCancel(LPARAM lParam, WPARAM wParam);
