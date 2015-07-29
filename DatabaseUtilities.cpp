@@ -445,10 +445,10 @@ BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg)
 		CRect r;
 		GetMonitorRect(0, r);
 		*popUpMsg = new CDittoPopupWindow();
-		(*popUpMsg)->Create(CRect(r.right - 400, r.bottom - 100, r.right - 10, r.bottom - 10), NULL);
-		(*popUpMsg)->UpdateText(_T("Backing up Ditto's Database"));
+		(*popUpMsg)->Create(CRect(r.right - 400, r.bottom - 100, r.right - 10, r.bottom - 10), NULL);		
 		::SetWindowPos((*popUpMsg)->m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
 		(*popUpMsg)->ShowWindow(SW_SHOW);
+		(*popUpMsg)->UpdateText(_T("Backing up Ditto's Database"));
 	}
 	CString backup = GetFilePath(dbPath);
 
