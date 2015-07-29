@@ -189,31 +189,11 @@ BOOL CToolTipEx::Show(CPoint point)
 		
 		if (rect.right > rcScreen.right)
 		{
-			int diff = rect.right - rcScreen.right;
-
-			int newLeft = rect.left - diff;
-			if (newLeft > rcScreen.left)
-			{
-				rect.left = newLeft;
-			}
-			else
-			{
-				rect.left = rcScreen.left;
-			}
-
 			rect.right = rcScreen.right;
 			m_reducedWindowSize = true;
 		}
 		if (rect.bottom > rcScreen.bottom)
 		{
-			int diff = rect.bottom - rcScreen.bottom;
-
-			int newTop = rect.top - diff;
-			if (newTop > 0)
-			{
-				rect.top = newTop;
-			}
-
 			rect.bottom = rcScreen.bottom;
 			m_reducedWindowSize = true;
 		}
