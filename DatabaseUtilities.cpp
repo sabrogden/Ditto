@@ -223,6 +223,8 @@ BOOL OpenDatabase(CString csDB)
 
 BOOL ValidDB(CString csPath, BOOL bUpgrade)
 {
+	CDittoPopupWindow *popUpMsg = NULL;
+
 	try
 	{
 		BOOL didBackup = FALSE;
@@ -268,7 +270,7 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		catch(CppSQLite3Exception& e)
 		{
 			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix);
+				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
 
  			e.errorCode();
  		}
@@ -281,7 +283,7 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		catch(CppSQLite3Exception& e)
 		{
 			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix);
+				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
 
 			e.errorCode();
 
@@ -299,7 +301,7 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		catch(CppSQLite3Exception& e)
 		{
 			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix);
+				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
 
 			e.errorCode();
 
@@ -332,7 +334,7 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		catch(CppSQLite3Exception& e)
 		{
 			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix);
+				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
 
 			db.execDML(_T("ALTER TABLE Main ADD clipOrder REAL"));
 			db.execDML(_T("ALTER TABLE Main ADD clipGroupOrder REAL"));
@@ -354,7 +356,8 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		catch(CppSQLite3Exception& e)
 		{
 			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix);
+				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
+
 
 			db.execDML(_T("ALTER TABLE Main ADD globalShortCut INTEGER"));
 
@@ -368,7 +371,7 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		catch(CppSQLite3Exception& e)
 		{
 			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix);
+				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
 
 			db.execDML(_T("ALTER TABLE Main ADD lastPasteDate INTEGER"));
 			db.execDML(_T("Update Main set lastPasteDate = lDate"));
@@ -384,7 +387,7 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		catch (CppSQLite3Exception& e)
 		{
 			if (didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix);
+				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
 
 			db.execDML(_T("ALTER TABLE Main ADD stickyClipOrder REAL"));
 			db.execDML(_T("ALTER TABLE Main ADD stickyClipGroupOrder REAL"));
@@ -405,7 +408,7 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 			if(count == 0)
 			{
 				if (didBackup == FALSE)
-					didBackup = BackupDB(csPath, backupFilePrefix);				
+					didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
 
 				db.execDML(_T("Update Main set stickyClipOrder = -(2147483647) where stickyClipOrder IS NULL;"));
 				db.execDML(_T("Update Main set stickyClipGroupOrder = -(2147483647) where stickyClipGroupOrder IS NULL;"));
@@ -420,19 +423,33 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		catch (CppSQLite3Exception& e)
 		{
 			if (didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix);
-
+				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
 
 			e.errorCode();
 		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 
+	if(popUpMsg != NULL)
+	{
+		popUpMsg->CloseWindow();
+		popUpMsg = NULL;
+	}
 	return TRUE;                                                     
 }
 
-BOOL BackupDB(CString dbPath, CString prefix)
+BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg)
 {
+	if ((*popUpMsg) == NULL)
+	{
+		CRect r;
+		GetMonitorRect(0, r);
+		*popUpMsg = new CDittoPopupWindow();
+		(*popUpMsg)->Create(CRect(r.right - 400, r.bottom - 100, r.right - 10, r.bottom - 10), NULL);
+		(*popUpMsg)->UpdateText(_T("Backing up Ditto's Database"));
+		::SetWindowPos((*popUpMsg)->m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+		(*popUpMsg)->ShowWindow(SW_SHOW);
+	}
 	CString backup = GetFilePath(dbPath);
 
 	CInternetUpdate update;
@@ -458,6 +475,11 @@ BOOL BackupDB(CString dbPath, CString prefix)
 	backup = temp;
 
 	BOOL ret = CopyFile(dbPath, backup, TRUE);
+
+	if ((*popUpMsg) != NULL)
+	{
+		(*popUpMsg)->UpdateText(_T("Running Ditto database scripts"));
+	}
 
 	return ret;
 }

@@ -22,7 +22,7 @@ static char THIS_FILE[] = __FILE__;
 
 CWndEx::CWndEx()
 {	
-	SetCaptionColorActive(false, theApp.GetConnectCV());
+	SetCaptionColorActive(false, TRUE);
 	m_crFullSizeWindow.SetRectEmpty();
 	m_lDelayMaxSeconds = 2;
 }
@@ -99,7 +99,7 @@ int CWndEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_DittoWindow.m_bDrawMinimize = false;
 	m_DittoWindow.m_bDrawMaximize = false;
 
-	SetCaptionColorActive(false, theApp.GetConnectCV());
+	SetCaptionColorActive(false, TRUE);
 	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true);
 	SetAutoMaxDelay(CGetSetOptions::GetAutoMaxDelay());
 	

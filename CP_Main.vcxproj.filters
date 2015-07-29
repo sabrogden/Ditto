@@ -388,12 +388,16 @@
     <ClCompile Include="DrawHTML.C">
       <Filter>source</Filter>
     </ClCompile>
+<<<<<<< .mine
+    <ClCompile Include="DittoPopupWindow.cpp" />
+=======
     <ClCompile Include="TrayWnd.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="SpecialPasteOptions.cpp">
       <Filter>source</Filter>
     </ClCompile>
+>>>>>>> .r772
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -834,6 +838,7 @@
     <ClInclude Include="DrawHTML.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="DittoPopupWindow.h" />
     <ClInclude Include="SpecialPasteOptions.h">
       <Filter>header</Filter>
     </ClInclude>

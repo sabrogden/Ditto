@@ -9,6 +9,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
+#include "DittoPopupWindow.h"
+
 #define DEFAULT_DB_NAME "Ditto.db"
 #define ERROR_OPENING_DATABASE	2
 
@@ -27,7 +29,7 @@ BOOL RemoveOldEntries(bool checkIdleTime);
 
 BOOL EnsureDirectory(CString csPath);
 
-BOOL BackupDB(CString dbPath, CString prefix);
+BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg);
 
 //BOOL CopyDownDatabase();
 //BOOL CopyUpDatabase();
