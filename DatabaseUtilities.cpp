@@ -240,7 +240,7 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		db.execQuery(_T("SELECT lID, lParentID, strClipBoardFormat, ooData FROM Data"));
 
 		db.execQuery(_T("SELECT lID, TypeText FROM Types"));
-
+		
 		try
 		{
 			db.execDML(_T("DROP TRIGGER delete_data_trigger"));
@@ -430,9 +430,11 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 
-	if(popUpMsg != NULL)
+	if(popUpMsg != NULL &&
+		IsWindow(popUpMsg->m_hWnd))
 	{
 		popUpMsg->CloseWindow();
+		popUpMsg->DestroyWindow();
 		popUpMsg = NULL;
 	}
 	return TRUE;                                                     
