@@ -388,16 +388,15 @@
     <ClCompile Include="DrawHTML.C">
       <Filter>source</Filter>
     </ClCompile>
-<<<<<<< .mine
-    <ClCompile Include="DittoPopupWindow.cpp" />
-=======
+    <ClCompile Include="DittoPopupWindow.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
     <ClCompile Include="TrayWnd.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="SpecialPasteOptions.cpp">
       <Filter>source</Filter>
     </ClCompile>
->>>>>>> .r772
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -838,7 +837,9 @@
     <ClInclude Include="DrawHTML.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="DittoPopupWindow.h" />
+    <ClInclude Include="DittoPopupWindow.h">
+      <Filter>header</Filter>
+    </ClInclude>
     <ClInclude Include="SpecialPasteOptions.h">
       <Filter>header</Filter>
     </ClInclude>
@@ -1113,6 +1114,12 @@
       <Filter>res</Filter>
     </None>
     <None Include="res\yellow_star_32_32.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\Ditto3.ico">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\Ditto3_NoCopyCb.ico">
       <Filter>res</Filter>
     </None>
   </ItemGroup>
