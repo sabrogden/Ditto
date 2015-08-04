@@ -1,3 +1,25 @@
+3.20.74 8-4-2015
+
+- always refresh the description window when an image is shown, if two images were the same size it would not be refreshed
+- Updated Czech language file
+- Fixed crash when adding a new group through right click menu in groups window
+- Added regular expression filtering
+- Added option to request remote files by either the ip or host name
+- Fixed issue with N and P to go to next and previous descriptions
+- If showing task bar then minimize when closing ditto's main window
+- Added commands to export bitmaps to file and to export clip to google translate
+- Sped up loading list with large databases 30000+ entries
+- Don't remove search data when diffing clips or when opening google translate
+- Unregister global shortcut keys when using right click - quick properties - remove hot key
+- use icu in sqlite for better international character searches - http://www.sqlite.org/faq.html#q18
+- Keep line feeds when display search results
+- fixed issue with always on top, sometimes it was not setting it to be always on top
+- Updated version of Persion translation
+- Added option to save the current clipboard to Ditto. Usefull if you turn off clipboard monitoring and only save the clips you want.
+- Re add the taskbar icon when explorer is restarted
+- Fixed issue with not applying color selection in clip editor
+- added message window when backing up db and running script updates
+
 3.20 1-10-15
 
 - View clip as QRCode
