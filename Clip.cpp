@@ -537,7 +537,8 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 	{
 		m_CRC = GenerateCRC();
 
-		if(bCheckForDuplicates)
+		if(bCheckForDuplicates &&
+			m_parentId < 0)
 		{	
 			int nID = FindDuplicate();
 			if(nID >= 0)
@@ -961,7 +962,7 @@ double CClip::GetNewOrder(int parentId, int clipId)
 		}
 		else
 		{
-			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipGroupOrder, mText FROM Main WHERE lParentID = %d ORDER BY clipOrder DESC LIMIT 1"), parentId);			
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipGroupOrder, mText FROM Main WHERE lParentID = %d ORDER BY clipGroupOrder DESC LIMIT 1"), parentId);			
 			if(q.eof() == false)
 			{
 				existingMaxOrder = q.getFloatField(_T("clipGroupOrder"));
