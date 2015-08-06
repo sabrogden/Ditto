@@ -480,6 +480,12 @@ public:
 
 	static BOOL GetShowGroupsInMainList();
 	static void SetShowGroupsInMainList(BOOL val);
+
+	static void SetGroupDoubleClickTimeMS(int val);
+	static int GetGroupDoubleClickTimeMS();
+
+	static void SetSaveToGroupTimeoutMS(int val);
+	static int GetSaveToGroupTimeoutMS();
 };
 
 // global for easy access and for initialization of fast access variables

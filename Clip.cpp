@@ -543,6 +543,7 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 			if(nID >= 0)
 			{
 				MakeLatestOrder();
+				MakeLatestGroupOrder();
 
 				CString sql;
 				
@@ -551,9 +552,21 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 
 				int ret = theApp.m_db.execDML(sql);
 
+				int groupRet = -1;
+
+				if(m_parentId > -1)
+				{
+					sql.Format(_T("UPDATE Main SET clipGroupOrder = %f where lID = %d;"), 
+						m_clipGroupOrder, nID);
+
+					groupRet = theApp.m_db.execDML(sql);
+				}
+
+
 				m_id = nID;
 
-				Log(StrF(_T("Found duplicate clip in db, Id: %d, crc: %d, NewOrder: %f, Ret: %d, SQL: %s"), nID, m_CRC, m_clipOrder, ret, sql));
+				Log(StrF(_T("Found duplicate clip in db, Id: %d, ParentId: %d crc: %d, NewOrder: %f, GroupOrder %f, Ret: %d, GroupRet: %d, SQL: %s"), 
+										nID, m_parentId, m_CRC, m_clipOrder, m_clipGroupOrder, ret, groupRet, sql));
 
 				return true;
 			}
@@ -667,7 +680,7 @@ bool CClip::AddToMainTable()
 
 		m_id = (long)theApp.m_db.lastRowId();
 
-		Log(StrF(_T("Added clip to main table, Id: %d, Desc: %s, Order: %f, GroupOrder: %f"), m_id, m_Desc, m_clipOrder, m_clipGroupOrder));
+		Log(StrF(_T("Added clip to main table, Id: %d, ParentId: %d Desc: %s, Order: %f, GroupOrder: %f"), m_id, m_parentId, m_Desc, m_clipOrder, m_clipGroupOrder));
 
 		m_LastAddedCRC = m_CRC;
 		m_lastAddedID = m_id;
@@ -918,6 +931,14 @@ double CClip::GetNewLastSticky(int parentId, int clipId)
 void CClip::MakeLatestOrder()
 {
 	m_clipOrder = GetNewOrder(-1, m_id);
+}
+
+void CClip::MakeLatestGroupOrder()
+{
+	if(m_parentId > -1)
+	{
+		m_clipGroupOrder = GetNewOrder(m_parentId, m_id);
+	}
 }
 
 double CClip::GetNewOrder(int parentId, int clipId)
@@ -1267,6 +1288,7 @@ int CClipList::AddToDB(bool bLatestOrder)
 		if(bLatestOrder)
 		{
 			pClip->MakeLatestOrder();
+			pClip->MakeLatestGroupOrder();
 		}
 
 		pClip->m_Time = CTime::GetCurrentTime().GetTime();

@@ -129,6 +129,7 @@ public:
 	bool ModifyMainTable();
 	bool SaveFromEditWnd(BOOL bUpdateDesc);
 	void MakeLatestOrder();
+	void MakeLatestGroupOrder();
 	void MakeStickyTop(int parentId);
 	void MakeStickyLast(int parentId);
 	void RemoveStickySetting(int parentId);

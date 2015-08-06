@@ -2218,3 +2218,23 @@ void CGetSetOptions::SetShowGroupsInMainList(BOOL val)
 {
 	SetProfileLong(_T("ShowGroupsInMainList"), val);
 }
+
+void CGetSetOptions::SetGroupDoubleClickTimeMS(int val)
+{
+	SetProfileLong(_T("GroupDoubleClickTimeMS"), val);
+}
+
+int CGetSetOptions::GetGroupDoubleClickTimeMS()
+{
+	return GetProfileLong(_T("GroupDoubleClickTimeMS"), 500);
+}
+
+void CGetSetOptions::SetSaveToGroupTimeoutMS(int val)
+{
+	SetProfileLong(_T("SaveToGroupTimeoutMS"), val);
+}
+
+int CGetSetOptions::GetSaveToGroupTimeoutMS()
+{
+	return GetProfileLong(_T("SaveToGroupTimeoutMS"), 1000);
+}

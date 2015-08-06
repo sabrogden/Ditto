@@ -17,6 +17,7 @@
 #define ACTIVE_WINDOW_TIMER				9
 #define TEXT_ONLY_PASTE					11
 #define READ_RANDOM_DB_FILE				12
+#define GROUP_DOUBLE_CLICK				13
 
 class CMainFrame: public CFrameWnd
 {
@@ -63,6 +64,8 @@ public:
 	CDialog *m_pGlobalClips;
 	CDialog *m_pDeleteClips;
 	CPropertySheet *m_pOptions;
+	int m_doubleClickGroupId;
+	DWORD m_doubleClickGroupStartTime;
 
     void DoDittoCopyBufferPaste(int nCopyBuffer);
     void DoFirstTenPositionsPaste(int nPos);

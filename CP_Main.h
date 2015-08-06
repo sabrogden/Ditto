@@ -181,6 +181,10 @@ public:
 
 	void RefreshShowInTaskBar();
 
+	void SetActiveGroupId(int groupId);
+	int GetActiveGroupId();
+
+
 public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
@@ -192,4 +196,7 @@ public:
 protected:
 	void ShowCommandLineError(CString csTitle, CString csMessage);
 	CUAC_Thread *m_pUacPasteThread;
+
+	int m_activeGroupId;
+	DWORD m_activeGroupStartTime;
 };

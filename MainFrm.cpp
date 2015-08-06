@@ -85,6 +85,8 @@ CMainFrame::CMainFrame()
 	m_pGlobalClips = NULL;
 	m_pOptions = NULL;
 	m_pDeleteClips = NULL;
+	m_doubleClickGroupId = -1;
+	m_doubleClickGroupStartTime = 0;
 }
 
 CMainFrame::~CMainFrame()
@@ -451,16 +453,51 @@ void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarg
 {
 	try
 	{
-		if (theApp.EnterGroupID(dbId, FALSE, TRUE))
-		{			
-			theApp.m_activeWnd.TrackActiveWnd(true);
-			
-			StartKeyModifyerTimer();
+		bool isGroup = false;
+		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT bIsGroup FROM Main WHERE lID = %d"), dbId);
+		if(q.eof() == false)
+		{
+			if(q.getIntField(_T("bIsGroup")) > 0)
+			{
+				isGroup = true;
+			}
+		}
+		
+		if(isGroup)
+		{
+			int maxDiff = CGetSetOptions::GetGroupDoubleClickTimeMS();
+			DWORD diff = GetTickCount() - m_doubleClickGroupStartTime;		
 
-			m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
+			if(m_doubleClickGroupId == dbId &&
+				diff < maxDiff)
+			{
+				Log(StrF(_T("Second Press of group hot key, group Id: %d, Sending copy to save selection to this group"), dbId));
+				
+				KillTimer(GROUP_DOUBLE_CLICK);
+				m_doubleClickGroupId = -1;
+				m_doubleClickGroupStartTime = 0;
+
+				theApp.SetActiveGroupId(dbId);
+				theApp.m_activeWnd.SendCopy();
+			}
+			else
+			{
+				m_doubleClickGroupId = dbId;
+				m_doubleClickGroupStartTime = GetTickCount();
+
+				int doubleClickTime = CGetSetOptions::GetGroupDoubleClickTimeMS();
+
+				SetTimer(GROUP_DOUBLE_CLICK, doubleClickTime, 0);
+
+				Log(StrF(_T("First Press of group hot key, group Id: %d, timout: %d"), dbId, doubleClickTime));
+			}
 		}
 		else
 		{
+			KillTimer(GROUP_DOUBLE_CLICK);
+			m_doubleClickGroupId = -1;
+			m_doubleClickGroupStartTime = 0;
+
 			BOOL bItWas = g_Opt.m_bUpdateTimeOnPaste;
 			if (updateClipTime != -1)
 			{				
@@ -590,7 +627,38 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 			{
 				m_thread.FireReadDbFile();
 			}
-		break;
+			break;
+
+		case GROUP_DOUBLE_CLICK:
+			{
+				KillTimer(GROUP_DOUBLE_CLICK);			
+
+				Log(StrF(_T("Processing single click of groupId %d in timer, opening ditto to this group"), m_doubleClickGroupId));
+
+				int maxDiff = (CGetSetOptions::GetGroupDoubleClickTimeMS() * 1.5);
+				DWORD diff = GetTickCount() - m_doubleClickGroupStartTime;					
+
+				if(diff < maxDiff)
+				{					
+					if(m_doubleClickGroupId > -1)
+					{
+						if (theApp.EnterGroupID(m_doubleClickGroupId, FALSE, TRUE))
+						{
+							theApp.m_activeWnd.TrackActiveWnd(true);
+							StartKeyModifyerTimer();
+							m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
+						}
+					}
+				}
+				else
+				{	
+					Log(StrF(_T("Something happened and we didn't process the group timer in time, Id: %d, Diff ms: %d, maxDiff: %d"), m_doubleClickGroupId, diff, maxDiff));
+				}
+
+				m_doubleClickGroupId = -1;
+				m_doubleClickGroupStartTime = 0;
+			}
+			break;
     }
 
     CFrameWnd::OnTimer(nIDEvent);

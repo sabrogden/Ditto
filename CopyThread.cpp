@@ -61,6 +61,12 @@ void CCopyThread::OnClipboardChange()
 	if(!m_LocalConfig.m_bCopyOnChange)
 		return;
 	
+	int groupId = theApp.GetActiveGroupId();
+	if(groupId > -1)
+	{
+		Log(StrF(_T("LoadFromClipboard - loading clips into groupId: %d"), groupId));
+	}
+
 	CClip* pClip = new CClip;
 
 	CClipTypes* pSupportedTypes = m_LocalConfig.m_pSupportedTypes;
@@ -131,6 +137,12 @@ void CCopyThread::OnClipboardChange()
 	{
 		delete pClip;
 		return; // error
+	}
+
+	if(pClip != NULL &&
+		groupId > -1)
+	{
+		pClip->m_parentId = groupId;
 	}
 	
 	if(m_LocalConfig.m_bAsyncCopy)

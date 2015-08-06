@@ -107,6 +107,8 @@ CCP_MainApp::CCP_MainApp()
 {
 	theApp.m_activeWnd.TrackActiveWnd(false);
 
+	m_activeGroupId = -1;
+	m_activeGroupStartTime = 0;
 	m_pUacPasteThread = NULL;
 	m_bAppRunning = false;
 	m_bAppExiting = false;
@@ -1106,4 +1108,28 @@ void CCP_MainApp::RefreshShowInTaskBar()
 	{
 		m_pMainFrame->RefreshShowInTaskBar();
 	}
+}
+
+void CCP_MainApp::SetActiveGroupId(int groupId)
+{
+	m_activeGroupId = groupId;
+	m_activeGroupStartTime = GetTickCount();
+}
+
+int CCP_MainApp::GetActiveGroupId()
+{
+	int ret = -1;
+	DWORD maxDiff = CGetSetOptions::GetSaveToGroupTimeoutMS();
+	DWORD diff = GetTickCount() - m_activeGroupStartTime;
+
+	if(m_activeGroupId > -1 &&
+		diff < maxDiff)
+	{
+		ret = m_activeGroupId;
+	}
+
+	m_activeGroupId = -1;
+	m_activeGroupStartTime = 0;
+
+	return ret;
 }
