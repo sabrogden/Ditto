@@ -6,6 +6,7 @@
 #include "EditFrameWnd.h"
 #include "MainFrmThread.h"
 #include "ClipboardSaveRestore.h"
+#include "PowerManager.h"
 
 
 #define CLOSE_WINDOW_TIMER				1	
@@ -66,6 +67,7 @@ public:
 	CPropertySheet *m_pOptions;
 	int m_doubleClickGroupId;
 	DWORD m_doubleClickGroupStartTime;
+	CPowerManager m_PowerManager;
 
     void DoDittoCopyBufferPaste(int nCopyBuffer);
     void DoFirstTenPositionsPaste(int nPos);
@@ -82,6 +84,7 @@ public:
 
     void ShowEditWnd(CClipIDs &Ids);
     CEditFrameWnd *m_pEditFrameWnd;
+
 
     // Generated message map functions
 protected:
@@ -123,4 +126,5 @@ DECLARE_MESSAGE_MAP()public:
 	afx_msg void OnFirstGlobalhotkeys();
 	afx_msg void OnFirstDeleteclipdata();
 	afx_msg void OnFirstSavecurrentclipboard();
+	afx_msg LRESULT OnReOpenDatabase(WPARAM wParam, LPARAM lParam);
 };

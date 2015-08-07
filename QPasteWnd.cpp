@@ -4009,14 +4009,15 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
         CString cs;
 
         int id = m_lstHeader.GetItemData(pInfo->lItem);
-        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText, lDate, lShortCut, clipOrder, stickyClipOrder, lDontAutoDelete, QuickPasteText, lastPasteDate, globalShortCut FROM Main WHERE lID = %d"), id);
+        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText, lDate, lShortCut, clipOrder, clipGroupOrder, stickyClipOrder, lDontAutoDelete, QuickPasteText, lastPasteDate, globalShortCut FROM Main WHERE lID = %d"), id);
         if(q.eof() == false)
         {
             cs = q.getStringField(1);
             cs += "\n\n";
 
             #ifdef _DEBUG
-                cs += StrF(_T("(Index = %d) (DB ID = %d) (Seq = %f) (Sticky Seq = %f)\n"), pInfo->lItem, q.getIntField(_T("lID")), q.getFloatField(_T("clipOrder")), q.getFloatField(_T("stickyClipOrder")));
+                cs += StrF(_T("(Index = %d) (DB ID = %d) (Seq = %f) (Group Seq = %f) (Sticky Seq = %f)\n"), pInfo->lItem, q.getIntField(_T("lID")), 
+													q.getFloatField(_T("clipOrder")), q.getFloatField(_T("clipGroupOrder")), q.getFloatField(_T("stickyClipOrder")));
             #endif 
 
             COleDateTime time((time_t)q.getIntField(_T("lDate")));

@@ -582,6 +582,7 @@
     <ClCompile Include="MessagePumpThread.cpp" />
     <ClCompile Include="MyDropTarget.cpp" />
     <ClCompile Include="Popup.cpp" />
+    <ClCompile Include="PowerManager.cpp" />
     <ClCompile Include="QPasteWndThread.cpp" />
     <ClCompile Include="QRCodeViewer.cpp" />
     <ClCompile Include="QRCode\bitstream.c">
@@ -1852,6 +1853,7 @@
     <ClInclude Include="MyDropTarget.h" />
     <ClInclude Include="NumberEdit.h" />
     <ClInclude Include="Popup.h" />
+    <ClInclude Include="PowerManager.h" />
     <ClInclude Include="QListCtrl.h" />
     <ClInclude Include="QPasteWndThread.h" />
     <ClInclude Include="QRCodeViewer.h" />

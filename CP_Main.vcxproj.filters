@@ -397,6 +397,7 @@
     <ClCompile Include="SpecialPasteOptions.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="PowerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -846,6 +847,7 @@
     <ClInclude Include="TrayWnd.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="PowerManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -1114,12 +1116,6 @@
       <Filter>res</Filter>
     </None>
     <None Include="res\yellow_star_32_32.png">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\Ditto3.ico">
-      <Filter>res</Filter>
-    </None>
-    <None Include="res\Ditto3_NoCopyCb.ico">
       <Filter>res</Filter>
     </None>
   </ItemGroup>

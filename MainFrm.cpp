@@ -64,6 +64,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_FIRST_SAVECURRENTCLIPBOARD, &CMainFrame::OnFirstSavecurrentclipboard)
 	ON_MESSAGE(WM_SAVE_CLIPBOARD, &CMainFrame::OnSaveClipboardMessage)
 	ON_MESSAGE(WM_READD_TASKBAR_ICON, OnReAddTaskBarIcon)
+	ON_MESSAGE(WM_REOPEN_DATABASE, &CMainFrame::OnReOpenDatabase)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -100,6 +101,8 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     {
         return  - 1;
     }
+
+	m_PowerManager.Start(m_hWnd);
 
     //Center the main window so message boxes are in the center
     CRect rcScreen;
@@ -746,6 +749,8 @@ void CMainFrame::OnClose()
 
     theApp.BeforeMainClose();
 
+	m_PowerManager.Close();
+
     CFrameWnd::OnClose();
 }
 
@@ -1190,3 +1195,23 @@ LRESULT CMainFrame::OnReAddTaskBarIcon(WPARAM wParam, LPARAM lParam)
 	}
 	return TRUE;
 }
+
+LRESULT CMainFrame::OnReOpenDatabase(WPARAM wParam, LPARAM lParam)
+{
+	Log(StrF(_T("OnReOpenDatabase, closing and reopening database")));
+
+	try
+	{
+		m_quickPaste.CloseQPasteWnd();
+		theApp.m_db.close();
+		OpenDatabase(CGetSetOptions::GetDBPath());
+	}
+	CATCH_SQLITE_EXCEPTION
+
+	return TRUE;
+}
+
+
+
+
+
