@@ -193,6 +193,39 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 		::ShowWindow(::GetDlgItem(m_hWnd, IDC_HOTKEY_MOVE_TO_GROUP), SW_HIDE);
 		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_WIN_MOVE_TO_GROUP), SW_HIDE);
 		::ShowWindow(::GetDlgItem(m_hWnd, IDC_HOT_KEY_GLOBAL_MOVE_TO_GROUP), SW_HIDE);
+
+		CRect anchorRect;
+		::GetWindowRect(::GetDlgItem(m_hWnd, IDC_STATIC_HOT_KEY_MOVE_TO_GROUP), &anchorRect);
+		ScreenToClient(&anchorRect);
+		
+
+		HWND hwnd = ::GetTopWindow(this->GetSafeHwnd());
+		// while we have a valid hwnd, 
+		// loop through all child windows
+		while (hwnd)
+		{
+			CRect rect;
+			::GetWindowRect(hwnd, &rect);
+			ScreenToClient(&rect);
+
+			if(rect.top > anchorRect.bottom)
+			{
+				::MoveWindow(hwnd, rect.left, 
+					rect.top - (anchorRect.Height()+4), rect.Width(), 
+					rect.Height(), TRUE);
+			}
+
+			// do something with the hwnd
+			// and get the next child control's hwnd
+			hwnd = ::GetNextWindow(hwnd, GW_HWNDNEXT);
+		}
+
+		CRect rect2;
+		::GetWindowRect(m_hWnd, &rect2);
+
+		::MoveWindow(m_hWnd, rect2.left, 
+				rect2.top, rect2.Width(), 
+				rect2.Height() - (anchorRect.Height()+4), TRUE);
 	}
 }
 
