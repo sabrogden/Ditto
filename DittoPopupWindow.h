@@ -8,6 +8,7 @@ public:
 	~CDittoPopupWindow();
 
 	void UpdateText(CString text);
+	void SetProgressBarPercent(int percent);
 	
 protected:
 	DECLARE_MESSAGE_MAP()
@@ -17,6 +18,7 @@ protected:
 
 
 	CStatic m_textLabel;
+	CProgressCtrl m_progressWnd;
 	CFont m_font;
 
 	void PumpMessages();

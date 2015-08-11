@@ -30,6 +30,11 @@ int CDittoPopupWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_font.CreateFont(-theApp.m_metrics.PointsToPixels(12), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("MS Sans Serif"));
 	m_textLabel.Create(_T("test"), WS_CHILD | WS_VISIBLE | SS_CENTERIMAGE, CRect(0, 0, 0, 0), this);
 	m_textLabel.SetFont(&m_font);
+	
+
+	m_progressWnd.Create(WS_CHILD|PBS_SMOOTH, CRect(0, 0, 0, 0), this, 2);
+
+	m_progressWnd.SetRange(0, 100);
 
 	SetWindowText(_T("Running Ditto Updates"));
 
@@ -51,15 +56,27 @@ void CDittoPopupWindow::UpdateText(CString text)
 	PumpMessages();
 }
 
+
+void CDittoPopupWindow::SetProgressBarPercent(int percent)
+{
+	m_progressWnd.ShowWindow(SW_SHOW);
+	m_progressWnd.SetPos(percent);
+	PumpMessages();
+}
+
 void CDittoPopupWindow::OnSize(UINT nType, int cx, int cy)
 {
 	CWndEx::OnSize(nType, cx, cy);
 
 	if(m_textLabel.m_hWnd != NULL)
 	{
-		m_textLabel.MoveWindow(0, 0, cx, cy);
+		m_textLabel.MoveWindow(10, 0, cx-20, cy-50);
 	}
-	
+
+	if(m_progressWnd.m_hWnd != NULL)
+	{
+		m_progressWnd.MoveWindow(10, cy-40, cx-20, 30);
+	}	
 }
 
 HBRUSH CDittoPopupWindow::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)

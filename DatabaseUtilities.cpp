@@ -232,7 +232,7 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 
 		CppSQLite3DB db;
 		db.open(csPath);
-
+		
 		db.execQuery(_T("SELECT lID, lDate, mText, lShortCut, lDontAutoDelete, ")
 								_T("CRC, bIsGroup, lParentID, QuickPasteText ")
 								_T("FROM Main"));
@@ -463,7 +463,7 @@ BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg)
 		CRect r;
 		GetMonitorRect(0, r);
 		*popUpMsg = new CDittoPopupWindow();
-		(*popUpMsg)->Create(CRect(r.right - 400, r.bottom - 100, r.right - 10, r.bottom - 10), NULL);		
+		(*popUpMsg)->Create(CRect(r.right - 400, r.bottom - 130, r.right - 10, r.bottom - 10), NULL);		
 		::SetWindowPos((*popUpMsg)->m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
 		(*popUpMsg)->ShowWindow(SW_SHOW);
 		(*popUpMsg)->UpdateText(_T("Backing up Ditto's Database"));
@@ -492,7 +492,53 @@ BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg)
 
 	backup = temp;
 
-	BOOL ret = CopyFile(dbPath, backup, TRUE);
+	BOOL ret = FALSE;
+
+	try
+	{
+		CFile file;
+		CFileException ex;
+		if(file.Open(dbPath, CFile::modeRead|CFile::typeBinary|CFile::shareDenyNone, &ex))
+		{
+			ULONGLONG fileSize = file.GetLength();
+			ULONGLONG totalReadSize = 0;
+			int percentageComplete = 0;
+			UINT readBytes = 0;
+			char *pBuffer = new char[65536];
+			if(pBuffer != NULL)
+			{
+				CFile writeFile;
+				if(writeFile.Open(backup, CFile::modeCreate|CFile::modeWrite|CFile::typeBinary|CFile::shareDenyNone, &ex))
+				{
+					do
+					{
+						readBytes = file.Read(pBuffer, 65536);
+						writeFile.Write(pBuffer, readBytes);
+						totalReadSize+= readBytes;
+
+						int percent = ((totalReadSize * 100) / fileSize);
+						if(percent != percentageComplete)
+						{
+							percentageComplete = percent;
+							(*popUpMsg)->SetProgressBarPercent(percentageComplete);
+						}
+
+					}while(readBytes >= 65536);
+
+					writeFile.Close();
+
+					ret = TRUE;
+				}
+			}
+
+			file.Close();
+		}
+	}
+	catch(...)
+	{
+
+	}
+	//BOOL ret = CopyFile(dbPath, backup, TRUE);
 
 	if ((*popUpMsg) != NULL)
 	{
