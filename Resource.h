@@ -148,6 +148,7 @@
 #define IDC_HOT_KEY_GLOBAL              1026
 #define IDC_COMPACT_REPAIR              1027
 #define IDC_NAMED_PASTE                 1027
+#define IDC_HOT_KEY_GLOBAL_MOVE_TO_GROUP 1027
 #define IDC_BT_COMPACT_AND_REPAIR       1028
 #define IDC_CHECK_UPDATES               1029
 #define IDC_CHECK_FOR_UPDATES           1030
@@ -189,6 +190,7 @@
 #define IDC_DISPLAY_IN_SYSTEMTRAY       2003
 #define IDD_OPTIONS_GENERAL             2003
 #define IDC_HOTKEY_TEXT_ONLY            2003
+#define IDC_HOTKEY_MOVE_TO_GROUP        2003
 #define IDD_OPTIONS_TYPES               2004
 #define IDC_START_ON_STARTUP            2004
 #define IDC_HOTKEY_SAVE_CLIPBOARD       2004
@@ -265,6 +267,8 @@
 #define IDC_STATIC_DATE2                2043
 #define IDC_CHECK_WIN3                  2044
 #define IDC_STATIC_AMOUNT               2044
+#define IDC_STATIC_HOT_KEY2             2044
+#define IDC_STATIC_HOT_KEY_MOVE_TO_GROUP 2044
 #define IDC_CHECK_WIN4                  2045
 #define IDC_STATIC_SOUND                2045
 #define IDC_CHECK_WIN5                  2046
@@ -341,6 +345,7 @@
 #define IDC_WIN_COPY_3                  2100
 #define IDC_EDIT_PROPERTIES             2100
 #define IDC_PASTE_3                     2101
+#define IDC_CHECK_WIN_MOVE_TO_GROUP     2101
 #define IDC_WIN_PASTE_3                 2102
 #define IDC_TIME_CREATE_START           2102
 #define IDC_STATIC_COPY_3               2103

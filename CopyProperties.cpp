@@ -49,6 +49,8 @@ void CCopyProperties::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_DATE_LAST_USED, m_lastPasteDate);
 	DDX_Check(pDX, IDC_NEVER_AUTO_DELETE, m_bNeverAutoDelete);
 	DDX_Check(pDX, IDC_HOT_KEY_GLOBAL, m_hotKeyGlobal);
+	DDX_Control(pDX, IDC_HOTKEY_MOVE_TO_GROUP, m_MoveToGrouHotKey);
+	DDX_Check(pDX, IDC_HOT_KEY_GLOBAL_MOVE_TO_GROUP, m_moveToGroupHotKeyGlobal);
 	//}}AFX_DATA_MAP
 }
 
@@ -101,7 +103,7 @@ BOOL CCopyProperties::OnInitDialog()
 	{
 		m_description.SetFocus();
 	}
-
+	
 	m_Resize.SetParent(m_hWnd);
 	m_Resize.AddControl(IDC_EDIT_PROPERTIES, DR_SizeHeight | DR_SizeWidth);
 	m_Resize.AddControl(IDC_STATIC_FORMATS, DR_MoveTop);
@@ -147,6 +149,15 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 		::CheckDlgButton(m_hWnd, IDC_CHECK_WIN, BST_CHECKED);
 	}
 
+	m_moveToGroupHotKeyGlobal = Clip.m_globalMoveToGroupShortCut;
+
+	m_MoveToGrouHotKey.SetHotKey(LOBYTE(Clip.m_moveToGroupShortCut), (HIBYTE(Clip.m_moveToGroupShortCut) & ~HOTKEYF_EXT));
+	m_MoveToGrouHotKey.SetRules(HKCOMB_A, 0);
+	if(HIBYTE(Clip.m_moveToGroupShortCut) & HOTKEYF_EXT)
+	{
+		::CheckDlgButton(m_hWnd, IDC_CHECK_WIN_MOVE_TO_GROUP, BST_CHECKED);
+	}
+
 	m_QuickPasteText.SetWindowText(Clip.m_csQuickPaste);
 
 	CString cs;
@@ -174,6 +185,14 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 		m_lCopyData.SetCurSel(selectedRow);
 		m_lCopyData.SetCaretIndex(selectedRow);
 		m_lCopyData.SetAnchorIndex(selectedRow);
+	}
+
+	if(Clip.m_bIsGroup == FALSE)
+	{
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_STATIC_HOT_KEY_MOVE_TO_GROUP), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_HOTKEY_MOVE_TO_GROUP), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_WIN_MOVE_TO_GROUP), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_HOT_KEY_GLOBAL_MOVE_TO_GROUP), SW_HIDE);
 	}
 }
 
@@ -231,6 +250,14 @@ void CCopyProperties::OnOK()
 					}
 				}
 
+				if(CheckMoveToGroupGlobalHotKey(clip) == FALSE)
+				{
+					if(MessageBox(_T("Error registering global move to group hot key\n\nContinue?"), _T(""), MB_YESNO|MB_ICONWARNING) == IDNO)
+					{
+						return;
+					}
+				}
+
 				if(clip.ModifyMainTable())
 				{
 					if(m_bDeletedData)
@@ -258,7 +285,24 @@ BOOL CCopyProperties::CheckGlobalHotKey(CClip &clip)
 	}
 	else
 	{
-		g_HotKeys.Remove(clip.m_id);
+		g_HotKeys.Remove(clip.m_id, CHotKey::PASTE_OPEN_CLIP);
+		ret = TRUE;
+	}
+
+	return ret;
+}
+
+BOOL CCopyProperties::CheckMoveToGroupGlobalHotKey(CClip &clip)
+{
+	BOOL ret = FALSE;
+
+	if(clip.m_globalMoveToGroupShortCut)
+	{
+		ret = g_HotKeys.ValidateClip(clip.m_id, clip.m_moveToGroupShortCut, clip.m_Desc);
+	}
+	else
+	{
+		g_HotKeys.Remove(clip.m_id, CHotKey::MOVE_TO_GROUP);
 		ret = TRUE;
 	}
 
@@ -279,10 +323,27 @@ void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
 
 	Clip.m_shortCut = MAKEWORD(sKeyKode, sModifers); 
 
+	long moveToGroupHotKey = m_MoveToGrouHotKey.GetHotKey();
+
+	short moveToGroupKeyKode = LOBYTE(m_MoveToGrouHotKey.GetHotKey());
+	short moveToGroupModifers = HIBYTE(m_MoveToGrouHotKey.GetHotKey());
+
+	if(moveToGroupKeyKode && ::IsDlgButtonChecked(m_hWnd, IDC_CHECK_WIN_MOVE_TO_GROUP))
+	{
+		moveToGroupModifers |= HOTKEYF_EXT;
+	}
+
+	Clip.m_moveToGroupShortCut = MAKEWORD(moveToGroupKeyKode, moveToGroupModifers); 
+
 	//remove any others that have the same hot key
 	if(Clip.m_shortCut > 0)
 	{
 		theApp.m_db.execDMLEx(_T("UPDATE Main SET lShortCut = 0 where lShortCut = %d AND lID <> %d;"), Clip.m_shortCut, m_lCopyID);
+	}
+
+	if(Clip.m_moveToGroupShortCut > 0)
+	{
+		theApp.m_db.execDMLEx(_T("UPDATE Main SET MoveToGroupShortCut = 0 where MoveToGroupShortCut = %d AND lID <> %d;"), Clip.m_shortCut, m_lCopyID);
 	}
 
 	m_description.GetWindowText(Clip.m_Desc);
@@ -312,6 +373,8 @@ void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
 	}
 
 	Clip.m_globalShortCut = m_hotKeyGlobal;
+
+	Clip.m_globalMoveToGroupShortCut = m_moveToGroupHotKeyGlobal;
 }
 
 void CCopyProperties::OnDeleteCopyData() 

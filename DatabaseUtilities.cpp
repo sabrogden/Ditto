@@ -427,6 +427,22 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 
 			e.errorCode();
 		}
+
+		try
+		{
+			db.execQuery(_T("SELECT MoveToGroupShortCut FROM Main"));
+			db.execQuery(_T("SELECT GlobalMoveToGroupShortCut FROM Main"));			
+		}
+		catch(CppSQLite3Exception& e)
+		{
+			if(didBackup == FALSE)
+				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
+
+			db.execDML(_T("ALTER TABLE Main ADD MoveToGroupShortCut INTEGER"));
+			db.execDML(_T("ALTER TABLE Main ADD GlobalMoveToGroupShortCut INTEGER"));			
+
+			e.errorCode();
+		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 

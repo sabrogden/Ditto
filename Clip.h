@@ -105,6 +105,8 @@ public:
 	double m_stickyClipGroupOrder;
 	BOOL m_globalShortCut;
 	CTime m_lastPasteDate;
+	int m_moveToGroupShortCut;
+	BOOL m_globalMoveToGroupShortCut;
 
 	virtual CString Description() { return m_Desc; }
 	virtual void Description(CString csValue) { m_Desc = csValue; }

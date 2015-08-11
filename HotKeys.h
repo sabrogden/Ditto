@@ -5,6 +5,12 @@
 class CHotKey
 {
 public:
+	enum HotKeyType
+	{ 
+		PASTE_OPEN_CLIP,
+		MOVE_TO_GROUP
+	};
+
 	CString	m_Name;
 	ATOM	m_Atom;
 	DWORD	m_Key; //704 is ctrl-tilda
@@ -12,9 +18,10 @@ public:
 	bool	m_bUnRegisterOnShowDitto;
 	int		m_clipId;
 	int		m_globalId;
+	HotKeyType m_hkType;
 	static int m_nextId;
 	
-	CHotKey( CString name, DWORD defKey = 0, bool bUnregOnShowDitto = false );
+	CHotKey( CString name, DWORD defKey = 0, bool bUnregOnShowDitto = false, HotKeyType hkType = PASTE_OPEN_CLIP );
 	~CHotKey();
 
 	bool	IsRegistered() { return m_bIsRegistered; }
@@ -59,7 +66,7 @@ public:
 	INT_PTR Find( CHotKey* pHotKey );
 	bool Remove( CHotKey* pHotKey ); // pHotKey is NOT deleted.
 
-	bool Remove(int clipId);
+	bool Remove(int clipId, CHotKey::HotKeyType hkType);
 
 	BOOL ValidateClip(int clipId, DWORD key, CString desc);
 

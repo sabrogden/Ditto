@@ -370,9 +370,22 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 				g_HotKeys[i]->m_Atom == wParam && 
 				g_HotKeys[i]->m_clipId > 0)
 			{
+				if(g_HotKeys[i]->m_hkType == CHotKey::PASTE_OPEN_CLIP)
+				{
+					Log(StrF(_T("Pasting clip from global shortcut, clipId: %d"), g_HotKeys[i]->m_clipId));
+					PasteOrShowGroup(g_HotKeys[i]->m_clipId, -1, FALSE, TRUE);
+				}
+				else if(g_HotKeys[i]->m_hkType == CHotKey::MOVE_TO_GROUP)
+				{
+					Log(StrF(_T("Global hot key to save clip to group Id: %d, Sending copy to save selection to this group"), g_HotKeys[i]->m_clipId));
 
-				Log(StrF(_T("Pasting clip from global shortcut, clipId: %d"), g_HotKeys[i]->m_clipId));
-				PasteOrShowGroup(g_HotKeys[i]->m_clipId, -1, FALSE, TRUE);
+					KillTimer(GROUP_DOUBLE_CLICK);
+					m_doubleClickGroupId = -1;
+					m_doubleClickGroupStartTime = 0;
+
+					theApp.SetActiveGroupId(g_HotKeys[i]->m_clipId);
+					theApp.m_activeWnd.SendCopy();
+				}
 
 				break;
 			}

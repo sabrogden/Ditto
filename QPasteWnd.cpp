@@ -1842,7 +1842,9 @@ void CQPasteWnd::OnMenuQuickpropertiesRemovehotkey()
         try
         {
             theApp.m_db.execDMLEx(_T("UPDATE Main SET lShortCut = 0, globalShortCut = 0 where lID = %d;"), IDs[i]);
-			g_HotKeys.Remove(IDs[i]);
+			g_HotKeys.Remove(IDs[i], CHotKey::PASTE_OPEN_CLIP);
+			theApp.m_db.execDMLEx(_T("UPDATE Main SET MoveToGroupShortCut = 0, GlobalMoveToGroupShortCut = 0 where lID = %d;"), IDs[i]);
+			g_HotKeys.Remove(IDs[i], CHotKey::MOVE_TO_GROUP);
         }
         CATCH_SQLITE_EXCEPTION
     }

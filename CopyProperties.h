@@ -28,11 +28,13 @@ public:
 	CEdit m_description;
 	CGroupCombo	m_GroupCombo;
 	CHotKeyCtrl	m_HotKey;
+	CHotKeyCtrl	m_MoveToGrouHotKey;
 	CListBox	m_lCopyData;
 	CString	m_eDate;
 	CString m_lastPasteDate;
 	BOOL	m_bNeverAutoDelete;
 	BOOL m_hotKeyGlobal;
+	BOOL m_moveToGroupHotKeyGlobal;
 	//}}AFX_DATA
 
 
@@ -66,6 +68,7 @@ protected:
 	void LoadDataIntoCClip(CClip &Clip);
 	void LoadDataFromCClip(CClip &Clip);
 	BOOL CheckGlobalHotKey(CClip &clip);
+	BOOL CheckMoveToGroupGlobalHotKey(CClip &clip);
 
 	// Generated message map functions
 	//{{AFX_MSG(CCopyProperties)

@@ -8,7 +8,7 @@ CHotKeys g_HotKeys;
 
 int CHotKey::m_nextId = 0;
 
-CHotKey::CHotKey(CString name, DWORD defKey, bool bUnregOnShowDitto) 
+CHotKey::CHotKey(CString name, DWORD defKey, bool bUnregOnShowDitto, HotKeyType hkType) 
 	: m_Name(name), 
 	m_bIsRegistered(false), 
 	m_bUnRegisterOnShowDitto(bUnregOnShowDitto),
@@ -19,6 +19,7 @@ CHotKey::CHotKey(CString name, DWORD defKey, bool bUnregOnShowDitto)
 	m_Key = (DWORD)g_Opt.GetProfileLong(m_Name, (long) defKey);
 	m_globalId = m_nextId;
 	m_nextId++;
+	m_hkType = hkType;
 	g_HotKeys.Add(this);
 }
 
@@ -285,12 +286,14 @@ bool CHotKeys::Remove(CHotKey* pHotKey)
 	return false;
 }
 
-bool CHotKeys::Remove(int clipId)
+bool CHotKeys::Remove(int clipId, CHotKey::HotKeyType hkType)
 {
 	INT_PTR count = GetSize();
 	for(int i=0; i < count; i++)
 	{
-		if(ElementAt(i) != NULL && ElementAt(i)->m_clipId == clipId)
+		if(ElementAt(i) != NULL && 
+			ElementAt(i)->m_clipId == clipId &&
+			ElementAt(i)->m_hkType == hkType)
 		{
 			CHotKey *pKey = ElementAt(i);
 

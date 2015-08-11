@@ -396,22 +396,44 @@ void CCP_MainApp::LoadGlobalClips()
 {
 	try
 	{
-		CppSQLite3Query q = m_db.execQuery(_T("SELECT lID, lShortCut, mText FROM Main WHERE lShortCut > 0 AND globalShortCut = 1"));
-
-		while(q.eof() == false)
 		{
-			int id = q.getIntField(_T("lID"));
-			int shortcut = q.getIntField(_T("lShortCut"));
-			CString desc = q.getStringField(_T("mText"));
+			CppSQLite3Query q = m_db.execQuery(_T("SELECT lID, lShortCut, mText FROM Main WHERE lShortCut > 0 AND globalShortCut = 1"));
 
-			//Constructor will add to a global list and free
-			CHotKey* globalHotKey = new CHotKey(desc, shortcut, true);
-			if(globalHotKey != NULL)
+			while(q.eof() == false)
 			{
-				globalHotKey->m_clipId = id;
-			}
+				int id = q.getIntField(_T("lID"));
+				int shortcut = q.getIntField(_T("lShortCut"));
+				CString desc = q.getStringField(_T("mText"));
 
-			q.nextRow();
+				//Constructor will add to a global list and free
+				CHotKey* globalHotKey = new CHotKey(desc, shortcut, true, CHotKey::PASTE_OPEN_CLIP);
+				if(globalHotKey != NULL)
+				{
+					globalHotKey->m_clipId = id;
+				}
+
+				q.nextRow();
+			}
+		}
+
+		{
+			CppSQLite3Query q2 = m_db.execQuery(_T("SELECT lID, MoveToGroupShortCut, mText FROM Main WHERE MoveToGroupShortCut > 0 AND GlobalMoveToGroupShortCut = 1"));
+
+			while(q2.eof() == false)
+			{
+				int id = q2.getIntField(_T("lID"));
+				int shortcut = q2.getIntField(_T("MoveToGroupShortCut"));
+				CString desc = q2.getStringField(_T("mText"));
+
+				//Constructor will add to a global list and free
+				CHotKey* globalHotKey = new CHotKey(desc, shortcut, true, CHotKey::MOVE_TO_GROUP);
+				if(globalHotKey != NULL)
+				{
+					globalHotKey->m_clipId = id;
+				}
+
+				q2.nextRow();
+			}
 		}
 	}
 	CATCH_SQLITE_EXCEPTION
