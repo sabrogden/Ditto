@@ -66,8 +66,9 @@ void CCopyThread::OnClipboardChange()
 	{
 		Log(StrF(_T("LoadFromClipboard - loading clips into groupId: %d"), groupId));
 	}
-
+	
 	CClip* pClip = new CClip;
+	pClip->m_copyReason = theApp.GetCopyReason();
 
 	CClipTypes* pSupportedTypes = m_LocalConfig.m_pSupportedTypes;
 	bool bDeleteMemory = false;

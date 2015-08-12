@@ -232,6 +232,7 @@ ON_COMMAND(ID_MENU_WILDCARDSEARCH, &CQPasteWnd::OnMenuWildcardsearch)
 
 ON_COMMAND(ID_MENU_SAVECURRENTCLIPBOARD, &CQPasteWnd::OnMenuSavecurrentclipboard)
 ON_UPDATE_COMMAND_UI(ID_MENU_SAVECURRENTCLIPBOARD, &CQPasteWnd::OnUpdateMenuSavecurrentclipboard)
+ON_MESSAGE(NM_MOVE_TO_GROUP, OnListMoveSelectionToGroup)
 END_MESSAGE_MAP()
 
 
@@ -820,6 +821,19 @@ LRESULT CQPasteWnd::OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam)
 	CSpecialPasteOptions pasteOptions;
 	OpenID((int) wParam, pasteOptions);
     return TRUE;
+}
+
+LRESULT CQPasteWnd::OnListMoveSelectionToGroup(WPARAM wParam, LPARAM lParam)
+{
+	int groupId = (int)wParam;
+	if(groupId >= -1)
+	{
+		CClipIDs IDs;
+		m_lstHeader.GetSelectionItemData(IDs);
+
+		IDs.MoveTo(groupId);
+	}
+	return TRUE;
 }
 
 LRESULT CQPasteWnd::OnListSelect_Index(WPARAM wParam, LPARAM lParam)
@@ -2625,11 +2639,11 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 bool CQPasteWnd::CheckActions(MSG * pMsg) 
 {
 	bool ret = false;
-	DWORD dID;
+	CAccel a;
 
-	if (m_actions.OnMsg(pMsg, dID))
+	if (m_actions.OnMsg(pMsg, a))
 	{
-		ret = DoAction(dID);
+		ret = DoAction(a.Cmd);
 	}   
 
 	return ret;

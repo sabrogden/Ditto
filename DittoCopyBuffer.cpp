@@ -35,7 +35,7 @@ bool CDittoCopyBuffer::StartCopy(long lCopyBuffer, bool bCut)
 		}
 		else
 		{
-			theApp.m_activeWnd.SendCopy();
+			theApp.m_activeWnd.SendCopy(CopyReasonEnum::COPY_TO_BUFFER);
 		}
 
 		//Create a thread to track if they have copied anything, if thread has exited before they have

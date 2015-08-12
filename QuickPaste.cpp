@@ -58,7 +58,10 @@ BOOL CQuickPaste::CloseQPasteWnd()
 	if(m_pwndPaste)
 	{		
 		if(m_pwndPaste)
+		{
 			m_pwndPaste->CloseWindow();
+			m_pwndPaste->DestroyWindow();
+		}
 
 		Log(_T("CloseQPasteWnd called closing qpastewnd"));
 		
@@ -76,7 +79,10 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	if(bFromKeyboard == false && GetKeyState(VK_SHIFT) & 0x8000 && GetKeyState(VK_CONTROL) & 0x8000)
 	{
 		if(m_pwndPaste)
+		{
+			m_pwndPaste->CloseWindow();
 			m_pwndPaste->DestroyWindow();
+		}
 
 		Log(_T("CloseQPasteWnd called closing qpastewnd from keyboard"));
 

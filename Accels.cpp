@@ -6,14 +6,17 @@ CAccels::CAccels(){
 
 }
 
-void CAccels::AddAccel(CAccel &a)
+void CAccels::AddAccel(CAccel a)
 {
-    m_Map.SetAt(a.Key, a.Cmd);
+    m_Map.SetAt(a.Key, a);
 }
 
 void CAccels::AddAccel(DWORD cmd, DWORD key)
 {
-	m_Map.SetAt(key, cmd);
+	CAccel a;
+	a.Cmd = cmd;
+	a.Key = key;
+	m_Map.SetAt(key, a);
 }
 
 void CAccels::RemoveAll()
@@ -26,12 +29,12 @@ CString CAccels::GetCmdKeyText(DWORD cmd)
 	CString cmdShortcutText = _T("");
 	POSITION pos = m_Map.GetStartPosition();
 	DWORD mapShortcut;
-	DWORD mapCmd;
+	CAccel a;
 	while (pos != NULL)
 	{
-		m_Map.GetNextAssoc(pos, mapShortcut, mapCmd);
+		m_Map.GetNextAssoc(pos, mapShortcut, a);
 
-		if(mapCmd == cmd)
+		if(a.Cmd == cmd)
 		{
 			cmdShortcutText = CHotKey::GetHotKeyDisplayStatic(mapShortcut);
 			break;
@@ -41,7 +44,7 @@ CString CAccels::GetCmdKeyText(DWORD cmd)
 	return cmdShortcutText;
 }
 
-bool CAccels::OnMsg(MSG *pMsg, DWORD &dID)
+bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
 {
     // bit 30 (0x40000000) is 1 if this is NOT the first msg of the key
     //  i.e. auto-repeat may cause multiple msgs of the same key
@@ -63,7 +66,7 @@ bool CAccels::OnMsg(MSG *pMsg, DWORD &dID)
     cs.Format(_T("Key: %d, Mod: %d, vkey: %d"), key, mod, vkey);
     OutputDebugString(cs);
 
-    if(m_Map.Lookup(key, dID))
+    if(m_Map.Lookup(key, a))
     {
         return true;
     }

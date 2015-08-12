@@ -2238,3 +2238,13 @@ int CGetSetOptions::GetSaveToGroupTimeoutMS()
 {
 	return GetProfileLong(_T("SaveToGroupTimeoutMS"), 1000);
 }
+
+void CGetSetOptions::SetCopyReasonTimeoutMS(int val)
+{
+	SetProfileLong(_T("CopyReasonTimeoutMS"), val);
+}
+
+int CGetSetOptions::GetCopyReasonTimeoutMS()
+{
+	return GetProfileLong(_T("CopyReasonTimeoutMS"), 1000);
+}

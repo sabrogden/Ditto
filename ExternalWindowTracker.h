@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Misc.h"
+
 class ExternalWindowTracker
 {
 public:
@@ -19,7 +21,7 @@ public:
 
 	void SendPaste(bool activateTarget);
 	void SendCut();
-	void SendCopy();
+	void SendCopy(CopyReasonEnum::CopyReason copyReason);
 
 	bool NotifyTrayhWnd(HWND hWnd);
 

@@ -12,6 +12,7 @@
 #include <afxtempl.h>
 #include "tinyxml\tinyxml.h"
 #include "Shared\IClip.h"
+#include "Misc.h"
 
 class CClip;
 class CCopyThread;
@@ -107,6 +108,7 @@ public:
 	CTime m_lastPasteDate;
 	int m_moveToGroupShortCut;
 	BOOL m_globalMoveToGroupShortCut;
+	CopyReasonEnum::CopyReason m_copyReason;
 
 	virtual CString Description() { return m_Desc; }
 	virtual void Description(CString csValue) { m_Desc = csValue; }

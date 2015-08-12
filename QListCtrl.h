@@ -41,6 +41,8 @@
 #define NM_SHOW_PROPERTIES			WM_USER+0x125
 #define NM_NEW_GROUP				WM_USER+0x126
 #define NM_DELETE_ID				WM_USER+0x127
+#define NM_MOVE_TO_GROUP			WM_USER+0x128
+
 
 
 #define COPY_BUFFER_HOT_KEY_1_ID	-100
@@ -131,7 +133,7 @@ public:
 	bool ShowFullDescription(bool bFromAuto = false, bool fromNextPrev = false);
 	BOOL SetItemCountEx(int iCount, DWORD dwFlags = 0);
 
-	void HidePopup()	{ if(m_pToolTip) m_pToolTip->Hide();	}
+	void HidePopup();
 
 	void SetLogFont(LOGFONT &font);
 

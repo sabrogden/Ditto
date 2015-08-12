@@ -12,6 +12,17 @@
 #define ONE_HOUR				3600000
 #define ONE_DAY					86400000
 
+class CopyReasonEnum
+{
+public:
+	enum CopyReason
+	{ 
+		COPY_TO_UNKOWN,
+		COPY_TO_GROUP,
+		COPY_TO_BUFFER
+	};
+};
+
 #define INVALID_STICKY	-(2147483647)
 
 #define CATCH_SQLITE_EXCEPTION		\
@@ -55,7 +66,7 @@ CString GetErrorString(int err);
 
 double IdleSeconds();
 
-#define LogSendRecieveInfo(cs) logsendrecieveinfo(cs, __FILE__, __LINE__)
+#define LogSendRecieveInfo(cs) logsendrecieveinfo(cs, __FILE__, __LINE__);
 void logsendrecieveinfo(CString cs, CString csFile = _T(""), long lLine = -1);
 
 // Utility Functions

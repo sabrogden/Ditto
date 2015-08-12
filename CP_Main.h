@@ -129,6 +129,7 @@ public:
 	long GetValidGroupID(); // returns a valid id (not negative)
 	void SetGroupDefaultID(long lID); // sets a valid id
 
+
 // Window States
 	// the ID given focus by CQPasteWnd::FillList
 	long	m_FocusID;
@@ -184,6 +185,9 @@ public:
 	void SetActiveGroupId(int groupId);
 	int GetActiveGroupId();
 
+	void SetCopyReason(CopyReasonEnum::CopyReason copyReason);
+	CopyReasonEnum::CopyReason GetCopyReason();
+
 
 public:
 	virtual BOOL InitInstance();
@@ -199,4 +203,7 @@ protected:
 
 	int m_activeGroupId;
 	DWORD m_activeGroupStartTime;
+
+	CopyReasonEnum::CopyReason m_copyReason;
+	DWORD m_copyReasonStartTime;
 };

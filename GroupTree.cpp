@@ -96,11 +96,11 @@ BOOL CGroupTree::PreTranslateMessage(MSG *pMsg)
 bool CGroupTree::CheckActions(MSG * pMsg) 
 {
 	bool ret = false;
-	DWORD dID;
+	CAccel a;
 
-	if (m_actions.OnMsg(pMsg, dID))
+	if (m_actions.OnMsg(pMsg, a))
 	{
-		ret = DoAction(dID);
+		ret = DoAction(a.Cmd);
 	}   
 
 	return ret;

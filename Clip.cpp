@@ -176,6 +176,7 @@ CClip::CClip() :
 	m_moveToGroupShortCut(0),
 	m_globalMoveToGroupShortCut(FALSE)
 {
+	m_copyReason = CopyReasonEnum::COPY_TO_UNKOWN;
 }
 
 CClip::~CClip()

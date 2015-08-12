@@ -486,6 +486,9 @@ public:
 
 	static void SetSaveToGroupTimeoutMS(int val);
 	static int GetSaveToGroupTimeoutMS();
+
+	static void SetCopyReasonTimeoutMS(int val);
+	static int GetCopyReasonTimeoutMS();
 };
 
 // global for easy access and for initialization of fast access variables

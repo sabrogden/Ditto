@@ -337,6 +337,7 @@ protected:
     afx_msg LRESULT OnDelete(WPARAM wParam, LPARAM lParam);
     afx_msg void OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg LRESULT OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnListMoveSelectionToGroup(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnListSelect_Index(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnRefreshView(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnReloadClipOrder(WPARAM wParam, LPARAM lParam);

@@ -26,6 +26,8 @@ static char THIS_FILE[] = __FILE__;
 #define TIMER_HIDE_SCROL	2
 #define TIMER_SHOW_SCROLL	3
 
+#define VALID_TOOLTIP (m_pToolTip && ::IsWindow(m_pToolTip->m_hWnd))
+
 
 /////////////////////////////////////////////////////////////////////////////
 // CQListCtrl
@@ -748,10 +750,10 @@ int CQListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg) 
 {
-	DWORD dID;
-	if(m_Accels.OnMsg(pMsg, dID))
+	CAccel a;
+	if(m_Accels.OnMsg(pMsg, a))
 	{
-		switch(dID)
+		switch(a.Cmd)
 		{
 		case COPY_BUFFER_HOT_KEY_1_ID:
 			PutSelectedItemOnDittoCopyBuffer(0);
@@ -763,13 +765,20 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 			PutSelectedItemOnDittoCopyBuffer(2);
 			break;
 		default:
-			GetParent()->SendMessage(NM_SELECT_DB_ID, dID, 0);
+			if(a.RefId == CHotKey::PASTE_OPEN_CLIP)
+			{
+				GetParent()->SendMessage(NM_SELECT_DB_ID, a.Cmd, 0);
+			}
+			else if(a.RefId == CHotKey::MOVE_TO_GROUP)
+			{
+				GetParent()->SendMessage(NM_MOVE_TO_GROUP, a.Cmd, 0);
+			}
 		}
 
 		return TRUE;
 	}
 
-	if(m_pToolTip)
+	if(VALID_TOOLTIP)
 	{
 		if(m_pToolTip->OnMsg(pMsg))
 			return TRUE;
@@ -793,7 +802,7 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 
 BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 {
-	if(m_pToolTip)
+	if(VALID_TOOLTIP)
 	{
 		MSG Msg;
 		Msg.lParam = lParam;
@@ -922,7 +931,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 
 	int clipId = this->GetItemData(this->GetCaret());
 
-	if(m_pToolTip != NULL && 
+	if(VALID_TOOLTIP && 
 		m_pToolTip->GetClipId() == clipId &&
 		::IsWindow(m_toolTipHwnd))
 	{
@@ -964,7 +973,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		m_toolTipHwnd = m_pToolTip->GetSafeHwnd();
 		m_pToolTip->SetNotifyWnd(GetParent());
 	}
-	else
+	else if(VALID_TOOLTIP)
 	{
 		CRect r;
 		m_pToolTip->GetWindowRect(r);
@@ -976,7 +985,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		
 	}
 	
-	if(m_pToolTip)
+	if(VALID_TOOLTIP)
 	{
 		m_pToolTip->SetClipId(clipId);
 		m_pToolTip->SetSearchText(m_searchText);
@@ -1240,7 +1249,10 @@ void CQListCtrl::OnKillFocus(CWnd* pNewWnd)
 
 HWND CQListCtrl::GetToolTipHWnd()
 {
-	return m_pToolTip->GetSafeHwnd();
+	if(VALID_TOOLTIP)
+		return m_pToolTip->GetSafeHwnd();
+
+	return NULL;
 }
 
 BOOL CQListCtrl::SetItemCountEx(int iCount, DWORD dwFlags /* = 0 */)
@@ -1464,4 +1476,10 @@ void CQListCtrl::StopHideScrollBarTimer()
 void CQListCtrl::SetSearchText(CString text) 
 { 
 	m_searchText = text;
+}
+
+void CQListCtrl::HidePopup()
+{ 
+	if(VALID_TOOLTIP) 
+		m_pToolTip->Hide();	
 }

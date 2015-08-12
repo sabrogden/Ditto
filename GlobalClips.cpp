@@ -79,7 +79,14 @@ void GlobalClips::LoadItems()
 
 		if(pHotKey->m_clipId > 0)
 		{
-			strItem.Insert(0, theApp.m_Language.GetGlobalHotKeyString("(Clip)", "(Clip) "));
+			if(pHotKey->m_hkType == CHotKey::PASTE_OPEN_CLIP)
+			{
+				strItem.Insert(0, theApp.m_Language.GetGlobalHotKeyString("(Clip)", "(Clip) "));
+			}
+			else if(pHotKey->m_hkType == CHotKey::MOVE_TO_GROUP)
+			{
+				strItem.Insert(0, _T("(Move To Group) "));
+			}
 		}
 
 		lvi.iSubItem = 0;

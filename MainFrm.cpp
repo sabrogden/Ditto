@@ -384,7 +384,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 					m_doubleClickGroupStartTime = 0;
 
 					theApp.SetActiveGroupId(g_HotKeys[i]->m_clipId);
-					theApp.m_activeWnd.SendCopy();
+					theApp.m_activeWnd.SendCopy(CopyReasonEnum::COPY_TO_GROUP);
 				}
 
 				break;
@@ -494,7 +494,7 @@ void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarg
 				m_doubleClickGroupStartTime = 0;
 
 				theApp.SetActiveGroupId(dbId);
-				theApp.m_activeWnd.SendCopy();
+				theApp.m_activeWnd.SendCopy(CopyReasonEnum::COPY_TO_GROUP);
 			}
 			else
 			{

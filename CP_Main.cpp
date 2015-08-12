@@ -107,6 +107,8 @@ CCP_MainApp::CCP_MainApp()
 {
 	theApp.m_activeWnd.TrackActiveWnd(false);
 
+	m_copyReason = CopyReasonEnum::COPY_TO_UNKOWN;
+	m_copyReasonStartTime = 0;
 	m_activeGroupId = -1;
 	m_activeGroupStartTime = 0;
 	m_pUacPasteThread = NULL;
@@ -1152,6 +1154,30 @@ int CCP_MainApp::GetActiveGroupId()
 
 	m_activeGroupId = -1;
 	m_activeGroupStartTime = 0;
+
+	return ret;
+}
+
+void CCP_MainApp::SetCopyReason(CopyReasonEnum::CopyReason copyReason)
+{
+	m_copyReason = copyReason;
+	m_copyReasonStartTime = GetTickCount();
+}
+
+CopyReasonEnum::CopyReason CCP_MainApp::GetCopyReason()
+{
+	CopyReasonEnum::CopyReason ret = CopyReasonEnum::COPY_TO_UNKOWN;
+	DWORD maxDiff = CGetSetOptions::GetCopyReasonTimeoutMS();
+	DWORD diff = GetTickCount() - m_copyReasonStartTime;
+
+	if(m_copyReason != CopyReasonEnum::COPY_TO_UNKOWN &&
+		diff < maxDiff)
+	{
+		ret = m_copyReason;
+	}
+
+	m_copyReason = CopyReasonEnum::COPY_TO_UNKOWN;
+	m_copyReasonStartTime = 0;
 
 	return ret;
 }

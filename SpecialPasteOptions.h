@@ -8,6 +8,7 @@ public:
 	~CSpecialPasteOptions();
 
 	bool m_pasteAsPlainText;
+	bool m_pasteRTFNoTextHighlight;
 	CClipFormats *m_pPasteFormats;
 
 	CString ToString();

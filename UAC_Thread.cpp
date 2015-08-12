@@ -66,7 +66,7 @@ void CUAC_Thread::OnEvent(int eventId, void *param)
 		theApp.m_activeWnd.SendPaste(false);
 		break; 
 	case UAC_COPY:
-		theApp.m_activeWnd.SendCopy();
+		theApp.m_activeWnd.SendCopy(CopyReasonEnum::COPY_TO_UNKOWN);
 		break; 
 	case UAC_CUT:
 		theApp.m_activeWnd.SendCut();

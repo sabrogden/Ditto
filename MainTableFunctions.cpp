@@ -31,17 +31,36 @@ void CMainTableFunctions::LoadAcceleratorKeys(CAccels& accels, CppSQLite3DB &db)
 {
 	try
 	{
-		CppSQLite3Query q = db.execQuery(_T("SELECT lID, lShortCut FROM Main WHERE lShortCut > 0"));
-		
-		CAccel a;
-		while(q.eof() == false)
 		{
-			a.Cmd = q.getIntField(_T("lID"));
-			a.Key = q.getIntField(_T("lShortCut"));
+			CppSQLite3Query q = db.execQuery(_T("SELECT lID, lShortCut FROM Main WHERE lShortCut > 0"));
+		
+			CAccel a;
+			while(q.eof() == false)
+			{
+				a.Cmd = q.getIntField(_T("lID"));
+				a.Key = q.getIntField(_T("lShortCut"));
+				a.RefId = CHotKey::PASTE_OPEN_CLIP;
 			
-			accels.AddAccel(a);
+				accels.AddAccel(a);
 
-			q.nextRow();
+				q.nextRow();
+			}
+		}
+
+		{
+			CppSQLite3Query q2 = db.execQuery(_T("SELECT lID, MoveToGroupShortCut FROM Main WHERE MoveToGroupShortCut > 0"));
+
+			CAccel a2;
+			while(q2.eof() == false)
+			{
+				a2.Cmd = q2.getIntField(_T("lID"));
+				a2.Key = q2.getIntField(_T("MoveToGroupShortCut"));
+				a2.RefId = CHotKey::MOVE_TO_GROUP;
+
+				accels.AddAccel(a2);
+
+				q2.nextRow();
+			}
 		}
 	}
 	CATCH_SQLITE_EXCEPTION

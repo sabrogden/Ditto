@@ -272,7 +272,7 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	Log(_T("Post sending paste"));
 }
 
-void ExternalWindowTracker::SendCopy()
+void ExternalWindowTracker::SendCopy(CopyReasonEnum::CopyReason copyReason)
 {
 	CSendKeys send;
 	send.AllKeysUp();
@@ -311,6 +311,8 @@ void ExternalWindowTracker::SendCopy()
 		//give the app some time to take focus before sending paste
 		Sleep(delay);
 		send.SetKeyDownDelay(max(50, delay));
+
+		theApp.SetCopyReason(copyReason);
 
 		send.SendKeys(csString, true);
 	}	

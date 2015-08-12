@@ -9,10 +9,12 @@ class CAccel
 public:
     DWORD Key;
     DWORD Cmd;
+	int RefId;
     CAccel(DWORD key = 0, DWORD cmd = 0)
     {
         Key = key;
         Cmd = cmd;
+		RefId = 0;
     }
 };
 
@@ -24,7 +26,8 @@ class CAccels
 public:
     CAccels();
 
-    void AddAccel(CAccel &a);
+    void AddAccel(CAccel a);
+
 	void AddAccel(DWORD cmd, DWORD key);
 
 	void RemoveAll();
@@ -34,10 +37,10 @@ public:
     // handles a key's first WM_KEYDOWN or WM_SYSKEYDOWN message.
     // it uses GetKeyState to test for modifiers.
     // returns a pointer to the internal CAccel if it matches the given key or NULL
-    bool OnMsg(MSG *pMsg, DWORD &dID);
+    bool OnMsg(MSG *pMsg, CAccel &a);
 
     static BYTE GetKeyStateModifiers();
 
 protected:
-	CMap < DWORD, DWORD, DWORD, DWORD > m_Map;
+	CMap < DWORD, DWORD, CAccel, CAccel > m_Map;
 };
