@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<project version='7' encrypted='1'>
+<project version='8' encrypted='1'>
 	<steps type='0'>
 		<step action='Set Macro'>
 			<MacroName>LOGFILE</MacroName>
@@ -334,7 +334,7 @@ var sc_security="b3f57099";
 			<Repository>/p/ditto-cp/code/</Repository>
 			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
 			<Subcommand>log</Subcommand>
-			<Switches>-r {2015-01-10}:{2016-12-31}</Switches>
+			<Switches>-r {2015-08-5}:{2016-12-31}</Switches>
 			<Username>sabrogden</Username>
 			<indent type='3'>2</indent>
 			<name>SVN Log Messages</name>

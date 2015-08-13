@@ -2248,3 +2248,13 @@ int CGetSetOptions::GetCopyReasonTimeoutMS()
 {
 	return GetProfileLong(_T("CopyReasonTimeoutMS"), 1000);
 }
+
+void CGetSetOptions::SetWindowsResumeDelayReOpenDbMS(int val)
+{
+	SetProfileLong(_T("WindowsResumeDelayReOpenDbMS"), val);
+}
+
+int CGetSetOptions::GetWindowsResumeDelayReOpenDbMS()
+{
+	return GetProfileLong(_T("WindowsResumeDelayReOpenDbMS"), 2000);
+}

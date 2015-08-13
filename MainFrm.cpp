@@ -1211,15 +1211,18 @@ LRESULT CMainFrame::OnReAddTaskBarIcon(WPARAM wParam, LPARAM lParam)
 
 LRESULT CMainFrame::OnReOpenDatabase(WPARAM wParam, LPARAM lParam)
 {
-	Log(StrF(_T("OnReOpenDatabase, closing and reopening database")));
+	Log(StrF(_T("OnReOpenDatabase, Start closing and reopening database Delay: %d"), CGetSetOptions::GetWindowsResumeDelayReOpenDbMS()));
 
-	try
+	try 
 	{
+		Sleep(CGetSetOptions::GetWindowsResumeDelayReOpenDbMS());
 		m_quickPaste.CloseQPasteWnd();
 		theApp.m_db.close();
 		OpenDatabase(CGetSetOptions::GetDBPath());
 	}
 	CATCH_SQLITE_EXCEPTION
+
+	Log(StrF(_T("OnReOpenDatabase, End closing and reopening database Delay: %d"), CGetSetOptions::GetWindowsResumeDelayReOpenDbMS()));
 
 	return TRUE;
 }

@@ -489,6 +489,9 @@ public:
 
 	static void SetCopyReasonTimeoutMS(int val);
 	static int GetCopyReasonTimeoutMS();
+
+	static void SetWindowsResumeDelayReOpenDbMS(int val);
+	static int GetWindowsResumeDelayReOpenDbMS();
 };
 
 // global for easy access and for initialization of fast access variables

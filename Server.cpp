@@ -5,6 +5,8 @@
 #include "stdafx.h"
 #include "cp_main.h"
 #include "Server.h"
+#include "Shared\Tokenizer.h"
+#include "WildCardMatch.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -191,11 +193,30 @@ void CServer::OnStart(CSendInfo &info)
 	
 	m_bSetToClipBoard = FALSE;
 
-	if(g_Opt.m_csIPListToPutOnClipboard.Find(m_csIP) >= 0)
-		m_bSetToClipBoard = TRUE;
+	CTokenizer token(g_Opt.m_csIPListToPutOnClipboard, ",");
+	CString line;
 
-	if(g_Opt.m_csIPListToPutOnClipboard.Find(m_csComputerName) >= 0)
-		m_bSetToClipBoard = TRUE;
+	while(token.Next(line))
+	{
+		if(line != "")
+		{
+			if(CWildCardMatch::WildMatch(line, m_csIP, ""))
+			{
+				LogSendRecieveInfo(StrF(_T("Found ip match, placing on clipboard Found Match %s - %s"), line, m_csIP));
+
+				m_bSetToClipBoard = TRUE;
+				break;
+			}
+
+			if(CWildCardMatch::WildMatch(line, m_csComputerName, ""))
+			{
+				LogSendRecieveInfo(StrF(_T("Found machine match, placing on clipboard Found Match %s - %s"), line, m_csIP));
+
+				m_bSetToClipBoard = TRUE;
+				break;
+			}
+		}
+	}
 	
 	info.m_cDesc[20] = 0;
 	LogSendRecieveInfo(StrF(_T("::START %s %s %s"), m_csDesc, m_csComputerName, m_csIP));
