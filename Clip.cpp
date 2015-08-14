@@ -1082,7 +1082,7 @@ bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT)
 		CString textFilter = _T("");
 		if(bOnlyLoad_CF_TEXT)
 		{
-			textFilter = _T("(strClipBoardFormat = 'CF_TEXT' OR strClipBoardFormat = 'CF_UNICODETEXT') AND ");
+			textFilter = _T("(strClipBoardFormat = 'CF_TEXT' OR strClipBoardFormat = 'CF_UNICODETEXT' OR strClipBoardFormat = 'CF_HDROP') AND ");
 		}
 
 		csSQL.Format(
@@ -1099,7 +1099,9 @@ bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT)
 			
 			if(bOnlyLoad_CF_TEXT)
 			{
-				if(cf.m_cfType != CF_TEXT && cf.m_cfType != CF_UNICODETEXT)
+				if(cf.m_cfType != CF_TEXT && 
+					cf.m_cfType != CF_UNICODETEXT &&
+					cf.m_cfType != CF_HDROP)
 				{
 					q.nextRow();
 					continue;

@@ -10,6 +10,7 @@ public:
 
 	virtual bool AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount);
 	virtual HGLOBAL GetHGlobal();
+	virtual HGLOBAL GetHGlobalAsString();
 
 protected:
 	CFileRecieve m_DropFiles;

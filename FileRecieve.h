@@ -12,7 +12,11 @@ public:
 	virtual ~CFileRecieve();
 
 	long RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgressDlg *pProgress);
+	
 	HGLOBAL CreateCF_HDROPBuffer();
+
+	HGLOBAL CreateCF_HDROPBufferAsString();
+
 	void AddFile(CString csFile)	{ m_RecievedFiles.Add(csFile); }
 
 protected:

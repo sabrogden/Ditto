@@ -203,6 +203,21 @@ long CFileRecieve::RecieveFileData(ULONG lFileSize, CString csFileName)
 	return bRet;
 }
 
+HGLOBAL CFileRecieve::CreateCF_HDROPBufferAsString()
+{
+	CString data;
+	int nFileArraySize = (int) m_RecievedFiles.GetSize();
+	for (int i = 0; i < nFileArraySize; i++)
+	{
+		data += m_RecievedFiles[i];
+		data += _T("\r\n");
+	}
+
+	HGLOBAL hReturn = NewGlobalP(data.GetBuffer(), (data.GetLength() + 1)*sizeof(TCHAR));
+
+	return hReturn;
+}
+
 HGLOBAL CFileRecieve::CreateCF_HDROPBuffer()
 {
 	int nFileArraySize = (int)m_RecievedFiles.GetSize();

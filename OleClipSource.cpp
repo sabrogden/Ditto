@@ -74,7 +74,17 @@ BOOL COleClipSource::DoImmediateRender()
 			bProcessedMult = TRUE;
 		}
 
-		if(m_pasteOptions.m_pasteAsPlainText == false)
+		if (m_pasteOptions.m_pasteAsPlainText &&
+			bProcessedMult == FALSE)
+		{
+			CCF_HDropAggregator HDrop;
+			if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
+			{
+				CacheGlobalData(CF_UNICODETEXT, HDrop.GetHGlobalAsString());
+				bProcessedMult = TRUE;
+			}
+		}
+		else if(m_pasteOptions.m_pasteAsPlainText == false)
 		{
 			CCF_HDropAggregator HDrop;
 			if(m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
@@ -105,6 +115,45 @@ BOOL COleClipSource::DoImmediateRender()
 		CClipFormats formats;
 
 		clip.LoadFormats(m_ClipIDs[0], m_pasteOptions.m_pasteAsPlainText);
+
+		if(m_pasteOptions.m_pasteAsPlainText)
+		{
+			bool foundText = false;
+			INT_PTR hDropIndex = -1;
+			INT_PTR	count = clip.m_Formats.GetCount();
+			for (INT_PTR i = 0; i < count; i++)
+			{
+				CClipFormat *pCF = &clip.m_Formats.ElementAt(i);
+
+				if (pCF->m_cfType == CF_TEXT ||
+					pCF->m_cfType == CF_UNICODETEXT)
+				{
+					foundText = true;
+				}
+				else if(pCF->m_cfType == CF_HDROP)
+				{
+					hDropIndex = i;
+				}
+			}
+
+			if(foundText &&
+				hDropIndex > -1)
+			{
+				clip.m_Formats.RemoveAt(hDropIndex);
+			}
+			else if(foundText == false &&
+					hDropIndex > -1)
+			{
+				CCF_HDropAggregator HDrop;
+				if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
+				{
+					CacheGlobalData(CF_UNICODETEXT, HDrop.GetHGlobalAsString());
+
+					return 1;
+				}
+			}
+
+		}
 		
 		return PutFormatOnClipboard(&clip.m_Formats) > 0;
 	}		

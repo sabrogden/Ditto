@@ -30,3 +30,8 @@ HGLOBAL CCF_HDropAggregator::GetHGlobal()
 {
 	return m_DropFiles.CreateCF_HDROPBuffer();
 }
+
+HGLOBAL CCF_HDropAggregator::GetHGlobalAsString()
+{
+	return m_DropFiles.CreateCF_HDROPBufferAsString();
+}
