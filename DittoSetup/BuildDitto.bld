@@ -21,7 +21,6 @@
 			<ContinueFail type='11'>-1</ContinueFail>
 			<DelDirs type='11'>-1</DelDirs>
 			<Ext>*</Ext>
-			<HideOn type='11'>-1</HideOn>
 			<Path>%workdir%</Path>
 			<Recurse type='11'>-1</Recurse>
 			<SysOn type='11'>-1</SysOn>
