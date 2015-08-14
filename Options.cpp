@@ -2258,3 +2258,13 @@ int CGetSetOptions::GetWindowsResumeDelayReOpenDbMS()
 {
 	return GetProfileLong(_T("WindowsResumeDelayReOpenDbMS"), 2000);
 }
+
+BOOL CGetSetOptions::GetShowMsgWndOnCopyToGroup()
+{
+	return GetProfileLong(_T("ShowMsgWndOnCopyToGroup"), TRUE);
+}
+
+void CGetSetOptions::SetShowMsgWndOnCopyToGroup(BOOL val)
+{
+	SetProfileLong(_T("ShowMsgWndOnCopyToGroup"), val);
+}

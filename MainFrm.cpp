@@ -65,6 +65,8 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_SAVE_CLIPBOARD, &CMainFrame::OnSaveClipboardMessage)
 	ON_MESSAGE(WM_READD_TASKBAR_ICON, OnReAddTaskBarIcon)
 	ON_MESSAGE(WM_REOPEN_DATABASE, &CMainFrame::OnReOpenDatabase)
+	ON_MESSAGE(WM_SHOW_MSG_WINDOW, &CMainFrame::OnShowMsgWindow)
+	ON_MESSAGE(WM_SHOW_DITTO_GROUP, &CMainFrame::OnShowDittoGroup)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -88,6 +90,7 @@ CMainFrame::CMainFrame()
 	m_pDeleteClips = NULL;
 	m_doubleClickGroupId = -1;
 	m_doubleClickGroupStartTime = 0;
+	m_pPopupWindow = NULL;
 }
 
 CMainFrame::~CMainFrame()
@@ -675,6 +678,21 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 				m_doubleClickGroupStartTime = 0;
 			}
 			break;
+		case CLOSE_POPUP_MSG_WND:
+			{
+				KillTimer(CLOSE_POPUP_MSG_WND);
+
+				if(m_pPopupWindow != NULL)
+				{
+					if(::IsWindow(m_pPopupWindow->m_hWnd))
+					{
+						m_pPopupWindow->DestroyWindow();
+					}
+					delete m_pPopupWindow;
+					m_pPopupWindow = NULL;
+				}
+			}
+			break;
     }
 
     CFrameWnd::OnTimer(nIDEvent);
@@ -1223,6 +1241,54 @@ LRESULT CMainFrame::OnReOpenDatabase(WPARAM wParam, LPARAM lParam)
 	CATCH_SQLITE_EXCEPTION
 
 	Log(StrF(_T("OnReOpenDatabase, End closing and reopening database Delay: %d"), CGetSetOptions::GetWindowsResumeDelayReOpenDbMS()));
+
+	return TRUE;
+}
+
+LRESULT CMainFrame::OnShowMsgWindow(WPARAM wParam, LPARAM lParam)
+{
+	if(m_pPopupWindow != NULL)
+	{
+		if(::IsWindow(m_pPopupWindow->m_hWnd))
+		{
+			m_pPopupWindow->DestroyWindow();
+		}
+		delete m_pPopupWindow;
+		m_pPopupWindow = NULL;
+	}
+
+	CString *pMsg = (CString*)wParam;
+	int clipId = (int)lParam;
+
+	CRect r;
+	GetMonitorRect(0, r);
+
+	m_pPopupWindow = new CDittoPopupWindow();
+	m_pPopupWindow->Create(CRect(r.right - 400, r.bottom - 100, r.right - 10, r.bottom - 10), this);		
+	m_pPopupWindow->SetWindowText(_T("Saved clip to group"));
+	m_pPopupWindow->ShowWindow(SW_SHOW);
+	m_pPopupWindow->SetCopyToGroupId(clipId);
+	m_pPopupWindow->UpdateText(*pMsg);
+
+	::SetWindowPos(m_pPopupWindow->m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+
+	SetTimer(CLOSE_POPUP_MSG_WND, 2000, 0);
+
+	delete pMsg;
+	return TRUE;
+}
+
+LRESULT CMainFrame::OnShowDittoGroup(WPARAM wParam, LPARAM lParam)
+{
+	int groupId = (int)wParam;
+	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT bIsGroup FROM Main WHERE lID = %d"), groupId);
+	if(q.eof() == false)
+	{
+		if(q.getIntField(_T("bIsGroup")) > 0)
+		{
+			PasteOrShowGroup(groupId, FALSE, FALSE, FALSE);
+		}
+	}
 
 	return TRUE;
 }

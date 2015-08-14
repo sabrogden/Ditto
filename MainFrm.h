@@ -7,7 +7,7 @@
 #include "MainFrmThread.h"
 #include "ClipboardSaveRestore.h"
 #include "PowerManager.h"
-
+#include "DittoPopupWindow.h"
 
 #define CLOSE_WINDOW_TIMER				1	
 #define HIDE_ICON_TIMER					2
@@ -19,6 +19,7 @@
 #define TEXT_ONLY_PASTE					11
 #define READ_RANDOM_DB_FILE				12
 #define GROUP_DOUBLE_CLICK				13
+#define CLOSE_POPUP_MSG_WND				14
 
 class CMainFrame: public CFrameWnd
 {
@@ -68,6 +69,7 @@ public:
 	int m_doubleClickGroupId;
 	DWORD m_doubleClickGroupStartTime;
 	CPowerManager m_PowerManager;
+	CDittoPopupWindow *m_pPopupWindow;
 
     void DoDittoCopyBufferPaste(int nCopyBuffer);
     void DoFirstTenPositionsPaste(int nPos);
@@ -127,4 +129,6 @@ DECLARE_MESSAGE_MAP()public:
 	afx_msg void OnFirstDeleteclipdata();
 	afx_msg void OnFirstSavecurrentclipboard();
 	afx_msg LRESULT OnReOpenDatabase(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnShowMsgWindow(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnShowDittoGroup(WPARAM wParam, LPARAM lParam);
 };

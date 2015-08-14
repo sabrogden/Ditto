@@ -492,6 +492,9 @@ public:
 
 	static void SetWindowsResumeDelayReOpenDbMS(int val);
 	static int GetWindowsResumeDelayReOpenDbMS();
+
+	static BOOL GetShowMsgWndOnCopyToGroup();
+	static void SetShowMsgWndOnCopyToGroup(BOOL val);
 };
 
 // global for easy access and for initialization of fast access variables

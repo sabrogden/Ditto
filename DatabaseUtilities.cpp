@@ -451,6 +451,7 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 	{
 		popUpMsg->CloseWindow();
 		popUpMsg->DestroyWindow();
+		delete popUpMsg;
 		popUpMsg = NULL;
 	}
 	return TRUE;                                                     
