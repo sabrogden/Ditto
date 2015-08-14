@@ -23,7 +23,7 @@ bool CClipboardSaveRestore::Save(BOOL textOnly)
 		int nFormat = EnumClipboardFormats(0);
 		while(nFormat != 0)
 		{
-			if(textOnly == false || (nFormat == CF_TEXT || nFormat == CF_UNICODETEXT))
+			if(textOnly == false || (nFormat == CF_TEXT || nFormat == CF_UNICODETEXT || nFormat == CF_HDROP))
 			{
 				HGLOBAL hGlobal = ::GetClipboardData(nFormat);
 				LPVOID pvData = GlobalLock(hGlobal);
@@ -100,6 +100,9 @@ bool CClipboardSaveRestore::RestoreTextOnly()
 
 		SetClipboardData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
 
+		bool foundText = false;
+		int hDropIndex = -1;
+
 		INT_PTR size = m_Clipboard.GetSize();
 		for(int pos = 0; pos < size; pos++)
 		{
@@ -116,7 +119,44 @@ bool CClipboardSaveRestore::RestoreTextOnly()
 					::SetClipboardData(pCF->m_cfType, newData);
 
 					::GlobalUnlock(pCF->m_hgData);
+
+					foundText = true;
 				}
+				else if(pCF->m_cfType == CF_HDROP)
+				{
+					hDropIndex = pos;
+				}
+			}
+		}
+
+		//if we didn't place text on the clipboard and we have a hdrop then convert the hdrop to text only with contents of hdrop
+		if(foundText == false &&
+			hDropIndex > -1)
+		{
+			CString hDropString;
+			CClipFormat *pCF = &m_Clipboard.ElementAt(hDropIndex);
+			if(pCF && pCF->m_hgData)
+			{
+				HDROP drop = (HDROP)GlobalLock(pCF->m_hgData);
+				int nNumFiles = DragQueryFile(drop, -1, NULL, 0);
+				TCHAR file[MAX_PATH];
+
+				for(int nFile = 0; nFile < nNumFiles; nFile++)
+				{
+					if(DragQueryFile(drop, nFile, file, sizeof(file)) > 0)
+					{
+						if(PathIsDirectory(file) == FALSE)
+						{
+							hDropString += file;
+							hDropString += _T("\r\n");
+						}
+					}
+				}
+
+				GlobalUnlock(pCF->m_hgData);
+
+				HGLOBAL newData = NewGlobalP(hDropString.GetBuffer(), ((hDropString.GetLength() + 1) * sizeof(TCHAR)));	
+				::SetClipboardData(CF_UNICODETEXT, newData);
 			}
 		}
 
