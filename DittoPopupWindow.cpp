@@ -59,18 +59,45 @@ void CDittoPopupWindow::UpdateText(CString text)
 
 void CDittoPopupWindow::SetProgressBarPercent(int percent)
 {
-	m_progressWnd.ShowWindow(SW_SHOW);
+	if(::IsWindowVisible(m_progressWnd.m_hWnd) == FALSE)
+	{
+		m_progressWnd.ShowWindow(SW_SHOW);
+
+		CRect size;
+		GetClientRect(size);
+		DoSize(size.Width(), size.Height());
+	}
 	m_progressWnd.SetPos(percent);
 	PumpMessages();
+}
+
+void CDittoPopupWindow::HideProgressBar()
+{
+	m_progressWnd.ShowWindow(SW_HIDE);
+	PumpMessages();
+
+	CRect size;
+	GetClientRect(size);
+	DoSize(size.Width(), size.Height());
 }
 
 void CDittoPopupWindow::OnSize(UINT nType, int cx, int cy)
 {
 	CWndEx::OnSize(nType, cx, cy);
+	DoSize(cx, cy);	
+}
 
+void CDittoPopupWindow::DoSize(int cx, int cy)
+{
 	if(m_textLabel.m_hWnd != NULL)
 	{
-		m_textLabel.MoveWindow(10, 0, cx-20, cy-50);
+		int bottom = 0;
+		if(::IsWindowVisible(m_progressWnd.m_hWnd))
+		{
+			bottom = 50;
+		}
+		m_textLabel.MoveWindow(10, 0, cx-20, cy-bottom);
+		this->Invalidate();
 	}
 
 	if(m_progressWnd.m_hWnd != NULL)

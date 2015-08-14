@@ -9,6 +9,7 @@ public:
 
 	void UpdateText(CString text);
 	void SetProgressBarPercent(int percent);
+	void HideProgressBar();
 	
 protected:
 	DECLARE_MESSAGE_MAP()
@@ -22,5 +23,7 @@ protected:
 	CFont m_font;
 
 	void PumpMessages();
+
+	void DoSize(int cx, int cy);
 };
 

@@ -542,7 +542,8 @@ BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg)
 
 	if ((*popUpMsg) != NULL)
 	{
-		(*popUpMsg)->UpdateText(_T("Running Ditto database scripts"));
+		(*popUpMsg)->HideProgressBar();
+		(*popUpMsg)->UpdateText(_T("Running Ditto database scripts ..."));
 	}
 
 	return ret;
