@@ -725,8 +725,8 @@ BOOL RemoveOldEntries(bool checkIdleTime)
 					if(shortcut == 0 && 
 						dontDelete == 0 &&
 						parentId <= 0 &&
-						stickyClipOrder == 0.0 &&
-						stickyClipGroupOrder == 0.0)
+						stickyClipOrder == -(2147483647) &&
+						stickyClipGroupOrder == -(2147483647))
 					{
 						clipId = q.getIntField(_T("lID"));
 						IDs.Add(clipId);
@@ -756,7 +756,7 @@ BOOL RemoveOldEntries(bool checkIdleTime)
 				
 				CppSQLite3Query q = db.execQueryEx(_T("SELECT lID FROM Main ")
 													_T("WHERE lastPasteDate < %d AND ")
-													_T("bIsGroup = 0 AND lShortCut = 0 AND lParentID <= 0 AND lDontAutoDelete = 0 AND stickyClipOrder = 0 AND stickyClipGroupOrder = 0"), (int)now.GetTime());
+													_T("bIsGroup = 0 AND lShortCut = 0 AND lParentID <= 0 AND lDontAutoDelete = 0 AND stickyClipOrder = -(2147483647) AND stickyClipGroupOrder = -(2147483647)"), (int)now.GetTime());
 
 				while(q.eof() == false)
 				{
