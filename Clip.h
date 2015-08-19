@@ -139,7 +139,8 @@ public:
 	void RemoveStickySetting(int parentId);
 	BOOL LoadMainTable(int id);
 	DWORD GenerateCRC();
-	void MoveUp();
+	void MoveUp(int parentId);
+	void MoveDown(int parentId);
 
 	CStringW GetUnicodeTextFormat();
 	CStringA GetCFTextTextFormat();

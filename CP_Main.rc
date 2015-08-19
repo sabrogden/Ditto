@@ -302,8 +302,12 @@ BEGIN
             MENUITEM "Remove Hot Key",              32822,MFT_STRING,MFS_ENABLED
             MENUITEM "Remove Quick Paste",          32856,MFT_STRING | MFT_RIGHTJUSTIFY,MFS_ENABLED
         END
-        POPUP "Sticky Clips",                   65535,MFT_STRING,MFS_ENABLED
+        POPUP "Clip Order",                     65535,MFT_STRING,MFS_ENABLED
         BEGIN
+            MENUITEM "Move To Top",                 ID_CLIPORDER_MOVETOTOP,MFT_STRING,MFS_ENABLED
+            MENUITEM "Move Up",                     ID_CLIPORDER_MOVEUP,MFT_STRING,MFS_ENABLED
+            MENUITEM "Move Down",                   ID_CLIPORDER_MOVEDOWN,MFT_STRING,MFS_ENABLED
+            MENUITEM MFT_SEPARATOR
             MENUITEM "Make Top Sticky Clip",        ID_STICKYCLIPS_MAKETOPSTICKYCLIP,MFT_STRING,MFS_ENABLED
             MENUITEM "Make Last Sticky Clip",       ID_STICKYCLIPS_MAKELASTSTICKYCLIP,MFT_STRING,MFS_ENABLED
             MENUITEM "Remove Sticky Setting",       ID_STICKYCLIPS_REMOVESTICKYSETTING,MFT_STRING,MFS_ENABLED

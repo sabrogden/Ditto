@@ -783,52 +783,204 @@ bool CClip::AddToDataTable()
 	return true;
 }
 
-void CClip::MoveUp()
+void CClip::MoveUp(int parentId)
 {
-	if (m_stickyClipOrder == INVALID_STICKY)
+	try
 	{
-		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, clipOrder FROM Main Where clipOrder > %f ORDER BY clipOrder ASC LIMIT 1"), m_clipOrder);
-		if (q.eof() == false)
+		//In a group, not a sticky
+		if(parentId > -1 && m_stickyClipGroupOrder == INVALID_STICKY)
 		{
-			int idAbove = q.getIntField(_T("lID"));
-			double orderAbove = q.getFloatField(_T("clipOrder"));
-
-			CppSQLite3Query q2 = theApp.m_db.execQueryEx(_T("SELECT lID, clipOrder FROM Main Where clipOrder > %f ORDER BY clipOrder ASC LIMIT 1"), orderAbove);
-			if (q2.eof() == false)
-			{ 
-				int idTwoAbove = q2.getIntField(_T("lID"));
-				double orderTwoAbove = q2.getFloatField(_T("clipOrder"));
-			
-				m_clipOrder = orderAbove + (orderTwoAbove - orderAbove) / 2.0;
-			}
-			else
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, clipGroupOrder FROM Main Where lParentID = %d AND stickyClipGroupOrder == -(2147483647) AND clipGroupOrder > %f ORDER BY clipGroupOrder ASC LIMIT 1"), parentId, m_clipGroupOrder);
+			if (q.eof() == false)
 			{
-				m_clipOrder = orderAbove + 1;
+				int idAbove = q.getIntField(_T("lID"));
+				double orderAbove = q.getFloatField(_T("clipGroupOrder"));
+
+				CppSQLite3Query q2 = theApp.m_db.execQueryEx(_T("SELECT lID, clipGroupOrder FROM Main Where lParentID = %d AND clipGroupOrder > %f AND stickyClipGroupOrder == -(2147483647) ORDER BY clipGroupOrder ASC LIMIT 1"), parentId, orderAbove);
+				if (q2.eof() == false)
+				{ 
+					int idTwoAbove = q2.getIntField(_T("lID"));
+					double orderTwoAbove = q2.getFloatField(_T("clipGroupOrder"));
+
+					m_clipGroupOrder = orderAbove + (orderTwoAbove - orderAbove) / 2.0;
+				}
+				else
+				{
+					m_clipGroupOrder = orderAbove + 1;
+				}
+			}
+		}
+		// main group, not a sticky
+		else if(parentId <= -1 && m_stickyClipOrder == INVALID_STICKY)
+		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, clipOrder FROM Main Where clipOrder > %f AND stickyClipOrder == -(2147483647) ORDER BY clipOrder ASC LIMIT 1"), m_clipOrder);
+			if (q.eof() == false)
+			{
+				int idAbove = q.getIntField(_T("lID"));
+				double orderAbove = q.getFloatField(_T("clipOrder"));
+
+				CppSQLite3Query q2 = theApp.m_db.execQueryEx(_T("SELECT lID, clipOrder FROM Main Where clipOrder > %f AND stickyClipOrder == -(2147483647) ORDER BY clipOrder ASC LIMIT 1"), orderAbove);
+				if (q2.eof() == false)
+				{ 
+					int idTwoAbove = q2.getIntField(_T("lID"));
+					double orderTwoAbove = q2.getFloatField(_T("clipOrder"));
+
+					m_clipOrder = orderAbove + (orderTwoAbove - orderAbove) / 2.0;
+				}
+				else
+				{
+					m_clipOrder = orderAbove + 1;
+				}
+			}
+		}
+		//In a group, a sticky clip
+		else if(parentId > -1 && m_stickyClipGroupOrder != INVALID_STICKY)
+		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipGroupOrder FROM Main Where lParentID = %d AND stickyClipGroupOrder <> -(2147483647) AND stickyClipGroupOrder > %f ORDER BY stickyClipGroupOrder ASC LIMIT 1"), parentId, m_stickyClipGroupOrder);
+			if (q.eof() == false)
+			{
+				int idAbove = q.getIntField(_T("lID"));
+				double orderAbove = q.getFloatField(_T("stickyClipGroupOrder"));
+
+				CppSQLite3Query q2 = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipGroupOrder FROM Main Where lParentID = %d AND stickyClipGroupOrder <> -(2147483647) AND stickyClipGroupOrder > %f ORDER BY stickyClipGroupOrder ASC LIMIT 1"), parentId, orderAbove);
+				if (q2.eof() == false)
+				{
+					int idTwoAbove = q2.getIntField(_T("lID"));
+					double orderTwoAbove = q2.getFloatField(_T("stickyClipGroupOrder"));
+
+					m_stickyClipGroupOrder = orderAbove + (orderTwoAbove - orderAbove) / 2.0;
+				}
+				else
+				{
+					m_stickyClipGroupOrder = orderAbove + 1;
+				}
+			}
+		}
+		//not in a group, a sticky clip
+		else if(parentId <= -1 && m_stickyClipOrder != INVALID_STICKY)
+		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipOrder FROM Main Where stickyClipOrder <> -(2147483647) AND stickyClipOrder > %f ORDER BY stickyClipOrder ASC LIMIT 1"), m_stickyClipOrder);
+			if (q.eof() == false)
+			{
+				int idAbove = q.getIntField(_T("lID"));
+				double orderAbove = q.getFloatField(_T("stickyClipOrder"));
+
+				CppSQLite3Query q2 = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipOrder FROM Main Where stickyClipOrder <> -(2147483647) AND stickyClipOrder > %f ORDER BY stickyClipOrder ASC LIMIT 1"), orderAbove);
+				if (q2.eof() == false)
+				{
+					int idTwoAbove = q2.getIntField(_T("lID"));
+					double orderTwoAbove = q2.getFloatField(_T("stickyClipOrder"));
+
+					m_stickyClipOrder = orderAbove + (orderTwoAbove - orderAbove) / 2.0;
+				}
+				else
+				{
+					m_stickyClipOrder = orderAbove + 1;
+				}
 			}
 		}
 	}
-	else 
+	CATCH_SQLITE_EXCEPTION
+}
+
+void CClip::MoveDown(int parentId)
+{
+	try
 	{
-		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipOrder FROM Main Where stickyClipOrder > %f ORDER BY clipOrder ASC LIMIT 1"), m_stickyClipOrder);
-		if (q.eof() == false)
+		//In a group, not a sticky
+		if(parentId > -1 && m_stickyClipGroupOrder == INVALID_STICKY)
 		{
-			int idAbove = q.getIntField(_T("lID"));
-			double orderAbove = q.getFloatField(_T("stickyClipOrder"));
-
-			CppSQLite3Query q2 = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipOrder FROM Main Where stickyClipOrder > %f ORDER BY clipOrder ASC LIMIT 1"), orderAbove);
-			if (q2.eof() == false)
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, clipGroupOrder FROM Main Where lParentID = %d AND clipGroupOrder < %f AND stickyClipGroupOrder = -(2147483647) ORDER BY clipGroupOrder DESC LIMIT 1"), parentId, m_clipGroupOrder);
+			if (q.eof() == false)
 			{
-				int idTwoAbove = q2.getIntField(_T("lID"));
-				double orderTwoAbove = q2.getFloatField(_T("stickyClipOrder"));
+				int idBelow = q.getIntField(_T("lID"));
+				double orderBelow = q.getFloatField(_T("clipGroupOrder"));
 
-				m_stickyClipOrder = orderAbove + (orderTwoAbove - orderAbove) / 2.0;
+				CppSQLite3Query q2 = theApp.m_db.execQueryEx(_T("SELECT lID, clipGroupOrder FROM Main Where lParentID = %d AND clipGroupOrder < %f AND stickyClipGroupOrder = -(2147483647) ORDER BY clipGroupOrder DESC LIMIT 1"), parentId, orderBelow);
+				if (q2.eof() == false)
+				{ 
+					int idTwoBelow = q2.getIntField(_T("lID"));
+					double orderTwoBelow = q2.getFloatField(_T("clipGroupOrder"));
+
+					m_clipGroupOrder = orderBelow + (orderTwoBelow - orderBelow) / 2.0;
+				}
+				else
+				{
+					m_clipGroupOrder = orderBelow - 1;
+				}
 			}
-			else
+		}
+		// main group, not a sticky
+		else if(parentId <= -1 && m_stickyClipOrder == INVALID_STICKY)
+		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, clipOrder FROM Main Where clipOrder < %f AND stickyClipOrder = -(2147483647) ORDER BY clipOrder DESC LIMIT 1"), m_clipOrder);
+			if (q.eof() == false)
 			{
-				m_stickyClipOrder = orderAbove + 1;
+				int idBelow = q.getIntField(_T("lID"));
+				double orderBelow = q.getFloatField(_T("clipOrder"));
+
+				CppSQLite3Query q2 = theApp.m_db.execQueryEx(_T("SELECT lID, clipOrder FROM Main Where clipOrder < %f AND stickyClipOrder = -(2147483647) ORDER BY clipOrder DESC LIMIT 1"), orderBelow);
+				if (q2.eof() == false)
+				{ 
+					int idTwoBelow = q2.getIntField(_T("lID"));
+					double orderTwoBelow = q2.getFloatField(_T("clipOrder"));
+
+					m_clipOrder = orderBelow + (orderTwoBelow - orderBelow) / 2.0;
+				}
+				else
+				{
+					m_clipOrder = orderBelow - 1;
+				}
+			}
+		}
+		//In a group, a sticky clip
+		else if(parentId > -1 && m_stickyClipGroupOrder != INVALID_STICKY)
+		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipGroupOrder FROM Main Where lParentID = %d AND stickyClipGroupOrder <> -(2147483647) AND stickyClipGroupOrder < %f ORDER BY stickyClipGroupOrder DESC LIMIT 1"), parentId, m_stickyClipGroupOrder);
+			if (q.eof() == false)
+			{
+				int idBelow = q.getIntField(_T("lID"));
+				double orderBelow = q.getFloatField(_T("stickyClipGroupOrder"));
+
+				CppSQLite3Query q2 = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipGroupOrder FROM Main Where lParentID = %d AND stickyClipGroupOrder <> -(2147483647) AND stickyClipGroupOrder < %f ORDER BY stickyClipGroupOrder DESC LIMIT 1"), parentId, orderBelow);
+				if (q2.eof() == false)
+				{
+					int idTwoBelow = q2.getIntField(_T("lID"));
+					double orderTwoBelow = q2.getFloatField(_T("stickyClipGroupOrder"));
+
+					m_stickyClipGroupOrder = orderBelow + (orderTwoBelow - orderBelow) / 2.0;
+				}
+				else
+				{
+					m_stickyClipGroupOrder = orderBelow - 1;
+				}
+			}
+		}
+		//not in a group, a sticky clip
+		else if(parentId <= -1 && m_stickyClipOrder != INVALID_STICKY)
+		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipOrder FROM Main Where stickyClipOrder <> -(2147483647) AND stickyClipOrder < %f ORDER BY stickyClipOrder DESC LIMIT 1"), m_stickyClipOrder);
+			if (q.eof() == false)
+			{
+				int idBelow = q.getIntField(_T("lID"));
+				double orderBelow = q.getFloatField(_T("stickyClipOrder"));
+
+				CppSQLite3Query q2 = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipOrder FROM Main Where stickyClipOrder <> -(2147483647) AND stickyClipOrder < %f ORDER BY stickyClipOrder DESC LIMIT 1"), orderBelow);
+				if (q2.eof() == false)
+				{
+					int idTwoBelow = q2.getIntField(_T("lID"));
+					double orderTwoBelow = q2.getFloatField(_T("stickyClipOrder"));
+
+					m_stickyClipOrder = orderBelow + (orderTwoBelow - orderBelow) / 2.0;
+				}
+				else
+				{
+					m_stickyClipOrder = orderBelow - 1;
+				}
 			}
 		}
 	}
+	CATCH_SQLITE_EXCEPTION
 }
 
 void CClip::MakeStickyTop(int parentId)
@@ -877,7 +1029,7 @@ double CClip::GetNewTopSticky(int parentId, int clipId)
 	{
 		if (parentId < 0)
 		{
-			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT stickyClipOrder, mText FROM Main ORDER BY stickyClipOrder DESC LIMIT 1"));
+			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT stickyClipOrder, mText FROM Main WHERE stickyClipOrder <> -(2147483647) ORDER BY stickyClipOrder DESC LIMIT 1"));
 			if (q.eof() == false)
 			{
 				existingMaxOrder = q.getFloatField(_T("stickyClipOrder"));
@@ -887,7 +1039,7 @@ double CClip::GetNewTopSticky(int parentId, int clipId)
 		}
 		else
 		{
-			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT stickyClipGroupOrder, mText FROM Main WHERE lParentID = %d ORDER BY stickyClipGroupOrder DESC LIMIT 1"), parentId);
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT stickyClipGroupOrder, mText FROM Main WHERE lParentID = %d AND stickyClipGroupOrder <> -(2147483647) ORDER BY stickyClipGroupOrder DESC LIMIT 1"), parentId);
 			if (q.eof() == false)
 			{
 				existingMaxOrder = q.getFloatField(_T("stickyClipGroupOrder"));
@@ -915,7 +1067,7 @@ double CClip::GetNewLastSticky(int parentId, int clipId)
 	{
 		if (parentId < 0)
 		{
-			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT stickyClipOrder, mText FROM Main WHERE stickyClipOrder <> -10000000 ORDER BY stickyClipOrder LIMIT 1"));
+			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT stickyClipOrder, mText FROM Main WHERE stickyClipOrder <> -(2147483647) ORDER BY stickyClipOrder LIMIT 1"));
 			if (q.eof() == false)
 			{
 				existingMaxOrder = q.getFloatField(_T("stickyClipOrder"));
@@ -925,7 +1077,7 @@ double CClip::GetNewLastSticky(int parentId, int clipId)
 		}
 		else
 		{
-			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT stickyClipGroupOrder, mText FROM Main WHERE lParentID = %d ORDER BY stickyClipGroupOrder LIMIT 1"), parentId);
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT stickyClipGroupOrder, mText FROM Main WHERE lParentID = %d AND stickyClipGroupOrder <> -(2147483647) ORDER BY stickyClipGroupOrder LIMIT 1"), parentId);
 			if (q.eof() == false)
 			{
 				existingMaxOrder = q.getFloatField(_T("stickyClipGroupOrder"));

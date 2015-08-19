@@ -1272,7 +1272,7 @@ LRESULT CMainFrame::OnShowMsgWindow(WPARAM wParam, LPARAM lParam)
 
 	::SetWindowPos(m_pPopupWindow->m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
 
-	SetTimer(CLOSE_POPUP_MSG_WND, 2000, 0);
+	SetTimer(CLOSE_POPUP_MSG_WND, 2500, 0);
 
 	delete pMsg;
 	return TRUE;

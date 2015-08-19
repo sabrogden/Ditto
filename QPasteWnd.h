@@ -238,11 +238,16 @@ public:
 	bool DoExportToGoogleTranslate();
 	bool DoExportToBitMapFile();
 	bool DoSaveCurrentClipboard();
+	bool DoMoveClipDown();
+	bool DoMoveClipUp();
+	bool DoMoveClipTOP();
 
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
 	bool ShowProperties(int id, int row);
 	bool DeleteClips(CClipIDs &IDs, ARRAY &Indexs);
+	bool SyncClipDataToArrayData(CClip &clip);
+	bool SelectIds(ARRAY &ids);
 
     // Generated message map functions
 protected:
@@ -382,7 +387,6 @@ protected:
 	afx_msg void OnMakeLastStickyClip();
 	afx_msg void OnRemoveStickySetting();
 	afx_msg void OnElevateAppToPasteIntoElevatedApp();
-	afx_msg void OnMoveClipUp();
 	
 public:
 	afx_msg void OnQuickoptionsShowintaskbar();
@@ -403,4 +407,10 @@ public:
 	afx_msg void OnMenuWildcardsearch();
 	afx_msg void OnMenuSavecurrentclipboard();
 	afx_msg void OnUpdateMenuSavecurrentclipboard(CCmdUI *pCmdUI);
+	afx_msg void OnCliporderMoveup();
+	afx_msg void OnUpdateCliporderMoveup(CCmdUI *pCmdUI);
+	afx_msg void OnCliporderMovedown();
+	afx_msg void OnUpdateCliporderMovedown(CCmdUI *pCmdUI);
+	afx_msg void OnCliporderMovetotop();
+	afx_msg void OnUpdateCliporderMovetotop(CCmdUI *pCmdUI);
 };

@@ -276,6 +276,7 @@ BOOL CQListCtrl::SetListPos( int index )
 	RemoveAllSelection();
 	SetCaret(index);
 	SetSelection(index);
+	ListView_SetSelectionMark(m_hWnd, index);
 	EnsureVisible(index,FALSE);
 
 	return TRUE;
