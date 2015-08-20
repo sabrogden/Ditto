@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Ditto_Language_File Version = "0.1" Author = "Radoslaw Szambelan" Notes = "Draft" LanguageCode = "pol">
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Ditto_Language_File Version = "1" Author = "Lukasz Seweryn" Notes = "Wersja finalna bazujaca na tlumaczeniu Radoslawa Szambelan" LanguageCode = "pl">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Grupy</Item>
-		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Nowa Grupa	Ctrl-F7</Item>
-		<Item English_Text = "New Group Selection	F7" ID = "32812">Wybranie nowej grupy	F7</Item>
-		<Item English_Text = "Move to Group" ID = "32840">Przenies do grupy</Item>
-		<Item English_Text = "Quick Options" ID = "-1">Opcje</Item>
-		<Item English_Text = "Lines Per Row" ID = "-1">Ilosc linii w wierszu</Item>
+		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Nowa grupa</Item>
+		<Item English_Text = "New Group Selection	F7" ID = "32812">Wybór nowej grupy</Item>
+		<Item English_Text = "Move to Group" ID = "32840">Przenieś do grupy</Item>
+		<Item English_Text = "Quick Options" ID = "-1">Szybkie opcje</Item>
+		<Item English_Text = "Lines Per Row" ID = "-1">Ilość linii w wierszu</Item>
 		<Item English_Text = "1" ID = "32807">1</Item>
 		<Item English_Text = "2" ID = "32786">2</Item>
 		<Item English_Text = "3" ID = "32787">3</Item>
 		<Item English_Text = "4" ID = "32788">4</Item>
 		<Item English_Text = "5" ID = "32789">5</Item>
-		<Item English_Text = "Transparency" ID = "-1">Przejrzystosc</Item>
-		<Item English_Text = "None" ID = "32800">Zaden</Item>
+		<Item English_Text = "Transparency" ID = "-1">Przeźroczystość</Item>
+		<Item English_Text = "None" ID = "32800">Brak</Item>
 		<Item English_Text = "5 " ID = "32808">5</Item>
 		<Item English_Text = "10 " ID = "32792">10</Item>
 		<Item English_Text = "15 " ID = "32794">15</Item>
@@ -25,116 +25,136 @@
 		<Item English_Text = "At Caret" ID = "32802">Przy znaku karetki</Item>
 		<Item English_Text = "At Cursor" ID = "32803">Przy znaku kursora</Item>
 		<Item English_Text = "At Previous Position" ID = "32804">Na poprzedniej pozycji</Item>
-		<Item English_Text = "First Ten Hot Keys" ID = "-1">Pierwsze 10 klawiszy skrotow</Item>
-		<Item English_Text = "Use Ctrl - Num" ID = "32777">Uzyj Ctrl - numer</Item>
-		<Item English_Text = "Show Hot Key Text" ID = "32778">Pokaz opis klawiszy skrotow</Item>
-		<Item English_Text = "View Caption Bar On" ID = "-1">Pokaz pasek naglowka</Item>
-		<Item English_Text = "Top" ID = "32783">Gora</Item>
+		<Item English_Text = "First Ten Hot Keys" ID = "-1">Pierwsze 10 skrótów klawiszowych</Item>
+		<Item English_Text = "Use Ctrl - Num" ID = "32777">Użyj Ctrl - numer</Item>
+		<Item English_Text = "Show Hot Key Text" ID = "32778">Pokaż opis skrótów klawiszowych</Item>
+		<Item English_Text = "View Caption Bar On" ID = "-1">Pokaż pasek nagłówka</Item>
+		<Item English_Text = "Top" ID = "32783">Góra</Item>
 		<Item English_Text = "Right" ID = "32780">Prawo</Item>
-		<Item English_Text = "Bottom" ID = "32781">Dol</Item>
+		<Item English_Text = "Bottom" ID = "32781">Dół</Item>
 		<Item English_Text = "Left" ID = "32782">Lewo</Item>
 		<Item English_Text = "Sort" ID = "-1">Sortuj</Item>
-		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">Rosnaco (Ostatni na gorze)</Item>
-		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">Malejaco (Ostatni na dole)</Item>
-		<Item English_Text = "Double Clicking on Caption" ID = "-1">Dwukrotne klikniecie na naglowek</Item>
-		<Item English_Text = "Toggles Always on Top" ID = "32814">Przelacza: Zawsze na wierzchu</Item>
-		<Item English_Text = "Rolls-up Window" ID = "32815">Przewija okienko</Item>
-		<Item English_Text = "Toggles Always Show Description" ID = "32816">Przelacza: Pokaz zawsze opis</Item>
+		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">Rosnąco (ostatni na górze)</Item>
+		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">Malejąco (ostatni na dole)</Item>
+		<Item English_Text = "Double Clicking on Caption" ID = "-1">Dwukrotne kliknięcie na nagłówek</Item>
+		<Item English_Text = "Toggles Always on Top" ID = "32814">Przełącza: zawsze na wierzchu</Item>
+		<Item English_Text = "Rolls-up Window" ID = "32815">Przewija okno</Item>
+		<Item English_Text = "Toggles Always Show Description" ID = "32816">Przełącza: zawsze pokazuj opis</Item>
 		<Item English_Text = "Always on Top	Ctrl-Space" ID = "32784">Zawsze na wierzchu	Ctrl-Space</Item>
 		<Item English_Text = "Auto Roll-up" ID = "32791">Automatyczne przewijanie</Item>
 		<Item English_Text = "Always Show Description" ID = "32813">Zawsze pokazuj opis</Item>
 		<Item English_Text = "Prompt For New Group Names" ID = "32817">Pytaj o nowe nazwy grup</Item>
-		<Item English_Text = "Select Font" ID = "32844">Wybierz czcionke</Item>
-		<Item English_Text = "Show Thumbnails" ID = "32845">Pokaz miniatury</Item>
+		<Item English_Text = "Select Font" ID = "32844">Wybierz czcionkę</Item>
+		<Item English_Text = "Show Thumbnails" ID = "32845">Pokaż miniatury</Item>
 		<Item English_Text = "Draw RTF Text" ID = "32846">Pokazuj tekst RTF</Item>
-		<Item English_Text = "Paste Clip after selection" ID = "32847">Wklej klip po wybraniu </Item>
+		<Item English_Text = "Paste Clip after selection" ID = "32847">Wklej klip po wybraniu</Item>
 		<Item English_Text = "Find As You Type" ID = "32848">Wyszukuj podczas pisania</Item>
-		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Zapewnij widocznosc calego okienka</Item>
-		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Pokaz klipy bedace w grupach na liscie glownej</Item>
-		<Item English_Text = "Send To" ID = "-1">Wyslij do</Item>
-		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">192.168.1.101) - ten sam komputer</Item>
-		<Item English_Text = "View Full Description	F3" ID = "32793">Pokaz pelny opis	F3</Item>
-		<Item English_Text = "View Groups	Ctrl-G" ID = "32819">Pokaz grupy	Ctrl-G</Item>
-		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">Wklej tylko tekst	Shift-Enter</Item>
+		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Zapewnij widoczność całego okna</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Pokaż klipy będące w grupach na liście głównej</Item>
+		<Item English_Text = "Send To" ID = "-1">Wyślij do</Item>
+		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">(192.168.1.101) - ten sam komputer</Item>
+		<Item English_Text = "View Full Description	F3" ID = "32793">Pokaż pełny opis</Item>
+		<Item English_Text = "View Groups	Ctrl-G" ID = "32819">Pokaż grupy</Item>
+		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">Wklej tylko tekst</Item>
 		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">Wklej HTML jako tekst</Item>
-		<Item English_Text = "Delete Entry	Del" ID = "32801">Usun wpis	Del</Item>
-		<Item English_Text = "Properties	Alt-Enter" ID = "32776">Wlasciwosci</Item>
-		<Item English_Text = "Quick Properties" ID = "-1">Krotkie wlasciwosci</Item>
-		<Item English_Text = "Never Auto Delete" ID = "32820">Nigdy nie usuwaj automatycznie</Item>
-		<Item English_Text = "Auto Delete" ID = "32821">Usuwanie automatyczne </Item>
-		<Item English_Text = "Remove Hot Key" ID = "32822">Usun klawisz skrotu</Item>
-		<Item English_Text = "Options..." ID = "32805">Opcje...</Item>
+		<Item English_Text = "Delete Entry	Del" ID = "32801">Usuń wpis</Item>
+		<Item English_Text = "Properties	Alt-Enter" ID = "32776">Właściwości</Item>
+		<Item English_Text = "Quick Properties" ID = "-1">Szybkie właściwości</Item>
+		<Item English_Text = "Never Auto Delete" ID = "32820">Nie usuwaj automatycznie</Item>
+		<Item English_Text = "Auto Delete" ID = "32821">Usuń automatyczne </Item>
+		<Item English_Text = "Remove Hot Key" ID = "32822">Usuń skrót klawiszowy</Item>
+		<Item English_Text = "Options..." ID = "32805">Ustawienia</Item>
 		<Item English_Text = "Help" ID = "32842">Pomoc</Item>
-		<Item English_Text = "Disconnect from Clipboard" ID = "32775">Odlacz od schowka</Item>
-		<Item English_Text = "Exit Program" ID = "32806">Zakoncz program</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "32775">Odłącz od schowka</Item>
+		<Item English_Text = "Exit Program" ID = "32806">Zakończ program</Item>
 		
 		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Prompt to Delete Clip" ID = "32852"></Item>	
-		<Item English_Text = "Import" ID = "32855"></Item>
-		<Item English_Text = "Export" ID = "32853"></Item>
-		<Item English_Text = "Remove Quick Paste" ID = "32856"></Item>	
-		<Item English_Text = "Edit Clip" ID = "32860"></Item>
-		<Item English_Text = "New Clip" ID = "32867"></Item>	
+		<Item English_Text = "Prompt to Delete Clip" ID = "32852">Zapytaj czy kasować klip</Item>	
+		<Item English_Text = "Import" ID = "32855">Importuj</Item>
+		<Item English_Text = "Export" ID = "32853">Eksportuj</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">Usuń szybkie wklejanie</Item>	
+		<Item English_Text = "Edit Clip" ID = "32860">Edytuj klip</Item>
+		<Item English_Text = "New Clip" ID = "32867">Nowy klip</Item>	
 		
+		//Added 1/10/15
+		<Item English_Text = "Compare" ID = "-1">Porównaj</Item>	
+		<Item English_Text = "Select Left Text" ID = "32893">Wybierz tekst po lewej</Item>	
+		<Item English_Text = "Select Right Text And Compare Against Left" ID = "32894">Wybierz tekst po prawej i porównaj z lewym</Item>	
+		<Item English_Text = "Compare" ID = "32895">Porównaj</Item>
+		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "32881">Podnieś uprawnienia aby wkleić do aplikacji z wyższymi uprawnieniami</Item>
+		<Item English_Text = "Show In Taskbar" ID = "32885">Pokaż na pasku zadań</Item>
+		<Item English_Text = "Sticky Clips" ID = "-1">Przyklejone klipy</Item>	
+		<Item English_Text = "Make Top Sticky Clip" ID = "32878">Przenieś na samą górę</Item>	
+		<Item English_Text = "Make Last Sticky Clip" ID = "32879">Przenieś na sam dół</Item>	
+		<Item English_Text = "Remove Sticky Setting" ID = "32880">Usuń ustawienia przyklejonych</Item>
+		<Item English_Text = "Import/Export" ID = "-1">Importuj/eksportuj</Item>	
+		<Item English_Text = "View as QRCode" ID = "32887">Pokaż jako barcode QR </Item>	
+		<Item English_Text = "Export Clip(s) to Text File" ID = "32889">Eksportuj klip(y) do pliku tekstowego</Item>	
+	
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
-		<Item English_Text = "Hot Key" ID = "2039">Klawisz skrotu</Item>
-		<Item English_Text = "Hot Key" ID = "2039">Klawisz skrotu</Item>
+		<Item English_Text = "Hot Key" ID = "2039">Klawisz skrótu</Item>
+		<Item English_Text = "Hot Key" ID = "2039">Skrót</Item>
 		<Item English_Text = "Date" ID = "2040">Data</Item>
-		<Item English_Text = "&Never Auto Delete" ID = "1025">&Nigdy nie usuwaj automatycznie</Item>
-		<Item English_Text = "Parse" ID = "1040">Parsuj</Item>
-		<Item English_Text = "Move To Group" ID = "2041">Przenies do grupy</Item>
-		<Item English_Text = "Item Title" ID = "2042">Tytul elementu</Item>
+		<Item English_Text = "&Never Auto Delete" ID = "1025">Nie usuwaj automatycznie</Item>
+		<Item English_Text = "Move To Group" ID = "2041">Przenieś do grupy</Item>
+		<Item English_Text = "Item Title" ID = "2042">Tytuł elementu</Item>
 		<Item English_Text = "Copy Formats" ID = "2029">Kopiuj formaty</Item>
-		<Item English_Text = "Delete" ID = "1021">Usun</Item>
+		<Item English_Text = "Delete" ID = "1021">Usuń</Item>
 		<Item English_Text = "OK" ID = "1">OK</Item>
 		<Item English_Text = "Cancel" ID = "2">Anuluj</Item>
-		<Item English_Text = "Copy Properties" ID = "-1">Kopiuj wlasciwosci</Item>
+		<Item English_Text = "Copy Properties" ID = "-1">Kopiuj właściwości</Item>
+	
+		//Added 1/10/15
+		<Item English_Text = "Hotkey available globally" ID = "1026">Globalny klawisz skrótu</Item>
+		<Item English_Text = "Last Used" ID = "2043">Ostatnio</Item>
+		<Item English_Text = "Quick Paste Text" ID = "2125">Szybkie wklejenie</Item>
+		
 	</Ditto_Clip_Properties>
 	<Ditto_Options_General>
-		<Item English_Text = "Start Ditto on System Startup" ID = "2004">Startuj Ditto przy starcie systemu</Item>
-		<Item English_Text = "Display Icon in System Tray" ID = "2003">Pokaz ikone w Sytem Tray</Item>
-		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Maksymalna ilosc skopiowanych elementow</Item>
-		<Item English_Text = "Paste Entries Expire after" ID = "2009">Wklejone elementy staja sie niewazne po</Item>
-		<Item English_Text = "Days" ID = "2043">Dni</Item>
-		<Item English_Text = "Compact and Repair" ID = "1028">Konsoliduj i naprawiaj</Item>
-		<Item English_Text = "Automatically check for updates online" ID = "1029">Sprawdz automatycznie dostepnosc nowych wersji online</Item>
-		<Item English_Text = "Check Now" ID = "1030">Sprawdz teraz</Item>
-		<Item English_Text = "Allow Duplicates" ID = "1037">Pozwol na duplikaty</Item>
+		<Item English_Text = "Start Ditto on System Startup" ID = "2004">Uruchom Ditto razem z systemem</Item>
+		<Item English_Text = "Display Icon in System Tray" ID = "2003">Pokaż ikonę w zasobniku systemowym</Item>
+		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Maksymalna ilość skopiowanych elementów</Item>
+		<Item English_Text = "Paste Entries Expire after" ID = "2009">Trwałość skopiowanych elementów</Item>
+		<Item English_Text = "Days" ID = "2043">dzień/dni</Item>
+		<Item English_Text = "Compact and Repair" ID = "1028">Kompaktuj i napraw</Item>
+		<Item English_Text = "Check Now" ID = "1030">Sprawdź teraz</Item>
+		<Item English_Text = "Allow Duplicates" ID = "1037">Pozwól na duplikaty</Item>
 		<Item English_Text = "Update Clip Order On Paste" ID = "1038">Aktualizuj czas klipu przy wklejeniu</Item>
-		<Item English_Text = "Save Multi-Pastes" ID = "1039">Zachowuj multi-wklejenia</Item>
-		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Ukryj Ditto klawiszem skrotu jezeli jest widoczny</Item>
-		<Item English_Text = "Amount of text to save for description" ID = "2044">Ilosc tektu do zachowania dla opisu</Item>
-		<Item English_Text = "On copy play the sound" ID = "2045">Odtwarzaj dzwiek przy kopiowaniu</Item>
+		<Item English_Text = "Save Multi-Pastes" ID = "1039">Zachowaj wielokrotne wklejenia</Item>
+		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Ukryj Ditto klawiszem skrótu, jeżeli jest widoczny</Item>
+		<Item English_Text = "Amount of text to save for description" ID = "2044">Maksymalna długość tekstu dla opisu (znaki)</Item>
+		<Item English_Text = "On copy play the sound" ID = "2045">Odtwórz dźwięk przy kopiowaniu</Item>
 		<Item English_Text = "Play" ID = "2034">Odtwarzaj</Item>
 		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">Wklej klip do aktywnego okna po wybraniu</Item>
-		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">Maksymalna wielkosc klipu w bajtach</Item>
-		<Item English_Text = "(Leave blank for no limit)" ID = "2047">(Pozostaw puste jezeli bez limitu)</Item>
-		<Item English_Text = "Set Database Path" ID = "1034">Ustaw sciezke do bazy danych</Item>
-		<Item English_Text = "Language" ID = "2069">Jezyk</Item>
-		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">Ignoruj kopie ktore nastapily po X milisekundach od ostatniej kopii (1000 ms = 1 sec)</Item>
-		<Item English_Text = "About Language" ID = "2073">O jezyku</Item>
-		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Zapewnij stale podlaczenie Ditto do schowka</Item>
-		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Ogolne</Item>
-		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090"></Item>
+		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">Maksymalna wielkość klipu w bajtach</Item>
+		<Item English_Text = "(Leave blank for no limit)" ID = "2047">pozostaw puste przy brak limitu</Item>
+		<Item English_Text = "Set Database Path" ID = "1034">Ścieżka do bazy danych</Item>
+		<Item English_Text = "Language" ID = "2069">Język</Item>
+		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">Ignoruj kopie,  które wystąpiły po X milisekundach od ostatniej kopii (1000 msek = 1 sek)</Item>
+		<Item English_Text = "About Language" ID = "2073">O języku</Item>
+		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Zapewnij stałe podłączenie Ditto do schowka</Item>
+		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Ogólne</Item>
+		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090">Separator wielokrotnego wklejenia</Item>
 		
 		//New item added 3/1/11
-		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098"></Item>
-		<Item English_Text = "Include" ID = "2095"></Item>
-		<Item English_Text = "Exclude" ID = "2096"></Item>
+		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098">Zatwierdzone aplikacje do kopiowania (rozdziel ;)</Item>
+		<Item English_Text = "Include" ID = "2095">Włącz.</Item>
+		<Item English_Text = "Exclude" ID = "2096">Wyklucz.</Item>
+	
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
-		<Item English_Text = "&Add" ID = "1015">$&Dodaj</Item>
-		<Item English_Text = "&Delete" ID = "1016">&Usun</Item>
-		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">Obslugiwane typy</Item>
+		<Item English_Text = "&Add" ID = "1015">&Dodaj</Item>
+		<Item English_Text = "&Delete" ID = "1016">&Usuń</Item>
+		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">Obsługiwane typy</Item>
 	</Ditto_Options_Supported_Types>
 	<Ditto_Options_Shortcuts>
-		<Item English_Text = "Activate Ditto" ID = "2048">Uaktywnij Ditto</Item>
+		<Item English_Text = "Activate Ditto" ID = "2048">Aktywuj Ditto</Item>
 		<Item English_Text = "Win" ID = "2035">Win</Item>
-		<Item English_Text = "Named Copy" ID = "2049">Kopia z nazwa</Item>
+		<Item English_Text = "Named Copy" ID = "2049">Kopia z nazwą</Item>
 		<Item English_Text = "Win" ID = "2036">Win</Item>
-		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">Globalne skroty dla ostatnich dziesiecu skopiowanych elementow</Item>
-		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Wyslij wklej (w innym wypadku po prostu zaladuj element to schowka)</Item>
+		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">Globalne skróty dla ostatnich 10 skopiowanych elementów</Item>
+		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Wyślij wklejenie (w przeciwnym razie załaduj element do schowka)</Item>
 		<Item English_Text = "Position 1" ID = "2052">Pozycja 1</Item>
 		<Item English_Text = "Position 2" ID = "2053">Pozycja 2</Item>
 		<Item English_Text = "Position 3" ID = "2054">Pozycja 3</Item>
@@ -155,142 +175,154 @@
 		<Item English_Text = "Win" ID = "2039">Win</Item>
 		<Item English_Text = "Win" ID = "2040">Win</Item>
 		<Item English_Text = "Win" ID = "2041">Win</Item>
-		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Zaznacz 'Win' zeby dolaczyc klawisz windows do skrotu</Item>
-		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">Skroty klawiaturowe</Item>
+		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Zaznacz 'Win', aby użyć go w skrócie</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">Skróty klawiszowe</Item>
+		
 		//New item added in 3.15.1 8/18/07
-		<Item English_Text = "Send custom strokes Per Application" ID = "2091"></Item>
+		<Item English_Text = "Send custom strokes Per Application" ID = "2091">Komendy wklejenia dla aplikacji</Item>
+	
+		//Added 1/10/15
+		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043">Przesuń klipy na górę listy podczas kopiowania</Item>
+		
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Quick_Paste>
-		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">Historia zaczyna sie na gorze listy</Item>
-		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">Uzyj Ctrl - Num zeby skorzytac z pierwszych dziesieciu skrotow kopiwania</Item>
-		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">Pokaz tekt dla pierwszych dziesieciu skrotow kopiwania</Item>
-		<Item English_Text = "Show leading whitespace" ID = "2021">Pokazuj poczatkowe spacje</Item>
-		<Item English_Text = "Text Lines per Row" ID = "2062">Ilosc linii tekstu w wierszu</Item>
-		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">Wlacz przejrzystosc szybkiego kopiowania</Item>
-		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">Pokaz miniatury (dla typu CF_DIB (moze zwiekszyc zuzycie pamieci i predkosc wyswetlania)</Item>
-		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">Pokazuj tekst RTF na liscie (for typu RTF) (moze zwiekszyc zuzycie pamieci i predkosc wyswetlania)</Item>
+		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">Historia zaczyna się na górze listy</Item>
+		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">Użyj Ctrl - numer, dla pierwszych 10 pozycji</Item>
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">Pokaż tekst dla pierwszych 10 skrótów kopiowania</Item>
+		<Item English_Text = "Show leading whitespace" ID = "2021">Pokazuj początkowe spacje</Item>
+		<Item English_Text = "Text Lines per Row" ID = "2062">Ilość linii tekstu w wierszu</Item>
+		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">Przeźroczystość okna szybkiego kopiowania</Item>
+		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">Pokaż miniatury (dla typu CF_DIB) (może zwiększyć zużycie pamięci i prędkość wyświetlania)</Item>
+		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">Pokazuj tekst RTF na liście (dla typu RTF) (może zwiększyć zużycie pamięci i prędkość wyświetlania)</Item>
 		<Item English_Text = "Find As You Type" ID = "2036">Wyszukuj podczas pisania</Item>
-		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">Zapewnij widocznosc calego okna</Item>
-		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">Pokazuj klipy bedace w grupach, na liscie glownej</Item>
+		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">Zapewnij widoczność całego okna</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">Pokazuj pozycje będące w grupach na liście głównej</Item>
 		<Item English_Text = "Font" ID = "1040">Czcionka</Item>
-		<Item English_Text = "Default Font" ID = "2031">Czcionka domyslna</Item>
-		<Item English_Text = "Popup Positioning" ID = "2063">Pozycjonowanie okienka wyskakujacego</Item>
+		<Item English_Text = "Default Font" ID = "2031">Domyślna czcionka</Item>
+		<Item English_Text = "Popup Positioning" ID = "2063">Pozycjonowanie menu</Item>
 		<Item English_Text = "At Caret" ID = "2015">Przy karetce</Item>
 		<Item English_Text = "At Cursor" ID = "2016">Przy kursorze</Item>
 		<Item English_Text = "At Previous Position" ID = "2017">Na poprzedniej pozycji</Item>
-		<Item English_Text = "List Item Prefix Legend" ID = "2064">Pokaz legende prefiksow elementow</Item>
-		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">  * = Nie usuwaj automatycznie\n  s = Skrot istnieje\n G = Element to grupa\n  ! = Element nalezy do grupy</Item>
+		<Item English_Text = "List Item Prefix Legend" ID = "2064">Pokaż legendę prefiksów elementów</Item>
+		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">  * = Nie usuwaj automatycznie\n  s = Skrót istnieje\n G = Element to grupa\n  ! = Element należy do grupy</Item>
 		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Szybkie wklejanie</Item>
 		
 		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Prompt when deleting clips" ID = "2039"></Item>
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Potwierdź przy usuwaniu pozycji</Item>
 		
 		//New strings added in 3.15.2 10-6-07
-		<Item English_Text = "Theme" ID = "2092"></Item>
-		<Item English_Text = "About Theme" ID = "2094"></Item>
+		<Item English_Text = "Theme" ID = "2092">Wygląd</Item>
+		<Item English_Text = "About Theme" ID = "2094">O wyglądzie</Item>
+	
+		//Added 1/10/15
+		<Item English_Text = "Always Show Scroll Bar" ID = "2040">Zawsze pokazuj pasek przewijania</Item>
+		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "2041">Podnieś uprawnienia aby wkleić do aplikacji z wyższymi uprawnieniami</Item>
+		<Item English_Text = "Show In Taskbar" ID = "2042">Pokaż w pasku zadań</Item>
+		<Item English_Text = "Diff Application Path" ID = "2122"></Item>	
+	
 	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>
-		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Jezeli otrzymujesz lub wysylasz kopie, jezeli jest na liscie ich IP, wtedy bedzie to umieszczone w schowku.  W przeciwnym wypadku bedzie umieszczone w zachowanych klipach do pozniejszego uzycia.</Item>
-		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP/Nazwy komputerow rozdzielone przecinkami</Item>
-		<Item English_Text = "Disable Recieving Clips" ID = "2026">Wylacz otrzymywanie klipow</Item>
-		<Item English_Text = "Network Password" ID = "2054">Haslo siecowe</Item>
-		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">Jezeli otrzymujsze klipy z komputerow gdzie nie pasuje twoje haslo sieciowe, wpisz dodatkowe hasla sieciowe oddzielone przecinkami</Item>
-		<Item English_Text = "Receive Passwords" ID = "2056">Otrzymuj hasla</Item>
-		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Jezeli wyslij wszystkie kopie jest wybrane wtedy wszystkie kopie z tego komputera beda wyslane do innego komputera.  Jezeli to nie jest wybrane to wysylanie kopii do innego komputera bedzie tylko mozliwe przez menu pod prawym klawiszem myszki.</Item>
-		<Item English_Text = "Log Send Receive Commands" ID = "1042">Rejestruj komendy wyslij/odbierz.</Item>
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Jeżeli otrzymasz klip z zapisanego IP bądź komputera, kopia zostanie dodana do schowka. W przeciwnym razie zostanie zapisany klip do użycia w późniejszym czasie.</Item>
+		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP/Nazwy komputerów rozdzielone przecinkami</Item>
+		<Item English_Text = "Disable Recieving Clips" ID = "2026">Wyłącz otrzymywanie klipów</Item>
+		<Item English_Text = "Network Password" ID = "2054">Hasło sieciowe</Item>
+		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">Jeżeli otrzymujesz klipy z innych komputerów a Twoje hasło nie pasuje, wpisz dodatkowe hasła sieciowe oddzielone przecinkami</Item>
+		<Item English_Text = "Receive Passwords" ID = "2056">Otrzymuj hasła</Item>
+		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Jeśli wybrano wyślij wszystkie kopie, zostaną wysłane wszystkie pozycje z tego do innego komputera. W przeciwnym wypadku będzie możliwość wysłania pojedyńczych pozycji po kliknięciu na niej prawym klawiszem myszy.</Item>
+		<Item English_Text = "Log Send Receive Commands" ID = "1042">Rejestruj komendy wyślij/odbierz.</Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Przyjaciele</Item>
+		
 		//Added in 9-11-09
-		<Item English_Text = "Send All Copies" ID = "Send_All_Copies"></Item>
-        	<Item English_Text = "IP/Name" ID = "IP_Name"></Item>
-        	<Item English_Text = "Descriptions" ID = "Descriptions"></Item>
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">Wyślij wszystkie kopie</Item>
+        	<Item English_Text = "IP/Name" ID = "IP_Name">IP/Nazwa</Item>
+        	<Item English_Text = "Descriptions" ID = "Descriptions">Opis</Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
-		<Item English_Text = "Send All Copies to this friend" ID = "1015">Wyslij wszystkie kopie do tego Przyjaciela</Item>
+		<Item English_Text = "Send All Copies to this friend" ID = "1015">Wyślij wszystkie kopie do tego Przyjaciela</Item>
 		<Item English_Text = "IP/Name" ID = "2052">IP/Nazwa</Item>
 		<Item English_Text = "Description" ID = "2053">Opis</Item>
 		<Item English_Text = "Friend Details" ID = "-1">Detale przyjaciela</Item>
 	</Ditto_Options_Friends_Detail>
 	<Ditto_Options_Stats>
-		<Item English_Text = "Odometer" ID = "2052">Odleglosciomierz</Item>
-		<Item English_Text = "Trip Odometer" ID = "2053">Odleglosciomierz dla wycieczki</Item>
+		<Item English_Text = "Odometer" ID = "2052">Odległościomierz całościowy</Item>
+		<Item English_Text = "Trip Odometer" ID = "2053">Odległościomierz jednorazowy</Item>
 		<Item English_Text = "Copies" ID = "2054">Kopii</Item>
-		<Item English_Text = "Pastes" ID = "2055">Wklejen</Item>
+		<Item English_Text = "Pastes" ID = "2055">Wklejeń</Item>
 		<Item English_Text = "Copies" ID = "2056">Kopii</Item>
-		<Item English_Text = "Pastes" ID = "2057">Wklejen</Item>
+		<Item English_Text = "Pastes" ID = "2057">Wklejeń</Item>
 		<Item English_Text = "Reset" ID = "1006">Kasuj</Item>
 		<Item English_Text = "Saved Copies" ID = "2058">Zachowanych kopii</Item>
 		<Item English_Text = "Saved Copy Data" ID = "2059">Zachowanych skopiowanych danych</Item>
-		<Item English_Text = "Remove All" ID = "1013">Usun wszystkie</Item>
-		<Item English_Text = "Last Started" ID = "2060">Ostatnio uruchmiony</Item>
-		<Item English_Text = "Database Size" ID = "2061">Wielkosc bazy danych</Item>
-		<Item English_Text = "Clips Sent" ID = "2066">Ilosc wyslanych klipow</Item>
-		<Item English_Text = "Clips received" ID = "2067">Ilosc odebranych klipow</Item>
+		<Item English_Text = "Remove All" ID = "1013">Usuń wszystkie</Item>
+		<Item English_Text = "Last Started" ID = "2060">Ostatnio uruchomiony</Item>
+		<Item English_Text = "Database Size" ID = "2061">Rozmiar bazy danych</Item>
+		<Item English_Text = "Clips Sent" ID = "2066">Ilość wysłanych klipów</Item>
+		<Item English_Text = "Clips received" ID = "2067">Ilość odebranych klipów</Item>
 		<Item English_Text = "Since Last Start" ID = "2068">Od ostatniego startu</Item>
 		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true">Statystyki</Item>
 	</Ditto_Options_Stats>
 	<Ditto_Options_Supported_Types_Add>
-		<Item English_Text = "Main Types" ID = "2052">Glowne typy</Item>
-		<Item English_Text = "Custom Type" ID = "2053">Typy uzytkownika</Item>
+		<Item English_Text = "Main Types" ID = "2052">Główne typy</Item>
+		<Item English_Text = "Custom Type" ID = "2053">Typy użytkownika</Item>
 		<Item English_Text = "Add" ID = "1020">Dodaj</Item>
 		<Item English_Text = "Currently on the Clipboard" ID = "2054">Obecnie w schowku</Item>
 		<Item English_Text = "Add" ID = "1019">Dodaj</Item>
 		<Item English_Text = "Add" ID = "1021">Dodaj</Item>
-		<Item English_Text = "Cancel" ID = "2">Usun</Item>
-		<Item English_Text = "Add Supported Type" ID = "-1">Dodaj obslugiwany typ</Item>
+		<Item English_Text = "Cancel" ID = "2">Usuń</Item>
+		<Item English_Text = "Add Supported Type" ID = "-1">Dodaj obsługiwany typ</Item>
 	</Ditto_Options_Supported_Types_Add>
 	<Ditto_Move_To_Groups>
 		<Item English_Text = "New Group" ID = "1040">Nowa grupa</Item>
 		<Item English_Text = "OK" ID = "1">OK</Item>
 		<Item English_Text = "Cancel" ID = "2">Anuluj</Item>
-		<Item English_Text = "Move to Group" ID = "-1">Przenies do grupy</Item>
+		<Item English_Text = "Move to Group" ID = "-1">Przenieś do grupy</Item>
 	</Ditto_Move_To_Groups>
-	
 	<Ditto_String_Table>
-		<Item English_Text = "General" ID = "GeneralTitle">Ogolny</Item>
-		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">Obslugiwane typy</Item>
+		<Item English_Text = "General" ID = "GeneralTitle">Ogólne</Item>
+		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">Obsługiwane typy</Item>
 		<Item English_Text = "Stats" ID = "StatsTitle">Statystyki</Item>
 		<Item English_Text = "Friends" ID = "FriendsTitle">Przyjaciele</Item>
 		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">Szybkie wklejanie</Item>
-		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">Skroty klawiaturowe</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">Skróty klawiszowe</Item>
 		<Item English_Text = "About" ID = "AboutTitle">O programie</Item>
-		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">Blad otwarcia bazy danych</Item>
-		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">Nie mozna zainicjalizowac DAO/Jet db engine.\nWybierz Yes zeby sciagnac DAO z http://ditto-cp.sourceforge.net/dao_setup.exe\n\nZrestartuj Ditto po instalacji DAO.</Item>
+		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">Błąd otwarcia bazy danych</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">Nie można zainicjalizować DAO/Jet db engine.\nWybierz Tak, żeby ściągnąć DAO z http://ditto-cp.sourceforge.net/dao_setup.exe\n\nZrestartuj Ditto po instalacji DAO.</Item>
 		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format">Nierozpoznany format bazy danych</Item>
 		<Item English_Text = "the file will be renamed" ID = "File_Renamed">nazwa pliku zostanie zmieniona</Item>
-		<Item English_Text = "and a new database will be created" ID = "New_Database">i nowa baza danych bedzie utworzona</Item>
-		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">Dostepne nowa wersja Ditto.\nOdwiedz ditto-cp.sourceforge.net zeby dowiedzec sie wiecej\n\nAktualna wersja</Item>
-		<Item English_Text = "Update Version" ID = "Update_Version">Nowa wersja</Item>
-		<Item English_Text = "Download updated version?" ID = "Download_Update">Sciagnac nowa wersje?</Item>			
-		<Item English_Text = "No updates available" ID = "No_Updates">Nie ma nowych wersji</Item>			
-		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Ta operacja usunie wszystkie skopiowane elementy!\n\nKontynuowac?</Item>
-		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Odlacz od schowka</Item>			
-		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Podlacz do schowka</Item>			
-		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">Nie mozna zainicjalizowac DAO/Jet db engine.  DAO zostanie teraz zainstalowane.\n\nZrestartuj Ditto po instalacji DAO.</Item>
-		<Item English_Text = "NO TARGET" ID = "No_Target"></Item>		
+		<Item English_Text = "and a new database will be created" ID = "New_Database">i nowa baza danych zostanie utworzona</Item>
+		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">Dostępna nowa wersja Ditto.\nOdwiedź ditto-cp.sourceforge.net, żeby dowiedzieć się więcej.\n\nAktualna wersja:</Item>
+		<Item English_Text = "Update Version" ID = "Update_Version">Nowa wersja jest dostępna</Item>
+		<Item English_Text = "Download updated version?" ID = "Download_Update">Czy pobrać nową wersje?</Item>			
+		<Item English_Text = "No updates available" ID = "No_Updates">Brak nowych wersji</Item>			
+		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Ta operacja usunie wszystkie skopiowane elementy!\n\nKontynuować?</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Odłącz od schowka</Item>			
+		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Podłącz do schowka</Item>			
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">Nie można zainicjalizować DAO/Jet db engine. DAO zostanie teraz zainstalowane.\n\nZrestartuj Ditto po instalacji DAO.</Item>
+		<Item English_Text = "NO TARGET" ID = "No_Target">BRAK PLIKU</Item>		
 		
 		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Prompt when deleting clips" ID = "2039"></Item>
-		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip"></Item>
-		<Item English_Text = "Error importing exported clip" ID = "Error_Importing"></Item>
-		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing"></Item>
-		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good"></Item>
-		<Item English_Text = "Successfully imported" ID = "Import_Successfully"></Item>
-		<Item English_Text = "clip" ID = "Clip"></Item>
-		<Item English_Text = "clips" ID = "Clips"></Item>
-		<Item English_Text = "Update clip description on save?" ID = "Update_Desc"></Item>
-		<Item English_Text = "New Clip" ID = "New_Clip"></Item>
-		<Item English_Text = "Save" ID = "Save"></Item>
-		<Item English_Text = "Save All" ID = "Save_All"></Item>
-		<Item English_Text = "Close Current Tab" ID = "Close"></Item>
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Zapytaj przed usuwaniem klipów</Item>
+		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">Czy usunąć zaznaczone klipy?</Item>
+		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">Błąd podczas importowania klipów</Item>
+		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing">Błąd analizy eksportowanego klipu</Item>
+		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good">Klip dodany do schowka</Item>
+		<Item English_Text = "Successfully imported" ID = "Import_Successfully">Zaimportowano pomyślnie</Item>
+		<Item English_Text = "clip" ID = "Clip">klip</Item>
+		<Item English_Text = "clips" ID = "Clips">klipy</Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">Czy uaktualnić opis podczas zapisu?</Item>
+		<Item English_Text = "New Clip" ID = "New_Clip">Nowy klip</Item>
+		<Item English_Text = "Save" ID = "Save">Zapisz</Item>
+		<Item English_Text = "Save All" ID = "Save_All">Zapisz wszystkie</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">Zamknij bieżącą zakładkę</Item>
 		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable"></Item>
 		<Item English_Text = "to be editable" ID = "Editable"></Item>
-		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges"></Item>
-		<Item English_Text = "Error saving clip" ID = "ErrorSaving"></Item>
-		<Item English_Text = "New" ID = "New"></Item>
-		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close"></Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">Czy chcesz zapisać zmiany do</Item>
+		<Item English_Text = "Error saving clip" ID = "ErrorSaving">Błąd zapisu klipu</Item>
+		<Item English_Text = "New" ID = "New">Nowy</Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">Zapisz, zamknij i dodaj do schowka</Item>
 		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit"></Item>
 		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title"></Item>
-		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1"></Item>
+		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">Błąd wczytywania danych</Item>
 		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2"></Item>
 		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3"></Item>
 		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title"></Item>
@@ -299,9 +331,13 @@
 		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3"></Item> 
 		
 		//New strings added in 3.17 2-28-10
-		<Item English_Text = "Add-Ins" ID = "Add_Ins"></Item> 
+		<Item English_Text = "Add-Ins" ID = "Add_Ins">Dodatki</Item> 
 		
-		<Item English_Text = "Copy Buffers" ID = "CopyBuffers"></Item>
+		<Item English_Text = "Copy Buffers" ID = "CopyBuffers">Bufory kopiowania</Item>
+	
+		<Item English_Text = "Search Options" ID = "SearchOptionsTooltip">Opcje wyszukiwania</Item>
+		<Item English_Text = "Groups" ID = "GroupsTooltip">Grupy</Item>
+		
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">OK</Item>
@@ -309,56 +345,90 @@
 		<Item English_Text = "Apply" ID = "12321">Zastosuj</Item>
 	</Ditto_Options_Sheet>
 	<Ditto_Tray_Icon_Menu>
-		<Item English_Text = "Show Quick Paste" ID = "32773">Pokaz szybkie wklejanie</Item>
-		<Item English_Text = "Options" ID = "32771">Opcje</Item>
+		<Item English_Text = "Show Quick Paste" ID = "32773">Pokaż szybkie wklejanie</Item>
+		<Item English_Text = "Options" ID = "32771">Ustawienia</Item>
 		<Item English_Text = "Help" ID = "32843">Pomoc</Item>
-		<Item English_Text = "Exit" ID = "32772">Wyjscie</Item>	
+		<Item English_Text = "Exit" ID = "32772">Wyjście</Item>	
 		
 		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Import" ID = "32854"></Item>
-		<Item English_Text = "New Clip" ID = "32868"></Item>
+		<Item English_Text = "Import" ID = "32854">Importuj</Item>
+		<Item English_Text = "New Clip" ID = "32868">Nowy klip</Item>
 		
 		//Added 12/10/11
-		<Item English_Text = "Global Hot Keys" ID = "32872"></Item>
+		<Item English_Text = "Global Hot Keys" ID = "32872">Globalne skróty klawiszowe</Item>
+
+		//Added 1/10/15
+		<Item English_Text = "Delete Clip Data" ID = "32886">Usuwanie informacji o klipach</Item>
 	</Ditto_Tray_Icon_Menu>
+	
 	//Added in 9-11-09
 	<Ditto_Options_CopyBuffers>
-		<Item English_Text = "Copy Buffer 1" ID = "2088"></Item>
-		<Item English_Text = "Copy" ID = "2079"></Item>
-		<Item English_Text = "Paste" ID = "2080"></Item>
-		<Item English_Text = "Cut" ID = "2081"></Item>
-		<Item English_Text = "Play Sound on Copy" ID = "1042"></Item>
-		<Item English_Text = "Win" ID = "2085"></Item>
-		<Item English_Text = "Win" ID = "2086"></Item>
-		<Item English_Text = "Win" ID = "2087"></Item>
+		<Item English_Text = "Copy Buffer 1" ID = "2088">Bufor kopiowania 1</Item>
+		<Item English_Text = "Copy" ID = "2079">Kopiuj</Item>
+		<Item English_Text = "Paste" ID = "2080">Wklej</Item>
+		<Item English_Text = "Cut" ID = "2081">Wytnij</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042">Dźwięk</Item>
+		<Item English_Text = "Win" ID = "2085">Win</Item>
+		<Item English_Text = "Win" ID = "2086">Win</Item>
+		<Item English_Text = "Win" ID = "2087">Win</Item>
 		
-		<Item English_Text = "Copy Buffer 2" ID = "2098"></Item>
-		<Item English_Text = "Copy" ID = "2093"></Item>
-		<Item English_Text = "Paste" ID = "2094"></Item>
-		<Item English_Text = "Cut" ID = "2097"></Item>
-		<Item English_Text = "Play Sound on Copy" ID = "1043"></Item>
-		<Item English_Text = "Win" ID = "2090"></Item>
-		<Item English_Text = "Win" ID = "2092"></Item>
-		<Item English_Text = "Win" ID = "2096"></Item>
+		<Item English_Text = "Copy Buffer 2" ID = "2098">Bufor kopiowania 2</Item>
+		<Item English_Text = "Copy" ID = "2093">Kopiuj</Item>
+		<Item English_Text = "Paste" ID = "2094">Wklej</Item>
+		<Item English_Text = "Cut" ID = "2097">Wytnij</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043">Dźwięk</Item>
+		<Item English_Text = "Win" ID = "2090">Win</Item>
+		<Item English_Text = "Win" ID = "2092">Win</Item>
+		<Item English_Text = "Win" ID = "2096">Win</Item>
 		
-		<Item English_Text = "Copy Buffer 3" ID = "2108"></Item>
-		<Item English_Text = "Copy" ID = "2103"></Item>
-		<Item English_Text = "Paste" ID = "2104"></Item>
-		<Item English_Text = "Cut" ID = "2107"></Item>
-		<Item English_Text = "Play Sound on Copy" ID = "1044"></Item>
-		<Item English_Text = "Win" ID = "2100"></Item>
-		<Item English_Text = "Win" ID = "2102"></Item>
-		<Item English_Text = "Win" ID = "2106"></Item>
+		<Item English_Text = "Copy Buffer 3" ID = "2108">Bufor kopiowania 3</Item>
+		<Item English_Text = "Copy" ID = "2103">Kopiuj</Item>
+		<Item English_Text = "Paste" ID = "2104">Wklej</Item>
+		<Item English_Text = "Cut" ID = "2107">Wytnij</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044">Dźwięk</Item>
+		<Item English_Text = "Win" ID = "2100">Win</Item>
+		<Item English_Text = "Win" ID = "2102">Win</Item>
+		<Item English_Text = "Win" ID = "2106">Win</Item>
 	</Ditto_Options_CopyBuffers>
 	
 	<Ditto_GlobalHotKeys>
-		<Item English_Text = "Global Hot Keys" ID = "-1"></Item>
-		<Item English_Text = "Close" ID = "2"></Item>
-		<Item English_Text = "(Clip) " ID = "(Clip)"></Item>
-		<Item English_Text = "Error" ID = "Error"></Item>
-		<Item English_Text = "Yes" ID = "Yes"></Item>
-		<Item English_Text = "Description" ID = "Description"></Item>
-		<Item English_Text = "HotKey" ID = "HotKey"></Item>
-		<Item English_Text = "Registered" ID = "Registered"></Item>
+		<Item English_Text = "Global Hot Keys" ID = "-1">Globalne skróty klawiszowe</Item>
+		<Item English_Text = "Close" ID = "2">Zamknij</Item>
+		<Item English_Text = "(Clip) " ID = "(Clip)">(Klip)</Item>
+		<Item English_Text = "Error" ID = "Error">Błąd</Item>
+		<Item English_Text = "Yes" ID = "Yes">Tak</Item>
+		<Item English_Text = "Description" ID = "Description">Opis</Item>
+		<Item English_Text = "HotKey" ID = "HotKey">Skrót klawiszowy</Item>
+		<Item English_Text = "Registered" ID = "Registered">Zarejestrowano</Item>
 	</Ditto_GlobalHotKeys>
+	
+	//Added 1/10/15
+	<Ditto_Groups_Right_Click_Menu>
+		<Item English_Text = "New Sub Group" ID = "32896">Nowa podgrupa</Item>
+		<Item English_Text = "Delete Group" ID = "32897">Usuń grupę</Item>
+		<Item English_Text = "Properties" ID = "32898">Właściwości</Item>	
+	</Ditto_Groups_Right_Click_Menu>
+	
+	//Added 1/10/15
+	<Ditto_DeleteClipData>
+		<Item English_Text = "Delete Clip Data" ID = "-1">Usuwanie danych klipów</Item>
+		<Item English_Text = "Each clip in Ditto is made of multiple clipboard items, all clipboard items in Ditto are listed below." ID = "2126">Wyświetla listę klipów utworzonych w Ditto, niektóre pozycje mogą wystąpić wielokrotnie</Item>
+		<Item English_Text = "Search Options" ID = "2120">Opcje wyszukiwania</Item>
+		<Item English_Text = "Title" ID = "1042">Tytuł</Item>
+		<Item English_Text = "Create Date Range" ID = "1043">Przedział czasowy</Item>
+		<Item English_Text = "Format" ID = "1045">Format</Item>
+		<Item English_Text = "Last Used Range" ID = "1044">Ostatnio użyty</Item>
+		<Item English_Text = "Search" ID = "1040">Szukaj</Item>
+		<Item English_Text = "Database Size" ID = "2115">Baza danych:</Item>
+		<Item English_Text = "Selected Size" ID = "2116">Rozmiar:</Item>
+		<Item English_Text = "Selected Count" ID = "2117">Zaznaczono:</Item>
+		<Item English_Text = "Delete" ID = "2118">Usuń</Item>
+		<Item English_Text = "Cancel" ID = "2">Anuluj</Item>
+		<Item English_Text = "Title" ID = "Title">Tutuł</Item>
+		<Item English_Text = "Created" ID = "Created">Utworzono</Item>
+		<Item English_Text = "Last Used" ID = "LastUsed">Ostatnio używano</Item>
+		<Item English_Text = "Format" ID = "Format">Format</Item>
+		<Item English_Text = "Data Size" ID = "DataSize">Rozmiar danych</Item>
+	</Ditto_DeleteClipData>
+
 </Ditto_Language_File>
