@@ -68,7 +68,7 @@ public:
 
 	bool Remove(int clipId, CHotKey::HotKeyType hkType);
 
-	BOOL ValidateClip(int clipId, DWORD key, CString desc);
+	BOOL ValidateClip(int clipId, DWORD key, CString desc, CHotKey::HotKeyType hkType);
 
 	// profile load / save
 	void LoadAllKeys();

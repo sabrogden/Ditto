@@ -314,7 +314,7 @@ BOOL CCopyProperties::CheckGlobalHotKey(CClip &clip)
 
 	if(clip.m_globalShortCut)
 	{
-		ret = g_HotKeys.ValidateClip(clip.m_id, clip.m_shortCut, clip.m_Desc);
+		ret = g_HotKeys.ValidateClip(clip.m_id, clip.m_shortCut, clip.m_Desc, CHotKey::PASTE_OPEN_CLIP);
 	}
 	else
 	{
@@ -331,7 +331,7 @@ BOOL CCopyProperties::CheckMoveToGroupGlobalHotKey(CClip &clip)
 
 	if(clip.m_globalMoveToGroupShortCut)
 	{
-		ret = g_HotKeys.ValidateClip(clip.m_id, clip.m_moveToGroupShortCut, clip.m_Desc);
+		ret = g_HotKeys.ValidateClip(clip.m_id, clip.m_moveToGroupShortCut, clip.m_Desc, CHotKey::MOVE_TO_GROUP);
 	}
 	else
 	{

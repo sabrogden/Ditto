@@ -307,13 +307,15 @@ bool CHotKeys::Remove(int clipId, CHotKey::HotKeyType hkType)
 	return false;
 }
 
-BOOL CHotKeys::ValidateClip(int clipId, DWORD key, CString desc)
+BOOL CHotKeys::ValidateClip(int clipId, DWORD key, CString desc, CHotKey::HotKeyType hkType)
 {
 	CHotKey *pKey = NULL;
 	INT_PTR count = GetSize();
 	for(int i=0; i < count; i++)
 	{
-		if(ElementAt(i) != NULL && ElementAt(i)->m_clipId == clipId)
+		if(ElementAt(i) != NULL && 
+			ElementAt(i)->m_clipId == clipId &&
+			ElementAt(i)->m_hkType == hkType)
 		{
 			pKey = ElementAt(i);
 			break;
@@ -322,7 +324,7 @@ BOOL CHotKeys::ValidateClip(int clipId, DWORD key, CString desc)
 
 	if(pKey == NULL)
 	{
-		pKey = new CHotKey(desc, key, true);
+		pKey = new CHotKey(desc, key, true, hkType);
 	}
 	   
 	BOOL ret = FALSE;
