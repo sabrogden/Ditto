@@ -177,6 +177,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Global Hot Keys",             ID_FIRST_GLOBALHOTKEYS
         MENUITEM "Delete Clip Data",            ID_FIRST_DELETECLIPDATA
+        MENUITEM "Fixup Sticky Clip Order",     ID_FIRST_FIXUPSTICKYCLIPORDER
         MENUITEM SEPARATOR
         MENUITEM "Import Clip(s)",              ID_FIRST_IMPORT
         MENUITEM "New Clip",                    ID_FIRST_NEWCLIP

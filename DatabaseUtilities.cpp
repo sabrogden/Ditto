@@ -221,6 +221,66 @@ BOOL OpenDatabase(CString csDB)
 	return FALSE;
 }
 
+void ReOrderStickyClips(int parentID, CppSQLite3DB &db)
+{
+	try
+	{
+		Log(StrF(_T("Start of ReOrderStickyClips, ParentId %d"), parentID));
+
+		//groups where created with 0 in these fields, fix them up if they are 0
+		if(parentID == -1)
+		{
+			db.execDMLEx(_T("Update Main Set stickyClipOrder = -(2147483647) where bIsGroup = 1 AND stickyClipOrder = 0"));
+			db.execDMLEx(_T("Update Main Set stickyClipGroupOrder = -(2147483647) where bIsGroup = 1 AND stickyClipGroupOrder = 0"));			
+		}
+
+		CppSQLite3Query qGroup = db.execQueryEx(_T("SELECT lID, mText FROM Main WHERE bIsGroup = 1 AND lParentID = %d"), parentID);
+
+		if (qGroup.eof() == false)
+		{
+			while (!qGroup.eof())
+			{
+				//Get all sticky clips at the top level or group
+				CString sql = StrF(_T("SELECT lID FROM Main WHERE stickyClipOrder <> -(2147483647) AND lParentID = %d ORDER BY stickyClipOrder DESC"), parentID);
+				if (parentID > -1)
+				{
+					sql = StrF(_T("SELECT lID FROM Main WHERE stickyClipGroupOrder <> -(2147483647) AND lParentID = %d ORDER BY stickyClipGroupOrder DESC"), parentID);
+				}
+
+				CppSQLite3Query qSticky = db.execQueryEx(sql);
+
+				int order = 1;
+
+				if (qSticky.eof() == false)
+				{
+					while (!qSticky.eof())
+					{
+						//set the new order
+						if (parentID > -1)
+						{
+							db.execDMLEx(_T("Update Main Set stickyClipGroupOrder = %d where lID = %d"), order, qSticky.getIntField(_T("lID")));
+						}
+						else
+						{
+							db.execDMLEx(_T("Update Main Set stickyClipOrder = %d where lID = %d"), order, qSticky.getIntField(_T("lID")));
+						}
+
+						qSticky.nextRow();
+						order--;
+					}
+				}				
+
+				ReOrderStickyClips(qGroup.getIntField(_T("lID")), db);
+
+				qGroup.nextRow();
+			}
+		}
+
+		Log(StrF(_T("End of ReOrderStickyClips, ParentId %d"), parentID));
+	}
+	CATCH_SQLITE_EXCEPTION
+}
+
 BOOL ValidDB(CString csPath, BOOL bUpgrade)
 {
 	CDittoPopupWindow *popUpMsg = NULL;
@@ -446,6 +506,8 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 
+	
+
 	if(popUpMsg != NULL &&
 		IsWindow(popUpMsg->m_hWnd))
 	{
@@ -456,6 +518,8 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 	}
 	return TRUE;                                                     
 }
+
+
 
 BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg)
 {

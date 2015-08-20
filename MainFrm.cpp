@@ -17,6 +17,7 @@
 #include "GlobalClips.h"
 #include "OptionsSheet.h"
 #include "DeleteClipData.h"
+#include "DatabaseUtilities.h"
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -67,6 +68,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_REOPEN_DATABASE, &CMainFrame::OnReOpenDatabase)
 	ON_MESSAGE(WM_SHOW_MSG_WINDOW, &CMainFrame::OnShowMsgWindow)
 	ON_MESSAGE(WM_SHOW_DITTO_GROUP, &CMainFrame::OnShowDittoGroup)
+	ON_COMMAND(ID_FIRST_FIXUPSTICKYCLIPORDER, &CMainFrame::OnFirstFixupstickycliporder)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -1293,7 +1295,7 @@ LRESULT CMainFrame::OnShowDittoGroup(WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-
-
-
-
+void CMainFrame::OnFirstFixupstickycliporder()
+{
+	ReOrderStickyClips(-1, theApp.m_db);
+}

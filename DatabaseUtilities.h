@@ -10,6 +10,7 @@
 #endif // _MSC_VER > 1000
 
 #include "DittoPopupWindow.h"
+#include "sqlite/CppSQLite3.h"
 
 #define DEFAULT_DB_NAME "Ditto.db"
 #define ERROR_OPENING_DATABASE	2
@@ -30,6 +31,8 @@ BOOL RemoveOldEntries(bool checkIdleTime);
 BOOL EnsureDirectory(CString csPath);
 
 BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg);
+
+void ReOrderStickyClips(int parentID, CppSQLite3DB &db);
 
 //BOOL CopyDownDatabase();
 //BOOL CopyUpDatabase();

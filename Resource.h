@@ -514,6 +514,7 @@
 #define ID_CLIPORDER_MOVEUP             32906
 #define ID_CLIPORDER_MOVEDOWN           32907
 #define ID_CLIPORDER_MOVETOTOP          32908
+#define ID_FIRST_FIXUPSTICKYCLIPORDER   32909
 
 // Next default values for new objects
 // 
@@ -521,7 +522,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        240
-#define _APS_NEXT_COMMAND_VALUE         32909
+#define _APS_NEXT_COMMAND_VALUE         32910
 #define _APS_NEXT_CONTROL_VALUE         2127
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

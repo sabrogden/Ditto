@@ -131,4 +131,5 @@ DECLARE_MESSAGE_MAP()public:
 	afx_msg LRESULT OnReOpenDatabase(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShowMsgWindow(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShowDittoGroup(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnFirstFixupstickycliporder();
 };

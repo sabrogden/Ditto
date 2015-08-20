@@ -707,7 +707,7 @@ long NewGroupID(int parentID, CString text)
 
 		CString cs;
 
-		cs.Format(_T("insert into Main (lDate, mText, lDontAutoDelete, bIsGroup, lParentID) values(%d, '%s', %d, 1, %d);"),
+		cs.Format(_T("insert into Main (lDate, mText, lDontAutoDelete, bIsGroup, lParentID, stickyClipOrder, stickyClipGroupOrder) values(%d, '%s', %d, 1, %d, -(2147483647), -(2147483647));"),
 							(int)time.GetTime(),
 							text,
 							(int)time.GetTime(),
