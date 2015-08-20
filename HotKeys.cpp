@@ -14,7 +14,7 @@ CHotKey::CHotKey(CString name, DWORD defKey, bool bUnregOnShowDitto, HotKeyType 
 	m_bUnRegisterOnShowDitto(bUnregOnShowDitto),
 	m_clipId(0)
 {
-	m_Atom = ::GlobalAddAtom(m_Name);
+	m_Atom = ::GlobalAddAtom(StrF(_T("%s_%d"), m_Name, hkType));
 	ASSERT(m_Atom);
 	m_Key = (DWORD)g_Opt.GetProfileLong(m_Name, (long) defKey);
 	m_globalId = m_nextId;

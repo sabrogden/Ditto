@@ -1267,12 +1267,11 @@ LRESULT CMainFrame::OnShowMsgWindow(WPARAM wParam, LPARAM lParam)
 
 	m_pPopupWindow = new CDittoPopupWindow();
 	m_pPopupWindow->Create(CRect(r.right - 400, r.bottom - 100, r.right - 10, r.bottom - 10), this);		
+	::SetWindowPos(m_pPopupWindow->m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
 	m_pPopupWindow->SetWindowText(_T("Saved clip to group"));
 	m_pPopupWindow->ShowWindow(SW_SHOW);
 	m_pPopupWindow->SetCopyToGroupId(clipId);
-	m_pPopupWindow->UpdateText(*pMsg);
-
-	::SetWindowPos(m_pPopupWindow->m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+	m_pPopupWindow->UpdateText(*pMsg);	
 
 	SetTimer(CLOSE_POPUP_MSG_WND, 2500, 0);
 
