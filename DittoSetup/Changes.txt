@@ -1,3 +1,18 @@
+3.21.19.0 10-16-2015
+- Fixed issue with deleting expired events
+- Double click global short cut key to save selection to that group
+- Added hot key to groups to save clip to that group
+- Added options to move clips up/down/top
+- If paste as plain text is selected then change cf_hdrop (file copy) to text of the copied file path
+- Close and reopen the database after windows resumes
+- Added a progress bar to the backup database function
+- Set group clip order correctly, it was using the wrong sort order
+- Allow wild card characters in ip/machine name matching for what to put in clipboard
+- Added menu option to fixup order of sticky clips. Found an issue with assigning sticky clips that would cause wacky ordering, this will fix that.
+
+- Updated chinese language file
+- Updated polish translation
+
 3.20.74 8-4-2015
 
 - always refresh the description window when an image is shown, if two images were the same size it would not be refreshed
