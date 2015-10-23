@@ -421,19 +421,37 @@ HRESULT CFormattedTextDraw::InitDefaultParaFormat()
 	return S_OK;
 }
 
+//https://connect.microsoft.com/VisualStudio/feedback/details/551071/the-6-0a-sdk-is-missing-riched20-lib-for-x64
+HRESULT CreateRichEdit(ITextHost *pTextHost, IUnknown **ppUnk)
+{
+	HRESULT hr = -1;
+	PCreateTextServices TextServicesProc = NULL;
+	HMODULE hmod = LoadLibrary(_T("msftedit.dll"));
+	if (hmod) 
+	{
+		TextServicesProc = (PCreateTextServices)GetProcAddress(hmod, "CreateTextServices");
+		if (TextServicesProc)
+		{
+			hr = TextServicesProc(NULL, pTextHost, ppUnk);
+		}
+	}
+
+	return hr;
+}
+
 HRESULT CFormattedTextDraw::CreateTextServicesObject()
 {
 	HRESULT hr = S_OK;
 	
-#ifdef _M_IX86
 	IUnknown *spUnk;
-	hr = CreateTextServices(NULL, static_cast<ITextHost*>(this), &spUnk);
-	if (hr == S_OK) {
+	hr = CreateRichEdit(static_cast<ITextHost*>(this), &spUnk);
+	if (hr == S_OK) 
+	{
 		hr = spUnk->QueryInterface(IID_ITextServicesEx, (void**)&m_spTextServices);
 		hr = spUnk->QueryInterface(IID_ITextDocument, (void**)&m_spTextDocument);
 		spUnk->Release();
 	}
-#endif
+
 	return hr;
 }
 

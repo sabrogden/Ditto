@@ -1427,15 +1427,10 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
         pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_SHOWTHUMBNAILS, MF_CHECKED);
     }
 
-	//this only works under 32 bit build
-#ifdef _M_IX86
     if(g_Opt.m_bDrawRTF)
     {
         pMenu->CheckMenuItem(ID_MENU_QUICKOPTIONS_DRAWRTFTEXT, MF_CHECKED);
     }
-#else
-	pMenu->RemoveMenu(ID_MENU_QUICKOPTIONS_DRAWRTFTEXT, MF_BYCOMMAND);
-#endif
 
     if(g_Opt.m_bSendPasteMessageAfterSelection)
     {
@@ -2255,11 +2250,8 @@ void CQPasteWnd::OnMenuQuickoptionsShowthumbnails()
 
 void CQPasteWnd::OnMenuQuickoptionsDrawrtftext()
 {
-	//this only works under 32 bit build
-#ifdef _M_IX86
     CGetSetOptions::SetDrawRTF(!g_Opt.m_bDrawRTF);
     m_lstHeader.RefreshVisibleRows();
-#endif
 }
 
 void CQPasteWnd::OnMenuQuickoptionsPasteclipafterselection()

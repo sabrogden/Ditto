@@ -1417,20 +1417,13 @@ CStringA CGetSetOptions::GetNetworkPassword()
 
 void CGetSetOptions::SetDrawRTF(long bDraw)
 {
-//this only works under 32 bit build
-#ifdef _M_IX86
 	SetProfileLong("DrawRTF", bDraw); 
 	m_bDrawRTF = bDraw;
-#endif
 }
 
 BOOL CGetSetOptions::GetDrawRTF()
 {
-//this only works under 32 bit build
-#ifdef _M_IX86
 	return GetProfileLong("DrawRTF", FALSE);
-#endif
-	return FALSE;
 }
 
 void CGetSetOptions::SetMultiPasteReverse(BOOL bVal)
