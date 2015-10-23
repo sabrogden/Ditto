@@ -23,7 +23,6 @@
 			<Ext>*</Ext>
 			<Path>%workdir%</Path>
 			<Recurse type='11'>-1</Recurse>
-			<SysOn type='11'>-1</SysOn>
 			<indent type='3'>1</indent>
 			<name>Delete Files</name>
 		</step>
@@ -31,10 +30,8 @@
 			<ContinueFail type='11'>-1</ContinueFail>
 			<DelDirs type='11'>-1</DelDirs>
 			<Ext>*</Ext>
-			<HideOn type='11'>-1</HideOn>
 			<Path>%testBuildWorkDir%</Path>
 			<Recurse type='11'>-1</Recurse>
-			<SysOn type='11'>-1</SysOn>
 			<indent type='3'>1</indent>
 			<name>Delete Temp Source</name>
 		</step>
@@ -129,39 +126,6 @@ End If
 			<name>Build Ditto 32</name>
 		</step>
 		<step action='Group'>
-			<checked type='11'>0</checked>
-			<indent type='3'>1</indent>
-			<name>Sign App Code</name>
-		</step>
-		<step action='Run Program'>
-			<checked type='11'>0</checked>
-			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release64\Ditto.exe</command>
-			<indent type='3'>2</indent>
-			<name>Sign Ditto.exe 64</name>
-			<outputfrom type='3'>1</outputfrom>
-		</step>
-		<step action='Run Program'>
-			<checked type='11'>0</checked>
-			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release64\Addins\DittoUtil.dll</command>
-			<indent type='3'>2</indent>
-			<name>Sign DittoUtil.dll 64</name>
-			<outputfrom type='3'>1</outputfrom>
-		</step>
-		<step action='Run Program'>
-			<checked type='11'>0</checked>
-			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release\Ditto.exe</command>
-			<indent type='3'>2</indent>
-			<name>Sign Ditto.exe</name>
-			<outputfrom type='3'>1</outputfrom>
-		</step>
-		<step action='Run Program'>
-			<checked type='11'>0</checked>
-			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release\Addins\DittoUtil.dll</command>
-			<indent type='3'>2</indent>
-			<name>Sign DittoUtil.dll</name>
-			<outputfrom type='3'>1</outputfrom>
-		</step>
-		<step action='Group'>
 			<indent type='3'>1</indent>
 			<name>Zip Source</name>
 		</step>
@@ -248,25 +212,6 @@ DittoSetup*]]></X>
 			<name>Zip Debug Files</name>
 		</step>
 		<step action='Group'>
-			<checked type='11'>0</checked>
-			<indent type='3'>1</indent>
-			<name>Sign Installers</name>
-		</step>
-		<step action='Run Program'>
-			<checked type='11'>0</checked>
-			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\DittoSetup\Output\DittoSetup_%versionFileName%.exe</command>
-			<indent type='3'>2</indent>
-			<name>Sign Ditto Installer</name>
-			<outputfrom type='3'>1</outputfrom>
-		</step>
-		<step action='Run Program'>
-			<checked type='11'>0</checked>
-			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\DittoSetup\Output\DittoSetup_64bit_%versionFileName%.exe</command>
-			<indent type='3'>2</indent>
-			<name>Sign Ditto 64 Installer</name>
-			<outputfrom type='3'>1</outputfrom>
-		</step>
-		<step action='Group'>
 			<indent type='3'>1</indent>
 			<name>Create Web Page</name>
 		</step>
@@ -333,7 +278,7 @@ var sc_security="b3f57099";
 			<Repository>/p/ditto-cp/code/</Repository>
 			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
 			<Subcommand>log</Subcommand>
-			<Switches>-r {2015-08-5}:{2016-12-31}</Switches>
+			<Switches>-r {2015-10-18}:{2016-12-31}</Switches>
 			<Username>sabrogden</Username>
 			<indent type='3'>2</indent>
 			<name>SVN Log Messages</name>
@@ -376,6 +321,58 @@ var sc_security="b3f57099";
 			<UserName>sabrogden,ditto-cp</UserName>
 			<indent type='3'>1</indent>
 			<name>Copy to beta folder</name>
+		</step></steps>
+	<steps type='1'>
+		<step action='Group'>
+			<checked type='11'>0</checked>
+			<name>Sign App Code</name>
+		</step>
+		<step action='Run Program'>
+			<checked type='11'>0</checked>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release64\Ditto.exe</command>
+			<indent type='3'>1</indent>
+			<name>Sign Ditto.exe 64</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='Run Program'>
+			<checked type='11'>0</checked>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release64\Addins\DittoUtil.dll</command>
+			<indent type='3'>1</indent>
+			<name>Sign DittoUtil.dll 64</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='Run Program'>
+			<checked type='11'>0</checked>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release\Ditto.exe</command>
+			<indent type='3'>1</indent>
+			<name>Sign Ditto.exe</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='Run Program'>
+			<checked type='11'>0</checked>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\Release\Addins\DittoUtil.dll</command>
+			<indent type='3'>1</indent>
+			<name>Sign DittoUtil.dll</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='Group'>
+			<checked type='11'>0</checked>
+			<indent type='3'>1</indent>
+			<name>Sign Installers</name>
+		</step>
+		<step action='Run Program'>
+			<checked type='11'>0</checked>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\DittoSetup\Output\DittoSetup_%versionFileName%.exe</command>
+			<indent type='3'>2</indent>
+			<name>Sign Ditto Installer</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='Run Program'>
+			<checked type='11'>0</checked>
+			<command>"c:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe" sign /f "C:\Users\sab.000\Desktop\Ditto_Cert\Ditto.pfx" /p Hastings /t http://timestamp.comodoca.com/authenticode %workDir%\%branch%\DittoSetup\Output\DittoSetup_64bit_%versionFileName%.exe</command>
+			<indent type='3'>2</indent>
+			<name>Sign Ditto 64 Installer</name>
+			<outputfrom type='3'>1</outputfrom>
 		</step></steps>
 	<macros>
 		<macro name='branch'>
