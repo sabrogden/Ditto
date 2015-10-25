@@ -2377,11 +2377,11 @@ void CQPasteWnd::DeleteSelectedRows()
         bool bStartValue = m_bHideWnd;
         m_bHideWnd = false;
 
-        int nRet = MessageBox(theApp.m_Language.GetString("Delete_Clip", "Delete Selected Clips?"), _T("Ditto"), MB_YESNO);
+        int nRet = MessageBox(theApp.m_Language.GetString("Delete_Clip", "Delete Selected Clips?"), _T("Ditto"), MB_YESNOCANCEL);
 
         m_bHideWnd = bStartValue;
 
-        if(nRet == IDNO)
+        if(nRet != IDYES)
         {
             return ;
         }
@@ -4894,11 +4894,11 @@ LRESULT CQPasteWnd::OnDeleteId(WPARAM wParam, LPARAM lParam)
 		bool bStartValue = m_bHideWnd;
 		m_bHideWnd = false;
 
-		int nRet = MessageBox(theApp.m_Language.GetString("Delete_Clip_Groups", "Delete Group?"), _T("Ditto"), MB_YESNO);
+		int nRet = MessageBox(theApp.m_Language.GetString("Delete_Clip_Groups", "Delete Group?"), _T("Ditto"), MB_YESNOCANCEL);
 
 		m_bHideWnd = bStartValue;
 
-		if (nRet == IDNO)
+		if (nRet != IDYES)
 		{
 			return FALSE;
 		}
