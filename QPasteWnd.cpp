@@ -2381,7 +2381,7 @@ void CQPasteWnd::DeleteSelectedRows()
 
         m_bHideWnd = bStartValue;
 
-        if(nRet != IDYES)
+        if(nRet != IDOK)
         {
             return ;
         }
@@ -4898,7 +4898,7 @@ LRESULT CQPasteWnd::OnDeleteId(WPARAM wParam, LPARAM lParam)
 
 		m_bHideWnd = bStartValue;
 
-		if (nRet != IDYES)
+		if (nRet != IDOK)
 		{
 			return FALSE;
 		}
