@@ -47,7 +47,6 @@ public:
 	bool ValidActiveWnd();
 
 	DWORD m_dwLastCopy;
-	bool m_bHandlingClipChange;
 
 	// Generated message map functions
 protected:
@@ -59,6 +58,7 @@ protected:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	//}}AFX_MSG
 	afx_msg LRESULT OnSetConnect(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT CClipboardViewer::OnClipboardChange(WPARAM wParam, LPARAM lPara);
 	DECLARE_MESSAGE_MAP()
 };
 
