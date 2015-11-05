@@ -146,18 +146,13 @@ void CMainFrmThread::OnSaveClips()
 		theApp.OnCopyCompleted(Id, count);
 
 		Log(StrF(_T("SaveCopyclips After AddToDb, Id: %d After OnCopyCopyCompleted"), Id));
-	
-		if(g_Opt.m_lAutoSendClientCount > 0)
-		{
-			m_sendToClientThread.FireSendToClient(pLocalClips);
-		}
 
-		if(pLocalClips->GetTail()->m_copyReason == CopyReasonEnum::COPY_TO_GROUP &&
+		if (pLocalClips->GetTail()->m_copyReason == CopyReasonEnum::COPY_TO_GROUP &&
 			CGetSetOptions::GetShowMsgWndOnCopyToGroup())
 		{
 			CString groupName;
 			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT mText FROM Main WHERE lID = %d"), pLocalClips->GetTail()->m_parentId);
-			if(q.eof() == false)
+			if (q.eof() == false)
 			{
 				groupName = q.getStringField(0);
 			}
@@ -165,8 +160,13 @@ void CMainFrmThread::OnSaveClips()
 			CString *pMsg = new CString();
 			pMsg->Format(_T("Saved new clip \"%s\"\r\ndirectly to the group \"%s\""), pLocalClips->GetTail()->m_Desc.Left(35), groupName);
 
-			theApp.m_pMainFrame->PostMessageW(WM_SHOW_MSG_WINDOW, (WPARAM)pMsg, pLocalClips->GetTail()->m_parentId);
+			theApp.m_pMainFrame->PostMessageW(WM_SHOW_MSG_WINDOW, (WPARAM) pMsg, pLocalClips->GetTail()->m_parentId);
 		}
+	
+		if(g_Opt.m_lAutoSendClientCount > 0)
+		{
+			m_sendToClientThread.FireSendToClient(pLocalClips);
+		}		
 	}
 
 	delete pLocalClips;
