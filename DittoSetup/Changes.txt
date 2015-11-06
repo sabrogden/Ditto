@@ -1,3 +1,9 @@
+3.21.28.0 11-6-2015
+- Fixed crash when auto send to friends is enabled
+- Draw rtf in 64bit builds
+- Support escape key to cancel delete message box
+- Monitor clipboard changes using new method AddClipboardFormatListener
+
 3.21.19.0 10-16-2015
 - Fixed issue with deleting expired events
 - Double click global short cut key to save selection to that group
