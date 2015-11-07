@@ -1,3 +1,6 @@
+3.21.29.0 11-7-2015
+- Fixed issue with running on XP
+
 3.21.28.0 11-6-2015
 - Fixed crash when auto send to friends is enabled
 - Draw rtf in 64bit builds
