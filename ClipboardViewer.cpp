@@ -68,12 +68,26 @@ void CClipboardViewer::Connect()
 	
 	m_bCalling_SetClipboardViewer = true;
 
+	bool useSetClipboardWnd = true;
+
 	if(IsVista())
 	{
-		Log(_T("Connecting to clipboard with function AddClipboardFormatListener"));
-		AddClipboardFormatListener(m_hWnd);
+		HMODULE hUser32 = LoadLibrary(_T("USER32.dll"));
+		if (hUser32) 
+		{
+			typedef BOOL (__stdcall *AddClipFormatListener)( HWND hwnd );
+
+			AddClipFormatListener addListener = (AddClipFormatListener) GetProcAddress(hUser32, "AddClipboardFormatListener");
+			if(addListener)
+			{
+				Log(_T("Connecting to clipboard with function AddClipboardFormatListener"));
+				useSetClipboardWnd = false;
+				addListener(m_hWnd);				
+			}
+		}
 	}
-	else
+	
+	if(useSetClipboardWnd)
 	{
 		Log(_T("Connecting to clipboard with function SetClipboardViewer"));
 		m_hNextClipboardViewer = CWnd::SetClipboardViewer();		
@@ -98,13 +112,29 @@ void CClipboardViewer::Disconnect(bool bSendPing)
 	Log(_T("Disconnect From Clipboard"));
 
 	KillTimer(TIMER_ENSURE_VIEWER_IN_CHAIN);
+	bool removeOldWay = true;
 
 	if(IsVista())
 	{
-		RemoveClipboardFormatListener(m_hWnd);
+		HMODULE hUser32 = LoadLibrary(_T("USER32.dll"));
+		if (hUser32) 
+		{
+			typedef BOOL (__stdcall *RemoveClipFormatListener)( HWND hwnd );
+
+			RemoveClipFormatListener removeListener = (RemoveClipFormatListener) GetProcAddress(hUser32, "RemoveClipboardFormatListener");
+			if(removeListener)
+			{
+				Log(_T("Disconnecting from clipboard with function RemoveClipboardFormatListener"));
+				removeOldWay = false;
+				removeListener(m_hWnd);				
+			}
+		}
 	}
-	else
+	
+	if(removeOldWay)
 	{
+		Log(_T("Disconnecting from clipboard with function ChangeClipboardChain"));
+
 		BOOL bRet = CWnd::ChangeClipboardChain(m_hNextClipboardViewer);
 		if(!bRet)
 		{
