@@ -47,6 +47,7 @@ public:
 		MOVE_CLIP_UP,
 		MOVE_CLIP_DOWN,
 		MOVE_CLIP_TOP,
+		FILTER_ON_SELECTED_CLIP,
 
 	};
 };

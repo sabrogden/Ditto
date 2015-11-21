@@ -289,6 +289,7 @@ BEGIN
             MENUITEM "Select Right Text And Compare Against Left", ID_COMPARE_COMPAREAGAINST,MFT_STRING,MFS_ENABLED
             MENUITEM "Compare",                     ID_COMPARE_COMPARE,MFT_STRING,MFS_ENABLED
         END
+        MENUITEM "Filter On",                   ID_MENU_FILTERON,MFT_STRING,MFS_ENABLED
         MENUITEM MFT_SEPARATOR
         MENUITEM "Delete Entry",                32801,MFT_STRING,MFS_ENABLED
         MENUITEM MFT_SEPARATOR

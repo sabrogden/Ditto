@@ -239,6 +239,8 @@ ON_COMMAND(ID_CLIPORDER_MOVEDOWN, &CQPasteWnd::OnCliporderMovedown)
 ON_UPDATE_COMMAND_UI(ID_CLIPORDER_MOVEDOWN, &CQPasteWnd::OnUpdateCliporderMovedown)
 ON_COMMAND(ID_CLIPORDER_MOVETOTOP, &CQPasteWnd::OnCliporderMovetotop)
 ON_UPDATE_COMMAND_UI(ID_CLIPORDER_MOVETOTOP, &CQPasteWnd::OnUpdateCliporderMovetotop)
+ON_COMMAND(ID_MENU_FILTERON, &CQPasteWnd::OnMenuFilteron)
+ON_UPDATE_COMMAND_UI(ID_MENU_FILTERON, &CQPasteWnd::OnUpdateMenuFilteron)
 END_MESSAGE_MAP()
 
 
@@ -2679,6 +2681,9 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::MOVE_CLIP_TOP:
 		ret = DoMoveClipTOP();
 		break;
+	case ActionEnums::FILTER_ON_SELECTED_CLIP:
+		ret = DoFilterOnSelectedClip();
+		break;
 	}
 
 	return ret;
@@ -3653,6 +3658,37 @@ bool CQPasteWnd::DoMoveClipTOP()
 	}
 
 	return true;
+}
+
+bool CQPasteWnd::DoFilterOnSelectedClip()
+{
+	bool ret = false;
+	ARRAY IDs, Indexes;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	INT_PTR size = IDs.GetSize();
+	if (size > 0)
+	{
+		int id = IDs[0];
+
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+		std::vector<CMainTable>::iterator iter = m_listItems.begin();
+		while (iter != m_listItems.end())
+		{
+			if (iter->m_lID == id)
+			{
+				m_bHandleSearchTextChange = false;
+				m_search.SetWindowText(iter->m_Desc);
+				m_bHandleSearchTextChange = true;
+				OnSearch(0, 0);				
+				ret = true;
+				break;
+			}
+			iter++;
+		}
+	}
+
+	return ret;
 }
 
 bool CQPasteWnd::DoExportToBitMapFile()
@@ -5094,4 +5130,21 @@ void CQPasteWnd::OnUpdateCliporderMovetotop(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::MOVE_CLIP_TOP);
+}
+
+
+void CQPasteWnd::OnMenuFilteron()
+{
+	DoAction(ActionEnums::FILTER_ON_SELECTED_CLIP);
+}
+
+
+void CQPasteWnd::OnUpdateMenuFilteron(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::FILTER_ON_SELECTED_CLIP);
 }

@@ -241,6 +241,7 @@ public:
 	bool DoMoveClipDown();
 	bool DoMoveClipUp();
 	bool DoMoveClipTOP();
+	bool DoFilterOnSelectedClip();
 
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
@@ -413,4 +414,6 @@ public:
 	afx_msg void OnUpdateCliporderMovedown(CCmdUI *pCmdUI);
 	afx_msg void OnCliporderMovetotop();
 	afx_msg void OnUpdateCliporderMovetotop(CCmdUI *pCmdUI);
+	afx_msg void OnMenuFilteron();
+	afx_msg void OnUpdateMenuFilteron(CCmdUI *pCmdUI);
 };
