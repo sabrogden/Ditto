@@ -77,17 +77,17 @@ UINT CDittoWindow::DoNcHitTest(CWnd *pWnd, CPoint point)
 
 	if(m_bMinimized == false)
 	{
-		if ((point.y < crWindow.top + BORDER * 2) &&
-			(point.x < crWindow.left + BORDER * 2))
+		if ((point.y < crWindow.top + BORDER * 4) &&
+			(point.x < crWindow.left + BORDER * 4))
 			return HTTOPLEFT;
-		else if ((point.y < crWindow.top + BORDER * 2) &&
-			(point.x > crWindow.right - BORDER * 2))
+		else if ((point.y < crWindow.top + BORDER * 4) &&
+			(point.x > crWindow.right - BORDER * 4))
 			return HTTOPRIGHT;
-		else if ((point.y > crWindow.bottom - BORDER * 2) &&
-			(point.x > crWindow.right - BORDER * 2))
+		else if ((point.y > crWindow.bottom - BORDER * 4) &&
+			(point.x > crWindow.right - BORDER * 4))
 			return HTBOTTOMRIGHT;
-		else if ((point.y > crWindow.bottom - BORDER * 2) &&
-			(point.x < crWindow.left + BORDER * 2))
+		else if ((point.y > crWindow.bottom - BORDER * 4) &&
+			(point.x < crWindow.left + BORDER * 4))
 			return HTBOTTOMLEFT;
 	}
 
