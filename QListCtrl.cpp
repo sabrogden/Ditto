@@ -891,6 +891,9 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 		
+	case VK_HOME:
+		SetListPos(0);
+		break;
 	} // end switch(vk)
 	
 	return FALSE;
