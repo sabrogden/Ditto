@@ -39,6 +39,8 @@ public:
     // returns a pointer to the internal CAccel if it matches the given key or NULL
     bool OnMsg(MSG *pMsg, CAccel &a);
 
+	bool m_handleRepeatKeys;
+
     static BYTE GetKeyStateModifiers();
 
 protected:

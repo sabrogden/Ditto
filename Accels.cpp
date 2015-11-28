@@ -2,8 +2,9 @@
 #include "Accels.h"
 #include "HotKeys.h"
 
-CAccels::CAccels(){
-
+CAccels::CAccels()
+{
+	m_handleRepeatKeys = false;
 }
 
 void CAccels::AddAccel(CAccel a)
@@ -45,13 +46,20 @@ CString CAccels::GetCmdKeyText(DWORD cmd)
 }
 
 bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
-{
-    // bit 30 (0x40000000) is 1 if this is NOT the first msg of the key
-    //  i.e. auto-repeat may cause multiple msgs of the same key
-    if((pMsg->lParam &0x40000000) || (pMsg->message != WM_KEYDOWN && pMsg->message != WM_SYSKEYDOWN))
-    {
-        return NULL;
-    }
+{    
+	if((pMsg->message != WM_KEYDOWN && pMsg->message != WM_SYSKEYDOWN))
+	{
+		return NULL;
+	}
+
+	// bit 30 (0x40000000) is 1 if this is NOT the first msg of the key
+	//  i.e. auto-repeat may cause multiple msgs of the same key
+	if((pMsg->lParam &0x40000000) && m_handleRepeatKeys == false)
+	{
+		return NULL;
+	}
+
+	m_handleRepeatKeys = false;
 
     if(!pMsg || m_Map.GetCount() <= 0)
     {

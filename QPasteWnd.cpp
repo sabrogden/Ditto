@@ -2703,6 +2703,8 @@ bool CQPasteWnd::DoActionNextDescription()
 	if (g_Opt.m_bAllwaysShowDescription)
 		return false;
 
+	m_actions.m_handleRepeatKeys = true;
+
 	ARRAY Indexes;
 	m_lstHeader.GetSelectionIndexes(Indexes);
 
@@ -2747,6 +2749,8 @@ bool CQPasteWnd::DoActionPrevDescription()
 
 	if (g_Opt.m_bAllwaysShowDescription)
 		return false;
+
+	m_actions.m_handleRepeatKeys = true;
 
 	ARRAY Indexes;
 	m_lstHeader.GetSelectionIndexes(Indexes);
@@ -2951,6 +2955,7 @@ bool CQPasteWnd::DoActionSelectionUp()
 	if (m_bModifersMoveActive)
 	{
 		MoveSelection(false);
+		m_actions.m_handleRepeatKeys = true;
 		return true;
 	}
 
@@ -2962,6 +2967,7 @@ bool CQPasteWnd::DoActionSelectionDown()
 	if (m_bModifersMoveActive)
 	{
 		MoveSelection(true);
+		m_actions.m_handleRepeatKeys = true;
 		return true;
 	}
 
