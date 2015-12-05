@@ -1302,5 +1302,7 @@ void CMainFrame::OnFirstFixupstickycliporder()
 
 LRESULT CMainFrame::OnResolutionChange(WPARAM wParam, LPARAM lParam)
 {
+	m_quickPaste.OnScreenResolutionChange();
+
 	return TRUE;
 }

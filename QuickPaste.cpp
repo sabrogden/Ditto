@@ -313,3 +313,19 @@ bool CQuickPaste::IsWindowTopLevel()
 
 	return false;
 }
+
+void CQuickPaste::OnScreenResolutionChange()
+{
+	if(m_pwndPaste != NULL &&
+		::IsWindow(m_pwndPaste->m_hWnd))
+	{
+		Log(StrF(_T("Window Position changed, moving window to position as of this screen resolution %dx%d"), GetScreenWidth(), GetScreenHeight()));
+		CPoint point;
+		CSize csSize;
+
+		CGetSetOptions::GetQuickPastePoint(point);
+		CGetSetOptions::GetQuickPasteSize(csSize);
+
+		m_pwndPaste->MoveWindow(point.x, point.y, csSize.cx, csSize.cy);
+	}
+}
