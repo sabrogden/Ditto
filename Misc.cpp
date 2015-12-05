@@ -573,7 +573,7 @@ int GetScreenWidth(void)
 	}
 	else
 	{
-		return(GetSystemMetrics(SM_CXSCREEN));
+		return(GetSystemMetrics(SM_CXVIRTUALSCREEN));
 	}
 }
 
@@ -622,7 +622,7 @@ int GetScreenHeight(void)
 	}
 	else
 	{
-		return(GetSystemMetrics(SM_CYSCREEN));
+		return(GetSystemMetrics(SM_CYVIRTUALSCREEN));
 	}
 }
 
@@ -1198,39 +1198,39 @@ CString InternetEncode(CString text)
 bool WriteCF_DIBToFile(CString csPath, LPVOID data, ULONG size)
 {
 	bool bRet = false;
-	CFile file;
-	CFileException ex;
-	if (file.Open(csPath, CFile::modeCreate | CFile::modeWrite | CFile::typeBinary, &ex))
+	
+	BITMAPINFO *lpBI = (BITMAPINFO *) data;		
+
+	int nPaletteEntries = 1 << lpBI->bmiHeader.biBitCount;
+	if (lpBI->bmiHeader.biBitCount > 8)
+		nPaletteEntries = 0;
+	else if (lpBI->bmiHeader.biClrUsed != 0)
+		nPaletteEntries = lpBI->bmiHeader.biClrUsed;
+
+	BITMAPFILEHEADER BFH;
+	memset(&BFH, 0, sizeof(BITMAPFILEHEADER));
+	BFH.bfType = 'MB';
+	BFH.bfSize = sizeof(BITMAPFILEHEADER) + size;
+	BFH.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + nPaletteEntries * sizeof(RGBQUAD);
+
+	// Create stream with 0 size
+	IStream* pIStream = NULL;
+	if (CreateStreamOnHGlobal(NULL, TRUE, (LPSTREAM*) &pIStream) != S_OK)
 	{
-		BITMAPINFO *lpBI = (BITMAPINFO *) data;
-
-		int nPaletteEntries = 1 << lpBI->bmiHeader.biBitCount;
-		if (lpBI->bmiHeader.biBitCount > 8)
-			nPaletteEntries = 0;
-		else if (lpBI->bmiHeader.biClrUsed != 0)
-			nPaletteEntries = lpBI->bmiHeader.biClrUsed;
-
-		BITMAPFILEHEADER BFH;
-		memset(&BFH, 0, sizeof(BITMAPFILEHEADER));
-		BFH.bfType = 'MB';
-		BFH.bfSize = sizeof(BITMAPFILEHEADER) + size;
-		BFH.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + nPaletteEntries * sizeof(RGBQUAD);
-
-		file.Write(&BFH, sizeof(BITMAPFILEHEADER));
-		file.Write(data, size);
-
-		file.Close();
-
-		bRet = true;
+		TRACE("Failed to create stream on global memory!\n");
+		return FALSE;
 	}
-	else
-	{
-		CString csError;
-		TCHAR exError[250];
-		ex.GetErrorMessage(exError, sizeof(exError));
 
-		csError.Format(_T("OutLookExpress Addin - Failed to write CF_DIB to file: %s, Error: %s"), csPath, exError);
-		OutputDebugString(csPath);
+	//write the file to the stream object
+	pIStream->Write(&BFH, sizeof(BITMAPFILEHEADER), NULL);
+	pIStream->Write(data, size, NULL);
+
+	CImage i;
+	i.Load(pIStream);
+
+	if(i.Save(csPath) == S_OK)
+	{
+		bRet = true;
 	}
 
 	return bRet;
