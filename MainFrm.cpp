@@ -69,6 +69,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_SHOW_MSG_WINDOW, &CMainFrame::OnShowMsgWindow)
 	ON_MESSAGE(WM_SHOW_DITTO_GROUP, &CMainFrame::OnShowDittoGroup)
 	ON_COMMAND(ID_FIRST_FIXUPSTICKYCLIPORDER, &CMainFrame::OnFirstFixupstickycliporder)
+	ON_MESSAGE(WM_DISPLAYCHANGE, &CMainFrame::OnResolutionChange)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -1297,4 +1298,9 @@ LRESULT CMainFrame::OnShowDittoGroup(WPARAM wParam, LPARAM lParam)
 void CMainFrame::OnFirstFixupstickycliporder()
 {
 	ReOrderStickyClips(-1, theApp.m_db);
+}
+
+LRESULT CMainFrame::OnResolutionChange(WPARAM wParam, LPARAM lParam)
+{
+	return TRUE;
 }

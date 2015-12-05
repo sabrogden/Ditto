@@ -132,4 +132,5 @@ DECLARE_MESSAGE_MAP()public:
 	afx_msg LRESULT OnShowMsgWindow(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShowDittoGroup(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnFirstFixupstickycliporder();
+	afx_msg LRESULT OnResolutionChange(WPARAM wParam, LPARAM lParam);
 };
