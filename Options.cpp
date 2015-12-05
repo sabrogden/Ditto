@@ -357,6 +357,29 @@ CString CGetSetOptions::GetAppDataPath()
 	return csPath;
 }
 
+long CGetSetOptions::GetResolutionProfileLong(CString csName, long lDefaultValue, CString csNewPath)
+{
+	CString resName;
+	resName.Format(_T("(%dx%d)_%s"), GetScreenWidth(), GetScreenHeight(), csName);
+
+	long value = GetProfileLong(resName, INT_MIN, csNewPath);
+
+	if(value == INT_MIN)
+	{
+		value = GetProfileLong(csName, lDefaultValue, csNewPath);
+	}
+
+	return value;
+}
+
+BOOL CGetSetOptions::SetResolutionProfileLong(CString csName, long lValue)
+{
+	CString resName;
+	resName.Format(_T("(%dx%d)_%s"), GetScreenWidth(), GetScreenHeight(), csName);
+
+	return SetProfileLong(resName, lValue);
+}
+
 long CGetSetOptions::GetProfileLong(CString csName, long lDefaultValue, CString csNewPath)
 {
 	if(m_bFromIni && !m_bInConversion)
@@ -710,16 +733,16 @@ long CGetSetOptions::GetQuickPastePosition()
 
 BOOL CGetSetOptions::SetQuickPasteSize(CSize size)
 {
-	BOOL bRet = SetProfileLong("QuickPasteCX", size.cx);
-	bRet = SetProfileLong("QuickPasteCY", size.cy);
+	BOOL bRet = SetResolutionProfileLong("QuickPasteCX", size.cx);
+	bRet = SetResolutionProfileLong("QuickPasteCY", size.cy);
 
 	return bRet;
 }
 
 void CGetSetOptions::GetQuickPasteSize(CSize &size)
-{
-	size.cx = GetProfileLong("QuickPasteCX", 300);
-	size.cy = GetProfileLong("QuickPasteCY", 300);
+{	
+	size.cx = GetResolutionProfileLong("QuickPasteCX", 300);
+	size.cy = GetResolutionProfileLong("QuickPasteCY", 300);
 	if(size.cx <= 0 && size.cy <= 0)
 	{
 		size.cx = 300;
@@ -729,16 +752,16 @@ void CGetSetOptions::GetQuickPasteSize(CSize &size)
 
 BOOL CGetSetOptions::SetQuickPastePoint(CPoint point)
 {
-	BOOL bRet = SetProfileLong("QuickPasteX", point.x);
-	bRet = SetProfileLong("QuickPasteY", point.y);
+	BOOL bRet = SetResolutionProfileLong("QuickPasteX", point.x);
+	bRet = SetResolutionProfileLong("QuickPasteY", point.y);
 
 	return bRet;
 }
 
 void CGetSetOptions::GetQuickPastePoint(CPoint &point)
 {
-	point.x = GetProfileLong("QuickPasteX", 300);
-	point.y = GetProfileLong("QuickPasteY", 300);
+	point.x = GetResolutionProfileLong("QuickPasteX", 300);
+	point.y = GetResolutionProfileLong("QuickPasteY", 300);
 
 	if(point.x <= 0 && point.y <= 0)
 	{
@@ -749,16 +772,16 @@ void CGetSetOptions::GetQuickPastePoint(CPoint &point)
 
 BOOL CGetSetOptions::SetEditWndSize(CSize size)
 {
-	BOOL bRet = SetProfileLong("EditWndCX", size.cx);
-	bRet = SetProfileLong("EditWndCY", size.cy);
+	BOOL bRet = SetResolutionProfileLong("EditWndCX", size.cx);
+	bRet = SetResolutionProfileLong("EditWndCY", size.cy);
 
 	return bRet;
 }
 
 void CGetSetOptions::GetEditWndSize(CSize &size)
 {
-	size.cx = GetProfileLong("EditWndCX", 600);
-	size.cy = GetProfileLong("EditWndCY", 600);
+	size.cx = GetResolutionProfileLong("EditWndCX", 600);
+	size.cy = GetResolutionProfileLong("EditWndCY", 600);
 	if(size.cx <= 0 && size.cy <= 0)
 	{
 		size.cx = 600;
@@ -768,16 +791,16 @@ void CGetSetOptions::GetEditWndSize(CSize &size)
 
 BOOL CGetSetOptions::SetEditWndPoint(CPoint point)
 {
-	BOOL bRet = SetProfileLong("EditWndX", point.x);
-	bRet = SetProfileLong("EditWndY", point.y);
+	BOOL bRet = SetResolutionProfileLong("EditWndX", point.x);
+	bRet = SetResolutionProfileLong("EditWndY", point.y);
 
 	return bRet;
 }
 
 void CGetSetOptions::GetEditWndPoint(CPoint &point)
 {
-	point.x = GetProfileLong("EditWndX", 100);
-	point.y = GetProfileLong("EditWndY", 100);
+	point.x = GetResolutionProfileLong("EditWndX", 100);
+	point.y = GetResolutionProfileLong("EditWndY", 100);
 
 	if(point.x <= 0 && point.y <= 0)
 	{
@@ -2110,20 +2133,20 @@ BOOL CGetSetOptions::GetScaleImagesToDescWindow()
 
 void CGetSetOptions::SetDescWndPoint(CPoint point)
 {
-	SetProfileLong("DescWndX", point.x);
-	SetProfileLong("DescWndY", point.y);
+	SetResolutionProfileLong("DescWndX", point.x);
+	SetResolutionProfileLong("DescWndY", point.y);
 }
 
 void CGetSetOptions::GetDescWndPoint(CPoint &point)
 {
-	point.x = GetProfileLong("DescWndX", 100);
-	point.y = GetProfileLong("DescWndY", 100);
+	point.x = GetResolutionProfileLong("DescWndX", 100);
+	point.y = GetResolutionProfileLong("DescWndY", 100);
 }
 
 void CGetSetOptions::GetDescWndSize(CSize &size)
 {
-	size.cx = GetProfileLong("DescWndCX", 300);
-	size.cy = GetProfileLong("DescWndCY", 300);
+	size.cx = GetResolutionProfileLong("DescWndCX", 300);
+	size.cy = GetResolutionProfileLong("DescWndCY", 300);
 	if(size.cx <= 0 && size.cy <= 0)
 	{
 		size.cx = 300;
@@ -2133,8 +2156,8 @@ void CGetSetOptions::GetDescWndSize(CSize &size)
 
 void CGetSetOptions::SetDescWndSize(CSize size)
 {
-	SetProfileLong("DescWndCX", size.cx);
-	SetProfileLong("DescWndCY", size.cy);
+	SetResolutionProfileLong("DescWndCX", size.cx);
+	SetResolutionProfileLong("DescWndCY", size.cy);
 }
 
 void CGetSetOptions::SetShowInTaskBar(BOOL val)
@@ -2260,4 +2283,18 @@ BOOL CGetSetOptions::GetShowMsgWndOnCopyToGroup()
 void CGetSetOptions::SetShowMsgWndOnCopyToGroup(BOOL val)
 {
 	SetProfileLong(_T("ShowMsgWndOnCopyToGroup"), val);
+}
+
+DWORD CGetSetOptions::GetActionShortCutA(DWORD action)
+{
+	CString actionText;
+	actionText.Format(_T("%d_A"), action);
+	return GetProfileLong(actionText, 0);
+}
+
+void CGetSetOptions::SetActionShortCutA(int action, DWORD shortcut)
+{
+	CString actionText;
+	actionText.Format(_T("%d_A"), action);
+	SetProfileLong(actionText, shortcut);
 }

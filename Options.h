@@ -90,6 +90,9 @@ public:
 	static BOOL SetProfileFont(CString csSection, LOGFONT &font);
 	static BOOL GetProfileFont(CString csSection, LOGFONT &font);
 
+	static long GetResolutionProfileLong(CString csName, long lDefaultValue, CString csNewPath = _T(""));
+	static BOOL SetResolutionProfileLong(CString csName, long lValue);
+
 	static BOOL SetProfileLong(CString csName, long lValue);
 	static long GetProfileLong(CString csName, long lDefaultValue = -1, CString csNewPath = _T(""));
 
@@ -495,6 +498,9 @@ public:
 
 	static BOOL GetShowMsgWndOnCopyToGroup();
 	static void SetShowMsgWndOnCopyToGroup(BOOL val);
+
+	static DWORD GetActionShortCutA(DWORD action);
+	static void SetActionShortCutA(int action, DWORD shortcut);
 };
 
 // global for easy access and for initialization of fast access variables
