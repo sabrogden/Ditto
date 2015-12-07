@@ -20,6 +20,7 @@
 #define READ_RANDOM_DB_FILE				12
 #define GROUP_DOUBLE_CLICK				13
 #define CLOSE_POPUP_MSG_WND				14
+#define SCREEN_RESOLUTION_CHANGED		15
 
 class CMainFrame: public CFrameWnd
 {

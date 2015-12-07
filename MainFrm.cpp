@@ -696,6 +696,12 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 				}
 			}
 			break;
+		case SCREEN_RESOLUTION_CHANGED:
+			{
+				KillTimer(SCREEN_RESOLUTION_CHANGED);
+				m_quickPaste.OnScreenResolutionChange();
+			}
+			break;
     }
 
     CFrameWnd::OnTimer(nIDEvent);
@@ -1302,7 +1308,7 @@ void CMainFrame::OnFirstFixupstickycliporder()
 
 LRESULT CMainFrame::OnResolutionChange(WPARAM wParam, LPARAM lParam)
 {
-	m_quickPaste.OnScreenResolutionChange();
+	SetTimer(SCREEN_RESOLUTION_CHANGED, 1000, NULL);
 
 	return TRUE;
 }

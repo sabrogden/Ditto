@@ -34,6 +34,9 @@ public:
 //protected:
 	CQPasteWnd *m_pwndPaste;
 
+protected:
+	bool m_forceResizeOnNextShow;
+
 };
 
 #endif // !defined(AFX_QUICKPASTE_H__1B4A98E6_B719_402C_BDD4_7F3F97CD0EB0__INCLUDED_)

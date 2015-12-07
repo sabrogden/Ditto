@@ -20,6 +20,7 @@ static char THIS_FILE[]=__FILE__;
 
 CQuickPaste::CQuickPaste()
 {
+	m_forceResizeOnNextShow = false;
 	m_pwndPaste = NULL;
 }
 
@@ -122,7 +123,8 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	
 	//If it is a window get the rect otherwise get the saved point and size
 	if (IsWindow(m_pwndPaste->m_hWnd) &&
-		m_pwndPaste->IsIconic() == FALSE)
+		m_pwndPaste->IsIconic() == FALSE &&
+		m_forceResizeOnNextShow == false)
 	{
 		m_pwndPaste->GetWindowRect(rcPrev);
 		csSize = rcPrev.Size();
@@ -178,7 +180,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 
 	CRect crRect = CRect(point, csSize);
 
-	bool forceMoveWindow = false;
+	bool forceMoveWindow = m_forceResizeOnNextShow;
 
 	if(g_Opt.m_bEnsureEntireWindowCanBeSeen)
 	{
@@ -317,7 +319,9 @@ bool CQuickPaste::IsWindowTopLevel()
 void CQuickPaste::OnScreenResolutionChange()
 {
 	if(m_pwndPaste != NULL &&
-		::IsWindow(m_pwndPaste->m_hWnd))
+		::IsWindow(m_pwndPaste->m_hWnd) &&
+		m_pwndPaste->IsIconic() == FALSE &&
+		IsWindowVisibleEx())
 	{
 		Log(StrF(_T("Window Position changed, moving window to position as of this screen resolution %dx%d"), GetScreenWidth(), GetScreenHeight()));
 		CPoint point;
@@ -327,5 +331,9 @@ void CQuickPaste::OnScreenResolutionChange()
 		CGetSetOptions::GetQuickPasteSize(csSize);
 
 		m_pwndPaste->MoveWindow(point.x, point.y, csSize.cx, csSize.cy);
+	}
+	else
+	{
+		m_forceResizeOnNextShow = true;
 	}
 }

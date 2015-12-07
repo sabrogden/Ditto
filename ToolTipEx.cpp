@@ -210,17 +210,20 @@ BOOL CToolTipEx::Hide()
 {
     DELETE_BITMAP 
 
+	if(::IsWindowVisible(m_hWnd))
+	{
+		CRect rect;
+		this->GetWindowRect(&rect);
+		CGetSetOptions::SetDescWndSize(rect.Size());
+		CGetSetOptions::SetDescWndPoint(rect.TopLeft());
+	}
+
     ShowWindow(SW_HIDE);
 
     m_csRTF = "";
     m_csText = "";
 	m_clipId = 0;
-	m_searchText = _T("");
-
-	CRect rect;
-	this->GetWindowRect(&rect);
-	CGetSetOptions::SetDescWndSize(rect.Size());
-	CGetSetOptions::SetDescWndPoint(rect.TopLeft());
+	m_searchText = _T("");	
 
     return TRUE;
 }
