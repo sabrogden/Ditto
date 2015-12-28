@@ -116,7 +116,7 @@ void CEventThread::WaitForThreadToExit(int waitTime)
 
 void CEventThread::Stop(int waitTime) 
 {
-	Log(_T("Start of CEventThread::Stop(int waitTime) "));
+	Log(StrF(_T("Start of CEventThread::Stop(int waitTime) %d - Name: %s"), waitTime, m_threadName));
 
 	if(m_threadRunning)
 	{
@@ -135,12 +135,12 @@ void CEventThread::Stop(int waitTime)
 		}
 	}
 
-	Log(_T("End of CEventThread::Stop(int waitTime) "));
+	Log(StrF(_T("End of CEventThread::Stop(int waitTime) %d - Name: %s"), waitTime, m_threadName));
 };
 
 void CEventThread::RunThread()
 {
-	Log(_T("Start of CEventThread::RunThread()"));
+	Log(StrF(_T("Start of CEventThread::RunThread() Name: %s"), m_threadName));
 
 	m_threadRunning = true;
 	m_threadWasStarted = true;
@@ -191,16 +191,18 @@ void CEventThread::RunThread()
 			}
 			else
 			{
-				Log(StrF(_T("Start of CEventThread::RunThread() - OnEvent %d"), eventId));
+				Log(StrF(_T("Start of CEventThread::RunThread() - OnEvent %d - Name %s"), eventId, m_threadName));
 				OnEvent(eventId, m_param);
-				Log(StrF(_T("End of CEventThread::RunThread() - OnEvent %d"), eventId));
+				Log(StrF(_T("End of CEventThread::RunThread() - OnEvent %d - Name: %d"), eventId, m_threadName));
 			}
 		}
 	}
 
+	UndoFireEvent(EXIT_EVENT);
+
 	SetEvent(m_hEvt);
 
-	Log(_T("End of CEventThread::RunThread()"));
+	Log(StrF(_T("End of CEventThread::RunThread() Name: %s"), m_threadName));
 
 	m_threadRunning = false;
 }

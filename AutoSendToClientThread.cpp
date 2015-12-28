@@ -8,6 +8,7 @@
 CAutoSendToClientThread::CAutoSendToClientThread(void)
 {
 	m_waitTimeout = 30000;
+	m_threadName = "CAutoSendToClientThread";
 	for(int eventEnum = 0; eventEnum < ECAUTOSENDTOCLIENTTHREADEVENTS_COUNT; eventEnum++)
 	{
 		AddEvent(eventEnum);

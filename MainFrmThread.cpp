@@ -7,6 +7,7 @@
 
 CMainFrmThread::CMainFrmThread(void)
 {
+	m_threadName = "CMainFrmThread";
     for(int eventEnum = 0; eventEnum < ECMAINFRMTHREADEVENTS_COUNT; eventEnum++)
     {
         AddEvent(eventEnum);

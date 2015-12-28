@@ -28,6 +28,7 @@ protected:
 	bool m_threadWasStarted;
 	void *m_param;
 	int m_waitTimeout;
+	CString m_threadName;
 
 public:
 	void Start(void *param = NULL);

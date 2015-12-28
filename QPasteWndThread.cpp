@@ -7,6 +7,7 @@
 
 CQPasteWndThread::CQPasteWndThread(void)
 {
+	m_threadName = "CQPasteWndThread";
     m_waitTimeout = ONE_HOUR * 12;
 
     m_SearchingEvent = CreateEvent(NULL, TRUE, FALSE, _T(""));
