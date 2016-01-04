@@ -501,6 +501,9 @@ public:
 
 	static DWORD GetActionShortCutA(DWORD action);
 	static void SetActionShortCutA(int action, DWORD shortcut);
+	
+	static BOOL GetUseIPFromAccept();
+	static void SetUseIPFromAccept(BOOL useAccept);
 };
 
 // global for easy access and for initialization of fast access variables

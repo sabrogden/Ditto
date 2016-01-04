@@ -56,9 +56,7 @@ UINT  MTServerThread(LPVOID pParam)
 		LogSendRecieveInfo("ERROR - if(listen(theApp.m_sSocket,10)!=0)");
 		return 0;
 	}
-
-	SOCKET socket;
-	
+		
 	sockaddr_in from;
 	int fromlen = sizeof(from);
 
@@ -67,10 +65,20 @@ UINT  MTServerThread(LPVOID pParam)
 		if(theApp.m_bAppExiting || theApp.m_bExitServerThread)
 			break;
 
-		socket = accept(theApp.m_sSocket, (struct sockaddr*)&from,&fromlen);
+		SOCKET socket = accept(theApp.m_sSocket, (struct sockaddr*)&from, &fromlen);
 
-		if( socket != INVALID_SOCKET )
-			AfxBeginThread(ClientThread,(LPVOID)socket);
+		SocketParams *pParams = new SocketParams();
+		pParams->m_ip = inet_ntoa(from.sin_addr);
+		pParams->m_socket = socket;
+
+		if (socket != INVALID_SOCKET)
+		{
+			AfxBeginThread(ClientThread, (LPVOID)pParams);
+		}
+		else
+		{
+			delete pParams;
+		}
 	}	
 
 	LogSendRecieveInfo("End of Server Thread");
@@ -85,8 +93,12 @@ UINT  ClientThread(LPVOID pParam)
 {	
 	LogSendRecieveInfo("*********************Start of ClientThread*********************");
 	
+	SocketParams *pParams = (SocketParams*)pParam;
+
 	CServer Server;
-	Server.RunThread((SOCKET)pParam);
+	Server.RunThread(pParams);
+
+	delete pParams;
 
 	LogSendRecieveInfo("*********************End of ClientThread*********************");
 	
@@ -105,9 +117,10 @@ CServer::~CServer()
 	closesocket(m_Sock.GetSocket());
 }
 
-void CServer::RunThread(SOCKET sock)
+void CServer::RunThread(SocketParams *pParams)
 {
-	m_Sock.SetSocket(sock);	
+	m_Sock.SetSocket(pParams->m_socket);	
+	m_recieveIP = pParams->m_ip;
 	CSendInfo info;
 	bool bBreak = false;
 		
@@ -171,7 +184,16 @@ void CServer::RunThread(SOCKET sock)
 
 void CServer::OnStart(CSendInfo &info)
 {
-	CTextConvert::ConvertFromUTF8(info.m_cIP, m_csIP);
+	if (m_recieveIP != _T("") &&
+		g_Opt.GetUseIPFromAccept())
+	{
+		LogSendRecieveInfo(StrF(_T("Using ip address from the Accept Call - %s"), m_recieveIP));
+		m_csIP = m_recieveIP;
+	}
+	else
+	{
+		CTextConvert::ConvertFromUTF8(info.m_cIP, m_csIP);
+	}
 	CTextConvert::ConvertFromUTF8(info.m_cComputerName, m_csComputerName);
 	CTextConvert::ConvertFromUTF8(info.m_cDesc, m_csDesc);
 

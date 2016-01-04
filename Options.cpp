@@ -2212,7 +2212,7 @@ void CGetSetOptions::SetRequestFilesUsingIP(int val)
 
 int CGetSetOptions::GetRequestFilesUsingIP()
 {
-	return GetProfileLong(_T("RequestFilesUsingIP"), 1);
+	return GetProfileLong(_T("RequestFilesUsingIP"), 0);
 }
 
 int CGetSetOptions::ReadRandomFileInterval()
@@ -2297,4 +2297,14 @@ void CGetSetOptions::SetActionShortCutA(int action, DWORD shortcut)
 	CString actionText;
 	actionText.Format(_T("%d_A"), action);
 	SetProfileLong(actionText, shortcut);
+}
+
+BOOL CGetSetOptions::GetUseIPFromAccept()
+{
+	return GetProfileLong(_T("UseIPFromAccept"), TRUE);
+}
+
+void CGetSetOptions::SetUseIPFromAccept(BOOL useAccept)
+{
+	SetProfileLong(_T("UseIPFromAccept"), useAccept);
 }

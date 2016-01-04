@@ -8,13 +8,20 @@
 #include "ServerDefines.h"
 
 
+class SocketParams
+{
+public:
+	SOCKET m_socket;
+	CString m_ip;
+};
+
 class CServer
 {
 public:
 	CServer();
 	~CServer();
 
-	void RunThread(SOCKET sock);
+	void RunThread(SocketParams *pParams);
 
 protected:
 	void AddRemoteCF_HDROPFormat();
@@ -36,6 +43,7 @@ protected:
 	CString m_csDesc;
 	CRecieveSocket m_Sock;
 	CClipFormat m_cf;
+	CString m_recieveIP;
 };
 
 UINT  MTServerThread(LPVOID pParam);
