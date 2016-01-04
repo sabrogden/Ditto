@@ -3730,12 +3730,12 @@ bool CQPasteWnd::DoExportToBitMapFile()
 	ofn.hwndOwner = m_hWnd;
 	ofn.lpstrFile = szFile;
 	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrFilter = _T("BMP (*.bmp)\0*.bmp\0PNG (*.png)\0*.png\0JPEG (*.jpeg)\0*.jpeg");
+	ofn.lpstrFilter = _T("PNG (*.png)\0*.png\0BMP (*.bmp)\0*.bmp\0JPEG (*.jpeg)\0*.jpeg");
 	ofn.nFilterIndex = 1;
 	ofn.lpstrFileTitle = NULL;
 	ofn.nMaxFileTitle = 0;
 	ofn.lpstrInitialDir = szDir;
-	ofn.lpstrDefExt = _T(".bmp");
+	ofn.lpstrDefExt = _T("png");
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
 
 	m_bHideWnd = false;
