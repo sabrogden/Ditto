@@ -8,6 +8,11 @@
 
 #include "Shared/ArrayEx.h"
 
+
+//Handle foreign keyboards pressing ALT_GR (right alt), this simulates a control press
+//http://compgroups.net/comp.os.programmer.win32/alt-gr-key-and-left-ctrl/2840252
+#define CONTROL_PRESSED ((::GetKeyState(VK_CONTROL) & 0x8000) && (((GetKeyState(VK_RMENU) < 0) && (GetKeyState(VK_LCONTROL) < 0)) == FALSE))
+
 #define ONE_MINUTE				60000
 #define ONE_HOUR				3600000
 #define ONE_DAY					86400000

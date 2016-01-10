@@ -819,7 +819,7 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 	if('0' <= vk && vk <= '9')
 	{
 		// if <Ctrl> is required but is absent, then break
-		if(g_Opt.m_bUseCtrlNumAccel && !(GetKeyState(VK_CONTROL) & 0x8000))
+		if(g_Opt.m_bUseCtrlNumAccel && !(CONTROL_PRESSED))
 			return FALSE;
 		
 		int index = (int)vk - '0';
@@ -835,7 +835,7 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 	if(VK_NUMPAD0 <= vk && vk <= VK_NUMPAD9)
 	{
 		// if <Ctrl> is required but is absent, then break
-		if( g_Opt.m_bUseCtrlNumAccel && !(GetKeyState(VK_CONTROL) & 0x8000) )
+		if( g_Opt.m_bUseCtrlNumAccel && !(CONTROL_PRESSED) )
 			return FALSE;
 		
 		int index = (int)vk - VK_NUMPAD0;
@@ -852,7 +852,7 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 	switch( vk )
 	{
 	case 'X': // Ctrl-X = Cut (prepare for moving the items into a Group)
-		if(GetKeyState(VK_CONTROL) & 0x8000)
+		if(CONTROL_PRESSED)
 		{
 			LoadCopyOrCutToClipboard();		
 			
@@ -862,7 +862,7 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 		break;
 		
 	case 'C': // Ctrl-C = Copy (prepare for copying the items into a Group)
-		if(GetKeyState(VK_CONTROL) & 0x8000)
+		if(CONTROL_PRESSED)
 		{
 			LoadCopyOrCutToClipboard();
 			
@@ -872,7 +872,7 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 		break;
 		
 	case 'V': // Ctrl-V = Paste (actually performs the copy or move of items into the current Group)
-		if(GetKeyState(VK_CONTROL) & 0x8000)
+		if(CONTROL_PRESSED)
 		{
 			theApp.IC_Paste();
 			return TRUE;
@@ -880,7 +880,7 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 		break;
 		
 	case 'A': // Ctrl-A = Select All
-		if(GetKeyState(VK_CONTROL) & 0x8000)
+		if(CONTROL_PRESSED)
 		{
 			int nCount = GetItemCount();
 			for(int i = 0; i < nCount; i++)

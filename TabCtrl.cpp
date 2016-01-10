@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "TabCtrl.h"
+#include "Misc.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -1025,7 +1026,7 @@ BOOL CTabCtrlEx::PreTranslateMessage(MSG* pMsg)
 	switch (pMsg->message)
 	{
 	case WM_KEYDOWN:
-		if (GetKeyState(VK_CONTROL) & 0x8000)
+		if (CONTROL_PRESSED)
 		{
 			if (pMsg->wParam == VK_TILDAE)
 			{

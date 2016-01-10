@@ -48,6 +48,7 @@
 #include "RulerRichEditCtrl.h"
 #include "TextFile/TextFile.h"
 #include "..\Options.h"
+#include "..\Misc.h"
 
 #include "ids.h"
 #include ".\rulerricheditctrl.h"
@@ -2086,7 +2087,7 @@ BOOL CRulerRichEditCtrl::PreTranslateMessage(MSG* pMsg)
 		switch(pMsg->wParam)
 		{
 		case 'X':
-			if(GetKeyState(VK_CONTROL) & 0x8000)
+			if(CONTROL_PRESSED)
 			{
 				m_rtf.Cut();
 				return TRUE;
@@ -2094,7 +2095,7 @@ BOOL CRulerRichEditCtrl::PreTranslateMessage(MSG* pMsg)
 			break;
 
 		case 'C':
-			if(GetKeyState(VK_CONTROL) & 0x8000)
+			if(CONTROL_PRESSED)
 			{
 				m_rtf.Copy();
 				return TRUE;
@@ -2102,49 +2103,49 @@ BOOL CRulerRichEditCtrl::PreTranslateMessage(MSG* pMsg)
 			break;
 
 		case 'V':
-			if(GetKeyState(VK_CONTROL) & 0x8000)
+			if(CONTROL_PRESSED)
 			{
 				m_rtf.Paste();
 				return TRUE;
 			}
 			break;
 		case 'I':
-			if(GetKeyState(VK_CONTROL) & 0x8000)
+			if(CONTROL_PRESSED)
 			{
 				DoItalic();
 				return TRUE;
 			}
 			break;
 		case 'B':
-			if(GetKeyState(VK_CONTROL) & 0x8000)
+			if(CONTROL_PRESSED)
 			{
 				DoBold();
 				return TRUE;
 			}
 			break;
 		case 'U':
-			if(GetKeyState(VK_CONTROL) & 0x8000)
+			if(CONTROL_PRESSED)
 			{
 				DoUnderline();
 				return TRUE;
 			}
 			break;
 		case 'Z':
-			if(GetKeyState(VK_CONTROL) & 0x8000)
+			if(CONTROL_PRESSED)
 			{
 				m_rtf.Undo();
 				return TRUE;
 			}
 			break;
 		case 'Y':
-			if(GetKeyState(VK_CONTROL) & 0x8000)
+			if(CONTROL_PRESSED)
 			{
 				m_rtf.Redo();
 				return TRUE;
 			}
 			break;
 		case 'W':
-			if(GetKeyState(VK_CONTROL) & 0x8000)
+			if(CONTROL_PRESSED)
 			{
 				DoWrap();
 				return TRUE;

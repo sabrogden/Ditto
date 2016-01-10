@@ -2534,7 +2534,7 @@ void CQPasteWnd::SetKeyModiferState(bool bActive)
 
 BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 {
-	if(CheckActions(pMsg))
+	if (CheckActions(pMsg))
 	{
 		return TRUE;
 	}

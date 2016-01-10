@@ -70,8 +70,8 @@ BOOL CSearchEditBox::PreTranslateMessage(MSG* pMsg)
 					}
 				}
 			}
-			else if(pMsg->wParam == 'C' && GetKeyState(VK_CONTROL) & 0x8000 ||
-					pMsg->wParam == 'X' && GetKeyState(VK_CONTROL) & 0x8000 ||
+			else if(pMsg->wParam == 'C' && CONTROL_PRESSED ||
+					pMsg->wParam == 'X' && CONTROL_PRESSED ||
 					pMsg->wParam == VK_DELETE)
 			{
 				LONG lEditSel = GetSel();

@@ -77,7 +77,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 {		
 	Log(StrF(_T("Start of ShowQPasteWnd, AtPrevPos: %d, FromKeyboard: %d, RefillList: %d"), bAtPrevPos, bFromKeyboard, bReFillList));
 
-	if(bFromKeyboard == false && GetKeyState(VK_SHIFT) & 0x8000 && GetKeyState(VK_CONTROL) & 0x8000)
+	if(bFromKeyboard == false && GetKeyState(VK_SHIFT) & 0x8000 && CONTROL_PRESSED)
 	{
 		if(m_pwndPaste)
 		{

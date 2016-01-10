@@ -386,7 +386,7 @@ BOOL CEditWnd::PreTranslateMessage(MSG* pMsg)
 		}
 		else if(pMsg->wParam == 'S')
 		{
-			if(GetKeyState(VK_CONTROL) & 0x8000)
+			if(CONTROL_PRESSED)
 			{
 				if(GetKeyState(VK_SHIFT) & 0x8000)
 				{
@@ -402,7 +402,7 @@ BOOL CEditWnd::PreTranslateMessage(MSG* pMsg)
 		}
 		else if(pMsg->wParam == 'N')
 		{
-			if(GetKeyState(VK_CONTROL) & 0x8000)
+			if(CONTROL_PRESSED)
 			{
 				OnNew();
 			}

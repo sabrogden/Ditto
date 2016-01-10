@@ -11,7 +11,6 @@
 #include "EditWithButton.h"
 #include "cp_main.h"
 
-// CEditWithButton
 
 IMPLEMENT_DYNAMIC(CEditWithButton, CEdit)
 
@@ -44,23 +43,25 @@ END_MESSAGE_MAP()
 
 // CEditWithButton message handlers
 
-void CEditWithButton::PreSubclassWindow( )
-{	
+void CEditWithButton::PreSubclassWindow()
+{
 	// We must have a multiline edit
 	// to be able to set the edit rect
-	ASSERT( GetStyle() & ES_MULTILINE );
+	ASSERT(GetStyle() & ES_MULTILINE);
 
 	ResizeWindow();
 }
 
-BOOL CEditWithButton::PreTranslateMessage( MSG* pMsg )
+BOOL CEditWithButton::PreTranslateMessage(MSG* pMsg)
 {
 	// TODO: Add your specialized code here and/or call the base class
 	// Intercept Ctrl + Z (Undo), Ctrl + X (Cut), Ctrl + C (Copy), Ctrl + V (Paste) and Ctrl + A (Select All)
 	// before CEdit base class gets a hold of them.
-	if (pMsg->message == WM_KEYDOWN && ::GetKeyState(VK_CONTROL) < 0)
-		switch (pMsg->wParam)
+	if (pMsg->message == WM_KEYDOWN && 
+		CONTROL_PRESSED)
 	{
+		switch (pMsg->wParam)
+		{
 		case 'Z':
 			Undo();
 			return TRUE;
@@ -76,6 +77,7 @@ BOOL CEditWithButton::PreTranslateMessage( MSG* pMsg )
 		case 'A':
 			SetSel(0, -1);
 			return TRUE;
+		}
 	}
 
 	switch(pMsg->message) 
