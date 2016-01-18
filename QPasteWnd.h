@@ -127,12 +127,13 @@ public:
     bool m_bHideWnd;
     CString m_strSQLSearch;
     CGroupStatic m_stGroup;
-    CFont GroupFont;
+    CFont m_groupFont;
     CString m_Title;
     CGroupTree m_GroupTree;
     CGdipButton m_ShowGroupsFolderBottom;
     CGdipButton m_BackButton;
 	CGdipButton m_searchOptionsButton;
+	CGroupStatic m_alwaysOnToWarningStatic;
 
     CString m_SQL;
     CString m_CountSQL;
@@ -416,4 +417,6 @@ public:
 	afx_msg void OnUpdateCliporderMovetotop(CCmdUI *pCmdUI);
 	afx_msg void OnMenuFilteron();
 	afx_msg void OnUpdateMenuFilteron(CCmdUI *pCmdUI);
+	afx_msg void OnAlwaysOnTopClicked();
+	//afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 };

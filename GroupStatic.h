@@ -26,6 +26,7 @@ public:
 	void SetBkColor( COLORREF color )		{ m_dwBkColor = color;		}
 	void SetFont( int nPointSize, LPCTSTR lpszFaceName, CDC* pDC = NULL );
 	void SetFont(CFont *pFont)				{ CStatic::SetFont(pFont);		}
+	void SetToggleCursor(bool toggle)		{ m_toggleCursorToHand = toggle; }
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -44,12 +45,13 @@ protected:
 	CFont*   m_pFont;
 	CBrush   m_brush;
 	CString  m_strBuff;        // Holds the static controls contents before & after the control is displayed
+	bool m_toggleCursorToHand;
 
 
 	// Generated message map functions
 protected:
 	//{{AFX_MSG(CGroupStatic)
-		// NOTE - the ClassWizard will add and remove member functions here.
+	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	//}}AFX_MSG
 
 	DECLARE_MESSAGE_MAP()

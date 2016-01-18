@@ -64,6 +64,7 @@ __int64 CGetSetOptions::nLastDbWriteTime = 0;
 CTheme CGetSetOptions::m_Theme;
 BOOL CGetSetOptions::m_showScrollBar = false;
 CGetSetOptions g_Opt;
+BOOL CGetSetOptions::m_bShowAlwaysOnTopWarning = TRUE;
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -156,6 +157,7 @@ void CGetSetOptions::LoadSettings()
 	m_bEnsureConnectToClipboard = GetEnsureConnectToClipboard();
 	m_bOutputDebugString = false;
 	m_showScrollBar = GetShowScrollBar();
+	m_bShowAlwaysOnTopWarning = GetShowAlwaysOnTopWarning();
 
 	GetExtraNetworkPassword(true);
 
@@ -2297,6 +2299,17 @@ void CGetSetOptions::SetActionShortCutA(int action, DWORD shortcut)
 	CString actionText;
 	actionText.Format(_T("%d_A"), action);
 	SetProfileLong(actionText, shortcut);
+}
+
+BOOL CGetSetOptions::GetShowAlwaysOnTopWarning()
+{
+	return GetProfileLong(_T("ShowAlwaysOnTopWarning"), TRUE);
+}
+
+void CGetSetOptions::SetShowAlwaysOnTopWarning(BOOL show)
+{
+	m_bShowAlwaysOnTopWarning = show;
+	SetProfileLong(_T("ShowAlwaysOnTopWarning"), show);
 }
 
 BOOL CGetSetOptions::GetUseIPFromAccept()

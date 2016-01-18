@@ -37,6 +37,7 @@
 #define ID_SHOW_GROUPS_TOP		0x206
 #define ID_BACK_BUTTON			0x207
 #define ID_SEARCH_DESCRIPTION_BUTTON 0x208
+#define ON_TOP_WARNING 0x209
 
 
 #define QPASTE_WIDTH			200
@@ -241,6 +242,8 @@ ON_COMMAND(ID_CLIPORDER_MOVETOTOP, &CQPasteWnd::OnCliporderMovetotop)
 ON_UPDATE_COMMAND_UI(ID_CLIPORDER_MOVETOTOP, &CQPasteWnd::OnUpdateCliporderMovetotop)
 ON_COMMAND(ID_MENU_FILTERON, &CQPasteWnd::OnMenuFilteron)
 ON_UPDATE_COMMAND_UI(ID_MENU_FILTERON, &CQPasteWnd::OnUpdateMenuFilteron)
+ON_BN_CLICKED(ON_TOP_WARNING, OnAlwaysOnTopClicked)
+//ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -311,7 +314,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_searchOptionsButton.LoadStdImageDPI(IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, IDB_COG_32_32, _T("PNG"));
 	m_searchOptionsButton.SetToolTipText(theApp.m_Language.GetString(_T("SearchOptionsTooltip"), _T("Search options")));
 	m_searchOptionsButton.ModifyStyle(WS_TABSTOP, 0);
-	m_searchOptionsButton.ShowWindow(SW_SHOW);
+	m_searchOptionsButton.ShowWindow(SW_SHOW);		
 
     m_stGroup.Create(_T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, ID_GROUP_TEXT);
 	
@@ -320,6 +323,8 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_lstHeader.SetWindowPos(this, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
     m_search.SetWindowPos(&m_lstHeader, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
     m_ShowGroupsFolderBottom.SetWindowPos(&m_search, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+	
+
 
     //LVS_EX_FLATSB
     m_lstHeader.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP);
@@ -339,11 +344,11 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     m_SearchFont.CreatePointFont(80, _T("Arial Unicode MS"));
 
-	GroupFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("MS Sans Serif"));
+	m_groupFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("MS Sans Serif"));	
 
     m_search.SetFont(&m_SearchFont);
-    m_stGroup.SetFont(&GroupFont);
-
+	m_stGroup.SetFont(&m_groupFont);	
+	
     UpdateFont();
 	
     m_thread.Start(this);
@@ -376,6 +381,22 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_actions.AddAccel(ActionEnums::CLIP_PROPERTIES, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_ALT));
 	m_actions.AddAccel(ActionEnums::PASTE_SELECTED_PLAIN_TEXT, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_SHIFT));
 	m_actions.AddAccel(ActionEnums::COMPARE_SELECTED_CLIPS, ACCEL_MAKEKEY(VK_F2, HOTKEYF_CONTROL));
+
+	CString onTopMsg = theApp.m_Language.GetString(_T("TurnOfAlwaysOntop"), _T("Always on Top Enabled"));
+	CString shortcutText = m_actions.GetCmdKeyText(ActionEnums::TOGGLESHOWPERSISTANT);
+	if (shortcutText != _T("") &&
+		shortcutText.Find("\t" + shortcutText) < 0)
+	{
+		onTopMsg += "\t(";
+		onTopMsg += shortcutText;
+		onTopMsg += ")";
+	}
+
+	m_alwaysOnToWarningStatic.Create(onTopMsg, WS_CHILD | SS_CENTERIMAGE | SS_NOTIFY, CRect(0, 0, 0, 0), this, ON_TOP_WARNING);
+	m_alwaysOnToWarningStatic.SetBkColor(COLORREF(RGB(255, 255, 0)));
+	m_alwaysOnToWarningStatic.SetTextColor(COLORREF(RGB(0, 0, 255)));
+	m_alwaysOnToWarningStatic.SetToggleCursor(true);
+	m_alwaysOnToWarningStatic.SetFont(&m_groupFont);
 	
     return 0;
 }
@@ -445,9 +466,16 @@ void CQPasteWnd::MoveControls()
 		m_BackButton.ShowWindow(SW_HIDE);
 		m_stGroup.ShowWindow(SW_HIDE);
 	}
+	
+	int searchRowStart = 22;
+
+	if(g_Opt.m_bShowPersistent)
+	{
+		searchRowStart = 41;
+	}
 
     int nWidth = cx;
-	int listBoxBottomOffset = theApp.m_metrics.ScaleY(22);
+	int listBoxBottomOffset = theApp.m_metrics.ScaleY(searchRowStart);
 	
 	int extraSize = 0;
 
@@ -460,17 +488,28 @@ void CQPasteWnd::MoveControls()
 		CRect r;
 		m_lstHeader.GetWindowRect(&r);
 
-		rgnRect.CreateRectRgn(0, 0, cx, (cy - listBoxBottomOffset-topOfListBox));
+		rgnRect.CreateRectRgn(0, 0, cx, (cy - listBoxBottomOffset-topOfListBox)+1);
 
 		m_lstHeader.SetWindowRgn(rgnRect, TRUE);
 	}
 
 	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize);
-    m_search.MoveWindow(theApp.m_metrics.ScaleX(20), cy - theApp.m_metrics.ScaleY(21), cx - theApp.m_metrics.ScaleX(40), theApp.m_metrics.ScaleY(20));
+	m_search.MoveWindow(theApp.m_metrics.ScaleX(20), cy - theApp.m_metrics.ScaleY(searchRowStart-1), cx - theApp.m_metrics.ScaleX(40), theApp.m_metrics.ScaleY(20));
 
-	m_searchOptionsButton.MoveWindow(cx - theApp.m_metrics.ScaleX(18), cy - theApp.m_metrics.ScaleY(19), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
+	m_searchOptionsButton.MoveWindow(cx - theApp.m_metrics.ScaleX(18), cy - theApp.m_metrics.ScaleY(searchRowStart-3), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
 
-    m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleY(2), cy - theApp.m_metrics.ScaleY(19), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
+	m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleX(2), cy - theApp.m_metrics.ScaleY(searchRowStart-3), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
+
+	if (g_Opt.m_bShowPersistent &&
+		g_Opt.m_bShowAlwaysOnTopWarning)
+	{
+		m_alwaysOnToWarningStatic.ShowWindow(SW_SHOW);
+		m_alwaysOnToWarningStatic.MoveWindow(theApp.m_metrics.ScaleX(2), cy - theApp.m_metrics.ScaleY(18), cx - theApp.m_metrics.ScaleY(4), theApp.m_metrics.ScaleY(17));
+	}
+	else
+	{
+		m_alwaysOnToWarningStatic.ShowWindow(SW_HIDE);
+	}
 }
 
 void CQPasteWnd::OnSetFocus(CWnd *pOldWnd)
@@ -3039,8 +3078,12 @@ bool CQPasteWnd::DoActionBackGroup()
 bool CQPasteWnd::DoActionToggleShowPersistant()
 {
 	theApp.ShowPersistent(!g_Opt.m_bShowPersistent);
-	if(g_Opt.m_bShowPersistent)
+	if (g_Opt.m_bShowPersistent)
+	{
 		::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+	}
+
+	MoveControls();
 
 	return true;
 }
@@ -4794,34 +4837,29 @@ LRESULT CQPasteWnd::OnShowHideScrollBar(WPARAM wParam, LPARAM lParam)
 
 //HBRUSH CQPasteWnd::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 //{
-	//switch (nCtlColor) 
-	//{
-	//case CTLCOLOR_EDIT:
-	//	{
-	//		/*switch (pWnd->GetDlgCtrlID())
-	//		{
-	//		case ID_EDIT_SEARCH:
-	//		{
-	//		pDC->SetTextColor(RGB(0, 255, 0));
-	//		pDC->SetBkColor(RGB(0, 0, 0));
-	//		return (HBRUSH)(m_searchTextBoxBrush->GetSafeHandle());
-	//		}
-	//		break;
-	//		}*/
-	//	}
-	//	break;
-	//case CTLCOLOR_STATIC:
-	//	switch (pWnd->GetDlgCtrlID())
-	//	{
-	//	case ID_BOTTOM_BACK:
-	//		{
-	//			return (HBRUSH)(m_searchTextBoxBrush->GetSafeHandle());
-	//		}
-	//		break;
-	//	}
-	//}
-
-//	return CWndEx::OnCtlColor(pDC, pWnd, nCtlColor);
+//	// Call the base class implementation first! Otherwise, it may 
+//	// undo what we're trying to accomplish here.
+//	HBRUSH hbr = CWnd::OnCtlColor(pDC, pWnd, nCtlColor);
+//
+//	switch (nCtlColor) 
+//	{
+//	case CTLCOLOR_STATIC:
+//		switch (pWnd->GetDlgCtrlID())
+//		{
+//			case ON_TOP_WARNING:
+//			{
+//				pDC->SetBkMode(TRANSPARENT);
+//				pDC->SetBkColor(RGB(0, 0, 255));
+//
+//				CBrush brush;
+//				brush.CreateSolidBrush(COLORREF(RGB(255, 0, 0)));
+//				return brush;
+//			}
+//			break;
+//		}
+//	}
+//
+//	return hbr;
 //}
 
 //void CQPasteWnd::OnPaint()
@@ -5153,4 +5191,9 @@ void CQPasteWnd::OnUpdateMenuFilteron(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::FILTER_ON_SELECTED_CLIP);
+}
+
+void CQPasteWnd::OnAlwaysOnTopClicked()
+{
+	DoAction(ActionEnums::TOGGLESHOWPERSISTANT);
 }

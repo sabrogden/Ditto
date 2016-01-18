@@ -18,6 +18,8 @@ CGroupStatic::CGroupStatic()
 {
 	m_dwTextColor = 0;
 	m_dwBkColor = RGB(255, 255, 255);
+	m_toggleCursorToHand = false;
+	m_pFont = NULL;
 }
 
 CGroupStatic::~CGroupStatic()
@@ -27,7 +29,7 @@ CGroupStatic::~CGroupStatic()
 
 BEGIN_MESSAGE_MAP(CGroupStatic, CStatic)
 	//{{AFX_MSG_MAP(CGroupStatic)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
+	ON_WM_SETCURSOR()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -113,4 +115,16 @@ void CGroupStatic::SetFont( int nPointSize, LPCTSTR lpszFaceName, CDC* pDC )
 
    // Set the window's current font to the specified font
    CStatic::SetFont( m_pFont );
+}
+
+BOOL CGroupStatic::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
+{
+	if (m_toggleCursorToHand)
+	{
+		HCURSOR h = ::LoadCursor(NULL, IDC_HAND);
+		::SetCursor(h);
+		return TRUE;
+	}
+
+	return FALSE;
 }

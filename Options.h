@@ -501,6 +501,10 @@ public:
 
 	static DWORD GetActionShortCutA(DWORD action);
 	static void SetActionShortCutA(int action, DWORD shortcut);
+
+	static BOOL	m_bShowAlwaysOnTopWarning;
+	static BOOL GetShowAlwaysOnTopWarning();
+	static void SetShowAlwaysOnTopWarning(BOOL show);
 	
 	static BOOL GetUseIPFromAccept();
 	static void SetUseIPFromAccept(BOOL useAccept);
