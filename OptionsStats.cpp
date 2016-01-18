@@ -78,26 +78,22 @@ BOOL COptionsStats::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
 
-	CTime time(CGetSetOptions::GetTotalDate());
-	m_eAllDate = time.Format("%m/%d/%Y %I:%M %p");
+	COleDateTime time((time_t) CGetSetOptions::GetTotalDate());
+	m_eAllDate = time.Format();
+
 	m_eAllCopies.Format(_T("%d"), CGetSetOptions::GetTotalCopyCount());
 	m_eAllPastes.Format(_T("%d"), CGetSetOptions::GetTotalPasteCount());
 
-	CTime time2(CGetSetOptions::GetTripDate());
-	m_eTripDate = time2.Format("%m/%d/%Y %I:%M %p");
+	COleDateTime time2((time_t)CGetSetOptions::GetTripDate());
+	m_eTripDate = time2.Format();
 	m_eTripCopies.Format(_T("%d"), CGetSetOptions::GetTripCopyCount());
 	m_eTripPastes.Format(_T("%d"), CGetSetOptions::GetTripPasteCount());
 
 	m_eClipsSent.Format(_T("%d"), theApp.m_lClipsSent);
 	m_eClipsRecieved.Format(_T("%d"), theApp.m_lClipsRecieved);
-	m_eLastStarted = theApp.m_oldtStartUp.Format(_T("%m/%d/%y %I:%M:%S"));
-	if(theApp.m_oldtStartUp.GetHour() > 12)
-		m_eLastStarted += " PM";
-	else
-		m_eLastStarted += " AM";
+	m_eLastStarted = theApp.m_oldtStartUp.Format();	
 
 	COleDateTimeSpan span = COleDateTime::GetCurrentTime() - theApp.m_oldtStartUp;
-
 	CString csSpan;
 	csSpan.Format(_T("  -  %d.%d.%d (D.H.M)"), (long)span.GetTotalDays(), span.GetHours(), span.GetMinutes());
 	m_eLastStarted += csSpan;
