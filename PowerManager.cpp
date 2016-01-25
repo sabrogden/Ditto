@@ -9,6 +9,7 @@ ULONG PowerChanged(PVOID Context, ULONG Type, PVOID Setting)
 {
 	//a
 	//b
+	//c
 	CString cs;
 	cs.Format(_T("PowerChanged Type %d"), Type);
 	Log(cs);
