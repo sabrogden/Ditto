@@ -53,8 +53,8 @@ BOOL COleClipSource::DoImmediateRender()
 	INT_PTR count = m_ClipIDs.GetSize();
 	if(count <= 0)
 		return 0;
-
-	BOOL bProcessedMult = FALSE;
+	
+	CClip clip;
 
 	if(count > 1)
 	{
@@ -62,103 +62,374 @@ BOOL COleClipSource::DoImmediateRender()
 		CCF_TextAggregator CFText(SepA);
 		if(m_ClipIDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse))
 		{
-			CacheGlobalData(CF_TEXT, CFText.GetHGlobal());
-			bProcessedMult = TRUE;
+			CClipFormat cf(CF_TEXT, CFText.GetHGlobal());
+			clip.m_Formats.Add(cf);
+			//clip.m_Formats now owns the global data
+			cf.m_autoDeleteData = false;
 		}
 
 		CStringW SepW = CTextConvert::ConvertToUnicode(g_Opt.GetMultiPasteSeparator());
 		CCF_UnicodeTextAggregator CFUnicodeText(SepW);
 		if(m_ClipIDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse))
 		{
-			CacheGlobalData(CF_UNICODETEXT, CFUnicodeText.GetHGlobal());
-			bProcessedMult = TRUE;
+			CClipFormat cf(CF_UNICODETEXT, CFUnicodeText.GetHGlobal());
+			clip.m_Formats.Add(cf);
+			//clip.m_Formats now owns the global data
+			cf.m_autoDeleteData = false;
 		}
 
-		if (m_pasteOptions.m_pasteAsPlainText &&
-			bProcessedMult == FALSE)
+		if ((m_pasteOptions.LimitFormatsToText()) &&
+			clip.m_Formats.GetCount() == 0)
 		{
 			CCF_HDropAggregator HDrop;
 			if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
 			{
-				CacheGlobalData(CF_UNICODETEXT, HDrop.GetHGlobalAsString());
-				bProcessedMult = TRUE;
+				CClipFormat cf(CF_UNICODETEXT, HDrop.GetHGlobalAsString());
+				clip.m_Formats.Add(cf);
+				//clip.m_Formats now owns the global data
+				cf.m_autoDeleteData = false;
 			}
 		}
-		else if(m_pasteOptions.m_pasteAsPlainText == false)
+		else if (m_pasteOptions.LimitFormatsToText() == false)
 		{
 			CCF_HDropAggregator HDrop;
 			if(m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
 			{
-				CacheGlobalData(CF_HDROP, HDrop.GetHGlobal());
-				bProcessedMult = TRUE;
+				CClipFormat cf(CF_HDROP, HDrop.GetHGlobal());
+				clip.m_Formats.Add(cf);
+				//clip.m_Formats now owns the global data
+				cf.m_autoDeleteData = false;
 			}
 
 			CRichTextAggregator RichText(SepA);
 			if(m_ClipIDs.AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse))
 			{
-				CacheGlobalData(theApp.m_RTFFormat, RichText.GetHGlobal());
-				bProcessedMult = TRUE;
+				CClipFormat cf(theApp.m_RTFFormat, RichText.GetHGlobal());
+				clip.m_Formats.Add(cf);
+				//clip.m_Formats now owns the global data
+				cf.m_autoDeleteData = false;
 			}
 
 			CHTMLFormatAggregator Html(SepA);
 			if(m_ClipIDs.AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse))
 			{
-				CacheGlobalData(theApp.m_HTML_Format, Html.GetHGlobal());
-				bProcessedMult = TRUE;
+				CClipFormat cf(theApp.m_HTML_Format, Html.GetHGlobal());
+				clip.m_Formats.Add(cf);
+				//clip.m_Formats now owns the global data
+				cf.m_autoDeleteData = false;
 			}
 		}
 	}
 
-	if(count >= 1 && bProcessedMult == FALSE)
+	if (count >= 1 && clip.m_Formats.GetCount() == 0)
 	{
-		CClip clip;
-		CClipFormats formats;
+		clip.LoadFormats(m_ClipIDs[0], m_pasteOptions.LimitFormatsToText());
+	}
 
-		clip.LoadFormats(m_ClipIDs[0], m_pasteOptions.m_pasteAsPlainText);
+	if (m_pasteOptions.LimitFormatsToText())
+	{
+		PlainTextFilter(clip);
+	}
 
-		if(m_pasteOptions.m_pasteAsPlainText)
+	if(m_pasteOptions.m_pasteUpperCase ||
+		m_pasteOptions.m_pasteLowerCase)
+	{
+		DoUpperLowerCase(clip, m_pasteOptions.m_pasteUpperCase);
+	}
+	else if(m_pasteOptions.m_pasteCapitalize)
+	{
+		Capitalize(clip);
+	}
+	else if(m_pasteOptions.m_pasteSentenceCase)
+	{
+		SentenceCase(clip);
+	}
+
+	return PutFormatOnClipboard(&clip.m_Formats) > 0;
+}
+
+void COleClipSource::DoUpperLowerCase(CClip &clip, bool upper)
+{
+	IClipFormat *unicodeTextFormat = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (unicodeTextFormat != NULL)
+	{
+		HGLOBAL data = unicodeTextFormat->Data();
+		wchar_t * stringData = (wchar_t *) GlobalLock(data);
+		int size = (int) GlobalSize(data);
+		CString cs(stringData, (size / sizeof(wchar_t)));
+		GlobalUnlock(data);
+
+		//free the old text we are going to replace it below with an upper case version
+		unicodeTextFormat->Free();
+
+		CString val;
+		if (upper)
 		{
-			bool foundText = false;
-			INT_PTR hDropIndex = -1;
-			INT_PTR	count = clip.m_Formats.GetCount();
-			for (INT_PTR i = 0; i < count; i++)
-			{
-				CClipFormat *pCF = &clip.m_Formats.ElementAt(i);
-
-				if (pCF->m_cfType == CF_TEXT ||
-					pCF->m_cfType == CF_UNICODETEXT)
-				{
-					foundText = true;
-				}
-				else if(pCF->m_cfType == CF_HDROP)
-				{
-					hDropIndex = i;
-				}
-			}
-
-			if(foundText &&
-				hDropIndex > -1)
-			{
-				clip.m_Formats.RemoveAt(hDropIndex);
-			}
-			else if(foundText == false &&
-					hDropIndex > -1)
-			{
-				CCF_HDropAggregator HDrop;
-				if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
-				{
-					CacheGlobalData(CF_UNICODETEXT, HDrop.GetHGlobalAsString());
-
-					return 1;
-				}
-			}
-
+			val = cs.MakeUpper();
+		}
+		else
+		{
+			val = cs.MakeLower();
 		}
 		
-		return PutFormatOnClipboard(&clip.m_Formats) > 0;
-	}		
+		long lLen = val.GetLength();
+		HGLOBAL hGlobal = NewGlobalP(val.GetBuffer(), ((lLen+1) * sizeof(wchar_t)));
+		val.ReleaseBuffer();
 
-	return bProcessedMult;
+		unicodeTextFormat->Data(hGlobal);		
+	}
+
+	IClipFormat *asciiTextFormat = clip.m_Formats.FindFormatEx(CF_TEXT);
+	if (asciiTextFormat != NULL)
+	{
+		HGLOBAL data = asciiTextFormat->Data();
+		char * stringData = (char *) GlobalLock(data);
+		int size = (int) GlobalSize(data);
+		CStringA cs(stringData, size);
+		GlobalUnlock(data);
+
+		//free the old text we are going to replace it below with an upper case version
+		asciiTextFormat->Free();
+		
+		CString val;
+		if (upper)
+		{
+			val = cs.MakeUpper();
+		}
+		else
+		{
+			val = cs.MakeLower();
+		}
+
+		long lLen = val.GetLength();
+		HGLOBAL hGlobal = NewGlobalP(val.GetBuffer(lLen), lLen + sizeof(char));
+		val.ReleaseBuffer();
+
+		asciiTextFormat->Data(hGlobal);
+	}
+}
+
+void COleClipSource::Capitalize(CClip &clip)
+{
+	IClipFormat *unicodeTextFormat = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (unicodeTextFormat != NULL)
+	{
+		HGLOBAL data = unicodeTextFormat->Data();
+		wchar_t * stringData = (wchar_t *) GlobalLock(data);
+		int size = (int) GlobalSize(data);
+		CString cs(stringData, (size / sizeof(wchar_t)));
+		GlobalUnlock(data);
+
+		//free the old text we are going to replace it below with an upper case version
+		unicodeTextFormat->Free();
+
+		CString val = cs.MakeLower();		
+		long len = val.GetLength();
+
+		if (len > 0)
+		{
+			wchar_t * pText = val.GetBuffer();
+			
+			pText[0] = toupper(pText[0]);
+			bool capitalize = false;
+			
+			for (int i = 1; i < len; i++)
+			{
+				wchar_t item = pText[i];
+				if (item == ' ')
+				{
+					capitalize = true;
+				}
+				else if (capitalize)
+				{
+					pText[i] = toupper(item);
+					capitalize = false;
+				}
+			}
+		}
+		
+		val.ReleaseBuffer();
+
+		HGLOBAL hGlobal = NewGlobalP(val.GetBuffer(), ((len + 1) * sizeof(wchar_t)));
+
+		unicodeTextFormat->Data(hGlobal);
+	}
+
+	IClipFormat *asciiTextFormat = clip.m_Formats.FindFormatEx(CF_TEXT);
+	if (asciiTextFormat != NULL)
+	{
+		HGLOBAL data = asciiTextFormat->Data();
+		char * stringData = (char *) GlobalLock(data);
+		int size = (int) GlobalSize(data);
+		CStringA cs(stringData, size);
+		GlobalUnlock(data);
+
+		//free the old text we are going to replace it below with an upper case version
+		asciiTextFormat->Free();
+
+		CStringA val = cs.MakeLower();
+		long len = val.GetLength();
+
+		if (len > 0)
+		{
+			char * pText = val.GetBuffer();
+
+			pText[0] = toupper(pText[0]);
+			bool capitalize = false;
+
+			for (int i = 1; i < len; i++)
+			{
+				wchar_t item = pText[i];
+				if (item == ' ')
+				{
+					capitalize = true;
+				}
+				else if (capitalize)
+				{
+					pText[i] = toupper(item);
+					capitalize = false;
+				}
+			}
+		}
+
+		val.ReleaseBuffer();
+
+		HGLOBAL hGlobal = NewGlobalP(val.GetBuffer(), (len + 1));
+
+		asciiTextFormat->Data(hGlobal);
+	}
+}
+
+void COleClipSource::SentenceCase(CClip &clip)
+{
+	IClipFormat *unicodeTextFormat = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (unicodeTextFormat != NULL)
+	{
+		HGLOBAL data = unicodeTextFormat->Data();
+		wchar_t * stringData = (wchar_t *) GlobalLock(data);
+		int size = (int) GlobalSize(data);
+		CString cs(stringData, (size / sizeof(wchar_t)));
+		GlobalUnlock(data);
+
+		//free the old text we are going to replace it below with an upper case version
+		unicodeTextFormat->Free();
+
+		CString val = cs.MakeLower();
+		long len = val.GetLength();
+
+		if (len > 0)
+		{
+			wchar_t * pText = val.GetBuffer();
+
+			pText[0] = toupper(pText[0]);
+			bool capitalize = false;
+
+			for (int i = 1; i < len; i++)
+			{
+				wchar_t item = pText[i];
+				if (item == '.' ||
+					item == '!' ||
+					item == '?')
+				{
+					capitalize = true;
+				}
+				else if (capitalize && item != ' ')
+				{
+					pText[i] = toupper(item);
+					capitalize = false;
+				}
+			}
+		}
+
+
+		val.ReleaseBuffer();
+
+		HGLOBAL hGlobal = NewGlobalP(val.GetBuffer(), ((len + 1) * sizeof(wchar_t)));
+
+		unicodeTextFormat->Data(hGlobal);
+	}
+
+	IClipFormat *asciiTextFormat = clip.m_Formats.FindFormatEx(CF_TEXT);
+	if (asciiTextFormat != NULL)
+	{
+		HGLOBAL data = asciiTextFormat->Data();
+		char * stringData = (char *) GlobalLock(data);
+		int size = (int) GlobalSize(data);
+		CStringA cs(stringData, size);
+		GlobalUnlock(data);
+
+		//free the old text we are going to replace it below with an upper case version
+		asciiTextFormat->Free();
+
+		CStringA val = cs.MakeLower();
+		long len = val.GetLength();
+
+		if (len > 0)
+		{
+			char * pText = val.GetBuffer();
+
+			pText[0] = toupper(pText[0]);
+			bool capitalize = false;
+
+			for (int i = 1; i < len; i++)
+			{
+				wchar_t item = pText[i];
+				if (item == '.' ||
+					item == '!' ||
+					item == '?')
+				{
+					capitalize = true;
+				}
+				else if (capitalize && item != ' ')
+				{
+					pText[i] = toupper(item);
+					capitalize = false;
+				}
+			}
+		}
+
+		val.ReleaseBuffer();
+
+		HGLOBAL hGlobal = NewGlobalP(val.GetBuffer(), (len + 1));
+
+		asciiTextFormat->Data(hGlobal);
+	}
+}
+
+void COleClipSource::PlainTextFilter(CClip &clip)
+{
+	bool foundText = false;
+	INT_PTR hDropIndex = -1;
+	INT_PTR	count = clip.m_Formats.GetCount();
+	for (INT_PTR i = 0; i < count; i++)
+	{
+		CClipFormat *pCF = &clip.m_Formats.ElementAt(i);
+
+		if (pCF->m_cfType == CF_TEXT ||
+			pCF->m_cfType == CF_UNICODETEXT)
+		{
+			foundText = true;
+		}
+		else if (pCF->m_cfType == CF_HDROP)
+		{
+			hDropIndex = i;
+		}
+	}
+
+	if (foundText &&
+		hDropIndex > -1)
+	{
+		clip.m_Formats.RemoveAt(hDropIndex);
+	}
+	else if (foundText == false &&
+		hDropIndex > -1)
+	{
+		CCF_HDropAggregator HDrop;
+		if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
+		{
+			clip.m_Formats.Add(CClipFormat(CF_UNICODETEXT, HDrop.GetHGlobalAsString()));
+		}
+	}
 }
 
 INT_PTR COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
@@ -196,6 +467,11 @@ INT_PTR COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 
 			continue;
 		}
+
+		wchar_t * stringData = (wchar_t *) GlobalLock(pCF->m_hgData);
+		int size = (int) GlobalSize(pCF->m_hgData);
+		CString cs(stringData, (size / sizeof(wchar_t)));
+		GlobalUnlock(pCF->m_hgData);
 
 		Log(StrF(_T("Setting clipboard type: %s to the clipboard"), GetFormatName(pCF->m_cfType)));
 

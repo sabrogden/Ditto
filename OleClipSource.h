@@ -20,6 +20,9 @@ public:
 
 	BOOL DoDelayRender();
 	BOOL DoImmediateRender();
+
+	void PlainTextFilter(CClip &clip);
+
 	INT_PTR PutFormatOnClipboard(CClipFormats *pFormats);
 
 public:
@@ -27,4 +30,8 @@ public:
 
 protected:
 	CClipFormats m_DelayRenderedFormats;
+
+	void DoUpperLowerCase(CClip &clip, bool upper);
+	void Capitalize(CClip &clip);
+	void SentenceCase(CClip &clip);;
 };

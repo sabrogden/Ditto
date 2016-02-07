@@ -45,7 +45,7 @@ public:
 	~CClipFormat();
 
 	void Clear();
-	void Free();
+	virtual void Free();
 
 	virtual CLIPFORMAT Type() { return m_cfType; }
 	virtual HGLOBAL Data() { return m_hgData; }

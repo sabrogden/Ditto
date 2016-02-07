@@ -244,6 +244,14 @@ ON_COMMAND(ID_MENU_FILTERON, &CQPasteWnd::OnMenuFilteron)
 ON_UPDATE_COMMAND_UI(ID_MENU_FILTERON, &CQPasteWnd::OnUpdateMenuFilteron)
 ON_BN_CLICKED(ON_TOP_WARNING, OnAlwaysOnTopClicked)
 //ON_WM_CTLCOLOR()
+ON_COMMAND(ID_SPECIALPASTE_UPPERCASE, &CQPasteWnd::OnSpecialpasteUppercase)
+ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_UPPERCASE, &CQPasteWnd::OnUpdateSpecialpasteUppercase)
+ON_COMMAND(ID_SPECIALPASTE_LOWERCASE, &CQPasteWnd::OnSpecialpasteLowercase)
+ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_LOWERCASE, &CQPasteWnd::OnUpdateSpecialpasteLowercase)
+ON_COMMAND(ID_SPECIALPASTE_CAPITALIZE, &CQPasteWnd::OnSpecialpasteCapitalize)
+ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_CAPITALIZE, &CQPasteWnd::OnUpdateSpecialpasteCapitalize)
+ON_COMMAND(ID_SPECIALPASTE_SENTENCE, &CQPasteWnd::OnSpecialpasteSentence)
+ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_SENTENCE, &CQPasteWnd::OnUpdateSpecialpasteSentence)
 END_MESSAGE_MAP()
 
 
@@ -2723,6 +2731,18 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::FILTER_ON_SELECTED_CLIP:
 		ret = DoFilterOnSelectedClip();
 		break;
+	case ActionEnums::PASTE_UPPER_CASE:
+		ret = DoPasteUpperCase();
+		break;
+	case ActionEnums::PASTE_LOWER_CASE:
+		ret = DoPasteLowerCase();
+		break;
+	case ActionEnums::PASTE_CAPITALiZE:
+		ret = DoPasteCapitalize();
+		break;
+	case ActionEnums::PASTE_SENTENCE_CASE:
+		ret = DoPasteSentenceCase();
+		break;
 	}
 
 	return ret;
@@ -3738,6 +3758,58 @@ bool CQPasteWnd::DoFilterOnSelectedClip()
 	}
 
 	return ret;
+}
+
+bool CQPasteWnd::DoPasteUpperCase()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteUpperCase = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoPasteLowerCase()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteLowerCase = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoPasteCapitalize()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteCapitalize = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoPasteSentenceCase()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteSentenceCase = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
 }
 
 bool CQPasteWnd::DoExportToBitMapFile()
@@ -5196,4 +5268,71 @@ void CQPasteWnd::OnUpdateMenuFilteron(CCmdUI *pCmdUI)
 void CQPasteWnd::OnAlwaysOnTopClicked()
 {
 	DoAction(ActionEnums::TOGGLESHOWPERSISTANT);
+}
+
+
+void CQPasteWnd::OnSpecialpasteUppercase()
+{
+	DoAction(ActionEnums::PASTE_UPPER_CASE);
+}
+
+
+void CQPasteWnd::OnUpdateSpecialpasteUppercase(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_UPPER_CASE);
+}
+
+
+void CQPasteWnd::OnSpecialpasteLowercase()
+{
+	DoAction(ActionEnums::PASTE_LOWER_CASE);
+}
+
+
+void CQPasteWnd::OnUpdateSpecialpasteLowercase(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_LOWER_CASE);
+}
+
+
+void CQPasteWnd::OnSpecialpasteCapitalize()
+{
+	DoAction(ActionEnums::PASTE_CAPITALiZE);
+}
+
+void CQPasteWnd::OnUpdateSpecialpasteCapitalize(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_CAPITALiZE);
+}
+
+
+void CQPasteWnd::OnSpecialpasteSentence()
+{
+	DoAction(ActionEnums::PASTE_SENTENCE_CASE);
+}
+
+
+void CQPasteWnd::OnUpdateSpecialpasteSentence(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_SENTENCE_CASE);
 }

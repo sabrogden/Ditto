@@ -243,6 +243,10 @@ public:
 	bool DoMoveClipUp();
 	bool DoMoveClipTOP();
 	bool DoFilterOnSelectedClip();
+	bool DoPasteUpperCase();
+	bool DoPasteLowerCase();
+	bool DoPasteCapitalize();
+	bool DoPasteSentenceCase();
 
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
@@ -419,4 +423,12 @@ public:
 	afx_msg void OnUpdateMenuFilteron(CCmdUI *pCmdUI);
 	afx_msg void OnAlwaysOnTopClicked();
 	//afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	afx_msg void OnSpecialpasteUppercase();
+	afx_msg void OnUpdateSpecialpasteUppercase(CCmdUI *pCmdUI);
+	afx_msg void OnSpecialpasteLowercase();
+	afx_msg void OnUpdateSpecialpasteLowercase(CCmdUI *pCmdUI);
+	afx_msg void OnSpecialpasteCapitalize();
+	afx_msg void OnUpdateSpecialpasteCapitalize(CCmdUI *pCmdUI);
+	afx_msg void OnSpecialpasteSentence();
+	afx_msg void OnUpdateSpecialpasteSentence(CCmdUI *pCmdUI);
 };

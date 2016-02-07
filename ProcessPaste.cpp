@@ -35,7 +35,7 @@ BOOL CProcessPaste::DoPaste()
 		
 		// Ignore the clipboard change that we will cause IF:
 		// 1) we are pasting a single element, since the element is already
-		//    in the db and its lDate was updated by MarkAsPasted().
+		//    in the db and its lDate was updated by MarkAsPas???ted().
 		// OR
 		// 2) we are pasting multiple, but g_Opt.m_bSaveMultiPaste is false
 		if(GetClipIDs().GetSize() == 1 || !g_Opt.m_bSaveMultiPaste)

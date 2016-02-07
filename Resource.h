@@ -516,6 +516,11 @@
 #define ID_CLIPORDER_MOVETOTOP          32908
 #define ID_FIRST_FIXUPSTICKYCLIPORDER   32909
 #define ID_MENU_FILTERON                32910
+#define ID_MENU_SPECIALPASTE            32911
+#define ID_SPECIALPASTE_UPPERCASE       32912
+#define ID_SPECIALPASTE_LOWERCASE       32913
+#define ID_SPECIALPASTE_CAPITALIZE      32914
+#define ID_SPECIALPASTE_SENTENCE        32915
 
 // Next default values for new objects
 // 
@@ -523,7 +528,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        240
-#define _APS_NEXT_COMMAND_VALUE         32911
+#define _APS_NEXT_COMMAND_VALUE         32916
 #define _APS_NEXT_CONTROL_VALUE         2127
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

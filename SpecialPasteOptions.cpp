@@ -6,6 +6,9 @@ CSpecialPasteOptions::CSpecialPasteOptions()
 {
 	m_pasteAsPlainText = false;
 	m_pPasteFormats = NULL;
+	m_pasteUpperCase = false;
+	m_pasteLowerCase = false;
+	m_pasteCapitalize = false;
 }
 
 
