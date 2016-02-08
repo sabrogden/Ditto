@@ -255,6 +255,7 @@ void COleClipSource::Capitalize(CClip &clip)
 		unicodeTextFormat->Data(hGlobal);
 	}
 
+	//my change
 	//test
 	//second test
 
