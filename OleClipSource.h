@@ -33,5 +33,8 @@ protected:
 
 	void DoUpperLowerCase(CClip &clip, bool upper);
 	void Capitalize(CClip &clip);
-	void SentenceCase(CClip &clip);;
+	void SentenceCase(CClip &clip);
+	void RemoveLineFeeds(CClip &clip);
+	void AddLineFeeds(CClip &clip, int count);
+	void Typoglycemia(CClip &clip);
 };

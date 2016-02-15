@@ -38,6 +38,7 @@
 #define ID_BACK_BUTTON			0x207
 #define ID_SEARCH_DESCRIPTION_BUTTON 0x208
 #define ON_TOP_WARNING 0x209
+#define ID_SYSTEM_BUTTON		0x210
 
 
 #define QPASTE_WIDTH			200
@@ -185,6 +186,7 @@ ON_COMMAND(ID_MENU_NEWGROUP, OnMenuNewGroup)
 ON_COMMAND(ID_MENU_NEWGROUPSELECTION, OnMenuNewGroupSelection)
 ON_MESSAGE(NM_GROUP_TREE_MESSAGE, OnGroupTreeMessage)
 ON_COMMAND(ID_BACK_BUTTON, OnBackButton)
+ON_COMMAND(ID_SYSTEM_BUTTON, OnSystemButton)
 ON_COMMAND(ID_SEARCH_DESCRIPTION_BUTTON, OnSearchDescription)
 ON_MESSAGE(CB_UPDOWN, OnUpDown)
 ON_MESSAGE(NM_INACTIVE_TOOLTIPWND, OnToolTipWndInactive)
@@ -252,6 +254,14 @@ ON_COMMAND(ID_SPECIALPASTE_CAPITALIZE, &CQPasteWnd::OnSpecialpasteCapitalize)
 ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_CAPITALIZE, &CQPasteWnd::OnUpdateSpecialpasteCapitalize)
 ON_COMMAND(ID_SPECIALPASTE_SENTENCE, &CQPasteWnd::OnSpecialpasteSentence)
 ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_SENTENCE, &CQPasteWnd::OnUpdateSpecialpasteSentence)
+ON_COMMAND(ID_SPECIALPASTE_REMOVELINEFEEDS, &CQPasteWnd::OnSpecialpasteRemovelinefeeds)
+ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_REMOVELINEFEEDS, &CQPasteWnd::OnUpdateSpecialpasteRemovelinefeeds)
+ON_COMMAND(ID_SPECIALPASTE_PASTE, &CQPasteWnd::OnSpecialpastePaste)
+ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_PASTE, &CQPasteWnd::OnUpdateSpecialpastePaste)
+ON_COMMAND(ID_SPECIALPASTE_PASTE32919, &CQPasteWnd::OnSpecialpastePaste32919)
+ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_PASTE32919, &CQPasteWnd::OnUpdateSpecialpastePaste32919)
+ON_COMMAND(ID_SPECIALPASTE_TYPOGLYCEMIA, &CQPasteWnd::OnSpecialpasteTypoglycemia)
+ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_TYPOGLYCEMIA, &CQPasteWnd::OnUpdateSpecialpasteTypoglycemia)
 END_MESSAGE_MAP()
 
 
@@ -317,6 +327,12 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_BackButton.LoadStdImageDPI(IDB_LEFT_ARROW_16_16, IDB_LEFT_ARROW_20_20, IDB_LEFT_ARROW_24_24, IDB_LEFT_ARROW_32_32, _T("PNG"));
 	m_BackButton.ModifyStyle(WS_TABSTOP, 0);
     m_BackButton.ShowWindow(SW_SHOW);
+
+	m_systemMenu.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SYSTEM_BUTTON);
+	//m_systemMenu.LoadStdImageDPI(IDB_HAMBURGER_16_16, IDB_HAMBURGER_20_20, IDB_HAMBURGER_24_24, IDB_HAMBURGER_32_32, _T("PNG"));
+	m_systemMenu.LoadStdImageDPI(IDB_SYSTEM_MENU_16_16, IDB_SYSTEM_MENU_20_20, IDB_SYSTEM_MENU_24_24, IDB_SYSTEM_MENU_32_32, _T("PNG"));
+	m_systemMenu.ModifyStyle(WS_TABSTOP, 0);
+	m_systemMenu.ShowWindow(SW_SHOW);
 
 	m_searchOptionsButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SEARCH_DESCRIPTION_BUTTON);
 	m_searchOptionsButton.LoadStdImageDPI(IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, IDB_COG_32_32, _T("PNG"));
@@ -457,17 +473,17 @@ void CQPasteWnd::MoveControls()
     int cx = crRect.Width();
     int cy = crRect.Height();
 
-    int topOfListBox = 0;
-
+	int topOfListBox = theApp.m_metrics.ScaleY(2);;
+	
     if(theApp.m_GroupID > 0)
     {
         m_stGroup.ShowWindow(SW_SHOW);
         m_BackButton.ShowWindow(SW_SHOW);
 
-		m_BackButton.MoveWindow(theApp.m_metrics.ScaleX(2), 0, theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
-		m_stGroup.MoveWindow(theApp.m_metrics.ScaleX(20), 0, cx-theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(16));
+		m_BackButton.MoveWindow(theApp.m_metrics.ScaleX(22), 0, theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
+		m_stGroup.MoveWindow(theApp.m_metrics.ScaleX(40), 0, cx-theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(16));
 
-		topOfListBox = theApp.m_metrics.ScaleY(16);
+		topOfListBox = theApp.m_metrics.ScaleY(32);
 	}
 	else
 	{
@@ -502,9 +518,11 @@ void CQPasteWnd::MoveControls()
 	}
 
 	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize);
-	m_search.MoveWindow(theApp.m_metrics.ScaleX(20), cy - theApp.m_metrics.ScaleY(searchRowStart-1), cx - theApp.m_metrics.ScaleX(40), theApp.m_metrics.ScaleY(20));
+	m_search.MoveWindow(theApp.m_metrics.ScaleX(20), cy - theApp.m_metrics.ScaleY(searchRowStart-1), cx - theApp.m_metrics.ScaleX(61), theApp.m_metrics.ScaleY(20));
 
-	m_searchOptionsButton.MoveWindow(cx - theApp.m_metrics.ScaleX(18), cy - theApp.m_metrics.ScaleY(searchRowStart-3), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
+	m_searchOptionsButton.MoveWindow(cx - theApp.m_metrics.ScaleX(36), cy - theApp.m_metrics.ScaleY(searchRowStart-3), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
+
+	m_systemMenu.MoveWindow(cx - theApp.m_metrics.ScaleX(18), cy - theApp.m_metrics.ScaleY(searchRowStart - 3), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
 
 	m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleX(2), cy - theApp.m_metrics.ScaleY(searchRowStart-3), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
 
@@ -1305,7 +1323,7 @@ void CQPasteWnd::OnRclickQuickPaste(NMHDR *pNMHDR, LRESULT *pResult)
         
 		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 
-        SetMenuChecks(cmSubMenu);
+		SetFriendChecks(cmSubMenu);
 
         cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
     }
@@ -1321,6 +1339,38 @@ void CQPasteWnd::HideMenuGroup(CMenu* menu, CString text)
 	{
 		menu->RemoveMenu(nMenuPos, MF_BYPOSITION);
 	}
+}
+
+void CQPasteWnd::SetFriendChecks(CMenu *pMenu)
+{
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIENDONE, 0);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TWO, 1);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_THREE, 2);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FORE, 3);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FIVE, 4);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_SIX, 5);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_SEVEN, 6);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_EIGHT, 7);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_NINE, 8);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TEN, 9);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_ELEVEN, 10);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TWELVE, 11);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_THIRTEEN, 12);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FORETEEN, 13);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FIFTEEN, 14);
+
+	if (g_Opt.GetAllowFriends() == false)
+	{
+		CString csText("Send To");
+		int nPos = -1;
+		CMultiLanguage::GetMenuPos(pMenu, csText, nPos);
+		if (nPos >= 0)
+		{
+			pMenu->DeleteMenu(nPos, MF_BYPOSITION);
+		}
+	}
+
+	pMenu->DeleteMenu(ID_MENU_SENTTO_PROMPTFORIP, MF_BYCOMMAND);
 }
 
 void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
@@ -1504,36 +1554,7 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
     if(g_Opt.GetPromptWhenDeletingClips())
     {
         pMenu->CheckMenuItem(ID_QUICKOPTIONS_PROMPTTODELETECLIP, MF_CHECKED);
-    }
-
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIENDONE, 0);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TWO, 1);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_THREE, 2);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FORE, 3);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FIVE, 4);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_SIX, 5);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_SEVEN, 6);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_EIGHT, 7);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_NINE, 8);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TEN, 9);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_ELEVEN, 10);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TWELVE, 11);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_THIRTEEN, 12);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FORETEEN, 13);
-    SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FIFTEEN, 14);
-
-    if(g_Opt.GetAllowFriends() == false)
-    {
-        CString csText("Send To");
-        int nPos = -1;
-        CMultiLanguage::GetMenuPos(pMenu, csText, nPos);
-        if(nPos >= 0)
-        {
-            pMenu->DeleteMenu(nPos, MF_BYPOSITION);
-        }
-    }
-
-    pMenu->DeleteMenu(ID_MENU_SENTTO_PROMPTFORIP, MF_BYCOMMAND);
+    }    
 
 	if (g_Opt.GetPasteAsAdmin())
 	{
@@ -2743,6 +2764,22 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::PASTE_SENTENCE_CASE:
 		ret = DoPasteSentenceCase();
 		break;
+
+	case ActionEnums::PASTE_REMOVE_LINE_FEEDS:
+		ret = DoPasteRemoveLineFeeds();
+		break;
+
+	case ActionEnums::PASTE_ADD_ONE_LINE_FEED:
+		ret = DoPastePlusAddLineFeed();
+		break;
+
+	case ActionEnums::PASTE_ADD_TWO_LINE_FEEDS:
+		ret = DoPasteAddTwoLineFeeds();
+		break;
+
+	case ActionEnums::PASTE_TYPOGLYCEMIA:
+		ret = DoPasteTypoglycemia();
+		break;
 	}
 
 	return ret;
@@ -3805,6 +3842,58 @@ bool CQPasteWnd::DoPasteSentenceCase()
 	{
 		CSpecialPasteOptions pasteOptions;
 		pasteOptions.m_pasteSentenceCase = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoPasteRemoveLineFeeds()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteRemoveLineFeeds = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoPastePlusAddLineFeed()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteAddOneLineFeed = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoPasteAddTwoLineFeeds()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteAddTwoLineFeeds = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoPasteTypoglycemia()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteTypoglycemia = true;
 		OpenSelection(pasteOptions);
 		return true;
 	}
@@ -5335,4 +5424,92 @@ void CQPasteWnd::OnUpdateSpecialpasteSentence(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_SENTENCE_CASE);
+}
+
+void CQPasteWnd::OnSystemButton()
+{
+	POINT pp;
+	CMenu cmPopUp;
+	CMenu *cmSubMenu = NULL;
+
+	GetCursorPos(&pp);
+	if (cmPopUp.LoadMenu(IDR_QUICK_PASTE_SYSTEM_MENU) != 0)
+	{
+		cmSubMenu = cmPopUp.GetSubMenu(0);
+		if (!cmSubMenu)
+		{
+			return;
+		}
+
+		SetMenuChecks(cmSubMenu);
+
+		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
+
+		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
+	}
+}
+
+void CQPasteWnd::OnSpecialpasteRemovelinefeeds()
+{
+	DoAction(ActionEnums::PASTE_REMOVE_LINE_FEEDS);
+}
+
+
+void CQPasteWnd::OnUpdateSpecialpasteRemovelinefeeds(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_REMOVE_LINE_FEEDS);
+}
+
+
+void CQPasteWnd::OnSpecialpastePaste()
+{
+	DoAction(ActionEnums::PASTE_ADD_ONE_LINE_FEED);
+}
+
+
+void CQPasteWnd::OnUpdateSpecialpastePaste(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_ADD_ONE_LINE_FEED);
+}
+
+
+void CQPasteWnd::OnSpecialpastePaste32919()
+{
+	DoAction(ActionEnums::PASTE_ADD_TWO_LINE_FEEDS);
+}
+
+void CQPasteWnd::OnUpdateSpecialpastePaste32919(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_ADD_TWO_LINE_FEEDS);
+}
+
+
+void CQPasteWnd::OnSpecialpasteTypoglycemia()
+{
+	DoAction(ActionEnums::PASTE_TYPOGLYCEMIA);
+}
+
+void CQPasteWnd::OnUpdateSpecialpasteTypoglycemia(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_TYPOGLYCEMIA);
 }

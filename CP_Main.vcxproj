@@ -2019,6 +2019,10 @@
     <None Include="res\DittoNew.ico" />
     <None Include="res\Ditto_NoCopyCb.ico" />
     <None Include="res\folder_open.png" />
+    <None Include="res\Hamburger_16_16.png" />
+    <None Include="res\Hamburger_20_20.png" />
+    <None Include="res\Hamburger_24_24.png" />
+    <None Include="res\Hamburger_32_32.png" />
     <None Include="res\in_folder_16_16.png" />
     <None Include="res\in_folder_20_20.png" />
     <None Include="res\in_folder_24_24.png" />
@@ -2056,6 +2060,10 @@
     <None Include="res\Sticky_20_20.png" />
     <None Include="res\Sticky_24_24.png" />
     <None Include="res\Sticky_32_32.png" />
+    <None Include="res\system_menu_16_16.png" />
+    <None Include="res\system_menu_20_20.png" />
+    <None Include="res\system_menu_24_24.png" />
+    <None Include="res\system_menu_32_32.png" />
     <None Include="res\Toolbar.bmp" />
     <None Include="res\toolbar1.bmp" />
     <CustomBuild Include="RulerRichEditCtrl\toolbar.bmp">

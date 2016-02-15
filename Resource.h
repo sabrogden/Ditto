@@ -107,6 +107,12 @@
 #define IDR_DESC_OPTIONS_MENU           238
 #define IDR_MENU1                       239
 #define IDR_MENU_GROUPS                 239
+#define IDB_PNG9                        241
+#define IDB_SYSTEM_MENU_16_16           244
+#define IDB_SYSTEM_MENU_20_20           245
+#define IDB_SYSTEM_MENU_24_24           246
+#define IDB_SYSTEM_MENU_32_32           247
+#define IDR_QUICK_PASTE_SYSTEM_MENU     248
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -521,14 +527,21 @@
 #define ID_SPECIALPASTE_LOWERCASE       32913
 #define ID_SPECIALPASTE_CAPITALIZE      32914
 #define ID_SPECIALPASTE_SENTENCE        32915
+#define ID_SPECIALPASTE_REMOVELINEFEEDS 32916
+#define ID_SPECIALPASTE_                32917
+#define ID_SPECIALPASTE_PASTE           32918
+#define ID_SPECIALPASTE_PASTE32919      32919
+#define ID_Menu                         32920
+#define ID_Menu32921                    32921
+#define ID_SPECIALPASTE_TYPOGLYCEMIA    32922
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        240
-#define _APS_NEXT_COMMAND_VALUE         32916
+#define _APS_NEXT_RESOURCE_VALUE        249
+#define _APS_NEXT_COMMAND_VALUE         32923
 #define _APS_NEXT_CONTROL_VALUE         2127
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

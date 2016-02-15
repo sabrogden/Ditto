@@ -134,6 +134,7 @@ public:
     CGdipButton m_BackButton;
 	CGdipButton m_searchOptionsButton;
 	CGroupStatic m_alwaysOnToWarningStatic;
+	CGdipButton m_systemMenu;
 
     CString m_SQL;
     CString m_CountSQL;
@@ -178,6 +179,7 @@ public:
     void OnUpdateTransparency(CCmdUI *pCmdUI, int nValue);
     void SetMenuChecks(CMenu *pMenu);
     void SetSendToMenu(CMenu *pMenu, int nMenuID, int nArrayPos);
+	void SetFriendChecks(CMenu *pMenu);
 
     BOOL SendToFriendbyPos(int nPos);
 
@@ -247,6 +249,10 @@ public:
 	bool DoPasteLowerCase();
 	bool DoPasteCapitalize();
 	bool DoPasteSentenceCase();
+	bool DoPasteRemoveLineFeeds();
+	bool DoPastePlusAddLineFeed();
+	bool DoPasteAddTwoLineFeeds();
+	bool DoPasteTypoglycemia();
 
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
@@ -369,6 +375,7 @@ protected:
     afx_msg void OnMenuNewGroup();
     afx_msg void OnMenuNewGroupSelection();
     afx_msg void OnBackButton();
+	afx_msg void OnSystemButton();
 	afx_msg void OnSearchDescription();
     afx_msg LRESULT OnUpDown(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnItemDeleted(WPARAM wParam, LPARAM lParam);
@@ -431,4 +438,12 @@ public:
 	afx_msg void OnUpdateSpecialpasteCapitalize(CCmdUI *pCmdUI);
 	afx_msg void OnSpecialpasteSentence();
 	afx_msg void OnUpdateSpecialpasteSentence(CCmdUI *pCmdUI);
+	afx_msg void OnSpecialpasteRemovelinefeeds();
+	afx_msg void OnUpdateSpecialpasteRemovelinefeeds(CCmdUI *pCmdUI);
+	afx_msg void OnSpecialpastePaste();
+	afx_msg void OnUpdateSpecialpastePaste(CCmdUI *pCmdUI);
+	afx_msg void OnSpecialpastePaste32919();
+	afx_msg void OnUpdateSpecialpastePaste32919(CCmdUI *pCmdUI);
+	afx_msg void OnSpecialpasteTypoglycemia();
+	afx_msg void OnUpdateSpecialpasteTypoglycemia(CCmdUI *pCmdUI);
 };

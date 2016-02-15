@@ -7,6 +7,8 @@
 #include "CF_TextAggregator.h"
 #include "richtextaggregator.h"
 #include "htmlformataggregator.h"
+#include "Shared\Tokenizer.h"
+#include <random>
 
 /*------------------------------------------------------------------*\
 COleClipSource
@@ -123,7 +125,7 @@ BOOL COleClipSource::DoImmediateRender()
 
 	if (count >= 1 && clip.m_Formats.GetCount() == 0)
 	{
-		clip.LoadFormats(m_ClipIDs[0], m_pasteOptions.LimitFormatsToText());
+		clip.LoadFormats(m_ClipIDs[0], m_pasteOptions.LimitFormatsToText(), m_pasteOptions.IncludeRTFForTextOnly());
 	}
 
 	if (m_pasteOptions.LimitFormatsToText())
@@ -144,6 +146,22 @@ BOOL COleClipSource::DoImmediateRender()
 	{
 		SentenceCase(clip);
 	}
+	else if(m_pasteOptions.m_pasteRemoveLineFeeds)
+	{
+		RemoveLineFeeds(clip);
+	}
+	else if(m_pasteOptions.m_pasteAddOneLineFeed)
+	{
+		AddLineFeeds(clip, 1);
+	}
+	else if (m_pasteOptions.m_pasteAddTwoLineFeeds)
+	{
+		AddLineFeeds(clip, 2);
+	}
+	else if (m_pasteOptions.m_pasteTypoglycemia)
+	{
+		Typoglycemia(clip);
+	}
 
 	return PutFormatOnClipboard(&clip.m_Formats) > 0;
 }
@@ -156,7 +174,7 @@ void COleClipSource::DoUpperLowerCase(CClip &clip, bool upper)
 		HGLOBAL data = unicodeTextFormat->Data();
 		wchar_t * stringData = (wchar_t *) GlobalLock(data);
 		int size = (int) GlobalSize(data);
-		CString cs(stringData, (size / sizeof(wchar_t)));
+		CString cs(stringData);
 		GlobalUnlock(data);
 
 		//free the old text we are going to replace it below with an upper case version
@@ -185,7 +203,7 @@ void COleClipSource::DoUpperLowerCase(CClip &clip, bool upper)
 		HGLOBAL data = asciiTextFormat->Data();
 		char * stringData = (char *) GlobalLock(data);
 		int size = (int) GlobalSize(data);
-		CStringA cs(stringData, size);
+		CStringA cs(stringData);
 		GlobalUnlock(data);
 
 		//free the old text we are going to replace it below with an upper case version
@@ -217,7 +235,7 @@ void COleClipSource::Capitalize(CClip &clip)
 		HGLOBAL data = unicodeTextFormat->Data();
 		wchar_t * stringData = (wchar_t *) GlobalLock(data);
 		int size = (int) GlobalSize(data);
-		CString cs(stringData, (size / sizeof(wchar_t)));
+		CString cs(stringData);
 		GlobalUnlock(data);
 
 		//free the old text we are going to replace it below with an upper case version
@@ -265,7 +283,7 @@ void COleClipSource::Capitalize(CClip &clip)
 		HGLOBAL data = asciiTextFormat->Data();
 		char * stringData = (char *) GlobalLock(data);
 		int size = (int) GlobalSize(data);
-		CStringA cs(stringData, size);
+		CStringA cs(stringData);
 		GlobalUnlock(data);
 
 		//free the old text we are going to replace it below with an upper case version
@@ -312,7 +330,7 @@ void COleClipSource::SentenceCase(CClip &clip)
 		HGLOBAL data = unicodeTextFormat->Data();
 		wchar_t * stringData = (wchar_t *) GlobalLock(data);
 		int size = (int) GlobalSize(data);
-		CString cs(stringData, (size / sizeof(wchar_t)));
+		CString cs(stringData);
 		GlobalUnlock(data);
 
 		//free the old text we are going to replace it below with an upper case version
@@ -359,7 +377,7 @@ void COleClipSource::SentenceCase(CClip &clip)
 		HGLOBAL data = asciiTextFormat->Data();
 		char * stringData = (char *) GlobalLock(data);
 		int size = (int) GlobalSize(data);
-		CStringA cs(stringData, size);
+		CStringA cs(stringData);
 		GlobalUnlock(data);
 
 		//free the old text we are going to replace it below with an upper case version
@@ -436,6 +454,224 @@ void COleClipSource::PlainTextFilter(CClip &clip)
 	}
 }
 
+void COleClipSource::RemoveLineFeeds(CClip &clip)
+{
+	IClipFormat *pUnicodeText = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (pUnicodeText != NULL)
+	{
+		wchar_t *stringData = (wchar_t *) GlobalLock(pUnicodeText->Data());
+		if (stringData != NULL)
+		{
+			CStringW string(stringData);
+
+			GlobalUnlock(pUnicodeText->Data());
+			pUnicodeText->Free();
+
+			int count = string.Replace(_T("\r\n"), _T(" "));
+			count = string.Replace(_T("\r"), _T(" "));
+			count = string.Replace(_T("\n"), _T(" "));
+			
+			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1) * sizeof(wchar_t)));
+
+			pUnicodeText->Data(hGlobal);
+		}
+	}
+
+	IClipFormat *pAsciiText = clip.m_Formats.FindFormatEx(CF_TEXT);
+	if (pAsciiText != NULL)
+	{
+		char *stringData = (char *) GlobalLock(pAsciiText->Data());
+		if (stringData != NULL)
+		{
+			CStringA string(stringData);
+
+			GlobalUnlock(pAsciiText->Data());
+			pAsciiText->Free();
+
+			int count = string.Replace("\r\n", " ");
+			count = string.Replace("\r", " ");
+			count = string.Replace("\n", " ");
+
+			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1)));
+
+			pAsciiText->Data(hGlobal);
+		}
+	}
+
+	IClipFormat *pRTFFormat = clip.m_Formats.FindFormatEx(theApp.m_RTFFormat);
+	if (pRTFFormat != NULL)
+	{
+		char *stringData = (char *) GlobalLock(pRTFFormat->Data());
+		if (stringData != NULL)
+		{
+			CStringA string(stringData);
+
+			GlobalUnlock(pRTFFormat->Data());
+			pRTFFormat->Free();
+
+			int count = string.Replace("\\par\r\n", " ");
+			int count2 = string.Replace("\\par ", " ");
+			int count3 = string.Replace("\\line ", " ");
+			
+			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1)));
+
+			pRTFFormat->Data(hGlobal);
+		}
+	}
+}
+
+void COleClipSource::AddLineFeeds(CClip &clip, int count)
+{
+	IClipFormat *pUnicodeText = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (pUnicodeText != NULL)
+	{
+		wchar_t *stringData = (wchar_t *) GlobalLock(pUnicodeText->Data());
+		if (stringData != NULL)
+		{
+			CStringW string(stringData);
+
+			GlobalUnlock(pUnicodeText->Data());
+			pUnicodeText->Free();
+
+			for(int i = 0; i < count; i++)
+			{
+				string += _T("\r\n");
+			}
+
+			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1) * sizeof(wchar_t)));
+
+			pUnicodeText->Data(hGlobal);
+		}
+	}
+
+	IClipFormat *pAsciiText = clip.m_Formats.FindFormatEx(CF_TEXT);
+	if (pAsciiText != NULL)
+	{
+		char *stringData = (char *) GlobalLock(pAsciiText->Data());
+		if (stringData != NULL)
+		{
+			CStringA string(stringData);
+
+			GlobalUnlock(pAsciiText->Data());
+			pAsciiText->Free();
+
+			for (int i = 0; i < count; i++)
+			{
+				string += _T("\r\n");
+			}
+
+			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1)));
+
+			pAsciiText->Data(hGlobal);
+		}
+	}
+
+	IClipFormat *pRTFFormat = clip.m_Formats.FindFormatEx(theApp.m_RTFFormat);
+	if (pRTFFormat != NULL)
+	{
+		char *stringData = (char *) GlobalLock(pRTFFormat->Data());
+		if (stringData != NULL)
+		{
+			CStringA string(stringData);
+
+			GlobalUnlock(pRTFFormat->Data());
+			pRTFFormat->Free();
+
+			for (int i = 0; i < count; i++)
+			{
+				int pos = string.ReverseFind('}');
+				if (pos >= 0)
+				{
+					int count = string.Insert(pos, "\\par\r\n");
+				}
+			}
+
+			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1)));
+
+			pRTFFormat->Data(hGlobal);
+		}
+	}
+}
+
+void COleClipSource::Typoglycemia(CClip &clip)
+{
+	IClipFormat *unicodeTextFormat = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (unicodeTextFormat != NULL)
+	{
+		HGLOBAL data = unicodeTextFormat->Data();
+		wchar_t * stringData = (wchar_t *) GlobalLock(data);
+		int size = (int) GlobalSize(data);
+		CString cs(stringData);
+		GlobalUnlock(data);
+
+		//free the old text we are going to replace it below with an upper case version
+		unicodeTextFormat->Free();
+
+		CString newString;
+		
+		
+		CTokenizer token(cs, _T(' '));
+		CString word;
+
+		while (token.Next(word))
+		{
+			if(word.GetLength() > 3)
+			{
+				int end = word.GetLength();
+				
+				for (int i = end-1; i >= 0; i--)
+				{
+					if(word[i] == _T('.') ||
+						word[i] == _T('!') ||
+						word[i] == _T('?'))
+					{
+						end--;
+					}
+					else
+					{
+						break;
+					}
+				}
+
+				if (end > 3)
+				{
+					std::uniform_int_distribution<int> dist(1, end - 2);
+					std::random_device rd;
+
+					for (int i = 1; i < end - 1; i++)
+					{
+						int newPos = dist(rd);
+
+						CString cs;
+						cs.Format(_T("pos: %d, rnd: %d\r\n"), i, newPos);
+						OutputDebugString(cs);
+
+						TCHAR temp = word.GetAt(i);
+						word.SetAt(i, word.GetAt(newPos));
+						word.SetAt(newPos, temp);
+					}
+				}
+
+				newString += word;
+			}
+			else
+			{
+				newString += word;
+			}
+
+			newString += _T(' ');
+		}
+
+		
+		long len = newString.GetLength();
+		HGLOBAL hGlobal = NewGlobalP(newString.GetBuffer(), ((len + 1) * sizeof(wchar_t)));
+
+		unicodeTextFormat->Data(hGlobal);
+	}
+
+	
+}
+
 INT_PTR COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 {
 	Log(_T("Start of put format on clipboard"));
@@ -472,11 +708,11 @@ INT_PTR COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 			continue;
 		}
 
-		wchar_t * stringData = (wchar_t *) GlobalLock(pCF->m_hgData);
+		/*wchar_t * stringData = (wchar_t *) GlobalLock(pCF->m_hgData);
 		int size = (int) GlobalSize(pCF->m_hgData);
-		CString cs(stringData, (size / sizeof(wchar_t)));
-		GlobalUnlock(pCF->m_hgData);
-
+		CString cs(stringData);
+		GlobalUnlock(pCF->m_hgData);*/
+		
 		Log(StrF(_T("Setting clipboard type: %s to the clipboard"), GetFormatName(pCF->m_cfType)));
 
 		CacheGlobalData(pCF->m_cfType, pCF->m_hgData);

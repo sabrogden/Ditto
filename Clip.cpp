@@ -1216,7 +1216,7 @@ HGLOBAL CClip::LoadFormat(int id, UINT cfType)
 	return hGlobal;
 }
 
-bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT)
+bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT, bool includeRichTextForTextOnly)
 {
 	DWORD startTick = GetTickCount();
 	CClipFormat cf;
@@ -1234,7 +1234,16 @@ bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT)
 		CString textFilter = _T("");
 		if(bOnlyLoad_CF_TEXT)
 		{
-			textFilter = _T("(strClipBoardFormat = 'CF_TEXT' OR strClipBoardFormat = 'CF_UNICODETEXT' OR strClipBoardFormat = 'CF_HDROP') AND ");
+			textFilter = _T("(strClipBoardFormat = 'CF_TEXT' OR strClipBoardFormat = 'CF_UNICODETEXT' OR strClipBoardFormat = 'CF_HDROP'");
+
+			if(includeRichTextForTextOnly)
+			{
+				textFilter = textFilter + _T(" OR strClipBoardFormat = 'Rich Text Format') AND ");
+			}
+			else
+			{
+				textFilter = textFilter + _T(") AND ");
+			}
 		}
 
 		csSQL.Format(
@@ -1253,7 +1262,8 @@ bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT)
 			{
 				if(cf.m_cfType != CF_TEXT && 
 					cf.m_cfType != CF_UNICODETEXT &&
-					cf.m_cfType != CF_HDROP)
+					cf.m_cfType != CF_HDROP &&
+					(cf.m_cfType != theApp.m_RTFFormat && !includeRichTextForTextOnly))
 				{
 					q.nextRow();
 					continue;

@@ -9,6 +9,11 @@ CSpecialPasteOptions::CSpecialPasteOptions()
 	m_pasteUpperCase = false;
 	m_pasteLowerCase = false;
 	m_pasteCapitalize = false;
+	m_pasteRemoveLineFeeds = false;
+	m_pasteAddOneLineFeed = false;
+	m_pasteAddTwoLineFeeds = false;
+	m_pasteSentenceCase = false;
+	m_pasteTypoglycemia = false;
 }
 
 

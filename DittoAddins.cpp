@@ -119,7 +119,8 @@ bool CDittoAddins::AddPrePasteAddinsToMenu(CMenu *pMenu)
 
 	if(bRet)
 	{
-		pMenu->InsertMenu(3, MF_BYPOSITION|MF_ENABLED|MF_STRING|MF_POPUP, (UINT)AllAddinsMenu, theApp.m_Language.GetString("Add_Ins", "Add-Ins"));
+		pMenu->InsertMenu(17, MF_BYPOSITION | MF_SEPARATOR);
+		pMenu->InsertMenu(18, MF_BYPOSITION|MF_ENABLED|MF_STRING|MF_POPUP, (UINT)AllAddinsMenu, theApp.m_Language.GetString("Add_Ins", "Add-Ins"));
 	}
 
 	return bRet;
