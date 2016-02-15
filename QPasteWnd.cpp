@@ -473,7 +473,7 @@ void CQPasteWnd::MoveControls()
     int cx = crRect.Width();
     int cy = crRect.Height();
 
-	int topOfListBox = theApp.m_metrics.ScaleY(2);;
+	int topOfListBox = 0;
 	
     if(theApp.m_GroupID > 0)
     {
