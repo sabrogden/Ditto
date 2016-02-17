@@ -940,7 +940,7 @@ bool CCP_MainApp::ImportClips(HWND hWnd)
 
 	FileName.lStructSize = sizeof(FileName);
 	FileName.lpstrTitle = _T("Import Clips");
-	FileName.Flags = OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST;
+	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR;
 	FileName.nMaxFile = 400;
 	FileName.lpstrFile = szFileName;
 	FileName.lpstrInitialDir = szDir;

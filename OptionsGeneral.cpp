@@ -364,7 +364,7 @@ void COptionsGeneral::OnGetPath()
 	memset(&szDir, 0, sizeof(szDir));
 	FileName.lStructSize = sizeof(FileName);
 	FileName.lpstrTitle = _T("Open Database");
-	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST;
+	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR;
 	FileName.nMaxFile = 400;
 	FileName.lpstrFile = szFileName;
 	FileName.lpstrInitialDir = szDir;
@@ -445,7 +445,7 @@ void COptionsGeneral::OnSelectSound()
 	FileName.lStructSize = sizeof(FileName);
 
 	FileName.lpstrTitle = _T("Select .wav file");
-	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST;
+	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR;
 	FileName.nMaxFile = 400;
 	FileName.lpstrFile = szFileName;
 	FileName.lpstrInitialDir = szDir;

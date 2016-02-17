@@ -308,7 +308,7 @@ void COptionsQuickPaste::OnBnClickedButtonDiffBrowse()
 	memset(&szDir, 0, sizeof(szDir));
 	FileName.lStructSize = sizeof(FileName);
 	FileName.lpstrTitle = _T("Diff Application");
-	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT|OFN_PATHMUSTEXIST;
+	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR;
 	FileName.nMaxFile = 400;
 	FileName.lpstrFile = szFileName;
 	FileName.lpstrInitialDir = szDir;

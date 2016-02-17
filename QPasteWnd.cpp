@@ -2262,7 +2262,7 @@ void CQPasteWnd::OnMenuExport()
     ofn.nMaxFileTitle = 0;
     ofn.lpstrInitialDir = szDir;
     ofn.lpstrDefExt = _T("dto");
-    ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
 
     m_bHideWnd = false;
 
@@ -3474,7 +3474,7 @@ bool CQPasteWnd::DoExportToTextFile()
 	ofn.nMaxFileTitle = 0;
 	ofn.lpstrInitialDir = szDir;
 	ofn.lpstrDefExt = _T("txt");
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
 
 	m_bHideWnd = false;
 
@@ -3940,10 +3940,10 @@ bool CQPasteWnd::DoExportToBitMapFile()
 	ofn.nMaxFileTitle = 0;
 	ofn.lpstrInitialDir = szDir;
 	ofn.lpstrDefExt = _T("png");
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR | OFN_NOCHANGEDIR;
 
 	m_bHideWnd = false;
-
+	
 	if (GetSaveFileName(&ofn))
 	{
 		using namespace nsPath;
