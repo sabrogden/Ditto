@@ -9,6 +9,7 @@
 #include "htmlformataggregator.h"
 #include "Shared\Tokenizer.h"
 #include <random>
+#include "Client.h"
 
 /*------------------------------------------------------------------*\
 COleClipSource
@@ -17,6 +18,7 @@ COleClipSource
 COleClipSource::COleClipSource()
 {
 	m_bLoadedFormats = false;
+	m_convertToHDROPOnDelayRender = false;
 }
 
 COleClipSource::~COleClipSource()
@@ -28,17 +30,28 @@ BOOL COleClipSource::DoDelayRender()
 {
 	CClipTypes types;
 	m_ClipIDs.GetTypes(types);
+
+	bool foundHDrop = false;
 	
 	INT_PTR count = types.GetSize();
 	for(int i=0; i < count; i++)
 	{
 		DelayRenderData(types[i]);
+
+		if (types[i] == CF_HDROP)
+		{
+			foundHDrop = true;
+		}
+	}
+
+	if (foundHDrop == false)
+	{
+		DelayRenderData(CF_HDROP);
+		m_convertToHDROPOnDelayRender = true;
 	}
 
 	return count > 0;
 }
-
-#include "Client.h"
 
 BOOL COleClipSource::DoImmediateRender()
 {
@@ -782,6 +795,13 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 			else
 			{
 				hData = m_ClipIDs.Render(lpFormatEtc->cfFormat);
+
+				if (m_convertToHDROPOnDelayRender &&
+					hData == NULL && 
+					lpFormatEtc->cfFormat == CF_HDROP)
+				{
+					hData = ConvertToFileDrop();
+				}
 			}
 		}
 
@@ -794,9 +814,9 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 			hCopy = NewGlobalH(hData, GlobalSize(hData));
 		}
 
-		CClipFormat format(lpFormatEtc->cfFormat, hCopy);
-		format.m_autoDeleteData = false; //owned by m_DelayRenderedFormats
+		CClipFormat format(lpFormatEtc->cfFormat, hCopy);		
 		m_DelayRenderedFormats.Add(format);
+		format.m_autoDeleteData = false; //owned by m_DelayRenderedFormats
 	}
 
 	BOOL bRet = FALSE;
@@ -823,4 +843,64 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 	bInHere = false;
 
 	return bRet;
+}
+
+HGLOBAL COleClipSource::ConvertToFileDrop()
+{
+	CString csFile = CGetSetOptions::GetPath(PATH_DRAG_FILES);
+	CString path;
+	path.Format(_T("%s%d\\"), csFile, GetTickCount());
+	CreateDirectory(path, NULL);
+
+	CFileRecieve fileList;
+
+	for (int i = 0; i < m_ClipIDs.GetCount(); i++)
+	{
+		CClip fileClip;
+		fileClip.LoadFormats(m_ClipIDs[i]);
+
+		CClipFormat *unicodeText = fileClip.m_Formats.FindFormat(CF_UNICODETEXT);
+		if (unicodeText)
+		{
+			CString file;
+			file.Format(_T("%stext_%d.txt"), path, i + 1);
+
+			fileClip.WriteTextToFile(file, TRUE, FALSE, FALSE);
+			fileList.AddFile(file);
+		}
+		else
+		{
+			CClipFormat *asciiText = fileClip.m_Formats.FindFormat(CF_TEXT);
+			if (asciiText)
+			{
+				CString file;
+				file.Format(_T("%stext_%d.txt"), path, i + 1);
+
+				fileClip.WriteTextToFile(file, FALSE, TRUE, FALSE);
+				fileList.AddFile(file);
+			}
+			else
+			{
+				CClipFormat *bitmap = fileClip.m_Formats.FindFormat(CF_DIB);
+				if (bitmap)
+				{
+					CString file;
+					file.Format(_T("%simage_%d.png"), path, i + 1);
+
+					LPVOID pvData = GlobalLock(bitmap->m_hgData);
+					ULONG size = (ULONG) GlobalSize(bitmap->m_hgData);
+
+					WriteCF_DIBToFile(file, pvData, size);
+
+					GlobalUnlock(bitmap->m_hgData);
+
+					fileList.AddFile(file);
+				}
+			}
+		}
+	}
+
+	HGLOBAL hData = fileList.CreateCF_HDROPBuffer();
+
+	return hData;
 }

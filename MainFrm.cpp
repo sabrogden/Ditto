@@ -149,7 +149,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     #endif 
 
     //SetTimer(CLOSE_WINDOW_TIMER, ONE_HOUR*24, 0);
-    SetTimer(REMOVE_OLD_REMOTE_COPIES, ONE_DAY, 0);
+	SetTimer(REMOVE_OLD_TEMP_FILES, ONE_DAY, 0);
     SetTimer(REMOVE_OLD_ENTRIES_TIMER, ONE_MINUTE*15, 0);
 
 	//found on some computers GetTickCount gettickcount returns a smaller value than other, can't explain
@@ -597,9 +597,9 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
             }
 			break;
 
-		case REMOVE_OLD_REMOTE_COPIES:
+		case REMOVE_OLD_TEMP_FILES:
 			{
-            	m_thread.FireRemoveRemoteFiles();
+            	m_thread.FireRemoveTempFiles();
 			}
 			break;
 

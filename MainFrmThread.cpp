@@ -54,8 +54,8 @@ void CMainFrmThread::OnEvent(int eventId, void *param)
         case DELETE_ENTRIES:
             OnDeleteEntries();
             break;
-        case REMOVE_REMOTE_FILES:
-            OnRemoveRemoteFiles();
+        case REMOVE_TEMP_FILES:
+            OnRemoveTempFiles();
             break;
 		case SAVE_CLIPS:
 			OnSaveClips();
@@ -101,13 +101,19 @@ void CMainFrmThread::OnDeleteEntries()
     RemoveOldEntries(true);
 }
 
-void CMainFrmThread::OnRemoveRemoteFiles()
+void CMainFrmThread::OnRemoveTempFiles()
 {
     CString csDir = CGetSetOptions::GetPath(PATH_REMOTE_FILES);
     if(FileExists(csDir))
     {
         DeleteReceivedFiles(csDir);
     }
+
+	csDir = CGetSetOptions::GetPath(PATH_DRAG_FILES);
+	if (FileExists(csDir))
+	{
+		DeleteReceivedFiles(csDir);
+	}
 }
 
 void CMainFrmThread::OnSaveClips()

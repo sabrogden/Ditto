@@ -59,6 +59,7 @@ public:
 #define PATH_U3_HWND_INI	7
 #define PATH_THEMES			8
 #define PATH_ADDINS			9
+#define PATH_DRAG_FILES		10
 
 class CGetSetOptions
 {

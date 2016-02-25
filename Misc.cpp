@@ -963,7 +963,7 @@ bool IsRunningLimited()
 
 void DeleteReceivedFiles(CString csDir)
 {
-	if(csDir.Find(_T("\\ReceivedFiles\\")) == -1)
+	if (csDir.Find(_T("\\ReceivedFiles\\")) == -1 && csDir.Find(_T("\\DragFiles\\")) == -1)
 		return;
 
 	FIX_CSTRING_PATH(csDir);

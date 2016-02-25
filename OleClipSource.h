@@ -30,6 +30,7 @@ public:
 
 protected:
 	CClipFormats m_DelayRenderedFormats;
+	bool m_convertToHDROPOnDelayRender;
 
 	void DoUpperLowerCase(CClip &clip, bool upper);
 	void Capitalize(CClip &clip);
@@ -37,4 +38,5 @@ protected:
 	void RemoveLineFeeds(CClip &clip);
 	void AddLineFeeds(CClip &clip, int count);
 	void Typoglycemia(CClip &clip);
+	HGLOBAL ConvertToFileDrop();
 };

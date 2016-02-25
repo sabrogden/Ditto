@@ -13,7 +13,7 @@ public:
     enum eCMainFrmThreadEvents
     {
         DELETE_ENTRIES, 
-        REMOVE_REMOTE_FILES, 
+        REMOVE_TEMP_FILES, 
 		SAVE_CLIPS,
 		SAVE_REMOTE_CLIPS,
 		READ_DB_FILE,
@@ -22,7 +22,7 @@ public:
     };
 
     void FireDeleteEntries() { FireEvent(DELETE_ENTRIES); }
-    void FireRemoveRemoteFiles() { FireEvent(REMOVE_REMOTE_FILES); }
+    void FireRemoveTempFiles() { FireEvent(REMOVE_TEMP_FILES); }
 	void FireReadDbFile() { FireEvent(READ_DB_FILE); }
 
 	void AddClipToSave(CClip *pClip);
@@ -32,7 +32,7 @@ protected:
     virtual void OnEvent(int eventId, void *param);
 
     void OnDeleteEntries();
-    void OnRemoveRemoteFiles();
+    void OnRemoveTempFiles();
 	void OnSaveClips();
 	void OnSaveRemoteClips();
 	void OnReadDbFile();

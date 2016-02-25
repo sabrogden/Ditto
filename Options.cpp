@@ -1735,6 +1735,21 @@ CString CGetSetOptions::GetPath(long lPathID)
 		csDir += "Addins\\";
 		
 		break;
+
+	case PATH_DRAG_FILES:
+		if (m_bU3)
+		{
+			csDir = GETENV(_T("U3_HOST_EXEC_PATH"));
+			FIX_CSTRING_PATH(csDir);
+		}
+		else if (CGetSetOptions::GetIsPortableDitto() == false)
+		{
+			csDir = GetAppDataPath();
+		}
+
+		csDir += "DragFiles\\";
+		break;
+
 	}
 
 	CreateDirectory(csDir, NULL);
