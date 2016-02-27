@@ -2336,3 +2336,13 @@ void CGetSetOptions::SetUseIPFromAccept(BOOL useAccept)
 {
 	SetProfileLong(_T("UseIPFromAccept"), useAccept);
 }
+
+int CGetSetOptions::GetDragId()
+{
+	return GetProfileLong(_T("DragId"), 1);
+}
+
+void CGetSetOptions::SetDragId(int id)
+{
+	SetProfileLong(_T("DragId"), id);
+}

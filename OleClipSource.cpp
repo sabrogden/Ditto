@@ -847,12 +847,13 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 
 HGLOBAL COleClipSource::ConvertToFileDrop()
 {
-	CString csFile = CGetSetOptions::GetPath(PATH_DRAG_FILES);
-	CString path;
-	path.Format(_T("%s%d\\"), csFile, GetTickCount());
+	CString path = CGetSetOptions::GetPath(PATH_DRAG_FILES);	
 	CreateDirectory(path, NULL);
 
 	CFileRecieve fileList;
+
+	int dragId = CGetSetOptions::GetDragId();
+	int origDragId = dragId;
 
 	for (int i = 0; i < m_ClipIDs.GetCount(); i++)
 	{
@@ -863,7 +864,7 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 		if (unicodeText)
 		{
 			CString file;
-			file.Format(_T("%stext_%d.txt"), path, i + 1);
+			file.Format(_T("%stext_%d.txt"), path, dragId++);
 
 			fileClip.WriteTextToFile(file, TRUE, FALSE, FALSE);
 			fileList.AddFile(file);
@@ -874,7 +875,7 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 			if (asciiText)
 			{
 				CString file;
-				file.Format(_T("%stext_%d.txt"), path, i + 1);
+				file.Format(_T("%stext_%d.txt"), path, dragId++);
 
 				fileClip.WriteTextToFile(file, FALSE, TRUE, FALSE);
 				fileList.AddFile(file);
@@ -885,7 +886,7 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 				if (bitmap)
 				{
 					CString file;
-					file.Format(_T("%simage_%d.png"), path, i + 1);
+					file.Format(_T("%simage_%d.png"), path, dragId++);
 
 					LPVOID pvData = GlobalLock(bitmap->m_hgData);
 					ULONG size = (ULONG) GlobalSize(bitmap->m_hgData);
@@ -898,6 +899,11 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 				}
 			}
 		}
+	}
+
+	if(dragId != origDragId)
+	{
+		CGetSetOptions::SetDragId(dragId);
 	}
 
 	HGLOBAL hData = fileList.CreateCF_HDROPBuffer();

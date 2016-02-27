@@ -509,6 +509,9 @@ public:
 	
 	static BOOL GetUseIPFromAccept();
 	static void SetUseIPFromAccept(BOOL useAccept);
+
+	static int GetDragId();
+	static void SetDragId(int id);
 };
 
 // global for easy access and for initialization of fast access variables
