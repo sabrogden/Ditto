@@ -480,10 +480,10 @@ void CQPasteWnd::MoveControls()
         m_stGroup.ShowWindow(SW_SHOW);
         m_BackButton.ShowWindow(SW_SHOW);
 
-		m_BackButton.MoveWindow(theApp.m_metrics.ScaleX(22), 0, theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
-		m_stGroup.MoveWindow(theApp.m_metrics.ScaleX(40), 0, cx-theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(16));
+		m_BackButton.MoveWindow(theApp.m_metrics.ScaleX(2), theApp.m_metrics.ScaleY(1), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
+		m_stGroup.MoveWindow(theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(1), cx - theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(16));
 
-		topOfListBox = theApp.m_metrics.ScaleY(32);
+		topOfListBox = theApp.m_metrics.ScaleY(16);
 	}
 	else
 	{
