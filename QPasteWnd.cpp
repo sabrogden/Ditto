@@ -392,6 +392,9 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_actions.AddAccel(ActionEnums::SHOWDESCRIPTION, VK_F3);
 	m_actions.AddAccel(ActionEnums::NEXTDESCRIPTION, 'N');
 	m_actions.AddAccel(ActionEnums::PREVDESCRIPTION, 'P');
+	m_actions.AddAccel(ActionEnums::PREVDESCRIPTION, VK_UP);
+	m_actions.AddAccel(ActionEnums::NEXTDESCRIPTION, VK_DOWN);
+
 	m_actions.AddAccel(ActionEnums::SHOWMENU, VK_APPS);
 	m_actions.AddAccel(ActionEnums::NEWGROUP, ACCEL_MAKEKEY(VK_F7, HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::NEWGROUPSELECTION, VK_F7);	

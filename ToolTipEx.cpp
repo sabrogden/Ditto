@@ -370,6 +370,14 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 				{
 					return FALSE;
 				}
+				else if (vk == VK_UP)
+				{
+					return FALSE;
+				}
+				else if (vk == VK_DOWN)
+				{
+					return FALSE;
+				}
 				else if(vk == VK_F3)
 				{
 					DoSearch();
