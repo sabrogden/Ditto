@@ -1,3 +1,26 @@
+3.21.50.0 3-18-2015
+- Up/down keys move description up down just as n and p do
+- Use ever incrementing value for drag file names, this way they are always unique
+- Add the ability to drag and drop clips to desktop or file explorer and it will auto create the files, text and png files
+- Don't change working directories when show open/save windows dialog
+- Updated to the latest sqlite, version 3.11.0
+- Add new special paste options - remvoe line feeds - add one or two line feeds - typoglycemia Reorganized menu to move non clip specific commands to a - System menu at bottom of the window
+- Added options to paste, upper, lower, captilize, sentance cases
+- Display warning when always on top is set (this is the number one complaint, how to turn this off when they don't know they set it)
+- Use standard formatting for date time in stats window in options
+- Handle Altgr being presses on foreign keyboards to handle other characters
+- Use the receiving ip address from the client not the ip address they send you
+- Default image export to png
+- Fixed issue with auto send to friends, after 30 seconds the first send would not be sent
+- Handle screen resolution changes better
+- Move ditto's main window when screen resolution changes
+- Save window sizes per screen resolution
+- Added option to save bitmaps to .bmp, .png, jpeg
+- Handle repeated keys on up/down and next/prev description
+- Handle Home button to go to first row
+- Increase the window that we show the resize icon in the corners
+- Added new menu option to filter on selected clip
+
 3.21.29.0 11-7-2015
 - Fixed issue with running on XP
 
