@@ -462,7 +462,11 @@ void COleClipSource::PlainTextFilter(CClip &clip)
 		CCF_HDropAggregator HDrop;
 		if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
 		{
-			clip.m_Formats.Add(CClipFormat(CF_UNICODETEXT, HDrop.GetHGlobalAsString()));
+			clip.m_Formats.RemoveAt(hDropIndex);
+
+			CClipFormat format(CF_UNICODETEXT, HDrop.GetHGlobalAsString());
+			clip.m_Formats.Add(format);
+			format.m_autoDeleteData = false; //owned by m_DelayRenderedFormats			
 		}
 	}
 }
@@ -721,10 +725,10 @@ INT_PTR COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 			continue;
 		}
 
-		/*wchar_t * stringData = (wchar_t *) GlobalLock(pCF->m_hgData);
+		wchar_t * stringData = (wchar_t *) GlobalLock(pCF->m_hgData);
 		int size = (int) GlobalSize(pCF->m_hgData);
 		CString cs(stringData);
-		GlobalUnlock(pCF->m_hgData);*/
+		GlobalUnlock(pCF->m_hgData);
 		
 		Log(StrF(_T("Setting clipboard type: %s to the clipboard"), GetFormatName(pCF->m_cfType)));
 
