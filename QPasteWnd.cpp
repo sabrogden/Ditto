@@ -4666,25 +4666,13 @@ void CQPasteWnd::OnSearchEditChange()
 
 LRESULT CQPasteWnd::OnUpDown(WPARAM wParam, LPARAM lParam)
 {
-	if(wParam == VK_F3)
+	MSG msg;
+	//Workaround for allow holding down arrow keys while in the search control
+	msg.lParam = lParam & (~0x40000000);
+	msg.wParam = wParam;
+	msg.message = WM_KEYDOWN;
+	if(CheckActions(&msg) == false)
 	{
-		MSG msg;
-		//Workaround for allow holding down arrow keys while in the search control
-		msg.lParam = lParam & (~0x40000000);
-		msg.wParam = wParam;
-		msg.message = WM_KEYDOWN;
-		if(CheckActions(&msg) == false)
-		{
-			if (m_lstHeader.HandleKeyDown(wParam, lParam) == FALSE)
-			{
-				LRESULT res = m_lstHeader.SendMessage(WM_KEYDOWN, wParam, lParam);
-			}
-		}
-	}
-	else
-	{
-		m_lstHeader.HidePopup();
-
 		if (m_lstHeader.HandleKeyDown(wParam, lParam) == FALSE)
 		{
 			LRESULT res = m_lstHeader.SendMessage(WM_KEYDOWN, wParam, lParam);
