@@ -113,6 +113,7 @@
 #define IDB_SYSTEM_MENU_24_24           246
 #define IDB_SYSTEM_MENU_32_32           247
 #define IDR_QUICK_PASTE_SYSTEM_MENU     248
+#define IDD_OPTIONS_QUICK_PASTE_KEYBOARD 249
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -175,6 +176,7 @@
 #define IDC_BUTTON_NEW_GROUP            1040
 #define IDC_BUTTON_REFRESH              1040
 #define IDC_BUTTON_SEARCH               1040
+#define IDC_ASSIGN                      1040
 #define IDC_PARSE_EDIT                  1041
 #define IDC_SEND_PASTE_MESSAGE          1041
 #define IDC_BUTTON_PROPERTIES           1041
@@ -385,12 +387,24 @@
 #define IDC_EDIT_DIFF_PATH              2123
 #define IDC_BUTTON2                     2124
 #define IDC_BUTTON_DIFF_BROWSE          2124
+#define IDC_BUTTON_REMOVE               2124
 #define IDC_STATIC_QUICK_PASTE          2125
 #define IDC_STATIC_DESC                 2126
 #define IDC_RADIO_USE_IP                2127
+#define IDC_RADIO_KEYBOARD              2127
 #define IDC_STATIC_REMOTE_FILES         2128
+#define IDC_RADIO2                      2128
+#define IDC_RADIO_ENTER                 2128
 #define IDC_RADIO_USE_HOST_NAME         2129
+#define IDC_COMBO_ENTER_MODIFYER        2129
 #define IDC_STATIC_REMOTE_FILE_REQUEST  2130
+#define IDC_RADIO3                      2130
+#define IDC_COMBO_ALL_ASSIGNED          2131
+#define IDC_BUTTON_ADD                  2132
+#define IDC_RADIO_KEYBOARD2             2133
+#define IDC_RADIO_ENTER2                2134
+#define IDC_COMBO_ENTER_MODIFYER2       2135
+#define IDC_RADIO4                      2136
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -540,9 +554,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        249
+#define _APS_NEXT_RESOURCE_VALUE        250
 #define _APS_NEXT_COMMAND_VALUE         32923
-#define _APS_NEXT_CONTROL_VALUE         2127
+#define _APS_NEXT_CONTROL_VALUE         2133
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

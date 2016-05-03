@@ -40,6 +40,7 @@
 #import "riched20.dll" raw_interfaces_only, raw_native_types, no_namespace, named_guids, exclude("UINT_PTR"), exclude("LONG_PTR") 
 
 #include <gdiplus.h>
+#include <afxdlgs.h>
 #pragma comment(lib, "gdiplus.lib")
 using namespace Gdiplus;
 

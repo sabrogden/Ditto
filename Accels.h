@@ -10,11 +10,14 @@ public:
     DWORD Key;
     DWORD Cmd;
 	int RefId;
+	bool SecondKey;
+
     CAccel(DWORD key = 0, DWORD cmd = 0)
     {
         Key = key;
         Cmd = cmd;
 		RefId = 0;
+		SecondKey = false;
     }
 };
 
@@ -28,7 +31,7 @@ public:
 
     void AddAccel(CAccel a);
 
-	void AddAccel(DWORD cmd, DWORD key);
+	void AddAccel(DWORD cmd, DWORD key, DWORD key2 = 0);
 
 	void RemoveAll();
 
@@ -45,4 +48,7 @@ public:
 
 protected:
 	CMap < DWORD, DWORD, CAccel, CAccel > m_Map;
+	CMap < DWORD, DWORD, CAccel, CAccel > m_Map2;
+
+	DWORD m_firstMapTick;
 };

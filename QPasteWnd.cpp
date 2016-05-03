@@ -377,29 +377,21 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	
     m_thread.Start(this);
 
-	m_actions.AddAccel(ActionEnums::NEXTTABCONTROL, VK_TAB);
-	m_actions.AddAccel(ActionEnums::SELECTIONUP, VK_UP);
-	m_actions.AddAccel(ActionEnums::SELECTIONDOWN, VK_DOWN);
-	m_actions.AddAccel(ActionEnums::MOVEFIRST, VK_HOME);
-	m_actions.AddAccel(ActionEnums::MOVELAST, VK_END);
-	m_actions.AddAccel(ActionEnums::BACKGRROUP, VK_BACK);
-	m_actions.AddAccel(ActionEnums::PASTE_SELECTED, VK_RETURN);
-	m_actions.AddAccel(ActionEnums::DELETE_SELECTED, VK_DELETE);
-	m_actions.AddAccel(ActionEnums::TOGGLEFILELOGGING, ACCEL_MAKEKEY(VK_F5, HOTKEYF_CONTROL));
-	m_actions.AddAccel(ActionEnums::TOGGLEOUTPUTDEBUGSTRING, VK_F5);
-	m_actions.AddAccel(ActionEnums::HOMELIST, VK_HOME);
+	
 
-	m_actions.AddAccel(ActionEnums::SHOWDESCRIPTION, VK_F3);
+	/*m_actions.AddAccel(ActionEnums::SHOWDESCRIPTION, VK_F3);
 	m_actions.AddAccel(ActionEnums::NEXTDESCRIPTION, 'N');
 	m_actions.AddAccel(ActionEnums::PREVDESCRIPTION, 'P');
 	m_actions.AddAccel(ActionEnums::PREVDESCRIPTION, VK_UP);
 	m_actions.AddAccel(ActionEnums::NEXTDESCRIPTION, VK_DOWN);
+	m_actions.AddAccel(ActionEnums::CLOSEWINDOW, VK_ESCAPE);
+	m_actions.AddAccel(ActionEnums::PREVTABCONTROL, ACCEL_MAKEKEY(VK_TAB, HOTKEYF_CONTROL));
 
-	m_actions.AddAccel(ActionEnums::SHOWMENU, VK_APPS);
+	m_actions.AddAccel(ActionEnums::SHOWMENU, VK_APPS));
 	m_actions.AddAccel(ActionEnums::NEWGROUP, ACCEL_MAKEKEY(VK_F7, HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::NEWGROUPSELECTION, VK_F7);	
-	m_actions.AddAccel(ActionEnums::CLOSEWINDOW, VK_ESCAPE);	
-	m_actions.AddAccel(ActionEnums::PREVTABCONTROL, ACCEL_MAKEKEY(VK_TAB, HOTKEYF_CONTROL));
+	
+	
 	m_actions.AddAccel(ActionEnums::SHOWGROUPS, ACCEL_MAKEKEY('G', HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::NEWCLIP, ACCEL_MAKEKEY('N', HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::EDITCLIP, ACCEL_MAKEKEY('E', HOTKEYF_CONTROL));	
@@ -407,7 +399,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_actions.AddAccel(ActionEnums::TOGGLESHOWPERSISTANT, ACCEL_MAKEKEY(VK_SPACE, HOTKEYF_CONTROL));	
 	m_actions.AddAccel(ActionEnums::CLIP_PROPERTIES, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_ALT));
 	m_actions.AddAccel(ActionEnums::PASTE_SELECTED_PLAIN_TEXT, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_SHIFT));
-	m_actions.AddAccel(ActionEnums::COMPARE_SELECTED_CLIPS, ACCEL_MAKEKEY(VK_F2, HOTKEYF_CONTROL));
+	m_actions.AddAccel(ActionEnums::COMPARE_SELECTED_CLIPS, ACCEL_MAKEKEY(VK_F2, HOTKEYF_CONTROL));*/
 
 	CString onTopMsg = theApp.m_Language.GetString(_T("TurnOfAlwaysOntop"), _T("Always on Top Enabled"));
 	CString shortcutText = m_actions.GetCmdKeyText(ActionEnums::TOGGLESHOWPERSISTANT);
@@ -424,8 +416,47 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_alwaysOnToWarningStatic.SetTextColor(COLORREF(RGB(0, 0, 255)));
 	m_alwaysOnToWarningStatic.SetToggleCursor(true);
 	m_alwaysOnToWarningStatic.SetFont(&m_groupFont);
+
+	LoadShortcuts();
 	
     return 0;
+}
+
+void CQPasteWnd::LoadShortcuts()
+{
+	m_actions.RemoveAll();
+	m_actions.AddAccel(ActionEnums::NEXTTABCONTROL, VK_TAB);
+	m_actions.AddAccel(ActionEnums::PREVTABCONTROL, ACCEL_MAKEKEY(VK_TAB, HOTKEYF_CONTROL));
+	m_actions.AddAccel(ActionEnums::SELECTIONUP, VK_UP);
+	m_actions.AddAccel(ActionEnums::SELECTIONDOWN, VK_DOWN);
+	m_actions.AddAccel(ActionEnums::MOVEFIRST, VK_HOME);
+	m_actions.AddAccel(ActionEnums::MOVELAST, VK_END);
+	m_actions.AddAccel(ActionEnums::BACKGRROUP, VK_BACK);
+	m_actions.AddAccel(ActionEnums::PASTE_SELECTED, VK_RETURN);
+	m_actions.AddAccel(ActionEnums::DELETE_SELECTED, VK_DELETE);
+	m_actions.AddAccel(ActionEnums::TOGGLEFILELOGGING, ACCEL_MAKEKEY(VK_F5, HOTKEYF_CONTROL));
+	m_actions.AddAccel(ActionEnums::TOGGLEOUTPUTDEBUGSTRING, VK_F5);
+	m_actions.AddAccel(ActionEnums::HOMELIST, VK_HOME);
+	m_actions.AddAccel(ActionEnums::CLOSEWINDOW, VK_ESCAPE);
+	m_actions.AddAccel(ActionEnums::SHOWMENU, VK_APPS);
+
+	for (DWORD i = ActionEnums::FIRST_ACTION + 1; i < ActionEnums::LAST_ACTION; i++)
+	{
+		ActionEnums::ActionEnumValues action = (ActionEnums::ActionEnumValues) i;
+
+		if (ActionEnums::UserConfigurable(action))
+		{
+			for (int i = 0; i < 10; i++)
+			{
+				DWORD a = g_Opt.GetActionShortCutA(action, i);
+				if (a > 0)
+				{
+					DWORD b = g_Opt.GetActionShortCutB(action, i);
+					m_actions.AddAccel(action, a, b);
+				}
+			}
+		}
+	}
 }
 
 void CQPasteWnd::SetSearchImages()
@@ -4019,6 +4050,7 @@ LRESULT CQPasteWnd::OnCancelFilter(WPARAM wParam, LPARAM lParam)
 LRESULT CQPasteWnd::OnPostOptions(WPARAM wParam, LPARAM lParam)
 {
 	UpdateFont();
+	LoadShortcuts();
 
 	return 1;
 }

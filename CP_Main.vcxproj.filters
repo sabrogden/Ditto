@@ -398,6 +398,7 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="PowerManager.cpp" />
+    <ClCompile Include="QuickPasteKeyboard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -848,6 +849,7 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="PowerManager.h" />
+    <ClInclude Include="QuickPasteKeyboard.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

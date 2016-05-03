@@ -261,6 +261,8 @@ public:
 	bool SyncClipDataToArrayData(CClip &clip);
 	bool SelectIds(ARRAY &ids);
 
+	void LoadShortcuts();
+
     // Generated message map functions
 protected:
     //{{AFX_MSG(CQPasteWnd)

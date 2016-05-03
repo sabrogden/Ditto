@@ -6,6 +6,7 @@
 #include "sqlite\CppSQLite3.h"
 #include "Path.h"
 #include "CP_Main.h"
+#include "ActionEnums.h"
 
 using namespace nsPath;
 
@@ -2302,17 +2303,43 @@ void CGetSetOptions::SetShowMsgWndOnCopyToGroup(BOOL val)
 	SetProfileLong(_T("ShowMsgWndOnCopyToGroup"), val);
 }
 
-DWORD CGetSetOptions::GetActionShortCutA(DWORD action)
+int CGetSetOptions::GetActionShortCutA(DWORD action, int pos)
 {
 	CString actionText;
-	actionText.Format(_T("%d_A"), action);
-	return GetProfileLong(actionText, 0);
+	actionText.Format(_T("%d_%d_A"), action, pos);
+	int ret = GetProfileLong(actionText, -1);
+	if (ret == -1)
+	{
+		ret = ActionEnums::GetDefaultShortCutKeyA((ActionEnums::ActionEnumValues)action, pos);
+	}
+
+	return ret;
 }
 
-void CGetSetOptions::SetActionShortCutA(int action, DWORD shortcut)
+void CGetSetOptions::SetActionShortCutA(int action, DWORD shortcut, int pos)
 {
 	CString actionText;
-	actionText.Format(_T("%d_A"), action);
+	actionText.Format(_T("%d_%d_A"), action, pos);
+	SetProfileLong(actionText, shortcut);
+}
+
+int CGetSetOptions::GetActionShortCutB(DWORD action, int pos)
+{
+	CString actionText;
+	actionText.Format(_T("%d_%d_B"), action, pos);
+	int ret = GetProfileLong(actionText, -1);
+	if (ret == -1)
+	{
+		ret = ActionEnums::GetDefaultShortCutKeyB((ActionEnums::ActionEnumValues)action, pos);
+	}
+
+	return ret;
+}
+
+void CGetSetOptions::SetActionShortCutB(int action, DWORD shortcut, int pos)
+{
+	CString actionText;
+	actionText.Format(_T("%d_%d_B"), action, pos);
 	SetProfileLong(actionText, shortcut);
 }
 

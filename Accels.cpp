@@ -5,6 +5,7 @@
 CAccels::CAccels()
 {
 	m_handleRepeatKeys = false;
+	m_firstMapTick = 0;
 }
 
 void CAccels::AddAccel(CAccel a)
@@ -12,17 +13,23 @@ void CAccels::AddAccel(CAccel a)
     m_Map.SetAt(a.Key, a);
 }
 
-void CAccels::AddAccel(DWORD cmd, DWORD key)
+void CAccels::AddAccel(DWORD cmd, DWORD key, DWORD key2)
 {
-	CAccel a;
-	a.Cmd = cmd;
-	a.Key = key;
+	CAccel a(key, cmd);
+	
+	if(key2 > 0)
+	{
+		a.SecondKey = true;
+		m_Map2.SetAt(key2, a);
+	}
+
 	m_Map.SetAt(key, a);
 }
 
 void CAccels::RemoveAll()
 {
 	m_Map.RemoveAll();
+	m_Map2.RemoveAll();
 }
 
 CString CAccels::GetCmdKeyText(DWORD cmd)
@@ -37,7 +44,26 @@ CString CAccels::GetCmdKeyText(DWORD cmd)
 
 		if(a.Cmd == cmd)
 		{
+			CString cmdShortcutText2;
+			CAccel a2;
+			DWORD mapShortcut2;
+			POSITION pos2 = m_Map2.GetStartPosition();
+			while (pos2 != NULL)
+			{
+				m_Map2.GetNextAssoc(pos2, mapShortcut2, a2);
+				if(a2.Cmd == cmd)
+				{
+					cmdShortcutText2 = CHotKey::GetHotKeyDisplayStatic(mapShortcut2);
+				}
+			}
+
 			cmdShortcutText = CHotKey::GetHotKeyDisplayStatic(mapShortcut);
+
+			if(cmdShortcutText2.GetLength() > 0)
+			{
+				cmdShortcutText += _T(" - ");
+				cmdShortcutText += cmdShortcutText2;
+			}
 			break;
 		}
 	}
@@ -74,10 +100,30 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
     cs.Format(_T("Key: %d, Mod: %d, vkey: %d"), key, mod, vkey);
     OutputDebugString(cs);
 
-    if(m_Map.Lookup(key, a))
-    {
-        return true;
-    }
+	if (m_firstMapTick != 0 &&
+		(GetTickCount() - m_firstMapTick) < 500)
+	{
+		if (m_Map2.Lookup(key, a))
+		{
+			m_firstMapTick = 0;
+			return true;
+		}
+	}
+	else
+	{
+		if (m_Map.Lookup(key, a))
+		{
+			if (a.SecondKey == false)
+			{
+				m_firstMapTick = 0;
+				return true;
+			}
+			else
+			{
+				m_firstMapTick = GetTickCount();
+			}
+		}
+	}
 
     return false;
 }

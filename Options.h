@@ -500,8 +500,11 @@ public:
 	static BOOL GetShowMsgWndOnCopyToGroup();
 	static void SetShowMsgWndOnCopyToGroup(BOOL val);
 
-	static DWORD GetActionShortCutA(DWORD action);
-	static void SetActionShortCutA(int action, DWORD shortcut);
+	static int GetActionShortCutA(DWORD action, int pos);
+	static void SetActionShortCutA(int action, DWORD shortcut, int pos);
+
+	static int GetActionShortCutB(DWORD action, int pos);
+	static void SetActionShortCutB(int action, DWORD shortcut, int pos);
 
 	static BOOL	m_bShowAlwaysOnTopWarning;
 	static BOOL GetShowAlwaysOnTopWarning();

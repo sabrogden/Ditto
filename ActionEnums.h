@@ -7,6 +7,7 @@ public:
 
 	enum ActionEnumValues
 	{ 
+		FIRST_ACTION,
 		SHOWDESCRIPTION,
 		NEXTDESCRIPTION,
 		PREVDESCRIPTION,
@@ -55,8 +56,15 @@ public:
 		PASTE_REMOVE_LINE_FEEDS,
 		PASTE_ADD_ONE_LINE_FEED,
 		PASTE_ADD_TWO_LINE_FEEDS,
-		PASTE_TYPOGLYCEMIA
+		PASTE_TYPOGLYCEMIA,
 
+		LAST_ACTION
 	};
+
+	static CString EnumDescription(ActionEnumValues value);
+
+	static int GetDefaultShortCutKeyA(ActionEnumValues value, int pos);
+	static int GetDefaultShortCutKeyB(ActionEnumValues value, int pos);
+	static bool UserConfigurable(ActionEnumValues value);
 };
 
