@@ -404,7 +404,9 @@
 #define IDC_RADIO_KEYBOARD2             2133
 #define IDC_RADIO_ENTER2                2134
 #define IDC_COMBO_ENTER_MODIFYER2       2135
+#define IDC_BUTTON_ENTER                2135
 #define IDC_RADIO4                      2136
+#define IDC_BUTTON_ENTER2               2137
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -554,9 +556,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        250
+#define _APS_NEXT_RESOURCE_VALUE        251
 #define _APS_NEXT_COMMAND_VALUE         32923
-#define _APS_NEXT_CONTROL_VALUE         2133
+#define _APS_NEXT_CONTROL_VALUE         2136
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

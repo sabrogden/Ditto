@@ -17,7 +17,7 @@ void CAccels::AddAccel(DWORD cmd, DWORD key, DWORD key2)
 {
 	CAccel a(key, cmd);
 	
-	if(key2 > 0)
+	if((int)key2 > 0)
 	{
 		a.SecondKey = true;
 		m_Map2.SetAt(key2, a);

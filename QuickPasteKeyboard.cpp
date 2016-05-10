@@ -44,6 +44,8 @@ BEGIN_MESSAGE_MAP(CQuickPasteKeyboard, CPropertyPage)
 	ON_CBN_KILLFOCUS(IDC_COMBO_ENTER_MODIFYER, &CQuickPasteKeyboard::OnCbnKillfocusComboEnterModifyer)
 	ON_EN_KILLFOCUS(IDC_HOTKEY1, &CQuickPasteKeyboard::OnEnKillfocusEdit1)
 	ON_WM_KILLFOCUS()
+	ON_BN_CLICKED(IDC_BUTTON_ENTER, &CQuickPasteKeyboard::OnBnClickedButtonEnter)
+	ON_BN_CLICKED(IDC_BUTTON_ENTER2, &CQuickPasteKeyboard::OnBnClickedButtonEnter2)
 END_MESSAGE_MAP()
 
 
@@ -225,7 +227,7 @@ void CQuickPasteKeyboard::OnBnClickedAssign()
 	int row = SelectedCommandRow();
 
 	if (id > 0 &&
-		id < m_map.size() &&
+		id < (int)m_map.size() &&
 		shortCutId >= 0 &&
 		shortCutId < 10)
 	{
@@ -274,7 +276,7 @@ void CQuickPasteKeyboard::OnCbnSelchangeComboAllAssigned()
 	int id = SelectedCommandId();
 
 	if (id > 0 &&
-		id < m_map.size() &&
+		id < (int)m_map.size() &&
 		shortCutId >= 0 &&
 		shortCutId < 10)
 	{
@@ -289,7 +291,7 @@ void CQuickPasteKeyboard::OnBnClickedButtonRemove()
 	int id = SelectedCommandId();
 
 	if (id > 0 &&
-		id < m_map.size() &&
+		id < (int)m_map.size() &&
 		shortCutId >= 0 &&
 		shortCutId < 10)
 	{
@@ -329,7 +331,7 @@ void CQuickPasteKeyboard::OnBnClickedButtonAdd()
 	if (count < 10)
 	{
 		int id = SelectedCommandId();
-		if (id > 0 && id < m_map.size())
+		if (id > 0 && id < (int)m_map.size())
 		{
 			CString shortcut;
 			int pos = m_assignedCombo.AddString(shortcut);
@@ -487,4 +489,18 @@ BOOL CQuickPasteKeyboard::OnCommand(WPARAM wParam, LPARAM lParam)
 	}
 
 	return CPropertyPage::OnCommand(wParam, lParam);
+}
+
+
+void CQuickPasteKeyboard::OnBnClickedButtonEnter()
+{
+	DWORD hk = m_hotKey1.GetHotKey();
+	m_hotKey1.SetHotKey(VK_RETURN, (HIBYTE((DWORD)hk)));
+}
+
+
+void CQuickPasteKeyboard::OnBnClickedButtonEnter2()
+{
+	DWORD hk = m_hotKey2.GetHotKey();
+	m_hotKey2.SetHotKey(VK_RETURN, (HIBYTE((DWORD)hk)));
 }

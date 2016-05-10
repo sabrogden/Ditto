@@ -263,6 +263,8 @@ public:
 
 	void LoadShortcuts();
 
+	void ShowRightClickMenu();;
+
     // Generated message map functions
 protected:
     //{{AFX_MSG(CQPasteWnd)
@@ -284,7 +286,6 @@ protected:
     afx_msg void OnMenuTransparency40();
     afx_msg void OnMenuTransparency5();
     afx_msg void OnMenuTransparencyNone();
-    afx_msg void OnRclickQuickPaste(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnMenuDelete();
     afx_msg void OnMenuPositioningAtcaret();
     afx_msg void OnMenuPositioningAtcursor();
@@ -350,7 +351,7 @@ protected:
     afx_msg void OnUpdateMenuDelete(CCmdUI *pCmdUI);
     afx_msg void OnUpdateMenuProperties(CCmdUI *pCmdUI);
     afx_msg void OnDestroy();
-    afx_msg LRESULT OnListSelect(WPARAM wParam, LPARAM lParam);
+    afx_msg LRESULT OnListDblClick(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnSearch(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnDelete(WPARAM wParam, LPARAM lParam);
@@ -448,4 +449,8 @@ public:
 	afx_msg void OnUpdateSpecialpastePaste32919(CCmdUI *pCmdUI);
 	afx_msg void OnSpecialpasteTypoglycemia();
 	afx_msg void OnUpdateSpecialpasteTypoglycemia(CCmdUI *pCmdUI);
+	afx_msg void OnNMClickList1(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMRClickList1(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnNMRDblclkList1(NMHDR *pNMHDR, LRESULT *pResult);
 };

@@ -133,7 +133,6 @@ int CQListCtrl::GetFirstTenIndex( int num )
 BEGIN_MESSAGE_MAP(CQListCtrl, CListCtrl)
 //{{AFX_MSG_MAP(CQListCtrl)
 	ON_NOTIFY_REFLECT(LVN_KEYDOWN, OnKeydown)
-	ON_NOTIFY_REFLECT(NM_DBLCLK, OnDblclk)
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, OnCustomdrawList)
 	ON_WM_MOUSEMOVE()
 	ON_WM_SYSKEYDOWN()
@@ -165,31 +164,6 @@ void CQListCtrl::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 DROPEFFECT CQListCtrl::OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point)
 {
 	return DROPEFFECT_COPY;
-}
-
-void CQListCtrl::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult) 
-{
-	LPNMITEMACTIVATE lpnmItem = (LPNMITEMACTIVATE) pNMHDR;
-	
-	UINT Flags;
-	int nItem = -1;
-	if ((nItem = HitTest(lpnmItem->ptAction, &Flags)) != -1)
-	{
-		if (Flags | LVHT_ONITEM)
-			SendSelection(nItem);
-	}
-	
-	*pResult = 0;
-}
-
-void CQListCtrl::SendSelection(int nItem)
-{
-	GetParent()->SendMessage(NM_SELECT, 1, (LPARAM) &nItem);
-}
-
-void CQListCtrl::SendSelection(ARRAY &arrItems)
-{
-	GetParent()->SendMessage(NM_SELECT, arrItems.GetSize(), (LPARAM) arrItems.GetData());
 }
 
 void CQListCtrl::GetSelectionIndexes(ARRAY &arr)

@@ -93,7 +93,6 @@ ON_COMMAND(ID_MENU_TRANSPARENCY_30, OnMenuTransparency30)
 ON_COMMAND(ID_MENU_TRANSPARENCY_40, OnMenuTransparency40)
 ON_COMMAND(ID_MENU_TRANSPARENCY_5, OnMenuTransparency5)
 ON_COMMAND(ID_MENU_TRANSPARENCY_NONE, OnMenuTransparencyNone)
-ON_NOTIFY(NM_RCLICK, ID_LIST_HEADER, OnRclickQuickPaste)
 ON_COMMAND(ID_MENU_DELETE, OnMenuDelete)
 ON_COMMAND(ID_MENU_POSITIONING_ATCARET, OnMenuPositioningAtcaret)
 ON_COMMAND(ID_MENU_POSITIONING_ATCURSOR, OnMenuPositioningAtcursor)
@@ -164,7 +163,7 @@ ON_COMMAND(ID_QUICKOPTIONS_ELEVATEPREVILEGESTOPASTEINTOELEVATEDAPPS, OnElevateAp
 ON_WM_DESTROY()
 
 //}}AFX_MSG_MAP
-ON_MESSAGE(NM_SELECT, OnListSelect)
+ON_MESSAGE(NM_DBL_CLICK, OnListDblClick)
 ON_MESSAGE(NM_END, OnListEnd)
 ON_MESSAGE(CB_SEARCH, OnSearch)
 ON_MESSAGE(NM_DELETE, OnDelete)
@@ -262,6 +261,10 @@ ON_COMMAND(ID_SPECIALPASTE_PASTE32919, &CQPasteWnd::OnSpecialpastePaste32919)
 ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_PASTE32919, &CQPasteWnd::OnUpdateSpecialpastePaste32919)
 ON_COMMAND(ID_SPECIALPASTE_TYPOGLYCEMIA, &CQPasteWnd::OnSpecialpasteTypoglycemia)
 ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_TYPOGLYCEMIA, &CQPasteWnd::OnUpdateSpecialpasteTypoglycemia)
+ON_NOTIFY(NM_CLICK, ID_LIST_HEADER, &CQPasteWnd::OnNMClickList1)
+ON_NOTIFY(NM_DBLCLK, ID_LIST_HEADER, &CQPasteWnd::OnNMDblclkList1)
+ON_NOTIFY(NM_RCLICK, ID_LIST_HEADER, &CQPasteWnd::OnNMRClickList1)
+ON_NOTIFY(NM_RDBLCLK, ID_LIST_HEADER, &CQPasteWnd::OnNMRDblclkList1)
 END_MESSAGE_MAP()
 
 
@@ -432,7 +435,6 @@ void CQPasteWnd::LoadShortcuts()
 	m_actions.AddAccel(ActionEnums::MOVEFIRST, VK_HOME);
 	m_actions.AddAccel(ActionEnums::MOVELAST, VK_END);
 	m_actions.AddAccel(ActionEnums::BACKGRROUP, VK_BACK);
-	m_actions.AddAccel(ActionEnums::PASTE_SELECTED, VK_RETURN);
 	m_actions.AddAccel(ActionEnums::DELETE_SELECTED, VK_DELETE);
 	m_actions.AddAccel(ActionEnums::TOGGLEFILELOGGING, ACCEL_MAKEKEY(VK_F5, HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::TOGGLEOUTPUTDEBUGSTRING, VK_F5);
@@ -448,10 +450,10 @@ void CQPasteWnd::LoadShortcuts()
 		{
 			for (int i = 0; i < 10; i++)
 			{
-				DWORD a = g_Opt.GetActionShortCutA(action, i);
+				int a = g_Opt.GetActionShortCutA(action, i);
 				if (a > 0)
 				{
-					DWORD b = g_Opt.GetActionShortCutB(action, i);
+					int b = g_Opt.GetActionShortCutB(action, i);
 					m_actions.AddAccel(action, a, b);
 				}
 			}
@@ -955,11 +957,9 @@ LRESULT CQPasteWnd::OnListSelect_Index(WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
-LRESULT CQPasteWnd::OnListSelect(WPARAM wParam, LPARAM lParam)
+LRESULT CQPasteWnd::OnListDblClick(WPARAM wParam, LPARAM lParam)
 {
-	CSpecialPasteOptions pasteOptions;
-    OpenSelection(pasteOptions);
-
+	DoAction(ActionEnums::PASTE_SELECTED);
     return TRUE;
 }
 
@@ -1327,8 +1327,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     return TRUE;
 }
 
-
-void CQPasteWnd::OnRclickQuickPaste(NMHDR *pNMHDR, LRESULT *pResult)
+void CQPasteWnd::ShowRightClickMenu()
 {
     POINT pp;
     CMenu cmPopUp;
@@ -1343,15 +1342,12 @@ void CQPasteWnd::OnRclickQuickPaste(NMHDR *pNMHDR, LRESULT *pResult)
             return ;
         }
 
-        if(pNMHDR == NULL)
-        {
-            int nItem = m_lstHeader.GetCaret();
-            CRect rc;
-            m_lstHeader.GetItemRect(nItem, rc, LVIR_BOUNDS);
-            ClientToScreen(rc);
-            pp.x = rc.left;
-            pp.y = rc.bottom;
-        }
+       /* int nItem = m_lstHeader.GetCaret();
+        CRect rc;
+        m_lstHeader.GetItemRect(nItem, rc, LVIR_BOUNDS);
+        ClientToScreen(rc);
+        pp.x = rc.left;
+        pp.y = rc.bottom;*/
 
         theApp.m_Addins.AddPrePasteAddinsToMenu(cmSubMenu);
         
@@ -1361,8 +1357,6 @@ void CQPasteWnd::OnRclickQuickPaste(NMHDR *pNMHDR, LRESULT *pResult)
 
         cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
     }
-
-    *pResult = 0;
 }
 
 void CQPasteWnd::HideMenuGroup(CMenu* menu, CString text)
@@ -2921,8 +2915,7 @@ bool CQPasteWnd::DoActionPrevDescription()
 
 bool CQPasteWnd::DoActionShowMenu()
 {
-	LRESULT lRet;
-	OnRclickQuickPaste(NULL, &lRet);
+	ShowRightClickMenu();
 
 	return true;
 }
@@ -5535,4 +5528,36 @@ void CQPasteWnd::OnUpdateSpecialpasteTypoglycemia(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_TYPOGLYCEMIA);
+}
+
+void CQPasteWnd::OnNMClickList1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	//DoAction(ActionEnums::PASTE_SELECTED);
+	*pResult = 0;
+}
+
+
+void CQPasteWnd::OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	
+	DoAction(ActionEnums::PASTE_SELECTED);
+
+	*pResult = 0;
+}
+
+
+void CQPasteWnd::OnNMRClickList1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	DoAction(ActionEnums::SHOWMENU);
+	*pResult = 0;
+}
+
+void CQPasteWnd::OnNMRDblclkList1(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	// TODO: Add your control notification handler code here
+	*pResult = 0;
 }

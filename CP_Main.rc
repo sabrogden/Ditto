@@ -66,8 +66,11 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\Ditto2.ico"
+
 IDR_CP_MAITYPE          ICON                    "res\\CP_MainDoc.ico"
+
 IDI_DITTO_NOCOPYCB      ICON                    "res\\Ditto2_NoCopyCb.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -75,24 +78,43 @@ IDI_DITTO_NOCOPYCB      ICON                    "res\\Ditto2_NoCopyCb.ico"
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+
 IDB_CLOSED_FOLDER       BITMAP                  "res\\bitmap1.bmp"
+
 IDB_CLOSED_FOLDER_PRESSED BITMAP                  "res\\closed_f.bmp"
+
 IDB_CLOSED_FOLDER_FOCUSED BITMAP                  "res\\bmp00001.bmp"
+
 IDB_OPEN_FOLDER         BITMAP                  "res\\bmp00002.bmp"
+
 IDB_OPEN_FOLDER_FOCUSED BITMAP                  "res\\open_fol.bmp"
+
 IDB_OPEN_FOLDER_PRESSED BITMAP                  "res\\bmp00003.bmp"
+
 IDB_BACK                BITMAP                  "res\\back.bmp"
+
 IDB_BACK_PRESSED        BITMAP                  "res\\back1.bmp"
+
 IDB_BACK_FOCUSED        BITMAP                  "res\\back2.bmp"
+
 IDR_EDIT_WND            BITMAP                  "res\\mainfram.bmp"
+
 IDB_BITMAP_SEARCH_NORMAL BITMAP                  "res\\search_normal.bmp"
+
 IDB_BITMAP_SEARCH_CLOSE BITMAP                  "res\\search_close.bmp"
+
 IDB_BITMAP_SEARCH_NORMAL_125 BITMAP                  "res\\search_normal_125.bmp"
+
 IDB_BITMAP_SEARCH_CLOSE_125 BITMAP                  "res\\search_close_125.bmp"
+
 IDB_BITMAP_SEARCH_CLOSE_150 BITMAP                  "res\\search_close_150.bmp"
+
 IDB_BITMAP_SEARCH_NORMAL_150 BITMAP                  "res\\search_normal_150.bmp"
+
 IDB_BITMAP_SEARCH_CLOSE_200 BITMAP                  "res\\search_close_200.bmp"
+
 IDB_BITMAP_SEARCH_NORMAL_200 BITMAP                  "res\\search_normal_200.bmp"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -872,25 +894,25 @@ END
 
 IDD_OPTIONS_QUICK_PASTE_KEYBOARD DIALOGEX 0, 0, 375, 265
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Dialog"
+CAPTION " "
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     CONTROL         "",IDC_LIST1,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,361,115
-    CONTROL         "",IDC_HOTKEY1,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,35,183,80,14
+    CONTROL         "",IDC_HOTKEY1,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,25,183,80,14
     PUSHBUTTON      "Assign",IDC_ASSIGN,318,244,50,14
     CONTROL         "",IDC_HOTKEY2,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,202,185,80,14
-    CONTROL         "Keyboard Shortcut",IDC_RADIO_KEYBOARD,"Button",BS_AUTORADIOBUTTON,18,170,76,10
-    CONTROL         "Enter Key",IDC_RADIO_ENTER,"Button",BS_AUTORADIOBUTTON,18,205,47,10
-    CONTROL         "Mouse Click",IDC_RADIO3,"Button",BS_AUTORADIOBUTTON,18,236,53,10
+    CONTROL         "Keyboard Shortcut",IDC_RADIO_KEYBOARD,"Button",BS_AUTORADIOBUTTON | WS_GROUP,18,170,76,10
+    CONTROL         "Mouse Click",IDC_RADIO3,"Button",BS_AUTORADIOBUTTON,18,207,53,10
     COMBOBOX        IDC_COMBO_ALL_ASSIGNED,8,139,253,99,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     PUSHBUTTON      "Remove",IDC_BUTTON_REMOVE,265,138,50,14
     PUSHBUTTON      "Add",IDC_BUTTON_ADD,318,138,50,14
     LTEXT           "Shortcuts for selected command:",IDC_STATIC,8,128,106,8
-    GROUPBOX        "First Keypress",IDC_STATIC,7,157,137,93
-    CONTROL         "Keyboard Shortcut",IDC_RADIO_KEYBOARD2,"Button",BS_AUTORADIOBUTTON,183,171,76,10
-    CONTROL         "Enter Key",IDC_RADIO_ENTER2,"Button",BS_AUTORADIOBUTTON,183,206,47,10
-    CONTROL         "Mouse Click",IDC_RADIO4,"Button",BS_AUTORADIOBUTTON,183,238,53,10
-    GROUPBOX        "Second Keypress",IDC_STATIC,172,158,126,93
+    GROUPBOX        "First Keypress",IDC_STATIC,7,157,151,93
+    CONTROL         "Keyboard Shortcut",IDC_RADIO_KEYBOARD2,"Button",BS_AUTORADIOBUTTON | WS_GROUP,183,171,76,10
+    CONTROL         "Mouse Click",IDC_RADIO4,"Button",BS_AUTORADIOBUTTON,183,209,53,10
+    GROUPBOX        "Second Keypress",IDC_STATIC,172,158,168,93
+    PUSHBUTTON      "Enter Key",IDC_BUTTON_ENTER,109,183,44,14
+    PUSHBUTTON      "Enter Key",IDC_BUTTON_ENTER2,286,185,44,14
 END
 
 
@@ -1106,68 +1128,137 @@ END
 
 IDR_FILE_COPY           AVI                     "res\\FILECOPY.AVI"
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // PNG
 //
 
 IDB_OPEN_FOLDER_PNG     PNG                     "res\\folder_open.png"
+
 IDB_COG_16_16           PNG                     "res\\cog_16_16.png"
+
 IDB_OPEN_FOLDER_16_16   PNG                     "res\\opened_folder_16_16.png"
+
 IDB_OPEN_FOLDER_20_20   PNG                     "res\\opened_folder_20_20.png"
+
 IDB_OPEN_FOLDER_24_24   PNG                     "res\\opened_folder_24_24.png"
+
 IDB_OPEN_FOLDER_32_32   PNG                     "res\\opened_folder_32_32.png"
+
 IDB_COG_20_20           PNG                     "res\\cog_20_20.png"
+
 IDB_COG_24_24           PNG                     "res\\cog_24_24.png"
+
 IDB_COG_32_32           PNG                     "res\\cog_32_32.png"
+
 IDB_LEFT_ARROW_16_16    PNG                     "res\\left_arrow_16_16.png"
+
 IDB_LEFT_ARROW_20_20    PNG                     "res\\left_arrow_20_20.png"
+
 IDB_LEFT_ARROW_24_24    PNG                     "res\\left_arrow_24_24.png"
+
 IDB_LEFT_ARROW_32_32    PNG                     "res\\left_arrow_32_32.png"
+
 IDB_CLOSE_8_8           PNG                     "res\\close_8_8.png"
+
 IDB_CLOSE_10_10         PNG                     "res\\close_10_10.png"
+
 IDB_CLOSE_12_13         PNG                     "res\\close_12_12.png"
+
 IDB_CLOSE_16_16         PNG                     "res\\close_16_16.png"
+
 IDB_CHEVRON_RIGHT_8_8   PNG                     "res\\chevron_right_8_8.png"
+
 IDB_CHEVRON_RIGHT_10_10 PNG                     "res\\chevron_right_10_10.png"
+
 IDB_CHEVRON_RIGHT_12_12 PNG                     "res\\chevron_right_12_12.png"
+
 IDB_CHEVRON_RIGHT_16_16 PNG                     "res\\chevron_right_16_16.png"
+
 IDB_CHEVRON_LEFT_8_8    PNG                     "res\\chevron_left_8_8.png"
+
 IDB_CHEVRON_LEFT_10_10  PNG                     "res\\chevron_left_10_10.png"
+
 IDB_CHEVRON_LEFT_12_12  PNG                     "res\\chevron_left_12_12.png"
+
 IDB_CHEVRON_LEFT_16_16  PNG                     "res\\chevron_left_16_16.png"
+
 IDB_CHEVRON_TOP_8_8     PNG                     "res\\chevron_top_8_8.png"
+
 IDB_CHEVRON_TOP_10_10   PNG                     "res\\chevron_top_10_10.png"
+
 IDB_CHEVRON_TOP_12_12   PNG                     "res\\chevron_top_12_12.png"
+
 IDB_CHEVRON_TOP_16_16   PNG                     "res\\chevron_top_16_16.png"
+
 IDB_CHEVRON_BOTTOM_8_8  PNG                     "res\\chevron_bottom_8_8.png"
+
 IDB_CHEVRON_BOTTOM_10_10 PNG                     "res\\chevron_bottom_10_10.png"
+
 IDB_CHEVRON_BOTTOM_12_12 PNG                     "res\\chevron_bottom_12_12.png"
+
 IDB_CHEVRON_BOTTOM_16_16 PNG                     "res\\chevron_bottom_16_16.png"
+
 IDB_MAXIMIZE_8_8        PNG                     "res\\maximize_8_8.png"
+
 IDB_MAXIMIZE_10_10      PNG                     "res\\maximize_10_10.png"
+
 IDB_MAXIMIZE_12_12      PNG                     "res\\maximize_12_12.png"
+
 IDB_MAXIMIZE_16_16      PNG                     "res\\maximize_16_16.png"
+
 IDB_YELLOW_STAR_32_32   PNG                     "res\\yellow_star_32_32.png"
+
 IDB_YELLOW_STAR_24_24   PNG                     "res\\yellow_star_24_24.png"
+
 IDB_YELLOW_STAR_20_20   PNG                     "res\\yellow_star_20_20.png"
+
 IDB_YELLOW_STAR_16_16   PNG                     "res\\yellow_star_16_16.png"
+
 IDB_IN_FOLDER_32_32     PNG                     "res\\in_folder_32_32.png"
+
 IDB_IN_FOLDER_24_24     PNG                     "res\\in_folder_24_24.png"
+
 IDB_IN_FOLDER_20_20     PNG                     "res\\in_folder_20_20.png"
+
 IDB_IN_FOLDER_16_16     PNG                     "res\\in_folder_16_16.png"
+
 IDB_KEY_32_32           PNG                     "res\\key_stroke_32_32.png"
+
 IDB_KEY_24_24           PNG                     "res\\key_stroke_24_24.png"
+
 IDB_KEY_20_20           PNG                     "res\\key_stroke_20_20.png"
+
 IDB_KEY_16_16           PNG                     "res\\key_stroke_16_16.png"
+
 IDB_STICKY_32_32        PNG                     "res\\Sticky_32_32.png"
+
 IDB_STICKY_24_24        PNG                     "res\\Sticky_24_24.png"
+
 IDB_STICKY_20_20        PNG                     "res\\Sticky_20_20.png"
+
 IDB_STICKY_16_16        PNG                     "res\\Sticky_16_16.png"
+
 IDB_SYSTEM_MENU_16_16   PNG                     "res\\system_menu_16_16.png"
+
 IDB_SYSTEM_MENU_20_20   PNG                     "res\\system_menu_20_20.png"
+
 IDB_SYSTEM_MENU_24_24   PNG                     "res\\system_menu_24_24.png"
+
 IDB_SYSTEM_MENU_32_32   PNG                     "res\\system_menu_32_32.png"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_OPTIONS_QUICK_PASTE_KEYBOARD AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

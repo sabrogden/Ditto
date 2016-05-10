@@ -150,6 +150,8 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 			return ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_SHIFT);
 		case ActionEnums::COMPARE_SELECTED_CLIPS:
 			return ACCEL_MAKEKEY(VK_F2, HOTKEYF_CONTROL);
+		case ActionEnums::PASTE_SELECTED:
+			return VK_RETURN;
 		}
 		break;
 	case 1:
@@ -190,7 +192,6 @@ bool ActionEnums::UserConfigurable(ActionEnumValues value)
 	case ActionEnums::MOVEFIRST:
 	case ActionEnums::MOVELAST:
 	case ActionEnums::BACKGRROUP:
-	case ActionEnums::PASTE_SELECTED:
 	case ActionEnums::DELETE_SELECTED:
 	case ActionEnums::TOGGLEFILELOGGING:
 	case ActionEnums::TOGGLEOUTPUTDEBUGSTRING:

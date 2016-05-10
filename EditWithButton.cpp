@@ -91,7 +91,7 @@ BOOL CEditWithButton::PreTranslateMessage(MSG* pMsg)
 				{
 					if(g_Opt.m_bFindAsYouType)
 					{
-						pWnd->SendMessage(NM_SELECT, 0, 0);
+						pWnd->SendMessage(NM_DBL_CLICK, 0, 0);
 					}
 					else
 					{

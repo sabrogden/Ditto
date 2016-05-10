@@ -14,7 +14,7 @@
 #include "Accels.h"
 #include "GdiImageDrawer.h"
 
-#define NM_SELECT					WM_USER+0x100
+#define NM_DBL_CLICK				WM_USER+0x100
 #define NM_RIGHT					WM_USER+0x101
 #define NM_LEFT						WM_USER+0x102
 #define NM_END						WM_USER+0x103
@@ -150,9 +150,7 @@ public:
 	void SetSearchText(CString text);
 
 protected:
-	void SendSelection(int nItem);;
 	void LoadCopyOrCutToClipboard();
-	void SendSelection(ARRAY &arrItems);
 	BOOL GetClipData(int nItem, CClipFormat &Clip);
 	BOOL DrawBitMap(int nItem, CRect &crRect, CDC *pDC, const CString &csDescription);
 	void LoadDittoCopyBufferHotkeys();
@@ -186,7 +184,6 @@ protected:
 protected:
 	//{{AFX_MSG(CQListCtrl)
 	afx_msg void OnKeydown(NMHDR* pNMHDR, LRESULT* pResult);
-	afx_msg void OnDblclk(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
