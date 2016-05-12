@@ -46,6 +46,7 @@ BEGIN_MESSAGE_MAP(CQuickPasteKeyboard, CPropertyPage)
 	ON_WM_KILLFOCUS()
 	ON_BN_CLICKED(IDC_BUTTON_ENTER, &CQuickPasteKeyboard::OnBnClickedButtonEnter)
 	ON_BN_CLICKED(IDC_BUTTON_ENTER2, &CQuickPasteKeyboard::OnBnClickedButtonEnter2)
+	ON_WM_KEYUP()
 END_MESSAGE_MAP()
 
 
@@ -226,14 +227,15 @@ void CQuickPasteKeyboard::OnBnClickedAssign()
 	int id = SelectedCommandId();
 	int row = SelectedCommandRow();
 
-	if (id > 0 &&
-		id < (int)m_map.size() &&
+	if (m_map.find(id) != m_map.end() &&
 		shortCutId >= 0 &&
 		shortCutId < 10)
 	{
 		m_map[id].Array[shortCutId].Dirty = true;
-		m_map[id].Array[shortCutId].A = m_hotKey1.GetHotKey();
-		m_map[id].Array[shortCutId].B = m_hotKey2.GetHotKey();
+
+		//remove the extended key flag, don't think this is needed now days
+		m_map[id].Array[shortCutId].A = ACCEL_MAKEKEY(LOBYTE(m_hotKey1.GetHotKey()), (HIBYTE(m_hotKey1.GetHotKey()) & ~HOTKEYF_EXT));
+		m_map[id].Array[shortCutId].B = ACCEL_MAKEKEY(LOBYTE(m_hotKey2.GetHotKey()), HIBYTE(m_hotKey2.GetHotKey()) & ~HOTKEYF_EXT);		
 
 		CString sh = GetShortCutText(m_map[id]);
 		LVITEM lvi;
@@ -275,8 +277,7 @@ void CQuickPasteKeyboard::OnCbnSelchangeComboAllAssigned()
 	int shortCutId = SelectedCommandShortCutId();
 	int id = SelectedCommandId();
 
-	if (id > 0 &&
-		id < (int)m_map.size() &&
+	if (m_map.find(id) != m_map.end() &&
 		shortCutId >= 0 &&
 		shortCutId < 10)
 	{
@@ -284,14 +285,12 @@ void CQuickPasteKeyboard::OnCbnSelchangeComboAllAssigned()
 	}
 }
 
-
 void CQuickPasteKeyboard::OnBnClickedButtonRemove()
 {
 	int shortCutId = SelectedCommandShortCutId();	
 	int id = SelectedCommandId();
 
-	if (id > 0 &&
-		id < (int)m_map.size() &&
+	if (m_map.find(id) != m_map.end() &&
 		shortCutId >= 0 &&
 		shortCutId < 10)
 	{
@@ -331,7 +330,7 @@ void CQuickPasteKeyboard::OnBnClickedButtonAdd()
 	if (count < 10)
 	{
 		int id = SelectedCommandId();
-		if (id > 0 && id < (int)m_map.size())
+		if (m_map.find(id) != m_map.end())
 		{
 			CString shortcut;
 			int pos = m_assignedCombo.AddString(shortcut);
@@ -391,12 +390,52 @@ void CQuickPasteKeyboard::LoadHotKey(KeyboardAB ab)
 	if (ab.A > 0)
 	{
 		a = ab.A;
+
+		switch (LOBYTE((DWORD)a))
+		{
+			case VK_LEFT:
+			case VK_UP:
+			case VK_RIGHT:
+			case VK_DOWN: // arrow keys
+			case VK_PRIOR:
+			case VK_NEXT: // page up and page down
+			case VK_END:
+			case VK_HOME:
+			case VK_INSERT:
+			case VK_DELETE:
+			case VK_DIVIDE: // numpad slash
+			case VK_NUMLOCK:
+			{
+				a = ACCEL_MAKEKEY(LOBYTE(a), (HIBYTE(a) | HOTKEYF_EXT));
+				break;
+			}
+		}
 	}
 
 	int b = 0;
 	if (ab.B > 0)
 	{
 		b = ab.B;
+
+		switch (LOBYTE((DWORD)b))
+		{
+		case VK_LEFT:
+		case VK_UP:
+		case VK_RIGHT:
+		case VK_DOWN: // arrow keys
+		case VK_PRIOR:
+		case VK_NEXT: // page up and page down
+		case VK_END:
+		case VK_HOME:
+		case VK_INSERT:
+		case VK_DELETE:
+		case VK_DIVIDE: // numpad slash
+		case VK_NUMLOCK:
+		{
+			b = ACCEL_MAKEKEY(LOBYTE(b), (HIBYTE(b) | HOTKEYF_EXT));
+			break;
+		}
+		}
 	}
 
 	m_hotKey1.SetHotKey(LOBYTE((DWORD)a), (HIBYTE((DWORD)a)));
@@ -503,4 +542,12 @@ void CQuickPasteKeyboard::OnBnClickedButtonEnter2()
 {
 	DWORD hk = m_hotKey2.GetHotKey();
 	m_hotKey2.SetHotKey(VK_RETURN, (HIBYTE((DWORD)hk)));
+}
+
+
+void CQuickPasteKeyboard::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CPropertyPage::OnKeyUp(nChar, nRepCnt, nFlags);
 }

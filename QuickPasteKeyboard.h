@@ -79,4 +79,5 @@ public:
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnBnClickedButtonEnter();
 	afx_msg void OnBnClickedButtonEnter2();
+	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
