@@ -212,6 +212,15 @@ bool CDittoRulerRichEditCtrl::LoadRTFData(CClip &Clip)
 		return false;
 	}
 
+	//remove the line feed at the end, not sure why the righ text always adds this
+	CString right = csRTFOriginal.Right(9);
+	if (right == _T("\\par\r\n}\r\n"))
+	{
+		CString r = csRTFOriginal.Left(csRTFOriginal.GetLength() - 9);
+		r += _T("}");
+		csRTFOriginal = r;
+	}
+
 	CStringA csRTF = CTextConvert::ConvertToChar(csRTFOriginal);
 	CClipFormat format;
 	format.m_cfType = RegisterClipboardFormat(_T("Rich Text Format"));
