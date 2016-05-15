@@ -60,6 +60,7 @@ protected:
 	int SelectedCommandShortCutId();
 	int SelectedCommandRow();
 	void SelectMouseTypeCombo(CComboBox &combo, int value);
+	void SelectedRow(int row);
 
 public:
 	afx_msg void OnLvnItemActivateList1(NMHDR *pNMHDR, LRESULT *pResult);

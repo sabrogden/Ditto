@@ -1,23 +1,27 @@
 #pragma once
 
+#include <map>
+
 #define ACCEL_VKEY(key)			LOBYTE(key)
 #define ACCEL_MOD(key)			HIBYTE(key)
 #define ACCEL_MAKEKEY(vkey,mod) ((mod << 8) | vkey)
+
+using namespace std;
 
 class CAccel
 {
 public:
     DWORD Key;
+	DWORD Key2;
     DWORD Cmd;
 	int RefId;
-	bool SecondKey;
 
-    CAccel(DWORD key = 0, DWORD cmd = 0)
+    CAccel(DWORD key = 0, DWORD cmd = 0, DWORD key2 = 0)
     {
         Key = key;
+		Key2 = key2;
         Cmd = cmd;
 		RefId = 0;
-		SecondKey = false;
     }
 };
 
@@ -47,8 +51,9 @@ public:
     static BYTE GetKeyStateModifiers();
 
 protected:
-	CMap < DWORD, DWORD, CAccel, CAccel > m_Map;
-	CMap < DWORD, DWORD, CAccel, CAccel > m_Map2;
+
+	multimap<DWORD, CAccel> m_multiMap;
+	DWORD m_activeFirstKey;
 
 	DWORD m_firstMapTick;
 };

@@ -151,6 +151,8 @@ void CQuickPasteKeyboard::LoadItems()
 			row++;
 		}
 	}
+
+	SelectedRow(0);
 }
 
 CString CQuickPasteKeyboard::GetShortCutText(KeyboardAB ab)
@@ -754,10 +756,15 @@ void CQuickPasteKeyboard::OnBnClickedButtonReset()
 		m_list.SetItem(&lvi);
 	}
 
-	m_list.SetItemState(0, LVIS_FOCUSED, LVIS_FOCUSED);
-	m_list.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
-	m_list.SetSelectionMark(0);
-	m_list.EnsureVisible(0, FALSE);
+	SelectedRow(0);	
+}
+
+void CQuickPasteKeyboard::SelectedRow(int row)
+{
+	m_list.SetItemState(row, LVIS_FOCUSED, LVIS_FOCUSED);
+	m_list.SetItemState(row, LVIS_SELECTED, LVIS_SELECTED);
+	m_list.SetSelectionMark(row);
+	m_list.EnsureVisible(row, FALSE);
 }
 
 
