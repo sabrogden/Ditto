@@ -31,6 +31,8 @@ void CQuickPasteKeyboard::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_HOTKEY1, m_hotKey1);
 	DDX_Control(pDX, IDC_HOTKEY2, m_hotKey2);
 	DDX_Control(pDX, IDC_COMBO_ALL_ASSIGNED, m_assignedCombo);
+	DDX_Control(pDX, IDC_MOUSE_1, m_mouseType1);
+	DDX_Control(pDX, IDC_MOUSE_2, m_mouseType2);
 }
 
 
@@ -47,6 +49,11 @@ BEGIN_MESSAGE_MAP(CQuickPasteKeyboard, CPropertyPage)
 	ON_BN_CLICKED(IDC_BUTTON_ENTER, &CQuickPasteKeyboard::OnBnClickedButtonEnter)
 	ON_BN_CLICKED(IDC_BUTTON_ENTER2, &CQuickPasteKeyboard::OnBnClickedButtonEnter2)
 	ON_WM_KEYUP()
+	ON_BN_CLICKED(IDC_BUTTON_RESET, &CQuickPasteKeyboard::OnBnClickedButtonReset)
+	ON_BN_CLICKED(IDC_RADIO_KEYBOARD_1, &CQuickPasteKeyboard::OnBnClickedRadioKeyboard1)
+	ON_BN_CLICKED(IDC_RADIO_MOUSE_1, &CQuickPasteKeyboard::OnBnClickedRadioMouse1)
+	ON_BN_CLICKED(IDC_RADIO_KEYBOARD_2, &CQuickPasteKeyboard::OnBnClickedRadioKeyboard2)
+	ON_BN_CLICKED(IDC_RADIO_MOUSE_2, &CQuickPasteKeyboard::OnBnClickedRadioMouse2)
 END_MESSAGE_MAP()
 
 
@@ -59,6 +66,33 @@ BOOL CQuickPasteKeyboard::OnInitDialog()
 
 	InitListCtrlCols();
 	LoadItems();
+
+	int pos = m_mouseType1.AddString(_T("Click"));
+	m_mouseType1.SetItemData(pos, VK_MOUSE_CLICK);
+
+	pos = m_mouseType1.AddString(_T("Double Click"));
+	m_mouseType1.SetItemData(pos, VK_MOUSE_DOUBLE_CLICK);
+
+	pos = m_mouseType1.AddString(_T("Right Click"));
+	m_mouseType1.SetItemData(pos, VK_MOUSE_RIGHT_CLICK);
+
+	pos = m_mouseType1.AddString(_T("Middle Click"));
+	m_mouseType1.SetItemData(pos, VK_MOUSE_MIDDLE_CLICK);
+
+	pos = m_mouseType2.AddString(_T("Click"));
+	m_mouseType2.SetItemData(pos, VK_MOUSE_CLICK);
+
+	pos = m_mouseType2.AddString(_T("Double Click"));
+	m_mouseType2.SetItemData(pos, VK_MOUSE_DOUBLE_CLICK);
+
+	pos = m_mouseType2.AddString(_T("Right Click"));
+	m_mouseType2.SetItemData(pos, VK_MOUSE_RIGHT_CLICK);
+
+	pos = m_mouseType2.AddString(_T("Middle Click"));
+	m_mouseType2.SetItemData(pos, VK_MOUSE_MIDDLE_CLICK);
+
+	m_mouseType1.SetCurSel(0);
+	m_mouseType2.SetCurSel(0);
 
 	SetWindowText(_T("Quick Paste Shortcuts"));
 
@@ -233,9 +267,55 @@ void CQuickPasteKeyboard::OnBnClickedAssign()
 	{
 		m_map[id].Array[shortCutId].Dirty = true;
 
-		//remove the extended key flag, don't think this is needed now days
-		m_map[id].Array[shortCutId].A = ACCEL_MAKEKEY(LOBYTE(m_hotKey1.GetHotKey()), (HIBYTE(m_hotKey1.GetHotKey()) & ~HOTKEYF_EXT));
-		m_map[id].Array[shortCutId].B = ACCEL_MAKEKEY(LOBYTE(m_hotKey2.GetHotKey()), HIBYTE(m_hotKey2.GetHotKey()) & ~HOTKEYF_EXT);		
+		if (this->IsDlgButtonChecked(IDC_RADIO_KEYBOARD_1) == BST_CHECKED)
+		{
+			//remove the extended key flag, don't think this is needed now days
+			m_map[id].Array[shortCutId].A = ACCEL_MAKEKEY(LOBYTE(m_hotKey1.GetHotKey()), (HIBYTE(m_hotKey1.GetHotKey()) & ~HOTKEYF_EXT));
+		}
+		else if (this->IsDlgButtonChecked(IDC_RADIO_MOUSE_1) == BST_CHECKED)
+		{
+			WORD vk = (WORD)m_mouseType1.GetItemData(m_mouseType1.GetCurSel());
+			WORD mod = 0;
+			if (this->IsDlgButtonChecked(IDC_CHECK_SHIFT_1) == BST_CHECKED)
+			{
+				mod |= HOTKEYF_SHIFT;
+			}
+			if (this->IsDlgButtonChecked(IDC_CHECK_CONTROL_1) == BST_CHECKED)
+			{ 
+				mod |= HOTKEYF_CONTROL;
+			}
+			if (this->IsDlgButtonChecked(IDC_CHECK_ALT_1) == BST_CHECKED)
+			{
+				mod |= HOTKEYF_ALT;
+			}
+
+			m_map[id].Array[shortCutId].A = ACCEL_MAKEKEY(vk, mod);
+		}
+
+		if (this->IsDlgButtonChecked(IDC_RADIO_KEYBOARD_2) == BST_CHECKED)
+		{
+			//remove the extended key flag, don't think this is needed now days
+			m_map[id].Array[shortCutId].B = ACCEL_MAKEKEY(LOBYTE(m_hotKey2.GetHotKey()), (HIBYTE(m_hotKey2.GetHotKey()) & ~HOTKEYF_EXT));
+		}
+		else if (this->IsDlgButtonChecked(IDC_RADIO_MOUSE_2) == BST_CHECKED)
+		{
+			WORD vk = (WORD)m_mouseType2.GetItemData(m_mouseType2.GetCurSel());
+			WORD mod = 0;
+			if (this->IsDlgButtonChecked(IDC_CHECK_SHIFT_2) == BST_CHECKED)
+			{
+				mod |= HOTKEYF_SHIFT;
+			}
+			if (this->IsDlgButtonChecked(IDC_CHECK_CONTROL_2) == BST_CHECKED)
+			{
+				mod |= HOTKEYF_CONTROL;
+			}
+			if (this->IsDlgButtonChecked(IDC_CHECK_ALT_2) == BST_CHECKED)
+			{
+				mod |= HOTKEYF_ALT;
+			}
+
+			m_map[id].Array[shortCutId].B = ACCEL_MAKEKEY(vk, mod);
+		}
 
 		CString sh = GetShortCutText(m_map[id]);
 		LVITEM lvi;
@@ -386,6 +466,17 @@ int CQuickPasteKeyboard::SelectedCommandShortCutId()
 
 void CQuickPasteKeyboard::LoadHotKey(KeyboardAB ab)
 {
+	CheckDlgButton(IDC_RADIO_MOUSE_1, BST_UNCHECKED);
+	CheckDlgButton(IDC_RADIO_KEYBOARD_1, BST_UNCHECKED);
+	CheckDlgButton(IDC_CHECK_SHIFT_1, BST_UNCHECKED);
+	CheckDlgButton(IDC_CHECK_CONTROL_1, BST_UNCHECKED);
+	CheckDlgButton(IDC_CHECK_ALT_1, BST_UNCHECKED);
+	CheckDlgButton(IDC_CHECK_SHIFT_2, BST_UNCHECKED);
+	CheckDlgButton(IDC_CHECK_CONTROL_2, BST_UNCHECKED);
+	CheckDlgButton(IDC_CHECK_ALT_2, BST_UNCHECKED);
+	m_hotKey1.SetHotKey(0, 0);
+	m_hotKey2.SetHotKey(0, 0);
+
 	int a = 0;
 	if (ab.A > 0)
 	{
@@ -409,37 +500,112 @@ void CQuickPasteKeyboard::LoadHotKey(KeyboardAB ab)
 				a = ACCEL_MAKEKEY(LOBYTE(a), (HIBYTE(a) | HOTKEYF_EXT));
 				break;
 			}
+			
 		}
-	}
 
-	int b = 0;
-	if (ab.B > 0)
-	{
-		b = ab.B;
+		switch (LOBYTE((DWORD)a))
+		{
+		case VK_MOUSE_CLICK:
+		case VK_MOUSE_DOUBLE_CLICK:
+		case VK_MOUSE_RIGHT_CLICK:
+		case VK_MOUSE_MIDDLE_CLICK:
+			SelectMouseTypeCombo(m_mouseType1, LOBYTE((DWORD)a));
+			CheckDlgButton(IDC_RADIO_MOUSE_1, BST_CHECKED);
+			
+			{
+				BYTE mod = HIBYTE(a);
+				if (mod & HOTKEYF_SHIFT)
+					CheckDlgButton(IDC_CHECK_SHIFT_1, BST_CHECKED);
+				if (mod & HOTKEYF_CONTROL)
+					CheckDlgButton(IDC_CHECK_CONTROL_1, BST_CHECKED);
+				if (mod & HOTKEYF_ALT)
+					CheckDlgButton(IDC_CHECK_ALT_1, BST_CHECKED);
+			}
 
-		switch (LOBYTE((DWORD)b))
-		{
-		case VK_LEFT:
-		case VK_UP:
-		case VK_RIGHT:
-		case VK_DOWN: // arrow keys
-		case VK_PRIOR:
-		case VK_NEXT: // page up and page down
-		case VK_END:
-		case VK_HOME:
-		case VK_INSERT:
-		case VK_DELETE:
-		case VK_DIVIDE: // numpad slash
-		case VK_NUMLOCK:
-		{
-			b = ACCEL_MAKEKEY(LOBYTE(b), (HIBYTE(b) | HOTKEYF_EXT));
+			break;
+		default:
+			CheckDlgButton(IDC_RADIO_KEYBOARD_1, BST_CHECKED);
+			m_hotKey1.SetHotKey(LOBYTE((DWORD)a), (HIBYTE((DWORD)a)));
 			break;
 		}
+
+		int b = 0;
+		if (ab.B > 0)
+		{
+			b = ab.B;
+
+			switch (LOBYTE((DWORD)b))
+			{
+			case VK_LEFT:
+			case VK_UP:
+			case VK_RIGHT:
+			case VK_DOWN: // arrow keys
+			case VK_PRIOR:
+			case VK_NEXT: // page up and page down
+			case VK_END:
+			case VK_HOME:
+			case VK_INSERT:
+			case VK_DELETE:
+			case VK_DIVIDE: // numpad slash
+			case VK_NUMLOCK:
+			{
+				b = ACCEL_MAKEKEY(LOBYTE(b), (HIBYTE(b) | HOTKEYF_EXT));
+				break;
+			}
+			}
+
+			switch (LOBYTE((DWORD)b))
+			{
+			case VK_MOUSE_CLICK:
+			case VK_MOUSE_DOUBLE_CLICK:
+			case VK_MOUSE_RIGHT_CLICK:
+			case VK_MOUSE_MIDDLE_CLICK:
+				SelectMouseTypeCombo(m_mouseType2, LOBYTE((DWORD)b));
+				CheckDlgButton(IDC_RADIO_MOUSE_2, BST_CHECKED);
+
+				{
+					BYTE mod = HIBYTE(b);
+					if (mod & HOTKEYF_SHIFT)
+						CheckDlgButton(IDC_CHECK_SHIFT_2, BST_CHECKED);
+					if (mod & HOTKEYF_CONTROL)
+						CheckDlgButton(IDC_CHECK_CONTROL_2, BST_CHECKED);
+					if (mod & HOTKEYF_ALT)
+						CheckDlgButton(IDC_CHECK_ALT_2, BST_CHECKED);
+				}
+
+				break;
+			default:
+				CheckDlgButton(IDC_RADIO_KEYBOARD_2, BST_CHECKED);
+				m_hotKey2.SetHotKey(LOBYTE((DWORD)b), (HIBYTE((DWORD)b)));
+				break;
+			}
+		}
+		else
+		{ 
+			CheckDlgButton(IDC_RADIO_KEYBOARD_2, BST_CHECKED);
 		}
 	}
+	else
+	{
+		CheckDlgButton(IDC_RADIO_KEYBOARD_1, BST_CHECKED);
+		CheckDlgButton(IDC_RADIO_KEYBOARD_2, BST_CHECKED);
+	}
 
-	m_hotKey1.SetHotKey(LOBYTE((DWORD)a), (HIBYTE((DWORD)a)));
-	m_hotKey2.SetHotKey(LOBYTE((DWORD)b), (HIBYTE((DWORD)b)));
+	OnBnClickedRadioMouse1();
+}
+
+void CQuickPasteKeyboard::SelectMouseTypeCombo(CComboBox &combo, int value)
+{
+	int count = combo.GetCount();
+	for (int i = 0; i < count; i++)
+	{
+		int itemData = combo.GetItemData(i);
+		if (itemData == value)
+		{
+			combo.SetCurSel(i);
+			break;
+		}
+	}
 }
 
 
@@ -550,4 +716,108 @@ void CQuickPasteKeyboard::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 	// TODO: Add your message handler code here and/or call default
 
 	CPropertyPage::OnKeyUp(nChar, nRepCnt, nFlags);
+}
+
+
+void CQuickPasteKeyboard::OnBnClickedButtonReset()
+{
+	for (std::map<DWORD, KeyboardArray>::iterator it = m_map.begin(); it != m_map.end(); ++it)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			int newA = ActionEnums::GetDefaultShortCutKeyA((ActionEnums::ActionEnumValues)it->first, i);
+			int newB = ActionEnums::GetDefaultShortCutKeyB((ActionEnums::ActionEnumValues)it->first, i);
+			if (it->second.Array[i].A != newA ||
+				it->second.Array[i].B != newB)
+			{
+				it->second.Array[i].A = newA;
+				it->second.Array[i].B = newB;
+				it->second.Array[i].Dirty = true;
+
+				CString sh = GetShortCutText(it->second);
+			}
+		}
+	}
+
+	int count = m_list.GetItemCount();
+	for (int row = 0; row < count; row++)
+	{
+		int actionId = m_list.GetItemData(row);
+		
+		CString sh = GetShortCutText(m_map[actionId]);
+
+		LVITEM lvi;
+		lvi.mask = LVIF_TEXT;
+		lvi.iItem = (int)row;
+		lvi.iSubItem = 0;
+		lvi.pszText = (LPTSTR)(LPCTSTR)(sh);
+		m_list.SetItem(&lvi);
+	}
+
+	m_list.SetItemState(0, LVIS_FOCUSED, LVIS_FOCUSED);
+	m_list.SetItemState(0, LVIS_SELECTED, LVIS_SELECTED);
+	m_list.SetSelectionMark(0);
+	m_list.EnsureVisible(0, FALSE);
+}
+
+
+void CQuickPasteKeyboard::OnBnClickedRadioKeyboard1()
+{
+	OnBnClickedRadioMouse1();
+}
+
+void CQuickPasteKeyboard::OnBnClickedRadioMouse1()
+{
+	if (IsDlgButtonChecked(IDC_RADIO_KEYBOARD_1) == BST_CHECKED)
+	{
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_HOTKEY1), SW_SHOW);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_BUTTON_ENTER), SW_SHOW);
+
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_MOUSE_1), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_SHIFT_1), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_CONTROL_1), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_ALT_1), SW_HIDE);
+	}
+	else if (IsDlgButtonChecked(IDC_RADIO_MOUSE_1) == BST_CHECKED)
+	{
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_HOTKEY1), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_BUTTON_ENTER), SW_HIDE);
+
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_MOUSE_1), SW_SHOW);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_SHIFT_1), SW_SHOW);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_CONTROL_1), SW_SHOW);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_ALT_1), SW_SHOW);
+	}
+
+	if (IsDlgButtonChecked(IDC_RADIO_KEYBOARD_2) == BST_CHECKED)
+	{
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_HOTKEY2), SW_SHOW);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_BUTTON_ENTER2), SW_SHOW);
+
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_MOUSE_2), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_SHIFT_2), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_CONTROL_2), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_ALT_2), SW_HIDE);
+	}
+	else if (IsDlgButtonChecked(IDC_RADIO_MOUSE_2) == BST_CHECKED)
+	{
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_HOTKEY2), SW_HIDE);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_BUTTON_ENTER2), SW_HIDE);
+
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_MOUSE_2), SW_SHOW);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_SHIFT_2), SW_SHOW);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_CONTROL_2), SW_SHOW);
+		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_ALT_2), SW_SHOW);
+	}
+}
+
+
+void CQuickPasteKeyboard::OnBnClickedRadioKeyboard2()
+{
+	OnBnClickedRadioMouse1();
+}
+
+void CQuickPasteKeyboard::OnBnClickedRadioMouse2()
+{
+	OnBnClickedRadioMouse1();
 }

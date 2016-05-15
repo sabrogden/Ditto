@@ -959,7 +959,7 @@ LRESULT CQPasteWnd::OnListSelect_Index(WPARAM wParam, LPARAM lParam)
 
 LRESULT CQPasteWnd::OnListDblClick(WPARAM wParam, LPARAM lParam)
 {
-	DoAction(ActionEnums::PASTE_SELECTED);
+	//DoAction(ActionEnums::PASTE_SELECTED);
     return TRUE;
 }
 
@@ -2630,11 +2630,26 @@ void CQPasteWnd::SetKeyModiferState(bool bActive)
 
 BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 {
-	if (CheckActions(pMsg))
+	switch (pMsg->message)
 	{
-		return TRUE;
+	case WM_MBUTTONUP:
+		MSG msg;
+		msg.lParam = 0;
+		msg.wParam = VK_MOUSE_MIDDLE_CLICK;
+		msg.message = WM_KEYDOWN;
+		if (CheckActions(&msg) == false)
+		{
+		}
+		break;
+	case WM_MBUTTONDBLCLK:
+		break;
+	default:
+		if (CheckActions(pMsg))
+		{
+			return TRUE;
+		}
+		break;
 	}
-
     return CWndEx::PreTranslateMessage(pMsg);
 }
 
@@ -5533,7 +5548,13 @@ void CQPasteWnd::OnUpdateSpecialpasteTypoglycemia(CCmdUI *pCmdUI)
 void CQPasteWnd::OnNMClickList1(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
-	//DoAction(ActionEnums::PASTE_SELECTED);
+	MSG msg;
+	msg.lParam = 0;
+	msg.wParam = VK_MOUSE_CLICK;
+	msg.message = WM_KEYDOWN;
+	if (CheckActions(&msg) == false)
+	{
+	}
 	*pResult = 0;
 }
 
@@ -5542,8 +5563,14 @@ void CQPasteWnd::OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	
-	DoAction(ActionEnums::PASTE_SELECTED);
-
+	MSG msg;
+	msg.lParam = 0;
+	msg.wParam = VK_MOUSE_DOUBLE_CLICK;
+	msg.message = WM_KEYDOWN;
+	if (CheckActions(&msg) == false)
+	{
+	}
+	
 	*pResult = 0;
 }
 
@@ -5551,13 +5578,25 @@ void CQPasteWnd::OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult)
 void CQPasteWnd::OnNMRClickList1(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
-	DoAction(ActionEnums::SHOWMENU);
+	MSG msg;
+	msg.lParam = 0;
+	msg.wParam = VK_MOUSE_RIGHT_CLICK;
+	msg.message = WM_KEYDOWN;
+	if (CheckActions(&msg) == false)
+	{
+	}
 	*pResult = 0;
 }
 
 void CQPasteWnd::OnNMRDblclkList1(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
-	// TODO: Add your control notification handler code here
+	/*MSG msg;
+	msg.lParam = 0;
+	msg.wParam = VK_MOUSE_RIGHT_CLICK;
+	msg.message = WM_KEYDOWN;
+	if (CheckActions(&msg) == false)
+	{
+	}*/
 	*pResult = 0;
 }

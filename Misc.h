@@ -8,6 +8,11 @@
 
 #include "Shared/ArrayEx.h"
 
+#define VK_MOUSE_CLICK 0x01
+#define VK_MOUSE_DOUBLE_CLICK 0x02
+#define VK_MOUSE_RIGHT_CLICK 0x03
+#define VK_MOUSE_MIDDLE_CLICK 0x04
+
 
 //Handle foreign keyboards pressing ALT_GR (right alt), this simulates a control press
 //http://compgroups.net/comp.os.programmer.win32/alt-gr-key-and-left-ctrl/2840252

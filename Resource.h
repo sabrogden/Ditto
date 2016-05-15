@@ -187,9 +187,11 @@
 #define IDC_ENSURE                      1042
 #define IDC_PLAY_SOUND_1                1042
 #define IDC_CHECK_CLIP_TITLE            1042
+#define IDC_CHECK_SHIFT_1               1042
 #define IDC_PLAY_SOUND_2                1043
 #define IDC_CHECK_MOVE_CLIPS_ON_PASTE   1043
 #define IDC_CHECK_CREATE_DATE           1043
+#define IDC_CHECK_SHIFT_2               1043
 #define IDC_PLAY_SOUND_3                1044
 #define IDC_CHECK_LAST_USE_DATE         1044
 #define IDC_CHECK_DATA_FORMAT           1045
@@ -392,6 +394,7 @@
 #define IDC_STATIC_DESC                 2126
 #define IDC_RADIO_USE_IP                2127
 #define IDC_RADIO_KEYBOARD              2127
+#define IDC_RADIO_KEYBOARD_1            2127
 #define IDC_STATIC_REMOTE_FILES         2128
 #define IDC_RADIO2                      2128
 #define IDC_RADIO_ENTER                 2128
@@ -399,14 +402,27 @@
 #define IDC_COMBO_ENTER_MODIFYER        2129
 #define IDC_STATIC_REMOTE_FILE_REQUEST  2130
 #define IDC_RADIO3                      2130
+#define IDC_RADIO_MOUSE                 2130
+#define IDC_RADIO_MOUSE_1               2130
 #define IDC_COMBO_ALL_ASSIGNED          2131
 #define IDC_BUTTON_ADD                  2132
 #define IDC_RADIO_KEYBOARD2             2133
+#define IDC_RADIO_KEYBOARD_2            2133
 #define IDC_RADIO_ENTER2                2134
 #define IDC_COMBO_ENTER_MODIFYER2       2135
 #define IDC_BUTTON_ENTER                2135
 #define IDC_RADIO4                      2136
+#define IDC_RADIO_MOUSE_2               2136
 #define IDC_BUTTON_ENTER2               2137
+#define IDC_MOUSE_A                     2138
+#define IDC_MOUSE_1                     2138
+#define IDC_CHECK_CONTROL_1             2139
+#define IDC_CHECK_ALT_1                 2140
+#define IDC_MOUSE_2                     2141
+#define IDC_CHECK_CONTROL_2             2142
+#define IDC_CHECK_ALT_2                 2143
+#define IDC_BUTTON3                     2144
+#define IDC_BUTTON_RESET                2144
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -558,7 +574,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        251
 #define _APS_NEXT_COMMAND_VALUE         32923
-#define _APS_NEXT_CONTROL_VALUE         2136
+#define _APS_NEXT_CONTROL_VALUE         2145
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

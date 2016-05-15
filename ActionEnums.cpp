@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ActionEnums.h"
 #include "Accels.h"
+#include "Misc.h"
 
 ActionEnums::ActionEnums()
 {
@@ -115,6 +116,8 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case PASTE_TYPOGLYCEMIA:
 		return "PASTE_TYPOGLYCEMIA";
 	}
+
+	return "";
 }
 
 int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
@@ -161,6 +164,8 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 			return VK_UP;
 		case ActionEnums::NEXTDESCRIPTION:
 			return VK_DOWN;
+		case ActionEnums::PASTE_SELECTED:
+			return VK_MOUSE_DOUBLE_CLICK;
 		}
 		break;
 	}
@@ -173,9 +178,10 @@ int ActionEnums::GetDefaultShortCutKeyB(ActionEnumValues value, int pos)
 	switch (pos)
 	{
 	case 0:
-		switch (value)
-		{
-		}
+		//switch (value)
+		//{
+		//}
+		break;
 	}
 
 	return -1;

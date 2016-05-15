@@ -59,6 +59,7 @@ protected:
 	int SelectedCommandId();
 	int SelectedCommandShortCutId();
 	int SelectedCommandRow();
+	void SelectMouseTypeCombo(CComboBox &combo, int value);
 
 public:
 	afx_msg void OnLvnItemActivateList1(NMHDR *pNMHDR, LRESULT *pResult);
@@ -79,5 +80,13 @@ public:
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnBnClickedButtonEnter();
 	afx_msg void OnBnClickedButtonEnter2();
+
 	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
+	CComboBox m_mouseType1;
+	CComboBox m_mouseType2;
+	afx_msg void OnBnClickedButtonReset();
+	afx_msg void OnBnClickedRadioKeyboard1();
+	afx_msg void OnBnClickedRadioMouse1();
+	afx_msg void OnBnClickedRadioKeyboard2();
+	afx_msg void OnBnClickedRadioMouse2();
 };

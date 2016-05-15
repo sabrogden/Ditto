@@ -35,6 +35,7 @@ CString CHotKey::GetHotKeyDisplay()
 
 CString CHotKey::GetHotKeyDisplayStatic(DWORD dwHotKey)
 {
+	WORD vk = LOBYTE(dwHotKey);
 	CString keyDisplay;
 	UINT modifiers = GetModifier(HIBYTE(dwHotKey));
 	if(modifiers & MOD_SHIFT)
@@ -57,7 +58,24 @@ CString CHotKey::GetHotKeyDisplayStatic(DWORD dwHotKey)
 		keyDisplay += _T("Win + ");
 	}
 
-	keyDisplay += GetVirKeyName(LOBYTE(dwHotKey));
+	switch (vk)
+	{
+	case VK_MOUSE_CLICK:
+		keyDisplay += "Click";
+		break;
+	case VK_MOUSE_DOUBLE_CLICK:
+		keyDisplay += "Double Click";
+		break;
+	case VK_MOUSE_RIGHT_CLICK:
+		keyDisplay += "Right Click";
+		break;
+	case VK_MOUSE_MIDDLE_CLICK:
+		keyDisplay += "Middle Click";
+		break;
+	default:
+		keyDisplay += GetVirKeyName(vk);
+		break;
+	}	
 
 	return keyDisplay;
 }
@@ -181,7 +199,7 @@ void CHotKey::CopyToCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID)
 	long lModifiers = HIBYTE(m_Key);
 	long keys = LOBYTE(m_Key);
 
-	ctrl.SetHotKey(keys, (WORD)lModifiers & ~HOTKEYF_EXT); 
+	ctrl.SetHotKey((WORD)keys, (WORD)lModifiers & ~HOTKEYF_EXT); 
 
 	if(lModifiers & HOTKEYF_EXT)
 	{
