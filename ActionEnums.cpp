@@ -155,6 +155,8 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 			return ACCEL_MAKEKEY(VK_F2, HOTKEYF_CONTROL);
 		case ActionEnums::PASTE_SELECTED:
 			return VK_RETURN;
+		case ActionEnums::SHOWMENU:
+			return VK_MOUSE_RIGHT_CLICK;
 		}
 		break;
 	case 1:
@@ -203,7 +205,6 @@ bool ActionEnums::UserConfigurable(ActionEnumValues value)
 	case ActionEnums::TOGGLEOUTPUTDEBUGSTRING:
 	case ActionEnums::HOMELIST:
 	case ActionEnums::CLOSEWINDOW:
-	case ActionEnums::SHOWMENU:
 		return false;
 	}
 
