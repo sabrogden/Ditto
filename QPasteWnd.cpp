@@ -169,7 +169,6 @@ ON_MESSAGE(CB_SEARCH, OnSearch)
 ON_MESSAGE(NM_DELETE, OnDelete)
 ON_NOTIFY(NM_GETTOOLTIPTEXT, ID_LIST_HEADER, OnGetToolTipText)
 ON_MESSAGE(NM_SELECT_DB_ID, OnListSelect_DB_ID)
-ON_MESSAGE(NM_SELECT_INDEX, OnListSelect_Index)
 ON_MESSAGE(WM_REFRESH_VIEW, OnRefreshView)
 ON_MESSAGE(WM_RELOAD_CLIP_ORDER, OnReloadClipOrder)
 ON_WM_NCLBUTTONDBLCLK()
@@ -877,6 +876,11 @@ BOOL CQPasteWnd::OpenSelection(CSpecialPasteOptions pasteOptions)
 
 BOOL CQPasteWnd::OpenIndex(int item)
 {
+	if (item >= m_lstHeader.GetItemCount())
+	{
+		return FALSE;
+	}
+
 	CSpecialPasteOptions pasteOptions;
     return OpenID(m_lstHeader.GetItemData(item), pasteOptions);
 }
@@ -943,18 +947,6 @@ LRESULT CQPasteWnd::OnListMoveSelectionToGroup(WPARAM wParam, LPARAM lParam)
 		IDs.MoveTo(groupId);
 	}
 	return TRUE;
-}
-
-LRESULT CQPasteWnd::OnListSelect_Index(WPARAM wParam, LPARAM lParam)
-{
-    if((int)wParam >= m_lstHeader.GetItemCount())
-    {
-        return FALSE;
-    }
-
-    OpenIndex((int)wParam);
-
-    return TRUE;
 }
 
 LRESULT CQPasteWnd::OnListDblClick(WPARAM wParam, LPARAM lParam)
@@ -2807,21 +2799,92 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::PASTE_SENTENCE_CASE:
 		ret = DoPasteSentenceCase();
 		break;
-
 	case ActionEnums::PASTE_REMOVE_LINE_FEEDS:
 		ret = DoPasteRemoveLineFeeds();
 		break;
-
 	case ActionEnums::PASTE_ADD_ONE_LINE_FEED:
 		ret = DoPastePlusAddLineFeed();
 		break;
-
 	case ActionEnums::PASTE_ADD_TWO_LINE_FEEDS:
 		ret = DoPasteAddTwoLineFeeds();
 		break;
-
 	case ActionEnums::PASTE_TYPOGLYCEMIA:
 		ret = DoPasteTypoglycemia();
+		break;
+	case ActionEnums::SEND_TO_FRIEND_1:
+		ret = SendToFriendbyPos(0);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_2:
+		ret = SendToFriendbyPos(1);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_3:
+		ret = SendToFriendbyPos(2);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_4:
+		ret = SendToFriendbyPos(3);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_5:
+		ret = SendToFriendbyPos(4);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_6:
+		ret = SendToFriendbyPos(5);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_7:
+		ret = SendToFriendbyPos(6);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_8:
+		ret = SendToFriendbyPos(7);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_9:
+		ret = SendToFriendbyPos(8);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_10:
+		ret = SendToFriendbyPos(9);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_11:
+		ret = SendToFriendbyPos(10);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_12:
+		ret = SendToFriendbyPos(11);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_13:
+		ret = SendToFriendbyPos(12);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_14:
+		ret = SendToFriendbyPos(13);
+		break;
+	case ActionEnums::SEND_TO_FRIEND_15:
+		ret = SendToFriendbyPos(14);
+		break;
+	case ActionEnums::PASTE_POSITION_1:
+		ret = OpenIndex(0);
+		break;
+	case ActionEnums::PASTE_POSITION_2:
+		ret = OpenIndex(1);
+		break;
+	case ActionEnums::PASTE_POSITION_3:
+		ret = OpenIndex(2);
+		break;
+	case ActionEnums::PASTE_POSITION_4:
+		ret = OpenIndex(3);
+		break;
+	case ActionEnums::PASTE_POSITION_5:
+		ret = OpenIndex(4);
+		break;
+	case ActionEnums::PASTE_POSITION_6:
+		ret = OpenIndex(5);
+		break;
+	case ActionEnums::PASTE_POSITION_7:
+		ret = OpenIndex(6);
+		break;
+	case ActionEnums::PASTE_POSITION_8:
+		ret = OpenIndex(7);
+		break;
+	case ActionEnums::PASTE_POSITION_9:
+		ret = OpenIndex(8);
+		break;
+	case ActionEnums::PASTE_POSITION_10:
+		ret = OpenIndex(9);
 		break;
 	}
 

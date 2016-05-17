@@ -115,6 +115,56 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		return "PASTE_ADD_TWO_LINE_FEEDS";
 	case PASTE_TYPOGLYCEMIA:
 		return "PASTE_TYPOGLYCEMIA";
+	case SEND_TO_FRIEND_1:
+		return "Send to friend 1";
+	case SEND_TO_FRIEND_2:
+		return "Send to friend 2";
+	case SEND_TO_FRIEND_3:
+		return "Send to friend 3";
+	case SEND_TO_FRIEND_4:
+		return "Send to friend 4";
+	case SEND_TO_FRIEND_5:
+		return "Send to friend 5";
+	case SEND_TO_FRIEND_6:
+		return "Send to friend 6";
+	case SEND_TO_FRIEND_7:
+		return "Send to friend 7";
+	case SEND_TO_FRIEND_8:
+		return "Send to friend 8";
+	case SEND_TO_FRIEND_9:
+		return "Send to friend 9";
+	case SEND_TO_FRIEND_10:
+		return "Send to friend 10";
+	case SEND_TO_FRIEND_11:
+		return "Send to friend 11";
+	case SEND_TO_FRIEND_12:
+		return "Send to friend 12";
+	case SEND_TO_FRIEND_13:
+		return "Send to friend 13";
+	case SEND_TO_FRIEND_14:
+		return "Send to friend 14";
+	case SEND_TO_FRIEND_15:
+		return "Send to friend 15";
+	case PASTE_POSITION_1:
+		return "Paste Position 1";
+	case PASTE_POSITION_2:
+		return "Paste Position 2";
+	case PASTE_POSITION_3:
+		return "Paste Position 3";
+	case PASTE_POSITION_4:
+		return "Paste Position 4";
+	case PASTE_POSITION_5:
+		return "Paste Position 5";
+	case PASTE_POSITION_6:
+		return "Paste Position 6";
+	case PASTE_POSITION_7:
+		return "Paste Position 7";
+	case PASTE_POSITION_8:
+		return "Paste Position 8";
+	case PASTE_POSITION_9:
+		return "Paste Position 9";
+	case PASTE_POSITION_10:
+		return "Paste Position 10";
 	}
 
 	return "";
@@ -157,6 +207,26 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 			return VK_RETURN;
 		case ActionEnums::SHOWMENU:
 			return VK_MOUSE_RIGHT_CLICK;
+		case PASTE_POSITION_1:
+			return ACCEL_MAKEKEY('1', HOTKEYF_CONTROL);
+		case PASTE_POSITION_2:
+			return ACCEL_MAKEKEY('2', HOTKEYF_CONTROL);
+		case PASTE_POSITION_3:
+			return ACCEL_MAKEKEY('3', HOTKEYF_CONTROL);
+		case PASTE_POSITION_4:
+			return ACCEL_MAKEKEY('4', HOTKEYF_CONTROL);
+		case PASTE_POSITION_5:
+			return ACCEL_MAKEKEY('5', HOTKEYF_CONTROL);
+		case PASTE_POSITION_6:
+			return ACCEL_MAKEKEY('6', HOTKEYF_CONTROL);
+		case PASTE_POSITION_7:
+			return ACCEL_MAKEKEY('7', HOTKEYF_CONTROL);
+		case PASTE_POSITION_8:
+			return ACCEL_MAKEKEY('8', HOTKEYF_CONTROL);
+		case PASTE_POSITION_9:
+			return ACCEL_MAKEKEY('9', HOTKEYF_CONTROL);
+		case PASTE_POSITION_10:
+			return ACCEL_MAKEKEY('0 ', HOTKEYF_CONTROL);
 		}
 		break;
 	case 1:
@@ -168,6 +238,26 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 			return VK_DOWN;
 		case ActionEnums::PASTE_SELECTED:
 			return VK_MOUSE_DOUBLE_CLICK;
+		case PASTE_POSITION_1:
+			return ACCEL_MAKEKEY(VK_NUMPAD1, HOTKEYF_CONTROL);
+		case PASTE_POSITION_2:
+			return ACCEL_MAKEKEY(VK_NUMPAD2, HOTKEYF_CONTROL);
+		case PASTE_POSITION_3:
+			return ACCEL_MAKEKEY(VK_NUMPAD3, HOTKEYF_CONTROL);
+		case PASTE_POSITION_4:
+			return ACCEL_MAKEKEY(VK_NUMPAD4, HOTKEYF_CONTROL);
+		case PASTE_POSITION_5:
+			return ACCEL_MAKEKEY(VK_NUMPAD5, HOTKEYF_CONTROL);
+		case PASTE_POSITION_6:
+			return ACCEL_MAKEKEY(VK_NUMPAD6, HOTKEYF_CONTROL);
+		case PASTE_POSITION_7:
+			return ACCEL_MAKEKEY(VK_NUMPAD7, HOTKEYF_CONTROL);
+		case PASTE_POSITION_8:
+			return ACCEL_MAKEKEY(VK_NUMPAD8, HOTKEYF_CONTROL);
+		case PASTE_POSITION_9:
+			return ACCEL_MAKEKEY(VK_NUMPAD9, HOTKEYF_CONTROL);
+		case PASTE_POSITION_10:
+			return ACCEL_MAKEKEY(VK_NUMPAD0, HOTKEYF_CONTROL);
 		}
 		break;
 	}

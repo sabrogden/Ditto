@@ -85,7 +85,7 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
     DWORD key = ACCEL_MAKEKEY(vkey, mod);
 
     CString cs;
-    cs.Format(_T("Key: %d, Mod: %d, vkey: %d"), key, mod, vkey);
+    cs.Format(_T("Key: %d, Mod: %d, vkey: %d\r\n"), key, mod, vkey);
     OutputDebugString(cs);
 		
 	if (m_firstMapTick != 0 &&
@@ -96,7 +96,7 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
 
 		for (multimap<DWORD, CAccel>::iterator it2 = ppp.first; it2 != ppp.second; ++it2)
 		{
-			if (vkey == it2->second.Key2)
+			if (key == it2->second.Key2)
 			{
 				a = (*it2).second;
 				m_firstMapTick = 0;
@@ -111,7 +111,7 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
 		m_activeFirstKey = 0;
 
 		pair<multimap<DWORD, CAccel>::iterator, multimap<DWORD, CAccel>::iterator> ppp;
-		ppp = m_multiMap.equal_range(vkey);
+		ppp = m_multiMap.equal_range(key);
 
 		for (multimap<DWORD, CAccel>::iterator it2 = ppp.first; it2 != ppp.second; ++it2)
 		{
@@ -122,7 +122,7 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
 			}
 			else
 			{
-				m_activeFirstKey = vkey;
+				m_activeFirstKey = key;
 				m_firstMapTick = GetTickCount();
 				break;
 			}

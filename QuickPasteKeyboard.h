@@ -19,7 +19,7 @@ public:
 		KeyboardAB()
 		{
 			A = -1;
-			B = 0;
+			B = -1;
 			Dirty = false;
 		}
 		int A;

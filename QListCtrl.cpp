@@ -788,40 +788,6 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 	}
 
 	WPARAM vk = wParam;
-				
-	// if a number key was pressed
-	if('0' <= vk && vk <= '9')
-	{
-		// if <Ctrl> is required but is absent, then break
-		if(g_Opt.m_bUseCtrlNumAccel && !(CONTROL_PRESSED))
-			return FALSE;
-		
-		int index = (int)vk - '0';
-		// '0' is actually 10 in the ditto window
-		if(index == 0)
-			index = 10;
-		// translate num 1-10 into the actual index (based upon m_bStartTop)
-		index = GetFirstTenIndex(index);
-		GetParent()->SendMessage(NM_SELECT_INDEX, index, 0);
-		return TRUE;
-	}
-
-	if(VK_NUMPAD0 <= vk && vk <= VK_NUMPAD9)
-	{
-		// if <Ctrl> is required but is absent, then break
-		if( g_Opt.m_bUseCtrlNumAccel && !(CONTROL_PRESSED) )
-			return FALSE;
-		
-		int index = (int)vk - VK_NUMPAD0;
-		// '0' is actually 10 in the ditto window
-		if(index == 0)
-			index = 10;
-		
-		// translate num 1-10 into the actual index (based upon m_bStartTop)
-		index = GetFirstTenIndex(index);
-		GetParent()->SendMessage(NM_SELECT_INDEX, index, 0);
-		return TRUE;
-	}
 	
 	switch( vk )
 	{
@@ -1195,7 +1161,7 @@ void CQListCtrl::LoadDittoCopyBufferHotkeys()
 	g_Opt.GetCopyBufferItem(0, Item);	
 	if(Item.m_lCopyHotKey > 0)
 	{
-		a.Cmd = COPY_BUFFER_HOT_KEY_1_ID;
+		a.Cmd = COPY_BUFFER_HOT_KEY_1_ID; 
 		a.Key = Item.m_lCopyHotKey;
 		m_Accels.AddAccel(a);
 	}
