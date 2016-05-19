@@ -416,10 +416,10 @@ void CQuickPasteKeyboard::OnBnClickedButtonAdd()
 		{
 			CString shortcut;
 			int pos = m_assignedCombo.AddString(shortcut);
-			m_assignedCombo.SetItemData(pos, count + 1);
+			m_assignedCombo.SetItemData(pos, count);
 			m_assignedCombo.SetCurSel(pos);
 
-			LoadHotKey(m_map[id].Array[count + 1]);
+			LoadHotKey(m_map[id].Array[count]);
 
 			m_hotKey1.SetFocus();
 		}

@@ -18,33 +18,33 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	switch (value)
 	{
 	case SHOWDESCRIPTION:
-		return "SHOWDESCRIPTION";
+		return "View Full Description";
 	case NEXTDESCRIPTION:
-		return "NEXTDESCRIPTION";
+		return "Next Full Description";
 	case PREVDESCRIPTION:
-		return "PREVDESCRIPTION";
+		return "Previous Full Description";
 	case SHOWMENU:
-		return "SHOWMENU";
+		return "Show Context Menu";
 	case NEWGROUP:
-		return "NEWGROUP";
+		return "New Group";
 	case NEWGROUPSELECTION:
-		return "NEWGROUPSELECTION";
+		return "New Group Selection";
 	case TOGGLEFILELOGGING:
-		return "TOGGLEFILELOGGING";
+		return "Toggle On File Logging";
 	case TOGGLEOUTPUTDEBUGSTRING:
-		return "TOGGLEOUTPUTDEBUGSTRING";
+		return "Toggle OutputDebugString Logging";
 	case CLOSEWINDOW:
-		return "CLOSEWINDOW";
+		return "Close Window";
 	case NEXTTABCONTROL:
 		return "NEXTTABCONTROL";
 	case PREVTABCONTROL:
 		return "PREVTABCONTROL";
 	case SHOWGROUPS:
-		return "SHOWGROUPS";
+		return "View Groups";
 	case NEWCLIP:
-		return "NEWCLIP";
+		return "New Clip";
 	case EDITCLIP:
-		return "EDITCLIP";
+		return "Edit Clip";
 	case SELECTIONUP:
 		return "SELECTIONUP";
 	case SELECTIONDOWN:
@@ -54,67 +54,67 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case MOVELAST:
 		return "MOVELAST";
 	case CANCELFILTER:
-		return "CANCELFILTER";
+		return "Cancel Filter";
 	case HOMELIST:
 		return "HOMELIST";
 	case BACKGRROUP:
-		return "BACKGRROUP";
+		return "Back Group";
 	case TOGGLESHOWPERSISTANT:
-		return "TOGGLESHOWPERSISTANT";
+		return "Toggle Show Persistant";
 	case PASTE_SELECTED:
-		return "PASTE_SELECTED";
+		return "Paste Selected";
 	case DELETE_SELECTED:
-		return "DELETE_SELECTED";
+		return "Delete Selected";
 	case CLIP_PROPERTIES:
-		return "CLIP_PROPERTIES";
+		return "Clip Properties";
 	case PASTE_SELECTED_PLAIN_TEXT:
-		return "PASTE_SELECTED_PLAIN_TEXT";
+		return "Paste Selected Plain Text";
 	case MOVE_CLIP_TO_GROUP:
-		return "MOVE_CLIP_TO_GROUP";
+		return "Move Clip To Group";
 	case ELEVATE_PRIVlEGES:
-		return "ELEVATE_PRIVlEGES";
+		return "Option - Elevate Privleges";
 	case SHOW_IN_TASKBAR:
-		return "SHOW_IN_TASKBAR";
+		return "Option - Show In TaskBar";
 	case COMPARE_SELECTED_CLIPS:
-		return "COMPARE_SELECTED_CLIPS";
+		return "Compare Selected Clips";
 	case SELECT_LEFT_SIDE_COMPARE:
-		return "SELECT_LEFT_SIDE_COMPARE";
+		return "Select Left File For Compare";
 	case SELECT_RIGHT_SITE_AND_DO_COMPARE:
-		return "SELECT_RIGHT_SITE_AND_DO_COMPARE";
+		return "Select Right File And Do Compare";
 	case EXPORT_TO_TEXT_FILE:
-		return "EXPORT_TO_TEXT_FILE";
+		return "Export To Text File";
 	case EXPORT_TO_QR_CODE:
-		return "EXPORT_TO_QR_CODE";
+		return "Export To QR Code";
 	case EXPORT_TO_GOOGLE_TRANSLATE:
-		return "EXPORT_TO_GOOGLE_TRANSLATE";
+		return "Export To Google Translate";
 	case EXPORT_TO_BITMAP_FILE:
-		return "EXPORT_TO_BITMAP_FILE";
+		return "Export To Image File";
 	case SAVE_CURRENT_CLIPBOARD:
-		return "SAVE_CURRENT_CLIPBOARD";
+		return "Save Current Clipboard";
 	case MOVE_CLIP_UP:
-		return "MOVE_CLIP_UP";
+		return "Move Clip Up";
 	case MOVE_CLIP_DOWN:
-		return "MOVE_CLIP_DOWN";
+		return "Move Clip Down";
 	case MOVE_CLIP_TOP:
-		return "MOVE_CLIP_TOP";
+		return "Move Clip Top";
 	case FILTER_ON_SELECTED_CLIP:
-		return "FILTER_ON_SELECTED_CLIP";
+		return "Filter On Selected Clip";
 	case PASTE_UPPER_CASE:
-		return "PASTE_UPPER_CASE";
+		return "Paste Upper Case";
 	case PASTE_LOWER_CASE:
-		return "PASTE_LOWER_CASE";
+		return "Paste Lower Case";
 	case PASTE_CAPITALiZE:
-		return "PASTE_CAPITALiZE";
+		return "Paste Capitalize";
 	case PASTE_SENTENCE_CASE:
-		return "PASTE_SENTENCE_CASE";
+		return "Paste Sentence Case";
 	case PASTE_REMOVE_LINE_FEEDS:
-		return "PASTE_REMOVE_LINE_FEEDS";
+		return "Paste Remove Line Feeds";
 	case PASTE_ADD_ONE_LINE_FEED:
-		return "PASTE_ADD_ONE_LINE_FEED";
+		return "Paste Add One Line Feed";
 	case PASTE_ADD_TWO_LINE_FEEDS:
-		return "PASTE_ADD_TWO_LINE_FEEDS";
+		return "Paste Add Two Line Feeds";
 	case PASTE_TYPOGLYCEMIA:
-		return "PASTE_TYPOGLYCEMIA";
+		return "Paste Typoglycemia";
 	case SEND_TO_FRIEND_1:
 		return "Send to friend 1";
 	case SEND_TO_FRIEND_2:
@@ -226,7 +226,9 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 		case PASTE_POSITION_9:
 			return ACCEL_MAKEKEY('9', HOTKEYF_CONTROL);
 		case PASTE_POSITION_10:
-			return ACCEL_MAKEKEY('0 ', HOTKEYF_CONTROL);
+			return ACCEL_MAKEKEY('0', HOTKEYF_CONTROL);
+		case CLOSEWINDOW:
+			return VK_ESCAPE;
 		}
 		break;
 	case 1:
@@ -294,7 +296,6 @@ bool ActionEnums::UserConfigurable(ActionEnumValues value)
 	case ActionEnums::TOGGLEFILELOGGING:
 	case ActionEnums::TOGGLEOUTPUTDEBUGSTRING:
 	case ActionEnums::HOMELIST:
-	case ActionEnums::CLOSEWINDOW:
 		return false;
 	}
 

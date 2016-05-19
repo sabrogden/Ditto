@@ -2306,7 +2306,7 @@ void CGetSetOptions::SetShowMsgWndOnCopyToGroup(BOOL val)
 int CGetSetOptions::GetActionShortCutA(DWORD action, int pos)
 {
 	CString actionText;
-	actionText.Format(_T("%d_%d_A"), action, pos);
+	actionText.Format(_T("QP_ShortCut_%d_%d_A"), action, pos);
 	int ret = GetProfileLong(actionText, -1);
 	if (ret == -1)
 	{
@@ -2319,14 +2319,14 @@ int CGetSetOptions::GetActionShortCutA(DWORD action, int pos)
 void CGetSetOptions::SetActionShortCutA(int action, DWORD shortcut, int pos)
 {
 	CString actionText;
-	actionText.Format(_T("%d_%d_A"), action, pos);
+	actionText.Format(_T("QP_ShortCut_%d_%d_A"), action, pos);
 	SetProfileLong(actionText, shortcut);
 }
 
 int CGetSetOptions::GetActionShortCutB(DWORD action, int pos)
 {
 	CString actionText;
-	actionText.Format(_T("%d_%d_B"), action, pos);
+	actionText.Format(_T("QP_ShortCut_%d_%d_B"), action, pos);
 	int ret = GetProfileLong(actionText, -1);
 	if (ret == -1)
 	{
@@ -2339,7 +2339,7 @@ int CGetSetOptions::GetActionShortCutB(DWORD action, int pos)
 void CGetSetOptions::SetActionShortCutB(int action, DWORD shortcut, int pos)
 {
 	CString actionText;
-	actionText.Format(_T("%d_%d_B"), action, pos);
+	actionText.Format(_T("QP_ShortCut_%d_%d_B"), action, pos);
 	SetProfileLong(actionText, shortcut);
 }
 

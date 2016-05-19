@@ -438,7 +438,6 @@ void CQPasteWnd::LoadShortcuts()
 	m_actions.AddAccel(ActionEnums::TOGGLEFILELOGGING, ACCEL_MAKEKEY(VK_F5, HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::TOGGLEOUTPUTDEBUGSTRING, VK_F5);
 	m_actions.AddAccel(ActionEnums::HOMELIST, VK_HOME);
-	m_actions.AddAccel(ActionEnums::CLOSEWINDOW, VK_ESCAPE);
 	m_actions.AddAccel(ActionEnums::SHOWMENU, VK_APPS);
 
 	for (DWORD i = ActionEnums::FIRST_ACTION + 1; i < ActionEnums::LAST_ACTION; i++)
@@ -1326,20 +1325,31 @@ void CQPasteWnd::ShowRightClickMenu()
     CMenu *cmSubMenu = NULL;
 
     GetCursorPos(&pp);
-    if(cmPopUp.LoadMenu(IDR_QUICK_PASTE) != 0)
-    {
-        cmSubMenu = cmPopUp.GetSubMenu(0);
-        if(!cmSubMenu)
-        {
-            return ;
-        }
+	if (cmPopUp.LoadMenu(IDR_QUICK_PASTE) != 0)
+	{
+		cmSubMenu = cmPopUp.GetSubMenu(0);
+		if (!cmSubMenu)
+		{
+			return;
+		}
 
-       /* int nItem = m_lstHeader.GetCaret();
-        CRect rc;
-        m_lstHeader.GetItemRect(nItem, rc, LVIR_BOUNDS);
-        ClientToScreen(rc);
-        pp.x = rc.left;
-        pp.y = rc.bottom;*/
+		int nItem = m_lstHeader.GetCaret();
+		CRect listRect;
+		m_lstHeader.GetWindowRect(listRect);
+		if (listRect.PtInRect(pp) == FALSE)
+		{
+			CRect rc;
+			m_lstHeader.GetItemRect(nItem, rc, LVIR_BOUNDS);
+			ClientToScreen(rc);
+			pp.x = rc.left;
+			pp.y = rc.bottom;
+
+			if (listRect.PtInRect(pp) == FALSE)
+			{
+				pp.x = listRect.left;
+				pp.y = listRect.top;
+			}
+		}	
 
         theApp.m_Addins.AddPrePasteAddinsToMenu(cmSubMenu);
         
