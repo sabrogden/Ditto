@@ -390,6 +390,36 @@ void CQuickPasteKeyboard::OnBnClickedButtonRemove()
 			int pos = m_assignedCombo.AddString(shortcut);
 			m_assignedCombo.SetItemData(pos, 0);
 		}
+		else
+		{
+			for (int resetRow = shortCutId; resetRow < (10-1); resetRow++)
+			{
+				m_map[id].Array[resetRow].A = m_map[id].Array[resetRow+1].A;
+				m_map[id].Array[resetRow].B = m_map[id].Array[resetRow+1].B;
+				if (m_map[id].Array[resetRow].A > 0)
+				{
+					m_map[id].Array[resetRow].Dirty = true;
+					m_map[id].Array[resetRow+1].Dirty = true;
+				}
+			}
+
+			if (m_map[id].Array[9].A > 0)
+			{
+				m_map[id].Array[9].Dirty = true;
+			}
+			m_map[id].Array[9].A = -1;
+			m_map[id].Array[9].B = -1;
+
+			int comboCount = m_assignedCombo.GetCount();
+			for (int comboIndex = 0; comboIndex < comboCount; comboIndex++)
+			{
+				int rowId = m_assignedCombo.GetItemData(comboIndex);
+				if (rowId >= shortCutId)
+				{
+					m_assignedCombo.SetItemData(comboIndex, rowId-1);
+				}
+			}
+		}
 
 		CString sh = GetShortCutText(m_map[id]);
 		LVITEM lvi;
