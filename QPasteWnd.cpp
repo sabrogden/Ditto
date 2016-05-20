@@ -163,7 +163,7 @@ ON_COMMAND(ID_QUICKOPTIONS_ELEVATEPREVILEGESTOPASTEINTOELEVATEDAPPS, OnElevateAp
 ON_WM_DESTROY()
 
 //}}AFX_MSG_MAP
-ON_MESSAGE(NM_DBL_CLICK, OnListDblClick)
+ON_MESSAGE(NM_SEARCH_ENTER_PRESSED, OnSearchEnterKeyPressed)
 ON_MESSAGE(NM_END, OnListEnd)
 ON_MESSAGE(CB_SEARCH, OnSearch)
 ON_MESSAGE(NM_DELETE, OnDelete)
@@ -948,9 +948,15 @@ LRESULT CQPasteWnd::OnListMoveSelectionToGroup(WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
-LRESULT CQPasteWnd::OnListDblClick(WPARAM wParam, LPARAM lParam)
+LRESULT CQPasteWnd::OnSearchEnterKeyPressed(WPARAM wParam, LPARAM lParam)
 {
-	//DoAction(ActionEnums::PASTE_SELECTED);
+	MSG msg;
+	msg.lParam = 0;
+	msg.wParam = VK_RETURN;
+	msg.message = WM_KEYDOWN;
+	if (CheckActions(&msg) == false)
+	{
+	}
     return TRUE;
 }
 
@@ -3262,14 +3268,9 @@ bool CQPasteWnd::DoActionToggleShowPersistant()
 
 bool CQPasteWnd::DoActionPasteSelected()
 {
-	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
-	{
-		CSpecialPasteOptions pasteOptions;
-		OpenSelection(pasteOptions);
-		return true;
-	}
-
-	return false;
+	CSpecialPasteOptions pasteOptions;
+	OpenSelection(pasteOptions);
+	return true;	
 }
 
 bool CQPasteWnd::DoActionDeleteSelected()

@@ -14,7 +14,7 @@
 #include "Accels.h"
 #include "GdiImageDrawer.h"
 
-#define NM_DBL_CLICK				WM_USER+0x100
+#define NM_SEARCH_ENTER_PRESSED		WM_USER+0x100
 #define NM_RIGHT					WM_USER+0x101
 #define NM_LEFT						WM_USER+0x102
 #define NM_END						WM_USER+0x103

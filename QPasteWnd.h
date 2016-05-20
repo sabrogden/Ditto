@@ -351,7 +351,7 @@ protected:
     afx_msg void OnUpdateMenuDelete(CCmdUI *pCmdUI);
     afx_msg void OnUpdateMenuProperties(CCmdUI *pCmdUI);
     afx_msg void OnDestroy();
-    afx_msg LRESULT OnListDblClick(WPARAM wParam, LPARAM lParam);
+    afx_msg LRESULT OnSearchEnterKeyPressed(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnSearch(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnDelete(WPARAM wParam, LPARAM lParam);
