@@ -275,6 +275,8 @@
 #define IDC_CHECK_WIN2                  2043
 #define IDC_STATIC_DAYS                 2043
 #define IDC_STATIC_DATE2                2043
+#define IDC_CHECK_SHOW_IN_TASKBAR2      2043
+#define IDC_CHECK_SHOW_CLIP_WAS_PASTED  2043
 #define IDC_CHECK_WIN3                  2044
 #define IDC_STATIC_AMOUNT               2044
 #define IDC_STATIC_HOT_KEY2             2044
@@ -566,14 +568,16 @@
 #define ID_Menu                         32920
 #define ID_Menu32921                    32921
 #define ID_SPECIALPASTE_TYPOGLYCEMIA    32922
+#define ID_QUICKOPTIONS_SHOWTEXTFORFIRSTTENCOPYHOTKEYS 32923
+#define ID_QUICKOPTIONS_SHOWINDICATORACLIPHASBEENPASTED 32924
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        251
-#define _APS_NEXT_COMMAND_VALUE         32923
+#define _APS_NEXT_RESOURCE_VALUE        257
+#define _APS_NEXT_COMMAND_VALUE         32925
 #define _APS_NEXT_CONTROL_VALUE         2145
 #define _APS_NEXT_SYMED_VALUE           101
 #endif

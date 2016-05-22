@@ -404,6 +404,8 @@ BEGIN
             MENUITEM "Prompt to Delete Clip",       32852
             MENUITEM "Elevated privileges to paste into elevated apps", ID_QUICKOPTIONS_ELEVATEPREVILEGESTOPASTEINTOELEVATEDAPPS
             MENUITEM "Show In Taskbar",             ID_QUICKOPTIONS_SHOWINTASKBAR
+            MENUITEM "Show text for first ten copy hot keys", ID_QUICKOPTIONS_SHOWTEXTFORFIRSTTENCOPYHOTKEYS
+            MENUITEM "Show indicator a clip has been pasted", ID_QUICKOPTIONS_SHOWINDICATORACLIPHASBEENPASTED
         END
         MENUITEM SEPARATOR
         MENUITEM "Save Current Clipboard",      ID_MENU_SAVECURRENTCLIPBOARD
@@ -477,33 +479,31 @@ BEGIN
     PUSHBUTTON      "&Delete",IDC_DELETE,147,30,50,14
 END
 
-IDD_OPTIONS_QUICK_PASTE DIALOGEX 0, 0, 367, 276
+IDD_OPTIONS_QUICK_PASTE DIALOGEX 0, 0, 367, 280
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Quick Paste"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    CONTROL         "Use Ctrl - Num for first ten copy hot keys",IDC_CTRL_CLICK,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,8,335,10
     CONTROL         "Show text for first ten copy hot keys",IDC_SHOW_TEXT_FOR_FIRST_TEN_HOT_KEYS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,19,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,9,335,10
     CONTROL         "Show leading whitespace",IDC_DESC_SHOW_LEADING_WHITESPACE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,30,335,10
-    LTEXT           "Text Lines per Clip",IDC_STATIC_LINES,25,43,93,8
-    EDITTEXT        IDC_LINES_ROW,114,41,19,12,ES_AUTOHSCROLL
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,20,335,10
+    LTEXT           "Text Lines per Clip",IDC_STATIC_LINES,25,33,93,8
+    EDITTEXT        IDC_LINES_ROW,114,31,19,12,ES_AUTOHSCROLL
     CONTROL         "Enable Quick Paste Transparency",IDC_TRANSPARENCY,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,56,155,10
-    EDITTEXT        IDC_TRANS_PERC,177,55,19,12,ES_AUTOHSCROLL
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,46,155,10
+    EDITTEXT        IDC_TRANS_PERC,177,45,19,12,ES_AUTOHSCROLL
     CONTROL         "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)",IDC_SHOW_THUMBNAILS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,68,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,58,335,10
     CONTROL         "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)",IDC_DRAW_RTF,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,78,335,10
-    CONTROL         "Find As You Type",IDC_CHECK_FIND_AS_YOU_TYPE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,88,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,68,335,10
+    CONTROL         "Find As You Type",IDC_CHECK_FIND_AS_YOU_TYPE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,78,335,10
     CONTROL         "Ensure Entire Window is Visible",IDC_CHECK_ENTIRE_WINDOW_IS_VISIBLE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,98,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,88,335,10
     CONTROL         "Show Clips That are in Groups in Main List",IDC_CHECK_SHOW_ALL_IN_MAIN_LIST,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,108,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,98,335,10
     CONTROL         "Prompt when deleting clips",IDC_CHECK_PROMPT_DELETE_CLIP,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,118,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,108,335,10
     COMBOBOX        IDC_COMBO_THEME,59,180,130,95,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     PUSHBUTTON      "About Theme",IDC_BUTTON_THEME,198,180,106,12
     PUSHBUTTON      "Font",IDC_BUTTON_FONT,18,198,143,17
@@ -511,17 +511,19 @@ BEGIN
     CONTROL         "At Caret",IDC_AT_CARET,"Button",BS_AUTORADIOBUTTON,22,233,93,10
     CONTROL         "At Cursor",IDC_AT_CURSOR,"Button",BS_AUTORADIOBUTTON,22,243,97,10
     CONTROL         "At Previous Position",IDC_AT_PREVIOUS,"Button",BS_AUTORADIOBUTTON,22,253,117,10
-    LTEXT           "%",IDC_STATIC,199,55,8,12,SS_CENTERIMAGE
+    LTEXT           "%",IDC_STATIC,199,45,8,12,SS_CENTERIMAGE
     GROUPBOX        "Popup Positioning",IDC_STATIC_POPUP,10,224,138,41
     LTEXT           "Theme",IDC_STATIC_THEME,18,180,36,12,SS_CENTERIMAGE
     CONTROL         "Always Show Scroll Bar",IDC_CHECK_SHOW_SCROLL_BAR,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,128,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,118,335,10
     CONTROL         "Elevated privileges to paste into elevated apps",IDC_CHECK_ELEVATE_PRIVILEGES,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,139,335,10
-    CONTROL         "Show In Taskbar",IDC_CHECK_SHOW_IN_TASKBAR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,150,335,10
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,129,335,10
+    CONTROL         "Show In Taskbar",IDC_CHECK_SHOW_IN_TASKBAR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,140,335,10
     EDITTEXT        IDC_EDIT_DIFF_PATH,109,162,218,14,ES_AUTOHSCROLL
     LTEXT           "Diff Application Path",IDC_STATIC_DIFF,25,164,80,8
     PUSHBUTTON      "...",IDC_BUTTON_DIFF_BROWSE,332,162,17,14
+    CONTROL         "Show indicator a clip has been pasted",IDC_CHECK_SHOW_CLIP_WAS_PASTED,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,151,335,10
 END
 
 IDD_OPTIONS_KEYSTROKES DIALOGEX 0, 0, 350, 219
@@ -1000,7 +1002,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 360
         TOPMARGIN, 7
-        BOTTOMMARGIN, 268
+        BOTTOMMARGIN, 272
     END
 
     IDD_OPTIONS_KEYSTROKES, DIALOG
@@ -1264,6 +1266,11 @@ IDB_SYSTEM_MENU_32_32   PNG                     "res\\system_menu_32_32.png"
 //
 
 IDD_OPTIONS_QUICK_PASTE_KEYBOARD AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_OPTIONS_QUICK_PASTE AFX_DIALOG_LAYOUT
 BEGIN
     0
 END

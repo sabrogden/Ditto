@@ -144,8 +144,6 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 							Log(StrF(_T("Setting clipId: %d, GroupOrder: %f"), pData->clipId, latestDate));
 
 							theApp.m_db.execDMLEx(_T("UPDATE Main SET clipGroupOrder = %f where lID = %d;"), latestDate, pData->clipId);
-
-							theApp.RefreshClipOrder(pData->clipId);
 						}
 					}
 					else
@@ -160,8 +158,6 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 							Log(StrF(_T("Setting clipId: %d, order: %f"), pData->clipId, latestDate));
 
 							theApp.m_db.execDMLEx(_T("UPDATE Main SET clipOrder = %f where lID = %d;"), latestDate, pData->clipId);
-
-							theApp.RefreshClipOrder(pData->clipId);
 						}
 					}
 				}
@@ -173,6 +169,8 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 				theApp.m_db.execDMLEx(_T("UPDATE Main SET lastPasteDate = %d where lID = %d;"), (int)CTime::GetCurrentTime().GetTime(), pData->clipId);
 			}
 			CATCH_SQLITE_EXCEPTION
+
+			theApp.RefreshClipAfterPaste(pData->clipId);
 
 			delete pData;
 			bRet = TRUE;

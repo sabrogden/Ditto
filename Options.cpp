@@ -2373,3 +2373,13 @@ void CGetSetOptions::SetDragId(int id)
 {
 	SetProfileLong(_T("DragId"), id);
 }
+
+BOOL CGetSetOptions::GetShowIfClipWasPasted()
+{
+	return GetProfileLong(_T("ShowIfClipWasPasted"), TRUE);
+}
+
+void CGetSetOptions::SetShowIfClipWasPasted(BOOL val)
+{
+	SetProfileLong(_T("ShowIfClipWasPasted"), val);
+}

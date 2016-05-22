@@ -596,18 +596,18 @@ void CCP_MainApp::RefreshView()
 	}
 }
 
-void CCP_MainApp::RefreshClipOrder(int clipId)
+void CCP_MainApp::RefreshClipAfterPaste(int clipId)
 {
 	CQPasteWnd *pWnd = QPasteWnd();
 	if(pWnd)
 	{
 		if(m_bAsynchronousRefreshView)
 		{
-			pWnd->PostMessage(WM_RELOAD_CLIP_ORDER, clipId, 0);
+			pWnd->PostMessage(WM_RELOAD_CLIP_AFTER_PASTE, clipId, 0);
 		}
 		else
 		{
-			pWnd->SendMessage(WM_RELOAD_CLIP_ORDER, clipId, 0);
+			pWnd->SendMessage(WM_RELOAD_CLIP_AFTER_PASTE, clipId, 0);
 		}
 	}
 }

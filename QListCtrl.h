@@ -126,6 +126,7 @@ public:
 	void GetToolTipText(int nItem, CString &csText);
 
 	void SetShowTextForFirstTenHotKeys(BOOL bVal)	{ m_bShowTextForFirstTenHotKeys = bVal;	}
+	void SetShowIfClipWasPasted(BOOL val) { m_showIfClipWasPasted = val; }
 
 	void DestroyAndCreateAccelerator(BOOL bCreate, CppSQLite3DB &db);
 
@@ -165,6 +166,7 @@ protected:
 	CToolTipEx *m_pToolTip;
 	HWND m_toolTipHwnd;
 	CFont m_Font;
+	CFont m_boldFont;
 	IFormattedTextDraw *m_pFormatter;
 	bool m_allSelected;
 	int m_linesPerRow;
@@ -177,6 +179,7 @@ protected:
 	CGdiImageDrawer m_stickyImage;
 	int m_rowHeight;
 	CString m_searchText;
+	BOOL m_showIfClipWasPasted;
 
 
 	// Generated message map functions

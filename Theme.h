@@ -27,6 +27,8 @@ public:
 	COLORREF ListBoxSelectedNoFocusBG() const { return m_ListBoxSelectedNoFocusBG; }
 	COLORREF ListBoxSelectedText() const { return m_ListBoxSelectedText; }
 	COLORREF ListBoxSelectedNoFocusText() const { return m_ListBoxSelectedNoFocusText; }
+	COLORREF ClipPastedColor() const { return m_clipPastedColor; }
+
 
 	CString Notes() const { return m_csNotes; }
 	CString Author() const { return m_csAuthor; }
@@ -54,6 +56,8 @@ protected:
 	COLORREF m_ListBoxSelectedNoFocusBG;
 	COLORREF m_ListBoxSelectedText;
 	COLORREF m_ListBoxSelectedNoFocusText;	
+	COLORREF m_clipPastedColor;
+
 
 	CString m_csLastError;
 	long m_lFileVersion;

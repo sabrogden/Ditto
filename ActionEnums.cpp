@@ -165,6 +165,10 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		return "Paste Position 9";
 	case PASTE_POSITION_10:
 		return "Paste Position 10";
+	case CONFIG_SHOW_FIRST_TEN_TEXT:
+		return "Option - Show text for first ten copy hot keys";
+	case CONFIG_SHOW_CLIP_WAS_PASTED:
+		return "Option - Show indicator a clip has been pasted";
 	}
 
 	return "";

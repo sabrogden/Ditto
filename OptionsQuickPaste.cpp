@@ -125,7 +125,8 @@ BOOL COptionsQuickPaste::OnInitDialog()
 	cs.Format(_T("Font - %s"), m_LogFont.lfFaceName);
 	m_btFont.SetWindowText(cs);
 
-	
+	if (CGetSetOptions::GetShowIfClipWasPasted())
+		CheckDlgButton(IDC_CHECK_SHOW_CLIP_WAS_PASTED, BST_CHECKED);
 
 	FillThemes();
 
@@ -188,6 +189,11 @@ BOOL COptionsQuickPaste::OnApply()
 	CString diffPath;
 	m_diffPathEditBox.GetWindowText(diffPath);
 	g_Opt.SetDiffApp(diffPath);
+
+	if (IsDlgButtonChecked(IDC_CHECK_SHOW_CLIP_WAS_PASTED))
+		CGetSetOptions::SetShowIfClipWasPasted(TRUE);
+	else
+		CGetSetOptions::SetShowIfClipWasPasted(FALSE);
 	
 	return CPropertyPage::OnApply();
 }

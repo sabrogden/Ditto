@@ -170,7 +170,7 @@ ON_MESSAGE(NM_DELETE, OnDelete)
 ON_NOTIFY(NM_GETTOOLTIPTEXT, ID_LIST_HEADER, OnGetToolTipText)
 ON_MESSAGE(NM_SELECT_DB_ID, OnListSelect_DB_ID)
 ON_MESSAGE(WM_REFRESH_VIEW, OnRefreshView)
-ON_MESSAGE(WM_RELOAD_CLIP_ORDER, OnReloadClipOrder)
+ON_MESSAGE(WM_RELOAD_CLIP_AFTER_PASTE, OnReloadClipAfterPaste)
 ON_WM_NCLBUTTONDBLCLK()
 ON_WM_WINDOWPOSCHANGING()
 ON_COMMAND(ID_VIEWCAPTIONBARON_RIGHT, OnViewcaptionbaronRight)
@@ -264,6 +264,10 @@ ON_NOTIFY(NM_CLICK, ID_LIST_HEADER, &CQPasteWnd::OnNMClickList1)
 ON_NOTIFY(NM_DBLCLK, ID_LIST_HEADER, &CQPasteWnd::OnNMDblclkList1)
 ON_NOTIFY(NM_RCLICK, ID_LIST_HEADER, &CQPasteWnd::OnNMRClickList1)
 ON_NOTIFY(NM_RDBLCLK, ID_LIST_HEADER, &CQPasteWnd::OnNMRDblclkList1)
+ON_COMMAND(ID_QUICKOPTIONS_SHOWTEXTFORFIRSTTENCOPYHOTKEYS, &CQPasteWnd::OnQuickoptionsShowtextforfirsttencopyhotkeys)
+ON_UPDATE_COMMAND_UI(ID_QUICKOPTIONS_SHOWTEXTFORFIRSTTENCOPYHOTKEYS, &CQPasteWnd::OnUpdateQuickoptionsShowtextforfirsttencopyhotkeys)
+ON_COMMAND(ID_QUICKOPTIONS_SHOWINDICATORACLIPHASBEENPASTED, &CQPasteWnd::OnQuickoptionsShowindicatoracliphasbeenpasted)
+ON_UPDATE_COMMAND_UI(ID_QUICKOPTIONS_SHOWINDICATORACLIPHASBEENPASTED, &CQPasteWnd::OnUpdateQuickoptionsShowindicatoracliphasbeenpasted)
 END_MESSAGE_MAP()
 
 
@@ -753,6 +757,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 
     m_lstHeader.SetNumberOfLinesPerRow(CGetSetOptions::GetLinesPerRow());
     m_lstHeader.SetShowTextForFirstTenHotKeys(CGetSetOptions::GetShowTextForFirstTenHotKeys());
+	m_lstHeader.SetShowIfClipWasPasted(CGetSetOptions::GetShowIfClipWasPasted());
 
     if(bFillList)
     {
@@ -965,18 +970,19 @@ LRESULT CQPasteWnd::OnListEnd(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-LRESULT CQPasteWnd::OnReloadClipOrder(WPARAM wParam, LPARAM lParam)
+LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
 {
 	DWORD startTick = GetTickCount();
 
 	BOOL foundClip = FALSE;
 	int clipId = (int)wParam;
 
-	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipOrder, clipGroupOrder FROM Main WHERE lID = %d"), clipId);			
+	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipOrder, clipGroupOrder, lastPasteDate FROM Main WHERE lID = %d"), clipId);			
 	if(q.eof() == false)
 	{
 		double order = q.getFloatField(_T("clipOrder"));
 		double orderGroup = q.getFloatField(_T("clipGroupOrder"));
+		int lastPasted = q.getIntField(_T("lastPasteDate"));
 
 		std::vector<CMainTable>::iterator iter = m_listItems.begin();
 		while(iter != m_listItems.end())
@@ -985,6 +991,7 @@ LRESULT CQPasteWnd::OnReloadClipOrder(WPARAM wParam, LPARAM lParam)
 			{
 				iter->m_clipOrder = order;
 				iter->m_clipGroupOrder = orderGroup;
+				iter->m_datePasted = lastPasted;
 
 				theApp.m_FocusID = clipId;
 
@@ -1013,7 +1020,7 @@ LRESULT CQPasteWnd::OnReloadClipOrder(WPARAM wParam, LPARAM lParam)
 
 	DWORD endTick = GetTickCount();
 	if((endTick-startTick) > 150)
-		Log(StrF(_T("Paste Timing OnReloadClipOrder: %d, ClipId: %d"), endTick-startTick, clipId));
+		Log(StrF(_T("Paste Timing OnReloadClipAfterPaste: %d, ClipId: %d"), endTick-startTick, clipId));
 
 	return foundClip;
 }
@@ -1297,7 +1304,8 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 	    m_CountSQL.Format(_T("SELECT COUNT(Main.lID) FROM Main %s where %s"), dataJoin, strFilter);
 
 	    m_SQL.Format(_T("SELECT Main.lID, Main.mText, Main.lParentID, Main.lDontAutoDelete, ")
-			_T("Main.lShortCut, Main.bIsGroup, Main.QuickPasteText, Main.clipOrder, Main.clipGroupOrder, Main.stickyClipOrder, Main.stickyClipGroupOrder FROM Main %s ")
+			_T("Main.lShortCut, Main.bIsGroup, Main.QuickPasteText, Main.clipOrder, Main.clipGroupOrder, ")
+				_T("Main.stickyClipOrder, Main.stickyClipGroupOrder, Main.lDate, Main.lastPasteDate FROM Main %s ")
 			_T("where %s order by %s"), dataJoin, strFilter, csSort);
 	}
 
@@ -1601,6 +1609,16 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 	{
 		pMenu->CheckMenuItem(ID_QUICKOPTIONS_SHOWINTASKBAR, MF_CHECKED);
 	}
+
+	if (CGetSetOptions::GetShowTextForFirstTenHotKeys())
+	{
+		pMenu->CheckMenuItem(ID_QUICKOPTIONS_SHOWTEXTFORFIRSTTENCOPYHOTKEYS, MF_CHECKED);
+	}
+
+	if (CGetSetOptions::GetShowIfClipWasPasted())
+	{
+		pMenu->CheckMenuItem(ID_QUICKOPTIONS_SHOWINDICATORACLIPHASBEENPASTED, MF_CHECKED);
+	}
 }
 
 void CQPasteWnd::SetSendToMenu(CMenu *pMenu, int nMenuID, int nArrayPos)
@@ -1790,7 +1808,6 @@ void CQPasteWnd::OnMenuFirsttenhotkeysUsectrlnum()
 void CQPasteWnd::OnMenuFirsttenhotkeysShowhotkeytext()
 {
     CGetSetOptions::SetShowTextForFirstTenHotKeys(!CGetSetOptions::GetShowTextForFirstTenHotKeys());
-
     m_lstHeader.SetShowTextForFirstTenHotKeys(CGetSetOptions::GetShowTextForFirstTenHotKeys());
 
     m_lstHeader.RefreshVisibleRows();
@@ -2901,6 +2918,12 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 		break;
 	case ActionEnums::PASTE_POSITION_10:
 		ret = OpenIndex(9);
+		break;
+	case ActionEnums::CONFIG_SHOW_FIRST_TEN_TEXT:
+		ret = OnShowFirstTenText();
+		break;
+	case ActionEnums::CONFIG_SHOW_CLIP_WAS_PASTED:
+		ret = OnShowClipWasPasted();
 		break;
 	}
 
@@ -4017,6 +4040,26 @@ bool CQPasteWnd::DoPasteTypoglycemia()
 	return false;
 }
 
+bool CQPasteWnd::OnShowFirstTenText()
+{
+	CGetSetOptions::SetShowTextForFirstTenHotKeys(!CGetSetOptions::GetShowTextForFirstTenHotKeys());
+	m_lstHeader.SetShowTextForFirstTenHotKeys(CGetSetOptions::GetShowTextForFirstTenHotKeys());
+
+	m_lstHeader.RefreshVisibleRows();
+	m_lstHeader.RedrawWindow();
+	return true;
+}
+
+bool CQPasteWnd::OnShowClipWasPasted()
+{
+	CGetSetOptions::SetShowIfClipWasPasted(!CGetSetOptions::GetShowIfClipWasPasted());
+	m_lstHeader.SetShowIfClipWasPasted(CGetSetOptions::GetShowIfClipWasPasted());
+
+	m_lstHeader.RefreshVisibleRows();
+	m_lstHeader.RedrawWindow();
+	return true;
+}
+
 bool CQPasteWnd::DoExportToBitMapFile()
 {
 	bool ret = false;
@@ -4134,6 +4177,10 @@ LRESULT CQPasteWnd::OnPostOptions(WPARAM wParam, LPARAM lParam)
 	UpdateFont();
 	LoadShortcuts();
 
+	m_lstHeader.SetShowTextForFirstTenHotKeys(CGetSetOptions::GetShowTextForFirstTenHotKeys());
+	m_lstHeader.SetShowIfClipWasPasted(CGetSetOptions::GetShowIfClipWasPasted());
+	m_lstHeader.SetNumberOfLinesPerRow(CGetSetOptions::GetLinesPerRow());
+
 	return 1;
 }
 
@@ -4210,44 +4257,49 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
                         CString cs;
                         if(m_listItems[pItem->iItem].m_bDontAutoDelete)
                         {
-                            cs += "*";
+							cs += _T("<noautodelete>");
                         }
 
                         if(m_listItems[pItem->iItem].m_bHasShortCut)
                         {
-                            cs += "s";
+							cs += _T("<shortcut>");
                         }
 
                         if(m_listItems[pItem->iItem].m_bIsGroup)
                         {
-                            cs += "G";
+							cs += _T("<group>");
                         }
 
 						if (theApp.m_GroupID > 0)
 						{
 							if (m_listItems[pItem->iItem].m_stickyClipGroupOrder != INVALID_STICKY)
 							{
-								cs += "Sticky";
+								cs += _T("<sticky>");
 							}
 						}
 						else
 						{
 							if (m_listItems[pItem->iItem].m_stickyClipOrder != INVALID_STICKY)
 							{
-								cs += "Sticky";
+								cs += _T("<sticky>");
 							}
 						}
 
                         // attached to a group
                         if(m_listItems[pItem->iItem].m_bHasParent)
                         {
-                            cs += "!";
+							cs += _T("<ingroup>");
                         }
 
                         if(m_listItems[pItem->iItem].m_QuickPaste.IsEmpty() == FALSE)
                         {
-                            cs += "Q";
+							cs += _T("<qpastetext>");
                         }
+
+						if (m_listItems[pItem->iItem].m_dateCopied != m_listItems[pItem->iItem].m_datePasted)
+						{
+							cs += "<pasted>";
+						}
 
                         // pipe is the "end of symbols" marker
                         cs += "|" + CMainTableFunctions::GetDisplayText(g_Opt.m_nLinesPerRow, m_listItems[pItem->iItem].m_Desc);
@@ -4987,6 +5039,8 @@ void CQPasteWnd::FillMainTable(CMainTable &table, CppSQLite3Query &q)
 	table.m_clipGroupOrder = q.getFloatField(_T("clipGroupOrder"));
 	table.m_stickyClipOrder = q.getFloatField(_T("stickyClipOrder"));
 	table.m_stickyClipGroupOrder = q.getFloatField(_T("stickyClipGroupOrder"));
+	table.m_dateCopied = q.getIntField(_T("lDate"));
+	table.m_datePasted = q.getIntField(_T("lastPasteDate"));
 }
 
 void CQPasteWnd::OnDestroy()
@@ -5673,4 +5727,36 @@ void CQPasteWnd::OnNMRDblclkList1(NMHDR *pNMHDR, LRESULT *pResult)
 	{
 	}*/
 	*pResult = 0;
+}
+
+void CQPasteWnd::OnQuickoptionsShowtextforfirsttencopyhotkeys()
+{
+	DoAction(ActionEnums::CONFIG_SHOW_FIRST_TEN_TEXT);
+}
+
+
+void CQPasteWnd::OnUpdateQuickoptionsShowtextforfirsttencopyhotkeys(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::CONFIG_SHOW_FIRST_TEN_TEXT);
+}
+
+
+void CQPasteWnd::OnQuickoptionsShowindicatoracliphasbeenpasted()
+{
+	DoAction(ActionEnums::CONFIG_SHOW_CLIP_WAS_PASTED);
+}
+
+void CQPasteWnd::OnUpdateQuickoptionsShowindicatoracliphasbeenpasted(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::CONFIG_SHOW_CLIP_WAS_PASTED);
 }

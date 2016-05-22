@@ -26,7 +26,9 @@ public:
 		m_bDontAutoDelete(false), 
 		m_bIsGroup(false), 
 		m_bHasShortCut(false), 
-		m_bHasParent(false)
+		m_bHasParent(false),
+		m_dateCopied(0),
+		m_datePasted(0)
 	{
 
 	}
@@ -47,6 +49,8 @@ public:
 	double m_clipGroupOrder;
 	double m_stickyClipOrder;
 	double m_stickyClipGroupOrder;
+	int m_dateCopied;
+	int m_datePasted;
 
 	static bool SortDesc(const CMainTable& d1, const CMainTable& d2)
 	{
@@ -253,6 +257,8 @@ public:
 	bool DoPastePlusAddLineFeed();
 	bool DoPasteAddTwoLineFeeds();
 	bool DoPasteTypoglycemia();
+	bool OnShowFirstTenText();
+	bool OnShowClipWasPasted();
 
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
@@ -359,7 +365,7 @@ protected:
     afx_msg LRESULT OnListSelect_DB_ID(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnListMoveSelectionToGroup(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnRefreshView(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnReloadClipOrder(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnGroupTreeMessage(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnFillRestOfList(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnRefeshRow(WPARAM wParam, LPARAM lParam);
@@ -452,4 +458,8 @@ public:
 	afx_msg void OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnNMRClickList1(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnNMRDblclkList1(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnQuickoptionsShowtextforfirsttencopyhotkeys();
+	afx_msg void OnUpdateQuickoptionsShowtextforfirsttencopyhotkeys(CCmdUI *pCmdUI);
+	afx_msg void OnQuickoptionsShowindicatoracliphasbeenpasted();
+	afx_msg void OnUpdateQuickoptionsShowindicatoracliphasbeenpasted(CCmdUI *pCmdUI);
 };

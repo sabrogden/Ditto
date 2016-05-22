@@ -26,6 +26,7 @@ CTheme::CTheme(void)
 	m_ListBoxSelectedNoFocusBG = RGB(236, 233, 216);
 	m_ListBoxSelectedText = RGB(255, 255, 255);
 	m_ListBoxSelectedNoFocusText = RGB(0, 0, 0);
+	m_clipPastedColor = RGB(0, 255, 0);
 }
 
 CTheme::~CTheme(void)
@@ -101,6 +102,7 @@ bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)
 	LoadElement(ItemHeader, "ListBoxSelectedNoFocusBG", m_ListBoxSelectedNoFocusBG);
 	LoadElement(ItemHeader, "ListBoxSelectedText", m_ListBoxSelectedText);
 	LoadElement(ItemHeader, "ListBoxSelectedNoFocusText", m_ListBoxSelectedNoFocusText);
+	LoadElement(ItemHeader, "ClipPastedColor", m_clipPastedColor);
 
 	return true;
 }
