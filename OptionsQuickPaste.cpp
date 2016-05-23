@@ -52,7 +52,6 @@ void COptionsQuickPaste::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_LINES_ROW, m_eLinesPerRow);
 	DDX_Control(pDX, IDC_TRANS_PERC, m_eTransparencyPercent);
 	DDX_Control(pDX, IDC_TRANSPARENCY, m_btEnableTransparency);
-	DDX_Control(pDX, IDC_CTRL_CLICK, m_btUseCtrlNum);
 	DDX_Control(pDX, IDC_DESC_SHOW_LEADING_WHITESPACE, m_btDescShowLeadingWhiteSpace);
 	//}}AFX_DATA_MAP
 	DDX_Control(pDX, IDC_CHECK_PROMPT_DELETE_CLIP, m_PromptForDelete);
@@ -101,7 +100,6 @@ BOOL COptionsQuickPaste::OnInitDialog()
 		CheckDlgButton(IDC_AT_PREVIOUS, BST_CHECKED);
 
 	m_btDescShowLeadingWhiteSpace.SetCheck(g_Opt.m_bDescShowLeadingWhiteSpace);
-	m_btUseCtrlNum.SetCheck(CGetSetOptions::GetUseCtrlNumForFirstTenHotKeys());
 
 	m_btShowText.SetCheck(CGetSetOptions::GetShowTextForFirstTenHotKeys());
 	m_PromptForDelete.SetCheck(CGetSetOptions::GetPromptWhenDeletingClips());
@@ -150,7 +148,6 @@ BOOL COptionsQuickPaste::OnApply()
 		CGetSetOptions::SetQuickPastePosition(POS_AT_PREVIOUS);
 
 	g_Opt.SetDescShowLeadingWhiteSpace(m_btDescShowLeadingWhiteSpace.GetCheck());
-	CGetSetOptions::SetUseCtrlNumForFirstTenHotKeys(m_btUseCtrlNum.GetCheck());
 	CGetSetOptions::SetShowTextForFirstTenHotKeys(m_btShowText.GetCheck());
 	CGetSetOptions::SetDrawThumbnail(m_btShowThumbnails.GetCheck());
 	CGetSetOptions::SetDrawRTF(m_btDrawRTF.GetCheck());

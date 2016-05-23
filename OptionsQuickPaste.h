@@ -36,7 +36,6 @@ public:
 	CNumberEdit	m_eLinesPerRow;
 	CNumberEdit	m_eTransparencyPercent;
 	CButton	m_btEnableTransparency;
-	CButton	m_btUseCtrlNum;
 	CButton m_btDescShowLeadingWhiteSpace;
 	//}}AFX_DATA
 
