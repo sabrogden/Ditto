@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include ".\Shared\ArrayEx.h"
 
 #define ACCEL_VKEY(key)			LOBYTE(key)
 #define ACCEL_MOD(key)			HIBYTE(key)
@@ -44,9 +45,10 @@ public:
     // handles a key's first WM_KEYDOWN or WM_SYSKEYDOWN message.
     // it uses GetKeyState to test for modifiers.
     // returns a pointer to the internal CAccel if it matches the given key or NULL
-    bool OnMsg(MSG *pMsg, CAccel &a);
+    bool OnMsg(MSG *pMsg, CAccel &a, ARRAY *pSkipActions = NULL);
 
 	bool m_handleRepeatKeys;
+	bool m_checkModifierKeys;
 
     static BYTE GetKeyStateModifiers();
 

@@ -7,6 +7,7 @@ CAccels::CAccels()
 	m_handleRepeatKeys = false;
 	m_firstMapTick = 0;
 	m_activeFirstKey = 0;
+	m_checkModifierKeys = true;
 }
 
 
@@ -59,7 +60,7 @@ CString CAccels::GetCmdKeyText(DWORD cmd)
 	return cmdShortcutText;
 }
 
-bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
+bool CAccels::OnMsg(MSG *pMsg, CAccel &a, ARRAY *pSkipActions)
 {    
 	if((pMsg->message != WM_KEYDOWN && pMsg->message != WM_SYSKEYDOWN))
 	{
@@ -81,7 +82,11 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
     }
 
     BYTE vkey = LOBYTE(pMsg->wParam);
-    BYTE mod = GetKeyStateModifiers();
+	BYTE mod = 0;
+	if (m_checkModifierKeys)
+	{
+		mod = GetKeyStateModifiers();
+	}
     DWORD key = ACCEL_MAKEKEY(vkey, mod);
 
     CString cs;
@@ -117,8 +122,12 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
 		{
 			if (it2->second.Key2 == 0)
 			{
-				a = (*it2).second;
-				return true;
+				if (pSkipActions == NULL ||
+					pSkipActions->Find(it2->second.Cmd) == FALSE)
+				{
+					a = (*it2).second;
+					return true;
+				}
 			}
 			else
 			{

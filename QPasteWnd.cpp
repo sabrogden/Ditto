@@ -2678,15 +2678,33 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
     return CWndEx::PreTranslateMessage(pMsg);
 }
 
-bool CQPasteWnd::CheckActions(MSG * pMsg) 
+bool CQPasteWnd::CheckActions(MSG * pMsg)
 {
 	bool ret = false;
 	CAccel a;
 
-	if (m_actions.OnMsg(pMsg, a))
+	ARRAY processedActions;
+
+	m_actions.m_checkModifierKeys = !m_bModifersMoveActive;
+
+	//possibly process multiple, break on the fist valid one
+	//ex. up / down keys, can be used for multiples but only one would be valid at a time
+	while (true)
 	{
-		ret = DoAction(a.Cmd);
-	}   
+		if (m_actions.OnMsg(pMsg, a, &processedActions))
+		{
+			processedActions.Add(a.Cmd);
+			ret = DoAction(a.Cmd);
+			if (ret)
+			{
+				break;
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
 
 	return ret;
 }
