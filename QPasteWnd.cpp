@@ -430,13 +430,18 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void CQPasteWnd::LoadShortcuts()
 {
+	m_modifierKeyActions.RemoveAll();
+
+	m_modifierKeyActions.m_checkModifierKeys = false;
+	m_modifierKeyActions.AddAccel(ActionEnums::MODIFIER_ACTVE_SELECTIONUP, VK_UP);
+	m_modifierKeyActions.AddAccel(ActionEnums::MODIFIER_ACTVE_SELECTIONDOWN, VK_DOWN);
+	m_modifierKeyActions.AddAccel(ActionEnums::MODIFIER_ACTVE_MOVEFIRST, VK_HOME);
+	m_modifierKeyActions.AddAccel(ActionEnums::MODIFIER_ACTVE_MOVELAST, VK_END);
+
 	m_actions.RemoveAll();
+
 	m_actions.AddAccel(ActionEnums::NEXTTABCONTROL, VK_TAB);
 	m_actions.AddAccel(ActionEnums::PREVTABCONTROL, ACCEL_MAKEKEY(VK_TAB, HOTKEYF_CONTROL));
-	m_actions.AddAccel(ActionEnums::SELECTIONUP, VK_UP);
-	m_actions.AddAccel(ActionEnums::SELECTIONDOWN, VK_DOWN);
-	m_actions.AddAccel(ActionEnums::MOVEFIRST, VK_HOME);
-	m_actions.AddAccel(ActionEnums::MOVELAST, VK_END);
 	m_actions.AddAccel(ActionEnums::BACKGRROUP, VK_BACK);
 	m_actions.AddAccel(ActionEnums::DELETE_SELECTED, VK_DELETE);
 	m_actions.AddAccel(ActionEnums::TOGGLEFILELOGGING, ACCEL_MAKEKEY(VK_F5, HOTKEYF_CONTROL));
@@ -2683,26 +2688,19 @@ bool CQPasteWnd::CheckActions(MSG * pMsg)
 	bool ret = false;
 	CAccel a;
 
-	ARRAY processedActions;
-
-	m_actions.m_checkModifierKeys = !m_bModifersMoveActive;
-
-	//possibly process multiple, break on the fist valid one
-	//ex. up / down keys, can be used for multiples but only one would be valid at a time
-	while (true)
+	if (m_bModifersMoveActive)
 	{
-		if (m_actions.OnMsg(pMsg, a, &processedActions))
+		if (m_modifierKeyActions.OnMsg(pMsg, a))
 		{
-			processedActions.Add(a.Cmd);
 			ret = DoAction(a.Cmd);
-			if (ret)
-			{
-				break;
-			}
 		}
-		else
+	}
+
+	if (ret == false)
+	{
+		if (m_actions.OnMsg(pMsg, a))
 		{
-			break;
+			ret = DoAction(a.Cmd);
 		}
 	}
 
@@ -2757,17 +2755,17 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::EDITCLIP:
 		ret = DoActionEditClip();
 		break;
-	case ActionEnums::SELECTIONUP:
-		ret = DoActionSelectionUp();
+	case ActionEnums::MODIFIER_ACTVE_SELECTIONUP:
+		ret = DoModifierActiveActionSelectionUp();
 		break;
-	case ActionEnums::SELECTIONDOWN:
-		ret = DoActionSelectionDown();
+	case ActionEnums::MODIFIER_ACTVE_SELECTIONDOWN:
+		ret = DoModifierActiveActionSelectionDown();
 		break;
-	case ActionEnums::MOVEFIRST:
-		ret = DoActionMoveFirst();
+	case ActionEnums::MODIFIER_ACTVE_MOVEFIRST:
+		ret = DoModifierActiveActionMoveFirst();
 		break;
-	case ActionEnums::MOVELAST:
-		ret = DoActionMoveLast();
+	case ActionEnums::MODIFIER_ACTVE_MOVELAST:
+		ret = DoModifierActiveActionMoveLast();
 		break;
 	case ActionEnums::CANCELFILTER:
 		ret = DoActionCancelFilter();
@@ -3208,31 +3206,31 @@ bool CQPasteWnd::DoActionEditClip()
 	return true;
 }
 
-bool CQPasteWnd::DoActionSelectionUp()
+bool CQPasteWnd::DoModifierActiveActionSelectionUp()
 {
 	if (m_bModifersMoveActive)
 	{
 		MoveSelection(false);
-		m_actions.m_handleRepeatKeys = true;
+		m_modifierKeyActions.m_handleRepeatKeys = true;
 		return true;
 	}
 
 	return false;
 }
 
-bool CQPasteWnd::DoActionSelectionDown()
+bool CQPasteWnd::DoModifierActiveActionSelectionDown()
 {
 	if (m_bModifersMoveActive)
 	{
 		MoveSelection(true);
-		m_actions.m_handleRepeatKeys = true;
+		m_modifierKeyActions.m_handleRepeatKeys = true;
 		return true;
 	}
 
 	return false;
 }
 
-bool CQPasteWnd::DoActionMoveFirst()
+bool CQPasteWnd::DoModifierActiveActionMoveFirst()
 {
 	if (m_bModifersMoveActive)
 	{
@@ -3243,7 +3241,7 @@ bool CQPasteWnd::DoActionMoveFirst()
 	return false;
 }
 
-bool CQPasteWnd::DoActionMoveLast()
+bool CQPasteWnd::DoModifierActiveActionMoveLast()
 {
 	if (m_bModifersMoveActive)
 	{

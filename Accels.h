@@ -45,7 +45,7 @@ public:
     // handles a key's first WM_KEYDOWN or WM_SYSKEYDOWN message.
     // it uses GetKeyState to test for modifiers.
     // returns a pointer to the internal CAccel if it matches the given key or NULL
-    bool OnMsg(MSG *pMsg, CAccel &a, ARRAY *pSkipActions = NULL);
+    bool OnMsg(MSG *pMsg, CAccel &a);
 
 	bool m_handleRepeatKeys;
 	bool m_checkModifierKeys;

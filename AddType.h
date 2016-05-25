@@ -19,7 +19,6 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CAddType)
 	enum { IDD = IDD_ADD_TYPE };
-	CListBox	m_lbOnClipboard;
 	CListBox	m_lbDefaultTypes;
 	CString	m_eCustomType;
 	//}}AFX_DATA
@@ -33,19 +32,23 @@ public:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	//}}AFX_VIRTUAL
 
+	void AddCommonTypes();
+	void AddCurrentClipboardTypes();
+
 // Implementation
 protected:
 
 	// Generated message map functions
 	//{{AFX_MSG(CAddType)
-	afx_msg void OnAdd1();
-	afx_msg void OnAdd2();
-	afx_msg void OnAdd3();
 	virtual BOOL OnInitDialog();
-	afx_msg void OnDblclkList1();
-	afx_msg void OnDblclkList2();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedRadio1();
+	afx_msg void OnBnClickedRadio2();
+	afx_msg void OnBnClickedRadio3();
+	afx_msg void OnBnClickedAdd();
+	afx_msg void OnLbnDblclkList();
 };
 
 //{{AFX_INSERT_LOCATION}}

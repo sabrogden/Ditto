@@ -60,7 +60,7 @@ CString CAccels::GetCmdKeyText(DWORD cmd)
 	return cmdShortcutText;
 }
 
-bool CAccels::OnMsg(MSG *pMsg, CAccel &a, ARRAY *pSkipActions)
+bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
 {    
 	if((pMsg->message != WM_KEYDOWN && pMsg->message != WM_SYSKEYDOWN))
 	{
@@ -122,12 +122,8 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a, ARRAY *pSkipActions)
 		{
 			if (it2->second.Key2 == 0)
 			{
-				if (pSkipActions == NULL ||
-					pSkipActions->Find(it2->second.Cmd) == FALSE)
-				{
-					a = (*it2).second;
-					return true;
-				}
+				a = (*it2).second;
+				return true;				
 			}
 			else
 			{

@@ -45,14 +45,14 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		return "New Clip";
 	case EDITCLIP:
 		return "Edit Clip";
-	case SELECTIONUP:
-		return "SELECTIONUP";
-	case SELECTIONDOWN:
-		return "SELECTIONDOWN";
-	case MOVEFIRST:
-		return "MOVEFIRST";
-	case MOVELAST:
-		return "MOVELAST";
+	case MODIFIER_ACTVE_SELECTIONUP:
+		return "MODIFIER_ACTVE_SELECTIONUP";
+	case MODIFIER_ACTVE_SELECTIONDOWN:
+		return "MODIFIER_ACTVE_SELECTIONDOWN";
+	case MODIFIER_ACTVE_MOVEFIRST:
+		return "MODIFIER_ACTVE_MOVEFIRST";
+	case MODIFIER_ACTVE_MOVELAST:
+		return "MODIFIER_ACTVE_MOVELAST";
 	case CANCELFILTER:
 		return "Cancel Filter";
 	case HOMELIST:
@@ -291,10 +291,10 @@ bool ActionEnums::UserConfigurable(ActionEnumValues value)
 	{
 	case ActionEnums::NEXTTABCONTROL:
 	case ActionEnums::PREVTABCONTROL:
-	case ActionEnums::SELECTIONUP:
-	case ActionEnums::SELECTIONDOWN:
-	case ActionEnums::MOVEFIRST:
-	case ActionEnums::MOVELAST:
+	case ActionEnums::MODIFIER_ACTVE_SELECTIONUP:
+	case ActionEnums::MODIFIER_ACTVE_SELECTIONDOWN:
+	case ActionEnums::MODIFIER_ACTVE_MOVEFIRST:
+	case ActionEnums::MODIFIER_ACTVE_MOVELAST:
 	case ActionEnums::BACKGRROUP:
 	case ActionEnums::DELETE_SELECTED:
 	case ActionEnums::TOGGLEFILELOGGING:
