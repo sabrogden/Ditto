@@ -27,6 +27,7 @@
 
 #define WM_ICON_NOTIFY			WM_APP+10
 #define MYWM_NOTIFYICON (WM_USER+1)
+#define WM_TRAYNOTIFY WM_USER + 100
 	
 IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 
@@ -47,7 +48,6 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_WM_CLOSE()
 	ON_MESSAGE(WM_ADD_TO_DATABASE_FROM_SOCKET, OnAddToDatabaseFromSocket)
 	ON_MESSAGE(WM_SEND_RECIEVE_ERROR, OnErrorOnSendRecieve)
-	ON_MESSAGE(WM_CUSTOMIZE_TRAY_MENU, OnCustomizeTrayMenu)
 	ON_COMMAND(ID_FIRST_IMPORT, OnFirstImport)
 	ON_MESSAGE(WM_EDIT_WND_CLOSING, OnEditWndClose)
 	ON_WM_DESTROY()
@@ -55,7 +55,6 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_SET_CONNECTED, OnSetConnected)
 	ON_MESSAGE(WM_OPEN_CLOSE_WINDWOW, OnOpenCloseWindow)
 	ON_MESSAGE(WM_LOAD_ClIP_ON_CLIPBOARD, OnLoadClipOnClipboard)
-	ON_MESSAGE(WM_TRAY_MENU_MOUSE_MOVE, OnSystemTrayMouseMove)
 	ON_COMMAND(ID_FIRST_GLOBALHOTKEYS, &CMainFrame::OnFirstGlobalhotkeys)
 	ON_MESSAGE(WM_GLOBAL_CLIPS_CLOSED, OnGlobalClipsClosed)
 	ON_MESSAGE(WM_OPTIONS_CLOSED, OnOptionsClosed)
@@ -70,6 +69,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_SHOW_DITTO_GROUP, &CMainFrame::OnShowDittoGroup)
 	ON_COMMAND(ID_FIRST_FIXUPSTICKYCLIPORDER, &CMainFrame::OnFirstFixupstickycliporder)
 	ON_MESSAGE(WM_DISPLAYCHANGE, &CMainFrame::OnResolutionChange)
+	ON_MESSAGE(WM_TRAYNOTIFY, &CMainFrame::OnTrayNotification)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -128,14 +128,13 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	SetTimer(READ_RANDOM_DB_FILE, g_Opt.ReadRandomFileInterval() * 1000, 0);
 
     SetWindowText(_T("Ditto"));
+	
+	m_trayIcon.Create(this, IDR_MENU, _T("Ditto"), CTrayNotifyIcon::LoadIcon(IDR_MAINFRAME), WM_TRAYNOTIFY, 0, 1);
+	m_trayIcon.SetDefaultMenuItem(ID_FIRST_SHOWQUICKPASTE, FALSE);	    
+    m_trayIcon.MinimiseToTray(this);
 
-    HICON hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-
-    m_TrayIcon.Create(NULL, WM_ICON_NOTIFY, _T("Ditto"), hIcon, IDR_MENU, FALSE, _T(""), _T(""), NULL, 20);
-    m_TrayIcon.SetSingleClickSelect(TRUE);
-    m_TrayIcon.MinimiseToTray(this);
-    m_TrayIcon.SetMenuDefaultItem(ID_FIRST_SHOWQUICKPASTE, FALSE);
-
+	theApp.m_Language.UpdateTrayIconRightClickMenu(&m_trayIcon.GetMenu());
+	
     //Only if in release
     #ifndef _DEBUG
         {
@@ -163,6 +162,17 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_thread.Start(this);
 
     return 0;
+}
+
+LRESULT CMainFrame::OnTrayNotification(WPARAM wParam, LPARAM lParam)
+{
+	if (WM_MOUSEFIRST <= LOWORD(lParam) && LOWORD(lParam) <= WM_MOUSELAST)
+	{
+		theApp.m_activeWnd.TrackActiveWnd(true);
+	}
+	
+	m_trayIcon.OnTrayNotification(wParam, lParam);
+	return 0L;
 }
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT &cs)
@@ -580,7 +590,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
     {
         case HIDE_ICON_TIMER:
             {
-                m_TrayIcon.HideIcon();
+				m_trayIcon.Hide();
                 KillTimer(nIDEvent);
             }
 			break;
@@ -711,7 +721,7 @@ LRESULT CMainFrame::OnShowTrayIcon(WPARAM wParam, LPARAM lParam)
 {
     if(lParam)
     {
-        if(!m_TrayIcon.Visible())
+        if(!m_trayIcon.IsHidden())
         {
             KillTimer(HIDE_ICON_TIMER);
             SetTimer(HIDE_ICON_TIMER, 40000, 0);
@@ -720,11 +730,11 @@ LRESULT CMainFrame::OnShowTrayIcon(WPARAM wParam, LPARAM lParam)
 
     if(wParam)
     {
-        m_TrayIcon.ShowIcon();
+		m_trayIcon.Show();
     }
     else
     {
-        m_TrayIcon.HideIcon();
+        m_trayIcon.Hide();
     }
 
     return TRUE;
@@ -835,12 +845,6 @@ bool CMainFrame::CloseAllOpenDialogs()
     return bRet;
 }
 
-LRESULT CMainFrame::OnSystemTrayMouseMove(WPARAM wParam, LPARAM lParam)
-{
-	theApp.m_activeWnd.TrackActiveWnd(true);
-	return 0;
-}
-
 LRESULT CMainFrame::OnLoadClipOnClipboard(WPARAM wParam, LPARAM lParam)
 {
 	CClip *pClip = (CClip*)wParam;
@@ -945,17 +949,6 @@ void CMainFrame::OnFirstHelp()
     CString csFile = CGetSetOptions::GetPath(PATH_HELP);
     csFile += "DittoGettingStarted.htm";
     CHyperLink::GotoURL(csFile, SW_SHOW);
-}
-
-LRESULT CMainFrame::OnCustomizeTrayMenu(WPARAM wParam, LPARAM lParam)
-{
-    CMenu *pMenu = (CMenu*)wParam;
-    if(pMenu)
-    {
-        theApp.m_Language.UpdateTrayIconRightClickMenu(pMenu);
-    }
-
-    return true;
 }
 
 void CMainFrame::ShowErrorMessage(CString csTitle, CString csMessage)
@@ -1118,7 +1111,7 @@ LRESULT CMainFrame::OnShowOptions(WPARAM wParam, LPARAM lParam)
 
 LRESULT CMainFrame::OnOptionsClosed(WPARAM wParam, LPARAM lParam)
 {
-	m_TrayIcon.MinimiseToTray(this);
+	m_trayIcon.MinimiseToTray(this);
 	CAlphaBlend tran;
 	tran.SetTransparent(m_hWnd, 255, 0);
 
@@ -1130,12 +1123,15 @@ LRESULT CMainFrame::OnOptionsClosed(WPARAM wParam, LPARAM lParam)
 		m_quickPaste.m_pwndPaste->PostMessage(NM_POST_OPTIONS_WINDOW);
 	}
 
+	m_trayIcon.SetMenu(NULL, IDR_MENU);
+	theApp.m_Language.UpdateTrayIconRightClickMenu(&m_trayIcon.GetMenu());
+
 	return 0;
 }
 
 LRESULT CMainFrame::OnGlobalClipsClosed(WPARAM wParam, LPARAM lParam)
 {
-	m_TrayIcon.MinimiseToTray(this);
+	m_trayIcon.MinimiseToTray(this);
 	CAlphaBlend tran;
 	tran.SetTransparent(m_hWnd, 255, 0);
 
@@ -1159,7 +1155,7 @@ void CMainFrame::RefreshShowInTaskBar()
 
 LRESULT CMainFrame::OnDeleteClipDataClosed(WPARAM wParam, LPARAM lParam)
 {
-	m_TrayIcon.MinimiseToTray(this);
+	m_trayIcon.MinimiseToTray(this);
 	CAlphaBlend tran;
 	tran.SetTransparent(m_hWnd, 255, 0);
 
@@ -1231,7 +1227,7 @@ LRESULT CMainFrame::OnReAddTaskBarIcon(WPARAM wParam, LPARAM lParam)
 {
 	if(CGetSetOptions::GetShowIconInSysTray())
 	{
-		m_TrayIcon.AddIcon();
+		m_trayIcon.SetIcon(CTrayNotifyIcon::LoadIcon(IDR_MAINFRAME));
 	}
 	return TRUE;
 }

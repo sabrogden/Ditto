@@ -4,6 +4,7 @@
 //
 
 #if !defined(AFX_STDAFX_H__56F3D184_7208_47FE_AFE2_E270325F356A__INCLUDED_)
+//#define _ATL_APARTMENT_THREADED 
 #define AFX_STDAFX_H__56F3D184_7208_47FE_AFE2_E270325F356A__INCLUDED_
 
 #if _MSC_VER > 1000
@@ -47,4 +48,8 @@ using namespace Gdiplus;
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
+
+#include <atlbase.h>
+#include <atlcom.h>
+#include <atlctl.h>
 #endif // !defined(AFX_STDAFX_H__56F3D184_7208_47FE_AFE2_E270325F356A__INCLUDED_)

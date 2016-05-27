@@ -383,7 +383,7 @@ bool CMultiLanguage::LoadSection(TiXmlNode &doc, LANGUAGE_ARRAY &Array, CString 
 	if(!node)
 	{
 		m_csLastError.Format(_T("Error finding the section %s"), csSection);
-		ASSERT(!m_csLastError);
+		//ASSERT(!m_csLastError);
 		Log(m_csLastError);
 		return false;
 	}

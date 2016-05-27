@@ -118,8 +118,11 @@ void CAddType::OnBnClickedRadio1()
 	::ShowWindow(::GetDlgItem(m_hWnd, IDC_LIST1), SW_SHOW);
 	::ShowWindow(::GetDlgItem(m_hWnd, IDC_EDIT1), SW_HIDE);
 	m_lbDefaultTypes.SetFocus();
-	if(m_lbDefaultTypes.GetCount() > 0)
+	if (m_lbDefaultTypes.GetCount() > 0)
+	{
 		m_lbDefaultTypes.SetCurSel(0);
+		m_lbDefaultTypes.SetSel(0);
+	}
 }
 
 void CAddType::OnBnClickedRadio2()

@@ -903,11 +903,11 @@ void CCP_MainApp::SetConnectCV(bool bConnect)
 
 	if(bConnect)
 	{
-		m_pMainFrame->m_TrayIcon.SetIcon(IDR_MAINFRAME);
+		m_pMainFrame->m_trayIcon.SetIcon(IDR_MAINFRAME);
 	}
 	else
 	{
-		m_pMainFrame->m_TrayIcon.SetIcon(IDI_DITTO_NOCOPYCB);
+		m_pMainFrame->m_trayIcon.SetIcon(IDI_DITTO_NOCOPYCB);
 	}
 
 	if(QPasteWnd())

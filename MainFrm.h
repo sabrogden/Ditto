@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SystemTray.h"
+//#include "SystemTray.h"
 #include "QuickPaste.h"
 #include "ToolTipEx.h"
 #include "EditFrameWnd.h"
@@ -8,6 +8,7 @@
 #include "ClipboardSaveRestore.h"
 #include "PowerManager.h"
 #include "DittoPopupWindow.h"
+#include "NTray.h"
 
 #define CLOSE_WINDOW_TIMER				1	
 #define HIDE_ICON_TIMER					2
@@ -54,7 +55,8 @@ public:
     #endif 
 
     CQuickPaste m_quickPaste;
-    CSystemTray m_TrayIcon;
+    //CSystemTray m_TrayIcon;
+	CTrayNotifyIcon m_trayIcon;
     ULONG m_ulCopyGap;
     CString m_csKeyboardPaste;
     CAlphaBlend m_Transparency;
@@ -108,12 +110,10 @@ protected:
     afx_msg LRESULT OnClipboardCopied(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnErrorOnSendRecieve(WPARAM wParam, LPARAM lParam);
-    afx_msg LRESULT OnCustomizeTrayMenu(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEditWndClose(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnSetConnected(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnOpenCloseWindow(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnLoadClipOnClipboard(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnSystemTrayMouseMove(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnGlobalClipsClosed(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnDeleteClipDataClosed(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnOptionsClosed(WPARAM wParam, LPARAM lParam);
@@ -134,4 +134,5 @@ DECLARE_MESSAGE_MAP()public:
 	afx_msg LRESULT OnShowDittoGroup(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnFirstFixupstickycliporder();
 	afx_msg LRESULT OnResolutionChange(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnTrayNotification(WPARAM wParam, LPARAM lParam);
 };

@@ -124,6 +124,7 @@ CSystemTray::CSystemTray(CWnd* pParent,             // The window that will reci
            szBalloonTip, szBalloonTitle, dwBalloonIcon, uBalloonTimeout);
 }
 
+
 void CSystemTray::Initialise()
 {
     memset(&m_tnd, 0, sizeof(m_tnd));

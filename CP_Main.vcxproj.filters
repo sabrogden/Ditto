@@ -399,6 +399,7 @@
     </ClCompile>
     <ClCompile Include="PowerManager.cpp" />
     <ClCompile Include="QuickPasteKeyboard.cpp" />
+    <ClCompile Include="NTray.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -850,6 +851,7 @@
     </ClInclude>
     <ClInclude Include="PowerManager.h" />
     <ClInclude Include="QuickPasteKeyboard.h" />
+    <ClInclude Include="NTray.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -1128,6 +1130,7 @@
     <None Include="res\system_menu_20_20.png" />
     <None Include="res\system_menu_24_24.png" />
     <None Include="res\system_menu_32_32.png" />
+    <None Include="CP_Main.rgs" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">
@@ -1156,5 +1159,8 @@
     <Manifest Include="DeclareDPIAware.manifest">
       <Filter>header</Filter>
     </Manifest>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="CP_Main.idl" />
   </ItemGroup>
 </Project>

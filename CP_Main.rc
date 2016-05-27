@@ -52,7 +52,8 @@ BEGIN
     "#include ""afxres.rc""         // Standard components\r\n"
     "#include ""afxprint.rc""       // printing/print preview resources\r\n"
     "#endif\r\n"
-    "\0"
+    "\r\n"
+    "1 TYPELIB ""CP_Main.tlb""\0"
 END
 
 #endif    // APSTUDIO_INVOKED
@@ -1285,6 +1286,14 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// REGISTRY
+//
+
+IDR_CP_MAIN             REGISTRY                "CP_Main.rgs"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // String Table
 //
 
@@ -1438,6 +1447,7 @@ LANGUAGE 9, 1
 #include "afxprint.rc"       // printing/print preview resources
 #endif
 
+1 TYPELIB "CP_Main.tlb"
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 

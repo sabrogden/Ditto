@@ -3,6 +3,7 @@
 // Used by CP_Main.rc
 //
 #define IDD_ABOUTBOX                    100
+#define IDR_CP_MAIN                     103
 #define IDR_MAINFRAME                   128
 #define IDR_CP_MAITYPE                  129
 #define IDR_EDIT_WND                    129
@@ -580,6 +581,6 @@
 #define _APS_NEXT_RESOURCE_VALUE        258
 #define _APS_NEXT_COMMAND_VALUE         32925
 #define _APS_NEXT_CONTROL_VALUE         2146
-#define _APS_NEXT_SYMED_VALUE           101
+#define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif
