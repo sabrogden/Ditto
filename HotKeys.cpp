@@ -3,6 +3,7 @@
 #include "Options.h"
 #include "Misc.h"
 #include "SendKeys.h"
+#include "Accels.h"
 
 CHotKeys g_HotKeys;
 
@@ -184,7 +185,7 @@ void CHotKey::CopyFromCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID)
 	long lHotKey = ctrl.GetHotKey();
 
 	short sKeyKode = LOBYTE(lHotKey);
-	short sModifers = HIBYTE(lHotKey);
+	short sModifers = ((HIBYTE(lHotKey)) & ~HOTKEYF_EXT);
 
 	if(lHotKey && ::IsDlgButtonChecked(hParent, nWindowsCBID))
 	{
@@ -196,12 +197,35 @@ void CHotKey::CopyFromCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID)
 
 void CHotKey::CopyToCtrl(CHotKeyCtrl& ctrl, HWND hParent, int nWindowsCBID)
 {
-	long lModifiers = HIBYTE(m_Key);
-	long keys = LOBYTE(m_Key);
+	DWORD shortcut = ACCEL_MAKEKEY(LOBYTE(m_Key), ((HIBYTE(m_Key)) &~HOTKEYF_EXT));
 
-	ctrl.SetHotKey((WORD)keys, (WORD)lModifiers & ~HOTKEYF_EXT); 
+	switch (LOBYTE(shortcut))
+	{
+		case VK_LEFT:
+		case VK_UP:
+		case VK_RIGHT:
+		case VK_DOWN: // arrow keys
+		case VK_PRIOR:
+		case VK_NEXT: // page up and page down
+		case VK_END:
+		case VK_HOME:
+		case VK_INSERT:
+		case VK_DELETE:
+		case VK_DIVIDE: // numpad slash
+		case VK_NUMLOCK:
+		{
+			shortcut = ACCEL_MAKEKEY(LOBYTE(shortcut), (HIBYTE(shortcut) | HOTKEYF_EXT));
+		}
+		break;
+	}
 
-	if(lModifiers & HOTKEYF_EXT)
+	long lModifiers = HIBYTE(shortcut);
+	long keys = LOBYTE(shortcut);
+
+	ctrl.SetHotKey((WORD)keys, (WORD)lModifiers); 
+
+	long originalModifiers = HIBYTE(m_Key);
+	if(originalModifiers & HOTKEYF_EXT)
 	{
 		::CheckDlgButton(hParent, nWindowsCBID, BST_CHECKED);
 	}

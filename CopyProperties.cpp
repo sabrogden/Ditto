@@ -142,7 +142,29 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 
 	m_GroupCombo.SetCurSelOnItemData(Clip.m_parentId);
 
-	m_HotKey.SetHotKey(LOBYTE(Clip.m_shortCut), (HIBYTE(Clip.m_shortCut) & ~HOTKEYF_EXT));
+	DWORD shortcut = ACCEL_MAKEKEY(LOBYTE(Clip.m_shortCut), ((HIBYTE(Clip.m_shortCut)) &~HOTKEYF_EXT));
+
+	switch (LOBYTE(shortcut))
+	{
+		case VK_LEFT:
+		case VK_UP:
+		case VK_RIGHT:
+		case VK_DOWN: // arrow keys
+		case VK_PRIOR:
+		case VK_NEXT: // page up and page down
+		case VK_END:
+		case VK_HOME:
+		case VK_INSERT:
+		case VK_DELETE:
+		case VK_DIVIDE: // numpad slash
+		case VK_NUMLOCK:
+		{
+			shortcut = ACCEL_MAKEKEY(LOBYTE(shortcut), (HIBYTE(shortcut) | HOTKEYF_EXT));
+		}
+		break;
+	}
+
+	m_HotKey.SetHotKey(LOBYTE(shortcut), (HIBYTE(shortcut)));
 	m_HotKey.SetRules(HKCOMB_A, 0);
 	if(HIBYTE(Clip.m_shortCut) & HOTKEYF_EXT)
 	{
@@ -347,7 +369,7 @@ void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
 	long lHotKey = m_HotKey.GetHotKey();
 
 	short sKeyKode = LOBYTE(m_HotKey.GetHotKey());
-	short sModifers = HIBYTE(m_HotKey.GetHotKey());
+	short sModifers = (HIBYTE(m_HotKey.GetHotKey())) & ~HOTKEYF_EXT;
 
 	if(sKeyKode && ::IsDlgButtonChecked(m_hWnd, IDC_CHECK_WIN))
 	{
