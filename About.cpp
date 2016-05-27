@@ -120,7 +120,7 @@ BOOL CAbout::OnInitDialog()
 	rect.top = rect.bottom + 5;
 	rect.bottom = rect.top + 5;
 	m_Link.MoveWindow(rect);
-	m_Link.SetURL(_T("ditto-cp.sf.net"));
+	m_Link.SetURL(_T("http://ditto-cp.sourceforge.net"));
 		
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
