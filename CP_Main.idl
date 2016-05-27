@@ -1,0 +1,17 @@
+// CP_Main.idl : IDL source for CP_Main
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (CP_Main.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(C4B234A1-7A0C-4DA0-983D-E6ED40DEAD87),
+	version(1.0)	
+]
+library CP_MainLib
+{
+	importlib("stdole2.tlb");
+};
