@@ -3436,15 +3436,10 @@ bool CQPasteWnd::ShowProperties(int id, int row)
 
 bool CQPasteWnd::DoActionPasteSelectedPlainText()
 {
-	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
-	{
-		CSpecialPasteOptions pasteOptions;
-		pasteOptions.m_pasteAsPlainText = true;			
-		OpenSelection(pasteOptions);
-		return true;
-	}
-
-	return false;
+	CSpecialPasteOptions pasteOptions;
+	pasteOptions.m_pasteAsPlainText = true;			
+	OpenSelection(pasteOptions);
+	return true;
 }
 
 bool CQPasteWnd::DoActionMoveClipToGroup()
