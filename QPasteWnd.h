@@ -260,6 +260,7 @@ public:
 	bool DoPasteTypoglycemia();
 	bool OnShowFirstTenText();
 	bool OnShowClipWasPasted();
+	bool OnToggleLastGroupToggle();
 
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
@@ -463,4 +464,6 @@ public:
 	afx_msg void OnUpdateQuickoptionsShowtextforfirsttencopyhotkeys(CCmdUI *pCmdUI);
 	afx_msg void OnQuickoptionsShowindicatoracliphasbeenpasted();
 	afx_msg void OnUpdateQuickoptionsShowindicatoracliphasbeenpasted(CCmdUI *pCmdUI);
+	afx_msg void OnGroupsTogglelastgroup();
+	afx_msg void OnUpdateGroupsTogglelastgroup(CCmdUI *pCmdUI);
 };

@@ -225,6 +225,7 @@ BEGIN
             MENUITEM "New Group",                   32811
             MENUITEM "New Group Selection",         32812
             MENUITEM "Move to Group",               32840
+            MENUITEM "Toggle Last Group Toggle",    ID_GROUPS_TOGGLELASTGROUP
         END
         POPUP "Send To"
         BEGIN

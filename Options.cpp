@@ -2383,3 +2383,13 @@ void CGetSetOptions::SetShowIfClipWasPasted(BOOL val)
 {
 	SetProfileLong(_T("ShowIfClipWasPasted"), val);
 }
+
+int CGetSetOptions::GetLastGroupToggle()
+{
+	return GetProfileLong(_T("LastGroupToggle"), -2);
+}
+
+void CGetSetOptions::SetLastGroupToggle(int val)
+{
+	SetProfileLong(_T("LastGroupToggle"), val);
+}

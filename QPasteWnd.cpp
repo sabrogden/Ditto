@@ -268,6 +268,8 @@ ON_COMMAND(ID_QUICKOPTIONS_SHOWTEXTFORFIRSTTENCOPYHOTKEYS, &CQPasteWnd::OnQuicko
 ON_UPDATE_COMMAND_UI(ID_QUICKOPTIONS_SHOWTEXTFORFIRSTTENCOPYHOTKEYS, &CQPasteWnd::OnUpdateQuickoptionsShowtextforfirsttencopyhotkeys)
 ON_COMMAND(ID_QUICKOPTIONS_SHOWINDICATORACLIPHASBEENPASTED, &CQPasteWnd::OnQuickoptionsShowindicatoracliphasbeenpasted)
 ON_UPDATE_COMMAND_UI(ID_QUICKOPTIONS_SHOWINDICATORACLIPHASBEENPASTED, &CQPasteWnd::OnUpdateQuickoptionsShowindicatoracliphasbeenpasted)
+ON_COMMAND(ID_GROUPS_TOGGLELASTGROUP, &CQPasteWnd::OnGroupsTogglelastgroup)
+ON_UPDATE_COMMAND_UI(ID_GROUPS_TOGGLELASTGROUP, &CQPasteWnd::OnUpdateGroupsTogglelastgroup)
 END_MESSAGE_MAP()
 
 
@@ -2941,6 +2943,9 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::CONFIG_SHOW_CLIP_WAS_PASTED:
 		ret = OnShowClipWasPasted();
 		break;
+	case ActionEnums::TOGGLE_LAST_GROUP_TOGGLE:
+		ret = OnToggleLastGroupToggle();
+		break;
 	}
 
 	return ret;
@@ -4068,6 +4073,27 @@ bool CQPasteWnd::OnShowClipWasPasted()
 
 	m_lstHeader.RefreshVisibleRows();
 	m_lstHeader.RedrawWindow();
+	return true;
+}
+
+bool CQPasteWnd::OnToggleLastGroupToggle()
+{
+	int newGroupId = -2;
+	if (theApp.m_GroupID > 0)
+	{
+		CGetSetOptions::SetLastGroupToggle(theApp.m_GroupID);
+		newGroupId = -1;		
+	}
+	else
+	{
+		newGroupId = CGetSetOptions::GetLastGroupToggle();
+	}
+
+	if (newGroupId >= -1)
+	{
+		theApp.EnterGroupID(newGroupId);
+	}
+
 	return true;
 }
 
@@ -5770,4 +5796,21 @@ void CQPasteWnd::OnUpdateQuickoptionsShowindicatoracliphasbeenpasted(CCmdUI *pCm
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::CONFIG_SHOW_CLIP_WAS_PASTED);
+}
+
+
+void CQPasteWnd::OnGroupsTogglelastgroup()
+{
+	DoAction(ActionEnums::TOGGLE_LAST_GROUP_TOGGLE);
+}
+
+
+void CQPasteWnd::OnUpdateGroupsTogglelastgroup(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TOGGLE_LAST_GROUP_TOGGLE);
 }

@@ -518,6 +518,9 @@ public:
 
 	static BOOL GetShowIfClipWasPasted();
 	static void SetShowIfClipWasPasted(BOOL val);
+
+	static int GetLastGroupToggle();
+	static void SetLastGroupToggle(int val);
 };
 
 // global for easy access and for initialization of fast access variables

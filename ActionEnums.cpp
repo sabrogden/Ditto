@@ -169,6 +169,8 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		return "Option - Show text for first ten copy hot keys";
 	case CONFIG_SHOW_CLIP_WAS_PASTED:
 		return "Option - Show indicator a clip has been pasted";
+	case TOGGLE_LAST_GROUP_TOGGLE:
+		return "Toggle Last Group Toggle";
 	}
 
 	return "";
