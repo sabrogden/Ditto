@@ -3497,13 +3497,63 @@ bool CQPasteWnd::DoShowInTaskBar()
 
 bool CQPasteWnd::DoClipCompare()
 {
-	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	if(IDs.GetCount() > 1)
+	{
+		if(!g_Opt.m_bShowPersistent)
+		{
+			HideQPasteWindow(false, false);
+		}
+		else if(g_Opt.GetAutoHide())
+		{
+			MinMaxWindow(FORCE_MIN);
+		}
+
+		CClipCompare compare;
+		compare.Compare(IDs[0], IDs[1]);
+			
+		return true;
+	}
+	else
+	{
+		Log(StrF(_T("DoClipCompare, at least 2 clips need to be selected, count: %d"), IDs.GetCount()));
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoSelectLeftSideCompare()
+{
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	if(IDs.GetCount() > 0)
+	{
+		m_leftSelectedCompareId = IDs[0];
+
+		return true;
+	}
+	else
+	{
+		Log(StrF(_T("DoSelectLeftSideCompare, no selected clip, not assigning left side")));
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoSelectRightSideAndDoCompare()
+{
+	if(m_leftSelectedCompareId > 0)
 	{
 		ARRAY IDs;
 		m_lstHeader.GetSelectionItemData(IDs);
 
-		if(IDs.GetCount() > 1)
+		if(IDs.GetCount() > 0)
 		{
+			int rightId = IDs[0];
+
 			if(!g_Opt.m_bShowPersistent)
 			{
 				HideQPasteWindow(false, false);
@@ -3514,77 +3564,18 @@ bool CQPasteWnd::DoClipCompare()
 			}
 
 			CClipCompare compare;
-			compare.Compare(IDs[0], IDs[1]);
-			
-			return true;
-		}
-		else
-		{
-			Log(StrF(_T("DoClipCompare, at least 2 clips need to be selected, count: %d"), IDs.GetCount()));
-		}
-	}
-
-	return false;
-}
-
-bool CQPasteWnd::DoSelectLeftSideCompare()
-{
-	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
-	{
-		ARRAY IDs;
-		m_lstHeader.GetSelectionItemData(IDs);
-
-		if(IDs.GetCount() > 0)
-		{
-			m_leftSelectedCompareId = IDs[0];
+			compare.Compare(m_leftSelectedCompareId, rightId);
 
 			return true;
 		}
 		else
 		{
-			Log(StrF(_T("DoSelectLeftSideCompare, no selected clip, not assigning left side")));
+			Log(StrF(_T("DoSelectRightSideAndDoCompare, no selected clips")));
 		}
 	}
-
-	return false;
-}
-
-bool CQPasteWnd::DoSelectRightSideAndDoCompare()
-{
-	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
+	else
 	{
-		if(m_leftSelectedCompareId > 0)
-		{
-			ARRAY IDs;
-			m_lstHeader.GetSelectionItemData(IDs);
-
-			if(IDs.GetCount() > 0)
-			{
-				int rightId = IDs[0];
-
-				if(!g_Opt.m_bShowPersistent)
-				{
-					HideQPasteWindow(false, false);
-				}
-				else if(g_Opt.GetAutoHide())
-				{
-					MinMaxWindow(FORCE_MIN);
-				}
-
-				CClipCompare compare;
-				compare.Compare(m_leftSelectedCompareId, rightId);
-
-				return true;
-			}
-			else
-			{
-				Log(StrF(_T("DoSelectRightSideAndDoCompare, no selected clips")));
-			}
-		}
-		else
-		{
-			Log(StrF(_T("DoSelectRightSideAndDoCompare, no left side selected, select left side first")));
-		}
+		Log(StrF(_T("DoSelectRightSideAndDoCompare, no left side selected, select left side first")));
 	}
 
 	return false;
