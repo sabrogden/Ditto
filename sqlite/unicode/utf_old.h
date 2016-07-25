@@ -145,9 +145,9 @@
 
 #ifndef U_HIDE_DEPRECATED_API
 
-#include "unicode/utf.h"
-#include "unicode/utf8.h"
-#include "unicode/utf16.h"
+#include "utf.h"
+#include "utf8.h"
+#include "utf16.h"
 
 /* Formerly utf.h, part 1 --------------------------------------------------- */
 

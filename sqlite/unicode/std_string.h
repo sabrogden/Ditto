@@ -23,7 +23,7 @@
  *                 header and for related definitions.
  */
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 #if U_HAVE_STD_STRING
 

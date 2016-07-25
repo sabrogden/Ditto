@@ -26,12 +26,12 @@
  * \brief C++ API: Unicode String 
  */
 
-#include "unicode/utypes.h"
-#include "unicode/rep.h"
-#include "unicode/std_string.h"
-#include "unicode/stringpiece.h"
-#include "unicode/bytestream.h"
-#include "unicode/ucasemap.h"
+#include "utypes.h"
+#include "rep.h"
+#include "std_string.h"
+#include "stringpiece.h"
+#include "bytestream.h"
+#include "ucasemap.h"
 
 struct UConverter;          // unicode/ucnv.h
 class  StringThreadTest;

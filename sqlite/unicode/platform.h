@@ -19,8 +19,8 @@
 #ifndef _PLATFORM_H
 #define _PLATFORM_H
 
-#include "unicode/uconfig.h"
-#include "unicode/uvernum.h"
+#include "uconfig.h"
+#include "uvernum.h"
 
 /**
  * \file

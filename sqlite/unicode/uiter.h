@@ -24,7 +24,7 @@
  * @see UCharIterator
  */
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 #if U_SHOW_CPLUSPLUS_API
     U_NAMESPACE_BEGIN

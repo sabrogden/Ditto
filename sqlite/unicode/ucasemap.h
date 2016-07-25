@@ -19,9 +19,9 @@
 #ifndef __UCASEMAP_H__
 #define __UCASEMAP_H__
 
-#include "unicode/utypes.h"
-#include "unicode/ustring.h"
-#include "unicode/localpointer.h"
+#include "utypes.h"
+#include "ustring.h"
+#include "localpointer.h"
 
 /**
  * \file

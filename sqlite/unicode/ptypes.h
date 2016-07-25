@@ -47,7 +47,7 @@
  */
 
 /* Find out if we have stdint.h etc. */
-#include "unicode/platform.h"
+#include "platform.h"
 
 /*===========================================================================*/
 /* Generic data types                                                        */

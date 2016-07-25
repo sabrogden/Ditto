@@ -25,9 +25,9 @@
  * \brief C++ API: StringPiece: Read-only byte string wrapper class.
  */
 
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
-#include "unicode/std_string.h"
+#include "utypes.h"
+#include "uobject.h"
+#include "std_string.h"
 
 // Arghh!  I wish C++ literals were "string".
 

@@ -27,7 +27,7 @@
  *   - by changing the default setting of U_DISABLE_RENAMING in uconfig.h
  */
 
-#include "unicode/uconfig.h"
+#include "uconfig.h"
 
 #if !U_DISABLE_RENAMING
 
@@ -37,12 +37,12 @@
  */
 
 #ifndef U_ICU_ENTRY_POINT_RENAME
-#include "unicode/umachine.h"
+#include "umachine.h"
 #endif
 
 /* If we still don't have U_ICU_ENTRY_POINT_RENAME use the default. */
 #ifndef U_ICU_ENTRY_POINT_RENAME
-#include "unicode/uvernum.h"
+#include "uvernum.h"
 #endif
 
 /* Error out before the following defines cause very strange and unexpected code breakage */

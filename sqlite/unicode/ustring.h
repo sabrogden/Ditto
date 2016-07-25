@@ -16,9 +16,9 @@
 #ifndef USTRING_H
 #define USTRING_H
 
-#include "unicode/utypes.h"
-#include "unicode/putil.h"
-#include "unicode/uiter.h"
+#include "utypes.h"
+#include "putil.h"
+#include "uiter.h"
 
 /**
  * \def UBRK_TYPEDEF_UBREAK_ITERATOR
