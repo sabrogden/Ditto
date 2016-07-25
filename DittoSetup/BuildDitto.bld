@@ -4,7 +4,6 @@
 		<step action='Set Macro'>
 			<MacroName>LOGFILE</MacroName>
 			<MacroValue>%workDir%\%branch%\Log.txt</MacroValue>
-			<checked type='11'>0</checked>
 			<name>Default Log File</name>
 		</step>
 		<step action='Read INI'>
@@ -17,6 +16,20 @@
 		<step action='Group'>
 			<name>Project steps</name>
 		</step>
+		<step action='Set File Attributes'>
+			<Archive type='3'>2</Archive>
+			<Ext>*</Ext>
+			<Hidden type='3'>2</Hidden>
+			<LogAttr type='11'>-1</LogAttr>
+			<LogUnchanged type='11'>-1</LogUnchanged>
+			<Path>%workdir%</Path>
+			<ReadOnly type='3'>2</ReadOnly>
+			<Recurse type='11'>-1</Recurse>
+			<System type='3'>2</System>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>1</indent>
+			<name>Set File Attributes</name>
+		</step>
 		<step action='Delete Files'>
 			<ContinueFail type='11'>-1</ContinueFail>
 			<DelDirs type='11'>-1</DelDirs>
@@ -26,6 +39,21 @@
 			<indent type='3'>1</indent>
 			<name>Delete Files</name>
 		</step>
+		<step action='Set File Attributes'>
+			<Archive type='3'>2</Archive>
+			<Ext>*</Ext>
+			<Hidden type='3'>2</Hidden>
+			<LogAttr type='11'>-1</LogAttr>
+			<LogUnchanged type='11'>-1</LogUnchanged>
+			<Path>%testBuildWorkDir%</Path>
+			<ReadOnly type='3'>2</ReadOnly>
+			<Recurse type='11'>-1</Recurse>
+			<System type='3'>2</System>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<continueonfail type='3'>1</continueonfail>
+			<indent type='3'>1</indent>
+			<name>Set File Attributes</name>
+		</step>
 		<step action='Delete Files'>
 			<ContinueFail type='11'>-1</ContinueFail>
 			<DelDirs type='11'>-1</DelDirs>
@@ -34,6 +62,13 @@
 			<Recurse type='11'>-1</Recurse>
 			<indent type='3'>1</indent>
 			<name>Delete Temp Source</name>
+		</step>
+		<step action='Run Program'>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<command>C:\Program Files\Git\bin\git.exe clone git://git.code.sf.net/p/ditto-cp/ditto %workDir%</command>
+			<indent type='3'>1</indent>
+			<name>Run Program</name>
+			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Subversion'>
 			<Files>%branch%</Files>
@@ -45,6 +80,7 @@
 			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
 			<Subcommand>checkout</Subcommand>
 			<Username>sabrogden</Username>
+			<checked type='11'>0</checked>
 			<indent type='3'>1</indent>
 			<name>Get Latest</name>
 		</step>
@@ -77,7 +113,7 @@ End If
 		<step action='ZIP Files'>
 			<Action type='3'>2</Action>
 			<Compression>5</Compression>
-			<Dest>%workDir%\trunk\dittosetup\output\DittoSource_%versionFileName%.zip</Dest>
+			<Dest>%workDir%\dittosetup\output\DittoSource_%versionFileName%.zip</Dest>
 			<ExclExt><![CDATA[*.tlog
 *.pch
 *.obj
@@ -88,7 +124,7 @@ End If
 *.svn-base
 *.map
 *.tlh
-]]></ExclExt>
+.git]]></ExclExt>
 			<Ext>*</Ext>
 			<Hidden type='11'>-1</Hidden>
 			<LogDetail type='11'>-1</LogDetail>
@@ -106,7 +142,7 @@ End If
 			<Attr type='11'>-1</Attr>
 			<Config>Release|x64</Config>
 			<FileVer type='11'>-1</FileVer>
-			<Filename>%workDir%\%branch%\CP_Main_10.sln</Filename>
+			<Filename>%workDir%\CP_Main_10.sln</Filename>
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
@@ -118,7 +154,7 @@ End If
 			<Attr type='11'>-1</Attr>
 			<Config>Release|Win32</Config>
 			<FileVer type='11'>-1</FileVer>
-			<Filename>%workDir%\%branch%\CP_Main_10.sln</Filename>
+			<Filename>%workDir%\CP_Main_10.sln</Filename>
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
@@ -136,7 +172,7 @@ End If
 			<PathInfo type='11'>-1</PathInfo>
 			<ReadOnly type='11'>-1</ReadOnly>
 			<Recurse type='11'>-1</Recurse>
-			<Source>%workDir%\trunk\dittosetup\output\DittoSource_%versionFileName%.zip</Source>
+			<Source>%workDir%\dittosetup\output\DittoSource_%versionFileName%.zip</Source>
 			<UNTAR type='11'>-1</UNTAR>
 			<indent type='3'>2</indent>
 			<name>UNZIP Files</name>
@@ -146,7 +182,7 @@ End If
 			<Attr type='11'>-1</Attr>
 			<Config>Release|x64</Config>
 			<FileVer type='11'>-1</FileVer>
-			<Filename>%testBuildWorkDir%\%branch%\CP_Main_10.sln</Filename>
+			<Filename>%testBuildWorkDir%\CP_Main_10.sln</Filename>
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
@@ -158,7 +194,7 @@ End If
 			<Attr type='11'>-1</Attr>
 			<Config>Release|x64</Config>
 			<FileVer type='11'>-1</FileVer>
-			<Filename>%testBuildWorkDir%\%branch%\CP_Main_10.sln</Filename>
+			<Filename>%testBuildWorkDir%\CP_Main_10.sln</Filename>
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
@@ -166,35 +202,35 @@ End If
 			<name>Build Ditto 32</name>
 		</step>
 		<step action='Run Program'>
-			<command>"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /F"DittoSetup_%versionFileName%" "%workDir%\%branch%\DittoSetup\DittoSetup_10.iss"</command>
+			<command>"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /F"DittoSetup_%versionFileName%" "%workDir%\DittoSetup\DittoSetup_10.iss"</command>
 			<indent type='3'>1</indent>
 			<name>Build Installer 32</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
-			<command>"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /F"DittoSetup_64bit_%versionFileName%" "%workDir%\%branch%\DittoSetup\DittoSetup_10.iss" "/dbit64=1"</command>
+			<command>"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /F"DittoSetup_64bit_%versionFileName%" "%workDir%\DittoSetup\DittoSetup_10.iss" "/dbit64=1"</command>
 			<indent type='3'>1</indent>
 			<name>Build Installer 64</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
-			<command>"%workDir%\%branch%\DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_%versionFileName%" bit32</command>
+			<command>"%workDir%\DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_%versionFileName%" bit32</command>
 			<indent type='3'>1</indent>
 			<name>Build Portable 32</name>
 			<outputfrom type='3'>1</outputfrom>
-			<startin>%workDir%\%branch%\DittoSetup\</startin>
+			<startin>%workDir%\DittoSetup\</startin>
 		</step>
 		<step action='Run Program'>
-			<command>"%workDir%\%branch%\DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_64bit_%versionFileName%" bit64</command>
+			<command>"%workDir%\DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_64bit_%versionFileName%" bit64</command>
 			<indent type='3'>1</indent>
 			<name>Build Portable 64</name>
 			<outputfrom type='3'>1</outputfrom>
-			<startin>%workDir%\%branch%\DittoSetup\</startin>
+			<startin>%workDir%\DittoSetup\</startin>
 		</step>
 		<step action='7-Zip'>
 			<Action>Update</Action>
 			<Exe>C:\Program Files (x86)\7-Zip\7z.exe</Exe>
-			<Filename>%workDir%\%branch%\DittoSetup\output\DittoDebug_%versionFileName%.7z</Filename>
+			<Filename>%workDir%\DittoSetup\output\DittoDebug_%versionFileName%.7z</Filename>
 			<I><![CDATA[*.map
 *.pdb
 *.dll
@@ -216,7 +252,7 @@ DittoSetup*]]></X>
 			<name>Create Web Page</name>
 		</step>
 		<step action='Write File'>
-			<Filename>%workDir%\%branch%\DittoSetup\output\index.php</Filename>
+			<Filename>%workDir%\DittoSetup\output\index.php</Filename>
 			<Text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -239,11 +275,19 @@ DittoSetup*]]></X>
 <br>
 <a href="DittoDebug_%versionFileName%.7z">Ditto Debug Files</a><br>
 <a href="DittoSource_%versionFileName%.zip">Ditto Source</a><br>
-<a href="changes.php">Change Log</a><br>
 
 <br>
 
-<a href="AllFiles.php">Previouse Builds</a><br>
+<a href="AllFiles.php">Previous Builds</a><br>
+<br>
+
+<a href="changes.php">Change Log since last release 3-18-2016</a><br>
+
+<br>
+
+<?php Include("changes.php");?>
+
+<br>
 <br>
 
 <!-- Start of StatCounter Code -->
@@ -264,28 +308,33 @@ var sc_security="b3f57099";
 		</step>
 		<step action='Set Macro'>
 			<MacroName>LOGFILE</MacroName>
-			<MacroValue>%workDir%\%branch%\DittoSetup\output\changes.php</MacroValue>
+			<MacroValue>%workDir%\DittoSetup\output\changes.php</MacroValue>
 			<indent type='3'>2</indent>
 			<name>Log Changes to File</name>
 			<nologging type='11'>-1</nologging>
 		</step>
-		<step action='Subversion'>
-			<Files>%branch%</Files>
-			<Host>svn.code.sf.net</Host>
-			<LocalPath>%workDir%</LocalPath>
-			<Password encrypted='1'>WM3ePOE8XeG4aqO46qE=</Password>
-			<Protocol>http</Protocol>
-			<Repository>/p/ditto-cp/code/</Repository>
-			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
-			<Subcommand>log</Subcommand>
-			<Switches>-r {2015-10-18}:{2016-12-31}</Switches>
-			<Username>sabrogden</Username>
+		<step action='Git'>
+			<Command>log</Command>
+			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2016-03-18</Options>
+			<WorkDir>%workDir%</WorkDir>
+			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>
-			<name>SVN Log Messages</name>
+			<name>Git</name>
+		</step>
+		<step action='Run Program'>
+			<ShowCmd type='11'>-1</ShowCmd>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<checked type='11'>0</checked>
+			<command>C:\Program Files\Git\bin\git.exe log --pretty=format:%ar %s --since=2015-11-21</command>
+			<indent type='3'>2</indent>
+			<name>Run Program</name>
+			<outputfile>c:\temp\a.txt</outputfile>
+			<outputfrom type='3'>2</outputfrom>
+			<startin>%workDir%</startin>
 		</step>
 		<step action='Set Macro'>
 			<MacroName>LOGFILE</MacroName>
-			<MacroValue>%workDir%\%branch%\Log.txt</MacroValue>
+			<MacroValue>%workDir%\Log.txt</MacroValue>
 			<indent type='3'>2</indent>
 			<name>Default Log File</name>
 			<nologging type='11'>-1</nologging>
@@ -294,20 +343,22 @@ var sc_security="b3f57099";
 			<FileIn>%workDir%\%branch%\DittoSetup\output\changes.php</FileIn>
 			<Find>Starting Build.*--------------------</Find>
 			<NoModS type='11'>-1</NoModS>
+			<checked type='11'>0</checked>
 			<indent type='3'>2</indent>
 			<name>Replace "Starting Build"</name>
 		</step>
 		<step action='Replace in File'>
-			<FileIn>%workDir%\%branch%\DittoSetup\output\changes.php</FileIn>
+			<FileIn>%workDir%\DittoSetup\output\changes.php</FileIn>
 			<Find>\r\n</Find>
 			<NoModS type='11'>-1</NoModS>
 			<Replace><![CDATA[<br>\r\n]]></Replace>
+			<checked type='11'>0</checked>
 			<indent type='3'>2</indent>
 			<name><![CDATA[Replace Line Feeds with <br>]]></name>
 		</step>
 		<step action='FTP'>
 			<Ext>*.*</Ext>
-			<Filename>%workDir%\%branch%\DittoSetup\output\</Filename>
+			<Filename>%workDir%\DittoSetup\output\</Filename>
 			<Incremental type='11'>-1</Incremental>
 			<Logging type='3'>6</Logging>
 			<Password encrypted='1'>WM3ePOE8XeG4aqO46qE=</Password>
