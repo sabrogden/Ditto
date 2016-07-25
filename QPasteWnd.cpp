@@ -1043,8 +1043,12 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 
 	theApp.m_FocusID = -1;
 
+	m_bHandleSearchTextChange = false;
+	m_search.SetWindowText(_T(""));
+	m_bHandleSearchTextChange = true;
+
 	if(theApp.m_bShowingQuickPaste)
-	{		
+	{	
 		FillList();
 		action = _T("Filled List");
 	}
