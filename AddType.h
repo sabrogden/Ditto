@@ -44,9 +44,9 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnBnClickedRadio1();
-	afx_msg void OnBnClickedRadio2();
-	afx_msg void OnBnClickedRadio3();
+	afx_msg void OnBnClickedRadioPrimaryTypes();
+	afx_msg void OnBnClickedRadioCurrentTypes();
+	afx_msg void OnBnClickedRadioCustomType();
 	afx_msg void OnBnClickedAdd();
 	afx_msg void OnLbnDblclkList();
 };

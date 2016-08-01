@@ -401,12 +401,14 @@
 #define IDC_STATIC_REMOTE_FILES         2128
 #define IDC_RADIO2                      2128
 #define IDC_RADIO_ENTER                 2128
+#define IDC_RADIO_CURRENT_TYPES         2128
 #define IDC_RADIO_USE_HOST_NAME         2129
 #define IDC_COMBO_ENTER_MODIFYER        2129
 #define IDC_STATIC_REMOTE_FILE_REQUEST  2130
 #define IDC_RADIO3                      2130
 #define IDC_RADIO_MOUSE                 2130
 #define IDC_RADIO_MOUSE_1               2130
+#define IDC_RADIO_CUSTOM_TYPE           2130
 #define IDC_COMBO_ALL_ASSIGNED          2131
 #define IDC_BUTTON_ADD                  2132
 #define IDC_RADIO_KEYBOARD2             2133
@@ -427,6 +429,7 @@
 #define IDC_BUTTON3                     2144
 #define IDC_BUTTON_RESET                2144
 #define IDC_RADIO1                      2145
+#define IDC_RADIO_PRIMARY_TYPES         2145
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773

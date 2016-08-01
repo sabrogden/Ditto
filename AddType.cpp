@@ -38,9 +38,9 @@ void CAddType::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CAddType, CDialog)
 	//{{AFX_MSG_MAP(CAddType)
 	//}}AFX_MSG_MAP
-	ON_BN_CLICKED(IDC_RADIO1, &CAddType::OnBnClickedRadio1)
-	ON_BN_CLICKED(IDC_RADIO2, &CAddType::OnBnClickedRadio2)
-	ON_BN_CLICKED(IDC_RADIO3, &CAddType::OnBnClickedRadio3)
+	ON_BN_CLICKED(IDC_RADIO_PRIMARY_TYPES, &CAddType::OnBnClickedRadioPrimaryTypes)
+	ON_BN_CLICKED(IDC_RADIO_CURRENT_TYPES, &CAddType::OnBnClickedRadioCurrentTypes)
+	ON_BN_CLICKED(IDC_RADIO_CUSTOM_TYPE, &CAddType::OnBnClickedRadioCustomType)
 	ON_BN_CLICKED(IDC_ADD_3, &CAddType::OnBnClickedAdd)
 	ON_LBN_DBLCLK(IDC_LIST1, &CAddType::OnLbnDblclkList)
 END_MESSAGE_MAP()
@@ -51,8 +51,8 @@ BOOL CAddType::OnInitDialog()
 {
 	CDialog::OnInitDialog();		
 	
-	::CheckDlgButton(m_hWnd, IDC_RADIO2, BST_CHECKED);
-	OnBnClickedRadio2();
+	::CheckDlgButton(m_hWnd, IDC_RADIO_CURRENT_TYPES, BST_CHECKED);
+	OnBnClickedRadioCurrentTypes();
 	
 	m_lbDefaultTypes.SetFocus();
 
@@ -112,7 +112,7 @@ void CAddType::AddCommonTypes()
 	m_lbDefaultTypes.AddString(GetFormatName(RegisterClipboardFormat(_T("HTML Format"))));
 }
 
-void CAddType::OnBnClickedRadio1()
+void CAddType::OnBnClickedRadioPrimaryTypes()
 {
 	AddCommonTypes();
 	::ShowWindow(::GetDlgItem(m_hWnd, IDC_LIST1), SW_SHOW);
@@ -125,7 +125,7 @@ void CAddType::OnBnClickedRadio1()
 	}
 }
 
-void CAddType::OnBnClickedRadio2()
+void CAddType::OnBnClickedRadioCurrentTypes()
 {
 	AddCurrentClipboardTypes();
 	::ShowWindow(::GetDlgItem(m_hWnd, IDC_LIST1), SW_SHOW);
@@ -139,7 +139,7 @@ void CAddType::OnBnClickedRadio2()
 	}
 }
 
-void CAddType::OnBnClickedRadio3()
+void CAddType::OnBnClickedRadioCustomType()
 {
 	::ShowWindow(::GetDlgItem(m_hWnd, IDC_EDIT1), SW_SHOW);
 	::ShowWindow(::GetDlgItem(m_hWnd, IDC_LIST1), SW_HIDE);
@@ -150,8 +150,8 @@ void CAddType::OnBnClickedAdd()
 {
 	m_csSelectedTypes.RemoveAll();
 
-	if (IsDlgButtonChecked(IDC_RADIO1) == BST_CHECKED ||
-		IsDlgButtonChecked(IDC_RADIO1) == BST_CHECKED)
+	if (IsDlgButtonChecked(IDC_RADIO_PRIMARY_TYPES) == BST_CHECKED ||
+		IsDlgButtonChecked(IDC_RADIO_CURRENT_TYPES) == BST_CHECKED)
 	{
 		int nCount = m_lbDefaultTypes.GetSelCount();
 		if (nCount)
@@ -168,7 +168,7 @@ void CAddType::OnBnClickedAdd()
 			}
 		}
 	}
-	else if (IsDlgButtonChecked(IDC_RADIO3) == BST_CHECKED)
+	else if (IsDlgButtonChecked(IDC_RADIO_CUSTOM_TYPE) == BST_CHECKED)
 	{
 		UpdateData();
 		m_csSelectedTypes.Add(m_eCustomType);
