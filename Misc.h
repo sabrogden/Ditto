@@ -167,7 +167,8 @@ __inline BOOL FileExists(LPCTSTR pszFile)
 bool IsRunningLimited();
 BOOL IsVista();
 
-void DeleteReceivedFiles(CString csDir);
+void DeleteDittoTempFiles(BOOL checkFileLastAccess);
+void DeleteFolderFiles(CString csDir, BOOL checkFileLastAccess);
 
 __int64 FileSize(const TCHAR *fileName);
 

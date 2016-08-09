@@ -60,6 +60,7 @@ public:
 #define PATH_THEMES			8
 #define PATH_ADDINS			9
 #define PATH_DRAG_FILES		10
+#define PATH_CLIP_DIFF		11
 
 class CGetSetOptions
 {

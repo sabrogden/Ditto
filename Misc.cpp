@@ -961,10 +961,33 @@ bool IsRunningLimited()
 	return false;
 }
 
-void DeleteReceivedFiles(CString csDir)
+void DeleteDittoTempFiles(BOOL checkFileLastAccess)
 {
-	if (csDir.Find(_T("\\ReceivedFiles\\")) == -1 && csDir.Find(_T("\\DragFiles\\")) == -1)
+	CString csDir = CGetSetOptions::GetPath(PATH_REMOTE_FILES);
+	if (FileExists(csDir))
+	{
+		DeleteFolderFiles(csDir, checkFileLastAccess);
+	}
+
+	csDir = CGetSetOptions::GetPath(PATH_DRAG_FILES);
+	if (FileExists(csDir))
+	{
+		DeleteFolderFiles(csDir, checkFileLastAccess);
+	}
+
+	csDir = CGetSetOptions::GetPath(PATH_CLIP_DIFF);
+	if (FileExists(csDir))
+	{
+		DeleteFolderFiles(csDir, checkFileLastAccess);
+	}
+}
+
+void DeleteFolderFiles(CString csDir, BOOL checkFileLastAccess)
+{
+	if (csDir.Find(_T("\\ReceivedFiles\\")) == -1 && csDir.Find(_T("\\DragFiles\\")) == -1 && csDir.Find(_T("ClipCompare")) == -1)
 		return;
+
+	Log(StrF(_T("Deleting files in Folder %s Check Last Access %d"), csDir, checkFileLastAccess));
 
 	FIX_CSTRING_PATH(csDir);
 
@@ -988,20 +1011,23 @@ void DeleteReceivedFiles(CString csDir)
 		if(Find.IsDirectory())
 		{
 			CString csDir(Find.GetFilePath());
-			DeleteReceivedFiles(csDir);
+			DeleteFolderFiles(csDir, checkFileLastAccess);
 			RemoveDirectory(csDir);
 		}
 
-		if(Find.GetLastAccessTime(ctFile))
+		if(checkFileLastAccess &&
+			Find.GetLastAccessTime(ctFile))
 		{
-			//Delete the remote copied file if it has'nt been used for the last day
+			//Delete the remote copied file if it hasn't been used for the last day
 			if(ctFile < ctOld)
 			{
+				Log(StrF(_T("Deleting temp file %s"), Find.GetFilePath()));
 				DeleteFile(Find.GetFilePath());
 			}
 		}
 		else
 		{
+			Log(StrF(_T("Deleting temp file %s"), Find.GetFilePath()));
 			DeleteFile(Find.GetFilePath());
 		}
 	}
@@ -1015,8 +1041,6 @@ __int64 FileSize(const TCHAR *fileName)
 
 	return buf.st_size;
 }
-
-
 
 int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, CString postInsert)
 {

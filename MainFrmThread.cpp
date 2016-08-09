@@ -103,17 +103,7 @@ void CMainFrmThread::OnDeleteEntries()
 
 void CMainFrmThread::OnRemoveTempFiles()
 {
-    CString csDir = CGetSetOptions::GetPath(PATH_REMOTE_FILES);
-    if(FileExists(csDir))
-    {
-        DeleteReceivedFiles(csDir);
-    }
-
-	csDir = CGetSetOptions::GetPath(PATH_DRAG_FILES);
-	if (FileExists(csDir))
-	{
-		DeleteReceivedFiles(csDir);
-	}
+	DeleteDittoTempFiles(TRUE);
 }
 
 void CMainFrmThread::OnSaveClips()

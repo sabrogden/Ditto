@@ -116,6 +116,11 @@ void CGetSetOptions::LoadSettings()
 			CreateDirectory(csPath, NULL);
 	}
 
+	/*CString cs = GetDBPath();
+	SetDBPath(_T("some path"));
+	CString cs2 = GetDBPath();*/
+
+
 	GetSetCurrentDirectory();
 
 	//First time we run, set some defaults
@@ -1638,62 +1643,19 @@ CString CGetSetOptions::GetPath(long lPathID)
 	switch(lPathID)
 	{
 	case PATH_HELP:
-		if(m_bU3)
-		{
-			csDir = GETENV(_T("U3_DEVICE_EXEC_PATH"));
-			FIX_CSTRING_PATH(csDir);
-		}
-
 		csDir += "Help\\";
 		break;
 	
 	case PATH_LANGUAGE:
-		if(m_bU3)
-		{
-			csDir = GETENV(_T("U3_DEVICE_EXEC_PATH"));
-			FIX_CSTRING_PATH(csDir);
-		}
-
 		csDir += "language\\";
-
 		break;
 
 	case PATH_THEMES:
-
-		if(m_bU3)
-		{
-			csDir = GETENV(_T("U3_DEVICE_EXEC_PATH"));
-			FIX_CSTRING_PATH(csDir);
-		}
-
 		csDir += "Themes\\";
-
 		break;
 
-	case PATH_REMOTE_FILES:
-		if(m_bU3)
-		{
-			csDir = GETENV(_T("U3_HOST_EXEC_PATH"));
-			FIX_CSTRING_PATH(csDir);
-		}
-		else if(CGetSetOptions::GetIsPortableDitto() == false)
-		{
-			csDir = GetAppDataPath();
-		}
-
-		csDir += "ReceivedFiles\\";
-		break;
-
-	case PATH_LOG_FILE:
-		if(m_bU3)
-		{
-			csDir = GETENV(_T("U3_HOST_EXEC_PATH"));
-			FIX_CSTRING_PATH(csDir);
-		}
-		else if(CGetSetOptions::GetIsPortableDitto() == false)
-		{
-			csDir = GetAppDataPath();
-		}
+	case PATH_LOG_FILE:if(CGetSetOptions::GetIsPortableDitto() == false)
+		csDir = GetAppDataPath();		
 
 		break;
 
@@ -1702,53 +1664,55 @@ CString CGetSetOptions::GetPath(long lPathID)
 		break;
 
 	case PATH_DATABASE:
-		if(m_bU3)
-		{
-			csDir = GETENV(_T("U3_APP_DATA_PATH"));
-			FIX_CSTRING_PATH(csDir);
-		}
 		break;
 
-
 	case PATH_INI:
-		if(m_bU3)
-		{
-			csDir = GETENV(_T("U3_APP_DATA_PATH"));
-			FIX_CSTRING_PATH(csDir);
-		}
 		break;
 
 	case PATH_U3_HWND_INI:
-		if(m_bU3)
-		{
-			csDir = GETENV(_T("U3_HOST_EXEC_PATH"));
-			FIX_CSTRING_PATH(csDir);
-		}
 		break;
 
 	case PATH_ADDINS:
-		if(m_bU3)
-		{
-			csDir = GETENV(_T("U3_DEVICE_EXEC_PATH"));
-			FIX_CSTRING_PATH(csDir);
-		}
+		csDir += "Addins\\";		
+		break;
 
-		csDir += "Addins\\";
-		
+	case PATH_REMOTE_FILES:
+		if (CGetSetOptions::GetIsPortableDitto() == false)
+		{
+			wchar_t wchPath[MAX_PATH];
+			if (GetTempPathW(MAX_PATH, wchPath))
+			{
+				csDir = wchPath;
+				csDir += _T("Ditto\\");
+			}
+		}
+		csDir += "ReceivedFiles\\";
 		break;
 
 	case PATH_DRAG_FILES:
-		if (m_bU3)
+		if (CGetSetOptions::GetIsPortableDitto() == false)
 		{
-			csDir = GETENV(_T("U3_HOST_EXEC_PATH"));
-			FIX_CSTRING_PATH(csDir);
+			wchar_t wchPath[MAX_PATH];
+			if (GetTempPathW(MAX_PATH, wchPath))
+			{
+				csDir = wchPath;
+				csDir += _T("Ditto\\");
+			}
 		}
-		else if (CGetSetOptions::GetIsPortableDitto() == false)
-		{
-			csDir = GetAppDataPath();
-		}
-
 		csDir += "DragFiles\\";
+		break;
+
+	case PATH_CLIP_DIFF:
+		if (CGetSetOptions::GetIsPortableDitto() == false)
+		{
+			wchar_t wchPath[MAX_PATH];
+			if (GetTempPathW(MAX_PATH, wchPath))
+			{
+				csDir = wchPath;	
+				csDir += _T("Ditto\\");
+			}
+		}
+		csDir += _T("ClipCompare\\");
 		break;
 
 	}

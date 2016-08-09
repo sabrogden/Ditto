@@ -166,6 +166,8 @@ BOOL CCP_MainApp::InitInstance()
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
 	Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
 
+	//MessageBox(NULL, _T("ditto starting"), _T("d"), MB_OK);
+
 	DittoCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 
@@ -869,6 +871,8 @@ void CCP_MainApp::ShowPersistent(bool bVal)
 int CCP_MainApp::ExitInstance() 
 {
 	Log(_T("ExitInstance"));
+
+	DeleteDittoTempFiles(FALSE);
 
 	m_db.close();
 
