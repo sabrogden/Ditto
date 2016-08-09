@@ -79,6 +79,7 @@ public:
 	static CString GetIniFileName(bool bLocalIniFile);
 	static void ConverSettingsToIni();
 	static CString GetAppDataPath();
+	static CString GetTempFilePath();
 
 	static CString GetExeFileName();
 	static CString GetAppName();

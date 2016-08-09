@@ -365,6 +365,21 @@ CString CGetSetOptions::GetAppDataPath()
 	return csPath;
 }
 
+CString CGetSetOptions::GetTempFilePath()
+{
+	CString csPath;
+
+	wchar_t wchPath[MAX_PATH];
+	if (GetTempPathW(MAX_PATH, wchPath))
+	{
+		csPath = wchPath;
+		csPath += _T("Ditto\\");
+		CreateDirectory(csPath, NULL);
+	}
+
+	return csPath;
+}
+
 long CGetSetOptions::GetResolutionProfileLong(CString csName, long lDefaultValue, CString csNewPath)
 {
 	CString resName;
@@ -1679,12 +1694,7 @@ CString CGetSetOptions::GetPath(long lPathID)
 	case PATH_REMOTE_FILES:
 		if (CGetSetOptions::GetIsPortableDitto() == false)
 		{
-			wchar_t wchPath[MAX_PATH];
-			if (GetTempPathW(MAX_PATH, wchPath))
-			{
-				csDir = wchPath;
-				csDir += _T("Ditto\\");
-			}
+			csDir = GetTempFilePath();			
 		}
 		csDir += "ReceivedFiles\\";
 		break;
@@ -1692,12 +1702,7 @@ CString CGetSetOptions::GetPath(long lPathID)
 	case PATH_DRAG_FILES:
 		if (CGetSetOptions::GetIsPortableDitto() == false)
 		{
-			wchar_t wchPath[MAX_PATH];
-			if (GetTempPathW(MAX_PATH, wchPath))
-			{
-				csDir = wchPath;
-				csDir += _T("Ditto\\");
-			}
+			csDir = GetTempFilePath();
 		}
 		csDir += "DragFiles\\";
 		break;
@@ -1705,12 +1710,7 @@ CString CGetSetOptions::GetPath(long lPathID)
 	case PATH_CLIP_DIFF:
 		if (CGetSetOptions::GetIsPortableDitto() == false)
 		{
-			wchar_t wchPath[MAX_PATH];
-			if (GetTempPathW(MAX_PATH, wchPath))
-			{
-				csDir = wchPath;	
-				csDir += _T("Ditto\\");
-			}
+			csDir = GetTempFilePath();
 		}
 		csDir += _T("ClipCompare\\");
 		break;
