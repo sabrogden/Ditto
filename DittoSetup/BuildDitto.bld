@@ -248,6 +248,174 @@ DittoSetup*]]></X>
 			<name>Zip Debug Files</name>
 		</step>
 		<step action='Group'>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>1</indent>
+			<name>Appx</name>
+		</step>
+		<step action='UNZIP Files'>
+			<Action type='3'>2</Action>
+			<Ansi type='11'>-1</Ansi>
+			<Dest>%workDir%\DittoSetup\appx\</Dest>
+			<Ext>*</Ext>
+			<LogDetail type='11'>-1</LogDetail>
+			<PathInfo type='11'>-1</PathInfo>
+			<Recurse type='11'>-1</Recurse>
+			<Source>%workDir%\DittoSetup\Output\DittoPortable_64bit_%versionFileName%.zip</Source>
+			<UNTAR type='11'>-1</UNTAR>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>2</indent>
+			<name>extraxt 64bit Portable</name>
+		</step>
+		<step action='Write File'>
+			<Filename>%workDir%\DittoSetup\appx\files.ini</Filename>
+			<Text><![CDATA[[[Files]]
+".\appxmanifest.xml"    "AppxManifest.xml"
+
+".\Ditto\Ditto.exe"     "Ditto.exe"
+
+".\Ditto\icudt55.dll" "icudt55.dll"
+".\Ditto\icuin55.dll" "icuin55.dll"
+".\Ditto\icuio55.dll" "icuio55.dll"
+".\Ditto\icule55.dll" "icule55.dll"
+".\Ditto\iculx55.dll" "iculx55.dll"
+".\Ditto\icutu55.dll" "icutu55.dll"
+".\Ditto\icuuc55.dll" "icuuc55.dll"
+".\Ditto\mfc100u.dll" "mfc100u.dll"
+".\Ditto\mfcm100u.dll" "mfcm100u.dll"
+".\Ditto\msvcp100.dll" "msvcp100.dll"
+".\Ditto\msvcr100.dll" "msvcr100.dll"
+
+
+
+".\Ditto.png"     "Ditto.png"
+".\Ditto_150.png"     "Ditto_150.png"
+".\Ditto_44.png"     "Ditto_44.png"
+
+".\Ditto\Addins\DittoUtil.dll" "Addins\DittoUtil.dll"
+
+"C:\Temp\Ditto\Help\DittoConfig.htm" "Help\DittoConfig.htm"
+".\Ditto\Help\DittoCustomKeys.htm" "Help\DittoCustomKeys.htm"
+".\Ditto\Help\DittoFAQ.htm" "Help\DittoFAQ.htm"
+".\Ditto\Help\DittoGettingStarted.htm" "Help\DittoGettingStarted.htm"
+".\Ditto\Help\Dutch_DittoConfig.htm" "Help\Dutch_DittoConfig.htm"
+".\Ditto\Help\Dutch_DittoFAQ.htm" "Help\Dutch_DittoFAQ.htm"
+".\Ditto\Help\Dutch_DittoGettingStarted.htm" "Help\Dutch_DittoGettingStarted.htm"
+".\Ditto\Help\Persian_DittoCustomKeys.htm" "Help\Persian_DittoCustomKeys.htm"
+".\Ditto\Help\Persian_DittoGettingStarted.htm" "Help\Persian_DittoGettingStarted.htm"
+".\Ditto\Help\RegCustomKeys.jpg" "Help\RegCustomKeys.jpg"
+".\Ditto\Help\U3_Install.htm" "Help\U3_Install.htm"
+
+     
+".\Ditto\Language\Chinese.xml" "Language\Chinese.xml"
+".\Ditto\Language\Chinese Traditional.xml" "Language\Chinese Traditional.xml"
+".\Ditto\Language\Croatian.xml" "Language\Croatian.xml"
+".\Ditto\Language\Czech.xml" "Language\Czech.xml"
+".\Ditto\Language\Danish.xml" "Language\Danish.xml"
+".\Ditto\Language\Deutsch.xml" "Language\Deutsch.xml"
+".\Ditto\Language\Dutch.xml" "Language\Dutch.xml"
+".\Ditto\Language\English.xml" "Language\English.xml"
+".\Ditto\Language\French.xml" "Language\French.xml"
+".\Ditto\Language\Greek.xml" "Language\Greek.xml"
+".\Ditto\Language\Hebrew.xml" "Language\Hebrew.xml"
+".\Ditto\Language\italiano.xml" "Language\italiano.xml"
+".\Ditto\Language\Japanese.xml" "Language\Japanese.xml"
+".\Ditto\Language\Korean.xml" "Language\Korean.xml"
+".\Ditto\Language\Persian.xml" "Language\Persian.xml"
+".\Ditto\Language\Polski.xml" "Language\Polski.xml"
+".\Ditto\Language\Portuguese.xml" "Language\Portuguese.xml"
+".\Ditto\Language\Romanian.xml" "Language\Romanian.xml"
+".\Ditto\Language\Russian.xml" "Language\Russian.xml"
+".\Ditto\Language\Slovenian.xml" "Language\Slovenian.xml"
+".\Ditto\Language\Spanish.xml" "Language\Spanish.xml"
+".\Ditto\Language\Swedish.xml" "Language\Swedish.xml"
+".\Ditto\Language\Turkish.xml" "Language\Turkish.xml"
+".\Ditto\Language\Ukrainian.xml" "Language\Ukrainian.xml"
+
+".\Ditto\Themes\Autumn.xml" "Themes\Autumn.xml"
+".\Ditto\Themes\BOCApastel.xml" "Themes\BOCApastel.xml"
+".\Ditto\Themes\DarkerDitto.xml" "Themes\DarkerDitto.xml"
+".\Ditto\Themes\Ditto.xml" "Themes\Ditto.xml"
+".\Ditto\Themes\Nighted.xml" "Themes\Nighted.xml"
+".\Ditto\Themes\OnnoG Blue.xml" "Themes\OnnoG Blue.xml"
+".\Ditto\Themes\OnnoG Green.xml" "Themes\OnnoG Green.xml"]]></Text>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<checked type='11'>0</checked>
+			<indent type='3'>2</indent>
+			<name>Write files.ini</name>
+		</step>
+		<step action='Write File'>
+			<Filename>%workDir%\DittoSetup\appx\appxmanifest.xml</Filename>
+			<Text><![CDATA[<?xml version="1.0" encoding="utf-8"?>
+<Package
+   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities">
+  <Identity Name="Ditto"
+    ProcessorArchitecture="x64"
+    Publisher="CN=ScottBrogden, O=ScottBrogden, L=Ogallala, S=Nebraska, C=United States"
+    Version="%version%" />
+  <Properties>
+    <DisplayName>Ditto</DisplayName>
+    <PublisherDisplayName>Reserved</PublisherDisplayName>
+    <Description>No description entered</Description>
+    <Logo>Ditto.png</Logo>
+  </Properties>
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.14316.0" MaxVersionTested="10.0.14316.0" />
+  </Dependencies>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust"/>
+  </Capabilities>
+  <Applications>
+    <Application Id="Ditto" Executable="Ditto.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+       BackgroundColor="#464646"
+       DisplayName="Ditto"
+       Square150x150Logo="Ditto_150.png"
+       Square44x44Logo="Ditto_44.png"
+       Description="Ditto" />
+    </Application>
+  </Applications>
+</Package>]]></Text>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>2</indent>
+			<name>Write manifest</name>
+		</step>
+		<step action='Run Program'>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<command>"c:\Program Files (x86)\Windows Kits\10\bin\x86\MakeAppx.exe" pack /f "%workDir%\DittoSetup\appx\files.ini" /p "%workDir%\DittoSetup\appx\Ditto_%versionFileName%.appx"</command>
+			<indent type='3'>2</indent>
+			<name>Gen appx</name>
+			<outputfrom type='3'>1</outputfrom>
+			<startin>%workDir%\DittoSetup\appx</startin>
+		</step>
+		<step action='Run Program'>
+			<ShowCmd type='11'>-1</ShowCmd>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<command>"c:\Program Files (x86)\Windows Kits\10\bin\x86\signtool.exe" sign -f "%workDir%\DittoSetup\appx\my.pfx" -fd SHA256 -v "%workDir%\DittoSetup\appx\Ditto_%versionFileName%.appx</command>
+			<indent type='3'>2</indent>
+			<name>Sign appx</name>
+			<outputfrom type='3'>1</outputfrom>
+		</step>
+		<step action='Copy Files'>
+			<Converted type='11'>-1</Converted>
+			<Delay>15</Delay>
+			<DestDir>%workDir%\DittoSetup\Output</DestDir>
+			<Ext>Ditto_%versionFileName%.appx</Ext>
+			<Incremental type='11'>-1</Incremental>
+			<LogCopied type='11'>-1</LogCopied>
+			<ReadOnly type='11'>-1</ReadOnly>
+			<Retries>10</Retries>
+			<SourceDir>%workDir%\DittoSetup\appx\</SourceDir>
+			<TBD type='11'>-1</TBD>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>2</indent>
+			<name>Copy Files</name>
+		</step>
+		<step action='Group'>
 			<indent type='3'>1</indent>
 			<name>Create Web Page</name>
 		</step>
@@ -271,6 +439,7 @@ DittoSetup*]]></X>
 <a href="DittoSetup_64bit_%versionFileName%.exe">Ditto Setup 64bit</a><br>
 <a href="DittoPortable_%versionFileName%.zip">Ditto Portable</a><br>
 <a href="DittoPortable_64bit_%versionFileName%.zip">Ditto Portable 64</a><br>
+<a href="Ditto_%versionFileName%.appx">Ditto Windows App</a><br>
 
 <br>
 <a href="DittoDebug_%versionFileName%.7z">Ditto Debug Files</a><br>
@@ -352,7 +521,6 @@ var sc_security="b3f57099";
 			<Find>\r\n</Find>
 			<NoModS type='11'>-1</NoModS>
 			<Replace><![CDATA[<br>\r\n]]></Replace>
-			<checked type='11'>0</checked>
 			<indent type='3'>2</indent>
 			<name><![CDATA[Replace Line Feeds with <br>]]></name>
 		</step>
@@ -361,7 +529,7 @@ var sc_security="b3f57099";
 			<Filename>%workDir%\DittoSetup\output\</Filename>
 			<Incremental type='11'>-1</Incremental>
 			<Logging type='3'>6</Logging>
-			<Password encrypted='1'>WM3ePOE8XeG4aqO46qE=</Password>
+			<Password encrypted='1'>Nc3MPPQ8duGharq4qKHsgxD9UJW9LhmWJguHyD/uunU=</Password>
 			<Percent>10</Percent>
 			<Port>22</Port>
 			<Retries>0</Retries>
