@@ -138,19 +138,6 @@ BOOL COptionsGeneral::OnInitDialog()
 
 	UpdateData(FALSE);
 
-	if(g_Opt.m_bU3)
-	{
-		//If running from a U3 device then don't allow them to set
-		//-run on startup
-		//-db path
-		m_btRunOnStartup.ShowWindow(SW_HIDE);
-		m_ePath.EnableWindow(FALSE);
-		m_btSetDatabasePath.EnableWindow(FALSE);
-		m_btGetPath.EnableWindow(FALSE);
-		m_ePath.SetWindowText(_T("U3 Device"));
-		::ShowWindow(::GetDlgItem(m_hWnd, IDC_CHECK_FOR_UPDATES), SW_HIDE);
-	}
-
 	theApp.m_Language.UpdateOptionGeneral(this);
 	return TRUE;
 }
@@ -250,7 +237,7 @@ BOOL COptionsGeneral::OnApply()
 	m_MaxClipSize.GetWindowText(csMax);
 	g_Opt.SetMaxClipSizeInBytes(ATOI(csMax));
 
-	if(!g_Opt.m_bU3 && m_btSetDatabasePath.GetCheck() == BST_CHECKED)
+	if(m_btSetDatabasePath.GetCheck() == BST_CHECKED)
 	{
 		CString csPath;
 		m_ePath.GetWindowText(csPath);

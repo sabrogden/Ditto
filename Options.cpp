@@ -56,10 +56,10 @@ long CGetSetOptions::m_lProcessDrawClipboardDelay;
 BOOL CGetSetOptions::m_bEnableDebugLogging;
 BOOL CGetSetOptions::m_bEnsureConnectToClipboard;
 bool CGetSetOptions::m_bOutputDebugString;
-bool CGetSetOptions::m_bU3 = false;
 bool CGetSetOptions::m_bInConversion = false;
 bool CGetSetOptions::m_bFromIni = false;
 bool CGetSetOptions::m_portable = false;
+bool CGetSetOptions::m_windowsApp = false;
 CString CGetSetOptions::m_csIniFileName;
 __int64 CGetSetOptions::nLastDbWriteTime = 0;
 CTheme CGetSetOptions::m_Theme;
@@ -78,23 +78,31 @@ CGetSetOptions::~CGetSetOptions()
 
 void CGetSetOptions::LoadSettings()
 {
-	m_csIniFileName = GetIniFileName(true);
+	CString exeDir = CGetSetOptions::GetExeFileName();
+	exeDir = GetFilePath(exeDir);
+	FIX_CSTRING_PATH(exeDir);
 
-	CString portable = GetFilePath(m_csIniFileName);
-	portable += _T("portable");
-	if(FileExists(portable)) 
+	CString windowsAppFile = exeDir += _T("WindowsApp");
+	if (FileExists(windowsAppFile))
 	{
-		m_portable = true;
-	}
-
-	if(m_bU3)
-	{
+		m_windowsApp = true;
 		m_bFromIni = true;
+		//always use the ini file in the app data folder for windows store
+		m_csIniFileName = GetIniFileName(false);
 	}
 	else
 	{
+		m_csIniFileName = GetIniFileName(true);
+
+		CString portable = GetFilePath(m_csIniFileName);
+		portable += _T("portable");
+		if (FileExists(portable))
+		{
+			m_portable = true;
+		}
+
 		//first check if ini file is in app directory
-		if(m_portable || FileExists(m_csIniFileName))
+		if (m_portable || FileExists(m_csIniFileName))
 		{
 			m_bFromIni = true;
 		}
@@ -102,7 +110,7 @@ void CGetSetOptions::LoadSettings()
 		{
 			//next check if it's in app data
 			m_csIniFileName = GetIniFileName(false);
-			if(FileExists(m_csIniFileName))
+			if (FileExists(m_csIniFileName))
 			{
 				m_bFromIni = true;
 			}
@@ -173,43 +181,6 @@ void CGetSetOptions::LoadSettings()
 	}
 
 	GetClientSendCount();
-
-
-	//If running from a U3 device and no language file as been asigned
-	//then use the language defined by the U3 launcher
-	if(m_bU3)
-	{
-		CString csLanguage = GetLanguageFile();
-		if(csLanguage.IsEmpty())
-		{
-			CString csLanguage = GETENV(_T("U3_ENV_LANGUAGE"));
-			long lLanguage = ATOI(csLanguage);
-			csLanguage.Empty();
-			switch(lLanguage)
-			{
-			case 1036: //French
-				csLanguage = _T("Français");
-				break;
-
-			case 1040: //Italian
-				csLanguage = _T("Italiano");
-				break;
-
-			case 1031: //German
-				csLanguage = _T("German");
-				break;
-
-			case 3082: //German
-				csLanguage = _T("Español");
-				break;
-			}
-
-			if(csLanguage.IsEmpty() == FALSE)
-			{
-				SetLanguageFile(csLanguage);
-			}
-		}
-	}
 
 	m_Theme.Load(GetTheme());
 }
@@ -318,21 +289,14 @@ void CGetSetOptions::ConverSettingsToIni()
 CString CGetSetOptions::GetIniFileName(bool bLocalIniFile)
 {
 	CString csPath = _T("c:\\program files\\Ditto\\");
-
-	if(m_bU3)
+	
+	if(bLocalIniFile)
 	{
-		csPath = CGetSetOptions::GetPath(PATH_INI);
+		csPath = GetFilePath(GetExeFileName());
 	}
 	else
-	{	
-		if(bLocalIniFile)
-		{
-			csPath = GetFilePath(GetExeFileName());
-		}
-		else
-		{
-			csPath = GetAppDataPath();
-		}
+	{
+		csPath = GetAppDataPath();
 	}
 
 	csPath += "Ditto.Settings";
@@ -702,10 +666,6 @@ BOOL CGetSetOptions::GetRunOnStartUp()
 
 void CGetSetOptions::SetRunOnStartUp(BOOL bRun)
 {
-	//Can't set auto run when running from U3 device
-	if(m_bU3)
-		return;
-
 	if(bRun == GetRunOnStartUp())
 		return;
 
@@ -860,22 +820,7 @@ BOOL CGetSetOptions::SetDBPath(CString csPath)
 CString CGetSetOptions::GetDBPath()
 {
 	CString csDBPath;
-	if(m_bU3)
-	{
-		csDBPath = GetProfileString("DBPath3", "");
-		if(csDBPath.IsEmpty())
-		{
-			csDBPath = GetDefaultDBName();
-		}
-
-		CPath ExistingPath(csDBPath);
-		csDBPath = CGetSetOptions::GetPath(PATH_DATABASE);
-		csDBPath += ExistingPath.GetName();
-	}
-	else
-	{
-		csDBPath = GetProfileString("DBPath3", "");
-	}
+	csDBPath = GetProfileString("DBPath3", "");
 
 	return csDBPath;
 }
@@ -888,8 +833,6 @@ void CGetSetOptions::SetCheckForMaxEntries(BOOL bVal)
 BOOL CGetSetOptions::GetCheckForMaxEntries()
 {
 	BOOL bDefault = FALSE;
-	if(m_bU3)
-		bDefault = TRUE;
 	if(GetIsPortableDitto())
 		bDefault = TRUE;
 
@@ -914,8 +857,6 @@ void CGetSetOptions::SetMaxEntries(long lVal)
 long CGetSetOptions::GetMaxEntries()
 {
 	long lMax = 500;
-	if(m_bU3)
-		lMax = 75;
 	if(GetIsPortableDitto())
 		lMax = 100;
 	return GetProfileLong("MaxEntries", lMax);
@@ -1310,8 +1251,6 @@ long CGetSetOptions::GetPort()
 BOOL CGetSetOptions::GetDisableRecieve()
 {
 	BOOL bDefault = FALSE;
-	if(m_bU3)
-		bDefault = TRUE;
 	if(GetIsPortableDitto())
 		bDefault = TRUE;
 
@@ -1398,8 +1337,6 @@ void CGetSetOptions::SetDrawThumbnail(long bDraw)
 BOOL CGetSetOptions::GetDrawThumbnail()
 {
 	BOOL bDrawThumbnails = TRUE;
-	if(g_Opt.m_bU3)
-		bDrawThumbnails = FALSE;
 
 	return GetProfileLong("DrawThumbnail", bDrawThumbnails);
 }
@@ -1788,6 +1725,11 @@ BOOL CGetSetOptions::GetSetCurrentDirectory()
 bool CGetSetOptions::GetIsPortableDitto()
 {
 	return m_portable;
+}
+
+bool CGetSetOptions::GetIsWindowsApp()
+{
+	return m_windowsApp;
 }
 
 CString CGetSetOptions::GetPasteString(CString csAppName)

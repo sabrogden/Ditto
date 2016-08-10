@@ -29,9 +29,6 @@ public:
 	{
 		m_bDisconnect = FALSE;
 		m_bConnect = FALSE;
-		m_bU3 = FALSE;
-		m_bU3Stop = FALSE;
-		m_bU3Install = FALSE;
 		m_uacPID = 0;
 		m_bOpenWindow = FALSE;
 		m_bCloseWindow = FALSE;
@@ -48,18 +45,6 @@ public:
   			else if(STRICMP(pszParam, _T("Disconnect")) == 0)
   			{
   				m_bDisconnect = TRUE;
-  			}
-  			else if(STRICMP(pszParam, _T("U3")) == 0)
-  			{
-  				m_bU3 = TRUE;
-  			}
-  			else if(STRICMP(pszParam, _T("U3appStop")) == 0)
-  			{
-  				m_bU3Stop = TRUE;
-  			}
-  			else if(STRICMP(pszParam, _T("U3Install")) == 0)
-  			{
-  				m_bU3Install = TRUE;
   			}
 			else if(wcsncmp(pszParam, _T("uacpaste"), 8) == 0)
 			{
@@ -86,9 +71,6 @@ public:
 
 	BOOL m_bDisconnect;
 	BOOL m_bConnect;
-	BOOL m_bU3;
-	BOOL m_bU3Stop;
-	BOOL m_bU3Install;
 	int m_uacPID;
 	BOOL m_bCloseWindow;
 	BOOL m_bOpenWindow;
@@ -170,10 +152,6 @@ BOOL CCP_MainApp::InitInstance()
 
 	DittoCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
-
-	//if starting from a u3 device we will pass in -U3Start
-	if(cmdInfo.m_bU3)
-		g_Opt.m_bU3 = cmdInfo.m_bU3 ? TRUE : FALSE;
 
 	g_Opt.LoadSettings();
 
@@ -277,14 +255,7 @@ BOOL CCP_MainApp::InitInstance()
 	Log(cs);
 
 	CString csMutex("Ditto Is Now Running");
-	if(g_Opt.m_bU3)
-	{
-		//If running from a U3 device then allow other ditto's to run
-		//only prevent Ditto from running from the same device
-		csMutex += " ";
-		csMutex += GETENV(_T("U3_DEVICE_SERIAL"));
-	}
-	else if(g_Opt.GetIsPortableDitto())
+	if(g_Opt.GetIsPortableDitto() || g_Opt.GetIsWindowsApp())
 	{
 		csMutex += " ";
 		csMutex += g_Opt.GetExeFileName();
@@ -311,17 +282,6 @@ BOOL CCP_MainApp::InitInstance()
 		m_Language.LoadLanguageFile(_T("English.xml"));
 	}
 
-	//The first time we run Ditto on U3 show a web page about ditto
-	if(g_Opt.m_bU3)
-	{
-		if(FileExists(CGetSetOptions::GetDBPath()) == FALSE)
-		{
-			CString csFile = CGetSetOptions::GetPath(PATH_HELP);
-			csFile += "U3_Install.htm";
-			CHyperLink::GotoURL(csFile, SW_SHOW);
-		}
-	}
-
 	int nRet = CheckDBExists(CGetSetOptions::GetDBPath());
 	if(nRet == FALSE)
 	{
@@ -344,12 +304,6 @@ void CCP_MainApp::AfterMainCreate()
 	m_MainhWnd = m_pMainFrame->m_hWnd;
 	ASSERT( ::IsWindow(m_MainhWnd) );
 	g_Opt.SetMainHWND((long)m_MainhWnd);
-
-	//Save the HWND so the stop app can send us a close message
-	if(g_Opt.m_bU3)
-	{
-		CGetSetOptions::WriteU3Hwnd(m_MainhWnd);
-	}
 
 	g_HotKeys.Init(m_MainhWnd);
 
@@ -562,11 +516,7 @@ CClipTypes* CCP_MainApp::LoadTypesFromDB()
 		pTypes->Add(RegisterClipboardFormat(CF_RTF));
 		pTypes->Add(CF_UNICODETEXT);
 		pTypes->Add(CF_HDROP);
-
-		if(g_Opt.m_bU3 == false)
-		{
-			pTypes->Add(CF_DIB);
-		}
+		pTypes->Add(CF_DIB);
 	}
 
 	return pTypes;

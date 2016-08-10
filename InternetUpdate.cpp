@@ -174,14 +174,7 @@ long CInternetUpdate::GetUpdateVersion()
 	//if nothing there get the default
 	if(csPath.IsEmpty())
 	{
-		if(g_Opt.m_bU3)
-		{
-			csPath = "ditto-cp.sourceforge.net/U3/DittoVersion.txt";
-		}
-		else
-		{
-			csPath = "ditto-cp.sourceforge.net/Update3/DittoVersion.txt";
-		}
+		csPath = "ditto-cp.sourceforge.net/Update3/DittoVersion.txt";
 	}
 	
 	CString csUrl = "http://" + csPath;
@@ -282,14 +275,7 @@ CString CInternetUpdate::DownloadUpdate()
 	//if nothing there get the default
 	if(csPath.IsEmpty())
 	{
-		if(g_Opt.m_bU3)
-		{
-			csPath = "ditto-cp.sourceforge.net/U3/DittoSetup.exe";
-		}
-		else
-		{
-			csPath = "ditto-cp.sourceforge.net/U3/DittoSetup.exe";
-		}
+		csPath = "ditto-cp.sourceforge.net/U3/DittoSetup.exe";
 	}
 		
 

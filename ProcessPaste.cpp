@@ -112,13 +112,6 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 
 	Log(_T("Start of MarkAsPastedThread"));
 
-	//If running from a U3 device then wait a little before updating the db
-	//updating the db can take a second or two and it delays the act of pasting
-	if(g_Opt.m_bU3)
-	{
-		Sleep(350);
-	}
-
 	BOOL bRet = FALSE;
 	int clipId = 0;
 

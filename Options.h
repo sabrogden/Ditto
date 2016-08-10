@@ -71,9 +71,9 @@ public:
 	static bool m_bFromIni;
 	static CString m_csIniFileName;
 	static bool m_bInConversion;
-	static bool m_bU3;
 	static CTheme m_Theme;
 	static bool m_portable;
+	static bool m_windowsApp;
 
 	static void LoadSettings();
 	static CString GetIniFileName(bool bLocalIniFile);
@@ -374,6 +374,7 @@ public:
 	static bool GetAllowFriends();
 
 	static bool		GetIsPortableDitto();
+	static bool		GetIsWindowsApp();
 
 	static long		GetAutoMaxDelay();
 	static void		SetAutoMaxDelay(long lDelay);

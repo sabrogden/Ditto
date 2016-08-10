@@ -91,11 +91,7 @@ BOOL COptionsTypes::OnInitDialog()
 			m_List.AddString(GetFormatName(RegisterClipboardFormat(CF_RTF)));
 			m_List.AddString(_T("CF_UNICODETEXT"));
 			m_List.AddString(_T("CF_HDROP"));
-
-			if(g_Opt.m_bU3 == false)
-			{
-				m_List.AddString(_T("CF_DIB"));
-			}
+			m_List.AddString(_T("CF_DIB"));
 		}
 
 		while(q.eof() == false)

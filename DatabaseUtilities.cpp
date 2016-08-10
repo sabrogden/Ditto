@@ -69,40 +69,33 @@ CString GetOLDDefaultDBName()
 CString GetDefaultDBName()
 {
 	CString csDefaultPath = _T("c:\\program files\\Ditto\\");
-
-	if(g_Opt.m_bU3)
+	
+	//If portable then default to the running path
+	if(CGetSetOptions::GetIsPortableDitto())
 	{
-		csDefaultPath = CGetSetOptions::GetPath(PATH_DATABASE);
+		csDefaultPath.Empty();
 	}
 	else
-	{	
-		//If portable then default to the running path
-		if(CGetSetOptions::GetIsPortableDitto())
-		{
-			csDefaultPath.Empty();
-		}
-		else
-		{
-			LPMALLOC pMalloc;
+	{
+		LPMALLOC pMalloc;
 		
-			if(SUCCEEDED(::SHGetMalloc(&pMalloc))) 
-			{ 
-				LPITEMIDLIST pidlPrograms;
+		if(SUCCEEDED(::SHGetMalloc(&pMalloc))) 
+		{ 
+			LPITEMIDLIST pidlPrograms;
 				
-				SHGetSpecialFolderLocation(NULL, CSIDL_APPDATA, &pidlPrograms);
+			SHGetSpecialFolderLocation(NULL, CSIDL_APPDATA, &pidlPrograms);
 				
-				TCHAR string[MAX_PATH];
-				SHGetPathFromIDList(pidlPrograms, string);
+			TCHAR string[MAX_PATH];
+			SHGetPathFromIDList(pidlPrograms, string);
 				
-				pMalloc->Free(pidlPrograms);
-				pMalloc->Release();
+			pMalloc->Free(pidlPrograms);
+			pMalloc->Release();
 				
-				csDefaultPath = string;		
-			}
-
-			FIX_CSTRING_PATH(csDefaultPath);
-			csDefaultPath += "Ditto\\";
+			csDefaultPath = string;		
 		}
+
+		FIX_CSTRING_PATH(csDefaultPath);
+		csDefaultPath += "Ditto\\";
 	}
 
 	CString csTempName = csDefaultPath + "Ditto.db";
@@ -120,7 +113,7 @@ CString GetDefaultDBName()
 BOOL CheckDBExists(CString csDBPath)
 {
 	//If this is the first time running this version then convert the old database to the new db
-	if(csDBPath.IsEmpty() && g_Opt.m_bU3 == false)
+	if(csDBPath.IsEmpty())
 	{
 		csDBPath = GetDefaultDBName();
 
