@@ -420,7 +420,8 @@ void CSendKeys::PopUpShiftKeys()
 // Sends a key string
 bool CSendKeys::SendKeys(LPCTSTR KeysString, bool Wait)
 {
-  WORD MKey, NumTimes;
+  WORD MKey;
+  WORD NumTimes = 1;
   TCHAR KeyString[300] = {0};
   bool retval  = false;
   int  keyIdx;
