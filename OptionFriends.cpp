@@ -224,7 +224,7 @@ void COptionFriends::OnDblclkList(NMHDR* pNMHDR, LRESULT* pResult)
 
 BOOL COptionFriends::EditItem(int nItem)
 {
-	CFriendDetails dlg;
+	CFriendDetails dlg(this);
 
 	if(m_List.GetItemText(nItem, 1) == "X")
 		dlg.m_checkSendAll = TRUE;
