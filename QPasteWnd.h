@@ -261,6 +261,9 @@ public:
 	bool OnShowFirstTenText();
 	bool OnShowClipWasPasted();
 	bool OnToggleLastGroupToggle();
+	bool OnMakeTopSticky();
+	bool OnMakeLastSticky();
+	bool OnRemoveStickySetting();
 
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
@@ -408,7 +411,7 @@ protected:
 	afx_msg LRESULT OnPostOptions(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnMakeTopStickyClip();
 	afx_msg void OnMakeLastStickyClip();
-	afx_msg void OnRemoveStickySetting();
+	afx_msg void OnRemoveSticky();
 	afx_msg void OnElevateAppToPasteIntoElevatedApp();
 	
 public:
@@ -466,4 +469,7 @@ public:
 	afx_msg void OnUpdateQuickoptionsShowindicatoracliphasbeenpasted(CCmdUI *pCmdUI);
 	afx_msg void OnGroupsTogglelastgroup();
 	afx_msg void OnUpdateGroupsTogglelastgroup(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateStickyclipsMaketopstickyclip(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateStickyclipsMakelaststickyclip(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateStickyclipsRemovestickysetting(CCmdUI *pCmdUI);
 };

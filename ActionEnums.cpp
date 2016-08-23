@@ -171,6 +171,12 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		return "Option - Show indicator a clip has been pasted";
 	case TOGGLE_LAST_GROUP_TOGGLE:
 		return "Toggle Last Group Toggle";
+	case MAKE_TOP_STICKY:
+		return "Make Top Sticky Clip";
+	case MAKE_LAST_STICKY:
+		return "Make Last Sticky Clip";
+	case REMOVE_STICKY:
+		return "Remove Sticky Setting";
 	}
 
 	return "";
