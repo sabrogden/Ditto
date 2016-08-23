@@ -74,4 +74,7 @@ public:
 	CGdiImageDrawer m_chevronTopButton;
 	CGdiImageDrawer m_chevronBottomButton;
 	CGdiImageDrawer m_maximizeButton;
+
+	CString m_customWindowTitle;
+	bool m_useCustomWindowTitle;
 };

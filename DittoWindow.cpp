@@ -32,6 +32,8 @@ CDittoWindow::CDittoWindow(void)
 	m_CaptionColorRight = RGB(61, 149, 255);
 	m_CaptionTextColor = RGB(255, 255, 255);
 	m_sendWMClose = true;
+	m_customWindowTitle = _T("");
+	m_useCustomWindowTitle = false;
 }
 
 CDittoWindow::~CDittoWindow(void)
@@ -305,8 +307,11 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 	else
 		pOldFont=dc.SelectObject(&m_HorFont);
 
-	CString csText;
-	pWnd->GetWindowText(csText);
+	CString csText = m_customWindowTitle;
+	if (m_useCustomWindowTitle == false)
+	{
+		pWnd->GetWindowText(csText);
+	}
 
 	if(m_lRightBorder == CAPTION_BORDER)
 	{

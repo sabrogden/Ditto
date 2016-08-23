@@ -1130,7 +1130,7 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 
     if(title != prev)
     {
-        SetWindowText(title);
+		SetCustomWindowTitle(title);
         RefreshNc();
     }
 }
