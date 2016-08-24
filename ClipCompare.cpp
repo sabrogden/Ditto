@@ -46,7 +46,7 @@ void CClipCompare::Compare(int leftId, int rightId)
 					SHELLEXECUTEINFO sei = { sizeof(sei) };
 					sei.lpFile = path;
 					CString csParam;
-					csParam.Format(_T("%s %s"), leftFile, rightFile);
+					csParam.Format(_T("\"%s\" \"%s\""), leftFile, rightFile);
 					sei.lpParameters = csParam;
 					sei.nShow = SW_NORMAL;
 
