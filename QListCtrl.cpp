@@ -1234,6 +1234,11 @@ void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 	if((pnmv->uNewState == 3) ||
 		(pnmv->uNewState == 1))
 	{
+		if (VALID_TOOLTIP &&
+			::IsWindowVisible(m_pToolTip->m_hWnd))
+		{
+			this->ShowFullDescription(false, true);
+		}
 		if(g_Opt.m_bAllwaysShowDescription)
 		{
 			KillTimer(TIMER_SHOW_PROPERTIES);

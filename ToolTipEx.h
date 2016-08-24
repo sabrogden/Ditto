@@ -105,6 +105,7 @@ public:
 	afx_msg void OnScaleimagestofitwindow();
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
+	afx_msg void OnPaint();
 	
 };
 

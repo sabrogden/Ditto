@@ -36,7 +36,7 @@ CToolTipEx::~CToolTipEx()
 
 BEGIN_MESSAGE_MAP(CToolTipEx, CWnd)
 //{{AFX_MSG_MAP(CToolTipEx)
-
+ON_WM_PAINT()
 ON_WM_SIZE()
 ON_WM_NCHITTEST()
 ON_WM_ACTIVATE()
@@ -113,6 +113,8 @@ BOOL CToolTipEx::Show(CPoint point)
     {
         m_RichEdit.ShowWindow(SW_HIDE);
 		m_imageViewer.ShowWindow(SW_SHOW);
+
+		m_imageViewer.UpdateBitmapSize();
     }
     else
     {
@@ -143,8 +145,8 @@ BOOL CToolTipEx::Show(CPoint point)
 
 		if (m_imageViewer.m_pBitmap)
 		{
-			int nWidth = CBitmapHelper::GetCBitmapWidth(*m_imageViewer.m_pBitmap);
-			int nHeight = CBitmapHelper::GetCBitmapHeight(*m_imageViewer.m_pBitmap);
+			int nWidth = CBitmapHelper::GetCBitmapWidth(*m_imageViewer.m_pBitmap) + ::GetSystemMetrics(SM_CXVSCROLL);
+			int nHeight = CBitmapHelper::GetCBitmapHeight(*m_imageViewer.m_pBitmap) + ::GetSystemMetrics(SM_CYHSCROLL);
 
 			rect.right = rect.left + nWidth;
 			rect.bottom = rect.top + nHeight;
@@ -274,7 +276,8 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
 			break;
 		case WM_RBUTTONDOWN:
 			{
-				if (m_RichEdit.m_hWnd == GetFocus()->m_hWnd)
+				if (m_RichEdit.m_hWnd == GetFocus()->m_hWnd ||
+					m_imageViewer.m_hWnd == GetFocus()->m_hWnd)
 				{
 					OnOptions();
 					return TRUE;
@@ -340,6 +343,14 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 					return TRUE;
 				}
 				else if(vk == VK_SHIFT)
+				{
+					return FALSE;
+				}
+				else if(vk == VK_NEXT)
+				{
+					return FALSE;
+				}
+				else if (vk == VK_PRIOR)
 				{
 					return FALSE;
 				}
@@ -795,6 +806,7 @@ void CToolTipEx::OnSizewindowtocontent()
 void CToolTipEx::OnScaleimagestofitwindow()
 {
 	CGetSetOptions::SetScaleImagesToDescWindow(!CGetSetOptions::GetScaleImagesToDescWindow());
+	m_imageViewer.UpdateBitmapSize();
 	Invalidate();
 }
 
@@ -811,4 +823,22 @@ void CToolTipEx::OnSetFocus(CWnd* pOldWnd)
 	CWnd::OnSetFocus(pOldWnd);
 
 	m_RichEdit.SetFocus();
+}
+
+void CToolTipEx::OnPaint()
+{
+	CPaintDC dc(this); // device context for painting
+
+	CRect rect;
+	GetClientRect(rect);
+	
+	CBrush  Brush, *pOldBrush;
+	Brush.CreateSolidBrush(GetSysColor(COLOR_INFOBK));
+
+	pOldBrush = dc.SelectObject(&Brush);
+
+	dc.FillRect(&rect, &Brush);
+
+	// Cleanup
+	dc.SelectObject(pOldBrush);
 }

@@ -67,10 +67,20 @@ void CImageViewer::UpdateBitmapSize()
 {
 	if (m_pBitmap != NULL)
 	{
-		int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
-		int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
+		if (CGetSetOptions::GetScaleImagesToDescWindow())
+		{
+			CRect rect;
+			GetClientRect(rect);
 
-		m_scrollHelper.SetDisplaySize(nWidth, nHeight);
+			m_scrollHelper.SetDisplaySize(rect.Width(), rect.Height());
+		}
+		else
+		{
+			int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
+			int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
+
+			m_scrollHelper.SetDisplaySize(nWidth, nHeight);
+		}
 	}
 }
 
