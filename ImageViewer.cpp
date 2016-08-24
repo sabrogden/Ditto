@@ -36,7 +36,7 @@ BOOL CImageViewer::Create(CWnd* pParent)
 
 	// Register window class
 	CString csClassName = AfxRegisterWndClass(CS_OWNDC | CS_HREDRAW | CS_VREDRAW,
-		::LoadCursor(NULL, IDC_APPSTARTING),
+		LoadCursor(NULL, IDC_ARROW),
 		CBrush(::GetSysColor(COLOR_BTNFACE)));
 
 
