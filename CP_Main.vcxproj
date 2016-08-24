@@ -586,6 +586,7 @@
     <ClCompile Include="GdipButton.cpp" />
     <ClCompile Include="GlobalClips.cpp" />
     <ClCompile Include="HotKeys.cpp" />
+    <ClCompile Include="ImageViewer.cpp" />
     <ClCompile Include="MainFrmThread.cpp" />
     <ClCompile Include="MessagePumpThread.cpp" />
     <ClCompile Include="MyDropTarget.cpp" />
@@ -649,6 +650,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="QuickPasteKeyboard.cpp" />
+    <ClCompile Include="ScrollHelper.cpp" />
     <ClCompile Include="Shared\TextConvert.cpp" />
     <ClCompile Include="Shared\Tokenizer.cpp" />
     <ClCompile Include="ShowTaskBarIcon.cpp" />
@@ -1857,6 +1859,7 @@
     <ClInclude Include="GlobalClips.h" />
     <ClInclude Include="GroupStatic.h" />
     <ClInclude Include="HotKeys.h" />
+    <ClInclude Include="ImageViewer.h" />
     <ClInclude Include="MainFrmThread.h" />
     <ClInclude Include="memdc.h" />
     <ClInclude Include="MessagePumpThread.h" />
@@ -1881,6 +1884,7 @@
     <ClInclude Include="QRCode\split.h" />
     <ClInclude Include="QuickPasteKeyboard.h" />
     <ClInclude Include="RichEditCtrlEx.h" />
+    <ClInclude Include="ScrollHelper.h" />
     <ClInclude Include="SearchEditBox.h" />
     <ClInclude Include="Shared\TextConvert.h" />
     <ClInclude Include="Shared\Tokenizer.h" />

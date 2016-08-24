@@ -10,6 +10,7 @@
 #include "WndEx.h"
 #include "DittoWindow.h"
 #include "GdipButton.h"
+#include "ImageViewer.h"
 /////////////////////////////////////////////////////////////////////////////
 // CToolTipEx window
 
@@ -59,7 +60,6 @@ protected:
 	CRect m_rectMargin;
 	CString m_csText;
 	CFont m_Font;
-	CBitmap *m_pBitmap;
 	CString m_csRTF;
 	CRichEditCtrlEx m_RichEdit;
 	CWnd *m_pNotifyWnd;
@@ -67,8 +67,14 @@ protected:
 	CGdipButton m_optionsButton;
 	int m_clipId;
 	CString m_searchText;
+	CScrollBar m_vScroll;
+	CScrollBar m_hScroll;
 
 	CDittoWindow m_DittoWindow;
+
+	CImageViewer m_imageViewer;
+
+	
 
 protected:
 	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);
@@ -80,8 +86,7 @@ protected:
 
 	// Generated message map functions
 protected:
-	//{{AFX_MSG(CToolTipEx)
-	afx_msg void OnPaint();
+	//{{AFX_MSG(CToolTipEx)	
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg HITTEST_RET OnNcHitTest(CPoint point);
 	afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized);
@@ -100,6 +105,7 @@ public:
 	afx_msg void OnScaleimagestofitwindow();
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
+	
 };
 
 /////////////////////////////////////////////////////////////////////////////

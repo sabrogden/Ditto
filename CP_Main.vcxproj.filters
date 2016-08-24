@@ -400,6 +400,8 @@
     <ClCompile Include="PowerManager.cpp" />
     <ClCompile Include="QuickPasteKeyboard.cpp" />
     <ClCompile Include="NTray.cpp" />
+    <ClCompile Include="ScrollHelper.cpp" />
+    <ClCompile Include="ImageViewer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -852,6 +854,8 @@
     <ClInclude Include="PowerManager.h" />
     <ClInclude Include="QuickPasteKeyboard.h" />
     <ClInclude Include="NTray.h" />
+    <ClInclude Include="ScrollHelper.h" />
+    <ClInclude Include="ImageViewer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

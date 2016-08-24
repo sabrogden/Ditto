@@ -11,11 +11,11 @@
     static char THIS_FILE[] = __FILE__;
 #endif 
 
-#define DELETE_BITMAP	if(m_pBitmap)					\
+#define DELETE_BITMAP	if(m_imageViewer.m_pBitmap)					\
 {								\
-m_pBitmap->DeleteObject();	\
-delete m_pBitmap;		\
-m_pBitmap = NULL;		\
+m_imageViewer.m_pBitmap->DeleteObject();	\
+delete m_imageViewer.m_pBitmap;		\
+m_imageViewer.m_pBitmap = NULL;		\
 }
 
 
@@ -24,7 +24,7 @@ m_pBitmap = NULL;		\
 
 CToolTipEx::CToolTipEx(): m_dwTextStyle(DT_EXPANDTABS | DT_EXTERNALLEADING |
                        DT_NOPREFIX | DT_WORDBREAK), m_rectMargin(2, 2, 3, 3),
-                       m_pBitmap(NULL), m_pNotifyWnd(NULL), m_clipId(0){}
+                        m_pNotifyWnd(NULL), m_clipId(0){}
 
 CToolTipEx::~CToolTipEx()
 {
@@ -36,7 +36,7 @@ CToolTipEx::~CToolTipEx()
 
 BEGIN_MESSAGE_MAP(CToolTipEx, CWnd)
 //{{AFX_MSG_MAP(CToolTipEx)
-ON_WM_PAINT()
+
 ON_WM_SIZE()
 ON_WM_NCHITTEST()
 ON_WM_ACTIVATE()
@@ -55,6 +55,9 @@ ON_COMMAND(ID_FIRST_SCALEIMAGESTOFITWINDOW, &CToolTipEx::OnScaleimagestofitwindo
 ON_COMMAND(2, OnOptions)
 ON_WM_RBUTTONDOWN()
 ON_WM_SETFOCUS()
+
+
+
 END_MESSAGE_MAP() 
 
 
@@ -64,8 +67,7 @@ END_MESSAGE_MAP()
 BOOL CToolTipEx::Create(CWnd *pParentWnd)
 {
     // Get the class name and create the window
-    CString szClassName = AfxRegisterWndClass(CS_CLASSDC | CS_SAVEBITS,
-        LoadCursor(NULL, IDC_ARROW));
+    CString szClassName = AfxRegisterWndClass(CS_CLASSDC | CS_SAVEBITS, LoadCursor(NULL, IDC_ARROW));
 
     // Create the window - just don't show it yet.
     if( !CWnd::CreateEx(WS_EX_TOPMOST, szClassName, _T(""), WS_POPUP,
@@ -74,6 +76,11 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
         return FALSE;
     }	
 
+	//CString szClassName2 = AfxRegisterWndClass(CS_CLASSDC | CS_SAVEBITS, LoadCursor(NULL, IDC_ARROW));
+	//BOOL b = m_imageViewer.Create(_T(""), szClassName2, WS_CHILD | WS_VISIBLE | WS_VSCROLL | WS_HSCROLL, CRect(0, 0, 0, 0), this, 3);
+	m_imageViewer.Create(this);
+	
+	
 	m_DittoWindow.DoCreate(this);
 	m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeft(), g_Opt.m_Theme.CaptionRight());
 	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true);
@@ -102,13 +109,15 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 BOOL CToolTipEx::Show(CPoint point)
 {
 	m_reducedWindowSize = false;
-    if(m_pBitmap)
+    if(m_imageViewer.m_pBitmap)
     {
         m_RichEdit.ShowWindow(SW_HIDE);
+		m_imageViewer.ShowWindow(SW_SHOW);
     }
     else
     {
         m_RichEdit.ShowWindow(SW_SHOW);
+		m_imageViewer.ShowWindow(SW_HIDE);
     }
 
 	CRect rect;
@@ -132,10 +141,10 @@ BOOL CToolTipEx::Show(CPoint point)
 		rect.right += 20;
 		rect.bottom += 20;
 
-		if (m_pBitmap)
+		if (m_imageViewer.m_pBitmap)
 		{
-			int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
-			int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
+			int nWidth = CBitmapHelper::GetCBitmapWidth(*m_imageViewer.m_pBitmap);
+			int nHeight = CBitmapHelper::GetCBitmapHeight(*m_imageViewer.m_pBitmap);
 
 			rect.right = rect.left + nWidth;
 			rect.bottom = rect.top + nHeight;
@@ -228,61 +237,7 @@ BOOL CToolTipEx::Hide()
     return TRUE;
 }
 
-void CToolTipEx::OnPaint()
-{
-    CPaintDC dc(this); // device context for painting
 
-    CRect rect;
-    GetClientRect(rect);
-
-    
-
-    // Draw Text
-    //    dc.SetBkMode(TRANSPARENT);
-    //    rect.DeflateRect(m_rectMargin);
-
-    
-	CBrush  Brush, *pOldBrush;
-	Brush.CreateSolidBrush(GetSysColor(COLOR_INFOBK));
-
-	pOldBrush = dc.SelectObject(&Brush);
-	CFont *pOldFont = dc.SelectObject(&m_Font);
-
-	dc.FillRect(&rect, &Brush);
-
-	if(m_pBitmap)
-	{
-        CDC MemDc;
-        MemDc.CreateCompatibleDC(&dc);
-
-        CBitmap *oldBitmap = MemDc.SelectObject(m_pBitmap);
-
-        int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
-        int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
-
-		if(CGetSetOptions::GetScaleImagesToDescWindow())
-		{
-			dc.StretchBlt(rect.left, rect.top, rect.Width(), rect.Height(), &MemDc, 0, 0, nWidth, nHeight, SRCCOPY);
-			//OutputDebugString(StrF(_T("scaling image, window size %d/%d, image %d/%d\n"), min(nWidth, rect.Width()), min(nHeight, rect.Height()), nWidth, nHeight));
-		}
-		else
-		{
-			dc.BitBlt(rect.left, rect.top, nWidth, nHeight, &MemDc, 0, 0, SRCCOPY);
-		}
-
-		//dc.StretchBlt(rect.left, rect.top, rect.Width(), rect.Height(), &MemDc, 0, 0, nWidth, nHeight, SRCCOPY);
-
-        MemDc.SelectObject(oldBitmap);
-
-        rect.top += nHeight;
-    }
-
-    //dc.DrawText(m_csText, rect, m_dwTextStyle);
-
-    // Cleanup
-    //  dc.SelectObject(pOldBrush);
-    //	dc.SelectObject(pOldFont);
-}
 
 void CToolTipEx::PostNcDestroy()
 {
@@ -458,10 +413,10 @@ CRect CToolTipEx::GetBoundsRect()
     rect.bottom += m_rectMargin.top + m_rectMargin.bottom;
     rect.right += m_rectMargin.left + m_rectMargin.right + 2;
 
-    if(m_pBitmap)
+    if(m_imageViewer.m_pBitmap)
     {
-        int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
-        int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
+        int nWidth = CBitmapHelper::GetCBitmapWidth(*m_imageViewer.m_pBitmap);
+        int nHeight = CBitmapHelper::GetCBitmapHeight(*m_imageViewer.m_pBitmap);
 
         rect.bottom += nHeight;
         if((rect.left + nWidth) > rect.right)
@@ -558,12 +513,14 @@ void CToolTipEx::SetBitmap(CBitmap *pBitmap)
 {
     DELETE_BITMAP 
 
-    m_pBitmap = pBitmap;
+	m_imageViewer.m_pBitmap = pBitmap;
 
-	if (m_pBitmap != NULL)
+	m_imageViewer.UpdateBitmapSize();
+
+	if (m_imageViewer.m_pBitmap != NULL)
 	{
-		int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
-		int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
+		int nWidth = CBitmapHelper::GetCBitmapWidth(*m_imageViewer.m_pBitmap);
+		int nHeight = CBitmapHelper::GetCBitmapHeight(*m_imageViewer.m_pBitmap);
 
 		Invalidate();
 	}
@@ -582,6 +539,7 @@ void CToolTipEx::OnSize(UINT nType, int cx, int cy)
     GetClientRect(cr);
     cr.DeflateRect(0, 0, 0, theApp.m_metrics.ScaleY(21));
     m_RichEdit.MoveWindow(cr);
+	m_imageViewer.MoveWindow(cr);
 
 	m_optionsButton.MoveWindow(cr.left, cr.bottom + theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
 
