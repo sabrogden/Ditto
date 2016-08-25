@@ -185,7 +185,6 @@ ON_COMMAND(ID_MENU_NEWGROUPSELECTION, OnMenuNewGroupSelection)
 ON_MESSAGE(NM_GROUP_TREE_MESSAGE, OnGroupTreeMessage)
 ON_COMMAND(ID_BACK_BUTTON, OnBackButton)
 ON_COMMAND(ID_SYSTEM_BUTTON, OnSystemButton)
-ON_COMMAND(ID_SEARCH_DESCRIPTION_BUTTON, OnSearchDescription)
 ON_MESSAGE(CB_UPDOWN, OnUpDown)
 ON_MESSAGE(NM_INACTIVE_TOOLTIPWND, OnToolTipWndInactive)
 ON_MESSAGE(NM_SET_LIST_COUNT, OnSetListCount)
@@ -344,13 +343,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_systemMenu.LoadStdImageDPI(IDB_SYSTEM_MENU_16_16, IDB_SYSTEM_MENU_20_20, IDB_SYSTEM_MENU_24_24, IDB_SYSTEM_MENU_32_32, _T("PNG"));
 	m_systemMenu.ModifyStyle(WS_TABSTOP, 0);
 	m_systemMenu.ShowWindow(SW_SHOW);
-
-	m_searchOptionsButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SEARCH_DESCRIPTION_BUTTON);
-	m_searchOptionsButton.LoadStdImageDPI(IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, IDB_COG_32_32, _T("PNG"));
-	m_searchOptionsButton.SetToolTipText(theApp.m_Language.GetString(_T("SearchOptionsTooltip"), _T("Search options")));
-	m_searchOptionsButton.ModifyStyle(WS_TABSTOP, 0);
-	m_searchOptionsButton.ShowWindow(SW_SHOW);		
-
+		
     m_stGroup.Create(_T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, ID_GROUP_TEXT);
 	
 
@@ -566,9 +559,7 @@ void CQPasteWnd::MoveControls()
 	}
 
 	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize);
-	m_search.MoveWindow(theApp.m_metrics.ScaleX(20), cy - theApp.m_metrics.ScaleY(searchRowStart-1), cx - theApp.m_metrics.ScaleX(61), theApp.m_metrics.ScaleY(20));
-
-	m_searchOptionsButton.MoveWindow(cx - theApp.m_metrics.ScaleX(36), cy - theApp.m_metrics.ScaleY(searchRowStart-3), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
+	m_search.MoveWindow(theApp.m_metrics.ScaleX(20), cy - theApp.m_metrics.ScaleY(searchRowStart-1), cx - theApp.m_metrics.ScaleX(40), theApp.m_metrics.ScaleY(20));
 
 	m_systemMenu.MoveWindow(cx - theApp.m_metrics.ScaleX(18), cy - theApp.m_metrics.ScaleY(searchRowStart - 3), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
 
@@ -672,6 +663,8 @@ BOOL CQPasteWnd::HideQPasteWindow (bool releaseFocus, bool clearSearchData)
 	}
 
     KillTimer(TIMER_FILL_CACHE);
+
+	m_lstHeader.HidePopup();
 
     //Save the size
     SaveWindowSize();
@@ -1632,6 +1625,27 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
 	if (CGetSetOptions::GetShowIfClipWasPasted())
 	{
 		pMenu->CheckMenuItem(ID_QUICKOPTIONS_SHOWINDICATORACLIPHASBEENPASTED, MF_CHECKED);
+	}
+
+	if (CGetSetOptions::GetSearchDescription())
+		pMenu->CheckMenuItem(ID_MENU_SEARCHDESCRIPTION, MF_CHECKED);
+
+	if (CGetSetOptions::GetSearchFullText())
+		pMenu->CheckMenuItem(ID_MENU_SEARCHFULLTEXT, MF_CHECKED);
+
+	if (CGetSetOptions::GetSearchQuickPaste())
+		pMenu->CheckMenuItem(ID_MENU_SEARCHQUICKPASTE, MF_CHECKED);
+
+	if (CGetSetOptions::GetSimpleTextSearch())
+		pMenu->CheckMenuItem(ID_MENU_CONTAINSTEXTSEARCHONLY, MF_CHECKED);
+
+	if (CGetSetOptions::GetRegExTextSearch())
+		pMenu->CheckMenuItem(ID_MENU_REGULAREXPRESSIONSEARCH, MF_CHECKED);
+
+	if (CGetSetOptions::GetSimpleTextSearch() == FALSE &&
+		CGetSetOptions::GetRegExTextSearch() == FALSE)
+	{
+		pMenu->CheckMenuItem(ID_MENU_WILDCARDSEARCH, MF_CHECKED);
 	}
 }
 
@@ -4725,6 +4739,8 @@ void CQPasteWnd::OnWindowPosChanging(WINDOWPOS *lpwndpos)
 
 void CQPasteWnd::OnShowGroupsTop()
 {
+	m_lstHeader.HidePopup();
+
     OnShowGroupsBottom();
     return ;
     m_GroupTree.m_bHide = false;
@@ -4733,9 +4749,7 @@ void CQPasteWnd::OnShowGroupsTop()
     CRect crList;
     m_lstHeader.GetWindowRect(crList);
 
-    CRect cr(crList.left, crList.top, crList.left + crList.Width(), crList.top + 200);
-
-	
+    CRect cr(crList.left, crList.top, crList.left + crList.Width(), crList.top + 200);	
 
     m_GroupTree.MoveWindow(cr);
     m_GroupTree.m_selectedFolderID = theApp.m_GroupID;
@@ -4749,6 +4763,8 @@ void CQPasteWnd::OnShowGroupsTop()
 
 void CQPasteWnd::OnShowGroupsBottom()
 {
+	m_lstHeader.HidePopup();
+
     m_GroupTree.m_bHide = false;
     m_bHideWnd = false;
 
@@ -4819,52 +4835,6 @@ LRESULT CQPasteWnd::OnGroupTreeMessage(WPARAM wParam, LPARAM lParam)
 void CQPasteWnd::OnBackButton()
 {
     theApp.EnterGroupID(theApp.m_GroupParentID);
-}
-
-void CQPasteWnd::OnSearchDescription()
-{
-	POINT pp;
-	CMenu cmPopUp;
-	CMenu *cmSubMenu = NULL;
-
-	GetCursorPos(&pp);
-	if(cmPopUp.LoadMenu(IDR_MENU_SEARCH) != 0)
-	{
-		cmSubMenu = cmPopUp.GetSubMenu(0);
-		if(!cmSubMenu)
-		{
-			return ;
-		}
-
-		GetCursorPos(&pp);
-
-		if(CGetSetOptions::GetSearchDescription())
-			cmSubMenu->CheckMenuItem(ID_MENU_SEARCHDESCRIPTION, MF_CHECKED);
-
-		if(CGetSetOptions::GetSearchFullText())
-			cmSubMenu->CheckMenuItem(ID_MENU_SEARCHFULLTEXT, MF_CHECKED);
-
-		if(CGetSetOptions::GetSearchQuickPaste())
-			cmSubMenu->CheckMenuItem(ID_MENU_SEARCHQUICKPASTE, MF_CHECKED);
-
-		if(CGetSetOptions::GetSimpleTextSearch())
-			cmSubMenu->CheckMenuItem(ID_MENU_CONTAINSTEXTSEARCHONLY, MF_CHECKED);
-
-		if (CGetSetOptions::GetRegExTextSearch())
-			cmSubMenu->CheckMenuItem(ID_MENU_REGULAREXPRESSIONSEARCH, MF_CHECKED);
-
-		if(CGetSetOptions::GetSimpleTextSearch() == FALSE &&
-			CGetSetOptions::GetRegExTextSearch() == FALSE)
-		{
-			cmSubMenu->CheckMenuItem(ID_MENU_WILDCARDSEARCH, MF_CHECKED);
-		}		
-
-		//theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
-
-		
-
-		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
-	}
 }
 
 void CQPasteWnd::OnMenuSearchDescription()
@@ -5682,6 +5652,8 @@ void CQPasteWnd::OnUpdateSpecialpasteSentence(CCmdUI *pCmdUI)
 
 void CQPasteWnd::OnSystemButton()
 {
+	m_lstHeader.HidePopup();
+
 	POINT pp;
 	CMenu cmPopUp;
 	CMenu *cmSubMenu = NULL;

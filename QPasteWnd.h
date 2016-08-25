@@ -136,7 +136,6 @@ public:
     CGroupTree m_GroupTree;
     CGdipButton m_ShowGroupsFolderBottom;
     CGdipButton m_BackButton;
-	CGdipButton m_searchOptionsButton;
 	CGroupStatic m_alwaysOnToWarningStatic;
 	CGdipButton m_systemMenu;
 
@@ -389,7 +388,6 @@ protected:
     afx_msg void OnMenuNewGroupSelection();
     afx_msg void OnBackButton();
 	afx_msg void OnSystemButton();
-	afx_msg void OnSearchDescription();
     afx_msg LRESULT OnUpDown(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnItemDeleted(WPARAM wParam, LPARAM lParam);
     LRESULT OnToolTipWndInactive(WPARAM wParam, LPARAM lParam);

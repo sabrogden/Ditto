@@ -397,11 +397,21 @@
     <ClCompile Include="SpecialPasteOptions.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="PowerManager.cpp" />
-    <ClCompile Include="QuickPasteKeyboard.cpp" />
-    <ClCompile Include="NTray.cpp" />
-    <ClCompile Include="ScrollHelper.cpp" />
-    <ClCompile Include="ImageViewer.cpp" />
+    <ClCompile Include="ScrollHelper.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="QuickPasteKeyboard.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerManager.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageViewer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="NTray.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -851,11 +861,21 @@
     <ClInclude Include="TrayWnd.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="PowerManager.h" />
-    <ClInclude Include="QuickPasteKeyboard.h" />
-    <ClInclude Include="NTray.h" />
-    <ClInclude Include="ScrollHelper.h" />
-    <ClInclude Include="ImageViewer.h" />
+    <ClInclude Include="ImageViewer.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerManager.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="QuickPasteKeyboard.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="ScrollHelper.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="NTray.h">
+      <Filter>header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -1126,15 +1146,31 @@
     <None Include="res\yellow_star_32_32.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\Hamburger_16_16.png" />
-    <None Include="res\Hamburger_20_20.png" />
-    <None Include="res\Hamburger_24_24.png" />
-    <None Include="res\Hamburger_32_32.png" />
-    <None Include="res\system_menu_16_16.png" />
-    <None Include="res\system_menu_20_20.png" />
-    <None Include="res\system_menu_24_24.png" />
-    <None Include="res\system_menu_32_32.png" />
     <None Include="CP_Main.rgs" />
+    <None Include="res\Hamburger_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\Hamburger_20_20.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\Hamburger_24_24.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\Hamburger_32_32.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\system_menu_16_16.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\system_menu_20_20.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\system_menu_24_24.png">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\system_menu_32_32.png">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">

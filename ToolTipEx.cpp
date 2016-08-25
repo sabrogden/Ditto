@@ -58,7 +58,8 @@ ON_WM_SETFOCUS()
 
 
 
-END_MESSAGE_MAP() 
+ON_COMMAND(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, &CToolTipEx::OnFirstHidedescriptionwindowonm)
+END_MESSAGE_MAP()
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -301,12 +302,15 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
         case WM_WINDOWPOSCHANGING:
         case WM_LBUTTONDOWN:
             {
-                if(!IsCursorInToolTip())
-                {
-                    Hide();
-                }
-                break;
+				if (CGetSetOptions::GetMouseClickHidesDescription())
+				{
+					if (!IsCursorInToolTip())
+					{
+						Hide();
+					}
+				}
             }
+			break;
         case WM_KEYDOWN:
             {
                 WPARAM vk = pMsg->wParam;
@@ -682,10 +686,8 @@ void CToolTipEx::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
 {
     CWnd::OnActivate(nState, pWndOther, bMinimized);
 
-    if(nState == WA_INACTIVE)
-    {
-        Hide();
-
+	if (nState == WA_INACTIVE)
+	{		
         if(m_pNotifyWnd)
         {
             m_pNotifyWnd->PostMessage(NM_INACTIVE_TOOLTIPWND, 0, 0);
@@ -781,6 +783,9 @@ void CToolTipEx::OnOptions()
 
 		if(CGetSetOptions::GetScaleImagesToDescWindow())
 			cmSubMenu->CheckMenuItem(ID_FIRST_SCALEIMAGESTOFITWINDOW, MF_CHECKED);
+
+		if (CGetSetOptions::GetMouseClickHidesDescription())
+			cmSubMenu->CheckMenuItem(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, MF_CHECKED);
 		
 		//theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 		
@@ -841,4 +846,9 @@ void CToolTipEx::OnPaint()
 
 	// Cleanup
 	dc.SelectObject(pOldBrush);
+}
+
+void CToolTipEx::OnFirstHidedescriptionwindowonm()
+{
+	CGetSetOptions::SetMouseClickHidesDescription(!CGetSetOptions::GetMouseClickHidesDescription());
 }

@@ -2305,3 +2305,13 @@ void CGetSetOptions::SetLastGroupToggle(int val)
 {
 	SetProfileLong(_T("LastGroupToggle"), val);
 }
+
+BOOL CGetSetOptions::GetMouseClickHidesDescription()
+{
+	return GetProfileLong(_T("MouseClickHidesDescription"), TRUE);
+}
+
+void CGetSetOptions::SetMouseClickHidesDescription(int val)
+{
+	SetProfileLong(_T("MouseClickHidesDescription"), val);
+}

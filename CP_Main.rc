@@ -327,6 +327,7 @@ BEGIN
         MENUITEM "Remember window position",    ID_FIRST_REMEMBERWINDOWPOSITION
         MENUITEM "Size window to content",      ID_FIRST_SIZEWINDOWTOCONTENT
         MENUITEM "Scale images to fit window",  ID_FIRST_SCALEIMAGESTOFITWINDOW
+        MENUITEM "Hide description window on mouse clip selection", ID_FIRST_HIDEDESCRIPTIONWINDOWONM
     END
 END
 
@@ -346,6 +347,16 @@ BEGIN
     BEGIN
         MENUITEM "Help",                        32842
         MENUITEM SEPARATOR
+        POPUP "Search Options"
+        BEGIN
+            MENUITEM "Search Description",          ID_MENU_SEARCHDESCRIPTION
+            MENUITEM "Search Full Text",            ID_MENU_SEARCHFULLTEXT
+            MENUITEM "Search Quick Paste",          ID_MENU_SEARCHQUICKPASTE
+            MENUITEM SEPARATOR
+            MENUITEM "Contains Text Search",        ID_MENU_CONTAINSTEXTSEARCHONLY
+            MENUITEM "Regular Expression Search",   ID_MENU_REGULAREXPRESSIONSEARCH
+            MENUITEM "Wildcard Search",             ID_MENU_WILDCARDSEARCH
+        END
         MENUITEM "Options...",                  32805
         POPUP "Quick Options"
         BEGIN
