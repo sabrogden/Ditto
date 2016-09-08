@@ -27,6 +27,7 @@ DisableReadyPage=yes
 DirExistsWarning=no
 UninstallLogMode=overwrite
 ChangesAssociations=yes
+CloseApplications=yes
 
 [Languages]
 Name: English; MessagesFile: compiler:Default.isl
@@ -95,7 +96,7 @@ Name: {group}\Uninstall; Filename: {uninstallexe}
 
 [Run]
 Filename: {app}\Ditto.exe; Description: Launch Ditto; Flags: nowait postinstall skipifsilent
-Filename: {app}\Help\DittoGettingStarted.htm; Description: View Help; Flags: nowait postinstall skipifsilent shellexec
+Filename: {app}\Help\DittoGettingStarted.htm; Description: View Help; Flags: nowait postinstall skipifsilent shellexec unchecked
 Filename: {app}\Changes.txt; Description: View Change History; Flags: nowait postinstall skipifsilent shellexec unchecked
 
 [Registry]
@@ -132,6 +133,56 @@ end;
 
 
 
+
+
+procedure CurStepChanged(CurStep: TSetupStep);
+var
+  ProgressPage: TOutputProgressWizardPage;
+  ErrorCode : Integer;
+  AbortNeeded: Boolean;
+begin
+  AbortNeeded := false;
+  case CurStep of
+    ssInstall:
+    begin
+    end;
+
+	  ssPostInstall:
+  	begin            
+    end;
+	
+    ssDone:
+    begin
+      RegisterForCrashDump('Ditto')
+    end;
+
+  end;
+end;
+
+procedure RegisterForCrashDump(theApp : String);
+var
+   theExe : String;
+begin
+  theExe := theApp + '.exe';
+  if IsWin64() then
+    begin
+      if RegValueExists(HKLM64, 'Software\Microsoft\Windows\Windows Error Reporting\LocalDumps\' + theExe, 'DumpFolder') = false then
+        RegWriteStringValue(HKLM64, 'Software\Microsoft\Windows\Windows Error Reporting\LocalDumps\' + theExe, 'DumpFolder', ExpandConstant('{userappdata}') + '\Ditto\Dumps');
+      if RegValueExists(HKLM64, 'Software\Microsoft\Windows\Windows Error Reporting\LocalDumps\' + theExe, 'DumpType') = false then
+        RegWriteDWordValue(HKLM64, 'Software\Microsoft\Windows\Windows Error Reporting\LocalDumps\' + theExe, 'DumpType', 2);
+      if RegValueExists(HKLM64, 'Software\Microsoft\Windows\Windows Error Reporting\LocalDumps\' + theExe, 'DumpCount') = false then
+        RegWriteDWordValue(HKLM64, 'Software\Microsoft\Windows\Windows Error Reporting\LocalDumps\' + theExe, 'DumpCount', 3);
+    end
+  else
+    begin
+      if RegValueExists(HKEY_LOCAL_MACHINE, 'Software\Microsoft\Windows\Windows Error Reporting\LocalDumps\' + theExe, 'DumpFolder') = false then
+        RegWriteStringValue(HKEY_LOCAL_MACHINE, 'Software\Microsoft\Windows\Windows Error Reporting\LocalDumps\' + theExe, 'DumpFolder', ExpandConstant('{userappdata}') + '\Ditto\Dumps');
+      if RegValueExists(HKEY_LOCAL_MACHINE, 'Software\Microsoft\Windows\Windows Error Reporting\LocalDumps\' + theExe, 'DumpType') = false then
+        RegWriteDWordValue(HKEY_LOCAL_MACHINE, 'Software\Microsoft\Windows\Windows Error Reporting\LocalDumps\' + theExe, 'DumpType', 2);
+      if RegValueExists(HKEY_LOCAL_MACHINE, 'Software\Microsoft\Windows\Windows Error Reporting\LocalDumps\' + theExe, 'DumpCount') = false then
+        RegWriteDWordValue(HKEY_LOCAL_MACHINE, 'Software\Microsoft\Windows\Windows Error Reporting\LocalDumps\' + theExe, 'DumpCount', 3);
+    end;
+end;
 
 
 
