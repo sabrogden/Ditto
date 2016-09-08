@@ -722,6 +722,7 @@ INT_PTR CQListCtrl::OnToolHitTest(CPoint point, TOOLINFO * pTI) const
 					pTI->uId = (UINT)(nIndex+1);
 					pTI->lpszText = LPSTR_TEXTCALLBACK;
 					pTI->rect = rect;
+					pTI->uFlags = TTF_TRANSPARENT;
 					return pTI->uId;
 				}
 			}
