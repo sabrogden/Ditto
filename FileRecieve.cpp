@@ -98,6 +98,23 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 		break;
 
 		case MyEnums::DATA_END:
+		{
+			if (Info.m_lParameter1 != 0 &&
+				Info.m_lParameter2 != 0 &&
+				m_RecievedFiles.GetCount() > 0)
+			{
+				FILETIME lastWriteTime;
+				lastWriteTime.dwLowDateTime = Info.m_lParameter1;
+				lastWriteTime.dwHighDateTime = Info.m_lParameter2;
+
+				HANDLE filename = CreateFile(m_RecievedFiles[m_RecievedFiles.GetCount() - 1], FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);				
+				if(filename != NULL)
+				{
+					SetFileTime(filename, NULL, NULL, &lastWriteTime);
+				}
+			}
+		}
+
 			break;
 
 		case MyEnums::END:

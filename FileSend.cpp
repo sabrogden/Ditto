@@ -151,6 +151,19 @@ BOOL CFileSend::SendFile(CString csFile)
 				
 				if(bError == FALSE)
 				{
+					Info.m_lParameter1 = 0;
+					Info.m_lParameter2 = 0;
+
+					FILETIME creationTime;
+					FILETIME lastAccessTime;
+					FILETIME lastWriteTime;
+
+					if (GetFileTime(file, &creationTime, &lastAccessTime, &lastWriteTime))
+					{
+						Info.m_lParameter1 = lastWriteTime.dwLowDateTime;
+						Info.m_lParameter2 = lastWriteTime.dwHighDateTime;
+					}
+
 					if(m_Send.SendCSendData(Info, MyEnums::DATA_END))
 						bRet = TRUE;
 				}
