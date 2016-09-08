@@ -80,7 +80,7 @@ CString CMainTableFunctions::GetDisplayText(int nMaxLines, const CString &OrigTe
 	CString token;
 	CStringArray tokens;
 	CTokenizer tokenizer(text,"\r\n");
-	for(int nLines=0; nLines < nMaxLines && tokenizer.Next(token); nLines++)
+	for(int nLines=0; nLines < 100 && tokenizer.Next(token); nLines++)
 	{
 		tokens.Add(token);
 	}

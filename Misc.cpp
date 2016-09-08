@@ -1042,7 +1042,7 @@ __int64 FileSize(const TCHAR *fileName)
 	return buf.st_size;
 }
 
-int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, CString postInsert)
+int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, CString postInsert, int linesPerRow)
 {
 	int replaceCount = 0;
 
@@ -1055,6 +1055,8 @@ int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, C
 		int startFindPos = 0;
 		int newPos = 0;
 		int insertedLength = 0;
+
+		int firstFindPos = 0;
 
 		//use icu::UnicodeString because it handles upper/lowercase characters for all languages, CSTring only hanldes ascii characters
 		icu::UnicodeString mainLow(mainStr);
@@ -1074,6 +1076,11 @@ int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, C
 			if (foundPos < 0)
 				break;
 
+			if (replaceCount == 0)
+			{
+				firstFindPos = foundPos + preLength;
+			}
+
 			newPos = foundPos + insertedLength;
 
 			mainStr.Insert(newPos, preInsert);
@@ -1087,6 +1094,44 @@ int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, C
 
 			//safety check, make sure we don't look forever
 			if (replaceCount > 100)
+				break;
+		}
+
+		startFindPos = 0;
+		int line = 0;
+		int prevLinePos = 0;
+		int prevPrevLinePos = 0;
+
+		while (TRUE)
+		{
+			foundPos = mainStr.Find(_T("\n"), startFindPos);
+			if (foundPos < 0)
+				break;
+
+			if (firstFindPos < foundPos)
+			{
+				if (line > linesPerRow - 1)
+				{
+					int lineStart = prevLinePos;
+					if (linesPerRow > 1)
+					{
+						lineStart = prevPrevLinePos;
+					}
+
+					mainStr = _T("... ") + mainStr.Mid(lineStart + 1);
+				}
+
+				break;
+			}			
+
+			startFindPos = foundPos + 1;
+			prevPrevLinePos = prevLinePos;
+			prevLinePos = foundPos;
+
+			line++;
+
+			//safety check, make sure we don't look forever
+			if (line > 1000)
 				break;
 		}
 

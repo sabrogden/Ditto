@@ -200,7 +200,7 @@ int __stdcall DrawHTML(
                       )
 {
   LPCTSTR Start;
-  int Left, Top, MaxWidth, MinWidth, Height;
+  int Left, Top, MaxWidth, MinWidth, Height, MaxHeight;
   int SavedDC;
   int Tag, TokenLength;
   HFONT hfontBase, hfontSpecial[FV_NUMBER];
@@ -217,10 +217,13 @@ int __stdcall DrawHTML(
   if (nCount < 0)
     nCount = _tcslen(lpString);
 
+  MaxHeight = INT_MAX;
+
   if (lpRect != NULL) {
     Left = lpRect->left;
     Top = lpRect->top;
     MaxWidth = lpRect->right - lpRect->left;
+	MaxHeight = lpRect->bottom - lpRect->top;
   } else {
     GetCurrentPositionEx(hdc, &CurPos);
     Left = CurPos.x;
@@ -362,6 +365,9 @@ int __stdcall DrawHTML(
         MinWidth = XPos;
       WhiteSpace = FALSE;
     } /* if */
+
+	if ((Height + LineHeight) >= MaxHeight)
+		break;
 
     Start += TokenLength;
   } /* for */

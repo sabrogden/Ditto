@@ -172,7 +172,7 @@ void DeleteFolderFiles(CString csDir, BOOL checkFileLastAccess);
 
 __int64 FileSize(const TCHAR *fileName);
 
-int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, CString postInsert);
+int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, CString postInsert, int linesPerRow);
 
 void OnInitMenuPopupEx(CMenu *pPopupMenu, UINT nIndex, BOOL bSysMenu, CWnd *pWnd);
 
