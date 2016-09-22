@@ -5,7 +5,7 @@
 void InitToolInfo( TOOLINFO& ti )
 {
 	// INITIALIZE MEMBERS OF THE TOOLINFO STRUCTURE
-	ti.cbSize = sizeof(TOOLINFO);
+	ti.cbSize = TTTOOLINFO_V1_SIZE;
 	ti.uFlags = TTF_ABSOLUTE | TTF_TRACK;
 	ti.hwnd = NULL;
 	ti.hinst = NULL;
