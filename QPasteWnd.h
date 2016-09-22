@@ -257,6 +257,7 @@ public:
 	bool DoPastePlusAddLineFeed();
 	bool DoPasteAddTwoLineFeeds();
 	bool DoPasteTypoglycemia();
+	bool DoPasteAddCurrentTime();
 	bool OnShowFirstTenText();
 	bool OnShowClipWasPasted();
 	bool OnToggleLastGroupToggle();
@@ -470,4 +471,6 @@ public:
 	afx_msg void OnUpdateStickyclipsMaketopstickyclip(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateStickyclipsMakelaststickyclip(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateStickyclipsRemovestickysetting(CCmdUI *pCmdUI);
+	afx_msg void OnSpecialpastePaste32927();
+	afx_msg void OnUpdateSpecialpastePaste32927(CCmdUI *pCmdUI);
 };

@@ -177,6 +177,8 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		return "Make Last Sticky Clip";
 	case REMOVE_STICKY:
 		return "Remove Sticky Setting";
+	case PASTE_ADD_CURRENT_TIME:
+		return "Paste Add Current Time";
 	}
 
 	return "";

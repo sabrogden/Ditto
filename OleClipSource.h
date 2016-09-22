@@ -39,4 +39,5 @@ protected:
 	void AddLineFeeds(CClip &clip, int count);
 	void Typoglycemia(CClip &clip);
 	HGLOBAL ConvertToFileDrop();
+	void AddDateTime(CClip &clip);
 };

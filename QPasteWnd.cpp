@@ -272,6 +272,8 @@ ON_UPDATE_COMMAND_UI(ID_GROUPS_TOGGLELASTGROUP, &CQPasteWnd::OnUpdateGroupsToggl
 ON_UPDATE_COMMAND_UI(ID_STICKYCLIPS_MAKETOPSTICKYCLIP, &CQPasteWnd::OnUpdateStickyclipsMaketopstickyclip)
 ON_UPDATE_COMMAND_UI(ID_STICKYCLIPS_MAKELASTSTICKYCLIP, &CQPasteWnd::OnUpdateStickyclipsMakelaststickyclip)
 ON_UPDATE_COMMAND_UI(ID_STICKYCLIPS_REMOVESTICKYSETTING, &CQPasteWnd::OnUpdateStickyclipsRemovestickysetting)
+ON_COMMAND(ID_SPECIALPASTE_PASTE32927, &CQPasteWnd::OnSpecialpastePaste32927)
+ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_PASTE32927, &CQPasteWnd::OnUpdateSpecialpastePaste32927)
 END_MESSAGE_MAP()
 
 
@@ -2789,6 +2791,9 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::PASTE_TYPOGLYCEMIA:
 		ret = DoPasteTypoglycemia();
 		break;
+	case ActionEnums::PASTE_ADD_CURRENT_TIME:
+		ret = DoPasteAddCurrentTime();
+		break;
 	case ActionEnums::SEND_TO_FRIEND_1:
 		ret = SendToFriendbyPos(0);
 		break;
@@ -3976,6 +3981,19 @@ bool CQPasteWnd::DoPasteTypoglycemia()
 	{
 		CSpecialPasteOptions pasteOptions;
 		pasteOptions.m_pasteTypoglycemia = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoPasteAddCurrentTime()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteAddingDateTime = true;
 		OpenSelection(pasteOptions);
 		return true;
 	}
@@ -5843,4 +5861,21 @@ void CQPasteWnd::OnUpdateGroupsTogglelastgroup(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::TOGGLE_LAST_GROUP_TOGGLE);
+}
+
+
+void CQPasteWnd::OnSpecialpastePaste32927()
+{
+	DoAction(ActionEnums::PASTE_ADD_CURRENT_TIME);
+}
+
+
+void CQPasteWnd::OnUpdateSpecialpastePaste32927(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_ADD_CURRENT_TIME);
 }

@@ -16,6 +16,7 @@ public:
 	bool m_pasteAddOneLineFeed;
 	bool m_pasteAddTwoLineFeeds;
 	bool m_pasteTypoglycemia;
+	bool m_pasteAddingDateTime;
 	CClipFormats *m_pPasteFormats;
 
 	bool LimitFormatsToText() 
@@ -28,14 +29,16 @@ public:
 			m_pasteRemoveLineFeeds ||
 			m_pasteAddOneLineFeed ||
 			m_pasteAddTwoLineFeeds ||
-			m_pasteTypoglycemia;
+			m_pasteTypoglycemia ||
+			m_pasteAddingDateTime;
 	}
 
 	bool IncludeRTFForTextOnly()
 	{
 		return m_pasteRemoveLineFeeds ||
 			m_pasteAddOneLineFeed ||
-			m_pasteAddTwoLineFeeds;
+			m_pasteAddTwoLineFeeds ||
+			m_pasteAddingDateTime;
 	}
 
 	CString ToString();

@@ -177,6 +177,10 @@ BOOL COleClipSource::DoImmediateRender()
 	{
 		Typoglycemia(clip);
 	}
+	else if (m_pasteOptions.m_pasteAddingDateTime)
+	{
+		AddDateTime(clip);
+	}
 
 	return PutFormatOnClipboard(&clip.m_Formats) > 0;
 }
@@ -607,6 +611,83 @@ void COleClipSource::AddLineFeeds(CClip &clip, int count)
 				{
 					int count = string.Insert(pos, "\\par\r\n");
 				}
+			}
+
+			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1)));
+
+			pRTFFormat->Data(hGlobal);
+		}
+	}
+}
+
+void COleClipSource::AddDateTime(CClip &clip)
+{
+	IClipFormat *pUnicodeText = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (pUnicodeText != NULL)
+	{
+		wchar_t *stringData = (wchar_t *)GlobalLock(pUnicodeText->Data());
+		if (stringData != NULL)
+		{
+			CStringW string(stringData);
+
+			GlobalUnlock(pUnicodeText->Data());
+			pUnicodeText->Free();
+
+			string += _T("\r\n\r\n");
+
+			COleDateTime now(COleDateTime::GetCurrentTime());
+			string += now.Format();			
+
+			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1) * sizeof(wchar_t)));
+
+			pUnicodeText->Data(hGlobal);
+		}
+	}
+
+	IClipFormat *pAsciiText = clip.m_Formats.FindFormatEx(CF_TEXT);
+	if (pAsciiText != NULL)
+	{
+		char *stringData = (char *)GlobalLock(pAsciiText->Data());
+		if (stringData != NULL)
+		{
+			CStringA string(stringData);
+
+			GlobalUnlock(pAsciiText->Data());
+			pAsciiText->Free();
+
+			string += "\r\n\r\n";
+
+			COleDateTime now(COleDateTime::GetCurrentTime());
+			string += CTextConvert::UnicodeStringToMultiByte(now.Format());
+
+			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1)));
+
+			pAsciiText->Data(hGlobal);
+		}
+	}
+
+	IClipFormat *pRTFFormat = clip.m_Formats.FindFormatEx(theApp.m_RTFFormat);
+	if (pRTFFormat != NULL)
+	{
+		char *stringData = (char *)GlobalLock(pRTFFormat->Data());
+		if (stringData != NULL)
+		{
+			CStringA string(stringData);
+
+			GlobalUnlock(pRTFFormat->Data());
+			pRTFFormat->Free();
+			
+			int pos = string.ReverseFind('}');
+			if (pos >= 0)
+			{
+				string += _T("\r\n\r\n");
+
+				COleDateTime now(COleDateTime::GetCurrentTime());
+				
+				CStringA insert;
+				insert.Format("\\par\r\n\\par\r\n%s", CTextConvert::UnicodeStringToMultiByte(now.Format()));
+
+				int count = string.Insert(pos, insert);
 			}
 
 			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1)));

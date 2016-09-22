@@ -259,6 +259,7 @@ BEGIN
             MENUITEM "Remove Line Feeds",           ID_SPECIALPASTE_REMOVELINEFEEDS
             MENUITEM "Paste + One Line Feed",       ID_SPECIALPASTE_PASTE
             MENUITEM "Paste + Two Line Feeds",      ID_SPECIALPASTE_PASTE32919
+            MENUITEM "Paste + Current Time",        ID_SPECIALPASTE_PASTE32927
             MENUITEM SEPARATOR
             MENUITEM "Typoglycemia",                ID_SPECIALPASTE_TYPOGLYCEMIA
         END
