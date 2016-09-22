@@ -12,6 +12,7 @@
 #include "Client.h"
 #include "sqlite\unicode\unistr.h"
 #include "sqlite\unicode\uchar.h"
+#include "BitmapHelper.h"
 
 /*------------------------------------------------------------------*\
 COleClipSource
@@ -21,11 +22,57 @@ COleClipSource::COleClipSource()
 {
 	m_bLoadedFormats = false;
 	m_convertToHDROPOnDelayRender = false;
+	m_pBitmapConversionData = NULL;
+	m_pBitmapConversion = NULL;
 }
 
 COleClipSource::~COleClipSource()
 {
 	
+}
+
+void COleClipSource::PostSetClipboard()
+{
+	/*if (m_pBitmapConversionData != NULL)
+	{
+		delete m_pBitmapConversionData;
+		m_pBitmapConversionData = NULL;
+	}*/
+
+	/*if (m_pBitmapConversion != NULL)
+	{
+		delete m_pBitmapConversion;
+		m_pBitmapConversion = NULL;
+	}*/
+
+	//if (OpenClipboard(theApp.m_pMainWnd->m_hWnd))
+	//{
+	//	CBitmap * junk = new CBitmap();
+
+	//	HANDLE hGlobal = ::GetClipboardData(CF_DIB);
+	//	LPVOID pvData = GlobalLock(hGlobal);
+	//	if (pvData)
+	//	{
+	//		
+	//		CClipFormat clipFormat;
+	//		clipFormat.m_hgData = pvData;
+	//		clipFormat.m_cfType = CF_DIB;
+	//		clipFormat.m_autoDeleteData = false;
+
+	//		CDC *pDC = theApp.m_pMainWnd->GetDC();
+
+	//		CBitmapHelper::GetCBitmap(&clipFormat, pDC, junk, MAXINT);
+
+	//		SetClipboardData(CF_BITMAP, junk->m_hObject);
+
+	//		GlobalUnlock(hGlobal);
+	//	}
+
+	//	CloseClipboard();
+
+	//	//copy has been made on clipboard so we can delete
+	//	delete junk;
+	//}
 }
 
 BOOL COleClipSource::DoDelayRender()
@@ -697,6 +744,9 @@ void COleClipSource::Typoglycemia(CClip &clip)
 
 INT_PTR COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 {
+	::OpenClipboard(NULL);
+	::EmptyClipboard();
+
 	Log(_T("Start of put format on clipboard"));
 
 	CClipFormat* pCF;
@@ -731,6 +781,44 @@ INT_PTR COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 			continue;
 		}
 
+		if (pCF->m_cfType == CF_DIB)
+		{
+			
+			//m_pBitmapConversion = new CBitmap();
+			//CDC *pDC = theApp.m_pMainWnd->GetDC();
+			/*byte *d = (byte *)GlobalLock(pCF->m_hgData);
+			
+			
+
+			HBITMAP h = CBitmapHelper::dib_to_bitmap(d);
+
+			GlobalUnlock(pCF->m_hgData);
+
+			this->CacheGlobalData(CF_BITMAP, h);*/
+
+			//
+
+			//m_pBitmapConversion = new CBitmap();
+			//CClientDC cdc(theApp.m_pMainWnd);
+			//CDC dc;
+			//dc.CreateCompatibleDC(&cdc);
+			//CRect client(0, 0, 200, 200);
+			//m_pBitmapConversion->CreateCompatibleBitmap(&cdc, client.Width(), client.Height());
+			//dc.SelectObject(m_pBitmapConversion);
+
+			//cdc.DrawText("test", client, DT_CENTER | DT_SINGLELINE | DT_VCENTER);
+			//
+			//m_pBitmapConversionData = new tagSTGMEDIUM;
+			//m_pBitmapConversionData->tymed = TYMED_GDI;
+			//m_pBitmapConversionData->hBitmap = HBITMAP(*m_pBitmapConversion);
+
+			//////put the data on the clipboard
+			//this->CacheData(CF_BITMAP, m_pBitmapConversionData);	
+
+			//m_pBitmapConversion->Detach();
+			
+		}
+
 		wchar_t * stringData = (wchar_t *) GlobalLock(pCF->m_hgData);
 		int size = (int) GlobalSize(pCF->m_hgData);
 		CString cs(stringData);
@@ -738,13 +826,16 @@ INT_PTR COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 		
 		Log(StrF(_T("Setting clipboard type: %s to the clipboard"), GetFormatName(pCF->m_cfType)));
 
-		CacheGlobalData(pCF->m_cfType, pCF->m_hgData);
+		//CacheGlobalData(pCF->m_cfType, pCF->m_hgData);
+		::SetClipboardData(pCF->m_cfType, pCF->m_hgData);
 		pCF->m_hgData = 0; // OLE owns it now
 	}
 
 	pFormats->RemoveAll();
 
 	m_bLoadedFormats = true;
+
+	::CloseClipboard();
 
 	Log(_T("End of put format on clipboard"));
 
