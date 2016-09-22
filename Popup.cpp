@@ -4,6 +4,7 @@
 #include "Misc.h"
 
 //feature x
+//test
 
 void InitToolInfo( TOOLINFO& ti )
 {
