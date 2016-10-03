@@ -633,7 +633,7 @@ void COleClipSource::AddDateTime(CClip &clip)
 			GlobalUnlock(pUnicodeText->Data());
 			pUnicodeText->Free();
 
-			string += _T("\r\n\r\n");
+			string += _T("\r\n");
 
 			COleDateTime now(COleDateTime::GetCurrentTime());
 			string += now.Format();			

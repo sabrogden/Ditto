@@ -14,8 +14,8 @@ CSpecialPasteOptions::CSpecialPasteOptions()
 	m_pasteAddTwoLineFeeds = false;
 	m_pasteSentenceCase = false;
 	m_pasteTypoglycemia = false;
+	m_pasteAddingDateTime = false;
 }
-
 
 CSpecialPasteOptions::~CSpecialPasteOptions()
 {
