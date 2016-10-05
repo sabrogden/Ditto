@@ -292,8 +292,25 @@ void CClipboardViewer::OnDrawClipboard()
 
 bool CClipboardViewer::ValidActiveWnd()
 {
-	HWND active = ::GetForegroundWindow();
-	CString activeApp = GetProcessName(active).MakeLower();
+	CString activeApp = _T("");
+
+	HWND owner = ::GetClipboardOwner();
+	if (owner != NULL)
+	{
+		DWORD PID = 0;
+		::GetWindowThreadProcessId(owner, &PID);
+
+		if (PID != 0)
+		{
+			activeApp = GetProcessName(NULL, PID);
+		}
+	}
+
+	if (activeApp == _T(""))
+	{
+		HWND active = ::GetForegroundWindow();
+		activeApp = GetProcessName(active, 0).MakeLower();
+	}
 
 	CString includeApps = CGetSetOptions::GetCopyAppInclude().MakeLower();
 

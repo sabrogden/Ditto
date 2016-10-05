@@ -878,13 +878,16 @@ __int64 GetLastWriteTime(const CString &csFile)
 	return nLastWrite;
 }
 
-CString GetProcessName(HWND hWnd) 
+CString GetProcessName(HWND hWnd, DWORD processId) 
 {
 	DWORD startTick = GetTickCount();
 
-	DWORD Id;
-	CString	strProcessName ;
-	GetWindowThreadProcessId(hWnd, &Id);
+	CString	strProcessName;
+	DWORD Id = processId;
+	if (Id == 0)
+	{		
+		GetWindowThreadProcessId(hWnd, &Id);
+	}
 
 	PROCESSENTRY32 processEntry = { 0 };
 

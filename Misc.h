@@ -120,7 +120,7 @@ CRect CenterRect(CRect startingRect);
 CRect CenterRectFromRect(CRect startingRect, CRect outerRect);
 
 __int64 GetLastWriteTime(const CString &csFile);
-CString GetProcessName(HWND hWnd);
+
 
 //Message to the main window to show icon or not
 #define WM_SHOW_TRAY_ICON		WM_USER + 200
@@ -179,5 +179,7 @@ void OnInitMenuPopupEx(CMenu *pPopupMenu, UINT nIndex, BOOL bSysMenu, CWnd *pWnd
 CString InternetEncode(CString text);
 
 bool WriteCF_DIBToFile(CString csPath, LPVOID data, ULONG size);
+
+CString GetProcessName(HWND hWnd, DWORD processId = 0);
 
 #endif // !defined(AFX_CP_GUI_GLOBALS__FBCDED09_A6F2_47EB_873F_50A746EBC86B__INCLUDED_)
