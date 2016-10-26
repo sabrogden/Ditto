@@ -578,6 +578,7 @@
 #define ID_GROUPS_TOGGLELASTGROUP       32925
 #define ID_FIRST_HIDEDESCRIPTIONWINDOWONM 32926
 #define ID_SPECIALPASTE_PASTE32927      32927
+#define ID_FIRST_WRAPTEXT               32928
 
 // Next default values for new objects
 // 
@@ -585,7 +586,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        258
-#define _APS_NEXT_COMMAND_VALUE         32928
+#define _APS_NEXT_COMMAND_VALUE         32929
 #define _APS_NEXT_CONTROL_VALUE         2146
 #define _APS_NEXT_SYMED_VALUE           104
 #endif

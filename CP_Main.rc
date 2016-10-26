@@ -329,6 +329,7 @@ BEGIN
         MENUITEM "Size window to content",      ID_FIRST_SIZEWINDOWTOCONTENT
         MENUITEM "Scale images to fit window",  ID_FIRST_SCALEIMAGESTOFITWINDOW
         MENUITEM "Hide description window on mouse clip selection", ID_FIRST_HIDEDESCRIPTIONWINDOWONM
+        MENUITEM "Wrap Text",                   ID_FIRST_WRAPTEXT
     END
 END
 

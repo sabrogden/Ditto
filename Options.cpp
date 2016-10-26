@@ -2315,3 +2315,13 @@ void CGetSetOptions::SetMouseClickHidesDescription(int val)
 {
 	SetProfileLong(_T("MouseClickHidesDescription"), val);
 }
+
+BOOL CGetSetOptions::GetWrapDescriptionText()
+{
+	return GetProfileLong(_T("WrapDescriptionText"), FALSE);
+}
+
+void CGetSetOptions::SetWrapDescriptionText(int val)
+{
+	SetProfileLong(_T("WrapDescriptionText"), val);
+}

@@ -527,6 +527,9 @@ public:
 
 	static BOOL GetMouseClickHidesDescription();
 	static void SetMouseClickHidesDescription(int val);
+
+	static BOOL GetWrapDescriptionText();
+	static void SetWrapDescriptionText(int val);
 };
 
 // global for easy access and for initialization of fast access variables

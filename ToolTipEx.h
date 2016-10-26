@@ -83,6 +83,7 @@ protected:
 	BOOL IsCursorInToolTip();
 	void HighlightSearchText();
 	void DoSearch();
+	void ApplyWordWrap();
 
 	// Generated message map functions
 protected:
@@ -108,6 +109,7 @@ public:
 	afx_msg void OnPaint();
 	
 	afx_msg void OnFirstHidedescriptionwindowonm();
+	afx_msg void OnFirstWraptext();
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -59,6 +59,7 @@ ON_WM_SETFOCUS()
 
 
 ON_COMMAND(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, &CToolTipEx::OnFirstHidedescriptionwindowonm)
+ON_COMMAND(ID_FIRST_WRAPTEXT, &CToolTipEx::OnFirstWraptext)
 END_MESSAGE_MAP()
 
 
@@ -96,6 +97,8 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 
     m_RichEdit.SetReadOnly();
     m_RichEdit.SetBackgroundColor(FALSE, GetSysColor(COLOR_INFOBK));
+
+	ApplyWordWrap();
 
     SetLogFont(GetSystemToolTipFont(), FALSE);
 
@@ -786,6 +789,9 @@ void CToolTipEx::OnOptions()
 
 		if (CGetSetOptions::GetMouseClickHidesDescription())
 			cmSubMenu->CheckMenuItem(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, MF_CHECKED);
+
+		if (CGetSetOptions::GetWrapDescriptionText())
+			cmSubMenu->CheckMenuItem(ID_FIRST_WRAPTEXT, MF_CHECKED);
 		
 		//theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 		
@@ -851,4 +857,22 @@ void CToolTipEx::OnPaint()
 void CToolTipEx::OnFirstHidedescriptionwindowonm()
 {
 	CGetSetOptions::SetMouseClickHidesDescription(!CGetSetOptions::GetMouseClickHidesDescription());
+}
+
+void CToolTipEx::OnFirstWraptext()
+{
+	CGetSetOptions::SetWrapDescriptionText(!CGetSetOptions::GetWrapDescriptionText());	
+	ApplyWordWrap();
+}
+
+void CToolTipEx::ApplyWordWrap()
+{
+	if (CGetSetOptions::GetWrapDescriptionText())
+	{
+		m_RichEdit.SetTargetDevice(NULL, 0);
+	}
+	else
+	{
+		m_RichEdit.SetTargetDevice(NULL, 1);
+	}
 }
