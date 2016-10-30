@@ -349,7 +349,8 @@ DittoSetup*]]></X>
 <Package
    xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
    xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities">
+   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+   xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10">
   <Identity Name="Ditto"
     ProcessorArchitecture="x64"
     Publisher="CN=ScottBrogden, O=ScottBrogden, L=Ogallala, S=Nebraska, C=United States"
@@ -377,11 +378,15 @@ DittoSetup*]]></X>
        Square150x150Logo="Ditto_150.png"
        Square44x44Logo="Ditto_44.png"
        Description="Ditto" />
+       
+       <Extensions>
+			<desktop:Extension Category="windows.startupTask" Executable="Ditto.exe" EntryPoint="Windows.FullTrustApplication">
+				<desktop:StartupTask TaskId="DittoStartupTask" Enabled="true" DisplayName="Ditto Service" />
+			</desktop:Extension>
+		</Extensions>
+		
     </Application>
   </Applications>
-  <desktop:Extension Category="windows.startupTask" Executable="Ditto.exe" EntryPoint="Windows.FullTrustApplication">
-    <desktop:StartupTask TaskId="DittoStartupTask" Enabled="true" DisplayName="Ditto Service" />
-  </desktop:Extension>
 </Package>]]></Text>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>

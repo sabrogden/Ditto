@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "Options.h"
 #include "AlphaBlend.h"
 #include "Misc.h"
@@ -122,6 +122,10 @@ void CGetSetOptions::LoadSettings()
 		CString csPath = GetFilePath(m_csIniFileName);
 		if(FileExists(csPath) == FALSE)
 			CreateDirectory(csPath, NULL);
+
+		//create the ini file as unicode, this way we can save unicode string to the ini file
+		//http://www.codeproject.com/Articles/9071/Using-Unicode-in-INI-files
+		CreateIniFile(m_csIniFileName);
 	}
 
 	/*CString cs = GetDBPath();
@@ -137,7 +141,7 @@ void CGetSetOptions::LoadSettings()
 	{
 		SetCheckForMaxEntries(TRUE);
 		SetSimpleTextSearch(TRUE);
-	}
+	}	
 
 	m_nLinesPerRow = GetLinesPerRow();
 	m_bUseCtrlNumAccel = GetUseCtrlNumForFirstTenHotKeys();
@@ -183,6 +187,24 @@ void CGetSetOptions::LoadSettings()
 	GetClientSendCount();
 
 	m_Theme.Load(GetTheme());
+}
+
+void CGetSetOptions::CreateIniFile(CString path)
+{
+	if (!::PathFileExists(path))
+	{
+		// UTF16-LE BOM(FFFE)
+		WORD wBOM = 0xFEFF;
+		DWORD NumberOfBytesWritten;
+
+		HANDLE hFile = ::CreateFile(path, GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+		::WriteFile(hFile, &wBOM, sizeof(WORD), &NumberOfBytesWritten, NULL);
+	
+		//LPTSTR pszSectionB = _T("[StringTable]"); // section name with bracket 
+		//::WriteFile(hFile, pszSectionB, (_tcslen(pszSectionB) + 1)*(sizeof(TCHAR)), &NumberOfBytesWritten, NULL);
+
+		::CloseHandle(hFile);
+	}
 }
 
 void CGetSetOptions::ConverSettingsToIni()
@@ -309,22 +331,44 @@ CString CGetSetOptions::GetAppDataPath()
 	CString csPath;
 	LPMALLOC pMalloc;
 
-	if(SUCCEEDED(::SHGetMalloc(&pMalloc))) 
-	{ 
-		LPITEMIDLIST pidlPrograms;
+	if (GetIsWindowsApp())
+	{
+		if (SUCCEEDED(::SHGetMalloc(&pMalloc)))
+		{
+			LPITEMIDLIST pidlPrograms;
 
-		SHGetSpecialFolderLocation(NULL, CSIDL_APPDATA, &pidlPrograms);
+			SHGetSpecialFolderLocation(NULL, CSIDL_LOCAL_APPDATA, &pidlPrograms);
 
-		TCHAR string[MAX_PATH];
-		SHGetPathFromIDList(pidlPrograms, string);
+			TCHAR string[MAX_PATH];
+			SHGetPathFromIDList(pidlPrograms, string);
 
-		pMalloc->Free(pidlPrograms);
-		pMalloc->Release();
+			pMalloc->Free(pidlPrograms);
+			pMalloc->Release();
 
-		csPath = string;		
+			csPath = string;
+		}
+		FIX_CSTRING_PATH(csPath);
+		csPath += "Ditto_WindowsApp\\";
 	}
-	FIX_CSTRING_PATH(csPath);
-	csPath += "Ditto\\";
+	else
+	{
+		if (SUCCEEDED(::SHGetMalloc(&pMalloc)))
+		{
+			LPITEMIDLIST pidlPrograms;
+
+			SHGetSpecialFolderLocation(NULL, CSIDL_APPDATA, &pidlPrograms);
+
+			TCHAR string[MAX_PATH];
+			SHGetPathFromIDList(pidlPrograms, string);
+
+			pMalloc->Free(pidlPrograms);
+			pMalloc->Release();
+
+			csPath = string;
+		}
+		FIX_CSTRING_PATH(csPath);
+		csPath += "Ditto\\";
+	}
 
 	return csPath;
 }

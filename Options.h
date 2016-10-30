@@ -80,6 +80,7 @@ public:
 	static void ConverSettingsToIni();
 	static CString GetAppDataPath();
 	static CString GetTempFilePath();
+	static void CreateIniFile(CString path);
 
 	static CString GetExeFileName();
 	static CString GetAppName();

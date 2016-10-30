@@ -77,25 +77,7 @@ CString GetDefaultDBName()
 	}
 	else
 	{
-		LPMALLOC pMalloc;
-		
-		if(SUCCEEDED(::SHGetMalloc(&pMalloc))) 
-		{ 
-			LPITEMIDLIST pidlPrograms;
-				
-			SHGetSpecialFolderLocation(NULL, CSIDL_APPDATA, &pidlPrograms);
-				
-			TCHAR string[MAX_PATH];
-			SHGetPathFromIDList(pidlPrograms, string);
-				
-			pMalloc->Free(pidlPrograms);
-			pMalloc->Release();
-				
-			csDefaultPath = string;		
-		}
-
-		FIX_CSTRING_PATH(csDefaultPath);
-		csDefaultPath += "Ditto\\";
+		csDefaultPath = CGetSetOptions::GetAppDataPath();
 	}
 
 	CString csTempName = csDefaultPath + "Ditto.db";
@@ -117,7 +99,9 @@ BOOL CheckDBExists(CString csDBPath)
 	{
 		csDBPath = GetDefaultDBName();
 
-		if(FileExists(csDBPath) == FALSE && CGetSetOptions::GetIsPortableDitto() == FALSE)
+		if(FileExists(csDBPath) == FALSE && 
+			CGetSetOptions::GetIsPortableDitto() == FALSE &&
+			CGetSetOptions::GetIsWindowsApp() == FALSE)
 		{
 			CString csOldDB = CGetSetOptions::GetDBPathOld();
 			if(csOldDB.IsEmpty())

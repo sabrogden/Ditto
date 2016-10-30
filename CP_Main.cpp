@@ -87,8 +87,6 @@ END_MESSAGE_MAP()
 
 CCP_MainApp::CCP_MainApp()
 {
-	theApp.m_activeWnd.TrackActiveWnd(false);
-
 	m_copyReason = CopyReasonEnum::COPY_TO_UNKOWN;
 	m_copyReasonStartTime = 0;
 	m_activeGroupId = -1;
@@ -154,6 +152,8 @@ BOOL CCP_MainApp::InitInstance()
 	ParseCommandLine(cmdInfo);
 
 	g_Opt.LoadSettings();
+
+	theApp.m_activeWnd.TrackActiveWnd(false);
 
 	if(cmdInfo.m_uacPID > 0)
 	{
