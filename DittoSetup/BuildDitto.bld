@@ -379,6 +379,9 @@ DittoSetup*]]></X>
        Description="Ditto" />
     </Application>
   </Applications>
+  <desktop:Extension Category="windows.startupTask" Executable="Ditto.exe" EntryPoint="Windows.FullTrustApplication">
+    <desktop:StartupTask TaskId="DittoStartupTask" Enabled="true" DisplayName="Ditto Service" />
+  </desktop:Extension>
 </Package>]]></Text>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>

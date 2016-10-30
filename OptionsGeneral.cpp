@@ -89,7 +89,15 @@ BOOL COptionsGeneral::OnInitDialog()
 	
 	m_pParent = (COptionsSheet *)GetParent();
 
-	m_btRunOnStartup.SetCheck(CGetSetOptions::GetRunOnStartUp());
+	if (CGetSetOptions::GetIsWindowsApp())
+	{
+		m_btRunOnStartup.SetCheck(BST_CHECKED);
+		GetDlgItem(IDC_START_ON_STARTUP)->EnableWindow(FALSE);
+	}
+	else
+	{
+		m_btRunOnStartup.SetCheck(CGetSetOptions::GetRunOnStartUp());
+	}
 	m_btShowIconInSysTray.SetCheck(CGetSetOptions::GetShowIconInSysTray());
 	m_btMaximumCheck.SetCheck(CGetSetOptions::GetCheckForMaxEntries());
 	m_btExpire.SetCheck(CGetSetOptions::GetCheckForExpiredEntries());
@@ -186,7 +194,12 @@ BOOL COptionsGeneral::OnApply()
 	::SendMessage(theApp.m_MainhWnd, WM_SHOW_TRAY_ICON, m_btShowIconInSysTray.GetCheck(), 0);
 
 	CGetSetOptions::SetShowIconInSysTray(m_btShowIconInSysTray.GetCheck());
-	CGetSetOptions::SetRunOnStartUp(m_btRunOnStartup.GetCheck());
+
+	if (CGetSetOptions::GetIsWindowsApp() == FALSE)
+	{
+		CGetSetOptions::SetRunOnStartUp(m_btRunOnStartup.GetCheck());
+	}
+
 	CGetSetOptions::SetCheckForMaxEntries(m_btMaximumCheck.GetCheck());
 	CGetSetOptions::SetCheckForExpiredEntries(m_btExpire.GetCheck());
 	CGetSetOptions::SetHideDittoOnHotKeyIfAlreadyShown(m_btHideDittoOnHotKey.GetCheck());
