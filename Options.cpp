@@ -1254,6 +1254,9 @@ BOOL CGetSetOptions::GetDisableRecieve()
 	if(GetIsPortableDitto())
 		bDefault = TRUE;
 
+	if(GetIsWindowsApp())
+		bDefault = TRUE;
+
 	return GetProfileLong("DisableRecieve", bDefault);
 }
 
