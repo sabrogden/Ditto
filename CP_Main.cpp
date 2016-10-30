@@ -261,16 +261,23 @@ BOOL CCP_MainApp::InitInstance()
 		csMutex += g_Opt.GetExeFileName();
 	}
 
-	m_hMutex = CreateMutex(NULL, FALSE, csMutex);
+	//create mutex doesn't like slashes, remove them, it always returns NULL with them in
+	csMutex.Replace(_T("\\"), _T("_"));
+
+	m_hMutex = CreateMutex(NULL, TRUE, csMutex);
 	DWORD dwError = GetLastError();
-	if(dwError == ERROR_ALREADY_EXISTS)
+	if(m_hMutex == NULL ||
+		dwError == ERROR_ALREADY_EXISTS)
 	{
+		Log(StrF(_T("Ditto is already running, closing, mutex: %s"), csMutex));
 		HWND hWnd = (HWND)CGetSetOptions::GetMainHWND();
 		if(hWnd)
 			::SendMessage(hWnd, WM_SHOW_TRAY_ICON, TRUE, TRUE);
 
 		return TRUE;
 	}
+
+	Log(StrF(_T("Starting up ditto with mutex: %s"), csMutex));
 
 	CString csFile = CGetSetOptions::GetLanguageFile();
 	if(m_Language.LoadLanguageFile(csFile) == false)
