@@ -309,8 +309,10 @@ bool CClipboardViewer::ValidActiveWnd()
 	if (activeApp == _T(""))
 	{
 		HWND active = ::GetForegroundWindow();
-		activeApp = GetProcessName(active, 0).MakeLower();
+		activeApp = GetProcessName(active, 0);
 	}
+
+	activeApp = activeApp.MakeLower();
 
 	CString includeApps = CGetSetOptions::GetCopyAppInclude().MakeLower();
 
