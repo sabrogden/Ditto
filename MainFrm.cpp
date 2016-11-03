@@ -240,7 +240,9 @@ void CMainFrame::OnFirstExit()
 
 LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 {
-    if(theApp.m_pDittoHotKey && wParam == theApp.m_pDittoHotKey->m_Atom)
+    if(theApp.m_pDittoHotKey && wParam == theApp.m_pDittoHotKey->m_Atom ||
+		theApp.m_pDittoHotKey2 && wParam == theApp.m_pDittoHotKey2->m_Atom ||
+		theApp.m_pDittoHotKey3 && wParam == theApp.m_pDittoHotKey3->m_Atom)
     {
         //If they still have the shift/ctrl keys down
         if(m_keyStateModifiers != 0 && m_quickPaste.IsWindowVisibleEx())

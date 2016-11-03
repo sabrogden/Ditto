@@ -316,6 +316,8 @@ void CCP_MainApp::AfterMainCreate()
 
 	// create hotkeys here.  They are automatically deleted on exit
 	m_pDittoHotKey = new CHotKey(CString("DittoHotKey"), 704); //704 is ctrl-tilda
+	m_pDittoHotKey2 = new CHotKey(CString("DittoHotKey2"));
+	m_pDittoHotKey3 = new CHotKey(CString("DittoHotKey3"));
 
 	m_pPosOne = new CHotKey("Position1", 0, true);
 	m_pPosTwo = new CHotKey("Position2", 0, true);

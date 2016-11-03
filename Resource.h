@@ -206,8 +206,10 @@
 #define IDC_START_ON_STARTUP            2004
 #define IDC_HOTKEY_SAVE_CLIPBOARD       2004
 #define IDR_QUICK_PASTE                 2005
+#define IDC_HOTKEY_ACTIVATE_2           2005
 #define IDC_TRANSPARENCY                2006
 #define IDD_OPTIONS_QUICK_PASTE         2006
+#define IDC_HOTKEY_ACTIVATE_3           2006
 #define IDD_OPTIONS_UTILITIES           2007
 #define IDC_TRANS_PERC                  2007
 #define IDC_MAXIMUM                     2008
@@ -308,9 +310,13 @@
 #define IDC_STATIC_NAMED_COPY2          2062
 #define IDC_STATIC_COLLECT_CLIPBOARD    2062
 #define IDC_STATIC_POPUP                2063
+#define IDC_CHECK_WIN_DITTO2            2063
 #define IDC_STATIC_LEGEND               2064
+#define IDC_STATIC_ACTIVATE3            2064
 #define IDC_STATIC_LEG                  2065
+#define IDC_CHECK_WIN_DITTO3            2065
 #define IDC_STATIC_11                   2066
+#define IDC_STATIC_ACTIVATE4            2066
 #define IDC_STATIC_12                   2067
 #define IDC_STATIC_13                   2068
 #define IDC_STATIC_LANGUAGE             2069
@@ -585,7 +591,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        258
+#define _APS_NEXT_RESOURCE_VALUE        259
 #define _APS_NEXT_COMMAND_VALUE         32929
 #define _APS_NEXT_CONTROL_VALUE         2146
 #define _APS_NEXT_SYMED_VALUE           104

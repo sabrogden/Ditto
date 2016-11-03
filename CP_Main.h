@@ -53,6 +53,8 @@ public:
 
 // System-wide HotKeys
 	CHotKey*	m_pDittoHotKey; // activate ditto's qpaste window
+	CHotKey*	m_pDittoHotKey2; // activate ditto's qpaste window
+	CHotKey*	m_pDittoHotKey3; // activate ditto's qpaste window
 	
 	CHotKey*	m_pPosOne;
 	CHotKey*	m_pPosTwo;

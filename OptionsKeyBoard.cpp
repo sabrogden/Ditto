@@ -46,6 +46,8 @@ void COptionsKeyBoard::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_HOTKEY10, m_Ten);
 	DDX_Control(pDX, IDC_HOTKEY1, m_One);
 	DDX_Control(pDX, IDC_HOTKEY, m_HotKey);
+	DDX_Control(pDX, IDC_HOTKEY_ACTIVATE_2, m_HotKey2);
+	DDX_Control(pDX, IDC_HOTKEY_ACTIVATE_3, m_HotKey3);
 	DDX_Control(pDX, IDC_HOTKEY_TEXT_ONLY, m_TextOnlyKey);
 	//}}AFX_DATA_MAP
 	DDX_Control(pDX, IDC_STATIC_CUSTOM_KEYS, m_CustomeKeysHelp);
@@ -72,6 +74,8 @@ BOOL COptionsKeyBoard::OnInitDialog()
 	m_pParent = (COptionsSheet *)GetParent();
 
 	theApp.m_pDittoHotKey->CopyToCtrl(m_HotKey, m_hWnd, IDC_CHECK_WIN_DITTO);
+	theApp.m_pDittoHotKey2->CopyToCtrl(m_HotKey2, m_hWnd, IDC_CHECK_WIN_DITTO2);
+	theApp.m_pDittoHotKey3->CopyToCtrl(m_HotKey3, m_hWnd, IDC_CHECK_WIN_DITTO3);
 
 	theApp.m_pPosOne->CopyToCtrl(m_One, m_hWnd, IDC_CHECK_WIN1);
 	theApp.m_pPosTwo->CopyToCtrl(m_Two, m_hWnd, IDC_CHECK_WIN2);
@@ -123,6 +127,8 @@ BOOL COptionsKeyBoard::OnApply()
 	g_HotKeys.GetKeys( keys ); // save old keys just in case new ones are invalid
 	
 	theApp.m_pDittoHotKey->CopyFromCtrl(m_HotKey, m_hWnd, IDC_CHECK_WIN_DITTO);
+	theApp.m_pDittoHotKey2->CopyFromCtrl(m_HotKey2, m_hWnd, IDC_CHECK_WIN_DITTO2);
+	theApp.m_pDittoHotKey3->CopyFromCtrl(m_HotKey3, m_hWnd, IDC_CHECK_WIN_DITTO3);
 	
 	theApp.m_pPosOne->CopyFromCtrl(m_One, m_hWnd, IDC_CHECK_WIN1);
 	theApp.m_pPosTwo->CopyFromCtrl(m_Two, m_hWnd, IDC_CHECK_WIN2);
