@@ -440,31 +440,51 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
     try
 	{
 		CString csSort = _T("");
-
-		csSort = "Main.bIsGroup ASC, "
-			"Main.stickyClipOrder DESC, "
-			"Main.clipOrder DESC";
-
 		CString strFilter = _T("");
 
-		if (g_Opt.m_bShowAllClipsInMainList)
+		if (theApp.m_GroupID < 0 ||
+			CGetSetOptions::GetUseUISelectedGroupForLastTenCopies() == FALSE)
 		{
-			if (CGetSetOptions::GetShowGroupsInMainList())
+			//do not change this this directly relates to the views in the Main table
+			csSort = "Main.bIsGroup ASC, "
+				"Main.stickyClipOrder DESC, "
+				"Main.clipOrder DESC";
+
+			if (g_Opt.m_bShowAllClipsInMainList)
 			{
-				//found to be slower on large databases
-				strFilter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR Main.bIsGroup = 0)";
+				if (CGetSetOptions::GetShowGroupsInMainList())
+				{
+					//found to be slower on large databases
+					strFilter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR Main.bIsGroup = 0)";
+				}
+				else
+				{
+					strFilter = "(Main.bIsGroup = 0)";
+				}
 			}
 			else
 			{
-				strFilter = "(Main.bIsGroup = 0)";
+				strFilter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR (Main.bIsGroup = 0 AND Main.lParentID = -1))";
 			}
 		}
 		else
 		{
-			strFilter = "((Main.bIsGroup = 1 AND Main.lParentID = -1) OR (Main.bIsGroup = 0 AND Main.lParentID = -1))";
+			//do not change this this directly relates to the views in the Main table
+			csSort = "Main.bIsGroup ASC, "
+				"Main.stickyClipGroupOrder DESC, "
+				"Main.clipGroupOrder DESC";
+			
+			if (theApp.m_GroupID >= 0)
+			{
+				strFilter.Format(_T("Main.lParentID = %d"), theApp.m_GroupID);
+			}
 		}
 
-		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, bIsGroup FROM Main WHERE %s ORDER BY %s LIMIT 1 OFFSET %d"), strFilter, csSort, nPos);
+		CString query = StrF(_T("SELECT lID, bIsGroup FROM Main WHERE %s ORDER BY %s LIMIT 1 OFFSET %d"), strFilter, csSort, nPos);
+
+		Log(StrF(_T("Doing Last Ten Paste, Index: %d Query: %s"), nPos, query));
+
+		CppSQLite3Query q = theApp.m_db.execQueryEx(query);
 
         if(q.eof() == false)
         {

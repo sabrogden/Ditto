@@ -35,6 +35,7 @@ void COptionsKeyBoard::DoDataExchange(CDataExchange* pDX)
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionsKeyBoard)
 	DDX_Control(pDX, IDC_CHECK_SEND_PASTE, m_btSendPaste);
+	DDX_Control(pDX, IDC_CHECK_USE_UI_GROUP_LAST_10, m_UseUiGroupForLastTen);
 	DDX_Control(pDX, IDC_HOTKEY9, m_Nine);
 	DDX_Control(pDX, IDC_HOTKEY8, m_Eight);
 	DDX_Control(pDX, IDC_HOTKEY7, m_Seven);
@@ -95,6 +96,7 @@ BOOL COptionsKeyBoard::OnInitDialog()
 	g_HotKeys.UnregisterAll();
 
 	m_btSendPaste.SetCheck(g_Opt.m_bSendPasteOnFirstTenHotKeys);
+	m_UseUiGroupForLastTen.SetCheck(g_Opt.GetUseUISelectedGroupForLastTenCopies());
 
 	m_btMoveClipOnGlobal10.SetCheck(g_Opt.GetMoveClipsOnGlobal10());
 
@@ -119,6 +121,7 @@ BOOL COptionsKeyBoard::OnApply()
 {
 	CGetSetOptions::SetSendPasteOnFirstTenHotKeys(m_btSendPaste.GetCheck());
 	CGetSetOptions::SetMoveClipsOnGlobal10(m_btMoveClipOnGlobal10.GetCheck());
+	CGetSetOptions::SetUseUISelectedGroupForLastTenCopies(m_UseUiGroupForLastTen.GetCheck());
 					
 	INT_PTR x,y;
 	CString str;

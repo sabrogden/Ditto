@@ -531,6 +531,9 @@ public:
 
 	static BOOL GetWrapDescriptionText();
 	static void SetWrapDescriptionText(int val);
+
+	static BOOL GetUseUISelectedGroupForLastTenCopies();
+	static void SetUseUISelectedGroupForLastTenCopies(int val);
 };
 
 // global for easy access and for initialization of fast access variables

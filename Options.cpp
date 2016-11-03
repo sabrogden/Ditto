@@ -2372,3 +2372,13 @@ void CGetSetOptions::SetWrapDescriptionText(int val)
 {
 	SetProfileLong(_T("WrapDescriptionText"), val);
 }
+
+BOOL CGetSetOptions::GetUseUISelectedGroupForLastTenCopies()
+{
+	return GetProfileLong(_T("UseUISelectedGroupForLastTenCopies"), FALSE);
+}
+
+void CGetSetOptions::SetUseUISelectedGroupForLastTenCopies(int val)
+{
+	SetProfileLong(_T("UseUISelectedGroupForLastTenCopies"), val);
+}
