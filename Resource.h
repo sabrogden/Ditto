@@ -195,6 +195,8 @@
 #define IDC_CHECK_SHIFT_2               1043
 #define IDC_PLAY_SOUND_3                1044
 #define IDC_CHECK_LAST_USE_DATE         1044
+#define IDC_CHECK_MOVE_CLIPS_ON_PASTE2  1044
+#define IDC_CHECK_USE_UI_GROUP_LAST_10  1044
 #define IDC_CHECK_DATA_FORMAT           1045
 #define IDD_OPTIONS_KEYSTROKES          2001
 #define IDC_HOTKEY                      2002
