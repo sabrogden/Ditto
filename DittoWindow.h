@@ -58,7 +58,6 @@ public:
 	bool m_bMouseOverChevron;
 	bool m_bMouseDownOnClose;
 	bool m_bMouseOverClose;
-	bool m_bMouseDownOnCaption;
 	bool m_bMouseDownOnMinimize;
 	bool m_bMouseOverMinimize;
 	bool m_bMouseDownOnMaximize;

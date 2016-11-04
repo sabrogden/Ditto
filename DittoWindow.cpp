@@ -14,7 +14,6 @@ CDittoWindow::CDittoWindow(void)
 	m_bMouseDownOnChevron = false;
 	m_bMouseDownOnClose = false;
 	m_bMouseOverClose = false;
-	m_bMouseDownOnCaption = false;
 	m_bMouseDownOnMinimize = false;
 	m_bMouseOverMinimize = false;
 	m_bMouseDownOnMaximize = false;
@@ -695,17 +694,6 @@ void CDittoWindow::DoNcMouseMove(CWnd *pWnd, UINT nHitTest, CPoint point)
 
 bool CDittoWindow::DoPreTranslateMessage(MSG* pMsg) 
 {
-	if (pMsg->message == WM_NCLBUTTONDOWN)
-	{		
-		m_bMouseDownOnCaption = true;
-	}
-
-	if ((pMsg->message == WM_LBUTTONUP) && (m_bMouseDownOnCaption)) 
-	{
-		m_bMouseDownOnCaption = false;
-		pMsg->message = WM_NCLBUTTONUP;
-	}
-
 	return true;
 }
 
