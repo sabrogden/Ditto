@@ -598,7 +598,7 @@ BEGIN
     CONTROL         "",IDC_HOTKEY_ACTIVATE_3,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,97,45,80,14
     CONTROL         "Win",IDC_CHECK_WIN_DITTO3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,180,45,33,14
     LTEXT           "Activate Ditto",IDC_STATIC_ACTIVATE4,19,45,71,14,SS_CENTERIMAGE
-    CONTROL         "Use currently select group for last ten copies",IDC_CHECK_USE_UI_GROUP_LAST_10,
+    CONTROL         "Use currently select group in Ditto's UI for last ten copies",IDC_CHECK_USE_UI_GROUP_LAST_10,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,20,134,324,12
 END
 
