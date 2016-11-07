@@ -75,6 +75,19 @@ UINT CDittoWindow::DoNcHitTest(CWnd *pWnd, CPoint point)
 	{
 		return -1;
 	}
+	
+	CPoint localPoint(point);
+	pWnd->ScreenToClient(&localPoint);
+
+	//http://stackoverflow.com/questions/521147/the-curious-problem-of-the-missing-wm-nclbuttonup-message-when-a-window-isnt-ma
+	//workaround for l button up not coming after a lbutton down
+	if (m_crCloseBT.PtInRect(localPoint) ||
+		m_crChevronBT.PtInRect(localPoint) ||
+		m_crMinimizeBT.PtInRect(localPoint) ||
+		m_crMaximizeBT.PtInRect(localPoint))
+	{
+		return HTBORDER;;
+	}
 
 	if(m_bMinimized == false)
 	{
@@ -512,6 +525,7 @@ void CDittoWindow::DrawMaximizeBtn(CWindowDC &dc, CWnd *pWnd)
 
 void CDittoWindow::DoNcLButtonDown(CWnd *pWnd, UINT nHitTest, CPoint point) 
 {
+	//ReleaseCapture();
 	CPoint clPoint(point);
 	pWnd->ScreenToClient(&clPoint);
 
@@ -520,29 +534,23 @@ void CDittoWindow::DoNcLButtonDown(CWnd *pWnd, UINT nHitTest, CPoint point)
 
 	if(m_crCloseBT.PtInRect(clPoint))
 	{
-		pWnd->SetCapture();
 		m_bMouseDownOnClose = true;
 		DoNcPaint(pWnd);
-		//CWindowDC dc(pWnd);
-		//DrawCloseBtn(dc);
 	}
 	else if(m_crChevronBT.PtInRect(clPoint))
 	{
-		pWnd->SetCapture();
 		m_bMouseDownOnChevron = true;
 		CWindowDC dc(pWnd);
 		DrawChevronBtn(dc, pWnd);
 	}
 	else if(m_crMinimizeBT.PtInRect(clPoint))
 	{
-		pWnd->SetCapture();
 		m_bMouseDownOnMinimize = true;
 		CWindowDC dc(pWnd);
 		DrawMinimizeBtn(dc);
 	}
 	else if(m_crMaximizeBT.PtInRect(clPoint))
 	{
-		pWnd->SetCapture();
 		m_bMouseDownOnMaximize = true;
 		CWindowDC dc(pWnd);
 		DrawMaximizeBtn(dc, pWnd);
@@ -555,19 +563,21 @@ void CDittoWindow::DoNcLButtonDown(CWnd *pWnd, UINT nHitTest, CPoint point)
 
 long CDittoWindow::DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point) 
 {
+	CPoint localPoint(point);
+	pWnd->ScreenToClient(&localPoint);
+
 	long lRet = 0;
 	if(m_bMouseDownOnClose)
 	{
-		ReleaseCapture();
 		m_bMouseDownOnClose = false;
 		m_bMouseOverClose = false;
 
 		DoNcPaint(pWnd);
-
+		
 		CPoint clPoint(point);
 		clPoint.x += m_lLeftBorder;
 		clPoint.y += m_lTopBorder;
-		if(m_crCloseBT.PtInRect(clPoint))
+		if(m_crCloseBT.PtInRect(localPoint))
 		{
 			if(m_sendWMClose)
 			{
@@ -578,13 +588,12 @@ long CDittoWindow::DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point)
 	}
 	else if(m_bMouseDownOnChevron)
 	{
-		ReleaseCapture();
 		m_bMouseDownOnChevron = false;
 		m_bMouseOverChevron = false;
 
 		DoNcPaint(pWnd);
 
-		CPoint clPoint(point);
+		CPoint clPoint(localPoint);
 		clPoint.x += m_lLeftBorder;
 		clPoint.y += m_lTopBorder;
 		if(m_crChevronBT.PtInRect(clPoint))
@@ -594,13 +603,12 @@ long CDittoWindow::DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point)
 	}
 	else if(m_bMouseDownOnMinimize)
 	{
-		ReleaseCapture();
 		m_bMouseDownOnMinimize = false;
 		m_bMouseOverMinimize = false;
 
 		DoNcPaint(pWnd);
 
-		CPoint clPoint(point);
+		CPoint clPoint(localPoint);
 		clPoint.x += m_lLeftBorder;
 		clPoint.y += m_lTopBorder;
 		if(m_crMinimizeBT.PtInRect(clPoint))
@@ -611,13 +619,12 @@ long CDittoWindow::DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point)
 	}
 	else if(m_bMouseDownOnMaximize)
 	{
-		ReleaseCapture();
 		m_bMouseDownOnMaximize = false;
 		m_bMouseOverMaximize = false;
 
 		DoNcPaint(pWnd);
 
-		CPoint clPoint(point);
+		CPoint clPoint(localPoint);
 		clPoint.x += m_lLeftBorder;
 		clPoint.y += m_lTopBorder;
 		if(m_crMaximizeBT.PtInRect(clPoint))
