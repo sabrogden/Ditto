@@ -391,7 +391,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 				if(g_HotKeys[i]->m_hkType == CHotKey::PASTE_OPEN_CLIP)
 				{
 					Log(StrF(_T("Pasting clip from global shortcut, clipId: %d"), g_HotKeys[i]->m_clipId));
-					PasteOrShowGroup(g_HotKeys[i]->m_clipId, -1, FALSE, TRUE);
+					PasteOrShowGroup(g_HotKeys[i]->m_clipId, -1, FALSE, TRUE, false);
 				}
 				else if(g_HotKeys[i]->m_hkType == CHotKey::MOVE_TO_GROUP)
 				{
@@ -441,6 +441,7 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 	{
 		CString csSort = _T("");
 		CString strFilter = _T("");
+		bool pastedFromGroup = false;
 
 		if (theApp.m_GroupID < 0 ||
 			CGetSetOptions::GetUseUISelectedGroupForLastTenCopies() == FALSE)
@@ -469,6 +470,8 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 		}
 		else
 		{
+			pastedFromGroup = true;
+
 			//do not change this this directly relates to the views in the Main table
 			csSort = "Main.bIsGroup ASC, "
 				"Main.stickyClipGroupOrder DESC, "
@@ -488,7 +491,7 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 
         if(q.eof() == false)
         {
-			PasteOrShowGroup(q.getIntField(_T("lID")), CGetSetOptions::GetMoveClipsOnGlobal10(), false, g_Opt.m_bSendPasteOnFirstTenHotKeys);
+			PasteOrShowGroup(q.getIntField(_T("lID")), CGetSetOptions::GetMoveClipsOnGlobal10(), false, g_Opt.m_bSendPasteOnFirstTenHotKeys, pastedFromGroup);
         }
     }
     CATCH_SQLITE_EXCEPTION
@@ -503,7 +506,7 @@ void CMainFrame::StartKeyModifyerTimer()
 	SetTimer(KEY_STATE_MODIFIERS, 50, NULL);
 }
 
-void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarget, BOOL sendPaste)
+void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarget, BOOL sendPaste, bool pastedFromGroup)
 {
 	try
 	{
@@ -559,6 +562,7 @@ void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarg
 			}
 
 			CProcessPaste paste;
+			paste.m_pastedFromGroup = pastedFromGroup;
 			paste.GetClipIDs().Add(dbId);
 
 			if (activeTarget != -1)
@@ -1312,7 +1316,7 @@ LRESULT CMainFrame::OnShowDittoGroup(WPARAM wParam, LPARAM lParam)
 	{
 		if(q.getIntField(_T("bIsGroup")) > 0)
 		{
-			PasteOrShowGroup(groupId, FALSE, FALSE, FALSE);
+			PasteOrShowGroup(groupId, FALSE, FALSE, FALSE, false);
 		}
 	}
 
