@@ -732,14 +732,16 @@ BOOL CQuickPasteKeyboard::OnCommand(WPARAM wParam, LPARAM lParam)
 void CQuickPasteKeyboard::OnBnClickedButtonEnter()
 {
 	DWORD hk = m_hotKey1.GetHotKey();
-	m_hotKey1.SetHotKey(VK_RETURN, (HIBYTE((DWORD)hk)));
+	BYTE currentModifiers = CAccels::GetKeyStateModifiers();
+	m_hotKey1.SetHotKey(VK_RETURN, currentModifiers);
 }
 
 
 void CQuickPasteKeyboard::OnBnClickedButtonEnter2()
 {
 	DWORD hk = m_hotKey2.GetHotKey();
-	m_hotKey2.SetHotKey(VK_RETURN, (HIBYTE((DWORD)hk)));
+	BYTE currentModifiers = CAccels::GetKeyStateModifiers();
+	m_hotKey2.SetHotKey(VK_RETURN, currentModifiers);
 }
 
 
