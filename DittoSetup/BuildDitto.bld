@@ -353,7 +353,7 @@ DittoSetup*]]></X>
    xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10">
   <Identity Name="Ditto"
     ProcessorArchitecture="x64"
-    Publisher="CN=ScottBrogden, O=ScottBrogden, L=Ogallala, S=Nebraska, C=United States"
+    Publisher="CN=Scott Brogden"
     Version="%version%" />
   <Properties>
     <DisplayName>Ditto</DisplayName>
