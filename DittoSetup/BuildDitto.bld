@@ -351,14 +351,14 @@ DittoSetup*]]></X>
    xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
    xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
    xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10">
-  <Identity Name="Ditto"
+  <Identity Name="60145ScottBrogden.ditto-cp"
     ProcessorArchitecture="x64"
-    Publisher="CN=Scott Brogden"
+    Publisher="CN=2032816C-0EBD-4FA0-8832-B8289B21D4F4"
     Version="%version%" />
   <Properties>
-    <DisplayName>Ditto</DisplayName>
-    <PublisherDisplayName>Reserved</PublisherDisplayName>
-    <Description>No description entered</Description>
+    <DisplayName>ditto-cp</DisplayName>
+    <PublisherDisplayName>Scott Brogden</PublisherDisplayName>
+    <Description>Ditto</Description>
     <Logo>Ditto.png</Logo>
   </Properties>
   <Resources>
