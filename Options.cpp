@@ -1116,11 +1116,11 @@ BOOL CGetSetOptions::GetMainHWND()
 
 void CGetSetOptions::SetCaptionPos(long lPos)	
 {	
-	SetProfileLong("CaptionPos", lPos);					
+	SetProfileLong("CaptionPos2", lPos);					
 }
 long CGetSetOptions::GetCaptionPos()			
 {	
-	return GetProfileLong("CaptionPos", CAPTION_RIGHT);	
+	return GetProfileLong("CaptionPos2", CAPTION_TOP);	
 }
 
 void CGetSetOptions::SetAutoHide(BOOL bAutoHide)
@@ -1350,7 +1350,7 @@ BOOL CGetSetOptions::GetFont(LOGFONT &font)
 	}
 
 	ZeroMemory(&font, sizeof(font));
-	font.lfHeight = -theApp.m_metrics.PointsToPixels(12);
+	font.lfHeight = -theApp.m_metrics.PointsToPixels(10);
 	font.lfWeight = 400;
 	font.lfCharSet = 1;
 	STRCPY(font.lfFaceName, _T("Segoe UI"));

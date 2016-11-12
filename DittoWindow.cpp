@@ -764,6 +764,7 @@ long CDittoWindow::DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point)
 
 void CDittoWindow::DoNcMouseMove(CWnd *pWnd, UINT nHitTest, CPoint point) 
 {
+	return;
 	CRect crWindow;
 	pWnd->GetWindowRect(crWindow);
 
