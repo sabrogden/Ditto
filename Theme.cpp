@@ -11,20 +11,20 @@ CTheme::CTheme(void)
 	m_LastWriteTime = 0;
 	m_lastTheme = _T("");
 
-	m_CaptionLeft = RGB(0, 84, 195);
-	m_CaptionRight = RGB(61, 149, 255);
-	m_CaptionLeftTopMost = RGB(122, 150, 223);
-	m_CaptionRightTopMost = RGB(157, 185, 235);
-	m_CaptionLeftNotConnected = RGB(255, 0, 0);
+	m_CaptionLeft = RGB(255, 255, 255);
+	m_CaptionRight = RGB(204, 204, 204);
+	m_CaptionLeftTopMost = RGB(255, 255, 255);
+	m_CaptionRightTopMost = RGB(100, 100, 100);
+	m_CaptionLeftNotConnected = RGB(255, 255, 255);
 	m_CaptionRightNotConnected = RGB(255, 0, 0);
-	m_CaptionTextColor = RGB(255, 255, 255);
+	m_CaptionTextColor = RGB(191, 191, 191);
 	m_ListBoxOddRowsBG = RGB(255, 255, 255);
 	m_ListBoxEvenRowsBG = RGB(240, 240, 240);
 	m_ListBoxOddRowsText = RGB(0, 0, 0);
 	m_ListBoxEvenRowsText = RGB(0, 0, 0);
-	m_ListBoxSelectedBG = RGB(30, 116, 211);
-	m_ListBoxSelectedNoFocusBG = RGB(236, 233, 216);
-	m_ListBoxSelectedText = RGB(255, 255, 255);
+	m_ListBoxSelectedBG = RGB(204, 204, 204);
+	m_ListBoxSelectedNoFocusBG = RGB(204, 204, 204);
+	m_ListBoxSelectedText = RGB(0, 0, 0);
 	m_ListBoxSelectedNoFocusText = RGB(0, 0, 0);
 	m_clipPastedColor = RGB(0, 255, 0);
 }

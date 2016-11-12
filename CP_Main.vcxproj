@@ -2002,6 +2002,10 @@
     <None Include="res\bmp00001.bmp" />
     <None Include="res\bmp00002.bmp" />
     <None Include="res\bmp00003.bmp" />
+    <None Include="res\ChevronRight_Black_16_16.png" />
+    <None Include="res\ChevronRight_Black_20_20.png" />
+    <None Include="res\ChevronRight_Black_24_24.png" />
+    <None Include="res\ChevronRight_Black_32_32.png" />
     <None Include="res\chevron_right_16_16.png" />
     <None Include="res\chevron_right_10_10.png" />
     <None Include="res\chevron_right_12_12.png" />
@@ -2023,6 +2027,10 @@
     <None Include="res\close_12_12.png" />
     <None Include="res\close_16_16.png" />
     <None Include="res\close_8_8.png" />
+    <None Include="res\Close_Black_16_16.png" />
+    <None Include="res\Close_Black_20_20.png" />
+    <None Include="res\Close_Black_24_24.png" />
+    <None Include="res\Close_Black_32_32.png" />
     <None Include="res\cog_16_16.png" />
     <None Include="res\cog_20_20.png" />
     <None Include="res\cog_22_22.png" />
@@ -2058,6 +2066,7 @@
     <None Include="res\maximize_12_12.png" />
     <None Include="res\maximize_16_16.png" />
     <None Include="res\maximize_8_8.png" />
+    <None Include="res\NewWindowIcon_24_14.png" />
     <None Include="res\opened_folder_16_16.png" />
     <None Include="res\opened_folder_20_20.png" />
     <None Include="res\opened_folder_24_24.png" />

@@ -1171,6 +1171,15 @@
     <None Include="res\system_menu_32_32.png">
       <Filter>res</Filter>
     </None>
+    <None Include="res\ChevronRight_Black_16_16.png" />
+    <None Include="res\ChevronRight_Black_20_20.png" />
+    <None Include="res\ChevronRight_Black_24_24.png" />
+    <None Include="res\ChevronRight_Black_32_32.png" />
+    <None Include="res\Close_Black_16_16.png" />
+    <None Include="res\Close_Black_20_20.png" />
+    <None Include="res\Close_Black_24_24.png" />
+    <None Include="res\Close_Black_32_32.png" />
+    <None Include="res\NewWindowIcon_24_14.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">

@@ -1313,7 +1313,7 @@ BOOL CGetSetOptions::GetFont(LOGFONT &font)
 {
 	if(m_bFromIni && !m_bInConversion)
 	{
-		GetProfileFont("DisplayFont", font);
+		GetProfileFont("DisplayFont4", font);
 
 		//Return true if there is a font name
 		//other wise load the default font below
@@ -1326,7 +1326,7 @@ BOOL CGetSetOptions::GetFont(LOGFONT &font)
 	{
 		DWORD dwLength = 0;
 		#ifdef _UNICODE
-			LPVOID lpVoid = GetProfileData("DisplayFont3", dwLength);
+			LPVOID lpVoid = GetProfileData("DisplayFont5", dwLength);
 		#else
 			LPVOID lpVoid = GetProfileData("DisplayFont", dwLength);
 		#endif
@@ -1350,10 +1350,10 @@ BOOL CGetSetOptions::GetFont(LOGFONT &font)
 	}
 
 	ZeroMemory(&font, sizeof(font));
-	font.lfHeight = -theApp.m_metrics.PointsToPixels(8);
+	font.lfHeight = -theApp.m_metrics.PointsToPixels(12);
 	font.lfWeight = 400;
 	font.lfCharSet = 1;
-	STRCPY(font.lfFaceName, _T("Arial Unicode MS"));
+	STRCPY(font.lfFaceName, _T("Segoe UI"));
 	return TRUE;
 }
 
@@ -1361,12 +1361,12 @@ void CGetSetOptions::SetFont(LOGFONT &font)
 {
 	if(m_bFromIni)
 	{
-		SetProfileFont("DisplayFont", font);
+		SetProfileFont("DisplayFont4", font);
 	}
 	else
 	{
 		#ifdef _UNICODE
-			CString csParam = "DisplayFont3";
+			CString csParam = "DisplayFont4";
 		#else
 			CString csParam = "DisplayFont";
 		#endif
@@ -1859,7 +1859,7 @@ void CGetSetOptions::SetTheme(CString csTheme)
 
 CString CGetSetOptions::GetTheme()
 {
-	return GetProfileString(_T("Theme"), "");
+	return GetProfileString(_T("Theme2"), "");
 }
 
 long CGetSetOptions::GetKeyStateWaitTimerCount()

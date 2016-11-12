@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 #define ROW_BOTTOM_BORDER		2
 #define ROW_LEFT_BORDER			3
 #define COLOR_SHADOW			RGB(245, 245, 245)
-#define DUMMY_COL_WIDTH			1
+#define DUMMY_COL_WIDTH			2
 
 #define TIMER_SHOW_PROPERTIES	1
 #define TIMER_HIDE_SCROL	2
@@ -335,8 +335,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
         GetItem(&rItem);
 		
         // Get the rect that bounds the text label.
-        GetItemRect(nItem, rcItem, LVIR_LABEL);
-		rcItem.left -= DUMMY_COL_WIDTH;
+        GetItemRect(nItem, rcItem, LVIR_SELECTBOUNDS);
 		
 		COLORREF OldColor = -1;
 		int nOldBKMode = -1;
@@ -476,8 +475,8 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		}
 		
         // Draw a focus rect around the item if necessary.
-        if(bListHasFocus && (rItem.state & LVIS_FOCUSED))
-			pDC->DrawFocusRect(rcItem);
+        //if(bListHasFocus && (rItem.state & LVIS_FOCUSED))
+		//	pDC->DrawFocusRect(rcItem);
 						
 		if( m_bShowTextForFirstTenHotKeys && firstTenNum > 0 )
 		{

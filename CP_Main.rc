@@ -1279,6 +1279,24 @@ IDB_SYSTEM_MENU_24_24   PNG                     "res\\system_menu_24_24.png"
 
 IDB_SYSTEM_MENU_32_32   PNG                     "res\\system_menu_32_32.png"
 
+ChevronRight_Black_16_16 PNG                     "res\\ChevronRight_Black_16_16.png"
+
+ChevronRight_Black_20_20 PNG                     "res\\ChevronRight_Black_20_20.png"
+
+ChevronRight_Black_24_24 PNG                     "res\\ChevronRight_Black_24_24.png"
+
+ChevronRight_Black_32_32 PNG                     "res\\ChevronRight_Black_32_32.png"
+
+Close_Black_16_16       PNG                     "res\\Close_Black_16_16.png"
+
+Close_Black_20_20       PNG                     "res\\Close_Black_20_20.png"
+
+Close_Black_24_24       PNG                     "res\\Close_Black_24_24.png"
+
+Close_Black_32_32       PNG                     "res\\Close_Black_32_32.png"
+
+NewWindowIcon_24_14     PNG                     "res\\NewWindowIcon_24_14.png"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

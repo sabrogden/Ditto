@@ -27,9 +27,9 @@ CDittoWindow::CDittoWindow(void)
 	m_crChevronBT.SetRectEmpty();
 	m_crMaximizeBT.SetRectEmpty();
 	m_crMinimizeBT.SetRectEmpty();
-	m_CaptionColorLeft = RGB(0, 84, 230);
-	m_CaptionColorRight = RGB(61, 149, 255);
-	m_CaptionTextColor = RGB(255, 255, 255);
+	m_CaptionColorLeft = RGB(255, 255, 255);
+	m_CaptionColorRight = RGB(204, 204, 204);
+	m_CaptionTextColor = RGB(191, 191, 191);
 	m_sendWMClose = true;
 	m_customWindowTitle = _T("");
 	m_useCustomWindowTitle = false;
@@ -41,20 +41,22 @@ CDittoWindow::~CDittoWindow(void)
 
 void CDittoWindow::DoCreate(CWnd *pWnd)
 {
-	m_VertFont.CreateFont(theApp.m_metrics.PointsToPixels(10), 0, -900, 0, 400, FALSE, FALSE, 0, ANSI_CHARSET,
+	m_VertFont.CreateFont(theApp.m_metrics.PointsToPixels(18), 0, -900, 0, 400, FALSE, FALSE, 0, ANSI_CHARSET,
 							OUT_DEFAULT_PRECIS,	CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, 
-							DEFAULT_PITCH|FF_SWISS, _T("Arial"));
+							DEFAULT_PITCH|FF_SWISS, _T("Segoe UI"));
 
-	m_HorFont.CreateFont(theApp.m_metrics.PointsToPixels(10), 0, 0, 0, 400, FALSE, FALSE, 0, ANSI_CHARSET,
+	m_HorFont.CreateFont(theApp.m_metrics.PointsToPixels(18), 0, 0, 0, 500, FALSE, FALSE, 0, ANSI_CHARSET,
 						OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
-						DEFAULT_PITCH|FF_SWISS, _T("Arial"));
+						DEFAULT_PITCH|FF_SWISS, _T("Segoe UI"));
 	
-	m_closeButton.LoadStdImageDPI(IDB_CLOSE_8_8, IDB_CLOSE_10_10, IDB_CLOSE_12_13, IDB_CLOSE_16_16, _T("PNG"));
-	m_chevronRightButton.LoadStdImageDPI(IDB_CHEVRON_RIGHT_8_8, IDB_CHEVRON_RIGHT_10_10, IDB_CHEVRON_RIGHT_12_12, IDB_CHEVRON_RIGHT_16_16, _T("PNG"));
+	m_closeButton.LoadStdImageDPI(Close_Black_16_16, Close_Black_20_20, Close_Black_24_24, Close_Black_32_32, _T("PNG"));
+	m_chevronRightButton.LoadStdImageDPI(ChevronRight_Black_16_16, ChevronRight_Black_24_24, ChevronRight_Black_24_24, ChevronRight_Black_32_32, _T("PNG"));
 	m_chevronLeftButton.LoadStdImageDPI(IDB_CHEVRON_LEFT_8_8, IDB_CHEVRON_LEFT_10_10, IDB_CHEVRON_LEFT_12_12, IDB_CHEVRON_LEFT_16_16, _T("PNG"));
 	m_chevronTopButton.LoadStdImageDPI(IDB_CHEVRON_TOP_8_8, IDB_CHEVRON_TOP_10_10, IDB_CHEVRON_TOP_12_12, IDB_CHEVRON_TOP_16_16, _T("PNG"));
 	m_chevronBottomButton.LoadStdImageDPI(IDB_CHEVRON_BOTTOM_8_8, IDB_CHEVRON_BOTTOM_10_10, IDB_CHEVRON_BOTTOM_12_12, IDB_CHEVRON_BOTTOM_16_16, _T("PNG"));
 	m_maximizeButton.LoadStdImageDPI(IDB_MAXIMIZE_8_8, IDB_MAXIMIZE_10_10, IDB_MAXIMIZE_12_12, IDB_MAXIMIZE_16_16, _T("PNG"));
+
+	m_windowIcon.LoadStdImageDPI(NewWindowIcon_24_14, NewWindowIcon_24_14, NewWindowIcon_24_14, NewWindowIcon_24_14, _T("PNG"));
 }
 
 void CDittoWindow::DoNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp)
@@ -76,15 +78,17 @@ UINT CDittoWindow::DoNcHitTest(CWnd *pWnd, CPoint point)
 		return -1;
 	}
 	
-	CPoint localPoint(point);
-	pWnd->ScreenToClient(&localPoint);
+	int x = point.x - crWindow.left;
+	int y = point.y - crWindow.top;
+
+	CPoint myLocal(x, y);
 
 	//http://stackoverflow.com/questions/521147/the-curious-problem-of-the-missing-wm-nclbuttonup-message-when-a-window-isnt-ma
 	//workaround for l button up not coming after a lbutton down
-	if (m_crCloseBT.PtInRect(localPoint) ||
-		m_crChevronBT.PtInRect(localPoint) ||
-		m_crMinimizeBT.PtInRect(localPoint) ||
-		m_crMaximizeBT.PtInRect(localPoint))
+	if (m_crCloseBT.PtInRect(myLocal) ||
+		m_crChevronBT.PtInRect(myLocal) ||
+		m_crMinimizeBT.PtInRect(myLocal) ||
+		m_crMaximizeBT.PtInRect(myLocal))
 	{
 		return HTBORDER;;
 	}
@@ -147,6 +151,66 @@ UINT CDittoWindow::DoNcHitTest(CWnd *pWnd, CPoint point)
 	return -1;
 }
 
+int IndexToPos(int index, bool horizontal)
+{
+	switch (index)
+	{
+	case 0:
+		if (horizontal)
+		{
+			return theApp.m_metrics.ScaleX(24);
+		}
+		else
+		{
+			return theApp.m_metrics.ScaleY(8);
+		}
+		break;
+	case 1:
+		if (horizontal)
+		{
+			return theApp.m_metrics.ScaleX(48);
+		}
+		else
+		{
+			return theApp.m_metrics.ScaleY(32);
+		}
+		break;
+	case 2:
+
+		if (horizontal)
+		{
+			return theApp.m_metrics.ScaleX(72);
+		}
+		else
+		{
+			return theApp.m_metrics.ScaleY(56);
+		}
+		break;
+	case 3:
+		if (horizontal)
+		{
+			return theApp.m_metrics.ScaleX(96);
+		}
+		else
+		{
+			return theApp.m_metrics.ScaleY(80);
+		}
+		break;
+	case 4:
+		if (horizontal)
+		{
+			return theApp.m_metrics.ScaleX(104);
+		}
+		else
+		{
+			return theApp.m_metrics.ScaleY(104);
+		}
+		break;
+	}
+
+	return 0;
+}
+
 void CDittoWindow::DoNcPaint(CWnd *pWnd)
 {
 	CWindowDC dc(pWnd);
@@ -164,98 +228,170 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 	// Draw the window border
 	CRect rcBorder(0, 0, lWidth, rcFrame.Height());
 
-	dc.Draw3dRect(rcBorder, m_CaptionColorLeft, m_CaptionColorLeft);
-	rcBorder.DeflateRect(1, 1, 1, 1);
-	dc.Draw3dRect(rcBorder, m_CaptionColorLeft, m_CaptionColorLeft);
+	int border = theApp.m_metrics.ScaleX(2);
+	int widthHeight = theApp.m_metrics.ScaleX(16);
 
-	rcBorder.InflateRect(1, 1, 1, 1);
+	for (int x = 0; x < border; x++)
+	{
+		dc.Draw3dRect(rcBorder, m_CaptionColorRight, m_CaptionColorRight);
+		rcBorder.DeflateRect(1, 1, 1, 1);
+	}
 
-	int smallBorder = theApp.m_metrics.ScaleX(4);
-	int largeBorder = theApp.m_metrics.ScaleX(7);
-	int widthHeight = theApp.m_metrics.ScaleX(8);
+	int iconArea = 0;
+	int index = 0;
+	int closeIndex = 0;
+	int chevronIndex = 0;
+	int minIndex = 0;
+	int maxIndex = 0;
+
+	if (m_bDrawClose)
+	{
+		iconArea += theApp.m_metrics.ScaleX(32);
+		closeIndex = index++;
+	}
+	if (m_bDrawChevron)
+	{
+		iconArea += theApp.m_metrics.ScaleX(32);
+		chevronIndex = index++;
+	}
+	if (m_bDrawMaximize)
+	{
+		iconArea += theApp.m_metrics.ScaleX(32);
+		maxIndex = index++;
+	}
+	if (m_bDrawMinimize)
+	{
+		iconArea += theApp.m_metrics.ScaleX(32);
+		minIndex = index++;
+	}
+	
+	CRect leftRect;
+	CRect rightRect;
+	CRect textRect;	
 
 	BOOL bVertical = FALSE;
 	if(m_lRightBorder == CAPTION_BORDER)
 	{
-		m_crCloseBT.SetRect(rcBorder.right - widthHeight - smallBorder, largeBorder, rcBorder.right - smallBorder, largeBorder + widthHeight);
+		rightRect.SetRect(rcBorder.right - CAPTION_BORDER+ border, leftRect.top, rcBorder.right, rcBorder.top + IndexToPos(index, false));
+		leftRect.SetRect(rcBorder.right - CAPTION_BORDER+ border, rcBorder.top + IndexToPos(index, false) + 1, rcBorder.right, rcBorder.bottom);
+		
+		textRect.SetRect(rcBorder.right - theApp.m_metrics.ScaleX(2), rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.right - CAPTION_BORDER + theApp.m_metrics.ScaleX(5), rcBorder.bottom - theApp.m_metrics.ScaleX(50));
 
-		m_crChevronBT.SetRect(rcBorder.right - widthHeight - smallBorder, rcBorder.bottom - widthHeight - largeBorder, rcBorder.right - smallBorder, rcBorder.bottom - largeBorder);
+		int left = rcBorder.right - theApp.m_metrics.ScaleX(22);
+		int right = rcBorder.right - theApp.m_metrics.ScaleX(6);
 
-		m_crMaximizeBT.left = m_crCloseBT.left;
-		m_crMaximizeBT.top = m_crCloseBT.bottom + largeBorder;
-		m_crMaximizeBT.right = m_crCloseBT.right;
-		m_crMaximizeBT.bottom = m_crMaximizeBT.top + widthHeight;
+		m_crCloseBT.SetRect(left, IndexToPos(closeIndex, false), right, m_crCloseBT.top+ widthHeight);
+		m_crChevronBT.SetRect(left, IndexToPos(chevronIndex, false), right, m_crChevronBT.top + widthHeight);
+		m_crMaximizeBT.SetRect(left, IndexToPos(maxIndex, false), right, m_crMaximizeBT.top + widthHeight);
+		m_crMinimizeBT.SetRect(left, IndexToPos(minIndex, false), right, m_crMinimizeBT.top + widthHeight);
 
-		m_crMinimizeBT.left = m_crMaximizeBT.left;
-		m_crMinimizeBT.top += m_crMaximizeBT.bottom + largeBorder;
-		m_crMinimizeBT.right = m_crMaximizeBT.right;
-		m_crMinimizeBT.bottom += m_crMinimizeBT.top + widthHeight;
 
-		rcBorder.left = rcBorder.right - m_lRightBorder;
+		m_crWindowIconBT.SetRect(rcBorder.right - theApp.m_metrics.ScaleX(27), rcBorder.bottom - theApp.m_metrics.ScaleX(28), rcBorder.right - theApp.m_metrics.ScaleX(8), rcBorder.bottom);
+
 		bVertical = TRUE;
 	}
 	else if(m_lLeftBorder == CAPTION_BORDER)
 	{
-		m_crCloseBT.SetRect(smallBorder, largeBorder, widthHeight+smallBorder, widthHeight+largeBorder);
-		m_crChevronBT.SetRect(smallBorder, rcBorder.bottom - largeBorder - widthHeight, widthHeight+smallBorder, rcBorder.bottom - largeBorder);
+		rightRect.SetRect(rcBorder.left, leftRect.top, rcBorder.left + CAPTION_BORDER - border, rcBorder.top + IndexToPos(index, false));
+		leftRect.SetRect(rcBorder.left, rcBorder.top + IndexToPos(index, false) + 1, rcBorder.left + CAPTION_BORDER - border, rcBorder.bottom);
 
-		m_crMaximizeBT = m_crCloseBT;
-		m_crMaximizeBT.top += m_crCloseBT.Height() + largeBorder;
-		m_crMaximizeBT.bottom += m_crCloseBT.Height() + largeBorder;
-		m_crMinimizeBT = m_crMaximizeBT;
-		m_crMinimizeBT.top += m_crCloseBT.Height() + largeBorder;
-		m_crMinimizeBT.bottom += m_crCloseBT.Height() + largeBorder;
+		textRect.SetRect(rcBorder.left + CAPTION_BORDER - theApp.m_metrics.ScaleX(3), rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.left + theApp.m_metrics.ScaleX(2), rcBorder.bottom - theApp.m_metrics.ScaleX(50));
 
-		rcBorder.right = rcBorder.left + m_lLeftBorder;
+		int left = theApp.m_metrics.ScaleX(8);
+		int right = theApp.m_metrics.ScaleX(24);
+
+		m_crCloseBT.SetRect(left, IndexToPos(closeIndex, false), right, m_crCloseBT.top + widthHeight);
+		m_crChevronBT.SetRect(left, IndexToPos(chevronIndex, false), right, m_crChevronBT.top + widthHeight);
+		m_crMaximizeBT.SetRect(left, IndexToPos(maxIndex, false), right, m_crMaximizeBT.top + widthHeight);
+		m_crMinimizeBT.SetRect(left, IndexToPos(minIndex, false), right, m_crMinimizeBT.top + widthHeight);
+
+
+		m_crWindowIconBT.SetRect(rcBorder.left + theApp.m_metrics.ScaleX(4), rcBorder.bottom - theApp.m_metrics.ScaleX(28), rcBorder.left + theApp.m_metrics.ScaleX(28), rcBorder.bottom);
+
 		bVertical = TRUE;
 	}
 	else if(m_lTopBorder == CAPTION_BORDER)
 	{
-		m_crCloseBT.SetRect(rcBorder.right - widthHeight - largeBorder, smallBorder, rcBorder.right - largeBorder, widthHeight + smallBorder);
-		m_crChevronBT.SetRect(largeBorder, smallBorder, largeBorder+widthHeight, smallBorder+widthHeight);
+		leftRect.SetRect(rcBorder.left, rcBorder.top, rcBorder.right - IndexToPos(index-1, true)- theApp.m_metrics.ScaleX(8), CAPTION_BORDER);
+		rightRect.SetRect(leftRect.right, rcBorder.top, rcBorder.right, CAPTION_BORDER);
 
-		m_crMaximizeBT = m_crCloseBT;
-		m_crMaximizeBT.left -= m_crCloseBT.Width() + largeBorder;
-		m_crMaximizeBT.right -= m_crCloseBT.Width() + largeBorder;
-		m_crMinimizeBT = m_crMaximizeBT;
-		m_crMinimizeBT.left -= m_crCloseBT.Width() + largeBorder;
-		m_crMinimizeBT.right -= m_crCloseBT.Width() + largeBorder;
+		textRect.SetRect(leftRect.right, leftRect.top, leftRect.right, leftRect.bottom);
 
-		rcBorder.bottom = rcBorder.top + m_lTopBorder;
+		int top = theApp.m_metrics.ScaleX(8);
+		int bottom = theApp.m_metrics.ScaleX(24);
+
+		m_crCloseBT.SetRect(rcBorder.right - IndexToPos(closeIndex, true), top, m_crCloseBT.left + widthHeight, bottom);
+		m_crChevronBT.SetRect(rcBorder.right - IndexToPos(chevronIndex, true), top, m_crChevronBT.left + widthHeight, bottom);
+		m_crMaximizeBT.SetRect(rcBorder.right - IndexToPos(maxIndex, true), top, m_crMaximizeBT.left + widthHeight, bottom);
+		m_crMinimizeBT.SetRect(rcBorder.right - IndexToPos(minIndex, true), top, m_crMinimizeBT.left + widthHeight, bottom);
+
+		m_crWindowIconBT.SetRect(rcBorder.left + theApp.m_metrics.ScaleX(10), top, m_crWindowIconBT.left + theApp.m_metrics.ScaleX(24), bottom);
+		
 		bVertical = FALSE;
 	}
 	else if(m_lBottomBorder == CAPTION_BORDER)
 	{
-		m_crCloseBT.SetRect(rcBorder.right - largeBorder-widthHeight, rcBorder.bottom - smallBorder-widthHeight, rcBorder.right - largeBorder, rcBorder.bottom - smallBorder);
-		m_crChevronBT.SetRect(largeBorder, rcBorder.bottom - smallBorder-widthHeight, largeBorder+widthHeight,	rcBorder.bottom - smallBorder);
+		leftRect.SetRect(rcBorder.left, rcBorder.bottom-CAPTION_BORDER+ border, rcBorder.right - IndexToPos(index - 1, true) - theApp.m_metrics.ScaleX(8), rcBorder.bottom);
+		rightRect.SetRect(leftRect.right, rcBorder.bottom - CAPTION_BORDER+ border, rcBorder.right, rcBorder.bottom);
 
-		m_crMaximizeBT = m_crCloseBT;
-		m_crMaximizeBT.left -= m_crCloseBT.Width() + largeBorder;
-		m_crMaximizeBT.right -= m_crCloseBT.Width() + largeBorder;
-		m_crMinimizeBT = m_crMaximizeBT;
-		m_crMinimizeBT.left -= m_crCloseBT.Width() + largeBorder;
-		m_crMinimizeBT.right -= m_crCloseBT.Width() + largeBorder;
+		textRect.SetRect(leftRect.right, leftRect.top, leftRect.right, leftRect.bottom);
 
-		rcBorder.top = rcBorder.bottom - m_lBottomBorder;
+		int top = leftRect.top + theApp.m_metrics.ScaleX(8);
+		int bottom = leftRect.top + theApp.m_metrics.ScaleX(24);
+
+		m_crCloseBT.SetRect(rcBorder.right - IndexToPos(closeIndex, true), top, m_crCloseBT.left + widthHeight, bottom);
+		m_crChevronBT.SetRect(rcBorder.right - IndexToPos(chevronIndex, true), top, m_crChevronBT.left + widthHeight, bottom);
+		m_crMaximizeBT.SetRect(rcBorder.right - IndexToPos(maxIndex, true), top, m_crMaximizeBT.left + widthHeight, bottom);
+		m_crMinimizeBT.SetRect(rcBorder.right - IndexToPos(minIndex, true), top, m_crMinimizeBT.left + widthHeight, bottom);
+
+		m_crWindowIconBT.SetRect(rcBorder.left + theApp.m_metrics.ScaleX(10), top, m_crWindowIconBT.left + theApp.m_metrics.ScaleX(24), bottom);
+
 		bVertical = FALSE;
 	}
 
-	if(m_bDrawClose == false)
+
+	HBRUSH leftColor = CreateSolidBrush(m_CaptionColorLeft);
+	HBRUSH rightColor = CreateSolidBrush(m_CaptionColorRight);	
+
+	::FillRect(dc, &leftRect, leftColor);
+	::FillRect(dc, &rightRect, rightColor);
+
+	DeleteObject(leftColor);
+	DeleteObject(rightColor);
+
+
+	int nOldBKMode = dc.SetBkMode(TRANSPARENT);
+	COLORREF oldColor = dc.SetTextColor(m_CaptionTextColor);
+
+	CFont *pOldFont = NULL;
+	if (bVertical)
+		pOldFont = dc.SelectObject(&m_VertFont);
+	else
+		pOldFont = dc.SelectObject(&m_HorFont);
+
+	CString csText = m_customWindowTitle;
+	if (m_useCustomWindowTitle == false)
 	{
-		m_crCloseBT.SetRectEmpty();
+		pWnd->GetWindowText(csText);
 	}
-	if(m_bDrawChevron == false)
+
+	int flags = DT_SINGLELINE;
+	if (bVertical == false)
 	{
-		m_crChevronBT.SetRectEmpty();
+		CRect size(0, 0, 0, 0);
+		dc.DrawText(csText, size, DT_CALCRECT);
+		textRect.left = textRect.right - size.Width() - 10;
+
+		flags |= DT_VCENTER;
 	}
-	if(m_bDrawMaximize == false)
-	{
-		m_crMaximizeBT.SetRectEmpty();
-	}
-	if(m_bDrawMinimize == false)
-	{
-		m_crMinimizeBT.SetRectEmpty();
-	}
+
+	dc.DrawText(csText, textRect, flags);
+
+	dc.SelectObject(pOldFont);
+	dc.SetBkMode(nOldBKMode);
+
+
+/*
 
 	int r1 = GetRValue(m_CaptionColorLeft);
 	int g1 = GetGValue(m_CaptionColorLeft);
@@ -361,18 +497,23 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 		dc.DrawText(csText, cr, DT_SINGLELINE);
 	}
 
-	DrawCloseBtn(dc, pWnd);
+	
 	DrawChevronBtn(dc, pWnd);
 	DrawMaximizeBtn(dc, pWnd);
 	DrawMinimizeBtn(dc);
 
 	dc.SelectObject(pOldFont);
 	dc.SetTextColor(oldColor);
-	dc.SetBkMode(nOldBKMode);
+	dc.SetBkMode(nOldBKMode);*/
+
+	DrawWindowIcon(dc, pWnd);
+	DrawChevronBtn(dc, pWnd);
+	DrawCloseBtn(dc, pWnd);
 }
 
 void CDittoWindow::DoSetRegion(CWnd *pWnd)
 {
+	return;
 	//Create the region for drawing the rounded top edge
 
 	CRect rect;
@@ -441,24 +582,13 @@ void CDittoWindow::DrawChevronBtn(CWindowDC &dc, CWnd *pWnd)
 	{
 		return;
 	}
-	bool bTopOrBottom = false;
 
-	if (m_lRightBorder == CAPTION_BORDER)
-	{
-		m_chevronRightButton.Draw(&dc, pWnd, m_crChevronBT.left, m_crChevronBT.top, m_bMouseOverChevron, m_bMouseDownOnChevron);
-	}
-	else if (m_lLeftBorder == CAPTION_BORDER)
-	{
-		m_chevronLeftButton.Draw(&dc, pWnd, m_crChevronBT.left, m_crChevronBT.top, m_bMouseOverChevron, m_bMouseDownOnChevron);
-	}
-	else if (m_lTopBorder == CAPTION_BORDER)
-	{
-		m_chevronTopButton.Draw(&dc, pWnd, m_crChevronBT.left, m_crChevronBT.top, m_bMouseOverChevron, m_bMouseDownOnChevron);
-	}
-	else if (m_lBottomBorder == CAPTION_BORDER)
-	{
-		m_chevronBottomButton.Draw(&dc, pWnd, m_crChevronBT.left, m_crChevronBT.top, m_bMouseOverChevron, m_bMouseDownOnChevron);
-	}	
+	m_chevronRightButton.Draw(&dc, pWnd, m_crChevronBT.left, m_crChevronBT.top, false, m_bMouseDownOnChevron);
+}
+
+void CDittoWindow::DrawWindowIcon(CWindowDC &dc, CWnd *pWnd)
+{
+	m_windowIcon.Draw(&dc, pWnd, m_crWindowIconBT.left, m_crWindowIconBT.top, false, false);
 }
 
 void CDittoWindow::DrawCloseBtn(CWindowDC &dc, CWnd *pWnd)
@@ -535,25 +665,26 @@ void CDittoWindow::DoNcLButtonDown(CWnd *pWnd, UINT nHitTest, CPoint point)
 	if(m_crCloseBT.PtInRect(clPoint))
 	{
 		m_bMouseDownOnClose = true;
-		DoNcPaint(pWnd);
+		//InvalidateRect(pWnd->m_hWnd, m_crCloseBT, TRUE);
+		//pWnd->InvalidateRect(m_crCloseBT);
+		//pWnd->UpdateWindow();
+		//DoNcPaint(pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	}
 	else if(m_crChevronBT.PtInRect(clPoint))
 	{
 		m_bMouseDownOnChevron = true;
-		CWindowDC dc(pWnd);
-		DrawChevronBtn(dc, pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	}
 	else if(m_crMinimizeBT.PtInRect(clPoint))
 	{
 		m_bMouseDownOnMinimize = true;
-		CWindowDC dc(pWnd);
-		DrawMinimizeBtn(dc);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	}
 	else if(m_crMaximizeBT.PtInRect(clPoint))
 	{
 		m_bMouseDownOnMaximize = true;
-		CWindowDC dc(pWnd);
-		DrawMaximizeBtn(dc, pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	}
 	else if(m_bMinimized)
 	{
@@ -563,8 +694,10 @@ void CDittoWindow::DoNcLButtonDown(CWnd *pWnd, UINT nHitTest, CPoint point)
 
 long CDittoWindow::DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point) 
 {
-	CPoint localPoint(point);
-	pWnd->ScreenToClient(&localPoint);
+	CRect crWindow;
+	pWnd->GetWindowRect(crWindow);
+
+	CPoint localPoint(point.x - crWindow.left, point.y - crWindow.top);
 
 	long lRet = 0;
 	if(m_bMouseDownOnClose)
@@ -572,11 +705,8 @@ long CDittoWindow::DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point)
 		m_bMouseDownOnClose = false;
 		m_bMouseOverClose = false;
 
-		DoNcPaint(pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 		
-		CPoint clPoint(point);
-		clPoint.x += m_lLeftBorder;
-		clPoint.y += m_lTopBorder;
 		if(m_crCloseBT.PtInRect(localPoint))
 		{
 			if(m_sendWMClose)
@@ -591,12 +721,9 @@ long CDittoWindow::DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point)
 		m_bMouseDownOnChevron = false;
 		m_bMouseOverChevron = false;
 
-		DoNcPaint(pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 
-		CPoint clPoint(localPoint);
-		clPoint.x += m_lLeftBorder;
-		clPoint.y += m_lTopBorder;
-		if(m_crChevronBT.PtInRect(clPoint))
+		if(m_crChevronBT.PtInRect(localPoint))
 		{
 			lRet = BUTTON_CHEVRON;
 		}
@@ -606,12 +733,9 @@ long CDittoWindow::DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point)
 		m_bMouseDownOnMinimize = false;
 		m_bMouseOverMinimize = false;
 
-		DoNcPaint(pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 
-		CPoint clPoint(localPoint);
-		clPoint.x += m_lLeftBorder;
-		clPoint.y += m_lTopBorder;
-		if(m_crMinimizeBT.PtInRect(clPoint))
+		if(m_crMinimizeBT.PtInRect(localPoint))
 		{
 			pWnd->ShowWindow(SW_MINIMIZE);
 			lRet = BUTTON_MINIMIZE;
@@ -622,12 +746,9 @@ long CDittoWindow::DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point)
 		m_bMouseDownOnMaximize = false;
 		m_bMouseOverMaximize = false;
 
-		DoNcPaint(pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 
-		CPoint clPoint(localPoint);
-		clPoint.x += m_lLeftBorder;
-		clPoint.y += m_lTopBorder;
-		if(m_crMaximizeBT.PtInRect(clPoint))
+		if(m_crMaximizeBT.PtInRect(localPoint))
 		{
 			if(pWnd->GetStyle() & WS_MAXIMIZE)
 				pWnd->ShowWindow(SW_RESTORE);
@@ -643,59 +764,53 @@ long CDittoWindow::DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point)
 
 void CDittoWindow::DoNcMouseMove(CWnd *pWnd, UINT nHitTest, CPoint point) 
 {
-	CPoint clPoint(point);
-	pWnd->ScreenToClient(&clPoint);
+	CRect crWindow;
+	pWnd->GetWindowRect(crWindow);
 
-	clPoint.x += m_lLeftBorder;
-	clPoint.y += m_lTopBorder;
+	CPoint localPoint(point.x - crWindow.left, point.y - crWindow.top);
 
-	if(m_crCloseBT.PtInRect(clPoint))
+	if(m_crCloseBT.PtInRect(localPoint))
 	{
 		m_bMouseOverClose = true;
-		CWindowDC dc(pWnd);
-		DrawCloseBtn(dc, pWnd);
-		//this->DoNcPaint(pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	}
 	else if(m_bMouseOverClose)
 	{
 		m_bMouseOverClose = false;
-		DoNcPaint(pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	}
 
-	if(m_crChevronBT.PtInRect(clPoint))
+	if(m_crChevronBT.PtInRect(localPoint))
 	{
 		m_bMouseOverChevron = true;
-		CWindowDC dc(pWnd);
-		DrawChevronBtn(dc, pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	}
 	else if(m_bMouseOverChevron)
 	{
 		m_bMouseOverChevron = false;
-		DoNcPaint(pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	}
 
-	if(m_crMinimizeBT.PtInRect(clPoint))
+	if(m_crMinimizeBT.PtInRect(localPoint))
 	{
 		m_bMouseOverMinimize = true;
-		CWindowDC dc(pWnd);
-		DrawMinimizeBtn(dc);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	}
 	else if(m_bMouseOverMinimize)
 	{
 		m_bMouseOverMinimize = false;
-		DoNcPaint(pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	}
 
-	if(m_crMaximizeBT.PtInRect(clPoint))
+	if(m_crMaximizeBT.PtInRect(localPoint))
 	{
 		m_bMouseOverMaximize = true;
-		CWindowDC dc(pWnd);
-		DrawMaximizeBtn(dc, pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	}
 	else if(m_bMouseOverMaximize)
 	{
 		m_bMouseOverMaximize = false;
-		DoNcPaint(pWnd);
+		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
 	}
 }
 

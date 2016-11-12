@@ -26,7 +26,7 @@
 extern class CCP_MainApp theApp;
 
 #define BORDER 2 
-#define CAPTION_BORDER theApp.m_metrics.ScaleX(16)
+#define CAPTION_BORDER theApp.m_metrics.ScaleX(32)
 
 class CCP_MainApp : public CWinApp
 {

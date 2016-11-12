@@ -60,8 +60,8 @@ void CGdiImageDrawer::Draw(CDC* pScreenDC, CWnd *pWnd, int posX, int posY, bool 
 
 	CRect rectWithBorder(posX, posY, posX + width, posY + height);
 
-	int two = theApp.m_metrics.ScaleX(2);
-	rectWithBorder.InflateRect(two, two, two, two);
+	//int two = theApp.m_metrics.ScaleX(2);
+	//rectWithBorder.InflateRect(two, two, two, two);
 
 	CDC dcBk;
 	CBitmap bmp;
@@ -86,8 +86,8 @@ void CGdiImageDrawer::Draw(CDC* pScreenDC, CWnd *pWnd, int posX, int posY, bool 
 	graphics.DrawImage(*m_pStdImage, posX, posY, width, height);	
 
 	//If we are hoving over then draw the border
-	if(mouseHover && mouseDown == false)
-	{
-		pScreenDC->Draw3dRect(rectWithBorder, RGB(255, 255, 255), RGB(255, 255, 255));
-	}
+	//if(mouseHover && mouseDown == false)
+	//{
+	//	pScreenDC->Draw3dRect(rectWithBorder, RGB(255, 255, 255), RGB(255, 255, 255));
+	//}
 }

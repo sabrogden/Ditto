@@ -516,7 +516,8 @@ void CQPasteWnd::MoveControls()
     int cx = crRect.Width();
     int cy = crRect.Height();
 
-	int topOfListBox = 0;
+    //Hide the two pixels of space at the top, not sure where this is coming from
+	int topOfListBox = -2;
 	
     if(theApp.m_GroupID > 0)
     {
@@ -1128,8 +1129,8 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 
     if(title != prev)
     {
-		SetCustomWindowTitle(title);
-        RefreshNc();
+		//SetCustomWindowTitle(title);
+        //RefreshNc();
     }
 }
 
@@ -2594,6 +2595,7 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 	switch (pMsg->message)
 	{
 	case WM_MBUTTONUP:
+	{
 		MSG msg;
 		msg.lParam = 0;
 		msg.wParam = VK_MOUSE_MIDDLE_CLICK;
@@ -2601,8 +2603,26 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 		if (CheckActions(&msg) == false)
 		{
 		}
+	}
 		break;
 	case WM_MBUTTONDBLCLK:
+		break;
+	case WM_LBUTTONDOWN:
+		break;
+
+	/*case WM_LBUTTONDBLCLK:
+	{
+		MSG msg;
+		msg.lParam = 0;
+		msg.wParam = VK_MOUSE_DOUBLE_CLICK;
+		msg.message = WM_KEYDOWN;
+		if (CheckActions(&msg))
+		{
+			return 0;
+		}
+	}
+		break;*/
+	case WM_NOTIFY:
 		break;
 	default:
 		if (CheckActions(pMsg))

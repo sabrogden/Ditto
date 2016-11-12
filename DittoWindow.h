@@ -20,6 +20,7 @@ public:
 	void DrawCloseBtn(CWindowDC &dc, CWnd *pWnd);
 	void DrawMaximizeBtn(CWindowDC &dc, CWnd *pWnd);
 	void DrawMinimizeBtn(CWindowDC &dc);
+	void DrawWindowIcon(CWindowDC &dc, CWnd *pWnd);
 
 	void DoCreate(CWnd *pWnd);
 	void DoNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp);
@@ -48,6 +49,7 @@ public:
 	CRect m_crChevronBT;
 	CRect m_crMaximizeBT;
 	CRect m_crMinimizeBT;
+	CRect m_crWindowIconBT;
 
 	CFont m_VertFont;
 	CFont m_HorFont;
@@ -73,6 +75,7 @@ public:
 	CGdiImageDrawer m_chevronTopButton;
 	CGdiImageDrawer m_chevronBottomButton;
 	CGdiImageDrawer m_maximizeButton;
+	CGdiImageDrawer m_windowIcon;
 
 	CString m_customWindowTitle;
 	bool m_useCustomWindowTitle;

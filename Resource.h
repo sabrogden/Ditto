@@ -115,6 +115,16 @@
 #define IDB_SYSTEM_MENU_32_32           247
 #define IDR_QUICK_PASTE_SYSTEM_MENU     248
 #define IDD_OPTIONS_QUICK_PASTE_KEYBOARD 249
+#define ChevronRight_Black_16_16        259
+#define ChevronRight_Black_20_20        260
+#define ChevronRight_Black_24_24        261
+#define ChevronRight_Black_32_32        262
+#define Close_Black_16_16               263
+#define Close_Black_20_20               264
+#define Close_Black_24_24               265
+#define Close_Black_32_32               266
+#define IDB_PNG6                        267
+#define NewWindowIcon_24_14             267
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -593,7 +603,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        259
+#define _APS_NEXT_RESOURCE_VALUE        268
 #define _APS_NEXT_COMMAND_VALUE         32929
 #define _APS_NEXT_CONTROL_VALUE         2146
 #define _APS_NEXT_SYMED_VALUE           104
