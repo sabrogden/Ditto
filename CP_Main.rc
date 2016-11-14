@@ -1297,6 +1297,44 @@ Close_Black_32_32       PNG                     "res\\Close_Black_32_32.png"
 
 NewWindowIcon_24_14     PNG                     "res\\NewWindowIcon_24_14.png"
 
+system_menu_2_48        PNG                     "res\\system_menu_2_48.png"
+
+system_menu_2_36        PNG                     "res\\system_menu_2_36.png"
+
+system_menu_2_30        PNG                     "res\\system_menu_2_30.png"
+
+system_menu_2_24        PNG                     "res\\system_menu_2_24.png"
+
+open_folder_48          PNG                     "res\\open_folder_48.png"
+
+open_folder_36          PNG                     "res\\open_folder_36.png"
+
+open_folder_30          PNG                     "res\\open_folder_30.png"
+
+open_folder_24          PNG                     "res\\open_folder_24.png"
+
+ChevronLeft_Black_16_16 PNG                     "res\\ChevronLeft_Black_16_16.png"
+
+ChevronLeft_Black_20_20 PNG                     "res\\ChevronLeft_Black_20_20.png"
+
+ChevronLeft_Black_24_24 PNG                     "res\\ChevronLeft_Black_24_24.png"
+
+ChevronLeft_Black_32_32 PNG                     "res\\ChevronLeft_Black_32_32.png"
+
+NewWindowIcon_48        PNG                     "res\\NewWindowIcon_48.png"
+
+NewWindowIcon_36        PNG                     "res\\NewWindowIcon_36.png"
+
+NewWindowIcon_30        PNG                     "res\\NewWindowIcon_30.png"
+
+return_16               PNG                     "res\\return_16.png"
+
+return_20               PNG                     "res\\return_20.png"
+
+return_24               PNG                     "res\\return_24.png"
+
+return_32               PNG                     "res\\return_32.png"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

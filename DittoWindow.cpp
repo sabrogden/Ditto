@@ -51,12 +51,12 @@ void CDittoWindow::DoCreate(CWnd *pWnd)
 	
 	m_closeButton.LoadStdImageDPI(Close_Black_16_16, Close_Black_20_20, Close_Black_24_24, Close_Black_32_32, _T("PNG"));
 	m_chevronRightButton.LoadStdImageDPI(ChevronRight_Black_16_16, ChevronRight_Black_24_24, ChevronRight_Black_24_24, ChevronRight_Black_32_32, _T("PNG"));
-	m_chevronLeftButton.LoadStdImageDPI(IDB_CHEVRON_LEFT_8_8, IDB_CHEVRON_LEFT_10_10, IDB_CHEVRON_LEFT_12_12, IDB_CHEVRON_LEFT_16_16, _T("PNG"));
+	m_chevronLeftButton.LoadStdImageDPI(ChevronLeft_Black_16_16, ChevronLeft_Black_24_24, ChevronLeft_Black_24_24, ChevronLeft_Black_32_32, _T("PNG"));
 	m_chevronTopButton.LoadStdImageDPI(IDB_CHEVRON_TOP_8_8, IDB_CHEVRON_TOP_10_10, IDB_CHEVRON_TOP_12_12, IDB_CHEVRON_TOP_16_16, _T("PNG"));
 	m_chevronBottomButton.LoadStdImageDPI(IDB_CHEVRON_BOTTOM_8_8, IDB_CHEVRON_BOTTOM_10_10, IDB_CHEVRON_BOTTOM_12_12, IDB_CHEVRON_BOTTOM_16_16, _T("PNG"));
 	m_maximizeButton.LoadStdImageDPI(IDB_MAXIMIZE_8_8, IDB_MAXIMIZE_10_10, IDB_MAXIMIZE_12_12, IDB_MAXIMIZE_16_16, _T("PNG"));
 
-	m_windowIcon.LoadStdImageDPI(NewWindowIcon_24_14, NewWindowIcon_24_14, NewWindowIcon_24_14, NewWindowIcon_24_14, _T("PNG"));
+	m_windowIcon.LoadStdImageDPI(NewWindowIcon_24_14, NewWindowIcon_30, NewWindowIcon_36, NewWindowIcon_48, _T("PNG"));
 }
 
 void CDittoWindow::DoNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp)
@@ -582,8 +582,15 @@ void CDittoWindow::DrawChevronBtn(CWindowDC &dc, CWnd *pWnd)
 	{
 		return;
 	}
-
-	m_chevronRightButton.Draw(&dc, pWnd, m_crChevronBT.left, m_crChevronBT.top, false, m_bMouseDownOnChevron);
+		
+	if(this->m_bMinimized)
+	{
+		m_chevronLeftButton.Draw(&dc, pWnd, m_crChevronBT.left, m_crChevronBT.top, m_bMouseOverChevron, m_bMouseDownOnChevron);
+	}
+	else
+	{
+		m_chevronRightButton.Draw(&dc, pWnd, m_crChevronBT.left, m_crChevronBT.top, m_bMouseOverChevron, m_bMouseDownOnChevron);
+	}
 }
 
 void CDittoWindow::DrawWindowIcon(CWindowDC &dc, CWnd *pWnd)

@@ -125,6 +125,27 @@
 #define Close_Black_32_32               266
 #define IDB_PNG6                        267
 #define NewWindowIcon_24_14             267
+#define IDB_PNG10                       273
+#define system_menu_2_48                274
+#define system_menu_2_36                275
+#define system_menu_2_30                276
+#define system_menu_2_24                277
+#define open_folder_48                  278
+#define open_folder_36                  279
+#define open_folder_30                  280
+#define open_folder_24                  281
+#define ChevronLeft_Black_16_16         282
+#define ChevronLeft_Black_20_20         283
+#define ChevronLeft_Black_24_24         284
+#define ChevronLeft_Black_32_32         285
+#define NewWindowIcon_48                286
+#define NewWindowIcon_36                287
+#define NewWindowIcon_30                288
+#define return_16                       289
+#define return_20                       290
+#define return_24                       291
+#define IDB_PNG14                       292
+#define return_32                       292
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -603,7 +624,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        268
+#define _APS_NEXT_RESOURCE_VALUE        293
 #define _APS_NEXT_COMMAND_VALUE         32929
 #define _APS_NEXT_CONTROL_VALUE         2146
 #define _APS_NEXT_SYMED_VALUE           104

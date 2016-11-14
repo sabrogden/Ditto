@@ -412,6 +412,7 @@
     <ClCompile Include="NTray.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="SymbolEdit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -876,6 +877,7 @@
     <ClInclude Include="NTray.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="SymbolEdit.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -1180,6 +1182,31 @@
     <None Include="res\Close_Black_24_24.png" />
     <None Include="res\Close_Black_32_32.png" />
     <None Include="res\NewWindowIcon_24_14.png" />
+    <None Include="res\system_menu_2_32_32.png" />
+    <None Include="res\system_menu_2_64_64.png" />
+    <None Include="res\system_menu_2_48_48.png" />
+    <None Include="res\system_menu_2_40_40.png" />
+    <None Include="res\Open Folder-32.png" />
+    <None Include="res\Open Folder-24.png" />
+    <None Include="res\system_menu_2_48.png" />
+    <None Include="res\system_menu_2_36.png" />
+    <None Include="res\system_menu_2_30.png" />
+    <None Include="res\system_menu_2_24.png" />
+    <None Include="res\open_folder_48.png" />
+    <None Include="res\open_folder_36.png" />
+    <None Include="res\open_folder_30.png" />
+    <None Include="res\open_folder_24.png" />
+    <None Include="res\ChevronLeft_Black_16_16.png" />
+    <None Include="res\ChevronLeft_Black_20_20.png" />
+    <None Include="res\ChevronLeft_Black_24_24.png" />
+    <None Include="res\ChevronLeft_Black_32_32.png" />
+    <None Include="res\NewWindowIcon_48.png" />
+    <None Include="res\NewWindowIcon_36.png" />
+    <None Include="res\NewWindowIcon_30.png" />
+    <None Include="res\return_16.png" />
+    <None Include="res\return_20.png" />
+    <None Include="res\return_24.png" />
+    <None Include="res\return_32.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">

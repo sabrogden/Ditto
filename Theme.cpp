@@ -27,6 +27,8 @@ CTheme::CTheme(void)
 	m_ListBoxSelectedText = RGB(0, 0, 0);
 	m_ListBoxSelectedNoFocusText = RGB(0, 0, 0);
 	m_clipPastedColor = RGB(0, 255, 0);
+	m_listSmallQuickPasteIndexColor = RGB(180, 180, 180);
+	m_mainWindowBG = RGB(240, 240, 240);
 }
 
 CTheme::~CTheme(void)

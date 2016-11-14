@@ -76,6 +76,7 @@ CQPasteWnd::~CQPasteWnd()
 
 BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 //{{AFX_MSG_MAP(CQPasteWnd)
+ON_WM_ERASEBKGND()
 ON_WM_CREATE()
 ON_WM_SIZE()
 ON_WM_SETFOCUS()
@@ -306,13 +307,14 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     SetWindowText(_T(QPASTE_TITLE));
 
     m_search.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | ES_MULTILINE, CRect(0, 0, 0, 0), this, ID_EDIT_SEARCH);
+	m_search.SetPromptText(_T("Search"));
 	SetSearchImages();
 
 	CRect rcEditArea(theApp.m_metrics.ScaleX(4), theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(2));
-	m_search.SetBorder(rcEditArea);
+	//m_search.SetBorder(rcEditArea);
 
 	CRect rcCloseArea(theApp.m_metrics.ScaleX(85), theApp.m_metrics.ScaleY(3), theApp.m_metrics.ScaleX(99), theApp.m_metrics.ScaleY(15));
-	m_search.SetButtonArea(rcCloseArea);
+	//m_search.SetButtonArea(rcCloseArea);
 
     // Create the header control
     if(!m_lstHeader.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | LVS_NOCOLUMNHEADER | LVS_REPORT | LVS_SHOWSELALWAYS | LVS_OWNERDATA | LVS_OWNERDRAWFIXED, CRect(0, 0, 0, 0), this, ID_LIST_HEADER))
@@ -330,31 +332,28 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     m_ShowGroupsFolderBottom.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SHOW_GROUPS_BOTTOM);
     //m_ShowGroupsFolderBottom.LoadBitmaps(IDB_CLOSED_FOLDER, IDB_CLOSED_FOLDER_PRESSED, IDB_CLOSED_FOLDER_FOCUSED);
-	m_ShowGroupsFolderBottom.LoadStdImageDPI(IDB_OPEN_FOLDER_16_16, IDB_OPEN_FOLDER_20_20, IDB_OPEN_FOLDER_24_24, IDB_OPEN_FOLDER_32_32, _T("PNG"));
+	m_ShowGroupsFolderBottom.LoadStdImageDPI(open_folder_24, open_folder_30, open_folder_36, open_folder_48, _T("PNG"));
     m_ShowGroupsFolderBottom.ShowWindow(SW_SHOW);
 	m_ShowGroupsFolderBottom.SetToolTipText(theApp.m_Language.GetString(_T("GroupsTooltip"), _T("Groups")));
 	m_ShowGroupsFolderBottom.ModifyStyle(WS_TABSTOP, 0);
 
     m_BackButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_BACK_BUTTON);
-	m_BackButton.LoadStdImageDPI(IDB_LEFT_ARROW_16_16, IDB_LEFT_ARROW_20_20, IDB_LEFT_ARROW_24_24, IDB_LEFT_ARROW_32_32, _T("PNG"));
+	m_BackButton.LoadStdImageDPI(return_16, return_20, return_24, return_32, _T("PNG"));
 	m_BackButton.ModifyStyle(WS_TABSTOP, 0);
     m_BackButton.ShowWindow(SW_SHOW);
 
 	m_systemMenu.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SYSTEM_BUTTON);
 	//m_systemMenu.LoadStdImageDPI(IDB_HAMBURGER_16_16, IDB_HAMBURGER_20_20, IDB_HAMBURGER_24_24, IDB_HAMBURGER_32_32, _T("PNG"));
-	m_systemMenu.LoadStdImageDPI(IDB_SYSTEM_MENU_16_16, IDB_SYSTEM_MENU_20_20, IDB_SYSTEM_MENU_24_24, IDB_SYSTEM_MENU_32_32, _T("PNG"));
+	m_systemMenu.LoadStdImageDPI(system_menu_2_24, system_menu_2_30, system_menu_2_36, system_menu_2_48, _T("PNG"));
 	m_systemMenu.ModifyStyle(WS_TABSTOP, 0);
 	m_systemMenu.ShowWindow(SW_SHOW);
 		
     m_stGroup.Create(_T(""), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, ID_GROUP_TEXT);
 	
-
     //Set the z-order
     m_lstHeader.SetWindowPos(this, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
     m_search.SetWindowPos(&m_lstHeader, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
     m_ShowGroupsFolderBottom.SetWindowPos(&m_search, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-	
-
 
     //LVS_EX_FLATSB
     m_lstHeader.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_HEADERDRAGDROP);
@@ -370,14 +369,15 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
         m_Alpha.SetWindowHandle(m_hWnd);
     #endif 
 
-	m_TitleFont.CreateFont(theApp.m_metrics.PointsToPixels(10), 0, -900, 0, 400, FALSE, FALSE, 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, _T("Arial"));
 
-    m_SearchFont.CreatePointFont(80, _T("Arial Unicode MS"));
-
-	m_groupFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("MS Sans Serif"));	
+    m_SearchFont.CreatePointFont(130, _T("Segoe UI"));
+	m_groupFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));	
 
     m_search.SetFont(&m_SearchFont);
+	m_search.SetPromptFont(m_SearchFont);
 	m_stGroup.SetFont(&m_groupFont);	
+
+	m_stGroup.SetBkColor(g_Opt.m_Theme.MainWindowBG());
 	
     UpdateFont();
 	
@@ -470,31 +470,31 @@ void CQPasteWnd::LoadShortcuts()
 
 void CQPasteWnd::SetSearchImages()
 {
-	int iSourceImageDPIToUse = 96; // We will assume 96 by default.
+	//int iSourceImageDPIToUse = 96; // We will assume 96 by default.
 
-	if (theApp.m_metrics.GetDPIX() > 144) 
-		iSourceImageDPIToUse = 192;
-	else if (theApp.m_metrics.GetDPIX() > 120) 
-		iSourceImageDPIToUse = 144;
-	else if (theApp.m_metrics.GetDPIX() > 96) 
-		iSourceImageDPIToUse = 120;
+	//if (theApp.m_metrics.GetDPIX() > 144) 
+	//	iSourceImageDPIToUse = 192;
+	//else if (theApp.m_metrics.GetDPIX() > 120) 
+	//	iSourceImageDPIToUse = 144;
+	//else if (theApp.m_metrics.GetDPIX() > 96) 
+	//	iSourceImageDPIToUse = 120;
 
-	// Now select the right resource to load.
-	switch(iSourceImageDPIToUse)
-	{
-	case 120: 
-		m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL_125, IDB_BITMAP_SEARCH_CLOSE_125);
-		break;
-	case 144: 
-		m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL_150, IDB_BITMAP_SEARCH_CLOSE_150);
-		break;
-	case 192: 
-		m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL_200, IDB_BITMAP_SEARCH_CLOSE_200);
-		break;						
-	default: // default to 96 DPI
-		m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL, IDB_BITMAP_SEARCH_CLOSE);
-		break;
-	}
+	//// Now select the right resource to load.
+	//switch(iSourceImageDPIToUse)
+	//{
+	//case 120: 
+	//	m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL_125, IDB_BITMAP_SEARCH_CLOSE_125);
+	//	break;
+	//case 144: 
+	//	m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL_150, IDB_BITMAP_SEARCH_CLOSE_150);
+	//	break;
+	//case 192: 
+	//	m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL_200, IDB_BITMAP_SEARCH_CLOSE_200);
+	//	break;						
+	//default: // default to 96 DPI
+	//	m_search.SetBitmaps(IDB_BITMAP_SEARCH_NORMAL, IDB_BITMAP_SEARCH_CLOSE);
+	//	break;
+	//}
 }
 
 void CQPasteWnd::OnSize(UINT nType, int cx, int cy)
@@ -524,10 +524,10 @@ void CQPasteWnd::MoveControls()
         m_stGroup.ShowWindow(SW_SHOW);
         m_BackButton.ShowWindow(SW_SHOW);
 
-		m_BackButton.MoveWindow(theApp.m_metrics.ScaleX(2), theApp.m_metrics.ScaleY(1), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
-		m_stGroup.MoveWindow(theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(1), cx - theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(16));
+		m_BackButton.MoveWindow(theApp.m_metrics.ScaleX(2), theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
+		m_stGroup.MoveWindow(theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(2), cx - theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(16));
 
-		topOfListBox = theApp.m_metrics.ScaleY(16);
+		topOfListBox = theApp.m_metrics.ScaleY(20);
 	}
 	else
 	{
@@ -535,12 +535,12 @@ void CQPasteWnd::MoveControls()
 		m_stGroup.ShowWindow(SW_HIDE);
 	}
 	
-	int searchRowStart = 22;
+	int searchRowStart = 33;
 
-	if(g_Opt.m_bShowPersistent)
+	/*if(g_Opt.m_bShowPersistent)
 	{
 		searchRowStart = 41;
-	}
+	}*/
 
     int nWidth = cx;
 	int listBoxBottomOffset = theApp.m_metrics.ScaleY(searchRowStart);
@@ -554,27 +554,27 @@ void CQPasteWnd::MoveControls()
 
 		CRgn rgnRect;
 		CRect r;
-		m_lstHeader.GetWindowRect(&r);
+		m_lstHeader.GetWindowRect(&r) ;
 
 		rgnRect.CreateRectRgn(0, 0, cx, (cy - listBoxBottomOffset-topOfListBox)+1);
 
 		m_lstHeader.SetWindowRgn(rgnRect, TRUE);
 	}
 
-	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize);
-	m_search.MoveWindow(theApp.m_metrics.ScaleX(20), cy - theApp.m_metrics.ScaleY(searchRowStart-1), cx - theApp.m_metrics.ScaleX(40), theApp.m_metrics.ScaleY(20));
+	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize+1);
+	m_search.MoveWindow(theApp.m_metrics.ScaleX(40), cy - theApp.m_metrics.ScaleY(searchRowStart-5), cx - theApp.m_metrics.ScaleX(90), theApp.m_metrics.ScaleY(23));
 
-	m_systemMenu.MoveWindow(cx - theApp.m_metrics.ScaleX(18), cy - theApp.m_metrics.ScaleY(searchRowStart - 3), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
+	m_systemMenu.MoveWindow(cx - theApp.m_metrics.ScaleX(28), cy - theApp.m_metrics.ScaleX(28), theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(24));
 
-	m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleX(2), cy - theApp.m_metrics.ScaleY(searchRowStart-3), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
+	m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleX(2), cy - theApp.m_metrics.ScaleX(28), theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(24));
 
-	if (g_Opt.m_bShowPersistent &&
+	/*if (g_Opt.m_bShowPersistent &&
 		g_Opt.m_bShowAlwaysOnTopWarning)
 	{
 		m_alwaysOnToWarningStatic.ShowWindow(SW_SHOW);
 		m_alwaysOnToWarningStatic.MoveWindow(theApp.m_metrics.ScaleX(2), cy - theApp.m_metrics.ScaleY(18), cx - theApp.m_metrics.ScaleY(4), theApp.m_metrics.ScaleY(17));
 	}
-	else
+	else*/
 	{
 		m_alwaysOnToWarningStatic.ShowWindow(SW_HIDE);
 	}
@@ -5301,21 +5301,21 @@ LRESULT CQPasteWnd::OnShowHideScrollBar(WPARAM wParam, LPARAM lParam)
 //	
 //}
 
-//BOOL CQPasteWnd::OnEraseBkgnd(CDC* pDC)
-//{
-//	CRect rect;
-//	GetClientRect(&rect);
-//	CBrush myBrush(RGB(255, 0, 0));    // dialog background color
-//	CBrush *pOld = pDC->SelectObject(&myBrush);
-//	BOOL bRes  = pDC->PatBlt(0, 0, rect.Width(), rect.Height(), PATCOPY);
-//	pDC->SelectObject(pOld);    // restore old brush
-//	return bRes;                       // CDialog::OnEraseBkgnd(pDC);
-//
-//	//return TRUE;
-//	// TODO: Add your message handler code here and/or call default
-//
-//	//return CWndEx::OnEraseBkgnd(pDC);
-//}
+BOOL CQPasteWnd::OnEraseBkgnd(CDC* pDC)
+{
+	CRect rect;
+	GetClientRect(&rect);
+	CBrush myBrush(g_Opt.m_Theme.MainWindowBG());    // dialog background color
+	CBrush *pOld = pDC->SelectObject(&myBrush);
+	BOOL bRes  = pDC->PatBlt(0, 0, rect.Width(), rect.Height(), PATCOPY);
+	pDC->SelectObject(pOld);    // restore old brush
+	return bRes;                       // CDialog::OnEraseBkgnd(pDC);
+
+	//return TRUE;
+	// TODO: Add your message handler code here and/or call default
+
+	//return CWndEx::OnEraseBkgnd(pDC);
+}
 
 void CQPasteWnd::OnQuickoptionsShowintaskbar()
 {

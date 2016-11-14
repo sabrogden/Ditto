@@ -1389,6 +1389,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SymbolEdit.cpp" />
     <ClCompile Include="SystemTray.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -1892,6 +1893,7 @@
     <ClInclude Include="SpecialPasteOptions.h" />
     <ClInclude Include="sqlite\sqlite3.h" />
     <ClInclude Include="sqlite\sqlite3ext.h" />
+    <ClInclude Include="SymbolEdit.h" />
     <ClInclude Include="ToolTipEx.h" />
     <ClInclude Include="TrayWnd.h" />
     <ClInclude Include="UAC_Helper.h" />
@@ -2002,6 +2004,10 @@
     <None Include="res\bmp00001.bmp" />
     <None Include="res\bmp00002.bmp" />
     <None Include="res\bmp00003.bmp" />
+    <None Include="res\ChevronLeft_Black_16_16.png" />
+    <None Include="res\ChevronLeft_Black_20_20.png" />
+    <None Include="res\ChevronLeft_Black_24_24.png" />
+    <None Include="res\ChevronLeft_Black_32_32.png" />
     <None Include="res\ChevronRight_Black_16_16.png" />
     <None Include="res\ChevronRight_Black_20_20.png" />
     <None Include="res\ChevronRight_Black_24_24.png" />
@@ -2067,12 +2073,25 @@
     <None Include="res\maximize_16_16.png" />
     <None Include="res\maximize_8_8.png" />
     <None Include="res\NewWindowIcon_24_14.png" />
+    <None Include="res\NewWindowIcon_30.png" />
+    <None Include="res\NewWindowIcon_36.png" />
+    <None Include="res\NewWindowIcon_48.png" />
+    <None Include="res\Open Folder-24.png" />
+    <None Include="res\Open Folder-32.png" />
     <None Include="res\opened_folder_16_16.png" />
     <None Include="res\opened_folder_20_20.png" />
     <None Include="res\opened_folder_24_24.png" />
     <None Include="res\opened_folder_32_32.png" />
     <None Include="res\open_fol.bmp" />
     <None Include="res\Ditto2.ico" />
+    <None Include="res\open_folder_24.png" />
+    <None Include="res\open_folder_30.png" />
+    <None Include="res\open_folder_36.png" />
+    <None Include="res\open_folder_48.png" />
+    <None Include="res\return_16.png" />
+    <None Include="res\return_20.png" />
+    <None Include="res\return_24.png" />
+    <None Include="res\return_32.png" />
     <None Include="res\search_close.bmp" />
     <None Include="res\search_close_125.bmp" />
     <None Include="res\search_close_150.bmp" />
@@ -2089,6 +2108,14 @@
     <None Include="res\system_menu_16_16.png" />
     <None Include="res\system_menu_20_20.png" />
     <None Include="res\system_menu_24_24.png" />
+    <None Include="res\system_menu_2_24.png" />
+    <None Include="res\system_menu_2_30.png" />
+    <None Include="res\system_menu_2_32_32.png" />
+    <None Include="res\system_menu_2_36.png" />
+    <None Include="res\system_menu_2_40_40.png" />
+    <None Include="res\system_menu_2_48.png" />
+    <None Include="res\system_menu_2_48_48.png" />
+    <None Include="res\system_menu_2_64_64.png" />
     <None Include="res\system_menu_32_32.png" />
     <None Include="res\Toolbar.bmp" />
     <None Include="res\toolbar1.bmp" />

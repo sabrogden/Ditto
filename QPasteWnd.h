@@ -17,7 +17,7 @@
 #include "GdipButton.h"
 #include "SpecialPasteOptions.h"
 #include "ClipIds.h"
-
+#include "SymbolEdit.h"
 class CMainTable
 {
 public:
@@ -125,8 +125,8 @@ public:
     CQListCtrl m_lstHeader;
 
     CAlphaBlend m_Alpha;
-    CFont m_TitleFont;
-	CEditWithButton m_search;
+	//CEditWithButton m_search;
+	CSymbolEdit m_search;
     CFont m_SearchFont;
     bool m_bHideWnd;
     CString m_strSQLSearch;
@@ -473,4 +473,5 @@ public:
 	afx_msg void OnUpdateStickyclipsRemovestickysetting(CCmdUI *pCmdUI);
 	afx_msg void OnSpecialpastePaste32927();
 	afx_msg void OnUpdateSpecialpastePaste32927(CCmdUI *pCmdUI);
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 };

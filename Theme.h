@@ -29,6 +29,8 @@ public:
 	COLORREF ListBoxSelectedNoFocusText() const { return m_ListBoxSelectedNoFocusText; }
 	COLORREF ClipPastedColor() const { return m_clipPastedColor; }
 
+	COLORREF ListSmallQuickPasteIndexColor() const { return m_listSmallQuickPasteIndexColor;  }
+	COLORREF MainWindowBG() const { return m_mainWindowBG; }
 
 	CString Notes() const { return m_csNotes; }
 	CString Author() const { return m_csAuthor; }
@@ -57,7 +59,8 @@ protected:
 	COLORREF m_ListBoxSelectedText;
 	COLORREF m_ListBoxSelectedNoFocusText;	
 	COLORREF m_clipPastedColor;
-
+	COLORREF m_listSmallQuickPasteIndexColor;
+	COLORREF m_mainWindowBG;
 
 	CString m_csLastError;
 	long m_lFileVersion;

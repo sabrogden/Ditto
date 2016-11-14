@@ -502,13 +502,19 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			crHotKey.top += theApp.m_metrics.ScaleX(1 + extraFromClipWasPaste);
 			
 			HFONT hOldFont = (HFONT)pDC->SelectObject(m_SmallFont);
-			
+			COLORREF localOldTextColor = pDC->SetTextColor(g_Opt.m_Theme.ListSmallQuickPasteIndexColor());
+
+			CPen pen(PS_SOLID, 0, g_Opt.m_Theme.ListSmallQuickPasteIndexColor());
+			CPen* pOldPen = pDC->SelectObject(&pen);
+						
 			pDC->DrawText(cs, crHotKey, DT_BOTTOM);
 			
 			pDC->MoveTo(CPoint(rcItem.left + theApp.m_metrics.ScaleX(8 + extraFromClipWasPaste), rcItem.top));
 			pDC->LineTo(CPoint(rcItem.left + theApp.m_metrics.ScaleX(8 + extraFromClipWasPaste), rcItem.bottom));
 			
 			pDC->SelectObject(hOldFont);
+			pDC->SetTextColor(localOldTextColor);
+			pDC->SelectObject(pOldPen);
 		}
 		
 		// restore the previous values		
