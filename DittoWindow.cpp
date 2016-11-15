@@ -275,10 +275,10 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 		rightRect.SetRect(rcBorder.right - CAPTION_BORDER+ border, leftRect.top, rcBorder.right, rcBorder.top + IndexToPos(index, false));
 		leftRect.SetRect(rcBorder.right - CAPTION_BORDER+ border, rcBorder.top + IndexToPos(index, false) + 1, rcBorder.right, rcBorder.bottom);
 		
-		textRect.SetRect(rcBorder.right - theApp.m_metrics.ScaleX(2), rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.right - CAPTION_BORDER + theApp.m_metrics.ScaleX(5), rcBorder.bottom - theApp.m_metrics.ScaleX(50));
+		textRect.SetRect(rcBorder.right + theApp.m_metrics.ScaleX(2), rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.right - CAPTION_BORDER + theApp.m_metrics.ScaleX(0), rcBorder.bottom - theApp.m_metrics.ScaleX(50));
 
-		int left = rcBorder.right - theApp.m_metrics.ScaleX(22);
-		int right = rcBorder.right - theApp.m_metrics.ScaleX(6);
+		int left = rcBorder.right - theApp.m_metrics.ScaleX(19);
+		int right = rcBorder.right - theApp.m_metrics.ScaleX(3);
 
 		m_crCloseBT.SetRect(left, IndexToPos(closeIndex, false), right, m_crCloseBT.top+ widthHeight);
 		m_crChevronBT.SetRect(left, IndexToPos(chevronIndex, false), right, m_crChevronBT.top + widthHeight);
@@ -286,7 +286,7 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 		m_crMinimizeBT.SetRect(left, IndexToPos(minIndex, false), right, m_crMinimizeBT.top + widthHeight);
 
 
-		m_crWindowIconBT.SetRect(rcBorder.right - theApp.m_metrics.ScaleX(27), rcBorder.bottom - theApp.m_metrics.ScaleX(28), rcBorder.right - theApp.m_metrics.ScaleX(8), rcBorder.bottom);
+		m_crWindowIconBT.SetRect(rcBorder.right - theApp.m_metrics.ScaleX(24), rcBorder.bottom - theApp.m_metrics.ScaleX(28), rcBorder.right - theApp.m_metrics.ScaleX(2), rcBorder.bottom);
 
 		bVertical = TRUE;
 	}
@@ -295,10 +295,10 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 		rightRect.SetRect(rcBorder.left, leftRect.top, rcBorder.left + CAPTION_BORDER - border, rcBorder.top + IndexToPos(index, false));
 		leftRect.SetRect(rcBorder.left, rcBorder.top + IndexToPos(index, false) + 1, rcBorder.left + CAPTION_BORDER - border, rcBorder.bottom);
 
-		textRect.SetRect(rcBorder.left + CAPTION_BORDER - theApp.m_metrics.ScaleX(3), rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.left + theApp.m_metrics.ScaleX(2), rcBorder.bottom - theApp.m_metrics.ScaleX(50));
+		textRect.SetRect(rcBorder.left + CAPTION_BORDER - theApp.m_metrics.ScaleX(0), rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.left - theApp.m_metrics.ScaleX(5), rcBorder.bottom - theApp.m_metrics.ScaleX(50));
 
-		int left = theApp.m_metrics.ScaleX(8);
-		int right = theApp.m_metrics.ScaleX(24);
+		int left = theApp.m_metrics.ScaleX(5);
+		int right = theApp.m_metrics.ScaleX(21);
 
 		m_crCloseBT.SetRect(left, IndexToPos(closeIndex, false), right, m_crCloseBT.top + widthHeight);
 		m_crChevronBT.SetRect(left, IndexToPos(chevronIndex, false), right, m_crChevronBT.top + widthHeight);
@@ -306,7 +306,7 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 		m_crMinimizeBT.SetRect(left, IndexToPos(minIndex, false), right, m_crMinimizeBT.top + widthHeight);
 
 
-		m_crWindowIconBT.SetRect(rcBorder.left + theApp.m_metrics.ScaleX(4), rcBorder.bottom - theApp.m_metrics.ScaleX(28), rcBorder.left + theApp.m_metrics.ScaleX(28), rcBorder.bottom);
+		m_crWindowIconBT.SetRect(rcBorder.left + theApp.m_metrics.ScaleX(0), rcBorder.bottom - theApp.m_metrics.ScaleX(28), rcBorder.left + theApp.m_metrics.ScaleX(25), rcBorder.bottom);
 
 		bVertical = TRUE;
 	}
@@ -317,8 +317,8 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 
 		textRect.SetRect(leftRect.right, leftRect.top, leftRect.right, leftRect.bottom);
 
-		int top = theApp.m_metrics.ScaleX(8);
-		int bottom = theApp.m_metrics.ScaleX(24);
+		int top = theApp.m_metrics.ScaleX(5);
+		int bottom = theApp.m_metrics.ScaleX(21);
 
 		m_crCloseBT.SetRect(rcBorder.right - IndexToPos(closeIndex, true), top, m_crCloseBT.left + widthHeight, bottom);
 		m_crChevronBT.SetRect(rcBorder.right - IndexToPos(chevronIndex, true), top, m_crChevronBT.left + widthHeight, bottom);
@@ -336,8 +336,8 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 
 		textRect.SetRect(leftRect.right, leftRect.top, leftRect.right, leftRect.bottom);
 
-		int top = leftRect.top + theApp.m_metrics.ScaleX(8);
-		int bottom = leftRect.top + theApp.m_metrics.ScaleX(24);
+		int top = leftRect.top + theApp.m_metrics.ScaleX(4);
+		int bottom = leftRect.top + theApp.m_metrics.ScaleX(20);
 
 		m_crCloseBT.SetRect(rcBorder.right - IndexToPos(closeIndex, true), top, m_crCloseBT.left + widthHeight, bottom);
 		m_crChevronBT.SetRect(rcBorder.right - IndexToPos(chevronIndex, true), top, m_crChevronBT.left + widthHeight, bottom);

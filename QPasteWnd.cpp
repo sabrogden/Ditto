@@ -424,6 +424,8 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_alwaysOnToWarningStatic.SetFont(&m_groupFont);
 
 	LoadShortcuts();
+
+	InvalidateNc();
 	
     return 0;
 }
@@ -1084,6 +1086,7 @@ void CQPasteWnd::RefreshNc()
 
 void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 {
+	return;
     CString title = m_Title;
     CString prev;
 

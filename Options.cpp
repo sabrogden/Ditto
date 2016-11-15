@@ -1116,11 +1116,11 @@ BOOL CGetSetOptions::GetMainHWND()
 
 void CGetSetOptions::SetCaptionPos(long lPos)	
 {	
-	SetProfileLong("CaptionPos2", lPos);					
+	SetProfileLong("CaptionPos", lPos);					
 }
 long CGetSetOptions::GetCaptionPos()			
 {	
-	return GetProfileLong("CaptionPos2", CAPTION_TOP);	
+	return GetProfileLong("CaptionPos", CAPTION_RIGHT);	
 }
 
 void CGetSetOptions::SetAutoHide(BOOL bAutoHide)
@@ -1313,7 +1313,7 @@ BOOL CGetSetOptions::GetFont(LOGFONT &font)
 {
 	if(m_bFromIni && !m_bInConversion)
 	{
-		GetProfileFont("DisplayFont4", font);
+		GetProfileFont("DisplayFont5", font);
 
 		//Return true if there is a font name
 		//other wise load the default font below
@@ -1325,11 +1325,7 @@ BOOL CGetSetOptions::GetFont(LOGFONT &font)
 	else
 	{
 		DWORD dwLength = 0;
-		#ifdef _UNICODE
-			LPVOID lpVoid = GetProfileData("DisplayFont5", dwLength);
-		#else
-			LPVOID lpVoid = GetProfileData("DisplayFont", dwLength);
-		#endif
+		LPVOID lpVoid = GetProfileData("DisplayFont5", dwLength);
 		if(lpVoid)
 		{
 			if(sizeof(font) == dwLength)
@@ -1361,17 +1357,11 @@ void CGetSetOptions::SetFont(LOGFONT &font)
 {
 	if(m_bFromIni)
 	{
-		SetProfileFont("DisplayFont4", font);
+		SetProfileFont("DisplayFont5", font);
 	}
 	else
-	{
-		#ifdef _UNICODE
-			CString csParam = "DisplayFont4";
-		#else
-			CString csParam = "DisplayFont";
-		#endif
-
-		SetProfileData(csParam, &font, sizeof(LOGFONT));
+	{	
+		SetProfileData("DisplayFont5", &font, sizeof(LOGFONT));
 	}
 }
 

@@ -281,6 +281,9 @@ void CSymbolEdit::OnPaint()
 			oldFont = dc.SelectObject(&m_fontPrompt);
 			COLORREF color = dc.GetTextColor();
 			dc.SetTextColor(m_colorPromptText);
+			DWORD margins = this->GetMargins();
+			rect.left += LOWORD(margins);
+			rect.right -= HIWORD(margins);
 			dc.DrawText(m_strPromptText, rect, DT_LEFT | DT_SINGLELINE | DT_EDITCONTROL);
 			dc.SetTextColor(color);
 			dc.SelectObject(oldFont);
@@ -291,6 +294,9 @@ void CSymbolEdit::OnPaint()
 		dc.FillSolidRect(rect, m_editFocusColor);
 
 		oldFont = dc.SelectObject(GetFont());
+		DWORD margins = this->GetMargins();
+		rect.left += LOWORD(margins);
+		rect.right -= HIWORD(margins);
 		dc.DrawText(text, rect, DT_SINGLELINE | DT_INTERNAL | DT_EDITCONTROL);
 		dc.SelectObject(oldFont);
 	}

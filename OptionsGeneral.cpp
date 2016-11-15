@@ -370,6 +370,7 @@ void COptionsGeneral::OnGetPath()
 	FileName.lpstrInitialDir = szDir;
 	FileName.lpstrFilter = _T("Ditto Databases (*.db; *.mdb)\0*.db;*.mdb\0\0");
 	FileName.lpstrDefExt = _T("db");
+	FileName.hwndOwner = m_hWnd;
 
 	if(GetOpenFileName(&FileName) == 0)
 		return;
@@ -451,6 +452,7 @@ void COptionsGeneral::OnSelectSound()
 	FileName.lpstrInitialDir = szDir;
 	FileName.lpstrFilter = _T("Sounds(*.wav)\0*.wav\0\0");
 	FileName.lpstrDefExt = _T("wav");
+	FileName.hwndOwner = m_hWnd;
 
 	if(GetOpenFileName(&FileName) == 0)
 		return;

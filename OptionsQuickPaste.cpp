@@ -197,7 +197,7 @@ BOOL COptionsQuickPaste::OnApply()
 
 void COptionsQuickPaste::OnButtonFont() 
 {
-	CFontDialog dlg(&m_LogFont, (CF_TTONLY | CF_SCREENFONTS));
+	CFontDialog dlg(&m_LogFont, (CF_TTONLY | CF_SCREENFONTS), 0, this);
 	if(dlg.DoModal() == IDOK)
 	{	
 		m_Font.DeleteObject();
@@ -221,10 +221,10 @@ void COptionsQuickPaste::OnButtonDefaultFault()
 
 	memset(&m_LogFont, 0, sizeof(m_LogFont));
 
-	m_LogFont.lfHeight = -11;
+	m_LogFont.lfHeight = -theApp.m_metrics.PointsToPixels(10);
 	m_LogFont.lfWeight = 400;
 	m_LogFont.lfCharSet = 1;
-	STRCPY(m_LogFont.lfFaceName, _T("Arial Unicode MS"));
+	STRCPY(m_LogFont.lfFaceName, _T("Segoe UI"));
 
 	m_Font.DeleteObject();
 	m_Font.CreateFontIndirect(&m_LogFont);
@@ -317,6 +317,7 @@ void COptionsQuickPaste::OnBnClickedButtonDiffBrowse()
 	FileName.lpstrInitialDir = szDir;
 	FileName.lpstrFilter = _T("*.exe");
 	FileName.lpstrDefExt = _T("");
+	FileName.hwndOwner = m_hWnd;
 
 	if(GetOpenFileName(&FileName) == 0)
 		return;
