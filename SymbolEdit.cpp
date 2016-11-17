@@ -241,10 +241,16 @@ void CSymbolEdit::OnPaint()
 	CRect rect;
 	GetClientRect(&rect);
 
+	DWORD margins = GetMargins();
+	
+	CRect textRect(rect);
+	textRect.left += LOWORD(margins);
+	textRect.right -= HIWORD(margins);
+
 	// Clearing the background
 	dc.FillSolidRect(rect, GetSysColor(COLOR_WINDOW));
 
-	DWORD margins = GetMargins();
+	
 
 	if (m_hSymbolIcon)
 	{
@@ -282,12 +288,9 @@ void CSymbolEdit::OnPaint()
 	{
 		dc.FillSolidRect(rect, m_editFocusColor);
 
-		oldFont = dc.SelectObject(GetFont());
-
-		rect.left += LOWORD(margins);
-		rect.right -= HIWORD(margins);
+		oldFont = dc.SelectObject(GetFont());		
 			
-		dc.DrawText(text, rect, DT_SINGLELINE | DT_INTERNAL | DT_EDITCONTROL);
+		dc.DrawText(text, textRect, DT_SINGLELINE | DT_INTERNAL | DT_EDITCONTROL);
 		dc.SelectObject(oldFont);
 	}
 	else
@@ -299,11 +302,8 @@ void CSymbolEdit::OnPaint()
 			oldFont = dc.SelectObject(&m_fontPrompt);
 			COLORREF color = dc.GetTextColor();
 			dc.SetTextColor(m_colorPromptText);
-
-			rect.left += LOWORD(margins);
-			rect.right -= HIWORD(margins);
-
-			dc.DrawText(m_strPromptText, rect, DT_LEFT | DT_SINGLELINE | DT_EDITCONTROL);
+			
+			dc.DrawText(m_strPromptText, textRect, DT_LEFT | DT_SINGLELINE | DT_EDITCONTROL);
 			dc.SetTextColor(color);
 			dc.SelectObject(oldFont);
 		}

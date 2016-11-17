@@ -41,11 +41,11 @@ CDittoWindow::~CDittoWindow(void)
 
 void CDittoWindow::DoCreate(CWnd *pWnd)
 {
-	m_VertFont.CreateFont(theApp.m_metrics.PointsToPixels(18), 0, -900, 0, 400, FALSE, FALSE, 0, ANSI_CHARSET,
+	m_VertFont.CreateFont(theApp.m_metrics.PointsToPixels(18), 0, -900, 0, 400, FALSE, FALSE, 0, DEFAULT_CHARSET,
 							OUT_DEFAULT_PRECIS,	CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, 
 							DEFAULT_PITCH|FF_SWISS, _T("Segoe UI"));
 
-	m_HorFont.CreateFont(theApp.m_metrics.PointsToPixels(18), 0, 0, 0, 500, FALSE, FALSE, 0, ANSI_CHARSET,
+	m_HorFont.CreateFont(theApp.m_metrics.PointsToPixels(18), 0, 0, 0, 500, FALSE, FALSE, 0, DEFAULT_CHARSET,
 						OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
 						DEFAULT_PITCH|FF_SWISS, _T("Segoe UI"));
 	

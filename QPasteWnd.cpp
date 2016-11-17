@@ -371,19 +371,16 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 
     m_SearchFont.CreatePointFont(120, _T("Segoe UI"));
-	m_groupFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));	
-
     m_search.SetFont(&m_SearchFont);
 	m_search.SetPromptFont(m_SearchFont);
-	m_stGroup.SetFont(&m_groupFont);	
 
+	m_groupFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+	m_stGroup.SetFont(&m_groupFont);	
 	m_stGroup.SetBkColor(g_Opt.m_Theme.MainWindowBG());
 	
     UpdateFont();
 	
-    m_thread.Start(this);
-
-	
+    m_thread.Start(this);	
 
 	/*m_actions.AddAccel(ActionEnums::SHOWDESCRIPTION, VK_F3);
 	m_actions.AddAccel(ActionEnums::NEXTDESCRIPTION, 'N');

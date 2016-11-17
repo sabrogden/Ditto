@@ -483,7 +483,6 @@ var sc_security="b3f57099";
 <!-- End of StatCounter Code --><br><a href="http://my.statcounter.com/project/standard/stats.php?project_id=4303469&guest=1">View My Stats</a>
 
 </body>]]></Text>
-			<checked type='11'>0</checked>
 			<indent type='3'>2</indent>
 			<name>Beta web page</name>
 		</step>
@@ -550,7 +549,6 @@ var sc_security="b3f57099";
 			<Timeout>30</Timeout>
 			<TransferType type='3'>1</TransferType>
 			<UserName>sabrogden,ditto-cp</UserName>
-			<checked type='11'>0</checked>
 			<indent type='3'>1</indent>
 			<name>Copy to beta folder</name>
 		</step></steps>
