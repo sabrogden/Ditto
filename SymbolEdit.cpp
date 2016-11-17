@@ -244,7 +244,7 @@ void CSymbolEdit::OnPaint()
 	// Clearing the background
 	dc.FillSolidRect(rect, GetSysColor(COLOR_WINDOW));
 
-	DWORD dwMargins = GetMargins();
+	DWORD margins = GetMargins();
 
 	if (m_hSymbolIcon)
 	{
@@ -263,7 +263,7 @@ void CSymbolEdit::OnPaint()
 			NULL,
 			DI_NORMAL);
 
-		rect.left += LOWORD(dwMargins) + 1;
+		rect.left += LOWORD(margins) + 1;
 		rect.right -= (width + 7);
 	}
 	else
@@ -284,7 +284,6 @@ void CSymbolEdit::OnPaint()
 
 		oldFont = dc.SelectObject(GetFont());
 
-		DWORD margins = this->GetMargins();
 		rect.left += LOWORD(margins);
 		rect.right -= HIWORD(margins);
 			
@@ -301,7 +300,6 @@ void CSymbolEdit::OnPaint()
 			COLORREF color = dc.GetTextColor();
 			dc.SetTextColor(m_colorPromptText);
 
-			DWORD margins = this->GetMargins();
 			rect.left += LOWORD(margins);
 			rect.right -= HIWORD(margins);
 
@@ -310,9 +308,6 @@ void CSymbolEdit::OnPaint()
 			dc.SelectObject(oldFont);
 		}
 	}
-	
-
-
 
 	m_searchButton.Draw(&dc, this, rect.right - 22, 4, false, false);
 
