@@ -2092,6 +2092,10 @@
     <None Include="res\return_20.png" />
     <None Include="res\return_24.png" />
     <None Include="res\return_32.png" />
+    <None Include="res\Search_16.png" />
+    <None Include="res\Search_20.png" />
+    <None Include="res\Search_24.png" />
+    <None Include="res\Search_32.png" />
     <None Include="res\search_close.bmp" />
     <None Include="res\search_close_125.bmp" />
     <None Include="res\search_close_150.bmp" />

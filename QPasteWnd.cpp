@@ -370,7 +370,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     #endif 
 
 
-    m_SearchFont.CreatePointFont(130, _T("Segoe UI"));
+    m_SearchFont.CreatePointFont(120, _T("Segoe UI"));
 	m_groupFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));	
 
     m_search.SetFont(&m_SearchFont);
@@ -564,11 +564,11 @@ void CQPasteWnd::MoveControls()
 	}
 
 	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize+1);
-	m_search.MoveWindow(theApp.m_metrics.ScaleX(40), cy - theApp.m_metrics.ScaleY(searchRowStart-5), cx - theApp.m_metrics.ScaleX(90), theApp.m_metrics.ScaleY(23));
+	m_search.MoveWindow(theApp.m_metrics.ScaleX(32), cy - theApp.m_metrics.ScaleY(searchRowStart-5), cx - theApp.m_metrics.ScaleX(68), theApp.m_metrics.ScaleY(23));
 
-	m_systemMenu.MoveWindow(cx - theApp.m_metrics.ScaleX(28), cy - theApp.m_metrics.ScaleX(28), theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(24));
+	m_systemMenu.MoveWindow(cx - theApp.m_metrics.ScaleX(32), cy - theApp.m_metrics.ScaleX(28), theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(24));
 
-	m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleX(2), cy - theApp.m_metrics.ScaleX(28), theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(24));
+	m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleX(4), cy - theApp.m_metrics.ScaleX(28), theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(24));
 
 	/*if (g_Opt.m_bShowPersistent &&
 		g_Opt.m_bShowAlwaysOnTopWarning)
@@ -4919,6 +4919,7 @@ void CQPasteWnd::OnMenuSearchQuickPaste()
 
 void CQPasteWnd::OnSearchEditChange()
 {
+	m_search.Invalidate();
     if(g_Opt.m_bFindAsYouType == FALSE)
     {
         return ;
@@ -4931,7 +4932,7 @@ void CQPasteWnd::OnSearchEditChange()
     }
 
     KillTimer(TIMER_DO_SEARCH);
-    SetTimer(TIMER_DO_SEARCH, 250, NULL);
+    SetTimer(TIMER_DO_SEARCH, 250, NULL);	
 
     return ;
 }

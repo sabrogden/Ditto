@@ -1335,6 +1335,14 @@ return_24               PNG                     "res\\return_24.png"
 
 return_32               PNG                     "res\\return_32.png"
 
+Search_16               PNG                     "res\\Search_16.png"
+
+Search_20               PNG                     "res\\Search_20.png"
+
+Search_24               PNG                     "res\\Search_24.png"
+
+Search_32               PNG                     "res\\Search_32.png"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

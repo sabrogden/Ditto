@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include "GdiImageDrawer.h"
 
 // CSymbolEdit
 
@@ -64,6 +65,8 @@ protected:
 	COLORREF m_editNonFocusColor;
 	CBrush m_editFocusBrush;
 	CBrush m_editNonFocusBrush;
+
+	CGdiImageDrawer m_searchButton;
 
 	void RecalcLayout();
 	virtual void PreSubclassWindow();

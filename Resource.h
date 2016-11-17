@@ -146,6 +146,11 @@
 #define return_24                       291
 #define IDB_PNG14                       292
 #define return_32                       292
+#define Search_16                       293
+#define Search_20                       294
+#define Search_24                       295
+#define IDB_PNG15                       296
+#define Search_32                       296
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -624,7 +629,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        293
+#define _APS_NEXT_RESOURCE_VALUE        297
 #define _APS_NEXT_COMMAND_VALUE         32929
 #define _APS_NEXT_CONTROL_VALUE         2146
 #define _APS_NEXT_SYMED_VALUE           104

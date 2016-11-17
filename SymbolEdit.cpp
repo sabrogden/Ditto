@@ -34,6 +34,8 @@ CSymbolEdit::CSymbolEdit() :
 	m_editNonFocusColor = RGB(240, 240, 240);
 	m_editFocusBrush.CreateSolidBrush(m_editFocusColor);
 	m_editNonFocusBrush.CreateSolidBrush(m_editNonFocusColor);
+
+	m_searchButton.LoadStdImageDPI(Search_16, Search_20, Search_24, Search_32, _T("PNG"));
 }
 
 CSymbolEdit::~CSymbolEdit()
@@ -224,6 +226,10 @@ void CSymbolEdit::RecalcLayout()
 		DWORD dwMargins = GetMargins();
 		SetMargins(LOWORD(dwMargins), width + 6);
 	}
+	else
+	{
+		SetMargins(4, 24);
+	}
 }
 
 // CSymbolEdit message handlers
@@ -272,34 +278,46 @@ void CSymbolEdit::OnPaint()
 
 	//rect.top += 1;
 
-	if (text.GetLength() == 0)
+	if(this == GetFocus() || text.GetLength() > 0)
 	{
+		dc.FillSolidRect(rect, m_editFocusColor);
+
+		oldFont = dc.SelectObject(GetFont());
+
+		DWORD margins = this->GetMargins();
+		rect.left += LOWORD(margins);
+		rect.right -= HIWORD(margins);
+			
+		dc.DrawText(text, rect, DT_SINGLELINE | DT_INTERNAL | DT_EDITCONTROL);
+		dc.SelectObject(oldFont);
+	}
+	else
+	{
+		dc.FillSolidRect(rect, m_editNonFocusColor);
+
 		if (this != GetFocus() && m_strPromptText.GetLength() > 0)
 		{
-			dc.FillSolidRect(rect, m_editNonFocusColor);
-
 			oldFont = dc.SelectObject(&m_fontPrompt);
 			COLORREF color = dc.GetTextColor();
 			dc.SetTextColor(m_colorPromptText);
+
 			DWORD margins = this->GetMargins();
 			rect.left += LOWORD(margins);
 			rect.right -= HIWORD(margins);
+
 			dc.DrawText(m_strPromptText, rect, DT_LEFT | DT_SINGLELINE | DT_EDITCONTROL);
 			dc.SetTextColor(color);
 			dc.SelectObject(oldFont);
 		}
 	}
-	else
-	{
-		dc.FillSolidRect(rect, m_editFocusColor);
+	
 
-		oldFont = dc.SelectObject(GetFont());
-		DWORD margins = this->GetMargins();
-		rect.left += LOWORD(margins);
-		rect.right -= HIWORD(margins);
-		dc.DrawText(text, rect, DT_SINGLELINE | DT_INTERNAL | DT_EDITCONTROL);
-		dc.SelectObject(oldFont);
-	}
+
+
+	m_searchButton.Draw(&dc, this, rect.right - 22, 4, false, false);
+
+	//OutputDebugString(_T("OnPaint"));
+
 }
 
 void CSymbolEdit::OnSize(UINT nType, int cx, int cy)
