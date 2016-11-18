@@ -523,7 +523,6 @@ var sc_security="b3f57099";
 			<FileIn>%workDir%\%branch%\DittoSetup\output\changes.php</FileIn>
 			<Find>Starting Build.*--------------------</Find>
 			<NoModS type='11'>-1</NoModS>
-			<checked type='11'>0</checked>
 			<indent type='3'>2</indent>
 			<name>Replace "Starting Build"</name>
 		</step>

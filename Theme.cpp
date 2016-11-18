@@ -13,13 +13,18 @@ CTheme::CTheme(void)
 
 	m_CaptionLeft = RGB(255, 255, 255);
 	m_CaptionRight = RGB(204, 204, 204);
+	
+	m_Border = RGB(204, 204, 204);
+	m_BorderTopMost = RGB(100, 100, 100);
+	m_BorderNotConnected = RGB(255, 0, 0);
+
 	m_CaptionLeftTopMost = RGB(255, 255, 255);
-	m_CaptionRightTopMost = RGB(100, 100, 100);
+	m_CaptionRightTopMost = RGB(204, 204, 204);
 	m_CaptionLeftNotConnected = RGB(255, 255, 255);
-	m_CaptionRightNotConnected = RGB(255, 0, 0);
+	m_CaptionRightNotConnected = RGB(204, 204, 204);
 	m_CaptionTextColor = RGB(191, 191, 191);
 	m_ListBoxOddRowsBG = RGB(255, 255, 255);
-	m_ListBoxEvenRowsBG = RGB(240, 240, 240);
+	m_ListBoxEvenRowsBG = RGB(250, 250, 250);
 	m_ListBoxOddRowsText = RGB(0, 0, 0);
 	m_ListBoxEvenRowsText = RGB(0, 0, 0);
 	m_ListBoxSelectedBG = RGB(204, 204, 204);

@@ -2099,6 +2099,7 @@
     <None Include="res\search_close.bmp" />
     <None Include="res\search_close_125.bmp" />
     <None Include="res\search_close_150.bmp" />
+    <None Include="res\search_close_16.png" />
     <None Include="res\search_close_200.bmp" />
     <None Include="res\search_normal.bmp" />
     <None Include="res\search_normal_125.bmp" />

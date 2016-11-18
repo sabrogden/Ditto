@@ -35,7 +35,8 @@ CSymbolEdit::CSymbolEdit() :
 	m_editFocusBrush.CreateSolidBrush(m_editFocusColor);
 	m_editNonFocusBrush.CreateSolidBrush(m_editNonFocusColor);
 
-	m_searchButton.LoadStdImageDPI(Search_16, Search_20, Search_24, Search_32, _T("PNG"));
+	//m_searchButton.LoadStdImageDPI(Search_16, Search_20, Search_24, Search_32, _T("PNG"));
+	m_closeButton.LoadStdImageDPI(search_close_16, Search_20, Search_24, Search_32, _T("PNG"));
 }
 
 CSymbolEdit::~CSymbolEdit()
@@ -303,13 +304,20 @@ void CSymbolEdit::OnPaint()
 			COLORREF color = dc.GetTextColor();
 			dc.SetTextColor(m_colorPromptText);
 			
-			dc.DrawText(m_strPromptText, textRect, DT_LEFT | DT_SINGLELINE | DT_EDITCONTROL);
+			dc.DrawText(m_strPromptText, textRect, DT_LEFT | DT_SINGLELINE | DT_EDITCONTROL | DT_VCENTER);
 			dc.SetTextColor(color);
 			dc.SelectObject(oldFont);
 		}
 	}
 
-	m_searchButton.Draw(&dc, this, rect.right - 22, 4, false, false);
+	if (text.GetLength() > 0)
+	{
+		m_closeButton.Draw(&dc, this, rect.right - 22, 4, false, false);
+	}
+	else
+	{
+		//m_searchButton.Draw(&dc, this, rect.right - 22, 4, false, false);
+	}
 
 	//OutputDebugString(_T("OnPaint"));
 

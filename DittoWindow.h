@@ -31,7 +31,7 @@ public:
 	void DoNcMouseMove(CWnd *pWnd, UINT nHitTest, CPoint point) ;
 	bool DoPreTranslateMessage(MSG* pMsg);
 	void SetCaptionOn(CWnd *pWnd, int nPos, bool bOnstartup);
-	bool SetCaptionColors(COLORREF left, COLORREF right);
+	bool SetCaptionColors(COLORREF left, COLORREF right, COLORREF border);
 	void SetCaptionTextColor(COLORREF color);
 
 	long m_lTopBorder;
@@ -68,6 +68,7 @@ public:
 	COLORREF m_CaptionColorLeft;
 	COLORREF m_CaptionColorRight;
 	COLORREF m_CaptionTextColor;
+	COLORREF m_border;
 	
 	CGdiImageDrawer m_closeButton;
 	CGdiImageDrawer m_chevronRightButton;
@@ -75,7 +76,7 @@ public:
 	CGdiImageDrawer m_chevronTopButton;
 	CGdiImageDrawer m_chevronBottomButton;
 	CGdiImageDrawer m_maximizeButton;
-	CGdiImageDrawer m_windowIcon;
+	//CGdiImageDrawer m_windowIcon;
 
 	CString m_customWindowTitle;
 	bool m_useCustomWindowTitle;

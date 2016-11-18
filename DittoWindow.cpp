@@ -30,6 +30,7 @@ CDittoWindow::CDittoWindow(void)
 	m_CaptionColorLeft = RGB(255, 255, 255);
 	m_CaptionColorRight = RGB(204, 204, 204);
 	m_CaptionTextColor = RGB(191, 191, 191);
+	m_border = RGB(204, 204, 204);
 	m_sendWMClose = true;
 	m_customWindowTitle = _T("");
 	m_useCustomWindowTitle = false;
@@ -56,7 +57,7 @@ void CDittoWindow::DoCreate(CWnd *pWnd)
 	m_chevronBottomButton.LoadStdImageDPI(IDB_CHEVRON_BOTTOM_8_8, IDB_CHEVRON_BOTTOM_10_10, IDB_CHEVRON_BOTTOM_12_12, IDB_CHEVRON_BOTTOM_16_16, _T("PNG"));
 	m_maximizeButton.LoadStdImageDPI(IDB_MAXIMIZE_8_8, IDB_MAXIMIZE_10_10, IDB_MAXIMIZE_12_12, IDB_MAXIMIZE_16_16, _T("PNG"));
 
-	m_windowIcon.LoadStdImageDPI(NewWindowIcon_24_14, NewWindowIcon_30, NewWindowIcon_36, NewWindowIcon_48, _T("PNG"));
+	//m_windowIcon.LoadStdImageDPI(NewWindowIcon_24_14, NewWindowIcon_30, NewWindowIcon_36, NewWindowIcon_48, _T("PNG"));
 }
 
 void CDittoWindow::DoNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp)
@@ -233,7 +234,7 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 
 	for (int x = 0; x < border; x++)
 	{
-		dc.Draw3dRect(rcBorder, m_CaptionColorRight, m_CaptionColorRight);
+		dc.Draw3dRect(rcBorder, m_border, m_border);
 		rcBorder.DeflateRect(1, 1, 1, 1);
 	}
 
@@ -272,7 +273,7 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 	BOOL bVertical = FALSE;
 	if(m_lRightBorder == CAPTION_BORDER)
 	{
-		rightRect.SetRect(rcBorder.right - CAPTION_BORDER+ border, leftRect.top, rcBorder.right, rcBorder.top + IndexToPos(index, false));
+		rightRect.SetRect(rcBorder.right - CAPTION_BORDER+ border, rcBorder.top, rcBorder.right, rcBorder.top + IndexToPos(index, false));
 		leftRect.SetRect(rcBorder.right - CAPTION_BORDER+ border, rcBorder.top + IndexToPos(index, false) + 1, rcBorder.right, rcBorder.bottom);
 		
 		textRect.SetRect(rcBorder.right + theApp.m_metrics.ScaleX(2), rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.right - CAPTION_BORDER + theApp.m_metrics.ScaleX(0), rcBorder.bottom - theApp.m_metrics.ScaleX(50));
@@ -292,7 +293,7 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 	}
 	else if(m_lLeftBorder == CAPTION_BORDER)
 	{
-		rightRect.SetRect(rcBorder.left, leftRect.top, rcBorder.left + CAPTION_BORDER - border, rcBorder.top + IndexToPos(index, false));
+		rightRect.SetRect(rcBorder.left, rcBorder.top, rcBorder.left + CAPTION_BORDER - border, rcBorder.top + IndexToPos(index, false));
 		leftRect.SetRect(rcBorder.left, rcBorder.top + IndexToPos(index, false) + 1, rcBorder.left + CAPTION_BORDER - border, rcBorder.bottom);
 
 		textRect.SetRect(rcBorder.left + CAPTION_BORDER - theApp.m_metrics.ScaleX(0), rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.left - theApp.m_metrics.ScaleX(5), rcBorder.bottom - theApp.m_metrics.ScaleX(50));
@@ -595,7 +596,7 @@ void CDittoWindow::DrawChevronBtn(CWindowDC &dc, CWnd *pWnd)
 
 void CDittoWindow::DrawWindowIcon(CWindowDC &dc, CWnd *pWnd)
 {
-	m_windowIcon.Draw(&dc, pWnd, m_crWindowIconBT.left, m_crWindowIconBT.top, false, false);
+	//m_windowIcon.Draw(&dc, pWnd, m_crWindowIconBT.left, m_crWindowIconBT.top, false, false);
 }
 
 void CDittoWindow::DrawCloseBtn(CWindowDC &dc, CWnd *pWnd)
@@ -854,10 +855,11 @@ void CDittoWindow::SetCaptionOn(CWnd *pWnd, int nPos, bool bOnstartup)
 	pWnd->RedrawWindow();
 }
 
-bool CDittoWindow::SetCaptionColors(COLORREF left, COLORREF right)
+bool CDittoWindow::SetCaptionColors(COLORREF left, COLORREF right, COLORREF border)
 {
 	m_CaptionColorLeft = left;
 	m_CaptionColorRight = right;
+	m_border = border;
 
 	return true;
 }

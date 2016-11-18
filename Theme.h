@@ -13,6 +13,9 @@ public:
 
 	COLORREF CaptionLeft() const { return m_CaptionLeft; }
 	COLORREF CaptionRight() const { return m_CaptionRight; }
+	COLORREF Border() const { return m_Border; }
+	COLORREF BorderTopMost() const { return m_BorderTopMost; }
+	COLORREF BorderNotConnected() const { return m_BorderNotConnected; }
 	COLORREF CaptionLeftTopMost() const { return m_CaptionLeftTopMost; }
 	COLORREF CaptionRightTopMost() const { return m_CaptionRightTopMost; }
 	COLORREF CaptionLeftNotConnected() const { return m_CaptionLeftNotConnected; }
@@ -61,6 +64,9 @@ protected:
 	COLORREF m_clipPastedColor;
 	COLORREF m_listSmallQuickPasteIndexColor;
 	COLORREF m_mainWindowBG;
+	COLORREF m_Border;
+	COLORREF m_BorderTopMost;
+	COLORREF m_BorderNotConnected;
 
 	CString m_csLastError;
 	long m_lFileVersion;

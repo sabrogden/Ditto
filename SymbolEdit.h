@@ -66,7 +66,8 @@ protected:
 	CBrush m_editFocusBrush;
 	CBrush m_editNonFocusBrush;
 
-	CGdiImageDrawer m_searchButton;
+	//CGdiImageDrawer m_searchButton;
+	CGdiImageDrawer m_closeButton;
 
 	void RecalcLayout();
 	virtual void PreSubclassWindow();

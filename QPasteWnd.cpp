@@ -370,7 +370,8 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     #endif 
 
 
-    m_SearchFont.CreatePointFont(120, _T("Segoe UI"));
+    //m_SearchFont.CreatePointFont(100, _T("Segoe UI"));
+	m_SearchFont.CreateFont(-theApp.m_metrics.PointsToPixels(12), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
     m_search.SetFont(&m_SearchFont);
 	m_search.SetPromptFont(m_SearchFont);
 

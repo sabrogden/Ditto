@@ -1211,6 +1211,7 @@
     <None Include="res\Search_20.png" />
     <None Include="res\Search_24.png" />
     <None Include="res\Search_32.png" />
+    <None Include="res\search_close_16.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">
