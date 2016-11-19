@@ -70,20 +70,6 @@
 			<name>Run Program</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
-		<step action='Subversion'>
-			<Files>%branch%</Files>
-			<Host>svn.code.sf.net</Host>
-			<LocalPath>%workDir%</LocalPath>
-			<Password encrypted='1'>WM3ePOE8XeG4aqO46qE=</Password>
-			<Protocol>http</Protocol>
-			<Repository>/p/ditto-cp/code/</Repository>
-			<SVNPath>C:\Program Files (x86)\SlikSvn\bin</SVNPath>
-			<Subcommand>checkout</Subcommand>
-			<Username>sabrogden</Username>
-			<checked type='11'>0</checked>
-			<indent type='3'>1</indent>
-			<name>Get Latest</name>
-		</step>
 		<step action='Run Script'>
 			<Language>VBScript</Language>
 			<Script><![CDATA[' increment the build number in the global macro BUILD_NUM, creating
@@ -339,7 +325,6 @@ DittoSetup*]]></X>
 ".\Ditto\Themes\OnnoG Blue.xml" "Themes\OnnoG Blue.xml"
 ".\Ditto\Themes\OnnoG Green.xml" "Themes\OnnoG Green.xml"]]></Text>
 			<buildfailsteps type='11'>0</buildfailsteps>
-			<checked type='11'>0</checked>
 			<indent type='3'>2</indent>
 			<name>Write files.ini</name>
 		</step>
@@ -523,6 +508,7 @@ var sc_security="b3f57099";
 			<FileIn>%workDir%\%branch%\DittoSetup\output\changes.php</FileIn>
 			<Find>Starting Build.*--------------------</Find>
 			<NoModS type='11'>-1</NoModS>
+			<checked type='11'>0</checked>
 			<indent type='3'>2</indent>
 			<name>Replace "Starting Build"</name>
 		</step>
