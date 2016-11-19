@@ -102,6 +102,12 @@ int CWndEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	SetCaptionColorActive(false, TRUE);
 	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true);
 	SetAutoMaxDelay(CGetSetOptions::GetAutoMaxDelay());
+
+	m_toolTip.Create(this);
+	CRect r;
+	GetWindowRect(&r);
+	ScreenToClient(&r);
+	m_toolTip.AddTool(this, _T("Ditto"), r, 1);
 	
 	return 0;
 }
@@ -315,6 +321,7 @@ void CWndEx::OnNcMouseMove(UINT nHitTest, CPoint point)
 
 BOOL CWndEx::PreTranslateMessage(MSG* pMsg) 
 {
+	m_toolTip.RelayEvent(pMsg);
 	m_DittoWindow.DoPreTranslateMessage(pMsg);
 	
 	return CWnd::PreTranslateMessage(pMsg);
@@ -367,7 +374,6 @@ void CWndEx::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 	}
 }
 
-
 void CWndEx::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
@@ -375,8 +381,12 @@ void CWndEx::OnSize(UINT nType, int cx, int cy)
 	m_DittoWindow.DoSetRegion(this);
 }
 
-
 void CWndEx::OnInitMenuPopup(CMenu *pPopupMenu, UINT nIndex, BOOL bSysMenu)
 {
 	OnInitMenuPopupEx(pPopupMenu, nIndex, bSysMenu, this);
 } 
+
+void CWndEx::SetToolTipText(CString text)
+{
+	m_toolTip.UpdateTipText(text, this, 1);
+}

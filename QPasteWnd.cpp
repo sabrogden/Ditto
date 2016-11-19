@@ -562,9 +562,9 @@ void CQPasteWnd::MoveControls()
 	}
 
 	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize+1);
-	m_search.MoveWindow(theApp.m_metrics.ScaleX(32), cy - theApp.m_metrics.ScaleY(searchRowStart-5), cx - theApp.m_metrics.ScaleX(68), theApp.m_metrics.ScaleY(23));
+	m_search.MoveWindow(theApp.m_metrics.ScaleX(34), cy - theApp.m_metrics.ScaleY(searchRowStart-5), cx - theApp.m_metrics.ScaleX(70), theApp.m_metrics.ScaleY(23));
 
-	m_systemMenu.MoveWindow(cx - theApp.m_metrics.ScaleX(32), cy - theApp.m_metrics.ScaleX(28), theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(24));
+	m_systemMenu.MoveWindow(cx - theApp.m_metrics.ScaleX(30), cy - theApp.m_metrics.ScaleX(28), theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(24));
 
 	m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleX(4), cy - theApp.m_metrics.ScaleX(28), theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(24));
 
@@ -1084,11 +1084,7 @@ void CQPasteWnd::RefreshNc()
 
 void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 {
-	return;
-    CString title = m_Title;
-    CString prev;
-
-    GetWindowText(prev);
+    CString title = m_Title;    
 
     CString cs;
     cs.Format(_T(" - %d/%d"), m_lstHeader.GetSelectedCount(), m_lstHeader.GetItemCount());
@@ -1128,11 +1124,9 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
         title += theApp.m_Language.GetString("No_Target", "No target");
     }
 
-    if(title != prev)
-    {
+    SetToolTipText(title);
 		//SetCustomWindowTitle(title);
-        //RefreshNc();
-    }
+        //RefreshNc();    
 }
 
 BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)

@@ -96,6 +96,7 @@
 #define IDB_IN_FOLDER_24_24             227
 #define IDB_IN_FOLDER_20_20             228
 #define IDB_IN_FOLDER_16_16             229
+#define IDB_FOLDER_WHITE_16             229
 #define IDB_KEY_32_32                   230
 #define IDB_KEY_24_24                   231
 #define IDB_KEY_20_20                   232
@@ -154,6 +155,7 @@
 #define IDI_ICON2                       297
 #define IDB_PNG11                       298
 #define search_close_16                 298
+#define IDB_FOLDER                      300
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -632,7 +634,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        299
+#define _APS_NEXT_RESOURCE_VALUE        301
 #define _APS_NEXT_COMMAND_VALUE         32929
 #define _APS_NEXT_CONTROL_VALUE         2146
 #define _APS_NEXT_SYMED_VALUE           104

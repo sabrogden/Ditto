@@ -45,6 +45,8 @@ public:
 
 	void SetCustomWindowTitle(CString title) { m_DittoWindow.m_customWindowTitle = title;  m_DittoWindow.m_useCustomWindowTitle = true; }
 
+	void SetToolTipText(CString text);
+
 protected:
 	CDittoWindow m_DittoWindow;
 	CRect m_crFullSizeWindow;
@@ -52,6 +54,7 @@ protected:
 	COleDateTime m_TimeMinimized;
 	COleDateTime m_TimeMaximized;
 	int m_lDelayMaxSeconds;
+	CToolTipCtrl m_toolTip;
 
 // Implementation
 public:
