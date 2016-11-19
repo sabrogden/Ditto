@@ -30,10 +30,6 @@ CSymbolEdit::CSymbolEdit() :
 		DEFAULT_PITCH | FF_SWISS,  // nPitchAndFamily
 		_T("Calibri"));
 
-	m_editFocusColor = RGB(255, 255, 255);
-	m_editNonFocusColor = RGB(240, 240, 240);
-	m_editFocusBrush.CreateSolidBrush(m_editFocusColor);
-	m_editNonFocusBrush.CreateSolidBrush(m_editNonFocusColor);
 
 	//m_searchButton.LoadStdImageDPI(Search_16, Search_20, Search_24, Search_32, _T("PNG"));
 	m_closeButton.LoadStdImageDPI(search_close_16, Search_20, Search_24, Search_32, _T("PNG"));
@@ -51,6 +47,10 @@ BEGIN_MESSAGE_MAP(CSymbolEdit, CEdit)
 	ON_WM_CTLCOLOR_REFLECT()
 	ON_WM_SETFOCUS()
 	ON_WM_KILLFOCUS()
+	ON_WM_SETCURSOR()
+	ON_WM_LBUTTONUP()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_MOUSEMOVE()
 END_MESSAGE_MAP()
 
 BOOL CSymbolEdit::PreTranslateMessage(MSG* pMsg)
@@ -285,9 +285,10 @@ void CSymbolEdit::OnPaint()
 
 	//rect.top += 1;
 
+
 	if(this == GetFocus() || text.GetLength() > 0)
 	{
-		dc.FillSolidRect(rect, m_editFocusColor);
+		dc.FillSolidRect(rect, RGB(255, 255, 255));
 
 		oldFont = dc.SelectObject(GetFont());		
 			
@@ -296,26 +297,28 @@ void CSymbolEdit::OnPaint()
 	}
 	else
 	{
-		dc.FillSolidRect(rect, m_editNonFocusColor);
+		dc.FillSolidRect(rect, g_Opt.m_Theme.MainWindowBG());
+	}
 
-		if (this != GetFocus() && m_strPromptText.GetLength() > 0)
-		{
-			oldFont = dc.SelectObject(&m_fontPrompt);
-			COLORREF color = dc.GetTextColor();
-			dc.SetTextColor(m_colorPromptText);
-			
-			dc.DrawText(m_strPromptText, textRect, DT_LEFT | DT_SINGLELINE | DT_EDITCONTROL | DT_VCENTER);
-			dc.SetTextColor(color);
-			dc.SelectObject(oldFont);
-		}
+	if (text.GetLength() == 0 && m_strPromptText.GetLength() > 0)
+	{
+		oldFont = dc.SelectObject(&m_fontPrompt);
+		COLORREF color = dc.GetTextColor();
+		dc.SetTextColor(m_colorPromptText);
+
+		dc.DrawText(m_strPromptText, textRect, DT_LEFT | DT_SINGLELINE | DT_EDITCONTROL | DT_VCENTER);
+		dc.SetTextColor(color);
+		dc.SelectObject(oldFont);
 	}
 
 	if (text.GetLength() > 0)
 	{
-		m_closeButton.Draw(&dc, this, rect.right - 22, 4, false, false);
+		m_closeButtonRect.SetRect(rect.right - 22, 0, rect.right, rect.bottom);
+		m_closeButton.Draw(&dc, this, m_closeButtonRect.left, 4, m_mouseHoveringOverClose, m_mouseDownOnClose);
 	}
 	else
 	{
+		m_closeButtonRect.SetRect(0, 0, 0, 0);
 		//m_searchButton.Draw(&dc, this, rect.right - 22, 4, false, false);
 	}
 
@@ -343,13 +346,13 @@ HBRUSH CSymbolEdit::CtlColor(CDC* pDC, UINT n)
 {
 	if (::GetFocus() == m_hWnd)
 	{
-		pDC->SetBkColor(m_editFocusColor);
-		return m_editFocusBrush;
+		pDC->SetBkColor(RGB(255, 255, 255));
+		return CreateSolidBrush(RGB(255, 255, 255));
 	}
 	else
 	{
-		pDC->SetBkColor(m_editNonFocusColor);
-		return m_editNonFocusBrush;
+		pDC->SetBkColor(g_Opt.m_Theme.MainWindowBG());
+		return CreateSolidBrush(g_Opt.m_Theme.MainWindowBG());
 	}
 }
 
@@ -363,4 +366,80 @@ void CSymbolEdit::OnKillFocus(CWnd* pNewWnd)
 {
 	Invalidate(FALSE);
 	CEdit::OnKillFocus(pNewWnd);
+}
+
+BOOL CSymbolEdit::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
+{
+	CPoint pntCursor;
+	GetCursorPos(&pntCursor);
+	ScreenToClient(&pntCursor);
+
+	if(m_closeButtonRect.PtInRect(pntCursor))
+	{
+		HCURSOR h = ::LoadCursor(NULL, IDC_ARROW);
+		::SetCursor(h);
+		return TRUE;
+	}
+
+	return CEdit::OnSetCursor(pWnd, nHitTest, message);
+}
+
+void CSymbolEdit::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	if (m_mouseDownOnClose)
+	{
+		ReleaseCapture();
+		InvalidateRect(m_closeButtonRect);
+	}
+
+	m_mouseDownOnClose = false;
+
+	if (m_closeButtonRect.PtInRect(point))
+	{
+		if ((GetWindowTextLength() > 0))
+		{
+			CWnd *pOwner = GetOwner();
+			if (pOwner)
+			{
+				pOwner->SendMessage(NM_CANCEL_SEARCH, 0, 0);
+			}
+		}		
+	}	
+
+	CEdit::OnLButtonUp(nFlags, point);
+}
+
+void CSymbolEdit::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	if (m_closeButtonRect.PtInRect(point))
+	{
+		m_mouseDownOnClose = true;
+		SetCapture();
+		InvalidateRect(m_closeButtonRect);
+	}
+	else
+	{
+		m_mouseDownOnClose = false;
+	}
+
+	CEdit::OnLButtonDown(nFlags, point);
+}
+
+void CSymbolEdit::OnMouseMove(UINT nFlags, CPoint point)
+{
+	if (m_closeButtonRect.PtInRect(point))
+	{
+		if (m_mouseHoveringOverClose == false)
+		{
+			m_mouseHoveringOverClose = true;
+			InvalidateRect(m_closeButtonRect);
+		}
+	}
+	else if(m_mouseHoveringOverClose)
+	{
+		m_mouseHoveringOverClose = false;
+		InvalidateRect(m_closeButtonRect);
+	}
+
+	CEdit::OnMouseMove(nFlags, point);
 }

@@ -60,14 +60,12 @@ public:
 	void SetPromptFont(const LOGFONT* lpLogFont, BOOL redraw = TRUE);
 
 protected:
-
-	COLORREF m_editFocusColor;
-	COLORREF m_editNonFocusColor;
-	CBrush m_editFocusBrush;
-	CBrush m_editNonFocusBrush;
-
+	
 	//CGdiImageDrawer m_searchButton;
 	CGdiImageDrawer m_closeButton;
+	CRect m_closeButtonRect;
+	bool m_mouseDownOnClose;
+	bool m_mouseHoveringOverClose;
 
 	void RecalcLayout();
 	virtual void PreSubclassWindow();
@@ -77,6 +75,10 @@ protected:
 	afx_msg HBRUSH CtlColor(CDC* pDC, UINT n);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
+	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 
 	DECLARE_MESSAGE_MAP()
 
