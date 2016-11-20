@@ -1212,6 +1212,13 @@
     <None Include="res\Search_24.png" />
     <None Include="res\Search_32.png" />
     <None Include="res\search_close_16.png" />
+    <None Include="res\minimize_16.png" />
+    <None Include="res\minimize_32.png" />
+    <None Include="res\minimize_24.png" />
+    <None Include="res\minimize_20.png" />
+    <None Include="res\maximize_32.png" />
+    <None Include="res\maximize_24.png" />
+    <None Include="res\maximize_20.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">

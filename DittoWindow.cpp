@@ -53,10 +53,8 @@ void CDittoWindow::DoCreate(CWnd *pWnd)
 	m_closeButton.LoadStdImageDPI(Close_Black_16_16, Close_Black_20_20, Close_Black_24_24, Close_Black_32_32, _T("PNG"));
 	m_chevronRightButton.LoadStdImageDPI(ChevronRight_Black_16_16, ChevronRight_Black_24_24, ChevronRight_Black_24_24, ChevronRight_Black_32_32, _T("PNG"));
 	m_chevronLeftButton.LoadStdImageDPI(ChevronLeft_Black_16_16, ChevronLeft_Black_24_24, ChevronLeft_Black_24_24, ChevronLeft_Black_32_32, _T("PNG"));
-	m_chevronTopButton.LoadStdImageDPI(IDB_CHEVRON_TOP_8_8, IDB_CHEVRON_TOP_10_10, IDB_CHEVRON_TOP_12_12, IDB_CHEVRON_TOP_16_16, _T("PNG"));
-	m_chevronBottomButton.LoadStdImageDPI(IDB_CHEVRON_BOTTOM_8_8, IDB_CHEVRON_BOTTOM_10_10, IDB_CHEVRON_BOTTOM_12_12, IDB_CHEVRON_BOTTOM_16_16, _T("PNG"));
-	m_maximizeButton.LoadStdImageDPI(IDB_MAXIMIZE_8_8, IDB_MAXIMIZE_10_10, IDB_MAXIMIZE_12_12, IDB_MAXIMIZE_16_16, _T("PNG"));
-
+	m_maximizeButton.LoadStdImageDPI(IDB_MAXIMIZE_16_16, maximize_20, maximize_24, maximize_32, _T("PNG"));
+	m_minimizeButton.LoadStdImageDPI(minimize_16, minimize_20, minimize_24, minimize_32, _T("PNG"));
 	//m_windowIcon.LoadStdImageDPI(NewWindowIcon_24_14, NewWindowIcon_30, NewWindowIcon_36, NewWindowIcon_48, _T("PNG"));
 }
 
@@ -510,6 +508,8 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 	DrawWindowIcon(dc, pWnd);
 	DrawChevronBtn(dc, pWnd);
 	DrawCloseBtn(dc, pWnd);
+	DrawMaximizeBtn(dc, pWnd);
+	DrawMinimizeBtn(dc, pWnd);
 }
 
 void CDittoWindow::DoSetRegion(CWnd *pWnd)
@@ -609,46 +609,14 @@ void CDittoWindow::DrawCloseBtn(CWindowDC &dc, CWnd *pWnd)
 	m_closeButton.Draw(&dc, pWnd, m_crCloseBT.left, m_crCloseBT.top, m_bMouseOverClose, m_bMouseDownOnClose);
 }
 
-void CDittoWindow::DrawMinimizeBtn(CWindowDC &dc)
+void CDittoWindow::DrawMinimizeBtn(CWindowDC &dc, CWnd *pWnd)
 {
 	if(m_bDrawMinimize == false)
 	{
 		return;
 	}
 
-	//rows first then columns
-	int Points[5][6] =
-	{
-			0,0,0,0,0,0,
-			0,0,0,0,0,0,
-			0,0,0,0,0,0,
-			1,1,1,1,1,0,
-			1,1,1,1,1,0
-	};
-
-	CPoint ptShift = m_crMinimizeBT.TopLeft();
-	ptShift.Offset(3, 3);
-
-	if(m_bMouseDownOnMinimize)
-	{
-		dc.Draw3dRect(m_crMinimizeBT, RGB(255, 255, 255), RGB(255, 255, 255));
-		CRect cr(m_crMinimizeBT);
-		cr.DeflateRect(1, 1, 1, 1);
-		dc.Draw3dRect(cr, RGB(255, 255, 255), RGB(255, 255, 255));
-	}
-	else if(m_bMouseOverMinimize)
-	{
-		dc.Draw3dRect(m_crMinimizeBT, RGB(255, 255, 255), RGB(255, 255, 255));
-	}
-
-	for (int iRow = 0; iRow < 5; iRow++)
-	{
-		for (int iCol = 0; iCol < 6; iCol++)
-		{
-			if (Points[iRow][iCol] == 1)
-				dc.SetPixel(ptShift+CPoint(iCol, iRow), RGB(255, 255, 255));
-		}
-	}
+	m_minimizeButton.Draw(&dc, pWnd, m_crMinimizeBT.left, m_crMinimizeBT.top, m_bMouseOverClose, m_bMouseDownOnClose);
 }
 
 void CDittoWindow::DrawMaximizeBtn(CWindowDC &dc, CWnd *pWnd)

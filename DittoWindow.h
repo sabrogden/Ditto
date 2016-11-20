@@ -19,7 +19,7 @@ public:
 	void DrawChevronBtn(CWindowDC &dc, CWnd *pWnd);
 	void DrawCloseBtn(CWindowDC &dc, CWnd *pWnd);
 	void DrawMaximizeBtn(CWindowDC &dc, CWnd *pWnd);
-	void DrawMinimizeBtn(CWindowDC &dc);
+	void DrawMinimizeBtn(CWindowDC &dc, CWnd *pWnd);
 	void DrawWindowIcon(CWindowDC &dc, CWnd *pWnd);
 
 	void DoCreate(CWnd *pWnd);
@@ -73,9 +73,8 @@ public:
 	CGdiImageDrawer m_closeButton;
 	CGdiImageDrawer m_chevronRightButton;
 	CGdiImageDrawer m_chevronLeftButton;
-	CGdiImageDrawer m_chevronTopButton;
-	CGdiImageDrawer m_chevronBottomButton;
 	CGdiImageDrawer m_maximizeButton;
+	CGdiImageDrawer m_minimizeButton;
 	//CGdiImageDrawer m_windowIcon;
 
 	CString m_customWindowTitle;

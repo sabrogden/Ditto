@@ -1345,6 +1345,20 @@ Search_32               PNG                     "res\\Search_32.png"
 
 search_close_16         PNG                     "res\\search_close_16.png"
 
+minimize_16             PNG                     "res\\minimize_16.png"
+
+minimize_32             PNG                     "res\\minimize_32.png"
+
+minimize_24             PNG                     "res\\minimize_24.png"
+
+minimize_20             PNG                     "res\\minimize_20.png"
+
+maximize_32             PNG                     "res\\maximize_32.png"
+
+maximize_24             PNG                     "res\\maximize_24.png"
+
+maximize_20             PNG                     "res\\maximize_20.png"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

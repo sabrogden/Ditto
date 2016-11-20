@@ -2071,7 +2071,14 @@
     <None Include="res\maximize_10_10.png" />
     <None Include="res\maximize_12_12.png" />
     <None Include="res\maximize_16_16.png" />
+    <None Include="res\maximize_20.png" />
+    <None Include="res\maximize_24.png" />
+    <None Include="res\maximize_32.png" />
     <None Include="res\maximize_8_8.png" />
+    <None Include="res\minimize_16.png" />
+    <None Include="res\minimize_20.png" />
+    <None Include="res\minimize_24.png" />
+    <None Include="res\minimize_32.png" />
     <None Include="res\NewWindowIcon_24_14.png" />
     <None Include="res\NewWindowIcon_30.png" />
     <None Include="res\NewWindowIcon_36.png" />

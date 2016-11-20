@@ -300,6 +300,7 @@ void CSymbolEdit::OnPaint()
 		dc.FillSolidRect(rect, g_Opt.m_Theme.MainWindowBG());
 	}
 
+
 	if (text.GetLength() == 0 && m_strPromptText.GetLength() > 0)
 	{
 		oldFont = dc.SelectObject(&m_fontPrompt);

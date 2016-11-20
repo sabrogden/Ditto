@@ -156,6 +156,14 @@
 #define IDB_PNG11                       298
 #define search_close_16                 298
 #define IDB_FOLDER                      300
+#define minimize_16                     301
+#define minimize_32                     302
+#define minimize_24                     303
+#define minimize_20                     304
+#define maximize_32                     305
+#define maximize_24                     306
+#define IDB_PNG17                       307
+#define maximize_20                     307
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -634,7 +642,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        301
+#define _APS_NEXT_RESOURCE_VALUE        308
 #define _APS_NEXT_COMMAND_VALUE         32929
 #define _APS_NEXT_CONTROL_VALUE         2146
 #define _APS_NEXT_SYMED_VALUE           104
