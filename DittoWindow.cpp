@@ -407,7 +407,7 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 	{
 		CRect size(0, 0, 0, 0);
 		dc.DrawText(csText, size, DT_CALCRECT);
-		textRect.left = textRect.right - size.Width() - 10;
+		textRect.left = textRect.right - size.Width() - theApp.m_metrics.ScaleX(10);
 
 		flags |= DT_VCENTER;
 	}
