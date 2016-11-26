@@ -32,7 +32,7 @@ CSymbolEdit::CSymbolEdit() :
 
 
 	//m_searchButton.LoadStdImageDPI(Search_16, Search_20, Search_24, Search_32, _T("PNG"));
-	m_closeButton.LoadStdImageDPI(search_close_16, Search_20, Search_24, Search_32, _T("PNG"));
+	m_closeButton.LoadStdImageDPI(search_close_16, Search_20, Search_24, Search_28, Search_32, _T("PNG"));
 }
 
 CSymbolEdit::~CSymbolEdit()

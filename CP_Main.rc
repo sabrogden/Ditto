@@ -1359,6 +1359,22 @@ maximize_24             PNG                     "res\\maximize_24.png"
 
 maximize_20             PNG                     "res\\maximize_20.png"
 
+return_28               PNG                     "res\\return_28.png"
+
+minimize_28             PNG                     "res\\minimize_28.png"
+
+maximize_28             PNG                     "res\\maximize_28.png"
+
+ChevronLeft_Black_28    PNG                     "res\\ChevronLeft_Black_28.png"
+
+ChevronRight_Black_28   PNG                     "res\\ChevronRight_Black_28.png"
+
+Close_Black_28          PNG                     "res\\Close_Black_28.png"
+
+system_menu_2_42        PNG                     "res\\system_menu_2_42.png"
+
+open_folder_42          PNG                     "res\\open_folder_42.png"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

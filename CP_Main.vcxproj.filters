@@ -1219,6 +1219,14 @@
     <None Include="res\maximize_32.png" />
     <None Include="res\maximize_24.png" />
     <None Include="res\maximize_20.png" />
+    <None Include="res\return_28.png" />
+    <None Include="res\minimize_28.png" />
+    <None Include="res\maximize_28.png" />
+    <None Include="res\ChevronLeft_Black_28.png" />
+    <None Include="res\ChevronRight_Black_28.png" />
+    <None Include="res\Close_Black_28.png" />
+    <None Include="res\system_menu_2_42.png" />
+    <None Include="res\open_folder_42.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">

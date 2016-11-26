@@ -2007,10 +2007,12 @@
     <None Include="res\ChevronLeft_Black_16_16.png" />
     <None Include="res\ChevronLeft_Black_20_20.png" />
     <None Include="res\ChevronLeft_Black_24_24.png" />
+    <None Include="res\ChevronLeft_Black_28.png" />
     <None Include="res\ChevronLeft_Black_32_32.png" />
     <None Include="res\ChevronRight_Black_16_16.png" />
     <None Include="res\ChevronRight_Black_20_20.png" />
     <None Include="res\ChevronRight_Black_24_24.png" />
+    <None Include="res\ChevronRight_Black_28.png" />
     <None Include="res\ChevronRight_Black_32_32.png" />
     <None Include="res\chevron_right_16_16.png" />
     <None Include="res\chevron_right_10_10.png" />
@@ -2036,6 +2038,7 @@
     <None Include="res\Close_Black_16_16.png" />
     <None Include="res\Close_Black_20_20.png" />
     <None Include="res\Close_Black_24_24.png" />
+    <None Include="res\Close_Black_28.png" />
     <None Include="res\Close_Black_32_32.png" />
     <None Include="res\cog_16_16.png" />
     <None Include="res\cog_20_20.png" />
@@ -2073,11 +2076,13 @@
     <None Include="res\maximize_16_16.png" />
     <None Include="res\maximize_20.png" />
     <None Include="res\maximize_24.png" />
+    <None Include="res\maximize_28.png" />
     <None Include="res\maximize_32.png" />
     <None Include="res\maximize_8_8.png" />
     <None Include="res\minimize_16.png" />
     <None Include="res\minimize_20.png" />
     <None Include="res\minimize_24.png" />
+    <None Include="res\minimize_28.png" />
     <None Include="res\minimize_32.png" />
     <None Include="res\NewWindowIcon_24_14.png" />
     <None Include="res\NewWindowIcon_30.png" />
@@ -2094,10 +2099,12 @@
     <None Include="res\open_folder_24.png" />
     <None Include="res\open_folder_30.png" />
     <None Include="res\open_folder_36.png" />
+    <None Include="res\open_folder_42.png" />
     <None Include="res\open_folder_48.png" />
     <None Include="res\return_16.png" />
     <None Include="res\return_20.png" />
     <None Include="res\return_24.png" />
+    <None Include="res\return_28.png" />
     <None Include="res\return_32.png" />
     <None Include="res\Search_16.png" />
     <None Include="res\Search_20.png" />
@@ -2125,6 +2132,7 @@
     <None Include="res\system_menu_2_32_32.png" />
     <None Include="res\system_menu_2_36.png" />
     <None Include="res\system_menu_2_40_40.png" />
+    <None Include="res\system_menu_2_42.png" />
     <None Include="res\system_menu_2_48.png" />
     <None Include="res\system_menu_2_48_48.png" />
     <None Include="res\system_menu_2_64_64.png" />

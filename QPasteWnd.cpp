@@ -332,19 +332,18 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     m_ShowGroupsFolderBottom.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SHOW_GROUPS_BOTTOM);
     //m_ShowGroupsFolderBottom.LoadBitmaps(IDB_CLOSED_FOLDER, IDB_CLOSED_FOLDER_PRESSED, IDB_CLOSED_FOLDER_FOCUSED);
-	m_ShowGroupsFolderBottom.LoadStdImageDPI(open_folder_24, open_folder_30, open_folder_36, open_folder_48, _T("PNG"));
+	m_ShowGroupsFolderBottom.LoadStdImageDPI(open_folder_24, open_folder_30, open_folder_36, open_folder_42, open_folder_48, _T("PNG"));
     m_ShowGroupsFolderBottom.ShowWindow(SW_SHOW);
 	m_ShowGroupsFolderBottom.SetToolTipText(theApp.m_Language.GetString(_T("GroupsTooltip"), _T("Groups")));
 	m_ShowGroupsFolderBottom.ModifyStyle(WS_TABSTOP, 0);
 
     m_BackButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_BACK_BUTTON);
-	m_BackButton.LoadStdImageDPI(return_16, return_20, return_24, return_32, _T("PNG"));
+	m_BackButton.LoadStdImageDPI(return_16, return_20, return_24, return_28, return_32, _T("PNG"));
 	m_BackButton.ModifyStyle(WS_TABSTOP, 0);
     m_BackButton.ShowWindow(SW_SHOW);
 
 	m_systemMenu.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SYSTEM_BUTTON);
-	//m_systemMenu.LoadStdImageDPI(IDB_HAMBURGER_16_16, IDB_HAMBURGER_20_20, IDB_HAMBURGER_24_24, IDB_HAMBURGER_32_32, _T("PNG"));
-	m_systemMenu.LoadStdImageDPI(system_menu_2_24, system_menu_2_30, system_menu_2_36, system_menu_2_48, _T("PNG"));
+	m_systemMenu.LoadStdImageDPI(system_menu_2_24, system_menu_2_30, system_menu_2_36, system_menu_2_42, system_menu_2_48, _T("PNG"));
 	m_systemMenu.ModifyStyle(WS_TABSTOP, 0);
 	m_systemMenu.ShowWindow(SW_SHOW);
 		

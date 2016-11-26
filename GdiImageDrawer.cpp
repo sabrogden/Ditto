@@ -25,13 +25,17 @@ BOOL CGdiImageDrawer::LoadRaw(unsigned char* bitmapData, int imageSize)
 	return m_pStdImage->LoadRaw(bitmapData, imageSize);
 }
 
-BOOL CGdiImageDrawer::LoadStdImageDPI(UINT id96, UINT id120, UINT id144, UINT id192, LPCTSTR pType)
+BOOL CGdiImageDrawer::LoadStdImageDPI(UINT id96, UINT id120, UINT id144, UINT id168, UINT id192, LPCTSTR pType)
 {
 	BOOL ret = FALSE;
 
 	if (theApp.m_metrics.GetDPIX() >= 192)
 	{
 		ret = LoadStdImage(id192, pType);
+	}
+	else if (theApp.m_metrics.GetDPIX() >= 168)
+	{
+		ret = LoadStdImage(id168, pType);
 	}
 	else if (theApp.m_metrics.GetDPIX() >= 144)
 	{
