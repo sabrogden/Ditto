@@ -103,7 +103,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
     SetLogFont(GetSystemToolTipFont(), FALSE);
 
 	m_optionsButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, 2);
-	m_optionsButton.LoadStdImageDPI(IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, cog_28 IDB_COG_32_32, _T("PNG"));
+	m_optionsButton.LoadStdImageDPI(IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, cog_28, IDB_COG_32_32, _T("PNG"));
 	m_optionsButton.SetToolTipText(theApp.m_Language.GetString(_T("DescriptionOptionsTooltip"), _T("Description Options")));
 	m_optionsButton.ShowWindow(SW_SHOW);
 

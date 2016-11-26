@@ -1227,6 +1227,8 @@
     <None Include="res\Close_Black_28.png" />
     <None Include="res\system_menu_2_42.png" />
     <None Include="res\open_folder_42.png" />
+    <None Include="res\cog_28.png" />
+    <None Include="res\Search_28.png" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">

@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by CP_Main2.rc
+// Used by CP_Main.rc
 //
 #define IDD_ABOUTBOX                    100
 #define IDR_CP_MAIN                     103
@@ -172,6 +172,9 @@
 #define Close_Black_28                  313
 #define system_menu_2_42                314
 #define open_folder_42                  315
+#define cog_28                          316
+#define IDB_PNG13                       317
+#define Search_28                       317
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -650,7 +653,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        316
+#define _APS_NEXT_RESOURCE_VALUE        318
 #define _APS_NEXT_COMMAND_VALUE         32929
 #define _APS_NEXT_CONTROL_VALUE         2146
 #define _APS_NEXT_SYMED_VALUE           104

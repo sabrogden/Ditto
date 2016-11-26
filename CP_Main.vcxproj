@@ -2044,6 +2044,7 @@
     <None Include="res\cog_20_20.png" />
     <None Include="res\cog_22_22.png" />
     <None Include="res\cog_24_24.png" />
+    <None Include="res\cog_28.png" />
     <None Include="res\cog_32_32.png" />
     <None Include="res\CP_Main.ico" />
     <None Include="res\CP_Main.rc2" />
@@ -2109,6 +2110,7 @@
     <None Include="res\Search_16.png" />
     <None Include="res\Search_20.png" />
     <None Include="res\Search_24.png" />
+    <None Include="res\Search_28.png" />
     <None Include="res\Search_32.png" />
     <None Include="res\search_close.bmp" />
     <None Include="res\search_close_125.bmp" />
