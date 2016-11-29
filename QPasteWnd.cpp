@@ -375,6 +375,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_groupFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 	m_stGroup.SetFont(&m_groupFont);	
 	m_stGroup.SetBkColor(g_Opt.m_Theme.MainWindowBG());
+	m_stGroup.SetTextColor(RGB(127, 127, 127));
 	
     UpdateFont();
 	
