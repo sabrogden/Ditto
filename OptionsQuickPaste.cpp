@@ -250,12 +250,20 @@ void COptionsQuickPaste::FillThemes()
 	while(bCont)
 	{
 		bCont = find.FindNextFile();
-		int nIndex = m_cbTheme.AddString(find.GetFileTitle());
 
-		if(find.GetFileTitle() == csTheme)
+		CTheme theme;
+		if (theme.Load(find.GetFileTitle(), true, false))
 		{
-			m_cbTheme.SetCurSel(nIndex);
-			bSetCurSel = true;
+			if (theme.FileVersion() >= 2)
+			{
+				int nIndex = m_cbTheme.AddString(find.GetFileTitle());
+
+				if (find.GetFileTitle() == csTheme)
+				{
+					m_cbTheme.SetCurSel(nIndex);
+					bSetCurSel = true;
+				}
+			}
 		}
 	}
 

@@ -265,6 +265,11 @@ public:
 	bool OnMakeLastSticky();
 	bool OnRemoveStickySetting();
 
+	bool OnNewClip();
+	bool OnImportClip();
+	bool OnDeleteClipData();
+	bool OnGlobalHotkyes();
+
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
 	bool ShowProperties(int id, int row);
@@ -474,4 +479,12 @@ public:
 	afx_msg void OnSpecialpastePaste32927();
 	afx_msg void OnUpdateSpecialpastePaste32927(CCmdUI *pCmdUI);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	afx_msg void OnMenuGlobalhotkeys32933();
+	afx_msg void OnMenuDeleteclipdata32934();
+	afx_msg void OnMenuImportclip32935();
+	afx_msg void OnMenuNewclip32937();
+	afx_msg void OnUpdateMenuImportclip32935(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateMenuNewclip32937(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateMenuGlobalhotkeys32933(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateMenuDeleteclipdata32934(CCmdUI *pCmdUI);
 };

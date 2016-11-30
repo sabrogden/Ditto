@@ -64,12 +64,12 @@ int CGroupTree::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 
 	CImageList iml;
-	iml.Create(18, 16, ILC_COLOR8, 0, 1);
+	iml.Create(18, 16, ILC_COLOR | ILC_MASK, 0, 1);
 
 	m_bmClosedFolder.LoadBitmap(IDB_CLOSED_FOLDER);
 	iml.Add(&m_bmClosedFolder, RGB(255, 0, 0));
 
-	m_bmOpenFolder.LoadBitmap(IDB_OPEN_FOLDER);
+	m_bmOpenFolder.LoadBitmap(IDB_CLOSED_FOLDER);
 	iml.Add(&m_bmOpenFolder, RGB(255, 0, 0));
 	
 
@@ -79,6 +79,8 @@ int CGroupTree::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_actions.AddAccel(ActionEnums::NEWGROUP, ACCEL_MAKEKEY(VK_F7, HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::CLIP_PROPERTIES, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_ALT));
 	m_actions.AddAccel(ActionEnums::DELETE_SELECTED, VK_DELETE);
+
+	
 
 	return 0;
 }
@@ -172,6 +174,9 @@ bool CGroupTree::DoActionClipProperties()
 
 void CGroupTree::FillTree()
 {	
+	this->SetBkColor(g_Opt.m_Theme.GroupTreeBG());
+	this->SetTextColor(g_Opt.m_Theme.GroupTreeText());
+
 	DeleteAllItems();
 	m_bSendAllready = false;
 

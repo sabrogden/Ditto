@@ -179,6 +179,12 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		return "Remove Sticky Setting";
 	case PASTE_ADD_CURRENT_TIME:
 		return "Paste Add Current Time";
+	case IMPORT_CLIP:
+		return "Import Clip";
+	case GLOBAl_HOTKEYS:
+		return "Global HotKeys";
+	case DELETE_CLIP_DATA:
+		return "Delete Clip Data";
 	}
 
 	return "";

@@ -1844,7 +1844,7 @@ void CGetSetOptions::SetAutoMaxDelay(long lDelay)
 
 void CGetSetOptions::SetTheme(CString csTheme)
 {
-	SetProfileString(_T("Theme"), csTheme);
+	SetProfileString(_T("Theme2"), csTheme);
 }
 
 CString CGetSetOptions::GetTheme()

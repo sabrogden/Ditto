@@ -347,7 +347,7 @@ IDR_QUICK_PASTE_SYSTEM_MENU MENU
 BEGIN
     POPUP "Menu"
     BEGIN
-        MENUITEM "Help",                        32842
+        MENUITEM "Options...",                  32805
         MENUITEM SEPARATOR
         POPUP "Search Options"
         BEGIN
@@ -421,12 +421,19 @@ BEGIN
             MENUITEM "Show text for first ten copy hot keys", ID_QUICKOPTIONS_SHOWTEXTFORFIRSTTENCOPYHOTKEYS
             MENUITEM "Show indicator a clip has been pasted", ID_QUICKOPTIONS_SHOWINDICATORACLIPHASBEENPASTED
         END
-        MENUITEM "Options...",                  32805
         MENUITEM SEPARATOR
-        MENUITEM "Save Current Clipboard",      ID_MENU_SAVECURRENTCLIPBOARD
+        MENUITEM "Global Hot Keys",             ID_MENU_GLOBALHOTKEYS32933
+        MENUITEM "Delete Clip Data",            ID_MENU_DELETECLIPDATA32934
+        MENUITEM SEPARATOR
+        MENUITEM "Import Clip(s)",              ID_MENU_IMPORTCLIP32935
+        MENUITEM "New Clip",                    ID_MENU_NEWCLIP32937
+        MENUITEM SEPARATOR
+        MENUITEM "Help",                        32842
+        MENUITEM SEPARATOR
         MENUITEM "Connect To Clipboard",        32775
+        MENUITEM "Save Current Clipboard",      ID_MENU_SAVECURRENTCLIPBOARD
         MENUITEM SEPARATOR
-        MENUITEM "Exit Program",                32806
+        MENUITEM "Exit",                        32806
     END
 END
 

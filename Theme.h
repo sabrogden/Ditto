@@ -34,6 +34,12 @@ public:
 
 	COLORREF ListSmallQuickPasteIndexColor() const { return m_listSmallQuickPasteIndexColor;  }
 	COLORREF MainWindowBG() const { return m_mainWindowBG; }
+	COLORREF SearchTextBoxFocusBG() const { return m_searchTextBoxFocusBG; }
+	COLORREF SearchTextBoxFocusText() const { return m_searchTextBoxFocusText; }
+
+	COLORREF GroupTreeBG() const { return m_groupTreeBG; }
+	COLORREF GroupTreeText() const { return m_groupTreeText; }
+
 
 	CString Notes() const { return m_csNotes; }
 	CString Author() const { return m_csAuthor; }
@@ -67,6 +73,11 @@ protected:
 	COLORREF m_Border;
 	COLORREF m_BorderTopMost;
 	COLORREF m_BorderNotConnected;
+	COLORREF m_searchTextBoxFocusBG;
+	COLORREF m_searchTextBoxFocusText;
+
+	COLORREF m_groupTreeBG;
+	COLORREF m_groupTreeText;
 
 	CString m_csLastError;
 	long m_lFileVersion;
@@ -75,4 +86,6 @@ protected:
 
 	__int64 m_LastWriteTime;
 	CString m_lastTheme;
+
+	void LoadDefaults();
 };

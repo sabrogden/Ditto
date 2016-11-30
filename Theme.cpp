@@ -11,9 +11,19 @@ CTheme::CTheme(void)
 	m_LastWriteTime = 0;
 	m_lastTheme = _T("");
 
+	LoadDefaults();
+}
+
+CTheme::~CTheme(void)
+{
+}
+
+
+void CTheme::LoadDefaults()
+{
 	m_CaptionLeft = RGB(255, 255, 255);
 	m_CaptionRight = RGB(204, 204, 204);
-	
+
 	m_Border = RGB(204, 204, 204);
 	m_BorderTopMost = RGB(100, 100, 100);
 	m_BorderNotConnected = RGB(255, 0, 0);
@@ -24,7 +34,7 @@ CTheme::CTheme(void)
 	m_CaptionRightNotConnected = RGB(204, 204, 204);
 	m_CaptionTextColor = RGB(191, 191, 191);
 	m_ListBoxOddRowsBG = RGB(255, 255, 255);
-	m_ListBoxEvenRowsBG = RGB(250, 250, 250);
+	m_ListBoxEvenRowsBG = RGB(243, 243, 243);
 	m_ListBoxOddRowsText = RGB(0, 0, 0);
 	m_ListBoxEvenRowsText = RGB(0, 0, 0);
 	m_ListBoxSelectedBG = RGB(204, 204, 204);
@@ -34,17 +44,21 @@ CTheme::CTheme(void)
 	m_clipPastedColor = RGB(0, 255, 0);
 	m_listSmallQuickPasteIndexColor = RGB(180, 180, 180);
 	m_mainWindowBG = RGB(240, 240, 240);
-}
+	m_searchTextBoxFocusBG = RGB(255, 255, 255);
+	m_searchTextBoxFocusText = RGB(0, 0, 0);
 
-CTheme::~CTheme(void)
-{
+	m_groupTreeBG = RGB(240, 240, 240);
+	m_groupTreeText = RGB(127, 127, 127);
 }
-
 
 bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)
 {
-	if(csTheme.IsEmpty())
+	LoadDefaults();
+
+	if (csTheme.IsEmpty() || csTheme == _T("Ditto"))
+	{
 		return false;
+	}
 
 	CString csPath = CGetSetOptions::GetPath(PATH_THEMES);
 	csPath += csTheme;
@@ -110,6 +124,16 @@ bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)
 	LoadElement(ItemHeader, "ListBoxSelectedText", m_ListBoxSelectedText);
 	LoadElement(ItemHeader, "ListBoxSelectedNoFocusText", m_ListBoxSelectedNoFocusText);
 	LoadElement(ItemHeader, "ClipPastedColor", m_clipPastedColor);
+	LoadElement(ItemHeader, "MainWindowBG", m_mainWindowBG);
+	LoadElement(ItemHeader, "SearchTextBoxFocusBG", m_searchTextBoxFocusBG);
+	LoadElement(ItemHeader, "SearchTextBoxFocusText", m_searchTextBoxFocusText);
+
+	LoadElement(ItemHeader, "Border", m_Border);
+	LoadElement(ItemHeader, "BorderTopMost", m_BorderTopMost);
+	LoadElement(ItemHeader, "BorderNotConnected", m_BorderNotConnected);
+
+	LoadElement(ItemHeader, "GroupTreeBG", m_groupTreeBG);
+	LoadElement(ItemHeader, "GroupTreeText", m_groupTreeText);
 
 	return true;
 }
@@ -133,6 +157,12 @@ bool CTheme::LoadElement(TiXmlElement *pParent, CStringA csNode, COLORREF &Color
 	}
 	
 	CString csColor = pColor->Value();
+
+	if (csColor == _T(""))
+	{
+		return false;
+	}
+
 	csColor = csColor.Trim();
 	csColor.Replace(_T("RGB("), _T(""));
 	csColor.Replace(_T(")"), _T(""));

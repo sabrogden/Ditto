@@ -275,6 +275,14 @@ ON_UPDATE_COMMAND_UI(ID_STICKYCLIPS_MAKELASTSTICKYCLIP, &CQPasteWnd::OnUpdateSti
 ON_UPDATE_COMMAND_UI(ID_STICKYCLIPS_REMOVESTICKYSETTING, &CQPasteWnd::OnUpdateStickyclipsRemovestickysetting)
 ON_COMMAND(ID_SPECIALPASTE_PASTE32927, &CQPasteWnd::OnSpecialpastePaste32927)
 ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_PASTE32927, &CQPasteWnd::OnUpdateSpecialpastePaste32927)
+ON_COMMAND(ID_MENU_GLOBALHOTKEYS32933, &CQPasteWnd::OnMenuGlobalhotkeys32933)
+ON_COMMAND(ID_MENU_DELETECLIPDATA32934, &CQPasteWnd::OnMenuDeleteclipdata32934)
+ON_COMMAND(ID_MENU_IMPORTCLIP32935, &CQPasteWnd::OnMenuImportclip32935)
+ON_COMMAND(ID_MENU_NEWCLIP32937, &CQPasteWnd::OnMenuNewclip32937)
+ON_UPDATE_COMMAND_UI(ID_MENU_IMPORTCLIP32935, &CQPasteWnd::OnUpdateMenuImportclip32935)
+ON_UPDATE_COMMAND_UI(ID_MENU_NEWCLIP32937, &CQPasteWnd::OnUpdateMenuNewclip32937)
+ON_UPDATE_COMMAND_UI(ID_MENU_GLOBALHOTKEYS32933, &CQPasteWnd::OnUpdateMenuGlobalhotkeys32933)
+ON_UPDATE_COMMAND_UI(ID_MENU_DELETECLIPDATA32934, &CQPasteWnd::OnUpdateMenuDeleteclipdata32934)
 END_MESSAGE_MAP()
 
 
@@ -324,8 +332,8 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     }
 	m_lstHeader.ShowWindow(SW_SHOW);
 
-    ((CWnd*) &m_GroupTree)->CreateEx(NULL, _T("SysTreeView32"), NULL, WS_BORDER | TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS, CRect(0, 0, 100, 100), this, 0);
-	m_GroupTree.ModifyStyle(WS_CAPTION | WS_TABSTOP, WS_BORDER);
+    ((CWnd*) &m_GroupTree)->CreateEx(NULL, _T("SysTreeView32"), NULL, TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS, CRect(0, 0, 100, 100), this, 0);
+	m_GroupTree.ModifyStyle(WS_CAPTION | WS_TABSTOP, 0);
 
     m_GroupTree.SetNotificationWndEx(m_hWnd);
     m_GroupTree.ShowWindow(SW_HIDE);
@@ -371,6 +379,8 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_SearchFont.CreateFont(-theApp.m_metrics.PointsToPixels(12), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
     m_search.SetFont(&m_SearchFont);
 	m_search.SetPromptFont(m_SearchFont);
+
+	m_GroupTree.SetFont(&m_SearchFont);
 
 	m_groupFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 	m_stGroup.SetFont(&m_groupFont);	
@@ -2900,6 +2910,15 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::REMOVE_STICKY:
 		ret = OnRemoveStickySetting();
 		break;
+	case ActionEnums::GLOBAl_HOTKEYS:
+		ret = OnGlobalHotkyes();
+		break;
+	case ActionEnums::DELETE_CLIP_DATA:
+		ret = OnDeleteClipData();
+		break;
+	case ActionEnums::IMPORT_CLIP:
+		ret = OnImportClip();
+		break;
 	}
 
 	return ret;
@@ -4195,6 +4214,50 @@ bool CQPasteWnd::OnRemoveStickySetting()
 			m_lstHeader.RefreshVisibleRows();
 			m_lstHeader.RedrawWindow();
 		}
+	}
+
+	return true;
+}
+
+bool CQPasteWnd::OnNewClip()
+{
+	CWnd *pWnd = AfxGetMainWnd();
+	if (pWnd != NULL)
+	{
+		pWnd->SendMessage(WM_COMMAND, ID_FIRST_NEWCLIP, 0);
+	}
+
+	return true;
+}
+
+bool CQPasteWnd::OnImportClip()
+{
+	CWnd *pWnd = AfxGetMainWnd();
+	if (pWnd != NULL)
+	{
+		pWnd->SendMessage(WM_COMMAND, ID_FIRST_IMPORT, 0);
+	}
+
+	return true;
+}
+
+bool CQPasteWnd::OnDeleteClipData()
+{
+	CWnd *pWnd = AfxGetMainWnd();
+	if (pWnd != NULL)
+	{
+		pWnd->SendMessage(WM_COMMAND, ID_FIRST_DELETECLIPDATA, 0);
+	}
+
+	return true;
+}
+
+bool CQPasteWnd::OnGlobalHotkyes()
+{
+	CWnd *pWnd = AfxGetMainWnd();
+	if (pWnd != NULL)
+	{
+		pWnd->SendMessage(WM_COMMAND, ID_FIRST_GLOBALHOTKEYS, 0);
 	}
 
 	return true;
@@ -5893,3 +5956,72 @@ void CQPasteWnd::OnUpdateSpecialpastePaste32927(CCmdUI *pCmdUI)
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_ADD_CURRENT_TIME);
 }
+
+
+void CQPasteWnd::OnMenuGlobalhotkeys32933()
+{
+	DoAction(ActionEnums::GLOBAl_HOTKEYS);
+}
+
+void CQPasteWnd::OnUpdateMenuGlobalhotkeys32933(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::GLOBAl_HOTKEYS);
+}
+
+
+void CQPasteWnd::OnMenuDeleteclipdata32934()
+{
+	DoAction(ActionEnums::DELETE_CLIP_DATA);
+}
+
+
+
+void CQPasteWnd::OnUpdateMenuDeleteclipdata32934(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::DELETE_CLIP_DATA);
+}
+
+
+
+void CQPasteWnd::OnMenuImportclip32935()
+{
+	DoAction(ActionEnums::IMPORT_CLIP);
+}
+
+void CQPasteWnd::OnUpdateMenuImportclip32935(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::IMPORT_CLIP);
+}
+
+void CQPasteWnd::OnMenuNewclip32937()
+{
+	DoAction(ActionEnums::NEWCLIP);
+}
+
+void CQPasteWnd::OnUpdateMenuNewclip32937(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::NEWCLIP);
+}
+
+
+

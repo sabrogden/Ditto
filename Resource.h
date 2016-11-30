@@ -647,6 +647,15 @@
 #define ID_FIRST_HIDEDESCRIPTIONWINDOWONM 32926
 #define ID_SPECIALPASTE_PASTE32927      32927
 #define ID_FIRST_WRAPTEXT               32928
+#define ID_MENU_NEWCLIP32929            32929
+#define ID_MENU_IMPORTCLIP              32930
+#define ID_MENU_GLOBALHOTKEYS           32931
+#define ID_MENU_DELETECLIPDATA          32932
+#define ID_MENU_GLOBALHOTKEYS32933      32933
+#define ID_MENU_DELETECLIPDATA32934     32934
+#define ID_MENU_IMPORTCLIP32935         32935
+#define ID_MENU_DELETECLIPDATA32936     32936
+#define ID_MENU_NEWCLIP32937            32937
 
 // Next default values for new objects
 // 
@@ -654,7 +663,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        318
-#define _APS_NEXT_COMMAND_VALUE         32929
+#define _APS_NEXT_COMMAND_VALUE         32938
 #define _APS_NEXT_CONTROL_VALUE         2146
 #define _APS_NEXT_SYMED_VALUE           104
 #endif

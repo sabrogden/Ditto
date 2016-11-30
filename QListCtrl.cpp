@@ -620,6 +620,14 @@ void CQListCtrl::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 BOOL CQListCtrl::OnEraseBkgnd(CDC* pDC) 
 {
 
+	CRect rect;
+	GetClientRect(&rect);
+	CBrush myBrush(g_Opt.m_Theme.MainWindowBG());    // dialog background color
+	CBrush *pOld = pDC->SelectObject(&myBrush);
+	BOOL bRes = pDC->PatBlt(0, 0, rect.Width(), rect.Height(), PATCOPY);
+	pDC->SelectObject(pOld);    // restore old brush
+	return bRes;                       // CDialog::OnEraseBkgnd(pDC);
+
 	// Simply returning TRUE seems OK since we do custom item
 	//	painting.  However, there is a pixel buffer around the
 	//	border of this control (not within the item rects)
@@ -631,9 +639,9 @@ BOOL CQListCtrl::OnEraseBkgnd(CDC* pDC)
 	// However, for some reason, bulk erasure is very noticeable when
 	//	shift-scrolling the page to select a block of items, so
 	//	I made a special case for that:
-	if(GetSelectedCount() >= 2)
-		return TRUE;
-	return CListCtrl::OnEraseBkgnd(pDC);
+	//if(GetSelectedCount() >= 2)
+	//	return TRUE;
+	//return CListCtrl::OnEraseBkgnd(pDC);
 }
 
 BOOL CQListCtrl::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )

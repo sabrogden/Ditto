@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="Ascii"?>
-<Ditto_Theme_File Version = "210108" Author = "Onno Giesmann" Notes = " http://www.onnog.kilu.de ">
+<Ditto_Theme_File Version = "1" Author = "Onno Giesmann" Notes = " http://www.onnog.kilu.de ">
 	<CaptionLeft>RGB(0, 84, 195)</CaptionLeft> 
 	<CaptionRight>RGB(61, 149, 255)</CaptionRight> 
 	<CaptionLeftTopMost>RGB(0, 100, 0)</CaptionLeftTopMost> Rahmenfarbe beim x 

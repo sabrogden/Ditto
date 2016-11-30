@@ -288,12 +288,17 @@ void CSymbolEdit::OnPaint()
 
 	if(this == GetFocus() || text.GetLength() > 0)
 	{
-		dc.FillSolidRect(rect, RGB(255, 255, 255));
+		dc.FillSolidRect(rect, g_Opt.m_Theme.SearchTextBoxFocusBG());
 
 		oldFont = dc.SelectObject(GetFont());		
+
+		COLORREF oldColor = dc.GetTextColor();
+		dc.SetTextColor(g_Opt.m_Theme.SearchTextBoxFocusText());
 			
 		dc.DrawText(text, textRect, DT_SINGLELINE | DT_INTERNAL | DT_EDITCONTROL);
+
 		dc.SelectObject(oldFont);
+		dc.SetTextColor(oldColor);
 	}
 	else
 	{
