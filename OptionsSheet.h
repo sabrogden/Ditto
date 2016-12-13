@@ -27,6 +27,8 @@ public:
 // Operations
 public:
 
+	BOOL m_themeChanged;
+
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(COptionsSheet)

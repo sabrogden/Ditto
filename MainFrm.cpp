@@ -1137,6 +1137,7 @@ LRESULT CMainFrame::OnShowOptions(WPARAM wParam, LPARAM lParam)
 
 LRESULT CMainFrame::OnOptionsClosed(WPARAM wParam, LPARAM lParam)
 {
+	BOOL themeChanged = (BOOL)wParam;
 	m_trayIcon.MinimiseToTray(this);
 	CAlphaBlend tran;
 	tran.SetTransparent(m_hWnd, 255, 0);
@@ -1144,13 +1145,21 @@ LRESULT CMainFrame::OnOptionsClosed(WPARAM wParam, LPARAM lParam)
 	delete m_pOptions;
 	m_pOptions = NULL;
 
-	if(m_quickPaste.m_pwndPaste != NULL)
+	if (themeChanged)
 	{
-		m_quickPaste.m_pwndPaste->PostMessage(NM_POST_OPTIONS_WINDOW);
+		m_quickPaste.CloseQPasteWnd();
+	}
+	else
+	{
+		if (m_quickPaste.m_pwndPaste != NULL)
+		{
+			m_quickPaste.m_pwndPaste->PostMessage(NM_POST_OPTIONS_WINDOW);
+		}
 	}
 
 	m_trayIcon.SetMenu(NULL, IDR_MENU);
 	theApp.m_Language.UpdateTrayIconRightClickMenu(&m_trayIcon.GetMenu());
+	
 
 	return 0;
 }

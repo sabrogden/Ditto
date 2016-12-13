@@ -90,4 +90,5 @@ public:
 	afx_msg void OnBnClickedRadioMouse1();
 	afx_msg void OnBnClickedRadioKeyboard2();
 	afx_msg void OnBnClickedRadioMouse2();
+	afx_msg void OnBnClickedCheckEnableSecondPress();
 };

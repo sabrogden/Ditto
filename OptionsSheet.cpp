@@ -30,6 +30,7 @@ IMPLEMENT_DYNAMIC(COptionsSheet, CPropertySheet)
 COptionsSheet::COptionsSheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT iSelectPage)
 	:CPropertySheet(pszCaption, pParentWnd, iSelectPage)
 {
+	m_themeChanged = FALSE;
 	m_pKeyBoardOptions = NULL;
 	m_pGeneralOptions = NULL;
 	m_pQuickPasteOptions = NULL;
@@ -129,5 +130,5 @@ BOOL COptionsSheet::OnInitDialog()
 void COptionsSheet::OnNcDestroy()
 {
 	CPropertySheet::OnNcDestroy();
-	::PostMessage(m_hWndParent, WM_OPTIONS_CLOSED, 0, 0);
+	::PostMessage(m_hWndParent, WM_OPTIONS_CLOSED, m_themeChanged, 0);
 }

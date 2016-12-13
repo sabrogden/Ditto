@@ -169,18 +169,28 @@ BOOL COptionsQuickPaste::OnApply()
 		CGetSetOptions::SetFont(m_LogFont);
 	}
 
+	CString currentTheme = g_Opt.GetTheme();
+
 	CString csTheme;
 	if(m_cbTheme.GetCurSel() >= 0)
 	{
 		m_cbTheme.GetLBText(m_cbTheme.GetCurSel(), csTheme);
-		if(csTheme == DEFAULT_THEME)
+		if (csTheme == DEFAULT_THEME)
+		{
 			g_Opt.SetTheme("");
+			csTheme = _T("");
+		}
 		else
 			g_Opt.SetTheme(csTheme);
 	}
 	else
 	{
 		g_Opt.SetTheme("");
+	}
+
+	if (currentTheme != csTheme)
+	{
+		m_pParent->m_themeChanged = TRUE;
 	}
 
 	CString diffPath;

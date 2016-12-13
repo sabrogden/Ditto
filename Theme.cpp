@@ -53,10 +53,9 @@ void CTheme::LoadDefaults()
 
 bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)
 {
-	LoadDefaults();
-
 	if (csTheme.IsEmpty() || csTheme == _T("Ditto"))
 	{
+		LoadDefaults();
 		return false;
 	}
 
@@ -74,6 +73,8 @@ bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)
 			return true;
 		}
 	}
+
+	LoadDefaults();
 
 	m_LastWriteTime = LastWrite;
 	m_lastTheme = csTheme;
