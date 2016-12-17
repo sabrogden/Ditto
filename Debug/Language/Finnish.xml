@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ditto_Language_File Version = "1" Author = "Sami Kuusisto" Notes = "www.6sto.com" LanguageCode = "fin">
+	<Ditto_Right_Click_Menu>
+		<Item English_Text = "Groups" ID = "-1">Ryhmät</Item>
+		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Uusi ryhmä Ctrl-F7</Item>
+		<Item English_Text = "New Group Selection	F7" ID = "32812">Uusi ryhmävalinta F7</Item>
+		<Item English_Text = "Move to Group" ID = "32840">Siirrä ryhmään</Item>
+		<Item English_Text = "Quick Options" ID = "-1">Pika-asetukset</Item>
+		<Item English_Text = "Lines Per Row" ID = "-1">Leikkeiden rivimäärä</Item>
+		<Item English_Text = "1" ID = "32807">1</Item>
+		<Item English_Text = "2" ID = "32786">2</Item>
+		<Item English_Text = "3" ID = "32787">3</Item>
+		<Item English_Text = "4" ID = "32788">4</Item>
+		<Item English_Text = "5" ID = "32789">5</Item>
+		<Item English_Text = "Transparency" ID = "-1">Läpinäkyvyys</Item>
+		<Item English_Text = "None" ID = "32800">Ei käytössä</Item>
+		<Item English_Text = "5 " ID = "32808">5</Item>
+		<Item English_Text = "10 " ID = "32792">10</Item>
+		<Item English_Text = "15 " ID = "32794">15</Item>
+		<Item English_Text = "20 " ID = "32796">20</Item>
+		<Item English_Text = "25 " ID = "32798">25</Item>
+		<Item English_Text = "30 " ID = "32799">30</Item>
+		<Item English_Text = "40 " ID = "32790">40</Item>
+		<Item English_Text = "Positioning" ID = "-1">Asemointi</Item>
+		<Item English_Text = "At Caret" ID = "32802">Merkin vieressä</Item>
+		<Item English_Text = "At Cursor" ID = "32803">Kursorin vieressä</Item>
+		<Item English_Text = "At Previous Position" ID = "32804">Edellisessä sijainnissa</Item>
+		<Item English_Text = "First Ten Hot Keys" ID = "-1">Ensimmäiset 10 pikanäppäintä</Item>
+		<Item English_Text = "Use Ctrl - Num" ID = "32777">Käytä Ctrl - Num</Item>
+		<Item English_Text = "Show Hot Key Text" ID = "32778">Näytä pikanäppäinteksti</Item>
+		<Item English_Text = "View Caption Bar On" ID = "-1">Näytä otsikkopalkki</Item>
+		<Item English_Text = "Top" ID = "32783">Ylhäällä</Item>
+		<Item English_Text = "Right" ID = "32780">Oikealla</Item>
+		<Item English_Text = "Bottom" ID = "32781">Alhaalla</Item>
+		<Item English_Text = "Left" ID = "32782">Vasemmalla</Item>
+		<Item English_Text = "Order" ID = "-1">Järjestys</Item>
+		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">Nouseva (viimeisin ylimpänä)</Item>
+		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">Laskeva (viimeisin alimpana)</Item>
+		<Item English_Text = "Double Clicking on Caption" ID = "-1">Otsikon kaksoisnapsautus</Item>
+		<Item English_Text = "Toggles Always on Top" ID = "32814">Aina päällimmäisenä</Item>
+		<Item English_Text = "Rolls-up Window" ID = "32815">Vieritä ikkuna ylös</Item>
+		<Item English_Text = "Toggles Always Show Description" ID = "32816">Näytä kuvaus aina</Item>
+		<Item English_Text = "Always on Top	Ctrl-Space" ID = "32784">Aina päällimmäisenä Ctrl-välilyönti</Item>
+		<Item English_Text = "Auto Roll-up" ID = "32791">Vieritä ikkuna automaattisesti ylös</Item>
+		<Item English_Text = "Always Show Description" ID = "32813">Näytä kuvaus aina</Item>
+		<Item English_Text = "Prompt For New Group Names" ID = "32817">Kysy uuden ryhmän nimeä</Item>
+		<Item English_Text = "Select Font" ID = "32844">Valitse fontti</Item>
+		<Item English_Text = "Show Thumbnails" ID = "32845">Näytä pikakuvakkeet</Item>
+		<Item English_Text = "Draw RTF Text" ID = "32846">Piirrä RTF-teksti</Item>
+		<Item English_Text = "Paste Clip after selection" ID = "32847">Liitä leike valinnan välkeen</Item>
+		<Item English_Text = "Find As You Type" ID = "32848">Etsi kirjoituksen edetessä</Item>
+		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Näytä koko ikkuna</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Näytä pääluettelon ryhmissä olevat leikkeet</Item>
+		<Item English_Text = "Send To" ID = "-1">Lähetä kohteeseen</Item>
+		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824"> - sama tietokone</Item>
+		<Item English_Text = "View Full Description	F3" ID = "32793">Näytä koko kuvaus F3</Item>
+		<Item English_Text = "View Groups	Ctrl-G" ID = "32819">Näytä ryhmät Ctrl-G</Item>
+		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">Liitä vain teksti Shift-Enter</Item>
+		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">Liitä muotoiltu teksti pelkkänä tekstinä</Item>
+		<Item English_Text = "Delete Entry	Del" ID = "32801">Poista kohde Del</Item>
+		<Item English_Text = "Properties	Alt-Enter" ID = "32776">Ominaisuudet Alt-Enter</Item>
+		<Item English_Text = "Quick Properties" ID = "-1">Pikaominaisuudet</Item>
+		<Item English_Text = "Never Auto Delete" ID = "32820">Älä koskaan poista automaattisesti</Item>
+		<Item English_Text = "Auto Delete" ID = "32821">Poista automaattisesti</Item>
+		<Item English_Text = "Remove Hot Key" ID = "32822">Poista pikanäppäin</Item>
+		<Item English_Text = "Options..." ID = "32805">Asetukset...</Item>
+		<Item English_Text = "Help" ID = "32842">Apua</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "32775">Katkaise yhteys leikepöytään</Item>
+		<Item English_Text = "Exit Program" ID = "32806">Sulje sovellus</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt to Delete Clip" ID = "32852">Kysy ennen leikkeen poistoa</Item>	
+		<Item English_Text = "Import" ID = "32855">Tuo leikkeet</Item>
+		<Item English_Text = "Export" ID = "32853">Vie leikkeet</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">Poista pikaliittäminen</Item>	
+		<Item English_Text = "Edit Clip" ID = "32860">Muokka leikettä</Item>
+		<Item English_Text = "New Clip" ID = "32867">Uusi leike</Item>	
+		
+		//Added 1/10/15
+		<Item English_Text = "Compare" ID = "-1">Vertaa</Item>	
+		<Item English_Text = "Select Left Text" ID = "32893">Valitse vasen teksti</Item>	
+		<Item English_Text = "Select Right Text And Compare Against Left" ID = "32894">Valitse oikea teksti ja vertaa sitä vasempaan</Item>	
+		<Item English_Text = "Compare" ID = "32895">Vertaa</Item>
+		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "32881">Liittäminen laajennetuilla käyttöoikeuksilla</Item>
+		<Item English_Text = "Show In Taskbar" ID = "32885">Näytä tehtäväpalkissa</Item>
+		<Item English_Text = "Sticky Clips" ID = "-1">Kiinnitetyt leikkeet</Item>	
+		<Item English_Text = "Make Top Sticky Clip" ID = "32878">Kiinnitä ylin leike</Item>	
+		<Item English_Text = "Make Last Sticky Clip" ID = "32879">Kiinnitä viimeinen leike</Item>	
+		<Item English_Text = "Remove Sticky Setting" ID = "32880">Poista leikkeiden kiinnitys</Item>
+		<Item English_Text = "Import/Export" ID = "-1">Tuo/Vie</Item>	
+		<Item English_Text = "View as QRCode" ID = "32887">Näytä QR-koodina</Item>	
+		<Item English_Text = "Export Clip(s) to Text File" ID = "32889">Vie leikkeet tekstitiedostoon</Item>	
+		
+	</Ditto_Right_Click_Menu>
+	<Ditto_Clip_Properties>
+		<Item English_Text = "Hot Key" ID = "2039">Pikanäppäin</Item>
+		<Item English_Text = "Date" ID = "2040">Päivämäärä</Item>
+		<Item English_Text = "&Never Auto Delete" ID = "1025">Älä koskaa&n poista automaattisesti</Item>
+		<Item English_Text = "Move To Group" ID = "2041">Siirrä ryhmään</Item>
+		<Item English_Text = "Item Title" ID = "2042">Kohteen otsikko</Item>
+		<Item English_Text = "Copy Formats" ID = "2029">Kopioi muotoilu</Item>
+		<Item English_Text = "Delete" ID = "1021">Poista</Item>
+		<Item English_Text = "OK" ID = "1">OK</Item>
+		<Item English_Text = "Cancel" ID = "2">Peruuta</Item>
+		<Item English_Text = "Copy Properties" ID = "-1">Kopioi ominaisuudet</Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Hotkey available globally" ID = "1026">Pikanäppäin yleiskäytössä</Item>
+		<Item English_Text = "Last Used" ID = "2043">Viimeksi käytetty</Item>
+		<Item English_Text = "Quick Paste Text" ID = "2125">Tekstin pikaliittäminen</Item>
+				
+	</Ditto_Clip_Properties>
+	<Ditto_Options_General>
+		<Item English_Text = "Start Ditto on System Startup" ID = "2004">Suorita Ditto käynnistyksessä</Item>
+		<Item English_Text = "Display Icon in System Tray" ID = "2003">Näytä kuvake järjestelmäpalkissa</Item>
+		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Tallennettujen leikkeiden maksimimäärä</Item>
+		<Item English_Text = "Paste Entries Expire after" ID = "2009">Poista leikkeet, kun aikaa kulunut</Item>
+		<Item English_Text = "Days" ID = "2043">Päivää</Item>
+		<Item English_Text = "Compact and Repair" ID = "1028">Pakkaa ja korjaa</Item>
+		<Item English_Text = "Automatically check for updates online" ID = "1029">Tarkista päivitykset automaattisesti verkosta</Item>
+		<Item English_Text = "Check Now" ID = "1030">Tarkista nyt</Item>
+		<Item English_Text = "Allow Duplicates" ID = "1037">Salli duplikaatit</Item>
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">Päivitä leikkeiden järjestys liitettäessä</Item>
+		<Item English_Text = "Save Multi-Pastes" ID = "1039">Tallenna multi-liittämiset</Item>
+		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Piilota näkyvissä oleva Ditto pikanäppäimellä</Item>
+		<Item English_Text = "Amount of text to save for description" ID = "2044">Kuvaukseksi talletettavan tekstin merkkimäärä</Item>
+		<Item English_Text = "On copy play the sound" ID = "2045">Ääni kopioitaessa</Item>
+		<Item English_Text = "Play" ID = "2034">Toista</Item>
+		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">Liitä leike aktiiviseen ikkunaan valinnan jälkeen</Item>
+		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">Leikkeen makimikoko tavuina</Item>
+		<Item English_Text = "(Leave blank for no limit)" ID = "2047">(Tyhjä = ei rajoitusta)</Item>
+		<Item English_Text = "Set Database Path" ID = "1034">Aseta tietokannan polku</Item>
+		<Item English_Text = "Language" ID = "2069">Kieli</Item>
+		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">Ohita X millisekunnin kuluessa edellisestä kopioinnista otetut kopiot (1000 ms = 1 s)</Item>
+		<Item English_Text = "About Language" ID = "2073">Tietoa kielestä</Item>
+		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Varmista, että Ditto on aina yhteydessä leikepöytään</Item>
+		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Yleinen</Item>
+		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090">Multi-liittämisen erotin ([LF] = rivivaihto)</Item>
+		
+		//New item added 3/1/11
+		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098">Hyväksytyt kopiointisovellukset (erota puolipisteellä (;))</Item>
+		<Item English_Text = "Include" ID = "2095">Sisällytä</Item>
+		<Item English_Text = "Exclude" ID = "2096">Sulje pois</Item>
+	</Ditto_Options_General>
+	<Ditto_Options_Supported_Types>
+		<Item English_Text = "&Add" ID = "1015">&Lisää</Item>
+		<Item English_Text = "&Delete" ID = "1016">&Poista</Item>
+		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">Tuetut tyypit</Item>
+	</Ditto_Options_Supported_Types>
+	<Ditto_Options_Shortcuts>
+		<Item English_Text = "Activate Ditto" ID = "2048">Aktivoi Ditto</Item>
+		<Item English_Text = "Win" ID = "2035">Win</Item>
+		<Item English_Text = "Named Copy" ID = "2049">Nimetty kopio</Item>
+		<Item English_Text = "Win" ID = "2036">Win</Item>
+		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">Yleiset pikanäppäimet 10 viimeisimmälle leikkeelle</Item>
+		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Lähetä leike (Muuten kohde vain ladataan leikepöydälle)</Item>
+		<Item English_Text = "Position 1" ID = "2052">Sijainti 1</Item>
+		<Item English_Text = "Position 2" ID = "2053">Sijainti 2</Item>
+		<Item English_Text = "Position 3" ID = "2054">Sijainti 3</Item>
+		<Item English_Text = "Position 4" ID = "2055">Sijainti 4</Item>
+		<Item English_Text = "Position 5" ID = "2056">Sijainti 5</Item>
+		<Item English_Text = "Position 6" ID = "2057">Sijainti 6</Item>
+		<Item English_Text = "Position 7" ID = "2058">Sijainti 7</Item>
+		<Item English_Text = "Position 8" ID = "2059">Sijainti 8</Item>
+		<Item English_Text = "Position 9" ID = "2060">Sijainti 9</Item>
+		<Item English_Text = "Position 10" ID = "2061">Sijainti 10</Item>
+		<Item English_Text = "Win" ID = "2042">Win</Item>
+		<Item English_Text = "Win" ID = "2043">Win</Item>
+		<Item English_Text = "Win" ID = "2044">Win</Item>
+		<Item English_Text = "Win" ID = "2045">Win</Item>
+		<Item English_Text = "Win" ID = "2046">Win</Item>
+		<Item English_Text = "Win" ID = "2037">Win</Item>
+		<Item English_Text = "Win" ID = "2038">Win</Item>
+		<Item English_Text = "Win" ID = "2039">Win</Item>
+		<Item English_Text = "Win" ID = "2040">Win</Item>
+		<Item English_Text = "Win" ID = "2041">Win</Item>
+		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Valitse 'Win' ottaaksesi Windows-näppäimen mukaan pikanäppäimeen.</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">Näppäimistöoikopolut</Item>
+
+		//New item added in 3.15.1 8/18/07
+		<Item English_Text = "Send custom strokes Per Application" ID = "2091">Lähetä muokatut painallukset sovellukselle</Item>
+
+		//Added 1/10/15
+		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043">Siirrä leikkeet listan kärkeen liitettäessä</Item>
+	
+	</Ditto_Options_Shortcuts>
+	<Ditto_Options_Quick_Paste>
+		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">Historia alkaa luettelon yläosasta (vs. alaosasta)</Item>
+		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">Käytä Ctrl-numero ensimmäiselle 10 kopiointipikanäppäimelle</Item>
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">Näytä teksti ensimmäiselle 10 kopiointipikanäppäimelle</Item>
+		<Item English_Text = "Show leading whitespace" ID = "2021">Näytä edeltävä välilyönti</Item>
+		<Item English_Text = "Text Lines per Row" ID = "2062">Tekstirivien määrä leikkeissä</Item>
+		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">Ota käyttöön pikaliittämisen läpinäkyvyys</Item>
+		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">Näytä pikakuvakkeet (CF_DIB -tyypeille) (Voi lisätä muistinkäyttöä ja näyttönopeutta)</Item>
+		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">Piirrä RTF-teksti luettelossa (RTF-tyypeille) (Voi lisätä muistinkäyttöä ja näyttönopeutta)</Item>
+		<Item English_Text = "Find As You Type" ID = "2036">Etsi kirjoituksen edetessä</Item>
+		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">Näytä koko ikkuna</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">Näytä pääluettelon ryhmissä olevat leikkeet</Item>
+		<Item English_Text = "Font" ID = "1040">Fontti</Item>
+		<Item English_Text = "Default Font" ID = "2031">Oletusfontti</Item>
+		<Item English_Text = "Popup Positioning" ID = "2063">Popupin sijainti</Item>
+		<Item English_Text = "At Caret" ID = "2015">Merkin vieressä</Item>
+		<Item English_Text = "At Cursor" ID = "2016">Kursorin vieressä</Item>
+		<Item English_Text = "At Previous Position" ID = "2017">Edellisessä sijainnissa</Item>
+		<Item English_Text = "List Item Prefix Legend" ID = "2064">Luettelokohteiden etuliitteiden selitykset</Item>
+		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">* = Älä poista automaattisesti\n s = pikanäppäin olemassa\n G = Kohde on ryhmä\n ! = Kohde kuuluu ryhmään</Item>
+		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Pikaliittäminen</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Vahvista kohteiden poistot</Item>
+	
+		//New strings added in 3.15.2 10-6-07
+		<Item English_Text = "Theme" ID = "2092">Teema</Item>
+		<Item English_Text = "About Theme" ID = "2094">Tietoa teemasta</Item>
+
+		//Added 1/10/15
+		<Item English_Text = "Always Show Scroll Bar" ID = "2040">Näytä vierityspalkki aina</Item>
+		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "2041">Liittäminen laajennetuilla käyttöoikeuksilla</Item>
+		<Item English_Text = "Show In Taskbar" ID = "2042">Näytä tehtäväpalkissa</Item>
+		<Item English_Text = "Diff Application Path" ID = "2122">Muu sovelluspolku</Item>
+		
+	</Ditto_Options_Quick_Paste>	
+	<Ditto_Options_Friends>
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Jos leike lähetetään IP-osoitteesta tai tietokoneesta, jonka nimi on tässä luettelossa, leike sijoitetaan leikepöydälle. Muussa tapauksessa se talletetaan myöhempää käyttöä varten. </Item>
+		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP:t/tietokoneiden nimet puolipisteillä (;) eroteltuina</Item>
+		<Item English_Text = "Disable Recieving Clips" ID = "2026">Poista leikkeiden vastaanotto käytöstä</Item>
+		<Item English_Text = "Network Password" ID = "2054">Verkon salasana</Item>
+		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">Jos leike lähetetään tietokoneesta, johon ei omilla verkkotunnuksillasi ole pääsyä, syötä tarvitavat salasanat tähän puolipisteellä (;) eroteltuina</Item>
+		<Item English_Text = "Receive Passwords" ID = "2056">Vastaanoton salasanat</Item>
+		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Jos 'Lähetä kaikki kopiot' on valittuna, lähetetään kaikki kopiot tältä tietokoneelta toiselle tietokoneelle. Jos valitaa ei ole tehty, kopiot jäävät valikkoon toiselle tietokoneelle lähetettäväksi</Item>
+		<Item English_Text = "Log Send Receive Commands" ID = "1042">Kirjaa 'Lähetä ja vastaanota -komennot' lokiin</Item>
+		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Ystävät</Item>
+
+		//Added in 9-11-09
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">Lähetä kaikki kopiot</Item>
+        	<Item English_Text = "IP/Name" ID = "IP_Name">IP/Nimi</Item>
+        	<Item English_Text = "Descriptions" ID = "Descriptions">Kuvaukset</Item>
+	</Ditto_Options_Friends>
+	<Ditto_Options_Friends_Detail>
+		<Item English_Text = "Send All Copies to this friend" ID = "1015">Lähetä kaikki kopiot tälle ystävälle</Item>
+		<Item English_Text = "IP/Name" ID = "2052">IP/Nimi</Item>
+		<Item English_Text = "Description" ID = "2053">Kuvaus</Item>
+		<Item English_Text = "Friend Details" ID = "-1">Tietoja ystävästä</Item>
+	</Ditto_Options_Friends_Detail>
+	<Ditto_Options_Stats>
+		<Item English_Text = "Odometer" ID = "2052">Matkamittari</Item>
+		<Item English_Text = "Trip Odometer" ID = "2053">Osamatkamittari</Item>
+		<Item English_Text = "Copies" ID = "2054">Leikkeet</Item>
+		<Item English_Text = "Pastes" ID = "2055">Liittämiset</Item>
+		<Item English_Text = "Copies" ID = "2056">Leikkeet</Item>
+		<Item English_Text = "Pastes" ID = "2057">Liittämiset</Item>
+		<Item English_Text = "Reset" ID = "1006">Nollaa</Item>
+		<Item English_Text = "Saved Copies" ID = "2058">Tallennetut leikkeet</Item>
+		<Item English_Text = "Saved Copy Data" ID = "2059">Tallennetut leiketiedot</Item>
+		<Item English_Text = "Remove All" ID = "1013">Poista kaikki</Item>
+		<Item English_Text = "Last Started" ID = "2060">Viimeksi aloitettu</Item>
+		<Item English_Text = "Database Size" ID = "2061">Tietokannan koko</Item>
+		<Item English_Text = "Clips Sent" ID = "2066">Lähetetyt leikkeet</Item>
+		<Item English_Text = "Clips received" ID = "2067">Vastaanotetut leikkeet</Item>
+		<Item English_Text = "Since Last Start" ID = "2068">Edellisen käynnistyksen jälkeen</Item>
+		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true">Tilastot</Item>
+	</Ditto_Options_Stats>
+	<Ditto_Options_Supported_Types_Add>
+		<Item English_Text = "Main Types" ID = "2052">Päätyypit</Item>
+		<Item English_Text = "Custom Type" ID = "2053">Muokattu tyyppi</Item>
+		<Item English_Text = "Add" ID = "1020">Lisää</Item>
+		<Item English_Text = "Currently on the Clipboard" ID = "2054">Nyt leikepöydällä</Item>
+		<Item English_Text = "Add" ID = "1019">Lisää</Item>
+		<Item English_Text = "Add" ID = "1021">Lisää</Item>
+		<Item English_Text = "Cancel" ID = "2">Peruuta</Item>
+		<Item English_Text = "Add Supported Type" ID = "-1">Lisää tuettu tyyppi</Item>
+	</Ditto_Options_Supported_Types_Add>
+	<Ditto_Move_To_Groups>
+		<Item English_Text = "New Group" ID = "1040">Uusi ryhmä</Item>
+		<Item English_Text = "OK" ID = "1">OK</Item>
+		<Item English_Text = "Cancel" ID = "2">Peruuta</Item>
+		<Item English_Text = "Move to Group" ID = "-1">Siirrä ryhmään</Item>
+	</Ditto_Move_To_Groups>
+	<Ditto_String_Table>
+		<Item English_Text = "General" ID = "GeneralTitle">Yleinen</Item>
+		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">Tuetut tyypit</Item>
+		<Item English_Text = "Stats" ID = "StatsTitle">Tilastot</Item>
+		<Item English_Text = "Friends" ID = "FriendsTitle">Ystävät</Item>
+		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">Pikaliittäminen</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">Näppäimistöoikopolut</Item>
+		<Item English_Text = "About" ID = "AboutTitle">Tietoa</Item>
+		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">Virhe tietokannan avaamisessa</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">DAO/Jet -tietokantamoottorin alustus epäonnistui. \nValitse KYLLÄ ladataksesi DAO:n osoitteesta http://ditto-cp.sourceforge.net/dao_setup.exe\n\nKäynnistä Ditto uudelleen DAO-asennuksen jälkeen.</Item>
+		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format">Tuntematon tietokantamuoto</Item>
+		<Item English_Text = "the file will be renamed" ID = "File_Renamed">tiedosto nimetään uudelleen</Item>
+		<Item English_Text = "and a new database will be created" ID = "New_Database">ja uusi tietokanta luodaan</Item>
+		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">Ditto-päivityksiä saatavissa. \nSiirry osoitteeseen ditto-cp.sourceforge.net saadaksesi lisätietoja\n\nAsennettu versio</Item>
+		<Item English_Text = "Update Version" ID = "Update_Version">Päivitä versio</Item>
+		<Item English_Text = "Download updated version?" ID = "Download_Update">Lataa päivitetty versio?</Item>		
+		<Item English_Text = "No updates available" ID = "No_Updates">Ei päivityksiä saatavissa</Item>			
+		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Tämä poistaa kaikki leikekohteet!\n\nJatka?</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Katkaise yhteys leikepöytään</Item>
+		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Yhdistä leikepöytään</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Install">DAO/Jet -tietokantamoottorin alustus epäonnistui. \nDAO tullaan asentamaan nyt.\n\nKäynnistä Ditto uudelleen DAO-asennuksen jälkeen.</Item>
+		<Item English_Text = "NO TARGET" ID = "No_Target">EI KOHDETTA</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Vahvista leikkeiden poistot</Item>
+		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">Poista valitut leikkeet?</Item>
+		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">Virhe viedyn leikkeen tuonnissa</Item>
+		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing">Virhe viedyn leikkeen jäsentämisessä</Item>
+		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good">Leike asetettu leikepöydälle</Item>
+		<Item English_Text = "Successfully imported" ID = "Import_Successfully">Tuotu onnistuneesti</Item>
+		<Item English_Text = "clip" ID = "Clip">leike</Item>
+		<Item English_Text = "clips" ID = "Clips">leikkeet</Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">Päivitä leikkeen kuvaus tallennettaessa?</Item>
+		<Item English_Text = "New Clip" ID = "New_Clip">Uusi leike</Item>
+		<Item English_Text = "Save" ID = "Save">Tallenna</Item>
+		<Item English_Text = "Save All" ID = "Save_All">Tallenna kaikki</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">Sulje nykyinen välilehti</Item>
+		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable">Nykyinen kohde ei ole muokattavissa. Leikkeen on kuuluttava leiketyyppeihin</Item>
+		<Item English_Text = "to be editable" ID = "Editable">, jotta sitä voi muokata</Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">Tallennetaanko muutokset kohteeseen</Item>
+		<Item English_Text = "Error saving clip" ID = "ErrorSaving">Virhe leikkeen tallennuksessa</Item>
+		<Item English_Text = "New" ID = "New">Uusi</Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">Tallenna, sulje ja aseta leikepöydälle</Item>
+		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">Ditto-muokkaus</Item>
+		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title">Ditto - Nimetty liittäminen</Item>
+		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">Virhe tietojen latauksessa</Item>
+		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2">Virhe leikkeen löytymisessä, jossa pikalittämisen teksti on</Item>
+		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">Poikkeus leikkeen löytämisessä</Item>
+		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title">Ditto - Nimetty kopiointi</Item>
+		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">Virhe nimetyn leikkeen tallennuksessa tietokantaan</Item>
+		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">Poikkeus nimetyn leikkeen tallennukseessa</Item>
+		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">Ditto ei vastaanottanut kopiota</Item> 
+		
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Add-Ins" ID = "Add_Ins">Lisäosat</Item> 
+		
+		<Item English_Text = "Copy Buffers" ID = "CopyBuffers">Kopiointipuskurit</Item>
+
+		<Item English_Text = "Search Options" ID = "SearchOptionsTooltip">Hakuasetukset</Item>
+		<Item English_Text = "Groups" ID = "GroupsTooltip">Ryhmät</Item>
+	
+	</Ditto_String_Table>
+	<Ditto_Options_Sheet>
+		<Item English_Text = "OK" ID = "1">OK</Item>
+		<Item English_Text = "Cancel" ID = "2">Peruuta</Item>
+		<Item English_Text = "Apply" ID = "12321">Käytä</Item>
+	</Ditto_Options_Sheet>
+	<Ditto_Tray_Icon_Menu>
+		<Item English_Text = "Show Quick Paste" ID = "32773">Näytä pikaliittäminen</Item>
+		<Item English_Text = "Options" ID = "32771">Asetukset</Item>
+		<Item English_Text = "Help" ID = "32843">Apua</Item>
+		<Item English_Text = "Exit" ID = "32772">Poistu</Item>
+
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Import" ID = "32854">Tuo</Item>
+		<Item English_Text = "New Clip" ID = "32868">Uusi leike</Item>
+		
+		//Added 12/10/11
+		<Item English_Text = "Global Hot Keys" ID = "32872">Yleiset pikanäppäimet</Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Delete Clip Data" ID = "32886">Poista leiketiedot</Item>
+	</Ditto_Tray_Icon_Menu>
+	
+	//Added in 9-11-09
+	<Ditto_Options_CopyBuffers>
+		<Item English_Text = "Copy Buffer 1" ID = "2088">Kopiointipuskuri 1</Item>
+		<Item English_Text = "Copy" ID = "2079">Kopioi</Item>
+		<Item English_Text = "Paste" ID = "2080">Liitä</Item>
+		<Item English_Text = "Cut" ID = "2081">Leikkaa</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042">Ääni kopioitaessa</Item>
+		<Item English_Text = "Win" ID = "2085">Win</Item>
+		<Item English_Text = "Win" ID = "2086">Win</Item>
+		<Item English_Text = "Win" ID = "2087">Win</Item>
+		
+		<Item English_Text = "Copy Buffer 2" ID = "2098">Kopiointipuskuri 2</Item>
+		<Item English_Text = "Copy" ID = "2093">Kopioi</Item>
+		<Item English_Text = "Paste" ID = "2094">Liitä</Item>
+		<Item English_Text = "Cut" ID = "2097">Leikkaa</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043">Ääni kopioitaessa</Item>
+		<Item English_Text = "Win" ID = "2090">Win</Item>
+		<Item English_Text = "Win" ID = "2092">Win</Item>
+		<Item English_Text = "Win" ID = "2096">Win</Item>
+		
+		<Item English_Text = "Copy Buffer 3" ID = "2108">Kopiointipuskuri 3</Item>
+		<Item English_Text = "Copy" ID = "2103">Kopioi</Item>
+		<Item English_Text = "Paste" ID = "2104">Liitä</Item>
+		<Item English_Text = "Cut" ID = "2107">Leikkaa</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044">Ääni kopioitaessa</Item>
+		<Item English_Text = "Win" ID = "2100">Win</Item>
+		<Item English_Text = "Win" ID = "2102">Win</Item>
+		<Item English_Text = "Win" ID = "2106">Win</Item>
+	</Ditto_Options_CopyBuffers>
+	
+	<Ditto_GlobalHotKeys>
+		<Item English_Text = "Global Hot Keys" ID = "-1">Yleiset pikanäppäimet</Item>
+		<Item English_Text = "Close" ID = "2">Sulje</Item>
+		<Item English_Text = "(Clip) " ID = "(Clip)">(Leike)</Item>
+		<Item English_Text = "Error" ID = "Error">Virhe</Item>
+		<Item English_Text = "Yes" ID = "Yes">Kyllä</Item>
+		<Item English_Text = "Description" ID = "Description">Kuvaus</Item>
+		<Item English_Text = "HotKey" ID = "HotKey">Pikänäppäin</Item>
+		<Item English_Text = "Registered" ID = "Registered">Rekisteröity</Item>
+	</Ditto_GlobalHotKeys>
+
+	//Added 1/10/15
+	<Ditto_Groups_Right_Click_Menu>
+		<Item English_Text = "New Sub Group" ID = "32896">Uusi aliryhmä</Item>
+		<Item English_Text = "Delete Group" ID = "32897">Poista ryhmä</Item>
+		<Item English_Text = "Properties" ID = "32898">Ominaisuudet</Item>	
+	</Ditto_Groups_Right_Click_Menu>
+	
+	//Added 1/10/15
+	<Ditto_DeleteClipData>
+		<Item English_Text = "Delete Clip Data" ID = "-1">Poista leiketiedot</Item>
+		<Item English_Text = "Each clip in Ditto is made of multiple clipboard items, all clipboard items in Ditto are listed below." ID = "2126">Jokainen Ditto-leike on tehty useista leikepöydän kohteista, kaikki Dittossa olevat leikepöydän kohteet ovat lueteltu alla.</Item>
+		<Item English_Text = "Search Options" ID = "2120">Hakuasetukset</Item>
+		<Item English_Text = "Title" ID = "1042">Otsikko</Item>
+		<Item English_Text = "Create Date Range" ID = "1043">Luo aikaväli</Item>
+		<Item English_Text = "Format" ID = "1045">Muoto</Item>
+		<Item English_Text = "Last Used Range" ID = "1044">Viimeiksi käytetty aikaväli</Item>
+		<Item English_Text = "Search" ID = "1040">Etsi</Item>
+		<Item English_Text = "Database Size" ID = "2115">Tietokannan koko</Item>
+		<Item English_Text = "Selected Size" ID = "2116">Valittu koko</Item>
+		<Item English_Text = "Selected Count" ID = "2117">Valittu määrä</Item>
+		<Item English_Text = "Delete" ID = "2118">Poista</Item>
+		<Item English_Text = "Cancel" ID = "2">Peruuta</Item>
+		<Item English_Text = "Title" ID = "Title">Otsikko</Item>
+		<Item English_Text = "Created" ID = "Created">Luotu</Item>
+		<Item English_Text = "Last Used" ID = "LastUsed">Viimeksi käytetty</Item>
+		<Item English_Text = "Format" ID = "Format">Muoto</Item>
+		<Item English_Text = "Data Size" ID = "DataSize">Tiedon koko</Item>
+	</Ditto_DeleteClipData>
+		
+</Ditto_Language_File>
