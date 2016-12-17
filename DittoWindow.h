@@ -30,9 +30,11 @@ public:
 	void DoNcLButtonDown(CWnd *pWnd, UINT nHitTest, CPoint point);
 	void DoNcMouseMove(CWnd *pWnd, UINT nHitTest, CPoint point) ;
 	bool DoPreTranslateMessage(MSG* pMsg);
-	void SetCaptionOn(CWnd *pWnd, int nPos, bool bOnstartup);
+	void SetCaptionOn(CWnd *pWnd, int nPos, bool bOnstartup, int captionSize, int captionFontSize);
 	bool SetCaptionColors(COLORREF left, COLORREF right, COLORREF border);
 	void SetCaptionTextColor(COLORREF color);
+
+	void SetTitleTextHeight(CWnd *pWnd);
 
 	long m_lTopBorder;
 	long m_lRightBorder;
@@ -79,4 +81,8 @@ public:
 
 	CString m_customWindowTitle;
 	bool m_useCustomWindowTitle;
+
+	int m_captionBorderWidth;
+
+	int m_titleTextHeight;
 };

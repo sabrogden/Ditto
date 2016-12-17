@@ -85,7 +85,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 	
 	m_DittoWindow.DoCreate(this);
 	m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeft(), g_Opt.m_Theme.CaptionRight(), g_Opt.m_Theme.Border());
-	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true);
+	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
 	m_DittoWindow.m_bDrawMaximize = false;
 	m_DittoWindow.m_bDrawMinimize = false;
 	m_DittoWindow.m_bDrawChevron = false;
@@ -96,7 +96,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
                       ES_AUTOHSCROLL, CRect(10, 10, 100, 200), this, 1);
 
     m_RichEdit.SetReadOnly();
-    m_RichEdit.SetBackgroundColor(FALSE, GetSysColor(COLOR_INFOBK));
+    m_RichEdit.SetBackgroundColor(FALSE, g_Opt.m_Theme.DescriptionWindowBG());
 
 	ApplyWordWrap();
 
@@ -581,7 +581,7 @@ void CToolTipEx::SetRTFText(const char *pRTF)
     m_RichEdit.SetRTF(pRTF);
     m_csRTF = pRTF;
 	m_RichEdit.SetSel(0, 0);
-
+	
 	HighlightSearchText();
 }
 
@@ -597,6 +597,14 @@ void CToolTipEx::SetToolTipText(const CString &csText)
     m_RichEdit.SetFont(&m_Font);
     m_RichEdit.SetText(csText);
 	m_RichEdit.SetSel(0, 0);
+
+	CHARFORMAT cfNew;
+	cfNew.cbSize = sizeof(CHARFORMAT);
+	cfNew.dwMask = CFM_COLOR;
+	cfNew.dwEffects = CFM_COLOR;
+	cfNew.dwEffects &= ~CFE_AUTOCOLOR;
+	cfNew.crTextColor = g_Opt.m_Theme.DescriptionWindowText();
+	m_RichEdit.SetDefaultCharFormat(cfNew);
 
 	HighlightSearchText();
 }
@@ -844,7 +852,7 @@ void CToolTipEx::OnPaint()
 	GetClientRect(rect);
 	
 	CBrush  Brush, *pOldBrush;
-	Brush.CreateSolidBrush(GetSysColor(COLOR_INFOBK));
+	Brush.CreateSolidBrush(g_Opt.m_Theme.DescriptionWindowBG());
 
 	pOldBrush = dc.SelectObject(&Brush);
 

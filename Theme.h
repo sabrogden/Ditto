@@ -40,6 +40,11 @@ public:
 	COLORREF GroupTreeBG() const { return m_groupTreeBG; }
 	COLORREF GroupTreeText() const { return m_groupTreeText; }
 
+	int GetCaptionSize() const { return m_captionSize; }
+	int GetCaptionFontSize() const { return m_captionFontSize; }
+
+	COLORREF DescriptionWindowBG() const { return m_descriptionWindowBG; }
+	COLORREF DescriptionWindowText() const { return m_descriptionWindowText; }
 
 	CString Notes() const { return m_csNotes; }
 	CString Author() const { return m_csAuthor; }
@@ -48,7 +53,10 @@ public:
 	CString LastError() const { return m_csLastError; }
 
 protected:
-	bool LoadElement(TiXmlElement *pParent, CStringA csNode, COLORREF &Color);
+	bool LoadElement(TiXmlElement *pParent, CStringA csNode, COLORREF &Color, int &intValue);
+
+	bool LoadInt(TiXmlElement *pParent, CStringA csNode, int &intValue);
+	bool LoadColor(TiXmlElement *pParent, CStringA csNode, COLORREF &Color);
 
 protected:
 	COLORREF m_CaptionLeft;
@@ -78,6 +86,12 @@ protected:
 
 	COLORREF m_groupTreeBG;
 	COLORREF m_groupTreeText;
+
+	COLORREF m_descriptionWindowBG;
+	COLORREF m_descriptionWindowText;
+
+	int m_captionSize;
+	int m_captionFontSize;
 
 	CString m_csLastError;
 	long m_lFileVersion;

@@ -61,7 +61,7 @@ int CEditFrameWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_DittoWindow.DoCreate(this);
 	m_DittoWindow.m_bDrawChevron = false;
 	m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeft(), g_Opt.m_Theme.CaptionRight(), g_Opt.m_Theme.Border());
-	m_DittoWindow.SetCaptionOn(this, CAPTION_TOP, true);
+	m_DittoWindow.SetCaptionOn(this, CAPTION_TOP, true, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
 
 	m_crIcon.SetRect(-2, -15, 15, 0);
 

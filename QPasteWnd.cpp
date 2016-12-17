@@ -748,8 +748,9 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
     g_Opt.m_Theme.Load(g_Opt.GetTheme(), false, true);
 
     SetCaptionColorActive(g_Opt.m_bShowPersistent, theApp.GetConnectCV());
+	SetCaptionOn(CGetSetOptions::GetCaptionPos(), true, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
 
-    UpdateStatus();
+	UpdateStatus();
 
     m_bHideWnd = true;
 
@@ -1849,25 +1850,25 @@ void CQPasteWnd::OnMenuFirsttenhotkeysShowhotkeytext()
 
 void CQPasteWnd::OnViewcaptionbaronRight()
 {
-    SetCaptionOn(CAPTION_RIGHT);
+    SetCaptionOn(CAPTION_RIGHT, false, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
     CGetSetOptions::SetCaptionPos(CAPTION_RIGHT);
 }
 
 void CQPasteWnd::OnViewcaptionbaronBottom()
 {
-    SetCaptionOn(CAPTION_BOTTOM);
+    SetCaptionOn(CAPTION_BOTTOM, false, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
     CGetSetOptions::SetCaptionPos(CAPTION_BOTTOM);
 }
 
 void CQPasteWnd::OnViewcaptionbaronLeft()
 {
-    SetCaptionOn(CAPTION_LEFT);
+    SetCaptionOn(CAPTION_LEFT, false, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
     CGetSetOptions::SetCaptionPos(CAPTION_LEFT);
 }
 
 void CQPasteWnd::OnViewcaptionbaronTop()
 {
-    SetCaptionOn(CAPTION_TOP);
+    SetCaptionOn(CAPTION_TOP, false, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
     CGetSetOptions::SetCaptionPos(CAPTION_TOP);
 }
 

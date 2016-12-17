@@ -1,37 +1,43 @@
 <Ditto_Theme_File Version="2" Author="Zigboom" Notes="DarkTheme">
-<CaptionLeft>RGB(0,0,0)</CaptionLeft>
-<CaptionRight>RGB(51,51,51)</CaptionRight>
+	<CaptionLeft>RGB(0,0,0)</CaptionLeft>
+	<CaptionRight>RGB(51,51,51)</CaptionRight>
 
-<CaptionLeftTopMost>RGB(0,0,0)</CaptionLeftTopMost>
-<CaptionRightTopMost>RGB(255,255,255)</CaptionRightTopMost>
+	<CaptionLeftTopMost>RGB(0,0,0)</CaptionLeftTopMost>
+	<CaptionRightTopMost>RGB(255,255,255)</CaptionRightTopMost>
 
-<CaptionLeftNotConnected>RGB(0,0,0)</CaptionLeftNotConnected>
-<CaptionRightNotConnected>RGB(255,0,0)</CaptionRightNotConnected>
+	<CaptionLeftNotConnected>RGB(0,0,0)</CaptionLeftNotConnected>
+	<CaptionRightNotConnected>RGB(255,0,0)</CaptionRightNotConnected>
 
-<CaptionTextColor>RGB(127,127,127)</CaptionTextColor>
+	<CaptionTextColor>RGB(127,127,127)</CaptionTextColor>
 
-<ListBoxOddRowsBG>RGB(24,24,24)</ListBoxOddRowsBG>
-<ListBoxEvenRowsBG>RGB(0,0,0)</ListBoxEvenRowsBG>
+	<ListBoxOddRowsBG>RGB(24,24,24)</ListBoxOddRowsBG>
+	<ListBoxEvenRowsBG>RGB(0,0,0)</ListBoxEvenRowsBG>
 
-<ListBoxOddRowsText>RGB(153,153,153)</ListBoxOddRowsText>
-<ListBoxEvenRowsText>RGB(153,153,153)</ListBoxEvenRowsText>
+	<ListBoxOddRowsText>RGB(153,153,153)</ListBoxOddRowsText>
+	<ListBoxEvenRowsText>RGB(153,153,153)</ListBoxEvenRowsText>
 
-<ListBoxSelectedBG>RGB(51,51,51)</ListBoxSelectedBG>
-<ListBoxSelectedNoFocusBG>RGB(0,0,0)</ListBoxSelectedNoFocusBG>
+	<ListBoxSelectedBG>RGB(64,64,64)</ListBoxSelectedBG>
+	<ListBoxSelectedNoFocusBG>RGB(64,64,64)</ListBoxSelectedNoFocusBG>
 
-<ListBoxSelectedText>RGB(238,238,238)</ListBoxSelectedText>
-<ListBoxSelectedNoFocusText>RGB(220,220,220)</ListBoxSelectedNoFocusText>
+	<ListBoxSelectedText>RGB(238,238,238)</ListBoxSelectedText>
+	<ListBoxSelectedNoFocusText>RGB(220,220,220)</ListBoxSelectedNoFocusText>
 
-<MainWindowBG>RGB(0,0,0)</MainWindowBG>
+	<MainWindowBG>RGB(0,0,0)</MainWindowBG>
 
-<SearchTextBoxFocusBG>RGB(24,24,24)</SearchTextBoxFocusBG>
-<SearchTextBoxFocusText>RGB(127,127,127)</SearchTextBoxFocusText>
+	<SearchTextBoxFocusBG>RGB(24,24,24)</SearchTextBoxFocusBG>
+	<SearchTextBoxFocusText>RGB(127,127,127)</SearchTextBoxFocusText>
 
-<Border>RGB(0,0,0)</Border>
-<BorderTopMost>RGB(0,0,0)</BorderTopMost>
-<BorderNotConnected>RGB(0,0,0)</BorderNotConnected>
+	<Border>RGB(0,0,0)</Border>
+	<BorderTopMost>RGB(0,0,0)</BorderTopMost>
+	<BorderNotConnected>RGB(0,0,0)</BorderNotConnected>
 
-<GroupTreeBG>RGB(0,0,0)</GroupTreeBG>
-<GroupTreeText>RGB(153,153,153)</GroupTreeText>
+	<GroupTreeBG>RGB(0,0,0)</GroupTreeBG>
+	<GroupTreeText>RGB(153,153,153)</GroupTreeText>
+	
+	<CaptionSize></CaptionSize>
+	<CaptionFontSize></CaptionFontSize>
+	
+	<DescriptionWindowBG></DescriptionWindowBG>
+	<DescriptionWindowText></DescriptionWindowText>
 
 </Ditto_Theme_File>

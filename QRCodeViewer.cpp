@@ -59,7 +59,7 @@ BOOL QRCodeViewer::CreateEx(CWnd *pParentWnd, unsigned char* bitmapData, int ima
 
 		m_DittoWindow.DoCreate(this);
 		m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeft(), g_Opt.m_Theme.CaptionRight(), g_Opt.m_Theme.Border());
-		m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true);
+		m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
 		m_DittoWindow.m_bDrawMinimize = false;
 		m_DittoWindow.m_bDrawMaximize = true;
 		m_DittoWindow.m_bDrawChevron = false;

@@ -27,7 +27,7 @@ int CDittoPopupWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	}
 
-	CWndEx::SetCaptionOn(CAPTION_TOP);
+	CWndEx::SetCaptionOn(CAPTION_TOP, false, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
 
 	m_font.CreateFont(-theApp.m_metrics.PointsToPixels(12), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("MS Sans Serif"));
 	m_textLabel.Create(_T("test"), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this);

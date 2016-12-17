@@ -86,8 +86,21 @@ void CGdiImageDrawer::Draw(CDC* pScreenDC, CWnd *pWnd, int posX, int posY, bool 
 		posX += one;
 		posY += one;
 	}
+
+	//ImageAttributes ia;
+	//
+
+	//ColorMap blackToRed;
+	//blackToRed.oldColor = Color(255, 110, 114, 122);  // black
+	//blackToRed.newColor = Color(255, 255, 0, 0);// red
+	//ia.SetRemapTable(1, &blackToRed);
+
 	Gdiplus::Graphics graphics(pScreenDC->m_hDC);
 	graphics.DrawImage(*m_pStdImage, posX, posY, width, height);	
+
+	//RectF grect; grect.X = posX, grect.Y = posY; grect.Width = width; grect.Height = height;
+	//graphics.DrawImage(*m_pStdImage, grect, 0, 0, width, height, UnitPixel, &ia);
+
 
 	//If we are hoving over then draw the border
 	//if(mouseHover && mouseDown == false)
