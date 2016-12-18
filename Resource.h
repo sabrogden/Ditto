@@ -500,6 +500,8 @@
 #define IDC_RADIO_PRIMARY_TYPES         2145
 #define IDC_CHECK_ENABLE_SECOND_PRESS   2146
 #define IDC_STATIC_SECOND_PRESS         2147
+#define IDC_STATIC_SHORTCUTS            2148
+#define IDC_STATIC_FIRST_KEYPRESS       2149
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -666,7 +668,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        318
 #define _APS_NEXT_COMMAND_VALUE         32938
-#define _APS_NEXT_CONTROL_VALUE         2148
+#define _APS_NEXT_CONTROL_VALUE         2150
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

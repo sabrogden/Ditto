@@ -316,14 +316,10 @@ DittoSetup*]]></X>
 ".\Ditto\Language\Swedish.xml" "Language\Swedish.xml"
 ".\Ditto\Language\Turkish.xml" "Language\Turkish.xml"
 ".\Ditto\Language\Ukrainian.xml" "Language\Ukrainian.xml"
+".\Ditto\Language\Finnish.xml" "Language\Finnish.xml"
 
-".\Ditto\Themes\Autumn.xml" "Themes\Autumn.xml"
-".\Ditto\Themes\BOCApastel.xml" "Themes\BOCApastel.xml"
-".\Ditto\Themes\DarkerDitto.xml" "Themes\DarkerDitto.xml"
-".\Ditto\Themes\Ditto.xml" "Themes\Ditto.xml"
-".\Ditto\Themes\Nighted.xml" "Themes\Nighted.xml"
-".\Ditto\Themes\OnnoG Blue.xml" "Themes\OnnoG Blue.xml"
-".\Ditto\Themes\OnnoG Green.xml" "Themes\OnnoG Green.xml"]]></Text>
+".\Ditto\Themes\Classic.xml" "Themes\Classic.xml"
+".\Ditto\Themes\DarkerDitto.xml" "Themes\DarkerDitto.xml"]]></Text>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>
 			<name>Write files.ini</name>

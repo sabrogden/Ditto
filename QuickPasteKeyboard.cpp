@@ -95,7 +95,9 @@ BOOL CQuickPasteKeyboard::OnInitDialog()
 	m_mouseType1.SetCurSel(0);
 	m_mouseType2.SetCurSel(0);
 
-	SetWindowText(_T("Quick Paste Shortcuts"));
+	//SetWindowText(_T("Quick Paste Shortcuts"));
+
+	theApp.m_Language.UpdateOptionQuickPasteKeyboard(this);
 
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
@@ -105,8 +107,8 @@ void CQuickPasteKeyboard::InitListCtrlCols()
 {
 	m_list.SetExtendedStyle(LVS_EX_FULLROWSELECT);
 
-	m_list.InsertColumn(0, theApp.m_Language.GetGlobalHotKeyString("QPHotKey", "Hot Key"), LVCFMT_LEFT, 150);
-	m_list.InsertColumn(1, theApp.m_Language.GetGlobalHotKeyString("QPCommand", "Command"), LVCFMT_LEFT, 350);
+	m_list.InsertColumn(0, theApp.m_Language.GetString("QPHotKey", "Hot Key"), LVCFMT_LEFT, 150);
+	m_list.InsertColumn(1, theApp.m_Language.GetString("QPCommand", "Command"), LVCFMT_LEFT, 350);
 }
 
 void CQuickPasteKeyboard::LoadItems()

@@ -6,7 +6,7 @@
 		<Item English_Text = "New Group Selection	F7" ID = "32812"></Item>
 		<Item English_Text = "Move to Group" ID = "32840"></Item>
 		<Item English_Text = "Quick Options" ID = "-1"></Item>
-		<Item English_Text = "Lines Per Clip" ID = "-1"></Item>
+		<Item English_Text = "Lines Per Row" ID = "-1"></Item>
 		<Item English_Text = "1" ID = "32807"></Item>
 		<Item English_Text = "2" ID = "32786"></Item>
 		<Item English_Text = "3" ID = "32787"></Item>
@@ -91,9 +91,44 @@
 		<Item English_Text = "View as QRCode" ID = "32887"></Item>	
 		<Item English_Text = "Export Clip(s) to Text File" ID = "32889"></Item>	
 		
+		//Added 12/17/16
+		<Item English_Text = "Special Paste" ID = "-1"></Item>			
+		<Item English_Text = "UPPER CASE" ID = "32912"></Item>	
+		<Item English_Text = "lower case" ID = "32913"></Item>	
+		<Item English_Text = "Capitalize Case" ID = "32914"></Item>	
+		<Item English_Text = "Sentence case" ID = "32915"></Item>	
+		<Item English_Text = "Remove Line Feeds" ID = "32916"></Item>	
+		<Item English_Text = "Paste + One Line Feed" ID = "32918"></Item>	
+		<Item English_Text = "Paste + Two Line Feeds" ID = "32919"></Item>	
+		<Item English_Text = "Paste + Current Time" ID = "32927"></Item>	
+		<Item English_Text = "Typoglycemia" ID = "32922"></Item>	
+		<Item English_Text = "Filter On" ID = "-1"></Item>			
+		<Item English_Text = "Toggle Last Group Toggle" ID = "32925"></Item>			
+		<Item English_Text = "Clip Order" ID = "-1"></Item>			
+		<Item English_Text = "Move To Top" ID = "32908"></Item>	
+		<Item English_Text = "Move Up" ID = "32906"></Item>	
+		<Item English_Text = "Move Down" ID = "32907"></Item>			
+		<Item English_Text = "Export Clip(s) to Image File" ID = "32902"></Item>	
+		<Item English_Text = "Export to Google Translate" ID = "32900"></Item>	
+		
+		<Item English_Text = "Search Options" ID = "-1"></Item>	
+		<Item English_Text = "Search Description" ID = "32873"></Item>	
+		<Item English_Text = "Search Full Text" ID = "32874"></Item>	
+		<Item English_Text = "Search Quick Paste" ID = "32875"></Item>	
+		<Item English_Text = "Contains Text Search" ID = "32876"></Item>	
+		<Item English_Text = "Regular Expression Search" ID = "32899"></Item>	
+		<Item English_Text = "Wildcard Search" ID = "32903"></Item>	
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "32923"></Item>	
+		<Item English_Text = "Show indicator a clip has been pasted" ID = "32924"></Item>	
+		<Item English_Text = "Global Hot Keys" ID = "32933"></Item>	
+		<Item English_Text = "Delete Clip Data" ID = "32934"></Item>	
+		<Item English_Text = "Import Clip(s)" ID = "32935"></Item>	
+		<Item English_Text = "New Clip" ID = "32937"></Item>	
+		<Item English_Text = "Save Current Clipboard" ID = "32905"></Item>	
+		<Item English_Text = "Import" ID = ""></Item>	
+		
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
-		<Item English_Text = "Hot Key" ID = "2039"></Item>
 		<Item English_Text = "Hot Key" ID = "2039"></Item>
 		<Item English_Text = "Date" ID = "2040"></Item>
 		<Item English_Text = "&Never Auto Delete" ID = "1025"></Item>
@@ -147,6 +182,12 @@
 		<Item English_Text = "&Add" ID = "1015"></Item>
 		<Item English_Text = "&Delete" ID = "1016"></Item>
 		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true"></Item>
+		
+		//New item added 12/17/16
+		<Item English_Text = "Current Clipboard Types" ID = "2128"></Item>
+		<Item English_Text = "Primary Clipboard Types" ID = "2145"></Item>
+		<Item English_Text = "Custom Clipboard Type" ID = "2130"></Item>
+		
 	</Ditto_Options_Supported_Types>
 	<Ditto_Options_Shortcuts>
 		<Item English_Text = "Activate Ditto" ID = "2048"></Item>
@@ -184,6 +225,17 @@
 		//Added 1/10/15
 		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043"></Item>
 		
+		//Added 12/17/16
+		<Item English_Text = "Activate Ditto" ID = "2064"></Item>
+		<Item English_Text = "Activate Ditto" ID = "2066"></Item>
+		
+		<Item English_Text = "Win" ID = "2063"></Item>
+		<Item English_Text = "Win" ID = "2065"></Item>
+		<Item English_Text = "Save Current Clipboard" ID = "2062"></Item>
+		<Item English_Text = "Win" ID = "2047"></Item>
+		
+		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044"></Item>
+		
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Quick_Paste>
 		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042"></Item>
@@ -220,6 +272,10 @@
 		<Item English_Text = "Show In Taskbar" ID = "2042"></Item>
 		<Item English_Text = "Diff Application Path" ID = "2122"></Item>
 		
+		//Added 1/10/15
+		<Item English_Text = "Show indicator a clip has been pasted" ID = "2043"></Item>
+		
+		
 	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>
 		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052"></Item>
@@ -232,10 +288,12 @@
 		<Item English_Text = "Log Send Receive Commands" ID = "1042"></Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true"></Item>
 		
-		//Added in 9-11-09
-		<Item English_Text = "Send All Copies" ID = "Send_All_Copies"></Item>
-        	<Item English_Text = "IP/Name" ID = "IP_Name"></Item>
-        	<Item English_Text = "Descriptions" ID = "Descriptions"></Item>
+			
+		//Added in 12-17-16
+		<Item English_Text = "Request using IP Address" ID = "2127"></Item>
+		<Item English_Text = "Request using Host Name" ID = "2129"></Item>
+		<Item English_Text = "Remote Files" ID = "2128"></Item>
+			
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015"></Item>
@@ -281,7 +339,7 @@
 		<Item English_Text = "General" ID = "GeneralTitle"></Item>
 		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle"></Item>
 		<Item English_Text = "Stats" ID = "StatsTitle"></Item>
-		<Item English_Text = "NetwFriendsork" ID = "FriendsTitle"></Item>
+		<Item English_Text = "Friends" ID = "FriendsTitle"></Item>
 		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle"></Item>
 		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle"></Item>
 		<Item English_Text = "About Ditto" ID = "AboutTitle"></Item>
@@ -337,6 +395,18 @@
 		
 		<Item English_Text = "Search Options" ID = "SearchOptionsTooltip"></Item>
 		<Item English_Text = "Groups" ID = "GroupsTooltip"></Item>
+		
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Search" ID = "Search"></Item>
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies"></Item>
+        <Item English_Text = "IP/Name" ID = "IP_Name"></Item>
+        <Item English_Text = "Descriptions" ID = "Descriptions"></Item>
+		
+		<Item English_Text = "Quick Paste Keyboard" ID = "QuickPasteKeyboardTitle"></Item>
+		
+		<Item English_Text = "Hot Key" ID = "QPHotKey"></Item>
+		<Item English_Text = "Command" ID = "QPCommand"></Item>
+		
 				
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
@@ -359,6 +429,10 @@
 		
 		//Added 1/10/15
 		<Item English_Text = "Delete Clip Data" ID = "32886"></Item>
+		
+		//Added 12/17/16
+		<Item English_Text = "Fixup Sticky Clip Order" ID = "32909"></Item>		
+		<Item English_Text = "Save Current Clipboard" ID = "32904"></Item>
 	</Ditto_Tray_Icon_Menu>
 
 	//Added in 9-11-09
@@ -430,5 +504,33 @@
 		<Item English_Text = "Format" ID = "Format"></Item>
 		<Item English_Text = "Data Size" ID = "DataSize"></Item>
 	</Ditto_DeleteClipData>
+	
+	<Ditto_Options_Quick_Paste_Keyboard>
+		<Item English_Text = "Quick Paste Keyboard" ID = "-1" PropertyPage = "true"></Item>
+		
+		<Item English_Text = "Reset" ID = "2144"></Item>
+		<Item English_Text = "Shortcuts for selected command:" ID = "2148"></Item>
+		<Item English_Text = "Remove" ID = "2124"></Item>
+		<Item English_Text = "Add" ID = "2132"></Item>
+		<Item English_Text = "Enable Second Keypress" ID = "2146"></Item>
+		<Item English_Text = "First Keypress" ID = "2149"></Item>
+		<Item English_Text = "Second Keypress" ID = "2147"></Item>
+		<Item English_Text = "Assign" ID = "1040"></Item>
+		
+		<Item English_Text = "Keyboard Shortcut" ID = "2127"></Item>
+		<Item English_Text = "Mouse Click" ID = "2130"></Item>
+		<Item English_Text = "Keyboard Shortcut" ID = "2133"></Item>
+		<Item English_Text = "Mouse Click" ID = "2136"></Item>
+		<Item English_Text = "Enter Key" ID = "2135"></Item>
+		
+		<Item English_Text = "Enter Key" ID = "2137"></Item>
+		<Item English_Text = "Shift" ID = "1042"></Item>
+		<Item English_Text = "Control" ID = "2139"></Item>
+		<Item English_Text = "Alt" ID = "2140"></Item>
+		<Item English_Text = "Shift" ID = "1043"></Item>
+		<Item English_Text = "Control" ID = "2142"></Item>
+		<Item English_Text = "Alt" ID = "2143"></Item>
+			
+	</Ditto_Options_Quick_Paste_Keyboard>
 	
 </Ditto_Language_File>

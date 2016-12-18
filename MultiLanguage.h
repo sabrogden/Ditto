@@ -49,6 +49,7 @@ public:
 	bool UpdateOptionSupportedTypes(CWnd *pParent);
 	bool UpdateOptionShortcuts(CWnd *pParent);
 	bool UpdateOptionQuickPaste(CWnd *pParent);
+	bool UpdateOptionQuickPasteKeyboard(CWnd *pParent);
 	bool UpdateOptionFriends(CWnd *pParent);
 	bool UpdateOptionFriendsDetail(CWnd *pParent);
 	bool UpdateOptionStats(CWnd *pParent);
@@ -83,6 +84,7 @@ protected:
 	LANGUAGE_ARRAY m_OptionsSupportedTypes;
 	LANGUAGE_ARRAY m_OptionsShortcuts;
 	LANGUAGE_ARRAY m_OptionsQuickPaste;
+	LANGUAGE_ARRAY m_OptionsQuickPasteKeyboard;
 	LANGUAGE_ARRAY m_OptionsFriends;
 	LANGUAGE_ARRAY m_OptionsFriendsDetail;
 	LANGUAGE_ARRAY m_OptionsStats;
