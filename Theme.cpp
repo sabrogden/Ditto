@@ -26,13 +26,15 @@ void CTheme::LoadDefaults()
 	m_CaptionRight = RGB(204, 204, 204);
 
 	m_Border = RGB(204, 204, 204);
-	m_BorderTopMost = RGB(100, 100, 100);
-	m_BorderNotConnected = RGB(255, 0, 0);
+	m_BorderTopMost = RGB(204, 204, 204);
+	m_BorderNotConnected = RGB(204, 204, 204);
 
 	m_CaptionLeftTopMost = RGB(255, 255, 255);
 	m_CaptionRightTopMost = RGB(204, 204, 204);
+	
 	m_CaptionLeftNotConnected = RGB(255, 255, 255);
-	m_CaptionRightNotConnected = RGB(204, 204, 204);
+	m_CaptionRightNotConnected = RGB(255, 0, 0);
+
 	m_CaptionTextColor = RGB(191, 191, 191);
 	m_ListBoxOddRowsBG = RGB(255, 255, 255);
 	m_ListBoxEvenRowsBG = RGB(243, 243, 243);
@@ -51,7 +53,11 @@ void CTheme::LoadDefaults()
 	m_groupTreeBG = RGB(240, 240, 240);
 	m_groupTreeText = RGB(127, 127, 127);
 
-	m_descriptionWindowBG = RGB(240, 240, 240);// GetSysColor(COLOR_INFOBK);
+	m_descriptionWindowBG = RGB(240, 240, 240);// GetSysColor(COLOR_INFOBK);//RGB(240, 240, 240);//
+	/*int r = GetRValue(m_descriptionWindowBG);
+	int g = GetGValue(m_descriptionWindowBG);
+	int b = GetBValue(m_descriptionWindowBG);*/
+
 	m_descriptionWindowText = RGB(0, 0, 0);
 
 	m_captionSize = 25;

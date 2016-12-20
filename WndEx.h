@@ -43,7 +43,7 @@ public:
 	void SetAutoMaxDelay(long lDelay)	{ m_lDelayMaxSeconds = lDelay; }
 	bool GetMinimized()	{ return m_DittoWindow.m_bMinimized; }
 
-	void SetCustomWindowTitle(CString title) { m_DittoWindow.m_customWindowTitle = title;  m_DittoWindow.m_useCustomWindowTitle = true; }
+	void SetCustomWindowTitle(CString title);
 
 	void SetToolTipText(CString text);
 

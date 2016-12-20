@@ -1,12 +1,13 @@
 <Ditto_Theme_File Version="2" Author="Zigboom" Notes="DarkTheme">
+
 	<CaptionLeft>RGB(0,0,0)</CaptionLeft>
 	<CaptionRight>RGB(51,51,51)</CaptionRight>
 
 	<CaptionLeftTopMost>RGB(0,0,0)</CaptionLeftTopMost>
-	<CaptionRightTopMost>RGB(255,255,255)</CaptionRightTopMost>
+	<CaptionRightTopMost>RGB(51,51,51)</CaptionRightTopMost>
 
 	<CaptionLeftNotConnected>RGB(0,0,0)</CaptionLeftNotConnected>
-	<CaptionRightNotConnected>RGB(255,0,0)</CaptionRightNotConnected>
+	<CaptionRightNotConnected>RGB(51,51,51)</CaptionRightNotConnected>
 
 	<CaptionTextColor>RGB(127,127,127)</CaptionTextColor>
 
@@ -21,15 +22,10 @@
 
 	<ListBoxSelectedText>RGB(238,238,238)</ListBoxSelectedText>
 	<ListBoxSelectedNoFocusText>RGB(220,220,220)</ListBoxSelectedNoFocusText>
-
-	<MainWindowBG>RGB(0,0,0)</MainWindowBG>
-
-	<SearchTextBoxFocusBG>RGB(24,24,24)</SearchTextBoxFocusBG>
-	<SearchTextBoxFocusText>RGB(127,127,127)</SearchTextBoxFocusText>
-
+	
 	<Border>RGB(0,0,0)</Border>
 	<BorderTopMost>RGB(0,0,0)</BorderTopMost>
-	<BorderNotConnected>RGB(0,0,0)</BorderNotConnected>
+	<BorderNotConnected>RGB(255,0,0)</BorderNotConnected>
 
 	<GroupTreeBG>RGB(0,0,0)</GroupTreeBG>
 	<GroupTreeText>RGB(153,153,153)</GroupTreeText>
@@ -37,7 +33,12 @@
 	<CaptionSize></CaptionSize>
 	<CaptionFontSize></CaptionFontSize>
 	
-	<DescriptionWindowBG></DescriptionWindowBG>
+	<DescriptionWindowBG>RGB(204,204,204)</DescriptionWindowBG>
 	<DescriptionWindowText></DescriptionWindowText>
 
+	<MainWindowBG>RGB(0,0,0)</MainWindowBG>
+
+	<SearchTextBoxFocusBG>RGB(24,24,24)</SearchTextBoxFocusBG>
+	<SearchTextBoxFocusText>RGB(127,127,127)</SearchTextBoxFocusText>
+	
 </Ditto_Theme_File>

@@ -1095,6 +1095,11 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 {
     CString title = m_Title;    
 
+	if (g_Opt.m_bShowPersistent)
+	{
+		title = (StrF(_T("%s %s"), _T(QPASTE_TITLE), theApp.m_Language.GetString("top_window", "[Top Most Window]")));
+	}
+
     CString cs;
     cs.Format(_T(" - %d/%d"), m_lstHeader.GetSelectedCount(), m_lstHeader.GetItemCount());
     title += cs;
@@ -1134,8 +1139,15 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
     }
 
     SetToolTipText(title);
-		//SetCustomWindowTitle(title);
-        //RefreshNc();    
+
+	if (g_Opt.m_bShowPersistent)
+	{
+		SetCustomWindowTitle(StrF(_T("%s %s"), _T(QPASTE_TITLE), theApp.m_Language.GetString("top_window", "[Top Most Window]")));
+	}
+	else
+	{
+		SetCustomWindowTitle(_T(QPASTE_TITLE));
+	}
 }
 
 BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
@@ -3281,6 +3293,7 @@ bool CQPasteWnd::DoActionToggleShowPersistant()
 
 	MoveControls();
 
+	UpdateStatus();
 	return true;
 }
 

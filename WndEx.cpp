@@ -390,3 +390,15 @@ void CWndEx::SetToolTipText(CString text)
 {
 	m_toolTip.UpdateTipText(text, this, 1);
 }
+
+void CWndEx::SetCustomWindowTitle(CString title)
+{
+	CString old = m_DittoWindow.m_customWindowTitle;
+	m_DittoWindow.m_customWindowTitle = title;
+	m_DittoWindow.m_useCustomWindowTitle = true;
+
+	if (old != m_DittoWindow.m_customWindowTitle)
+	{
+		this->InvalidateNc();
+	}
+}

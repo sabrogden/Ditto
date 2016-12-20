@@ -407,6 +407,8 @@
 		<Item English_Text = "Hot Key" ID = "QPHotKey"></Item>
 		<Item English_Text = "Command" ID = "QPCommand"></Item>
 		
+		<Item English_Text = "[Top Most Window]" ID = "top_most"></Item>
+		
 				
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
