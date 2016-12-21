@@ -130,9 +130,9 @@ void CDeleteClipData::InitListCtrlCols()
 
 	m_List.InsertColumn(0, theApp.m_Language.GetDeleteClipDataString("Title", "Title"), LVCFMT_LEFT, 350);
 	m_List.InsertColumn(1, theApp.m_Language.GetDeleteClipDataString("Created", "Created"), LVCFMT_LEFT, 150);
-	m_List.InsertColumn(2, theApp.m_Language.GetDeleteClipDataString("Last Used", "LastUsed"), LVCFMT_LEFT, 150);
+	m_List.InsertColumn(2, theApp.m_Language.GetDeleteClipDataString("LastUsed", "Last Used"), LVCFMT_LEFT, 150);
 	m_List.InsertColumn(3, theApp.m_Language.GetDeleteClipDataString("Format", "Format"), LVCFMT_LEFT, 150);
-	m_List.InsertColumn(4, theApp.m_Language.GetDeleteClipDataString("Data Size", "DataSize"), LVCFMT_LEFT, 100);
+	m_List.InsertColumn(4, theApp.m_Language.GetDeleteClipDataString("DataSize", "Data Size"), LVCFMT_LEFT, 100);
 }
 
 void CDeleteClipData::LoadItems()

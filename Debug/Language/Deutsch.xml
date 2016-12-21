@@ -276,10 +276,10 @@
 		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Liste der Rechner in der Gruppe (Standardmäßig erscheint der Rechner im Kontextmenu unter 'Senden an'. Zusätzlich werden bei Auswahl von 'Send All Copies' alle Einträge dem anderen Rechner geschickt.)</Item>
 		<Item English_Text = "Log Send Receive Commands" ID = "1042">Kommunikation protokollieren</Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Netzwerk</Item>
-		//Added in 9-11-09
-		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">Alle Kopien senden</Item>
-        	<Item English_Text = "IP/Name" ID = "IP_Name">IP oder Rechnername</Item>
-        	<Item English_Text = "Descriptions" ID = "Descriptions">Beschreibungen</Item>
+		//Added in 12-17-16
+		<Item English_Text = "Request using IP Address" ID = "2127"></Item>
+		<Item English_Text = "Request using Host Name" ID = "2129"></Item>
+		<Item English_Text = "Remote Files" ID = "2128"></Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015">Alle Einträge diesem Rechner senden</Item>

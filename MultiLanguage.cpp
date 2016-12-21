@@ -138,6 +138,21 @@ CString CMultiLanguage::GetDeleteClipDataString(CString csID, CString csDefault)
 	return csDefault;
 }
 
+CString CMultiLanguage::GetQuickPasteKeyboardString(int id, CString csDefault)
+{
+	INT_PTR size = m_OptionsQuickPasteKeyboard.GetSize();
+	for (int i = 0; i < size; i++)
+	{
+		CLangItem *plItem = m_OptionsQuickPasteKeyboard[i];
+		if (plItem->m_nID == id)
+		{
+			return plItem->m_csForeignLang;
+		}
+	}
+
+	return csDefault;
+}
+
 bool CMultiLanguage::UpdateRightClickMenu(CMenu *pMenu)
 {
 	return UpdateMenuToLanguage(pMenu, m_RightClickMenu);

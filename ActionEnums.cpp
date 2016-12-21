@@ -2,6 +2,7 @@
 #include "ActionEnums.h"
 #include "Accels.h"
 #include "Misc.h"
+#include "CP_Main.h"
 
 ActionEnums::ActionEnums()
 {
@@ -15,179 +16,272 @@ ActionEnums::~ActionEnums()
 
 CString ActionEnums::EnumDescription(ActionEnumValues value)
 {
+	CString val = _T("");
+
 	switch (value)
 	{
 	case SHOWDESCRIPTION:
-		return "View Full Description";
+		val = "View Full Description";
+		break;
 	case NEXTDESCRIPTION:
-		return "Next Full Description";
+		val = "Next Full Description";
+		break;
 	case PREVDESCRIPTION:
-		return "Previous Full Description";
+		val = "Previous Full Description";
+		break;
 	case SHOWMENU:
-		return "Show Context Menu";
+		val = "Show Context Menu";
+		break;
 	case NEWGROUP:
-		return "New Group";
+		val = "New Group";
+		break;
 	case NEWGROUPSELECTION:
-		return "New Group Selection";
+		val = "New Group Selection";
+		break;
 	case TOGGLEFILELOGGING:
-		return "Toggle On File Logging";
+		val = "Toggle On File Logging";
+		break;
 	case TOGGLEOUTPUTDEBUGSTRING:
-		return "Toggle OutputDebugString Logging";
+		val = "Toggle OutputDebugString Logging";
+		break;
 	case CLOSEWINDOW:
-		return "Close Window";
+		val = "Close Window";
+		break;
 	case NEXTTABCONTROL:
-		return "NEXTTABCONTROL";
+		val = "NEXTTABCONTROL";
+		break;
 	case PREVTABCONTROL:
-		return "PREVTABCONTROL";
+		val = "PREVTABCONTROL";
+		break;
 	case SHOWGROUPS:
-		return "View Groups";
+		val = "View Groups";
+		break;
 	case NEWCLIP:
-		return "New Clip";
+		val = "New Clip";
+		break;
 	case EDITCLIP:
-		return "Edit Clip";
+		val = "Edit Clip";
+		break;
 	case MODIFIER_ACTVE_SELECTIONUP:
-		return "MODIFIER_ACTVE_SELECTIONUP";
+		val = "MODIFIER_ACTVE_SELECTIONUP";
+		break;
 	case MODIFIER_ACTVE_SELECTIONDOWN:
-		return "MODIFIER_ACTVE_SELECTIONDOWN";
+		val = "MODIFIER_ACTVE_SELECTIONDOWN";
+		break;
 	case MODIFIER_ACTVE_MOVEFIRST:
-		return "MODIFIER_ACTVE_MOVEFIRST";
+		val = "MODIFIER_ACTVE_MOVEFIRST";
+		break;
 	case MODIFIER_ACTVE_MOVELAST:
-		return "MODIFIER_ACTVE_MOVELAST";
+		val = "MODIFIER_ACTVE_MOVELAST";
+		break;
 	case CANCELFILTER:
-		return "Cancel Filter";
+		val = "Cancel Filter";
+		break;
 	case HOMELIST:
-		return "HOMELIST";
+		val = "HOMELIST";
+		break;
 	case BACKGRROUP:
-		return "Back Group";
+		val = "Back Group";
+		break;
 	case TOGGLESHOWPERSISTANT:
-		return "Toggle Show Persistant";
+		val = "Toggle Show Persistant";
+		break;
 	case PASTE_SELECTED:
-		return "Paste Selected";
+		val = "Paste Selected";
+		break;
 	case DELETE_SELECTED:
-		return "Delete Selected";
+		val = "Delete Selected";
+		break;
 	case CLIP_PROPERTIES:
-		return "Clip Properties";
+		val = "Clip Properties";
+		break;
 	case PASTE_SELECTED_PLAIN_TEXT:
-		return "Paste Selected Plain Text";
+		val = "Paste Selected Plain Text";
+		break;
 	case MOVE_CLIP_TO_GROUP:
-		return "Move Clip To Group";
+		val = "Move Clip To Group";
+		break;
 	case ELEVATE_PRIVlEGES:
-		return "Option - Elevate Privleges";
+		val = "Option - Elevate Privleges";
+		break;
 	case SHOW_IN_TASKBAR:
-		return "Option - Show In TaskBar";
+		val = "Option - Show In TaskBar";
+		break;
 	case COMPARE_SELECTED_CLIPS:
-		return "Compare Selected Clips";
+		val = "Compare Selected Clips";
+		break;
 	case SELECT_LEFT_SIDE_COMPARE:
-		return "Select Left File For Compare";
+		val = "Select Left File For Compare";
+		break;
 	case SELECT_RIGHT_SITE_AND_DO_COMPARE:
-		return "Select Right File And Do Compare";
+		val = "Select Right File And Do Compare";
+		break;
 	case EXPORT_TO_TEXT_FILE:
-		return "Export To Text File";
+		val = "Export To Text File";
+		break;
 	case EXPORT_TO_QR_CODE:
-		return "Export To QR Code";
+		val = "Export To QR Code";
+		break;
 	case EXPORT_TO_GOOGLE_TRANSLATE:
-		return "Export To Google Translate";
+		val = "Export To Google Translate";
+		break;
 	case EXPORT_TO_BITMAP_FILE:
-		return "Export To Image File";
+		val = "Export To Image File";
+		break;
 	case SAVE_CURRENT_CLIPBOARD:
-		return "Save Current Clipboard";
+		val = "Save Current Clipboard";
+		break;
 	case MOVE_CLIP_UP:
-		return "Move Clip Up";
+		val = "Move Clip Up";
+		break;
 	case MOVE_CLIP_DOWN:
-		return "Move Clip Down";
+		val = "Move Clip Down";
+		break;
 	case MOVE_CLIP_TOP:
-		return "Move Clip Top";
+		val = "Move Clip Top";
+		break;
 	case FILTER_ON_SELECTED_CLIP:
-		return "Filter On Selected Clip";
+		val = "Filter On Selected Clip";
+		break;
 	case PASTE_UPPER_CASE:
-		return "Paste Upper Case";
+		val = "Paste Upper Case";
+		break;
 	case PASTE_LOWER_CASE:
-		return "Paste Lower Case";
+		val = "Paste Lower Case";
+		break;
 	case PASTE_CAPITALiZE:
-		return "Paste Capitalize";
+		val = "Paste Capitalize";
+		break;
 	case PASTE_SENTENCE_CASE:
-		return "Paste Sentence Case";
+		val = "Paste Sentence Case";
+		break;
 	case PASTE_REMOVE_LINE_FEEDS:
-		return "Paste Remove Line Feeds";
+		val = "Paste Remove Line Feeds";
+		break;
 	case PASTE_ADD_ONE_LINE_FEED:
-		return "Paste Add One Line Feed";
+		val = "Paste Add One Line Feed";
+		break;
 	case PASTE_ADD_TWO_LINE_FEEDS:
-		return "Paste Add Two Line Feeds";
+		val = "Paste Add Two Line Feeds";
+		break;
 	case PASTE_TYPOGLYCEMIA:
-		return "Paste Typoglycemia";
+		val = "Paste Typoglycemia";
+		break;
 	case SEND_TO_FRIEND_1:
-		return "Send to friend 1";
+		val = "Send to friend 1";
+		break;
 	case SEND_TO_FRIEND_2:
-		return "Send to friend 2";
+		val = "Send to friend 2";
+		break;
 	case SEND_TO_FRIEND_3:
-		return "Send to friend 3";
+		val = "Send to friend 3";
+		break;
 	case SEND_TO_FRIEND_4:
-		return "Send to friend 4";
+		val = "Send to friend 4";
+		break;
 	case SEND_TO_FRIEND_5:
-		return "Send to friend 5";
+		val = "Send to friend 5";
+		break;
 	case SEND_TO_FRIEND_6:
-		return "Send to friend 6";
+		val = "Send to friend 6";
+		break;
 	case SEND_TO_FRIEND_7:
-		return "Send to friend 7";
+		val = "Send to friend 7";
+		break;
 	case SEND_TO_FRIEND_8:
-		return "Send to friend 8";
+		val = "Send to friend 8";
+		break;
 	case SEND_TO_FRIEND_9:
-		return "Send to friend 9";
+		val = "Send to friend 9";
+		break;
 	case SEND_TO_FRIEND_10:
-		return "Send to friend 10";
+		val = "Send to friend 10";
+		break;
 	case SEND_TO_FRIEND_11:
-		return "Send to friend 11";
+		val = "Send to friend 11";
+		break;
 	case SEND_TO_FRIEND_12:
-		return "Send to friend 12";
+		val = "Send to friend 12";
+		break;
 	case SEND_TO_FRIEND_13:
-		return "Send to friend 13";
+		val = "Send to friend 13";
+		break;
 	case SEND_TO_FRIEND_14:
-		return "Send to friend 14";
+		val = "Send to friend 14";
+		break;
 	case SEND_TO_FRIEND_15:
-		return "Send to friend 15";
+		val = "Send to friend 15";
+		break;
 	case PASTE_POSITION_1:
-		return "Paste Position 1";
+		val = "Paste Position 1";
+		break;
 	case PASTE_POSITION_2:
-		return "Paste Position 2";
+		val = "Paste Position 2";
+		break;
 	case PASTE_POSITION_3:
-		return "Paste Position 3";
+		val = "Paste Position 3";
+		break;
 	case PASTE_POSITION_4:
-		return "Paste Position 4";
+		val = "Paste Position 4";
+		break;
 	case PASTE_POSITION_5:
-		return "Paste Position 5";
+		val = "Paste Position 5";
+		break;
 	case PASTE_POSITION_6:
-		return "Paste Position 6";
+		val = "Paste Position 6";
+		break;
 	case PASTE_POSITION_7:
-		return "Paste Position 7";
+		val = "Paste Position 7";
+		break;
 	case PASTE_POSITION_8:
-		return "Paste Position 8";
+		val = "Paste Position 8";
+		break;
 	case PASTE_POSITION_9:
-		return "Paste Position 9";
+		val = "Paste Position 9";
+		break;
 	case PASTE_POSITION_10:
-		return "Paste Position 10";
+		val = "Paste Position 10";
+		break;
 	case CONFIG_SHOW_FIRST_TEN_TEXT:
-		return "Option - Show text for first ten copy hot keys";
+		val = "Option - Show text for first ten copy hot keys";
+		break;
 	case CONFIG_SHOW_CLIP_WAS_PASTED:
-		return "Option - Show indicator a clip has been pasted";
+		val = "Option - Show indicator a clip has been pasted";
+		break;
 	case TOGGLE_LAST_GROUP_TOGGLE:
-		return "Toggle Last Group Toggle";
+		val = "Toggle Last Group Toggle";
+		break;
 	case MAKE_TOP_STICKY:
-		return "Make Top Sticky Clip";
+		val = "Make Top Sticky Clip";
+		break;
 	case MAKE_LAST_STICKY:
-		return "Make Last Sticky Clip";
+		val = "Make Last Sticky Clip";
+		break;
 	case REMOVE_STICKY:
-		return "Remove Sticky Setting";
+		val = "Remove Sticky Setting";
+		break;
 	case PASTE_ADD_CURRENT_TIME:
-		return "Paste Add Current Time";
+		val = "Paste Add Current Time";
+		break;
 	case IMPORT_CLIP:
-		return "Import Clip";
+		val = "Import Clip";
+		break;
 	case GLOBAl_HOTKEYS:
-		return "Global HotKeys";
+		val = "Global HotKeys";
+		break;
 	case DELETE_CLIP_DATA:
-		return "Delete Clip Data";
+		val = "Delete Clip Data";
+		break;
 	}
 
-	return "";
+	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
+
+	if (translatedValue != _T(""))
+	{
+		return translatedValue;
+	}
+
+	return val;
 }
 
 int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)

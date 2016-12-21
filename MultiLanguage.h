@@ -62,6 +62,7 @@ public:
 
 	CString GetGlobalHotKeyString(CString csID, CString csDefault);
 	CString GetDeleteClipDataString(CString csID, CString csDefault);
+	CString GetQuickPasteKeyboardString(int id, CString csDefault);
 
 	CString GetString(CString csID, CString csDefault);
 

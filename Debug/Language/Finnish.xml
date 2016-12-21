@@ -6,7 +6,7 @@
 		<Item English_Text = "New Group Selection	F7" ID = "32812">Uusi ryhmävalinta F7</Item>
 		<Item English_Text = "Move to Group" ID = "32840">Siirrä ryhmään</Item>
 		<Item English_Text = "Quick Options" ID = "-1">Pika-asetukset</Item>
-		<Item English_Text = "Lines Per Row" ID = "-1">Leikkeiden rivimäärä</Item>
+		<Item English_Text = "Lines Per Clip" ID = "-1">Leikkeiden rivimäärä</Item>
 		<Item English_Text = "1" ID = "32807">1</Item>
 		<Item English_Text = "2" ID = "32786">2</Item>
 		<Item English_Text = "3" ID = "32787">3</Item>
