@@ -18,6 +18,8 @@ delete m_imageViewer.m_pBitmap;		\
 m_imageViewer.m_pBitmap = NULL;		\
 }
 
+#define HIDE_WINDOW_TIMER 1
+#define SAVE_SIZE 2
 
 /////////////////////////////////////////////////////////////////////////////
 // CToolTipEx
@@ -68,6 +70,8 @@ END_MESSAGE_MAP()
 
 BOOL CToolTipEx::Create(CWnd *pParentWnd)
 {
+	m_saveWindowLockout = true;
+
     // Get the class name and create the window
     CString szClassName = AfxRegisterWndClass(CS_CLASSDC | CS_SAVEBITS, LoadCursor(NULL, IDC_ARROW));
 
@@ -106,6 +110,8 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 	m_optionsButton.LoadStdImageDPI(IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, cog_28, IDB_COG_32_32, _T("PNG"));
 	m_optionsButton.SetToolTipText(theApp.m_Language.GetString(_T("DescriptionOptionsTooltip"), _T("Description Options")));
 	m_optionsButton.ShowWindow(SW_SHOW);
+
+	m_saveWindowLockout = false;
 
     return TRUE;
 }
@@ -214,24 +220,20 @@ BOOL CToolTipEx::Show(CPoint point)
 		}
 	}
 
+	m_saveWindowLockout = true;
     SetWindowPos(&CWnd::wndTopMost, rect.left, rect.top, rect.Width(), rect.Height
                  (), SWP_SHOWWINDOW | SWP_NOCOPYBITS | SWP_NOACTIVATE |
                  SWP_NOZORDER);
+	m_saveWindowLockout = false;
 
     return TRUE;
 }
 
 BOOL CToolTipEx::Hide()
 {
-    DELETE_BITMAP 
+	DELETE_BITMAP
 
-	if(::IsWindowVisible(m_hWnd))
-	{
-		CRect rect;
-		this->GetWindowRect(&rect);
-		CGetSetOptions::SetDescWndSize(rect.Size());
-		CGetSetOptions::SetDescWndPoint(rect.TopLeft());
-	}
+		SaveWindowSize();
 
     ShowWindow(SW_HIDE);
 
@@ -243,7 +245,18 @@ BOOL CToolTipEx::Hide()
     return TRUE;
 }
 
+void CToolTipEx::SaveWindowSize()
+{
+	if (::IsWindowVisible(m_hWnd))
+	{
+		CRect rect;
+		this->GetWindowRect(&rect);
+		CGetSetOptions::SetDescWndSize(rect.Size());
+		CGetSetOptions::SetDescWndPoint(rect.TopLeft());
 
+		OutputDebugString(_T("Saving tooltip size"));
+	}
+}
 
 void CToolTipEx::PostNcDestroy()
 {
@@ -563,6 +576,11 @@ void CToolTipEx::OnSize(UINT nType, int cx, int cy)
 
 	this->Invalidate();
 	m_DittoWindow.DoSetRegion(this);
+
+	if (m_saveWindowLockout == false)
+	{
+		SetTimer(SAVE_SIZE, 250, NULL);
+	}
 }
 
 BOOL CToolTipEx::IsCursorInToolTip()
@@ -714,6 +732,10 @@ void CToolTipEx::OnTimer(UINT_PTR nIDEvent)
             Hide();
             PostMessage(WM_DESTROY, 0, 0);
             break;
+		case SAVE_SIZE:
+			SaveWindowSize();
+			KillTimer(SAVE_SIZE);
+			break;
     }
 
     CWnd::OnTimer(nIDEvent);
@@ -883,4 +905,9 @@ void CToolTipEx::ApplyWordWrap()
 	{
 		m_RichEdit.SetTargetDevice(NULL, 1);
 	}
+}
+
+void CToolTipEx::HideWindowInXMilliSeconds(long lms) 
+{ 
+	SetTimer(HIDE_WINDOW_TIMER, lms, NULL); 
 }

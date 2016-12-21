@@ -14,7 +14,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // CToolTipEx window
 
-#define HIDE_WINDOW_TIMER 1
 
 class CToolTipEx : public CWnd
 {
@@ -36,7 +35,7 @@ public:
 	void SetRTFText(const char *pRTF);
 	void SetBitmap(CBitmap *pBitmap);
 	void SetNotifyWnd(CWnd *pNotify)		{ m_pNotifyWnd = pNotify;	}
-	void HideWindowInXMilliSeconds(long lms)	{ SetTimer(HIDE_WINDOW_TIMER, lms, NULL); }
+	void HideWindowInXMilliSeconds(long lms);
 	CRect GetBoundsRect();
 
 	void SetClipId(int clipId) { m_clipId = clipId; }
@@ -69,10 +68,10 @@ protected:
 	CString m_searchText;
 	CScrollBar m_vScroll;
 	CScrollBar m_hScroll;
-
 	CDittoWindow m_DittoWindow;
-
 	CImageViewer m_imageViewer;
+
+	bool m_saveWindowLockout;
 
 	
 
@@ -84,6 +83,7 @@ protected:
 	void HighlightSearchText();
 	void DoSearch();
 	void ApplyWordWrap();
+	void SaveWindowSize();
 
 	// Generated message map functions
 protected:

@@ -92,7 +92,7 @@ void CImageViewer::OnPaint()
 	GetClientRect(rect);	
 
 	CBrush  Brush, *pOldBrush;
-	Brush.CreateSolidBrush(GetSysColor(COLOR_INFOBK));
+	Brush.CreateSolidBrush(g_Opt.m_Theme.DescriptionWindowBG());
 
 	pOldBrush = dc.SelectObject(&Brush);
 
