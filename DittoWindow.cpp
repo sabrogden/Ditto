@@ -277,13 +277,13 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 	BOOL bVertical = FALSE;
 	if(m_lRightBorder == m_captionBorderWidth)
 	{
-		rightRect.SetRect(rcBorder.right - m_captionBorderWidth + border, rcBorder.top, rcBorder.right, rcBorder.top + IndexToPos(index, false));
-		leftRect.SetRect(rcBorder.right - m_captionBorderWidth + border, rcBorder.top + IndexToPos(index, false), rcBorder.right, rcBorder.bottom);
+		rightRect.SetRect(rcBorder.right - (m_captionBorderWidth - border), rcBorder.top, rcBorder.right, rcBorder.top + IndexToPos(index, false));
+		leftRect.SetRect(rcBorder.right - (m_captionBorderWidth - border), rcBorder.top + IndexToPos(index, false), rcBorder.right, rcBorder.bottom);
 		
 		textRect.SetRect(rcBorder.right, rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.right - m_captionBorderWidth, rcBorder.bottom - theApp.m_metrics.ScaleX(50));
 
-		int left = (rcBorder.right - m_captionBorderWidth + border) + theApp.m_metrics.ScaleX((m_captionBorderWidth / 2) - (theApp.m_metrics.ScaleX(16) / 2));
-		int right = left + theApp.m_metrics.ScaleX(16);
+		int left = rightRect.left;
+		int right = rightRect.right;
 
 		int top = IndexToPos(closeIndex, false);
 		m_crCloseBT.SetRect(left, top, right, top+ widthHeight);
@@ -309,8 +309,8 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 
 		textRect.SetRect(rcBorder.left + m_captionBorderWidth - theApp.m_metrics.ScaleX(0), rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.left - theApp.m_metrics.ScaleX(5), rcBorder.bottom - theApp.m_metrics.ScaleX(50));
 
-		int left = theApp.m_metrics.ScaleX((m_captionBorderWidth / 2) - (theApp.m_metrics.ScaleX(16) / 2));
-		int right = left + theApp.m_metrics.ScaleX(16);
+		int left = rightRect.left;
+		int right = rightRect.right;
 
 		int top = IndexToPos(closeIndex, false);
 		m_crCloseBT.SetRect(left, top, right, top + widthHeight);
@@ -335,8 +335,8 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 
 		textRect.SetRect(leftRect.right, leftRect.top, leftRect.right, leftRect.bottom);
 
-		int top = theApp.m_metrics.ScaleX((m_captionBorderWidth/2) - (theApp.m_metrics.ScaleX(16)/2));
-		int bottom = top + theApp.m_metrics.ScaleX(16);
+		int top = rightRect.top;
+		int bottom = rightRect.bottom;
 
 		int left = rcBorder.right - IndexToPos(closeIndex, true);
 		m_crCloseBT.SetRect(left, top, left + widthHeight, bottom);
@@ -356,13 +356,13 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 	}
 	else if(m_lBottomBorder == m_captionBorderWidth)
 	{
-		leftRect.SetRect(rcBorder.left, rcBorder.bottom- m_captionBorderWidth + border, rcBorder.right - IndexToPos(index - 1, true) - theApp.m_metrics.ScaleX(8), rcBorder.bottom);
-		rightRect.SetRect(leftRect.right, rcBorder.bottom - m_captionBorderWidth + border, rcBorder.right, rcBorder.bottom);
+		leftRect.SetRect(rcBorder.left, rcBorder.bottom- m_captionBorderWidth - border, rcBorder.right - IndexToPos(index - 1, true) - theApp.m_metrics.ScaleX(8), rcBorder.bottom);
+		rightRect.SetRect(leftRect.right, rcBorder.bottom - m_captionBorderWidth - border, rcBorder.right, rcBorder.bottom);
 
 		textRect.SetRect(leftRect.right, leftRect.top, leftRect.right, leftRect.bottom);
 
-		int top = leftRect.top + theApp.m_metrics.ScaleX((m_captionBorderWidth / 2) - (theApp.m_metrics.ScaleX(16) / 2));
-		int bottom = top + theApp.m_metrics.ScaleX(16);
+		int top = rightRect.top;
+		int bottom = rightRect.bottom;
 
 		int left = rcBorder.right - IndexToPos(closeIndex, true);
 		m_crCloseBT.SetRect(left, top, left + widthHeight, bottom);
@@ -517,11 +517,11 @@ void CDittoWindow::DrawChevronBtn(CWindowDC &dc, CWnd *pWnd)
 		
 	if(this->m_bMinimized)
 	{
-		m_chevronLeftButton.Draw(&dc, pWnd, m_crChevronBT.left, m_crChevronBT.top, m_bMouseOverChevron, m_bMouseDownOnChevron);
+		m_chevronLeftButton.Draw(&dc, pWnd, m_crChevronBT, m_bMouseOverChevron, m_bMouseDownOnChevron);
 	}
 	else
 	{
-		m_chevronRightButton.Draw(&dc, pWnd, m_crChevronBT.left, m_crChevronBT.top, m_bMouseOverChevron, m_bMouseDownOnChevron);
+		m_chevronRightButton.Draw(&dc, pWnd, m_crChevronBT, m_bMouseOverChevron, m_bMouseDownOnChevron);
 	}
 }
 
@@ -537,7 +537,7 @@ void CDittoWindow::DrawCloseBtn(CWindowDC &dc, CWnd *pWnd)
 		return;
 	}
 	
-	m_closeButton.Draw(&dc, pWnd, m_crCloseBT.left, m_crCloseBT.top, m_bMouseOverClose, m_bMouseDownOnClose);
+	m_closeButton.Draw(&dc, pWnd, m_crCloseBT, m_bMouseOverClose, m_bMouseDownOnClose);
 }
 
 void CDittoWindow::DrawMinimizeBtn(CWindowDC &dc, CWnd *pWnd)
@@ -547,7 +547,7 @@ void CDittoWindow::DrawMinimizeBtn(CWindowDC &dc, CWnd *pWnd)
 		return;
 	}
 
-	m_minimizeButton.Draw(&dc, pWnd, m_crMinimizeBT.left, m_crMinimizeBT.top, m_bMouseOverClose, m_bMouseDownOnClose);
+	m_minimizeButton.Draw(&dc, pWnd, m_crMinimizeBT, m_bMouseOverClose, m_bMouseDownOnClose);
 }
 
 void CDittoWindow::DrawMaximizeBtn(CWindowDC &dc, CWnd *pWnd)
@@ -557,7 +557,7 @@ void CDittoWindow::DrawMaximizeBtn(CWindowDC &dc, CWnd *pWnd)
 		return;
 	}
 
-	m_maximizeButton.Draw(&dc, pWnd, m_crMaximizeBT.left, m_crMaximizeBT.top, m_bMouseOverMaximize, m_bMouseDownOnMaximize);
+	m_maximizeButton.Draw(&dc, pWnd, m_crMaximizeBT, m_bMouseOverMaximize, m_bMouseDownOnMaximize);
 }
 
 void CDittoWindow::DoNcLButtonDown(CWnd *pWnd, UINT nHitTest, CPoint point) 

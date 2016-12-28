@@ -53,6 +53,17 @@ BOOL CGdiImageDrawer::LoadStdImageDPI(UINT id96, UINT id120, UINT id144, UINT id
 	return ret;
 }
 
+void CGdiImageDrawer::Draw(CDC* pScreenDC, CWnd *pWnd, CRect rc, bool mouseHover, bool mouseDown)
+{
+	int width = m_pStdImage->m_pBitmap->GetWidth();
+	int height = m_pStdImage->m_pBitmap->GetHeight();
+
+	int x = rc.left + (rc.Width() / 2) - (width / 2);
+	int y = rc.top + (rc.Height() / 2) - (height / 2);
+
+	Draw(pScreenDC, pWnd, x, y, mouseHover, mouseDown);
+}
+
 void CGdiImageDrawer::Draw(CDC* pScreenDC, CWnd *pWnd, int posX, int posY, bool mouseHover, bool mouseDown, int forceWidth, int forceHeight)
 {
 	int width = m_pStdImage->m_pBitmap->GetWidth();

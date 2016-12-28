@@ -4807,44 +4807,6 @@ void CQPasteWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
     CWndEx::OnNcLButtonDblClk(nHitTest, point);
 }
 
-#define WNDSNAP_ALLOWANCE 12
-
-void CQPasteWnd::OnWindowPosChanging(WINDOWPOS *lpwndpos)
-{
-    CWndEx::OnWindowPosChanging(lpwndpos);
-	
-    CRect rcScreen;
-
-    CRect cr(lpwndpos->x, lpwndpos->y, lpwndpos->x + lpwndpos->cx, lpwndpos->y + lpwndpos->cy);
-    int nMonitor = GetMonitorFromRect(&cr);
-    GetMonitorRect(nMonitor, &rcScreen);
-
-    // Snap X axis to left
-    if(abs(lpwndpos->x - rcScreen.left) <= WNDSNAP_ALLOWANCE)
-    {
-        lpwndpos->x = rcScreen.left;
-    }
-
-    // Snap X axis to right
-    if(abs(lpwndpos->x + lpwndpos->cx - rcScreen.right) <= WNDSNAP_ALLOWANCE)
-    {
-        lpwndpos->x = rcScreen.right - lpwndpos->cx;
-    }
-
-    // Snap Y axis to top
-    if(abs(lpwndpos->y - rcScreen.top) <= WNDSNAP_ALLOWANCE)
-    {
-        // Assign new cordinate
-        lpwndpos->y = rcScreen.top;
-    }
-
-    // Snap Y axis to bottom
-    if(abs(lpwndpos->y + lpwndpos->cy - rcScreen.bottom) <= WNDSNAP_ALLOWANCE)
-    {
-        lpwndpos->y = rcScreen.bottom - lpwndpos->cy;
-    }
-}
-
 void CQPasteWnd::OnShowGroupsTop()
 {
 	m_lstHeader.HidePopup();

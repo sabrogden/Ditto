@@ -25,6 +25,7 @@ CWndEx::CWndEx()
 	SetCaptionColorActive(false, TRUE);
 	m_crFullSizeWindow.SetRectEmpty();
 	m_lDelayMaxSeconds = 2;
+	m_lButtonDownOnCaption = false;
 }
 
 CWndEx::~CWndEx()
@@ -166,6 +167,15 @@ HITTEST_RET CWndEx::OnNcHitTest(CPoint point)
 void CWndEx::OnNcLButtonDown(UINT nHitTest, CPoint point) 
 {
 	m_DittoWindow.DoNcLButtonDown(this, nHitTest, point);
+
+	switch (nHitTest)
+	{
+	case HTCAPTION:
+		m_lButtonDownOnCaption = true;
+		break;
+	default:
+		m_lButtonDownOnCaption = false;
+	}
 
 	CWnd::OnNcLButtonDown(nHitTest, point);
 }
@@ -363,6 +373,96 @@ void CWndEx::OnTimer(UINT_PTR nIDEvent)
 	CWnd::OnTimer(nIDEvent);
 }
 
+void CWndEx::SnapToEdge(WINDOWPOS* lpwndpos)
+{
+	if (lpwndpos->cx == 0 &&
+		lpwndpos->cy == 0)
+	{
+		return;
+	}
+
+	const char threshold = 12;
+	RECT rect = { 0 };
+	HMONITOR hMonitor;
+	MONITORINFO mi;
+	
+	// Grab information about our monitors
+	// For multi-monitor support, we use this instead of SystemParametersInfo(SPI_GETWORKAREA, 0, &rect, 0);
+	hMonitor = MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST);
+	mi.cbSize = sizeof(mi);
+	GetMonitorInfo(hMonitor, &mi);
+	rect = mi.rcWork;
+
+	bool edgeMove = true;
+	bool captionMove = false;
+
+	if (m_lButtonDownOnCaption)
+	{
+		edgeMove = false;
+		captionMove = true;
+	}
+
+	// Snap to left
+	if (lpwndpos->x >= (rect.left - threshold) &&
+		lpwndpos->x <= (rect.left + threshold))
+	{
+		if (edgeMove)
+		{
+			int diff = lpwndpos->x - rect.left;
+			lpwndpos->cx += diff;
+		}
+		if (edgeMove || captionMove)
+		{
+			lpwndpos->x = rect.left;
+		}
+	}
+
+	// Snap to right
+	if ((lpwndpos->x + lpwndpos->cx) >= (rect.right - threshold) &&
+		(lpwndpos->x + lpwndpos->cx) <= (rect.right + threshold))
+	{
+		if (edgeMove)
+		{
+			int diff = rect.right - (lpwndpos->x + lpwndpos->cx);
+			lpwndpos->cx += diff;
+		}
+		if (captionMove)
+		{
+			lpwndpos->x = (rect.right - lpwndpos->cx);
+		}
+	}
+
+	// Snap to top
+	if (lpwndpos->y >= (rect.top - threshold) &&
+		lpwndpos->y <= (rect.top + threshold))
+	{
+		if (edgeMove)
+		{
+			int diff = lpwndpos->y - rect.top;
+			lpwndpos->cy += diff;
+		}
+		if (edgeMove || captionMove)
+		{
+			lpwndpos->y = rect.top;
+		}
+	}
+
+	// Snap to bottom
+	if ((lpwndpos->y + lpwndpos->cy) >= (rect.bottom - threshold) &&
+		(lpwndpos->y + lpwndpos->cy) <= (rect.bottom + threshold))
+	{
+		if (edgeMove)
+		{
+			int diff = rect.bottom - (lpwndpos->y + lpwndpos->cy);
+			lpwndpos->cy += diff;
+		}
+		if (captionMove)
+		{
+			lpwndpos->y = (rect.bottom - lpwndpos->cy);
+		}
+	}
+}
+
 void CWndEx::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanging(lpwndpos);
@@ -372,6 +472,8 @@ void CWndEx::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 		KillTimer(TIMER_AUTO_MAX);
 		m_bMaxSetTimer = false;
 	}
+
+	SnapToEdge(lpwndpos);
 }
 
 void CWndEx::OnSize(UINT nType, int cx, int cy)

@@ -57,6 +57,9 @@ protected:
 	COleDateTime m_TimeMaximized;
 	int m_lDelayMaxSeconds;
 	CToolTipCtrl m_toolTip;
+	bool m_lButtonDownOnCaption;
+
+	void SnapToEdge(WINDOWPOS* lpwndpos);
 
 // Implementation
 public:
