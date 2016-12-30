@@ -351,7 +351,7 @@ bool CMultiLanguage::LoadLanguageFile(CString csFile)
 	TiXmlDocument doc(csPathA);
 	if(!doc.LoadFile())
 	{
-		m_csLastError.Format(_T("Error loading file %s - reason = %s"), csFile, CTextConvert::ConvertToUnicode(doc.ErrorDesc()));
+		m_csLastError.Format(_T("Error loading file %s - reason = %s, Line: %d, column: %d"), csFile, CTextConvert::ConvertToUnicode(doc.ErrorDesc()), doc.ErrorRow(), doc.ErrorCol());
 		Log(m_csLastError);
 		return false;
 	}
