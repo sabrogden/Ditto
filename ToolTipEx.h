@@ -97,6 +97,7 @@ protected:
 	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp); 
 	afx_msg void OnNcPaint();
 	afx_msg void OnOptions();
+	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 public:

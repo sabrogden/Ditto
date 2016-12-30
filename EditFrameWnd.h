@@ -45,6 +45,8 @@ public:
 	afx_msg void OnNcMouseMove(UINT nHitTest, CPoint point);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
+	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 

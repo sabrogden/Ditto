@@ -37,6 +37,8 @@ CDittoWindow::CDittoWindow(void)
 	m_customWindowTitle = _T("");
 	m_useCustomWindowTitle = false;
 
+	m_buttonDownOnCaption = false;
+
 	
 }
 
@@ -547,7 +549,7 @@ void CDittoWindow::DrawMinimizeBtn(CWindowDC &dc, CWnd *pWnd)
 		return;
 	}
 
-	m_minimizeButton.Draw(&dc, pWnd, m_crMinimizeBT, m_bMouseOverClose, m_bMouseDownOnClose);
+	m_minimizeButton.Draw(&dc, pWnd, m_crMinimizeBT, m_bMouseOverMinimize, m_bMouseDownOnMinimize);
 }
 
 void CDittoWindow::DrawMaximizeBtn(CWindowDC &dc, CWnd *pWnd)
@@ -560,8 +562,18 @@ void CDittoWindow::DrawMaximizeBtn(CWindowDC &dc, CWnd *pWnd)
 	m_maximizeButton.Draw(&dc, pWnd, m_crMaximizeBT, m_bMouseOverMaximize, m_bMouseDownOnMaximize);
 }
 
-void CDittoWindow::DoNcLButtonDown(CWnd *pWnd, UINT nHitTest, CPoint point) 
+int CDittoWindow::DoNcLButtonDown(CWnd *pWnd, UINT nHitTest, CPoint point) 
 {
+	switch (nHitTest)
+	{
+	case HTCAPTION:
+		m_buttonDownOnCaption = true;
+		break;
+	default:
+		m_buttonDownOnCaption = false;
+	}
+
+	int buttonPressed = 0;
 	//ReleaseCapture();
 	CPoint clPoint(point);
 	pWnd->ScreenToClient(&clPoint);
@@ -577,30 +589,38 @@ void CDittoWindow::DoNcLButtonDown(CWnd *pWnd, UINT nHitTest, CPoint point)
 		//pWnd->UpdateWindow();
 		//DoNcPaint(pWnd);
 		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
+		buttonPressed = BUTTON_CLOSE;
 	}
 	else if(m_crChevronBT.PtInRect(clPoint))
 	{
 		m_bMouseDownOnChevron = true;
 		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
+		buttonPressed = BUTTON_CHEVRON;
 	}
 	else if(m_crMinimizeBT.PtInRect(clPoint))
 	{
 		m_bMouseDownOnMinimize = true;
 		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
+		buttonPressed = BUTTON_MINIMIZE;
 	}
 	else if(m_crMaximizeBT.PtInRect(clPoint))
 	{
 		m_bMouseDownOnMaximize = true;
 		RedrawWindow(pWnd->m_hWnd, NULL, NULL, RDW_FRAME | RDW_INVALIDATE);
+		buttonPressed = BUTTON_MAXIMIZE;
 	}
 	else if(m_bMinimized)
 	{
 		//MinMaxWindow(FORCE_MAX);
 	}
+
+	return buttonPressed;
 }
 
 long CDittoWindow::DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point) 
 {
+	m_buttonDownOnCaption = false;
+
 	CRect crWindow;
 	pWnd->GetWindowRect(crWindow);
 
@@ -796,4 +816,94 @@ bool CDittoWindow::SetCaptionColors(COLORREF left, COLORREF right, COLORREF bord
 void CDittoWindow::SetCaptionTextColor(COLORREF color)
 {
 	m_CaptionTextColor = color;
+}
+
+void CDittoWindow::SnapToEdge(CWnd *pWnd, WINDOWPOS* lpwndpos)
+{
+	if (lpwndpos->cx == 0 &&
+		lpwndpos->cy == 0)
+	{
+		return;
+	}
+
+	const char threshold = 12;
+	RECT rect = { 0 };
+	HMONITOR hMonitor;
+	MONITORINFO mi;
+
+	// Grab information about our monitors
+	// For multi-monitor support, we use this instead of SystemParametersInfo(SPI_GETWORKAREA, 0, &rect, 0);
+	hMonitor = MonitorFromWindow(pWnd->m_hWnd, MONITOR_DEFAULTTONEAREST);
+	mi.cbSize = sizeof(mi);
+	GetMonitorInfo(hMonitor, &mi);
+	rect = mi.rcWork;
+
+	bool edgeMove = true;
+	bool captionMove = false;
+
+	if (m_buttonDownOnCaption)
+	{
+		edgeMove = false;
+		captionMove = true;
+	}
+
+	// Snap to left
+	if (lpwndpos->x >= (rect.left - threshold) &&
+		lpwndpos->x <= (rect.left + threshold))
+	{
+		if (edgeMove)
+		{
+			int diff = lpwndpos->x - rect.left;
+			lpwndpos->cx += diff;
+		}
+		if (edgeMove || captionMove)
+		{
+			lpwndpos->x = rect.left;
+		}
+	}
+
+	// Snap to right
+	if ((lpwndpos->x + lpwndpos->cx) >= (rect.right - threshold) &&
+		(lpwndpos->x + lpwndpos->cx) <= (rect.right + threshold))
+	{
+		if (edgeMove)
+		{
+			int diff = rect.right - (lpwndpos->x + lpwndpos->cx);
+			lpwndpos->cx += diff;
+		}
+		if (captionMove)
+		{
+			lpwndpos->x = (rect.right - lpwndpos->cx);
+		}
+	}
+
+	// Snap to top
+	if (lpwndpos->y >= (rect.top - threshold) &&
+		lpwndpos->y <= (rect.top + threshold))
+	{
+		if (edgeMove)
+		{
+			int diff = lpwndpos->y - rect.top;
+			lpwndpos->cy += diff;
+		}
+		if (edgeMove || captionMove)
+		{
+			lpwndpos->y = rect.top;
+		}
+	}
+
+	// Snap to bottom
+	if ((lpwndpos->y + lpwndpos->cy) >= (rect.bottom - threshold) &&
+		(lpwndpos->y + lpwndpos->cy) <= (rect.bottom + threshold))
+	{
+		if (edgeMove)
+		{
+			int diff = rect.bottom - (lpwndpos->y + lpwndpos->cy);
+			lpwndpos->cy += diff;
+		}
+		if (captionMove)
+		{
+			lpwndpos->y = (rect.bottom - lpwndpos->cy);
+		}
+	}
 }

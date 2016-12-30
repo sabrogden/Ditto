@@ -27,7 +27,7 @@ public:
 	UINT DoNcHitTest(CWnd *pWnd, CPoint point);
 	void DoSetRegion(CWnd *pWnd);
 	long DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point);
-	void DoNcLButtonDown(CWnd *pWnd, UINT nHitTest, CPoint point);
+	int DoNcLButtonDown(CWnd *pWnd, UINT nHitTest, CPoint point);
 	void DoNcMouseMove(CWnd *pWnd, UINT nHitTest, CPoint point) ;
 	bool DoPreTranslateMessage(MSG* pMsg);
 	void SetCaptionOn(CWnd *pWnd, int nPos, bool bOnstartup, int captionSize, int captionFontSize);
@@ -35,6 +35,8 @@ public:
 	void SetCaptionTextColor(COLORREF color);
 
 	void SetTitleTextHeight(CWnd *pWnd);
+
+	void SnapToEdge(CWnd *pWnd, WINDOWPOS* lpwndpos);
 
 	long m_lTopBorder;
 	long m_lRightBorder;
@@ -85,4 +87,6 @@ public:
 	int m_captionBorderWidth;
 
 	int m_titleTextHeight;
+
+	bool m_buttonDownOnCaption;
 };

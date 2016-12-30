@@ -20,6 +20,7 @@ m_imageViewer.m_pBitmap = NULL;		\
 
 #define HIDE_WINDOW_TIMER 1
 #define SAVE_SIZE 2
+#define TIMER_BUTTON_UP 3
 
 /////////////////////////////////////////////////////////////////////////////
 // CToolTipEx
@@ -62,6 +63,7 @@ ON_WM_SETFOCUS()
 
 ON_COMMAND(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, &CToolTipEx::OnFirstHidedescriptionwindowonm)
 ON_COMMAND(ID_FIRST_WRAPTEXT, &CToolTipEx::OnFirstWraptext)
+ON_WM_WINDOWPOSCHANGING()
 END_MESSAGE_MAP()
 
 
@@ -401,45 +403,54 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 
 CRect CToolTipEx::GetBoundsRect()
 {
+	DWORD d = GetTickCount();
+
     CWindowDC dc(NULL);
+	int nLineWidth = 0;
 
-    CFont *pOldFont = (CFont*)dc.SelectObject((CFont*) &m_Font);
-
-    int nLineWidth = 0;
+	CRect rect(0, 0, 0, 0);
 
     if(nLineWidth == 0)
     {
         // Count the number of lines of text
-        int nStart = 0, nNumLines = 0;
-        CString strTextCopy = m_csText;
+		int nStart = 0;
+		INT nNumLines = 0;
+		int longestLength = 0;
+		CString longestString;
         do
         {
-            nStart = strTextCopy.Find(_T("\n"));
+            int newStart = m_csText.Find(_T("\n"), nStart);
+			if (newStart < 0)
+			{
+				int length = m_csText.GetLength() - nStart;
+				if (length > longestLength)
+				{
+					longestString = m_csText.Mid(nStart, length);
+					longestLength = length;
+				}
 
-            // skip found character 
-            if(nStart >= 0)
-            {
-                strTextCopy = strTextCopy.Mid(nStart + 1);
-            }
+				break;
+			}
+
+			int length = newStart - nStart;
+			if(length > longestLength)
+			{
+				longestString = m_csText.Mid(nStart, length);
+				longestLength = length;
+			}           
 
             nNumLines++;
+			nStart = newStart + 1;
         }
+        while(nStart >= 0 && nNumLines < 100);
 
-        while(nStart >= 0);
+		CFont *pOldFont = (CFont*)dc.SelectObject((CFont*)&m_Font);
+		CSize size = dc.GetTextExtent(longestString);  
+		dc.SelectObject(pOldFont);
 
-        // Find the widest line
-        for(int i = 0; i < nNumLines; i++)
-        {
-            CString strLine = GetFieldFromString(m_csText, i, _T('\n')) + _T(
-                "  ");
-            nLineWidth = max(nLineWidth, dc.GetTextExtent(strLine).cx);
-        }
-    }
-
-    CRect rect(0, 0, max(0, nLineWidth), 0);
-    dc.DrawText(m_csText, rect, DT_CALCRECT | m_dwTextStyle);
-
-    dc.SelectObject(pOldFont);
+		rect.right = size.cx;
+		rect.bottom = size.cy * nNumLines;
+    }    
 
     rect.bottom += m_rectMargin.top + m_rectMargin.bottom;
     rect.right += m_rectMargin.left + m_rectMargin.right + 2;
@@ -455,6 +466,12 @@ CRect CToolTipEx::GetBoundsRect()
             rect.right = rect.left + nWidth;
         }
     }
+
+	DWORD diff = GetTickCount() - d;
+	if (diff > 10)
+	{
+		Log(StrF(_T("Size To Content: %d\n"), diff));
+	}
 
     return rect;
 }
@@ -736,6 +753,16 @@ void CToolTipEx::OnTimer(UINT_PTR nIDEvent)
 			SaveWindowSize();
 			KillTimer(SAVE_SIZE);
 			break;
+		case TIMER_BUTTON_UP:
+		{
+			if ((GetKeyState(VK_LBUTTON) & 0x100) == 0)
+			{
+				m_DittoWindow.DoNcLButtonUp(this, 0, CPoint(0, 0));
+				KillTimer(TIMER_BUTTON_UP);
+			}
+			break;
+		}
+
     }
 
     CWnd::OnTimer(nIDEvent);
@@ -765,7 +792,12 @@ HITTEST_RET CToolTipEx::OnNcHitTest(CPoint point)
 
 void CToolTipEx::OnNcLButtonDown(UINT nHitTest, CPoint point) 
 {
-	m_DittoWindow.DoNcLButtonDown(this, nHitTest, point);
+	int buttonPressed = m_DittoWindow.DoNcLButtonDown(this, nHitTest, point);
+
+	if (buttonPressed != 0)
+	{
+		SetTimer(TIMER_BUTTON_UP, 100, NULL);
+	}
 
 	CWnd::OnNcLButtonDown(nHitTest, point);
 }
@@ -780,6 +812,8 @@ void CToolTipEx::OnNcLButtonUp(UINT nHitTest, CPoint point)
 		Hide();
 		break;
 	}
+
+	KillTimer(TIMER_BUTTON_UP);
 
 	CWnd::OnNcLButtonUp(nHitTest, point);
 }
@@ -910,4 +944,11 @@ void CToolTipEx::ApplyWordWrap()
 void CToolTipEx::HideWindowInXMilliSeconds(long lms) 
 { 
 	SetTimer(HIDE_WINDOW_TIMER, lms, NULL); 
+}
+
+void CToolTipEx::OnWindowPosChanging(WINDOWPOS* lpwndpos)
+{
+	CWnd::OnWindowPosChanging(lpwndpos);
+
+	m_DittoWindow.SnapToEdge(this, lpwndpos);
 }

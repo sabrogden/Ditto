@@ -6,6 +6,7 @@
 #include "EditFrameWnd.h"
 #include ".\editframewnd.h"
 
+#define TIMER_BUTTON_UP 1
 
 // CEditFrameWnd
 
@@ -39,6 +40,8 @@ BEGIN_MESSAGE_MAP(CEditFrameWnd, CFrameWnd)
 	ON_WM_NCLBUTTONUP()
 	ON_WM_NCMOUSEMOVE()
 	ON_WM_NCLBUTTONDBLCLK()
+	ON_WM_WINDOWPOSCHANGING()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -177,7 +180,12 @@ HITTEST_RET CEditFrameWnd::OnNcHitTest(CPoint point)
 }
 void CEditFrameWnd::OnNcLButtonDown(UINT nHitTest, CPoint point)
 {
-	m_DittoWindow.DoNcLButtonDown(this, nHitTest, point);
+	int buttonPressed = m_DittoWindow.DoNcLButtonDown(this, nHitTest, point);
+
+	if (buttonPressed != 0)
+	{
+		SetTimer(TIMER_BUTTON_UP, 100, NULL);
+	}
 
 	CFrameWnd::OnNcLButtonDown(nHitTest, point);
 }
@@ -186,6 +194,8 @@ void CEditFrameWnd::OnNcLButtonUp(UINT nHitTest, CPoint point)
 {
 	if(m_DittoWindow.DoNcLButtonUp(this, nHitTest, point) > 0)
 		return;
+
+	KillTimer(TIMER_BUTTON_UP);
 
 	CFrameWnd::OnNcLButtonUp(nHitTest, point);
 }
@@ -220,4 +230,29 @@ void CEditFrameWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
 	}
 
 	CFrameWnd::OnNcLButtonDblClk(nHitTest, point);
+}
+
+void CEditFrameWnd::OnWindowPosChanging(WINDOWPOS* lpwndpos)
+{
+	CFrameWnd::OnWindowPosChanging(lpwndpos);
+
+	m_DittoWindow.SnapToEdge(this, lpwndpos);
+}
+
+void CEditFrameWnd::OnTimer(UINT_PTR nIDEvent)
+{
+	switch (nIDEvent)
+	{
+		case TIMER_BUTTON_UP:
+		{
+			if ((GetKeyState(VK_LBUTTON) & 0x100) == 0)
+			{
+				m_DittoWindow.DoNcLButtonUp(this, 0, CPoint(0, 0));
+				KillTimer(TIMER_BUTTON_UP);
+			}
+			break;
+		}
+	}
+
+	CWnd::OnTimer(nIDEvent);
 }
