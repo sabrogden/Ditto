@@ -337,6 +337,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     m_GroupTree.SetNotificationWndEx(m_hWnd);
     m_GroupTree.ShowWindow(SW_HIDE);
+	m_GroupTree.m_showRightClickMenu = true;
 
     m_ShowGroupsFolderBottom.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SHOW_GROUPS_BOTTOM);
     //m_ShowGroupsFolderBottom.LoadBitmaps(IDB_CLOSED_FOLDER, IDB_CLOSED_FOLDER_PRESSED, IDB_CLOSED_FOLDER_FOCUSED);
@@ -344,7 +345,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_ShowGroupsFolderBottom.ShowWindow(SW_SHOW);
 	m_ShowGroupsFolderBottom.SetToolTipText(theApp.m_Language.GetString(_T("GroupsTooltip"), _T("Groups")));
 	m_ShowGroupsFolderBottom.ModifyStyle(WS_TABSTOP, 0);
-
+	
     m_BackButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_BACK_BUTTON);
 	m_BackButton.LoadStdImageDPI(return_16, return_20, return_24, return_28, return_32, _T("PNG"));
 	m_BackButton.ModifyStyle(WS_TABSTOP, 0);
@@ -5736,11 +5737,11 @@ void CQPasteWnd::OnSystemButton()
 		if (!cmSubMenu)
 		{
 			return;
-		}
+		}				
+		
+		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 
 		SetMenuChecks(cmSubMenu);
-
-		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 
 		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
 	}
