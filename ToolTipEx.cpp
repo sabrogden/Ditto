@@ -842,6 +842,8 @@ void CToolTipEx::OnOptions()
 
 		GetCursorPos(&pp);
 
+		//theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
+
 		if(CGetSetOptions::GetRememberDescPos())
 			cmSubMenu->CheckMenuItem(ID_FIRST_REMEMBERWINDOWPOSITION, MF_CHECKED);
 
@@ -857,7 +859,7 @@ void CToolTipEx::OnOptions()
 		if (CGetSetOptions::GetWrapDescriptionText())
 			cmSubMenu->CheckMenuItem(ID_FIRST_WRAPTEXT, MF_CHECKED);
 		
-		//theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
+		
 		
 		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
 	}
