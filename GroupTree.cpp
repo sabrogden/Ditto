@@ -20,6 +20,7 @@ CGroupTree::CGroupTree()
 	m_bHide = true;
 	m_selectedFolderID = -1;
 	m_bSendAllready = false;
+	m_showRightClickMenu = false;	
 }
 
 CGroupTree::~CGroupTree()
@@ -349,6 +350,11 @@ UINT CGroupTree::GetSelectedCount() const
 
 void CGroupTree::OnRclickQuickPaste(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	if (m_showRightClickMenu == false)
+	{
+		*pResult = 0;
+		return;
+	}
 	POINT pp;
 	CMenu cmPopUp;
 	CMenu *cmSubMenu = NULL;

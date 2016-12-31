@@ -28,6 +28,7 @@ public:
 	int m_selectedFolderID;
 	int GetSelectedTree();
 	bool AddNode(CString csText, int id);
+	bool m_showRightClickMenu;
 
 protected:
 	void FillTree(int parentId, HTREEITEM hParent);
