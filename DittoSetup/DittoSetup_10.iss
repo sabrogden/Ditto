@@ -56,11 +56,12 @@ Name: Hebrew; MessagesFile: Hebrew.isl
 Name: Finnish; MessagesFile: Finnish.isl
 
 [Tasks]
-Name: RunAtStartup; Description: Run Ditto on Windows Startup
+Name: RunAtStartup; Description: Run Ditto on windows startup
+Name: AddFireWallException; Description: Add windows firewall exception for Ditto on port 23443;  Flags: unchecked
 
 [Files]
 #ifdef bit64
-	Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
+	Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_64');
 	Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 	Source: mfc-crt64\*; DestDir: {app}      
   Source: ..\Release64\icuuc55.dll; DestDir: {app}; Flags: ignoreversion
@@ -72,7 +73,9 @@ Name: RunAtStartup; Description: Run Ditto on Windows Startup
   Source: ..\Release64\icudt55.dll; DestDir: {app}; Flags: ignoreversion
 #endif
 #ifndef bit64
-	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion;
+	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_32');
+
+
 	Source: ..\Addins\DittoUtil\Release\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 	Source: mfc-crt_10\*; DestDir: {app}
   Source: ..\Release\icuuc55.dll; DestDir: {app}; Flags: ignoreversion
@@ -183,6 +186,46 @@ begin
   end;
 end;
 
+
+function RuleExistsInFirewall(RuleName : String) : Boolean;
+var
+  ErrorCode : Integer;
+begin
+  Exec('>', 'netsh advfirewall firewall show rule name="' + RuleName + '"', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+  if ErrorCode = 0 then
+    Result := True
+  else
+    Result := False;
+end;
+
+procedure AddProgramToFirewall(ProgramName : String; RuleName : String);
+var
+  ErrorCode : Integer;
+  Success : Boolean;
+  WindowsVersion : TWindowsVersion;
+begin
+  if IsTaskSelected('AddFireWallException') then
+    begin
+    GetWindowsVersionEx(WindowsVersion);
+    if (WindowsVersion.Major < 6) then
+      begin
+        Success := Exec('>', 'netsh firewall add allowedprogram "' + ProgramName + '" "' + RuleName + '" ENABLE ALL', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+      end
+    else
+      begin
+        if (not RuleExistsInFirewall(RuleName)) then
+          begin
+            Success := Exec('>', 'netsh advfirewall firewall add rule name="' + RuleName + '" dir=in action=allow protocol=TCP localport=23443 program="' + ProgramName + '" enable=yes', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+            Success := Exec('>', 'netsh advfirewall firewall add rule name="' + RuleName + '" dir=out action=allow protocol=TCP localport=23443 program="' + ProgramName + '" enable=yes', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+          end
+      end;
+     
+    if not Success then
+       Log('Error - Unable to add ' + RuleName + ' to List of Windows firewall exceptions. ErrorCode: ' + IntToStr(ErrorCode))
+    else
+       Log(RuleName + ' successfully added to list of Windows firewall exceptions. ErrorCode: ' + IntToStr(ErrorCode))
+  end
+end;
 
 
 
