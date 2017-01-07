@@ -867,10 +867,15 @@ void CCP_MainApp::SetConnectCV(bool bConnect)
 	if(bConnect)
 	{
 		m_pMainFrame->m_trayIcon.SetIcon(IDR_MAINFRAME);
+		m_pMainFrame->m_trayIcon.SetTooltipText(_T("Ditto"));
 	}
 	else
 	{
 		m_pMainFrame->m_trayIcon.SetIcon(IDI_DITTO_NOCOPYCB);
+		CString cs;
+		cs = _T("Ditto ");
+		cs += theApp.m_Language.GetString("disconnected", "[Disconnected]");
+		m_pMainFrame->m_trayIcon.SetTooltipText(cs);
 	}
 
 	if(QPasteWnd())

@@ -409,6 +409,8 @@
 		
 		<Item English_Text = "[Top Most Window]" ID = "top_most"></Item>
 		
+		<Item English_Text = "[Disconnected]" ID = "disconnected"></Item>
+		
 				
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>

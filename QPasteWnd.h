@@ -279,7 +279,9 @@ public:
 
 	void LoadShortcuts();
 
-	void ShowRightClickMenu();;
+	void ShowRightClickMenu();
+
+	void SetCurrentTransparency();
 
     // Generated message map functions
 protected:

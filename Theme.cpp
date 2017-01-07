@@ -33,7 +33,7 @@ void CTheme::LoadDefaults()
 	m_CaptionRightTopMost = RGB(204, 204, 204);
 	
 	m_CaptionLeftNotConnected = RGB(255, 255, 255);
-	m_CaptionRightNotConnected = RGB(255, 0, 0);
+	m_CaptionRightNotConnected = RGB(255, 255, 0);
 
 	m_CaptionTextColor = RGB(191, 191, 191);
 	m_ListBoxOddRowsBG = RGB(255, 255, 255);

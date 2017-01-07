@@ -1047,11 +1047,11 @@ LRESULT CMainFrame::OnSetConnected(WPARAM wParam, LPARAM lParam)
 {
     if(wParam)
     {
-        theApp.SetConnectCV(true);
+        theApp.SetConnectCV(true);		
     }
     else if(lParam)
     {
-        theApp.SetConnectCV(false);
+        theApp.SetConnectCV(false);		
     }
 
     return TRUE;

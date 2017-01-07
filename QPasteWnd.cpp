@@ -755,21 +755,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 
     m_bHideWnd = true;
 
-    #ifdef AFTER_98
-        //Set the transparency
-        if(CGetSetOptions::GetEnableTransparency())
-        {
-            m_Alpha.SetTransparent(TRUE);
-
-            float fPercent = CGetSetOptions::GetTransparencyPercent() / (float)100.0;
-
-            m_Alpha.SetOpacity(OPACITY_MAX - (int)(fPercent *OPACITY_MAX));
-        }
-        else
-        {
-            m_Alpha.SetTransparent(FALSE);
-        }
-    #endif 
+	SetCurrentTransparency();
 
     m_lstHeader.SetNumberOfLinesPerRow(CGetSetOptions::GetLinesPerRow());
     m_lstHeader.SetShowTextForFirstTenHotKeys(CGetSetOptions::GetShowTextForFirstTenHotKeys());
@@ -1101,6 +1087,12 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 		title = (StrF(_T("%s %s"), _T(QPASTE_TITLE), theApp.m_Language.GetString("top_window", "[Top Most Window]")));
 	}
 
+	if (theApp.IsClipboardViewerConnected() == FALSE)
+	{
+		title += _T(" ");
+		title += theApp.m_Language.GetString("disconnected", "[Disconnected]");
+	}
+
     CString cs;
     cs.Format(_T(" - %d/%d"), m_lstHeader.GetSelectedCount(), m_lstHeader.GetItemCount());
     title += cs;
@@ -1141,14 +1133,19 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 
     SetToolTipText(title);
 
+	CString windowTitle = _T(QPASTE_TITLE);
+
 	if (g_Opt.m_bShowPersistent)
 	{
-		SetCustomWindowTitle(StrF(_T("%s %s"), _T(QPASTE_TITLE), theApp.m_Language.GetString("top_window", "[Top Most Window]")));
+		windowTitle += StrF(_T(" %s"), theApp.m_Language.GetString("top_window", "[Top Most Window]"));
 	}
-	else
+
+	if (theApp.IsClipboardViewerConnected() == FALSE)
 	{
-		SetCustomWindowTitle(_T(QPASTE_TITLE));
+		windowTitle += StrF(_T(" %s"), theApp.m_Language.GetString("disconnected", "[Disconnected]"));
 	}
+
+	SetCustomWindowTitle(windowTitle);
 }
 
 BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
@@ -1768,7 +1765,7 @@ void CQPasteWnd::OnMenuTransparency25()
 
 void CQPasteWnd::OnMenuTransparency30()
 {
-    SetTransparency(25);
+    SetTransparency(30);
 }
 
 void CQPasteWnd::OnMenuTransparency40()
@@ -1796,6 +1793,23 @@ void CQPasteWnd::SetTransparency(int percent)
             m_Alpha.SetTransparent(FALSE);
         }
     #endif 
+}
+
+void CQPasteWnd::SetCurrentTransparency()
+{
+	//Set the transparency
+	if (CGetSetOptions::GetEnableTransparency())
+	{
+		m_Alpha.SetTransparent(TRUE);
+
+		float fPercent = CGetSetOptions::GetTransparencyPercent() / (float)100.0;
+
+		m_Alpha.SetOpacity(OPACITY_MAX - (int)(fPercent *OPACITY_MAX));
+	}
+	else
+	{
+		m_Alpha.SetTransparent(FALSE);
+	}
 }
 
 void CQPasteWnd::OnMenuDelete()
@@ -4398,6 +4412,8 @@ LRESULT CQPasteWnd::OnPostOptions(WPARAM wParam, LPARAM lParam)
 	m_lstHeader.SetShowTextForFirstTenHotKeys(CGetSetOptions::GetShowTextForFirstTenHotKeys());
 	m_lstHeader.SetShowIfClipWasPasted(CGetSetOptions::GetShowIfClipWasPasted());
 	m_lstHeader.SetNumberOfLinesPerRow(CGetSetOptions::GetLinesPerRow());
+
+	SetCurrentTransparency();
 
 	return 1;
 }
