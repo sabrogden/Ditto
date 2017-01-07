@@ -1845,6 +1845,8 @@ void CQPasteWnd::OnMenuExitprogram()
 void CQPasteWnd::OnMenuToggleConnectCV()
 {
     theApp.ToggleConnectCV();
+
+	UpdateStatus();
 }
 
 #include "client.h"

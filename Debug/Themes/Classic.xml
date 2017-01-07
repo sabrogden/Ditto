@@ -7,7 +7,7 @@
 	<CaptionRightTopMost>RGB(157, 185, 235)</CaptionRightTopMost>
 	
 	<CaptionLeftNotConnected>RGB(122, 150, 223)</CaptionLeftNotConnected>
-	<CaptionRightNotConnected>RGB(122, 150, 223)</CaptionRightNotConnected>
+	<CaptionRightNotConnected>RGB(255, 255, 0)</CaptionRightNotConnected>
 	
 	<CaptionTextColor>RGB(255, 255, 255)</CaptionTextColor>
 	
@@ -25,7 +25,7 @@
 	
 	<Border>RGB(122, 150, 223)</Border>
 	<BorderTopMost>RGB(122, 150, 223)</BorderTopMost>
-	<BorderNotConnected>RGB(255, 0, 0)</BorderNotConnected>	
+	<BorderNotConnected>RGB(122, 150, 223)</BorderNotConnected>	
 	
 	<GroupTreeBG></GroupTreeBG>
 	<GroupTreeText></GroupTreeText>
