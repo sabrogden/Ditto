@@ -28,7 +28,7 @@ BOOL PASCAL AfxInitRichEditEx()
     if( l_pState->m_hInstRichEdit20 == NULL )
     {
 #ifdef _UNICODE 
-        l_pState->m_hInstRichEdit20 = LoadLibraryW(_T("RICHED20.DLL"));
+        l_pState->m_hInstRichEdit20 = LoadLibraryW(_T("MSFTEDIT.DLL"));
 #else
 		l_pState->m_hInstRichEdit20 = LoadLibraryA(_T("RICHED20.DLL"));
 #endif
@@ -534,9 +534,6 @@ int CRichEditCtrlEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 BOOL CRichEditCtrlEx::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext) 
 {
-#ifdef _UNICODE
-	return CWnd::Create(_T("RichEdit20W"), lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
-#else
-	return CWnd::Create(_T("RichEdit20A"), lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
-#endif
+	return CWnd::Create(_T("RichEdit50W"), lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
+
 }

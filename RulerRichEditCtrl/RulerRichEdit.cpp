@@ -95,7 +95,7 @@ BOOL CRulerRichEdit::Create( DWORD style, CRect rect, CWnd* parent )
    ============================================================*/
 {
 
-	return CWnd::Create (RTF_CLASS, NULL, style, rect, parent, RTF_CONTROL );
+	return CWnd::Create (L"RICHEDIT50W", NULL, style, rect, parent, RTF_CONTROL );
 
 };
 

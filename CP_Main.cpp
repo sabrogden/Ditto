@@ -135,9 +135,7 @@ CCP_MainApp::~CCP_MainApp()
 }
 
 BOOL CCP_MainApp::InitInstance()
-{
-	LoadLibrary(TEXT("riched20.dll"));
-
+{	
 	AfxEnableControlContainer();
 	AfxOleInit();
 	AfxInitRichEditEx();
@@ -145,6 +143,8 @@ BOOL CCP_MainApp::InitInstance()
 
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
 	Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
+
+	LoadLibrary(TEXT("MSFTEDIT.DLL"));
 
 	//MessageBox(NULL, _T("ditto starting"), _T("d"), MB_OK);
 
