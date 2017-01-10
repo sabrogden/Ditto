@@ -78,7 +78,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
     CString szClassName = AfxRegisterWndClass(CS_CLASSDC | CS_SAVEBITS, LoadCursor(NULL, IDC_ARROW));
 
     // Create the window - just don't show it yet.
-    if( !CWnd::CreateEx(WS_EX_TOPMOST, szClassName, _T(""), WS_POPUP,
+    if( !CWnd::CreateEx(0, szClassName, _T(""), WS_POPUP,
        0, 0, 0, 0, pParentWnd->GetSafeHwnd(), 0, NULL))
     {
         return FALSE;
@@ -223,9 +223,8 @@ BOOL CToolTipEx::Show(CPoint point)
 	}
 
 	m_saveWindowLockout = true;
-    SetWindowPos(&CWnd::wndTopMost, rect.left, rect.top, rect.Width(), rect.Height
-                 (), SWP_SHOWWINDOW | SWP_NOCOPYBITS | SWP_NOACTIVATE |
-                 SWP_NOZORDER);
+	ShowWindow(SW_SHOW);
+	MoveWindow(rect);
 	m_saveWindowLockout = false;
 
     return TRUE;
