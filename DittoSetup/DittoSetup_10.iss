@@ -57,7 +57,7 @@ Name: Finnish; MessagesFile: Finnish.isl
 
 [Tasks]
 Name: RunAtStartup; Description: Run Ditto on windows startup
-Name: AddFireWallException; Description: Add windows firewall exception for Ditto on port 23443;  Flags: unchecked
+Name: AddFireWallException; Description: Add Windows Firewall exception for Ditto on port 23443;  Flags: unchecked
 
 [Files]
 #ifdef bit64
