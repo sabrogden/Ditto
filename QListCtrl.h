@@ -143,7 +143,8 @@ public:
 
 	BOOL OnItemDeleted(long lID);
 
-	BOOL IsToolTipWindowVisible() { return ::IsWindowVisible(m_toolTipHwnd); }
+	BOOL IsToolTipWindowVisible();
+	BOOL IsToolTipWindowFocus();
 
 	int GetRowHeight() { return m_rowHeight; }
 

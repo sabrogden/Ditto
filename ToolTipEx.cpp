@@ -223,8 +223,9 @@ BOOL CToolTipEx::Show(CPoint point)
 	}
 
 	m_saveWindowLockout = true;
-	ShowWindow(SW_SHOW);
 	MoveWindow(rect);
+	ShowWindow(SW_SHOWNA);
+	
 	m_saveWindowLockout = false;
 
     return TRUE;

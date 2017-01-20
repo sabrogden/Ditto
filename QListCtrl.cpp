@@ -1472,3 +1472,14 @@ void CQListCtrl::HidePopup()
 	if(VALID_TOOLTIP) 
 		m_pToolTip->Hide();	
 }
+
+BOOL CQListCtrl::IsToolTipWindowVisible() 
+{ 
+	return ::IsWindowVisible(m_toolTipHwnd); 
+}
+
+BOOL CQListCtrl::IsToolTipWindowFocus()
+{
+	return ::GetFocus() == m_toolTipHwnd ||
+		::GetParent(::GetFocus()) == m_toolTipHwnd;
+}
