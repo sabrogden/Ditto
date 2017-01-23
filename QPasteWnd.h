@@ -290,6 +290,7 @@ protected:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnSetFocus(CWnd *pOldWnd);
+	afx_msg void OnKillFocus(CWnd *pOldWnd);
     afx_msg void OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized);
     afx_msg void OnMenuLinesperrow1();
     afx_msg void OnMenuLinesperrow2();
@@ -488,4 +489,5 @@ public:
 	afx_msg void OnUpdateMenuNewclip32937(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateMenuGlobalhotkeys32933(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateMenuDeleteclipdata32934(CCmdUI *pCmdUI);
+	afx_msg LRESULT OnSearchFocused(WPARAM wParam, LPARAM lParam);
 };

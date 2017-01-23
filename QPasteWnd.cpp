@@ -80,6 +80,7 @@ ON_WM_ERASEBKGND()
 ON_WM_CREATE()
 ON_WM_SIZE()
 ON_WM_SETFOCUS()
+ON_WM_KILLFOCUS()
 ON_WM_ACTIVATE()
 ON_COMMAND(ID_MENU_LINESPERROW_1, OnMenuLinesperrow1)
 ON_COMMAND(ID_MENU_LINESPERROW_2, OnMenuLinesperrow2)
@@ -283,6 +284,7 @@ ON_UPDATE_COMMAND_UI(ID_MENU_IMPORTCLIP32935, &CQPasteWnd::OnUpdateMenuImportcli
 ON_UPDATE_COMMAND_UI(ID_MENU_NEWCLIP32937, &CQPasteWnd::OnUpdateMenuNewclip32937)
 ON_UPDATE_COMMAND_UI(ID_MENU_GLOBALHOTKEYS32933, &CQPasteWnd::OnUpdateMenuGlobalhotkeys32933)
 ON_UPDATE_COMMAND_UI(ID_MENU_DELETECLIPDATA32934, &CQPasteWnd::OnUpdateMenuDeleteclipdata32934)
+ON_MESSAGE(NM_FOCUS_ON_SEARCH, OnSearchFocused)
 END_MESSAGE_MAP()
 
 
@@ -597,6 +599,11 @@ void CQPasteWnd::OnSetFocus(CWnd *pOldWnd)
     {
         m_lstHeader.SetFocus();
     }
+}
+
+void CQPasteWnd::OnKillFocus(CWnd *pOldWnd)
+{
+	CWndEx::OnKillFocus(pOldWnd);	
 }
 
 void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
@@ -6026,5 +6033,9 @@ void CQPasteWnd::OnUpdateMenuNewclip32937(CCmdUI *pCmdUI)
 	UpdateMenuShortCut(pCmdUI, ActionEnums::NEWCLIP);
 }
 
+LRESULT CQPasteWnd::OnSearchFocused(WPARAM wParam, LPARAM lParam)
+{
+	m_lstHeader.HidePopup();
 
-
+	return TRUE;
+}

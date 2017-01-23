@@ -134,8 +134,6 @@ void CQuickPasteKeyboard::LoadItems()
 			for (int x = 0; x < 10; x++)
 			{
 				ar.Array[x].A = g_Opt.GetActionShortCutA(action, x);
-				if (ar.Array[x].A < 0)
-					break;
 				ar.Array[x].B = g_Opt.GetActionShortCutB(action, x);
 			}
 
@@ -231,6 +229,8 @@ void CQuickPasteKeyboard::OnLvnItemchangedList1(NMHDR *pNMHDR, LRESULT *pResult)
 
 		m_assignedCombo.ResetContent();
 
+		bool addedItem = false;
+
 		for (int i = 0; i < 10; i++)
 		{
 			if(m_map[id].Array[i].A > 0)
@@ -238,17 +238,16 @@ void CQuickPasteKeyboard::OnLvnItemchangedList1(NMHDR *pNMHDR, LRESULT *pResult)
 				CString shortcut = GetShortCutText(m_map[id].Array[i]);
 				int pos = m_assignedCombo.AddString(shortcut);
 				m_assignedCombo.SetItemData(pos, i);
+
+				addedItem = true;
 			}
-			else
-			{
-				if(i == 0)
-				{
-					CString shortcut;
-					int pos = m_assignedCombo.AddString(shortcut);
-					m_assignedCombo.SetItemData(pos, i);
-				}
-				break;
-			}
+		}
+
+		if (addedItem == false)
+		{
+			CString shortcut;
+			int pos = m_assignedCombo.AddString(shortcut);
+			m_assignedCombo.SetItemData(pos, 0);
 		}
 
 		m_assignedCombo.SetCurSel(0);
@@ -400,25 +399,28 @@ void CQuickPasteKeyboard::OnBnClickedButtonRemove()
 			int pos = m_assignedCombo.AddString(shortcut);
 			m_assignedCombo.SetItemData(pos, 0);
 		}
-		else
+		/*else
 		{
-			for (int resetRow = shortCutId; resetRow < (10-1); resetRow++)
+			if (m_map[id].Array[shortCutId + 1].A > 0)
 			{
-				m_map[id].Array[resetRow].A = m_map[id].Array[resetRow+1].A;
-				m_map[id].Array[resetRow].B = m_map[id].Array[resetRow+1].B;
-				if (m_map[id].Array[resetRow].A > 0)
+				for (int resetRow = shortCutId; resetRow < (10 - 1); resetRow++)
 				{
-					m_map[id].Array[resetRow].Dirty = true;
-					m_map[id].Array[resetRow+1].Dirty = true;
+					m_map[id].Array[resetRow].A = m_map[id].Array[resetRow + 1].A;
+					m_map[id].Array[resetRow].B = m_map[id].Array[resetRow + 1].B;
+					if (m_map[id].Array[resetRow].A > 0)
+					{
+						m_map[id].Array[resetRow].Dirty = true;
+						m_map[id].Array[resetRow + 1].Dirty = true;
+					}
 				}
-			}
 
-			if (m_map[id].Array[9].A > 0)
-			{
-				m_map[id].Array[9].Dirty = true;
+				if (m_map[id].Array[9].A > 0)
+				{
+					m_map[id].Array[9].Dirty = true;
+				}
+				m_map[id].Array[9].A = -1;
+				m_map[id].Array[9].B = -1;
 			}
-			m_map[id].Array[9].A = -1;
-			m_map[id].Array[9].B = -1;
 
 			int comboCount = m_assignedCombo.GetCount();
 			for (int comboIndex = 0; comboIndex < comboCount; comboIndex++)
@@ -429,7 +431,7 @@ void CQuickPasteKeyboard::OnBnClickedButtonRemove()
 					m_assignedCombo.SetItemData(comboIndex, rowId-1);
 				}
 			}
-		}
+		}*/
 
 		CString sh = GetShortCutText(m_map[id]);
 		LVITEM lvi;
@@ -454,14 +456,22 @@ void CQuickPasteKeyboard::OnBnClickedButtonAdd()
 		int id = SelectedCommandId();
 		if (m_map.find(id) != m_map.end())
 		{
-			CString shortcut;
-			int pos = m_assignedCombo.AddString(shortcut);
-			m_assignedCombo.SetItemData(pos, count);
-			m_assignedCombo.SetCurSel(pos);
+			for (int i = 0; i < 10; i++)
+			{
+				if (m_map[id].Array[i].A <= 0)
+				{
+					CString shortcut;
+					int pos = m_assignedCombo.AddString(shortcut);
+					m_assignedCombo.SetItemData(pos, i);
+					m_assignedCombo.SetCurSel(pos);
 
-			LoadHotKey(m_map[id].Array[count]);
+					LoadHotKey(m_map[id].Array[i]);
 
-			m_hotKey1.SetFocus();
+					m_hotKey1.SetFocus();
+
+					break;
+				}
+			}
 		}
 	}
 }

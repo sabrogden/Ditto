@@ -366,6 +366,15 @@ void CSymbolEdit::OnSetFocus(CWnd* pOldWnd)
 {
 	Invalidate(FALSE);
 	CEdit::OnSetFocus(pOldWnd);
+
+	CWnd *pWnd = GetParent();
+	if (pWnd)
+	{
+		if (g_Opt.m_bFindAsYouType)
+		{
+			pWnd->SendMessage(NM_FOCUS_ON_SEARCH, 0, 0);
+		}
+	}
 }
 
 void CSymbolEdit::OnKillFocus(CWnd* pNewWnd)
