@@ -2972,9 +2972,6 @@ bool CQPasteWnd::DoActionNextDescription()
 	if (m_lstHeader.IsToolTipWindowVisible() == FALSE)
 		return false;
 
-	if (m_lstHeader.IsToolTipWindowFocus())
-		return false;
-
 	if (g_Opt.m_bAllwaysShowDescription)
 		return false;
 
@@ -3020,9 +3017,6 @@ bool CQPasteWnd::DoActionNextDescription()
 bool CQPasteWnd::DoActionPrevDescription()
 {
 	if (m_lstHeader.IsToolTipWindowVisible() == FALSE)
-		return false;
-
-	if (m_lstHeader.IsToolTipWindowFocus())
 		return false;
 
 	if (g_Opt.m_bAllwaysShowDescription)

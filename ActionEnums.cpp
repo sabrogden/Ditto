@@ -348,10 +348,6 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 	case 1:
 		switch (value)
 		{
-		case ActionEnums::PREVDESCRIPTION:
-			return VK_UP;
-		case ActionEnums::NEXTDESCRIPTION:
-			return VK_DOWN;
 		case ActionEnums::PASTE_SELECTED:
 			return VK_MOUSE_DOUBLE_CLICK;
 		case PASTE_POSITION_1:
