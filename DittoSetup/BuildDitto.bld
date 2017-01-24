@@ -608,6 +608,6 @@ var sc_security="b3f57099";
 			<value>%verMajor%_%verMinor%_%verBuild%_%verRevision%</value>
 		</macro>
 		<macro name='workDir'>
-			<value>%temp%\Ditto</value>
+			<value>%temp%\Ditto_Build</value>
 		</macro></macros>
 </project>
