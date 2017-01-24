@@ -5020,8 +5020,14 @@ LRESULT CQPasteWnd::OnToolTipWndInactive(WPARAM wParam, LPARAM lParam)
             HideQPasteWindow(false);
         }
     }
-
-	m_lstHeader.HidePopup();
+	else
+	{
+		CWnd *p = GetFocus();
+		if (p == NULL)
+		{
+			m_lstHeader.HidePopup();
+		}
+	}
 
     return TRUE;
 }
