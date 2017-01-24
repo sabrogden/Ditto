@@ -117,10 +117,10 @@ CString CInternetUpdate::GetVersionString(long lVersion)
 {
 	CString csLine;
 	csLine.Format(_T("%02i.%02i.%02i.%02i"), 
-		(lVersion >> 24) & 0x03f,
-		(lVersion >> 16) & 0x03f,
-		((lVersion >> 8) & 0x07f),
-		lVersion & 0x07f);
+		(lVersion >> 24) & 0x0ff,
+		(lVersion >> 16) & 0x0ff,
+		((lVersion >> 8) & 0x0ff),
+		lVersion & 0x0ff);
 
 	return csLine;
 }
