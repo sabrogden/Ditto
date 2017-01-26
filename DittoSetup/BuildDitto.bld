@@ -354,7 +354,7 @@ DittoSetup*]]></X>
   <Applications>
     <Application Id="Ditto" Executable="Ditto.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements
-       BackgroundColor="#464646"
+       BackgroundColor="#ffffff"
        DisplayName="Ditto"
        Square150x150Logo="Ditto_150.png"
        Square44x44Logo="Ditto_44.png"
