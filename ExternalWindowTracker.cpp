@@ -437,8 +437,16 @@ CPoint ExternalWindowTracker::FocusCaret()
 				BOOL ret = GetCaretPos(&pt);
 				if(ret  && (pt.x > 0 || pt.y > 0))
 				{
-					ClientToScreen(m_focusWnd, &pt);
-					pt.y += 20;
+					::ClientToScreen(m_focusWnd, &pt);
+					if (pt.y > 0 && pt.x > 0)
+					{
+						pt.y += 20;
+					}
+					else
+					{
+						pt.x = 0;
+						pt.y = 0;
+					}
 				}
 
 				AttachThreadInput(GetWindowThreadProcessId(m_activeWnd, NULL), GetCurrentThreadId(), FALSE);
