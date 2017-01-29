@@ -1,3 +1,18 @@
+3.21.134.0 1-29-2017
+- Updated default UI look of Ditto
+- Added custom shortcut keys (options - quick paste Keyboard)
+- Updated Ditto Icon
+- Added option to paste adding the current time to the end
+- Added option to show what clips have been pasted
+- Added option to installer to add firewall exception for Ditto
+- Added option to last ten pastes to use ui selected group for indexes
+- Installer updated to auto close Ditto
+- Removed flicker on large tooltop text
+- Added option to toggle last viewed group
+- Show scroll bars when viewing image in description window
+- Added multiple shortcut keys to activate Ditto. Useful when using multiple language keyboards
+- Allow delete/page up/down while description window is visible
+
 3.21.50.0 3-18-2015
 - Up/down keys move description up down just as n and p do
 - Use ever incrementing value for drag file names, this way they are always unique

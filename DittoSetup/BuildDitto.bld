@@ -271,7 +271,7 @@ DittoSetup*]]></X>
 ".\Ditto\msvcp100.dll" "msvcp100.dll"
 ".\Ditto\msvcr100.dll" "msvcr100.dll"
 
-
+".\WindowsApp" "WindowsApp"
 
 ".\Ditto.png"     "Ditto.png"
 ".\Ditto_150.png"     "Ditto_150.png"
@@ -279,7 +279,7 @@ DittoSetup*]]></X>
 
 ".\Ditto\Addins\DittoUtil.dll" "Addins\DittoUtil.dll"
 
-"C:\Temp\Ditto\Help\DittoConfig.htm" "Help\DittoConfig.htm"
+".\Ditto\Help\Help\DittoConfig.htm" "Help\DittoConfig.htm"
 ".\Ditto\Help\DittoCustomKeys.htm" "Help\DittoCustomKeys.htm"
 ".\Ditto\Help\DittoFAQ.htm" "Help\DittoFAQ.htm"
 ".\Ditto\Help\DittoGettingStarted.htm" "Help\DittoGettingStarted.htm"
