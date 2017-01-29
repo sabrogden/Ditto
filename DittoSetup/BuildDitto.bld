@@ -279,7 +279,7 @@ DittoSetup*]]></X>
 
 ".\Ditto\Addins\DittoUtil.dll" "Addins\DittoUtil.dll"
 
-".\Ditto\Help\Help\DittoConfig.htm" "Help\DittoConfig.htm"
+".\Ditto\Help\DittoConfig.htm" "Help\DittoConfig.htm"
 ".\Ditto\Help\DittoCustomKeys.htm" "Help\DittoCustomKeys.htm"
 ".\Ditto\Help\DittoFAQ.htm" "Help\DittoFAQ.htm"
 ".\Ditto\Help\DittoGettingStarted.htm" "Help\DittoGettingStarted.htm"
