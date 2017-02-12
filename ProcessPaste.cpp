@@ -87,18 +87,19 @@ void CProcessPaste::MarkAsPasted()
 	Log(_T("start of MarkAsPasted"));
 
 	CClipIDs& clips = GetClipIDs();
-	if(clips.GetSize() == 1)
+	
+	CGetSetOptions::SetTripPasteCount(-1);
+	CGetSetOptions::SetTotalPasteCount(-1);
+
+	MarkAsPastedData* pData = new MarkAsPastedData();
+	for (int i = 0; i < clips.GetCount(); i++)
 	{
-		CGetSetOptions::SetTripPasteCount(-1);
-		CGetSetOptions::SetTotalPasteCount(-1);
-
-		MarkAsPastedData* pData = new MarkAsPastedData();
-		pData->clipId = clips.ElementAt(0);
-		pData->pastedFromGroup = m_pastedFromGroup;
-
-		//Moved to a thread because when running from from U3 devices the write is time consuming
-		AfxBeginThread(CProcessPaste::MarkAsPastedThread, (LPVOID)pData, THREAD_PRIORITY_LOWEST);
+		pData->ids.Add(clips.ElementAt(i));
 	}
+	pData->pastedFromGroup = m_pastedFromGroup;
+
+	//Moved to a thread because when running from from U3 devices the write is time consuming
+	AfxBeginThread(CProcessPaste::MarkAsPastedThread, (LPVOID)pData, THREAD_PRIORITY_LOWEST);
 
 	Log(_T("End of MarkAsPasted"));
 }
@@ -120,50 +121,79 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 		MarkAsPastedData* pData = (MarkAsPastedData*)pParam;
 		if(pData)
 		{
-			clipId = pData->clipId;
-			if(g_Opt.m_bUpdateTimeOnPaste)
+			int clipCount = pData->ids.GetCount();
+
+			if(g_Opt.m_bUpdateTimeOnPaste && 
+				clipCount == 1)
 			{
-				try
+				for (int i = 0; i < clipCount; i++)
 				{
-					if(pData->pastedFromGroup)
+					int id = pData->ids.ElementAt(i);
+					try
 					{
-						CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipGroupOrder FROM Main ORDER BY clipGroupOrder DESC LIMIT 1"));
-
-						if(q.eof() == false)
+						if (pData->pastedFromGroup)
 						{
-							double latestDate = q.getFloatField(_T("clipGroupOrder"));
-							latestDate += 1;
+							CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipGroupOrder FROM Main ORDER BY clipGroupOrder DESC LIMIT 1"));
 
-							Log(StrF(_T("Setting clipId: %d, GroupOrder: %f"), pData->clipId, latestDate));
+							if (q.eof() == false)
+							{
+								double latestDate = q.getFloatField(_T("clipGroupOrder"));
+								latestDate += 1;
 
-							theApp.m_db.execDMLEx(_T("UPDATE Main SET clipGroupOrder = %f where lID = %d;"), latestDate, pData->clipId);
+								Log(StrF(_T("Setting clipId: %d, GroupOrder: %f"), id, latestDate));
+
+								theApp.m_db.execDMLEx(_T("UPDATE Main SET clipGroupOrder = %f where lID = %d;"), latestDate, id);
+							}
+						}
+						else
+						{
+							CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipOrder FROM Main ORDER BY clipOrder DESC LIMIT 1"));
+
+							if (q.eof() == false)
+							{
+								double latestDate = q.getFloatField(_T("clipOrder"));
+								latestDate += 1;
+
+								Log(StrF(_T("Setting clipId: %d, order: %f"), id, latestDate));
+
+								theApp.m_db.execDMLEx(_T("UPDATE Main SET clipOrder = %f where lID = %d;"), latestDate, id);
+							}
 						}
 					}
-					else
-					{
-						CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipOrder FROM Main ORDER BY clipOrder DESC LIMIT 1"));
-
-						if(q.eof() == false)
-						{
-							double latestDate = q.getFloatField(_T("clipOrder"));
-							latestDate += 1;
-
-							Log(StrF(_T("Setting clipId: %d, order: %f"), pData->clipId, latestDate));
-
-							theApp.m_db.execDMLEx(_T("UPDATE Main SET clipOrder = %f where lID = %d;"), latestDate, pData->clipId);
-						}
-					}
+					CATCH_SQLITE_EXCEPTION
 				}
-				CATCH_SQLITE_EXCEPTION
 			}
 
 			try
 			{
-				theApp.m_db.execDMLEx(_T("UPDATE Main SET lastPasteDate = %d where lID = %d;"), (int)CTime::GetCurrentTime().GetTime(), pData->clipId);
+				for (int i = 0; i < clipCount; i++)
+				{
+					int id = pData->ids.ElementAt(i);
+					theApp.m_db.execDMLEx(_T("UPDATE Main SET lastPasteDate = %d where lID = %d;"), (int)CTime::GetCurrentTime().GetTime(), id);
+				}
 			}
 			CATCH_SQLITE_EXCEPTION
 
-			theApp.RefreshClipAfterPaste(pData->clipId);
+			int refreshFlags = 0;
+
+			//if multiple clips are selected then don't change selection
+			if (clipCount == 1)
+			{
+				refreshFlags |= UPDATE_AFTER_PASTE_SELECT_CLIP;
+			}
+
+			for (int i = 0; i < clipCount; i++)
+			{
+				int id = pData->ids.ElementAt(i);
+
+				//refresh the window on the last clip
+				if (i == clipCount - 1)
+				{
+					refreshFlags |= UPDATE_AFTER_PASTE_REFRESH_VISIBLE;
+				}
+
+				theApp.RefreshClipAfterPaste(id, refreshFlags);
+			}			
 
 			delete pData;
 			bRet = TRUE;

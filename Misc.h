@@ -13,6 +13,9 @@
 #define VK_MOUSE_RIGHT_CLICK 0x03
 #define VK_MOUSE_MIDDLE_CLICK 0x04
 
+#define UPDATE_AFTER_PASTE_SELECT_CLIP 0x1
+#define UPDATE_AFTER_PASTE_REFRESH_VISIBLE 0x2
+
 
 //Handle foreign keyboards pressing ALT_GR (right alt), this simulates a control press
 //http://compgroups.net/comp.os.programmer.win32/alt-gr-key-and-left-ctrl/2840252

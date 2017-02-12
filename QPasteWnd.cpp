@@ -985,6 +985,7 @@ LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
 
 	BOOL foundClip = FALSE;
 	int clipId = (int)wParam;
+	int updateFlags = (int)lParam;
 
 	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipOrder, clipGroupOrder, lastPasteDate FROM Main WHERE lID = %d"), clipId);			
 	if(q.eof() == false)
@@ -998,27 +999,36 @@ LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
 		{
 			if(iter->m_lID == clipId)
 			{
-				iter->m_clipOrder = order;
-				iter->m_clipGroupOrder = orderGroup;
 				iter->m_datePasted = lastPasted;
-
-				theApp.m_FocusID = clipId;
-
-				if(theApp.m_GroupID > 0)
+				
+				if (iter->m_clipOrder != order || iter->m_clipGroupOrder != orderGroup)
 				{
-					std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::GroupSortDesc);
-				}
-				else
-				{
-					std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::SortDesc);
+					iter->m_clipOrder = order;
+					iter->m_clipGroupOrder = orderGroup;
+
+					if (theApp.m_GroupID > 0)
+					{
+						std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::GroupSortDesc);
+					}
+					else
+					{
+						std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::SortDesc);
+					}
 				}
 				
 				foundClip = TRUE;
 				
-				SelectFocusID();
+				if (updateFlags & UPDATE_AFTER_PASTE_SELECT_CLIP)
+				{
+					theApp.m_FocusID = clipId;
+					SelectFocusID();
+				}
 
-				m_lstHeader.RefreshVisibleRows();
-				m_lstHeader.RedrawWindow();
+				if (updateFlags & UPDATE_AFTER_PASTE_REFRESH_VISIBLE)
+				{
+					m_lstHeader.RefreshVisibleRows();
+					m_lstHeader.RedrawWindow();
+				}
 
 				break;
 			}

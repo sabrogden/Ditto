@@ -29,7 +29,7 @@ public:
 
 	struct MarkAsPastedData 
 	{
-		int clipId;
+		CClipIDs ids;
 		bool pastedFromGroup;
 	};
 	
