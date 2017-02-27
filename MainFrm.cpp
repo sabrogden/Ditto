@@ -885,6 +885,7 @@ LRESULT CMainFrame::OnLoadClipOnClipboard(WPARAM wParam, LPARAM lParam)
 		CProcessPaste paste;
 		paste.m_bSendPaste = false;
 		paste.m_bActivateTarget = false;
+		paste.m_pasteOptions.m_delayRenderLockout = GetTickCount();
 
 		LogSendRecieveInfo("---------OnLoadClipOnClipboard - Before PutFormats on clipboard");
 

@@ -855,6 +855,13 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 	}
 	else
 	{
+		if (m_pasteOptions.m_delayRenderLockout > 0 &&
+			(GetTickCount() - m_pasteOptions.m_delayRenderLockout) < CGetSetOptions::GetDelayRenderLockout())
+		{
+			bInHere = false;
+			return false;
+		}
+
 		LogSendRecieveInfo("Delayed Render, getting data from remote machine");
 
 		CClip clip;

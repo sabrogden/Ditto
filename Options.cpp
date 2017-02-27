@@ -2372,3 +2372,13 @@ void CGetSetOptions::SetUseUISelectedGroupForLastTenCopies(int val)
 {
 	SetProfileLong(_T("UseUISelectedGroupForLastTenCopies"), val);
 }
+
+int CGetSetOptions::GetDelayRenderLockout()
+{
+	return GetProfileLong(_T("DelayRenderLockout"), 1000);
+}
+
+void CGetSetOptions::SetDelayRenderLockout(int val)
+{
+	SetProfileLong(_T("DelayRenderLockout"), val);
+}

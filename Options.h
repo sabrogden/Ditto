@@ -534,6 +534,10 @@ public:
 
 	static BOOL GetUseUISelectedGroupForLastTenCopies();
 	static void SetUseUISelectedGroupForLastTenCopies(int val);
+
+	static int GetDelayRenderLockout();
+	static void SetDelayRenderLockout(int val);
+
 };
 
 // global for easy access and for initialization of fast access variables
