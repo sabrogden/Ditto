@@ -1570,13 +1570,13 @@ void CGetSetOptions::SetEnableDebugLogging(BOOL bEnable)
 
 BOOL CGetSetOptions::GetEnsureConnectToClipboard()
 {
-	return GetProfileLong("EnsureConnected", TRUE);
+	return GetProfileLong("EnsureConnected2", FALSE);
 }
 
 void CGetSetOptions::SetEnsureConnectToClipboard(BOOL bSet)
 {
 	m_bEnsureConnectToClipboard = bSet;
-	SetProfileLong("EnsureConnected", bSet);
+	SetProfileLong("EnsureConnected2", bSet);
 }
 
 BOOL CGetSetOptions::GetPromptWhenDeletingClips()
@@ -2373,6 +2373,7 @@ void CGetSetOptions::SetUseUISelectedGroupForLastTenCopies(int val)
 	SetProfileLong(_T("UseUISelectedGroupForLastTenCopies"), val);
 }
 
+
 int CGetSetOptions::GetDelayRenderLockout()
 {
 	return GetProfileLong(_T("DelayRenderLockout"), 1000);
@@ -2381,4 +2382,14 @@ int CGetSetOptions::GetDelayRenderLockout()
 void CGetSetOptions::SetDelayRenderLockout(int val)
 {
 	SetProfileLong(_T("DelayRenderLockout"), val);
+}
+
+BOOL CGetSetOptions::GetAdjustClipsForCRC()
+{
+	return GetProfileLong(_T("AdjustClipsForCRC"), TRUE);
+}
+
+void CGetSetOptions::SetAdjustClipsForCRC(int val)
+{
+	SetProfileLong(_T("AdjustClipsForCRC"), val);
 }

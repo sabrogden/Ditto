@@ -538,6 +538,8 @@ public:
 	static int GetDelayRenderLockout();
 	static void SetDelayRenderLockout(int val);
 
+	static BOOL GetAdjustClipsForCRC();
+	static void SetAdjustClipsForCRC(int val);
 };
 
 // global for easy access and for initialization of fast access variables

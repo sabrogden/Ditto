@@ -1307,3 +1307,79 @@ bool WriteCF_DIBToFile(CString csPath, LPVOID data, ULONG size)
 
 	return bRet;
 }
+
+void DeleteParamFromRTF(CStringA &test, CStringA find, bool searchForTrailingDigits)
+{
+	int start = 0;
+
+	while (start >= 0)
+	{
+		start = test.Find(find, start);
+		if (start >= 0)
+		{
+			if (start > 0)
+			{
+				//leave it if the preceding character is \\, i was seeing the double slash if the actual text contained slash
+				if (test[start - 1] == '\\')
+				{
+					start++;
+					continue;
+				}
+			}
+
+			int end = -1;	
+			int innerStart = start + find.GetLength();
+
+			if (searchForTrailingDigits)
+			{
+				for (int i = innerStart; i < test.GetLength(); i++)
+				{
+					if (isdigit(test[i]) == false)
+					{
+						end = i;
+						break;
+					}
+				}
+			}
+			else
+			{
+				end = innerStart;
+			}
+
+			if (end > 0)
+			{
+				if (searchForTrailingDigits == false ||
+					end != innerStart)
+				{
+					test.Delete(start, (end - start));
+				}
+				else
+				{
+					start++;
+				}
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+}
+
+bool RemoveRTFSection(CStringA &str, CStringA section)
+{
+	bool removedSection = false;
+
+	int start2 = str.Find(section, 0);
+	if (start2 >= 0)
+	{
+		int end2 = str.Find("}", start2);
+		if (end2 > start2)
+		{
+			str.Delete(start2, (end2 - start2) + 1);
+			removedSection = true;
+		}
+	}
+
+	return removedSection;
+}

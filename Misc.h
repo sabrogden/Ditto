@@ -185,4 +185,8 @@ bool WriteCF_DIBToFile(CString csPath, LPVOID data, ULONG size);
 
 CString GetProcessName(HWND hWnd, DWORD processId = 0);
 
+void DeleteParamFromRTF(CStringA &test, CStringA find, bool searchForTrailingDigits);
+
+bool RemoveRTFSection(CStringA &str, CStringA section);
+
 #endif // !defined(AFX_CP_GUI_GLOBALS__FBCDED09_A6F2_47EB_873F_50A746EBC86B__INCLUDED_)

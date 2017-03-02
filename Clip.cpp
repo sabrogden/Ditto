@@ -341,7 +341,19 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore)
 	cfDesc.m_cfType = CF_UNICODETEXT;	
 	if(oleData.IsDataAvailable(cfDesc.m_cfType))
 	{
-		cfDesc.m_hgData = oleData.GetGlobalData(cfDesc.m_cfType);
+		for (int i = 0; i < 10; i++)
+		{
+			cfDesc.m_hgData = oleData.GetGlobalData(cfDesc.m_cfType);
+			if (cfDesc.m_hgData == NULL)
+			{
+				Log(StrF(_T("Tried to set description from cf_unicode, data is NULL, try: %d"), i+1));
+			}
+			else
+			{
+				break;
+			}
+			Sleep(10);
+		}
 		bIsDescSet = SetDescFromText(cfDesc.m_hgData, true);
 
 		Log(StrF(_T("Tried to set description from cf_unicode text, Set: %d, Desc: [%s]"), bIsDescSet, m_Desc.Left(30)));
@@ -352,7 +364,20 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore)
 		cfDesc.m_cfType = CF_TEXT;	
 		if(oleData.IsDataAvailable(cfDesc.m_cfType))
 		{
-			cfDesc.m_hgData = oleData.GetGlobalData(cfDesc.m_cfType);
+			for (int i = 0; i < 10; i++)
+			{
+				cfDesc.m_hgData = oleData.GetGlobalData(cfDesc.m_cfType);
+				if (cfDesc.m_hgData == NULL)
+				{
+					Log(StrF(_T("Tried to set description from cf_text, data is NULL, try: %d"), i + 1));
+				}
+				else
+				{
+					break;
+				}
+				Sleep(10);
+			}
+
 			bIsDescSet = SetDescFromText(cfDesc.m_hgData, false);
 
 			Log(StrF(_T("Tried to set description from cf_text text, Set: %d, Desc: [%s]"), bIsDescSet, m_Desc.Left(30)));
@@ -385,7 +410,17 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore)
 		}
 		else
 		{
-			cf.m_hgData = oleData.GetGlobalData(cf.m_cfType);
+			for (int i = 0; i < 2; i++)
+			{
+				cf.m_hgData = oleData.GetGlobalData(cf.m_cfType);
+				if (cf.m_hgData != NULL)
+				{
+					break;
+				}
+
+				Log(StrF(_T("Tried to get data for type: %s, data is NULL, try: %d"), GetFormatName(cf.m_cfType), i + 1));
+				Sleep(5);
+			}
 		}
 		
 		if(cf.m_hgData)
@@ -556,8 +591,8 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 
 				CString sql;
 				
-				sql.Format(_T("UPDATE Main SET clipOrder = %f, lastPasteDate = %d where lID = %d;"), 
-								m_clipOrder, (int)CTime::GetCurrentTime().GetTime(), nID);
+				sql.Format(_T("UPDATE Main SET clipOrder = %f where lID = %d;"), 
+								m_clipOrder, nID);
 
 				int ret = theApp.m_db.execDML(sql);
 
@@ -628,6 +663,8 @@ int CClip::FindDuplicate()
 	return -1;
 }
 
+
+
 DWORD CClip::GenerateCRC()
 {
 	CClipFormat* pCF;
@@ -646,7 +683,43 @@ DWORD CClip::GenerateCRC()
 			const unsigned char *Data = (const unsigned char *)GlobalLock(pCF->m_hgData);
 			if(Data)
 			{
-				pCrc32->GenerateCrc32((const LPBYTE)Data, (DWORD)GlobalSize(pCF->m_hgData), dwCRC);
+				if (CGetSetOptions::GetAdjustClipsForCRC())
+				{
+					//Try and remove known things that change in rtf (word and outlook)
+					if (pCF->m_cfType == theApp.m_RTFFormat)
+					{
+						CStringA CStringData((char*)Data);
+
+						//In word and outlook I was finding that data in the \\datastore section was always changing, remove this for the crc check
+						RemoveRTFSection(CStringData, "{\\*\\datastore");
+
+						//In word and outlook rsid values are always changing, remove these for the crc check
+						DeleteParamFromRTF(CStringData, "\\rsid", true);
+						DeleteParamFromRTF(CStringData, "\\insrsid", true);
+						DeleteParamFromRTF(CStringData, "\\mdispDef1", false);
+
+						pCrc32->GenerateCrc32((const LPBYTE)CStringData.GetBuffer(), (DWORD)CStringData.GetLength(), dwCRC);
+					}
+					else
+					{
+						//i've seen examble where the text size was 10 but the data size was 20, leading to random crc values
+						//try and only check the crc for the actual text
+						int dataLength = GlobalSize(pCF->m_hgData);
+						if (pCF->m_cfType == CF_TEXT)
+						{
+							dataLength = min(dataLength, (strlen((char*)Data) + 1));
+						}
+						else if (pCF->m_cfType == CF_UNICODETEXT)
+						{
+							dataLength = min(dataLength, ((wcslen((wchar_t*)Data) + 1) * 2));
+						}
+						pCrc32->GenerateCrc32((const LPBYTE)Data, (DWORD)dataLength, dwCRC);
+					}
+				}
+				else
+				{
+					pCrc32->GenerateCrc32((const LPBYTE)Data, (DWORD)GlobalSize(pCF->m_hgData), dwCRC);
+				}
 			}
 			GlobalUnlock(pCF->m_hgData);
 		}
