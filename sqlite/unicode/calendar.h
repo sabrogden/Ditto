@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ********************************************************************************
 *   Copyright (C) 1997-2014, International Business Machines
@@ -25,7 +27,7 @@
 #ifndef CALENDAR_H
 #define CALENDAR_H
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 /**
  * \file 
@@ -33,11 +35,11 @@
  */
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/uobject.h"
-#include "unicode/locid.h"
-#include "unicode/timezone.h"
-#include "unicode/ucal.h"
-#include "unicode/umisc.h"
+#include "uobject.h"
+#include "locid.h"
+#include "timezone.h"
+#include "ucal.h"
+#include "umisc.h"
 
 U_NAMESPACE_BEGIN
 

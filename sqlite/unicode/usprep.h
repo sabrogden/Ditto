@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  *
@@ -22,8 +24,8 @@
  * \brief C API: Implements the StringPrep algorithm.
  */
 
-#include "unicode/utypes.h"
-#include "unicode/localpointer.h"
+#include "utypes.h"
+#include "localpointer.h"
 
 /**
  *
@@ -59,7 +61,7 @@
  */
 #if !UCONFIG_NO_IDNA
 
-#include "unicode/parseerr.h"
+#include "parseerr.h"
 
 /**
  * The StringPrep profile

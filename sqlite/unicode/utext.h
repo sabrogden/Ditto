@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 *
@@ -135,13 +137,13 @@
 
 
 
-#include "unicode/utypes.h"
-#include "unicode/uchar.h"
+#include "utypes.h"
+#include "uchar.h"
 #if U_SHOW_CPLUSPLUS_API
-#include "unicode/localpointer.h"
-#include "unicode/rep.h"
-#include "unicode/unistr.h"
-#include "unicode/chariter.h"
+#include "localpointer.h"
+#include "rep.h"
+#include "unistr.h"
+#include "chariter.h"
 #endif
 
 

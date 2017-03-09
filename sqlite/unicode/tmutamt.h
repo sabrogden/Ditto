@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  *******************************************************************************
  * Copyright (C) 2009-2010, Google, International Business Machines Corporation and *
@@ -14,8 +16,8 @@
  * \brief C++ API: time unit amount object.
  */
 
-#include "unicode/measure.h"
-#include "unicode/tmunit.h"
+#include "measure.h"
+#include "tmunit.h"
 
 #if !UCONFIG_NO_FORMATTING
 

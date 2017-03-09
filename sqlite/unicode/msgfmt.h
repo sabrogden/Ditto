@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 * Copyright (C) 2007-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
@@ -17,7 +19,7 @@
 #ifndef MSGFMT_H
 #define MSGFMT_H
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 /**
  * \file
@@ -26,12 +28,12 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/format.h"
-#include "unicode/locid.h"
-#include "unicode/messagepattern.h"
-#include "unicode/parseerr.h"
-#include "unicode/plurfmt.h"
-#include "unicode/plurrule.h"
+#include "format.h"
+#include "locid.h"
+#include "messagepattern.h"
+#include "parseerr.h"
+#include "plurfmt.h"
+#include "plurrule.h"
 
 U_CDECL_BEGIN
 // Forward declaration.

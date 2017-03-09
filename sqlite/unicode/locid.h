@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ******************************************************************************
 *
@@ -29,12 +31,12 @@
 #ifndef LOCID_H
 #define LOCID_H
 
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
-#include "unicode/unistr.h"
-#include "unicode/putil.h"
-#include "unicode/uloc.h"
-#include "unicode/strenum.h"
+#include "utypes.h"
+#include "uobject.h"
+#include "unistr.h"
+#include "putil.h"
+#include "uloc.h"
+#include "strenum.h"
 
 /**
  * \file
@@ -493,7 +495,6 @@ public:
      */
     uint32_t        getLCID(void) const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns whether this locale's script is written right-to-left.
      * If there is no script subtag, then the likely script is used, see uloc_addLikelySubtags().
@@ -505,10 +506,9 @@ public:
      * Returns TRUE for "ar" and "en-Hebr", FALSE for "zh" and "fa-Cyrl".
      *
      * @return TRUE if the locale's script is written right-to-left
-     * @draft ICU 54
+     * @stable ICU 54
      */
     UBool isRightToLeft() const;
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Fills in "dispLang" with the name of this locale's language in a format suitable for

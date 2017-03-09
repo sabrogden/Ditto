@@ -1,6 +1,8 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  ********************************************************************************
- *   Copyright (C) 1997-2015, International Business Machines
+ *   Copyright (C) 1997-2016, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  ********************************************************************************
  *
@@ -19,17 +21,17 @@
 #ifndef DATEFMT_H
 #define DATEFMT_H
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/udat.h"
-#include "unicode/calendar.h"
-#include "unicode/numfmt.h"
-#include "unicode/format.h"
-#include "unicode/locid.h"
-#include "unicode/enumset.h"
-#include "unicode/udisplaycontext.h"
+#include "udat.h"
+#include "calendar.h"
+#include "numfmt.h"
+#include "format.h"
+#include "locid.h"
+#include "enumset.h"
+#include "udisplaycontext.h"
 
 /**
  * \file
@@ -571,7 +573,20 @@ public:
                                               EStyle timeStyle = kDefault,
                                               const Locale& aLocale = Locale::getDefault());
 
-#ifndef U_HIDE_DRAFT_API
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * Returns the best pattern given a skeleton and locale.
+     * @param locale the locale
+     * @param skeleton the skeleton
+     * @param status ICU error returned here
+     * @return the best pattern.
+     * @internal For ICU use only.
+     */
+    static UnicodeString getBestPattern(
+            const Locale &locale,
+            const UnicodeString &skeleton,
+            UErrorCode &status);
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Creates a date/time formatter for the given skeleton and 
@@ -584,7 +599,7 @@ public:
      *                 order for that locale.
      * @param status   Any error returned here.
      * @return         A date/time formatter which the caller owns.
-     * @draft ICU 55
+     * @stable ICU 55
      */
     static DateFormat* U_EXPORT2 createInstanceForSkeleton(
             const UnicodeString& skeleton,
@@ -601,7 +616,7 @@ public:
      * @param locale  The given locale.
      * @param status   Any error returned here.
      * @return         A date/time formatter which the caller owns.
-     * @draft ICU 55
+     * @stable ICU 55
      */
     static DateFormat* U_EXPORT2 createInstanceForSkeleton(
             const UnicodeString& skeleton,
@@ -620,7 +635,7 @@ public:
      * @param locale  The given locale.
      * @param status   Any error returned here.
      * @return         A date/time formatter which the caller owns.
-     * @draft ICU 55
+     * @stable ICU 55
      */
     static DateFormat* U_EXPORT2 createInstanceForSkeleton(
             Calendar *calendarToAdopt,
@@ -628,42 +643,6 @@ public:
             const Locale &locale,
             UErrorCode &status);
 
-#endif /* U_HIDE_DRAFT_API */
-
-#ifndef U_HIDE_INTERNAL_API 
-
-    /**
-     * Creates a date/time formatter for the given skeleton and locale and
-     * uses the given DateTimePatternGenerator to convert the skeleton to
-     * a format pattern. As creating a DateTimePatternGenerator is
-     * expensive, callers can supply it here (if they already have it) to save
-     * this method from creating its own.
-     *
-     * @param skeleton The skeleton e.g "yMMMMd." Fields in the skeleton can
-     *                 be in any order, and this method uses the provided
-     *                 DateTimePatternGenerator to map the skeleton to a
-     *                 pattern that includes appropriate separators with
-     *                 the fields in the appropriate order.
-     * @param locale  The given locale.
-     * @param dpng     The user supplied DateTimePatternGenerator. dpng
-     *                 must be created for the same locale as locale.
-     *                 Moreover, the caller must not modify dpng between
-     *                 creating it by locale and calling this method.
-     *                 Although dpng is a non-const reference, the caller
-     *                 must not regard it as an out or in-out parameter.
-     *                 The only reason dpng is a non-const reference is
-     *                 because its method, getBestPattern, which converts
-     *                 a skeleton to a date format pattern is non-const.
-     * @return         A date/time formatter which the caller owns.
-     * @internal For ICU use only
-     */
-    static DateFormat* U_EXPORT2 internalCreateInstanceForSkeleton(
-            const UnicodeString& skeleton,
-            const Locale &locale,
-            DateTimePatternGenerator &dpng,
-            UErrorCode &status);
-
-#endif /* U_HIDE_INTERNAL_API */
 
     /**
      * Gets the set of locales for which DateFormats are installed.
@@ -887,6 +866,7 @@ protected:
 
 
 private:
+
     /**
      * Gets the date/time formatter with the given formatting styles for the
      * given locale.

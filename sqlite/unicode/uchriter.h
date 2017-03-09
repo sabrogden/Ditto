@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 **********************************************************************
 *   Copyright (C) 1998-2005, International Business Machines
@@ -8,8 +10,8 @@
 #ifndef UCHRITER_H
 #define UCHRITER_H
 
-#include "unicode/utypes.h"
-#include "unicode/chariter.h"
+#include "utypes.h"
+#include "chariter.h"
 
 /**
  * \file 

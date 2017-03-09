@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 *
@@ -10,9 +12,9 @@
 #ifndef INDEXCHARS_H
 #define INDEXCHARS_H
 
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
-#include "unicode/locid.h"
+#include "utypes.h"
+#include "uobject.h"
+#include "locid.h"
 
 #if !UCONFIG_NO_COLLATION
 

@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ******************************************************************************
 * Copyright (C) 2001-2014, International Business Machines
@@ -15,7 +17,7 @@
 #ifndef __UCLEAN_H__
 #define __UCLEAN_H__
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 /**
  * \file
  * \brief C API: Initialize and clean up ICU

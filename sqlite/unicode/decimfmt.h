@@ -1,6 +1,8 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2015, International Business Machines
+*   Copyright (C) 1997-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -25,7 +27,7 @@
 #ifndef DECIMFMT_H
 #define DECIMFMT_H
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 /**
  * \file
  * \brief C++ API: Formats decimal numbers.
@@ -33,14 +35,15 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/dcfmtsym.h"
-#include "unicode/numfmt.h"
-#include "unicode/locid.h"
-#include "unicode/fpositer.h"
-#include "unicode/stringpiece.h"
-#include "unicode/curramt.h"
-#include "unicode/enumset.h"
+#include "dcfmtsym.h"
+#include "numfmt.h"
+#include "locid.h"
+#include "fpositer.h"
+#include "stringpiece.h"
+#include "curramt.h"
+#include "enumset.h"
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * \def UNUM_DECIMALFORMAT_INTERNAL_SIZE
  * @internal
@@ -48,17 +51,20 @@
 #if UCONFIG_FORMAT_FASTPATHS_49
 #define UNUM_DECIMALFORMAT_INTERNAL_SIZE 16
 #endif
+#endif  /* U_HIDE_INTERNAL_API */
 
 U_NAMESPACE_BEGIN
 
 class DigitList;
-class ChoiceFormat;
 class CurrencyPluralInfo;
 class Hashtable;
 class UnicodeSet;
 class FieldPositionHandler;
 class DecimalFormatStaticSets;
 class FixedDecimal;
+class DecimalFormatImpl;
+class PluralRules;
+class VisibleDigitsWithExponent;
 
 // explicit template instantiation. see digitlst.h
 #if defined (_MSC_VER)
@@ -803,7 +809,7 @@ public:
     virtual int32_t getAttribute( UNumberFormatAttribute attr,
                                   UErrorCode &status) const;
 
-    
+
     /**
      * Set whether or not grouping will be used in this format.
      * @param newValue    True, grouping will be used in this format.
@@ -827,7 +833,7 @@ public:
      * @param value The UDisplayContext value to set.
      * @param status Input/output status. If at entry this indicates a failure
      *               status, the function will do nothing; otherwise this will be
-     *               updated with any new status from the function. 
+     *               updated with any new status from the function.
      * @stable ICU 53
      */
     virtual void setContext(UDisplayContext value, UErrorCode& status);
@@ -964,7 +970,7 @@ public:
      *                  Can be NULL.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable 4.4
+     * @stable ICU 4.4
      */
     virtual UnicodeString& format(double number,
                                   UnicodeString& appendTo,
@@ -1013,7 +1019,7 @@ public:
      *                  Can be NULL.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable 4.4
+     * @stable ICU 4.4
      */
     virtual UnicodeString& format(int32_t number,
                                   UnicodeString& appendTo,
@@ -1062,7 +1068,7 @@ public:
      *                  Can be NULL.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable 4.4
+     * @stable ICU 4.4
      */
     virtual UnicodeString& format(int64_t number,
                                   UnicodeString& appendTo,
@@ -1083,9 +1089,9 @@ public:
      *                  Can be NULL.
      * @param status    Output param filled with success/failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable 4.4
+     * @stable ICU 4.4
      */
-    virtual UnicodeString& format(const StringPiece &number,
+    virtual UnicodeString& format(StringPiece number,
                                   UnicodeString& appendTo,
                                   FieldPositionIterator* posIter,
                                   UErrorCode& status) const;
@@ -1110,6 +1116,40 @@ public:
                                   UnicodeString& appendTo,
                                   FieldPositionIterator* posIter,
                                   UErrorCode& status) const;
+
+    /**
+     * Format a decimal number.
+     * @param number    The number
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @param status    Output param filled with success/failure status.
+     * @return          Reference to 'appendTo' parameter.
+     * @internal
+     */
+    virtual UnicodeString& format(
+            const VisibleDigitsWithExponent &number,
+            UnicodeString& appendTo,
+            FieldPosition& pos,
+            UErrorCode& status) const;
+
+    /**
+     * Format a decimal number.
+     * @param number    The number
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param posIter   On return, can be used to iterate over positions
+     *                  of fields generated by this format call.
+     * @param status    Output param filled with success/failure status.
+     * @return          Reference to 'appendTo' parameter.
+     * @internal
+     */
+    virtual UnicodeString& format(
+            const VisibleDigitsWithExponent &number,
+            UnicodeString& appendTo,
+            FieldPositionIterator* posIter,
+            UErrorCode& status) const;
 
     /**
      * Format a decimal number.
@@ -1610,6 +1650,45 @@ public:
      */
     virtual void setSecondaryGroupingSize(int32_t newValue);
 
+#ifndef U_HIDE_INTERNAL_API
+
+    /**
+     * Returns the minimum number of grouping digits.
+     * Grouping separators are output if there are at least this many
+     * digits to the left of the first (rightmost) grouping separator,
+     * that is, there are at least (minimum grouping + grouping size) integer digits.
+     * (Subject to isGroupingUsed().)
+     *
+     * For example, if this value is 2, and the grouping size is 3, then
+     * 9999 -> "9999" and 10000 -> "10,000"
+     *
+     * This is a technology preview. This API may change behavior or may be removed.
+     *
+     * The default value for this attribute is 0.
+     * A value of 1, 0, or lower, means that the use of grouping separators
+     * only depends on the grouping size (and on isGroupingUsed()).
+     * Currently, the corresponding CLDR data is not used; this is likely to change.
+     *
+     * @see setMinimumGroupingDigits
+     * @see getGroupingSize
+     * @internal technology preview
+     */
+    int32_t getMinimumGroupingDigits() const;
+
+#endif  /* U_HIDE_INTERNAL_API */
+
+	/* Cannot use #ifndef U_HIDE_INTERNAL_API for the following draft method since it is virtual. */
+    /**
+     * Sets the minimum grouping digits. Setting to a value less than or
+     * equal to 1 turns off minimum grouping digits.
+     *
+     * @param newValue the new value of minimum grouping digits.
+     * @see getMinimumGroupingDigits
+     * @internal technology preview
+     */
+    virtual void setMinimumGroupingDigits(int32_t newValue);
+
+
     /**
      * Allows you to get the behavior of the decimal separator with integers.
      * (The decimal separator will always appear with decimals.)
@@ -1630,24 +1709,22 @@ public:
      */
     virtual void setDecimalSeparatorAlwaysShown(UBool newValue);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Allows you to get the parse behavior of the pattern decimal mark.
      *
      * @return    TRUE if input must contain a match to decimal mark in pattern
-     * @draft ICU 54
+     * @stable ICU 54
      */
     UBool isDecimalPatternMatchRequired(void) const;
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Allows you to set the behavior of the pattern decimal mark.
-     * 
+     *
      * if TRUE, the input must have a decimal mark if one was specified in the pattern. When
      * FALSE the decimal mark may be omitted from the input.
      *
      * @param newValue    set TRUE if input must contain a match to decimal mark in pattern
-     * @draft ICU 54
+     * @stable ICU 54
      */
     virtual void setDecimalPatternMatchRequired(UBool newValue);
 
@@ -1893,22 +1970,20 @@ public:
      */
     virtual void setCurrency(const UChar* theCurrency);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Sets the <tt>Currency Context</tt> object used to display currency.
      * This takes effect immediately, if this format is a
-     * currency format.  
-     * @param currencyContext new currency context object to use.  
-     * @draft ICU 54
+     * currency format.
+     * @param currencyContext new currency context object to use.
+     * @stable ICU 54
      */
     void setCurrencyUsage(UCurrencyUsage newUsage, UErrorCode* ec);
 
     /**
      * Returns the <tt>Currency Context</tt> object used to display currency
-     * @draft ICU 54
+     * @stable ICU 54
      */
     UCurrencyUsage getCurrencyUsage() const;
-#endif  /* U_HIDE_DRAFT_API */
 
 
 #ifndef U_HIDE_DEPRECATED_API
@@ -1944,6 +2019,41 @@ public:
      *  @internal
      */
      FixedDecimal getFixedDecimal(DigitList &number, UErrorCode &status) const;
+
+    /**
+     *  Get a VisibleDigitsWithExponent corresponding to a double
+     *  as it would be formatted by this DecimalFormat.
+     *  Internal, not intended for public use.
+     *  @internal
+     */
+     VisibleDigitsWithExponent &initVisibleDigitsWithExponent(
+             double number,
+             VisibleDigitsWithExponent &digits,
+             UErrorCode &status) const;
+
+    /**
+     *  Get a VisibleDigitsWithExponent corresponding to a formattable
+     *  as it would be formatted by this DecimalFormat.
+     *  Internal, not intended for public use.
+     *  @internal
+     */
+     VisibleDigitsWithExponent &initVisibleDigitsWithExponent(
+             const Formattable &number,
+             VisibleDigitsWithExponent &digits,
+             UErrorCode &status) const;
+
+    /**
+     *  Get a VisibleDigitsWithExponent corresponding to a DigitList
+     *  as it would be formatted by this DecimalFormat.
+     *  Note: the DigitList may be modified.
+     *  Internal, not intended for public use.
+     *  @internal
+     */
+     VisibleDigitsWithExponent &initVisibleDigitsWithExponent(
+             DigitList &number,
+             VisibleDigitsWithExponent &digits,
+             UErrorCode &status) const;
+
 #endif  /* U_HIDE_INTERNAL_API */
 
 public:
@@ -1978,8 +2088,6 @@ private:
 
     DecimalFormat(); // default constructor not implemented
 
-    int32_t precision() const;
-
     /**
      *   Initialize all fields of a new DecimalFormatter to a safe default value.
      *      Common code for use by constructors.
@@ -1995,71 +2103,7 @@ private:
                    DecimalFormatSymbols*    symbolsToAdopt = 0
                    );
 
-    /**
-     * Does the real work of generating a pattern.
-     *
-     * @param result     Output param which will receive the pattern.
-     *                   Previous contents are deleted.
-     * @param localized  TRUE return localized pattern.
-     * @return           A reference to 'result'.
-     */
-    UnicodeString& toPattern(UnicodeString& result, UBool localized) const;
-
-    /**
-     * Does the real work of applying a pattern.
-     * @param pattern    The pattern to be applied.
-     * @param localized  If true, the pattern is localized; else false.
-     * @param parseError Struct to recieve information on position
-     *                   of error if an error is encountered
-     * @param status     Output param set to success/failure code on
-     *                   exit. If the pattern is invalid, this will be
-     *                   set to a failure result.
-     */
-    void applyPattern(const UnicodeString& pattern,
-                            UBool localized,
-                            UParseError& parseError,
-                            UErrorCode& status);
-
-    /*
-     * similar to applyPattern, but without re-gen affix for currency
-     */
-    void applyPatternInternally(const UnicodeString& pluralCount,
-                                const UnicodeString& pattern,
-                                UBool localized,
-                                UParseError& parseError,
-                                UErrorCode& status);
-
-    /*
-     * only apply pattern without expand affixes
-     */
-    void applyPatternWithoutExpandAffix(const UnicodeString& pattern,
-                                        UBool localized,
-                                        UParseError& parseError,
-                                        UErrorCode& status);
-
-
-    /*
-     * expand affixes (after apply patter) and re-compute fFormatWidth
-     */
-    void expandAffixAdjustWidth(const UnicodeString* pluralCount);
-
-
-    /**
-     * Do the work of formatting a number, either a double or a long.
-     *
-     * @param appendTo       Output parameter to receive result.
-     *                       Result is appended to existing contents.
-     * @param handler        Records information about field positions.
-     * @param digits         the digits to be formatted.
-     * @param isInteger      if TRUE format the digits as Integer.
-     * @return               Reference to 'appendTo' parameter.
-     */
-    UnicodeString& subformat(UnicodeString& appendTo,
-                             FieldPositionHandler& handler,
-                             DigitList&     digits,
-                             UBool          isInteger,
-                             UErrorCode &status) const;
-
+    void handleCurrencySignInPattern(UErrorCode& status);
 
     void parse(const UnicodeString& text,
                Formattable& result,
@@ -2144,231 +2188,45 @@ private:
                              UChar32 decimalChar, const UnicodeSet *decimalSet,
                              UChar32 schar);
 
-    /**
-     * Get a decimal format symbol.
-     * Returns a const reference to the symbol string.
-     * @internal
-     */
-    inline const UnicodeString &getConstSymbol(DecimalFormatSymbols::ENumberFormatSymbol symbol) const;
-
-    int32_t appendAffix(UnicodeString& buf,
-                        double number,
-                        FieldPositionHandler& handler,
-                        UBool isNegative,
-                        UBool isPrefix) const;
-
-    /**
-     * Append an affix to the given UnicodeString, using quotes if
-     * there are special characters.  Single quotes themselves must be
-     * escaped in either case.
-     */
-    void appendAffixPattern(UnicodeString& appendTo, const UnicodeString& affix,
-                            UBool localized) const;
-
-    void appendAffixPattern(UnicodeString& appendTo,
-                            const UnicodeString* affixPattern,
-                            const UnicodeString& expAffix, UBool localized) const;
-
-    void expandAffix(const UnicodeString& pattern,
-                     UnicodeString& affix,
-                     double number,
-                     FieldPositionHandler& handler,
-                     UBool doFormat,
-                     const UnicodeString* pluralCount) const;
-
-    void expandAffixes(const UnicodeString* pluralCount);
-
-    void addPadding(UnicodeString& appendTo,
-                    FieldPositionHandler& handler,
-                    int32_t prefixLen, int32_t suffixLen) const;
-
-    UBool isGroupingPosition(int32_t pos) const;
-
-    void setCurrencyForSymbols();
-
-    // similar to setCurrency without re-compute the affixes for currency.
-    // If currency changes, the affix pattern for currency is not changed,
-    // but the affix will be changed. So, affixes need to be
-    // re-computed in setCurrency(), but not in setCurrencyInternally().
-    virtual void setCurrencyInternally(const UChar* theCurrency, UErrorCode& ec);
-
     // set up currency affix patterns for mix parsing.
     // The patterns saved here are the affix patterns of default currency
     // pattern and the unique affix patterns of the plural currency patterns.
     // Those patterns are used by parseForCurrency().
     void setupCurrencyAffixPatterns(UErrorCode& status);
 
-    // set up the currency affixes used in currency plural formatting.
-    // It sets up both fAffixesForCurrency for currency pattern if the current
-    // pattern contains 3 currency signs,
-    // and it sets up fPluralAffixesForCurrency for currency plural patterns.
-    void setupCurrencyAffixes(const UnicodeString& pattern,
-                              UBool setupForCurrentPattern,
-                              UBool setupForPluralPattern,
-                              UErrorCode& status);
-	
     // get the currency rounding with respect to currency usage
     double getCurrencyRounding(const UChar* currency,
                                UErrorCode* ec) const;
-	
+
     // get the currency fraction with respect to currency usage
     int getCurrencyFractionDigits(const UChar* currency,
                                   UErrorCode* ec) const;
 
     // hashtable operations
     Hashtable* initHashForAffixPattern(UErrorCode& status);
-    Hashtable* initHashForAffix(UErrorCode& status);
 
     void deleteHashForAffixPattern();
-    void deleteHashForAffix(Hashtable*& table);
 
     void copyHashForAffixPattern(const Hashtable* source,
                                  Hashtable* target, UErrorCode& status);
-    void copyHashForAffix(const Hashtable* source,
-                          Hashtable* target, UErrorCode& status);
 
-    UnicodeString& _format(int64_t number,
-                           UnicodeString& appendTo,
-                           FieldPositionHandler& handler,
-                           UErrorCode &status) const;
-    UnicodeString& _format(double number,
-                           UnicodeString& appendTo,
-                           FieldPositionHandler& handler,
-                           UErrorCode &status) const;
-    UnicodeString& _format(const DigitList &number,
-                           UnicodeString& appendTo,
-                           FieldPositionHandler& handler,
-                           UErrorCode &status) const;
+    DecimalFormatImpl *fImpl;
 
     /**
      * Constants.
      */
 
-    UnicodeString           fPositivePrefix;
-    UnicodeString           fPositiveSuffix;
-    UnicodeString           fNegativePrefix;
-    UnicodeString           fNegativeSuffix;
-    UnicodeString*          fPosPrefixPattern;
-    UnicodeString*          fPosSuffixPattern;
-    UnicodeString*          fNegPrefixPattern;
-    UnicodeString*          fNegSuffixPattern;
-
-    /**
-     * Formatter for ChoiceFormat-based currency names.  If this field
-     * is not null, then delegate to it to format currency symbols.
-     * @since ICU 2.6
-     */
-    ChoiceFormat*           fCurrencyChoice;
-
-    DigitList *             fMultiplier;   // NULL for multiplier of one
-    int32_t                 fScale;
-    int32_t                 fGroupingSize;
-    int32_t                 fGroupingSize2;
-    UBool                   fDecimalSeparatorAlwaysShown;
-    DecimalFormatSymbols*   fSymbols;
-
-    UBool                   fUseSignificantDigits;
-    int32_t                 fMinSignificantDigits;
-    int32_t                 fMaxSignificantDigits;
-
-    UBool                   fUseExponentialNotation;
-    int8_t                  fMinExponentDigits;
-    UBool                   fExponentSignAlwaysShown;
 
     EnumSet<UNumberFormatAttribute,
             UNUM_MAX_NONBOOLEAN_ATTRIBUTE+1,
             UNUM_LIMIT_BOOLEAN_ATTRIBUTE>
                             fBoolFlags;
 
-    DigitList*              fRoundingIncrement;  // NULL if no rounding increment specified.
-    ERoundingMode           fRoundingMode;
 
-    UChar32                 fPad;
-    int32_t                 fFormatWidth;
-    EPadPosition            fPadPosition;
-
-    /*
-     * Following are used for currency format
-     */
-    // pattern used in this formatter
-    UnicodeString fFormatPattern;
     // style is only valid when decimal formatter is constructed by
     // DecimalFormat(pattern, decimalFormatSymbol, style)
     int fStyle;
-    /*
-     * Represents whether this is a currency format, and which
-     * currency format style.
-     * 0: not currency format type;
-     * 1: currency style -- symbol name, such as "$" for US dollar.
-     * 2: currency style -- ISO name, such as USD for US dollar.
-     * 3: currency style -- plural long name, such as "US Dollar" for
-     *                      "1.00 US Dollar", or "US Dollars" for
-     *                      "3.00 US Dollars".
-     */
-    int fCurrencySignCount;
 
-
-    /* For currency parsing purose,
-     * Need to remember all prefix patterns and suffix patterns of
-     * every currency format pattern,
-     * including the pattern of default currecny style
-     * and plural currency style. And the patterns are set through applyPattern.
-     */
-    // TODO: innerclass?
-    /* This is not needed in the class declaration, so it is moved into decimfmp.cpp
-    struct AffixPatternsForCurrency : public UMemory {
-        // negative prefix pattern
-        UnicodeString negPrefixPatternForCurrency;
-        // negative suffix pattern
-        UnicodeString negSuffixPatternForCurrency;
-        // positive prefix pattern
-        UnicodeString posPrefixPatternForCurrency;
-        // positive suffix pattern
-        UnicodeString posSuffixPatternForCurrency;
-        int8_t patternType;
-
-        AffixPatternsForCurrency(const UnicodeString& negPrefix,
-                                 const UnicodeString& negSuffix,
-                                 const UnicodeString& posPrefix,
-                                 const UnicodeString& posSuffix,
-                                 int8_t type) {
-            negPrefixPatternForCurrency = negPrefix;
-            negSuffixPatternForCurrency = negSuffix;
-            posPrefixPatternForCurrency = posPrefix;
-            posSuffixPatternForCurrency = posSuffix;
-            patternType = type;
-        }
-    };
-    */
-
-    /* affix for currency formatting when the currency sign in the pattern
-     * equals to 3, such as the pattern contains 3 currency sign or
-     * the formatter style is currency plural format style.
-     */
-    /* This is not needed in the class declaration, so it is moved into decimfmp.cpp
-    struct AffixesForCurrency : public UMemory {
-        // negative prefix
-        UnicodeString negPrefixForCurrency;
-        // negative suffix
-        UnicodeString negSuffixForCurrency;
-        // positive prefix
-        UnicodeString posPrefixForCurrency;
-        // positive suffix
-        UnicodeString posSuffixForCurrency;
-
-        int32_t formatWidth;
-
-        AffixesForCurrency(const UnicodeString& negPrefix,
-                           const UnicodeString& negSuffix,
-                           const UnicodeString& posPrefix,
-                           const UnicodeString& posSuffix) {
-            negPrefixForCurrency = negPrefix;
-            negSuffixForCurrency = negSuffix;
-            posPrefixForCurrency = posPrefix;
-            posSuffixForCurrency = posSuffix;
-        }
-    };
-    */
 
     // Affix pattern set for currency.
     // It is a set of AffixPatternsForCurrency,
@@ -2385,16 +2243,6 @@ private:
     // count match or not.
     Hashtable* fAffixPatternsForCurrency;
 
-    // Following 2 are affixes for currency.
-    // It is a hash map from plural count to AffixesForCurrency.
-    // AffixesForCurrency saves the negative prefix,
-    // negative suffix, positive prefix, and positive suffix of a pattern.
-    // It is used during currency formatting only when the currency sign count
-    // is 3. In which case, the affixes are getting from here, not
-    // from the fNegativePrefix etc.
-    Hashtable* fAffixesForCurrency;  // for current pattern
-    Hashtable* fPluralAffixesForCurrency;  // for plural pattern
-
     // Information needed for DecimalFormat to format/parse currency plural.
     CurrencyPluralInfo* fCurrencyPluralInfo;
 
@@ -2404,9 +2252,6 @@ private:
 
     // Decimal Format Static Sets singleton.
     const DecimalFormatStaticSets *fStaticSets;
-	
-    // Currency Usage(STANDARD vs CASH)
-    UCurrencyUsage fCurrencyUsage;
 
 protected:
 
@@ -2449,26 +2294,7 @@ protected:
      */
     static const int32_t  kMaxScientificIntegerDigits;
 
-#if UCONFIG_FORMAT_FASTPATHS_49
- private:
-    /**
-     * Internal state.
-     * @internal
-     */
-    uint8_t fReserved[UNUM_DECIMALFORMAT_INTERNAL_SIZE];
-
-
-    /**
-     * Called whenever any state changes. Recomputes whether fastpath is OK to use.
-     */
-    void handleChanged();
-#endif
 };
-
-inline const UnicodeString &
-DecimalFormat::getConstSymbol(DecimalFormatSymbols::ENumberFormatSymbol symbol) const {
-    return fSymbols->getConstSymbol(symbol);
-}
 
 U_NAMESPACE_END
 

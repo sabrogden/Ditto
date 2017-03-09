@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 **********************************************************************
 *   Copyright (C) 2001-2014 IBM and others. All rights reserved.
@@ -10,7 +12,7 @@
 #ifndef STSEARCH_H
 #define STSEARCH_H
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 /**
  * \file 
@@ -19,9 +21,9 @@
  
 #if !UCONFIG_NO_COLLATION && !UCONFIG_NO_BREAK_ITERATION
 
-#include "unicode/tblcoll.h"
-#include "unicode/coleitr.h"
-#include "unicode/search.h"
+#include "tblcoll.h"
+#include "coleitr.h"
+#include "search.h"
 
 U_NAMESPACE_BEGIN
 

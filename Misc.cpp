@@ -7,6 +7,8 @@
 #include "Tlhelp32.h"
 #include <Wininet.h>
 #include "sqlite\utext.h"
+#include <sys/types.h>  
+#include <sys/stat.h> 
 
 CString GetIPAddress()
 {
@@ -1038,8 +1040,8 @@ void DeleteFolderFiles(CString csDir, BOOL checkFileLastAccess)
 
 __int64 FileSize(const TCHAR *fileName)
 {
-	__stat64 buf;
-	if (_wstat64(fileName, &buf) != 0)
+	struct _stat64  buf;
+	if (_wstat64((wchar_t const*)fileName, &buf) != 0)
 		return -1; // error, could use errno to find out more
 
 	return buf.st_size;

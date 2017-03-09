@@ -1,6 +1,8 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 **********************************************************************
-*   Copyright (C) 2002-2015, International Business Machines
+*   Copyright (C) 2002-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  regex.h
@@ -42,16 +44,16 @@
  * </p>
  */
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
 
-#include "unicode/uobject.h"
-#include "unicode/unistr.h"
-#include "unicode/utext.h"
-#include "unicode/parseerr.h"
+#include "uobject.h"
+#include "unistr.h"
+#include "utext.h"
+#include "parseerr.h"
 
-#include "unicode/uregex.h"
+#include "uregex.h"
 
 // Forward Declarations
 
@@ -450,7 +452,7 @@ public:
      * @param  groupName   The capture group name.
      * @param  status      A UErrorCode to receive any errors.
      *
-     * @draft ICU 55
+     * @stable ICU 55
      */
     virtual int32_t groupNumberFromName(const UnicodeString &groupName, UErrorCode &status) const;
 
@@ -469,7 +471,7 @@ public:
      *                     nul-terminated.
      * @param  status      A UErrorCode to receive any errors.
      *
-     * @draft ICU 55
+     * @stable ICU 55
      */
     virtual int32_t groupNumberFromName(const char *groupName, int32_t nameLength, UErrorCode &status) const;
 
@@ -849,7 +851,7 @@ public:
     *     position may not be valid with the altered input string.</p>
     *  @param   status  A reference to a UErrorCode to receive any errors.
     *  @return  TRUE if a match is found.
-    *  @draft ICU 55
+    * @stable ICU 55
     */
     virtual UBool find(UErrorCode &status);
 
@@ -880,6 +882,11 @@ public:
    /**
     *    Returns a string containing the text captured by the given group
     *    during the previous match operation.  Group(0) is the entire match.
+    *
+    *    A zero length string is returned both for capture groups that did not
+    *    participate in the match and for actual zero length matches.
+    *    To distinguish between these two cases use the function start(),
+    *    which returns -1 for non-participating groups.
     *
     *    @param groupNum the capture group number
     *    @param   status     A reference to a UErrorCode to receive any errors.
@@ -918,6 +925,11 @@ public:
    /**
     *   Returns a shallow clone of the entire live input string with the UText current native index
     *   set to the beginning of the requested group.
+    *
+    *   A group length of zero is returned both for capture groups that did not
+    *   participate in the match and for actual zero length matches.
+    *   To distinguish between these two cases use the function start(),
+    *   which returns -1 for non-participating groups.
     *
     *   @param   groupNum   The capture group number.
     *   @param   dest        The UText into which the input should be cloned, or NULL to create a new UText.

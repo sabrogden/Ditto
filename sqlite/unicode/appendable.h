@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 *   Copyright (C) 2011-2012, International Business Machines
@@ -20,8 +22,8 @@
  * \brief C++ API: Appendable class: Sink for Unicode code points and 16-bit code units (UChars).
  */
 
-#include "unicode/utypes.h"
-#include "unicode/uobject.h"
+#include "utypes.h"
+#include "uobject.h"
 
 U_NAMESPACE_BEGIN
 

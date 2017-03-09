@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 * Copyright (C) 2010-2014, International Business Machines Corporation and
@@ -16,7 +18,7 @@
 #ifndef NUMSYS
 #define NUMSYS
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 /**
  * \def NUMSYS_NAME_CAPACITY
@@ -34,8 +36,8 @@
 #if !UCONFIG_NO_FORMATTING
 
 
-#include "unicode/format.h"
-#include "unicode/uobject.h"
+#include "format.h"
+#include "uobject.h"
 
 U_NAMESPACE_BEGIN
 

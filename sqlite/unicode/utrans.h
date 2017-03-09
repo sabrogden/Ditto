@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 *   Copyright (C) 1997-2011,2014-2015 International Business Machines
@@ -11,15 +13,15 @@
 #ifndef UTRANS_H
 #define UTRANS_H
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-#include "unicode/localpointer.h"
-#include "unicode/urep.h"
-#include "unicode/parseerr.h"
-#include "unicode/uenum.h"
-#include "unicode/uset.h"
+#include "localpointer.h"
+#include "urep.h"
+#include "parseerr.h"
+#include "uenum.h"
+#include "uset.h"
 
 /********************************************************************
  * General Notes

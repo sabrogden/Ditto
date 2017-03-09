@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ******************************************************************************
 *
@@ -17,7 +19,7 @@
 #ifndef __USHAPE_H__
 #define __USHAPE_H__
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 /**
  * \file

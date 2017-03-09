@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 *   Copyright (C) 2001-2014, International Business Machines
@@ -16,7 +18,7 @@
 #ifndef UCOLEITR_H
 #define UCOLEITR_H
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 #if !UCONFIG_NO_COLLATION
 
@@ -27,7 +29,7 @@
  */
 #define UCOL_NULLORDER        ((int32_t)0xFFFFFFFF)
 
-#include "unicode/ucol.h"
+#include "ucol.h"
 
 /** 
  * The UCollationElements struct.

@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 **********************************************************************
 * Copyright (C) 1999-2010, International Business Machines Corporation and others.
@@ -10,8 +12,8 @@
 #ifndef UNIFILT_H
 #define UNIFILT_H
 
-#include "unicode/unifunct.h"
-#include "unicode/unimatch.h"
+#include "unifunct.h"
+#include "unimatch.h"
 
 /**
  * \file 

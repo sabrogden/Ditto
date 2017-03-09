@@ -1,6 +1,8 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
-* Copyright (C) 2011-2014, International Business Machines Corporation and
+* Copyright (C) 2011-2015, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -12,13 +14,13 @@
  * \brief C++ API: TimeZoneFormat
  */
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/format.h"
-#include "unicode/timezone.h"
-#include "unicode/tznames.h"
+#include "format.h"
+#include "timezone.h"
+#include "tznames.h"
 
 U_CDECL_BEGIN
 /**
@@ -233,18 +235,15 @@ typedef enum UTimeZoneFormatParseOption {
      * by other styles.
      * @stable ICU 50
      */
-    UTZFMT_PARSE_OPTION_ALL_STYLES  = 0x01
-#ifndef U_HIDE_DRAFT_API
-    ,
+    UTZFMT_PARSE_OPTION_ALL_STYLES  = 0x01,
      /**
       * When parsing a time zone display name in UTZFMT_STYLE_SPECIFIC_SHORT,
       * look for the IANA tz database compatible zone abbreviations in addition
       * to the localized names coming from the {@link TimeZoneNames} currently
       * used by the {@link TimeZoneFormat}. 
-      * @draft ICU 54
+      * @stable ICU 54
       */
     UTZFMT_PARSE_OPTION_TZ_DATABASE_ABBREVIATIONS = 0x02
-#endif  /* U_HIDE_DRAFT_API */
 } UTimeZoneFormatParseOption;
 
 U_CDECL_END

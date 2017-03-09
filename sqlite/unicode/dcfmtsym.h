@@ -1,6 +1,8 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2015, International Business Machines
+*   Copyright (C) 1997-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -25,14 +27,14 @@
 #ifndef DCFMTSYM_H
 #define DCFMTSYM_H
 
-#include "unicode/utypes.h"
-#include "unicode/uchar.h"
+#include "utypes.h"
+#include "uchar.h"
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/uobject.h"
-#include "unicode/locid.h"
-#include "unicode/unum.h"
+#include "uobject.h"
+#include "locid.h"
+#include "unum.h"
 
 /**
  * \file
@@ -163,12 +165,10 @@ public:
          * @stable ICU 4.6
          */
         kNineDigitSymbol,
-#ifndef U_HIDE_DRAFT_API
         /** Multiplication sign.
-         * @draft ICU 54
+         * @stable ICU 54
          */
         kExponentMultiplicationSymbol,
-#endif  /* U_HIDE_DRAFT_API */
         /** count symbol constants */
         kFormatSymbolCount = kNineDigitSymbol + 2
     };
@@ -356,6 +356,23 @@ private:
     void setCurrencyForSymbols();
 
 public:
+
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * @internal For ICU use only
+     */
+    inline UBool isCustomCurrencySymbol() const {
+        return fIsCustomCurrencySymbol;
+    }
+
+    /**
+     * @internal For ICU use only
+     */
+    inline UBool isCustomIntlCurrencySymbol() const {
+        return fIsCustomIntlCurrencySymbol;
+    }
+#endif  /* U_HIDE_INTERNAL_API */
+
     /**
      * _Internal_ function - more efficient version of getSymbol,
      * returning a const reference to one of the symbol strings.
@@ -410,6 +427,8 @@ private:
 
     UnicodeString currencySpcBeforeSym[UNUM_CURRENCY_SPACING_COUNT];
     UnicodeString currencySpcAfterSym[UNUM_CURRENCY_SPACING_COUNT];
+    UBool fIsCustomCurrencySymbol;
+    UBool fIsCustomIntlCurrencySymbol;
 };
 
 // -------------------------------------
@@ -425,8 +444,7 @@ DecimalFormatSymbols::getSymbol(ENumberFormatSymbol symbol) const {
     return *strPtr;
 }
 
-//#ifndef U_HIDE_INTERNAL_API
-// See comments above for this function. Not hidden.
+// See comments above for this function. Not hidden with #ifndef U_HIDE_INTERNAL_API
 inline const UnicodeString &
 DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
     const UnicodeString *strPtr;
@@ -438,13 +456,16 @@ DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
     return *strPtr;
 }
 
-//#endif  /* U_HIDE_INTERNAL_API */
-
-
 // -------------------------------------
 
 inline void
 DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, const UnicodeString &value, const UBool propogateDigits = TRUE) {
+    if (symbol == kCurrencySymbol) {
+        fIsCustomCurrencySymbol = TRUE;
+    }
+    else if (symbol == kIntlCurrencySymbol) {
+        fIsCustomIntlCurrencySymbol = TRUE;
+    }
     if(symbol<kFormatSymbolCount) {
         fSymbols[symbol]=value;
     }

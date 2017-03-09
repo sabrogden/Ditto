@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 * Copyright (C) 2007-2008, International Business Machines Corporation and    *
@@ -12,13 +14,13 @@
  * \brief C++ API: Time zone rule classes
  */
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/uobject.h"
-#include "unicode/unistr.h"
-#include "unicode/dtrule.h"
+#include "uobject.h"
+#include "unistr.h"
+#include "dtrule.h"
 
 U_NAMESPACE_BEGIN
 

@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 * Copyright (C) 2007-2013, International Business Machines Corporation and    *
@@ -7,7 +9,7 @@
 #ifndef RBTZ_H
 #define RBTZ_H
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 /**
  * \file 
@@ -16,8 +18,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/basictz.h"
-#include "unicode/unistr.h"
+#include "basictz.h"
+#include "unistr.h"
 
 U_NAMESPACE_BEGIN
 

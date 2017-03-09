@@ -139,7 +139,6 @@ BOOL CCP_MainApp::InitInstance()
 	AfxEnableControlContainer();
 	AfxOleInit();
 	AfxInitRichEditEx();
-	afxAmbientActCtx = FALSE; 
 
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
 	Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);

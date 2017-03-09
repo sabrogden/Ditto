@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
  ******************************************************************************
  *   Copyright (C) 1997-2014, International Business Machines
@@ -31,12 +33,12 @@
 #ifndef COLEITR_H
 #define COLEITR_H
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 #if !UCONFIG_NO_COLLATION
 
-#include "unicode/unistr.h"
-#include "unicode/uobject.h"
+#include "unistr.h"
+#include "uobject.h"
 
 struct UCollationElements;
 struct UHashtable;

@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ******************************************************************************
 *
@@ -18,9 +20,9 @@
 #ifndef SCHRITER_H
 #define SCHRITER_H
 
-#include "unicode/utypes.h"
-#include "unicode/chariter.h"
-#include "unicode/uchriter.h"
+#include "utypes.h"
+#include "chariter.h"
+#include "uchriter.h"
 
 /**
  * \file 

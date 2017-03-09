@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 * Copyright (C) 1997-2013, International Business Machines Corporation and others.
 * All Rights Reserved.
@@ -24,11 +26,11 @@
 #ifndef GREGOCAL_H
 #define GREGOCAL_H
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/calendar.h"
+#include "calendar.h"
 
 /**
  * \file 

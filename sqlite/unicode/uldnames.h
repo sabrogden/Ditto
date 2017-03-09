@@ -1,7 +1,9 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2014, International Business Machines Corporation and       * 
-*   others.  All Rights Reserved.                                             *
+*   Copyright (C) 2010-2016, International Business Machines Corporation and
+*   others.  All Rights Reserved.
 *******************************************************************************
 */
 
@@ -13,10 +15,10 @@
  * \brief C API: Provides display names of Locale ids and their components.
  */
 
-#include "unicode/utypes.h"
-#include "unicode/localpointer.h"
-#include "unicode/uscript.h"
-#include "unicode/udisplaycontext.h"
+#include "utypes.h"
+#include "localpointer.h"
+#include "uscript.h"
+#include "udisplaycontext.h"
 
 /**
  * Enum used in LocaleDisplayNames::createInstance.

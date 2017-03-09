@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 *   Copyright (C) 2010-2012, International Business Machines
@@ -21,10 +23,10 @@
  *                 to integer values.
  */
 
-#include "unicode/utypes.h"
-#include "unicode/unistr.h"
-#include "unicode/uobject.h"
-#include "unicode/ustringtrie.h"
+#include "utypes.h"
+#include "unistr.h"
+#include "uobject.h"
+#include "ustringtrie.h"
 
 U_NAMESPACE_BEGIN
 

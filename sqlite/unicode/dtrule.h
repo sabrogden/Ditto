@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 * Copyright (C) 2007-2008, International Business Machines Corporation and         *
@@ -7,7 +9,7 @@
 #ifndef DTRULE_H
 #define DTRULE_H
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 /**
  * \file 
@@ -16,7 +18,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/uobject.h"
+#include "uobject.h"
 
 U_NAMESPACE_BEGIN
 /**

@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *******************************************************************************
 * Copyright (C) 2008-2015, International Business Machines Corporation and
@@ -16,7 +18,7 @@
 #ifndef PLURRULE
 #define PLURRULE
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 /**
  * \file
@@ -25,8 +27,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/format.h"
-#include "unicode/upluralrules.h"
+#include "format.h"
+#include "upluralrules.h"
 
 /**
  * Value returned by PluralRules::getUniqueKeywordValue() when there is no
@@ -39,6 +41,7 @@ U_NAMESPACE_BEGIN
 
 class Hashtable;
 class FixedDecimal;
+class VisibleDigitsWithExponent;
 class RuleChain;
 class PluralRuleParser;
 class PluralKeywordEnumeration;
@@ -346,6 +349,10 @@ public:
       * @internal
       */
     UnicodeString select(const FixedDecimal &number) const;
+    /**
+      * @internal
+      */
+    UnicodeString select(const VisibleDigitsWithExponent &number) const;
 #endif  /* U_HIDE_INTERNAL_API */
 
     /**

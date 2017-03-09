@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 *****************************************************************************************
 * Copyright (C) 2010-2013, International Business Machines
@@ -8,11 +10,11 @@
 #ifndef UGENDER_H
 #define UGENDER_H
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/localpointer.h"
+#include "localpointer.h"
 
 /**
  * \file

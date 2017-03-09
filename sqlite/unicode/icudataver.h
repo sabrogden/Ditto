@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ******************************************************************************
 *
@@ -16,7 +18,7 @@
 #ifndef __ICU_DATA_VER_H__
 #define __ICU_DATA_VER_H__
 
-#include "unicode/utypes.h"
+#include "utypes.h"
 
 /**
  * @stable ICU 49

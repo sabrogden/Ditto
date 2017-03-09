@@ -1,7 +1,9 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2015, International Business Machines
+*   Copyright (C) 1997-2016, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -160,6 +162,9 @@
 #       define U_PLATFORM U_PF_DARWIN
 #   endif
 #elif defined(BSD) || defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__MirBSD__)
+#   if defined(__FreeBSD__)
+#       include <sys/endian.h>
+#   endif
 #   define U_PLATFORM U_PF_BSD
 #elif defined(sun) || defined(__sun)
     /* Check defined(__SVR4) || defined(__svr4__) to distinguish Solaris from SunOS? */
@@ -425,9 +430,24 @@
 #   define U_HAVE_DEBUG_LOCATION_NEW 0
 #endif
 
-/* Compatibility with non clang compilers */
+/* Compatibility with non clang compilers: http://clang.llvm.org/docs/LanguageExtensions.html */
 #ifndef __has_attribute
 #    define __has_attribute(x) 0
+#endif
+#ifndef __has_cpp_attribute
+#    define __has_cpp_attribute(x) 0
+#endif
+#ifndef __has_builtin
+#    define __has_builtin(x) 0
+#endif
+#ifndef __has_feature
+#    define __has_feature(x) 0
+#endif
+#ifndef __has_extension
+#    define __has_extension(x) 0
+#endif
+#ifndef __has_warning
+#    define __has_warning(x) 0
 #endif
 
 /**
@@ -453,6 +473,81 @@
 #   define U_ALLOC_SIZE_ATTR(X)
 #   define U_ALLOC_SIZE_ATTR2(X,Y)
 #endif
+
+/**
+ * \def U_CPLUSPLUS_VERSION
+ * 0 if no C++; 1, 11, 14, ... if C++.
+ * Support for specific features cannot always be determined by the C++ version alone.
+ * @internal
+ */
+#ifdef U_CPLUSPLUS_VERSION
+#   if U_CPLUSPLUS_VERSION != 0 && !defined(__cplusplus)
+#       undef U_CPLUSPLUS_VERSION
+#       define U_CPLUSPLUS_VERSION 0
+#   endif
+    /* Otherwise use the predefined value. */
+#elif !defined(__cplusplus)
+#   define U_CPLUSPLUS_VERSION 0
+#elif __cplusplus >= 201402L
+#   define U_CPLUSPLUS_VERSION 14
+#elif __cplusplus >= 201103L
+#   define U_CPLUSPLUS_VERSION 11
+#else
+    // C++98 or C++03
+#   define U_CPLUSPLUS_VERSION 1
+#endif
+
+/**
+ * \def U_HAVE_RVALUE_REFERENCES
+ * Set to 1 if the compiler supports rvalue references.
+ * C++11 feature, necessary for move constructor & move assignment.
+ * @internal
+ */
+#ifdef U_HAVE_RVALUE_REFERENCES
+    /* Use the predefined value. */
+#elif U_CPLUSPLUS_VERSION >= 11 || __has_feature(cxx_rvalue_references) \
+        || defined(__GXX_EXPERIMENTAL_CXX0X__) \
+        || (defined(_MSC_VER) && _MSC_VER >= 1600)  /* Visual Studio 2010 */
+#   define U_HAVE_RVALUE_REFERENCES 1
+#else
+#   define U_HAVE_RVALUE_REFERENCES 0
+#endif
+
+/**
+ * \def U_NOEXCEPT
+ * "noexcept" if supported, otherwise empty.
+ * Some code, especially STL containers, uses move semantics of objects only
+ * if the move constructor and the move operator are declared as not throwing exceptions.
+ * @internal
+ */
+#ifdef U_NOEXCEPT
+    /* Use the predefined value. */
+#elif defined(_HAS_EXCEPTIONS) && !_HAS_EXCEPTIONS  /* Visual Studio */
+#   define U_NOEXCEPT
+#elif U_CPLUSPLUS_VERSION >= 11 || __has_feature(cxx_noexcept) || __has_extension(cxx_noexcept) \
+        || (defined(_MSC_VER) && _MSC_VER >= 1900)  /* Visual Studio 2015 */
+#   define U_NOEXCEPT noexcept
+#else
+#   define U_NOEXCEPT
+#endif
+
+/**
+ * \def U_FALLTHROUGH
+ * Annotate intentional fall-through between switch labels.
+ * http://clang.llvm.org/docs/AttributeReference.html#fallthrough-clang-fallthrough
+ * @internal
+ */
+#ifdef __cplusplus
+#   if __has_cpp_attribute(clang::fallthrough) || \
+            (__has_feature(cxx_attributes) && __has_warning("-Wimplicit-fallthrough"))
+#       define U_FALLTHROUGH [[clang::fallthrough]]
+#   else
+#       define U_FALLTHROUGH
+#   endif
+#else
+#   define U_FALLTHROUGH
+#endif
+
 
 /** @} */
 
@@ -670,7 +765,7 @@
      * does not support u"abc" string literals.
      * C++11 and C11 require support for UTF-16 literals
      */
-#   if (defined(__cplusplus) && __cplusplus >= 201103L) || (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
+#   if U_CPLUSPLUS_VERSION >= 11 || (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
 #       define U_HAVE_CHAR16_T 1
 #   else
 #       define U_HAVE_CHAR16_T 0
@@ -748,6 +843,12 @@
  * This is only used for non-ICU-API functions.
  * When a function is a public ICU API,
  * you must use the U_CAPI and U_EXPORT2 qualifiers.
+ *
+ * Please note, you need to use U_CALLCONV after the *.
+ *
+ * NO : "static const char U_CALLCONV *func( . . . )"
+ * YES: "static const char* U_CALLCONV func( . . . )"
+ *
  * @stable ICU 2.0
  */
 #if U_PLATFORM == U_PF_OS390 && defined(__cplusplus)

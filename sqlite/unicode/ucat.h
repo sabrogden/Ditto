@@ -1,3 +1,5 @@
+// Copyright (C) 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
 /*
 **********************************************************************
 * Copyright (c) 2003-2004, International Business Machines
@@ -11,8 +13,8 @@
 #ifndef UCAT_H
 #define UCAT_H
 
-#include "unicode/utypes.h"
-#include "unicode/ures.h"
+#include "utypes.h"
+#include "ures.h"
 
 /**
  * \file
