@@ -63,12 +63,10 @@ Name: AddFireWallException; Description: Add Windows Firewall exception for Ditt
 #ifdef bit64
 	Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_64');
 	Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
-	Source: mfc-crt64\*; DestDir: {app}      
+	Source: mfc-crt64\vcredist_x64_2017.exe; DestDir: {app}      
   Source: ..\Release64\icuuc55.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release64\icuin55.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release64\icutu55.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release64\icule55.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release64\iculx55.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release64\icuio55.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release64\icudt55.dll; DestDir: {app}; Flags: ignoreversion
 #endif
@@ -77,12 +75,10 @@ Name: AddFireWallException; Description: Add Windows Firewall exception for Ditt
 
 
 	Source: ..\Addins\DittoUtil\Release\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
-	Source: mfc-crt_10\*; DestDir: {app}
+	Source: mfc-crt_10\vcredist_x86_2017.exe; DestDir: {app}
   Source: ..\Release\icuuc55.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release\icuin55.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release\icutu55.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release\icule55.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release\iculx55.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release\icuio55.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release\icudt55.dll; DestDir: {app}; Flags: ignoreversion
 #endif
@@ -134,6 +130,20 @@ begin
     RenameFile(sDir+'\Language\Italian.xml', sDir+'\Language\Italian.xml.old')
 end;
 
+procedure CleanupOldFiles();
+var
+  sDir: String;
+begin
+    sDir := ExpandConstant('{app}');
+
+    DeleteFile(sDir+'\mfc100u.dll')
+    DeleteFile(sDir+'\mfcm100u.dll')
+    DeleteFile(sDir+'\msvcp100.dll')
+    DeleteFile(sDir+'\msvcr100.dll')
+    DeleteFile(sDir+'\iculx55.dll')
+    DeleteFile(sDir+'\icule55.dll')
+end;
+
 
 procedure RegisterForCrashDump(theApp : String);
 var
@@ -160,7 +170,98 @@ begin
     end;
 end;
 
+function IsVC2017CRuntimeInstalled(): Boolean;
+var
+  Installed: Boolean;
+  IsInstalled: Cardinal;
+begin
+  Installed := false
+  IsInstalled := 0;
 
+  #ifdef bit64
+
+    if RegQueryDWordValue(HKLM, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64', 'Installed', IsInstalled) then
+    begin
+      if (IsInstalled = 1) then
+      begin
+        Installed := true;
+      end;
+    end;  
+
+    //double check the HKLM64 key
+    if (IsInstalled <> 1) and IsWin64() then 
+    begin
+      if RegQueryDWordValue(HKLM64, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64', 'Installed', IsInstalled) then
+      begin
+        if (IsInstalled = 1) then
+        begin
+          Installed := true;
+        end;
+      end;  
+    end;
+
+  #endif
+  #ifndef bit64
+    if RegQueryDWordValue(HKLM, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86', 'Installed', IsInstalled) then
+    begin
+      if (IsInstalled = 1) then
+      begin
+        Installed := true;
+      end;
+    end;  
+
+    //double check the HKLM64 key
+    if (IsInstalled <> 1) and IsWin64() then 
+    begin
+      if RegQueryDWordValue(HKLM64, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86', 'Installed', IsInstalled) then
+      begin
+        if (IsInstalled = 1) then
+        begin
+          Installed := true;
+        end;
+      end;  
+    end;
+  #endif
+
+  Result := Installed;
+end;
+
+function InstallVc2017Runtime(): Boolean;
+var
+  nErrorCode: Integer;
+begin
+  Log('Installing VS 2017 C++ redistributable');
+
+  #ifdef bit64
+    ExtractTemporaryFile('vcredist_x86_2017.exe');
+    ShellExec('', ExpandConstant('{tmp}\vcredist_x86_2017.exe'), '/q', '' , SW_HIDE, ewWaitUntilTerminated, nErrorCode);
+  #endif
+  #ifndef bit64
+    ExtractTemporaryFile('vcredist_x86_2017.exe');
+    ShellExec('', ExpandConstant('{tmp}\vcredist_x86_2017.exe'), '/q', '' , SW_HIDE, ewWaitUntilTerminated, nErrorCode);
+  #endif
+end;
+
+procedure CheckForPreReqs();
+var
+  VCRuntime2017Installed: Boolean;
+  nReturnCode: Integer;
+begin
+  VCRuntime2017Installed := IsVC2015CRuntimeInstalled();
+
+  if VCRuntime2017Installed = true then
+    Log('Microsoft VS 2017 C++ redistributable is already installed.')
+  else
+  begin
+    InstallVc2017Runtime();
+    if not IsVC2017CRuntimeInstalled then
+    begin
+      Log('VS 2017 C++ redistributable install failed!');
+      SuppressibleMsgBox(CustomMessage('VCRuntimeInstallFailed'), mbInformation, MB_OK, idOK);
+    end;
+  end;
+
+end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
 var
@@ -170,8 +271,9 @@ var
 begin
   AbortNeeded := false;
   case CurStep of
-    ssInstall:
+    ssInstall:      
     begin
+      CheckForPreReqs();
     end;
 
 	  ssPostInstall:
@@ -181,6 +283,7 @@ begin
     ssDone:
     begin
       RegisterForCrashDump('Ditto')
+      CleanupOldFiles()
     end;
 
   end;
@@ -229,3 +332,5 @@ end;
 
 
 
+[CustomMessages]
+en.VCRuntimeInstallFailed=VCRuntime prerequisite install failed.
