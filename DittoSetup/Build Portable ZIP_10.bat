@@ -36,7 +36,7 @@ if "%2"=="bit32" GOTO skipBit64
 copy ..\Release64\Ditto.exe Ditto\Ditto.exe
 copy ..\Release64\Addins\*.dll Ditto\Addins\
 
-copy mfc-crt64vcruntime140.dll Ditto\vcruntime140.dll
+copy mfc-crt64\vcruntime140.dll Ditto\vcruntime140.dll
 copy mfc-crt64\vccorlib140.dll Ditto\vccorlib140.dll
 copy mfc-crt64\msvcp140.dll Ditto\msvcp140.dll
 copy mfc-crt64\mfcm140u.dll Ditto\mfcm140u.dll
