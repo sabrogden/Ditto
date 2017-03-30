@@ -110,11 +110,11 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_PowerManager.Start(m_hWnd);
 
-    //Center the main window so message boxes are in the center
-    CRect rcScreen;
-    GetMonitorRect(0, &rcScreen);
-    CPoint cpCenter = rcScreen.CenterPoint();
-    //MoveWindow(cpCenter.x, cpCenter.x,  - 2,  - 2);
+    ////Center the main window so message boxes are in the center
+    //CRect rcScreen;
+    //GetMonitorRect(0, &rcScreen);
+    //CPoint cpCenter = rcScreen.CenterPoint();
+    ////MoveWindow(cpCenter.x, cpCenter.x,  - 2,  - 2);
 
     //Then set the main window to transparent so it's never shown
     //if it is shown then only the task tray icon

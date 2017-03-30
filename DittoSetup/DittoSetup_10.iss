@@ -63,24 +63,24 @@ Name: AddFireWallException; Description: Add Windows Firewall exception for Ditt
 #ifdef bit64
 	Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_64');
 	Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
-	Source: mfc-crt64\vcredist_x64_2017.exe; DestDir: {app}      
-  Source: ..\Release64\icuuc55.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release64\icuin55.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release64\icutu55.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release64\icuio55.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release64\icudt55.dll; DestDir: {app}; Flags: ignoreversion
+	Source: mfc-crt64\vcredist_x64_2017.exe; Flags: dontcopy;      
+  Source: ..\Release64\icuuc58.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release64\icuin58.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release64\icutu58.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release64\icuio58.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release64\icudt58.dll; DestDir: {app}; Flags: ignoreversion
 #endif
 #ifndef bit64
 	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_32');
 
 
 	Source: ..\Addins\DittoUtil\Release\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
-	Source: mfc-crt_10\vcredist_x86_2017.exe; DestDir: {app}
-  Source: ..\Release\icuuc55.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release\icuin55.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release\icutu55.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release\icuio55.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release\icudt55.dll; DestDir: {app}; Flags: ignoreversion
+	Source: mfc-crt\vcredist_x86_2017.exe; Flags: dontcopy;
+  Source: ..\Release\icuuc58.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release\icuin58.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release\icutu58.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release\icuio58.dll; DestDir: {app}; Flags: ignoreversion
+  Source: ..\Release\icudt58.dll; DestDir: {app}; Flags: ignoreversion
 #endif
 
 Source: Changes.txt; DestDir: {app}
@@ -233,8 +233,8 @@ begin
   Log('Installing VS 2017 C++ redistributable');
 
   #ifdef bit64
-    ExtractTemporaryFile('vcredist_x86_2017.exe');
-    ShellExec('', ExpandConstant('{tmp}\vcredist_x86_2017.exe'), '/q', '' , SW_HIDE, ewWaitUntilTerminated, nErrorCode);
+    ExtractTemporaryFile('vcredist_x64_2017.exe');
+    ShellExec('', ExpandConstant('{tmp}\vcredist_x64_2017.exe'), '/q', '' , SW_HIDE, ewWaitUntilTerminated, nErrorCode);
   #endif
   #ifndef bit64
     ExtractTemporaryFile('vcredist_x86_2017.exe');
@@ -247,7 +247,7 @@ var
   VCRuntime2017Installed: Boolean;
   nReturnCode: Integer;
 begin
-  VCRuntime2017Installed := IsVC2015CRuntimeInstalled();
+  VCRuntime2017Installed := IsVC2017CRuntimeInstalled();
 
   if VCRuntime2017Installed = true then
     Log('Microsoft VS 2017 C++ redistributable is already installed.')
@@ -333,4 +333,4 @@ end;
 
 
 [CustomMessages]
-en.VCRuntimeInstallFailed=VCRuntime prerequisite install failed.
+VCRuntimeInstallFailed=VCRuntime prerequisite install failed.

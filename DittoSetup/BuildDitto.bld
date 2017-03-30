@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<project version='8' encrypted='1'>
+<project version='9' encrypted='1'>
 	<steps type='0'>
 		<step action='Set Macro'>
 			<MacroName>LOGFILE</MacroName>
-			<MacroValue>%workDir%\%branch%\Log.txt</MacroValue>
+			<MacroValue>%temp%\DittoTestBuild_LogFile\Log.txt</MacroValue>
 			<name>Default Log File</name>
 		</step>
 		<step action='Read INI'>
@@ -27,6 +27,7 @@
 			<Recurse type='11'>-1</Recurse>
 			<System type='3'>2</System>
 			<buildfailsteps type='11'>0</buildfailsteps>
+			<continueonfail type='3'>1</continueonfail>
 			<indent type='3'>1</indent>
 			<name>Set File Attributes</name>
 		</step>
@@ -34,6 +35,7 @@
 			<ContinueFail type='11'>-1</ContinueFail>
 			<DelDirs type='11'>-1</DelDirs>
 			<Ext>*</Ext>
+			<LogDel type='11'>-1</LogDel>
 			<Path>%workdir%</Path>
 			<Recurse type='11'>-1</Recurse>
 			<indent type='3'>1</indent>
@@ -96,8 +98,9 @@ End If
 			<indent type='3'>1</indent>
 			<name>Increment Build Number</name>
 		</step>
-		<step action='ZIP Files'>
+		<step action='Enhanced Zip Files'>
 			<Action type='3'>2</Action>
+			<ComprMethod type='3'>1</ComprMethod>
 			<Compression>5</Compression>
 			<Dest>%workDir%\dittosetup\output\DittoSource_%versionFileName%.zip</Dest>
 			<ExclExt><![CDATA[*.tlog
@@ -123,7 +126,7 @@ End If
 			<indent type='3'>1</indent>
 			<name>Build Ditto</name>
 		</step>
-		<step action='Make VS 2010'>
+		<step action='Make VS 2017'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
 			<Config>Release|x64</Config>
@@ -135,7 +138,7 @@ End If
 			<indent type='3'>2</indent>
 			<name>Build Ditto 64</name>
 		</step>
-		<step action='Make VS 2010'>
+		<step action='Make VS 2017'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
 			<Config>Release|Win32</Config>
@@ -151,19 +154,21 @@ End If
 			<indent type='3'>1</indent>
 			<name>Zip Source</name>
 		</step>
-		<step action='UNZIP Files'>
-			<Ansi type='11'>-1</Ansi>
+		<step action='Enhanced Unzip Files'>
+			<Action type='3'>2</Action>
 			<Dest>%testBuildWorkDir%</Dest>
+			<Ext>*</Ext>
+			<HideOn type='11'>-1</HideOn>
 			<LogDetail type='11'>-1</LogDetail>
 			<PathInfo type='11'>-1</PathInfo>
-			<ReadOnly type='11'>-1</ReadOnly>
 			<Recurse type='11'>-1</Recurse>
 			<Source>%workDir%\dittosetup\output\DittoSource_%versionFileName%.zip</Source>
-			<UNTAR type='11'>-1</UNTAR>
+			<SysOn type='11'>-1</SysOn>
+			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>
-			<name>UNZIP Files</name>
+			<name>Enhanced Unzip Files</name>
 		</step>
-		<step action='Make VS 2010'>
+		<step action='Make VS 2017'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
 			<Config>Release|x64</Config>
@@ -175,7 +180,7 @@ End If
 			<indent type='3'>2</indent>
 			<name>Build Ditto 64</name>
 		</step>
-		<step action='Make VS 2010'>
+		<step action='Make VS 2017'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
 			<Config>Release|x64</Config>
@@ -213,23 +218,25 @@ End If
 			<outputfrom type='3'>1</outputfrom>
 			<startin>%workDir%\DittoSetup\</startin>
 		</step>
-		<step action='7-Zip'>
-			<Action>Update</Action>
-			<Exe>C:\Program Files (x86)\7-Zip\7z.exe</Exe>
-			<Filename>%workDir%\DittoSetup\output\DittoDebug_%versionFileName%.7z</Filename>
-			<I><![CDATA[*.map
-*.pdb
-*.dll
-*.exe]]></I>
-			<O>%workDir%</O>
-			<R type='11'>-1</R>
-			<T>7z</T>
-			<X><![CDATA[mfc*
+		<step action='Enhanced Zip Files'>
+			<Action type='3'>2</Action>
+			<ComprMethod type='3'>1</ComprMethod>
+			<Compression>6</Compression>
+			<Dest>%workDir%\DittoSetup\output\DittoDebug_%versionFileName%.7z</Dest>
+			<ExclExt><![CDATA[mfc*
 msp*
 msv*
 u3*
-DittoSetup*]]></X>
-			<Y type='11'>-1</Y>
+DittoSetup*]]></ExclExt>
+			<Ext><![CDATA[*.pdb
+*.map]]></Ext>
+			<HideOn type='11'>-1</HideOn>
+			<LogDetail type='11'>-1</LogDetail>
+			<Recurse type='11'>-1</Recurse>
+			<Source>%workDir%</Source>
+			<SysOn type='11'>-1</SysOn>
+			<Unicode type='11'>-1</Unicode>
+			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>1</indent>
 			<name>Zip Debug Files</name>
 		</step>
@@ -238,38 +245,40 @@ DittoSetup*]]></X>
 			<indent type='3'>1</indent>
 			<name>Appx</name>
 		</step>
-		<step action='UNZIP Files'>
+		<step action='Enhanced Unzip Files'>
 			<Action type='3'>2</Action>
-			<Ansi type='11'>-1</Ansi>
 			<Dest>%workDir%\DittoSetup\appx\</Dest>
 			<Ext>*</Ext>
+			<HideOn type='11'>-1</HideOn>
 			<LogDetail type='11'>-1</LogDetail>
 			<PathInfo type='11'>-1</PathInfo>
 			<Recurse type='11'>-1</Recurse>
 			<Source>%workDir%\DittoSetup\Output\DittoPortable_64bit_%versionFileName%.zip</Source>
-			<UNTAR type='11'>-1</UNTAR>
+			<SysOn type='11'>-1</SysOn>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>
 			<name>extraxt 64bit Portable</name>
 		</step>
 		<step action='Write File'>
+			<BOM type='11'>-1</BOM>
 			<Filename>%workDir%\DittoSetup\appx\files.ini</Filename>
 			<Text><![CDATA[[[Files]]
 ".\appxmanifest.xml"    "AppxManifest.xml"
 
 ".\Ditto\Ditto.exe"     "Ditto.exe"
 
-".\Ditto\icudt55.dll" "icudt55.dll"
-".\Ditto\icuin55.dll" "icuin55.dll"
-".\Ditto\icuio55.dll" "icuio55.dll"
-".\Ditto\icule55.dll" "icule55.dll"
-".\Ditto\iculx55.dll" "iculx55.dll"
-".\Ditto\icutu55.dll" "icutu55.dll"
-".\Ditto\icuuc55.dll" "icuuc55.dll"
-".\Ditto\mfc100u.dll" "mfc100u.dll"
-".\Ditto\mfcm100u.dll" "mfcm100u.dll"
-".\Ditto\msvcp100.dll" "msvcp100.dll"
-".\Ditto\msvcr100.dll" "msvcr100.dll"
+".\Ditto\icudt58.dll" "icudt58.dll"
+".\Ditto\icuin58.dll" "icuin58.dll"
+".\Ditto\icuio58.dll" "icuio58.dll"
+".\Ditto\icutu58.dll" "icutu58.dll"
+".\Ditto\icuuc58.dll" "icuuc58.dll"
+
+".\Ditto\vcruntime140.dll" "vcruntime140.dll"
+".\Ditto\vccorlib140.dll" "vccorlib140.dll"
+".\Ditto\msvcp140.dll" "msvcp140.dll"
+".\Ditto\mfcm140u.dll" "mfcm140u.dll"
+".\Ditto\mfc140u.dll" "mfc140u.dll"
+".\Ditto\mfc140enu.dll" "mfc140enu.dll"
 
 ".\WindowsApp" "WindowsApp"
 
@@ -422,7 +431,7 @@ DittoSetup*]]></X>
 %DATETIME%
 <br>
 <br>
-Warning, as of version 3.21.105 I'm in the middle of updating the default looks of Ditto, so it might take a few versions to sort out.
+Warning as of 3/29 Ditto has been update to use Visual Studio 2017, this might take a while to sort out the installers to properly install needed dlls
 <br>
 <br>
 <b>Ditto beta, version %version%</b>
@@ -467,13 +476,6 @@ var sc_security="b3f57099";
 			<indent type='3'>2</indent>
 			<name>Beta web page</name>
 		</step>
-		<step action='Set Macro'>
-			<MacroName>LOGFILE</MacroName>
-			<MacroValue>%workDir%\DittoSetup\output\changes.php</MacroValue>
-			<indent type='3'>2</indent>
-			<name>Log Changes to File</name>
-			<nologging type='11'>-1</nologging>
-		</step>
 		<step action='Git'>
 			<Command>log</Command>
 			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2017-02-10</Options>
@@ -482,31 +484,12 @@ var sc_security="b3f57099";
 			<indent type='3'>2</indent>
 			<name>Git</name>
 		</step>
-		<step action='Run Program'>
-			<ShowCmd type='11'>-1</ShowCmd>
+		<step action='Write File'>
+			<Filename>%workDir%\DittoSetup\output\changes.php</Filename>
+			<Text>%LASTSTEP_OUTPUT%</Text>
 			<buildfailsteps type='11'>0</buildfailsteps>
-			<checked type='11'>0</checked>
-			<command>C:\Program Files\Git\bin\git.exe log --pretty=format:%ar %s --since=2015-11-21</command>
 			<indent type='3'>2</indent>
-			<name>Run Program</name>
-			<outputfile>c:\temp\a.txt</outputfile>
-			<outputfrom type='3'>2</outputfrom>
-			<startin>%workDir%</startin>
-		</step>
-		<step action='Set Macro'>
-			<MacroName>LOGFILE</MacroName>
-			<MacroValue>%workDir%\Log.txt</MacroValue>
-			<indent type='3'>2</indent>
-			<name>Default Log File</name>
-			<nologging type='11'>-1</nologging>
-		</step>
-		<step action='Replace in File'>
-			<FileIn>%workDir%\%branch%\DittoSetup\output\changes.php</FileIn>
-			<Find>Starting Build.*--------------------</Find>
-			<NoModS type='11'>-1</NoModS>
-			<checked type='11'>0</checked>
-			<indent type='3'>2</indent>
-			<name>Replace "Starting Build"</name>
+			<name>Log Changes to File</name>
 		</step>
 		<step action='Replace in File'>
 			<FileIn>%workDir%\DittoSetup\output\changes.php</FileIn>
@@ -521,7 +504,7 @@ var sc_security="b3f57099";
 			<Filename>%workDir%\DittoSetup\output\</Filename>
 			<Incremental type='11'>-1</Incremental>
 			<Logging type='3'>6</Logging>
-			<Password encrypted='1'>Nc3MPPQ8duGharq4qKHsgxD9UJW9LhmWJguHyD/uunU=</Password>
+			<Password encrypted='1'>amkwNSREZkNXUFp3JmFRMlkc1ehlfY06mdLEVJHqyXdFbT0D5VqgTJGtkZ7P6mdnGca+n6FwXTNm9GfdZyIEMg==</Password>
 			<Percent>10</Percent>
 			<Port>22</Port>
 			<Retries>0</Retries>

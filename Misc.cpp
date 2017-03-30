@@ -638,7 +638,7 @@ int GetMonitorFromRect(LPRECT lpMonitorRect)
 	EnumParam.iMonitor = -1;
 	
 	// Enum Displays
-	EnumDisplayMonitors(NULL, NULL, MyMonitorEnumProc, (long)&EnumParam);
+	EnumDisplayMonitors(NULL, NULL, MyMonitorEnumProc, (LPARAM)&EnumParam);
 	
 	// Return the result
 	return EnumParam.iMonitor;
@@ -656,7 +656,7 @@ void GetMonitorRect(int iMonitor, LPRECT lpDestRect)
 	lpDestRect->bottom = lpDestRect->left = lpDestRect->right = lpDestRect->top = 0;
 	
 	// Enum Displays
-	EnumDisplayMonitors(NULL, NULL, MyMonitorEnumProc, (long)&EnumParam);
+	EnumDisplayMonitors(NULL, NULL, MyMonitorEnumProc, (LPARAM)&EnumParam);
 	
 	// If not successful, default to the screen dimentions
 	if(lpDestRect->right == 0 || lpDestRect->bottom == 0)
