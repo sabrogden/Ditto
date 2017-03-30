@@ -68,7 +68,7 @@ CString CRichEditCtrlEx::GetRTF()
 
 	CString sRTF = "";
 
-	es.dwCookie = (DWORD) &sRTF;	// so sRTF receives the string
+	es.dwCookie = (DWORD_PTR) &sRTF;	// so sRTF receives the string
 	
 	StreamOut(SF_RTF, es);			// Call CRichEditCtrl::StreamOut to get the string.
 	///
@@ -88,10 +88,10 @@ void CRichEditCtrlEx::SetRTF(const char *pRTF)
 
 #ifdef _UNICODE
 	CString cs;
-	es.dwCookie = (DWORD) &cs;
+	es.dwCookie = (DWORD_PTR) &cs;
 #else
 	CString cs(pRTF);
-	es.dwCookie = (DWORD) &cs;
+	es.dwCookie = (DWORD_PTR) &cs;
 #endif
 
 	StreamIn(SF_RTF, es);	// Do it.
@@ -115,9 +115,9 @@ void CRichEditCtrlEx::SetRTF(CStringA sRTF)
 
 #ifdef _UNICODE
 	CString cs;
-	es.dwCookie = (DWORD) &cs;
+	es.dwCookie = (DWORD_PTR) &cs;
 #else
-	es.dwCookie = (DWORD) &sRTF;
+	es.dwCookie = (DWORD_PTR) &sRTF;
 #endif
 
 	StreamIn(SF_RTF, es);	// Do it.
@@ -159,7 +159,7 @@ CString CRichEditCtrlEx::GetText()
 	EDITSTREAM es;
 	es.dwError = 0;
 	es.pfnCallback = CBStreamOut;		// Set the callback
-	es.dwCookie = (DWORD) &sText;	// so sRTF receives the string
+	es.dwCookie = (DWORD_PTR) &sText;	// so sRTF receives the string
 	StreamOut(SF_TEXT, es);			// Call CRichEditCtrl::StreamOut to get the string.
 #endif
 
@@ -176,9 +176,9 @@ void CRichEditCtrlEx::SetText(CString sText)
 	es.pfnCallback = CBStreamIn;
 #ifdef _UNICODE
 	CString cs;
-	es.dwCookie = (DWORD) &cs;
+	es.dwCookie = (DWORD_PTR) &cs;
 #else
-	es.dwCookie = (DWORD) &sText;
+	es.dwCookie = (DWORD_PTR) &sText;
 #endif
 	StreamIn(SF_TEXT, es);	// Do it.
 

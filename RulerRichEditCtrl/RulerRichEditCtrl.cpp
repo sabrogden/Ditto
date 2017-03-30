@@ -806,7 +806,7 @@ CString CRulerRichEditCtrl::GetRTF()
 
 	CString* str = new CString;
 	EDITSTREAM	es;
-	es.dwCookie = ( DWORD ) str;
+	es.dwCookie = (DWORD_PTR) str;
 	es.pfnCallback = StreamOut;
 	m_rtf.StreamOut( SF_RTF, es );
 
@@ -837,7 +837,7 @@ void CRulerRichEditCtrl::SetRTF( const CString& rtf )
 	CString* str = new CString( rtf );
 
 	EDITSTREAM	es;
-	es.dwCookie = ( DWORD ) str;
+	es.dwCookie = (DWORD_PTR) str;
 	es.pfnCallback = StreamIn;
 	m_rtf.StreamIn( SF_RTF, es );
 
@@ -852,9 +852,9 @@ void CRulerRichEditCtrl::SetText(CString sText)
 //	es.pfnCallback = StreamIn;
 #ifdef _UNICODE
 	CString cs;
-	es.dwCookie = (DWORD) &cs;
+	es.dwCookie = (DWORD_PTR) &cs;
 #else
-	es.dwCookie = (DWORD) &sText;
+	es.dwCookie = (DWORD_PTR) &sText;
 	m_rtf.StreamIn(SF_TEXT, es);	// Do it.
 #endif
 	
@@ -896,7 +896,7 @@ CString CRulerRichEditCtrl::GetText()
 	EDITSTREAM es;
 	es.dwError = 0;
 	es.pfnCallback = StreamOut;		// Set the callback
-	es.dwCookie = (DWORD) &sText;	// so sRTF receives the string
+	es.dwCookie = (DWORD_PTR) &sText;	// so sRTF receives the string
 	m_rtf.StreamOut(SF_TEXT, es);			// Call CRichEditCtrl::StreamOut to get the string.
 #endif
 
@@ -928,7 +928,7 @@ BOOL CRulerRichEditCtrl::Save( CString& filename )
 	CString* str = new CString;
 
 	EDITSTREAM	es;
-	es.dwCookie = ( DWORD ) str;
+	es.dwCookie = (DWORD_PTR) str;
 	es.pfnCallback = StreamOut;
 	m_rtf.StreamOut( SF_RTF, es );
 
@@ -968,7 +968,7 @@ BOOL CRulerRichEditCtrl::Load( CString& filename )
 	if( result )
 	{
 		EDITSTREAM	es;
-		es.dwCookie = ( DWORD ) str;
+		es.dwCookie = (DWORD_PTR) str;
 //		es.pfnCallback = StreamIn;
 		m_rtf.StreamIn( SF_RTF, es );
 	}
