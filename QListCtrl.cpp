@@ -1,4 +1,4 @@
-// QListCtrl.cpp : implementation file
+﻿// QListCtrl.cpp : implementation file
 //
 
 #include "stdafx.h"
@@ -463,8 +463,9 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		
 		if(DrawRtfText(nItem, rcText, pDC) == FALSE)
 		{
+			//use funky characters (defined in DrawHTML) text for font so it doesn't colide with copied html
 			if (m_searchText.GetLength() > 0 &&
-				FindNoCaseAndInsert(csText, m_searchText, _T("<font color='#ff0000'>"), _T("</font>"), m_linesPerRow) > 0)
+				FindNoCaseAndInsert(csText, m_searchText, _T("<从@#$ color='#ff0000'>"), _T("</从@#$>"), m_linesPerRow) > 0)
 			{				
 				DrawHTML(pDC->m_hDC, csText, csText.GetLength(), rcText, DT_VCENTER | DT_EXPANDTABS | DT_NOPREFIX);
 			}
