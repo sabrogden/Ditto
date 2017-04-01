@@ -249,22 +249,20 @@ HGLOBAL CFileRecieve::CreateCF_HDROPBuffer()
 
 	for(int i = 0; i < nFileArraySize; i++)
 	{
-		nBuffSize += m_RecievedFiles[i].GetLength()*sizeof(TCHAR)+1;
+		nBuffSize += m_RecievedFiles[i].GetLength()+1;
 	}
 
-	nBuffSize += sizeof(DROPFILES)+2;
-	nBuffSize = (nBuffSize/32 + 1)*32;
+	// Add 1 extra for the final null char,
+	// and the size of the DROPFILES struct.
+	nBuffSize = sizeof(DROPFILES) + (sizeof(TCHAR) * (nBuffSize + 1));
 
 	pBuff = new TCHAR[nBuffSize];
 
 	ZeroMemory(pBuff, nBuffSize);
 	((DROPFILES*)pBuff)->pFiles = sizeof(DROPFILES);
-
-#ifdef _UNICODE
 	((DROPFILES*)pBuff)->fWide = TRUE;
-#endif
 
-	TCHAR* pCurrent = (TCHAR*)(((char*)pBuff) + sizeof(DROPFILES));
+	TCHAR* pCurrent = (TCHAR*)(LPBYTE(pBuff) + sizeof(DROPFILES));
 
 	for(int n = 0; n < nFileArraySize; n++)
 	{
