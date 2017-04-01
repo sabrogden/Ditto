@@ -140,8 +140,15 @@ begin
     DeleteFile(sDir+'\mfcm100u.dll')
     DeleteFile(sDir+'\msvcp100.dll')
     DeleteFile(sDir+'\msvcr100.dll')
+
     DeleteFile(sDir+'\iculx55.dll')
     DeleteFile(sDir+'\icule55.dll')
+    DeleteFile(sDir+'\icuuc55.dll')
+    DeleteFile(sDir+'\icutu55.dll')
+    DeleteFile(sDir+'\icuio55.dll')
+    DeleteFile(sDir+'\icuin55.dll')
+    DeleteFile(sDir+'\icudt55.dll')
+
 end;
 
 
