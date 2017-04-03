@@ -274,9 +274,7 @@ DittoSetup*]]></ExclExt>
 ".\Ditto\icuuc58.dll" "icuuc58.dll"
 
 ".\Ditto\vcruntime140.dll" "vcruntime140.dll"
-".\Ditto\vccorlib140.dll" "vccorlib140.dll"
 ".\Ditto\msvcp140.dll" "msvcp140.dll"
-".\Ditto\mfcm140u.dll" "mfcm140u.dll"
 ".\Ditto\mfc140u.dll" "mfc140u.dll"
 ".\Ditto\mfc140enu.dll" "mfc140enu.dll"
 

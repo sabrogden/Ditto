@@ -17,9 +17,7 @@ copy ..\Release\Ditto.exe Ditto\Ditto.exe
 copy ..\Release\Addins\*.dll Ditto\Addins\
 
 copy mfc-crt\vcruntime140.dll Ditto\vcruntime140.dll
-copy mfc-crt\vccorlib140.dll Ditto\vccorlib140.dll
 copy mfc-crt\msvcp140.dll Ditto\msvcp140.dll
-copy mfc-crt\mfcm140u.dll Ditto\mfcm140u.dll
 copy mfc-crt\mfc140u.dll Ditto\mfc140u.dll
 copy mfc-crt\mfc140enu.dll Ditto\mfc140enu.dll
 
@@ -37,9 +35,7 @@ copy ..\Release64\Ditto.exe Ditto\Ditto.exe
 copy ..\Release64\Addins\*.dll Ditto\Addins\
 
 copy mfc-crt64\vcruntime140.dll Ditto\vcruntime140.dll
-copy mfc-crt64\vccorlib140.dll Ditto\vccorlib140.dll
 copy mfc-crt64\msvcp140.dll Ditto\msvcp140.dll
-copy mfc-crt64\mfcm140u.dll Ditto\mfcm140u.dll
 copy mfc-crt64\mfc140u.dll Ditto\mfc140u.dll
 copy mfc-crt64\mfc140enu.dll Ditto\mfc140enu.dll
 
