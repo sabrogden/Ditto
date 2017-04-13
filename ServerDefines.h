@@ -28,7 +28,8 @@ public:
 	CHAR				m_cDesc[250];
 	long				m_lParameter1;
 	long				m_lParameter2;
-	char				m_cExtra[50];
+	CHAR				m_md5[32];
+	char				m_cExtra[18];
 };
 
 class CDittoCF_HDROP

@@ -1,19 +1,11 @@
-#if !defined(AFX_ToolTipEx_H__5796127D_8817_493F_ACA7_8741A6759DD3__INCLUDED_)
-#define AFX_ToolTipEx_H__5796127D_8817_493F_ACA7_8741A6759DD3__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// ToolTipEx.h : header file
-//
+
 #include "RichEditCtrlEx.h"
 #include "WndEx.h"
 #include "DittoWindow.h"
 #include "GdipButton.h"
 #include "ImageViewer.h"
-/////////////////////////////////////////////////////////////////////////////
-// CToolTipEx window
-
+#include "GroupStatic.h"
 
 class CToolTipEx : public CWnd
 {
@@ -31,7 +23,6 @@ public:
 	BOOL Show(CPoint point);
 	BOOL Hide();
 	void SetToolTipText(const CString &csText);
-//	void SetRTFText(const CString &csRTF);
 	void SetRTFText(const char *pRTF);
 	void SetBitmap(CBitmap *pBitmap);
 	void SetNotifyWnd(CWnd *pNotify)		{ m_pNotifyWnd = pNotify;	}
@@ -41,6 +32,8 @@ public:
 	void SetClipId(int clipId) { m_clipId = clipId; }
 	int GetClipId() { return m_clipId; }
 	void SetSearchText(CString text) { m_searchText = text; }
+
+	void SetClipData(CString data) { m_clipData = data; }
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -70,10 +63,10 @@ protected:
 	CScrollBar m_hScroll;
 	CDittoWindow m_DittoWindow;
 	CImageViewer m_imageViewer;
-
+	CGroupStatic m_clipDataStatic;
+	CString m_clipData;
+	CFont m_clipDataFont;
 	bool m_saveWindowLockout;
-
-	
 
 protected:
 	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);
@@ -107,15 +100,7 @@ public:
 	afx_msg void OnScaleimagestofitwindow();
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
-	afx_msg void OnPaint();
-	
+	afx_msg void OnPaint();	
 	afx_msg void OnFirstHidedescriptionwindowonm();
 	afx_msg void OnFirstWraptext();
 };
-
-/////////////////////////////////////////////////////////////////////////////
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
-
-#endif // !defined(AFX_ToolTipEx_H__5796127D_8817_493F_ACA7_8741A6759DD3__INCLUDED_)

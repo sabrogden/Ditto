@@ -427,6 +427,7 @@
     <ClCompile Include="SymbolEdit.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="Md5.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -894,6 +895,7 @@
     <ClInclude Include="SymbolEdit.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="Md5.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -1357,6 +1359,9 @@
     <None Include="res\cog_28.png">
       <Filter>res</Filter>
     </None>
+    <None Include="res\cursor1.cur" />
+    <None Include="res\cursor_zoom_in.cur" />
+    <None Include="res\cursor2.cur" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">
@@ -1388,5 +1393,8 @@
   </ItemGroup>
   <ItemGroup>
     <Midl Include="CP_Main.idl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\icon3.ico" />
   </ItemGroup>
 </Project>

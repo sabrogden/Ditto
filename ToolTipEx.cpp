@@ -32,10 +32,9 @@ CToolTipEx::CToolTipEx(): m_dwTextStyle(DT_EXPANDTABS | DT_EXTERNALLEADING |
 CToolTipEx::~CToolTipEx()
 {
     DELETE_BITMAP 
-
     m_Font.DeleteObject();
+	m_clipDataFont.DeleteObject();
 }
-
 
 BEGIN_MESSAGE_MAP(CToolTipEx, CWnd)
 //{{AFX_MSG_MAP(CToolTipEx)
@@ -51,16 +50,12 @@ ON_WM_NCLBUTTONDOWN()
 ON_WM_NCMOUSEMOVE()
 ON_WM_NCLBUTTONUP()
 ON_WM_ERASEBKGND()
-
 ON_COMMAND(ID_FIRST_REMEMBERWINDOWPOSITION, &CToolTipEx::OnRememberwindowposition)
 ON_COMMAND(ID_FIRST_SIZEWINDOWTOCONTENT, &CToolTipEx::OnSizewindowtocontent)
 ON_COMMAND(ID_FIRST_SCALEIMAGESTOFITWINDOW, &CToolTipEx::OnScaleimagestofitwindow)
 ON_COMMAND(2, OnOptions)
 ON_WM_RBUTTONDOWN()
 ON_WM_SETFOCUS()
-
-
-
 ON_COMMAND(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, &CToolTipEx::OnFirstHidedescriptionwindowonm)
 ON_COMMAND(ID_FIRST_WRAPTEXT, &CToolTipEx::OnFirstWraptext)
 ON_WM_WINDOWPOSCHANGING()
@@ -112,6 +107,13 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 	m_optionsButton.LoadStdImageDPI(IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, cog_28, IDB_COG_32_32, _T("PNG"));
 	m_optionsButton.SetToolTipText(theApp.m_Language.GetString(_T("DescriptionOptionsTooltip"), _T("Description Options")));
 	m_optionsButton.ShowWindow(SW_SHOW);
+
+	m_clipDataStatic.Create(_T("some text"), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, 3);
+
+	m_clipDataFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+	m_clipDataStatic.SetFont(&m_clipDataFont);
+	m_clipDataStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
+	m_clipDataStatic.SetTextColor(RGB(127, 127, 127));
 
 	m_saveWindowLockout = false;
 
@@ -221,6 +223,8 @@ BOOL CToolTipEx::Show(CPoint point)
 			m_reducedWindowSize = true;
 		}
 	}
+
+	m_clipDataStatic.SetWindowText(m_clipData);
 
 	m_saveWindowLockout = true;
 	MoveWindow(rect);
@@ -590,6 +594,8 @@ void CToolTipEx::OnSize(UINT nType, int cx, int cy)
 	m_imageViewer.MoveWindow(cr);
 
 	m_optionsButton.MoveWindow(cr.left, cr.bottom + theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
+
+	m_clipDataStatic.MoveWindow(cr.left + theApp.m_metrics.ScaleX(19), cr.bottom + theApp.m_metrics.ScaleY(2), cr.Width() - cr.left + theApp.m_metrics.ScaleX(19), theApp.m_metrics.ScaleY(17));
 
 	this->Invalidate();
 	m_DittoWindow.DoSetRegion(this);

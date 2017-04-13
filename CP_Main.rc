@@ -1435,6 +1435,16 @@ IDR_CP_MAIN             REGISTRY                "CP_Main.rgs"
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Cursor
+//
+
+IDC_CURSOR_ZOOM_IN      CURSOR                  "res\\cursor_zoom_in.cur"
+
+IDC_CURSOR_ZOOM_OUT     CURSOR                  "res\\cursor2.cur"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // String Table
 //
 

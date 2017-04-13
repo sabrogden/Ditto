@@ -175,6 +175,10 @@
 #define cog_28                          316
 #define IDB_PNG13                       317
 #define Search_28                       317
+#define IDC_CURSOR1                     322
+#define IDC_CURSOR_ZOOM_IN              322
+#define IDC_CURSOR2                     323
+#define IDC_CURSOR_ZOOM_OUT             323
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -666,7 +670,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        318
+#define _APS_NEXT_RESOURCE_VALUE        324
 #define _APS_NEXT_COMMAND_VALUE         32938
 #define _APS_NEXT_CONTROL_VALUE         2150
 #define _APS_NEXT_SYMED_VALUE           104

@@ -15,6 +15,7 @@ CImageViewer::CImageViewer()
 {
 	m_pBitmap = NULL;
 	m_scrollHelper.AttachWnd(this);
+	m_hoveringOverImage = false;
 }
 
 CImageViewer::~CImageViewer()
@@ -28,6 +29,8 @@ BEGIN_MESSAGE_MAP(CImageViewer, CWnd)
 	ON_WM_MOUSEWHEEL()
 	ON_WM_PAINT()
 	ON_WM_SIZE()
+	ON_WM_SETCURSOR()
+	ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 BOOL CImageViewer::Create(CWnd* pParent)
@@ -105,25 +108,46 @@ void CImageViewer::OnPaint()
 
 		CBitmap *oldBitmap = MemDc.SelectObject(m_pBitmap);
 
-		int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
-		int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
+		int width = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
+		int height = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
 
 		if (CGetSetOptions::GetScaleImagesToDescWindow())
 		{
-			dc.StretchBlt(rect.left, rect.top, rect.Width(), rect.Height(), &MemDc, 0, 0, nWidth, nHeight, SRCCOPY);
+			double newWidth = rect.Width();
+			double newHeight = rect.Height();
+
+			if (width > 0 &&
+				height > 0 &&
+				rect.Width() > 0 &&
+				rect.Height() > 0)
+			{
+				float origAspect = (width / (float)height);
+				float newAspect = (rect.Width() / (float)rect.Height());
+
+				if (origAspect > newAspect)
+				{
+					newHeight = (rect.Width() * height) / width;
+				}
+				else
+				{
+					newWidth = (rect.Height() * width) / height;
+				}
+			}
+			
+			dc.StretchBlt(rect.left, rect.top, newWidth, newHeight, &MemDc, 0, 0, width, height, SRCCOPY);
 			//OutputDebugString(StrF(_T("scaling image, window size %d/%d, image %d/%d\n"), min(nWidth, rect.Width()), min(nHeight, rect.Height()), nWidth, nHeight));
 		}
 		else
 		{
 			CSize s = m_scrollHelper.GetScrollPos();
-			dc.BitBlt(rect.left, rect.top, nWidth, nHeight, &MemDc, s.cx, s.cy, SRCCOPY);
+			dc.BitBlt(rect.left, rect.top, width, height, &MemDc, s.cx, s.cy, SRCCOPY);
 		}
 
 		//dc.StretchBlt(rect.left, rect.top, rect.Width(), rect.Height(), &MemDc, 0, 0, nWidth, nHeight, SRCCOPY);
 
 		MemDc.SelectObject(oldBitmap);
 
-		rect.top += nHeight;
+		rect.top += height;
 	}
 	
 	// Cleanup
@@ -153,4 +177,42 @@ void CImageViewer::OnSize(UINT nType, int cx, int cy)
 	m_scrollHelper.OnSize(nType, cx, cy);
 }
 
+BOOL CImageViewer::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message)
+{
+	if (this->m_pBitmap &&
+		pWnd->m_hWnd == this->m_hWnd &&
+		nHitTest == HTCLIENT)
+	{
+		if (CGetSetOptions::GetScaleImagesToDescWindow())
+		{
+			::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_ZOOM_IN));
+		}
+		else
+		{
+			::SetCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_ZOOM_OUT));
+		}
 
+		m_hoveringOverImage = true;
+
+		return TRUE;
+	}
+
+	m_hoveringOverImage = false;
+
+	return CWnd::OnSetCursor(pWnd, nHitTest, message);
+}
+
+
+void CImageViewer::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	if (this->m_pBitmap &&
+		m_hoveringOverImage)
+	{
+		CGetSetOptions::SetScaleImagesToDescWindow(!CGetSetOptions::GetScaleImagesToDescWindow());
+		this->UpdateBitmapSize();
+		Invalidate();
+		return;
+	}
+
+	CWnd::OnLButtonUp(nFlags, point);
+}

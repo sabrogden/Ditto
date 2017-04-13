@@ -593,6 +593,7 @@
     <ClCompile Include="HotKeys.cpp" />
     <ClCompile Include="ImageViewer.cpp" />
     <ClCompile Include="MainFrmThread.cpp" />
+    <ClCompile Include="Md5.cpp" />
     <ClCompile Include="MessagePumpThread.cpp" />
     <ClCompile Include="MyDropTarget.cpp" />
     <ClCompile Include="NTray.cpp" />
@@ -1891,6 +1892,7 @@
     <ClInclude Include="HotKeys.h" />
     <ClInclude Include="ImageViewer.h" />
     <ClInclude Include="MainFrmThread.h" />
+    <ClInclude Include="Md5.h" />
     <ClInclude Include="memdc.h" />
     <ClInclude Include="MessagePumpThread.h" />
     <ClInclude Include="MyDropTarget.h" />
@@ -2078,6 +2080,9 @@
     <None Include="res\CP_Main.ico" />
     <None Include="res\CP_Main.rc2" />
     <None Include="res\CP_MainDoc.ico" />
+    <None Include="res\cursor1.cur" />
+    <None Include="res\cursor2.cur" />
+    <None Include="res\cursor_zoom_in.cur" />
     <None Include="res\Ditto.ico" />
     <None Include="res\Ditto2_NoCopyCb.ico" />
     <None Include="res\DittoNew.ico" />
@@ -2222,6 +2227,9 @@
       <GenerateStublessProxies Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateStublessProxies>
       <TypeLibraryName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)$(ProjectName).tlb</TypeLibraryName>
     </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\icon3.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

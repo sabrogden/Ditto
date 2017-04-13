@@ -972,10 +972,58 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		m_pToolTip->SetClipId(clipId);
 		m_pToolTip->SetSearchText(m_searchText);
 
+		m_pToolTip->SetClipData(_T(""));
 		m_pToolTip->SetToolTipText(_T(""));  
 		m_pToolTip->SetRTFText("    ");
 		bool bSetPlainText = false;
 		CClipFormat Clip;
+
+
+		try
+		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, lDate, lastPasteDate, lDontAutoDelete, QuickPasteText, lShortCut, globalShortCut FROM Main WHERE lID = %d"), clipId);
+			if (q.eof() == false)
+			{
+				CString clipData;
+				COleDateTime time((time_t)q.getIntField(_T("lDate")));
+				clipData += "Added: " + time.Format();
+
+				COleDateTime modified((time_t)q.getIntField(_T("lastPasteDate")));
+				clipData += _T(" | Last Used: ") + modified.Format();
+
+				if (q.getIntField(_T("lDontAutoDelete")) > 0)
+				{
+					clipData += _T(" | Never Auto Delete");
+				}
+
+				CString csQuickPaste = q.getStringField(_T("QuickPasteText"));
+				if (csQuickPaste.IsEmpty() == FALSE)
+				{
+					clipData += _T(" | Quick Paste = ");
+					clipData += csQuickPaste;
+				}
+
+				int shortCut = q.getIntField(_T("lShortCut"));
+				if (shortCut > 0)
+				{
+					clipData += _T(" | ");
+					clipData += CHotKey::GetHotKeyDisplayStatic(shortCut);
+
+					BOOL globalShortCut = q.getIntField(_T("globalShortCut"));
+					if (globalShortCut)
+					{
+						clipData += _T(" - Global Shortcut Key");
+					}
+				}
+
+				m_pToolTip->SetClipData(clipData);
+			}
+		}
+		CATCH_SQLITE_EXCEPTION
+
+
+
+
 		
 		Clip.m_cfType = CF_UNICODETEXT;
 		if(GetClipData(nItem, Clip) && Clip.m_hgData)

@@ -19,6 +19,8 @@ public:
 
 	BOOL Create(CWnd* pParent);
 
+	bool m_hoveringOverImage;
+
 protected:
 	DECLARE_MESSAGE_MAP()
 
@@ -27,6 +29,9 @@ protected:
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnPaint();
+public:
+	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 };
 
 

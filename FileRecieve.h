@@ -4,6 +4,7 @@
 #include "FileTransferProgressDlg.h"
 
 #define USER_CANCELED -2
+#define MD5_MISMATCH -3
 
 class CFileRecieve
 {
@@ -20,7 +21,7 @@ public:
 	void AddFile(CString csFile)	{ m_RecievedFiles.Add(csFile); }
 
 protected:
-	long RecieveFileData(ULONG lFileSize, CString csFileName);
+	long RecieveFileData(ULONG lFileSize, CString csFileName, CString &md5String);
 
 protected:
 	CRecieveSocket m_Sock;

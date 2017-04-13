@@ -540,6 +540,9 @@ public:
 
 	static BOOL GetAdjustClipsForCRC();
 	static void SetAdjustClipsForCRC(int val);
+
+	static BOOL GetCheckMd5OnFileTransfers();
+	static void SetCheckMd5OnFileTransfers(int val);
 };
 
 // global for easy access and for initialization of fast access variables

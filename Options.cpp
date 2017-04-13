@@ -2393,3 +2393,13 @@ void CGetSetOptions::SetAdjustClipsForCRC(int val)
 {
 	SetProfileLong(_T("AdjustClipsForCRC"), val);
 }
+
+BOOL CGetSetOptions::GetCheckMd5OnFileTransfers()
+{
+	return GetProfileLong(_T("CheckMd5OnFileTransfers"), TRUE);
+}
+
+void CGetSetOptions::SetCheckMd5OnFileTransfers(int val)
+{
+	SetProfileLong(_T("CheckMd5OnFileTransfers"), val);
+}

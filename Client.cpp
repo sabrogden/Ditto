@@ -348,7 +348,7 @@ HGLOBAL CClient::RequestCopiedFiles(CClipFormat &HDropFormat, CString csIP, CStr
 		{
 			hReturn = Recieve.CreateCF_HDROPBuffer();
 		}
-		else if(lRet == FALSE)
+		else if(lRet == FALSE || lRet == MD5_MISMATCH)
 		{
 			if(pProgress != NULL && pProgress->Cancelled())
 			{
@@ -357,6 +357,10 @@ HGLOBAL CClient::RequestCopiedFiles(CClipFormat &HDropFormat, CString csIP, CStr
 			else	
 			{
 				csErrorString = _T("Error recieving files.");
+				if (lRet == MD5_MISMATCH)
+				{
+					csErrorString += _T(" MD5 Match Error.");
+				}
 			}
 		}
 

@@ -1,7 +1,3 @@
-// FileRecieve.cpp: implementation of the CFileRecieve class.
-//
-//////////////////////////////////////////////////////////////////////
-
 #include "stdafx.h"
 #include "cp_main.h"
 #include "FileRecieve.h"
@@ -9,6 +5,7 @@
 #include "shared/TextConvert.h"
 #include "Path.h"
 #include "UnicodeMacros.h"
+#include "Md5.h"
 
 
 #ifdef _DEBUG
@@ -33,6 +30,7 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 	BOOL lRet = FALSE;
 	int nNumFiles = 0;
 	int nFilesRecieved = 0;
+	CString lastMd5;
 
 	m_pProgress = pProgress;
 	m_csRecievingFromIP = csIP;
@@ -78,7 +76,7 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 
 			LogSendRecieveInfo(StrF(_T("START of recieving the file %s, size: %d, File %d of %d"), csFileName, lFileSize, nFilesRecieved, nNumFiles));
 
-			long lRecieveRet = RecieveFileData(lFileSize, csFileName);
+			long lRecieveRet = RecieveFileData(lFileSize, csFileName, lastMd5);
 			if(lRecieveRet == USER_CANCELED)
 			{
 				lRet = USER_CANCELED;
@@ -103,19 +101,51 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 				Info.m_lParameter2 != 0 &&
 				m_RecievedFiles.GetCount() > 0)
 			{
-				FILETIME lastWriteTime;
-				lastWriteTime.dwLowDateTime = Info.m_lParameter1;
-				lastWriteTime.dwHighDateTime = Info.m_lParameter2;
+				bool md5Error = false;
+				CString fileName = m_RecievedFiles[m_RecievedFiles.GetCount() - 1];
 
-				HANDLE filename = CreateFile(m_RecievedFiles[m_RecievedFiles.GetCount() - 1], FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);				
-				if(filename != NULL)
+				if (strlen(Info.m_md5) > 0 &&
+					CGetSetOptions::GetCheckMd5OnFileTransfers())
 				{
-					SetFileTime(filename, NULL, NULL, &lastWriteTime);
+					CMd5 md5;
+					CStringA localMd5 = lastMd5;
+					CStringA remoteMd5 = Info.m_md5;
+
+					if (localMd5 != remoteMd5)
+					{
+						lRet = MD5_MISMATCH;
+						bBreak = true;
+						md5Error = true;
+						::DeleteFile(fileName);
+
+						LogSendRecieveInfo(StrF(_T("MD5 ERROR Receiving data_end for file: %s, local md5: %s remote md5: %s"), fileName, CTextConvert::MultiByteToUnicodeString(localMd5), CTextConvert::MultiByteToUnicodeString(remoteMd5)));
+					}
+					else
+					{
+						LogSendRecieveInfo(StrF(_T("Receiving data_end for file: %s, MD5 MATCH local md5: %s remote md5: %s"), fileName, CTextConvert::MultiByteToUnicodeString(localMd5), CTextConvert::MultiByteToUnicodeString(remoteMd5)));
+					}
+				}
+				else
+				{
+					LogSendRecieveInfo(StrF(_T("Not checking mdf on file transfer, either setting is off or md5 is not sent, md5 Passed In: %s, setting to check: %d"), CTextConvert::MultiByteToUnicodeString(Info.m_md5), CGetSetOptions::GetCheckMd5OnFileTransfers()));
+				}
+
+				if (md5Error == false)
+				{
+					FILETIME lastWriteTime;
+					lastWriteTime.dwLowDateTime = Info.m_lParameter1;
+					lastWriteTime.dwHighDateTime = Info.m_lParameter2;
+
+					HANDLE filename = CreateFile(fileName, FILE_WRITE_ATTRIBUTES, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+					if (filename != NULL)
+					{
+						SetFileTime(filename, NULL, NULL, &lastWriteTime);
+					}
 				}
 			}
 		}
 
-			break;
+		break;
 
 		case MyEnums::END:
 			bBreak = true;
@@ -133,7 +163,7 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 	return lRet;
 }
 
-long CFileRecieve::RecieveFileData(ULONG lFileSize, CString csFileName)
+long CFileRecieve::RecieveFileData(ULONG lFileSize, CString csFileName, CString &md5String)
 {
 	CString csFile = CGetSetOptions::GetPath(PATH_REMOTE_FILES);
 	CreateDirectory(csFile, NULL);
@@ -158,6 +188,8 @@ long CFileRecieve::RecieveFileData(ULONG lFileSize, CString csFileName)
 	long lBytesNeeded = 0;
 	int nPercent = 0;
 	int nPrevPercent = 0;
+	CMd5 md5;
+	md5.MD5Init();
 
 	char *pBuffer = new char[CHUNK_WRITE_SIZE];
 	if(pBuffer == NULL)
@@ -165,6 +197,8 @@ long CFileRecieve::RecieveFileData(ULONG lFileSize, CString csFileName)
 		LogSendRecieveInfo("Error creating buffer in RequestCopiedFiles");
 		return FALSE;
 	}
+
+	BOOL calcMd5 = CGetSetOptions::GetCheckMd5OnFileTransfers();
 
 	BOOL bRet = FALSE;
 	while(true)
@@ -179,6 +213,11 @@ long CFileRecieve::RecieveFileData(ULONG lFileSize, CString csFileName)
 		}
 		
 		File.Write(pBuffer, lBytesNeeded);
+
+		if (calcMd5)
+		{
+			md5.MD5Update((unsigned char*)pBuffer, lBytesNeeded);
+		}
 
 		lBytesRead += lBytesNeeded;
 
@@ -208,6 +247,8 @@ long CFileRecieve::RecieveFileData(ULONG lFileSize, CString csFileName)
 	}
 
 	File.Close();
+
+	md5String = md5.MD5FinalToString();
 
 	if(bRet)
 	{
