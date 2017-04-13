@@ -156,7 +156,7 @@ BOOL CFileSend::SendFile(CString csFile)
 
 					if (calcMd5)
 					{
-						//md5.MD5Update((unsigned char *)pBuffer, lReadBytes);
+						md5.MD5Update((unsigned char *)pBuffer, lReadBytes);
 					}
 					
 				}while(lReadBytes >= CHUNK_WRITE_SIZE);
