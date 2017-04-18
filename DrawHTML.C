@@ -5,6 +5,8 @@
 #include <tchar.h>
 #include <assert.h>
 
+//use unprintable characters so it doesn't find copied html to convert
+
 #define ENDFLAG   0x100
 enum { tNONE, tB, tBR, tFONT, tI, tP, tSUB, tSUP, tU, tNUMTAGS };
 struct
@@ -13,7 +15,8 @@ struct
 	short token, param, block;
 } Tags[] = {
   { NULL,         tNONE, 0, 0},
-  { _T("从@#$"),   tFONT, 1, 0 },
+  { _T("\x04"),   tFONT, 1, 0 },
+  { _T("\x05"),   tBR,   0, 1 },
   /*{ _T("b"),      tB,    0, 0},
   { _T("br"),     tBR,   0, 1},
   { _T("em"),     tI,    0, 0},
@@ -56,19 +59,19 @@ static int GetToken(LPCTSTR *String, int *Size, int *TokenLength, BOOL *WhiteSpa
 	EndToken = Start;
 	Length = 0;
 	IsEndTag = 0;
-	if (*EndToken == _T('<'))
+	if (*EndToken == _T('\x01'))
 	{
 		/* might be a HTML tag, check */
 		EndToken++;
 		Length++;
-		if (Length < *Size && *EndToken == _T('/'))
+		if (Length < *Size && *EndToken == _T('\x03'))
 		{
 			IsEndTag = ENDFLAG;
 			EndToken++;
 			Length++;
 		} /* if */
 		while (Length < *Size && !_istspace(*EndToken)
-			&& *EndToken != _T('<') && *EndToken != _T('>'))
+			&& *EndToken != _T('\x01') && *EndToken != _T('\x02'))
 		{
 			EndToken++;
 			Length++;
@@ -83,13 +86,13 @@ static int GetToken(LPCTSTR *String, int *Size, int *TokenLength, BOOL *WhiteSpa
 			if (Tags[Index].param && !IsEndTag)
 			{
 				while (Length < *Size
-					&& *EndToken != _T('<') && *EndToken != _T('>'))
+					&& *EndToken != _T('\x01') && *EndToken != _T('\x02'))
 				{
 					EndToken++;
 					Length++;
 				} /* while */
 			}
-			else if (*EndToken != _T('>'))
+			else if (*EndToken != _T('\x02'))
 			{
 				/* no parameters, then '>' must follow the tag */
 				Index = 0;
@@ -97,7 +100,7 @@ static int GetToken(LPCTSTR *String, int *Size, int *TokenLength, BOOL *WhiteSpa
 			if (WhiteSpace != NULL && Tags[Index].block)
 				*WhiteSpace = FALSE;
 		} /* if */
-		if (*EndToken == _T('>'))
+		if (*EndToken == _T('\x02'))
 		{
 			EndToken++;
 			Length++;
@@ -117,7 +120,7 @@ static int GetToken(LPCTSTR *String, int *Size, int *TokenLength, BOOL *WhiteSpa
 	{
 		/* normal word (no tag) */
 		Index = 0;
-		while (Length < *Size && !_istspace(*EndToken) && *EndToken != _T('<'))
+		while (Length < *Size && !_istspace(*EndToken) && *EndToken != _T('\x01'))
 		{
 			EndToken++;
 			Length++;
@@ -324,8 +327,8 @@ int __stdcall DrawHTML(
 		case tFONT:
 			if ((Tag & ENDFLAG) == 0)
 			{
-				if (_tcsnicmp(Start + 6, _T("color="), 6) == 0)
-					PushColor(hdc, ParseColor(Start + 12));
+				if (_tcsnicmp(Start + 3, _T("color="), 6) == 0)
+					PushColor(hdc, ParseColor(Start + 9));
 			}
 			else
 			{

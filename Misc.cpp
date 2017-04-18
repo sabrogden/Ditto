@@ -1142,9 +1142,10 @@ int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, C
 
 		if(replaceCount > 0)
 		{
-			mainStr.Replace(_T("\r\n"), _T("<br>"));
-			int l = mainStr.Replace(_T("\r"), _T("<br>"));
-			int m = mainStr.Replace(_T("\n"), _T("<br>"));
+			//use unprintable characters so it doesn't find copied html to convert
+			mainStr.Replace(_T("\r\n"), _T("\x01\x05\x02"));
+			int l = mainStr.Replace(_T("\r"), _T("\x01\x05\x02"));
+			int m = mainStr.Replace(_T("\n"), _T("\x01\x05\x02"));
 		}
 	}
 
