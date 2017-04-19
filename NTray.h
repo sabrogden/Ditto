@@ -239,7 +239,7 @@ public:
   BOOL IsHidden() const { return m_bHidden; };
 
 //Sets or gets the Balloon style tooltip settings
-  BOOL         SetBalloonDetails(_In_ LPCTSTR pszBalloonText, _In_ LPCTSTR pszBalloonCaption, _In_ BalloonStyle style, _In_ UINT nTimeout, _In_ HICON hUserIcon = NULL, _In_ BOOL bNoSound = FALSE, _In_ BOOL bLargeIcon = FALSE, _In_ BOOL bRealtime = FALSE, _In_ HICON hBalloonIcon = NULL);
+  BOOL         SetBalloonDetails(_In_ LPCTSTR pszBalloonText, _In_ LPCTSTR pszBalloonCaption, _In_ BalloonStyle style, _In_ UINT nTimeout, _In_ HICON hUserIcon = NULL, _In_ BOOL bNoSound = TRUE, _In_ BOOL bLargeIcon = FALSE, _In_ BOOL bRealtime = FALSE, _In_ HICON hBalloonIcon = NULL);
   String       GetBalloonText() const;
   String       GetBalloonCaption() const;
   BalloonStyle GetBalloonStyle() const;

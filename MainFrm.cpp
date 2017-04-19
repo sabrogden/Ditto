@@ -133,6 +133,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_trayIcon.SetDefaultMenuItem(ID_FIRST_SHOWQUICKPASTE, FALSE);	    
     m_trayIcon.MinimiseToTray(this);
 
+	CString msg = theApp.m_Language.GetString(_T("StartupMsg"), _T("Ditto is running minimized, Ditto can be opened by hot keys or by clicking the task tray icon"));
+	m_trayIcon.SetBalloonDetails(msg, _T("Ditto"), CTrayNotifyIcon::BalloonStyle::Info, CGetSetOptions::GetBalloonTimeout());
+
 	theApp.m_Language.UpdateTrayIconRightClickMenu(&m_trayIcon.GetMenu());
 	
     //Only if in release
@@ -169,6 +172,12 @@ LRESULT CMainFrame::OnTrayNotification(WPARAM wParam, LPARAM lParam)
 	if (WM_MOUSEFIRST <= LOWORD(lParam) && LOWORD(lParam) <= WM_MOUSELAST)
 	{
 		theApp.m_activeWnd.TrackActiveWnd(true);
+	}
+
+	//click on balloon
+	if (lParam == 0x405)
+	{
+		m_quickPaste.ShowQPasteWnd(this, false, false, FALSE);
 	}
 	
 	m_trayIcon.OnTrayNotification(wParam, lParam);
@@ -981,23 +990,7 @@ void CMainFrame::OnFirstHelp()
 void CMainFrame::ShowErrorMessage(CString csTitle, CString csMessage)
 {
     Log(StrF(_T("ShowErrorMessage %s - %s"), csTitle, csMessage));
-
-    CToolTipEx *pErrorWnd = new CToolTipEx;
-    pErrorWnd->Create(this);
-    pErrorWnd->SetToolTipText(csTitle + "\n\n" + csMessage);
-
-    CPoint pt;
-    CRect rcScreen;
-    GetMonitorRect(0, &rcScreen);
-    pt = rcScreen.BottomRight();
-
-    CRect cr = pErrorWnd->GetBoundsRect();
-
-    pt.x -= max(cr.Width() + 50, 150);
-    pt.y -= max(cr.Height() + 50, 150);
-
-    pErrorWnd->Show(pt);
-    pErrorWnd->HideWindowInXMilliSeconds(4000);
+	m_trayIcon.SetBalloonDetails(csMessage, csTitle, CTrayNotifyIcon::BalloonStyle::Error, CGetSetOptions::GetBalloonTimeout());
 }
 
 void CMainFrame::OnFirstImport()

@@ -2403,3 +2403,13 @@ void CGetSetOptions::SetCheckMd5OnFileTransfers(int val)
 {
 	SetProfileLong(_T("CheckMd5OnFileTransfers"), val);
 }
+
+int CGetSetOptions::GetBalloonTimeout()
+{
+	return GetProfileLong(_T("BalloonTimeout"), 2500);
+}
+
+void CGetSetOptions::SetBalloonTimeout(int val)
+{
+	SetProfileLong(_T("BalloonTimeout"), val);
+}

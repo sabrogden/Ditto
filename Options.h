@@ -543,6 +543,9 @@ public:
 
 	static BOOL GetCheckMd5OnFileTransfers();
 	static void SetCheckMd5OnFileTransfers(int val);
+
+	static int GetBalloonTimeout();
+	static void SetBalloonTimeout(int val);
 };
 
 // global for easy access and for initialization of fast access variables

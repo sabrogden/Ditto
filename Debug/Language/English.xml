@@ -411,6 +411,8 @@
 		
 		<Item English_Text = "[Disconnected]" ID = "disconnected"></Item>
 		
+		<Item English_Text = "Ditto is running minimized, Ditto can be opened by hot keys or by clicking the task tray icon" ID = "StartuMsg"></Item>
+		
 				
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
