@@ -136,7 +136,7 @@ public:
 	void MakeLatestGroupOrder();
 	void MakeStickyTop(int parentId);
 	void MakeStickyLast(int parentId);
-	void RemoveStickySetting(int parentId);
+	bool RemoveStickySetting(int parentId);
 	BOOL LoadMainTable(int id);
 	DWORD GenerateCRC();
 	void MoveUp(int parentId);

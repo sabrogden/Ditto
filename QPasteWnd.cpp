@@ -285,6 +285,8 @@ ON_UPDATE_COMMAND_UI(ID_MENU_NEWCLIP32937, &CQPasteWnd::OnUpdateMenuNewclip32937
 ON_UPDATE_COMMAND_UI(ID_MENU_GLOBALHOTKEYS32933, &CQPasteWnd::OnUpdateMenuGlobalhotkeys32933)
 ON_UPDATE_COMMAND_UI(ID_MENU_DELETECLIPDATA32934, &CQPasteWnd::OnUpdateMenuDeleteclipdata32934)
 ON_MESSAGE(NM_FOCUS_ON_SEARCH, OnSearchFocused)
+ON_COMMAND(ID_CLIPORDER_REPLACETOPSTICKYCLIP, &CQPasteWnd::OnCliporderReplacetopstickyclip)
+ON_UPDATE_COMMAND_UI(ID_CLIPORDER_REPLACETOPSTICKYCLIP, &CQPasteWnd::OnUpdateCliporderReplacetopstickyclip)
 END_MESSAGE_MAP()
 
 
@@ -2949,7 +2951,7 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 		ret = OnToggleLastGroupToggle();
 		break;
 	case ActionEnums::MAKE_TOP_STICKY:
-		ret = OnMakeTopSticky();
+		ret = OnMakeTopSticky(false);
 		break;
 	case ActionEnums::MAKE_LAST_STICKY:
 		ret = OnMakeLastSticky();
@@ -2965,6 +2967,9 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 		break;
 	case ActionEnums::IMPORT_CLIP:
 		ret = OnImportClip();
+		break;
+	case ActionEnums::REPLACE_TOP_STICKY_CLIP:
+		ret = DoActionReplaceTopStickyClip();
 		break;
 	}
 
@@ -4122,14 +4127,14 @@ bool CQPasteWnd::OnToggleLastGroupToggle()
 	return true;
 }
 
-bool CQPasteWnd::OnMakeTopSticky()
+bool CQPasteWnd::OnMakeTopSticky(bool forceSort)
 {
 	ARRAY IDs;
 	m_lstHeader.GetSelectionItemData(IDs);
 
 	if (IDs.GetCount() > 0)
 	{
-		bool sort = false;
+		bool sort = forceSort;
 		for (int i = IDs.GetCount() - 1; i >= 0; i--)
 		{
 			int id = IDs[i];
@@ -4216,32 +4221,7 @@ bool CQPasteWnd::OnRemoveStickySetting()
 		bool sort = false;
 		for (int i = IDs.GetCount() - 1; i >= 0; i--)
 		{
-			int id = IDs[i];
-			CClip clip;
-			if (clip.LoadMainTable(id))
-			{
-				clip.RemoveStickySetting(theApp.m_GroupID);
-				clip.ModifyMainTable();
-
-				std::vector<CMainTable>::iterator iter = m_listItems.begin();
-				while (iter != m_listItems.end())
-				{
-					if (iter->m_lID == id)
-					{
-						if (theApp.m_GroupID > 0)
-						{
-							iter->m_stickyClipGroupOrder = clip.m_stickyClipGroupOrder;
-						}
-						else
-						{
-							iter->m_stickyClipOrder = clip.m_stickyClipOrder;
-						}
-						sort = true;
-						break;
-					}
-					iter++;
-				}
-			}
+			RemoveStickyInternal(IDs[i], sort);
 		}
 
 		//theApp.m_FocusID = id;
@@ -4267,6 +4247,37 @@ bool CQPasteWnd::OnRemoveStickySetting()
 	return true;
 }
 
+void CQPasteWnd::RemoveStickyInternal(int id, bool &sort)
+{
+	CClip clip;
+	if (clip.LoadMainTable(id))
+	{
+		if (clip.RemoveStickySetting(theApp.m_GroupID))
+		{
+			clip.ModifyMainTable();
+
+			std::vector<CMainTable>::iterator iter = m_listItems.begin();
+			while (iter != m_listItems.end())
+			{
+				if (iter->m_lID == id)
+				{
+					if (theApp.m_GroupID > 0)
+					{
+						iter->m_stickyClipGroupOrder = clip.m_stickyClipGroupOrder;
+					}
+					else
+					{
+						iter->m_stickyClipOrder = clip.m_stickyClipOrder;
+					}
+					sort = true;
+					break;
+				}
+				iter++;
+			}
+		}
+	}
+}
+
 bool CQPasteWnd::OnNewClip()
 {
 	CWnd *pWnd = AfxGetMainWnd();
@@ -4284,6 +4295,25 @@ bool CQPasteWnd::OnImportClip()
 	if (pWnd != NULL)
 	{
 		pWnd->SendMessage(WM_COMMAND, ID_FIRST_IMPORT, 0);
+	}
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionReplaceTopStickyClip()
+{
+	ARRAY IDs;
+	IDs.Add(m_lstHeader.GetItemData(0));
+
+	if (IDs.GetCount() > 0)
+	{
+		bool sort = false;
+		for (int i = IDs.GetCount() - 1; i >= 0; i--)
+		{
+			RemoveStickyInternal(IDs[i], sort);
+		}
+
+		OnMakeTopSticky(true);
 	}
 
 	return true;
@@ -6048,4 +6078,19 @@ LRESULT CQPasteWnd::OnSearchFocused(WPARAM wParam, LPARAM lParam)
 	m_lstHeader.HidePopup();
 
 	return TRUE;
+}
+
+void CQPasteWnd::OnCliporderReplacetopstickyclip()
+{
+	DoAction(ActionEnums::REPLACE_TOP_STICKY_CLIP);
+}
+
+void CQPasteWnd::OnUpdateCliporderReplacetopstickyclip(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::REPLACE_TOP_STICKY_CLIP);
 }

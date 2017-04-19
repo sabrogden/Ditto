@@ -1080,16 +1080,27 @@ void CClip::MakeStickyLast(int parentId)
 	}
 }
 
-void CClip::RemoveStickySetting(int parentId)
+bool CClip::RemoveStickySetting(int parentId)
 {
+	bool reset = false;
 	if (parentId < 0)
 	{
-		m_stickyClipOrder = INVALID_STICKY;
+		if (m_stickyClipOrder != INVALID_STICKY)
+		{
+			m_stickyClipOrder = INVALID_STICKY;
+			reset = true;
+		}
 	}
 	else
 	{
-		m_stickyClipGroupOrder = INVALID_STICKY;
+		if (m_stickyClipGroupOrder != INVALID_STICKY)
+		{
+			m_stickyClipGroupOrder = INVALID_STICKY;
+			reset = true;
+		}
 	}
+
+	return reset;
 }
 
 double CClip::GetNewTopSticky(int parentId, int clipId)

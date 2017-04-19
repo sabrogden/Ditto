@@ -292,6 +292,7 @@ BEGIN
             MENUITEM SEPARATOR
             MENUITEM "Make Top Sticky Clip",        ID_STICKYCLIPS_MAKETOPSTICKYCLIP
             MENUITEM "Make Last Sticky Clip",       ID_STICKYCLIPS_MAKELASTSTICKYCLIP
+            MENUITEM "Replace Top Sticky Clip",     ID_CLIPORDER_REPLACETOPSTICKYCLIP
             MENUITEM "Remove Sticky Setting",       ID_STICKYCLIPS_REMOVESTICKYSETTING
         END
         MENUITEM SEPARATOR

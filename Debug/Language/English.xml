@@ -621,6 +621,7 @@
 		<Item English_Text = "Import Clip" ID = "82"></Item>
 		<Item English_Text = "Global HotKeys" ID = "83"></Item>
 		<Item English_Text = "Delete Clip Data" ID = "84"></Item>
+		<Item English_Text = "Replace Top Sticky Clip" ID = "85"></Item>
 			
 	</Ditto_Options_Quick_Paste_Keyboard>
 	

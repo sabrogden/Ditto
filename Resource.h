@@ -664,6 +664,7 @@
 #define ID_MENU_IMPORTCLIP32935         32935
 #define ID_MENU_DELETECLIPDATA32936     32936
 #define ID_MENU_NEWCLIP32937            32937
+#define ID_CLIPORDER_REPLACETOPSTICKYCLIP 32938
 
 // Next default values for new objects
 // 
@@ -671,7 +672,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        324
-#define _APS_NEXT_COMMAND_VALUE         32938
+#define _APS_NEXT_COMMAND_VALUE         32939
 #define _APS_NEXT_CONTROL_VALUE         2150
 #define _APS_NEXT_SYMED_VALUE           104
 #endif

@@ -200,6 +200,7 @@ public:
 	void SelectFocusID();
 	void HideMenuGroup(CMenu* menu, CString text);
 	void SetSearchImages();
+	void RemoveStickyInternal(int id, bool &sort);
 
 	DROPEFFECT OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point);
 	DROPEFFECT OnDragEnter(COleDataObject* pDataObject, DWORD dwKeyState, CPoint point);
@@ -261,15 +262,16 @@ public:
 	bool OnShowFirstTenText();
 	bool OnShowClipWasPasted();
 	bool OnToggleLastGroupToggle();
-	bool OnMakeTopSticky();
+	bool OnMakeTopSticky(bool forceSort);
 	bool OnMakeLastSticky();
-	bool OnRemoveStickySetting();
+	bool OnRemoveStickySetting();	
+	bool DoActionReplaceTopStickyClip();
 
 	bool OnNewClip();
 	bool OnImportClip();
 	bool OnDeleteClipData();
 	bool OnGlobalHotkyes();
-
+	
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
 	bool ShowProperties(int id, int row);
@@ -490,4 +492,6 @@ public:
 	afx_msg void OnUpdateMenuGlobalhotkeys32933(CCmdUI *pCmdUI);
 	afx_msg void OnUpdateMenuDeleteclipdata32934(CCmdUI *pCmdUI);
 	afx_msg LRESULT OnSearchFocused(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnCliporderReplacetopstickyclip();
+	afx_msg void OnUpdateCliporderReplacetopstickyclip(CCmdUI *pCmdUI);
 };

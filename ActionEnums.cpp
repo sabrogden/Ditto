@@ -272,6 +272,9 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case DELETE_CLIP_DATA:
 		val = "Delete Clip Data";
 		break;
+	case REPLACE_TOP_STICKY_CLIP:
+		val = "Replace Top Sticky Clip";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
