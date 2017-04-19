@@ -131,6 +131,7 @@ public:
 
 	void DestroyAndCreateAccelerator(BOOL bCreate, CppSQLite3DB &db);
 
+	bool PostEventLoadedCheckDescription();
 	bool ShowFullDescription(bool bFromAuto = false, bool fromNextPrev = false);
 	BOOL SetItemCountEx(int iCount, DWORD dwFlags = 0);
 

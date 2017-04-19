@@ -904,6 +904,31 @@ void CQListCtrl::LoadCopyOrCutToClipboard()
 	g_Opt.m_bUpdateTimeOnPaste = bItWas;
 }
 
+bool CQListCtrl::PostEventLoadedCheckDescription()
+{
+	bool loadedClip = false;
+
+	int clipRow = this->GetCaret();
+
+	if (VALID_TOOLTIP)
+	{
+		int toolTipClipId = m_pToolTip->GetClipId();
+		int toolTipClipRow = m_pToolTip->GetClipRow();
+
+		//We tried to show the clip but we didn't have the id yet, it was loaded in a thread, now it's being updated
+		//see if we need to show this rows description
+		if (toolTipClipId <= 0 &&
+			toolTipClipRow == clipRow &&
+			::IsWindow(m_toolTipHwnd))
+		{
+			ShowFullDescription(false, true);
+			loadedClip = true;
+		}
+	}
+
+	return loadedClip;
+}
+
 bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 {
 	if (this->GetSelectedCount() == 0)
@@ -911,7 +936,8 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		return false;
 	}	
 
-	int clipId = this->GetItemData(this->GetCaret());
+	int clipRow = this->GetCaret();
+	int clipId = this->GetItemData(clipRow);
 
 	if(VALID_TOOLTIP && 
 		m_pToolTip->GetClipId() == clipId &&
@@ -970,6 +996,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 	if(VALID_TOOLTIP)
 	{
 		m_pToolTip->SetClipId(clipId);
+		m_pToolTip->SetClipRow(clipRow);
 		m_pToolTip->SetSearchText(m_searchText);
 
 		m_pToolTip->SetClipData(_T(""));

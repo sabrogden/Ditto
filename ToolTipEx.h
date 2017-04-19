@@ -31,6 +31,10 @@ public:
 
 	void SetClipId(int clipId) { m_clipId = clipId; }
 	int GetClipId() { return m_clipId; }
+
+	void SetClipRow(int clipRow) { m_clipRow = clipRow; }
+	int GetClipRow() { return m_clipRow; }
+
 	void SetSearchText(CString text) { m_searchText = text; }
 
 	void SetClipData(CString data) { m_clipData = data; }
@@ -67,6 +71,7 @@ protected:
 	CString m_clipData;
 	CFont m_clipDataFont;
 	bool m_saveWindowLockout;
+	int m_clipRow;
 
 protected:
 	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);

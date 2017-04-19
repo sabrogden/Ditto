@@ -27,7 +27,9 @@ m_imageViewer.m_pBitmap = NULL;		\
 
 CToolTipEx::CToolTipEx(): m_dwTextStyle(DT_EXPANDTABS | DT_EXTERNALLEADING |
                        DT_NOPREFIX | DT_WORDBREAK), m_rectMargin(2, 2, 3, 3),
-                        m_pNotifyWnd(NULL), m_clipId(0){}
+                        m_pNotifyWnd(NULL), m_clipId(0), m_clipRow(-1)
+{
+}
 
 CToolTipEx::~CToolTipEx()
 {
@@ -108,7 +110,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 	m_optionsButton.SetToolTipText(theApp.m_Language.GetString(_T("DescriptionOptionsTooltip"), _T("Description Options")));
 	m_optionsButton.ShowWindow(SW_SHOW);
 
-	m_clipDataStatic.Create(_T("some text"), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this, 3);
+	m_clipDataStatic.Create(_T("some text"), WS_CHILD | WS_VISIBLE | SS_SIMPLE, CRect(0, 0, 0, 0), this, 3);
 
 	m_clipDataFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 	m_clipDataStatic.SetFont(&m_clipDataFont);
@@ -237,6 +239,7 @@ BOOL CToolTipEx::Show(CPoint point)
 
 BOOL CToolTipEx::Hide()
 {
+	return FALSE;
 	DELETE_BITMAP
 
 		SaveWindowSize();
@@ -246,6 +249,7 @@ BOOL CToolTipEx::Hide()
     m_csRTF = "";
     m_csText = "";
 	m_clipId = 0;
+	m_clipRow = -1;
 	m_searchText = _T("");	
 
     return TRUE;
