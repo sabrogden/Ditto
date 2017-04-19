@@ -75,13 +75,15 @@ void CImageViewer::UpdateBitmapSize()
 			CRect rect;
 			GetClientRect(rect);
 
-			m_scrollHelper.SetDisplaySize(rect.Width(), rect.Height());
+			m_scrollHelper.SetDisplaySize(0, 0);
+			m_scrollHelper.DetachWnd();
+			
 		}
 		else
 		{
 			int nWidth = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
 			int nHeight = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
-
+			m_scrollHelper.AttachWnd(this);
 			m_scrollHelper.SetDisplaySize(nWidth, nHeight);
 		}
 	}
