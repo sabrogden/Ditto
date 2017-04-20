@@ -1109,7 +1109,7 @@ LRESULT CTrayNotifyIcon::OnTrayNotification(WPARAM wParam, LPARAM lParam)
   BOOL bDoubleClick = FALSE;
   BOOL bSingleClick = FALSE;
   UINT nIconID = 0;
-  if ((m_NotifyIconData.uVersion == 0) || (m_NotifyIconData.uVersion == NOTIFYICON_VERSION))
+  if ((m_NotifyIconData.uVersion == 0) || (m_ShellVersion >= Version5))
   {
     nIconID = static_cast<UINT>(wParam);
     bShowMenu = (lParam == WM_RBUTTONUP);
