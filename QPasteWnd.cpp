@@ -5198,6 +5198,7 @@ LRESULT CQPasteWnd::OnRefeshRow(WPARAM wParam, LPARAM lParam)
 	if(listPos >= topIndex && listPos <= lastIndex)
 	{
 		m_lstHeader.RefreshRow(listPos);
+		m_lstHeader.PostEventLoadedCheckDescription(listPos);
 	}
 
 	if(clipId == -2)
