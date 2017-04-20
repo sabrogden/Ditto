@@ -239,7 +239,6 @@ BOOL CToolTipEx::Show(CPoint point)
 
 BOOL CToolTipEx::Hide()
 {
-	return FALSE;
 	DELETE_BITMAP
 
 		SaveWindowSize();
