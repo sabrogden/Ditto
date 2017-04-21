@@ -226,11 +226,12 @@ BOOL CToolTipEx::Show(CPoint point)
 		}
 	}
 
-	m_clipDataStatic.SetWindowText(m_clipData);
+	m_clipDataStatic.SetWindowText(m_clipData);	
 
 	m_saveWindowLockout = true;
 	MoveWindow(rect);
-	ShowWindow(SW_SHOWNA);
+	this->Invalidate();
+	ShowWindow(SW_SHOWNA);	
 	
 	m_saveWindowLockout = false;
 

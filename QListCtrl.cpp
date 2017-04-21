@@ -433,9 +433,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 				m_groupFolder.Draw(pDC, this, rcText.left, rcText.top, false, false);
 				rcText.left += m_groupFolder.ImageWidth() + theApp.m_metrics.ScaleX(2);
 			}
-			if (strSymbols.Find(_T("<noautodelete>")) >= 0 &&
-				strSymbols.Find(_T("<group>")) < 0 &&
-				strSymbols.Find(_T("<sticky>")) < 0) //don't auto delete
+			if (strSymbols.Find(_T("<noautodelete>"))) //don't auto delete
 			{
 				m_dontDeleteImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
 				rcText.left += m_dontDeleteImage.ImageWidth() + theApp.m_metrics.ScaleX(2);
