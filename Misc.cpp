@@ -1308,6 +1308,8 @@ bool WriteCF_DIBToFile(CString csPath, LPVOID data, ULONG size)
 		bRet = true;
 	}
 
+	pIStream->Release();
+
 	return bRet;
 }
 
