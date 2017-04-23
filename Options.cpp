@@ -710,9 +710,6 @@ BOOL CGetSetOptions::GetRunOnStartUp()
 
 void CGetSetOptions::SetRunOnStartUp(BOOL bRun)
 {
-	if(bRun == GetRunOnStartUp())
-		return;
-
 	HKEY hkRun;
 	LONG nResult = RegOpenKeyEx(HKEY_CURRENT_USER,
 		_T("Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
