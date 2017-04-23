@@ -429,6 +429,7 @@
     </ClCompile>
     <ClCompile Include="Md5.cpp" />
     <ClCompile Include="FriendPromptDlg.cpp" />
+    <ClCompile Include="DimWnd.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -898,6 +899,7 @@
     </ClInclude>
     <ClInclude Include="Md5.h" />
     <ClInclude Include="FriendPromptDlg.h" />
+    <ClInclude Include="DimWnd.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

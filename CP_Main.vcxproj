@@ -577,6 +577,7 @@
     </ClCompile>
     <ClCompile Include="CreateQRCodeImage.cpp" />
     <ClCompile Include="DeleteClipData.cpp" />
+    <ClCompile Include="DimWnd.cpp" />
     <ClCompile Include="DittoPopupWindow.cpp" />
     <ClCompile Include="DPI.cpp" />
     <ClCompile Include="DrawHTML.C">
@@ -1880,6 +1881,7 @@
     <ClInclude Include="ClipFormatQListCtrl.h" />
     <ClInclude Include="CreateQRCodeImage.h" />
     <ClInclude Include="DeleteClipData.h" />
+    <ClInclude Include="DimWnd.h" />
     <ClInclude Include="DittoPopupWindow.h" />
     <ClInclude Include="DPI.h" />
     <ClInclude Include="DrawHTML.h" />

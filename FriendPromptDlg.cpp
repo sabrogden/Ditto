@@ -137,12 +137,12 @@ void CFriendPromptDlg::OnCbnSelchangeCombo1()
 
 HBRUSH CFriendPromptDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
-	//HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
+	HBRUSH hbr = CDialogEx::OnCtlColor(pDC, pWnd, nCtlColor);
 
 	// TODO:  Change any attributes of the DC here
 
 	// TODO:  Return a different brush if the default is not desired
-	//return hbr;
+	return hbr;
 
-	return m_brush;
+	//return m_brush;
 }

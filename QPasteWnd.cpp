@@ -21,6 +21,7 @@
 //#include "MyDropTarget.h"
 #include "Misc.h"
 #include "FriendPromptDlg.h"
+#include "DimWnd.h"
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -911,6 +912,8 @@ BOOL CQPasteWnd::NewGroup(bool bGroupSelection, int parentId)
     if(g_Opt.m_bPrompForNewGroupName)
     {
         m_bHideWnd = false;
+
+		CDimWnd dimmer(this);
 
         INT_PTR nRet = Name.DoModal();
 
@@ -2342,6 +2345,8 @@ void CQPasteWnd::OnMenuQuickoptionsFont()
 {
     m_bHideWnd = false;
 
+	CDimWnd dimmer(this);
+
     CFont *pFont = m_lstHeader.GetFont();
     LOGFONT lf;
     pFont->GetLogFont(&lf);
@@ -3405,14 +3410,14 @@ bool CQPasteWnd::DoActionClipProperties()
 
 bool CQPasteWnd::ShowProperties(int id, int row)
 {
-	
-
 	if (id < 0)
 	{
 		return false;
 	}
 
 	m_bHideWnd = false;	
+
+	CDimWnd dimmer(this);
 
 	CCopyProperties props(id, this);
 	INT_PTR doModalRet = props.DoModal();
@@ -3492,6 +3497,8 @@ bool CQPasteWnd::DoActionMoveClipToGroup()
 	if(::GetFocus() == m_lstHeader.GetSafeHwnd())
 	{
 		m_bHideWnd = false;
+
+		CDimWnd dimmer(this);
 
 		CMoveToGroupDlg dlg;
 
@@ -4336,6 +4343,8 @@ bool CQPasteWnd::DoActionReplaceTopStickyClip()
 bool CQPasteWnd::DoActionPromptSendToFriend()
 {
 	m_bHideWnd = false;
+
+	CDimWnd dimmer(this);
 
 	CFriendPromptDlg dlg(this);
 	if (dlg.DoModal() == IDOK)
