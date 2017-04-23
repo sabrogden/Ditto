@@ -546,6 +546,9 @@ public:
 
 	static int GetBalloonTimeout();
 	static void SetBalloonTimeout(int val);
+
+	static void		SetCustomSendToList(CString val);
+	static CString	GetCustomSendToList();
 };
 
 // global for easy access and for initialization of fast access variables

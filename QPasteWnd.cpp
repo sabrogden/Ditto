@@ -20,6 +20,7 @@
 #include "ClipCompare.h"
 //#include "MyDropTarget.h"
 #include "Misc.h"
+#include "FriendPromptDlg.h"
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -287,6 +288,8 @@ ON_UPDATE_COMMAND_UI(ID_MENU_DELETECLIPDATA32934, &CQPasteWnd::OnUpdateMenuDelet
 ON_MESSAGE(NM_FOCUS_ON_SEARCH, OnSearchFocused)
 ON_COMMAND(ID_CLIPORDER_REPLACETOPSTICKYCLIP, &CQPasteWnd::OnCliporderReplacetopstickyclip)
 ON_UPDATE_COMMAND_UI(ID_CLIPORDER_REPLACETOPSTICKYCLIP, &CQPasteWnd::OnUpdateCliporderReplacetopstickyclip)
+ON_COMMAND(ID_SENDTO_PROMPTFORNAME, &CQPasteWnd::OnSendtoPromptforname)
+ON_UPDATE_COMMAND_UI(ID_SENDTO_PROMPTFORNAME, &CQPasteWnd::OnUpdateSendtoPromptforname)
 END_MESSAGE_MAP()
 
 
@@ -1456,8 +1459,6 @@ void CQPasteWnd::SetFriendChecks(CMenu *pMenu)
 			pMenu->DeleteMenu(nPos, MF_BYPOSITION);
 		}
 	}
-
-	pMenu->DeleteMenu(ID_MENU_SENTTO_PROMPTFORIP, MF_BYCOMMAND);
 }
 
 void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
@@ -2123,77 +2124,77 @@ void CQPasteWnd::OnQuickpropertiesRemovequickpaste()
 
 void CQPasteWnd::OnMenuSenttoFriendFifteen()
 {
-    SendToFriendbyPos(14);
+    SendToFriendbyPos(14, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendForeteen()
 {
-    SendToFriendbyPos(13);
+    SendToFriendbyPos(13, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendThirteen()
 {
-    SendToFriendbyPos(12);
+    SendToFriendbyPos(12, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendTwelve()
 {
-    SendToFriendbyPos(11);
+    SendToFriendbyPos(11, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendEleven()
 {
-    SendToFriendbyPos(10);
+    SendToFriendbyPos(10, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendTen()
 {
-    SendToFriendbyPos(9);
+    SendToFriendbyPos(9, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendNine()
 {
-    SendToFriendbyPos(8);
+    SendToFriendbyPos(8, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendEight()
 {
-    SendToFriendbyPos(7);
+    SendToFriendbyPos(7, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendSeven()
 {
-    SendToFriendbyPos(6);
+    SendToFriendbyPos(6, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendSix()
 {
-    SendToFriendbyPos(5);
+    SendToFriendbyPos(5, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendFive()
 {
-    SendToFriendbyPos(4);
+    SendToFriendbyPos(4, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendFore()
 {
-    SendToFriendbyPos(3);
+    SendToFriendbyPos(3, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendThree()
 {
-    SendToFriendbyPos(2);
+    SendToFriendbyPos(2, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendTwo()
 {
-    SendToFriendbyPos(1);
+    SendToFriendbyPos(1, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoFriendone()
 {
-    SendToFriendbyPos(0);
+    SendToFriendbyPos(0, _T(""));
 }
 
 void CQPasteWnd::OnMenuSenttoPromptforip()
@@ -2406,7 +2407,7 @@ void CQPasteWnd::OnMenuNewclip()
 ///////////////////////////////////////////////////////////////////////
 
 
-BOOL CQPasteWnd::SendToFriendbyPos(int nPos)
+BOOL CQPasteWnd::SendToFriendbyPos(int nPos, CString override_IP_Host)
 {
     if(g_Opt.GetAllowFriends() == false)
     {
@@ -2432,42 +2433,50 @@ BOOL CQPasteWnd::SendToFriendbyPos(int nPos)
     }
 
     CSendToFriendInfo Info;
-    Info.m_pos = nPos;
 
     BOOL bRet = FALSE;
 
     try
     {
-        CPopup Popup(0, 0, m_hWnd);
-        Popup.Show(StrF(_T("Sending clip to %s"), g_Opt.m_SendClients[nPos].csIP));
+		Info.m_csIP = override_IP_Host;
+		if (Info.m_csIP == _T(""))
+		{
+			Info.m_csIP = g_Opt.m_SendClients[nPos].csIP;
+		}
 
-        Info.m_pPopup = &Popup;
+		if (Info.m_csIP != _T(""))
+		{
+			CPopup Popup(0, 0, m_hWnd);
+			Popup.Show(StrF(_T("Sending clip to %s"), Info.m_csIP));
 
-        Info.m_pClipList = new CClipList;
-        for(int i = 0; i < count; i++)
-        {
-            CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT mText FROM Main WHERE lID = %d"), IDs[i]);
-            if(q.eof() == false)
-            {
-                CClip *pClip = new CClip;
-                if(pClip)
-                {
-                    pClip->LoadFormats(IDs[i]);
-                    pClip->m_Desc = q.getStringField(0);
-                    pClip->m_id = IDs[i];
-                    Info.m_pClipList->AddTail(pClip);
-                }
-            }
-        }
+			Info.m_pPopup = &Popup;
 
-        if(SendToFriend(Info) == FALSE)
-        {
-            MessageBox(StrF(_T("Error Sending data to %s\n\n%s"), g_Opt.m_SendClients[nPos].csIP, Info.m_csErrorText), _T("Ditto"));
-        }
-        else
-        {
-            bRet = TRUE;
-        }
+			Info.m_pClipList = new CClipList;
+			for (int i = 0; i < count; i++)
+			{
+				CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT mText FROM Main WHERE lID = %d"), IDs[i]);
+				if (q.eof() == false)
+				{
+					CClip *pClip = new CClip;
+					if (pClip)
+					{
+						pClip->LoadFormats(IDs[i]);
+						pClip->m_Desc = q.getStringField(0);
+						pClip->m_id = IDs[i];
+						Info.m_pClipList->AddTail(pClip);
+					}
+				}
+			}
+
+			if (SendToFriend(Info) == FALSE)
+			{
+				MessageBox(StrF(_T("Error Sending data to %s\n\n%s"), Info.m_csIP, Info.m_csErrorText), _T("Ditto"));
+			}
+			else
+			{
+				bRet = TRUE;
+			}
+		}
     }
     CATCH_SQLITE_EXCEPTION 
 
@@ -2867,49 +2876,49 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 		ret = DoPasteAddCurrentTime();
 		break;
 	case ActionEnums::SEND_TO_FRIEND_1:
-		ret = SendToFriendbyPos(0);
+		ret = SendToFriendbyPos(0, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_2:
-		ret = SendToFriendbyPos(1);
+		ret = SendToFriendbyPos(1, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_3:
-		ret = SendToFriendbyPos(2);
+		ret = SendToFriendbyPos(2, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_4:
-		ret = SendToFriendbyPos(3);
+		ret = SendToFriendbyPos(3, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_5:
-		ret = SendToFriendbyPos(4);
+		ret = SendToFriendbyPos(4, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_6:
-		ret = SendToFriendbyPos(5);
+		ret = SendToFriendbyPos(5, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_7:
-		ret = SendToFriendbyPos(6);
+		ret = SendToFriendbyPos(6, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_8:
-		ret = SendToFriendbyPos(7);
+		ret = SendToFriendbyPos(7, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_9:
-		ret = SendToFriendbyPos(8);
+		ret = SendToFriendbyPos(8, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_10:
-		ret = SendToFriendbyPos(9);
+		ret = SendToFriendbyPos(9, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_11:
-		ret = SendToFriendbyPos(10);
+		ret = SendToFriendbyPos(10, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_12:
-		ret = SendToFriendbyPos(11);
+		ret = SendToFriendbyPos(11, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_13:
-		ret = SendToFriendbyPos(12);
+		ret = SendToFriendbyPos(12, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_14:
-		ret = SendToFriendbyPos(13);
+		ret = SendToFriendbyPos(13, _T(""));
 		break;
 	case ActionEnums::SEND_TO_FRIEND_15:
-		ret = SendToFriendbyPos(14);
+		ret = SendToFriendbyPos(14, _T(""));
 		break;
 	case ActionEnums::PASTE_POSITION_1:
 		ret = OpenIndex(0);
@@ -2970,6 +2979,9 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 		break;
 	case ActionEnums::REPLACE_TOP_STICKY_CLIP:
 		ret = DoActionReplaceTopStickyClip();
+		break;
+	case ActionEnums::PROMPT_SEND_TO_FRIEND:
+		ret = DoActionPromptSendToFriend();
 		break;
 	}
 
@@ -3393,12 +3405,14 @@ bool CQPasteWnd::DoActionClipProperties()
 
 bool CQPasteWnd::ShowProperties(int id, int row)
 {
-	m_bHideWnd = false;	
+	
 
 	if (id < 0)
 	{
 		return false;
 	}
+
+	m_bHideWnd = false;	
 
 	CCopyProperties props(id, this);
 	INT_PTR doModalRet = props.DoModal();
@@ -4315,6 +4329,21 @@ bool CQPasteWnd::DoActionReplaceTopStickyClip()
 
 		OnMakeTopSticky(true);
 	}
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionPromptSendToFriend()
+{
+	m_bHideWnd = false;
+
+	CFriendPromptDlg dlg(this);
+	if (dlg.DoModal() == IDOK)
+	{
+		SendToFriendbyPos(0, dlg.GetName());
+	}
+
+	m_bHideWnd = true;
 
 	return true;
 }
@@ -6094,4 +6123,20 @@ void CQPasteWnd::OnUpdateCliporderReplacetopstickyclip(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::REPLACE_TOP_STICKY_CLIP);
+}
+
+
+void CQPasteWnd::OnSendtoPromptforname()
+{
+	DoAction(ActionEnums::PROMPT_SEND_TO_FRIEND);
+}
+
+void CQPasteWnd::OnUpdateSendtoPromptforname(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PROMPT_SEND_TO_FRIEND);
 }

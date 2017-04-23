@@ -61,6 +61,7 @@ BEGIN_MESSAGE_MAP(CCopyProperties, CDialog)
 	ON_WM_ACTIVATE()
 	ON_WM_SIZE()
 	//}}AFX_MSG_MAP
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -69,6 +70,11 @@ END_MESSAGE_MAP()
 BOOL CCopyProperties::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
+
+	//remove the default icon in top left of window
+	int extendedStyle = GetWindowLong(m_hWnd, GWL_EXSTYLE);
+	SetWindowLong(m_hWnd, GWL_EXSTYLE, extendedStyle | WS_EX_DLGMODALFRAME);
+	SetWindowPos(NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 
 	m_GroupCombo.FillCombo();
 
@@ -483,4 +489,15 @@ void CCopyProperties::OnSize(UINT nType, int cx, int cy)
 	
 
 	m_Resize.MoveControls(CSize(cx, cy));
+}
+
+
+HBRUSH CCopyProperties::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	// TODO:  Change any attributes of the DC here
+
+	// TODO:  Return a different brush if the default is not desired
+	return hbr;
 }

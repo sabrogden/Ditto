@@ -587,6 +587,7 @@
     </ClCompile>
     <ClCompile Include="EditWithButton.cpp" />
     <ClCompile Include="EventThread.cpp" />
+    <ClCompile Include="FriendPromptDlg.cpp" />
     <ClCompile Include="GdiImageDrawer.cpp" />
     <ClCompile Include="GdipButton.cpp" />
     <ClCompile Include="GlobalClips.cpp" />
@@ -1885,6 +1886,7 @@
     <ClInclude Include="EditWithButton.h" />
     <ClInclude Include="EventThread.h" />
     <ClInclude Include="FormattedTextDraw.h" />
+    <ClInclude Include="FriendPromptDlg.h" />
     <ClInclude Include="GdiImageDrawer.h" />
     <ClInclude Include="GdipButton.h" />
     <ClInclude Include="GlobalClips.h" />

@@ -185,7 +185,7 @@ public:
     void SetSendToMenu(CMenu *pMenu, int nMenuID, int nArrayPos);
 	void SetFriendChecks(CMenu *pMenu);
 
-    BOOL SendToFriendbyPos(int nPos);
+    BOOL SendToFriendbyPos(int nPos, CString override_IP_Host);
 
     bool InsertNextNRecords(int nEnd);
 
@@ -266,6 +266,7 @@ public:
 	bool OnMakeLastSticky();
 	bool OnRemoveStickySetting();	
 	bool DoActionReplaceTopStickyClip();
+	bool DoActionPromptSendToFriend();
 
 	bool OnNewClip();
 	bool OnImportClip();
@@ -494,4 +495,6 @@ public:
 	afx_msg LRESULT OnSearchFocused(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnCliporderReplacetopstickyclip();
 	afx_msg void OnUpdateCliporderReplacetopstickyclip(CCmdUI *pCmdUI);
+	afx_msg void OnSendtoPromptforname();
+	afx_msg void OnUpdateSendtoPromptforname(CCmdUI *pCmdUI);
 };

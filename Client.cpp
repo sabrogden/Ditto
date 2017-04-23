@@ -25,13 +25,9 @@ BOOL SendToFriend(CSendToFriendInfo &Info)
 {
 	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - START OF Send To Friend - @@@@@@@@@@@@@@@");
 
-	if(Info.m_pos > -1 && Info.m_pos < MAX_SEND_CLIENTS)
+	if(Info.m_csIP == _T(""))	
 	{
-		Info.m_csIP = g_Opt.m_SendClients[Info.m_pos].csIP;
-	}
-	else
-	{
-		Info.m_csErrorText = StrF(_T("ERROR getting ip position - %d"), Info.m_pos);
+		Info.m_csErrorText = StrF(_T("ERROR getting ip/host name position - %s"), Info.m_csIP);
 		LogSendRecieveInfo(Info.m_csErrorText);
 		return FALSE;
 	}

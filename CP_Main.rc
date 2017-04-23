@@ -244,7 +244,8 @@ BEGIN
             MENUITEM "Friend Thirteen",             32836
             MENUITEM "Friend Foreteen",             32837
             MENUITEM "Friend Fifteen",              32838
-            MENUITEM "Prompt for IP",               32839
+            MENUITEM SEPARATOR
+            MENUITEM "Prompt for Name",             ID_SENDTO_PROMPTFORNAME
         END
         MENUITEM "View Full Description",       32793
         POPUP "Special Paste"
@@ -956,6 +957,17 @@ BEGIN
     PUSHBUTTON      "Reset",IDC_BUTTON_RESET,318,7,50,14
 END
 
+IDD_DIALOG_FREIND_PROMPT DIALOGEX 0, 0, 237, 46
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Send to Friend"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,125,25,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,180,25,50,14
+    LTEXT           "IP or Host Name",IDC_STATIC_FRIEND_PROMPT,7,7,53,8
+    COMBOBOX        IDC_COMBO1,64,7,166,102,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1157,6 +1169,14 @@ BEGIN
         RIGHTMARGIN, 368
         TOPMARGIN, 7
         BOTTOMMARGIN, 301
+    END
+
+    IDD_DIALOG_FREIND_PROMPT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 230
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 39
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -1421,6 +1441,11 @@ BEGIN
 END
 
 IDD_OPTIONS_KEYSTROKES AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DIALOG_FREIND_PROMPT AFX_DIALOG_LAYOUT
 BEGIN
     0
 END

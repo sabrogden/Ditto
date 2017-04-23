@@ -179,6 +179,7 @@
 #define IDC_CURSOR_ZOOM_IN              322
 #define IDC_CURSOR2                     323
 #define IDC_CURSOR_ZOOM_OUT             323
+#define IDD_DIALOG_FREIND_PROMPT        324
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -506,6 +507,7 @@
 #define IDC_STATIC_SECOND_PRESS         2147
 #define IDC_STATIC_SHORTCUTS            2148
 #define IDC_STATIC_FIRST_KEYPRESS       2149
+#define IDC_STATIC_FRIEND_PROMPT        2150
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -665,15 +667,16 @@
 #define ID_MENU_DELETECLIPDATA32936     32936
 #define ID_MENU_NEWCLIP32937            32937
 #define ID_CLIPORDER_REPLACETOPSTICKYCLIP 32938
+#define ID_SENDTO_PROMPTFORNAME         32939
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        324
-#define _APS_NEXT_COMMAND_VALUE         32939
-#define _APS_NEXT_CONTROL_VALUE         2150
+#define _APS_NEXT_RESOURCE_VALUE        326
+#define _APS_NEXT_COMMAND_VALUE         32940
+#define _APS_NEXT_CONTROL_VALUE         2151
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

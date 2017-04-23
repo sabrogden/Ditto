@@ -428,6 +428,7 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="Md5.cpp" />
+    <ClCompile Include="FriendPromptDlg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -896,6 +897,7 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="Md5.h" />
+    <ClInclude Include="FriendPromptDlg.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

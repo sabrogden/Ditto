@@ -2413,3 +2413,13 @@ void CGetSetOptions::SetBalloonTimeout(int val)
 {
 	SetProfileLong(_T("BalloonTimeout"), val);
 }
+
+void CGetSetOptions::SetCustomSendToList(CString val)
+{
+	SetProfileString(_T("CustomSendToList"), val);
+}
+
+CString	CGetSetOptions::GetCustomSendToList()
+{
+	return GetProfileString("CustomSendToList", "");
+}
