@@ -579,7 +579,7 @@ BOOL CQListCtrl::DrawBitMap(int nItem, CRect &crRect, CDC *pDC, const CString &c
 	CClipFormatQListCtrl *format = GetItem_CF_DIB_ClipFormat(nItem);
 	if(format != NULL)
 	{
-		HGLOBAL smallImage = format->GetDib(pDC, crRect.Height());
+		HGLOBAL smallImage = format->GetDibFittingToHeight(pDC, crRect.Height());
 		if(smallImage != NULL)
 		{
 			//Will return the width of the bitmap in nWidth

@@ -28,8 +28,9 @@ public:
     {
         FireEvent(LOAD_ITEMS);
     }
-    void FireLoadExtraData()
+    void FireLoadExtraData(int rowHeight)
     {
+		m_rowHeight = rowHeight;
         FireEvent(LOAD_EXTRA_DATA);
     }
     void FireLoadAccelerators()
@@ -43,6 +44,8 @@ public:
 
     HANDLE m_SearchingEvent;
 
+	void SetRowHeight(int height) { m_rowHeight = height; }
+
 protected:
     virtual void OnEvent(int eventId, void *param);
     virtual void OnTimeOut(void *param);
@@ -50,8 +53,11 @@ protected:
     void OnSetListCount(void *param);
     void OnLoadItems(void *param);
     void OnLoadExtraData(void *param);
+	//void ReduceMapItems(CF_DibTypeMap mapItem, CCriticalSection &critSection, CString mapName);
     void OnLoadAccelerators(void *param);
     void OnUnloadAccelerators(void *param);
 
 	CString EnumName(eCQPasteWndThreadEvents e);
+
+	int m_rowHeight;
 };

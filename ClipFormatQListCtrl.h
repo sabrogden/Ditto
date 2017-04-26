@@ -10,7 +10,8 @@ public:
 
 	int m_clipRow;
 	bool m_convertedToSmallImage;
+	INT64 m_counter;
 
-	HGLOBAL GetDib(CDC *pDc, int height);
+	HGLOBAL GetDibFittingToHeight(CDC *pDc, int height);
 };
 

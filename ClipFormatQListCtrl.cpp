@@ -4,6 +4,7 @@
 
 CClipFormatQListCtrl::CClipFormatQListCtrl(void)
 {
+	m_counter = 0;
 	m_clipRow = -1;
 	m_convertedToSmallImage = false;
 }
@@ -13,7 +14,7 @@ CClipFormatQListCtrl::~CClipFormatQListCtrl(void)
 }
 
 
-HGLOBAL CClipFormatQListCtrl::GetDib(CDC *pDc, int height)
+HGLOBAL CClipFormatQListCtrl::GetDibFittingToHeight(CDC *pDc, int height)
 {
 	if(m_cfType != CF_DIB)
 	{
@@ -36,8 +37,12 @@ HGLOBAL CClipFormatQListCtrl::GetDib(CDC *pDc, int height)
 		return FALSE;
 	}
 
+	this->m_autoDeleteData = true;
+
 	// delete the large image data loaded from the db
 	this->Free();
+
+	this->m_autoDeleteData = false;
 
 	//Convert the smaller bitmap back to a dib
 	HPALETTE hPal = NULL;

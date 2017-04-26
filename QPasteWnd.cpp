@@ -70,6 +70,7 @@ CQPasteWnd::CQPasteWnd()
     m_bModifersMoveActive = false;
 	m_showScrollBars = false;
 	m_leftSelectedCompareId = 0;
+	m_extraDataCounter = 0;
 }
 
 CQPasteWnd::~CQPasteWnd()
@@ -399,6 +400,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     UpdateFont();
 	
     m_thread.Start(this);	
+	m_extraDataThread.Start(this);
 
 	/*m_actions.AddAccel(ActionEnums::SHOWDESCRIPTION, VK_F3);
 	m_actions.AddAccel(ActionEnums::NEXTDESCRIPTION, 'N');
@@ -1753,6 +1755,13 @@ void CQPasteWnd::SetLinesPerRow(int lines)
     CGetSetOptions::SetLinesPerRow(lines);
     m_lstHeader.SetNumberOfLinesPerRow(lines);
 
+	ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
+	m_cf_dibCache.clear();
+	m_cf_NO_dibCache.clear();
+	m_cf_rtfCache.clear();
+	m_cf_NO_rtfCache.clear();
+
     FillList();
 }
 
@@ -2550,17 +2559,7 @@ bool CQPasteWnd::DeleteClips(CClipIDs &IDs, ARRAY &Indexs)
 				m_listItems.erase(m_listItems.begin() + Indexs[i]);
 				erasedCount++;
 
-				CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(m_lstHeader.GetItemData(Indexs[i]));
-				if (iterDib != m_cf_dibCache.end())
-				{
-					m_cf_dibCache.erase(iterDib);
-				}
-
-				CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(m_lstHeader.GetItemData(Indexs[i]));
-				if (iterRtf != m_cf_rtfCache.end())
-				{
-					m_cf_rtfCache.erase(iterRtf);
-				}
+				RemoveFromImageRtfCache(Indexs[i]);
 			}
 		}
 	}
@@ -2577,6 +2576,35 @@ bool CQPasteWnd::DeleteClips(CClipIDs &IDs, ARRAY &Indexs)
 	UpdateStatus();
 
 	return true;
+}
+
+void CQPasteWnd::RemoveFromImageRtfCache(int id)
+{
+	ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
+	CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(m_lstHeader.GetItemData(id));
+	if (iterDib != m_cf_dibCache.end())
+	{
+		m_cf_dibCache.erase(iterDib);
+	}
+
+	CF_NoDibTypeMap::iterator iterNoDib = m_cf_NO_dibCache.find(m_lstHeader.GetItemData(id));
+	if (iterNoDib != m_cf_NO_dibCache.end())
+	{
+		m_cf_NO_dibCache.erase(iterNoDib);
+	}
+
+	CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(m_lstHeader.GetItemData(id));
+	if (iterRtf != m_cf_rtfCache.end())
+	{
+		m_cf_rtfCache.erase(iterRtf);
+	}
+
+	CF_NoDibTypeMap::iterator iterNoRtf = m_cf_NO_rtfCache.find(m_lstHeader.GetItemData(id));
+	if (iterNoRtf != m_cf_NO_rtfCache.end())
+	{
+		m_cf_NO_rtfCache.erase(iterNoRtf);
+	}
 }
 
 CString CQPasteWnd::LoadDescription(int nItem)
@@ -3454,20 +3482,10 @@ bool CQPasteWnd::ShowProperties(int id, int row)
 				}
 			}
 
-			CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(id);
-			if (iterDib != m_cf_dibCache.end())
-			{
-				m_cf_dibCache.erase(iterDib);
-			}
-
-			CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(id);
-			if (iterRtf != m_cf_rtfCache.end())
-			{
-				m_cf_rtfCache.erase(iterRtf);
-			}
+			RemoveFromImageRtfCache(id);
 		}
 
-		m_thread.FireLoadAccelerators();
+		m_extraDataThread.FireLoadAccelerators();
 
 		m_lstHeader.RefreshVisibleRows();
 
@@ -4685,38 +4703,43 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
      
 		if((int)m_listItems.size() > pItem->iItem)
         {
-            CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(m_listItems[pItem->iItem].m_lID);
-            if(iterDib == m_cf_dibCache.end())
-            {
-                bool exists = false;
-				for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
+			CF_NoDibTypeMap::iterator iterNoDib = m_cf_NO_dibCache.find(m_listItems[pItem->iItem].m_lID);
+			if (iterNoDib == m_cf_NO_dibCache.end())
+			{
+				CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(m_listItems[pItem->iItem].m_lID);
+				if (iterDib == m_cf_dibCache.end())
 				{
-					if(it->m_cfType == CF_DIB && it->m_parentId == m_listItems[pItem->iItem].m_lID)
+					bool exists = false;
+					for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
 					{
-						exists = true;
-						break;
+						if (it->m_cfType == CF_DIB && it->m_parentId == m_listItems[pItem->iItem].m_lID)
+						{
+							exists = true;
+							break;
+						}
+					}
+
+					if (exists == false)
+					{
+						CClipFormatQListCtrl format;
+						format.m_cfType = CF_DIB;
+						format.m_parentId = m_listItems[pItem->iItem].m_lID;
+						format.m_clipRow = pItem->iItem;
+						format.m_autoDeleteData = true;
+						format.m_counter = m_extraDataCounter++;
+						m_ExtraDataLoadItems.push_back(format);
+
+						m_extraDataThread.FireLoadExtraData(m_lstHeader.GetRowHeight());
 					}
 				}
-
-                if(exists == false)
-                {
-                    CClipFormatQListCtrl format;
-                    format.m_cfType = CF_DIB;
-                    format.m_parentId = m_listItems[pItem->iItem].m_lID;
-                    format.m_clipRow = pItem->iItem;
-                    format.m_autoDeleteData = false;
-                    m_ExtraDataLoadItems.push_back(format);
-
-                    m_thread.FireLoadExtraData();
-                }
-            }
-            else
-            {
-                if(iterDib->second.m_hgData != NULL)
-                {
-                    pItem->lParam = (LPARAM) &(iterDib->second);
-                }
-            }
+				else
+				{
+					if (iterDib->second.m_hgData != NULL)
+					{
+						pItem->lParam = (LPARAM) &(iterDib->second);
+					}
+				}
+			}
         }
     }
 
@@ -4726,38 +4749,43 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
 
         if((int)m_listItems.size() > pItem->iItem)
         {
-            CF_DibTypeMap::iterator iterRTF = m_cf_rtfCache.find(m_listItems[pItem->iItem].m_lID);
-            if(iterRTF == m_cf_rtfCache.end())
-            {
-                bool exists = false;
-				for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
+			CF_NoDibTypeMap::iterator iterNoRtf = m_cf_NO_rtfCache.find(m_listItems[pItem->iItem].m_lID);
+			if (iterNoRtf == m_cf_NO_rtfCache.end())
+			{
+				CF_DibTypeMap::iterator iterRTF = m_cf_rtfCache.find(m_listItems[pItem->iItem].m_lID);
+				if (iterRTF == m_cf_rtfCache.end())
 				{
-					if(it->m_cfType == theApp.m_RTFFormat && it->m_parentId == m_listItems[pItem->iItem].m_lID)
+					bool exists = false;
+					for (std::list<CClipFormatQListCtrl>::iterator it = m_ExtraDataLoadItems.begin(); it != m_ExtraDataLoadItems.end(); it++)
 					{
-						exists = true;
-						break;
+						if (it->m_cfType == theApp.m_RTFFormat && it->m_parentId == m_listItems[pItem->iItem].m_lID)
+						{
+							exists = true;
+							break;
+						}
+					}
+
+					if (exists == false)
+					{
+						CClipFormatQListCtrl format;
+						format.m_cfType = theApp.m_RTFFormat;
+						format.m_parentId = m_listItems[pItem->iItem].m_lID;
+						format.m_clipRow = pItem->iItem;
+						format.m_autoDeleteData = true;
+						format.m_counter = m_extraDataCounter++;
+						m_ExtraDataLoadItems.push_back(format);
+
+						m_extraDataThread.FireLoadExtraData(m_lstHeader.GetRowHeight());
 					}
 				}
-
-                if(exists == false)
-                {
-                    CClipFormatQListCtrl format;
-                    format.m_cfType = theApp.m_RTFFormat;
-                    format.m_parentId = m_listItems[pItem->iItem].m_lID;
-                    format.m_clipRow = pItem->iItem;
-                    format.m_autoDeleteData = false;
-                    m_ExtraDataLoadItems.push_back(format);
-
-                    m_thread.FireLoadExtraData();
-                }
-            }
-            else
-            {
-                if(iterRTF->second.m_hgData != NULL)
-                {
-                    pItem->lParam = (LPARAM) &(iterRTF->second);
-                }
-            }
+				else
+				{
+					if (iterRTF->second.m_hgData != NULL)
+					{
+						pItem->lParam = (LPARAM) &(iterRTF->second);
+					}
+				}
+			}
         }
     }
 }
@@ -5296,6 +5324,7 @@ void CQPasteWnd::OnDestroy()
 {
     CWndEx::OnDestroy();
     m_thread.Stop();
+	m_extraDataThread.Stop();
 }
 
 void CQPasteWnd::OnTimer(UINT_PTR nIDEvent)

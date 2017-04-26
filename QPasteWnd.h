@@ -85,6 +85,7 @@ public:
 
 typedef std::map < int, CMainTable > MainTypeMap;
 typedef std::map < int, CClipFormatQListCtrl > CF_DibTypeMap;
+typedef std::map < int, char > CF_NoDibTypeMap;
 
 
 
@@ -147,17 +148,21 @@ public:
     bool m_bModifersMoveActive;
 
     CQPasteWndThread m_thread;
+	CQPasteWndThread m_extraDataThread;
 	std::vector<CMainTable> m_listItems;
 
 	std::list<CPoint> m_loadItems;
     std::list<CClipFormatQListCtrl> m_ExtraDataLoadItems;
     CF_DibTypeMap m_cf_dibCache;
+	CF_NoDibTypeMap m_cf_NO_dibCache;
     CF_DibTypeMap m_cf_rtfCache;
+	CF_NoDibTypeMap m_cf_NO_rtfCache;
     CCriticalSection m_CritSection;
     CAccels m_actions;
 	CAccels m_modifierKeyActions;
 	bool m_showScrollBars;
 	int m_leftSelectedCompareId;
+	INT64 m_extraDataCounter;
 
     void RefreshNc();
     void UpdateStatus(bool bRepaintImmediately = false); // regenerates the status (caption) text
@@ -277,6 +282,7 @@ public:
 
 	bool ShowProperties(int id, int row);
 	bool DeleteClips(CClipIDs &IDs, ARRAY &Indexs);
+	void RemoveFromImageRtfCache(int id);
 	bool SyncClipDataToArrayData(CClip &clip);
 	bool SelectIds(ARRAY &ids);
 
