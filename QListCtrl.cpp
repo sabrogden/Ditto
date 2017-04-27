@@ -433,7 +433,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 				m_groupFolder.Draw(pDC, this, rcText.left, rcText.top, false, false);
 				rcText.left += m_groupFolder.ImageWidth() + theApp.m_metrics.ScaleX(2);
 			}
-			if (strSymbols.Find(_T("<noautodelete>"))) //don't auto delete
+			if (strSymbols.Find(_T("<noautodelete>")) >= 0) //don't auto delete
 			{
 				m_dontDeleteImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
 				rcText.left += m_dontDeleteImage.ImageWidth() + theApp.m_metrics.ScaleX(2);
@@ -1012,7 +1012,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 
 		try
 		{
-			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, lDate, lastPasteDate, lDontAutoDelete, QuickPasteText, lShortCut, globalShortCut FROM Main WHERE lID = %d"), clipId);
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, lDate, lastPasteDate, lDontAutoDelete, QuickPasteText, lShortCut, globalShortCut, stickyClipOrder, stickyClipGroupOrder FROM Main WHERE lID = %d"), clipId);
 			if (q.eof() == false)
 			{
 				CString clipData;
@@ -1044,6 +1044,25 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 					if (globalShortCut)
 					{
 						clipData += _T(" - Global Shortcut Key");
+					}
+				}
+
+				if (theApp.m_GroupID > 0)
+				{
+					int sticky = q.getIntField(_T("stickyClipGroupOrder"));
+					if (sticky != INVALID_STICKY)
+					{
+						clipData += _T(" | ");
+						clipData += _T(" - Sticky In Group");
+					}
+				}
+				else
+				{
+					int sticky = q.getIntField(_T("stickyClipOrder"));
+					if (sticky != INVALID_STICKY)
+					{
+						clipData += _T(" | ");
+						clipData += _T(" - Sticky");
 					}
 				}
 

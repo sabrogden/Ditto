@@ -4889,6 +4889,25 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
 					cs += " - Global Shortcut Key";
 				}
             }
+
+			if (theApp.m_GroupID > 0)
+			{
+				int sticky = q.getIntField(_T("stickyClipGroupOrder"));
+				if (sticky != INVALID_STICKY)
+				{
+					cs += "\n\n";
+					cs += _T(" - Sticky In Group");
+				}
+			}
+			else
+			{
+				int sticky = q.getIntField(_T("stickyClipOrder"));
+				if (sticky != INVALID_STICKY)
+				{
+					cs += "\n\n";
+					cs += _T(" - Sticky");
+				}
+			}
         }
 
         lstrcpyn(pInfo->pszText, cs, pInfo->cchTextMax);
