@@ -337,8 +337,12 @@ DittoSetup*]]></ExclExt>
 <Package
    xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
    xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+   xmlns:uap2="http://schemas.microsoft.com/appx/manifest/uap/windows10/2"
+   xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
    xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-   xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10">
+   xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+   xmlns:desktop2="http://schemas.microsoft.com/appx/manifest/desktop/windows10/2"
+   IgnorableNamespaces="desktop2">
   <Identity Name="60145ScottBrogden.ditto-cp"
     ProcessorArchitecture="x64"
     Publisher="CN=2032816C-0EBD-4FA0-8832-B8289B21D4F4"
@@ -371,6 +375,24 @@ DittoSetup*]]></ExclExt>
 			<desktop:Extension Category="windows.startupTask" Executable="Ditto.exe" EntryPoint="Windows.FullTrustApplication">
 				<desktop:StartupTask TaskId="DittoStartupTask" Enabled="true" DisplayName="Ditto Service" />
 			</desktop:Extension>
+			
+			<desktop2:Extension Category="windows.firewallRules">  
+     			<desktop2:FirewallRules Executable="Ditto.exe">  
+          			<desktop2:Rule Direction="in" IPProtocol="TCP" LocalPortMin="23443" LocalPortMax="23443" RemotePortMin="23443" RemotePortMax="23443" Profile="domainAndPrivate"/>   
+          			<desktop2:Rule Direction="out" IPProtocol="TCP" LocalPortMin="23443" LocalPortMax="23443" RemotePortMin="23443" RemotePortMax="23443" Profile="domainAndPrivate"/>   
+      			</desktop2:FirewallRules>  
+  			</desktop2:Extension>
+			
+
+			<uap:Extension Category="windows.fileTypeAssociation">
+          		<uap3:FileTypeAssociation Name="alsdkja">
+            		<uap:SupportedFileTypes>
+              			<uap:FileType>.dto</uap:FileType>
+            		</uap:SupportedFileTypes>
+          		</uap3:FileTypeAssociation>
+        	</uap:Extension>
+        
+  
 		</Extensions>
 		
     </Application>
