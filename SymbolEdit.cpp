@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "SymbolEdit.h"
 #include "cp_main.h"
+#include "QListCtrl.h"
 
 // CSymbolEdit
 
@@ -114,6 +115,25 @@ BOOL CSymbolEdit::PreTranslateMessage(MSG* pMsg)
 			{
 				pWnd->SendMessage(CB_UPDOWN, pMsg->wParam, pMsg->lParam);
 				return TRUE;
+			}
+		}
+		else if (pMsg->wParam == VK_DELETE)
+		{
+			int startChar;
+			int endChar;
+			this->GetSel(startChar, endChar);
+			CString cs;
+			this->GetWindowText(cs);
+			//if selection is at the end then forward this on to the parent to delete the selected clip
+			if(startChar == cs.GetLength() &&
+				endChar == cs.GetLength())
+			{ 
+				CWnd *pWnd = GetParent();
+				if (pWnd)
+				{
+					pWnd->SendMessage(NM_DELETE, pMsg->wParam, pMsg->lParam);
+					return TRUE;
+				}
 			}
 		}
 		break;
