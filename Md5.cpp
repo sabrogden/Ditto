@@ -70,10 +70,10 @@ char* CMd5::CalcMD5FromFile(const TCHAR *s8_Path)
 //                calculate MD5 from a string
 //
 /********************************************************************/
-char* CMd5::CalcMD5FromString(const char *s8_Input)
+char* CMd5::CalcMD5FromString(const char *s8_Input, int len)
 {
 	MD5Init();
-	MD5Update((unsigned char*)s8_Input, strlen(s8_Input));
+	MD5Update((unsigned char*)s8_Input, len);
 
 	return MD5FinalToString();
 }

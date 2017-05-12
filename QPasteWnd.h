@@ -18,6 +18,8 @@
 #include "SpecialPasteOptions.h"
 #include "ClipIds.h"
 #include "SymbolEdit.h"
+#include "Popup.h"
+
 class CMainTable
 {
 public:
@@ -163,6 +165,7 @@ public:
 	bool m_showScrollBars;
 	int m_leftSelectedCompareId;
 	INT64 m_extraDataCounter;
+	CPopup m_popupMsg;
 
     void RefreshNc();
     void UpdateStatus(bool bRepaintImmediately = false); // regenerates the status (caption) text
@@ -272,6 +275,7 @@ public:
 	bool OnRemoveStickySetting();	
 	bool DoActionReplaceTopStickyClip();
 	bool DoActionPromptSendToFriend();
+	bool DoActionSaveCF_HDROP_FileData();
 
 	bool OnNewClip();
 	bool OnImportClip();
@@ -503,4 +507,6 @@ public:
 	afx_msg void OnUpdateCliporderReplacetopstickyclip(CCmdUI *pCmdUI);
 	afx_msg void OnSendtoPromptforname();
 	afx_msg void OnUpdateSendtoPromptforname(CCmdUI *pCmdUI);
+	afx_msg void OnImportImportcopiedfile();
+	afx_msg void OnUpdateImportImportcopiedfile(CCmdUI *pCmdUI);
 };

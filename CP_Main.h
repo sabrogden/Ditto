@@ -164,6 +164,7 @@ public:
 	CLIPFORMAT m_HTML_Format;
 	CLIPFORMAT m_RemoteCF_HDROP;
 	CLIPFORMAT m_RTFFormat;
+	CLIPFORMAT m_DittoFileData;
 
 	COleDateTime m_oldtStartUp;
 

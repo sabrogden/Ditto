@@ -11,6 +11,7 @@
 #include "shared/TextConvert.h"
 #include "zlib/zlib.h"
 #include "Misc.h"
+#include "Md5.h"
 
 #include <Mmsystem.h>
 
@@ -250,7 +251,7 @@ void CClip::EmptyFormats()
 }
 
 // Adds a new Format to this Clip by copying the given data.
-bool CClip::AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen)
+bool CClip::AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen, bool setDesc)
 {
 	ASSERT(pData && nLen);
 	HGLOBAL hGlobal = ::NewGlobalP(pData, nLen);
@@ -259,8 +260,11 @@ bool CClip::AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen)
 	// update the Clip statistics
 	m_Time = m_Time.GetCurrentTime();
 
-	if(!SetDescFromText(hGlobal, true))
-		SetDescFromType();
+	if (setDesc)
+	{
+		if (cfType != CF_UNICODETEXT || !SetDescFromText(hGlobal, true))
+			SetDescFromType();
+	}
 	
 	CClipFormat format(cfType,hGlobal);
 	CClipFormat *pFormat;
@@ -814,6 +818,25 @@ bool CClip::ModifyMainTable()
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)
 
 	return bRet;
+}
+
+bool CClip::ModifyDescription()
+{
+	bool bRet = false;
+	try
+	{
+		m_Desc.Replace(_T("'"), _T("''"));
+
+		theApp.m_db.execDMLEx(_T("UPDATE Main SET mText = '%s' ")
+			_T("WHERE lID = %d;"),
+			m_Desc,
+			m_id);
+
+		bRet = true;
+	}
+	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)
+
+		return bRet;
 }
 
 // Empties m_Formats as it saves them to the Data Table.
@@ -1513,6 +1536,147 @@ BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL utf8)
 	}
 
 	return ret;
+}
+
+bool CClip::AddFileDataToData(CString &errorMessage)
+{
+	INT_PTR size = m_Formats.GetSize();
+	if (size <= 0)
+	{
+		errorMessage = _T("No CF_HDROP formats to convert");
+		return false;
+	}
+
+	bool addedFileData = false;
+
+	int nCF_HDROPIndex = -1;
+	int dittoDataIndex = -1;
+	for (int i = 0; i < size; i++)
+	{
+		if (m_Formats[i].m_cfType == CF_HDROP)
+		{
+			nCF_HDROPIndex = i;
+		}
+		else if(m_Formats[i].m_cfType == theApp.m_DittoFileData)
+		{
+			dittoDataIndex = i;
+		}
+	}	
+
+	if (nCF_HDROPIndex < 0)
+	{
+		errorMessage = _T("No CF_HDROP formats to convert");
+		return false;
+	}
+	else if (dittoDataIndex >= 0)
+	{
+		return false;
+	}
+	else
+	{
+		using namespace nsPath;
+
+		HDROP drop = (HDROP)GlobalLock(m_Formats[nCF_HDROPIndex].m_hgData);
+		int nNumFiles = DragQueryFile(drop, -1, NULL, 0);
+		
+		TCHAR filePath[MAX_PATH];
+
+		CString newDesc = _T("File Contents - ");
+				
+		for (int nFile = 0; nFile < nNumFiles; nFile++)
+		{
+			if (DragQueryFile(drop, nFile, filePath, sizeof(filePath)) > 0)
+			{
+				CFile file;
+				CFileException ex;
+				if (file.Open(filePath, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone, &ex))
+				{
+					ULONGLONG fileSize = file.GetLength();
+					int maxSize = CGetSetOptions::GetMaxFileContentsSize();
+					if (fileSize < maxSize)
+					{
+						CString src(filePath);
+						CStringA csFilePath;
+						CTextConvert::ConvertToUTF8(src, csFilePath);
+						
+						int bufferSize = fileSize + csFilePath.GetLength() + 1 + md5StringLength + 1;;
+						char *pBuffer = new char[bufferSize];
+						if (pBuffer != NULL)
+						{
+							//data contents
+							//original file<null terminator>md5<null terminator>file data
+
+							memset(pBuffer, 0, bufferSize);
+							strncpy(pBuffer, csFilePath, csFilePath.GetLength());
+							CClipFormat* pCF;
+						
+							//move the buffer start past the file path and md5 string
+							char *bufferStart = pBuffer + csFilePath.GetLength() + 1 + md5StringLength + 1;
+
+							int readBytes = file.Read(bufferStart, fileSize);
+
+							CMd5 md5;
+							CStringA md5String = md5.CalcMD5FromString(bufferStart, fileSize);
+
+							char *bufferMd5 = pBuffer + csFilePath.GetLength() + 1;
+							strncpy(bufferMd5, md5String, md5StringLength);
+
+							AddFormat(theApp.m_DittoFileData, pBuffer, bufferSize);
+
+							addedFileData = true;
+
+							newDesc += filePath;
+							newDesc += _T("\n");
+
+							Log(StrF(_T("Saving file contents to Ditto Database, file: %s, size: %d, md5: %s"), filePath, fileSize, md5String));
+						}
+					}
+					else
+					{
+						const int MAX_FILE_SIZE_BUFFER = 255;
+						TCHAR szFileSize[MAX_FILE_SIZE_BUFFER];
+						TCHAR szMaxFileSize[MAX_FILE_SIZE_BUFFER];
+						StrFormatByteSize(fileSize, szFileSize, MAX_FILE_SIZE_BUFFER);
+						StrFormatByteSize(maxSize, szMaxFileSize, MAX_FILE_SIZE_BUFFER);
+
+						errorMessage += StrF(_T("File is to large: %s, Size: %s, Max Size: %s\r\n"), filePath, szFileSize, szMaxFileSize);
+					}
+				}
+				else
+				{
+					TCHAR szError[200];
+					ex.GetErrorMessage(szError, 200);
+					errorMessage += StrF(_T("Error opening file: %s, Error: %s\r\n"), filePath, szError);
+				}
+			}
+		}
+
+		GlobalUnlock(m_Formats[nCF_HDROPIndex].m_hgData);
+
+		if (addedFileData)
+		{
+			for (int i = 0; i < size; i++)
+			{
+				this->m_Formats.RemoveAt(i, 1);
+			}
+
+			this->m_Desc = newDesc;
+
+			if (this->ModifyDescription())
+			{
+				if (this->AddToDataTable() == FALSE)
+				{
+					errorMessage += _T("Error saving data to database.");
+				}
+			}
+			else
+			{
+				errorMessage += _T("Error saving main table to database.");
+			}
+		}
+	}
+
+	return addedFileData;
 }
 
 /*----------------------------------------------------------------------------*\

@@ -2420,3 +2420,23 @@ CString	CGetSetOptions::GetCustomSendToList()
 {
 	return GetProfileString("CustomSendToList", "");
 }
+
+int CGetSetOptions::GetMaxFileContentsSize()
+{
+	return GetProfileLong(_T("MaxFileContentsSize"), 64000000);
+}
+
+void CGetSetOptions::SetMaxFileContentsSize(int val)
+{
+	SetProfileLong(_T("MaxFileContentsSize"), val);
+}
+
+int CGetSetOptions::GetErrorMsgPopupTimeout()
+{
+	return GetProfileLong(_T("ErrorMsgPopupTimeout"), 3500);
+}
+
+void CGetSetOptions::SetErrorMsgPopupTimeout(int val)
+{
+	SetProfileLong(_T("ErrorMsgPopupTimeout"), val);
+}

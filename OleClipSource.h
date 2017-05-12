@@ -40,4 +40,5 @@ protected:
 	void Typoglycemia(CClip &clip);
 	HGLOBAL ConvertToFileDrop();
 	void AddDateTime(CClip &clip);
+	void SaveDittoFileDataToFile(CClip &clip);
 };

@@ -125,12 +125,13 @@ public:
 
 	void Clear();
 	void EmptyFormats();
-	bool AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen);
+	bool AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen, bool setDesc = false);
 	bool LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore = true);
 	bool SetDescFromText(HGLOBAL hgData, bool unicode);
 	bool SetDescFromType();
 	bool AddToDB(bool bCheckForDuplicates = true);
 	bool ModifyMainTable();
+	bool ModifyDescription();
 	bool SaveFromEditWnd(BOOL bUpdateDesc);
 	void MakeLatestOrder();
 	void MakeLatestGroupOrder();
@@ -157,6 +158,8 @@ public:
 	static double GetNewOrder(int parentId, int clipId);
 	static double GetNewTopSticky(int parentId, int clipId);
 	static double GetNewLastSticky(int parentId, int clipId);
+
+	bool AddFileDataToData(CString &errorMessage);
 	
 protected:
 	bool AddToMainTable();

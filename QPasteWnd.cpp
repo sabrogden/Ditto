@@ -49,6 +49,7 @@
 #define TIMER_FILL_CACHE		1
 #define TIMER_DO_SEARCH			2
 #define TIMER_PASTE_FROM_MODIFER	3
+#define TIMER_ERROR_MSG			4
 
 #define THREAD_DO_QUERY				0
 #define THREAD_EXIT_THREAD			1
@@ -292,6 +293,8 @@ ON_COMMAND(ID_CLIPORDER_REPLACETOPSTICKYCLIP, &CQPasteWnd::OnCliporderReplacetop
 ON_UPDATE_COMMAND_UI(ID_CLIPORDER_REPLACETOPSTICKYCLIP, &CQPasteWnd::OnUpdateCliporderReplacetopstickyclip)
 ON_COMMAND(ID_SENDTO_PROMPTFORNAME, &CQPasteWnd::OnSendtoPromptforname)
 ON_UPDATE_COMMAND_UI(ID_SENDTO_PROMPTFORNAME, &CQPasteWnd::OnUpdateSendtoPromptforname)
+ON_COMMAND(ID_IMPORT_IMPORTCOPIEDFILE, &CQPasteWnd::OnImportImportcopiedfile)
+ON_UPDATE_COMMAND_UI(ID_IMPORT_IMPORTCOPIEDFILE, &CQPasteWnd::OnUpdateImportImportcopiedfile)
 END_MESSAGE_MAP()
 
 
@@ -440,6 +443,8 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_alwaysOnToWarningStatic.SetToggleCursor(true);
 	m_alwaysOnToWarningStatic.SetFont(&m_groupFont);
 
+	m_popupMsg.m_hWndPosRelativeTo = m_hWnd;
+
 	LoadShortcuts();
 
 	InvalidateNc();
@@ -524,6 +529,8 @@ void CQPasteWnd::OnSize(UINT nType, int cx, int cy)
     {
         return ;
     }
+
+	m_popupMsg.Hide();
 
     MoveControls();
 }
@@ -692,6 +699,8 @@ BOOL CQPasteWnd::HideQPasteWindow (bool releaseFocus, bool clearSearchData)
     KillTimer(TIMER_FILL_CACHE);
 
 	m_lstHeader.HidePopup();
+
+	m_popupMsg.Hide();
 
     //Save the size
     SaveWindowSize();
@@ -3016,6 +3025,9 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::PROMPT_SEND_TO_FRIEND:
 		ret = DoActionPromptSendToFriend();
 		break;
+	case ActionEnums::SAVE_CF_HDROP_FIlE_DATA:
+		ret = DoActionSaveCF_HDROP_FileData();
+		break;
 	}
 
 	return ret;
@@ -3275,6 +3287,7 @@ bool CQPasteWnd::DoActionEditClip()
 
 	CClipIDs IDs;
 	m_lstHeader.GetSelectionItemData(IDs);
+
 	theApp.EditItems(IDs, true);
 
 	HideQPasteWindow(false);
@@ -4358,6 +4371,64 @@ bool CQPasteWnd::DoActionReplaceTopStickyClip()
 	return true;
 }
 
+bool CQPasteWnd::DoActionSaveCF_HDROP_FileData()
+{
+	if (m_lstHeader.GetSelectedCount() == 0)
+	{
+		return false;
+	}
+
+	CWaitCursor wait;
+
+	CString errorMessage;
+
+	CClipIDs IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+	ARRAY Indexs;
+	m_lstHeader.GetSelectionIndexes(Indexs);
+
+	if (IDs.GetCount() > 0)
+	{
+		for(int i = 0; i < min(Indexs.GetCount(), IDs.GetCount()); i++)
+		{
+			int row = Indexs[i];
+			int id = IDs[i];
+			CClip clip;
+			if (clip.LoadMainTable(id))
+			{
+				if (clip.LoadFormats(id))
+				{
+					CString localErrorMessage;
+					if (clip.AddFileDataToData(localErrorMessage))
+					{
+						if (row >= 0 &&
+							row < (int)m_listItems.size())
+						{
+							CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), id);
+							if (!q.eof())
+							{
+								FillMainTable(m_listItems[row], q);
+							}
+						}
+					}
+					
+					errorMessage += localErrorMessage;
+				}
+			}
+		}
+	}
+
+	if (errorMessage.GetLength() > 0)
+	{
+		m_popupMsg.Show(errorMessage, CPoint(0, 0), true);
+		SetTimer(TIMER_ERROR_MSG, CGetSetOptions::GetErrorMsgPopupTimeout(), NULL);
+	}
+
+	m_lstHeader.RefreshVisibleRows();
+
+	return true;
+}
+
 bool CQPasteWnd::DoActionPromptSendToFriend()
 {
 	m_bHideWnd = false;
@@ -5380,6 +5451,11 @@ void CQPasteWnd::OnTimer(UINT_PTR nIDEvent)
             Log(_T("m_bModifersMoveActive set to false\n"));
         }
     }
+	else if (nIDEvent == TIMER_ERROR_MSG)
+	{
+		KillTimer(TIMER_ERROR_MSG);
+		m_popupMsg.Hide();
+	}
 
     CWndEx::OnTimer(nIDEvent);
 }
@@ -6196,4 +6272,20 @@ void CQPasteWnd::OnUpdateSendtoPromptforname(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::PROMPT_SEND_TO_FRIEND);
+}
+
+
+void CQPasteWnd::OnImportImportcopiedfile()
+{
+	DoAction(ActionEnums::SAVE_CF_HDROP_FIlE_DATA);
+}
+
+void CQPasteWnd::OnUpdateImportImportcopiedfile(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::SAVE_CF_HDROP_FIlE_DATA);
 }

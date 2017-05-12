@@ -1,11 +1,12 @@
 #pragma once
 
 #define _ReadBufSize 1000000
+#define md5StringLength 32
 
 class CMd5  
 {
 public:
-	char* CalcMD5FromString(const char *s8_Input);
+	char* CalcMD5FromString(const char *s8_Input, int len);
 	char* CalcMD5FromFile(const TCHAR *s8_Path);
 
 	void MD5Init();

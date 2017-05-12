@@ -12,6 +12,8 @@
 #include "Client.h"
 #include "sqlite\unicode\unistr.h"
 #include "sqlite\unicode\uchar.h"
+#include "Path.h"
+#include "Md5.h"
 
 /*------------------------------------------------------------------*\
 COleClipSource
@@ -181,6 +183,8 @@ BOOL COleClipSource::DoImmediateRender()
 	{
 		AddDateTime(clip);
 	}
+	
+	SaveDittoFileDataToFile(clip);
 
 	return PutFormatOnClipboard(&clip.m_Formats) > 0;
 }
@@ -697,6 +701,96 @@ void COleClipSource::AddDateTime(CClip &clip)
 	}
 }
 
+void COleClipSource::SaveDittoFileDataToFile(CClip &clip)
+{
+	CFileRecieve hDrpData;
+	CClipFormat* pCF;
+	int hDropIndex = -1;
+	bool savedFile = false;
+	INT_PTR	count = clip.m_Formats.GetSize();
+	for (int i = 0; i < count; i++)
+	{
+		pCF = &clip.m_Formats.ElementAt(i);
+
+		if (pCF->m_cfType == theApp.m_DittoFileData)
+		{
+			IClipFormat *dittoFileData = &clip.m_Formats.ElementAt(i);
+			if (dittoFileData != NULL)
+			{
+				HGLOBAL data = dittoFileData->Data();
+				char * stringData = (char *)GlobalLock(data);
+
+				//original source is store in the first string ending in the null terminator
+				CStringA src(stringData);
+				stringData += src.GetLength() + 1;
+
+				CStringA originalMd5(stringData);
+				stringData += originalMd5.GetLength() + 1;
+
+				int dataSize = (int)GlobalSize(data) - (src.GetLength() + 1) - (originalMd5.GetLength() + 1);
+
+				CMd5 calcMd5;
+				CStringA md5String = calcMd5.CalcMD5FromString(stringData, dataSize);
+
+				CString unicodeFilePath;
+				CTextConvert::ConvertFromUTF8(src, unicodeFilePath);
+
+				CString unicodeMd5;
+				CTextConvert::ConvertFromUTF8(md5String, unicodeMd5);
+
+				Log(StrF(_T("Saving file contents from Ditto, original file: %s, size: %d, md5: %s"), unicodeFilePath, dataSize, unicodeMd5));
+
+				if (md5String == originalMd5)
+				{
+					using namespace nsPath;
+					CPath path(unicodeFilePath);
+					CString fileName = path.GetName();
+
+					CString newFilePath = CGetSetOptions::GetPath(PATH_DRAG_FILES);
+					newFilePath += fileName;
+
+					CFile f;
+					if (f.Open(newFilePath, CFile::modeWrite | CFile::modeCreate))
+					{
+						f.Write(stringData, dataSize);
+
+						f.Close();
+
+						savedFile = true;
+						hDrpData.AddFile(newFilePath);
+					}
+					else
+					{
+						Log(StrF(_T("Error saving file: %s"), unicodeFilePath));
+					}
+				}
+				else
+				{
+					Log(StrF(_T("MD5 ERROR, file: %s, original md5: %s, calc md5: %s"), unicodeFilePath, originalMd5, md5String));
+				}
+			}
+		}
+		else if (pCF->m_cfType == CF_HDROP)
+		{
+			hDropIndex = i;
+		}
+	}
+
+	if (hDropIndex >= 0)
+	{
+		clip.m_Formats.RemoveAt(hDropIndex);
+	}
+
+	if (savedFile)
+	{
+		CClipFormat cf(CF_HDROP, hDrpData.CreateCF_HDROPBuffer());
+		clip.m_Formats.Add(cf);
+
+		//clip.m_Formats now owns the global data
+		cf.m_autoDeleteData = false;
+	}
+}
+
 void COleClipSource::Typoglycemia(CClip &clip)
 {
 	IClipFormat *unicodeTextFormat = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
@@ -783,6 +877,7 @@ INT_PTR COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 	CClipFormat* pCF;
 	INT_PTR	count = pFormats->GetSize();
 	bool bDelayedRenderCF_HDROP = false;
+	bool dittoFileData = false;
 	INT_PTR i = 0;
 
 	//see if the html format is in the list
@@ -794,6 +889,14 @@ INT_PTR COleClipSource::PutFormatOnClipboard(CClipFormats *pFormats)
 		if(pCF->m_cfType == theApp.m_RemoteCF_HDROP)
 		{
 			bDelayedRenderCF_HDROP = true;
+		}
+
+		if (pCF->m_cfType == theApp.m_DittoFileData)
+		{
+			dittoFileData = true;
+
+			//save file data
+			//adjust hdrop
 		}
 	}
 

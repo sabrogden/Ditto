@@ -127,6 +127,7 @@ CCP_MainApp::CCP_MainApp()
 	m_cfIgnoreClipboard = ::RegisterClipboardFormat(_T("Clipboard Viewer Ignore"));
 	m_cfDelaySavingData = ::RegisterClipboardFormat(_T("Ditto Delay Saving Data"));
 	m_RemoteCF_HDROP = ::RegisterClipboardFormat(_T("Ditto Remote CF_HDROP"));
+	m_DittoFileData = ::RegisterClipboardFormat(_T("Ditto File Data"));
 }
 
 CCP_MainApp::~CCP_MainApp()

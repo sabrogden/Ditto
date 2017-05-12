@@ -305,6 +305,7 @@ BEGIN
             MENUITEM "Export Clip(s) to Text File", ID_EXPORT_EXPORTTOTEXTFILE
             MENUITEM "Export Clip(s) to Image File", ID_IMPORT_EXPORTCLIP_BITMAP
             MENUITEM "Export to Google Translate",  ID_IMPORT_EXPORTTOGOOGLETRANSLATE
+            MENUITEM "Import File Contents From CF_HDROP", ID_IMPORT_IMPORTCOPIEDFILE
         END
     END
 END

@@ -549,6 +549,12 @@ public:
 
 	static void		SetCustomSendToList(CString val);
 	static CString	GetCustomSendToList();
+
+	static int GetMaxFileContentsSize();
+	static void SetMaxFileContentsSize(int val);
+
+	static int GetErrorMsgPopupTimeout();
+	static void SetErrorMsgPopupTimeout(int val);
 };
 
 // global for easy access and for initialization of fast access variables
