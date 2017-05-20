@@ -555,6 +555,12 @@ public:
 
 	static int GetErrorMsgPopupTimeout();
 	static void SetErrorMsgPopupTimeout(int val);
+
+	static void		SetRegexFilter(CString val, int pos);
+	static CString	GetRegexFilter(int pos);
+
+	static void SetRegexFilterByProcessName(CString val, int pos);
+	static CString GetRegexFilterByProcessName(int pos);
 };
 
 // global for easy access and for initialization of fast access variables

@@ -657,28 +657,22 @@ BOOL CGetSetOptions::GetEnableTransparency()
 
 BOOL CGetSetOptions::SetTransparencyPercent(long lPercent)
 {
-#ifdef AFTER_98
 	if(lPercent > OPACITY_MAX)
 		lPercent = OPACITY_MAX;
 	if(lPercent < 0)
 		lPercent = 0;
 
 	return SetProfileLong("TransparencyPercent", lPercent);
-#endif
-	return FALSE;
 }
 
 long CGetSetOptions::GetTransparencyPercent()
 {
-#ifdef AFTER_98
 	long lValue = GetProfileLong("TransparencyPercent", 14);
 
 	if(lValue > OPACITY_MAX) lValue = OPACITY_MAX;
 	if(lValue < 0) lValue = 0;
 
 	return lValue;
-#endif
-	return 0;
 }
 
 BOOL CGetSetOptions::SetLinesPerRow(long lLines)
@@ -2439,4 +2433,34 @@ int CGetSetOptions::GetErrorMsgPopupTimeout()
 void CGetSetOptions::SetErrorMsgPopupTimeout(int val)
 {
 	SetProfileLong(_T("ErrorMsgPopupTimeout"), val);
+}
+
+void CGetSetOptions::SetRegexFilter(CString val, int pos)
+{
+	CString cs;
+	cs.Format(_T("RegexFilter_%d"), pos);
+
+	SetProfileString(cs, val);
+}
+
+CString	CGetSetOptions::GetRegexFilter(int pos)
+{
+	CString cs;
+	cs.Format(_T("RegexFilter_%d"), pos);
+	return GetProfileString(cs, "");
+}
+
+void CGetSetOptions::SetRegexFilterByProcessName(CString val, int pos)
+{
+	CString cs;
+	cs.Format(_T("RegexFilterByProcessName_%d"), pos);
+
+	SetProfileString(cs, val);
+}
+
+CString	CGetSetOptions::GetRegexFilterByProcessName(int pos)
+{
+	CString cs;
+	cs.Format(_T("RegexFilterByProcessName_%d"), pos);
+	return GetProfileString(cs, "*");
 }

@@ -18,10 +18,10 @@
 #include "QRCodeViewer.h"
 #include "CreateQRCodeImage.h"
 #include "ClipCompare.h"
-//#include "MyDropTarget.h"
 #include "Misc.h"
 #include "FriendPromptDlg.h"
 #include "DimWnd.h"
+#include "client.h"
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -295,6 +295,7 @@ ON_COMMAND(ID_SENDTO_PROMPTFORNAME, &CQPasteWnd::OnSendtoPromptforname)
 ON_UPDATE_COMMAND_UI(ID_SENDTO_PROMPTFORNAME, &CQPasteWnd::OnUpdateSendtoPromptforname)
 ON_COMMAND(ID_IMPORT_IMPORTCOPIEDFILE, &CQPasteWnd::OnImportImportcopiedfile)
 ON_UPDATE_COMMAND_UI(ID_IMPORT_IMPORTCOPIEDFILE, &CQPasteWnd::OnUpdateImportImportcopiedfile)
+ON_UPDATE_COMMAND_UI(32775, &CQPasteWnd::OnUpdate32775)
 END_MESSAGE_MAP()
 
 
@@ -385,9 +386,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-    #ifdef AFTER_98
-        m_Alpha.SetWindowHandle(m_hWnd);
-    #endif 
+    m_Alpha.SetWindowHandle(m_hWnd);
 		
 	m_SearchFont.CreateFont(-theApp.m_metrics.PointsToPixels(12), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
     m_search.SetFont(&m_SearchFont);
@@ -1816,24 +1815,22 @@ void CQPasteWnd::OnMenuTransparency40()
 
 void CQPasteWnd::SetTransparency(int percent)
 {
-    #ifdef AFTER_98
-        if(percent)
-        {
-            CGetSetOptions::SetTransparencyPercent(percent);
-            CGetSetOptions::SetEnableTransparency(TRUE);
+    if(percent)
+    {
+        CGetSetOptions::SetTransparencyPercent(percent);
+        CGetSetOptions::SetEnableTransparency(TRUE);
 
-            m_Alpha.SetTransparent(TRUE);
+        m_Alpha.SetTransparent(TRUE);
 
-            float fPercent = percent / (float)100.0;
+        float fPercent = percent / (float)100.0;
 
-            m_Alpha.SetOpacity(OPACITY_MAX - (int)(fPercent *OPACITY_MAX));
-        }
-        else
-        {
-            CGetSetOptions::SetEnableTransparency(FALSE);
-            m_Alpha.SetTransparent(FALSE);
-        }
-    #endif 
+        m_Alpha.SetOpacity(OPACITY_MAX - (int)(fPercent *OPACITY_MAX));
+    }
+    else
+    {
+        CGetSetOptions::SetEnableTransparency(FALSE);
+        m_Alpha.SetTransparent(FALSE);
+    }
 }
 
 void CQPasteWnd::SetCurrentTransparency()
@@ -1885,12 +1882,18 @@ void CQPasteWnd::OnMenuExitprogram()
 
 void CQPasteWnd::OnMenuToggleConnectCV()
 {
-    theApp.ToggleConnectCV();
-
-	UpdateStatus();
+	this->DoAction(ActionEnums::TOGGLE_CLIPBOARD_CONNECTION);
 }
 
-#include "client.h"
+void CQPasteWnd::OnUpdate32775(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TOGGLE_CLIPBOARD_CONNECTION);
+}
 
 void CQPasteWnd::OnMenuProperties()
 {
@@ -3027,6 +3030,9 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 		break;
 	case ActionEnums::SAVE_CF_HDROP_FIlE_DATA:
 		ret = DoActionSaveCF_HDROP_FileData();
+		break;
+	case ActionEnums::TOGGLE_CLIPBOARD_CONNECTION:
+		ret = DoActionToggleClipboardConnection();
 		break;
 	}
 
@@ -4442,6 +4448,14 @@ bool CQPasteWnd::DoActionPromptSendToFriend()
 	}
 
 	m_bHideWnd = true;
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionToggleClipboardConnection()
+{
+	theApp.ToggleConnectCV();
+	UpdateStatus();
 
 	return true;
 }

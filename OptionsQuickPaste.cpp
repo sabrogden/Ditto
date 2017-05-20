@@ -282,8 +282,8 @@ void COptionsQuickPaste::FillThemes()
 	{
 		m_cbTheme.SetCurSel(nIndex);
 	}
-
 }
+
 void COptionsQuickPaste::OnBnClickedButtonTheme()
 {
 	CTheme theme;

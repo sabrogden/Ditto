@@ -275,6 +275,12 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case REPLACE_TOP_STICKY_CLIP:
 		val = "Replace Top Sticky Clip";
 		break;
+	case PROMPT_SEND_TO_FRIEND:
+		val = "Prompt send to friend";
+		break;
+	case TOGGLE_CLIPBOARD_CONNECTION:
+		val = "Toggle clipboard connection";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);

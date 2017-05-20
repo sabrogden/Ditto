@@ -37,6 +37,8 @@ public:
 	// Convert a point size (1/72 of an inch) to raw pixels.
 	int PointsToPixels(int pt) { _Init(); return MulDiv(pt, _dpiY, 72); }
 
+	int PixelsToPoints(int px) { _Init(); return MulDiv(px, 72, _dpiY); }
+
 	// Invalidate any cached metrics.
 	void Invalidate() { _fInitialized = false; }
 

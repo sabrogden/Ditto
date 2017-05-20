@@ -406,6 +406,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="AdvGeneral.cpp" />
     <ClCompile Include="AutoSendToClientThread.cpp" />
     <ClCompile Include="BitmapHelper.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
@@ -1873,6 +1874,7 @@
   <ItemGroup>
     <ClInclude Include="Accels.h" />
     <ClInclude Include="ActionEnums.h" />
+    <ClInclude Include="AdvGeneral.h" />
     <ClInclude Include="AlphaBlend.h" />
     <ClInclude Include="ArrayEx.h" />
     <ClInclude Include="AutoSendToClientThread.h" />

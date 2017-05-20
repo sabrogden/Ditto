@@ -276,6 +276,7 @@ public:
 	bool DoActionReplaceTopStickyClip();
 	bool DoActionPromptSendToFriend();
 	bool DoActionSaveCF_HDROP_FileData();
+	bool DoActionToggleClipboardConnection();
 
 	bool OnNewClip();
 	bool OnImportClip();
@@ -509,4 +510,5 @@ public:
 	afx_msg void OnUpdateSendtoPromptforname(CCmdUI *pCmdUI);
 	afx_msg void OnImportImportcopiedfile();
 	afx_msg void OnUpdateImportImportcopiedfile(CCmdUI *pCmdUI);
+	afx_msg void OnUpdate32775(CCmdUI *pCmdUI);
 };

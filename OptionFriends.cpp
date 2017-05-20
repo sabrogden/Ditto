@@ -5,6 +5,7 @@
 #include "cp_main.h"
 #include "OptionFriends.h"
 #include "FriendDetails.h"
+#include "DimWnd.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -224,6 +225,8 @@ void COptionFriends::OnDblclkList(NMHDR* pNMHDR, LRESULT* pResult)
 
 BOOL COptionFriends::EditItem(int nItem)
 {
+	CDimWnd dim(this->GetParent());
+
 	CFriendDetails dlg(this);
 
 	if(m_List.GetItemText(nItem, 1) == "X")

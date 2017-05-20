@@ -180,6 +180,8 @@
 #define IDC_CURSOR2                     323
 #define IDC_CURSOR_ZOOM_OUT             323
 #define IDD_DIALOG_FREIND_PROMPT        324
+#define IDD_DIALOG2                     325
+#define IDD_ADV_OPTIONS                 325
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -389,6 +391,7 @@
 #define IDC_STATIC_LANGUAGE             2069
 #define IDC_COMBO_LANGUAGE              2070
 #define IDC_EDIT_SAVE_DELAY             2071
+#define IDC_COMBO_POPUP_POSITION        2071
 #define IDC_STATIC_SAVE_DELAY           2072
 #define IDC_BUTTON_ABOUT                2073
 #define IDC_EDIT_QUICK_PASTE            2074
@@ -428,10 +431,14 @@
 #define IDC_STATIC_APP_SEP_DESC         2098
 #define IDC_COPY_3                      2099
 #define IDC_CHECK_WIN                   2099
+#define IDC_STATIC_DATABASE_PATH        2099
 #define IDC_WIN_COPY_3                  2100
 #define IDC_EDIT_PROPERTIES             2100
+#define IDC_STATIC_POPUP_POS            2100
 #define IDC_PASTE_3                     2101
 #define IDC_CHECK_WIN_MOVE_TO_GROUP     2101
+#define IDC_STATIC_POPUP_POS2           2101
+#define IDC_STATIC_FONT                 2101
 #define IDC_WIN_PASTE_3                 2102
 #define IDC_TIME_CREATE_START           2102
 #define IDC_STATIC_COPY_3               2103
@@ -466,6 +473,7 @@
 #define IDC_BUTTON2                     2124
 #define IDC_BUTTON_DIFF_BROWSE          2124
 #define IDC_BUTTON_REMOVE               2124
+#define IDC_BUTTON_ADVANCED             2124
 #define IDC_STATIC_QUICK_PASTE          2125
 #define IDC_STATIC_DESC                 2126
 #define IDC_RADIO_USE_IP                2127
@@ -676,7 +684,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        326
+#define _APS_NEXT_RESOURCE_VALUE        328
 #define _APS_NEXT_COMMAND_VALUE         32942
 #define _APS_NEXT_CONTROL_VALUE         2151
 #define _APS_NEXT_SYMED_VALUE           104

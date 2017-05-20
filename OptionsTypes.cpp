@@ -5,6 +5,7 @@
 #include "CP_Main.h"
 #include "OptionsTypes.h"
 #include "Shared/ArrayEx.h"
+#include "DimWnd.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -129,6 +130,7 @@ void COptionsTypes::OnDelete()
 #include "AddType.h"
 void COptionsTypes::OnAdd() 
 {
+	CDimWnd dim(this->GetParent());
 	CAddType add(this);
 
 	if(add.DoModal() == IDOK)

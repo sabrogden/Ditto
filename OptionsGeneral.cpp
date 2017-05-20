@@ -9,8 +9,12 @@
 #include <Mmsystem.h> //play sound
 #include "Path.h"
 #include "AccessToSqlite.h"
+#include "AdvGeneral.h"
+#include "DimWnd.h"
 
 using namespace nsPath;
+
+#define DEFAULT_THEME _T("(Default)")
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -30,7 +34,6 @@ COptionsGeneral::COptionsGeneral() : CPropertyPage(COptionsGeneral::IDD)
 	m_psp.dwFlags |= PSP_USETITLE; 
 
 	//{{AFX_DATA_INIT(COptionsGeneral)
-	m_csPlaySound = _T("");
 	//}}AFX_DATA_INIT
 }
 
@@ -42,42 +45,34 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(COptionsGeneral)
-	DDX_Control(pDX, IDC_ENSURE, m_EnsureConnected);
-	DDX_Control(pDX, IDC_EDIT_SAVE_DELAY, m_SaveDelay);
+	//DDX_Control(pDX, IDC_ENSURE, m_EnsureConnected);
+	//	DDX_Control(pDX, IDC_EDIT_SAVE_DELAY, m_SaveDelay);
 	DDX_Control(pDX, IDC_COMBO_LANGUAGE, m_cbLanguage);
-	DDX_Control(pDX, IDC_EDIT_MAX_SIZE, m_MaxClipSize);
-	DDX_Control(pDX, IDC_SEND_PASTE_MESSAGE, m_btSendPasteMessage);
-	DDX_Control(pDX, IDC_HIDE_DITO_ON_HOT_KEY, m_btHideDittoOnHotKey);
-	DDX_Control(pDX, IDC_DESC_TEXT_SIZE, m_DescTextSize);
-	DDX_Control(pDX, IDC_GET_PATH, m_btGetPath);
 	DDX_Control(pDX, IDC_PATH, m_ePath);
-	DDX_Control(pDX, IDC_SET_DB_PATH, m_btSetDatabasePath);
 	DDX_Control(pDX, IDC_EXPIRE_AFTER, m_eExpireAfter);
 	DDX_Control(pDX, IDC_MAX_SAVED_COPIES, m_eMaxSavedCopies);
-	DDX_Control(pDX, IDC_MAXIMUM, m_btMaximumCheck);
 	DDX_Control(pDX, IDC_EXPIRE, m_btExpire);
-	DDX_Control(pDX, IDC_DISPLAY_IN_SYSTEMTRAY, m_btShowIconInSysTray);
 	DDX_Control(pDX, IDC_START_ON_STARTUP, m_btRunOnStartup);
-	DDX_Text(pDX, IDC_EDIT_PLAY_SOUND, m_csPlaySound);
-	DDX_Control(pDX, IDC_EDIT_CLIP_SEPARATOR, m_ClipSeparator);
-	//}}AFX_DATA_MAP
-	DDX_Control(pDX, IDC_ALLOW_DUPLICATES, m_btAllowDuplicates);
-	DDX_Control(pDX, IDC_UPDATE_TIME_ON_PASTE, m_btUpdateTimeOnPaste);
-	DDX_Control(pDX, IDC_SAVE_MULTIPASTE, m_btSaveMultiPaste);
 	DDX_Control(pDX, IDC_EDIT_APP_COPY_INCLUDE, m_copyAppInclude);
 	DDX_Control(pDX, IDC_EDIT_APP_COPY_EXCLUDE, m_copyAppExclude);
+	//}}AFX_DATA_MAP
+	DDX_Control(pDX, IDC_COMBO_THEME, m_cbTheme);
+	DDX_Control(pDX, IDC_BUTTON_FONT, m_btFont);
+	DDX_Control(pDX, IDC_BUTTON_DEFAULT_FAULT, m_btDefaultButton);
+	DDX_Control(pDX, IDC_COMBO_POPUP_POSITION, m_popupPositionCombo);
 }
 
 
 BEGIN_MESSAGE_MAP(COptionsGeneral, CPropertyPage)
 	//{{AFX_MSG_MAP(COptionsGeneral)
-	ON_BN_CLICKED(IDC_BT_COMPACT_AND_REPAIR, OnBtCompactAndRepair)
-	ON_BN_CLICKED(IDC_SET_DB_PATH, OnSetDbPath)
 	ON_BN_CLICKED(IDC_GET_PATH, OnGetPath)
-	ON_BN_CLICKED(IDC_SELECT_SOUND, OnSelectSound)
-	ON_BN_CLICKED(IDC_BUTTON_PLAY, OnButtonPlay)
 	ON_BN_CLICKED(IDC_BUTTON_ABOUT, OnButtonAbout)
 	//}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_BUTTON_ADVANCED, &COptionsGeneral::OnBnClickedButtonAdvanced)
+	ON_WM_CTLCOLOR()
+	ON_BN_CLICKED(IDC_BUTTON_THEME, &COptionsGeneral::OnBnClickedButtonTheme)
+	ON_BN_CLICKED(IDC_BUTTON_DEFAULT_FAULT, &COptionsGeneral::OnBnClickedButtonDefaultFault)
+	ON_BN_CLICKED(IDC_BUTTON_FONT, &COptionsGeneral::OnBnClickedButtonFont)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -86,6 +81,8 @@ END_MESSAGE_MAP()
 BOOL COptionsGeneral::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
+
+	m_brush.CreateSolidBrush(RGB(251, 251, 251));
 	
 	m_pParent = (COptionsSheet *)GetParent();
 
@@ -98,51 +95,59 @@ BOOL COptionsGeneral::OnInitDialog()
 	{
 		m_btRunOnStartup.SetCheck(CGetSetOptions::GetRunOnStartUp());
 	}
-	m_btShowIconInSysTray.SetCheck(CGetSetOptions::GetShowIconInSysTray());
-	m_btMaximumCheck.SetCheck(CGetSetOptions::GetCheckForMaxEntries());
+
 	m_btExpire.SetCheck(CGetSetOptions::GetCheckForExpiredEntries());
 	
 	m_eExpireAfter.SetNumber(CGetSetOptions::GetExpiredEntries());
 	m_eMaxSavedCopies.SetNumber(CGetSetOptions::GetMaxEntries());
-	m_DescTextSize.SetNumber(g_Opt.m_bDescTextSize);
-	m_SaveDelay.SetNumber(g_Opt.m_dwSaveClipDelay);
 
-	m_btAllowDuplicates.SetCheck( g_Opt.m_bAllowDuplicates );
-	m_btUpdateTimeOnPaste.SetCheck( g_Opt.m_bUpdateTimeOnPaste );
-	m_btSaveMultiPaste.SetCheck( g_Opt.m_bSaveMultiPaste );
-	m_btHideDittoOnHotKey.SetCheck(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown);
-	m_btSendPasteMessage.SetCheck(g_Opt.m_bSendPasteMessageAfterSelection);
-	m_EnsureConnected.SetCheck(g_Opt.m_bEnsureConnectToClipboard);
-	
 	m_copyAppInclude.SetWindowText(g_Opt.GetCopyAppInclude());
 	m_copyAppExclude.SetWindowText(g_Opt.GetCopyAppExclude());
 
-	m_ClipSeparator.SetWindowText(g_Opt.GetMultiPasteSeparator(false));
-
-	if(g_Opt.m_lMaxClipSizeInBytes > 0)
-	{
-		CString csMax;
-		csMax.Format(_T("%d"), g_Opt.m_lMaxClipSizeInBytes);
-		m_MaxClipSize.SetWindowText(csMax);
-	}
-
 	CString csPath = CGetSetOptions::GetDBPath();
-	if(csPath.IsEmpty())
+	m_ePath.SetWindowText(csPath);
+	
+	if (CGetSetOptions::GetFont(m_LogFont))
 	{
-		m_ePath.EnableWindow(FALSE);
-		m_btGetPath.EnableWindow(FALSE);
-		csPath = CGetSetOptions::GetDBPath();
-		m_ePath.SetWindowText(csPath);
+		m_Font.CreateFontIndirect(&m_LogFont);
+		m_btFont.SetFont(&m_Font);
 	}
 	else
 	{
-		m_btSetDatabasePath.SetCheck(BST_CHECKED);
-		m_ePath.SetWindowText(csPath);
+		CFont *ft = m_btFont.GetFont();
+		ft->GetLogFont(&m_LogFont);
 	}
 
-	m_csPlaySound = g_Opt.m_csPlaySoundOnCopy;
+	CString cs;
+	cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, abs(theApp.m_metrics.PixelsToPoints(m_LogFont.lfHeight)));
+	m_btFont.SetWindowText(cs);
 
+	FillThemes();
 	FillLanguages();
+
+	int caretPos = m_popupPositionCombo.AddString(_T("At Caret"));
+	m_popupPositionCombo.SetItemData(caretPos, POS_AT_CARET);
+
+	int cursorPos = m_popupPositionCombo.AddString(_T("At Cursor"));
+	m_popupPositionCombo.SetItemData(cursorPos, POS_AT_CURSOR);
+
+	int prevPos = m_popupPositionCombo.AddString(_T("At Previous Position"));
+	m_popupPositionCombo.SetItemData(prevPos, POS_AT_PREVIOUS);
+
+	switch (CGetSetOptions::GetQuickPastePosition())
+	{
+	case POS_AT_CARET:
+		m_popupPositionCombo.SetCurSel(caretPos);
+		break;
+	case POS_AT_CURSOR:
+		m_popupPositionCombo.SetCurSel(cursorPos);
+		break;
+	case POS_AT_PREVIOUS:
+		m_popupPositionCombo.SetCurSel(prevPos);
+		break;
+	default:
+		m_popupPositionCombo.SetCurSel(cursorPos);
+	}
 
 	UpdateData(FALSE);
 
@@ -191,40 +196,19 @@ BOOL COptionsGeneral::OnApply()
 {
 	UpdateData();
 
-	::SendMessage(theApp.m_MainhWnd, WM_SHOW_TRAY_ICON, m_btShowIconInSysTray.GetCheck(), 0);
-
-	CGetSetOptions::SetShowIconInSysTray(m_btShowIconInSysTray.GetCheck());
-
 	if (CGetSetOptions::GetIsWindowsApp() == FALSE)
 	{
 		CGetSetOptions::SetRunOnStartUp(m_btRunOnStartup.GetCheck());
 	}
 
-	CGetSetOptions::SetCheckForMaxEntries(m_btMaximumCheck.GetCheck());
 	CGetSetOptions::SetCheckForExpiredEntries(m_btExpire.GetCheck());
-	CGetSetOptions::SetHideDittoOnHotKeyIfAlreadyShown(m_btHideDittoOnHotKey.GetCheck());
-	CGetSetOptions::SetSendPasteAfterSelection(m_btSendPasteMessage.GetCheck());
-	CGetSetOptions::SetEnsureConnectToClipboard(m_EnsureConnected.GetCheck());
-	
 	CGetSetOptions::SetMaxEntries(m_eMaxSavedCopies.GetNumber());
 	CGetSetOptions::SetExpiredEntries(m_eExpireAfter.GetNumber());
-	CGetSetOptions::SetDescTextSize(m_DescTextSize.GetNumber());
-	CGetSetOptions::SetSaveClipDelay(m_SaveDelay.GetNumber());
-
-	CGetSetOptions::SetPlaySoundOnCopy(m_csPlaySound);
-
-	g_Opt.SetAllowDuplicates(m_btAllowDuplicates.GetCheck());
-	g_Opt.SetUpdateTimeOnPaste(m_btUpdateTimeOnPaste.GetCheck());
-	g_Opt.SetSaveMultiPaste(m_btSaveMultiPaste.GetCheck());
 	
 	CString stringVal;
 
-	m_ClipSeparator.GetWindowText(stringVal);
-	g_Opt.SetMultiPasteSeparator(stringVal);
-
 	m_copyAppInclude.GetWindowText(stringVal);
 	g_Opt.SetCopyAppInclude(stringVal);
-
 	m_copyAppExclude.GetWindowText(stringVal);
 	g_Opt.SetCopyAppExclude(stringVal);
 
@@ -246,66 +230,61 @@ BOOL COptionsGeneral::OnApply()
 		}
 	}
 
-	CString csMax;
-	m_MaxClipSize.GetWindowText(csMax);
-	g_Opt.SetMaxClipSizeInBytes(ATOI(csMax));
+	CString csPath;
+	m_ePath.GetWindowText(csPath);
 
-	if(m_btSetDatabasePath.GetCheck() == BST_CHECKED)
+	bool bOpenNewDatabase = false;
+
+	if(csPath.IsEmpty() == FALSE)
 	{
-		CString csPath;
-		m_ePath.GetWindowText(csPath);
-
-		bool bOpenNewDatabase = false;
-
-		if(csPath.IsEmpty() == FALSE)
+		if(FileExists(csPath) == FALSE)
 		{
-			if(FileExists(csPath) == FALSE)
-			{
-				CString cs;
-				cs.Format(_T("The database %s does not exist.\n\nCreate a new database?"), csPath);
+			CString cs;
+			cs.Format(_T("The database %s does not exist.\n\nCreate a new database?"), csPath);
 
-				if(MessageBox(cs, _T("Ditto"), MB_YESNO) == IDYES)
-				{
-					// -- create a new one
-					if(CreateDB(csPath))
-					{
-						bOpenNewDatabase = true;
-					}
-					else
-						MessageBox(_T("Error Creating Database"));
-				}
-				else
-					return FALSE;
-			}
-			else
+			if(MessageBox(cs, _T("Ditto"), MB_YESNO) == IDYES)
 			{
-				if(ValidDB(csPath) == FALSE)
-				{
-					MessageBox(_T("Invalid Database"), _T("Ditto"), MB_OK);
-					m_ePath.SetFocus();
-					return FALSE;
-				}
-				else
+				// -- create a new one
+				if(CreateDB(csPath))
 				{
 					bOpenNewDatabase = true;
 				}
-			}
-
-			if(bOpenNewDatabase)
-			{
-				if(OpenDatabase(csPath) == FALSE)
-				{
-					MessageBox(_T("Error Opening new database"), _T("Ditto"), MB_OK);
-					m_ePath.SetFocus();
-					return FALSE;
-				}
 				else
-				{
-					theApp.RefreshView();
-				}
+					MessageBox(_T("Error Creating Database"));
 			}
-		}	
+			else
+				return FALSE;
+		}
+		else
+		{
+			if(ValidDB(csPath) == FALSE)
+			{
+				MessageBox(_T("Invalid Database"), _T("Ditto"), MB_OK);
+				m_ePath.SetFocus();
+				return FALSE;
+			}
+			else
+			{
+				bOpenNewDatabase = true;
+			}
+		}
+
+		if(bOpenNewDatabase)
+		{
+			if(OpenDatabase(csPath) == FALSE)
+			{
+				MessageBox(_T("Error Opening new database"), _T("Ditto"), MB_OK);
+				m_ePath.SetFocus();
+				return FALSE;
+			}
+			else
+			{
+				theApp.RefreshView();
+			}
+		}
 	}
+
+	CGetSetOptions::SetQuickPastePosition(m_popupPositionCombo.GetItemData(m_popupPositionCombo.GetCurSel()));
 	
 	return CPropertyPage::OnApply();
 }
@@ -314,44 +293,20 @@ BOOL COptionsGeneral::OnSetActive()
 {	
 	return CPropertyPage::OnSetActive();
 }
-void COptionsGeneral::OnBtCompactAndRepair() 
-{
-	CWaitCursor wait;
 
-	try
-	{
-		try
-		{
-			for(int i = 0; i < 100; i++)
-			{
-				int toDeleteCount = theApp.m_db.execScalar(_T("SELECT COUNT(clipID) FROM MainDeletes"));
-				if(toDeleteCount <= 0)
-					break;
-
-				RemoveOldEntries(false);
-			}
-		}
-		CATCH_SQLITE_EXCEPTION
-
-		theApp.m_db.execDML(_T("PRAGMA auto_vacuum = 1"));
-		theApp.m_db.execQuery(_T("VACUUM"));
-	}
-	CATCH_SQLITE_EXCEPTION
-}
-
-void COptionsGeneral::OnSetDbPath() 
-{
-	if(m_btSetDatabasePath.GetCheck() == BST_CHECKED)
-	{
-		m_ePath.EnableWindow(TRUE);
-		m_btGetPath.EnableWindow(TRUE);
-	}
-	else
-	{
-		m_ePath.EnableWindow(FALSE);
-		m_btGetPath.EnableWindow(FALSE);
-	}	
-}
+//void COptionsGeneral::OnSetDbPath() 
+//{
+//	if(m_btSetDatabasePath.GetCheck() == BST_CHECKED)
+//	{
+//		m_ePath.EnableWindow(TRUE);
+//		m_btGetPath.EnableWindow(TRUE);
+//	}
+//	else
+//	{
+//		m_ePath.EnableWindow(FALSE);
+//		m_btGetPath.EnableWindow(FALSE);
+//	}	
+//}
 
 void COptionsGeneral::OnGetPath() 
 {
@@ -432,48 +387,10 @@ void COptionsGeneral::OnGetPath()
 	}
 }
 
-void COptionsGeneral::OnSelectSound() 
-{
-	OPENFILENAME	FileName;
-
-	TCHAR			szFileName[400];
-	TCHAR			szDir[400];
-
-	memset(&FileName, 0, sizeof(FileName));
-	memset(szFileName, 0, sizeof(szFileName));
-	memset(&szDir, 0, sizeof(szDir));
-
-	FileName.lStructSize = sizeof(FileName);
-
-	FileName.lpstrTitle = _T("Select .wav file");
-	FileName.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR;
-	FileName.nMaxFile = 400;
-	FileName.lpstrFile = szFileName;
-	FileName.lpstrInitialDir = szDir;
-	FileName.lpstrFilter = _T("Sounds(*.wav)\0*.wav\0\0");
-	FileName.lpstrDefExt = _T("wav");
-	FileName.hwndOwner = m_hWnd;
-
-	if(GetOpenFileName(&FileName) == 0)
-		return;
-
-	CString	csPath(FileName.lpstrFile);
-
-	if(csPath.GetLength())
-		m_csPlaySound = csPath;
-
-	UpdateData(FALSE);
-}
-
-void COptionsGeneral::OnButtonPlay() 
-{
-	UpdateData();
-
-	PlaySound(m_csPlaySound, NULL, SND_FILENAME|SND_ASYNC);
-}
-
 void COptionsGeneral::OnButtonAbout() 
 {
+	CDimWnd dim(this->GetParent());
+
 	CMultiLanguage Lang;
 
 	CString csLanguage;
@@ -501,5 +418,148 @@ void COptionsGeneral::OnButtonAbout()
 		csError.Format(_T("Error loading language file - %s - reason = "), csLanguage, Lang.m_csLastError);
 
 		MessageBox(csError, _T("Ditto"), MB_OK);
+	}
+}
+
+void COptionsGeneral::OnBnClickedButtonAdvanced()
+{
+	CDimWnd dim(this->GetParent());
+
+	CAdvGeneral adv(this);
+	adv.DoModal();
+}
+
+
+HBRUSH COptionsGeneral::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+	HBRUSH hbr = CPropertyPage::OnCtlColor(pDC, pWnd, nCtlColor);
+
+	
+
+	switch(nCtlColor)
+	{
+	case CTLCOLOR_DLG:     // dialog 
+	case CTLCOLOR_STATIC:  // static, checkbox, read-only edit, etc.
+		//pDC->SetBkColor(RGB(251, 251, 251));
+		//hbr = m_brush;
+		break;
+	}
+	return hbr;
+}
+
+void COptionsGeneral::FillThemes()
+{
+	CString csFile = CGetSetOptions::GetPath(PATH_THEMES);
+	csFile += "*.xml";
+
+	CString csTheme = CGetSetOptions::GetTheme();
+
+	CFileFind find;
+	BOOL bCont = find.FindFile(csFile);
+	bool bSetCurSel = false;
+
+	while (bCont)
+	{
+		bCont = find.FindNextFile();
+
+		CTheme theme;
+		if (theme.Load(find.GetFileTitle(), true, false))
+		{
+			if (theme.FileVersion() >= 2 && theme.FileVersion() < 100)
+			{
+				int nIndex = m_cbTheme.AddString(find.GetFileTitle());
+
+				if (find.GetFileTitle() == csTheme)
+				{
+					m_cbTheme.SetCurSel(nIndex);
+					bSetCurSel = true;
+				}
+			}
+		}
+	}
+
+	int nIndex = m_cbTheme.AddString(DEFAULT_THEME);
+	if (bSetCurSel == false)
+	{
+		m_cbTheme.SetCurSel(nIndex);
+	}
+}
+
+void COptionsGeneral::OnBnClickedButtonTheme()
+{
+	CDimWnd dim(this->GetParent());
+	CTheme theme;
+
+	CString csTheme;
+	m_cbTheme.GetLBText(m_cbTheme.GetCurSel(), csTheme);
+
+	if (csTheme == DEFAULT_THEME)
+		return;
+
+	if (theme.Load(csTheme, true, false))
+	{
+		CString csMessage;
+
+		csMessage.Format(_T("Theme -  %s\n")
+			_T("Version -   %d\n")
+			_T("Author -   %s\n")
+			_T("Notes -   %s"), csTheme,
+			theme.FileVersion(),
+			theme.Author(),
+			theme.Notes());
+
+		MessageBox(csMessage, _T("Ditto"), MB_OK);
+	}
+	else
+	{
+		CString csError;
+		csError.Format(_T("Error loading theme file - %s - reason = "), csTheme, theme.LastError());
+
+		MessageBox(csError, _T("Ditto"), MB_OK);
+	}
+}
+
+
+void COptionsGeneral::OnBnClickedButtonDefaultFault()
+{
+	CFont *ft = m_btDefaultButton.GetFont();
+	ft->GetLogFont(&m_LogFont);
+
+	memset(&m_LogFont, 0, sizeof(m_LogFont));
+
+	m_LogFont.lfHeight = -theApp.m_metrics.PointsToPixels(10);
+	m_LogFont.lfWeight = 400;
+	m_LogFont.lfCharSet = 1;
+	STRCPY(m_LogFont.lfFaceName, _T("Segoe UI"));
+
+	m_Font.DeleteObject();
+	m_Font.CreateFontIndirect(&m_LogFont);
+
+	m_btFont.SetFont(&m_Font);
+
+	CString cs;
+	cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, abs(theApp.m_metrics.PixelsToPoints(m_LogFont.lfHeight)));
+	m_btFont.SetWindowText(cs);
+
+	this->SetFont(&m_Font);
+}
+
+
+void COptionsGeneral::OnBnClickedButtonFont()
+{
+	CFontDialog dlg(&m_LogFont, (CF_TTONLY | CF_SCREENFONTS), 0, this);
+	if (dlg.DoModal() == IDOK)
+	{
+		m_Font.DeleteObject();
+
+		memcpy(&m_LogFont, dlg.m_cf.lpLogFont, sizeof(LOGFONT));
+
+		m_Font.CreateFontIndirect(&m_LogFont);
+
+		m_btFont.SetFont(&m_Font);
+
+		CString cs;
+		cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, abs(theApp.m_metrics.PixelsToPoints(m_LogFont.lfHeight)));
+		m_btFont.SetWindowText(cs);
 	}
 }
