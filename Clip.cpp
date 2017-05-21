@@ -286,7 +286,7 @@ bool CClip::AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen, bool setDesc)
 }
 
 // Fills this CClip with the contents of the clipboard.
-bool CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore)
+int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, CString activeApp)
 {
 	COleDataObjectEx oleData;
 	CClipTypes defaultTypes;
@@ -299,7 +299,7 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore)
 	if(::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
 	{
 		Log(_T("Clipboard ignore type is on the clipboard, skipping this clipboard change"));
-		return false;
+		return FALSE;
 	}
 
 	//If we are saving a multi paste then delay us connecting to the clipboard
@@ -315,7 +315,7 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore)
 	{
 		Log(_T("failed to attache to clipboard, skipping this clipboard change"));
 		ASSERT(0); // does this ever happen?
-		return false;
+		return FALSE;
 	}
 	
 	oleData.EnsureClipboardObject();
@@ -359,6 +359,24 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore)
 			Sleep(10);
 		}
 		bIsDescSet = SetDescFromText(cfDesc.m_hgData, true);
+
+		if (activeApp != _T(""))
+		{
+			TCHAR* text = (TCHAR *)GlobalLock(cfDesc.m_hgData);
+			if (text != NULL)
+			{
+				std::wstring stringData(text);
+				GlobalUnlock(cfDesc.m_hgData);
+				if (g_Opt.m_regexHelper.TextMatchFilters(activeApp, stringData))
+				{
+					return -1;
+				}
+			}
+			else
+			{
+				GlobalUnlock(cfDesc.m_hgData);
+			}
+		}
 
 		Log(StrF(_T("Tried to set description from cf_unicode text, Set: %d, Desc: [%s]"), bIsDescSet, m_Desc.Left(30)));
 	}
@@ -439,7 +457,7 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore)
 					Log(cs);
 
 					oleData.Release();
-					return false;
+					return -1;
 				}
 
 				ASSERT(::IsValid(cf.m_hgData));
@@ -478,14 +496,24 @@ bool CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore)
 	}
 	
 	oleData.Release();
+
+	if (!bIsDescSet &&
+		this->m_Desc != _T(""))
+	{
+		std::wstring stringData(this->m_Desc);
+		if (g_Opt.m_regexHelper.TextMatchFilters(activeApp, stringData))
+		{
+			return -1;
+		}
+	}
 	
 	if(m_Formats.GetSize() == 0)
 	{
 		Log(_T("No clip types were in supported types array"));
-		return false;
+		return FALSE;
 	}
 
-	return true;
+	return TRUE;
 }
 
 bool CClip::SetDescFromText(HGLOBAL hgData, bool unicode)

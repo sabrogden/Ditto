@@ -432,6 +432,7 @@
     <ClCompile Include="DimWnd.cpp" />
     <ClCompile Include="SymbolEdit.cpp" />
     <ClCompile Include="AdvGeneral.cpp" />
+    <ClCompile Include="RegExFilterHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -904,6 +905,7 @@
     <ClInclude Include="DimWnd.h" />
     <ClInclude Include="SymbolEdit.h" />
     <ClInclude Include="AdvGeneral.h" />
+    <ClInclude Include="RegExFilterHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

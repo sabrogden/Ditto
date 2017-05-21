@@ -659,6 +659,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="QuickPasteKeyboard.cpp" />
+    <ClCompile Include="RegExFilterHelper.cpp" />
     <ClCompile Include="ScrollHelper.cpp" />
     <ClCompile Include="Shared\TextConvert.cpp" />
     <ClCompile Include="Shared\Tokenizer.cpp" />
@@ -1921,6 +1922,7 @@
     <ClInclude Include="QRCode\rsecc.h" />
     <ClInclude Include="QRCode\split.h" />
     <ClInclude Include="QuickPasteKeyboard.h" />
+    <ClInclude Include="RegExFilterHelper.h" />
     <ClInclude Include="RichEditCtrlEx.h" />
     <ClInclude Include="ScrollHelper.h" />
     <ClInclude Include="SearchEditBox.h" />

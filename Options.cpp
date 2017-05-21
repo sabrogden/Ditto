@@ -66,6 +66,7 @@ CTheme CGetSetOptions::m_Theme;
 BOOL CGetSetOptions::m_showScrollBar = false;
 CGetSetOptions g_Opt;
 BOOL CGetSetOptions::m_bShowAlwaysOnTopWarning = TRUE;
+CRegExFilterHelper CGetSetOptions::m_regexHelper;
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -182,6 +183,14 @@ void CGetSetOptions::LoadSettings()
 	for(int i = 0; i < MAX_SEND_CLIENTS; i++)
 	{
 		GetSendClients(i);
+	}
+
+	for (int i = 0; i < MAX_REGEX_FILTERS; i++)
+	{
+		CRegExFilterData data;
+		data.m_regEx = GetRegexFilter(i);
+		data.m_processFilters = GetRegexFilterByProcessName(i);
+		m_regexHelper.Add(i, data);
 	}
 
 	GetClientSendCount();
@@ -2440,6 +2449,8 @@ void CGetSetOptions::SetRegexFilter(CString val, int pos)
 	CString cs;
 	cs.Format(_T("RegexFilter_%d"), pos);
 
+	m_regexHelper.SetRegEx(pos, std::wstring(val));
+
 	SetProfileString(cs, val);
 }
 
@@ -2454,6 +2465,8 @@ void CGetSetOptions::SetRegexFilterByProcessName(CString val, int pos)
 {
 	CString cs;
 	cs.Format(_T("RegexFilterByProcessName_%d"), pos);
+
+	m_regexHelper.SetProcessFilter(pos, val);
 
 	SetProfileString(cs, val);
 }

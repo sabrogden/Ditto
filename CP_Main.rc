@@ -391,7 +391,6 @@ BEGIN
             END
             POPUP "First Ten Hot Keys"
             BEGIN
-                MENUITEM "Use Ctrl - Num",              32777
                 MENUITEM "Show Hot Key Text",           32778
             END
             POPUP "View Caption Bar On"

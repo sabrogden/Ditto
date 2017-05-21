@@ -51,7 +51,7 @@ int CCopyThread::ExitInstance()
 }
 
 // Called within Copy Thread:
-void CCopyThread::OnClipboardChange()
+void CCopyThread::OnClipboardChange(CString activeWindow)
 {
 	Log(_T("OnClipboardChange - Start"));
 
@@ -107,10 +107,10 @@ void CCopyThread::OnClipboardChange()
 	}
 
 	Log(_T("LoadFromClipboard - Before"));
-	bool bResult = pClip->LoadFromClipboard(pSupportedTypes);
+	int bResult = pClip->LoadFromClipboard(pSupportedTypes, true, activeWindow);
 	Log(_T("LoadFromClipboard - After"));
 
-	if(!bResult)
+	if(bResult == FALSE)
 	{
 		DWORD delay = CGetSetOptions::GetNoFormatsRetryDelay();
 		if(delay > 0)
@@ -119,7 +119,7 @@ void CCopyThread::OnClipboardChange()
 			Sleep(delay);
 
 			Log(_T("LoadFromClipboard #2 - Before"));
-			bResult = pClip->LoadFromClipboard(pSupportedTypes);
+			bResult = pClip->LoadFromClipboard(pSupportedTypes, activeWindow);
 			Log(_T("LoadFromClipboard #2 - After"));
 		}
 		else
@@ -134,7 +134,7 @@ void CCopyThread::OnClipboardChange()
 		pSupportedTypes = NULL;
 	}
 	
-	if(!bResult)
+	if(bResult != TRUE)
 	{
 		delete pClip;
 		return; // error

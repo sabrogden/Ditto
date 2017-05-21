@@ -162,36 +162,36 @@ BOOL CAdvGeneral::OnInitDialog()
 	CString processFilterDesc = _T("Process making the copy first must match this before the Regex filter will be applied (separate multiples by ;)");
 	CString regexFilterDesc = _T("If copied text matches this regular expression then the clip will not be saved to Ditto");
 
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 1 Regex"), CGetSetOptions::GetRegexFilter(1), regexFilterDesc, SETTING_REGEX_FILTERING_1));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 1 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(1), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_1));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 2 Regex"), CGetSetOptions::GetRegexFilter(2), regexFilterDesc, SETTING_REGEX_FILTERING_2));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 2 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(2), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_2));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 3 Regex"), CGetSetOptions::GetRegexFilter(3), regexFilterDesc, SETTING_REGEX_FILTERING_3));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 3 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(3), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_3));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 4 Regex"), CGetSetOptions::GetRegexFilter(4), regexFilterDesc, SETTING_REGEX_FILTERING_4));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 4 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(4), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_4));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 5 Regex"), CGetSetOptions::GetRegexFilter(5), regexFilterDesc, SETTING_REGEX_FILTERING_5));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 5 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(5), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_5));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 6 Regex"), CGetSetOptions::GetRegexFilter(6), regexFilterDesc, SETTING_REGEX_FILTERING_6));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 6 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(6), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_6));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 7 Regex"), CGetSetOptions::GetRegexFilter(7), regexFilterDesc, SETTING_REGEX_FILTERING_7));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 7 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(7), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_7));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 8 Regex"), CGetSetOptions::GetRegexFilter(8), regexFilterDesc, SETTING_REGEX_FILTERING_8));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 8 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(8), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_8));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 9 Regex"), CGetSetOptions::GetRegexFilter(9), regexFilterDesc, SETTING_REGEX_FILTERING_9));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 9 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(9), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_9));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 10 Regex"), CGetSetOptions::GetRegexFilter(10), regexFilterDesc, SETTING_REGEX_FILTERING_10));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 10 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(10), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_10));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 11 Regex"), CGetSetOptions::GetRegexFilter(11), regexFilterDesc, SETTING_REGEX_FILTERING_11));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 11 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(11), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_11));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 12 Regex"), CGetSetOptions::GetRegexFilter(12), regexFilterDesc, SETTING_REGEX_FILTERING_12));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 12 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(12), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_12));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 13 Regex"), CGetSetOptions::GetRegexFilter(13), regexFilterDesc, SETTING_REGEX_FILTERING_13));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 13 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(13), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_13));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 14 Regex"), CGetSetOptions::GetRegexFilter(14), regexFilterDesc, SETTING_REGEX_FILTERING_14));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 14 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(14), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_14));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 15 Regex"), CGetSetOptions::GetRegexFilter(15), regexFilterDesc, SETTING_REGEX_FILTERING_15));
-	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 15 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(15), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_14));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 1 Regex"), CGetSetOptions::GetRegexFilter(0), regexFilterDesc, SETTING_REGEX_FILTERING_1));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 1 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(0), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_1));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 2 Regex"), CGetSetOptions::GetRegexFilter(1), regexFilterDesc, SETTING_REGEX_FILTERING_2));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 2 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(1), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_2));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 3 Regex"), CGetSetOptions::GetRegexFilter(2), regexFilterDesc, SETTING_REGEX_FILTERING_3));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 3 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(2), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_3));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 4 Regex"), CGetSetOptions::GetRegexFilter(3), regexFilterDesc, SETTING_REGEX_FILTERING_4));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 4 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(3), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_4));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 5 Regex"), CGetSetOptions::GetRegexFilter(4), regexFilterDesc, SETTING_REGEX_FILTERING_5));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 5 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(4), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_5));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 6 Regex"), CGetSetOptions::GetRegexFilter(5), regexFilterDesc, SETTING_REGEX_FILTERING_6));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 6 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(5), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_6));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 7 Regex"), CGetSetOptions::GetRegexFilter(6), regexFilterDesc, SETTING_REGEX_FILTERING_7));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 7 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(6), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_7));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 8 Regex"), CGetSetOptions::GetRegexFilter(7), regexFilterDesc, SETTING_REGEX_FILTERING_8));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 8 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(7), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_8));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 9 Regex"), CGetSetOptions::GetRegexFilter(8), regexFilterDesc, SETTING_REGEX_FILTERING_9));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 9 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(8), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_9));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 10 Regex"), CGetSetOptions::GetRegexFilter(9), regexFilterDesc, SETTING_REGEX_FILTERING_10));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 10 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(9), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_10));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 11 Regex"), CGetSetOptions::GetRegexFilter(10), regexFilterDesc, SETTING_REGEX_FILTERING_11));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 11 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(10), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_11));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 12 Regex"), CGetSetOptions::GetRegexFilter(11), regexFilterDesc, SETTING_REGEX_FILTERING_12));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 12 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(11), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_12));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 13 Regex"), CGetSetOptions::GetRegexFilter(12), regexFilterDesc, SETTING_REGEX_FILTERING_13));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 13 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(12), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_13));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 14 Regex"), CGetSetOptions::GetRegexFilter(13), regexFilterDesc, SETTING_REGEX_FILTERING_14));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 14 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(13), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_14));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 15 Regex"), CGetSetOptions::GetRegexFilter(14), regexFilterDesc, SETTING_REGEX_FILTERING_15));
+	regexFilterGroup->AddSubItem(new CMFCPropertyGridProperty(_T("Filter 15 By Process Name"), CGetSetOptions::GetRegexFilterByProcessName(14), processFilterDesc, SETTING_REGEX_FILTERING_BY_PROCESS_NAME_14));
 
 	regexFilterGroup->Expand(FALSE);
 
@@ -517,7 +517,7 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_REGEX_FILTERING_15:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					CGetSetOptions::SetRegexFilter(pNewValue->bstrVal, (((int)prop->GetData()) - SETTING_REGEX_FILTERING_1) + 1);
+					CGetSetOptions::SetRegexFilter(pNewValue->bstrVal, (((int)prop->GetData()) - SETTING_REGEX_FILTERING_1));
 				}
 				break;
 			case SETTING_REGEX_FILTERING_BY_PROCESS_NAME_1:
@@ -537,7 +537,7 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_REGEX_FILTERING_BY_PROCESS_NAME_15:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					CGetSetOptions::SetRegexFilterByProcessName(pNewValue->bstrVal, (((int)prop->GetData()) - SETTING_REGEX_FILTERING_BY_PROCESS_NAME_1) + 1);
+					CGetSetOptions::SetRegexFilterByProcessName(pNewValue->bstrVal, (((int)prop->GetData()) - SETTING_REGEX_FILTERING_BY_PROCESS_NAME_1));
 				}
 				break;
 			}

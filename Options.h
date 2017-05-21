@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Theme.h"
+#include "RegExFilterHelper.h"
 
 #define MAX_SEND_CLIENTS	15
 class CSendClients
@@ -556,6 +557,7 @@ public:
 	static int GetErrorMsgPopupTimeout();
 	static void SetErrorMsgPopupTimeout(int val);
 
+	static CRegExFilterHelper m_regexHelper;
 	static void		SetRegexFilter(CString val, int pos);
 	static CString	GetRegexFilter(int pos);
 

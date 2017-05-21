@@ -292,7 +292,7 @@ void CClipboardViewer::OnDrawClipboard()
 
 bool CClipboardViewer::ValidActiveWnd()
 {
-	CString activeApp = _T("");
+	m_activeWindow = _T("");
 
 	HWND owner = ::GetClipboardOwner();
 	if (owner != NULL)
@@ -302,21 +302,22 @@ bool CClipboardViewer::ValidActiveWnd()
 
 		if (PID != 0)
 		{
-			activeApp = GetProcessName(NULL, PID);
+			m_activeWindow = GetProcessName(NULL, PID);
 		}
 	}
 
-	if (activeApp == _T(""))
+	//L"RuntimeBroker.exe" is what all modern apps report as
+	if (m_activeWindow == _T(""))
 	{
 		HWND active = ::GetForegroundWindow();
-		activeApp = GetProcessName(active, 0);
+		m_activeWindow = GetProcessName(active, 0);
 	}
 
-	activeApp = activeApp.MakeLower();
+	m_activeWindow = m_activeWindow.MakeLower();
 
 	CString includeApps = CGetSetOptions::GetCopyAppInclude().MakeLower();
 
-	Log(StrF(_T("INCLUDE app names: %s, Active App: %s"), includeApps, activeApp));
+	Log(StrF(_T("INCLUDE app names: %s, Active App: %s"), includeApps, m_activeWindow));
 
 	bool tokenMatch = false;
 
@@ -327,9 +328,9 @@ bool CClipboardViewer::ValidActiveWnd()
 	{
 		if(line != "")
 		{
-			if(CWildCardMatch::WildMatch(line, activeApp, ""))
+			if(CWildCardMatch::WildMatch(line, m_activeWindow, ""))
 			{
-				Log(StrF(_T("Inlclude app names Found Match %s - %s"), line, activeApp));
+				Log(StrF(_T("Inlclude app names Found Match %s - %s"), line, m_activeWindow));
 
 				tokenMatch = true;
 				break;
@@ -343,7 +344,7 @@ bool CClipboardViewer::ValidActiveWnd()
 
 		if(excludeApps != "")
 		{
-			Log(StrF(_T("EXCLUDE app names %s, Active App: %s"), excludeApps, activeApp));
+			Log(StrF(_T("EXCLUDE app names %s, Active App: %s"), excludeApps, m_activeWindow));
 
 			CTokenizer token2(excludeApps, CGetSetOptions::GetCopyAppSeparator());
 			CString line2;
@@ -351,9 +352,9 @@ bool CClipboardViewer::ValidActiveWnd()
 			{
 				if(line2 != "")
 				{
-					if(CWildCardMatch::WildMatch(line2, activeApp, ""))
+					if(CWildCardMatch::WildMatch(line2, m_activeWindow, ""))
 					{
-						Log(StrF(_T("Exclude app names Found Match %s - %s - NOT SAVING COPY"), line2, activeApp));
+						Log(StrF(_T("Exclude app names Found Match %s - %s - NOT SAVING COPY"), line2, m_activeWindow));
 
 						return false;
 					}
@@ -390,7 +391,7 @@ void CClipboardViewer::OnTimer(UINT_PTR nIDEvent)
 				{
 					Log(StrF(_T("OnDrawClipboard::OnTimer %d"), dwNow));
 
-					m_pHandler->OnClipboardChange();
+					m_pHandler->OnClipboardChange(m_activeWindow);
 
 					m_dwLastCopy = dwNow;
 				}
@@ -399,6 +400,8 @@ void CClipboardViewer::OnTimer(UINT_PTR nIDEvent)
 			{
 				Log(StrF(_T("Clip copy to fast difference from last copy = %d"), (dwNow - m_dwLastCopy)));
 			}
+
+			m_activeWindow = _T("");
 		}
 		break;
 
