@@ -2475,5 +2475,5 @@ CString	CGetSetOptions::GetRegexFilterByProcessName(int pos)
 {
 	CString cs;
 	cs.Format(_T("RegexFilterByProcessName_%d"), pos);
-	return GetProfileString(cs, "*");
+	return GetProfileString(cs, "");
 }
