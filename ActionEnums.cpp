@@ -278,6 +278,9 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case PROMPT_SEND_TO_FRIEND:
 		val = "Prompt send to friend";
 		break;
+	case SAVE_CF_HDROP_FIlE_DATA:
+		val = "Save copied file (cf_hdrop) contents into Ditto";
+		break;
 	case TOGGLE_CLIPBOARD_CONNECTION:
 		val = "Toggle clipboard connection";
 		break;
