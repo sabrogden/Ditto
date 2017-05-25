@@ -55,10 +55,18 @@ bool CRegExFilterData::MatchesRegEx(std::wstring &copiedText)
 	//std::wstring input(copiedText);
 	if (m_regEx != _T(""))
 	{
-		std::wregex integer(m_regEx);
-		if (regex_match(copiedText, integer))
+		try 
 		{
-			return true;
+			std::wregex integer(m_regEx);
+			if (regex_match(copiedText, integer))
+			{
+				return true;
+			}
+		}
+		catch (regex_error e) 
+		{
+			CString w(e.what());
+			Log(StrF(_T("MatchesRegEx exception: %s, Code Is: %d"), w, e.code()));
 		}
 	}
 
