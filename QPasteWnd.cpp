@@ -327,7 +327,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     SetWindowText(_T(QPASTE_TITLE));
 
-    m_search.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | ES_MULTILINE, CRect(0, 0, 0, 0), this, ID_EDIT_SEARCH);
+    m_search.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL, CRect(0, 0, 0, 0), this, ID_EDIT_SEARCH);
 	m_search.SetPromptText(theApp.m_Language.GetString(_T("Search"), _T("Search")));
 	SetSearchImages();
 
