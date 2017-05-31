@@ -790,11 +790,11 @@ void CGetSetOptions::GetQuickPastePoint(CPoint &point)
 	point.x = GetResolutionProfileLong("QuickPasteX", 300);
 	point.y = GetResolutionProfileLong("QuickPasteY", 300);
 
-	if(point.x <= 0 && point.y <= 0)
+	/*if(point.x <= 0 && point.y <= 0)
 	{
 		point.x = 300;
 		point.y = 300;
-	}
+	}*/
 }
 
 BOOL CGetSetOptions::SetEditWndSize(CSize size)
