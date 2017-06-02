@@ -282,7 +282,7 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 		rightRect.SetRect(rcBorder.right - (m_captionBorderWidth - border), rcBorder.top, rcBorder.right, rcBorder.top + IndexToPos(index, false));
 		leftRect.SetRect(rcBorder.right - (m_captionBorderWidth - border), rcBorder.top + IndexToPos(index, false), rcBorder.right, rcBorder.bottom);
 		
-		textRect.SetRect(rcBorder.right, rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.right - m_captionBorderWidth, rcBorder.bottom - theApp.m_metrics.ScaleX(50));
+		textRect.SetRect(rcBorder.right, rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.right - m_captionBorderWidth, rcBorder.bottom - theApp.m_metrics.ScaleX(1));
 
 		int left = rightRect.left;
 		int right = rightRect.right;
@@ -309,7 +309,7 @@ void CDittoWindow::DoNcPaint(CWnd *pWnd)
 		rightRect.SetRect(rcBorder.left, rcBorder.top, rcBorder.left + m_captionBorderWidth - border, rcBorder.top + IndexToPos(index, false));
 		leftRect.SetRect(rcBorder.left, rcBorder.top + IndexToPos(index, false), rcBorder.left + m_captionBorderWidth - border, rcBorder.bottom);
 
-		textRect.SetRect(rcBorder.left + m_captionBorderWidth - theApp.m_metrics.ScaleX(0), rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.left - theApp.m_metrics.ScaleX(5), rcBorder.bottom - theApp.m_metrics.ScaleX(50));
+		textRect.SetRect(rcBorder.left + m_captionBorderWidth - theApp.m_metrics.ScaleX(0), rightRect.bottom + theApp.m_metrics.ScaleX(10), rcBorder.left - theApp.m_metrics.ScaleX(5), rcBorder.bottom - theApp.m_metrics.ScaleX(1));
 
 		int left = rightRect.left;
 		int right = rightRect.right;

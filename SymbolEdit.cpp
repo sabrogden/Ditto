@@ -328,6 +328,10 @@ void CSymbolEdit::OnPaint()
 
 	if (text.GetLength() == 0 && m_strPromptText.GetLength() > 0)
 	{
+		//if we aren't showing the close icon, then use the full space
+		textRect.right += HIWORD(margins);
+		textRect.right -= LOWORD(margins);
+
 		oldFont = dc.SelectObject(&m_fontPrompt);
 		COLORREF color = dc.GetTextColor();
 		dc.SetTextColor(m_colorPromptText);
