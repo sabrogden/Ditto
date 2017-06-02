@@ -775,14 +775,14 @@ void COleClipSource::SaveDittoFileDataToFile(CClip &clip)
 			hDropIndex = i;
 		}
 	}
-
-	if (hDropIndex >= 0)
-	{
-		clip.m_Formats.RemoveAt(hDropIndex);
-	}
-
+	
 	if (savedFile)
 	{
+		if (hDropIndex >= 0)
+		{
+			clip.m_Formats.RemoveAt(hDropIndex);
+		}
+
 		CClipFormat cf(CF_HDROP, hDrpData.CreateCF_HDROPBuffer());
 		clip.m_Formats.Add(cf);
 
