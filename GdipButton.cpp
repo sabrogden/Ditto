@@ -66,7 +66,6 @@ CGdipButton::~CGdipButton()
 {
 	if(m_pStdImage) delete m_pStdImage;
 	if(m_pAltImage) delete m_pAltImage;
-
 	if(m_pToolTip)	delete m_pToolTip;
 }
 
@@ -135,6 +134,20 @@ BOOL CGdipButton::LoadStdImage(UINT id, LPCTSTR pType)
 {
 	m_pStdImage = new CGdiPlusBitmapResource;
 	return m_pStdImage->Load(id, pType);
+}
+
+void CGdipButton::Reset()
+{
+	/*if(m_pStdImage) delete m_pStdImage;
+	if (m_pAltImage) delete m_pAltImage;
+	if (m_pToolTip)	delete m_pToolTip;*/
+	m_bHaveBitmaps = FALSE;
+	m_bHaveAltImage = FALSE;
+
+	m_dcStd.DeleteDC();
+	m_dcStdP.DeleteDC();
+	m_dcStdH.DeleteDC();
+	m_dcBk.DeleteDC();
 }
 
 void CGdipButton::Test(CString c)
@@ -246,7 +259,20 @@ HBRUSH CGdipButton::CtlColor(CDC* pScreenDC, UINT nCtlColor)
 			{
 				PaintBk(pDC);
 
-				graphics.DrawImage(*m_pStdImage, 1, 1);
+				//graphics.DrawImage(*m_pStdImage, 1, 1);
+
+				//m_dcStdP.CreateCompatibleDC(pDC);
+				//bmp.CreateCompatibleBitmap(pDC, rect.Width(), rect.Height());
+				//pOldBitmap = m_dcStdP.SelectObject(&bmp);
+				//m_dcStdP.BitBlt(0, 0, rect.Width(), rect.Height(), pDC, 0, 0, SRCCOPY);
+				//bmp.DeleteObject();
+
+				float width = (float)m_pStdImage->m_pBitmap->GetWidth();
+				float height = (float)m_pStdImage->m_pBitmap->GetHeight();
+
+				RectF grect; grect.X = 0, grect.Y = 0; grect.Width = width; grect.Height = height;
+
+				graphics.DrawImage(*m_pStdImage, grect, -1, -1, width, height, UnitPixel);
 
 				m_dcStdP.CreateCompatibleDC(pDC);
 				bmp.CreateCompatibleBitmap(pDC, rect.Width(), rect.Height());

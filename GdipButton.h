@@ -72,6 +72,8 @@ public:
 	void SetHorizontal(bool ImagesAreLaidOutHorizontally = FALSE);
 	void DeleteToolTip();
 
+	void Reset();
+
 
 protected:
 
