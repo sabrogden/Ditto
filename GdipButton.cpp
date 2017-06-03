@@ -220,8 +220,21 @@ HBRUSH CGdipButton::CtlColor(CDC* pScreenDC, UINT nCtlColor)
 		{
 			PaintBk(pDC);
 
-			graphics.DrawImage(*m_pStdImage, 0, 0);
+			/*graphics.DrawImage(*m_pStdImage, 0, 0);
 		
+			m_dcStd.CreateCompatibleDC(pDC);
+			bmp.CreateCompatibleBitmap(pDC, rect.Width(), rect.Height());
+			pOldBitmap = m_dcStd.SelectObject(&bmp);
+			m_dcStd.BitBlt(0, 0, rect.Width(), rect.Height(), pDC, 0, 0, SRCCOPY);
+			bmp.DeleteObject();*/
+
+			float width = (float)m_pStdImage->m_pBitmap->GetWidth();
+			float height = (float)m_pStdImage->m_pBitmap->GetHeight();
+
+			RectF grect; grect.X = 0, grect.Y = 0; grect.Width = width; grect.Height = height;
+
+			graphics.DrawImage(*m_pStdImage, grect, 0, 0, width, height, UnitPixel);
+
 			m_dcStd.CreateCompatibleDC(pDC);
 			bmp.CreateCompatibleBitmap(pDC, rect.Width(), rect.Height());
 			pOldBitmap = m_dcStd.SelectObject(&bmp);
