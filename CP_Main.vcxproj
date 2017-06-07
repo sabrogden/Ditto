@@ -577,6 +577,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="CreateQRCodeImage.cpp" />
+    <ClCompile Include="CustomFriendsHelper.cpp" />
     <ClCompile Include="DeleteClipData.cpp" />
     <ClCompile Include="DimWnd.cpp" />
     <ClCompile Include="DittoPopupWindow.cpp" />
@@ -1883,6 +1884,7 @@
     <ClInclude Include="ClipCompare.h" />
     <ClInclude Include="ClipFormatQListCtrl.h" />
     <ClInclude Include="CreateQRCodeImage.h" />
+    <ClInclude Include="CustomFriendsHelper.h" />
     <ClInclude Include="DeleteClipData.h" />
     <ClInclude Include="DimWnd.h" />
     <ClInclude Include="DittoPopupWindow.h" />

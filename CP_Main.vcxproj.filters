@@ -433,6 +433,7 @@
     <ClCompile Include="SymbolEdit.cpp" />
     <ClCompile Include="AdvGeneral.cpp" />
     <ClCompile Include="RegExFilterHelper.cpp" />
+    <ClCompile Include="CustomFriendsHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -906,6 +907,7 @@
     <ClInclude Include="SymbolEdit.h" />
     <ClInclude Include="AdvGeneral.h" />
     <ClInclude Include="RegExFilterHelper.h" />
+    <ClInclude Include="CustomFriendsHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

@@ -296,6 +296,7 @@ ON_UPDATE_COMMAND_UI(ID_SENDTO_PROMPTFORNAME, &CQPasteWnd::OnUpdateSendtoPromptf
 ON_COMMAND(ID_IMPORT_IMPORTCOPIEDFILE, &CQPasteWnd::OnImportImportcopiedfile)
 ON_UPDATE_COMMAND_UI(ID_IMPORT_IMPORTCOPIEDFILE, &CQPasteWnd::OnUpdateImportImportcopiedfile)
 ON_UPDATE_COMMAND_UI(32775, &CQPasteWnd::OnUpdate32775)
+ON_COMMAND_RANGE(CustomFriendStartId, (CustomFriendStartId+ MaxCustomFriends+1), OnCustomSendToFriend)
 END_MESSAGE_MAP()
 
 
@@ -1460,7 +1461,7 @@ void CQPasteWnd::SetFriendChecks(CMenu *pMenu)
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_TWELVE, 11);
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_THIRTEEN, 12);
 	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FORETEEN, 13);
-	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FIFTEEN, 14);
+	SetSendToMenu(pMenu, ID_MENU_SENTTO_FRIEND_FIFTEEN, 14);	
 
 	if (g_Opt.GetAllowFriends() == false)
 	{
@@ -1470,6 +1471,18 @@ void CQPasteWnd::SetFriendChecks(CMenu *pMenu)
 		if (nPos >= 0)
 		{
 			pMenu->DeleteMenu(nPos, MF_BYPOSITION);
+		}
+	}
+	else
+	{
+		CString csText("Send To");
+		int nPos = -1;
+		CMenu *sendToMenu = CMultiLanguage::GetMenuPos(pMenu, csText, nPos);
+
+		if (sendToMenu != NULL)
+		{
+			m_customFriendsHelper.Load();
+			m_customFriendsHelper.AddToMenu(sendToMenu);
 		}
 	}
 }
@@ -4444,6 +4457,10 @@ bool CQPasteWnd::DoActionPromptSendToFriend()
 	CFriendPromptDlg dlg(this);
 	if (dlg.DoModal() == IDOK)
 	{
+		if (dlg.GetSave())
+		{
+			m_customFriendsHelper.Add(dlg.GetName());
+		}
 		SendToFriendbyPos(0, dlg.GetName());
 	}
 
@@ -6302,4 +6319,13 @@ void CQPasteWnd::OnUpdateImportImportcopiedfile(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::SAVE_CF_HDROP_FIlE_DATA);
+}
+
+void CQPasteWnd::OnCustomSendToFriend(UINT idIn)
+{
+	CString ip_name = m_customFriendsHelper.GetSendTo(idIn);
+	if (ip_name != _T(""))
+	{
+		SendToFriendbyPos(0, ip_name);
+	}
 }

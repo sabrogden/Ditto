@@ -315,6 +315,11 @@ CMenu * CMultiLanguage::GetMenuPos(CMenu *pMenu, const CString &csLookingForMenu
 		if(csMenuText == csLookingForMenuText)
 		{
 			nMenuPos = i;
+			pSubMenu = pMenu->GetSubMenu(i);
+			if (pSubMenu != NULL)
+			{
+				return pSubMenu;
+			}
 			return pMenu;
 		}
 

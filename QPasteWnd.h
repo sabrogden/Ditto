@@ -19,6 +19,7 @@
 #include "ClipIds.h"
 #include "SymbolEdit.h"
 #include "Popup.h"
+#include "CustomFriendsHelper.h"
 
 class CMainTable
 {
@@ -166,6 +167,7 @@ public:
 	int m_leftSelectedCompareId;
 	INT64 m_extraDataCounter;
 	CPopup m_popupMsg;
+	CCustomFriendsHelper m_customFriendsHelper;
 
     void RefreshNc();
     void UpdateStatus(bool bRepaintImmediately = false); // regenerates the status (caption) text
@@ -422,6 +424,7 @@ protected:
     afx_msg void OnUpdateMenuEdititem(CCmdUI *pCmdUI);
     afx_msg void OnUpdateMenuNewclip(CCmdUI *pCmdUI);
     afx_msg void CQPasteWnd::OnAddinSelect(UINT id);
+	afx_msg void CQPasteWnd::OnCustomSendToFriend(UINT idIn);
     afx_msg LRESULT OnSelectAll(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShowHideScrollBar(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnMenuSearchDescription();
