@@ -280,6 +280,25 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 			//Before we show our window find the current focused window for paste into
 			theApp.m_activeWnd.TrackActiveWnd(true);
 
+			if (CGetSetOptions::GetOpenToGroupByActiveExe() &&
+				theApp.m_activeWnd.ActiveWnd() != NULL)
+			{
+				CString exeName = GetProcessName(theApp.m_activeWnd.ActiveWnd());
+				if (exeName != _T(""))
+				{
+					CString query = StrF(_T("SELECT lID FROM Main WHERE bIsGroup = 1 AND mText = '%s' COLLATE NOCASE"), exeName);
+					CppSQLite3Query q = theApp.m_db.execQueryEx(query);
+					if (q.eof() == false)
+					{
+						int groupId = q.getIntField(_T("lID"));
+						//this will revert back to the old group on hide of ditto
+						theApp.EnterGroupID(groupId, TRUE, TRUE);
+
+						Log(StrF(_T("Opening Ditto to Group based on found group name, name: %s, GroupId: %d"), exeName, groupId));
+					}
+				}
+			}
+
             m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
         }
 

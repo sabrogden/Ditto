@@ -2477,3 +2477,13 @@ CString	CGetSetOptions::GetRegexFilterByProcessName(int pos)
 	cs.Format(_T("RegexFilterByProcessName_%d"), pos);
 	return GetProfileString(cs, "");
 }
+
+BOOL CGetSetOptions::GetOpenToGroupByActiveExe()
+{
+	return GetProfileLong(_T("OpenToGroupByActiveExe"), TRUE);
+}
+
+void CGetSetOptions::SetOpenToGroupByActiveExe(int val)
+{
+	SetProfileLong(_T("OpenToGroupByActiveExe"), val);
+}

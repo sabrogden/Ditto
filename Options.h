@@ -563,6 +563,9 @@ public:
 
 	static void SetRegexFilterByProcessName(CString val, int pos);
 	static CString GetRegexFilterByProcessName(int pos);
+
+	static BOOL GetOpenToGroupByActiveExe();
+	static void SetOpenToGroupByActiveExe(int val);
 };
 
 // global for easy access and for initialization of fast access variables
