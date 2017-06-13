@@ -286,6 +286,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 				CString exeName = GetProcessName(theApp.m_activeWnd.ActiveWnd());
 				if (exeName != _T(""))
 				{
+					theApp.TryEnterOldGroupState();
 					CString query = StrF(_T("SELECT lID FROM Main WHERE bIsGroup = 1 AND mText = '%s' COLLATE NOCASE"), exeName);
 					CppSQLite3Query q = theApp.m_db.execQueryEx(query);
 					if (q.eof() == false)
@@ -295,6 +296,10 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 						theApp.EnterGroupID(groupId, TRUE, TRUE);
 
 						Log(StrF(_T("Opening Ditto to Group based on found group name, name: %s, GroupId: %d"), exeName, groupId));
+					}
+					else
+					{
+						theApp.TryEnterOldGroupState();
 					}
 				}
 			}
