@@ -33,6 +33,8 @@ COptionsGeneral::COptionsGeneral() : CPropertyPage(COptionsGeneral::IDD)
 	m_psp.pszTitle = m_csTitle;
 	m_psp.dwFlags |= PSP_USETITLE; 
 
+	memset(&m_LogFont, 0, sizeof(LOGFONT));
+
 	//{{AFX_DATA_INIT(COptionsGeneral)
 	//}}AFX_DATA_INIT
 }
@@ -55,6 +57,7 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_START_ON_STARTUP, m_btRunOnStartup);
 	DDX_Control(pDX, IDC_EDIT_APP_COPY_INCLUDE, m_copyAppInclude);
 	DDX_Control(pDX, IDC_EDIT_APP_COPY_EXCLUDE, m_copyAppExclude);
+	DDX_Control(pDX, IDC_MAXIMUM, m_btMaximumCheck);
 	//}}AFX_DATA_MAP
 	DDX_Control(pDX, IDC_COMBO_THEME, m_cbTheme);
 	DDX_Control(pDX, IDC_BUTTON_FONT, m_btFont);
@@ -96,8 +99,8 @@ BOOL COptionsGeneral::OnInitDialog()
 		m_btRunOnStartup.SetCheck(CGetSetOptions::GetRunOnStartUp());
 	}
 
-	m_btExpire.SetCheck(CGetSetOptions::GetCheckForExpiredEntries());
-	
+	m_btMaximumCheck.SetCheck(CGetSetOptions::GetCheckForMaxEntries());
+	m_btExpire.SetCheck(CGetSetOptions::GetCheckForExpiredEntries());	
 	m_eExpireAfter.SetNumber(CGetSetOptions::GetExpiredEntries());
 	m_eMaxSavedCopies.SetNumber(CGetSetOptions::GetMaxEntries());
 
@@ -201,6 +204,7 @@ BOOL COptionsGeneral::OnApply()
 		CGetSetOptions::SetRunOnStartUp(m_btRunOnStartup.GetCheck());
 	}
 
+	CGetSetOptions::SetCheckForMaxEntries(m_btMaximumCheck.GetCheck());
 	CGetSetOptions::SetCheckForExpiredEntries(m_btExpire.GetCheck());
 	CGetSetOptions::SetMaxEntries(m_eMaxSavedCopies.GetNumber());
 	CGetSetOptions::SetExpiredEntries(m_eExpireAfter.GetNumber());
@@ -285,6 +289,11 @@ BOOL COptionsGeneral::OnApply()
 	}
 
 	CGetSetOptions::SetQuickPastePosition(m_popupPositionCombo.GetItemData(m_popupPositionCombo.GetCurSel()));
+
+	if (m_LogFont.lfWeight != 0)
+	{
+		CGetSetOptions::SetFont(m_LogFont);
+	}
 
 	CString currentTheme = g_Opt.GetTheme();
 
