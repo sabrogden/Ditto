@@ -2416,12 +2416,12 @@ void CGetSetOptions::SetBalloonTimeout(int val)
 
 void CGetSetOptions::SetCustomSendToList(CString val)
 {
-	SetProfileString(_T("CustomSendToList"), val);
+	SetProfileString(_T("CustomSendToList2"), val);
 }
 
 CString	CGetSetOptions::GetCustomSendToList()
 {
-	return GetProfileString("CustomSendToList", "");
+	return GetProfileString("CustomSendToList2", "");
 }
 
 int CGetSetOptions::GetMaxFileContentsSize()

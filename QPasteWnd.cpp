@@ -1717,7 +1717,14 @@ void CQPasteWnd::SetSendToMenu(CMenu *pMenu, int nMenuID, int nArrayPos)
     if(g_Opt.m_SendClients[nArrayPos].csIP.GetLength() > 0)
     {
         CString cs;
-        cs.Format(_T("(%s) - %s"), g_Opt.m_SendClients[nArrayPos].csIP, g_Opt.m_SendClients[nArrayPos].csDescription);
+		if (g_Opt.m_SendClients[nArrayPos].csDescription != _T(""))
+		{
+			cs.Format(_T("(%s) - %s"), g_Opt.m_SendClients[nArrayPos].csIP, g_Opt.m_SendClients[nArrayPos].csDescription);
+		}
+		else
+		{
+			cs.Format(_T("%s"), g_Opt.m_SendClients[nArrayPos].csIP);
+		}
         pMenu->ModifyMenu(nMenuID, MF_BYCOMMAND, nMenuID, cs);
     }
     else
@@ -4457,11 +4464,22 @@ bool CQPasteWnd::DoActionPromptSendToFriend()
 	CFriendPromptDlg dlg(this);
 	if (dlg.DoModal() == IDOK)
 	{
-		if (dlg.GetSave())
+		if (dlg.GetClearList())
 		{
-			m_customFriendsHelper.Add(dlg.GetName());
+			m_customFriendsHelper.ClearList();
 		}
-		SendToFriendbyPos(0, dlg.GetName());
+		else
+		{
+			CString name = dlg.GetName();
+			if (name != _T(""))
+			{
+				if (dlg.GetSave())
+				{
+					m_customFriendsHelper.Add(name, dlg.GetDesc());
+				}
+				SendToFriendbyPos(0, name);
+			}
+		}
 	}
 
 	m_bHideWnd = true;
@@ -6323,8 +6341,13 @@ void CQPasteWnd::OnUpdateImportImportcopiedfile(CCmdUI *pCmdUI)
 
 void CQPasteWnd::OnCustomSendToFriend(UINT idIn)
 {
-	CString ip_name = m_customFriendsHelper.GetSendTo(idIn);
-	if (ip_name != _T(""))
+	bool showDlg = false;
+	CString ip_name = m_customFriendsHelper.GetSendTo(idIn, showDlg);
+	if (showDlg)
+	{
+		DoAction(ActionEnums::PROMPT_SEND_TO_FRIEND);
+	}
+	else if (ip_name != _T(""))
 	{
 		SendToFriendbyPos(0, ip_name);
 	}

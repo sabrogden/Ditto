@@ -2,6 +2,7 @@
 #include "CustomFriendsHelper.h"
 #include "CP_Main.h"
 #include "Shared\Tokenizer.h"
+#include "Shared\TextConvert.h"
 
 
 CCustomFriendsHelper::CCustomFriendsHelper()
@@ -18,23 +19,34 @@ void CCustomFriendsHelper::Load()
 	m_list.clear();
 
 	CString oldValues = CGetSetOptions::GetCustomSendToList();
-	CTokenizer token(oldValues, _T(","));
-	CString line;
 
-	bool setSelected = false;
+	TiXmlDocument doc;
+	CStringA xmlA;
+	CTextConvert::ConvertToUTF8(oldValues, xmlA);
+	doc.Parse(xmlA);
 
-	while (token.Next(line))
+	TiXmlElement *ItemHeader = doc.FirstChildElement("CustomFriends");
+
+	if (ItemHeader != NULL)
 	{
-		if (line != "")
+		TiXmlElement *ItemElement = ItemHeader->FirstChildElement();
+
+		while (ItemElement)
 		{
-			m_list.push_back(line);
+			Name_Desc array_item;
+			array_item.m_name = ItemElement->Attribute("name");
+			array_item.m_desc = ItemElement->Attribute("desc");
+			
+			m_list.push_back(array_item);
+
+			ItemElement = ItemElement->NextSiblingElement();
 		}
 	}
 }
 
 void CCustomFriendsHelper::Save()
 {
-	CString values = _T("");
+	/*CString values = _T("");
 
 	int count = m_list.size();
 	for (int i = 0; i < count; i++)
@@ -42,57 +54,99 @@ void CCustomFriendsHelper::Save()
 		CString lineValue = m_list[i];
 		values += _T(",");
 		values += lineValue;
-	}
+	}*/
 
-	CGetSetOptions::SetCustomSendToList(values);
+	TiXmlDocument doc;
+
+	TiXmlElement* friendOuter = new TiXmlElement("CustomFriends");
+	doc.LinkEndChild(friendOuter);
+
+	for (auto & listItem : m_list)
+	{
+		TiXmlElement* friendElement = new TiXmlElement("Friend");
+
+		CStringA nameA;
+		CTextConvert::ConvertToUTF8(listItem.m_name, nameA);
+		friendElement->SetAttribute("name",  nameA);
+
+		CStringA descA;
+		CTextConvert::ConvertToUTF8(listItem.m_desc, descA);
+		friendElement->SetAttribute("desc", descA);
+
+		friendOuter->LinkEndChild(friendElement);
+	}
+	
+	TiXmlPrinter printer;
+	doc.Accept(&printer);
+	CString cs = printer.CStr();
+
+	CGetSetOptions::SetCustomSendToList(cs);
 }
 
 void CCustomFriendsHelper::AddToMenu(CMenu *pMenu)
 {
-	bool addedSeparator = false;
+	bool addedItem = false;
 	int id = 0;
 	for (auto & element : m_list) 
 	{
-		if (addedSeparator == false)
+		if (addedItem == false)
 		{
-			pMenu->AppendMenu(MF_SEPARATOR);
-			addedSeparator = true;
+			addedItem = true;
 		}
 
-		pMenu->AppendMenuW(MF_STRING, (CustomFriendStartId + id), element);
+		CString cs;
+		if (element.m_desc != _T(""))
+		{
+			cs.Format(_T("(%s) - %s"), element.m_name, element.m_desc);
+		}
+		else
+		{
+			cs.Format(_T("%s"), element.m_name);
+		}
+
+		pMenu->AppendMenuW(MF_STRING, (CustomFriendStartId + id), cs);
 		id++;
 	}
 
-	if (addedSeparator)
+	if (addedItem)
 	{
 		pMenu->AppendMenu(MF_SEPARATOR);
-		pMenu->AppendMenuW(MF_STRING, (CustomFriendStartId + ClearListId), _T("Clear Custom List"));
 	}
+	
+	pMenu->AppendMenuW(MF_STRING, (CustomFriendStartId + PromptForCustom), _T("Prompt For Name"));	
 }
 
-void CCustomFriendsHelper::Add(CString item)
+void CCustomFriendsHelper::Add(CString item, CString desc)
 {
 	int count = m_list.size();
 	if (count < MaxCustomFriends)
 	{
-		m_list.push_back(item);
+		Name_Desc array_item;
+		array_item.m_name = item;
+		array_item.m_desc = desc;
+		m_list.push_back(array_item);
 		Save();
 	}
 }
 
-CString CCustomFriendsHelper::GetSendTo(int id)
+CString CCustomFriendsHelper::GetSendTo(int id, bool &showDlg)
 {
 	int index = id - CustomFriendStartId;
 	if (index >= 0 && index < m_list.size())
 	{
-		return m_list[index];
+		return m_list[index].m_name;
 	}
 
-	if (index == ClearListId)
+	if (index == PromptForCustom)
 	{
-		m_list.clear();
-		this->Save();
+		showDlg = true;
 	}
 
 	return _T("");
+}
+
+void CCustomFriendsHelper::ClearList()
+{
+	m_list.clear();
+	this->Save();
 }
