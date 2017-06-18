@@ -182,6 +182,12 @@
 #define IDD_DIALOG_FREIND_PROMPT        324
 #define IDD_DIALOG2                     325
 #define IDD_ADV_OPTIONS                 325
+#define down_16                         328
+#define down_20                         329
+#define down_24                         330
+#define down_28                         331
+#define IDB_PNG20                       332
+#define down_32                         332
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -690,7 +696,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        328
+#define _APS_NEXT_RESOURCE_VALUE        333
 #define _APS_NEXT_COMMAND_VALUE         32942
 #define _APS_NEXT_CONTROL_VALUE         2154
 #define _APS_NEXT_SYMED_VALUE           104

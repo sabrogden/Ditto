@@ -48,6 +48,10 @@ public:
 
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 
+	void AddToSearchHistory();
+
+	bool ShowSearchHistoryMenu();
+
 	void SetSymbolIcon(HICON hIcon, BOOL redraw = TRUE);
 	void SetSymbolIcon(UINT id, BOOL redraw = TRUE);
 
@@ -67,11 +71,19 @@ protected:
 	bool m_mouseDownOnClose;
 	bool m_mouseHoveringOverClose;
 
+	CGdiImageDrawer m_searchesButton;
+	CRect m_searchesButtonRect;
+	bool m_mouseDownOnSearches;
+	bool m_mouseHoveringOverSearches;
+
+	CStringArray m_searches;
+
 	void RecalcLayout();
 	virtual void PreSubclassWindow();
 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg LRESULT OnSetFont(WPARAM wParam, LPARAM lParam);
+	//afx_msg LRESULT OnMenuExit(WPARAM wParam, LPARAM lParam);
 	afx_msg HBRUSH CtlColor(CDC* pDC, UINT n);
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
@@ -79,6 +91,7 @@ protected:
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnSelectSearchString(UINT idIn);
 
 	DECLARE_MESSAGE_MAP()
 
