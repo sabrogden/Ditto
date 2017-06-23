@@ -5379,6 +5379,10 @@ void CQPasteWnd::OnUpdateMenuNewclip(CCmdUI *pCmdUI)
 
 LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 {
+	int x = m_lstHeader.GetScrollPos(SB_HORZ);
+	int y = m_lstHeader.GetScrollPos(SB_VERT);
+	m_lstHeader.Scroll(CSize(-x, -y));
+
     m_lstHeader.SetItemCountEx((int)wParam);
 	SelectFocusID();
     UpdateStatus(false);
