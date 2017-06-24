@@ -67,6 +67,7 @@ BOOL CGetSetOptions::m_showScrollBar = false;
 CGetSetOptions g_Opt;
 BOOL CGetSetOptions::m_bShowAlwaysOnTopWarning = TRUE;
 CRegExFilterHelper CGetSetOptions::m_regexHelper;
+BOOL CGetSetOptions::m_excludeCF_DIBInExcel = TRUE;
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -177,6 +178,7 @@ void CGetSetOptions::LoadSettings()
 	m_bOutputDebugString = false;
 	m_showScrollBar = GetShowScrollBar();
 	m_bShowAlwaysOnTopWarning = GetShowAlwaysOnTopWarning();
+	m_excludeCF_DIBInExcel = GetExcludeCF_DIBInExcel();
 
 	GetExtraNetworkPassword(true);
 
@@ -2486,4 +2488,15 @@ BOOL CGetSetOptions::GetOpenToGroupByActiveExe()
 void CGetSetOptions::SetOpenToGroupByActiveExe(int val)
 {
 	SetProfileLong(_T("OpenToGroupByActiveExe"), val);
+}
+
+BOOL CGetSetOptions::GetExcludeCF_DIBInExcel()
+{
+	return GetProfileLong(_T("ExcludeCF_DIBInExcel"), TRUE);
+}
+
+void CGetSetOptions::SetExcludeCF_DIBInExcel(int val)
+{
+	m_excludeCF_DIBInExcel = val;
+	SetProfileLong(_T("ExcludeCF_DIBInExcel"), val);
 }

@@ -416,6 +416,13 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 	{
 		cf.m_cfType = pTypes->ElementAt(i);
 
+		if (cf.m_cfType == CF_DIB &&
+			g_Opt.m_excludeCF_DIBInExcel &&
+			activeApp.MakeLower() == _T("excel.exe"))
+		{
+			continue;
+		}
+
 		BOOL bSuccess = false;
 		Log(StrF(_T("Begin try and load type %s"), GetFormatName(cf.m_cfType)));
 		

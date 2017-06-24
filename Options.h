@@ -566,6 +566,10 @@ public:
 
 	static BOOL GetOpenToGroupByActiveExe();
 	static void SetOpenToGroupByActiveExe(int val);
+
+	static BOOL m_excludeCF_DIBInExcel;
+	static BOOL GetExcludeCF_DIBInExcel();
+	static void SetExcludeCF_DIBInExcel(int val);
 };
 
 // global for easy access and for initialization of fast access variables
