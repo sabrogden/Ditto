@@ -1408,22 +1408,16 @@ void CQPasteWnd::ShowRightClickMenu()
 		}
 
 		int nItem = m_lstHeader.GetCaret();
-		CRect listRect;
-		m_lstHeader.GetWindowRect(listRect);
-		if (listRect.PtInRect(pp) == FALSE)
+
+		CRect rc;
+		m_lstHeader.GetItemRect(nItem, rc, LVIR_BOUNDS);
+		ClientToScreen(rc);
+
+		if (rc.PtInRect(pp) == FALSE)
 		{
-			CRect rc;
-			m_lstHeader.GetItemRect(nItem, rc, LVIR_BOUNDS);
-			ClientToScreen(rc);
 			pp.x = rc.left;
 			pp.y = rc.bottom;
-
-			if (listRect.PtInRect(pp) == FALSE)
-			{
-				pp.x = listRect.left;
-				pp.y = listRect.top;
-			}
-		}	
+		}
 
         theApp.m_Addins.AddPrePasteAddinsToMenu(cmSubMenu);
         
