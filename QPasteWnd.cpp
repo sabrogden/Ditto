@@ -2582,13 +2582,16 @@ bool CQPasteWnd::DeleteClips(CClipIDs &IDs, ARRAY &Indexs)
 		{
 			if (Indexs[i] < (int) m_listItems.size())
 			{
+				RemoveFromImageRtfCache(Indexs[i]);
+				g_HotKeys.Remove(m_lstHeader.GetItemData(Indexs[i]), CHotKey::PASTE_OPEN_CLIP);
+
 				m_listItems.erase(m_listItems.begin() + Indexs[i]);
 				erasedCount++;
-
-				RemoveFromImageRtfCache(Indexs[i]);
 			}
 		}
 	}
+
+	m_extraDataThread.FireLoadAccelerators();
 
 	m_lstHeader.SetItemCountEx(m_lstHeader.GetItemCount() - erasedCount);
 
