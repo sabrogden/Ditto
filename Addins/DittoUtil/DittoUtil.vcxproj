@@ -189,7 +189,9 @@ copy $(TargetDir)*.dll $(SolutionDir)Debug64\Addins</Command>
       <MkTypLibCompatible>false</MkTypLibCompatible>
     </Midl>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.dll $(SolutionDir)Release\Addins</Command>
+      <Command>mkdir $(SolutionDir)Release
+mkdir $(SolutionDir)Release\Addins
+copy $(TargetDir)*.dll $(SolutionDir)Release\Addins</Command>
     </PostBuildEvent>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

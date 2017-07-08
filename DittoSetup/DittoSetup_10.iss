@@ -72,9 +72,7 @@ Name: AddFireWallException; Description: Add Windows Firewall exception for Ditt
 #endif
 #ifndef bit64
 	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_32');
-
-
-	Source: ..\Addins\DittoUtil\Release\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
+  Source: ..\Release\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 	Source: mfc-crt\vcredist_x86_2017.exe; Flags: dontcopy;
   Source: ..\Release\icuuc58.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release\icuin58.dll; DestDir: {app}; Flags: ignoreversion

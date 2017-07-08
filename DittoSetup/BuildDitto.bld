@@ -253,11 +253,11 @@ DittoSetup*]]></ExclExt>
 			<LogDetail type='11'>-1</LogDetail>
 			<PathInfo type='11'>-1</PathInfo>
 			<Recurse type='11'>-1</Recurse>
-			<Source>%workDir%\DittoSetup\Output\DittoPortable_64bit_%versionFileName%.zip</Source>
+			<Source>%workDir%\DittoSetup\Output\DittoPortable_%versionFileName%.zip</Source>
 			<SysOn type='11'>-1</SysOn>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>
-			<name>extraxt 64bit Portable</name>
+			<name>extraxt x86 Portable</name>
 		</step>
 		<step action='Write File'>
 			<BOM type='11'>-1</BOM>
@@ -344,7 +344,7 @@ DittoSetup*]]></ExclExt>
    xmlns:desktop2="http://schemas.microsoft.com/appx/manifest/desktop/windows10/2"
    IgnorableNamespaces="desktop2">
   <Identity Name="60145ScottBrogden.ditto-cp"
-    ProcessorArchitecture="x64"
+    ProcessorArchitecture="x86"
     Publisher="CN=2032816C-0EBD-4FA0-8832-B8289B21D4F4"
     Version="%version%" />
   <Properties>
