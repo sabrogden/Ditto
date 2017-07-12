@@ -2591,6 +2591,8 @@ bool CQPasteWnd::DeleteClips(CClipIDs &IDs, ARRAY &Indexs)
 		}
 	}
 
+	CClip::m_LastAddedCRC = 0;
+
 	m_extraDataThread.FireLoadAccelerators();
 
 	m_lstHeader.SetItemCountEx(m_lstHeader.GetItemCount() - erasedCount);
@@ -4650,6 +4652,12 @@ void CQPasteWnd::OnBegindrag(NMHDR *pNMHDR, LRESULT *pResult)
     NM_LISTVIEW *pLV = (NM_LISTVIEW*)pNMHDR;
     CProcessPaste paste;
 	paste.m_pastedFromGroup = (theApp.m_GroupID > 0);
+
+	if (CONTROL_PRESSED)
+	{
+		paste.m_pasteOptions.m_dragDropFilesOnly = true;
+	}
+
     CClipIDs &clips = paste.GetClipIDs();
 
     m_lstHeader.GetSelectionItemData(clips);

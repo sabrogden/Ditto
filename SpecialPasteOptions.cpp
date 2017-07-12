@@ -16,6 +16,7 @@ CSpecialPasteOptions::CSpecialPasteOptions()
 	m_pasteTypoglycemia = false;
 	m_pasteAddingDateTime = false;
 	m_delayRenderLockout = 0;
+	m_dragDropFilesOnly = false;
 }
 
 CSpecialPasteOptions::~CSpecialPasteOptions()

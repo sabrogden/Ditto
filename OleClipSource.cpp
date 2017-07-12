@@ -40,7 +40,17 @@ BOOL COleClipSource::DoDelayRender()
 	INT_PTR count = types.GetSize();
 	for(int i=0; i < count; i++)
 	{
-		DelayRenderData(types[i]);
+		if (m_pasteOptions.m_dragDropFilesOnly)
+		{
+			if (types[i] == CF_HDROP)
+			{
+				DelayRenderData(types[i]);
+			}
+		}
+		else
+		{
+			DelayRenderData(types[i]);
+		}
 
 		if (types[i] == CF_HDROP)
 		{

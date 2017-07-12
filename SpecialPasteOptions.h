@@ -19,6 +19,7 @@ public:
 	bool m_pasteAddingDateTime;
 	CClipFormats *m_pPasteFormats;
 	DWORD m_delayRenderLockout;
+	bool m_dragDropFilesOnly;
 
 	bool LimitFormatsToText() 
 	{ 

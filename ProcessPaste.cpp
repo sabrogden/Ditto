@@ -72,6 +72,7 @@ BOOL CProcessPaste::DoPaste()
 
 BOOL CProcessPaste::DoDrag()
 {
+	m_pOle->m_pasteOptions = m_pasteOptions;
 	m_pOle->DoDelayRender();
 	DROPEFFECT de = m_pOle->DoDragDrop(DROPEFFECT_COPY);
 	if(de != DROPEFFECT_NONE)
