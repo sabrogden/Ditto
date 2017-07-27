@@ -203,7 +203,7 @@ public:
 
     void FillMainTable(CMainTable &table, CppSQLite3Query &q);
     void RunThread();
-    void MoveSelection(bool down);
+    void MoveSelection(bool down, bool requireModifersActive);
     void OnKeyStateUp();
     void SetKeyModiferState(bool bActive);
 	void SaveWindowSize();
@@ -233,6 +233,8 @@ public:
 	bool DoActionShowGroups();
 	bool DoActionNewClip();
 	bool DoActionEditClip();
+	bool DoActionMoveSelectionDown();
+	bool DoActionMoveSelectionUp();
 	bool DoModifierActiveActionSelectionUp();
 	bool DoModifierActiveActionSelectionDown();
 	bool DoModifierActiveActionMoveFirst();

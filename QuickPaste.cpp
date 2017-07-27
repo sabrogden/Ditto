@@ -245,13 +245,9 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 
 		// Show the window
 		m_pwndPaste->ShowWindow(SW_SHOW);
-	}
-	
-	
+	}	
 
-	m_pwndPaste->SetKeyModiferState(bFromKeyboard);
-	
-	
+	m_pwndPaste->SetKeyModiferState(bFromKeyboard);	
 
 	if(bReFillList)
 	{
@@ -268,7 +264,7 @@ void CQuickPaste::MoveSelection(bool down)
 	{
 		if (IsWindow(m_pwndPaste->m_hWnd))
 		{
-			m_pwndPaste->MoveSelection(down);
+			m_pwndPaste->MoveSelection(down, true);
 		}
 	}
 }

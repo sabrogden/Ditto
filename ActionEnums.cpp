@@ -284,6 +284,12 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case TOGGLE_CLIPBOARD_CONNECTION:
 		val = "Toggle clipboard connection";
 		break;
+	case MOVE_SELECTION_UP:
+		val = "Move Selection Up";
+		break;
+	case MOVE_SELECTION_DOWN:
+		val = "Move Selection Down";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);

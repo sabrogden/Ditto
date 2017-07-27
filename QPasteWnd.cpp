@@ -2661,9 +2661,9 @@ CString CQPasteWnd::LoadDescription(int nItem)
     return cs;
 }
 
-void CQPasteWnd::MoveSelection(bool down)
+void CQPasteWnd::MoveSelection(bool down, bool requireModifersActive)
 {
-    if(m_bModifersMoveActive)
+    if(m_bModifersMoveActive || requireModifersActive == false)
     {
         ARRAY arr;
         m_lstHeader.GetSelectionIndexes(arr);
@@ -3053,6 +3053,12 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::TOGGLE_CLIPBOARD_CONNECTION:
 		ret = DoActionToggleClipboardConnection();
 		break;
+	case ActionEnums::MOVE_SELECTION_UP:
+		ret = DoActionMoveSelectionUp();
+		break;
+	case ActionEnums::MOVE_SELECTION_DOWN:
+		ret = DoActionMoveSelectionDown();
+		break;
 	}
 
 	return ret;
@@ -3319,11 +3325,23 @@ bool CQPasteWnd::DoActionEditClip()
 	return true;
 }
 
+bool CQPasteWnd::DoActionMoveSelectionUp()
+{
+	MoveSelection(false, false);
+	return true;
+}
+
+bool CQPasteWnd::DoActionMoveSelectionDown()
+{
+	MoveSelection(true, false);
+	return true;
+}
+
 bool CQPasteWnd::DoModifierActiveActionSelectionUp()
 {
 	if (m_bModifersMoveActive)
 	{
-		MoveSelection(false);
+		MoveSelection(false, true);
 		m_modifierKeyActions.m_handleRepeatKeys = true;
 		return true;
 	}
@@ -3335,7 +3353,7 @@ bool CQPasteWnd::DoModifierActiveActionSelectionDown()
 {
 	if (m_bModifersMoveActive)
 	{
-		MoveSelection(true);
+		MoveSelection(true, true);
 		m_modifierKeyActions.m_handleRepeatKeys = true;
 		return true;
 	}
