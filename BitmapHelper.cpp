@@ -73,22 +73,70 @@ BOOL CBitmapHelper::GetCBitmap(void	*pClip2, CDC *pDC, CBitmap *pBitMap, int nMa
 			
 			if(pBitMap)
 			{
-				pBitMap->CreateCompatibleBitmap(pDC, nWidth, nHeight);
-				ASSERT(pBitMap->m_hObject != NULL);
+				if (nMaxHeight < INT_MAX)
+				{
+					//first create a bitmap of the real size, this is used to pass into Gdiplus::Bitmap to resize more accuratly
+					CBitmap tmp;
+					tmp.CreateCompatibleBitmap(pDC, lpBI->bmiHeader.biWidth, lpBI->bmiHeader.biHeight);
+					ASSERT(tmp.m_hObject != NULL);
 
-				CDC MemDc;
-				MemDc.CreateCompatibleDC(pDC);
+					CDC MemDc;
+					MemDc.CreateCompatibleDC(pDC);
 
-				CBitmap* oldBitmap = MemDc.SelectObject(pBitMap);	
-			
-				::StretchDIBits(MemDc.m_hDC,
-					0, 0, 
-					nWidth, nHeight,
-					0, 0, lpBI->bmiHeader.biWidth, 
-					lpBI->bmiHeader.biHeight,
-					pDIBBits, lpBI, DIB_PAL_COLORS, SRCCOPY);
+					CBitmap* oldBitmap = MemDc.SelectObject(&tmp);			
+				
+					::StretchDIBits(MemDc.m_hDC,
+						0, 0, 
+						lpBI->bmiHeader.biWidth, lpBI->bmiHeader.biHeight,
+						0, 0, lpBI->bmiHeader.biWidth, 
+						lpBI->bmiHeader.biHeight,
+						pDIBBits, lpBI, DIB_PAL_COLORS, SRCCOPY);
 
-				MemDc.SelectObject(oldBitmap);
+					MemDc.SelectObject(oldBitmap);
+
+				
+					//do the resize
+					pBitMap->CreateCompatibleBitmap(pDC, nWidth, nHeight);
+					ASSERT(pBitMap->m_hObject != NULL);
+
+					CDC MemDc2;
+					MemDc2.CreateCompatibleDC(pDC);
+
+					CBitmap* oldBitmap2 = MemDc2.SelectObject(pBitMap);
+
+					HBITMAP h = (HBITMAP)tmp;
+					Gdiplus::Bitmap gdipBitmap(h, NULL);
+
+					Gdiplus::ImageAttributes attrs;
+					Gdiplus::Rect dest(0, 0, nWidth, nHeight);
+
+					Gdiplus::Graphics graphics(MemDc2);
+					graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+					graphics.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHalf);
+
+					graphics.DrawImage(&gdipBitmap, dest, 0, 0, lpBI->bmiHeader.biWidth, lpBI->bmiHeader.biHeight, Gdiplus::UnitPixel, &attrs);
+
+					MemDc2.SelectObject(oldBitmap2);
+				}
+				else
+				{
+					pBitMap->CreateCompatibleBitmap(pDC, nWidth, nHeight);
+					ASSERT(pBitMap->m_hObject != NULL);
+
+					CDC MemDc;
+					MemDc.CreateCompatibleDC(pDC);
+
+					CBitmap* oldBitmap = MemDc.SelectObject(pBitMap);
+
+					::StretchDIBits(MemDc.m_hDC,
+						0, 0,
+						lpBI->bmiHeader.biWidth, lpBI->bmiHeader.biHeight,
+						0, 0, lpBI->bmiHeader.biWidth,
+						lpBI->bmiHeader.biHeight,
+						pDIBBits, lpBI, DIB_PAL_COLORS, SRCCOPY);
+
+					MemDc.SelectObject(oldBitmap);
+				}
 
 				bRet = TRUE;
 			}

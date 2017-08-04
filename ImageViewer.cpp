@@ -112,9 +112,12 @@ void CImageViewer::OnPaint()
 
 		int width = CBitmapHelper::GetCBitmapWidth(*m_pBitmap);
 		int height = CBitmapHelper::GetCBitmapHeight(*m_pBitmap);
-
+		
 		if (CGetSetOptions::GetScaleImagesToDescWindow())
 		{
+			HBITMAP h = (HBITMAP)*m_pBitmap;
+			Gdiplus::Bitmap gdipBitmap(h, NULL);
+
 			double newWidth = rect.Width();
 			double newHeight = rect.Height();
 
@@ -135,8 +138,17 @@ void CImageViewer::OnPaint()
 					newWidth = (rect.Height() * width) / height;
 				}
 			}
+
+			Gdiplus::ImageAttributes attrs;
+			Gdiplus::Rect dest(0, 0, newWidth, newHeight);
+
+			Gdiplus::Graphics graphics(dc);
+			graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+			graphics.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHalf);
+
+			graphics.DrawImage(&gdipBitmap, dest, 0, 0, width, height, Gdiplus::UnitPixel, &attrs);
 			
-			dc.StretchBlt(rect.left, rect.top, newWidth, newHeight, &MemDc, 0, 0, width, height, SRCCOPY);
+			//dc.StretchBlt(rect.left, rect.top, newWidth, newHeight, &MemDc, 0, 0, width, height, SRCCOPY);
 			//OutputDebugString(StrF(_T("scaling image, window size %d/%d, image %d/%d\n"), min(nWidth, rect.Width()), min(nHeight, rect.Height()), nWidth, nHeight));
 		}
 		else
