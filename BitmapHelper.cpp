@@ -117,6 +117,8 @@ BOOL CBitmapHelper::GetCBitmap(void	*pClip2, CDC *pDC, CBitmap *pBitMap, int nMa
 					graphics.DrawImage(&gdipBitmap, dest, 0, 0, lpBI->bmiHeader.biWidth, lpBI->bmiHeader.biHeight, Gdiplus::UnitPixel, &attrs);
 
 					MemDc2.SelectObject(oldBitmap2);
+
+					tmp.DeleteObject();
 				}
 				else
 				{
