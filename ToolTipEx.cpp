@@ -405,7 +405,23 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
                 Hide();
                 break;
             }
+
+		case WM_MOUSEWHEEL:
+		{
+			if (m_imageViewer.m_pBitmap)
+			{
+				m_imageViewer.PostMessageW(pMsg->message, pMsg->wParam, pMsg->lParam);
+				return TRUE;
+			}
+			else
+			{
+				m_RichEdit.PostMessageW(pMsg->message, pMsg->wParam, pMsg->lParam);
+				return TRUE;
+			}
+		}
+		break;
     }
+
 
     return FALSE;
 }
