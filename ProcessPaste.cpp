@@ -80,6 +80,13 @@ BOOL CProcessPaste::DoDrag()
 		MarkAsPasted();
 		return TRUE;
 	}
+	m_pOle->InternalRelease();
+	
+	// The Clipboard now owns the allocated memory
+	// and will delete this data object
+	// when new data is put on the Clipboard
+	m_pOle = NULL; // m_pOle should not be accessed past this point
+
 	return FALSE;
 }
 
