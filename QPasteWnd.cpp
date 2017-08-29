@@ -4807,7 +4807,7 @@ void CQPasteWnd::GetDispInfo(NMHDR *pNMHDR, LRESULT *pResult)
 
                         if(addToLoadItems)
                         {
-                            CPoint loadItem(pItem->iItem, (m_lstHeader.GetTopIndex() + m_lstHeader.GetCountPerPage() + 2));
+                            CPoint loadItem(pItem->iItem, (m_lstHeader.GetTopIndex() + (m_lstHeader.GetCountPerPage() * 2)));
 
 							//Log(StrF(_T("DrawItem index %d, add: %d"), loadItem.x, loadItem.y));
                             m_loadItems.push_back(loadItem);
