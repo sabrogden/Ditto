@@ -123,7 +123,7 @@ void CQPasteWndThread::OnLoadItems(void *param)
 	    {
 			try
 			{
-				Log(StrF(_T("Load Items start = %d, count = %d"), loadItemsIndex, loadItemsCount));
+				Log(StrF(_T("Load Items start = %d, count = %d, list size: %d"), loadItemsIndex, loadItemsCount, pasteWnd->m_listItems.size()));
 
 				int pos = loadItemsIndex;
 				CString limit;
@@ -137,27 +137,41 @@ void CQPasteWndThread::OnLoadItems(void *param)
 				{
 					pasteWnd->FillMainTable(table, q);
 
+					int updateIndex = -1;
+
 					{
 						ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
 
 						if (pos < pasteWnd->m_listItems.size())
 						{
 							pasteWnd->m_listItems[pos] = table;
+
+							updateIndex = pos;
+
+							//Log(StrF(_T("updating list pos = %d, id: %d, size: %d"), pos, table.m_lID, pasteWnd->m_listItems.size() - 1));
 						}
 						else if (pos == pasteWnd->m_listItems.size())
 						{
 							pasteWnd->m_listItems.push_back(table);
+							updateIndex = pasteWnd->m_listItems.size() - 1;
+							//Log(StrF(_T("adding (same size) list pos = %d, id: %d, size: %d"), pasteWnd->m_listItems.size()-1, table.m_lID, pasteWnd->m_listItems.size() - 1));
 						}
 						else if (pos > pasteWnd->m_listItems.size())
 						{
-							for (int toAdd = pasteWnd->m_listItems.size(); toAdd < pos - 1; toAdd++)
+							for (int toAdd = pasteWnd->m_listItems.size()-1; toAdd < pos - 1; toAdd++)
 							{
 								CMainTable empty;
 								empty.m_lID = -1;
 								pasteWnd->m_listItems.push_back(empty);
+
+								//Log(StrF(_T("adding dummy row size: %d"), pasteWnd->m_listItems.size()-1));
 							}
 
 							pasteWnd->m_listItems.push_back(table);
+
+							updateIndex = pasteWnd->m_listItems.size() - 1;
+
+							//Log(StrF(_T("adding list pos = %d, id: %d, size: %d"), pasteWnd->m_listItems.size()-1, table.m_lID, pasteWnd->m_listItems.size() - 1));
 						}
 					}
 
@@ -171,7 +185,12 @@ void CQPasteWndThread::OnLoadItems(void *param)
 
 					if(firstLoad == false)
 					{
-	            		::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, table.m_lID, loadItemsIndex);
+						/*if (updateIndex != loadItemsIndex)
+						{
+							Log(StrF(_T("index difference old: %d, new: %d"), loadItemsIndex, updateIndex));
+						}*/
+
+	            		::PostMessage(pasteWnd->m_hWnd, NM_REFRESH_ROW, table.m_lID, updateIndex);
 					}
 
 					loadItemsIndex++;
@@ -251,6 +270,8 @@ void ReduceMapItems(CF_DibTypeMap &mapItem, CCriticalSection &critSection, CStri
 		{
 			if (std::binary_search(counterArray.begin(), counterArray.end(), iterDib->second.m_counter) == false)
 			{
+				Log(StrF(_T("reduced size of %s cache, Id: %d, Row: %d"), mapName, iterDib->second.m_parentId, iterDib->second.m_clipRow));
+
 				mapItem.erase(iterDib++);
 			}
 			else
@@ -353,7 +374,7 @@ void CQPasteWndThread::OnLoadExtraData(void *param)
 					//the cache now owns the format data, set it to delete the data in the destructor
 					pasteWnd->m_cf_dibCache[it->m_parentId].m_autoDeleteData = true;
 
-					Log(StrF(_T("Loaded, extra data for clip %d, image cache count: %d"), it->m_parentId, pasteWnd->m_cf_dibCache.size()));
+					Log(StrF(_T("Loaded, extra data for clipId: %d, Row: %d image cache count: %d"), it->m_parentId, it->m_clipRow, pasteWnd->m_cf_dibCache.size()));
 				}
 				else if (it->m_cfType == theApp.m_RTFFormat)
 				{
