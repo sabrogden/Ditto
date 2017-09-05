@@ -2200,10 +2200,6 @@
     <None Include="res\yellow_star_32_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="U3Stop\U3Stop.vcxproj">
-      <Project>{eda8dbee-92a2-4a5d-a9ed-0fc0f037c43c}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="DeclareDPIAware.manifest" />
