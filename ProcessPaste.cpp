@@ -80,6 +80,11 @@ BOOL CProcessPaste::DoDrag()
 		MarkAsPasted();
 		return TRUE;
 	}
+
+	//from https://www.codeproject.com/Articles/886711/Drag-Drop-Images-and-Drop-Descriptions-for-MFC-App
+	//You may have noted the InternalRelease() function call.This is required here to delete the object.While it is possible to use 
+	//delete or create the object on the stack with Drag & Drop operations, it is not recommended to do so.
+
 	m_pOle->InternalRelease();
 	
 	// The Clipboard now owns the allocated memory
