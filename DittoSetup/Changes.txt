@@ -1,3 +1,31 @@
+3.21.185.0 9-4-2017
+- Reworked config - removed quick paste tab - updated general page - added advanced popup for rest of settings - added regex filter config ui
+- Forward mousewheel to description window
+- Updated bitmap generation, uses Bicubic to resize images now, much better image quality
+- Added command to move selection up/down that can be assigned to shortcut key
+- Control-drag will always drag files
+- Exclude CF_DIB if copied from excel, often causes lockups
+- Reset scroll back to 0 when refilling list, before it could get scrolled to the right and look empty
+- Show menu of previouse searches (ctrl-down or ctrl-shift-down or click down icon)
+- Check focused process name against group name, if they match open to that group, needs to match exactly (ex, notepad.exe), case does not matter
+- Windows scaling fixes
+- Fixed pasting into search bar if pasted text is larger than the displayed width
+- Fixed crashes around bad regular expressions, added try-catch block
+- Implimented regex filter of clips to exclude clips from getting into ditto that match a regulare expression
+- Added option to save file contents into ditto's database so we don't need the file anymore
+- Fixed issue with showing never delete icon when it shouldn't be shown
+- Free up memory when saving image to file fromd drag drop
+- Added option to prompt for friends ip/host name for who to send to
+- Offset position at cursor so we don't show toolip
+- Added option to replace top sticky clip
+- Show balloon tooltip on start and on error messages
+- When running from windows app don't try and launch elevated app
+- Fixes for drawning html tags present in copied text, use un printable characters to highlight
+- Updated to visual studio 2017
+- Adjust rtf text when generating crc to handle word and outlook adding unique values to the rtf text
+
+
+
 3.21.134.0 1-29-2017
 - Updated default UI look of Ditto
 - Added custom shortcut keys (options - quick paste Keyboard)
