@@ -2500,3 +2500,13 @@ void CGetSetOptions::SetExcludeCF_DIBInExcel(int val)
 	m_excludeCF_DIBInExcel = val;
 	SetProfileLong(_T("ExcludeCF_DIBInExcel"), val);
 }
+
+BOOL CGetSetOptions::GetShowStartupMessage()
+{
+	return GetProfileLong(_T("ShowStartupMessage"), TRUE);
+}
+
+void CGetSetOptions::SetShowStartupMessage(int val)
+{
+	SetProfileLong(_T("ShowStartupMessage"), val);
+}

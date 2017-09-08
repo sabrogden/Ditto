@@ -570,6 +570,10 @@ public:
 	static BOOL m_excludeCF_DIBInExcel;
 	static BOOL GetExcludeCF_DIBInExcel();
 	static void SetExcludeCF_DIBInExcel(int val);
+
+	static BOOL GetShowStartupMessage();
+	static void SetShowStartupMessage(int val);
+
 };
 
 // global for easy access and for initialization of fast access variables
