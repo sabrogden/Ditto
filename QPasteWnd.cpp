@@ -844,18 +844,27 @@ BOOL CQPasteWnd::OpenID(int id, CSpecialPasteOptions pasteOptions)
 
     paste.GetClipIDs().Add(id);
     
-    paste.DoPaste();
-    theApp.OnPasteCompleted();
+	if (paste.DoPaste())
+	{
+		theApp.OnPasteCompleted();
 
-    if(g_Opt.m_bSendPasteMessageAfterSelection == FALSE)
-    {
-        theApp.m_activeWnd.ActivateTarget();
-    }
+		if (g_Opt.m_bSendPasteMessageAfterSelection == FALSE)
+		{
+			theApp.m_activeWnd.ActivateTarget();
+		}
 
-    if(g_Opt.m_bShowPersistent && g_Opt.GetAutoHide())
-    {
-        MinMaxWindow(FORCE_MIN);
-    }
+		if (g_Opt.m_bShowPersistent && g_Opt.GetAutoHide())
+		{
+			MinMaxWindow(FORCE_MIN);
+		}
+	}
+	else
+	{
+		CString errorMessage;
+		errorMessage.Format(_T("Paste Error - %s"), paste.m_lastErrorMessage);
+		m_popupMsg.Show(errorMessage, CPoint(0, 0), true);
+		SetTimer(TIMER_ERROR_MSG, CGetSetOptions::GetErrorMsgPopupTimeout(), NULL);
+	}
 
 	Log(StrF(_T("End OpenId, Id: %d, Only CF_TEXT: %s"), id, pasteOptions.ToString()));
 
@@ -887,18 +896,27 @@ BOOL CQPasteWnd::OpenSelection(CSpecialPasteOptions pasteOptions)
 	paste.m_pastedFromGroup = (theApp.m_GroupID > 0);
 
     paste.GetClipIDs().Copy(IDs);
-    paste.DoPaste();
-    theApp.OnPasteCompleted();
+	if (paste.DoPaste())
+	{
+		theApp.OnPasteCompleted();
 
-    if(g_Opt.m_bSendPasteMessageAfterSelection == FALSE)
-    {
-        theApp.m_activeWnd.ActivateTarget();
-    }
+		if (g_Opt.m_bSendPasteMessageAfterSelection == FALSE)
+		{
+			theApp.m_activeWnd.ActivateTarget();
+		}
 
-    if(g_Opt.m_bShowPersistent && g_Opt.GetAutoHide())
-    {
-        MinMaxWindow(FORCE_MIN);
-    }
+		if (g_Opt.m_bShowPersistent && g_Opt.GetAutoHide())
+		{
+			MinMaxWindow(FORCE_MIN);
+		}
+	}
+	else
+	{
+		CString errorMessage;
+		errorMessage.Format(_T("Paste Error - %s"), paste.m_lastErrorMessage);
+		m_popupMsg.Show(errorMessage, CPoint(0, 0), true);
+		SetTimer(TIMER_ERROR_MSG, CGetSetOptions::GetErrorMsgPopupTimeout(), NULL);
+	}
 
     Log(_T("End Open Selection"));
     return TRUE;

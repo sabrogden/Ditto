@@ -26,6 +26,7 @@ public:
 	bool m_bActivateTarget;
 	CSpecialPasteOptions m_pasteOptions;
 	bool m_pastedFromGroup;
+	CString m_lastErrorMessage;
 
 	struct MarkAsPastedData 
 	{

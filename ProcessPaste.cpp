@@ -24,73 +24,103 @@ CProcessPaste::~CProcessPaste()
 
 BOOL CProcessPaste::DoPaste()
 {
-	m_pOle->m_pasteOptions = m_pasteOptions;
-
-	if(m_pOle->DoImmediateRender())
+	try
 	{
-		// MarkAsPasted() must be done first since it makes use of
-		//  m_pOle->m_ClipIDs and m_pOle is inaccessible after
-		//  SetClipboard is called.
-		MarkAsPasted();
-		
-		// Ignore the clipboard change that we will cause IF:
-		// 1) we are pasting a single element, since the element is already
-		//    in the db and its lDate was updated by MarkAsPas???ted().
-		// OR
-		// 2) we are pasting multiple, but g_Opt.m_bSaveMultiPaste is false
-		if(GetClipIDs().GetSize() == 1 || !g_Opt.m_bSaveMultiPaste)
-		{
-			m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
-		}
-		else
-		{
-			m_pOle->CacheGlobalData(theApp.m_cfDelaySavingData, NewGlobalP("Delay", sizeof("Delay")));
-		}
-		
-		m_pOle->SetClipboard(); // m_pOle is now managed by the OLE clipboard
+		m_pOle->m_pasteOptions = m_pasteOptions;
 
-		// The Clipboard now owns the allocated memory
-		// and will delete this data object
-		// when new data is put on the Clipboard
-		m_pOle = NULL; // m_pOle should not be accessed past this point
+		if (m_pOle->DoImmediateRender())
+		{
+			// MarkAsPasted() must be done first since it makes use of
+			//  m_pOle->m_ClipIDs and m_pOle is inaccessible after
+			//  SetClipboard is called.
+			MarkAsPasted();
 
-		if(m_bSendPaste)
-		{
-			Log(_T("Sending Paste to active window"));
-			theApp.m_activeWnd.SendPaste(m_bActivateTarget);
+			// Ignore the clipboard change that we will cause IF:
+			// 1) we are pasting a single element, since the element is already
+			//    in the db and its lDate was updated by MarkAsPas???ted().
+			// OR
+			// 2) we are pasting multiple, but g_Opt.m_bSaveMultiPaste is false
+			if (GetClipIDs().GetSize() == 1 || !g_Opt.m_bSaveMultiPaste)
+			{
+				m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
+			}
+			else
+			{
+				m_pOle->CacheGlobalData(theApp.m_cfDelaySavingData, NewGlobalP("Delay", sizeof("Delay")));
+			}
+
+			m_pOle->SetClipboard(); // m_pOle is now managed by the OLE clipboard
+
+			// The Clipboard now owns the allocated memory
+			// and will delete this data object
+			// when new data is put on the Clipboard
+			m_pOle = NULL; // m_pOle should not be accessed past this point
+
+			if (m_bSendPaste)
+			{
+				Log(_T("Sending Paste to active window"));
+				theApp.m_activeWnd.SendPaste(m_bActivateTarget);
+			}
+			else if (m_bActivateTarget)
+			{
+				Log(_T("Activating active window"));
+				theApp.m_activeWnd.ActivateTarget();
+			}
+
+			return TRUE;
 		}
-		else if(m_bActivateTarget)
-		{
-			Log(_T("Activating active window"));
-			theApp.m_activeWnd.ActivateTarget();
-		}
-		
-		return TRUE;
+	}
+	catch (CException *ex)
+	{
+		TCHAR szCause[255];
+		ex->GetErrorMessage(szCause, 255);
+		m_lastErrorMessage.Format(_T("Paste exception: %s"), szCause);
+		Log(m_lastErrorMessage);
+	}
+	catch (...) 
+	{
+		m_lastErrorMessage = _T("Paste generic exception");
+		Log(m_lastErrorMessage);
 	}
 	return FALSE;
 }
 
 BOOL CProcessPaste::DoDrag()
 {
-	m_pOle->m_pasteOptions = m_pasteOptions;
-	m_pOle->DoDelayRender();
-	DROPEFFECT de = m_pOle->DoDragDrop(DROPEFFECT_COPY);
-	if(de != DROPEFFECT_NONE)
+	try
 	{
-		MarkAsPasted();
-		return TRUE;
+		m_pOle->m_pasteOptions = m_pasteOptions;
+		m_pOle->DoDelayRender();
+		DROPEFFECT de = m_pOle->DoDragDrop(DROPEFFECT_COPY);
+		if (de != DROPEFFECT_NONE)
+		{
+			MarkAsPasted();
+			return TRUE;
+		}
+
+		//from https://www.codeproject.com/Articles/886711/Drag-Drop-Images-and-Drop-Descriptions-for-MFC-App
+		//You may have noted the InternalRelease() function call.This is required here to delete the object.While it is possible to use 
+		//delete or create the object on the stack with Drag & Drop operations, it is not recommended to do so.
+
+		m_pOle->InternalRelease();
+
+		// The Clipboard now owns the allocated memory
+		// and will delete this data object
+		// when new data is put on the Clipboard
+		m_pOle = NULL; // m_pOle should not be accessed past this point
 	}
-
-	//from https://www.codeproject.com/Articles/886711/Drag-Drop-Images-and-Drop-Descriptions-for-MFC-App
-	//You may have noted the InternalRelease() function call.This is required here to delete the object.While it is possible to use 
-	//delete or create the object on the stack with Drag & Drop operations, it is not recommended to do so.
-
-	m_pOle->InternalRelease();
-	
-	// The Clipboard now owns the allocated memory
-	// and will delete this data object
-	// when new data is put on the Clipboard
-	m_pOle = NULL; // m_pOle should not be accessed past this point
+	catch (CException *ex)
+	{
+		TCHAR szCause[255];
+		ex->GetErrorMessage(szCause, 255);
+		m_lastErrorMessage.Format(_T("Drag drop exception: %s"), szCause);
+		Log(m_lastErrorMessage);
+	}
+	catch (...)
+	{
+		m_lastErrorMessage = _T("Drag drop generic exception");
+		Log(m_lastErrorMessage);
+	}
 
 	return FALSE;
 }
