@@ -451,9 +451,6 @@ DittoSetup*]]></ExclExt>
 %DATETIME%
 <br>
 <br>
-Warning as of 3/29 Ditto has been update to use Visual Studio 2017, this might take a while to sort out the installers to properly install needed dlls
-<br>
-<br>
 <b>Ditto beta, version %version%</b>
 <br><br>
 <a href="DittoSetup_%versionFileName%.exe">Ditto Setup</a><br>
@@ -471,7 +468,7 @@ Warning as of 3/29 Ditto has been update to use Visual Studio 2017, this might t
 <a href="AllFiles.php">Previous Builds</a><br>
 <br>
 
-<a href="changes.php">Change Log since last release 3-18-2016</a><br>
+<a href="changes.php">Change Log since last release 9-7-2017</a><br>
 
 <br>
 
@@ -498,7 +495,7 @@ var sc_security="b3f57099";
 		</step>
 		<step action='Git'>
 			<Command>log</Command>
-			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2017-02-10</Options>
+			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2017-09-07</Options>
 			<WorkDir>%workDir%</WorkDir>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>
