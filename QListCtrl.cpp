@@ -656,6 +656,7 @@ BOOL CQListCtrl::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 		return FALSE;   	// created tooltip
 	
 	::SendMessage(pNMHDR->hwndFrom, TTM_SETMAXTIPWIDTH, 0, 500);
+	//::SendMessage(pNMHDR->hwndFrom, TTM_SETDELAYTIME, TTDT_AUTOPOP, MAKELPARAM(32000, 0));
 	
 	// Use Item's name as the tool tip. Change this for something different.
 	// Like use its file size, etc.
