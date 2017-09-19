@@ -24,6 +24,8 @@ CProcessPaste::~CProcessPaste()
 
 BOOL CProcessPaste::DoPaste()
 {
+	BOOL ret = FALSE;
+
 	try
 	{
 		m_pOle->m_pasteOptions = m_pasteOptions;
@@ -67,7 +69,7 @@ BOOL CProcessPaste::DoPaste()
 				theApp.m_activeWnd.ActivateTarget();
 			}
 
-			return TRUE;
+			ret = TRUE;
 		}
 	}
 	catch (CException *ex)
@@ -82,11 +84,18 @@ BOOL CProcessPaste::DoPaste()
 		m_lastErrorMessage = _T("Paste generic exception");
 		Log(m_lastErrorMessage);
 	}
-	return FALSE;
+
+	// The Clipboard now owns the allocated memory
+	// and will delete this data object
+	// when new data is put on the Clipboard
+	m_pOle = NULL; // m_pOle should not be accessed past this point
+
+	return ret;
 }
 
 BOOL CProcessPaste::DoDrag()
 {
+	BOOL ret = FALSE;
 	try
 	{
 		m_pOle->m_pasteOptions = m_pasteOptions;
@@ -95,19 +104,8 @@ BOOL CProcessPaste::DoDrag()
 		if (de != DROPEFFECT_NONE)
 		{
 			MarkAsPasted();
-			return TRUE;
-		}
-
-		//from https://www.codeproject.com/Articles/886711/Drag-Drop-Images-and-Drop-Descriptions-for-MFC-App
-		//You may have noted the InternalRelease() function call.This is required here to delete the object.While it is possible to use 
-		//delete or create the object on the stack with Drag & Drop operations, it is not recommended to do so.
-
-		m_pOle->InternalRelease();
-
-		// The Clipboard now owns the allocated memory
-		// and will delete this data object
-		// when new data is put on the Clipboard
-		m_pOle = NULL; // m_pOle should not be accessed past this point
+			ret = TRUE;
+		}		
 	}
 	catch (CException *ex)
 	{
@@ -122,7 +120,32 @@ BOOL CProcessPaste::DoDrag()
 		Log(m_lastErrorMessage);
 	}
 
-	return FALSE;
+	try
+	{
+		//from https://www.codeproject.com/Articles/886711/Drag-Drop-Images-and-Drop-Descriptions-for-MFC-App
+		//You may have noted the InternalRelease() function call.This is required here to delete the object.While it is possible to use 
+		//delete or create the object on the stack with Drag & Drop operations, it is not recommended to do so.
+		m_pOle->InternalRelease();
+	}
+	catch (CException *ex)
+	{
+		TCHAR szCause[255];
+		ex->GetErrorMessage(szCause, 255);
+		m_lastErrorMessage.Format(_T("Drag drop exception 2: %s"), szCause);
+		Log(m_lastErrorMessage);
+	}
+	catch (...)
+	{
+		m_lastErrorMessage = _T("Drag drop generic exception 2");
+		Log(m_lastErrorMessage);
+	}
+
+	// The Clipboard now owns the allocated memory
+	// and will delete this data object
+	// when new data is put on the Clipboard
+	m_pOle = NULL; // m_pOle should not be accessed past this point
+
+	return ret;
 }
 
 void CProcessPaste::MarkAsPasted()
