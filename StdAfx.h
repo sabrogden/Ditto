@@ -19,8 +19,8 @@
 
 #define HITTEST_RET LRESULT
 
-#define _WIN32_WINNT 0x0600
-#define WINVER 0x0600
+#define _WIN32_WINNT 0x0605
+#define WINVER 0x0605
 
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 

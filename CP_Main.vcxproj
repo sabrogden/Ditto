@@ -132,6 +132,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>Default</CompileAs>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;Winmm.lib;Version.lib;EncryptDecrypt.lib;zlib\zlibstat.lib;focus.lib;Shlwapi.lib;sqlite\lib32\icuuc.lib;sqlite\lib32\icutu.lib;sqlite\lib32\icuio.lib;sqlite\lib32\icuin.lib;sqlite\lib32\icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -189,6 +190,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>Default</CompileAs>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;Winmm.lib;Version.lib;EncryptDecrypt64.lib;zlib\zlibstat64.lib;focus64.lib;Shlwapi.lib;sqlite\lib64\icuuc.lib;sqlite\lib64\icutu.lib;sqlite\lib64\icuio.lib;sqlite\lib64\icuin.lib;sqlite\lib64\icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -242,6 +244,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;Winmm.lib;Pdh.lib;Version.lib;EncryptDecryptD.lib;zlib\zlibstat.lib;focus.lib;Shlwapi.lib;%(AdditionalDependencies);sqlite\lib32\icuuc.lib;sqlite\lib32\icutu.lib;sqlite\lib32\icuio.lib;sqlite\lib32\icuin.lib;sqlite\lib32\icudt.lib</AdditionalDependencies>
@@ -296,6 +299,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;Winmm.lib;Pdh.lib;Version.lib;EncryptDecryptD64.lib;zlib\zlibstat64.lib;focus64.lib;Shlwapi.lib;sqlite\lib64\icuuc.lib;sqlite\lib64\icutu.lib;sqlite\lib64\icuio.lib;sqlite\lib64\icuin.lib;sqlite\lib64\icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -434,6 +438,8 @@
     <ClCompile Include="CF_HDropAggregator.cpp" />
     <ClCompile Include="CF_TextAggregator.cpp" />
     <ClCompile Include="CF_UnicodeTextAggregator.cpp" />
+    <ClCompile Include="ChaiScriptOnCopy.cpp" />
+    <ClCompile Include="ChaiScriptXml.cpp" />
     <ClCompile Include="Clip.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -580,6 +586,7 @@
     <ClCompile Include="CustomFriendsHelper.cpp" />
     <ClCompile Include="DeleteClipData.cpp" />
     <ClCompile Include="DimWnd.cpp" />
+    <ClCompile Include="DittoChaiScript.cpp" />
     <ClCompile Include="DittoPopupWindow.cpp" />
     <ClCompile Include="DPI.cpp" />
     <ClCompile Include="DrawHTML.C">
@@ -661,6 +668,7 @@
     </ClCompile>
     <ClCompile Include="QuickPasteKeyboard.cpp" />
     <ClCompile Include="RegExFilterHelper.cpp" />
+    <ClCompile Include="ScriptEditor.cpp" />
     <ClCompile Include="ScrollHelper.cpp" />
     <ClCompile Include="Shared\TextConvert.cpp" />
     <ClCompile Include="Shared\Tokenizer.cpp" />
@@ -1881,12 +1889,15 @@
     <ClInclude Include="ArrayEx.h" />
     <ClInclude Include="AutoSendToClientThread.h" />
     <ClInclude Include="CGdiPlusBitmap.h" />
+    <ClInclude Include="ChaiScriptOnCopy.h" />
+    <ClInclude Include="ChaiScriptXml.h" />
     <ClInclude Include="ClipCompare.h" />
     <ClInclude Include="ClipFormatQListCtrl.h" />
     <ClInclude Include="CreateQRCodeImage.h" />
     <ClInclude Include="CustomFriendsHelper.h" />
     <ClInclude Include="DeleteClipData.h" />
     <ClInclude Include="DimWnd.h" />
+    <ClInclude Include="DittoChaiScript.h" />
     <ClInclude Include="DittoPopupWindow.h" />
     <ClInclude Include="DPI.h" />
     <ClInclude Include="DrawHTML.h" />
@@ -1926,6 +1937,7 @@
     <ClInclude Include="QuickPasteKeyboard.h" />
     <ClInclude Include="RegExFilterHelper.h" />
     <ClInclude Include="RichEditCtrlEx.h" />
+    <ClInclude Include="ScriptEditor.h" />
     <ClInclude Include="ScrollHelper.h" />
     <ClInclude Include="SearchEditBox.h" />
     <ClInclude Include="Shared\TextConvert.h" />

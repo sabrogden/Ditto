@@ -297,6 +297,7 @@ ON_COMMAND(ID_IMPORT_IMPORTCOPIEDFILE, &CQPasteWnd::OnImportImportcopiedfile)
 ON_UPDATE_COMMAND_UI(ID_IMPORT_IMPORTCOPIEDFILE, &CQPasteWnd::OnUpdateImportImportcopiedfile)
 ON_UPDATE_COMMAND_UI(32775, &CQPasteWnd::OnUpdate32775)
 ON_COMMAND_RANGE(CustomFriendStartId, (CustomFriendStartId+ MaxCustomFriends+1), OnCustomSendToFriend)
+ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
 END_MESSAGE_MAP()
 
 
@@ -653,7 +654,7 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
             g_HotKeys.RegisterAll();
         }
 
-        m_lstHeader.HidePopup();
+        m_lstHeader.HidePopup(true);
     }
     else if(nState == WA_ACTIVE || nState == WA_CLICKACTIVE)
     {
@@ -698,7 +699,7 @@ BOOL CQPasteWnd::HideQPasteWindow (bool releaseFocus, bool clearSearchData)
 
     KillTimer(TIMER_FILL_CACHE);
 
-	m_lstHeader.HidePopup();
+	m_lstHeader.HidePopup(true);
 
 	m_popupMsg.Hide();
 
@@ -1138,7 +1139,7 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 
 	if (g_Opt.m_bShowPersistent)
 	{
-		title = (StrF(_T("%s %s"), _T(QPASTE_TITLE), theApp.m_Language.GetString("top_window", "[Top Most Window]")));
+		title = (StrF(_T("%s %s"), _T(QPASTE_TITLE), theApp.m_Language.GetString("top_window", "[Always on top]")));
 	}
 
 	if (theApp.IsClipboardViewerConnected() == FALSE)
@@ -1191,7 +1192,7 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 
 	if (g_Opt.m_bShowPersistent)
 	{
-		windowTitle += StrF(_T(" %s"), theApp.m_Language.GetString("top_window", "[Top Most Window]"));
+		windowTitle += StrF(_T(" %s"), theApp.m_Language.GetString("top_window", "[Always on top]"));
 	}
 
 	if (theApp.IsClipboardViewerConnected() == FALSE)
@@ -1205,7 +1206,7 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 {
     KillTimer(TIMER_DO_SEARCH);
-	m_lstHeader.HidePopup();
+	m_lstHeader.HidePopup(true);
 
     Log(StrF(_T("Start Fill List - %s"), csSQLSearch));
 
@@ -3250,7 +3251,7 @@ bool CQPasteWnd::DoActionCloseWindow()
 	{
 		if (m_lstHeader.IsToolTipWindowVisible())
 		{
-			m_lstHeader.HidePopup();
+			m_lstHeader.HidePopup(true);
 		}
 		else if (m_strSQLSearch.IsEmpty() == FALSE)
 		{
@@ -5121,7 +5122,7 @@ void CQPasteWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
 
 void CQPasteWnd::OnShowGroupsTop()
 {
-	m_lstHeader.HidePopup();
+	m_lstHeader.HidePopup(true);
 
     OnShowGroupsBottom();
     return ;
@@ -5145,7 +5146,7 @@ void CQPasteWnd::OnShowGroupsTop()
 
 void CQPasteWnd::OnShowGroupsBottom()
 {
-	m_lstHeader.HidePopup();
+	m_lstHeader.HidePopup(true);
 
     m_GroupTree.m_bHide = false;
     m_bHideWnd = false;
@@ -5311,7 +5312,7 @@ LRESULT CQPasteWnd::OnToolTipWndInactive(WPARAM wParam, LPARAM lParam)
 		CWnd *p = GetFocus();
 		if (p == NULL)
 		{
-			m_lstHeader.HidePopup();
+			m_lstHeader.HidePopup(true);
 		}
 	}
 
@@ -6054,7 +6055,7 @@ void CQPasteWnd::OnUpdateSpecialpasteSentence(CCmdUI *pCmdUI)
 
 void CQPasteWnd::OnSystemButton()
 {
-	m_lstHeader.HidePopup();
+	m_lstHeader.HidePopup(true);
 
 	POINT pp;
 	CMenu cmPopUp;
@@ -6332,7 +6333,13 @@ void CQPasteWnd::OnUpdateMenuNewclip32937(CCmdUI *pCmdUI)
 
 LRESULT CQPasteWnd::OnSearchFocused(WPARAM wParam, LPARAM lParam)
 {
-	m_lstHeader.HidePopup();
+	m_lstHeader.HidePopup(true);
+
+	return TRUE;
+}
+
+LRESULT CQPasteWnd::OnDpiChanged(WPARAM wParam, LPARAM lParam)
+{
 
 	return TRUE;
 }

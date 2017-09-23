@@ -1570,10 +1570,16 @@ void CQListCtrl::SetSearchText(CString text)
 	m_searchText = text;
 }
 
-void CQListCtrl::HidePopup()
+void CQListCtrl::HidePopup(bool checkShowPersistant)
 { 
-	if(VALID_TOOLTIP) 
-		m_pToolTip->Hide();	
+	if (VALID_TOOLTIP)
+	{
+		if (checkShowPersistant == false ||
+			m_pToolTip->GetShowPersistant() == false)
+		{
+			m_pToolTip->Hide();
+		}
+	}
 }
 
 BOOL CQListCtrl::IsToolTipWindowVisible() 

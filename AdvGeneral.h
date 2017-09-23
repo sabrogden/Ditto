@@ -27,4 +27,6 @@ public:
 	afx_msg void OnBnClickedOk();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnBnClickedBtCompactAndRepair();
+	afx_msg void OnBnClickedButtonCopyScripts();
+	afx_msg void OnBnClickedButtonPasteScripts2();
 };

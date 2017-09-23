@@ -2,6 +2,7 @@
 
 #include "Theme.h"
 #include "RegExFilterHelper.h"
+#include "ChaiScriptXml.h"
 
 #define MAX_SEND_CLIENTS	15
 class CSendClients
@@ -573,6 +574,14 @@ public:
 
 	static BOOL GetShowStartupMessage();
 	static void SetShowStartupMessage(int val);
+
+	static CChaiScriptXml m_copyScripts;
+	static CString GetCopyScriptsXml();
+	static void SetCopyScriptsXml(CString val);
+
+	static CChaiScriptXml m_pasteScripts;
+	static CString GetPasteScriptsXml();
+	static void SetPasteScriptsXml(CString val);
 
 };
 

@@ -516,4 +516,5 @@ public:
 	afx_msg void OnImportImportcopiedfile();
 	afx_msg void OnUpdateImportImportcopiedfile(CCmdUI *pCmdUI);
 	afx_msg void OnUpdate32775(CCmdUI *pCmdUI);
+	afx_msg LRESULT OnDpiChanged(WPARAM wParam, LPARAM lParam);
 };

@@ -434,6 +434,16 @@
     <ClCompile Include="AdvGeneral.cpp" />
     <ClCompile Include="RegExFilterHelper.cpp" />
     <ClCompile Include="CustomFriendsHelper.cpp" />
+    <ClCompile Include="DittoChaiScript.cpp">
+      <Filter>ChaiScript</Filter>
+    </ClCompile>
+    <ClCompile Include="ChaiScriptOnCopy.cpp">
+      <Filter>ChaiScript</Filter>
+    </ClCompile>
+    <ClCompile Include="ChaiScriptXml.cpp">
+      <Filter>ChaiScript</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -908,6 +918,16 @@
     <ClInclude Include="AdvGeneral.h" />
     <ClInclude Include="RegExFilterHelper.h" />
     <ClInclude Include="CustomFriendsHelper.h" />
+    <ClInclude Include="DittoChaiScript.h">
+      <Filter>ChaiScript</Filter>
+    </ClInclude>
+    <ClInclude Include="ChaiScriptOnCopy.h">
+      <Filter>ChaiScript</Filter>
+    </ClInclude>
+    <ClInclude Include="ChaiScriptXml.h">
+      <Filter>ChaiScript</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

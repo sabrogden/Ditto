@@ -68,6 +68,8 @@ CGetSetOptions g_Opt;
 BOOL CGetSetOptions::m_bShowAlwaysOnTopWarning = TRUE;
 CRegExFilterHelper CGetSetOptions::m_regexHelper;
 BOOL CGetSetOptions::m_excludeCF_DIBInExcel = TRUE;
+CChaiScriptXml CGetSetOptions::m_copyScripts;
+CChaiScriptXml CGetSetOptions::m_pasteScripts;
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -198,6 +200,9 @@ void CGetSetOptions::LoadSettings()
 	GetClientSendCount();
 
 	m_Theme.Load(GetTheme());
+
+	m_copyScripts.Load(GetCopyScriptsXml());
+	m_pasteScripts.Load(GetPasteScriptsXml());
 }
 
 void CGetSetOptions::CreateIniFile(CString path)
@@ -474,7 +479,7 @@ CString CGetSetOptions::GetProfileString(CString csName, CString csDefault, CStr
 			csApp = csNewPath;
 		}
 
-		TCHAR cString[MAX_PATH];
+		TCHAR cString[100000];
 		GetPrivateProfileString(csApp, csName, csDefault, cString, sizeof(cString), m_csIniFileName);
 
 		return cString;
@@ -2509,4 +2514,26 @@ BOOL CGetSetOptions::GetShowStartupMessage()
 void CGetSetOptions::SetShowStartupMessage(int val)
 {
 	SetProfileLong(_T("ShowStartupMessage"), val);
+}
+
+CString CGetSetOptions::GetCopyScriptsXml()
+{
+	return GetProfileString("CopyScriptsXml", "");
+}
+
+void CGetSetOptions::SetCopyScriptsXml(CString val)
+{
+	m_copyScripts.Load(val);
+	SetProfileString(_T("CopyScriptsXml"), val);
+}
+
+CString CGetSetOptions::GetPasteScriptsXml()
+{
+	return GetProfileString("PasteScriptsXml", "");
+}
+
+void CGetSetOptions::SetPasteScriptsXml(CString val)
+{
+	m_pasteScripts.Load(val);
+	SetProfileString(_T("PasteScriptsXml"), val);
 }

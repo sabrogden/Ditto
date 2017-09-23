@@ -173,7 +173,7 @@
 		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090"></Item>
 		
 		//New item added 3/1/11
-		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098"></Item>
+		<Item English_Text = "Accepted Copy Applications (separate by ;)" ID = "2098"></Item>
 		<Item English_Text = "Include" ID = "2095"></Item>
 		<Item English_Text = "Exclude" ID = "2096"></Item>
 		
@@ -278,9 +278,9 @@
 		
 	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>
-		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052"></Item>
+		<Item English_Text = "When you receive a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052"></Item>
 		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053"></Item>
-		<Item English_Text = "Disable Recieving Clips" ID = "2026"></Item>
+		<Item English_Text = "Disable Receiving Clips" ID = "2026"></Item>
 		<Item English_Text = "Group Password" ID = "2054"></Item>
 		<Item English_Text = "If you are receiving clips from computers where your group password does not match, enter additional group passwords separated by commas" ID = "2055"></Item>
 		<Item English_Text = "Receive Passwords" ID = "2056"></Item>
@@ -407,7 +407,7 @@
 		<Item English_Text = "Hot Key" ID = "QPHotKey"></Item>
 		<Item English_Text = "Command" ID = "QPCommand"></Item>
 		
-		<Item English_Text = "[Top Most Window]" ID = "top_most"></Item>
+		<Item English_Text = "[Always on top]" ID = "top_most"></Item>
 		
 		<Item English_Text = "[Disconnected]" ID = "disconnected"></Item>
 		

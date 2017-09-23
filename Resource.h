@@ -188,6 +188,7 @@
 #define down_28                         331
 #define IDB_PNG20                       332
 #define down_32                         332
+#define IDD_SCRIPT_EDITOR               333
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -254,9 +255,12 @@
 #define IDC_BUTTON_SEARCH               1040
 #define IDC_ASSIGN                      1040
 #define IDC_BUTTON_CLEAR                1040
+#define IDC_BUTTON_RUN                  1040
+#define IDC_BUTTON_COPY_SCRIPTS         1040
 #define IDC_PARSE_EDIT                  1041
 #define IDC_SEND_PASTE_MESSAGE          1041
 #define IDC_BUTTON_PROPERTIES           1041
+#define IDC_BUTTON_PASTE_SCRIPTS        1041
 #define IDC_CHECK1                      1042
 #define IDC_HISTORY_START_TOP           1042
 #define IDC_CHECK_SEND_PASTE            1042
@@ -265,6 +269,7 @@
 #define IDC_PLAY_SOUND_1                1042
 #define IDC_CHECK_CLIP_TITLE            1042
 #define IDC_CHECK_SHIFT_1               1042
+#define IDC_CHECK_ACTIVE                1042
 #define IDC_PLAY_SOUND_2                1043
 #define IDC_CHECK_MOVE_CLIPS_ON_PASTE   1043
 #define IDC_CHECK_CREATE_DATE           1043
@@ -483,7 +488,9 @@
 #define IDC_BUTTON_DIFF_BROWSE          2124
 #define IDC_BUTTON_REMOVE               2124
 #define IDC_BUTTON_ADVANCED             2124
+#define IDC_BUTTON_ADD_SCRIPT           2124
 #define IDC_STATIC_QUICK_PASTE          2125
+#define IDC_BUTTON_DELETE_SCRIPT        2125
 #define IDC_STATIC_DESC                 2126
 #define IDC_RADIO_USE_IP                2127
 #define IDC_RADIO_KEYBOARD              2127
@@ -528,6 +535,21 @@
 #define IDC_CHECK_SAVE                  2151
 #define IDC_STATIC_FRIEND_DESC          2152
 #define IDC_EDIT_NAME                   2153
+#define IDC_EDIT_SCRIPT                 2155
+#define IDC_STATIC_NAME                 2156
+#define IDC_EDIT_INPUT                  2157
+#define IDC_EDIT_OUTPUT                 2158
+#define IDC_STATIC_INPUT                2159
+#define IDC_STATIC_OUTPUT               2160
+#define IDC_LIST_SCRIPTS                2161
+#define IDC_STATIC_RETURN_DESC          2162
+#define IDC_STATIC_SCRIPT               2163
+#define IDC_STATIC_ACTIVE               2164
+#define IDC_MFCLINK1                    2165
+#define IDC_MFCLINK_CHAISCRIPT          2165
+#define IDC_MFCLINK2_EXAMPLES           2166
+#define IDC_STATIC_MD5                  2167
+#define IDC_EDIT_MD5                    2168
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -690,15 +712,16 @@
 #define ID_SENDTO_PROMPTFORNAME         32939
 #define ID_MENU_SAVE                    32940
 #define ID_IMPORT_IMPORTCOPIEDFILE      32941
+#define ID_FIRST_ALWAYSONTOP            32942
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        333
-#define _APS_NEXT_COMMAND_VALUE         32942
-#define _APS_NEXT_CONTROL_VALUE         2154
+#define _APS_NEXT_RESOURCE_VALUE        337
+#define _APS_NEXT_COMMAND_VALUE         32943
+#define _APS_NEXT_CONTROL_VALUE         2169
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

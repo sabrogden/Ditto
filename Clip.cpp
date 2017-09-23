@@ -12,6 +12,7 @@
 #include "zlib/zlib.h"
 #include "Misc.h"
 #include "Md5.h"
+#include "ChaiScriptOnCopy.h"
 
 #include <Mmsystem.h>
 
@@ -518,6 +519,43 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 	{
 		Log(_T("No clip types were in supported types array"));
 		return FALSE;
+	}
+
+	try
+	{
+		for (auto & listItem : g_Opt.m_copyScripts.m_list)
+		{
+			if (listItem.m_active)
+			{
+				Log(StrF(_T("Start of process copy name: %s, script: %s"), listItem.m_name, listItem.m_script));
+
+				ChaiScriptOnCopy onCopy;
+				if (onCopy.ProcessScript(this, (LPCSTR)CTextConvert::ConvertToChar(listItem.m_script), (LPCSTR)CTextConvert::ConvertToChar(activeApp)) == false)
+				{
+					Log(StrF(_T("End of process copy name: %s, returned false, not saving this copy to Ditto, last Error: %s"), listItem.m_name, onCopy.m_lastError));
+
+					return -1;
+				}
+
+				Log(StrF(_T("End of process copy name: %s, returned true, last Error: %s"), listItem.m_name, onCopy.m_lastError));
+			}
+			else
+			{
+				Log(StrF(_T("Script is not active, not processing name: %s, script: %s"), listItem.m_name, listItem.m_script));
+			}
+		}
+	}
+	catch (CException *ex)
+	{
+		TCHAR szCause[255];
+		ex->GetErrorMessage(szCause, 255);
+		CString cs;
+		cs.Format(_T("save copy exception: %s"), szCause);
+		Log(cs);
+	}
+	catch (...)
+	{
+		Log(_T("save copy exception 2"));
 	}
 
 	return TRUE;

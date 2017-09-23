@@ -135,7 +135,7 @@ public:
 	bool ShowFullDescription(bool bFromAuto = false, bool fromNextPrev = false);
 	BOOL SetItemCountEx(int iCount, DWORD dwFlags = 0);
 
-	void HidePopup();
+	void HidePopup(bool checkShowPersistant);
 
 	void SetLogFont(LOGFONT &font);
 

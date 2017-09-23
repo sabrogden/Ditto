@@ -5,6 +5,8 @@
 #include "cp_main.h"
 #include "CopyProperties.h"
 #include ".\copyproperties.h"
+#include "Md5.h"
+#include "Shared\TextConvert.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -62,6 +64,7 @@ BEGIN_MESSAGE_MAP(CCopyProperties, CDialog)
 	ON_WM_SIZE()
 	//}}AFX_MSG_MAP
 	ON_WM_CTLCOLOR()
+	ON_LBN_SELCHANGE(IDC_COPY_DATA, &CCopyProperties::OnLbnSelchangeCopyData)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -86,11 +89,10 @@ BOOL CCopyProperties::OnInitDialog()
 		}
 		else
 		{
-			CClip Clip;
-			if(Clip.LoadMainTable(m_lCopyID))
+			if(m_clip.LoadMainTable(m_lCopyID))
 			{
-				Clip.LoadFormats(m_lCopyID);
-				LoadDataFromCClip(Clip);			
+				m_clip.LoadFormats(m_lCopyID);
+				LoadDataFromCClip(m_clip);
 			}
 		}
 	}
@@ -500,4 +502,70 @@ HBRUSH CCopyProperties::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 	// TODO:  Return a different brush if the default is not desired
 	return hbr;
+}
+
+
+void CCopyProperties::OnLbnSelchangeCopyData()
+{
+	int selCount = m_lCopyData.GetSelCount();
+	if (selCount > 0)
+	{
+		m_bDeletedData = true;
+
+		//Get the selected indexes
+		ARRAY items;
+		items.SetSize(selCount);
+		m_lCopyData.GetSelItems(selCount, items.GetData());
+
+		items.SortDescending();
+
+		for (int i = 0; i < selCount; i++)
+		{
+			int row = items[i];
+			int itemData = (int)m_lCopyData.GetItemData(row);
+
+			CClip *pClip = NULL;
+			if (m_lCopyID == -1 && m_pMemoryClip != NULL)
+			{
+				pClip = m_pMemoryClip;
+			}
+			else
+			{
+				pClip = &m_clip;
+			}
+
+			if (pClip != NULL)
+			{
+				CClipFormat* pCF;
+				INT_PTR dataCount = pClip->m_Formats.GetSize();
+				for (int i = 0; i < dataCount; i++)
+				{
+					pCF = &pClip->m_Formats.GetData()[i];
+					if (pCF)
+					{
+						if (pCF->m_dataId == itemData)
+						{
+							CMd5 md5;
+							md5.MD5Init();
+
+							SIZE_T size = ::GlobalSize(pCF->Data());
+							void* pv = GlobalLock(pCF->Data());
+							if (pv != NULL)
+							{
+								md5.MD5Update((unsigned char*)pv, (unsigned int)size);
+
+								GlobalUnlock(pCF->Data());
+
+								CStringA md5String = md5.MD5FinalToString();
+
+								this->SetDlgItemText(IDC_EDIT_MD5, CTextConvert::MultiByteToUnicodeString(md5String));
+							}
+						}
+					}
+				}
+			}
+
+			break;
+		}
+	}
 }

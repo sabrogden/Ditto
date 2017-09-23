@@ -29,6 +29,7 @@ CToolTipEx::CToolTipEx(): m_dwTextStyle(DT_EXPANDTABS | DT_EXTERNALLEADING |
                        DT_NOPREFIX | DT_WORDBREAK), m_rectMargin(2, 2, 3, 3),
                         m_pNotifyWnd(NULL), m_clipId(0), m_clipRow(-1)
 {
+	m_showPersistant = false;
 }
 
 CToolTipEx::~CToolTipEx()
@@ -45,7 +46,7 @@ ON_WM_SIZE()
 ON_WM_NCHITTEST()
 ON_WM_ACTIVATE()
 ON_WM_TIMER()
-
+ON_WM_NCLBUTTONDBLCLK()
 ON_WM_NCPAINT()
 ON_WM_NCCALCSIZE()
 ON_WM_NCLBUTTONDOWN()
@@ -61,6 +62,7 @@ ON_WM_SETFOCUS()
 ON_COMMAND(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, &CToolTipEx::OnFirstHidedescriptionwindowonm)
 ON_COMMAND(ID_FIRST_WRAPTEXT, &CToolTipEx::OnFirstWraptext)
 ON_WM_WINDOWPOSCHANGING()
+ON_COMMAND(ID_FIRST_ALWAYSONTOP, &CToolTipEx::OnFirstAlwaysontop)
 END_MESSAGE_MAP()
 
 
@@ -243,7 +245,7 @@ BOOL CToolTipEx::Hide()
 {
 	DELETE_BITMAP
 
-		SaveWindowSize();
+	SaveWindowSize();
 
     ShowWindow(SW_HIDE);
 
@@ -252,8 +254,20 @@ BOOL CToolTipEx::Hide()
 	m_clipId = 0;
 	m_clipRow = -1;
 	m_searchText = _T("");	
+	m_showPersistant = false;
 
     return TRUE;
+}
+
+void CToolTipEx::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
+{
+	// toggle ShowPersistent when we double click the caption
+	if (nHitTest == HTCAPTION)
+	{
+		OnFirstAlwaysontop();		
+	}
+
+	CWnd::OnNcLButtonDblClk(nHitTest, point);
 }
 
 void CToolTipEx::SaveWindowSize()
@@ -289,6 +303,17 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
             case VK_ESCAPE:
                 Hide();
                 return TRUE;
+			case 'W':
+				OnFirstWraptext();				
+				return TRUE;
+				break;
+			case VK_SPACE:
+				if (GetKeyState(VK_CONTROL) & 0x8000)
+				{
+					OnFirstAlwaysontop();
+					return TRUE;
+				}
+				break;
             case 'C':
                 if(GetKeyState(VK_CONTROL) &0x8000)
                 {
@@ -329,11 +354,14 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
         case WM_WINDOWPOSCHANGING:
         case WM_LBUTTONDOWN:
             {
-				if (CGetSetOptions::GetMouseClickHidesDescription())
+				if (m_showPersistant == false)
 				{
-					if (!IsCursorInToolTip())
+					if (CGetSetOptions::GetMouseClickHidesDescription())
 					{
-						Hide();
+						if (!IsCursorInToolTip())
+						{
+							Hide();
+						}
 					}
 				}
             }
@@ -386,7 +414,10 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 					return FALSE;
 				}
 
-                Hide();
+				if (m_showPersistant == false)
+				{
+					Hide();
+				}
 
                 break;
             }
@@ -402,7 +433,10 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
         case WM_NCMBUTTONDOWN:
         case WM_NCMBUTTONDBLCLK:
             {
-                Hide();
+				if (m_showPersistant == false)
+				{
+					Hide();
+				}
                 break;
             }
 
@@ -885,8 +919,20 @@ void CToolTipEx::OnOptions()
 
 		if (CGetSetOptions::GetWrapDescriptionText())
 			cmSubMenu->CheckMenuItem(ID_FIRST_WRAPTEXT, MF_CHECKED);
-		
-		
+
+		if (m_showPersistant)
+			cmSubMenu->CheckMenuItem(ID_FIRST_ALWAYSONTOP, MF_CHECKED);
+
+		CString cs;
+		cmSubMenu->GetMenuString(ID_FIRST_WRAPTEXT, cs, MF_BYCOMMAND);
+		CString shortcutText = 'W';
+		if (shortcutText != _T("") &&
+			cs.Find("\t" + shortcutText) < 0)
+		{
+			cs += "\t";
+			cs += shortcutText;
+			cmSubMenu->ModifyMenu(ID_FIRST_WRAPTEXT, MF_BYCOMMAND, ID_FIRST_WRAPTEXT, cs);
+		}
 		
 		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
 	}
@@ -980,4 +1026,23 @@ void CToolTipEx::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 	CWnd::OnWindowPosChanging(lpwndpos);
 
 	m_DittoWindow.SnapToEdge(this, lpwndpos);
+}
+
+
+void CToolTipEx::OnFirstAlwaysontop()
+{
+	m_showPersistant = !m_showPersistant;
+	if (m_showPersistant)
+	{
+		m_DittoWindow.m_customWindowTitle = _T("[Always on top]");
+		m_DittoWindow.m_useCustomWindowTitle = true;
+		::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+	}
+	else
+	{
+		m_DittoWindow.m_customWindowTitle = _T("");
+		m_DittoWindow.m_useCustomWindowTitle = true;
+	}
+
+	::SetWindowPos(m_hWnd, NULL, 0, 0, 0, 0, SWP_DRAWFRAME | SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);	
 }

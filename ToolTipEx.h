@@ -39,6 +39,8 @@ public:
 
 	void SetClipData(CString data) { m_clipData = data; }
 
+	bool GetShowPersistant() { return m_showPersistant; }
+
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CToolTipEx)
@@ -72,6 +74,7 @@ protected:
 	CFont m_clipDataFont;
 	bool m_saveWindowLockout;
 	int m_clipRow;
+	bool m_showPersistant;
 
 protected:
 	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);
@@ -108,4 +111,6 @@ public:
 	afx_msg void OnPaint();	
 	afx_msg void OnFirstHidedescriptionwindowonm();
 	afx_msg void OnFirstWraptext();
+	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
+	afx_msg void OnFirstAlwaysontop();
 };
