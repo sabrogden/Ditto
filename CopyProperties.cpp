@@ -121,6 +121,8 @@ BOOL CCopyProperties::OnInitDialog()
 	m_Resize.AddControl(IDCANCEL, DR_MoveTop | DR_MoveLeft);
 	m_Resize.AddControl(IDC_EDIT_QUICK_PASTE, DR_SizeWidth);
 	m_Resize.AddControl(IDC_COMBO1, DR_SizeWidth);
+	m_Resize.AddControl(IDC_STATIC_MD5, DR_MoveTop | DR_MoveLeft);
+	m_Resize.AddControl(IDC_EDIT_MD5, DR_MoveTop | DR_MoveLeft);
 	
 	theApp.m_Language.UpdateClipProperties(this);
 
@@ -216,6 +218,9 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 		m_lCopyData.SetCaretIndex(selectedRow);
 		m_lCopyData.SetAnchorIndex(selectedRow);
 	}
+
+	//show the selected data md5
+	OnLbnSelchangeCopyData();
 
 	if(Clip.m_bIsGroup == FALSE)
 	{
