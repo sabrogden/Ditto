@@ -18,6 +18,7 @@ public:
 
 protected:
 	
+	void EnableDisable(BOOL enable);
 
 // Dialog Data
 #ifdef AFX_DESIGN_TIME
@@ -40,4 +41,5 @@ public:
 	afx_msg void OnBnClickedCheckActive();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnBnClickedButtonDeleteScript();
+	afx_msg void OnBnClickedButtonRun();
 };

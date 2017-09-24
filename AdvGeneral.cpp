@@ -607,7 +607,7 @@ void CAdvGeneral::OnBnClickedBtCompactAndRepair()
 
 void CAdvGeneral::OnBnClickedButtonCopyScripts()
 {
-	CDimWnd dim(this->GetParent());
+	CDimWnd dim(this);
 
 	CScriptEditor e(this);
 	e.m_xml.Load(CGetSetOptions::GetCopyScriptsXml());
@@ -620,7 +620,7 @@ void CAdvGeneral::OnBnClickedButtonCopyScripts()
 
 void CAdvGeneral::OnBnClickedButtonPasteScripts2()
 {
-	CDimWnd dim(this->GetParent());
+	CDimWnd dim(this);
 
 	CScriptEditor e(this);
 	e.m_xml.Load(CGetSetOptions::GetPasteScriptsXml());

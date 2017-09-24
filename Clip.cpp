@@ -13,6 +13,7 @@
 #include "Misc.h"
 #include "Md5.h"
 #include "ChaiScriptOnCopy.h"
+#include "DittoChaiScript.h"
 
 #include <Mmsystem.h>
 
@@ -530,7 +531,8 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 				Log(StrF(_T("Start of process copy name: %s, script: %s"), listItem.m_name, listItem.m_script));
 
 				ChaiScriptOnCopy onCopy;
-				if (onCopy.ProcessScript(this, (LPCSTR)CTextConvert::ConvertToChar(listItem.m_script), (LPCSTR)CTextConvert::ConvertToChar(activeApp)) == false)
+				CDittoChaiScript clipData(this, (LPCSTR)CTextConvert::ConvertToChar(activeApp));
+				if (onCopy.ProcessScript(clipData, (LPCSTR)CTextConvert::ConvertToChar(listItem.m_script)) == false)
 				{
 					Log(StrF(_T("End of process copy name: %s, returned false, not saving this copy to Ditto, last Error: %s"), listItem.m_name, onCopy.m_lastError));
 

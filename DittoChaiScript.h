@@ -16,8 +16,8 @@ public:
 	std::string GetAsciiString();
 	void SetAsciiString(std::string stringVal);
 
-	std::string GetClipMD5(int clipboardFormat);
-	SIZE_T GetClipSize(int clipboardFormat);
+	std::string GetClipMD5(std::string clipboardFormat);
+	SIZE_T GetClipSize(std::string clipboardFormat);
 
 	std::string GetActiveApp() { return m_activeApp; }
 };

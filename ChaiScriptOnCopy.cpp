@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "ChaiScriptOnCopy.h"
-#include "DittoChaiScript.h"
 #include "Shared\TextConvert.h"
 
 #include "chaiscript/chaiscript.hpp"
@@ -18,18 +17,20 @@ ChaiScriptOnCopy::~ChaiScriptOnCopy()
 }
 
 
-bool ChaiScriptOnCopy::ProcessScript(IClip *pClip, std::string script, std::string activeApp)
+bool ChaiScriptOnCopy::ProcessScript(CDittoChaiScript &clipData, std::string script)
 {
 	m_lastError = _T("");
 	bool continueCopy = true;
-	
+	 
 	try
 	{
 		ChaiScript chai;
 
 		chai.add(chaiscript::fun(&CDittoChaiScript::GetClipMD5), "GetClipMD5");
+		chai.add(chaiscript::fun(&CDittoChaiScript::GetClipSize), "GetClipSize");
+		chai.add(chaiscript::fun(&CDittoChaiScript::GetAsciiString), "GetAsciiString");
+		chai.add(chaiscript::fun(&CDittoChaiScript::SetAsciiString), "SetAsciiString");
 
-		CDittoChaiScript clipData(pClip, activeApp);
 		chai.add(chaiscript::var(&clipData), "clip");
 
 		//loop over all scripts
@@ -42,7 +43,7 @@ bool ChaiScriptOnCopy::ProcessScript(IClip *pClip, std::string script, std::stri
 		Boxed_Value bv = chai.eval(script);
 		if (chaiscript::boxed_cast<bool> (bv) == true)
 		{
-			m_lastError = _T("Script return true, to cancel copy");
+			m_lastError = _T("Script returned true, canceling copy");
 			continueCopy = false;
 		}
 	}

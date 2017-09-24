@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "DittoChaiScript.h"
-
+#include "Shared\TextConvert.h"
 #include "Md5.h"
 #include "Misc.h"
 
@@ -43,14 +43,14 @@ void CDittoChaiScript::SetAsciiString(std::string stringVal)
 	{
 		m_pClip->Clips()->DeleteAll();
 
-		//HGLOBAL hGlobal = ::NewGlobalP(stringVal.c_str, 4);
-	//	ASSERT(hGlobal);
+		HGLOBAL hGlobal = ::NewGlobalP((LPVOID)stringVal.c_str(), stringVal.size()+1);
+		ASSERT(hGlobal);
 
-		//m_pClip->Clips()->AddNew(CF_TEXT, hGlobal);
+		m_pClip->Clips()->AddNew(CF_TEXT, hGlobal);
 	}
 }
 
-std::string CDittoChaiScript::GetClipMD5(int clipboardFormat)
+std::string CDittoChaiScript::GetClipMD5(std::string clipboardFormat)
 {
 	CMd5 md5;
 	md5.MD5Init();
@@ -59,7 +59,9 @@ std::string CDittoChaiScript::GetClipMD5(int clipboardFormat)
 
 	if (m_pClip)
 	{
-		IClipFormat *pFormat = m_pClip->Clips()->FindFormatEx(clipboardFormat);
+		int formatId = GetFormatID(CTextConvert::MultiByteToUnicodeString(clipboardFormat.c_str()));
+
+		IClipFormat *pFormat = m_pClip->Clips()->FindFormatEx(formatId);
 		if (pFormat)
 		{
 			SIZE_T size = ::GlobalSize(pFormat->Data());
@@ -78,12 +80,14 @@ std::string CDittoChaiScript::GetClipMD5(int clipboardFormat)
 	return md5String;
 }
 
-SIZE_T CDittoChaiScript::GetClipSize(int clipboardFormat)
+SIZE_T CDittoChaiScript::GetClipSize(std::string clipboardFormat)
 {
 	SIZE_T size = 0;
 	if (m_pClip)
 	{
-		IClipFormat *pFormat = m_pClip->Clips()->FindFormatEx(clipboardFormat);
+		int formatId = GetFormatID(CTextConvert::MultiByteToUnicodeString(clipboardFormat.c_str()));
+
+		IClipFormat *pFormat = m_pClip->Clips()->FindFormatEx(formatId);
 		if (pFormat)
 		{
 			size = ::GlobalSize(pFormat->Data());

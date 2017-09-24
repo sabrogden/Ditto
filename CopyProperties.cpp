@@ -209,7 +209,7 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 				m_lCopyData.SetItemData(nIndex, pCF->m_dataId);
 		}
 	}
-
+	
 	int selectedRow = m_lCopyData.GetCount()-1;
 	if(selectedRow >= 0 && selectedRow < m_lCopyData.GetCount())
 	{

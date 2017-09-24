@@ -5,15 +5,13 @@ BEGIN_MESSAGE_MAP(CDimWnd, CFrameWnd)
 	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
-// For preventing two dimmer windows ever appearing
-bool is_dimmer_active = false;
 
 CDimWnd::CDimWnd(CWnd *pParent)
 {
 
 	// Don't do anything if the main frame doesn't appear to be there,
 	// or if there is already dimming happening.
-	if (pParent != NULL && !is_dimmer_active)
+	if (pParent != NULL)
 	{
 		// Get the client area of the window to dim.
 		CRect rc;
@@ -32,14 +30,11 @@ CDimWnd::CDimWnd(CWnd *pParent)
 
 		// Show the dimmer window
 		ShowWindow(SW_SHOW);
-
-		is_dimmer_active = true;
 	}
 }
 
 CDimWnd::~CDimWnd()
 {
-	is_dimmer_active = false;
 }
 
 BOOL CDimWnd::OnEraseBkgnd(CDC* pDC)

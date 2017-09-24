@@ -434,16 +434,16 @@
     <ClCompile Include="AdvGeneral.cpp" />
     <ClCompile Include="RegExFilterHelper.cpp" />
     <ClCompile Include="CustomFriendsHelper.cpp" />
-    <ClCompile Include="DittoChaiScript.cpp">
-      <Filter>ChaiScript</Filter>
-    </ClCompile>
+    <ClCompile Include="ScriptEditor.cpp" />
     <ClCompile Include="ChaiScriptOnCopy.cpp">
       <Filter>ChaiScript</Filter>
     </ClCompile>
     <ClCompile Include="ChaiScriptXml.cpp">
       <Filter>ChaiScript</Filter>
     </ClCompile>
-    <ClCompile Include="ScriptEditor.cpp" />
+    <ClCompile Include="DittoChaiScript.cpp">
+      <Filter>ChaiScript</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -918,16 +918,16 @@
     <ClInclude Include="AdvGeneral.h" />
     <ClInclude Include="RegExFilterHelper.h" />
     <ClInclude Include="CustomFriendsHelper.h" />
-    <ClInclude Include="DittoChaiScript.h">
-      <Filter>ChaiScript</Filter>
-    </ClInclude>
+    <ClInclude Include="ScriptEditor.h" />
     <ClInclude Include="ChaiScriptOnCopy.h">
       <Filter>ChaiScript</Filter>
     </ClInclude>
     <ClInclude Include="ChaiScriptXml.h">
       <Filter>ChaiScript</Filter>
     </ClInclude>
-    <ClInclude Include="ScriptEditor.h" />
+    <ClInclude Include="DittoChaiScript.h">
+      <Filter>ChaiScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -1416,6 +1416,9 @@
     </Filter>
     <Filter Include="QRCode">
       <UniqueIdentifier>{3a17864d-e44b-4afe-84b0-a44dee42c591}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ChaiScript">
+      <UniqueIdentifier>{13844e6c-68be-44ca-93c7-1f0b08f0b319}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

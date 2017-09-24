@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Shared\IClip.h"
+#include "DittoChaiScript.h"
 #include <string>
 
 class ChaiScriptOnCopy
@@ -9,7 +9,7 @@ public:
 	ChaiScriptOnCopy();
 	~ChaiScriptOnCopy();
 
-	bool ProcessScript(IClip *pClip, std::string script, std::string activeApp);
+	bool ProcessScript(CDittoChaiScript &clipData, std::string script);
 
 	CString m_lastError;
 };

@@ -716,7 +716,7 @@ BEGIN
     CONTROL         "&Never Auto Delete",IDC_NEVER_AUTO_DELETE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,149,40,105,10
     COMBOBOX        IDC_COMBO1,71,91,215,128,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LISTBOX         IDC_COPY_DATA,7,205,279,43,LBS_SORT | LBS_NOINTEGRALHEIGHT | LBS_EXTENDEDSEL | WS_VSCROLL | WS_TABSTOP
-    PUSHBUTTON      "Delete",IDC_DELETE_COPY_DATA,6,248,42,12
+    PUSHBUTTON      "Delete",IDC_DELETE_COPY_DATA,6,251,42,12
     DEFPUSHBUTTON   "OK",IDOK,163,268,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,236,268,50,14
     LTEXT           "Item Title",IDC_STATIC_TITLE,7,108,168,8
@@ -991,7 +991,7 @@ BEGIN
     LTEXT           "Desciption",IDC_STATIC_DESC,100,24,34,14,SS_CENTERIMAGE
     LTEXT           "Sample Input",IDC_STATIC_INPUT,100,189,43,8
     LTEXT           "Sample Output",IDC_STATIC_OUTPUT,100,232,48,8
-    LTEXT           "All function must return true/false.  Either to cancel saving the copy or cancel the paste.",IDC_STATIC_RETURN_DESC,100,177,326,8
+    LTEXT           "All function must return true/false.  Return true to cancel saving the copy or cancel the paste.",IDC_STATIC_RETURN_DESC,100,177,326,8
     LTEXT           "Script",IDC_STATIC_SCRIPT,100,56,30,10
     LTEXT           "Active",IDC_STATIC_ACTIVE,100,42,21,14
     CONTROL         "ChaiScript (http://chaiscript.com/)",IDC_MFCLINK_CHAISCRIPT,

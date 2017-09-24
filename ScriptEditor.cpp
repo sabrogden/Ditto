@@ -5,6 +5,9 @@
 #include "CP_Main.h"
 #include "ScriptEditor.h"
 #include "afxdialogex.h"
+#include "ChaiScriptOnCopy.h"
+#include "Shared\TextConvert.h"
+#include "DittoChaiScript.h"
 
 
 // CScriptEditor dialog
@@ -37,6 +40,7 @@ BEGIN_MESSAGE_MAP(CScriptEditor, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECK_ACTIVE, &CScriptEditor::OnBnClickedCheckActive)
 	ON_WM_SIZE()
 	ON_BN_CLICKED(IDC_BUTTON_DELETE_SCRIPT, &CScriptEditor::OnBnClickedButtonDeleteScript)
+	ON_BN_CLICKED(IDC_BUTTON_RUN, &CScriptEditor::OnBnClickedButtonRun)
 END_MESSAGE_MAP()
 
 
@@ -63,6 +67,10 @@ BOOL CScriptEditor::OnInitDialog()
 
 		OnLbnSelchangeListScripts();
 	}
+	else
+	{
+		EnableDisable(FALSE);
+	}
 
 	m_resize.SetParent(m_hWnd);	
 	m_resize.AddControl(IDOK, DR_MoveTop | DR_MoveLeft);
@@ -83,8 +91,7 @@ BOOL CScriptEditor::OnInitDialog()
 	m_resize.AddControl(IDC_BUTTON_RUN, DR_MoveTop | DR_MoveLeft);
 
 	m_resize.AddControl(IDC_BUTTON_DELETE_SCRIPT, DR_MoveTop);
-	m_resize.AddControl(IDC_BUTTON_ADD_SCRIPT, DR_MoveTop);
-	
+	m_resize.AddControl(IDC_BUTTON_ADD_SCRIPT, DR_MoveTop);	
 	
 
 	return FALSE;
@@ -92,7 +99,7 @@ BOOL CScriptEditor::OnInitDialog()
 
 void CScriptEditor::OnLbnSelchangeListScripts()
 {
-	int listIndex = m_scriptsList.GetItemData(m_scriptsList.GetCurSel());
+	int listIndex = m_scriptsList.GetCurSel();
 	if (listIndex >= 0 && listIndex < m_xml.m_list.size())
 	{
 		this->SetDlgItemText(IDC_EDIT_NAME, m_xml.m_list[listIndex].m_name);
@@ -119,12 +126,6 @@ void CScriptEditor::OnBnClickedButtonAddScript()
 	m_xml.m_list.push_back(newItem);
 
 	int index = m_scriptsList.AddString(newItem.m_name);
-	{
-		int y = m_xml.m_list.size() - 1;
-		m_scriptsList.SetItemData(index, y);// );
-	}
-
-	int t = m_scriptsList.GetItemData(index);
 
 	m_scriptsList.SetSel(index);
 	m_scriptsList.SetCurSel(index);
@@ -137,12 +138,13 @@ void CScriptEditor::OnBnClickedButtonAddScript()
 	this->CheckDlgButton(IDC_CHECK_ACTIVE, BST_CHECKED);
 
 	this->GetDlgItem(IDC_EDIT_NAME)->SetFocus();
+
+	EnableDisable(TRUE);
 }
 
 void CScriptEditor::OnEnKillfocusEditName()
 {
-	int selectedRow = m_scriptsList.GetCurSel();
-	int listIndex = m_scriptsList.GetItemData(selectedRow);
+	int listIndex = m_scriptsList.GetCurSel();
 	if (listIndex >= 0 && listIndex < m_xml.m_list.size())
 	{
 		CString name;
@@ -154,14 +156,12 @@ void CScriptEditor::OnEnKillfocusEditName()
 
 			m_scriptsList.SetRedraw(FALSE);
 
-			int itemData = m_scriptsList.GetItemData(selectedRow);
-			m_scriptsList.DeleteString(selectedRow);
-			m_scriptsList.InsertString(selectedRow, name);
-			m_scriptsList.SetItemData(selectedRow, itemData);
-			m_scriptsList.SetSel(selectedRow);
-			m_scriptsList.SetCurSel(selectedRow);
-			m_scriptsList.SetCaretIndex(selectedRow);
-			m_scriptsList.SetAnchorIndex(selectedRow);
+			m_scriptsList.DeleteString(listIndex);
+			m_scriptsList.InsertString(listIndex, name);
+			m_scriptsList.SetSel(listIndex);
+			m_scriptsList.SetCurSel(listIndex);
+			m_scriptsList.SetCaretIndex(listIndex);
+			m_scriptsList.SetAnchorIndex(listIndex);
 			m_scriptsList.SetRedraw(TRUE);
 			m_scriptsList.UpdateWindow();
 		}	
@@ -170,7 +170,7 @@ void CScriptEditor::OnEnKillfocusEditName()
 
 void CScriptEditor::OnEnKillfocusEditDesc()
 {
-	int listIndex = m_scriptsList.GetItemData(m_scriptsList.GetCurSel());
+	int listIndex = m_scriptsList.GetCurSel();
 	if (listIndex >= 0 && listIndex < m_xml.m_list.size())
 	{
 		CString desc;
@@ -181,7 +181,7 @@ void CScriptEditor::OnEnKillfocusEditDesc()
 
 void CScriptEditor::OnEnKillfocusEditScript()
 {
-	int listIndex = m_scriptsList.GetItemData(m_scriptsList.GetCurSel());
+	int listIndex = m_scriptsList.GetCurSel();
 	if (listIndex >= 0 && listIndex < m_xml.m_list.size())
 	{
 		CString script;
@@ -192,7 +192,7 @@ void CScriptEditor::OnEnKillfocusEditScript()
 
 void CScriptEditor::OnBnClickedCheckActive()
 {
-	int listIndex = m_scriptsList.GetItemData(m_scriptsList.GetCurSel());
+	int listIndex = m_scriptsList.GetCurSel();
 	if (listIndex >= 0 && listIndex < m_xml.m_list.size())
 	{
 		if (this->IsDlgButtonChecked(IDC_CHECK_ACTIVE) == BST_CHECKED)
@@ -216,26 +216,66 @@ void CScriptEditor::OnSize(UINT nType, int cx, int cy)
 
 void CScriptEditor::OnBnClickedButtonDeleteScript()
 {
-	int row = m_scriptsList.GetCurSel();
-	int listIndex = m_scriptsList.GetItemData(row);
+	int listIndex = m_scriptsList.GetCurSel();
 	if (listIndex >= 0 && listIndex < m_xml.m_list.size())
 	{
 		m_xml.m_list.erase(m_xml.m_list.begin() + listIndex);
-		m_scriptsList.DeleteString(row);
+		m_scriptsList.DeleteString(listIndex);
 
-		if (m_scriptsList.GetCount() <= row)
+		if (m_scriptsList.GetCount() <= listIndex)
 		{
-			row--;
+			listIndex--;
 		}
 
-		if (row >= 0)
+		if (listIndex >= 0)
 		{
-			m_scriptsList.SetSel(row);
-			m_scriptsList.SetCurSel(row);
-			m_scriptsList.SetCaretIndex(row);
-			m_scriptsList.SetAnchorIndex(row);
+			m_scriptsList.SetSel(listIndex);
+			m_scriptsList.SetCurSel(listIndex);
+			m_scriptsList.SetCaretIndex(listIndex);
+			m_scriptsList.SetAnchorIndex(listIndex);
 
 			OnLbnSelchangeListScripts();
 		}
+		else
+		{
+			EnableDisable(FALSE);
+		}
+	}
+}
+
+void CScriptEditor::EnableDisable(BOOL enable)
+{
+	::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_NAME), enable);
+	::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_DESC), enable);
+	::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_SCRIPT), enable);
+	::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_INPUT), enable);
+	::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_OUTPUT), enable);
+	::EnableWindow(::GetDlgItem(m_hWnd, IDC_BUTTON_RUN), enable);
+}
+
+
+void CScriptEditor::OnBnClickedButtonRun()
+{
+	CWaitCursor wait;
+
+	CString input;
+	GetDlgItemText(IDC_EDIT_INPUT, input);
+	CString script;
+	GetDlgItemText(IDC_EDIT_SCRIPT, script);
+
+	CClip clip;
+	ChaiScriptOnCopy test;
+	CDittoChaiScript clipData(&clip, "");
+	clipData.SetAsciiString((LPCSTR)CTextConvert::UnicodeStringToMultiByte(input));
+	
+	test.ProcessScript(clipData, (LPCSTR)CTextConvert::UnicodeStringToMultiByte(script));
+
+	if (test.m_lastError == _T(""))
+	{
+		SetDlgItemText(IDC_EDIT_OUTPUT, _T("returned false"));
+	}
+	else
+	{
+		SetDlgItemText(IDC_EDIT_OUTPUT, test.m_lastError);
 	}
 }
