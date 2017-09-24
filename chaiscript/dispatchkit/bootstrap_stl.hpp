@@ -707,6 +707,9 @@ namespace chaiscript
           m.add(fun([](const String *s, const String &f, size_t pos) { return s->find_last_not_of(f, pos); } ), "find_last_not_of");
           m.add(fun([](const String *s, const String &f, size_t pos) { return s->find_first_not_of(f, pos); } ), "find_first_not_of");
 
+	  m.add(fun([](String *s, typename String::value_type c) -> decltype(auto) { return (*s += c); } ), "+=");
+
+
           m.add(fun([](String *s) { s->clear(); } ), "clear");
           m.add(fun([](const String *s) { return s->empty(); } ), "empty");
           m.add(fun([](const String *s) { return s->size(); } ), "size");
