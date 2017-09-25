@@ -70,7 +70,7 @@ CRegExFilterHelper CGetSetOptions::m_regexHelper;
 BOOL CGetSetOptions::m_excludeCF_DIBInExcel = TRUE;
 CChaiScriptXml CGetSetOptions::m_copyScripts;
 CChaiScriptXml CGetSetOptions::m_pasteScripts;
-int CGetSetOptions::m_tooltipTimeout;
+long CGetSetOptions::m_tooltipTimeout;
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -2577,12 +2577,12 @@ void CGetSetOptions::SetPasteScriptsXml(CString val)
 	SetProfileString(_T("PasteScriptsXml"), val);
 }
 
-int CGetSetOptions::GetToolTipTimeout()
+long CGetSetOptions::GetToolTipTimeout()
 {
 	return GetProfileLong("ToolTipTimeout", -1);
 }
 
-void CGetSetOptions::SetToolTipTimeout(int val)
+void CGetSetOptions::SetToolTipTimeout(long val)
 {
 	m_tooltipTimeout = val;
 	SetProfileLong("ToolTipTimeout", val);

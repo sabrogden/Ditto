@@ -583,9 +583,9 @@ public:
 	static CString GetPasteScriptsXml();
 	static void SetPasteScriptsXml(CString val);
 
-	static int m_tooltipTimeout;
-	static int GetToolTipTimeout();
-	static void SetToolTipTimeout(int val);
+	static long m_tooltipTimeout;
+	static long GetToolTipTimeout();
+	static void SetToolTipTimeout(int long);
 
 };
 

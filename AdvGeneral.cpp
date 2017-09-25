@@ -101,6 +101,7 @@ END_MESSAGE_MAP()
 #define SETTING_REGEX_FILTERING_BY_PROCESS_NAME_15 57
 
 #define SETTING_SHOW_STARTUP_MESSAGE 58
+#define SETTING_TOOLTIP_TIMEOUT 59
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -164,6 +165,9 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Show thumbnails(for CF_DIB types) (Could Increase Memory Usage and Display Speed)"), CGetSetOptions::GetDrawThumbnail(), SETTING_DRAW_THUMBNAILS);
 	
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Text Lines per Clip"), CGetSetOptions::GetLinesPerRow(), _T(""), SETTING_LINES_PER_ROW));
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Tooltip timeout(ms) max of 32000"), g_Opt.m_tooltipTimeout, _T(""), SETTING_TOOLTIP_TIMEOUT));
+
 	AddTrueFalse(pGroupTest, _T("Transparency Enabled"), CGetSetOptions::GetEnableTransparency(), SETTING_ENABLE_TRANSPARENCY);
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Transparency Percentage"), CGetSetOptions::GetTransparencyPercent(), _T(""), SETTING_TRANSPARENCY));
 	AddTrueFalse(pGroupTest, _T("Update Clip Order On Paste"), CGetSetOptions::GetUpdateTimeOnPaste(), SETTING_UPDATE_ORDER);
@@ -562,6 +566,13 @@ void CAdvGeneral::OnBnClickedOk()
 						val = true;
 					}
 					CGetSetOptions::SetShowStartupMessage(val);
+				}
+				break;
+
+			case SETTING_TOOLTIP_TIMEOUT:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetToolTipTimeout(pNewValue->lVal);
 				}
 				break;
 			}
