@@ -473,6 +473,9 @@ long CGetSetOptions::GetProfileLong(CString csName, long lDefaultValue, CString 
 
 CString CGetSetOptions::GetProfileString(CString csName, CString csDefault, CString csNewPath)
 {
+	CString returnString;
+	DWORD dwBufLen = 0;
+
 	if(m_bFromIni && !m_bInConversion)
 	{
 		CString csApp(_T("Ditto"));
@@ -482,10 +485,31 @@ CString CGetSetOptions::GetProfileString(CString csName, CString csDefault, CStr
 			csApp = csNewPath;
 		}
 
-		TCHAR cString[100000];
-		GetPrivateProfileString(csApp, csName, csDefault, cString, sizeof(cString), m_csIniFileName);
+		bool doBreak = false;
+		dwBufLen = 10000;
+		while (true)
+		{
+			TCHAR *szString = new TCHAR[dwBufLen];
+			ZeroMemory(szString, dwBufLen);
 
-		return cString;
+			DWORD readLength = GetPrivateProfileString(csApp, csName, csDefault, szString, dwBufLen, m_csIniFileName);
+
+			if (readLength < (dwBufLen - 1))
+			{
+				returnString = szString;
+				doBreak = true; //delay break so we can delete the string
+			}
+
+			delete[] szString;
+			dwBufLen = dwBufLen * 2;
+
+			if (doBreak)
+			{
+				break;
+			}
+		}
+
+		return returnString;
 	}
 
 	CString csPath(_T(REG_PATH));
@@ -497,18 +521,30 @@ CString CGetSetOptions::GetProfileString(CString csName, CString csDefault, CStr
 	HKEY hkKey;
 	long lResult = RegOpenKeyEx(HKEY_CURRENT_USER, csPath, NULL, KEY_READ, &hkKey);
 
-	TCHAR szString[256];
-	ZeroMemory(szString, sizeof(szString));
-	DWORD dwBufLen = 256;
+	if (lResult == ERROR_SUCCESS)
+	{
+		lResult = ::RegQueryValueEx(hkKey, csName, NULL, NULL, NULL, &dwBufLen);
 
-	lResult = ::RegQueryValueEx(hkKey , csName, NULL, NULL, (LPBYTE)szString, &dwBufLen);
+		if (lResult == ERROR_SUCCESS &&
+			dwBufLen > 0)
+		{
+			dwBufLen++;
+			TCHAR *szString = new TCHAR[dwBufLen];
+			ZeroMemory(szString, dwBufLen);
 
-	RegCloseKey(hkKey);
+			lResult = ::RegQueryValueEx(hkKey, csName, NULL, NULL, (LPBYTE)szString, &dwBufLen);
+
+			returnString = szString;
+			delete[] szString;
+		}
+
+		RegCloseKey(hkKey);
+	}
 
 	if(lResult != ERROR_SUCCESS)
 		return csDefault;
 
-	return szString;
+	return returnString;
 }
 
 BOOL CGetSetOptions::SetProfileLong(CString csName, long lValue)
