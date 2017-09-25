@@ -70,6 +70,7 @@ CRegExFilterHelper CGetSetOptions::m_regexHelper;
 BOOL CGetSetOptions::m_excludeCF_DIBInExcel = TRUE;
 CChaiScriptXml CGetSetOptions::m_copyScripts;
 CChaiScriptXml CGetSetOptions::m_pasteScripts;
+int CGetSetOptions::m_tooltipTimeout;
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -203,6 +204,8 @@ void CGetSetOptions::LoadSettings()
 
 	m_copyScripts.Load(GetCopyScriptsXml());
 	m_pasteScripts.Load(GetPasteScriptsXml());
+
+	m_tooltipTimeout = GetToolTipTimeout();
 }
 
 void CGetSetOptions::CreateIniFile(CString path)
@@ -2536,4 +2539,15 @@ void CGetSetOptions::SetPasteScriptsXml(CString val)
 {
 	m_pasteScripts.Load(val);
 	SetProfileString(_T("PasteScriptsXml"), val);
+}
+
+int CGetSetOptions::GetToolTipTimeout()
+{
+	return GetProfileLong("ToolTipTimeout", -1);
+}
+
+void CGetSetOptions::SetToolTipTimeout(int val)
+{
+	m_tooltipTimeout = val;
+	SetProfileLong("ToolTipTimeout", val);
 }

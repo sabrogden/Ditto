@@ -583,6 +583,10 @@ public:
 	static CString GetPasteScriptsXml();
 	static void SetPasteScriptsXml(CString val);
 
+	static int m_tooltipTimeout;
+	static int GetToolTipTimeout();
+	static void SetToolTipTimeout(int val);
+
 };
 
 // global for easy access and for initialization of fast access variables

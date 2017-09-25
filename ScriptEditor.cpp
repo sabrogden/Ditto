@@ -251,8 +251,8 @@ void CScriptEditor::EnableDisable(BOOL enable)
 	::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_INPUT), enable);
 	::EnableWindow(::GetDlgItem(m_hWnd, IDC_EDIT_OUTPUT), enable);
 	::EnableWindow(::GetDlgItem(m_hWnd, IDC_BUTTON_RUN), enable);
+	::EnableWindow(::GetDlgItem(m_hWnd, IDC_CHECK_ACTIVE), enable);
 }
-
 
 void CScriptEditor::OnBnClickedButtonRun()
 {
