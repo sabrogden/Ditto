@@ -5343,6 +5343,7 @@ LRESULT CQPasteWnd::OnToolTipWndInactive(WPARAM wParam, LPARAM lParam)
         if(p == NULL)
         {
             HideQPasteWindow(false);
+			m_lstHeader.HidePopup(true);
         }
     }
 	else
