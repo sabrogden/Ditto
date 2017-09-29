@@ -364,14 +364,14 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
 			switch (a.Cmd)
 			{
 			case ActionEnums::CLOSEWINDOW:
-				if (this->m_showPersistant &&
+				/*if (this->m_showPersistant &&
 					m_DittoWindow.m_bMinimized == false)
 				{
 					m_DittoWindow.MinMaxWindow(this, FORCE_MIN);
 					theApp.m_activeWnd.ReleaseFocus();
 
 					return TRUE;
-				}
+				}*/
 				break;
 			}
 		}
