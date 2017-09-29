@@ -3,6 +3,7 @@
 #include "ToolTipEx.h"
 #include "BitmapHelper.h"
 #include "Options.h"
+#include "ActionEnums.h"
 #include <Richedit.h>
 
 #ifdef _DEBUG
@@ -21,6 +22,7 @@ m_imageViewer.m_pBitmap = NULL;		\
 #define HIDE_WINDOW_TIMER 1
 #define SAVE_SIZE 2
 #define TIMER_BUTTON_UP 3
+#define TIMER_AUTO_MAX		4
 
 /////////////////////////////////////////////////////////////////////////////
 // CToolTipEx
@@ -30,6 +32,9 @@ CToolTipEx::CToolTipEx(): m_dwTextStyle(DT_EXPANDTABS | DT_EXTERNALLEADING |
                         m_pNotifyWnd(NULL), m_clipId(0), m_clipRow(-1)
 {
 	m_showPersistant = false;
+	m_pToolTipActions = NULL;
+	m_bMaxSetTimer = false;
+	m_lDelayMaxSeconds = 2;
 }
 
 CToolTipEx::~CToolTipEx()
@@ -93,7 +98,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
 	m_DittoWindow.m_bDrawMaximize = false;
 	m_DittoWindow.m_bDrawMinimize = false;
-	m_DittoWindow.m_bDrawChevron = false;
+	m_DittoWindow.m_bDrawChevron = true;
 	m_DittoWindow.m_sendWMClose = false;
 
     m_RichEdit.Create(_T(""), _T(""), WS_CHILD | WS_VISIBLE | WS_VSCROLL |
@@ -230,6 +235,12 @@ BOOL CToolTipEx::Show(CPoint point)
 
 	m_clipDataStatic.SetWindowText(m_clipData);	
 
+	if (m_DittoWindow.m_bMinimized)
+	{
+		//m_DittoWindow.MinMaxWindow(this, FORCE_MAX);
+		m_DittoWindow.m_bMinimized = false;
+	}
+
 	m_saveWindowLockout = true;
 	MoveWindow(rect);	
 	ShowWindow(SW_SHOWNA);	
@@ -239,6 +250,17 @@ BOOL CToolTipEx::Show(CPoint point)
 	m_saveWindowLockout = false;
 
     return TRUE;
+}
+
+void CToolTipEx::GetWindowRectEx(LPRECT lpRect)
+{
+	if (m_DittoWindow.m_bMinimized)
+	{
+		*lpRect = m_DittoWindow.m_crFullSizeWindow;
+		return;
+	}
+
+	CWnd::GetWindowRect(lpRect);
 }
 
 BOOL CToolTipEx::Hide()
@@ -275,7 +297,16 @@ void CToolTipEx::SaveWindowSize()
 	if (::IsWindowVisible(m_hWnd))
 	{
 		CRect rect;
-		this->GetWindowRect(&rect);
+
+		if (m_DittoWindow.m_bMinimized)
+		{
+			rect = m_DittoWindow.m_crFullSizeWindow;
+		}
+		else
+		{
+			this->GetWindowRect(&rect);
+		}		
+		
 		CGetSetOptions::SetDescWndSize(rect.Size());
 		CGetSetOptions::SetDescWndPoint(rect.TopLeft());
 
@@ -300,20 +331,6 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
 
             switch(pMsg->wParam)
             {
-            case VK_ESCAPE:
-                Hide();
-                return TRUE;
-			case 'W':
-				OnFirstWraptext();				
-				return TRUE;
-				break;
-			case VK_SPACE:
-				if (GetKeyState(VK_CONTROL) & 0x8000)
-				{
-					OnFirstAlwaysontop();
-					return TRUE;
-				}
-				break;
             case 'C':
                 if(GetKeyState(VK_CONTROL) &0x8000)
                 {
@@ -338,6 +355,27 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
 			}
 			break;
     }
+
+	if (m_pToolTipActions != NULL)
+	{
+		CAccel a;
+		if (m_pToolTipActions->OnMsg(pMsg, a))
+		{
+			switch (a.Cmd)
+			{
+			case ActionEnums::CLOSEWINDOW:
+				if (this->m_showPersistant &&
+					m_DittoWindow.m_bMinimized == false)
+				{
+					m_DittoWindow.MinMaxWindow(this, FORCE_MIN);
+					theApp.m_activeWnd.ReleaseFocus();
+
+					return TRUE;
+				}
+				break;
+			}
+		}
+	}
 
     return CWnd::PreTranslateMessage(pMsg);
 }
@@ -369,21 +407,13 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
         case WM_KEYDOWN:
             {
                 WPARAM vk = pMsg->wParam;
-                if(vk == VK_ESCAPE)
-                {
-                    Hide();
-                    return TRUE;
-                }
-                else if(vk == VK_TAB)
+                
+                if(vk == VK_TAB)
                 {
                     m_RichEdit.SetFocus();
                     return TRUE;
                 }
-				else if(vk == 'N')
-				{
-					return FALSE;
-				}
-				else if (vk == 'P')
+				else if (vk == VK_CONTROL || vk == VK_SHIFT)
 				{
 					return FALSE;
 				}
@@ -395,23 +425,13 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 				{
 					return FALSE;
 				}
-				else if(vk == VK_F3)
-				{
-					DoSearch();
 
-					return TRUE;
-				}
-				else if(vk == VK_SHIFT)
+				if (m_pToolTipActions != NULL)
 				{
-					return FALSE;
-				}
-				else if(vk == VK_NEXT)
-				{
-					return FALSE;
-				}
-				else if (vk == VK_PRIOR)
-				{
-					return FALSE;
+					if (m_pToolTipActions->ContainsKey(vk))
+					{
+						return FALSE;
+					}
 				}
 
 				if (m_showPersistant == false)
@@ -823,6 +843,31 @@ void CToolTipEx::OnTimer(UINT_PTR nIDEvent)
 			}
 			break;
 		}
+		case TIMER_AUTO_MAX:
+		{
+			if (m_DittoWindow.m_bMinimized)
+			{
+				CPoint cp;
+				GetCursorPos(&cp);
+
+				UINT nHitTest = (UINT)OnNcHitTest(cp);
+
+				ScreenToClient(&cp);
+
+				if (nHitTest == HTCAPTION)
+				{
+					if (m_DittoWindow.m_crCloseBT.PtInRect(cp) == false)
+					{
+						if (m_DittoWindow.m_crMinimizeBT.PtInRect(cp) == false)
+						{
+							m_DittoWindow.MinMaxWindow(this, FORCE_MAX);
+						}
+					}
+				}
+			}
+			KillTimer(TIMER_AUTO_MAX);
+			m_bMaxSetTimer = false;
+		}
 
     }
 
@@ -872,6 +917,10 @@ void CToolTipEx::OnNcLButtonUp(UINT nHitTest, CPoint point)
 	case BUTTON_CLOSE:
 		Hide();
 		break;
+	case BUTTON_CHEVRON:
+		m_DittoWindow.MinMaxWindow(this, SWAP_MIN_MAX);
+		OnNcPaint();
+		break;
 	}
 
 	KillTimer(TIMER_BUTTON_UP);
@@ -882,6 +931,16 @@ void CToolTipEx::OnNcLButtonUp(UINT nHitTest, CPoint point)
 void CToolTipEx::OnNcMouseMove(UINT nHitTest, CPoint point) 
 {
 	m_DittoWindow.DoNcMouseMove(this, nHitTest, point);
+
+	if ((m_bMaxSetTimer == false) && m_DittoWindow.m_bMinimized)
+	{
+		COleDateTimeSpan sp = COleDateTime::GetCurrentTime() - m_DittoWindow.m_TimeMinimized;
+		if (sp.GetTotalSeconds() >= m_lDelayMaxSeconds)
+		{
+			SetTimer(TIMER_AUTO_MAX, CGetSetOptions::GetTimeBeforeExpandWindow(), NULL);
+			m_bMaxSetTimer = true;
+		}
+	}
 
 	CWnd::OnNcMouseMove(nHitTest, point);
 }
@@ -923,18 +982,27 @@ void CToolTipEx::OnOptions()
 		if (m_showPersistant)
 			cmSubMenu->CheckMenuItem(ID_FIRST_ALWAYSONTOP, MF_CHECKED);
 
+		UpdateMenuShortCut(cmSubMenu, ID_FIRST_WRAPTEXT, ActionEnums::TOGGLE_DESCRIPTION_WORD_WRAP);
+		UpdateMenuShortCut(cmSubMenu, ID_FIRST_ALWAYSONTOP, ActionEnums::TOGGLESHOWPERSISTANT);
+		
+		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
+	}
+}
+
+void CToolTipEx::UpdateMenuShortCut(CMenu *subMenu, int id, DWORD action)
+{
+	if (m_pToolTipActions != NULL)
+	{
 		CString cs;
-		cmSubMenu->GetMenuString(ID_FIRST_WRAPTEXT, cs, MF_BYCOMMAND);
-		CString shortcutText = 'W';
+		subMenu->GetMenuString(id, cs, MF_BYCOMMAND);
+		CString shortcutText = m_pToolTipActions->GetCmdKeyText(action);
 		if (shortcutText != _T("") &&
 			cs.Find("\t" + shortcutText) < 0)
 		{
 			cs += "\t";
 			cs += shortcutText;
-			cmSubMenu->ModifyMenu(ID_FIRST_WRAPTEXT, MF_BYCOMMAND, ID_FIRST_WRAPTEXT, cs);
+			subMenu->ModifyMenu(id, MF_BYCOMMAND, id, cs);
 		}
-		
-		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
 	}
 }
 
@@ -998,6 +1066,18 @@ void CToolTipEx::OnFirstHidedescriptionwindowonm()
 	CGetSetOptions::SetMouseClickHidesDescription(!CGetSetOptions::GetMouseClickHidesDescription());
 }
 
+bool CToolTipEx::ToggleWordWrap()
+{
+	bool didWordWrap = false;
+	if (m_RichEdit.IsWindowVisible())
+	{
+		OnFirstWraptext();
+		didWordWrap = true;
+	}
+
+	return didWordWrap;
+}
+
 void CToolTipEx::OnFirstWraptext()
 {
 	CGetSetOptions::SetWrapDescriptionText(!CGetSetOptions::GetWrapDescriptionText());	
@@ -1036,7 +1116,7 @@ void CToolTipEx::OnFirstAlwaysontop()
 	{
 		m_DittoWindow.m_customWindowTitle = _T("[Always on top]");
 		m_DittoWindow.m_useCustomWindowTitle = true;
-		::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+		::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW | SWP_NOACTIVATE);
 	}
 	else
 	{

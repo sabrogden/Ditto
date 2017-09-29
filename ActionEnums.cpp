@@ -290,6 +290,8 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case MOVE_SELECTION_DOWN:
 		val = "Move Selection Down";
 		break;
+	case TOGGLE_DESCRIPTION_WORD_WRAP:
+		val = "Toggle Description Word Wrap";
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
@@ -361,6 +363,8 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 			return ACCEL_MAKEKEY('0', HOTKEYF_CONTROL);
 		case CLOSEWINDOW:
 			return VK_ESCAPE;
+		case TOGGLE_DESCRIPTION_WORD_WRAP:
+			return 'W';
 		}
 		break;
 	case 1:
@@ -428,4 +432,20 @@ bool ActionEnums::UserConfigurable(ActionEnumValues value)
 	}
 
 	return true;
+}
+
+bool ActionEnums::ToolTipAction(ActionEnumValues value)
+{
+	switch (value)
+	{
+	case ActionEnums::NEXTDESCRIPTION:
+	case ActionEnums::PREVDESCRIPTION:
+	case ActionEnums::TOGGLESHOWPERSISTANT:
+	case ActionEnums::TOGGLE_DESCRIPTION_WORD_WRAP:
+	case ActionEnums::CLOSEWINDOW:
+
+		return true;
+	}
+
+	return false;
 }

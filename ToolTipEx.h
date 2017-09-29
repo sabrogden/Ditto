@@ -6,6 +6,7 @@
 #include "GdipButton.h"
 #include "ImageViewer.h"
 #include "GroupStatic.h"
+#include "Accels.h"
 
 class CToolTipEx : public CWnd
 {
@@ -40,6 +41,13 @@ public:
 	void SetClipData(CString data) { m_clipData = data; }
 
 	bool GetShowPersistant() { return m_showPersistant; }
+	void ToggleShowPersistant() { OnFirstAlwaysontop(); }
+	bool ToggleWordWrap();
+	void SetTooltipActions(CAccels *pToolTipActions) { m_pToolTipActions = pToolTipActions; }
+
+	void GetWindowRectEx(LPRECT lpRect);
+
+	void UpdateMenuShortCut(CMenu *subMenu, int id, DWORD action);
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -75,6 +83,9 @@ protected:
 	bool m_saveWindowLockout;
 	int m_clipRow;
 	bool m_showPersistant;
+	CAccels *m_pToolTipActions;
+	bool m_bMaxSetTimer;
+	int m_lDelayMaxSeconds;
 
 protected:
 	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);

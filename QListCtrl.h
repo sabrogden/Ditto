@@ -136,6 +136,10 @@ public:
 	BOOL SetItemCountEx(int iCount, DWORD dwFlags = 0);
 
 	void HidePopup(bool checkShowPersistant);
+	void ToggleToolTipShowPersistant();
+	bool ToggleToolTipWordWrap();
+	void SetTooltipActions(CAccels *pToolTipActions) { m_pToolTipActions = pToolTipActions; }
+	bool IsToolTipShowPersistant();
 
 	void SetLogFont(LOGFONT &font);
 
@@ -183,6 +187,7 @@ protected:
 	int m_rowHeight;
 	CString m_searchText;
 	BOOL m_showIfClipWasPasted;
+	CAccels *m_pToolTipActions;
 
 
 	// Generated message map functions

@@ -464,6 +464,7 @@ void CQPasteWnd::LoadShortcuts()
 	m_modifierKeyActions.AddAccel(ActionEnums::MODIFIER_ACTVE_MOVELAST, VK_END);
 
 	m_actions.RemoveAll();
+	m_toolTipActions.RemoveAll();
 
 	m_actions.AddAccel(ActionEnums::NEXTTABCONTROL, VK_TAB);
 	m_actions.AddAccel(ActionEnums::PREVTABCONTROL, ACCEL_MAKEKEY(VK_TAB, HOTKEYF_CONTROL));
@@ -487,10 +488,17 @@ void CQPasteWnd::LoadShortcuts()
 				{
 					int b = g_Opt.GetActionShortCutB(action, i);
 					m_actions.AddAccel(action, a, b);
+
+					if (ActionEnums::ToolTipAction(action))
+					{
+						m_toolTipActions.AddAccel(action, a, b);
+					}
 				}
 			}
 		}
 	}
+
+	m_lstHeader.SetTooltipActions(&m_toolTipActions);
 }
 
 void CQPasteWnd::SetSearchImages()
@@ -3078,9 +3086,21 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::MOVE_SELECTION_DOWN:
 		ret = DoActionMoveSelectionDown();
 		break;
+	case ActionEnums::TOGGLE_DESCRIPTION_WORD_WRAP:
+		ret = DoActionToggleDescriptionWordWrap();
+		break;
 	}
 
 	return ret;
+}
+
+bool CQPasteWnd::DoActionToggleDescriptionWordWrap()
+{
+	if (m_lstHeader.IsToolTipWindowVisible() == FALSE)
+		return false;
+
+	bool ret = m_lstHeader.ToggleToolTipWordWrap();
+	return (ret == true);
 }
 
 bool CQPasteWnd::DoActionShowDescription()
@@ -3249,7 +3269,8 @@ bool CQPasteWnd::DoActionCloseWindow()
 	}
 	else
 	{
-		if (m_lstHeader.IsToolTipWindowVisible())
+		if (m_lstHeader.IsToolTipShowPersistant() == false &&
+			m_lstHeader.IsToolTipWindowVisible())
 		{
 			m_lstHeader.HidePopup(true);
 		}
@@ -3444,15 +3465,22 @@ bool CQPasteWnd::DoActionBackGroup()
 
 bool CQPasteWnd::DoActionToggleShowPersistant()
 {
-	theApp.ShowPersistent(!g_Opt.m_bShowPersistent);
-	if (g_Opt.m_bShowPersistent)
+	if (m_lstHeader.IsToolTipWindowVisible())
 	{
-		::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+		m_lstHeader.ToggleToolTipShowPersistant();
 	}
+	else
+	{
+		theApp.ShowPersistent(!g_Opt.m_bShowPersistent);
+		if (g_Opt.m_bShowPersistent)
+		{
+			::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+		}
 
-	MoveControls();
+		MoveControls();
 
-	UpdateStatus();
+		UpdateStatus();
+	}
 	return true;
 }
 
@@ -5106,7 +5134,17 @@ void CQPasteWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
         switch(g_Opt.m_bDoubleClickingOnCaptionDoes)
         {
             case TOGGLES_ALLWAYS_ON_TOP:				
-				DoAction(ActionEnums::TOGGLESHOWPERSISTANT);                
+			{
+				theApp.ShowPersistent(!g_Opt.m_bShowPersistent);
+				if (g_Opt.m_bShowPersistent)
+				{
+					::SetWindowPos(m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
+				}
+
+				MoveControls();
+
+				UpdateStatus();
+			}
                 break;
             case TOGGLES_ALLWAYS_SHOW_DESCRIPTION:
 				DoAction(ActionEnums::SHOWDESCRIPTION);    

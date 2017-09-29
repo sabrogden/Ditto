@@ -137,6 +137,20 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
     return false;
 }
 
+bool CAccels::ContainsKey(int vKey)
+{
+	CString cmdShortcutText;
+	for (multimap<DWORD, CAccel>::iterator it = m_multiMap.begin(); it != m_multiMap.end(); ++it)
+	{
+		if (LOBYTE(it->second.Key) == vKey || LOBYTE(it->second.Key2) == vKey)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
 BYTE CAccels::GetKeyStateModifiers()
 {
     BYTE m = 0;

@@ -34,6 +34,8 @@ public:
 	bool SetCaptionColors(COLORREF left, COLORREF right, COLORREF border);
 	void SetCaptionTextColor(COLORREF color);
 
+	void MinMaxWindow(CWnd *pWnd, long lOption);
+
 	void SetTitleTextHeight(CWnd *pWnd);
 
 	void SnapToEdge(CWnd *pWnd, WINDOWPOS* lpwndpos);
@@ -89,4 +91,8 @@ public:
 	int m_titleTextHeight;
 
 	bool m_buttonDownOnCaption;
+
+	CRect m_crFullSizeWindow;
+	COleDateTime m_TimeMinimized;
+	COleDateTime m_TimeMaximized;
 };

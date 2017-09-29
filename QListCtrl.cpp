@@ -73,6 +73,8 @@ CQListCtrl::CQListCtrl()
 
 	m_showIfClipWasPasted = TRUE;
 	m_bShowTextForFirstTenHotKeys = true;
+
+	m_pToolTipActions = NULL;
 }
 
 CQListCtrl::~CQListCtrl()
@@ -993,7 +995,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 	else if(VALID_TOOLTIP)
 	{
 		CRect r;
-		m_pToolTip->GetWindowRect(r);
+		m_pToolTip->GetWindowRectEx(r);
 		pt = r.TopLeft();
 
 		m_pToolTip->SetBitmap(NULL);
@@ -1004,6 +1006,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 	
 	if(VALID_TOOLTIP)
 	{
+		m_pToolTip->SetTooltipActions(m_pToolTipActions);
 		m_pToolTip->SetClipId(clipId);
 		m_pToolTip->SetClipRow(clipRow);
 		m_pToolTip->SetSearchText(m_searchText);
@@ -1591,8 +1594,38 @@ BOOL CQListCtrl::IsToolTipWindowVisible()
 	return ::IsWindowVisible(m_toolTipHwnd); 
 }
 
+void CQListCtrl::ToggleToolTipShowPersistant()
+{
+	if (VALID_TOOLTIP)
+	{
+		m_pToolTip->ToggleShowPersistant();		
+	}
+}
+
+bool CQListCtrl::ToggleToolTipWordWrap()
+{
+	bool didWordWrap = false;
+	if (VALID_TOOLTIP)
+	{
+		didWordWrap = m_pToolTip->ToggleWordWrap();
+	}
+
+	return didWordWrap;
+}
+
+
 BOOL CQListCtrl::IsToolTipWindowFocus()
 {
 	return ::GetFocus() == m_toolTipHwnd ||
 		::GetParent(::GetFocus()) == m_toolTipHwnd;
+}
+
+bool CQListCtrl::IsToolTipShowPersistant()
+{
+	if (VALID_TOOLTIP)
+	{
+		return m_pToolTip->GetShowPersistant();
+	}
+
+	return false;
 }

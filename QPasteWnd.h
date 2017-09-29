@@ -162,6 +162,7 @@ public:
 	CF_NoDibTypeMap m_cf_NO_rtfCache;
     CCriticalSection m_CritSection;
     CAccels m_actions;
+	CAccels m_toolTipActions;
 	CAccels m_modifierKeyActions;
 	bool m_showScrollBars;
 	int m_leftSelectedCompareId;
@@ -234,6 +235,7 @@ public:
 	bool DoActionNewClip();
 	bool DoActionEditClip();
 	bool DoActionMoveSelectionDown();
+	bool DoActionToggleDescriptionWordWrap();
 	bool DoActionMoveSelectionUp();
 	bool DoModifierActiveActionSelectionUp();
 	bool DoModifierActiveActionSelectionDown();

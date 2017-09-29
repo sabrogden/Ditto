@@ -98,6 +98,7 @@ public:
 		TOGGLE_CLIPBOARD_CONNECTION,
 		MOVE_SELECTION_UP,
 		MOVE_SELECTION_DOWN,
+		TOGGLE_DESCRIPTION_WORD_WRAP,
 
 		LAST_ACTION
 	};
@@ -107,5 +108,6 @@ public:
 	static int GetDefaultShortCutKeyA(ActionEnumValues value, int pos);
 	static int GetDefaultShortCutKeyB(ActionEnumValues value, int pos);
 	static bool UserConfigurable(ActionEnumValues value);
+	static bool ToolTipAction(ActionEnumValues value);
 };
 

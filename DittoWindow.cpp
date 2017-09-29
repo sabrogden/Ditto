@@ -36,10 +36,8 @@ CDittoWindow::CDittoWindow(void)
 	m_sendWMClose = true;
 	m_customWindowTitle = _T("");
 	m_useCustomWindowTitle = false;
-
 	m_buttonDownOnCaption = false;
-
-	
+	m_crFullSizeWindow.SetRectEmpty();	
 }
 
 CDittoWindow::~CDittoWindow(void)
@@ -904,6 +902,115 @@ void CDittoWindow::SnapToEdge(CWnd *pWnd, WINDOWPOS* lpwndpos)
 		if (captionMove)
 		{
 			lpwndpos->y = (rect.bottom - lpwndpos->cy);
+		}
+	}
+}
+
+void CDittoWindow::MinMaxWindow(CWnd *pWnd, long lOption)
+{
+	if ((m_bMinimized) && (lOption == FORCE_MIN))
+		return;
+
+	if ((m_bMinimized == false) && (lOption == FORCE_MAX))
+		return;
+
+	if (m_lRightBorder == m_captionBorderWidth)
+	{
+		if (m_bMinimized == false)
+		{
+			pWnd->GetWindowRect(m_crFullSizeWindow);
+			pWnd->MoveWindow(m_crFullSizeWindow.right - m_captionBorderWidth,
+				m_crFullSizeWindow.top, m_captionBorderWidth,
+				m_crFullSizeWindow.Height());
+			m_bMinimized = true;
+			m_TimeMinimized = COleDateTime::GetCurrentTime();
+		}
+		else
+		{
+			CRect cr;
+			pWnd->GetWindowRect(cr);
+			pWnd->MoveWindow(cr.right - m_crFullSizeWindow.Width(),
+				cr.top, m_crFullSizeWindow.Width(), cr.Height());
+
+			m_crFullSizeWindow.SetRectEmpty();
+			m_bMinimized = false;
+			m_TimeMaximized = COleDateTime::GetCurrentTime();
+			::SetForegroundWindow(pWnd->GetSafeHwnd());
+		}
+	}
+	if (m_lLeftBorder == m_captionBorderWidth)
+	{
+		if (m_bMinimized == false)
+		{
+			pWnd->GetWindowRect(m_crFullSizeWindow);
+			pWnd->MoveWindow(m_crFullSizeWindow.left,
+				m_crFullSizeWindow.top, m_captionBorderWidth,
+				m_crFullSizeWindow.Height());
+			m_bMinimized = true;
+			m_TimeMinimized = COleDateTime::GetCurrentTime();
+		}
+		else
+		{
+			CRect cr;
+			pWnd->GetWindowRect(cr);
+			pWnd->MoveWindow(cr.left, cr.top,
+				m_crFullSizeWindow.Width(), cr.Height());
+
+			m_crFullSizeWindow.SetRectEmpty();
+			m_bMinimized = false;
+			m_TimeMaximized = COleDateTime::GetCurrentTime();
+			::SetForegroundWindow(pWnd->GetSafeHwnd());
+		}
+	}
+	else if (m_lTopBorder == m_captionBorderWidth)
+	{
+		if (m_bMinimized == false)
+		{
+			pWnd->GetWindowRect(m_crFullSizeWindow);
+			pWnd->MoveWindow(m_crFullSizeWindow.left,
+				m_crFullSizeWindow.top,
+				m_crFullSizeWindow.Width(),
+				m_captionBorderWidth);
+			m_bMinimized = true;
+			m_TimeMinimized = COleDateTime::GetCurrentTime();
+		}
+		else
+		{
+			CRect cr;
+			pWnd->GetWindowRect(cr);
+			pWnd->MoveWindow(cr.left, cr.top,
+				cr.Width(), m_crFullSizeWindow.Height());
+
+			m_crFullSizeWindow.SetRectEmpty();
+			m_bMinimized = false;
+			m_TimeMaximized = COleDateTime::GetCurrentTime();
+			::SetForegroundWindow(pWnd->GetSafeHwnd());
+		}
+	}
+	else if (m_lBottomBorder == m_captionBorderWidth)
+	{
+		if (m_bMinimized == false)
+		{
+			pWnd->GetWindowRect(m_crFullSizeWindow);
+			pWnd->MoveWindow(m_crFullSizeWindow.left,
+				m_crFullSizeWindow.bottom - m_captionBorderWidth,
+				m_crFullSizeWindow.Width(),
+				m_captionBorderWidth);
+			m_bMinimized = true;
+			m_TimeMinimized = COleDateTime::GetCurrentTime();
+		}
+		else
+		{
+			CRect cr;
+			pWnd->GetWindowRect(cr);
+			pWnd->MoveWindow(cr.left,
+				cr.bottom - m_crFullSizeWindow.Height(),
+				cr.Width(), m_crFullSizeWindow.Height());
+
+			m_crFullSizeWindow.SetRectEmpty();
+			m_bMinimized = false;
+			m_TimeMaximized = COleDateTime::GetCurrentTime();
+			::SetForegroundWindow(pWnd->GetSafeHwnd());
 		}
 	}
 }

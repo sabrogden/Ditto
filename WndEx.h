@@ -51,10 +51,8 @@ public:
 
 protected:
 	CDittoWindow m_DittoWindow;
-	CRect m_crFullSizeWindow;
-	bool m_bMaxSetTimer;
-	COleDateTime m_TimeMinimized;
-	COleDateTime m_TimeMaximized;
+	
+	bool m_bMaxSetTimer;	
 	int m_lDelayMaxSeconds;
 	CToolTipCtrl m_toolTip;
 
