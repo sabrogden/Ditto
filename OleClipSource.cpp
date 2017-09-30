@@ -14,6 +14,8 @@
 #include "sqlite\unicode\uchar.h"
 #include "Path.h"
 #include "Md5.h"
+#include "DittoChaiScript.h"
+#include "ChaiScriptOnCopy.h"
 
 /*------------------------------------------------------------------*\
 COleClipSource
@@ -195,6 +197,38 @@ BOOL COleClipSource::DoImmediateRender()
 	}
 	
 	SaveDittoFileDataToFile(clip);
+
+	if (m_pasteOptions.m_pasteScriptIndex >= 0 &&
+		m_pasteOptions.m_pasteScriptIndex < g_Opt.m_pasteScripts.m_list.size())
+	{
+		try
+		{
+			Log(StrF(_T("Start of process copy name: %s, script: %s"), g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_name, g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_script));
+
+			ChaiScriptOnCopy onPaste;
+			CDittoChaiScript clipData(&clip, "");
+			if (onPaste.ProcessScript(clipData, (LPCSTR)CTextConvert::ConvertToChar(g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_script)) == false)
+			{
+				Log(StrF(_T("End of process copy name: %s, returned false, not saving this copy to Ditto, last Error: %s"), g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_name, onPaste.m_lastError));
+
+				return -1;
+			}
+
+			Log(StrF(_T("End of process copy name: %s, returned true, last Error: %s"), g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_name, onPaste.m_lastError));			
+		}
+		catch (CException *ex)
+		{
+			TCHAR szCause[255];
+			ex->GetErrorMessage(szCause, 255);
+			CString cs;
+			cs.Format(_T("chai script paste exception: %s"), szCause);
+			Log(cs);
+		}
+		catch (...)
+		{
+			Log(_T("chai script paste exception 2"));
+		}
+	}
 
 	return PutFormatOnClipboard(&clip.m_Formats) > 0;
 }

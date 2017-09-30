@@ -297,6 +297,7 @@ ON_COMMAND(ID_IMPORT_IMPORTCOPIEDFILE, &CQPasteWnd::OnImportImportcopiedfile)
 ON_UPDATE_COMMAND_UI(ID_IMPORT_IMPORTCOPIEDFILE, &CQPasteWnd::OnUpdateImportImportcopiedfile)
 ON_UPDATE_COMMAND_UI(32775, &CQPasteWnd::OnUpdate32775)
 ON_COMMAND_RANGE(CustomFriendStartId, (CustomFriendStartId+ MaxCustomFriends+1), OnCustomSendToFriend)
+ON_COMMAND_RANGE(ChaiScriptMenuStartId, (ChaiScriptMenuStartId + MaxChaiScripts + 1), OnChaiScriptPaste)
 ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
 END_MESSAGE_MAP()
 
@@ -1450,6 +1451,14 @@ void CQPasteWnd::ShowRightClickMenu()
 		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 
 		SetFriendChecks(cmSubMenu);
+
+		CString specialPaste("Special Paste");
+		int nPos = -1;
+		CMenu *sendToMenu = CMultiLanguage::GetMenuPos(cmSubMenu, specialPaste, nPos);
+		if (sendToMenu != NULL)
+		{
+			g_Opt.m_pasteScripts.AddToMenu(sendToMenu);
+		}
 
         cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
     }
@@ -6450,4 +6459,11 @@ void CQPasteWnd::OnCustomSendToFriend(UINT idIn)
 	{
 		SendToFriendbyPos(0, ip_name);
 	}
+}
+
+void CQPasteWnd::OnChaiScriptPaste(UINT idIn)
+{
+	CSpecialPasteOptions pasteOptions;
+	pasteOptions.m_pasteScriptIndex = ChaiScriptMenuStartId - idIn;
+	OpenSelection(pasteOptions);
 }

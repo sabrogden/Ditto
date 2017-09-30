@@ -701,13 +701,24 @@ namespace chaiscript
 
 
           m.add(fun([](const String *s, const String &f, size_t pos) { return s->find(f, pos); } ), "find");
+		  m.add(fun([](const String *s, typename String::value_type c, size_t pos) { return s->find(c, pos); } ), "find");
+		  
           m.add(fun([](const String *s, const String &f, size_t pos) { return s->rfind(f, pos); } ), "rfind");
+		  m.add(fun([](const String *s, typename String::value_type c, size_t pos) { return s->rfind(c, pos); } ), "rfind");
+		  
           m.add(fun([](const String *s, const String &f, size_t pos) { return s->find_first_of(f, pos); } ), "find_first_of");
+		  m.add(fun([](const String *s, ypename String::value_type, size_t pos) { return s->find_first_of(c, pos); } ), "find_first_of");
+		  
           m.add(fun([](const String *s, const String &f, size_t pos) { return s->find_last_of(f, pos); } ), "find_last_of");
+		  m.add(fun([](const String *s, ypename String::value_type, size_t pos) { return s->find_last_of(c, pos); } ), "find_last_of");
+		  
           m.add(fun([](const String *s, const String &f, size_t pos) { return s->find_last_not_of(f, pos); } ), "find_last_not_of");
+		  m.add(fun([](const String *s, ypename String::value_type, size_t pos) { return s->find_last_not_of(c, pos); } ), "find_last_not_of");
+		  
           m.add(fun([](const String *s, const String &f, size_t pos) { return s->find_first_not_of(f, pos); } ), "find_first_not_of");
+		  m.add(fun([](const String *s, ypename String::value_type, size_t pos) { return s->find_first_not_of(c, pos); } ), "find_first_not_of");
 
-	  m.add(fun([](String *s, typename String::value_type c) -> decltype(auto) { return (*s += c); } ), "+=");
+		  m.add(fun([](String *s, typename String::value_type c) -> decltype(auto) { return (*s += c); } ), "+=");
 
 
           m.add(fun([](String *s) { s->clear(); } ), "clear");

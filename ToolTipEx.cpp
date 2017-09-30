@@ -428,7 +428,7 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 
 				if (m_pToolTipActions != NULL)
 				{
-					if (m_pToolTipActions->ContainsKey(vk))
+					if (m_pToolTipActions->ContainsKey((int)vk))
 					{
 						return FALSE;
 					}

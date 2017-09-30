@@ -77,6 +77,7 @@ void CCustomFriendsHelper::Save()
 	}
 	
 	TiXmlPrinter printer;
+	printer.SetLineBreak("");
 	doc.Accept(&printer);
 	CString cs = printer.CStr();
 

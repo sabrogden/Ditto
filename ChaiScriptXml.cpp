@@ -96,3 +96,39 @@ CString CChaiScriptXml::Save()
 
 	return cs;
 }
+
+void CChaiScriptXml::AddToMenu(CMenu *pMenu)
+{
+	if (m_list.size() > 0)
+	{
+		pMenu->AppendMenu(MF_SEPARATOR);
+
+		bool addedItem = false;
+		int id = 0;
+		for (auto & element : m_list)
+		{
+			if (addedItem == false)
+			{
+				addedItem = true;
+			}
+
+			CString cs;
+			if (element.m_description != _T(""))
+			{
+				cs.Format(_T("(%s) - %s"), element.m_name, element.m_description);
+			}
+			else
+			{
+				cs.Format(_T("%s"), element.m_name);
+			}
+
+			pMenu->AppendMenuW(MF_STRING, (ChaiScriptMenuStartId + id), cs);
+			id++;
+
+			if (id > MaxChaiScripts)
+			{
+				break;
+			}
+		}
+	}
+}

@@ -427,8 +427,9 @@ protected:
     afx_msg void OnMenuNewclip();
     afx_msg void OnUpdateMenuEdititem(CCmdUI *pCmdUI);
     afx_msg void OnUpdateMenuNewclip(CCmdUI *pCmdUI);
-    afx_msg void CQPasteWnd::OnAddinSelect(UINT id);
-	afx_msg void CQPasteWnd::OnCustomSendToFriend(UINT idIn);
+    afx_msg void OnAddinSelect(UINT id);
+	afx_msg void OnCustomSendToFriend(UINT idIn);
+	afx_msg void OnChaiScriptPaste(UINT idIn);
     afx_msg LRESULT OnSelectAll(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShowHideScrollBar(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnMenuSearchDescription();

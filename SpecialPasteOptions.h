@@ -20,6 +20,7 @@ public:
 	CClipFormats *m_pPasteFormats;
 	DWORD m_delayRenderLockout;
 	bool m_dragDropFilesOnly;
+	int m_pasteScriptIndex;
 
 	bool LimitFormatsToText() 
 	{ 

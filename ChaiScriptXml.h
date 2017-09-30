@@ -2,6 +2,9 @@
 
 #include <vector>
 
+#define ChaiScriptMenuStartId 5001
+#define MaxChaiScripts 99
+
 class CDittoChaiScriptXmlItem
 {
 public:
@@ -27,4 +30,6 @@ public:
 	CString GetScript(CString name, BOOL &active);
 
 	std::vector<CDittoChaiScriptXmlItem> m_list;
+
+	void AddToMenu(CMenu *pMenu);
 };
