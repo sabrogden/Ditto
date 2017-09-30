@@ -558,7 +558,7 @@ BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg)
 						writeFile.Write(pBuffer, readBytes);
 						totalReadSize+= readBytes;
 
-						int percent = ((totalReadSize * 100) / fileSize);
+						int percent = (int)((totalReadSize * 100) / fileSize);
 						if(percent != percentageComplete)
 						{
 							percentageComplete = percent;
