@@ -49,6 +49,8 @@ public:
 
 	void UpdateMenuShortCut(CMenu *subMenu, int id, DWORD action);
 
+	void DoSearch();
+
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CToolTipEx)
@@ -92,8 +94,7 @@ protected:
 	BOOL SetLogFont(LPLOGFONT lpLogFont, BOOL bRedraw /*=TRUE*/);
 	LPLOGFONT GetSystemToolTipFont();
 	BOOL IsCursorInToolTip();
-	void HighlightSearchText();
-	void DoSearch();
+	void HighlightSearchText();	
 	void ApplyWordWrap();
 	void SaveWindowSize();
 

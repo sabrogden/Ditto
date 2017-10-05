@@ -337,11 +337,6 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
                     m_RichEdit.Copy();
                 }
                 break;
-			case VK_F3:
-			{
-				DoSearch();
-			}
-			break;
             }
 			break;
 		case WM_RBUTTONDOWN:

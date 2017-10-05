@@ -203,18 +203,18 @@ BOOL COleClipSource::DoImmediateRender()
 	{
 		try
 		{
-			Log(StrF(_T("Start of process copy name: %s, script: %s"), g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_name, g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_script));
+			Log(StrF(_T("Start of paste script name: %s, script: %s"), g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_name, g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_script));
 
 			ChaiScriptOnCopy onPaste;
 			CDittoChaiScript clipData(&clip, "");
 			if (onPaste.ProcessScript(clipData, (LPCSTR)CTextConvert::ConvertToChar(g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_script)) == false)
 			{
-				Log(StrF(_T("End of process copy name: %s, returned false, not saving this copy to Ditto, last Error: %s"), g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_name, onPaste.m_lastError));
+				Log(StrF(_T("End of paste script name: %s, returned false, not saving this copy to Ditto, last Error: %s"), g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_name, onPaste.m_lastError));
 
-				return -1;
+				return FALSE;
 			}
 
-			Log(StrF(_T("End of process copy name: %s, returned true, last Error: %s"), g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_name, onPaste.m_lastError));			
+			Log(StrF(_T("End of paste script name: %s, returned true, last Error: %s"), g_Opt.m_pasteScripts.m_list[m_pasteOptions.m_pasteScriptIndex].m_name, onPaste.m_lastError));			
 		}
 		catch (CException *ex)
 		{

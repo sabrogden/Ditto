@@ -325,8 +325,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-	//m_pDropTarget = new CMyDropTarget(this);
-	//m_pDropTarget->Register(this);
+	//BOOL b = this->Register(this);
 
     SetWindowText(_T(QPASTE_TITLE));
 
@@ -490,9 +489,32 @@ void CQPasteWnd::LoadShortcuts()
 					int b = g_Opt.GetActionShortCutB(action, i);
 					m_actions.AddAccel(action, a, b);
 
+					//always add a shift variation to show description F3 so it will search backwards in the text search
+					if (action == ActionEnums::SHOWDESCRIPTION)
+					{
+						int shift = HOTKEYF_SHIFT;
+						if ((HIBYTE(a) & HOTKEYF_SHIFT))
+						{
+							shift = 0;
+						}
+
+						m_actions.AddAccel(action, ACCEL_MAKEKEY(LOBYTE(a), shift), b);
+					}
+
 					if (ActionEnums::ToolTipAction(action))
 					{
 						m_toolTipActions.AddAccel(action, a, b);
+
+						if (action == ActionEnums::SHOWDESCRIPTION)
+						{
+							int shift = HOTKEYF_SHIFT;
+							if ((HIBYTE(a) & HOTKEYF_SHIFT))
+							{
+								shift = 0;
+							}
+
+							m_toolTipActions.AddAccel(action, ACCEL_MAKEKEY(LOBYTE(a), shift), b);
+						}
 					}
 				}
 			}
@@ -3113,7 +3135,28 @@ bool CQPasteWnd::DoActionToggleDescriptionWordWrap()
 
 bool CQPasteWnd::DoActionShowDescription()
 {
-	bool ret = m_lstHeader.ShowFullDescription(false, false);
+	bool ret = false;
+
+	if (m_lstHeader.IsToolTipWindowVisible() == false)
+	{
+		ret = m_lstHeader.ShowFullDescription(false, false);
+	}
+	else
+	{
+		CString csText;
+		m_search.GetWindowText(csText);
+		if (csText != _T(""))
+		{
+			m_lstHeader.DoToolTipSearch();
+			ret = true;
+		}
+		else
+		{
+			m_lstHeader.HideToolTip();
+			ret = true;
+		}
+	}
+
 	return (ret == true);
 }
 

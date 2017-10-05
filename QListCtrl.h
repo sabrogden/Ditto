@@ -140,6 +140,8 @@ public:
 	bool ToggleToolTipWordWrap();
 	void SetTooltipActions(CAccels *pToolTipActions) { m_pToolTipActions = pToolTipActions; }
 	bool IsToolTipShowPersistant();
+	void DoToolTipSearch();
+	void HideToolTip();
 
 	void SetLogFont(LOGFONT &font);
 

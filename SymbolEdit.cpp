@@ -128,7 +128,6 @@ BOOL CSymbolEdit::PreTranslateMessage(MSG* pMsg)
 		}
 		else if (pMsg->wParam == VK_DOWN ||
 			pMsg->wParam == VK_UP ||
-			pMsg->wParam == VK_F3 ||
 			pMsg->wParam == VK_PRIOR ||
 			pMsg->wParam == VK_NEXT)
 		{

@@ -369,7 +369,7 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 		break;
 	case 1:
 		switch (value)
-		{
+		{		
 		case ActionEnums::PASTE_SELECTED:
 			return VK_MOUSE_DOUBLE_CLICK;
 		case PASTE_POSITION_1:
@@ -443,6 +443,7 @@ bool ActionEnums::ToolTipAction(ActionEnumValues value)
 	case ActionEnums::TOGGLESHOWPERSISTANT:
 	case ActionEnums::TOGGLE_DESCRIPTION_WORD_WRAP:
 	case ActionEnums::CLOSEWINDOW:
+	case ActionEnums::SHOWDESCRIPTION:
 
 		return true;
 	}

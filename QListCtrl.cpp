@@ -1542,6 +1542,8 @@ void CQListCtrl::OnMouseMove(UINT nFlags, CPoint point)
 			KillTimer(TIMER_SHOW_SCROLL);
 		}
 	}
+
+	CListCtrl::OnMouseMove(nFlags, point);
 }
 
 bool CQListCtrl::MouseInScrollBarArea(CRect crWindow, CPoint point)
@@ -1591,7 +1593,12 @@ void CQListCtrl::HidePopup(bool checkShowPersistant)
 
 BOOL CQListCtrl::IsToolTipWindowVisible() 
 { 
-	return ::IsWindowVisible(m_toolTipHwnd); 
+	if (VALID_TOOLTIP)
+	{
+		return ::IsWindowVisible(m_toolTipHwnd);
+	}
+
+	return FALSE;
 }
 
 void CQListCtrl::ToggleToolTipShowPersistant()
@@ -1616,8 +1623,13 @@ bool CQListCtrl::ToggleToolTipWordWrap()
 
 BOOL CQListCtrl::IsToolTipWindowFocus()
 {
-	return ::GetFocus() == m_toolTipHwnd ||
-		::GetParent(::GetFocus()) == m_toolTipHwnd;
+	if (VALID_TOOLTIP)
+	{
+		return ::GetFocus() == m_toolTipHwnd ||
+			::GetParent(::GetFocus()) == m_toolTipHwnd;
+	}
+
+	return FALSE;
 }
 
 bool CQListCtrl::IsToolTipShowPersistant()
@@ -1628,4 +1640,20 @@ bool CQListCtrl::IsToolTipShowPersistant()
 	}
 
 	return false;
+}
+
+void CQListCtrl::DoToolTipSearch()
+{
+	if (VALID_TOOLTIP)
+	{
+		return m_pToolTip->DoSearch();
+	}
+}
+
+void CQListCtrl::HideToolTip()
+{
+	if (VALID_TOOLTIP)
+	{
+		m_pToolTip->Hide();
+	}
 }
