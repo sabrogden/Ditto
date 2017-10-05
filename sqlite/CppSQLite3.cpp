@@ -758,7 +758,8 @@ void sqlite_regexp(sqlite3_context* context, int argc, sqlite3_value** values)
 
 	if (argc != 2 || reg == 0 || text == 0) 
 	{
-		sqlite3_result_error(context, "SQL function regexp() called with invalid arguments.\n", -1);
+		//sqlite3_result_error(context, "SQL function regexp() called with invalid arguments.\n", -1);
+		sqlite3_result_int(context, 0);
 		return;
 	}
 
