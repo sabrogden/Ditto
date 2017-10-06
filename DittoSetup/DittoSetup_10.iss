@@ -27,6 +27,8 @@ DirExistsWarning=no
 UninstallLogMode=overwrite
 ChangesAssociations=yes
 CloseApplications=yes
+;vista forward
+MinVersion=6.0.6000
 
 [Languages]
 Name: English; MessagesFile: compiler:Default.isl
@@ -108,8 +110,11 @@ Root: HKCU; Subkey: Software\Ditto\PasteStrings; ValueType: string; ValueName: g
 Root: HKCU; Subkey: Software\Ditto\CopyStrings; ValueType: string; ValueName: gvim.exe; ValueData: """{{PLUS}y"
 Root: HKCU; Subkey: Software\Ditto\CutStrings; ValueType: string; ValueName: gvim.exe; ValueData: """{{PLUS}x"
 
-Root: HKCU; Subkey: Software\Ditto\PasteStrings; ValueType: string; ValueName: cmd.exe; ValueData: % {{Delay100}ep
-Root: HKCU; Subkey: Software\Ditto\CopyStrings; ValueType: string; ValueName: cmd.exe; ValueData: % {{Delay100}ey
+Root: HKCU; Subkey: Software\Ditto\PasteStrings; ValueType: string; ValueName: cmd.exe; OnlyBelowVersion: 10; ValueData: % {{Delay100}ep
+Root: HKCU; Subkey: Software\Ditto\CopyStrings; ValueType: string; ValueName: cmd.exe; OnlyBelowVersion: 10; ValueData: % {{Delay100}ey
+
+Root: HKCU; Subkey: Software\Ditto\PasteStrings; ValueName: cmd.exe; MinVersion: 10; Flags: deletevalue
+Root: HKCU; Subkey: Software\Ditto\CopyStrings; ValueName: cmd.exe; MinVersion: 10; Flags: deletevalue
 
 ;associate .dto with Ditto
 Root: HKCR; Subkey: .dto; ValueType: string; ValueName: ; ValueData: Ditto; Flags: uninsdeletevalue
@@ -131,7 +136,7 @@ end;
 procedure CleanupOldFiles();
 var
   sDir: String;
-begin
+  begin
     sDir := ExpandConstant('{app}');
 
     DeleteFile(sDir+'\mfc100u.dll')
@@ -146,7 +151,6 @@ begin
     DeleteFile(sDir+'\icuio55.dll')
     DeleteFile(sDir+'\icuin55.dll')
     DeleteFile(sDir+'\icudt55.dll')
-
 end;
 
 
