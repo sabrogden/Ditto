@@ -292,6 +292,12 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		break;
 	case TOGGLE_DESCRIPTION_WORD_WRAP:
 		val = "Toggle Description Word Wrap";
+		break;
+	case APPLY_LAST_SEARCH:
+		val = "Apply Last Search";
+		break;
+	case TOGGLE_SEARCH_METHOD:
+		val = "Toggle Search Method";
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);

@@ -11,6 +11,7 @@
 #include "OptionsSheet.h"
 #include "NumberEdit.h"
 #include "afxwin.h"
+#include "HyperLink.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // COptionsGeneral dialog
@@ -46,6 +47,8 @@ public:
 	CEdit m_ClipSeparator;
 	CEdit m_copyAppInclude;
 	CEdit m_copyAppExclude;
+	CMFCLinkCtrl m_envVarLink;
+	 
 	//}}AFX_DATA
 
 
@@ -71,6 +74,8 @@ protected:
 	CFont m_Font;
 	LOGFONT m_LogFont;
 
+	CFont m_envVarFont;
+
 	void FillThemes();
 	
 	void FillLanguages();
@@ -93,6 +98,9 @@ public:
 	CButton m_btFont;
 	CButton m_btDefaultButton;
 	CComboBox m_popupPositionCombo;
+	//afx_msg void OnNMClickSyslinkEnvVarInfo(NMHDR *pNMHDR, LRESULT *pResult);
+	//afx_msg void OnEnChangePath();
+	afx_msg void OnEnChangePath();
 };
 
 //{{AFX_INSERT_LOCATION}}

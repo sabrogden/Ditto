@@ -236,6 +236,8 @@ public:
 	bool DoActionEditClip();
 	bool DoActionMoveSelectionDown();
 	bool DoActionToggleDescriptionWordWrap();
+	bool DoActionApplyLastSearch();
+	bool DoActionToggleSearchMethod();
 	bool DoActionMoveSelectionUp();
 	bool DoModifierActiveActionSelectionUp();
 	bool DoModifierActiveActionSelectionDown();

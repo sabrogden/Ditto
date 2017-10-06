@@ -547,9 +547,11 @@
 #define IDC_STATIC_ACTIVE               2164
 #define IDC_MFCLINK1                    2165
 #define IDC_MFCLINK_CHAISCRIPT          2165
+#define IDC_MFCLINK_ENV_VAR             2165
 #define IDC_MFCLINK2_EXAMPLES           2166
 #define IDC_STATIC_MD5                  2167
 #define IDC_EDIT_MD5                    2168
+#define IDC_STATIC_ENV_VAR              2170
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -719,9 +721,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        337
+#define _APS_NEXT_RESOURCE_VALUE        338
 #define _APS_NEXT_COMMAND_VALUE         32943
-#define _APS_NEXT_CONTROL_VALUE         2169
+#define _APS_NEXT_CONTROL_VALUE         2172
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

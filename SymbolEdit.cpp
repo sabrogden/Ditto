@@ -5,6 +5,7 @@
 #include "SymbolEdit.h"
 #include "cp_main.h"
 #include "QListCtrl.h"
+#include "Shared\TextConvert.h"
 
 // CSymbolEdit
 
@@ -164,6 +165,59 @@ BOOL CSymbolEdit::PreTranslateMessage(MSG* pMsg)
 	return CEdit::PreTranslateMessage(pMsg);
 }
 
+CString CSymbolEdit::SavePastSearches()
+{
+	TiXmlDocument doc;
+
+	TiXmlElement* outer = new TiXmlElement("PastSearches");
+	doc.LinkEndChild(outer);
+
+	int count = m_searches.GetCount();
+	for (int i = 0; i < count; i++)
+	{		
+		TiXmlElement* searchElement = new TiXmlElement("Search");
+
+		CStringA t;
+		CTextConvert::ConvertToUTF8(m_searches[i], t);
+		searchElement->SetAttribute("text", t);
+
+		outer->LinkEndChild(searchElement);
+	}
+
+	TiXmlPrinter printer;
+	printer.SetLineBreak("");
+	doc.Accept(&printer);
+	CString cs = printer.CStr();
+
+	return cs;
+}
+
+void CSymbolEdit::LoadPastSearches(CString values)
+{
+	m_searches.RemoveAll();
+
+	TiXmlDocument doc;
+	CStringA xmlA;
+	CTextConvert::ConvertToUTF8(values, xmlA);
+	doc.Parse(xmlA);
+
+	TiXmlElement *ItemHeader = doc.FirstChildElement("PastSearches");
+
+	if (ItemHeader != NULL)
+	{
+		TiXmlElement *ItemElement = ItemHeader->FirstChildElement();
+
+		while (ItemElement)
+		{
+			CString item = ItemElement->Attribute("text");
+
+			m_searches.Add(item);
+
+			ItemElement = ItemElement->NextSiblingElement();
+		}
+	}
+}
+
 void CSymbolEdit::AddToSearchHistory()
 {
 	CString cs;
@@ -208,7 +262,28 @@ bool CSymbolEdit::ShowSearchHistoryMenu()
 	int count = min(m_searches.GetCount(), LIST_MAX_COUNT);
 	for (int i = count-1; i >= 0; i--)
 	{
-		cmPopUp.AppendMenuW(MF_STRING, (RANGE_START + i), m_searches[i]);
+		CString text = m_searches[i];
+
+		if (i == count - 1 &&
+			m_lastSearchShortCut.Key > 0)
+		{
+			CString cmdShortcutText = CHotKey::GetHotKeyDisplayStatic(m_lastSearchShortCut.Key);
+			if (m_lastSearchShortCut.Key2 != 0)
+			{
+				CString cmdShortcutText2 = CHotKey::GetHotKeyDisplayStatic(m_lastSearchShortCut.Key2);
+
+				if (cmdShortcutText2.GetLength() > 0)
+				{
+					cmdShortcutText += _T(" - ");
+					cmdShortcutText += cmdShortcutText2;
+				}
+			}
+
+			text += "\t";
+			text += cmdShortcutText;
+		}
+
+		cmPopUp.AppendMenuW(MF_STRING, (RANGE_START + i), text);
 	}
 
 	cmPopUp.AppendMenu(MF_SEPARATOR);
@@ -651,4 +726,23 @@ void CSymbolEdit::OnSelectSearchString(UINT idIn)
 		m_searches.RemoveAt(index);
 		m_searches.Add(cs);
 	}
+}
+
+bool CSymbolEdit::ApplyLastSearch()
+{
+	bool ret = false;
+	if (m_searches.GetCount() > 0)
+	{
+		CString cs = m_searches[m_searches.GetCount()-1];
+		this->SetWindowTextW(cs);
+
+		this->SetFocus();
+		this->SetSel(-1);
+
+		this->Invalidate();
+
+		ret = true;
+	}
+
+	return ret;
 }

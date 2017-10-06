@@ -27,6 +27,7 @@
 #pragma once
 
 #include "GdiImageDrawer.h"
+#include "Accels.h"
 
 // CSymbolEdit
 
@@ -63,6 +64,13 @@ public:
 	void SetPromptFont(CFont& font, BOOL redraw = TRUE);
 	void SetPromptFont(const LOGFONT* lpLogFont, BOOL redraw = TRUE);
 
+	bool ApplyLastSearch();
+
+	void SetLastSearchAccel(CAccel a) { m_lastSearchShortCut = a; }
+
+	CString SavePastSearches();
+	void LoadPastSearches(CString values);
+
 protected:
 	
 	//CGdiImageDrawer m_searchButton;
@@ -75,6 +83,8 @@ protected:
 	CRect m_searchesButtonRect;
 	bool m_mouseDownOnSearches;
 	bool m_mouseHoveringOverSearches;
+
+	CAccel m_lastSearchShortCut;
 
 	CStringArray m_searches;
 

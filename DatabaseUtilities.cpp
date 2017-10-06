@@ -186,8 +186,7 @@ BOOL OpenDatabase(CString csDB)
 	try
 	{
 		theApp.m_db.close();
-		theApp.m_db.open(csDB);
-		CGetSetOptions::SetDBPath(csDB);
+		theApp.m_db.open(csDB);		
 
 		theApp.m_db.setBusyTimeout(CGetSetOptions::GetDbTimeout());
 

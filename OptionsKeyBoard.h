@@ -75,7 +75,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
-	CHyperLink m_CustomeKeysHelp;
+	CMFCLinkCtrl m_CustomeKeysHelp;
 	CHotKeyCtrl m_saveClipboardHotKey;
 };
 

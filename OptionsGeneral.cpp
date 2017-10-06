@@ -11,6 +11,7 @@
 #include "AccessToSqlite.h"
 #include "AdvGeneral.h"
 #include "DimWnd.h"
+#include "HyperLink.h"
 
 using namespace nsPath;
 
@@ -63,6 +64,7 @@ void COptionsGeneral::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_FONT, m_btFont);
 	DDX_Control(pDX, IDC_BUTTON_DEFAULT_FAULT, m_btDefaultButton);
 	DDX_Control(pDX, IDC_COMBO_POPUP_POSITION, m_popupPositionCombo);
+	DDX_Control(pDX, IDC_MFCLINK_ENV_VAR, m_envVarLink);
 }
 
 
@@ -76,6 +78,7 @@ BEGIN_MESSAGE_MAP(COptionsGeneral, CPropertyPage)
 	ON_BN_CLICKED(IDC_BUTTON_THEME, &COptionsGeneral::OnBnClickedButtonTheme)
 	ON_BN_CLICKED(IDC_BUTTON_DEFAULT_FAULT, &COptionsGeneral::OnBnClickedButtonDefaultFault)
 	ON_BN_CLICKED(IDC_BUTTON_FONT, &COptionsGeneral::OnBnClickedButtonFont)
+	ON_EN_CHANGE(IDC_PATH, &COptionsGeneral::OnEnChangePath)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -84,6 +87,11 @@ END_MESSAGE_MAP()
 BOOL COptionsGeneral::OnInitDialog() 
 {
 	CPropertyPage::OnInitDialog();
+
+	CString url = _T("https://sourceforge.net/p/ditto-cp/wiki/EnvironmentVariables/");
+	
+	/*m_envVarLink.SetURL(_T("\"") + url);
+	m_envVarLink.SetFontSize(-9);*/
 
 	m_brush.CreateSolidBrush(RGB(251, 251, 251));
 	
@@ -110,7 +118,7 @@ BOOL COptionsGeneral::OnInitDialog()
 	m_copyAppInclude.SetWindowText(g_Opt.GetCopyAppInclude());
 	m_copyAppExclude.SetWindowText(g_Opt.GetCopyAppExclude());
 
-	CString csPath = CGetSetOptions::GetDBPath();
+	CString csPath = CGetSetOptions::GetDBPath(false);
 	m_ePath.SetWindowText(csPath);
 	
 	if (CGetSetOptions::GetFont(m_LogFont))
@@ -158,6 +166,9 @@ BOOL COptionsGeneral::OnInitDialog()
 	UpdateData(FALSE);
 
 	theApp.m_Language.UpdateOptionGeneral(this);
+
+	OnEnChangePath();
+
 	return TRUE;
 }
 
@@ -240,22 +251,23 @@ BOOL COptionsGeneral::OnApply()
 		}
 	}
 
-	CString csPath;
-	m_ePath.GetWindowText(csPath);
+	CString toSavePath;
+	m_ePath.GetWindowText(toSavePath);
+	CString resolvedPath = CGetSetOptions::ResolvePath(toSavePath);
 
 	bool bOpenNewDatabase = false;
 
-	if(csPath.IsEmpty() == FALSE)
+	if(resolvedPath.IsEmpty() == FALSE)
 	{
-		if(FileExists(csPath) == FALSE)
+		if(FileExists(resolvedPath) == FALSE)
 		{
 			CString cs;
-			cs.Format(_T("The database %s does not exist.\n\nCreate a new database?"), csPath);
+			cs.Format(_T("The database %s does not exist.\n\nCreate a new database?"), resolvedPath);
 
 			if(MessageBox(cs, _T("Ditto"), MB_YESNO) == IDYES)
 			{
 				// -- create a new one
-				if(CreateDB(csPath))
+				if(CreateDB(resolvedPath))
 				{
 					bOpenNewDatabase = true;
 				}
@@ -267,7 +279,7 @@ BOOL COptionsGeneral::OnApply()
 		}
 		else
 		{
-			if(ValidDB(csPath) == FALSE)
+			if(ValidDB(resolvedPath) == FALSE)
 			{
 				MessageBox(_T("Invalid Database"), _T("Ditto"), MB_OK);
 				m_ePath.SetFocus();
@@ -281,7 +293,9 @@ BOOL COptionsGeneral::OnApply()
 
 		if(bOpenNewDatabase)
 		{
-			if(OpenDatabase(csPath) == FALSE)
+			CGetSetOptions::SetDBPath(toSavePath);
+
+			if(OpenDatabase(resolvedPath) == FALSE)
 			{
 				MessageBox(_T("Error Opening new database"), _T("Ditto"), MB_OK);
 				m_ePath.SetFocus();
@@ -601,4 +615,49 @@ void COptionsGeneral::OnBnClickedButtonFont()
 		cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, abs(theApp.m_metrics.PixelsToPoints(m_LogFont.lfHeight)));
 		m_btFont.SetWindowText(cs);
 	}
+}
+
+
+//void COptionsGeneral::OnNMClickSyslinkEnvVarInfo(NMHDR *pNMHDR, LRESULT *pResult)
+//{
+//	CString url = _T("https:////sourceforge.net//p//ditto-cp//wiki//EnvironmentVariables//");
+//
+//	CHyperLink::GotoURL(url, SW_SHOW);
+//
+//	*pResult = 0;
+//}
+//
+//
+//void COptionsGeneral::OnEnChangePath()
+//{
+//	// TODO:  If this is a RICHEDIT control, the control will not
+//	// send this notification unless you override the CPropertyPage::OnInitDialog()
+//	// function and call CRichEditCtrl().SetEventMask()
+//	// with the ENM_CHANGE flag ORed into the mask.
+//
+//	// TODO:  Add your control notification handler code here
+//}
+
+
+void COptionsGeneral::OnEnChangePath()
+{
+	// TODO:  If this is a RICHEDIT control, the control will not
+	// send this notification unless you override the CPropertyPage::OnInitDialog()
+	// function and call CRichEditCtrl().SetEventMask()
+	// with the ENM_CHANGE flag ORed into the mask.
+
+	// TODO:  Add your control notification handler code here
+
+	CString toSavePath;
+	m_ePath.GetWindowText(toSavePath);
+
+	if (toSavePath.Find(_T("%")) >= 0)
+	{
+		CString resolvedPath = CGetSetOptions::ResolvePath(toSavePath);
+		m_envVarLink.SetWindowText(resolvedPath);		
+	}
+	else
+	{
+		m_envVarLink.SetWindowText(_T("Environment Variables"));
+	}		
 }

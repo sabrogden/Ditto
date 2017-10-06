@@ -137,7 +137,8 @@ public:
 	static void SetCopyGap(long lGap);
 
 	static BOOL SetDBPath(CString csPath);
-	static CString GetDBPath();
+	static CString GetDBPath(bool resolvePath = true);
+	static CString ResolvePath(CString path);
 
 	static BOOL SetDBPathOld(CString csPath);
 	static CString GetDBPathOld();
@@ -586,6 +587,9 @@ public:
 	static long m_tooltipTimeout;
 	static long GetToolTipTimeout();
 	static void SetToolTipTimeout(int long);
+
+	static CString GetPastSearchXml();
+	static void SetPastSearchXml(CString val);
 
 };
 

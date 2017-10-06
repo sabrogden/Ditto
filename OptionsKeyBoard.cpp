@@ -69,8 +69,8 @@ BOOL COptionsKeyBoard::OnInitDialog()
 	CPropertyPage::OnInitDialog();
 
 	CString csHelpPath = CGetSetOptions::GetPath(PATH_HELP);
-	csHelpPath += "DittoCustomKeys.htm\"";
-	m_CustomeKeysHelp.SetURL(_T("\"") + csHelpPath);
+	csHelpPath += "DittoCustomKeys.htm";
+	m_CustomeKeysHelp.SetURL(csHelpPath);
 
 	m_pParent = (COptionsSheet *)GetParent();
 

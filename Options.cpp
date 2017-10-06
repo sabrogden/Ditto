@@ -907,10 +907,28 @@ BOOL CGetSetOptions::SetDBPath(CString csPath)
 	return SetProfileString("DBPath3", csPath);
 }
 
-CString CGetSetOptions::GetDBPath()
+CString CGetSetOptions::ResolvePath(CString path)
+{
+	CString dest;
+	int newSize = max(path.GetLength() * 10, 1000);
+
+	//path = _T("some string %COMPUTERNAME% test");
+
+	ExpandEnvironmentStrings(path, dest.GetBuffer(newSize), newSize);
+	dest.ReleaseBuffer();
+
+	return dest;
+}
+
+CString CGetSetOptions::GetDBPath(bool resolvePath)
 {
 	CString csDBPath;
 	csDBPath = GetProfileString("DBPath3", "");
+
+	if (resolvePath)
+	{
+		csDBPath = ResolvePath(csDBPath);
+	}
 
 	return csDBPath;
 }
@@ -2586,4 +2604,14 @@ void CGetSetOptions::SetToolTipTimeout(long val)
 {
 	m_tooltipTimeout = val;
 	SetProfileLong("ToolTipTimeout", val);
+}
+
+CString CGetSetOptions::GetPastSearchXml()
+{
+	return GetProfileString("PastSearchXml", "");
+}
+
+void CGetSetOptions::SetPastSearchXml(CString val)
+{
+	SetProfileString(_T("PastSearchXml"), val);
 }

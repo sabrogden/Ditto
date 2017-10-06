@@ -44,7 +44,7 @@ CString CAccels::GetCmdKeyText(DWORD cmd)
 				cmdShortcutText = CHotKey::GetHotKeyDisplayStatic(it->second.Key);
 				if (it->second.Key2 != 0)
 				{
-					CString cmdShortcutText2 = CHotKey::GetHotKeyDisplayStatic(it->second.Key);
+					CString cmdShortcutText2 = CHotKey::GetHotKeyDisplayStatic(it->second.Key2);
 
 					if (cmdShortcutText2.GetLength() > 0)
 					{

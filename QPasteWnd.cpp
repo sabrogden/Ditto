@@ -332,6 +332,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_search.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL, CRect(0, 0, 0, 0), this, ID_EDIT_SEARCH);
 	m_search.SetPromptText(theApp.m_Language.GetString(_T("Search"), _T("Search")));
 	SetSearchImages();
+	m_search.LoadPastSearches(CGetSetOptions::GetPastSearchXml());
 
 	CRect rcEditArea(theApp.m_metrics.ScaleX(4), theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(2));
 	//m_search.SetBorder(rcEditArea);
@@ -475,6 +476,8 @@ void CQPasteWnd::LoadShortcuts()
 	m_actions.AddAccel(ActionEnums::HOMELIST, VK_HOME);
 	m_actions.AddAccel(ActionEnums::SHOWMENU, VK_APPS);
 
+	m_search.SetLastSearchAccel(CAccel(0, ActionEnums::APPLY_LAST_SEARCH, 0));
+
 	for (DWORD i = ActionEnums::FIRST_ACTION + 1; i < ActionEnums::LAST_ACTION; i++)
 	{
 		ActionEnums::ActionEnumValues action = (ActionEnums::ActionEnumValues) i;
@@ -499,6 +502,10 @@ void CQPasteWnd::LoadShortcuts()
 						}
 
 						m_actions.AddAccel(action, ACCEL_MAKEKEY(LOBYTE(a), shift), b);
+					}
+					else if (action == ActionEnums::APPLY_LAST_SEARCH)
+					{
+						m_search.SetLastSearchAccel(CAccel(a, action, b));
 					}
 
 					if (ActionEnums::ToolTipAction(action))
@@ -3119,9 +3126,43 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::TOGGLE_DESCRIPTION_WORD_WRAP:
 		ret = DoActionToggleDescriptionWordWrap();
 		break;
+	case ActionEnums::APPLY_LAST_SEARCH:
+		ret = DoActionApplyLastSearch();
+		break;
+	case ActionEnums::TOGGLE_SEARCH_METHOD:
+		ret = DoActionToggleSearchMethod();
+		break;
 	}
 
 	return ret;
+}
+
+bool CQPasteWnd::DoActionToggleSearchMethod()
+{
+	if (CGetSetOptions::GetRegExTextSearch())
+	{
+		//if regex go back to wildcard
+		CGetSetOptions::SetSimpleTextSearch(FALSE);
+		CGetSetOptions::SetRegExTextSearch(FALSE);
+	}
+	else if (CGetSetOptions::GetSimpleTextSearch())
+	{
+		//if contains search go to regex
+		CGetSetOptions::SetSimpleTextSearch(FALSE);
+		CGetSetOptions::SetRegExTextSearch(TRUE);
+	}
+	else
+	{
+		//if wildcard to to contains
+		CGetSetOptions::SetSimpleTextSearch(TRUE);
+		CGetSetOptions::SetRegExTextSearch(FALSE);
+	}
+	return true;
+}
+
+bool CQPasteWnd::DoActionApplyLastSearch()
+{
+	return m_search.ApplyLastSearch();
 }
 
 bool CQPasteWnd::DoActionToggleDescriptionWordWrap()
@@ -3137,14 +3178,19 @@ bool CQPasteWnd::DoActionShowDescription()
 {
 	bool ret = false;
 
+	CString csText;
+	m_search.GetWindowText(csText);
+	if (csText != _T(""))
+	{
+		m_search.AddToSearchHistory();
+	}
+
 	if (m_lstHeader.IsToolTipWindowVisible() == false)
 	{
 		ret = m_lstHeader.ShowFullDescription(false, false);
 	}
 	else
 	{
-		CString csText;
-		m_search.GetWindowText(csText);
 		if (csText != _T(""))
 		{
 			m_lstHeader.DoToolTipSearch();
@@ -5606,6 +5652,8 @@ void CQPasteWnd::FillMainTable(CMainTable &table, CppSQLite3Query &q)
 
 void CQPasteWnd::OnDestroy()
 {
+	CGetSetOptions::SetPastSearchXml(m_search.SavePastSearches());
+
     CWndEx::OnDestroy();
     m_thread.Stop();
 	m_extraDataThread.Stop();
