@@ -102,6 +102,8 @@ END_MESSAGE_MAP()
 
 #define SETTING_SHOW_STARTUP_MESSAGE 58
 #define SETTING_TOOLTIP_TIMEOUT 59
+#define SETTING_SELECTED_INDEX 60
+#define SETTING_CLIPBOARD_SAVE_DELAY 61
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -153,7 +155,13 @@ BOOL CAdvGeneral::OnInitDialog()
 
 	AddTrueFalse(pGroupTest, _T("Paste Clip in active window after selection"), CGetSetOptions::GetSendPasteAfterSelection(), SETTING_PASTE_IN_ACTIVE_WINDOW);
 	AddTrueFalse(pGroupTest, _T("Prompt when deleting clips"), CGetSetOptions::GetPromptWhenDeletingClips(), SETTING_PROMP_ON_DELETE);
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Save Clipboard Delay (ms, default: 100))"), (long)(CGetSetOptions::GetProcessDrawClipboardDelay()), _T(""), SETTING_CLIPBOARD_SAVE_DELAY));
+
 	AddTrueFalse(pGroupTest, _T("Save Multi-Pastes"), CGetSetOptions::GetSaveMultiPaste(), SETTING_SAVE_MULTI_PASTE);
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Selected Index"), (long)(CGetSetOptions::SelectedIndex()+1), _T(""), SETTING_SELECTED_INDEX));
+
 	AddTrueFalse(pGroupTest, _T("Show Clips That are in Groups in Main List"), CGetSetOptions::GetShowAllClipsInMainList(), SETTING_SHOW_GROUP_CLIPS_IN_LIST);
 	AddTrueFalse(pGroupTest, _T("Show leading whitespace"), CGetSetOptions::GetDescShowLeadingWhiteSpace(), SETTING_SHOW_LEADING_WHITESPACE);
 	AddTrueFalse(pGroupTest, _T("Show In Taskbar"), CGetSetOptions::GetShowInTaskBar(), SETTTING_SHOW_IN_TASKBAR);
@@ -251,6 +259,18 @@ void CAdvGeneral::OnBnClickedOk()
 				if (pNewValue->lVal != pOrigValue->lVal)
 				{
 					CGetSetOptions::SetDescTextSize(pNewValue->lVal);
+				}
+				break;
+			case SETTING_SELECTED_INDEX:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetSelectedIndex(max((pNewValue->lVal-1), 0));
+				}
+				break;
+			case SETTING_CLIPBOARD_SAVE_DELAY:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetProcessDrawClipboardDelay(max(pNewValue->lVal, 0));
 				}
 				break;
 			case SETTING_SHOW_TASKBAR_ICON:

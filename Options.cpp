@@ -1984,6 +1984,11 @@ DWORD CGetSetOptions::SelectedIndex()
 	return (DWORD)GetProfileLong(_T("SelectedIndex"), 0);
 }
 
+void CGetSetOptions::SetSelectedIndex(int val)
+{
+	SetProfileLong(_T("SelectedIndex"), val);
+}
+
 void CGetSetOptions::SetCopyAppInclude(CString csAppName)
 {
 	SetProfileString(_T("CopyAppInclude"), csAppName);

@@ -404,6 +404,7 @@ public:
 	static BOOL		GetSetFocusToApp(CString csAppName);
 
 	static DWORD	SelectedIndex();
+	static void		SetSelectedIndex(int val);
 
 	static void		SetCopyAppInclude(CString csAppName);
 	static CString  GetCopyAppInclude();
