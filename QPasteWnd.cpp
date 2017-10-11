@@ -299,6 +299,8 @@ ON_UPDATE_COMMAND_UI(32775, &CQPasteWnd::OnUpdate32775)
 ON_COMMAND_RANGE(CustomFriendStartId, (CustomFriendStartId+ MaxCustomFriends+1), OnCustomSendToFriend)
 ON_COMMAND_RANGE(ChaiScriptMenuStartId, (ChaiScriptMenuStartId + MaxChaiScripts + 1), OnChaiScriptPaste)
 ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
+ON_COMMAND(ID_CLIPORDER_MOVETOLAST, &CQPasteWnd::OnCliporderMovetolast)
+ON_UPDATE_COMMAND_UI(ID_CLIPORDER_MOVETOLAST, &CQPasteWnd::OnUpdateCliporderMovetolast)
 END_MESSAGE_MAP()
 
 
@@ -2973,6 +2975,9 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::MOVE_CLIP_TOP:
 		ret = DoMoveClipTOP();
 		break;
+	case ActionEnums::MOVE_CLIP_LAST:
+		ret = DoMoveClipLast();
+		break;
 	case ActionEnums::FILTER_ON_SELECTED_CLIP:
 		ret = DoFilterOnSelectedClip();
 		break;
@@ -4132,6 +4137,74 @@ bool CQPasteWnd::DoMoveClipUp()
 			m_lstHeader.RefreshVisibleRows();
 			m_lstHeader.RedrawWindow();
 		}
+	}
+
+	return true;
+}
+
+bool CQPasteWnd::DoMoveClipLast()
+{
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	if (IDs.GetCount() > 0)
+	{
+		bool sort = false;
+		for (int i = 0; i < IDs.GetCount(); i++)
+		{
+			int id = IDs[i];
+			CClip clip;
+			if (clip.LoadMainTable(id))
+			{
+				if (theApp.m_GroupID > 0)
+				{
+					clip.MakeLastGroupOrder();
+				}
+				else
+				{
+					clip.MakeLastOrder();
+				}
+				clip.ModifyMainTable();
+
+				//have we loaded all clips, if so then sort and select
+				if (m_listItems.size() == m_lstHeader.GetItemCount())
+				{
+					sort = SyncClipDataToArrayData(clip);
+				}
+				else
+				{
+					//haven't loaded all clips so this will be out of what we have loaded
+					//remove this from the list, will be shown as they scroll down the list
+					std::vector<CMainTable>::iterator iter = m_listItems.begin();
+					while (iter != m_listItems.end())
+					{
+						if (iter->m_lID == clip.ID())
+						{
+							m_listItems.erase(iter);
+							break;
+						}
+						iter++;
+					}
+				}
+			}
+		}
+
+		if (sort)
+		{
+			if (theApp.m_GroupID > 0)
+			{
+				std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::GroupSortDesc);
+			}
+			else
+			{
+				std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::SortDesc);
+			}
+
+			SelectIds(IDs);			
+		}
+
+		m_lstHeader.RefreshVisibleRows();
+		m_lstHeader.RedrawWindow();
 	}
 
 	return true;
@@ -6557,4 +6630,20 @@ void CQPasteWnd::OnChaiScriptPaste(UINT idIn)
 	CSpecialPasteOptions pasteOptions;
 	pasteOptions.m_pasteScriptIndex = ChaiScriptMenuStartId - idIn;
 	OpenSelection(pasteOptions);
+}
+
+void CQPasteWnd::OnCliporderMovetolast()
+{
+	DoAction(ActionEnums::MOVE_CLIP_LAST);
+}
+
+
+void CQPasteWnd::OnUpdateCliporderMovetolast(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::MOVE_CLIP_LAST);
 }

@@ -265,6 +265,7 @@ public:
 	bool DoMoveClipDown();
 	bool DoMoveClipUp();
 	bool DoMoveClipTOP();
+	bool DoMoveClipLast();
 	bool DoFilterOnSelectedClip();
 	bool DoPasteUpperCase();
 	bool DoPasteLowerCase();
@@ -522,4 +523,6 @@ public:
 	afx_msg void OnUpdateImportImportcopiedfile(CCmdUI *pCmdUI);
 	afx_msg void OnUpdate32775(CCmdUI *pCmdUI);
 	afx_msg LRESULT OnDpiChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnCliporderMovetolast();
+	afx_msg void OnUpdateCliporderMovetolast(CCmdUI *pCmdUI);
 };

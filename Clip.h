@@ -135,6 +135,8 @@ public:
 	bool SaveFromEditWnd(BOOL bUpdateDesc);
 	void MakeLatestOrder();
 	void MakeLatestGroupOrder();
+	void MakeLastOrder();
+	void MakeLastGroupOrder();
 	void MakeStickyTop(int parentId);
 	void MakeStickyLast(int parentId);
 	bool RemoveStickySetting(int parentId);
@@ -156,6 +158,7 @@ public:
 	static void LoadTypes(int id, CClipTypes& types);
 
 	static double GetNewOrder(int parentId, int clipId);
+	double GetNewLastOrder(int parentId, int clipId);
 	static double GetNewTopSticky(int parentId, int clipId);
 	static double GetNewLastSticky(int parentId, int clipId);
 

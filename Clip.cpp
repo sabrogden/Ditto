@@ -1290,6 +1290,19 @@ void CClip::MakeLatestGroupOrder()
 	}
 }
 
+void CClip::MakeLastOrder()
+{
+	m_clipOrder = GetNewLastOrder(-1, m_id);
+}
+
+void CClip::MakeLastGroupOrder()
+{
+	if (m_parentId > -1)
+	{
+		m_clipGroupOrder = GetNewLastOrder(m_parentId, m_id);
+	}
+}
+
 double CClip::GetNewOrder(int parentId, int clipId)
 {
 	double newOrder = 0;
@@ -1323,6 +1336,41 @@ double CClip::GetNewOrder(int parentId, int clipId)
 	CATCH_SQLITE_EXCEPTION
 
 	return newOrder;
+}
+
+double CClip::GetNewLastOrder(int parentId, int clipId)
+{
+	double newOrder = 0;
+	double existingMinOrder = 0;
+	CString existingDesc = _T("");
+
+	try
+	{
+		if (parentId < 0)
+		{
+			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT clipOrder, mText FROM Main where clipOrder notnull ORDER BY clipOrder ASC LIMIT 1"));
+			if (q.eof() == false)
+			{
+				existingMinOrder = q.getFloatField(_T("clipOrder"));
+				existingDesc = q.getStringField(_T("mText"));
+				newOrder = existingMinOrder - 1;
+			}
+		}
+		else
+		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipGroupOrder, mText FROM Main WHERE lParentID = %d AND clipGroupOrder notnull ORDER BY clipGroupOrder ASC LIMIT 1"), parentId);
+			if (q.eof() == false)
+			{
+				existingMinOrder = q.getFloatField(_T("clipGroupOrder"));
+				newOrder = existingMinOrder - 1;
+			}
+		}
+
+		Log(StrF(_T("GetLastOrder, Id: %d, parentId: %d, CurrentMin: %f, CurrentDesc: %s, NewMax: %f"), clipId, parentId, existingMinOrder, existingDesc, newOrder));
+	}
+	CATCH_SQLITE_EXCEPTION
+
+		return newOrder;
 }
 
 BOOL CClip::LoadMainTable(int id)

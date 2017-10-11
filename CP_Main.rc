@@ -289,6 +289,7 @@ BEGIN
             MENUITEM "Move To Top",                 ID_CLIPORDER_MOVETOTOP
             MENUITEM "Move Up",                     ID_CLIPORDER_MOVEUP
             MENUITEM "Move Down",                   ID_CLIPORDER_MOVEDOWN
+            MENUITEM "Move To Last",                ID_CLIPORDER_MOVETOLAST
             MENUITEM SEPARATOR
             MENUITEM "Make Top Sticky Clip",        ID_STICKYCLIPS_MAKETOPSTICKYCLIP
             MENUITEM "Make Last Sticky Clip",       ID_STICKYCLIPS_MAKELASTSTICKYCLIP

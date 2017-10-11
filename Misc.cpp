@@ -1065,11 +1065,12 @@ int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, C
 
 		//use icu::UnicodeString because it handles upper/lowercase characters for all languages, CSTring only hanldes ascii characters
 		icu::UnicodeString mainLow(mainStr);
-		mainLow.toLower();
+		mainLow.foldCase(U_FOLD_CASE_DEFAULT);
 
 		icu::UnicodeString findLow(findStr);
-		findLow.toLower();
+		findLow.foldCase(U_FOLD_CASE_DEFAULT);
 
+		
 		int preLength = preInsert.GetLength();
 		int postLength = postInsert.GetLength();
 

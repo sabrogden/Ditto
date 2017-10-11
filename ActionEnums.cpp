@@ -298,6 +298,10 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		break;
 	case TOGGLE_SEARCH_METHOD:
 		val = "Toggle Search Method";
+		break;
+	case MOVE_CLIP_LAST:
+		val = "Move Clip Last";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
