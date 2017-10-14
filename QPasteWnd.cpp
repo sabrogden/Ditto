@@ -3479,12 +3479,14 @@ bool CQPasteWnd::DoActionEditClip()
 bool CQPasteWnd::DoActionMoveSelectionUp()
 {
 	MoveSelection(false, false);
+	m_actions.m_handleRepeatKeys = true;
 	return true;
 }
 
 bool CQPasteWnd::DoActionMoveSelectionDown()
 {
 	MoveSelection(true, false);
+	m_actions.m_handleRepeatKeys = true;
 	return true;
 }
 
