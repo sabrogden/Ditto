@@ -39,7 +39,18 @@ void CEventThread::AddEvent(int eventId)
 
 void CEventThread::AddEvent(int eventId, CString name)
 {
-	HANDLE handle = CreateEvent(NULL, FALSE, FALSE, name);
+	//handle creating events cross users/cross process
+	//https://stackoverflow.com/questions/29976596/shared-global-event-between-a-service-user-mode-processes-doesnt-work
+	SECURITY_DESCRIPTOR sd;
+	InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
+	SetSecurityDescriptorDacl(&sd, TRUE, NULL, FALSE);
+
+	SECURITY_ATTRIBUTES sa = { 0 };
+	sa.nLength = sizeof(sa);
+	sa.bInheritHandle = FALSE;
+	sa.lpSecurityDescriptor = &sd;
+
+	HANDLE handle = CreateEvent(&sa, FALSE, FALSE, name);
 	m_eventMap[handle] = eventId;
 }
 
@@ -149,8 +160,11 @@ void CEventThread::RunThread()
 	int indexPos = 0;
 	for(EventMapType::iterator it = m_eventMap.begin(); it != m_eventMap.end(); it++)
 	{
-		pHandleArray[indexPos] = it->first;
-		indexPos++;
+		if (it->first != 0)
+		{
+			pHandleArray[indexPos] = it->first;
+			indexPos++;
+		}
 	}
 
 	SetEvent(m_hEvt);
@@ -176,6 +190,8 @@ void CEventThread::RunThread()
 
 			ASSERT(!lpMsgBuf);
 			LocalFree(lpMsgBuf);
+
+			Sleep(1000);
 		}
 		else if(event == WAIT_TIMEOUT)
 		{
