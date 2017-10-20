@@ -551,8 +551,9 @@ HBRUSH CSymbolEdit::CtlColor(CDC* pDC, UINT n)
 {
 	if (::GetFocus() == m_hWnd)
 	{
-		pDC->SetBkColor(RGB(255, 255, 255));
-		return CreateSolidBrush(RGB(255, 255, 255));
+		pDC->SetTextColor(g_Opt.m_Theme.SearchTextBoxFocusText());
+		pDC->SetBkColor(g_Opt.m_Theme.SearchTextBoxFocusBG());
+		return CreateSolidBrush(g_Opt.m_Theme.SearchTextBoxFocusBG());
 	}
 	else
 	{
