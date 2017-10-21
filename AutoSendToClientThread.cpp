@@ -144,7 +144,7 @@ bool CAutoSendToClientThread::SendToClient(CClipList *pClipList)
 
 				LogSendRecieveInfo(StrF(_T("Sending clip to %s"), g_Opt.m_SendClients[nClient].csIP));
 
-				if(client.SendItem(pClip) == FALSE)
+				if(client.SendItem(pClip, false) == FALSE)
 				{
 					CString cs;
 					cs.Format(_T("Error sending clip to %s"), g_Opt.m_SendClients[nClient].csIP);

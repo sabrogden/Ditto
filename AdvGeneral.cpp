@@ -104,6 +104,7 @@ END_MESSAGE_MAP()
 #define SETTING_TOOLTIP_TIMEOUT 59
 #define SETTING_SELECTED_INDEX 60
 #define SETTING_CLIPBOARD_SAVE_DELAY 61
+#define SETTING_SHOW_MSG_WHEN_RECEIVING_MANUAL_SENT_CLIP 62
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -166,7 +167,9 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Show leading whitespace"), CGetSetOptions::GetDescShowLeadingWhiteSpace(), SETTING_SHOW_LEADING_WHITESPACE);
 	AddTrueFalse(pGroupTest, _T("Show In Taskbar"), CGetSetOptions::GetShowInTaskBar(), SETTTING_SHOW_IN_TASKBAR);
 	AddTrueFalse(pGroupTest, _T("Show indicator a clip has been pasted"), CGetSetOptions::GetShowIfClipWasPasted(), SETTING_SHOW_CLIP_PASTED);
-	
+
+	AddTrueFalse(pGroupTest, _T("Show message that we received a manual sent clip"), CGetSetOptions::GetShowMsgWhenReceivingManualSentClip(), SETTING_SHOW_MSG_WHEN_RECEIVING_MANUAL_SENT_CLIP);	
+
 	AddTrueFalse(pGroupTest, _T("Show startup tooltip message"), CGetSetOptions::GetShowStartupMessage(), SETTING_SHOW_STARTUP_MESSAGE);
 
 	AddTrueFalse(pGroupTest, _T("Show text for first ten copy hot keys"), CGetSetOptions::GetShowTextForFirstTenHotKeys(), SETTING_TEXT_FIRST_TEN);
@@ -506,6 +509,17 @@ void CAdvGeneral::OnBnClickedOk()
 						val = true;
 					}
 					CGetSetOptions::SetShowIfClipWasPasted(val);
+				}
+				break;
+			case SETTING_SHOW_MSG_WHEN_RECEIVING_MANUAL_SENT_CLIP:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = false;
+					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
+					{
+						val = true;
+					}
+					CGetSetOptions::SetShowMsgWhenReceivingManualSentClip(val);
 				}
 				break;
 			case SETTING_DIFF_APP:

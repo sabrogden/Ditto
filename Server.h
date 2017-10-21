@@ -39,6 +39,7 @@ protected:
 	CTextConvert m_Convert;
 	BOOL m_bSetToClipBoard;
 	CString m_csIP;
+	bool m_manualSend;
 	CString m_csComputerName;
 	CString m_csDesc;
 	CRecieveSocket m_Sock;

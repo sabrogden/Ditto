@@ -93,7 +93,6 @@ CMainFrame::CMainFrame()
 	m_pDeleteClips = NULL;
 	m_doubleClickGroupId = -1;
 	m_doubleClickGroupStartTime = 0;
-	m_pPopupWindow = NULL;
 }
 
 CMainFrame::~CMainFrame()
@@ -753,21 +752,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 				m_doubleClickGroupStartTime = 0;
 			}
 			break;
-		case CLOSE_POPUP_MSG_WND:
-			{
-				KillTimer(CLOSE_POPUP_MSG_WND);
 
-				if(m_pPopupWindow != NULL)
-				{
-					if(::IsWindow(m_pPopupWindow->m_hWnd))
-					{
-						m_pPopupWindow->DestroyWindow();
-					}
-					delete m_pPopupWindow;
-					m_pPopupWindow = NULL;
-				}
-			}
-			break;
 		case SCREEN_RESOLUTION_CHANGED:
 			{
 				KillTimer(SCREEN_RESOLUTION_CHANGED);
@@ -951,16 +936,26 @@ LRESULT CMainFrame::OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam)
         return FALSE;
     }
 
-    BOOL bSetToClipBoard = (BOOL)lParam;
-    if(bSetToClipBoard)
+    DWORD flags = (DWORD)lParam;
+    if(flags & REMOTE_CLIP_ADD_TO_CLIPBOARD)
     {
         CClip *pClip = pClipList->GetTail();
         if(pClip)
         {
 			LogSendRecieveInfo("OnAddToDatabaseFromSocket - Adding clip from socket setting clip to be put on clipboard");
-			pClip->m_param1 = TRUE;
+			pClip->m_param1 |= REMOTE_CLIP_ADD_TO_CLIPBOARD;
 		}
     }
+
+	if (flags & REMOTE_CLIP_MANUAL_SEND)
+	{
+		CClip *pClip = pClipList->GetTail();
+		if (pClip)
+		{
+			LogSendRecieveInfo("OnAddToDatabaseFromSocket - Adding clip from socket setting clip was a manual send from other side");
+			pClip->m_param1 |= REMOTE_CLIP_MANUAL_SEND;
+		}
+	}
 
 	m_thread.AddRemoteClipToSave(pClipList);
 
@@ -1308,20 +1303,10 @@ LRESULT CMainFrame::OnReOpenDatabase(WPARAM wParam, LPARAM lParam)
 
 LRESULT CMainFrame::OnShowMsgWindow(WPARAM wParam, LPARAM lParam)
 {
-	if(m_pPopupWindow != NULL)
-	{
-		if(::IsWindow(m_pPopupWindow->m_hWnd))
-		{
-			m_pPopupWindow->DestroyWindow();
-		}
-		delete m_pPopupWindow;
-		m_pPopupWindow = NULL;
-	}
-
 	CString *pMsg = (CString*)wParam;
 	int clipId = (int)lParam;
 
-	CRect r;
+	/*CRect r;
 	GetMonitorRect(0, r);
 
 	m_pPopupWindow = new CDittoPopupWindow();
@@ -1332,7 +1317,9 @@ LRESULT CMainFrame::OnShowMsgWindow(WPARAM wParam, LPARAM lParam)
 	m_pPopupWindow->SetCopyToGroupId(clipId);
 	m_pPopupWindow->UpdateText(*pMsg);	
 
-	SetTimer(CLOSE_POPUP_MSG_WND, 2500, 0);
+	SetTimer(CLOSE_POPUP_MSG_WND, 2500, 0);*/
+
+	m_trayIcon.SetBalloonDetails(pMsg->GetBuffer(), _T("Ditto"), CTrayNotifyIcon::BalloonStyle::Info, CGetSetOptions::GetBalloonTimeout());
 
 	delete pMsg;
 	return TRUE;

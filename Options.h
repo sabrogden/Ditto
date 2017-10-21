@@ -592,6 +592,9 @@ public:
 	static CString GetPastSearchXml();
 	static void SetPastSearchXml(CString val);
 
+	static BOOL GetShowMsgWhenReceivingManualSentClip();
+	static void SetShowMsgWhenReceivingManualSentClip(BOOL val);
+
 };
 
 // global for easy access and for initialization of fast access variables

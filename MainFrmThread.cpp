@@ -201,7 +201,7 @@ void CMainFrmThread::OnSaveRemoteClips()
 
 	//are we supposed to add this clip to the clipboard
 	CClip *pLastClip = pLocalClips->GetTail();
-	if(pLastClip && pLastClip->m_param1 == TRUE)
+	if(pLastClip && (pLastClip->m_param1 & REMOTE_CLIP_ADD_TO_CLIPBOARD))
 	{
 		LogSendRecieveInfo("---------OnSaveRemoteClips - Before Posting msg to main thread to set clipboard");
 
@@ -213,6 +213,19 @@ void CMainFrmThread::OnSaveRemoteClips()
 		LogSendRecieveInfo("---------OnSaveRemoteClips - After Posting msg to main thread to set clipboard");
 
 		pLocalClips->RemoveTail();
+	}
+
+	if (CGetSetOptions::GetShowMsgWhenReceivingManualSentClip())
+	{
+		if (pLastClip && (pLastClip->m_param1 & REMOTE_CLIP_MANUAL_SEND))
+		{
+			CString *pMsg = new CString();
+
+			//baloon message can only show 254 characters
+			pMsg->Format(_T("Received remote clip\r\n\r\n%s"), pLastClip->m_Desc.Left(225));
+
+			theApp.m_pMainFrame->PostMessageW(WM_SHOW_MSG_WINDOW, (WPARAM)pMsg, pLocalClips->GetTail()->m_parentId);
+		}
 	}
 
 	theApp.RefreshView();

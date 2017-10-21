@@ -72,7 +72,6 @@ public:
 	int m_doubleClickGroupId;
 	DWORD m_doubleClickGroupStartTime;
 	CPowerManager m_PowerManager;
-	CDittoPopupWindow *m_pPopupWindow;
 
     void DoDittoCopyBufferPaste(int nCopyBuffer);
     void DoFirstTenPositionsPaste(int nPos);

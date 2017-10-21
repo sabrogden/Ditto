@@ -1432,10 +1432,8 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 		m_listItems.clear();
 	}
 
-	if(m_lstHeader.GetItemCount() <= 0)
-	{
-		m_lstHeader.SetItemCount(m_lstHeader.GetCountPerPage() + 2);
-	}
+	m_lstHeader.SetItemCount(0);
+	m_lstHeader.RefreshVisibleRows();
 	
 	CPoint loadItem(-1, m_lstHeader.GetCountPerPage() + 2);
 	m_loadItems.push_back(loadItem);
@@ -2544,6 +2542,7 @@ BOOL CQPasteWnd::SendToFriendbyPos(int nPos, CString override_IP_Host)
 
     try
     {
+		Info.m_manualSend = true;
 		Info.m_csIP = override_IP_Host;
 		if (Info.m_csIP == _T(""))
 		{

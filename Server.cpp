@@ -110,6 +110,7 @@ CServer::CServer()
 	m_pClipList = NULL;
 	m_pClip = NULL;
 	m_bSetToClipBoard = FALSE;
+	m_manualSend = false;
 }
 
 CServer::~CServer()
@@ -196,6 +197,8 @@ void CServer::OnStart(CSendInfo &info)
 	}
 	CTextConvert::ConvertFromUTF8(info.m_cComputerName, m_csComputerName);
 	CTextConvert::ConvertFromUTF8(info.m_cDesc, m_csDesc);
+
+	m_manualSend = info.m_manualSend;
 
 	if(m_pClip != NULL)
 	{
@@ -334,8 +337,18 @@ void CServer::OnExit(CSendInfo &info)
 	{
 		theApp.m_lClipsRecieved += (long)m_pClipList->GetCount();
 
+		DWORD flags = 0;
+		if (m_bSetToClipBoard)
+		{
+			flags |= REMOTE_CLIP_ADD_TO_CLIPBOARD;
+		}
+		if (m_manualSend)
+		{
+			flags |= REMOTE_CLIP_MANUAL_SEND;
+		}
+
 		//Post a message pClipList will be freed by the reciever
-		::PostMessage(theApp.m_MainhWnd, WM_ADD_TO_DATABASE_FROM_SOCKET, (WPARAM)m_pClipList, m_bSetToClipBoard);
+		::PostMessage(theApp.m_MainhWnd, WM_ADD_TO_DATABASE_FROM_SOCKET, (WPARAM)m_pClipList, flags);
 		m_pClipList = NULL;
 	}
 	else

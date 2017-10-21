@@ -72,7 +72,7 @@ BOOL SendToFriend(CSendToFriendInfo &Info)
 
 		LogSendRecieveInfo(StrF(_T("Sending %d of %d clip to %s"), i+1, count, Info.m_csIP));
 
-		if(client.SendItem(pClip) == FALSE)
+		if(client.SendItem(pClip, Info.m_manualSend) == FALSE)
 		{
 			Info.m_csErrorText = "ERROR SendItem Failed";
 			LogSendRecieveInfo(Info.m_csErrorText);
@@ -175,9 +175,11 @@ BOOL CClient::OpenConnection(const TCHAR* servername)
 	return TRUE;
 }
 
-BOOL CClient::SendItem(CClip *pClip)
+BOOL CClient::SendItem(CClip *pClip, bool manualSend)
 {
 	CSendInfo Info;
+
+	Info.m_manualSend = manualSend;
 
 	//Send all text over as UTF-8
 	CStringA dest;

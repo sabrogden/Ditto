@@ -2620,3 +2620,13 @@ void CGetSetOptions::SetPastSearchXml(CString val)
 {
 	SetProfileString(_T("PastSearchXml"), val);
 }
+
+BOOL CGetSetOptions::GetShowMsgWhenReceivingManualSentClip()
+{
+	return GetProfileLong("ShowMsgWhenReceivingManualSentClip", TRUE);
+}
+
+void CGetSetOptions::SetShowMsgWhenReceivingManualSentClip(BOOL val)
+{
+	SetProfileLong("ShowMsgWhenReceivingManualSentClip", val);
+}
