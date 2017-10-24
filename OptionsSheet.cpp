@@ -115,7 +115,8 @@ BOOL COptionsSheet::OnInitDialog()
 	m_bModeless = FALSE;   
 	m_nFlags |= WF_CONTINUEMODAL;
 
-	SetIcon(CTrayNotifyIcon::LoadIcon(IDR_MAINFRAME), FALSE);	
+	HICON b = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME), IMAGE_ICON, 64, 64, LR_SHARED);
+	SetIcon(b, TRUE);
 
 	BOOL bResult = CPropertySheet::OnInitDialog();
 

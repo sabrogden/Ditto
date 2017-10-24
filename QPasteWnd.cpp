@@ -327,7 +327,8 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-	SetIcon(CTrayNotifyIcon::LoadIcon(IDR_MAINFRAME), FALSE);
+	HICON b = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME), IMAGE_ICON, 64, 64, LR_SHARED);	
+	SetIcon(b, TRUE);
 
 	//BOOL b = this->Register(this);
 

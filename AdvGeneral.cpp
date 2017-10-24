@@ -111,7 +111,8 @@ BOOL CAdvGeneral::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	SetIcon(CTrayNotifyIcon::LoadIcon(IDR_MAINFRAME), FALSE);
+	HICON b = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME), IMAGE_ICON, 64, 64, LR_SHARED);
+	SetIcon(b, TRUE);
 
 	m_propertyGrid.ModifyStyle(0, WS_CLIPCHILDREN);
 
