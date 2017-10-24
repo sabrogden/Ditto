@@ -659,7 +659,7 @@ BOOL CQListCtrl::OnToolTipText( UINT id, NMHDR * pNMHDR, LRESULT * pResult )
 	
 	::SendMessage(pNMHDR->hwndFrom, TTM_SETMAXTIPWIDTH, 0, 500);
 
-	if (g_Opt.m_tooltipTimeout >= 0)
+	if (g_Opt.m_tooltipTimeout > 0)
 	{
 		::SendMessage(pNMHDR->hwndFrom, TTM_SETDELAYTIME, TTDT_AUTOPOP, MAKELPARAM(g_Opt.m_tooltipTimeout, 0));
 	}
@@ -756,7 +756,15 @@ int CQListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CListCtrl::OnCreate(lpCreateStruct) == -1)
 		return -1;
 	
-	EnableToolTips();
+	if (g_Opt.m_tooltipTimeout > 0 ||
+		g_Opt.m_tooltipTimeout == -1)
+	{
+		EnableToolTips();
+	}
+	else
+	{
+		EnableToolTips(FALSE);
+	}
 
 	m_pToolTip = new CToolTipEx;
 	m_pToolTip->Create(this);

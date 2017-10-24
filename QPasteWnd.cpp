@@ -327,6 +327,8 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
+	SetIcon(CTrayNotifyIcon::LoadIcon(IDR_MAINFRAME), FALSE);
+
 	//BOOL b = this->Register(this);
 
     SetWindowText(_T(QPASTE_TITLE));
@@ -4883,6 +4885,16 @@ LRESULT CQPasteWnd::OnPostOptions(WPARAM wParam, LPARAM lParam)
 	m_lstHeader.SetNumberOfLinesPerRow(CGetSetOptions::GetLinesPerRow());
 
 	SetCurrentTransparency();
+
+	if (g_Opt.m_tooltipTimeout > 0 ||
+		g_Opt.m_tooltipTimeout == -1)
+	{
+		m_lstHeader.EnableToolTips();
+	}
+	else
+	{
+		m_lstHeader.EnableToolTips(FALSE);
+	}
 
 	return 1;
 }

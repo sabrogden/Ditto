@@ -29,4 +29,5 @@ public:
 	afx_msg void OnBnClickedBtCompactAndRepair();
 	afx_msg void OnBnClickedButtonCopyScripts();
 	afx_msg void OnBnClickedButtonPasteScripts2();
+	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 };

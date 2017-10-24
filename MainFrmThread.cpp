@@ -201,20 +201,6 @@ void CMainFrmThread::OnSaveRemoteClips()
 
 	//are we supposed to add this clip to the clipboard
 	CClip *pLastClip = pLocalClips->GetTail();
-	if(pLastClip && (pLastClip->m_param1 & REMOTE_CLIP_ADD_TO_CLIPBOARD))
-	{
-		LogSendRecieveInfo("---------OnSaveRemoteClips - Before Posting msg to main thread to set clipboard");
-
-		//set the clipboard on the main thread, i was having a problem with setting the clipboard on a thread
-		//guess it needs to be set on the main thread
-		//main window will clear this memory
-		PostMessage(theApp.m_MainhWnd, WM_LOAD_ClIP_ON_CLIPBOARD, (LPARAM)pLastClip, 0);
-
-		LogSendRecieveInfo("---------OnSaveRemoteClips - After Posting msg to main thread to set clipboard");
-
-		pLocalClips->RemoveTail();
-	}
-
 	if (CGetSetOptions::GetShowMsgWhenReceivingManualSentClip())
 	{
 		if (pLastClip && (pLastClip->m_param1 & REMOTE_CLIP_MANUAL_SEND))
@@ -227,6 +213,20 @@ void CMainFrmThread::OnSaveRemoteClips()
 			theApp.m_pMainFrame->PostMessageW(WM_SHOW_MSG_WINDOW, (WPARAM)pMsg, pLocalClips->GetTail()->m_parentId);
 		}
 	}
+
+	if(pLastClip && (pLastClip->m_param1 & REMOTE_CLIP_ADD_TO_CLIPBOARD))
+	{
+		LogSendRecieveInfo("---------OnSaveRemoteClips - Before Posting msg to main thread to set clipboard");
+
+		//set the clipboard on the main thread, i was having a problem with setting the clipboard on a thread
+		//guess it needs to be set on the main thread
+		//main window will clear this memory
+		PostMessage(theApp.m_MainhWnd, WM_LOAD_ClIP_ON_CLIPBOARD, (LPARAM)pLastClip, 0);
+
+		LogSendRecieveInfo("---------OnSaveRemoteClips - After Posting msg to main thread to set clipboard");
+
+		pLocalClips->RemoveTail();
+	}	
 
 	theApp.RefreshView();
 

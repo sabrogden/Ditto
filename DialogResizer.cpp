@@ -107,4 +107,6 @@ void CDialogResizer::MoveControls(CSize csNewSize)
 
 		::SetWindowPos(data.m_hWnd, NULL, rc.left, rc.top, rc.Width(), rc.Height(), SWP_NOACTIVATE | SWP_NOZORDER);
 	}
+
+	::RedrawWindow(m_hWndParent, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_UPDATENOW | RDW_ALLCHILDREN);
 }

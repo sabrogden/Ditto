@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(CAdvGeneral, CDialogEx)
 	ON_BN_CLICKED(IDC_BT_COMPACT_AND_REPAIR, &CAdvGeneral::OnBnClickedBtCompactAndRepair)
 	ON_BN_CLICKED(IDC_BUTTON_COPY_SCRIPTS, &CAdvGeneral::OnBnClickedButtonCopyScripts)
 	ON_BN_CLICKED(IDC_BUTTON_PASTE_SCRIPTS, &CAdvGeneral::OnBnClickedButtonPasteScripts2)
+	ON_WM_GETMINMAXINFO()
 END_MESSAGE_MAP()
 
 
@@ -110,6 +111,8 @@ BOOL CAdvGeneral::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
+	SetIcon(CTrayNotifyIcon::LoadIcon(IDR_MAINFRAME), FALSE);
+
 	m_propertyGrid.ModifyStyle(0, WS_CLIPCHILDREN);
 
 	CMFCPropertyGridProperty * pGroupTest = new CMFCPropertyGridProperty( _T( "Ditto" ) );
@@ -177,7 +180,7 @@ BOOL CAdvGeneral::OnInitDialog()
 	
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Text Lines per Clip"), CGetSetOptions::GetLinesPerRow(), _T(""), SETTING_LINES_PER_ROW));
 
-	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Tooltip timeout(ms) max of 32000"), g_Opt.m_tooltipTimeout, _T(""), SETTING_TOOLTIP_TIMEOUT));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Tooltip display time(ms) max of 32000 (-1 default (5 seconds), 0 to turn off)"), g_Opt.m_tooltipTimeout, _T(""), SETTING_TOOLTIP_TIMEOUT));
 
 	AddTrueFalse(pGroupTest, _T("Transparency Enabled"), CGetSetOptions::GetEnableTransparency(), SETTING_ENABLE_TRANSPARENCY);
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Transparency Percentage"), CGetSetOptions::GetTransparencyPercent(), _T(""), SETTING_TRANSPARENCY));
@@ -673,4 +676,13 @@ void CAdvGeneral::OnBnClickedButtonPasteScripts2()
 	{
 		CGetSetOptions::SetPasteScriptsXml(e.m_xml.Save());
 	}
+}
+
+
+void CAdvGeneral::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+	lpMMI->ptMinTrackSize.x = 450;
+	lpMMI->ptMinTrackSize.y = 450;
+
+	CDialogEx::OnGetMinMaxInfo(lpMMI);
 }

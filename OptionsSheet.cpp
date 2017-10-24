@@ -115,11 +115,11 @@ BOOL COptionsSheet::OnInitDialog()
 	m_bModeless = FALSE;   
 	m_nFlags |= WF_CONTINUEMODAL;
 
-	
+	SetIcon(CTrayNotifyIcon::LoadIcon(IDR_MAINFRAME), FALSE);	
 
 	BOOL bResult = CPropertySheet::OnInitDialog();
 
-	SetWindowText(_T("Ditto"));
+	SetWindowText(_T("Options"));
 
 	theApp.m_Language.UpdateOptionsSheet(this);
 
