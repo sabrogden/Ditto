@@ -4809,6 +4809,8 @@ bool CQPasteWnd::DoExportToBitMapFile()
 	
 	if (GetSaveFileName(&ofn))
 	{
+		CWaitCursor wait;
+
 		using namespace nsPath;
 		CString startingFilePath = ofn.lpstrFile;
 		CPath path(ofn.lpstrFile);
@@ -4823,8 +4825,18 @@ bool CQPasteWnd::DoExportToBitMapFile()
 		{
 			int id = IDs[i];
 
-			HGLOBAL dibGlobal = CClip::LoadFormat(id, CF_DIB);
-			if (dibGlobal != NULL)
+			CClip toSave;
+			toSave.LoadFormats(id);
+
+			CClipFormat *png = NULL;
+			CClipFormat *bitmap = toSave.m_Formats.FindFormat(CF_DIB);
+			if (bitmap == NULL)
+			{
+				png = toSave.m_Formats.FindFormat(theApp.m_PNG_Format);
+			}
+
+			if (bitmap != NULL ||
+				png != NULL)
 			{
 				CString savePath = startingFilePath;
 				if (IDs.GetCount() > 1 ||
@@ -4846,12 +4858,7 @@ bool CQPasteWnd::DoExportToBitMapFile()
 
 				if (savePath != _T(""))
 				{
-					LPVOID pvData = GlobalLock(dibGlobal);
-					ULONG size = (ULONG) GlobalSize(dibGlobal);
-					
-					WriteCF_DIBToFile(savePath, pvData, size);
-
-					GlobalUnlock(dibGlobal);
+					toSave.WriteImageToFile(savePath);
 
 					ret = true;
 				}
@@ -4859,8 +4866,6 @@ bool CQPasteWnd::DoExportToBitMapFile()
 				{
 					Log(StrF(_T("Failed to find a valid file name for starting path: %s"), startingFilePath));
 				}
-
-				::GlobalFree(dibGlobal);
 			}
 		}
 	}

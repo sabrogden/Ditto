@@ -1127,20 +1127,23 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 			}
 			else
 			{
+				CClipFormat *png = NULL;
 				CClipFormat *bitmap = fileClip.m_Formats.FindFormat(CF_DIB);
-				if (bitmap)
+				if (bitmap == NULL)
+				{
+					png = fileClip.m_Formats.FindFormat(theApp.m_PNG_Format);
+				}
+
+				if(bitmap != NULL ||
+					png != NULL)
 				{
 					CString file;
 					file.Format(_T("%simage_%d.png"), path, dragId++);
 
-					LPVOID pvData = GlobalLock(bitmap->m_hgData);
-					ULONG size = (ULONG) GlobalSize(bitmap->m_hgData);
-
-					WriteCF_DIBToFile(file, pvData, size);
-
-					GlobalUnlock(bitmap->m_hgData);
-
-					fileList.AddFile(file);
+					if (fileClip.WriteImageToFile(file))
+					{
+						fileList.AddFile(file);
+					}
 				}
 			}
 		}

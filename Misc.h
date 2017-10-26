@@ -184,8 +184,6 @@ void OnInitMenuPopupEx(CMenu *pPopupMenu, UINT nIndex, BOOL bSysMenu, CWnd *pWnd
 
 CString InternetEncode(CString text);
 
-bool WriteCF_DIBToFile(CString csPath, LPVOID data, ULONG size);
-
 CString GetProcessName(HWND hWnd, DWORD processId = 0);
 
 void DeleteParamFromRTF(CStringA &test, CStringA find, bool searchForTrailingDigits);

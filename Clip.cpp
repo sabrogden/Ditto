@@ -1661,6 +1661,80 @@ BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL utf8)
 	return ret;
 }
 
+BOOL CClip::WriteImageToFile(CString path)
+{
+	BOOL ret = false;
+
+	CClipFormat *bitmap = this->m_Formats.FindFormat(CF_DIB);
+	if (bitmap)
+	{
+		LPVOID pvData = GlobalLock(bitmap->m_hgData);
+		ULONG size = (ULONG)GlobalSize(bitmap->m_hgData);
+
+		BITMAPINFO *lpBI = (BITMAPINFO *)pvData;
+
+		int nPaletteEntries = 1 << lpBI->bmiHeader.biBitCount;
+		if (lpBI->bmiHeader.biBitCount > 8)
+			nPaletteEntries = 0;
+		else if (lpBI->bmiHeader.biClrUsed != 0)
+			nPaletteEntries = lpBI->bmiHeader.biClrUsed;
+
+		BITMAPFILEHEADER BFH;
+		memset(&BFH, 0, sizeof(BITMAPFILEHEADER));
+		BFH.bfType = 'MB';
+		BFH.bfSize = sizeof(BITMAPFILEHEADER) + size;
+		BFH.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + nPaletteEntries * sizeof(RGBQUAD);
+
+		// Create stream with 0 size
+		IStream* pIStream = NULL;
+		if (CreateStreamOnHGlobal(NULL, TRUE, (LPSTREAM*)&pIStream) == S_OK)
+		{
+
+			//write the file to the stream object
+			pIStream->Write(&BFH, sizeof(BITMAPFILEHEADER), NULL);
+			pIStream->Write(pvData, size, NULL);
+
+			CImage i;
+			i.Load(pIStream);
+
+			if (i.Save(path) == S_OK)
+			{
+				ret = true;
+			}
+
+			pIStream->Release();
+		}
+	}
+	else
+	{
+		CClipFormat *png = this->m_Formats.FindFormat(theApp.m_PNG_Format);
+		if (png)
+		{
+			IStream* pIStream = NULL;
+			if (CreateStreamOnHGlobal(NULL, TRUE, (LPSTREAM*)&pIStream) == S_OK)
+			{
+				LPVOID pvData = GlobalLock(png->m_hgData);
+				ULONG size = (ULONG)GlobalSize(png->m_hgData);
+
+				pIStream->Write(pvData, size, NULL);
+
+				GlobalUnlock(png->m_hgData);
+
+				CImage i;
+				i.Load(pIStream);
+
+				if (i.Save(path) == S_OK)
+				{
+					ret = true;
+				}
+
+				pIStream->Release();
+			}
+		}
+	}
+	return ret;
+}
+
 bool CClip::AddFileDataToData(CString &errorMessage)
 {
 	INT_PTR size = m_Formats.GetSize();

@@ -128,6 +128,7 @@ CCP_MainApp::CCP_MainApp()
 	m_cfDelaySavingData = ::RegisterClipboardFormat(_T("Ditto Delay Saving Data"));
 	m_RemoteCF_HDROP = ::RegisterClipboardFormat(_T("Ditto Remote CF_HDROP"));
 	m_DittoFileData = ::RegisterClipboardFormat(_T("Ditto File Data"));
+	m_PNG_Format = GetFormatID(_T("PNG"));
 }
 
 CCP_MainApp::~CCP_MainApp()
