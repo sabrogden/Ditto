@@ -348,7 +348,7 @@ DittoSetup*]]></ExclExt>
     Publisher="CN=2032816C-0EBD-4FA0-8832-B8289B21D4F4"
     Version="%version%" />
   <Properties>
-    <DisplayName>ditto-cp</DisplayName>
+    <DisplayName>Ditto Clipboard</DisplayName>
     <PublisherDisplayName>Scott Brogden</PublisherDisplayName>
     <Description>Ditto</Description>
     <Logo>Ditto.png</Logo>
@@ -446,6 +446,12 @@ DittoSetup*]]></ExclExt>
 <title>Ditto clipboard manager - Beta %version%</title>
 <meta name="description" content="" />
 </head>
+
+<?php
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+?>
 
 <body>       
 %DATETIME%
