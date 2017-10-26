@@ -134,6 +134,56 @@ void CClipFormat::Free()
 	}
 }
 
+Gdiplus::Bitmap *CClipFormat::CreateGdiplusBitmap()
+{
+	Gdiplus::Bitmap *gdipBitmap = NULL;
+	IStream* pIStream = NULL;
+
+	if (CreateStreamOnHGlobal(NULL, TRUE, (LPSTREAM*)&pIStream) == S_OK)
+	{
+		if (this->m_cfType == CF_DIB)
+		{
+			LPVOID pvData = GlobalLock(this->m_hgData);
+			ULONG size = (ULONG)GlobalSize(this->m_hgData);
+
+			BITMAPINFO *lpBI = (BITMAPINFO *)pvData;
+
+			int nPaletteEntries = 1 << lpBI->bmiHeader.biBitCount;
+			if (lpBI->bmiHeader.biBitCount > 8)
+				nPaletteEntries = 0;
+			else if (lpBI->bmiHeader.biClrUsed != 0)
+				nPaletteEntries = lpBI->bmiHeader.biClrUsed;
+
+			BITMAPFILEHEADER BFH;
+			memset(&BFH, 0, sizeof(BITMAPFILEHEADER));
+			BFH.bfType = 'MB';
+			BFH.bfSize = sizeof(BITMAPFILEHEADER) + size;
+			BFH.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + nPaletteEntries * sizeof(RGBQUAD);
+
+			pIStream->Write(&BFH, sizeof(BITMAPFILEHEADER), NULL);
+			pIStream->Write(pvData, size, NULL);
+
+			GlobalUnlock(this->m_hgData);
+
+			gdipBitmap = Gdiplus::Bitmap::FromStream(pIStream);
+		}
+		else if (this->m_cfType == theApp.m_PNG_Format)
+		{
+			LPVOID pvData = GlobalLock(this->m_hgData);
+			ULONG size = (ULONG)GlobalSize(this->m_hgData);
+			pIStream->Write(pvData, size, NULL);
+
+			GlobalUnlock(this->m_hgData);
+
+			gdipBitmap = Gdiplus::Bitmap::FromStream(pIStream);
+		}
+
+		pIStream->Release();
+	}
+
+	return gdipBitmap;
+}
+
 
 
 /*----------------------------------------------------------------------------*\
@@ -154,6 +204,8 @@ CClipFormat* CClipFormats::FindFormat(UINT cfType)
 	}
 	return NULL;
 }
+
+
 
 
 /*----------------------------------------------------------------------------*\
@@ -1874,6 +1926,27 @@ bool CClip::AddFileDataToData(CString &errorMessage)
 	}
 
 	return addedFileData;
+}
+
+Gdiplus::Bitmap *CClip::CreateGdiplusBitmap()
+{
+	Gdiplus::Bitmap *gdipBitmap = NULL;
+
+	CClipFormat *png = this->m_Formats.FindFormat(GetFormatID(_T("PNG")));
+	if (png != NULL)
+	{
+		gdipBitmap = png->CreateGdiplusBitmap();
+	}
+	else
+	{
+		CClipFormat *dib = this->m_Formats.FindFormat(CF_DIB);
+		if (dib != NULL)
+		{
+			gdipBitmap = dib->CreateGdiplusBitmap();
+		}
+	}
+
+	return gdipBitmap;
 }
 
 /*----------------------------------------------------------------------------*\

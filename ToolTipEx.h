@@ -25,7 +25,7 @@ public:
 	BOOL Hide();
 	void SetToolTipText(const CString &csText);
 	void SetRTFText(const char *pRTF);
-	void SetBitmap(CBitmap *pBitmap);
+	void SetGdiplusBitmap(Gdiplus::Bitmap *gdiplusBitmap);
 	void SetNotifyWnd(CWnd *pNotify)		{ m_pNotifyWnd = pNotify;	}
 	void HideWindowInXMilliSeconds(long lms);
 	CRect GetBoundsRect();
@@ -50,6 +50,7 @@ public:
 	void UpdateMenuShortCut(CMenu *subMenu, int id, DWORD action);
 
 	void DoSearch();
+
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -88,6 +89,7 @@ protected:
 	CAccels *m_pToolTipActions;
 	bool m_bMaxSetTimer;
 	int m_lDelayMaxSeconds;
+	
 
 protected:
 	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ScrollHelper.h"
+#include "Clip.h"
 
 
 
@@ -12,7 +13,7 @@ public:
 	CImageViewer();
 	virtual ~CImageViewer();
 
-	CBitmap *m_pBitmap;
+	Gdiplus::Bitmap *m_pGdiplusBitmap;
 	CScrollHelper m_scrollHelper;
 
 	void UpdateBitmapSize();

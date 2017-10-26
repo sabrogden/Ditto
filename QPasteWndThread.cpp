@@ -348,7 +348,17 @@ void CQPasteWndThread::OnLoadExtraData(void *param)
 		{
 			DWORD startLoadClipData = GetTickCount();
 
-			if (theApp.GetClipData(it->m_parentId, *it))
+			BOOL foundClipData = theApp.GetClipData(it->m_parentId, *it);
+			if (foundClipData == false &&
+				it->m_cfType == CF_DIB)
+			{
+				it->Free();
+				it->m_cfType = theApp.m_PNG_Format;
+
+				foundClipData = theApp.GetClipData(it->m_parentId, *it);
+			}
+
+			if (foundClipData)
 			{
 				DWORD timeTook = GetTickCount() - startLoadClipData;
 				if (timeTook > 20)
@@ -356,7 +366,8 @@ void CQPasteWndThread::OnLoadExtraData(void *param)
 					Log(StrF(_T("GetClipData for clip %d, took: %d"), it->m_parentId, timeTook));
 				}
 
-				if (it->m_cfType == CF_DIB)
+				if (it->m_cfType == CF_DIB ||
+					it->m_cfType == theApp.m_PNG_Format)
 				{
 					DWORD startConvertImage = GetTickCount();
 
@@ -394,7 +405,8 @@ void CQPasteWndThread::OnLoadExtraData(void *param)
 			{
 				ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
 
-				if (it->m_cfType == CF_DIB)
+				if (it->m_cfType == CF_DIB ||
+					it->m_cfType == theApp.m_PNG_Format)
 				{
 					pasteWnd->m_cf_NO_dibCache[it->m_parentId] = true;
 				}

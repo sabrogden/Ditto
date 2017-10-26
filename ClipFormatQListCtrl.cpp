@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ClipFormatQListCtrl.h"
 #include "BitmapHelper.h"
+#include "CP_Main.h"
 
 CClipFormatQListCtrl::CClipFormatQListCtrl(void)
 {
@@ -16,7 +17,8 @@ CClipFormatQListCtrl::~CClipFormatQListCtrl(void)
 
 HGLOBAL CClipFormatQListCtrl::GetDibFittingToHeight(CDC *pDc, int height)
 {
-	if(m_cfType != CF_DIB)
+	if(m_cfType != CF_DIB &&
+		m_cfType != theApp.m_PNG_Format)
 	{
 		return NULL;
 	}

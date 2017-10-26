@@ -53,6 +53,8 @@ public:
 	virtual void Data(HGLOBAL data) { m_hgData = data; }
 	virtual void AutoDeleteData(bool autoDeleteData) { m_autoDeleteData = autoDeleteData; }
 	virtual bool AutoDeleteData()	{ return m_autoDeleteData; }
+
+	Gdiplus::Bitmap *CreateGdiplusBitmap();
 };
 
 /*----------------------------------------------------------------------------*\
@@ -164,6 +166,8 @@ public:
 	static double GetNewLastSticky(int parentId, int clipId);
 
 	bool AddFileDataToData(CString &errorMessage);
+
+	Gdiplus::Bitmap *CreateGdiplusBitmap();
 	
 protected:
 	bool AddToMainTable();

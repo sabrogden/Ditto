@@ -1006,7 +1006,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		m_pToolTip->GetWindowRectEx(r);
 		pt = r.TopLeft();
 
-		m_pToolTip->SetBitmap(NULL);
+		m_pToolTip->SetGdiplusBitmap(NULL);
 		m_pToolTip->SetRTFText("");
 		m_pToolTip->SetToolTipText(_T(""));
 		
@@ -1023,8 +1023,8 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		m_pToolTip->SetToolTipText(_T(""));  
 		m_pToolTip->SetRTFText("    ");
 		bool bSetPlainText = false;
-		CClipFormat Clip;
 
+		CClipFormat Clip;
 
 		try
 		{
@@ -1086,10 +1086,6 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 			}
 		}
 		CATCH_SQLITE_EXCEPTION
-
-
-
-
 		
 		Clip.m_cfType = CF_UNICODETEXT;
 		if(GetClipData(nItem, Clip) && Clip.m_hgData)
@@ -1148,31 +1144,22 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 
 			Clip.Free();
 			Clip.Clear();
-		}	
-			
-		Clip.m_cfType = CF_DIB;
-				
+		}				
+
+		Clip.m_cfType = CF_DIB;				
 		if(GetClipData(nItem, Clip) && Clip.m_hgData)
-		{			
-			CBitmap *pBitMap = new CBitmap;
-			if(pBitMap)
+		{
+			m_pToolTip->SetGdiplusBitmap(Clip.CreateGdiplusBitmap());
+		}
+		else
+		{
+			Clip.m_cfType = theApp.m_PNG_Format;
+			if (GetClipData(nItem, Clip) && Clip.m_hgData)
 			{
-				CRect rcItem;
-				GetWindowRect(rcItem);
-				
-				CDC *pDC = GetDC();;
 
-				CBitmapHelper::GetCBitmap(&Clip, pDC, pBitMap, MAXINT);
-
-				ReleaseDC(pDC);
-
-				//Tooltip wnd will release
-				m_pToolTip->SetBitmap(pBitMap);
+				m_pToolTip->SetGdiplusBitmap(Clip.CreateGdiplusBitmap());
 			}
-
-			Clip.Free();
-			Clip.Clear();
-		}			
+		}
 		
 		m_pToolTip->Show(pt);
 	}

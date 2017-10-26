@@ -12,13 +12,6 @@
     static char THIS_FILE[] = __FILE__;
 #endif 
 
-#define DELETE_BITMAP	if(m_imageViewer.m_pBitmap)					\
-{								\
-m_imageViewer.m_pBitmap->DeleteObject();	\
-delete m_imageViewer.m_pBitmap;		\
-m_imageViewer.m_pBitmap = NULL;		\
-}
-
 #define HIDE_WINDOW_TIMER 1
 #define SAVE_SIZE 2
 #define TIMER_BUTTON_UP 3
@@ -39,7 +32,6 @@ CToolTipEx::CToolTipEx(): m_dwTextStyle(DT_EXPANDTABS | DT_EXTERNALLEADING |
 
 CToolTipEx::~CToolTipEx()
 {
-    DELETE_BITMAP 
     m_Font.DeleteObject();
 	m_clipDataFont.DeleteObject();
 }
@@ -132,7 +124,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 BOOL CToolTipEx::Show(CPoint point)
 {
 	m_reducedWindowSize = false;
-    if(m_imageViewer.m_pBitmap)
+    if(m_imageViewer.m_pGdiplusBitmap)
     {
         m_RichEdit.ShowWindow(SW_HIDE);
 		m_imageViewer.ShowWindow(SW_SHOW);
@@ -166,10 +158,10 @@ BOOL CToolTipEx::Show(CPoint point)
 		rect.right += 20;
 		rect.bottom += 20;
 
-		if (m_imageViewer.m_pBitmap)
+		if (m_imageViewer.m_pGdiplusBitmap)
 		{
-			int nWidth = CBitmapHelper::GetCBitmapWidth(*m_imageViewer.m_pBitmap) + ::GetSystemMetrics(SM_CXVSCROLL);
-			int nHeight = CBitmapHelper::GetCBitmapHeight(*m_imageViewer.m_pBitmap) + ::GetSystemMetrics(SM_CYHSCROLL);
+			int nWidth = m_imageViewer.m_pGdiplusBitmap->GetWidth() + ::GetSystemMetrics(SM_CXVSCROLL);
+			int nHeight = m_imageViewer.m_pGdiplusBitmap->GetHeight() + ::GetSystemMetrics(SM_CYHSCROLL);
 
 			rect.right = rect.left + nWidth;
 			rect.bottom = rect.top + nHeight;
@@ -265,7 +257,8 @@ void CToolTipEx::GetWindowRectEx(LPRECT lpRect)
 
 BOOL CToolTipEx::Hide()
 {
-	DELETE_BITMAP
+	delete m_imageViewer.m_pGdiplusBitmap;
+	m_imageViewer.m_pGdiplusBitmap = NULL;
 
 	SaveWindowSize();
 
@@ -457,7 +450,7 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 
 		case WM_MOUSEWHEEL:
 		{
-			if (m_imageViewer.m_pBitmap)
+			if (m_imageViewer.m_pGdiplusBitmap)
 			{
 				m_imageViewer.PostMessageW(pMsg->message, pMsg->wParam, pMsg->lParam);
 				return TRUE;
@@ -529,10 +522,10 @@ CRect CToolTipEx::GetBoundsRect()
     rect.bottom += m_rectMargin.top + m_rectMargin.bottom;
     rect.right += m_rectMargin.left + m_rectMargin.right + 2;
 
-    if(m_imageViewer.m_pBitmap)
+    if(m_imageViewer.m_pGdiplusBitmap)
     {
-        int nWidth = CBitmapHelper::GetCBitmapWidth(*m_imageViewer.m_pBitmap);
-        int nHeight = CBitmapHelper::GetCBitmapHeight(*m_imageViewer.m_pBitmap);
+		int nWidth = m_imageViewer.m_pGdiplusBitmap->GetWidth();
+		int nHeight = m_imageViewer.m_pGdiplusBitmap->GetHeight();
 
         rect.bottom += nHeight;
         if((rect.left + nWidth) > rect.right)
@@ -631,21 +624,14 @@ BOOL CToolTipEx::SetLogFont(LPLOGFONT lpLogFont, BOOL bRedraw /*=TRUE*/)
     return TRUE;
 }
 
-void CToolTipEx::SetBitmap(CBitmap *pBitmap)
+void CToolTipEx::SetGdiplusBitmap(Gdiplus::Bitmap *gdiplusBitmap)
 {
-    DELETE_BITMAP 
+	delete m_imageViewer.m_pGdiplusBitmap;
+	m_imageViewer.m_pGdiplusBitmap = NULL;
 
-	m_imageViewer.m_pBitmap = pBitmap;
-
+	m_imageViewer.m_pGdiplusBitmap = gdiplusBitmap;
 	m_imageViewer.UpdateBitmapSize();
-
-	if (m_imageViewer.m_pBitmap != NULL)
-	{
-		int nWidth = CBitmapHelper::GetCBitmapWidth(*m_imageViewer.m_pBitmap);
-		int nHeight = CBitmapHelper::GetCBitmapHeight(*m_imageViewer.m_pBitmap);
-
-		Invalidate();
-	}
+	Invalidate();
 }
 
 void CToolTipEx::OnSize(UINT nType, int cx, int cy)
