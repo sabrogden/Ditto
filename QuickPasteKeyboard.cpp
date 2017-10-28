@@ -153,6 +153,40 @@ void CQuickPasteKeyboard::LoadItems()
 		}
 	}
 
+	int dummyId = -1;
+
+	for (auto & element : g_Opt.m_pasteScripts.m_list)
+	{
+		// Insert the first item
+		lvi.mask = LVIF_TEXT;
+		lvi.iItem = (int)row;
+
+		KeyboardArray ar;
+		ar.m_refData = element.m_guid;
+		for (int x = 0; x < 10; x++)
+		{
+			ar.Array[x].A = g_Opt.GetActionShortCutA(ActionEnums::PASTE_SCRIPT, x, element.m_guid);
+			ar.Array[x].B = g_Opt.GetActionShortCutB(ActionEnums::PASTE_SCRIPT, x, element.m_guid);
+		}
+
+		CString shortCutText = GetShortCutText(ar);
+
+		lvi.iSubItem = 0;
+		lvi.pszText = (LPTSTR)(LPCTSTR)(shortCutText);
+		int x = m_list.InsertItem(&lvi);
+
+		CString col2 = ActionEnums::EnumDescription(ActionEnums::PASTE_SCRIPT);
+		col2 += _T(": ");
+		col2 += element.m_name;
+		m_list.SetItemText(row, 1, col2);
+
+		m_list.SetItemData(row, dummyId);
+		m_map[dummyId] = ar;
+
+		dummyId--;
+		row++;
+	}
+
 	SelectedRow(0);
 }
 
@@ -353,8 +387,14 @@ BOOL CQuickPasteKeyboard::OnApply()
 		{
 			if (it->second.Array[i].Dirty)
 			{
-				g_Opt.SetActionShortCutA(it->first, it->second.Array[i].A, i);
-				g_Opt.SetActionShortCutB(it->first, it->second.Array[i].B, i);
+				int actionEnum = it->first;
+				if (actionEnum < 0)
+				{
+					actionEnum = ActionEnums::PASTE_SCRIPT;
+				}
+
+				g_Opt.SetActionShortCutA(actionEnum, it->second.Array[i].A, i, it->second.m_refData);
+				g_Opt.SetActionShortCutB(actionEnum, it->second.Array[i].B, i, it->second.m_refData);
 				it->second.Array[i].Dirty = false;
 			}
 		}

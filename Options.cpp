@@ -203,7 +203,15 @@ void CGetSetOptions::LoadSettings()
 	m_Theme.Load(GetTheme());
 
 	m_copyScripts.Load(GetCopyScriptsXml());
+	if (m_copyScripts.m_assignedGuidOnLoad)
+	{
+		SetCopyScriptsXml(m_copyScripts.Save());
+	}
 	m_pasteScripts.Load(GetPasteScriptsXml());
+	if (m_pasteScripts.m_assignedGuidOnLoad)
+	{
+		SetPasteScriptsXml(m_pasteScripts.Save());
+	}
 
 	m_tooltipTimeout = GetToolTipTimeout();
 }
@@ -2321,10 +2329,17 @@ void CGetSetOptions::SetShowMsgWndOnCopyToGroup(BOOL val)
 	SetProfileLong(_T("ShowMsgWndOnCopyToGroup"), val);
 }
 
-int CGetSetOptions::GetActionShortCutA(DWORD action, int pos)
+int CGetSetOptions::GetActionShortCutA(DWORD action, int pos, CString refData)
 {
 	CString actionText;
-	actionText.Format(_T("QP_ShortCut_%d_%d_A"), action, pos);
+	if (refData != _T(""))
+	{
+		actionText.Format(_T("QP_ShortCut_%d_%s_%d_A"), action, refData, pos);
+	}
+	else
+	{
+		actionText.Format(_T("QP_ShortCut_%d_%d_A"), action, pos);
+	}
 	int ret = GetProfileLong(actionText, -1);
 	if (ret == -1)
 	{
@@ -2334,17 +2349,31 @@ int CGetSetOptions::GetActionShortCutA(DWORD action, int pos)
 	return ret;
 }
 
-void CGetSetOptions::SetActionShortCutA(int action, DWORD shortcut, int pos)
+void CGetSetOptions::SetActionShortCutA(int action, DWORD shortcut, int pos, CString refData)
 {
 	CString actionText;
-	actionText.Format(_T("QP_ShortCut_%d_%d_A"), action, pos);
+	if (refData != _T(""))
+	{
+		actionText.Format(_T("QP_ShortCut_%d_%s_%d_A"), action, refData, pos);
+	}
+	else
+	{
+		actionText.Format(_T("QP_ShortCut_%d_%d_A"), action, pos);
+	}
 	SetProfileLong(actionText, shortcut);
 }
 
-int CGetSetOptions::GetActionShortCutB(DWORD action, int pos)
+int CGetSetOptions::GetActionShortCutB(DWORD action, int pos, CString refData)
 {
 	CString actionText;
-	actionText.Format(_T("QP_ShortCut_%d_%d_B"), action, pos);
+	if (refData != _T(""))
+	{
+		actionText.Format(_T("QP_ShortCut_%d_%s_%d_B"), action, refData, pos);
+	}
+	else
+	{
+		actionText.Format(_T("QP_ShortCut_%d_%d_B"), action, pos);
+	}
 	int ret = GetProfileLong(actionText, -1);
 	if (ret == -1)
 	{
@@ -2354,10 +2383,17 @@ int CGetSetOptions::GetActionShortCutB(DWORD action, int pos)
 	return ret;
 }
 
-void CGetSetOptions::SetActionShortCutB(int action, DWORD shortcut, int pos)
+void CGetSetOptions::SetActionShortCutB(int action, DWORD shortcut, int pos, CString refData)
 {
 	CString actionText;
-	actionText.Format(_T("QP_ShortCut_%d_%d_B"), action, pos);
+	if (refData != _T(""))
+	{
+		actionText.Format(_T("QP_ShortCut_%d_%s_%d_B"), action, refData, pos);
+	}
+	else
+	{
+		actionText.Format(_T("QP_ShortCut_%d_%d_B"), action, pos);
+	}
 	SetProfileLong(actionText, shortcut);
 }
 

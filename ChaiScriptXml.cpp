@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "ChaiScriptXml.h"
-
 #include "tinyxml\tinyxml.h"
-
 #include "Shared\TextConvert.h"
+#include "Misc.h"
 
 
 CChaiScriptXml::CChaiScriptXml()
 {
+	m_assignedGuidOnLoad = false;
 }
 
 
@@ -33,6 +33,7 @@ CString CChaiScriptXml::GetScript(CString name, BOOL &active)
 
 void CChaiScriptXml::Load(CString values)
 {
+	m_assignedGuidOnLoad = false;
 	m_list.clear();
 	
 	TiXmlDocument doc;
@@ -53,6 +54,14 @@ void CChaiScriptXml::Load(CString values)
 			array_item.m_name = ItemElement->Attribute("name");
 			array_item.m_description = ItemElement->Attribute("description");
 			array_item.m_script = ItemElement->Attribute("script");
+			array_item.m_guid = ItemElement->Attribute("guid");
+			array_item.m_version = ItemElement->Attribute("vesion");
+
+			if (array_item.m_guid == "")
+			{
+				array_item.m_guid = NewGuidString();
+				m_assignedGuidOnLoad = true;
+			}
 
 			m_list.push_back(array_item);
 
@@ -63,6 +72,7 @@ void CChaiScriptXml::Load(CString values)
 
 CString CChaiScriptXml::Save()
 {
+	m_assignedGuidOnLoad = false;
 	TiXmlDocument doc;
 
 	TiXmlElement* friendOuter = new TiXmlElement("ChaiScripts");
@@ -85,6 +95,14 @@ CString CChaiScriptXml::Save()
 		CStringA script;
 		CTextConvert::ConvertToUTF8(listItem.m_script, script);
 		friendElement->SetAttribute("script", script);
+
+		CStringA guid;
+		CTextConvert::ConvertToUTF8(listItem.m_guid, guid);
+		friendElement->SetAttribute("guid", guid);
+
+		CStringA version;
+		CTextConvert::ConvertToUTF8(listItem.m_version, version);
+		friendElement->SetAttribute("version", version);
 
 		friendOuter->LinkEndChild(friendElement);
 	}

@@ -30,6 +30,7 @@ bool ChaiScriptOnCopy::ProcessScript(CDittoChaiScript &clipData, std::string scr
 		chai.add(chaiscript::fun(&CDittoChaiScript::GetClipSize), "GetClipSize");
 		chai.add(chaiscript::fun(&CDittoChaiScript::GetAsciiString), "GetAsciiString");
 		chai.add(chaiscript::fun(&CDittoChaiScript::SetAsciiString), "SetAsciiString");
+		chai.add(chaiscript::fun(&CDittoChaiScript::GetActiveApp), "GetActiveApp");
 
 		chai.add(chaiscript::var(&clipData), "clip");
 

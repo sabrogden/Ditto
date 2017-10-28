@@ -17,7 +17,7 @@ CSpecialPasteOptions::CSpecialPasteOptions()
 	m_pasteAddingDateTime = false;
 	m_delayRenderLockout = 0;
 	m_dragDropFilesOnly = false;
-	m_pasteScriptIndex = -1;
+	m_pasteScriptGuid = _T("");
 }
 
 CSpecialPasteOptions::~CSpecialPasteOptions()

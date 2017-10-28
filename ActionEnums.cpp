@@ -302,6 +302,9 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case MOVE_CLIP_LAST:
 		val = "Move Clip Last";
 		break;
+	case PASTE_SCRIPT:
+		val = "Paste Script";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
@@ -438,6 +441,7 @@ bool ActionEnums::UserConfigurable(ActionEnumValues value)
 	case ActionEnums::TOGGLEFILELOGGING:
 	case ActionEnums::TOGGLEOUTPUTDEBUGSTRING:
 	case ActionEnums::HOMELIST:
+	case ActionEnums::PASTE_SCRIPT:
 		return false;
 	}
 

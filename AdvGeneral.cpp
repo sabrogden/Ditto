@@ -659,6 +659,7 @@ void CAdvGeneral::OnBnClickedButtonCopyScripts()
 	CDimWnd dim(this);
 
 	CScriptEditor e(this);
+	e.m_title = _T("Copy Scripts");
 	e.m_xml.Load(CGetSetOptions::GetCopyScriptsXml());
 	if (e.DoModal() == IDOK)
 	{
@@ -672,6 +673,7 @@ void CAdvGeneral::OnBnClickedButtonPasteScripts2()
 	CDimWnd dim(this);
 
 	CScriptEditor e(this);
+	e.m_title = _T("Paste Scripts");
 	e.m_xml.Load(CGetSetOptions::GetPasteScriptsXml());
 	if (e.DoModal() == IDOK)
 	{

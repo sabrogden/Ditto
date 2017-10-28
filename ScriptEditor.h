@@ -16,6 +16,8 @@ public:
 
 	CChaiScriptXml m_xml;
 
+	CString m_title;
+
 protected:
 	
 	void EnableDisable(BOOL enable);

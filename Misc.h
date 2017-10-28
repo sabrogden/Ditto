@@ -190,4 +190,6 @@ void DeleteParamFromRTF(CStringA &test, CStringA find, bool searchForTrailingDig
 
 bool RemoveRTFSection(CStringA &str, CStringA section);
 
+CString NewGuidString();
+
 #endif // !defined(AFX_CP_GUI_GLOBALS__FBCDED09_A6F2_47EB_873F_50A746EBC86B__INCLUDED_)

@@ -533,6 +533,19 @@ void CQPasteWnd::LoadShortcuts()
 		}
 	}
 
+	for (auto & element : g_Opt.m_pasteScripts.m_list)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			int a = g_Opt.GetActionShortCutA(ActionEnums::PASTE_SCRIPT, i, element.m_guid);
+			if (a > 0)
+			{
+				int b = g_Opt.GetActionShortCutB(ActionEnums::PASTE_SCRIPT, i, element.m_guid);
+				m_actions.AddAccel(ActionEnums::PASTE_SCRIPT, a, b, element.m_guid);
+			}
+		}
+	}
+
 	m_lstHeader.SetTooltipActions(&m_toolTipActions);
 }
 
@@ -2836,7 +2849,7 @@ bool CQPasteWnd::CheckActions(MSG * pMsg)
 	{
 		if (m_modifierKeyActions.OnMsg(pMsg, a))
 		{
-			ret = DoAction(a.Cmd);
+			ret = DoAction(a);
 		}
 	}
 
@@ -2844,18 +2857,18 @@ bool CQPasteWnd::CheckActions(MSG * pMsg)
 	{
 		if (m_actions.OnMsg(pMsg, a))
 		{
-			ret = DoAction(a.Cmd);
+			ret = DoAction(a);
 		}
 	}
 
 	return ret;
 }
 
-bool CQPasteWnd::DoAction(DWORD actionId)
+bool CQPasteWnd::DoAction(CAccel a)
 {
 	bool ret = false;
 
-	switch (actionId)
+	switch (a.Cmd)
 	{
 	case ActionEnums::SHOWDESCRIPTION:
 		ret = DoActionShowDescription();
@@ -3139,9 +3152,21 @@ bool CQPasteWnd::DoAction(DWORD actionId)
 	case ActionEnums::TOGGLE_SEARCH_METHOD:
 		ret = DoActionToggleSearchMethod();
 		break;
+	case ActionEnums::PASTE_SCRIPT:
+		ret = DoActionPasteScript(a.RefData);
+		break;
 	}
 
 	return ret;
+}
+
+bool CQPasteWnd::DoActionPasteScript(CString scriptGuid)
+{
+	CSpecialPasteOptions pasteOptions;
+	pasteOptions.m_pasteScriptGuid = scriptGuid;
+	OpenSelection(pasteOptions);
+
+	return true;
 }
 
 bool CQPasteWnd::DoActionToggleSearchMethod()
@@ -6647,8 +6672,14 @@ void CQPasteWnd::OnCustomSendToFriend(UINT idIn)
 void CQPasteWnd::OnChaiScriptPaste(UINT idIn)
 {
 	CSpecialPasteOptions pasteOptions;
-	pasteOptions.m_pasteScriptIndex = ChaiScriptMenuStartId - idIn;
-	OpenSelection(pasteOptions);
+	int index = idIn - ChaiScriptMenuStartId;
+
+	if (index >= 0 &&
+		index < g_Opt.m_pasteScripts.m_list.size())
+	{
+		pasteOptions.m_pasteScriptGuid = g_Opt.m_pasteScripts.m_list[index].m_guid;
+		OpenSelection(pasteOptions);
+	}
 }
 
 void CQPasteWnd::OnCliporderMovetolast()

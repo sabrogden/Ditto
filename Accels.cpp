@@ -16,13 +16,13 @@ void CAccels::AddAccel(CAccel a)
 	m_multiMap.insert(pair<DWORD, CAccel>(a.Key, a));
 }
 
-void CAccels::AddAccel(DWORD cmd, DWORD key, DWORD key2)
+void CAccels::AddAccel(DWORD cmd, DWORD key, DWORD key2, CString refData)
 {
 	if ((int)key2 <= 0)
 	{
 		key2 = 0;
 	}
-	CAccel a(key, cmd, key2);
+	CAccel a(key, cmd, key2, refData);
 
 	m_multiMap.insert(pair<DWORD, CAccel>(key, a));
 }

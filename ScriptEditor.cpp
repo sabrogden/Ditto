@@ -50,6 +50,8 @@ BOOL CScriptEditor::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
+	SetWindowText(m_title);
+
 	int index = 0;
 	for (auto & listItem : m_xml.m_list)
 	{
@@ -123,6 +125,7 @@ void CScriptEditor::OnBnClickedButtonAddScript()
 	CDittoChaiScriptXmlItem newItem;
 	newItem.m_name = _T("New Script");
 	newItem.m_active = true;
+	newItem.m_guid = NewGuidString();
 	m_xml.m_list.push_back(newItem);
 
 	int index = m_scriptsList.AddString(newItem.m_name);

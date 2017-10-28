@@ -219,7 +219,7 @@ public:
 	void OnDragLeave();
 	COleDropTarget *m_pDropTarget;
 
-	bool DoAction(DWORD actionId);
+	bool DoAction(CAccel a);
 	bool DoActionShowDescription();
 	bool DoActionNextDescription(); 
 	bool DoActionPrevDescription();
@@ -238,6 +238,7 @@ public:
 	bool DoActionToggleDescriptionWordWrap();
 	bool DoActionApplyLastSearch();
 	bool DoActionToggleSearchMethod();
+	bool DoActionPasteScript(CString scriptGuid);
 	bool DoActionMoveSelectionUp();
 	bool DoModifierActiveActionSelectionUp();
 	bool DoModifierActiveActionSelectionDown();

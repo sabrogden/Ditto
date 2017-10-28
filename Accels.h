@@ -16,13 +16,15 @@ public:
 	DWORD Key2;
     DWORD Cmd;
 	int RefId;
+	CString RefData;
 
-    CAccel(DWORD key = 0, DWORD cmd = 0, DWORD key2 = 0)
+    CAccel(DWORD key = 0, DWORD cmd = 0, DWORD key2 = 0, CString refData = _T(""))
     {
         Key = key;
 		Key2 = key2;
         Cmd = cmd;
 		RefId = 0;
+		RefData = refData;
     }
 };
 
@@ -36,7 +38,7 @@ public:
 
     void AddAccel(CAccel a);
 
-	void AddAccel(DWORD cmd, DWORD key, DWORD key2 = 0);
+	void AddAccel(DWORD cmd, DWORD key, DWORD key2 = 0, CString refData = _T(""));
 
 	void RemoveAll();
 
