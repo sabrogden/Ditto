@@ -220,6 +220,7 @@ public:
 	COleDropTarget *m_pDropTarget;
 
 	bool DoAction(CAccel a);
+	bool DoAction(DWORD cmd);
 	bool DoActionShowDescription();
 	bool DoActionNextDescription(); 
 	bool DoActionPrevDescription();

@@ -2864,6 +2864,12 @@ bool CQPasteWnd::CheckActions(MSG * pMsg)
 	return ret;
 }
 
+bool CQPasteWnd::DoAction(DWORD cmd)
+{
+	CAccel a(0, cmd);
+	return DoAction(a);
+}
+
 bool CQPasteWnd::DoAction(CAccel a)
 {
 	bool ret = false;
