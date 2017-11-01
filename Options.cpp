@@ -71,6 +71,7 @@ BOOL CGetSetOptions::m_excludeCF_DIBInExcel = TRUE;
 CChaiScriptXml CGetSetOptions::m_copyScripts;
 CChaiScriptXml CGetSetOptions::m_pasteScripts;
 long CGetSetOptions::m_tooltipTimeout;
+BOOL CGetSetOptions::m_cleanRTFBeforeDrawing = TRUE;
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -1946,7 +1947,7 @@ DWORD CGetSetOptions::SendKeysDelay()
 
 DWORD CGetSetOptions::WaitForActiveWndTimeout()
 {
-	return (DWORD)GetProfileLong(_T("WaitForActiveWndTimeout"), 100);
+	return (DWORD)GetProfileLong(_T("WaitForActiveWndTimeout"), 500);
 }
 
 DWORD CGetSetOptions::FocusChangedDelay()
@@ -2665,4 +2666,16 @@ BOOL CGetSetOptions::GetShowMsgWhenReceivingManualSentClip()
 void CGetSetOptions::SetShowMsgWhenReceivingManualSentClip(BOOL val)
 {
 	SetProfileLong("ShowMsgWhenReceivingManualSentClip", val);
+}
+
+
+BOOL CGetSetOptions::GetCleanRTFBeforeDrawing()
+{
+	return GetProfileLong("CleanRTFBeforeDrawing", TRUE);
+}
+
+void CGetSetOptions::SetCleanRTFBeforeDrawing(BOOL val)
+{
+	m_cleanRTFBeforeDrawing = true;
+	SetProfileLong("CleanRTFBeforeDrawing", val);
 }

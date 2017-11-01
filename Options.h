@@ -595,6 +595,10 @@ public:
 	static BOOL GetShowMsgWhenReceivingManualSentClip();
 	static void SetShowMsgWhenReceivingManualSentClip(BOOL val);
 
+	static BOOL m_cleanRTFBeforeDrawing;
+	static BOOL GetCleanRTFBeforeDrawing();
+	static void SetCleanRTFBeforeDrawing(BOOL val);
+
 };
 
 // global for easy access and for initialization of fast access variables

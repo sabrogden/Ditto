@@ -555,7 +555,24 @@ BOOL CQListCtrl::DrawRtfText(int nItem, CRect &crRect, CDC *pDC)
 	   char *pData = (char*)GlobalLock(pThumbnail->m_hgData);
 	   if(pData)
 	   {
-		   CComBSTR bStr(pData);
+		   CStringA CStringData((char*)pData);		   
+
+		   /*CFile file;
+		   if (file.Open(_T("c:\\temp\\rtf.txt"), CFile::modeRead))
+		   {
+			   int len = file.GetLength();
+			   file.Read(CStringData.GetBuffer(len), len);
+			   CStringData.ReleaseBuffer();
+		   }*/
+
+		   //newer version of word adds these to the rtf, i tracked these sections down, remove them and it draws correcty, might find more later
+		   if (g_Opt.m_cleanRTFBeforeDrawing)
+		   {
+			   RemoveRTFSection(CStringData, "{\\fonttbl");
+			   RemoveRTFSection(CStringData, "{\\stylesheet");
+		   }
+
+		   CComBSTR bStr(CStringData);
 		   
 		   m_pFormatter->put_RTFText(bStr);
 		   

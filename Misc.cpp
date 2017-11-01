@@ -1334,9 +1334,31 @@ bool RemoveRTFSection(CStringA &str, CStringA section)
 	bool removedSection = false;
 
 	int start2 = str.Find(section, 0);
+	int end2 = 0;
 	if (start2 >= 0)
 	{
-		int end2 = str.Find("}", start2);
+		int in = 0;
+		for (int pos = start2+1; pos < str.GetLength(); pos++)
+		{
+			if (str[pos] == '{')
+			{
+				in++;
+			}
+
+			if (str[pos] == '}')
+			{
+				if (in > 0)
+				{
+					in--;
+				}
+				else
+				{
+					end2 = pos;
+					break;
+				}
+			}
+		}
+
 		if (end2 > start2)
 		{
 			str.Delete(start2, (end2 - start2) + 1);
