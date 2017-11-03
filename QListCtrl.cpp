@@ -550,35 +550,27 @@ BOOL CQListCtrl::DrawRtfText(int nItem, CRect &crRect, CDC *pDC)
 		m_pFormatter->Create();
 	}
 
+	if (m_rtfFormater.m_hWnd == NULL)
+	{
+		m_rtfFormater.Create(_T(""), _T(""), WS_CHILD | WS_VSCROLL |
+			WS_HSCROLL | ES_MULTILINE | ES_AUTOVSCROLL | ES_NOHIDESEL |
+			ES_AUTOHSCROLL, CRect(0, 0, 0, 0), this, -1);
+	}
+
 	if(m_pFormatter)
 	{
 	   char *pData = (char*)GlobalLock(pThumbnail->m_hgData);
 	   if(pData)
-	   {
-		   CStringA CStringData((char*)pData);		   
+	   {		   
+		   //somehow ms word places crazy rtf text onto the clipboard and our draw routine doesn't handle that
+		   //pass the rtf text into a richtext control and get it out and the contorl will clean  the rtf so our routine can draw it
+		   m_rtfFormater.SetRTF((char*)pData);
+		   CString betterRTF = m_rtfFormater.GetRTF();		   
 
-		   /*CFile file;
-		   if (file.Open(_T("c:\\temp\\rtf.txt"), CFile::modeRead))
-		   {
-			   int len = file.GetLength();
-			   file.Read(CStringData.GetBuffer(len), len);
-			   CStringData.ReleaseBuffer();
-		   }*/
-
-		   //newer version of word adds these to the rtf, i tracked these sections down, remove them and it draws correcty, might find more later
-		   if (g_Opt.m_cleanRTFBeforeDrawing)
-		   {
-			   RemoveRTFSection(CStringData, "{\\fonttbl");
-			   RemoveRTFSection(CStringData, "{\\stylesheet");
-		   }
-
-		   CComBSTR bStr(CStringData);
-		   
+		   CComBSTR bStr(betterRTF);		   
 		   m_pFormatter->put_RTFText(bStr);
 		   
 		   m_pFormatter->Draw(pDC->m_hDC, crRect);
-
-		   GlobalUnlock(pThumbnail->m_hgData);
 
 		   bRet = TRUE;
 	   }
@@ -781,7 +773,7 @@ int CQListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	else
 	{
 		EnableToolTips(FALSE);
-	}
+	}	
 
 	m_pToolTip = new CToolTipEx;
 	m_pToolTip->Create(this);

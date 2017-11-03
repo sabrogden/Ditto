@@ -190,6 +190,7 @@ protected:
 	CString m_searchText;
 	BOOL m_showIfClipWasPasted;
 	CAccels *m_pToolTipActions;
+	CRichEditCtrlEx m_rtfFormater;
 
 
 	// Generated message map functions
