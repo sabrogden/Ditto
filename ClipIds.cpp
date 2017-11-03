@@ -166,6 +166,11 @@ bool CClipIDs::AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bRev
 					bRet = true;
 				}
 			}
+			else
+			{
+				bRet = false;
+				break;
+			}
 		}
 	}
 	CATCH_SQLITE_EXCEPTION
