@@ -1845,8 +1845,15 @@ bool CGetSetOptions::GetIsWindowsApp()
 CString CGetSetOptions::GetPasteString(CString csAppName)
 {
 	CString csString = GetProfileString(csAppName, _T(""), _T("PasteStrings"));
-	if(csString.IsEmpty())
+	if (csString.IsEmpty())
+	{
+		//edge is really slow to set focus so add a delay before sending the paste
+		if (csAppName == L"MicrosoftEdge.exe")
+		{
+			return _T("{DELAY 500}^{VKEY86}");
+		}
 		return GetDefaultPasteString();
+	}
 
 	return csString;
 }

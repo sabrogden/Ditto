@@ -9,6 +9,7 @@
 #include "sqlite\utext.h"
 #include <sys/types.h>  
 #include <sys/stat.h> 
+#include "Path.h"
 
 CString GetIPAddress()
 {
@@ -880,6 +881,44 @@ __int64 GetLastWriteTime(const CString &csFile)
 	return nLastWrite;
 }
 
+typedef struct 
+{
+	DWORD ownerpid;
+	DWORD childpid;
+} windowinfo;
+
+BOOL CALLBACK EnumChildWindowsCallback(HWND hWnd, LPARAM lp) 
+{
+	windowinfo* info = (windowinfo*)lp;
+	DWORD pid = 0;
+	GetWindowThreadProcessId(hWnd, &pid);
+	if (pid != info->ownerpid) 
+		info->childpid = pid;
+	return TRUE;
+}
+
+CString UWP_AppName(HWND active_window, DWORD ownerpid)
+{
+	CString uwpAppName;
+	windowinfo info = { 0 };
+	info.ownerpid = ownerpid;
+	info.childpid = info.ownerpid;
+	EnumChildWindows(active_window, EnumChildWindowsCallback, (LPARAM)&info);
+	HANDLE active_process = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, info.childpid);
+	if (active_process != NULL)
+	{
+		WCHAR image_name[MAX_PATH] = { 0 };
+		DWORD bufsize = MAX_PATH;
+		QueryFullProcessImageName(active_process, 0, image_name, &bufsize);
+		CloseHandle(active_process);
+
+		nsPath::CPath path(image_name);
+		uwpAppName = path.GetName();
+	}
+
+	return uwpAppName;
+}
+
 CString GetProcessName(HWND hWnd, DWORD processId) 
 {
 	DWORD startTick = GetTickCount();
@@ -891,7 +930,19 @@ CString GetProcessName(HWND hWnd, DWORD processId)
 		GetWindowThreadProcessId(hWnd, &Id);
 	}
 
-	PROCESSENTRY32 processEntry = { 0 };
+	HANDLE active_process = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, Id);
+	if (active_process != NULL)
+	{
+		WCHAR image_name[MAX_PATH] = { 0 };
+		DWORD bufsize = MAX_PATH;
+		QueryFullProcessImageName(active_process, 0, image_name, &bufsize);
+		CloseHandle(active_process);
+
+		nsPath::CPath path(image_name);
+		strProcessName = path.GetName();
+	}
+
+	/*PROCESSENTRY32 processEntry = { 0 };
 
 	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 	processEntry.dwSize = sizeof(PROCESSENTRY32);
@@ -908,7 +959,13 @@ CString GetProcessName(HWND hWnd, DWORD processId)
 		} while(Process32Next(hSnapShot, &processEntry));
 	}
 
-	CloseHandle(hSnapShot);
+	CloseHandle(hSnapShot);*/
+
+	//uwp apps are wrapped in another app called, if this has focus then try and find the child uwp process
+	if (strProcessName == _T("ApplicationFrameHost.exe"))
+	{
+		strProcessName = UWP_AppName(hWnd, Id);
+	}
 
 	DWORD endTick = GetTickCount();
 	DWORD diff = endTick - startTick;
