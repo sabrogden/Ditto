@@ -106,6 +106,7 @@ END_MESSAGE_MAP()
 #define SETTING_SELECTED_INDEX 60
 #define SETTING_CLIPBOARD_SAVE_DELAY 61
 #define SETTING_SHOW_MSG_WHEN_RECEIVING_MANUAL_SENT_CLIP 62
+#define SETTING_MULTIPASTE_REVERSE_ORDER 63
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -129,7 +130,7 @@ BOOL CAdvGeneral::OnInitDialog()
 
 	HDITEM hdItem;
 	hdItem.mask = HDI_WIDTH; // indicating cxy is width
-	hdItem.cxy = 300; // whatever you want the property name column width to be
+	hdItem.cxy = 600; // whatever you want the property name column width to be
 	m_propertyGrid.GetHeaderCtrl().SetItem(0, &hdItem);
 
 	m_propertyGrid.SetFont(this->GetFont());
@@ -153,6 +154,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Hide Ditto on Hot Key if Ditto is Visible"), CGetSetOptions::GetHideDittoOnHotKeyIfAlreadyShown(), SETTING_HIDE_ON_HOTKEY_IF_VISIBLE);
 	pGroupTest->AddSubItem( new CMFCPropertyGridProperty(_T("Maximum Clip Size in Bytes (0 for no limit)"), g_Opt.m_lMaxClipSizeInBytes, _T(""), SETTING_MAX_CLIP_SIZE));
 	pGroupTest->AddSubItem( new CMFCPropertyGridProperty(_T("Multi-Paste clip separator ([LF] = line feed)"), g_Opt.GetMultiPasteSeparator(false), _T(""), SETTING_CLIP_SEPARATOR));
+
+	AddTrueFalse(pGroupTest, _T("Multi-Paste in reverse order"), g_Opt.m_bMultiPasteReverse, SETTING_MULTIPASTE_REVERSE_ORDER);
 
 	static TCHAR BASED_CODE szFilter[] = _T("Sounds(*.wav)|*.wav||");
 	CMFCPropertyGridFileProperty* pFileProp = new CMFCPropertyGridFileProperty(_T("On copy play the sound"), TRUE, CGetSetOptions::GetPlaySoundOnCopy(), _T("wav"), 0, szFilter, (LPCTSTR)0, SETTING_COPY_PLAY_SOUND);
@@ -541,6 +544,17 @@ void CAdvGeneral::OnBnClickedOk()
 						val = true;
 					}
 					CGetSetOptions::SetUpdateTimeOnPaste(val);
+				}
+				break;
+			case SETTING_MULTIPASTE_REVERSE_ORDER:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = false;
+					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
+					{
+						val = true;
+					}
+					CGetSetOptions::SetMultiPasteReverse(val);
 				}
 				break;
 			case SETTING_ALLOW_DUPLICATES:
