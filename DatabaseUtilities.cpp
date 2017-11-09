@@ -7,7 +7,6 @@
 #include "DatabaseUtilities.h"
 #include "ProcessPaste.h"
 #include <io.h>
-#include "AccessToSqlite.h"
 #include "Path.h"
 #include "InternetUpdate.h"
 
@@ -98,26 +97,7 @@ BOOL CheckDBExists(CString csDBPath)
 	if(csDBPath.IsEmpty())
 	{
 		csDBPath = GetDefaultDBName();
-
-		if(FileExists(csDBPath) == FALSE && 
-			CGetSetOptions::GetIsPortableDitto() == FALSE &&
-			CGetSetOptions::GetIsWindowsApp() == FALSE)
-		{
-			CString csOldDB = CGetSetOptions::GetDBPathOld();
-			if(csOldDB.IsEmpty())
-			{
-				csOldDB = GetOLDDefaultDBName();
-			}
-
-			if(FileExists(csOldDB))
-			{
-				//create the new sqlite db
-				CreateDB(csDBPath);
-
-				CAccessToSqlite Convert;
-				Convert.ConvertDatabase(csDBPath, csOldDB);
-			}
-		}
+		CGetSetOptions::SetDBPath(csDBPath);		
 	}
 
 	BOOL bRet = FALSE;

@@ -8,7 +8,6 @@
 #include <io.h>
 #include <Mmsystem.h> //play sound
 #include "Path.h"
-#include "AccessToSqlite.h"
 #include "AdvGeneral.h"
 #include "DimWnd.h"
 #include "HyperLink.h"
@@ -384,44 +383,6 @@ void COptionsGeneral::OnGetPath()
 		return;
 
 	CString csPath(FileName.lpstrFile);
-	CPath path(FileName.lpstrFile);
-
-	if(path.GetExtension() == _T("mdb"))
-	{
-		CString cs;
-
-		cs.Format(_T("The database '%s' must be converted to a Sqlite Database (Version 3 format).\n\nConvert database?"), FileName.lpstrFile);
-		if(MessageBox(cs, _T("Ditto"), MB_YESNO) == IDNO)
-			return;
-
-		CString csNewDBPath = path.RemoveExtension();
-
-		//Make sure the db name is unique
-		CString csTempName;
-		csTempName.Format(_T("%s.db"), csNewDBPath);
-		int i = 1;
-		while(FileExists(csTempName))
-		{
-			csTempName.Format(_T("%s_%d.db"), csNewDBPath, i);
-			i++;
-		}
-		csNewDBPath = csTempName;
-		
-		CreateDB(csNewDBPath);
-
-		CAccessToSqlite Convert;
-		if(Convert.ConvertDatabase(csNewDBPath, FileName.lpstrFile))
-		{
-			csPath = csNewDBPath;
-		}
-		else
-		{
-			MessageBox(_T("Error converting database."), _T("Ditto"), MB_OK);
-			DeleteFile(csNewDBPath);
-			return;
-		}
-	}
-
 	if(FileExists(csPath))
 	{
 		if(ValidDB(csPath) == FALSE)

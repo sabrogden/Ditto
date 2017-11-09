@@ -40,9 +40,6 @@
     <ClCompile Include="AlphaBlend.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="AccessToSqlite.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="AddType.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -465,9 +462,6 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="Accels.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="AccessToSqlite.h">
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="AddType.h">

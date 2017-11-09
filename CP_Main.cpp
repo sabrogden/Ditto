@@ -289,7 +289,7 @@ BOOL CCP_MainApp::InitInstance()
 
 		m_Language.LoadLanguageFile(_T("English.xml"));
 	}
-
+	
 	int nRet = CheckDBExists(CGetSetOptions::GetDBPath());
 	if(nRet == FALSE)
 	{
