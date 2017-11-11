@@ -138,9 +138,16 @@ CCP_MainApp::~CCP_MainApp()
 
 BOOL CCP_MainApp::InitInstance()
 {	
+	INITCOMMONCONTROLSEX InitCtrls;
+	InitCtrls.dwSize = sizeof(InitCtrls);
+	// Set this to include all the common control classes you want to use
+	// in your application.
+	InitCtrls.dwICC = ICC_WIN95_CLASSES;
+	InitCommonControlsEx(&InitCtrls);
+
 	AfxEnableControlContainer();
 	AfxOleInit();
-	AfxInitRichEditEx();
+	AfxInitRichEditEx();	
 
 	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
 	Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
