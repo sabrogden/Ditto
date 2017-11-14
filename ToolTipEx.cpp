@@ -413,6 +413,14 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 				{
 					return FALSE;
 				}
+				else if (vk == VK_NEXT)
+				{
+					return FALSE;
+				}
+				else if (vk == VK_PRIOR)
+				{
+					return FALSE;
+				}
 
 				if (m_pToolTipActions != NULL)
 				{
