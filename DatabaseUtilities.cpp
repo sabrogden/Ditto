@@ -146,6 +146,8 @@ BOOL CheckDBExists(CString csDBPath)
 			csDBPath = csPath;
 			
 			bRet = CreateDB(csDBPath);
+
+			CGetSetOptions::SetDBPath(csDBPath);
 		}
 		else
 		{
