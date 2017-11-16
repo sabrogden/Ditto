@@ -105,6 +105,7 @@ protected:
     afx_msg void OnFirstHelp();
     //}}AFX_MSG
     afx_msg LRESULT OnHotKey(WPARAM wParam, LPARAM lParam);
+	void ShowQPasteWithActiveWindowCheck();
     afx_msg LRESULT OnShowTrayIcon(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnClipboardCopied(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam);
