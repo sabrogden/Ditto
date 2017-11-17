@@ -99,7 +99,6 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 
     m_RichEdit.SetReadOnly();
     m_RichEdit.SetBackgroundColor(FALSE, g_Opt.m_Theme.DescriptionWindowBG());
-	m_RichEdit.SetEventMask(ENM_MOUSEEVENTS | ENM_SCROLLEVENTS);
 
 	ApplyWordWrap();
 
