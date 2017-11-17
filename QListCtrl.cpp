@@ -149,7 +149,6 @@ BEGIN_MESSAGE_MAP(CQListCtrl, CListCtrl)
 	ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnSelectionChange)
 	ON_WM_VSCROLL()
 	ON_WM_WINDOWPOSCHANGED()
-	ON_WM_MOUSEWHEEL()
 	//}}AFX_MSG_MAP
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTW, 0, 0xFFFF, OnToolTipText)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
@@ -1479,11 +1478,6 @@ void CQListCtrl::SetLogFont(LOGFONT &font)
 void CQListCtrl::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar) 
 {
 	CListCtrl::OnVScroll(nSBCode, nPos, pScrollBar);
-}
-
-BOOL CQListCtrl::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) 
-{
-	return CListCtrl::OnMouseWheel(nFlags, zDelta, pt);
 }
 
 BOOL CQListCtrl::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pLResult) 

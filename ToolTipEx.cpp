@@ -60,6 +60,7 @@ ON_COMMAND(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, &CToolTipEx::OnFirstHidedescriptio
 ON_COMMAND(ID_FIRST_WRAPTEXT, &CToolTipEx::OnFirstWraptext)
 ON_WM_WINDOWPOSCHANGING()
 ON_COMMAND(ID_FIRST_ALWAYSONTOP, &CToolTipEx::OnFirstAlwaysontop)
+ON_NOTIFY(EN_MSGFILTER, 1, &CToolTipEx::OnEnMsgfilterRichedit21)
 END_MESSAGE_MAP()
 
 
@@ -99,6 +100,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 
     m_RichEdit.SetReadOnly();
     m_RichEdit.SetBackgroundColor(FALSE, g_Opt.m_Theme.DescriptionWindowBG());
+	m_RichEdit.SetEventMask(ENM_MOUSEEVENTS | ENM_SCROLLEVENTS);
 
 	ApplyWordWrap();
 
@@ -225,7 +227,7 @@ BOOL CToolTipEx::Show(CPoint point)
 		}
 	}
 
-	m_clipDataStatic.SetWindowText(m_clipData);	
+	m_clipDataStatic.SetWindowText(m_clipData);
 
 	if (m_DittoWindow.m_bMinimized)
 	{
@@ -234,14 +236,14 @@ BOOL CToolTipEx::Show(CPoint point)
 	}
 
 	m_saveWindowLockout = true;
-	MoveWindow(rect);	
-	ShowWindow(SW_SHOWNA);	
+	MoveWindow(rect);
+	ShowWindow(SW_SHOWNA);
 	this->Invalidate();
 	this->UpdateWindow();
-	
+
 	m_saveWindowLockout = false;
 
-    return TRUE;
+	return TRUE;
 }
 
 void CToolTipEx::GetWindowRectEx(LPRECT lpRect)
@@ -262,16 +264,16 @@ BOOL CToolTipEx::Hide()
 
 	SaveWindowSize();
 
-    ShowWindow(SW_HIDE);
+	ShowWindow(SW_HIDE);
 
-    m_csRTF = "";
-    m_csText = "";
+	m_csRTF = "";
+	m_csText = "";
 	m_clipId = 0;
 	m_clipRow = -1;
-	m_searchText = _T("");	
+	m_searchText = _T("");
 	m_showPersistant = false;
 
-    return TRUE;
+	return TRUE;
 }
 
 void CToolTipEx::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
@@ -279,7 +281,7 @@ void CToolTipEx::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
 	// toggle ShowPersistent when we double click the caption
 	if (nHitTest == HTCAPTION)
 	{
-		OnFirstAlwaysontop();		
+		OnFirstAlwaysontop();
 	}
 
 	CWnd::OnNcLButtonDblClk(nHitTest, point);
@@ -298,8 +300,8 @@ void CToolTipEx::SaveWindowSize()
 		else
 		{
 			this->GetWindowRect(&rect);
-		}		
-		
+		}
+
 		CGetSetOptions::SetDescWndSize(rect.Size());
 		CGetSetOptions::SetDescWndPoint(rect.TopLeft());
 
@@ -309,17 +311,17 @@ void CToolTipEx::SaveWindowSize()
 
 void CToolTipEx::PostNcDestroy()
 {
-    CWnd::PostNcDestroy();
+	CWnd::PostNcDestroy();
 
-    delete this;
+	delete this;
 }
 
 BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
 {
 	m_DittoWindow.DoPreTranslateMessage(pMsg);
 
-    switch(pMsg->message)
-    {
+	switch (pMsg->message)
+	{		
         case WM_KEYDOWN:
 
             switch(pMsg->wParam)
@@ -1114,4 +1116,39 @@ void CToolTipEx::OnFirstAlwaysontop()
 	}
 
 	::SetWindowPos(m_hWnd, NULL, 0, 0, 0, 0, SWP_DRAWFRAME | SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);	
+}
+
+void CToolTipEx::OnEnMsgfilterRichedit21(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	MSGFILTER *pMsgFilter = reinterpret_cast<MSGFILTER *>(pNMHDR);
+	if (pMsgFilter != NULL)
+	{
+		switch (pMsgFilter->msg)
+		{
+		case WM_VSCROLL:
+
+			//forward the mouse wheel onto the window under the cursor
+			//normally windows only sends it to the window with focus, bypass this
+			POINT mouse;
+			GetCursorPos(&mouse);
+			HWND windowUnderCursor = ::WindowFromPoint(mouse);
+
+			if (windowUnderCursor != m_RichEdit)
+			{
+				::PostMessage(windowUnderCursor, WM_MOUSEWHEEL, pMsgFilter->lParam, pMsgFilter->wParam);
+				*pResult = TRUE;
+				return;
+			}
+
+			break;
+		}
+	}
+	// TODO:  The control will not send this notification unless you override the
+	// CDialogEx::OnInitDialog() function to send the EM_SETEVENTMASK message
+	// to the control with either the ENM_KEYEVENTS or ENM_MOUSEEVENTS flag 
+	// ORed into the lParam mask.
+
+	// TODO:  Add your control notification handler code here
+
+	*pResult = 0;
 }

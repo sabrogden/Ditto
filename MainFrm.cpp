@@ -817,18 +817,20 @@ LRESULT CMainFrame::OnClipboardCopied(WPARAM wParam, LPARAM lParam)
 		m_thread.AddClipToSave(pClip);
 	} 
     
-    Log(_T("End of function OnClipboardCopied"));
+    Log(_T("End of function OnClipboardCopied"));	
     return TRUE;
 }
 
 BOOL CMainFrame::PreTranslateMessage(MSG *pMsg)
 {
-	
-    // target before mouse messages change the focus
-	/*if(theApp.m_bShowingQuickPaste && WM_MOUSEFIRST <= pMsg->message && pMsg->message <= WM_MOUSELAST)
+	//forward the mouse wheel onto the window under the cursor
+	//normally windows only sends it to the window with focus, bypass this
+	if (pMsg->message == WM_MOUSEWHEEL)
 	{
-	theApp.m_activeWnd.TrackActiveWnd(true);
-	}*/
+		POINT mouse;
+		GetCursorPos(&mouse);
+		pMsg->hwnd = ::WindowFromPoint(mouse);
+	}
 
     return CFrameWnd::PreTranslateMessage(pMsg);
 }
