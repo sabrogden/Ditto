@@ -127,5 +127,4 @@ public:
 	afx_msg void OnFirstWraptext();
 	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
 	afx_msg void OnFirstAlwaysontop();
-	afx_msg void OnEnMsgfilterRichedit21(NMHDR *pNMHDR, LRESULT *pResult);
 };

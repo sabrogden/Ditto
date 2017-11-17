@@ -60,7 +60,6 @@ ON_COMMAND(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, &CToolTipEx::OnFirstHidedescriptio
 ON_COMMAND(ID_FIRST_WRAPTEXT, &CToolTipEx::OnFirstWraptext)
 ON_WM_WINDOWPOSCHANGING()
 ON_COMMAND(ID_FIRST_ALWAYSONTOP, &CToolTipEx::OnFirstAlwaysontop)
-ON_NOTIFY(EN_MSGFILTER, 1, &CToolTipEx::OnEnMsgfilterRichedit21)
 END_MESSAGE_MAP()
 
 
@@ -1116,39 +1115,4 @@ void CToolTipEx::OnFirstAlwaysontop()
 	}
 
 	::SetWindowPos(m_hWnd, NULL, 0, 0, 0, 0, SWP_DRAWFRAME | SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);	
-}
-
-void CToolTipEx::OnEnMsgfilterRichedit21(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	MSGFILTER *pMsgFilter = reinterpret_cast<MSGFILTER *>(pNMHDR);
-	if (pMsgFilter != NULL)
-	{
-		switch (pMsgFilter->msg)
-		{
-		case WM_VSCROLL:
-
-			//forward the mouse wheel onto the window under the cursor
-			//normally windows only sends it to the window with focus, bypass this
-			POINT mouse;
-			GetCursorPos(&mouse);
-			HWND windowUnderCursor = ::WindowFromPoint(mouse);
-
-			if (windowUnderCursor != m_RichEdit)
-			{
-				::PostMessage(windowUnderCursor, WM_MOUSEWHEEL, pMsgFilter->lParam, pMsgFilter->wParam);
-				*pResult = TRUE;
-				return;
-			}
-
-			break;
-		}
-	}
-	// TODO:  The control will not send this notification unless you override the
-	// CDialogEx::OnInitDialog() function to send the EM_SETEVENTMASK message
-	// to the control with either the ENM_KEYEVENTS or ENM_MOUSEEVENTS flag 
-	// ORed into the lParam mask.
-
-	// TODO:  Add your control notification handler code here
-
-	*pResult = 0;
 }
