@@ -2591,7 +2591,7 @@ BOOL CQPasteWnd::SendToFriendbyPos(int nPos, CString override_IP_Host)
 
 			if (SendToFriend(Info) == FALSE)
 			{
-				MessageBox(StrF(_T("Error Sending data to %s\n\n%s"), Info.m_csIP, Info.m_csErrorText), _T("Ditto"));
+				MessageBox(StrF(_T("Error Sending data to %s\n\n%s"), Info.m_csIP, Info.m_csErrorText), _T("Ditto"), MB_OK|MB_TOPMOST);
 			}
 			else
 			{
@@ -2619,7 +2619,7 @@ void CQPasteWnd::DeleteSelectedRows()
         bool bStartValue = m_bHideWnd;
         m_bHideWnd = false;
 
-        int nRet = MessageBox(theApp.m_Language.GetString("Delete_Clip", "Delete Selected Clips?"), _T("Ditto"), MB_OKCANCEL);
+        int nRet = MessageBox(theApp.m_Language.GetString("Delete_Clip", "Delete Selected Clips?"), _T("Ditto"), MB_OKCANCEL|MB_TOPMOST);
 
         m_bHideWnd = bStartValue;
 
@@ -2686,6 +2686,11 @@ bool CQPasteWnd::DeleteClips(CClipIDs &IDs, ARRAY &Indexs)
 
 	m_lstHeader.SetListPos(nFirstSel);
 	UpdateStatus();
+
+	if (m_lstHeader.IsToolTipShowPersistant())
+	{
+		m_lstHeader.ShowFullDescription(false, true);
+	}
 
 	return true;
 }
@@ -6032,7 +6037,7 @@ LRESULT CQPasteWnd::OnDeleteId(WPARAM wParam, LPARAM lParam)
 		bool bStartValue = m_bHideWnd;
 		m_bHideWnd = false;
 
-		int nRet = MessageBox(theApp.m_Language.GetString("Delete_Clip_Groups", "Delete Group?"), _T("Ditto"), MB_OKCANCEL);
+		int nRet = MessageBox(theApp.m_Language.GetString("Delete_Clip_Groups", "Delete Group?"), _T("Ditto"), MB_OKCANCEL| MB_TOPMOST);
 
 		m_bHideWnd = bStartValue;
 
