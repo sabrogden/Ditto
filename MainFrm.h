@@ -22,6 +22,7 @@
 #define GROUP_DOUBLE_CLICK				13
 #define CLOSE_POPUP_MSG_WND				14
 #define SCREEN_RESOLUTION_CHANGED		15
+#define DELAYED_SHOW_DITTO_TIMER		16
 
 class CMainFrame: public CFrameWnd
 {

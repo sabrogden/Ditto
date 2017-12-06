@@ -179,7 +179,7 @@ LRESULT CMainFrame::OnTrayNotification(WPARAM wParam, LPARAM lParam)
 	//click on balloon
 	if (lParam == 0x405)
 	{
-		m_quickPaste.ShowQPasteWnd(this, false, false, FALSE);
+		SetTimer(DELAYED_SHOW_DITTO_TIMER, 100, NULL);		
 	}
 	
 	m_trayIcon.OnTrayNotification(wParam, lParam);
@@ -764,6 +764,13 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 				m_quickPaste.OnScreenResolutionChange();
 			}
 			break;
+		case DELAYED_SHOW_DITTO_TIMER:
+		{
+			KillTimer(DELAYED_SHOW_DITTO_TIMER);
+			m_quickPaste.ShowQPasteWnd(this, false, false, FALSE);
+		}
+		break;
+
     }
 
     CFrameWnd::OnTimer(nIDEvent);
