@@ -4,6 +4,7 @@
 #include "BitmapHelper.h"
 #include "Options.h"
 #include "ActionEnums.h"
+#include "HyperLink.h"
 #include <Richedit.h>
 
 #ifdef _DEBUG
@@ -99,6 +100,9 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 
     m_RichEdit.SetReadOnly();
     m_RichEdit.SetBackgroundColor(FALSE, g_Opt.m_Theme.DescriptionWindowBG());
+
+	m_RichEdit.SetEventMask(m_RichEdit.GetEventMask() | ENM_SELCHANGE | ENM_LINK);
+	m_RichEdit.SetAutoURLDetect(TRUE);
 
 	ApplyWordWrap();
 
@@ -1114,4 +1118,24 @@ void CToolTipEx::OnFirstAlwaysontop()
 	}
 
 	::SetWindowPos(m_hWnd, NULL, 0, 0, 0, 0, SWP_DRAWFRAME | SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);	
+}
+
+BOOL CToolTipEx::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
+{
+	switch (((LPNMHDR)lParam)->code)
+	{
+		case EN_LINK:
+		{
+			ENLINK *enLinkInfo = (ENLINK *)lParam; // pointer to a ENLINK structure
+			if (enLinkInfo->msg == WM_LBUTTONUP)
+			{
+				CString s;
+				m_RichEdit.GetTextRange(enLinkInfo->chrg.cpMin, enLinkInfo->chrg.cpMax, s);
+				CHyperLink::GotoURL(s, SW_SHOW);
+			}
+		}
+		break;
+	}
+
+	return CWnd::OnNotify(wParam, lParam, pResult);
 }
