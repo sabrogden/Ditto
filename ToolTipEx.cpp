@@ -425,6 +425,10 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 				{
 					return FALSE;
 				}
+				else if (vk == VK_DELETE)
+				{
+					return FALSE;
+				}
 
 				if (m_pToolTipActions != NULL)
 				{

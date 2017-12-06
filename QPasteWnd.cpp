@@ -2687,7 +2687,7 @@ bool CQPasteWnd::DeleteClips(CClipIDs &IDs, ARRAY &Indexs)
 	m_lstHeader.SetListPos(nFirstSel);
 	UpdateStatus();
 
-	if (m_lstHeader.IsToolTipShowPersistant())
+	if (m_lstHeader.IsToolTipWindowVisible())
 	{
 		m_lstHeader.ShowFullDescription(false, true);
 	}
