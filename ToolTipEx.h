@@ -128,4 +128,5 @@ public:
 	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
 	afx_msg void OnFirstAlwaysontop();
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
+	void OnEnMsgfilterRichedit21(NMHDR *pNMHDR, LRESULT *pResult);
 };

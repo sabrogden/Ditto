@@ -61,6 +61,7 @@ ON_COMMAND(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, &CToolTipEx::OnFirstHidedescriptio
 ON_COMMAND(ID_FIRST_WRAPTEXT, &CToolTipEx::OnFirstWraptext)
 ON_WM_WINDOWPOSCHANGING()
 ON_COMMAND(ID_FIRST_ALWAYSONTOP, &CToolTipEx::OnFirstAlwaysontop)
+ON_NOTIFY(EN_MSGFILTER, 1, &CToolTipEx::OnEnMsgfilterRichedit21)
 END_MESSAGE_MAP()
 
 
@@ -101,8 +102,9 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
     m_RichEdit.SetReadOnly();
     m_RichEdit.SetBackgroundColor(FALSE, g_Opt.m_Theme.DescriptionWindowBG());
 
-	m_RichEdit.SetEventMask(m_RichEdit.GetEventMask() | ENM_SELCHANGE | ENM_LINK);
+	m_RichEdit.SetEventMask(m_RichEdit.GetEventMask() | ENM_SELCHANGE | ENM_LINK | ENM_MOUSEEVENTS | ENM_SCROLLEVENTS);
 	m_RichEdit.SetAutoURLDetect(TRUE);
+
 
 	ApplyWordWrap();
 
@@ -1142,4 +1144,21 @@ BOOL CToolTipEx::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 	}
 
 	return CWnd::OnNotify(wParam, lParam, pResult);
+}
+
+
+void CToolTipEx::OnEnMsgfilterRichedit21(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	MSGFILTER *pMsgFilter = reinterpret_cast<MSGFILTER *>(pNMHDR);
+	if (pMsgFilter != NULL)
+	{
+		switch (pMsgFilter->msg)
+		{
+			case WM_MOUSEACTIVATE:
+				m_RichEdit.SetFocus();
+				break;
+		}
+	}
+
+	*pResult = 0;
 }
