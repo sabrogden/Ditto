@@ -1154,6 +1154,8 @@ void CToolTipEx::OnEnMsgfilterRichedit21(NMHDR *pNMHDR, LRESULT *pResult)
 	{
 		switch (pMsgFilter->msg)
 		{
+			//handle click on the rich text control when it doesn't have focus
+			//set focus so the first click is handled by the rich text control
 			case WM_MOUSEACTIVATE:
 				m_RichEdit.SetFocus();
 				break;
