@@ -1,3 +1,48 @@
+3.21.223.0 12-15-2017
+
+- Chai script paste support (https://sourceforge.net/p/ditto-cp/wiki/Scripting/)
+- Fixed issue with pasting into admin app from a low privilege user
+- Fixed crash when dragging and dropping
+- Handle exception when placing items on the clipboard, should fix a reported crash
+- Handle hyper-links in description window
+- Handle mouse wheel messages for the window the mouse is over not the the focused window
+- Set focus to richtext on mouse active so the first click works to select text and click on hyper-links
+- Don't hide description window when deleting clips
+- Track active window when opened from command line option
+- Handle page up/down with description window open
+- Use version 6 common controls, config windows looks better
+- Removed ability to convert old access db to sqlite, if needed they can first run an older version then this version.
+- Added adv option to multi paste in reverse order or not
+- Find child process for uwp apps, edge, mail, ... 
+- Delay sending paste to edge browser so the paste works, edge seems to take a long time to set focus
+- use rtf control to pre process rtf before we draw rtf text, was finding newer version of word would add data that our draw routine could not handle
+- Don't combine multiple clips unless they all have that type of data
+- Assign short cut keys to paste scripts
+- PNG supported in viewer and thumbnail images
+- Support png images in drag and drop and export to image
+- Change appx app name to "Ditto Clipboard" - added php script to beta page to always refresh page
+- Updated icons for alt-tab
+- Resize dialog paint fix
+- Tooltip timeout of 0 turns off toolips
+- Show a message when receiving a manual sent clip, option to turn this off
+- Color search box better when using dark theme
+- Handle repeat keys when moving selection up and down
+- Show selected index and clipboard change delay in adv settings
+- Added menu option to move clip to the end of the list
+- Added shortcut key to load last search
+- Added shortcut key to toggle search method 
+- Added the ability use environment variables in the database path
+- Don't add cmd.exe custom keys if we are windows 10
+- Fixed issue with showing scroll bars
+- Fixed searching for regex on quick paste text
+- F3 searches list by default on second press if searching
+- Added tooltip timeout to the adv options window
+- Read large string values from settings (reg or ini)
+- Fixed issues with drawing rtf text
+- Updated Chinese translation
+- Added option to not show startup tooltip message 
+- Show & when typed into search box
+
 3.21.185.0 9-4-2017
 - Reworked config - removed quick paste tab - updated general page - added advanced popup for rest of settings - added regex filter config ui
 - Forward mousewheel to description window
