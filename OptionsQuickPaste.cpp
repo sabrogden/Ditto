@@ -231,7 +231,7 @@ void COptionsQuickPaste::OnButtonDefaultFault()
 
 	memset(&m_LogFont, 0, sizeof(m_LogFont));
 
-	m_LogFont.lfHeight = -theApp.m_metrics.PointsToPixels(10);
+	m_LogFont.lfHeight = -10;
 	m_LogFont.lfWeight = 400;
 	m_LogFont.lfCharSet = 1;
 	STRCPY(m_LogFont.lfFaceName, _T("Segoe UI"));

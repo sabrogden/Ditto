@@ -40,6 +40,9 @@ BEGIN_MESSAGE_MAP(QRCodeViewer, CWnd)
 	ON_WM_CTLCOLOR()
 	ON_WM_WINDOWPOSCHANGING()
 	ON_WM_TIMER()
+	ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
+	ON_WM_MOVING()
+	ON_WM_ENTERSIZEMOVE()
 END_MESSAGE_MAP()
 
 
@@ -52,6 +55,8 @@ BOOL QRCodeViewer::CreateEx(CWnd *pParentWnd, unsigned char* bitmapData, int ima
 	m_imageSize = imageSize;
 	m_descRowHeight = rowHeight;
 	m_descBackground = CreateSolidBrush(RGB(255, 255, 255));
+	m_logFont = logFont;
+	m_originalFontHeight = logFont.lfHeight;
 
 	if(CWnd::CreateEx(0, szClassName, _T(""), WS_POPUP, 0, 0, 0, 0, NULL, 0, NULL))
 	{	
@@ -79,8 +84,13 @@ BOOL QRCodeViewer::CreateEx(CWnd *pParentWnd, unsigned char* bitmapData, int ima
 		rect.left = parentRect.left;
 		rect.top = parentRect.top;
 
-		rect.right = rect.left + m_DittoWindow.m_lLeftBorder + m_DittoWindow.m_lRightBorder + m_qrCodeDrawer.ImageWidth() + (CGetSetOptions::GetQRCodeBorderPixels() * 2);
-		rect.bottom = rect.top + m_DittoWindow.m_lTopBorder + m_DittoWindow.m_lBottomBorder + rowHeight + 5 + m_qrCodeDrawer.ImageHeight() + (CGetSetOptions::GetQRCodeBorderPixels() * 2);
+		rect.right = rect.left + m_DittoWindow.m_borderSize + m_DittoWindow.m_borderSize + m_qrCodeDrawer.ImageWidth() + (CGetSetOptions::GetQRCodeBorderPixels() * 2);
+		if (m_DittoWindow.m_captionPosition == CAPTION_LEFT ||
+			m_DittoWindow.m_captionPosition == CAPTION_RIGHT)
+		{
+			rect.right += m_DittoWindow.m_captionBorderWidth;
+		}
+		rect.bottom = rect.top + m_DittoWindow.m_borderSize + m_DittoWindow.m_borderSize + rowHeight + 5 + m_qrCodeDrawer.ImageHeight() + (CGetSetOptions::GetQRCodeBorderPixels() * 2);
 		
 		CRect center = CenterRect(rect);
 
@@ -107,8 +117,6 @@ void QRCodeViewer::OnSize(UINT nType, int cx, int cy)
 	this->Invalidate();
 
 	MoveControls();
-
-	m_DittoWindow.DoSetRegion(this);	
 }
 
 void QRCodeViewer::MoveControls()
@@ -120,7 +128,7 @@ void QRCodeViewer::MoveControls()
 
 	if(m_desc.m_hWnd != NULL)
 	{
-		m_desc.MoveWindow(5, cy - m_descRowHeight - 5, cx - 10, m_descRowHeight);
+		m_desc.MoveWindow(m_DittoWindow.m_dpi.ScaleX(5), cy - m_DittoWindow.m_dpi.ScaleX(m_descRowHeight) - m_DittoWindow.m_dpi.ScaleX(5), cx - m_DittoWindow.m_dpi.ScaleX(10), m_DittoWindow.m_dpi.ScaleX(m_descRowHeight));
 	}
 }
 
@@ -130,7 +138,7 @@ void QRCodeViewer::OnPaint()
 
 	CRect thisRect;
 	GetClientRect(thisRect);
-	thisRect.bottom -= m_descRowHeight - 5;
+	thisRect.bottom -= m_DittoWindow.m_dpi.ScaleX(m_descRowHeight) - m_DittoWindow.m_dpi.ScaleX(5);
 	
 	int width = thisRect.Width() - (CGetSetOptions::GetQRCodeBorderPixels() * 2);
 	int height = min(width, (thisRect.Height() - (CGetSetOptions::GetQRCodeBorderPixels() * 2)));
@@ -140,7 +148,7 @@ void QRCodeViewer::OnPaint()
 
 	CRect centerRect = CenterRectFromRect(imageRect, thisRect);
 
-	m_qrCodeDrawer.Draw(&dc, this, centerRect.left, centerRect.top, false, false, width, height);
+	m_qrCodeDrawer.Draw(&dc, m_DittoWindow.m_dpi, this, centerRect.left, centerRect.top, false, false, width, height);
 }
 
 BOOL QRCodeViewer::PreTranslateMessage(MSG *pMsg)
@@ -253,8 +261,6 @@ HBRUSH QRCodeViewer::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 void QRCodeViewer::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanging(lpwndpos);
-
-	m_DittoWindow.SnapToEdge(this, lpwndpos);
 }
 
 void QRCodeViewer::OnTimer(UINT_PTR nIDEvent)
@@ -273,4 +279,40 @@ void QRCodeViewer::OnTimer(UINT_PTR nIDEvent)
 	}
 
 	CWnd::OnTimer(nIDEvent);
+}
+
+LRESULT QRCodeViewer::OnDpiChanged(WPARAM wParam, LPARAM lParam)
+{
+	int dpi = HIWORD(wParam);
+	m_DittoWindow.OnDpiChanged(this, dpi);
+
+	RECT* const prcNewWindow = (RECT*)lParam;
+	SetWindowPos(NULL,
+		prcNewWindow->left,
+		prcNewWindow->top,
+		prcNewWindow->right - prcNewWindow->left,
+		prcNewWindow->bottom - prcNewWindow->top,
+		SWP_NOZORDER | SWP_NOACTIVATE);
+
+	MoveControls();
+
+	m_logFont.lfHeight = m_DittoWindow.m_dpi.PointsToPixels(m_originalFontHeight);
+
+	m_font.Detach();
+	m_font.CreateFontIndirect(&m_logFont);
+	m_desc.SetFont(&m_font);
+
+	return TRUE;
+}
+
+void QRCodeViewer::OnMoving(UINT fwSide, LPRECT pRect)
+{
+	CWnd::OnMoving(fwSide, pRect);
+	m_snap.OnSnapMoving(m_hWnd, pRect);
+}
+
+void QRCodeViewer::OnEnterSizeMove()
+{
+	m_snap.OnSnapEnterSizeMove(m_hWnd);
+	CWnd::OnEnterSizeMove();
 }

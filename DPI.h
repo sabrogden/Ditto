@@ -5,6 +5,8 @@ class CDPI
 public:
 	CDPI() : _fInitialized(false), _dpiX(96), _dpiY(96) { }
 
+	void Update(int dpi) { _dpiX = dpi; _dpiY = dpi; }
+
 	// Get screen DPI.
 	int GetDPIX() { _Init(); return _dpiX; }
 	int GetDPIY() { _Init(); return _dpiY; }

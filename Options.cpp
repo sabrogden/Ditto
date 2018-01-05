@@ -1419,7 +1419,7 @@ BOOL CGetSetOptions::GetFont(LOGFONT &font)
 	}
 
 	ZeroMemory(&font, sizeof(font));
-	font.lfHeight = -theApp.m_metrics.PointsToPixels(10);
+	font.lfHeight = -10;
 	font.lfWeight = 400;
 	font.lfCharSet = 1;
 	STRCPY(font.lfFaceName, _T("Segoe UI"));

@@ -13,6 +13,7 @@
 #include "ClipFormatQListCtrl.h"
 #include "Accels.h"
 #include "GdiImageDrawer.h"
+#include "DPI.h"
 
 #define NM_SEARCH_ENTER_PRESSED		WM_USER+0x100
 #define NM_RIGHT					WM_USER+0x101
@@ -42,6 +43,7 @@
 #define NM_DELETE_ID				WM_USER+0x127
 #define NM_MOVE_TO_GROUP			WM_USER+0x128
 #define NM_FOCUS_ON_SEARCH			WM_USER+0x129
+#define NM_COPY_CLIP				WM_USER+0x130
 
 
 
@@ -104,7 +106,7 @@ public:
 	// returns the list index corresponding to the given FirstTen position number.
 	int GetFirstTenIndex( int num );
 
-	void SetNumberOfLinesPerRow(int nLines);
+	void SetNumberOfLinesPerRow(int nLines, bool force);
 	void GetSelectionIndexes(ARRAY &arr);
 	void GetSelectionItemData(ARRAY &arr);
 	void RefreshVisibleRows();
@@ -158,8 +160,13 @@ public:
 
 	void SetSearchText(CString text);
 
-protected:
+	void SetDpiInfo(CDPI *dpi);
+
+	void OnDpiChanged();
+	
 	void LoadCopyOrCutToClipboard();
+
+protected:
 	BOOL GetClipData(int nItem, CClipFormat &Clip);
 	BOOL DrawBitMap(int nItem, CRect &crRect, CDC *pDC, const CString &csDescription);
 	void LoadDittoCopyBufferHotkeys();
@@ -191,6 +198,7 @@ protected:
 	BOOL m_showIfClipWasPasted;
 	CAccels *m_pToolTipActions;
 	CRichEditCtrlEx m_rtfFormater;
+	CDPI *m_windowDpi;
 
 
 	// Generated message map functions

@@ -20,13 +20,9 @@
 #include "DittoAddins.h"
 #include "externalwindowtracker.h"
 #include "HotKeys.h"
-#include "DPI.h"
 #include "UAC_Thread.h"
 
 extern class CCP_MainApp theApp;
-
-#define BORDER theApp.m_metrics.ScaleX(2) 
-#define CAPTION_BORDER theApp.m_metrics.ScaleX(25)
 
 class CCP_MainApp : public CWinApp
 {
@@ -177,7 +173,6 @@ public:
 
 	CDittoAddins m_Addins;
 
-	CDPI m_metrics;
 	ULONG_PTR m_gdiplusToken;
 
 	bool UACPaste();

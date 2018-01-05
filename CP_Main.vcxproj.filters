@@ -441,6 +441,7 @@
     <ClCompile Include="DittoChaiScript.cpp">
       <Filter>ChaiScript</Filter>
     </ClCompile>
+    <ClCompile Include="SnapWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -922,6 +923,7 @@
     <ClInclude Include="DittoChaiScript.h">
       <Filter>ChaiScript</Filter>
     </ClInclude>
+    <ClInclude Include="SnapWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

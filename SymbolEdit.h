@@ -28,6 +28,7 @@
 
 #include "GdiImageDrawer.h"
 #include "Accels.h"
+#include "DPI.h"
 
 // CSymbolEdit
 
@@ -71,6 +72,10 @@ public:
 	CString SavePastSearches();
 	void LoadPastSearches(CString values);
 
+	void SetDpiInfo(CDPI *dpi);
+
+	void OnDpiChanged();
+
 protected:
 	
 	//CGdiImageDrawer m_searchButton;
@@ -90,6 +95,8 @@ protected:
 
 	void RecalcLayout();
 	virtual void PreSubclassWindow();
+
+	CDPI *m_windowDpi;
 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg LRESULT OnSetFont(WPARAM wParam, LPARAM lParam);

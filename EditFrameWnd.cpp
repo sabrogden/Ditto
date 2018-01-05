@@ -42,6 +42,9 @@ BEGIN_MESSAGE_MAP(CEditFrameWnd, CFrameWnd)
 	ON_WM_NCLBUTTONDBLCLK()
 	ON_WM_WINDOWPOSCHANGING()
 	ON_WM_TIMER()
+	ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
+	ON_WM_MOVING()
+	ON_WM_ENTERSIZEMOVE()
 END_MESSAGE_MAP()
 
 
@@ -88,9 +91,6 @@ void CEditFrameWnd::OnDestroy()
 void CEditFrameWnd::OnSize(UINT nType, int cx, int cy)
 {
 	CFrameWnd::OnSize(nType, cx, cy);
-
-	m_DittoWindow.DoSetRegion(this);
-
 	MoveControls();
 }
 
@@ -108,6 +108,7 @@ bool CEditFrameWnd::EditIds(CClipIDs &Ids)
 {
 	return m_EditWnd.EditIds(Ids);
 }
+
 BOOL CEditFrameWnd::PreCreateWindow(CREATESTRUCT& cs)
 {
 	if(cs.hMenu!=NULL)  
@@ -235,8 +236,6 @@ void CEditFrameWnd::OnNcLButtonDblClk(UINT nHitTest, CPoint point)
 void CEditFrameWnd::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 {
 	CFrameWnd::OnWindowPosChanging(lpwndpos);
-
-	m_DittoWindow.SnapToEdge(this, lpwndpos);
 }
 
 void CEditFrameWnd::OnTimer(UINT_PTR nIDEvent)
@@ -255,4 +254,36 @@ void CEditFrameWnd::OnTimer(UINT_PTR nIDEvent)
 	}
 
 	CWnd::OnTimer(nIDEvent);
+}
+
+LRESULT CEditFrameWnd::OnDpiChanged(WPARAM wParam, LPARAM lParam)
+{
+	int dpi = HIWORD(wParam);
+	m_DittoWindow.OnDpiChanged(this, dpi);
+
+	RECT* const prcNewWindow = (RECT*)lParam;
+	SetWindowPos(NULL,
+		prcNewWindow->left,
+		prcNewWindow->top,
+		prcNewWindow->right - prcNewWindow->left,
+		prcNewWindow->bottom - prcNewWindow->top,
+		SWP_NOZORDER | SWP_NOACTIVATE);
+
+
+	this->Invalidate();
+	this->UpdateWindow();
+
+	return TRUE;
+}
+
+void CEditFrameWnd::OnMoving(UINT fwSide, LPRECT pRect)
+{
+	CWnd::OnMoving(fwSide, pRect);
+	m_snap.OnSnapMoving(m_hWnd, pRect);
+}
+
+void CEditFrameWnd::OnEnterSizeMove()
+{
+	m_snap.OnSnapEnterSizeMove(m_hWnd);
+	CWnd::OnEnterSizeMove();
 }

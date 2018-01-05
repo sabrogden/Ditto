@@ -13,6 +13,13 @@ CGdiImageDrawer::~CGdiImageDrawer()
 	delete m_pStdImage;
 }
 
+void CGdiImageDrawer::Reset()
+{
+	delete m_pStdImage;
+	m_pStdImage = NULL;
+
+}
+
 BOOL CGdiImageDrawer::LoadStdImage(UINT id, LPCTSTR pType)
 {
 	m_pStdImage = new CGdiPlusBitmapResource;
@@ -25,23 +32,23 @@ BOOL CGdiImageDrawer::LoadRaw(unsigned char* bitmapData, int imageSize)
 	return m_pStdImage->LoadRaw(bitmapData, imageSize);
 }
 
-BOOL CGdiImageDrawer::LoadStdImageDPI(UINT id96, UINT id120, UINT id144, UINT id168, UINT id192, LPCTSTR pType)
+BOOL CGdiImageDrawer::LoadStdImageDPI(int dpi, UINT id96, UINT id120, UINT id144, UINT id168, UINT id192, LPCTSTR pType)
 {
 	BOOL ret = FALSE;
 
-	if (theApp.m_metrics.GetDPIX() >= 192)
+	if (dpi >= 192)
 	{
 		ret = LoadStdImage(id192, pType);
 	}
-	else if (theApp.m_metrics.GetDPIX() >= 168)
+	else if (dpi >= 168)
 	{
 		ret = LoadStdImage(id168, pType);
 	}
-	else if (theApp.m_metrics.GetDPIX() >= 144)
+	else if (dpi >= 144)
 	{
 		ret = LoadStdImage(id144, pType);
 	}
-	else if (theApp.m_metrics.GetDPIX() >= 120)
+	else if (dpi >= 120)
 	{
 		ret = LoadStdImage(id120, pType);
 	}
@@ -53,7 +60,7 @@ BOOL CGdiImageDrawer::LoadStdImageDPI(UINT id96, UINT id120, UINT id144, UINT id
 	return ret;
 }
 
-void CGdiImageDrawer::Draw(CDC* pScreenDC, CWnd *pWnd, CRect rc, bool mouseHover, bool mouseDown)
+void CGdiImageDrawer::Draw(CDC* pScreenDC, CDPI &dpi, CWnd *pWnd, CRect rc, bool mouseHover, bool mouseDown)
 {
 	int width = m_pStdImage->m_pBitmap->GetWidth();
 	int height = m_pStdImage->m_pBitmap->GetHeight();
@@ -61,10 +68,10 @@ void CGdiImageDrawer::Draw(CDC* pScreenDC, CWnd *pWnd, CRect rc, bool mouseHover
 	int x = rc.left + (rc.Width() / 2) - (width / 2);
 	int y = rc.top + (rc.Height() / 2) - (height / 2);
 
-	Draw(pScreenDC, pWnd, x, y, mouseHover, mouseDown);
+	Draw(pScreenDC, dpi, pWnd, x, y, mouseHover, mouseDown);
 }
 
-void CGdiImageDrawer::Draw(CDC* pScreenDC, CWnd *pWnd, int posX, int posY, bool mouseHover, bool mouseDown, int forceWidth, int forceHeight)
+void CGdiImageDrawer::Draw(CDC* pScreenDC, CDPI &dpi, CWnd *pWnd, int posX, int posY, bool mouseHover, bool mouseDown, int forceWidth, int forceHeight)
 {
 	int width = m_pStdImage->m_pBitmap->GetWidth();
 	if (forceWidth != INT_MAX)
@@ -74,10 +81,7 @@ void CGdiImageDrawer::Draw(CDC* pScreenDC, CWnd *pWnd, int posX, int posY, bool 
 		height = forceHeight;
 
 	CRect rectWithBorder(posX, posY, posX + width, posY + height);
-
-	//int two = theApp.m_metrics.ScaleX(2);
-	//rectWithBorder.InflateRect(two, two, two, two);
-
+	
 	CDC dcBk;
 	CBitmap bmp;
 	CClientDC clDC(pWnd);
@@ -93,7 +97,7 @@ void CGdiImageDrawer::Draw(CDC* pScreenDC, CWnd *pWnd, int posX, int posY, bool 
 	//Draw the png file
 	if (mouseDown)
 	{
-		int one = theApp.m_metrics.ScaleX(1);
+		int one = dpi.ScaleX(1);
 		posX += one;
 		posY += one;
 	}

@@ -2,8 +2,8 @@
 
 #include "EditWnd.h"
 #include "ClipIds.h"
-
 #include "DittoWindow.h"
+#include "SnapWindow.h"
 
 class CEditFrameWnd : public CFrameWnd
 {
@@ -21,6 +21,7 @@ protected:
 	HWND m_hNotifyWnd;
 	CDittoWindow m_DittoWindow;
 	CRect m_crIcon;
+	SnapWindow m_snap;
 
 protected:
 	DECLARE_MESSAGE_MAP()
@@ -47,6 +48,10 @@ public:
 	afx_msg void OnNcLButtonDblClk(UINT nHitTest, CPoint point);
 	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg LRESULT OnDpiChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnMoving(UINT fwSide, LPRECT pRect);
+	afx_msg void OnEnterSizeMove();
 };
+
 
 

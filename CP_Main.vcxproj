@@ -22,7 +22,7 @@
     <RootNamespace>CP_Main</RootNamespace>
     <Keyword>MFCProj</Keyword>
     <ProjectGuid>{8ECC3EF2-AF07-27B6-A773-779874943C0D}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -280,6 +280,7 @@
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>DeclareDPIAware.manifest</AdditionalManifestFiles>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -650,6 +651,7 @@
     <ClCompile Include="Shared\TextConvert.cpp" />
     <ClCompile Include="Shared\Tokenizer.cpp" />
     <ClCompile Include="ShowTaskBarIcon.cpp" />
+    <ClCompile Include="SnapWindow.cpp" />
     <ClCompile Include="SpecialPasteOptions.cpp" />
     <ClCompile Include="sqlite\CppSQLite3.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
@@ -1920,6 +1922,7 @@
     <ClInclude Include="Shared\TextConvert.h" />
     <ClInclude Include="Shared\Tokenizer.h" />
     <ClInclude Include="ShowTaskBarIcon.h" />
+    <ClInclude Include="SnapWindow.h" />
     <ClInclude Include="SpecialPasteOptions.h" />
     <ClInclude Include="sqlite\sqlite3.h" />
     <ClInclude Include="sqlite\sqlite3ext.h" />

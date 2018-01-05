@@ -62,6 +62,8 @@ BEGIN_MESSAGE_MAP(CWndEx, CWnd)
 	ON_WM_INITMENUPOPUP() 
 //}}AFX_MSG_MAP
 ON_WM_SIZE()
+ON_WM_MOVING()
+ON_WM_ENTERSIZEMOVE()
 END_MESSAGE_MAP()
 
 
@@ -98,6 +100,13 @@ int CWndEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_DittoWindow.DoCreate(this);
 	m_DittoWindow.m_bDrawMinimize = false;
 	m_DittoWindow.m_bDrawMaximize = false;
+
+	SetWindowPos(NULL,
+		lpCreateStruct->x,
+		lpCreateStruct->y,
+		m_DittoWindow.m_dpi.ScaleX(lpCreateStruct->cx),
+		m_DittoWindow.m_dpi.ScaleY(lpCreateStruct->cy),
+		SWP_NOZORDER | SWP_NOACTIVATE);
 
 	SetCaptionColorActive(false, TRUE);
 	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
@@ -274,14 +283,14 @@ void CWndEx::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 		m_bMaxSetTimer = false;
 	}
 
-	m_DittoWindow.SnapToEdge(this, lpwndpos);
+	//m_DittoWindow.SnapToEdge(this, lpwndpos);
 }
 
 void CWndEx::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
 	
-	m_DittoWindow.DoSetRegion(this);
+	//m_DittoWindow.DoSetRegion(this);
 }
 
 void CWndEx::OnInitMenuPopup(CMenu *pPopupMenu, UINT nIndex, BOOL bSysMenu)
@@ -309,4 +318,21 @@ void CWndEx::SetCustomWindowTitle(CString title)
 void CWndEx::MinMaxWindow(long lOption)
 {
 	m_DittoWindow.MinMaxWindow(this, lOption);
+}
+
+
+void CWndEx::OnMoving(UINT fwSide, LPRECT pRect)
+{
+	CWnd::OnMoving(fwSide, pRect);
+
+	m_snap.OnSnapMoving(m_hWnd, pRect);
+	// TODO: Add your message handler code here
+}
+
+
+void CWndEx::OnEnterSizeMove()
+{
+	m_snap.OnSnapEnterSizeMove(m_hWnd);
+
+	CWnd::OnEnterSizeMove();
 }

@@ -9,6 +9,7 @@
 
 #include "DittoWindow.h"
 #include "GdipButton.h"
+#include "SnapWindow.h"
 
 #define	SWAP_MIN_MAX			1
 #define FORCE_MIN				2
@@ -49,12 +50,14 @@ public:
 
 	int GetCaptionSize() { return m_DittoWindow.m_captionBorderWidth; }
 
-protected:
 	CDittoWindow m_DittoWindow;
+
+protected:	
 	
 	bool m_bMaxSetTimer;	
 	int m_lDelayMaxSeconds;
 	CToolTipCtrl m_toolTip;
+	SnapWindow m_snap;
 
 // Implementation
 public:
@@ -78,6 +81,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
+	afx_msg void OnMoving(UINT fwSide, LPRECT pRect);
+	afx_msg void OnEnterSizeMove();
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "GdipButton.h"
-
 #include "GdiImageDrawer.h"
+#include "DPI.h"
 
 #define BUTTON_CLOSE 1
 #define BUTTON_CHEVRON 2
@@ -25,7 +25,6 @@ public:
 	void DoCreate(CWnd *pWnd);
 	void DoNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS FAR* lpncsp);
 	UINT DoNcHitTest(CWnd *pWnd, CPoint point);
-	void DoSetRegion(CWnd *pWnd);
 	long DoNcLButtonUp(CWnd *pWnd, UINT nHitTest, CPoint point);
 	int DoNcLButtonDown(CWnd *pWnd, UINT nHitTest, CPoint point);
 	void DoNcMouseMove(CWnd *pWnd, UINT nHitTest, CPoint point) ;
@@ -33,18 +32,11 @@ public:
 	void SetCaptionOn(CWnd *pWnd, int nPos, bool bOnstartup, int captionSize, int captionFontSize);
 	bool SetCaptionColors(COLORREF left, COLORREF right, COLORREF border);
 	void SetCaptionTextColor(COLORREF color);
-
 	void MinMaxWindow(CWnd *pWnd, long lOption);
-
 	void SetTitleTextHeight(CWnd *pWnd);
-
-	void SnapToEdge(CWnd *pWnd, WINDOWPOS* lpwndpos);
-
-	long m_lTopBorder;
-	long m_lRightBorder;
-	long m_lBottomBorder;
-	long m_lLeftBorder;
-
+	int IndexToPos(int index, bool horizontal);
+	void OnDpiChanged(CWnd *pWnd, int dpi);
+	
 	bool m_bDrawClose;
 	bool m_sendWMClose;
 	bool m_bDrawChevron;
@@ -88,6 +80,9 @@ public:
 
 	int m_captionBorderWidth;
 
+	int m_captionPosition;
+	int m_borderSize;
+
 	int m_titleTextHeight;
 
 	bool m_buttonDownOnCaption;
@@ -95,4 +90,7 @@ public:
 	CRect m_crFullSizeWindow;
 	COleDateTime m_TimeMinimized;
 	COleDateTime m_TimeMaximized;
+
+
+	CDPI m_dpi;
 };

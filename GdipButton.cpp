@@ -82,23 +82,23 @@ BEGIN_MESSAGE_MAP(CGdipButton, CButton)
 END_MESSAGE_MAP()
 
 
-BOOL CGdipButton::LoadStdImageDPI(UINT id96, UINT id120, UINT id144, UINT id168, UINT id192, LPCTSTR pType)
+BOOL CGdipButton::LoadStdImageDPI(int dpiX, UINT id96, UINT id120, UINT id144, UINT id168, UINT id192, LPCTSTR pType)
 {
 	BOOL ret = FALSE;
 
-	if (theApp.m_metrics.GetDPIX() >= 192)
+	if (dpiX >= 192)
 	{
 		ret = LoadStdImage(id192, pType);
 	}
-	else if (theApp.m_metrics.GetDPIX() >= 168)
+	else if (dpiX >= 168)
 	{
 		ret = LoadStdImage(id168, pType);
 	}
-	else if (theApp.m_metrics.GetDPIX() >= 144)
+	else if (dpiX >= 144)
 	{
 		ret = LoadStdImage(id144, pType);
 	}
-	else if (theApp.m_metrics.GetDPIX() >= 120)
+	else if (dpiX >= 120)
 	{
 		ret = LoadStdImage(id120, pType);
 	}
@@ -138,9 +138,13 @@ BOOL CGdipButton::LoadStdImage(UINT id, LPCTSTR pType)
 
 void CGdipButton::Reset()
 {
-	/*if(m_pStdImage) delete m_pStdImage;
-	if (m_pAltImage) delete m_pAltImage;
-	if (m_pToolTip)	delete m_pToolTip;*/
+	delete m_pStdImage;
+	m_pStdImage = NULL;
+	delete m_pAltImage;
+	m_pAltImage = NULL;
+	delete m_pToolTip;
+	m_pToolTip = NULL;
+
 	m_bHaveBitmaps = FALSE;
 	m_bHaveAltImage = FALSE;
 

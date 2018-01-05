@@ -62,6 +62,9 @@ ON_COMMAND(ID_FIRST_WRAPTEXT, &CToolTipEx::OnFirstWraptext)
 ON_WM_WINDOWPOSCHANGING()
 ON_COMMAND(ID_FIRST_ALWAYSONTOP, &CToolTipEx::OnFirstAlwaysontop)
 ON_NOTIFY(EN_MSGFILTER, 1, &CToolTipEx::OnEnMsgfilterRichedit21)
+ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
+ON_WM_MOVING()
+ON_WM_ENTERSIZEMOVE()
 END_MESSAGE_MAP()
 
 
@@ -111,13 +114,13 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
     SetLogFont(GetSystemToolTipFont(), FALSE);
 
 	m_optionsButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, 2);
-	m_optionsButton.LoadStdImageDPI(IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, cog_28, IDB_COG_32_32, _T("PNG"));
+	m_optionsButton.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPIX(), IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, cog_28, IDB_COG_32_32, _T("PNG"));
 	m_optionsButton.SetToolTipText(theApp.m_Language.GetString(_T("DescriptionOptionsTooltip"), _T("Description Options")));
 	m_optionsButton.ShowWindow(SW_SHOW);
 
 	m_clipDataStatic.Create(_T("some text"), WS_CHILD | WS_VISIBLE | SS_SIMPLE, CRect(0, 0, 0, 0), this, 3);
 
-	m_clipDataFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+	m_clipDataFont.CreateFont(-m_DittoWindow.m_dpi.PointsToPixels(8), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 	m_clipDataStatic.SetFont(&m_clipDataFont);
 	m_clipDataStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
 	m_clipDataStatic.SetTextColor(RGB(80, 80, 80));
@@ -151,8 +154,8 @@ BOOL CToolTipEx::Show(CPoint point)
 		rect.top = point.y;
 		CSize size;
 		CGetSetOptions::GetDescWndSize(size);
-		rect.right = rect.left + size.cx;
-		rect.bottom = rect.top + size.cy;
+		rect.right = rect.left + m_DittoWindow.m_dpi.ScaleX(size.cx);
+		rect.bottom = rect.top + m_DittoWindow.m_dpi.ScaleY(size.cy);
 
 		EnsureWindowVisible(&rect);
 	}
@@ -183,8 +186,8 @@ BOOL CToolTipEx::Show(CPoint point)
 			rect.bottom = rect.top + lNewHeight;
 		}
 
-		rect.right += CAPTION_BORDER * 2;
-		rect.bottom += CAPTION_BORDER * 2;
+		//rect.right += CAPTION_BORDER * 2;
+		//rect.bottom += CAPTION_BORDER * 2;
 
 		
 
@@ -306,7 +309,8 @@ void CToolTipEx::SaveWindowSize()
 			this->GetWindowRect(&rect);
 		}
 
-		CGetSetOptions::SetDescWndSize(rect.Size());
+		CSize s = rect.Size();
+		CGetSetOptions::SetDescWndSize(CSize(m_DittoWindow.m_dpi.UnscaleX(s.cx), m_DittoWindow.m_dpi.UnscaleX(s.cy)));
 		CGetSetOptions::SetDescWndPoint(rect.TopLeft());
 
 		OutputDebugString(_T("Saving tooltip size"));
@@ -661,18 +665,22 @@ void CToolTipEx::OnSize(UINT nType, int cx, int cy)
         return ;
     }
 
-    CRect cr;
-    GetClientRect(cr);
-    cr.DeflateRect(0, 0, 0, theApp.m_metrics.ScaleY(21));
-    m_RichEdit.MoveWindow(cr);
+	MoveControls();
+}
+
+void CToolTipEx::MoveControls()
+{
+	CRect cr;
+	GetClientRect(cr);
+	cr.DeflateRect(0, 0, 0, m_DittoWindow.m_dpi.ScaleY(21));
+	m_RichEdit.MoveWindow(cr);
 	m_imageViewer.MoveWindow(cr);
 
-	m_optionsButton.MoveWindow(cr.left, cr.bottom + theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(17), theApp.m_metrics.ScaleY(17));
+	m_optionsButton.MoveWindow(cr.left, cr.bottom + m_DittoWindow.m_dpi.ScaleY(2), m_DittoWindow.m_dpi.ScaleX(17), m_DittoWindow.m_dpi.ScaleY(17));
 
-	m_clipDataStatic.MoveWindow(cr.left + theApp.m_metrics.ScaleX(19), cr.bottom + theApp.m_metrics.ScaleY(2), cr.Width() - cr.left + theApp.m_metrics.ScaleX(19), theApp.m_metrics.ScaleY(17));
+	m_clipDataStatic.MoveWindow(cr.left + m_DittoWindow.m_dpi.ScaleX(19), cr.bottom + m_DittoWindow.m_dpi.ScaleY(2), cr.Width() - cr.left + m_DittoWindow.m_dpi.ScaleX(19), m_DittoWindow.m_dpi.ScaleY(17));
 
 	this->Invalidate();
-	m_DittoWindow.DoSetRegion(this);
 
 	if (m_saveWindowLockout == false)
 	{
@@ -1104,7 +1112,7 @@ void CToolTipEx::OnWindowPosChanging(WINDOWPOS* lpwndpos)
 {
 	CWnd::OnWindowPosChanging(lpwndpos);
 
-	m_DittoWindow.SnapToEdge(this, lpwndpos);
+	//m_DittoWindow.SnapToEdge(this, lpwndpos);
 }
 
 
@@ -1163,4 +1171,49 @@ void CToolTipEx::OnEnMsgfilterRichedit21(NMHDR *pNMHDR, LRESULT *pResult)
 	}
 
 	*pResult = 0;
+}
+
+LRESULT CToolTipEx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
+{
+	int dpi = HIWORD(wParam);
+	m_DittoWindow.OnDpiChanged(this, dpi);
+
+	RECT* const prcNewWindow = (RECT*)lParam;
+	SetWindowPos(NULL,
+		prcNewWindow->left,
+		prcNewWindow->top,
+		prcNewWindow->right - prcNewWindow->left,
+		prcNewWindow->bottom - prcNewWindow->top,
+		SWP_NOZORDER | SWP_NOACTIVATE);
+
+	m_optionsButton.Reset();
+	m_optionsButton.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPIX(), IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, cog_28, IDB_COG_32_32, _T("PNG"));
+
+	m_clipDataFont.Detach();
+	m_clipDataFont.CreateFont(-m_DittoWindow.m_dpi.PointsToPixels(8), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+	m_clipDataStatic.SetFont(&m_clipDataFont);
+	m_clipDataStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
+	m_clipDataStatic.SetTextColor(RGB(80, 80, 80));
+
+	this->MoveControls();
+	this->Invalidate();
+	this->UpdateWindow();
+
+	return TRUE;
+}
+
+void CToolTipEx::OnMoving(UINT fwSide, LPRECT pRect)
+{
+	CWnd::OnMoving(fwSide, pRect);
+
+	m_snap.OnSnapMoving(m_hWnd, pRect);
+	// TODO: Add your message handler code here
+}
+
+
+void CToolTipEx::OnEnterSizeMove()
+{
+	m_snap.OnSnapEnterSizeMove(m_hWnd);
+
+	CWnd::OnEnterSizeMove();
 }

@@ -2,6 +2,7 @@
 
 #include "GdipButton.h"
 #include "DittoWindow.h"
+#include "SnapWindow.h"
 // QRCodeViewer
 
 class QRCodeViewer : public CWnd
@@ -34,6 +35,9 @@ protected:
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	afx_msg void OnWindowPosChanging(WINDOWPOS* lpwndpos);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg LRESULT OnDpiChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnMoving(UINT fwSide, LPRECT pRect);
+	afx_msg void OnEnterSizeMove();
 
 	unsigned char* m_bitmapData;
 	int m_imageSize;
@@ -42,6 +46,9 @@ protected:
 	int m_descRowHeight;
 	CFont m_font;
 	HBRUSH m_descBackground;
+	LOGFONT m_logFont;
+	int m_originalFontHeight;
+	SnapWindow m_snap;
 
 	void MoveControls();
 };

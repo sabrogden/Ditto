@@ -132,7 +132,7 @@ BOOL COptionsGeneral::OnInitDialog()
 	}
 
 	CString cs;
-	cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, abs(theApp.m_metrics.PixelsToPoints(m_LogFont.lfHeight)));
+	cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, GetFontSize(m_hWnd, m_LogFont));
 	m_btFont.SetWindowText(cs);
 
 	FillThemes();
@@ -541,7 +541,7 @@ void COptionsGeneral::OnBnClickedButtonDefaultFault()
 
 	memset(&m_LogFont, 0, sizeof(m_LogFont));
 
-	m_LogFont.lfHeight = -theApp.m_metrics.PointsToPixels(10);
+	m_LogFont.lfHeight = -10;
 	m_LogFont.lfWeight = 400;
 	m_LogFont.lfCharSet = 1;
 	STRCPY(m_LogFont.lfFaceName, _T("Segoe UI"));
@@ -552,12 +552,34 @@ void COptionsGeneral::OnBnClickedButtonDefaultFault()
 	m_btFont.SetFont(&m_Font);
 
 	CString cs;
-	cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, abs(theApp.m_metrics.PixelsToPoints(m_LogFont.lfHeight)));
+	cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, GetFontSize(m_hWnd, m_LogFont));
 	m_btFont.SetWindowText(cs);
 
 	this->SetFont(&m_Font);
 }
 
+int COptionsGeneral::GetFontSize(HWND hWnd, const LOGFONT& lf)
+{
+	int nFontSize = 0;
+
+	HDC hDC = ::GetWindowDC(hWnd);
+
+	if (lf.lfHeight < 0)
+	{
+		nFontSize = -::MulDiv(lf.lfHeight, 72, ::GetDeviceCaps(hDC, LOGPIXELSY));
+	}
+	else
+	{
+		TEXTMETRIC tm;
+		::ZeroMemory(&tm, sizeof(TEXTMETRIC));
+		::GetTextMetrics(hDC, &tm);
+
+		nFontSize = ::MulDiv(lf.lfHeight - tm.tmInternalLeading, 72, ::GetDeviceCaps(hDC, LOGPIXELSY));
+	}
+	::ReleaseDC(hWnd, hDC);
+
+	return nFontSize;
+}
 
 void COptionsGeneral::OnBnClickedButtonFont()
 {
@@ -573,7 +595,7 @@ void COptionsGeneral::OnBnClickedButtonFont()
 		m_btFont.SetFont(&m_Font);
 
 		CString cs;
-		cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, abs(theApp.m_metrics.PixelsToPoints(m_LogFont.lfHeight)));
+		cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, GetFontSize(m_hWnd, m_LogFont));
 		m_btFont.SetWindowText(cs);
 	}
 }

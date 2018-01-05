@@ -7,6 +7,7 @@
 #include "ImageViewer.h"
 #include "GroupStatic.h"
 #include "Accels.h"
+#include "SnapWindow.h"
 
 class CToolTipEx : public CWnd
 {
@@ -50,6 +51,7 @@ public:
 	void UpdateMenuShortCut(CMenu *subMenu, int id, DWORD action);
 
 	void DoSearch();
+	void MoveControls();
 
 
 // Overrides
@@ -89,6 +91,7 @@ protected:
 	CAccels *m_pToolTipActions;
 	bool m_bMaxSetTimer;
 	int m_lDelayMaxSeconds;
+	SnapWindow m_snap;
 	
 
 protected:
@@ -129,4 +132,7 @@ public:
 	afx_msg void OnFirstAlwaysontop();
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 	void OnEnMsgfilterRichedit21(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg LRESULT OnDpiChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnMoving(UINT fwSide, LPRECT pRect);
+	afx_msg void OnEnterSizeMove();
 };

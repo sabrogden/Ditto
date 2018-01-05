@@ -170,6 +170,7 @@ ON_WM_DESTROY()
 
 //}}AFX_MSG_MAP
 ON_MESSAGE(NM_SEARCH_ENTER_PRESSED, OnSearchEnterKeyPressed)
+ON_MESSAGE(NM_COPY_CLIP, OnCopyClip)
 ON_MESSAGE(NM_END, OnListEnd)
 ON_MESSAGE(CB_SEARCH, OnSearch)
 ON_MESSAGE(NM_DELETE, OnDelete)
@@ -335,14 +336,15 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     SetWindowText(_T(QPASTE_TITLE));
 
     m_search.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL, CRect(0, 0, 0, 0), this, ID_EDIT_SEARCH);
+	m_search.SetDpiInfo(&m_DittoWindow.m_dpi);
 	m_search.SetPromptText(theApp.m_Language.GetString(_T("Search"), _T("Search")));
 	SetSearchImages();
 	m_search.LoadPastSearches(CGetSetOptions::GetPastSearchXml());
 
-	CRect rcEditArea(theApp.m_metrics.ScaleX(4), theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(2));
+	CRect rcEditArea(m_DittoWindow.m_dpi.ScaleX(4), m_DittoWindow.m_dpi.ScaleY(2), m_DittoWindow.m_dpi.ScaleX(20), m_DittoWindow.m_dpi.ScaleY(2));
 	//m_search.SetBorder(rcEditArea);
 
-	CRect rcCloseArea(theApp.m_metrics.ScaleX(85), theApp.m_metrics.ScaleY(3), theApp.m_metrics.ScaleX(99), theApp.m_metrics.ScaleY(15));
+	CRect rcCloseArea(m_DittoWindow.m_dpi.ScaleX(85), m_DittoWindow.m_dpi.ScaleY(3), m_DittoWindow.m_dpi.ScaleX(99), m_DittoWindow.m_dpi.ScaleY(15));
 	//m_search.SetButtonArea(rcCloseArea);
 
     // Create the header control
@@ -351,6 +353,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
         ASSERT(FALSE);
         return -1;
     }
+	m_lstHeader.SetDpiInfo(&m_DittoWindow.m_dpi);
 	m_lstHeader.ShowWindow(SW_SHOW);
 
     ((CWnd*) &m_GroupTree)->CreateEx(NULL, _T("SysTreeView32"), NULL, TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS, CRect(0, 0, 100, 100), this, 0);
@@ -362,18 +365,18 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     m_ShowGroupsFolderBottom.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SHOW_GROUPS_BOTTOM);
     //m_ShowGroupsFolderBottom.LoadBitmaps(IDB_CLOSED_FOLDER, IDB_CLOSED_FOLDER_PRESSED, IDB_CLOSED_FOLDER_FOCUSED);
-	m_ShowGroupsFolderBottom.LoadStdImageDPI(open_folder_24, open_folder_30, open_folder_36, open_folder_42, open_folder_48, _T("PNG"));
+	m_ShowGroupsFolderBottom.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPIX(), open_folder_24, open_folder_30, open_folder_36, open_folder_42, open_folder_48, _T("PNG"));
     m_ShowGroupsFolderBottom.ShowWindow(SW_SHOW);
 	m_ShowGroupsFolderBottom.SetToolTipText(theApp.m_Language.GetString(_T("GroupsTooltip"), _T("Groups")));
 	m_ShowGroupsFolderBottom.ModifyStyle(WS_TABSTOP, 0);
 	
     m_BackButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_BACK_BUTTON);
-	m_BackButton.LoadStdImageDPI(return_16, return_20, return_24, return_28, return_32, _T("PNG"));
+	m_BackButton.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPIX(), return_16, return_20, return_24, return_28, return_32, _T("PNG"));
 	m_BackButton.ModifyStyle(WS_TABSTOP, 0);
     m_BackButton.ShowWindow(SW_SHOW);
 
 	m_systemMenu.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, ID_SYSTEM_BUTTON);
-	m_systemMenu.LoadStdImageDPI(system_menu_2_24, system_menu_2_30, system_menu_2_36, system_menu_2_42, system_menu_2_48, _T("PNG"));
+	m_systemMenu.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPIX(), system_menu_2_24, system_menu_2_30, system_menu_2_36, system_menu_2_42, system_menu_2_48, _T("PNG"));
 	m_systemMenu.ModifyStyle(WS_TABSTOP, 0);
 	m_systemMenu.ShowWindow(SW_SHOW);
 		
@@ -394,18 +397,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-    m_Alpha.SetWindowHandle(m_hWnd);
-		
-	m_SearchFont.CreateFont(-theApp.m_metrics.PointsToPixels(12), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
-    m_search.SetFont(&m_SearchFont);
-	m_search.SetPromptFont(m_SearchFont);
-
-	m_GroupTree.SetFont(&m_SearchFont);
-
-	m_groupFont.CreateFont(-theApp.m_metrics.PointsToPixels(8), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
-	m_stGroup.SetFont(&m_groupFont);	
-	m_stGroup.SetBkColor(g_Opt.m_Theme.MainWindowBG());
-	m_stGroup.SetTextColor(RGB(127, 127, 127));
+    m_Alpha.SetWindowHandle(m_hWnd);	
 	
     UpdateFont();
 	
@@ -553,11 +545,11 @@ void CQPasteWnd::SetSearchImages()
 {
 	//int iSourceImageDPIToUse = 96; // We will assume 96 by default.
 
-	//if (theApp.m_metrics.GetDPIX() > 144) 
+	//if (m_DittoWindow.m_dpi.GetDPIX() > 144) 
 	//	iSourceImageDPIToUse = 192;
-	//else if (theApp.m_metrics.GetDPIX() > 120) 
+	//else if (m_DittoWindow.m_dpi.GetDPIX() > 120) 
 	//	iSourceImageDPIToUse = 144;
-	//else if (theApp.m_metrics.GetDPIX() > 96) 
+	//else if (m_DittoWindow.m_dpi.GetDPIX() > 96) 
 	//	iSourceImageDPIToUse = 120;
 
 	//// Now select the right resource to load.
@@ -600,17 +592,17 @@ void CQPasteWnd::MoveControls()
     int cy = crRect.Height();
 
     //Hide the two pixels of space at the top, not sure where this is coming from
-	int topOfListBox = -2;
+	int topOfListBox = 0;
 	
     if(theApp.m_GroupID > 0)
     {
         m_stGroup.ShowWindow(SW_SHOW);
         m_BackButton.ShowWindow(SW_SHOW);
 
-		m_BackButton.MoveWindow(theApp.m_metrics.ScaleX(2), theApp.m_metrics.ScaleY(2), theApp.m_metrics.ScaleX(16), theApp.m_metrics.ScaleY(16));
-		m_stGroup.MoveWindow(theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(2), cx - theApp.m_metrics.ScaleX(20), theApp.m_metrics.ScaleY(16));
+		m_BackButton.MoveWindow(m_DittoWindow.m_dpi.ScaleX(2), m_DittoWindow.m_dpi.ScaleY(2), m_DittoWindow.m_dpi.ScaleX(16), m_DittoWindow.m_dpi.ScaleY(16));
+		m_stGroup.MoveWindow(m_DittoWindow.m_dpi.ScaleX(24), m_DittoWindow.m_dpi.ScaleY(2), cx - m_DittoWindow.m_dpi.ScaleX(20), m_DittoWindow.m_dpi.ScaleY(16));
 
-		topOfListBox = theApp.m_metrics.ScaleY(20);
+		topOfListBox = m_DittoWindow.m_dpi.ScaleY(20);
 	}
 	else
 	{
@@ -626,14 +618,14 @@ void CQPasteWnd::MoveControls()
 	}*/
 
     int nWidth = cx;
-	int listBoxBottomOffset = theApp.m_metrics.ScaleY(searchRowStart);
+	int listBoxBottomOffset = m_DittoWindow.m_dpi.ScaleY(searchRowStart);
 	
 	int extraSize = 0;
 
 	if(m_showScrollBars == false &&
 		g_Opt.m_showScrollBar == false)
 	{
-		extraSize = ::GetSystemMetrics(SM_CXVSCROLL);
+		extraSize = m_DittoWindow.m_dpi.ScaleX(::GetSystemMetrics(SM_CXVSCROLL));
 
 		CRgn rgnRect;
 		CRect r;
@@ -645,17 +637,17 @@ void CQPasteWnd::MoveControls()
 	}
 
 	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize+1);
-	m_search.MoveWindow(theApp.m_metrics.ScaleX(34), cy - theApp.m_metrics.ScaleY(searchRowStart-5), cx - theApp.m_metrics.ScaleX(70), theApp.m_metrics.ScaleY(23));
+	m_search.MoveWindow(m_DittoWindow.m_dpi.ScaleX(34), cy - m_DittoWindow.m_dpi.ScaleY(searchRowStart-5), cx - m_DittoWindow.m_dpi.ScaleX(70), m_DittoWindow.m_dpi.ScaleY(23));
 
-	m_systemMenu.MoveWindow(cx - theApp.m_metrics.ScaleX(30), cy - theApp.m_metrics.ScaleX(28), theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(24));
+	m_systemMenu.MoveWindow(cx - m_DittoWindow.m_dpi.ScaleX(30), cy - m_DittoWindow.m_dpi.ScaleX(28), m_DittoWindow.m_dpi.ScaleX(24), m_DittoWindow.m_dpi.ScaleY(24));
 
-	m_ShowGroupsFolderBottom.MoveWindow(theApp.m_metrics.ScaleX(4), cy - theApp.m_metrics.ScaleX(28), theApp.m_metrics.ScaleX(24), theApp.m_metrics.ScaleY(24));
+	m_ShowGroupsFolderBottom.MoveWindow(m_DittoWindow.m_dpi.ScaleX(4), cy - m_DittoWindow.m_dpi.ScaleX(28), m_DittoWindow.m_dpi.ScaleX(24), m_DittoWindow.m_dpi.ScaleY(24));
 
 	/*if (g_Opt.m_bShowPersistent &&
 		g_Opt.m_bShowAlwaysOnTopWarning)
 	{
 		m_alwaysOnToWarningStatic.ShowWindow(SW_SHOW);
-		m_alwaysOnToWarningStatic.MoveWindow(theApp.m_metrics.ScaleX(2), cy - theApp.m_metrics.ScaleY(18), cx - theApp.m_metrics.ScaleY(4), theApp.m_metrics.ScaleY(17));
+		m_alwaysOnToWarningStatic.MoveWindow(m_DittoWindow.m_dpi.ScaleX(2), cy - m_DittoWindow.m_dpi.ScaleY(18), cx - m_DittoWindow.m_dpi.ScaleY(4), m_DittoWindow.m_dpi.ScaleY(17));
 	}
 	else*/
 	{
@@ -814,7 +806,8 @@ void CQPasteWnd::SaveWindowSize()
 	{
 		CRect rect;
 		GetWindowRectEx(&rect);
-		CGetSetOptions::SetQuickPasteSize(rect.Size());
+		CSize s = rect.Size();
+		CGetSetOptions::SetQuickPasteSize(CSize(m_DittoWindow.m_dpi.UnscaleX(s.cx), m_DittoWindow.m_dpi.UnscaleX(s.cy)));
 		CGetSetOptions::SetQuickPastePoint(rect.TopLeft());
 	}
 }
@@ -837,7 +830,7 @@ BOOL CQPasteWnd::ShowQPasteWindow(BOOL bFillList)
 
 	SetCurrentTransparency();
 
-    m_lstHeader.SetNumberOfLinesPerRow(CGetSetOptions::GetLinesPerRow());
+    m_lstHeader.SetNumberOfLinesPerRow(CGetSetOptions::GetLinesPerRow(), false);
     m_lstHeader.SetShowTextForFirstTenHotKeys(CGetSetOptions::GetShowTextForFirstTenHotKeys());
 	m_lstHeader.SetShowIfClipWasPasted(CGetSetOptions::GetShowIfClipWasPasted());
 
@@ -1052,6 +1045,13 @@ LRESULT CQPasteWnd::OnListMoveSelectionToGroup(WPARAM wParam, LPARAM lParam)
 
 		IDs.MoveTo(groupId);
 	}
+	return TRUE;
+}
+
+LRESULT CQPasteWnd::OnCopyClip(WPARAM wParam, LPARAM lParam)
+{
+	m_lstHeader.LoadCopyOrCutToClipboard();
+	theApp.IC_Copy();
 	return TRUE;
 }
 
@@ -1829,33 +1829,33 @@ LRESULT CQPasteWnd::OnSearch(WPARAM wParam, LPARAM lParam)
 ///////////////////////////////////////////////////////////////////////
 void CQPasteWnd::OnMenuLinesperrow1()
 {
-    SetLinesPerRow(1);
+    SetLinesPerRow(1, false);
 }
 
 void CQPasteWnd::OnMenuLinesperrow2()
 {
-    SetLinesPerRow(2);
+    SetLinesPerRow(2, false);
 }
 
 void CQPasteWnd::OnMenuLinesperrow3()
 {
-    SetLinesPerRow(3);
+    SetLinesPerRow(3, false);
 }
 
 void CQPasteWnd::OnMenuLinesperrow4()
 {
-    SetLinesPerRow(4);
+    SetLinesPerRow(4, false);
 }
 
 void CQPasteWnd::OnMenuLinesperrow5()
 {
-    SetLinesPerRow(5);
+    SetLinesPerRow(5, false);
 }
 
-void CQPasteWnd::SetLinesPerRow(int lines)
+void CQPasteWnd::SetLinesPerRow(int lines, bool force)
 {
     CGetSetOptions::SetLinesPerRow(lines);
-    m_lstHeader.SetNumberOfLinesPerRow(lines);
+    m_lstHeader.SetNumberOfLinesPerRow(lines, force);
 
 	ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
@@ -1864,7 +1864,7 @@ void CQPasteWnd::SetLinesPerRow(int lines)
 	m_cf_rtfCache.clear();
 	m_cf_NO_rtfCache.clear();
 
-    FillList();
+    //FillList();
 }
 
 void CQPasteWnd::OnMenuTransparencyNone()
@@ -1998,7 +1998,21 @@ void CQPasteWnd::UpdateFont()
 {
     LOGFONT lf;
     CGetSetOptions::GetFont(lf);
+	lf.lfHeight = m_DittoWindow.m_dpi.PointsToPixels(lf.lfHeight);
     m_lstHeader.SetLogFont(lf);
+
+	m_SearchFont.Detach();
+	m_SearchFont.CreateFont(-m_DittoWindow.m_dpi.PointsToPixels(12), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+	m_search.SetFont(&m_SearchFont);
+	m_search.SetPromptFont(m_SearchFont);
+
+	m_GroupTree.SetFont(&m_SearchFont);
+
+	m_groupFont.Detach();
+	m_groupFont.CreateFont(-m_DittoWindow.m_dpi.PointsToPixels(8), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+	m_stGroup.SetFont(&m_groupFont);
+	m_stGroup.SetBkColor(g_Opt.m_Theme.MainWindowBG());
+	m_stGroup.SetTextColor(RGB(127, 127, 127));
 }
 
 void CQPasteWnd::OnMenuFirsttenhotkeysUsectrlnum()
@@ -2465,11 +2479,16 @@ void CQPasteWnd::OnMenuQuickoptionsFont()
     CFont *pFont = m_lstHeader.GetFont();
     LOGFONT lf;
     pFont->GetLogFont(&lf);
+
+	lf.lfHeight = m_DittoWindow.m_dpi.PixelsToPoints(lf.lfHeight);
+
     CFontDialog dlg(&lf);
     if(dlg.DoModal() == IDOK)
     {
         CGetSetOptions::SetFont(*dlg.m_cf.lpLogFont);
+		(*dlg.m_cf.lpLogFont).lfHeight = m_DittoWindow.m_dpi.PointsToPixels((*dlg.m_cf.lpLogFont).lfHeight);
         m_lstHeader.SetLogFont(*dlg.m_cf.lpLogFont);
+		this->SetLinesPerRow(CGetSetOptions::GetLinesPerRow(), true);
     }
 
     m_bHideWnd = true;
@@ -4924,7 +4943,7 @@ LRESULT CQPasteWnd::OnPostOptions(WPARAM wParam, LPARAM lParam)
 
 	m_lstHeader.SetShowTextForFirstTenHotKeys(CGetSetOptions::GetShowTextForFirstTenHotKeys());
 	m_lstHeader.SetShowIfClipWasPasted(CGetSetOptions::GetShowIfClipWasPasted());
-	m_lstHeader.SetNumberOfLinesPerRow(CGetSetOptions::GetLinesPerRow());
+	m_lstHeader.SetNumberOfLinesPerRow(CGetSetOptions::GetLinesPerRow(), true);
 
 	SetCurrentTransparency();
 
@@ -6613,8 +6632,51 @@ LRESULT CQPasteWnd::OnSearchFocused(WPARAM wParam, LPARAM lParam)
 	return TRUE;
 }
 
+#include <ShellScalingApi.h>
+
+
 LRESULT CQPasteWnd::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 {
+	int dpi = HIWORD(wParam);	
+	m_DittoWindow.OnDpiChanged(this, dpi);
+		
+	RECT* const prcNewWindow = (RECT*)lParam;
+	SetWindowPos(NULL,
+		prcNewWindow->left,
+		prcNewWindow->top,
+		prcNewWindow->right - prcNewWindow->left,
+		prcNewWindow->bottom - prcNewWindow->top,
+		SWP_NOZORDER | SWP_NOACTIVATE);
+	
+	m_systemMenu.Reset();
+	m_systemMenu.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPIX(), system_menu_2_24, system_menu_2_30, system_menu_2_36, system_menu_2_42, system_menu_2_48, _T("PNG"));
+
+	m_BackButton.Reset();
+	m_BackButton.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPIX(), return_16, return_20, return_24, return_28, return_32, _T("PNG"));
+
+	m_ShowGroupsFolderBottom.Reset();
+	m_ShowGroupsFolderBottom.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPIX(), open_folder_24, open_folder_30, open_folder_36, open_folder_42, open_folder_48, _T("PNG"));
+	
+	m_search.OnDpiChanged();
+
+	int t = m_lstHeader.GetTopIndex();
+	m_lstHeader.EnsureVisible(0, FALSE);
+	
+	m_lstHeader.OnDpiChanged();	
+
+	UpdateFont();
+	this->SetLinesPerRow(CGetSetOptions::GetLinesPerRow(), true);
+
+	m_lstHeader.EnsureVisible(t, FALSE);
+
+	MoveControls();
+
+	m_lstHeader.RefreshVisibleRows();
+
+	this->SetWindowPos(NULL, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
+
+	this->Invalidate();
+	this->RedrawWindow();
 
 	return TRUE;
 }

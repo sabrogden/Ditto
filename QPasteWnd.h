@@ -188,7 +188,7 @@ public:
     bool SaveDescription(int nItem, CString text);
 
     //Menu Items
-    void SetLinesPerRow(int lines);
+    void SetLinesPerRow(int lines, bool force);
     void SetTransparency(int percent);
     void OnUpdateLinesPerRow(CCmdUI *pCmdUI, int nValue);
     void OnUpdateTransparency(CCmdUI *pCmdUI, int nValue);
@@ -527,4 +527,5 @@ public:
 	afx_msg LRESULT OnDpiChanged(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnCliporderMovetolast();
 	afx_msg void OnUpdateCliporderMovetolast(CCmdUI *pCmdUI);
+	afx_msg LRESULT OnCopyClip(WPARAM wParam, LPARAM lParam);
 };

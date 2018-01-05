@@ -40,10 +40,10 @@ CSymbolEdit::CSymbolEdit() :
 	m_mouseHoveringOverSearches = false;
 	m_mouseDownOnClose = false;
 	m_mouseHoveringOverClose = false;
+	m_windowDpi = NULL;
 
 	//m_searchButton.LoadStdImageDPI(Search_16, Search_20, Search_24, Search_32, _T("PNG"));
-	m_closeButton.LoadStdImageDPI(search_close_16, Search_20, Search_24, Search_28, Search_32, _T("PNG"));
-	m_searchesButton.LoadStdImageDPI(down_16, down_20, down_24, down_28, down_32, _T("PNG"));
+	
 }
 
 CSymbolEdit::~CSymbolEdit()
@@ -84,7 +84,23 @@ BOOL CSymbolEdit::PreTranslateMessage(MSG* pMsg)
 			Cut();
 			return TRUE;
 		case 'C':
-			Copy();
+			{
+				int startChar;
+				int endChar;
+				this->GetSel(startChar, endChar);
+				if (startChar == endChar)
+				{
+					CWnd *pWnd = GetParent();
+					if (pWnd)
+					{
+						pWnd->SendMessage(NM_COPY_CLIP, pMsg->wParam, pMsg->lParam);
+					}
+				}
+				else
+				{
+					Copy();
+				}
+			}
 			return TRUE;
 		case 'V':
 			Paste();
@@ -410,7 +426,10 @@ void CSymbolEdit::RecalcLayout()
 	}
 	else
 	{
-		SetMargins(4, theApp.m_metrics.ScaleX(34));
+		if (m_windowDpi != NULL)
+		{
+			SetMargins(4, m_windowDpi->ScaleX(34));
+		}
 	}
 }
 
@@ -488,7 +507,7 @@ void CSymbolEdit::OnPaint()
 	if (text.GetLength() == 0 && m_strPromptText.GetLength() > 0)
 	{
 		//if we aren't showing the close icon, then use the full space
-		textRect.right += theApp.m_metrics.ScaleX(16);
+		textRect.right += m_windowDpi->ScaleX(16);
 		//textRect.right -= LOWORD(margins);
 
 		oldFont = dc.SelectObject(&m_fontPrompt);
@@ -503,9 +522,9 @@ void CSymbolEdit::OnPaint()
 	int right = rect.right;
 	if ((text.GetLength() > 0 || this == GetFocus()))
 	{
-		m_searchesButtonRect.SetRect(rect.right - theApp.m_metrics.ScaleX(18), 0, rect.right, rect.bottom);
-		right = rect.right - theApp.m_metrics.ScaleX(18);
-		m_searchesButton.Draw(&dc, this, m_searchesButtonRect.left, 4, m_mouseHoveringOverSearches, m_mouseDownOnSearches);
+		m_searchesButtonRect.SetRect(rect.right - m_windowDpi->ScaleX(18), 0, rect.right, rect.bottom);
+		right = rect.right - m_windowDpi->ScaleX(18);
+		m_searchesButton.Draw(&dc, *m_windowDpi, this, m_searchesButtonRect.left, 4, m_mouseHoveringOverSearches, m_mouseDownOnSearches);
 	}
 	else
 	{
@@ -517,8 +536,8 @@ void CSymbolEdit::OnPaint()
 	{
 		OutputDebugString(_T("showing close button\n"));
 
-		m_closeButtonRect.SetRect(right - theApp.m_metrics.ScaleX(16), 0, right, rect.bottom);
-		m_closeButton.Draw(&dc, this, m_closeButtonRect.left, 4, m_mouseHoveringOverClose, m_mouseDownOnClose);
+		m_closeButtonRect.SetRect(right - m_windowDpi->ScaleX(16), 0, right, rect.bottom);
+		m_closeButton.Draw(&dc, *m_windowDpi, this, m_closeButtonRect.left, 4, m_mouseHoveringOverClose, m_mouseDownOnClose);
 	}
 	else
 	{
@@ -746,4 +765,22 @@ bool CSymbolEdit::ApplyLastSearch()
 	}
 
 	return ret;
+}
+
+void CSymbolEdit::OnDpiChanged()
+{
+	SetDpiInfo(m_windowDpi);
+}
+
+void CSymbolEdit::SetDpiInfo(CDPI *dpi)
+{ 
+	m_windowDpi = dpi; 
+
+	m_closeButton.Reset();
+	m_closeButton.LoadStdImageDPI(m_windowDpi->GetDPIX(), search_close_16, Search_20, Search_24, Search_28, Search_32, _T("PNG"));
+
+	m_searchesButton.Reset();
+	m_searchesButton.LoadStdImageDPI(m_windowDpi->GetDPIX(), down_16, down_20, down_24, down_28, down_32, _T("PNG"));
+
+	RecalcLayout();
 }

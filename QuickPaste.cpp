@@ -207,6 +207,8 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 		Log(StrF(_T("Invalid initial size %d %d %d %d, Centered Window %d %d %d %d"), orig.left, orig.top, orig.right, orig.bottom, crRect.left, crRect.top, crRect.right, crRect.bottom));
 	}	
 	
+	bool adjustRect = false;
+
 	if( !IsWindow(m_pwndPaste->m_hWnd) )
 	{
 		CWnd *pLocalParent = pParent;
@@ -217,6 +219,8 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 		}
 
 		VERIFY( m_pwndPaste->Create(crRect, pLocalParent) );
+
+		adjustRect = true;
 	}	
 
 	//If minimized
@@ -229,6 +233,12 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 			bAtPrevPos ||
 			forceMoveWindow)
 		{
+			if (adjustRect)
+			{
+				crRect.right = crRect.left + m_pwndPaste->m_DittoWindow.m_dpi.ScaleX(crRect.Width());
+				crRect.bottom = crRect.top + m_pwndPaste->m_DittoWindow.m_dpi.ScaleY(crRect.Height());
+			}
+
 			m_pwndPaste->MoveWindow(crRect);
 		}
 	}
@@ -239,6 +249,11 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 			bAtPrevPos ||
 			forceMoveWindow)
 		{
+			if (adjustRect)
+			{
+				crRect.right = crRect.left + m_pwndPaste->m_DittoWindow.m_dpi.ScaleX(crRect.Width());
+				crRect.bottom = crRect.top + m_pwndPaste->m_DittoWindow.m_dpi.ScaleY(crRect.Height());
+			}
 			m_pwndPaste->MoveWindow(crRect);
 		}
 

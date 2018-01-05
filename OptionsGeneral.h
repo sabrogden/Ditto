@@ -66,19 +66,15 @@ public:
 protected:
 	
 	COptionsSheet *m_pParent;
-
 	CString m_csTitle;
-
 	CBrush m_brush;
-
 	CFont m_Font;
 	LOGFONT m_LogFont;
-
 	CFont m_envVarFont;
-
-	void FillThemes();
 	
+	void FillThemes();	
 	void FillLanguages();
+	int GetFontSize(HWND hWnd, const LOGFONT& lf);
 
 	// Generated message map functions
 	//{{AFX_MSG(COptionsGeneral)

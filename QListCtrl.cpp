@@ -37,43 +37,16 @@ CQListCtrl::CQListCtrl()
 	m_pchTip = NULL;
 	m_pwchTip = NULL;
 	m_linesPerRow = 1;
-	
-	LOGFONT lf;
-	
-	lf.lfHeight = theApp.m_metrics.PointsToPixels(-7);
-	lf.lfWidth = 0;
-	lf.lfEscapement = 0;
-	lf.lfOrientation = 0;
-	lf.lfWeight = FW_LIGHT;
-	lf.lfItalic = FALSE;
-	lf.lfUnderline = FALSE;
-	lf.lfStrikeOut = FALSE;
-	lf.lfCharSet = ANSI_CHARSET;
-	lf.lfOutPrecision = OUT_STRING_PRECIS;
-	lf.lfClipPrecision = CLIP_STROKE_PRECIS;
-	lf.lfQuality = DEFAULT_QUALITY;
-	lf.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
-	lstrcpy(lf.lfFaceName, _T("Small Font"));
-	
-	m_SmallFont = ::CreateFontIndirect(&lf);
-		
+	m_windowDpi = NULL;
+	m_SmallFont = NULL;		
 	m_bStartTop = true;
 	m_pToolTip = NULL;
 	m_pFormatter = NULL;
 	m_allSelected = false;
 	m_rowHeight = 50;
-
 	m_mouseOverScrollAreaStart = 0;
-
-	m_groupFolder.LoadStdImageDPI(IDB_OPEN_FOLDER_16_16, IDB_OPEN_FOLDER_20_20, IDB_OPEN_FOLDER_24_24, IDB_OPEN_FOLDER_24_24, IDB_OPEN_FOLDER_32_32, _T("PNG"));
-	m_dontDeleteImage.LoadStdImageDPI(IDB_YELLOW_STAR_16_16, IDB_YELLOW_STAR_20_20, IDB_YELLOW_STAR_24_24, IDB_YELLOW_STAR_24_24, IDB_YELLOW_STAR_32_32, _T("PNG"));
-	m_inFolderImage.LoadStdImageDPI(IDB_IN_FOLDER_16_16, IDB_IN_FOLDER_20_20, IDB_IN_FOLDER_24_24, IDB_IN_FOLDER_24_24, IDB_IN_FOLDER_32_32, _T("PNG"));
-	m_shortCutImage.LoadStdImageDPI(IDB_KEY_16_16, IDB_KEY_20_20, IDB_KEY_24_24, IDB_KEY_24_24, IDB_KEY_32_32, _T("PNG"));
-	m_stickyImage.LoadStdImageDPI(IDB_STICKY_16_16, IDB_STICKY_20_20, IDB_STICKY_24_24, IDB_STICKY_24_24, IDB_STICKY_32_32, _T("PNG"));
-
 	m_showIfClipWasPasted = TRUE;
 	m_bShowTextForFirstTenHotKeys = true;
-
 	m_pToolTipActions = NULL;
 }
 
@@ -97,6 +70,8 @@ CQListCtrl::~CQListCtrl()
 		delete m_pFormatter;
 		m_pFormatter = NULL;
 	}
+
+	DeleteObject(m_SmallFont);
 }
 
 // returns the position 1-10 if the index is in the FirstTen block else -1
@@ -274,9 +249,10 @@ BOOL CQListCtrl::SetFormattedText(int nRow, int nCol, LPCTSTR lpszFormat,...)
 	return SetText(nRow,nCol,csText);
 }
 
-void CQListCtrl::SetNumberOfLinesPerRow(int nLines)
+void CQListCtrl::SetNumberOfLinesPerRow(int nLines, bool force)
 {
-	if(m_linesPerRow != nLines)
+	if(m_linesPerRow != nLines ||
+		force)
 	{
 		m_linesPerRow = nLines;
 
@@ -298,8 +274,11 @@ void CQListCtrl::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 	CFont* pFont = GetFont();
 	HFONT hFontOld = (HFONT)SelectObject(hDC, pFont->GetSafeHandle());
 	GetTextMetrics(hDC, &tm);
-	lpMeasureItemStruct->itemHeight = ((tm.tmHeight + tm.tmExternalLeading) * m_linesPerRow) + ROW_BOTTOM_BORDER;
-	m_rowHeight = lpMeasureItemStruct->itemHeight;
+	if (m_windowDpi != NULL)
+	{
+		lpMeasureItemStruct->itemHeight = ((tm.tmHeight + tm.tmExternalLeading) * m_linesPerRow) + m_windowDpi->ScaleX(ROW_BOTTOM_BORDER);
+		m_rowHeight = lpMeasureItemStruct->itemHeight;
+	}
 	SelectObject(hDC, hFontOld);
 	::ReleaseDC(NULL, hDC);
 }
@@ -398,11 +377,11 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		{
 			CRect pastedRect(rcItem);
 			pastedRect.left++;
-			pastedRect.right = rcItem.left + theApp.m_metrics.ScaleX(3);
+			pastedRect.right = rcItem.left + m_windowDpi->ScaleX(3);
 				
 			pDC->FillSolidRect(pastedRect, g_Opt.m_Theme.ClipPastedColor());
 
-			rcText.left += theApp.m_metrics.ScaleX(4);
+			rcText.left += m_windowDpi->ScaleX(4);
 		}
 		        		
 		// set firstTenNum to the first ten number (1-10) corresponding to
@@ -412,7 +391,7 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		
 		if( m_bShowTextForFirstTenHotKeys && firstTenNum > 0 )
 		{
-			rcText.left += theApp.m_metrics.ScaleX(12);
+			rcText.left += m_windowDpi->ScaleX(12);
 		}
 		
 		bool drawInGroupIcon = true;
@@ -431,32 +410,32 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		{
 			if(strSymbols.Find(_T("<group>")) >= 0) //group 
 			{
-				m_groupFolder.Draw(pDC, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_groupFolder.ImageWidth() + theApp.m_metrics.ScaleX(2);
+				m_groupFolder.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
+				rcText.left += m_groupFolder.ImageWidth() + m_windowDpi->ScaleX(2);
 			}
 			if (strSymbols.Find(_T("<noautodelete>")) >= 0) //don't auto delete
 			{
-				m_dontDeleteImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_dontDeleteImage.ImageWidth() + theApp.m_metrics.ScaleX(2);
+				m_dontDeleteImage.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
+				rcText.left += m_dontDeleteImage.ImageWidth() + m_windowDpi->ScaleX(2);
 			}
 			if (strSymbols.Find(_T("<shortcut>")) >= 0) // has shortcut
 			{
-				m_shortCutImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_shortCutImage.ImageWidth() + theApp.m_metrics.ScaleX(2);
+				m_shortCutImage.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
+				rcText.left += m_shortCutImage.ImageWidth() + m_windowDpi->ScaleX(2);
 			}
 			if (drawInGroupIcon &&
 				strSymbols.Find(_T("<ingroup>")) >= 0) // in group
 			{
-				m_inFolderImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_inFolderImage.ImageWidth() + theApp.m_metrics.ScaleX(2);
+				m_inFolderImage.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
+				rcText.left += m_inFolderImage.ImageWidth() + m_windowDpi->ScaleX(2);
 			}
 			if (strSymbols.Find(_T("<qpastetext>")) >= 0) // has quick paste text
 			{
 			}
 			if (strSymbols.Find(_T("<sticky>")) >= 0) //sticky clip
 			{
-				m_stickyImage.Draw(pDC, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_stickyImage.ImageWidth() + theApp.m_metrics.ScaleX(2);
+				m_stickyImage.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
+				rcText.left += m_stickyImage.ImageWidth() + m_windowDpi->ScaleX(2);
 			}			
 		}
 		
@@ -497,9 +476,9 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			if (m_showIfClipWasPasted)
 				extraFromClipWasPaste = 3;
 			
-			crHotKey.right = crHotKey.left + theApp.m_metrics.ScaleX(11);
-			crHotKey.left += theApp.m_metrics.ScaleX(1 + extraFromClipWasPaste);
-			crHotKey.top += theApp.m_metrics.ScaleX(1 + extraFromClipWasPaste);
+			crHotKey.right = crHotKey.left + m_windowDpi->ScaleX(11);
+			crHotKey.left += m_windowDpi->ScaleX(1 + extraFromClipWasPaste);
+			crHotKey.top += m_windowDpi->ScaleX(1 + extraFromClipWasPaste);
 			
 			HFONT hOldFont = (HFONT)pDC->SelectObject(m_SmallFont);
 			COLORREF localOldTextColor = pDC->SetTextColor(g_Opt.m_Theme.ListSmallQuickPasteIndexColor());
@@ -509,8 +488,8 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 						
 			pDC->DrawText(cs, crHotKey, DT_BOTTOM);
 			
-			pDC->MoveTo(CPoint(rcItem.left + theApp.m_metrics.ScaleX(8 + extraFromClipWasPaste), rcItem.top));
-			pDC->LineTo(CPoint(rcItem.left + theApp.m_metrics.ScaleX(8 + extraFromClipWasPaste), rcItem.bottom));
+			pDC->MoveTo(CPoint(rcItem.left + m_windowDpi->ScaleX(8 + extraFromClipWasPaste), rcItem.top));
+			pDC->LineTo(CPoint(rcItem.left + m_windowDpi->ScaleX(8 + extraFromClipWasPaste), rcItem.bottom));
 			
 			pDC->SelectObject(hOldFont);
 			pDC->SetTextColor(localOldTextColor);
@@ -1437,8 +1416,8 @@ void CQListCtrl::OnTimer(UINT_PTR nIDEvent)
 				this->GetWindowRect(&crWindow);
 
 				//Adjust for the v-scroll bar being off of the screen
-				crWindow.right -= theApp.m_metrics.ScaleX(GetSystemMetrics(SM_CXVSCROLL));
-				crWindow.bottom -= theApp.m_metrics.ScaleX(::GetSystemMetrics(SM_CXHSCROLL));
+				crWindow.right -= m_windowDpi->ScaleX(GetSystemMetrics(SM_CXVSCROLL));
+				crWindow.bottom -= m_windowDpi->ScaleX(::GetSystemMetrics(SM_CXHSCROLL));
 
 				//Check and see if we are still in the cursor area
 				if(MouseInScrollBarArea(crWindow, cursorPos))
@@ -1519,8 +1498,8 @@ void CQListCtrl::OnMouseMove(UINT nFlags, CPoint point)
 		this->GetWindowRect(&crWindow);
 		ScreenToClient(&crWindow);
 
-		crWindow.right -= theApp.m_metrics.ScaleX(::GetSystemMetrics(SM_CXVSCROLL));
-		crWindow.bottom -= theApp.m_metrics.ScaleX(::GetSystemMetrics(SM_CXHSCROLL));
+		crWindow.right -= m_windowDpi->ScaleX(::GetSystemMetrics(SM_CXVSCROLL));
+		crWindow.bottom -= m_windowDpi->ScaleX(::GetSystemMetrics(SM_CXHSCROLL));
 
 		if(MouseInScrollBarArea(crWindow, point))
 		{
@@ -1549,8 +1528,8 @@ bool CQListCtrl::MouseInScrollBarArea(CRect crWindow, CPoint point)
 	CRect crRight(crWindow);
 	CRect crBottom(crWindow);	
 
-	crRight.left = crRight.right - theApp.m_metrics.ScaleX(::GetSystemMetrics(SM_CXVSCROLL));
-	crBottom.top = crBottom.bottom - theApp.m_metrics.ScaleY(::GetSystemMetrics(SM_CYHSCROLL));
+	crRight.left = crRight.right - m_windowDpi->ScaleX(::GetSystemMetrics(SM_CXVSCROLL));
+	crBottom.top = crBottom.bottom - m_windowDpi->ScaleY(::GetSystemMetrics(SM_CYHSCROLL));
 
 	/*CString cs;
 	cs.Format(_T("point.x: %d, Width: %d, Height: %d\n"), point.x, crWindow.Width(), crWindow.Height());
@@ -1654,4 +1633,50 @@ void CQListCtrl::HideToolTip()
 	{
 		m_pToolTip->Hide();
 	}
+}
+
+void CQListCtrl::OnDpiChanged()
+{
+	SetDpiInfo(m_windowDpi);
+}
+
+void CQListCtrl::SetDpiInfo(CDPI *dpi)
+{
+	m_windowDpi = dpi;
+
+	m_groupFolder.Reset();
+	m_groupFolder.LoadStdImageDPI(m_windowDpi->GetDPIX(), IDB_OPEN_FOLDER_16_16, IDB_OPEN_FOLDER_20_20, IDB_OPEN_FOLDER_24_24, IDB_OPEN_FOLDER_24_24, IDB_OPEN_FOLDER_32_32, _T("PNG"));
+
+	m_dontDeleteImage.Reset();
+	m_dontDeleteImage.LoadStdImageDPI(m_windowDpi->GetDPIX(), IDB_YELLOW_STAR_16_16, IDB_YELLOW_STAR_20_20, IDB_YELLOW_STAR_24_24, IDB_YELLOW_STAR_24_24, IDB_YELLOW_STAR_32_32, _T("PNG"));
+
+	m_inFolderImage.Reset();
+	m_inFolderImage.LoadStdImageDPI(m_windowDpi->GetDPIX(), IDB_IN_FOLDER_16_16, IDB_IN_FOLDER_20_20, IDB_IN_FOLDER_24_24, IDB_IN_FOLDER_24_24, IDB_IN_FOLDER_32_32, _T("PNG"));
+
+	m_shortCutImage.Reset();
+	m_shortCutImage.LoadStdImageDPI(m_windowDpi->GetDPIX(), IDB_KEY_16_16, IDB_KEY_20_20, IDB_KEY_24_24, IDB_KEY_24_24, IDB_KEY_32_32, _T("PNG"));
+
+	m_stickyImage.Reset();
+	m_stickyImage.LoadStdImageDPI(m_windowDpi->GetDPIX(), IDB_STICKY_16_16, IDB_STICKY_20_20, IDB_STICKY_24_24, IDB_STICKY_24_24, IDB_STICKY_32_32, _T("PNG"));
+
+	DeleteObject(m_SmallFont);
+
+	LOGFONT lf;
+
+	lf.lfHeight = m_windowDpi->PointsToPixels(-7);
+	lf.lfWidth = 0;
+	lf.lfEscapement = 0;
+	lf.lfOrientation = 0;
+	lf.lfWeight = FW_LIGHT;
+	lf.lfItalic = FALSE;
+	lf.lfUnderline = FALSE;
+	lf.lfStrikeOut = FALSE;
+	lf.lfCharSet = ANSI_CHARSET;
+	lf.lfOutPrecision = OUT_STRING_PRECIS;
+	lf.lfClipPrecision = CLIP_STROKE_PRECIS;
+	lf.lfQuality = DEFAULT_QUALITY;
+	lf.lfPitchAndFamily = VARIABLE_PITCH | FF_DONTCARE;
+	lstrcpy(lf.lfFaceName, _T("Small Font"));
+
+	m_SmallFont = ::CreateFontIndirect(&lf);
 }
