@@ -501,7 +501,7 @@ var sc_security="b3f57099";
 		</step>
 		<step action='Git'>
 			<Command>log</Command>
-			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2017-09-07</Options>
+			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2018-01-01</Options>
 			<WorkDir>%workDir%</WorkDir>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>

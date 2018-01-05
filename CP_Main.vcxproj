@@ -169,6 +169,7 @@
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>DeclareDPIAware.manifest</AdditionalManifestFiles>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -225,6 +226,7 @@
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>DeclareDPIAware.manifest</AdditionalManifestFiles>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -337,6 +339,7 @@
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>DeclareDPIAware.manifest</AdditionalManifestFiles>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
