@@ -6657,18 +6657,12 @@ LRESULT CQPasteWnd::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 	m_ShowGroupsFolderBottom.Reset();
 	m_ShowGroupsFolderBottom.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPIX(), open_folder_24, open_folder_30, open_folder_36, open_folder_42, open_folder_48, _T("PNG"));
 	
-	m_search.OnDpiChanged();
-
-	int t = m_lstHeader.GetTopIndex();
-	m_lstHeader.EnsureVisible(0, FALSE);
-	
+	m_search.OnDpiChanged();		
 	m_lstHeader.OnDpiChanged();	
 
 	UpdateFont();
 	this->SetLinesPerRow(CGetSetOptions::GetLinesPerRow(), true);
-
-	m_lstHeader.EnsureVisible(t, FALSE);
-
+		
 	MoveControls();
 
 	m_lstHeader.RefreshVisibleRows();

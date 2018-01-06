@@ -73,6 +73,8 @@ public:
 	int m_doubleClickGroupId;
 	DWORD m_doubleClickGroupStartTime;
 	CPowerManager m_PowerManager;
+	int m_startupScreenWidth;
+	int m_startupScreenHeight;
 
     void DoDittoCopyBufferPaste(int nCopyBuffer);
     void DoFirstTenPositionsPaste(int nPos);

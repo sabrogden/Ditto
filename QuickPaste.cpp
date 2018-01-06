@@ -348,6 +348,9 @@ void CQuickPaste::OnScreenResolutionChange()
 		CGetSetOptions::GetQuickPastePoint(point);
 		CGetSetOptions::GetQuickPasteSize(csSize);
 
+		csSize.cx = m_pwndPaste->m_DittoWindow.m_dpi.ScaleX(csSize.cx);
+		csSize.cy = m_pwndPaste->m_DittoWindow.m_dpi.ScaleY(csSize.cy);
+
 		m_pwndPaste->MoveWindow(point.x, point.y, csSize.cx, csSize.cy);
 	}
 	else
