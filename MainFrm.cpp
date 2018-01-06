@@ -1365,6 +1365,9 @@ LRESULT CMainFrame::OnResolutionChange(WPARAM wParam, LPARAM lParam)
 	if (m_startupScreenWidth != GetScreenWidth() ||
 		m_startupScreenHeight != GetScreenHeight())
 	{
+		m_startupScreenWidth = GetScreenWidth();
+		m_startupScreenHeight = GetScreenHeight();
+
 		SetTimer(SCREEN_RESOLUTION_CHANGED, 1000, NULL);
 	}
 

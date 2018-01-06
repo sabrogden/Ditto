@@ -188,7 +188,7 @@ public:
     bool SaveDescription(int nItem, CString text);
 
     //Menu Items
-    void SetLinesPerRow(int lines, bool force);
+    void SetLinesPerRow(int lines, bool force, bool resetListCount);
     void SetTransparency(int percent);
     void OnUpdateLinesPerRow(CCmdUI *pCmdUI, int nValue);
     void OnUpdateTransparency(CCmdUI *pCmdUI, int nValue);

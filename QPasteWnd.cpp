@@ -1829,31 +1829,46 @@ LRESULT CQPasteWnd::OnSearch(WPARAM wParam, LPARAM lParam)
 ///////////////////////////////////////////////////////////////////////
 void CQPasteWnd::OnMenuLinesperrow1()
 {
-    SetLinesPerRow(1, false);
+    SetLinesPerRow(1, false, true);
 }
 
 void CQPasteWnd::OnMenuLinesperrow2()
 {
-    SetLinesPerRow(2, false);
+    SetLinesPerRow(2, false, true);
 }
 
 void CQPasteWnd::OnMenuLinesperrow3()
 {
-    SetLinesPerRow(3, false);
+    SetLinesPerRow(3, false, true);
 }
 
 void CQPasteWnd::OnMenuLinesperrow4()
 {
-    SetLinesPerRow(4, false);
+    SetLinesPerRow(4, false, true);
 }
 
 void CQPasteWnd::OnMenuLinesperrow5()
 {
-    SetLinesPerRow(5, false);
+    SetLinesPerRow(5, false, true);
 }
 
-void CQPasteWnd::SetLinesPerRow(int lines, bool force)
+void CQPasteWnd::SetLinesPerRow(int lines, bool force, bool resetListCount)
 {
+	ARRAY Indexs;
+	int listCount = 0;
+
+	if (resetListCount)
+	{
+		//save and restore state, list box seems to pain funny (gap at header) if items are not reset
+		m_lstHeader.GetSelectionIndexes(Indexs);
+		if (Indexs.GetCount() <= 0)
+		{
+			Indexs.Add(0);
+		}
+		listCount = m_lstHeader.GetItemCount();
+		m_lstHeader.SetItemCountEx(0);
+	}
+
     CGetSetOptions::SetLinesPerRow(lines);
     m_lstHeader.SetNumberOfLinesPerRow(lines, force);
 
@@ -1864,7 +1879,12 @@ void CQPasteWnd::SetLinesPerRow(int lines, bool force)
 	m_cf_rtfCache.clear();
 	m_cf_NO_rtfCache.clear();
 
-    //FillList();
+	if (resetListCount)
+	{
+		m_lstHeader.SetItemCountEx(listCount);
+		m_lstHeader.SetListPos(Indexs[0]);
+		m_lstHeader.RefreshVisibleRows();
+	}
 }
 
 void CQPasteWnd::OnMenuTransparencyNone()
@@ -2488,7 +2508,7 @@ void CQPasteWnd::OnMenuQuickoptionsFont()
         CGetSetOptions::SetFont(*dlg.m_cf.lpLogFont);
 		(*dlg.m_cf.lpLogFont).lfHeight = m_DittoWindow.m_dpi.PointsToPixels((*dlg.m_cf.lpLogFont).lfHeight);
         m_lstHeader.SetLogFont(*dlg.m_cf.lpLogFont);
-		this->SetLinesPerRow(CGetSetOptions::GetLinesPerRow(), true);
+		this->SetLinesPerRow(CGetSetOptions::GetLinesPerRow(), true, true);
     }
 
     m_bHideWnd = true;
@@ -6637,6 +6657,15 @@ LRESULT CQPasteWnd::OnSearchFocused(WPARAM wParam, LPARAM lParam)
 
 LRESULT CQPasteWnd::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 {
+	ARRAY Indexs;
+	m_lstHeader.GetSelectionIndexes(Indexs);
+	if (Indexs.GetCount() <= 0)
+	{
+		Indexs.Add(0);
+	}
+	int c = m_lstHeader.GetItemCount();
+	m_lstHeader.SetItemCountEx(0);
+
 	int dpi = HIWORD(wParam);	
 	m_DittoWindow.OnDpiChanged(this, dpi);
 		
@@ -6661,15 +6690,16 @@ LRESULT CQPasteWnd::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 	m_lstHeader.OnDpiChanged();	
 
 	UpdateFont();
-	this->SetLinesPerRow(CGetSetOptions::GetLinesPerRow(), true);
+	this->SetLinesPerRow(CGetSetOptions::GetLinesPerRow(), true, false);
 		
 	MoveControls();
-
-	m_lstHeader.RefreshVisibleRows();
-
-	this->SetWindowPos(NULL, 0, 0, 0, 0, SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
-
+	
+	m_lstHeader.SetItemCountEx(c);
+	m_lstHeader.SetListPos(Indexs[0]);
+	
+	InvalidateNc();
 	this->Invalidate();
+	m_lstHeader.RefreshVisibleRows();
 	this->RedrawWindow();
 
 	return TRUE;
