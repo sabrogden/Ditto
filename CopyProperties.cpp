@@ -65,6 +65,7 @@ BEGIN_MESSAGE_MAP(CCopyProperties, CDialog)
 	//}}AFX_MSG_MAP
 	ON_WM_CTLCOLOR()
 	ON_LBN_SELCHANGE(IDC_COPY_DATA, &CCopyProperties::OnLbnSelchangeCopyData)
+	ON_WM_NCLBUTTONDOWN()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -494,10 +495,12 @@ void CCopyProperties::OnSize(UINT nType, int cx, int cy)
 {
 	CDialog::OnSize(nType, cx, cy);
 	
-
-	m_Resize.MoveControls(CSize(cx, cy));
+	if (((GetKeyState(VK_LBUTTON) & 0x100) != 0) &&
+		m_mouseDownOnCaption == false)
+	{
+		m_Resize.MoveControls(CSize(cx, cy));
+	}
 }
-
 
 HBRUSH CCopyProperties::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
@@ -573,4 +576,17 @@ void CCopyProperties::OnLbnSelchangeCopyData()
 			break;
 		}
 	}
+}
+
+
+void CCopyProperties::OnNcLButtonDown(UINT nHitTest, CPoint point)
+{
+	m_mouseDownOnCaption = false;
+
+	if (nHitTest == HTCAPTION)
+	{
+		m_mouseDownOnCaption = true;
+	}
+
+	CDialog::OnNcLButtonDown(nHitTest, point);
 }

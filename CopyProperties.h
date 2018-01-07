@@ -66,6 +66,7 @@ protected:
 	CClip *m_pMemoryClip;
 	CBrush m_brush;
 	CClip m_clip;
+	bool m_mouseDownOnCaption;
 
 	void LoadDataIntoCClip(CClip &Clip);
 	void LoadDataFromCClip(CClip &Clip);
@@ -85,6 +86,7 @@ protected:
 public:
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	afx_msg void OnLbnSelchangeCopyData();
+	afx_msg void OnNcLButtonDown(UINT nHitTest, CPoint point);
 };
 
 //{{AFX_INSERT_LOCATION}}
