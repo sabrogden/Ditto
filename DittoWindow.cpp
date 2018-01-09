@@ -47,8 +47,18 @@ void CDittoWindow::DoCreate(CWnd *pWnd)
 {
 	//EnableNonClientDpiScaling(pWnd->m_hWnd);
 
-	int dpi = GetDpiForWindow(pWnd->m_hWnd);
-	m_dpi.Update(dpi);
+	HMODULE hUser32 = LoadLibrary(_T("USER32.dll"));
+	if (hUser32)
+	{
+		typedef UINT(__stdcall *GetDpiForWindow)(HWND hwnd);
+
+		GetDpiForWindow getDpi = (GetDpiForWindow)GetProcAddress(hUser32, "GetDpiForWindow");
+		if (getDpi)
+		{
+			int dpi = getDpi(pWnd->m_hWnd);
+			m_dpi.Update(dpi);
+		}
+	}	
 
 	m_VertFont.CreateFont(m_dpi.PointsToPixels(18), 0, -900, 0, 400, FALSE, FALSE, 0, DEFAULT_CHARSET,
 							OUT_DEFAULT_PRECIS,	CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, 

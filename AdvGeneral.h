@@ -14,6 +14,7 @@ public:
 	enum { IDD = IDD_ADV_OPTIONS };
 
 	CDialogResizer m_Resize;
+	bool m_mouseDownOnCaption;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -30,4 +31,5 @@ public:
 	afx_msg void OnBnClickedButtonCopyScripts();
 	afx_msg void OnBnClickedButtonPasteScripts2();
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+	afx_msg void OnNcLButtonDown(UINT nHitTest, CPoint point);
 };

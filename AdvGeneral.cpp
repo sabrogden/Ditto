@@ -37,6 +37,7 @@ BEGIN_MESSAGE_MAP(CAdvGeneral, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_COPY_SCRIPTS, &CAdvGeneral::OnBnClickedButtonCopyScripts)
 	ON_BN_CLICKED(IDC_BUTTON_PASTE_SCRIPTS, &CAdvGeneral::OnBnClickedButtonPasteScripts2)
 	ON_WM_GETMINMAXINFO()
+	ON_WM_NCLBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -633,14 +634,20 @@ void CAdvGeneral::OnBnClickedOk()
 	CDialogEx::OnOK();
 }
 
-
 void CAdvGeneral::OnSize(UINT nType, int cx, int cy)
 {
 	CDialogEx::OnSize(nType, cx, cy);
 
-	m_Resize.MoveControls(CSize(cx, cy));
+	if (((GetKeyState(VK_LBUTTON) & 0x100) != 0) &&
+		m_mouseDownOnCaption == false)
+	{
+		m_Resize.MoveControls(CSize(cx, cy));
+	}
+	else
+	{
+		m_Resize.SetParent(m_hWnd);
+	}
 }
-
 
 void CAdvGeneral::OnBnClickedBtCompactAndRepair()
 {
@@ -667,7 +674,6 @@ void CAdvGeneral::OnBnClickedBtCompactAndRepair()
 	CATCH_SQLITE_EXCEPTION
 }
 
-
 void CAdvGeneral::OnBnClickedButtonCopyScripts()
 {
 	CDimWnd dim(this);
@@ -680,7 +686,6 @@ void CAdvGeneral::OnBnClickedButtonCopyScripts()
 		CGetSetOptions::SetCopyScriptsXml(e.m_xml.Save());
 	}
 }
-
 
 void CAdvGeneral::OnBnClickedButtonPasteScripts2()
 {
@@ -695,11 +700,22 @@ void CAdvGeneral::OnBnClickedButtonPasteScripts2()
 	}
 }
 
-
 void CAdvGeneral::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 {
 	lpMMI->ptMinTrackSize.x = 450;
 	lpMMI->ptMinTrackSize.y = 450;
 
 	CDialogEx::OnGetMinMaxInfo(lpMMI);
+}
+
+void CAdvGeneral::OnNcLButtonDown(UINT nHitTest, CPoint point)
+{
+	m_mouseDownOnCaption = false;
+
+	if (nHitTest == HTCAPTION)
+	{
+		m_mouseDownOnCaption = true;
+	}
+
+	CDialog::OnNcLButtonDown(nHitTest, point);
 }

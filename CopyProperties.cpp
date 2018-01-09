@@ -500,6 +500,10 @@ void CCopyProperties::OnSize(UINT nType, int cx, int cy)
 	{
 		m_Resize.MoveControls(CSize(cx, cy));
 	}
+	else
+	{
+		m_Resize.SetParent(m_hWnd);
+	}
 }
 
 HBRUSH CCopyProperties::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
