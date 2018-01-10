@@ -1105,6 +1105,7 @@ LRESULT CMainFrame::OnOpenCloseWindow(WPARAM wParam, LPARAM lParam)
 {
 	if(wParam)
 	{
+		StartKeyModifyerTimer();
 		ShowQPasteWithActiveWindowCheck();
 	}
 	else if(lParam)
