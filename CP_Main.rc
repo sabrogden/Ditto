@@ -390,10 +390,6 @@ BEGIN
                 MENUITEM "At Cursor",                   32803
                 MENUITEM "At Previous Position",        32804
             END
-            POPUP "First Ten Hot Keys"
-            BEGIN
-                MENUITEM "Show Hot Key Text",           32778
-            END
             POPUP "View Caption Bar On"
             BEGIN
                 MENUITEM "Top",                         32783
@@ -401,28 +397,12 @@ BEGIN
                 MENUITEM "Bottom",                      32781
                 MENUITEM "Left",                        32782
             END
-            POPUP "Double Clicking on Caption"
-            BEGIN
-                MENUITEM "Toggles Always on Top",       32814
-                MENUITEM "Rolls-up Window",             32815
-                MENUITEM "Toggles Always Show Description", 32816
-            END
+            MENUITEM SEPARATOR
             MENUITEM "Always on Top",               32784
-            MENUITEM "Auto Roll-up",                32791
-            MENUITEM "Always Show Description",     32813
-            MENUITEM "Prompt For New Group Names",  32817
             MENUITEM "Select Font",                 32844
+            MENUITEM SEPARATOR
             MENUITEM "Show Thumbnails",             32845
             MENUITEM "Draw RTF Text",               32846
-            MENUITEM "Paste Clip after selection",  32847
-            MENUITEM "Find As You Type",            32848
-            MENUITEM "Ensure Entire Window Is Visible", 32849
-            MENUITEM "Show Clips That are in Groups in Main List", 32850
-            MENUITEM "Prompt to Delete Clip",       32852
-            MENUITEM "Elevated privileges to paste into elevated apps", ID_QUICKOPTIONS_ELEVATEPREVILEGESTOPASTEINTOELEVATEDAPPS
-            MENUITEM "Show In Taskbar",             ID_QUICKOPTIONS_SHOWINTASKBAR
-            MENUITEM "Show text for first ten copy hot keys", ID_QUICKOPTIONS_SHOWTEXTFORFIRSTTENCOPYHOTKEYS
-            MENUITEM "Show indicator a clip has been pasted", ID_QUICKOPTIONS_SHOWINDICATORACLIPHASBEENPASTED
         END
         MENUITEM SEPARATOR
         MENUITEM "Global Hot Keys",             ID_MENU_GLOBALHOTKEYS32933
