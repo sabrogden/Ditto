@@ -1386,7 +1386,7 @@ BOOL CGetSetOptions::GetFont(LOGFONT &font)
 {
 	if(m_bFromIni && !m_bInConversion)
 	{
-		GetProfileFont("DisplayFont5", font);
+		GetProfileFont("DisplayFont6", font);
 
 		//Return true if there is a font name
 		//other wise load the default font below
@@ -1398,7 +1398,7 @@ BOOL CGetSetOptions::GetFont(LOGFONT &font)
 	else
 	{
 		DWORD dwLength = 0;
-		LPVOID lpVoid = GetProfileData("DisplayFont5", dwLength);
+		LPVOID lpVoid = GetProfileData("DisplayFont6", dwLength);
 		if(lpVoid)
 		{
 			if(sizeof(font) == dwLength)
@@ -1419,7 +1419,7 @@ BOOL CGetSetOptions::GetFont(LOGFONT &font)
 	}
 
 	ZeroMemory(&font, sizeof(font));
-	font.lfHeight = -10;
+	font.lfHeight = -13;
 	font.lfWeight = 400;
 	font.lfCharSet = 1;
 	STRCPY(font.lfFaceName, _T("Segoe UI"));
@@ -1430,11 +1430,11 @@ void CGetSetOptions::SetFont(LOGFONT &font)
 {
 	if(m_bFromIni)
 	{
-		SetProfileFont("DisplayFont5", font);
+		SetProfileFont("DisplayFont6", font);
 	}
 	else
 	{	
-		SetProfileData("DisplayFont5", &font, sizeof(LOGFONT));
+		SetProfileData("DisplayFont6", &font, sizeof(LOGFONT));
 	}
 }
 

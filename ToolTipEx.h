@@ -53,6 +53,8 @@ public:
 	void DoSearch();
 	void MoveControls();
 
+	BOOL SetLogFont(LPLOGFONT lpLogFont, BOOL bRedraw /*=TRUE*/);
+
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -71,6 +73,7 @@ protected:
 	CRect m_rectMargin;
 	CString m_csText;
 	CFont m_Font;
+	int m_fontHeight;
 	CString m_csRTF;
 	CRichEditCtrlEx m_RichEdit;
 	CWnd *m_pNotifyWnd;
@@ -92,12 +95,9 @@ protected:
 	bool m_bMaxSetTimer;
 	int m_lDelayMaxSeconds;
 	SnapWindow m_snap;
-	
 
 protected:
-	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);
-	BOOL SetLogFont(LPLOGFONT lpLogFont, BOOL bRedraw /*=TRUE*/);
-	LPLOGFONT GetSystemToolTipFont();
+	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);	
 	BOOL IsCursorInToolTip();
 	void HighlightSearchText();	
 	void ApplyWordWrap();

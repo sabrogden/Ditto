@@ -128,7 +128,7 @@ void QRCodeViewer::MoveControls()
 
 	if(m_desc.m_hWnd != NULL)
 	{
-		m_desc.MoveWindow(m_DittoWindow.m_dpi.ScaleX(5), cy - m_DittoWindow.m_dpi.ScaleX(m_descRowHeight) - m_DittoWindow.m_dpi.ScaleX(5), cx - m_DittoWindow.m_dpi.ScaleX(10), m_DittoWindow.m_dpi.ScaleX(m_descRowHeight));
+		m_desc.MoveWindow(m_DittoWindow.m_dpi.Scale(5), cy - m_DittoWindow.m_dpi.Scale(m_descRowHeight) - m_DittoWindow.m_dpi.Scale(5), cx - m_DittoWindow.m_dpi.Scale(10), m_DittoWindow.m_dpi.Scale(m_descRowHeight));
 	}
 }
 
@@ -138,7 +138,7 @@ void QRCodeViewer::OnPaint()
 
 	CRect thisRect;
 	GetClientRect(thisRect);
-	thisRect.bottom -= m_DittoWindow.m_dpi.ScaleX(m_descRowHeight) - m_DittoWindow.m_dpi.ScaleX(5);
+	thisRect.bottom -= m_DittoWindow.m_dpi.Scale(m_descRowHeight) - m_DittoWindow.m_dpi.Scale(5);
 	
 	int width = thisRect.Width() - (CGetSetOptions::GetQRCodeBorderPixels() * 2);
 	int height = min(width, (thisRect.Height() - (CGetSetOptions::GetQRCodeBorderPixels() * 2)));
@@ -296,7 +296,7 @@ LRESULT QRCodeViewer::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 
 	MoveControls();
 
-	m_logFont.lfHeight = m_DittoWindow.m_dpi.PointsToPixels(m_originalFontHeight);
+	m_logFont.lfHeight = m_DittoWindow.m_dpi.Scale(m_originalFontHeight);
 
 	m_font.Detach();
 	m_font.CreateFontIndirect(&m_logFont);

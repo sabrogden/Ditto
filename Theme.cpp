@@ -61,7 +61,7 @@ void CTheme::LoadDefaults()
 	m_descriptionWindowText = RGB(0, 0, 0);
 
 	m_captionSize = 25;
-	m_captionFontSize = 18;
+	m_captionFontSize = 19;
 }
 
 bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)

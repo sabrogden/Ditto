@@ -104,8 +104,8 @@ int CWndEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	SetWindowPos(NULL,
 		lpCreateStruct->x,
 		lpCreateStruct->y,
-		m_DittoWindow.m_dpi.ScaleX(lpCreateStruct->cx),
-		m_DittoWindow.m_dpi.ScaleY(lpCreateStruct->cy),
+		m_DittoWindow.m_dpi.Scale(lpCreateStruct->cx),
+		m_DittoWindow.m_dpi.Scale(lpCreateStruct->cy),
 		SWP_NOZORDER | SWP_NOACTIVATE);
 
 	SetCaptionColorActive(false, TRUE);

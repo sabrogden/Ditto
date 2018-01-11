@@ -120,16 +120,7 @@ BOOL COptionsGeneral::OnInitDialog()
 	CString csPath = CGetSetOptions::GetDBPath(false);
 	m_ePath.SetWindowText(csPath);
 	
-	if (CGetSetOptions::GetFont(m_LogFont))
-	{
-		m_Font.CreateFontIndirect(&m_LogFont);
-		m_btFont.SetFont(&m_Font);
-	}
-	else
-	{
-		CFont *ft = m_btFont.GetFont();
-		ft->GetLogFont(&m_LogFont);
-	}
+	CGetSetOptions::GetFont(m_LogFont);	
 
 	CString cs;
 	cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, GetFontSize(m_hWnd, m_LogFont));
@@ -536,26 +527,17 @@ void COptionsGeneral::OnBnClickedButtonTheme()
 
 void COptionsGeneral::OnBnClickedButtonDefaultFault()
 {
-	CFont *ft = m_btDefaultButton.GetFont();
-	ft->GetLogFont(&m_LogFont);
 
 	memset(&m_LogFont, 0, sizeof(m_LogFont));
 
-	m_LogFont.lfHeight = -10;
+	m_LogFont.lfHeight = -13;
 	m_LogFont.lfWeight = 400;
 	m_LogFont.lfCharSet = 1;
 	STRCPY(m_LogFont.lfFaceName, _T("Segoe UI"));
-
-	m_Font.DeleteObject();
-	m_Font.CreateFontIndirect(&m_LogFont);
-
-	m_btFont.SetFont(&m_Font);
-
+		
 	CString cs;
 	cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, GetFontSize(m_hWnd, m_LogFont));
-	m_btFont.SetWindowText(cs);
-
-	this->SetFont(&m_Font);
+	m_btFont.SetWindowText(cs);	
 }
 
 int COptionsGeneral::GetFontSize(HWND hWnd, const LOGFONT& lf)
@@ -586,14 +568,8 @@ void COptionsGeneral::OnBnClickedButtonFont()
 	CFontDialog dlg(&m_LogFont, (CF_TTONLY | CF_SCREENFONTS), 0, this);
 	if (dlg.DoModal() == IDOK)
 	{
-		m_Font.DeleteObject();
-
 		memcpy(&m_LogFont, dlg.m_cf.lpLogFont, sizeof(LOGFONT));
-
-		m_Font.CreateFontIndirect(&m_LogFont);
-
-		m_btFont.SetFont(&m_Font);
-
+				
 		CString cs;
 		cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, GetFontSize(m_hWnd, m_LogFont));
 		m_btFont.SetWindowText(cs);

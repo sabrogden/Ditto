@@ -97,7 +97,7 @@ void CGdiImageDrawer::Draw(CDC* pScreenDC, CDPI &dpi, CWnd *pWnd, int posX, int 
 	//Draw the png file
 	if (mouseDown)
 	{
-		int one = dpi.ScaleX(1);
+		int one = dpi.Scale(1);
 		posX += one;
 		posY += one;
 	}

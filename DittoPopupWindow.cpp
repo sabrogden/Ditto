@@ -29,7 +29,7 @@ int CDittoPopupWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	CWndEx::SetCaptionOn(CAPTION_TOP, false, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
 		
-	m_font.CreateFont(-m_DittoWindow.m_dpi.PointsToPixels(12), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("MS Sans Serif"));
+	m_font.CreateFont(-m_DittoWindow.m_dpi.Scale(12), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("MS Sans Serif"));
 	m_textLabel.Create(_T("test"), WS_CHILD | WS_VISIBLE, CRect(0, 0, 0, 0), this);
 	m_textLabel.SetFont(&m_font);
 	

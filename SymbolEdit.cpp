@@ -428,7 +428,7 @@ void CSymbolEdit::RecalcLayout()
 	{
 		if (m_windowDpi != NULL)
 		{
-			SetMargins(4, m_windowDpi->ScaleX(34));
+			SetMargins(m_windowDpi->Scale(4), m_windowDpi->Scale(34));
 		}
 	}
 }
@@ -507,7 +507,7 @@ void CSymbolEdit::OnPaint()
 	if (text.GetLength() == 0 && m_strPromptText.GetLength() > 0)
 	{
 		//if we aren't showing the close icon, then use the full space
-		textRect.right += m_windowDpi->ScaleX(16);
+		textRect.right += m_windowDpi->Scale(16);
 		//textRect.right -= LOWORD(margins);
 
 		oldFont = dc.SelectObject(&m_fontPrompt);
@@ -522,8 +522,8 @@ void CSymbolEdit::OnPaint()
 	int right = rect.right;
 	if ((text.GetLength() > 0 || this == GetFocus()))
 	{
-		m_searchesButtonRect.SetRect(rect.right - m_windowDpi->ScaleX(18), 0, rect.right, rect.bottom);
-		right = rect.right - m_windowDpi->ScaleX(18);
+		m_searchesButtonRect.SetRect(rect.right - m_windowDpi->Scale(18), 0, rect.right, rect.bottom);
+		right = rect.right - m_windowDpi->Scale(18);
 		m_searchesButton.Draw(&dc, *m_windowDpi, this, m_searchesButtonRect.left, 4, m_mouseHoveringOverSearches, m_mouseDownOnSearches);
 	}
 	else
@@ -536,7 +536,7 @@ void CSymbolEdit::OnPaint()
 	{
 		OutputDebugString(_T("showing close button\n"));
 
-		m_closeButtonRect.SetRect(right - m_windowDpi->ScaleX(16), 0, right, rect.bottom);
+		m_closeButtonRect.SetRect(right - m_windowDpi->Scale(16), 0, right, rect.bottom);
 		m_closeButton.Draw(&dc, *m_windowDpi, this, m_closeButtonRect.left, 4, m_mouseHoveringOverClose, m_mouseDownOnClose);
 	}
 	else
@@ -777,10 +777,10 @@ void CSymbolEdit::SetDpiInfo(CDPI *dpi)
 	m_windowDpi = dpi; 
 
 	m_closeButton.Reset();
-	m_closeButton.LoadStdImageDPI(m_windowDpi->GetDPIX(), search_close_16, Search_20, Search_24, Search_28, Search_32, _T("PNG"));
+	m_closeButton.LoadStdImageDPI(m_windowDpi->GetDPI(), search_close_16, Search_20, Search_24, Search_28, Search_32, _T("PNG"));
 
 	m_searchesButton.Reset();
-	m_searchesButton.LoadStdImageDPI(m_windowDpi->GetDPIX(), down_16, down_20, down_24, down_28, down_32, _T("PNG"));
+	m_searchesButton.LoadStdImageDPI(m_windowDpi->GetDPI(), down_16, down_20, down_24, down_28, down_32, _T("PNG"));
 
 	RecalcLayout();
 }

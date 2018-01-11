@@ -79,6 +79,7 @@ public:
 	bool m_useCustomWindowTitle;
 
 	int m_captionBorderWidth;
+	int m_captionFontSize;
 
 	int m_captionPosition;
 	int m_borderSize;

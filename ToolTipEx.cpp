@@ -108,19 +108,16 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 	m_RichEdit.SetEventMask(m_RichEdit.GetEventMask() | ENM_SELCHANGE | ENM_LINK | ENM_MOUSEEVENTS | ENM_SCROLLEVENTS);
 	m_RichEdit.SetAutoURLDetect(TRUE);
 
-
-	ApplyWordWrap();
-
-    SetLogFont(GetSystemToolTipFont(), FALSE);
+	ApplyWordWrap();	   
 
 	m_optionsButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, 2);
-	m_optionsButton.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPIX(), IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, cog_28, IDB_COG_32_32, _T("PNG"));
+	m_optionsButton.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPI(), IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, cog_28, IDB_COG_32_32, _T("PNG"));
 	m_optionsButton.SetToolTipText(theApp.m_Language.GetString(_T("DescriptionOptionsTooltip"), _T("Description Options")));
 	m_optionsButton.ShowWindow(SW_SHOW);
 
 	m_clipDataStatic.Create(_T("some text"), WS_CHILD | WS_VISIBLE | SS_SIMPLE, CRect(0, 0, 0, 0), this, 3);
 
-	m_clipDataFont.CreateFont(-m_DittoWindow.m_dpi.PointsToPixels(8), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+	m_clipDataFont.CreateFont(-m_DittoWindow.m_dpi.Scale(8), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 	m_clipDataStatic.SetFont(&m_clipDataFont);
 	m_clipDataStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
 	m_clipDataStatic.SetTextColor(RGB(80, 80, 80));
@@ -154,8 +151,8 @@ BOOL CToolTipEx::Show(CPoint point)
 		rect.top = point.y;
 		CSize size;
 		CGetSetOptions::GetDescWndSize(size);
-		rect.right = rect.left + m_DittoWindow.m_dpi.ScaleX(size.cx);
-		rect.bottom = rect.top + m_DittoWindow.m_dpi.ScaleY(size.cy);
+		rect.right = rect.left + m_DittoWindow.m_dpi.Scale(size.cx);
+		rect.bottom = rect.top + m_DittoWindow.m_dpi.Scale(size.cy);
 
 		EnsureWindowVisible(&rect);
 	}
@@ -310,7 +307,7 @@ void CToolTipEx::SaveWindowSize()
 		}
 
 		CSize s = rect.Size();
-		CGetSetOptions::SetDescWndSize(CSize(m_DittoWindow.m_dpi.UnscaleX(s.cx), m_DittoWindow.m_dpi.UnscaleX(s.cy)));
+		CGetSetOptions::SetDescWndSize(CSize(m_DittoWindow.m_dpi.UnScale(s.cx), m_DittoWindow.m_dpi.UnScale(s.cy)));
 		CGetSetOptions::SetDescWndPoint(rect.TopLeft());
 
 		OutputDebugString(_T("Saving tooltip size"));
@@ -508,6 +505,8 @@ CRect CToolTipEx::GetBoundsRect()
 		CString longestString;
         do
         {
+			nNumLines++;
+
             int newStart = m_csText.Find(_T("\n"), nStart);
 			if (newStart < 0)
 			{
@@ -528,7 +527,7 @@ CRect CToolTipEx::GetBoundsRect()
 				longestLength = length;
 			}           
 
-            nNumLines++;
+            
 			nStart = newStart + 1;
         }
         while(nStart >= 0 && nNumLines < 100);
@@ -604,23 +603,6 @@ CString CToolTipEx::GetFieldFromString(CString ref, int nIndex, TCHAR ch)
     return ref.Mid(nOldStart, nEnd - nOldStart - 1);
 }
 
-LPLOGFONT CToolTipEx::GetSystemToolTipFont()
-{
-    static LOGFONT LogFont;
-
-    NONCLIENTMETRICS ncm;
-    ncm.cbSize = sizeof(NONCLIENTMETRICS);
-    if(!SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS),
-       &ncm, 0))
-    {
-        return FALSE;
-    }
-
-    memcpy(&LogFont, &(ncm.lfStatusFont), sizeof(LOGFONT));
-
-    return  &LogFont;
-}
-
 BOOL CToolTipEx::SetLogFont(LPLOGFONT lpLogFont, BOOL bRedraw /*=TRUE*/)
 {
     ASSERT(lpLogFont);
@@ -633,6 +615,10 @@ BOOL CToolTipEx::SetLogFont(LPLOGFONT lpLogFont, BOOL bRedraw /*=TRUE*/)
 
     // Store font as the global default
     memcpy(&LogFont, lpLogFont, sizeof(LOGFONT));
+
+	m_fontHeight = lpLogFont->lfHeight;
+
+	LogFont.lfHeight = m_DittoWindow.m_dpi.Scale(LogFont.lfHeight);
 
     // Create the actual font object
     m_Font.DeleteObject();
@@ -672,13 +658,13 @@ void CToolTipEx::MoveControls()
 {
 	CRect cr;
 	GetClientRect(cr);
-	cr.DeflateRect(0, 0, 0, m_DittoWindow.m_dpi.ScaleY(21));
+	cr.DeflateRect(0, 0, 0, m_DittoWindow.m_dpi.Scale(21));
 	m_RichEdit.MoveWindow(cr);
 	m_imageViewer.MoveWindow(cr);
 
-	m_optionsButton.MoveWindow(cr.left, cr.bottom + m_DittoWindow.m_dpi.ScaleY(2), m_DittoWindow.m_dpi.ScaleX(17), m_DittoWindow.m_dpi.ScaleY(17));
+	m_optionsButton.MoveWindow(cr.left, cr.bottom + m_DittoWindow.m_dpi.Scale(2), m_DittoWindow.m_dpi.Scale(17), m_DittoWindow.m_dpi.Scale(17));
 
-	m_clipDataStatic.MoveWindow(cr.left + m_DittoWindow.m_dpi.ScaleX(19), cr.bottom + m_DittoWindow.m_dpi.ScaleY(2), cr.Width() - cr.left + m_DittoWindow.m_dpi.ScaleX(19), m_DittoWindow.m_dpi.ScaleY(17));
+	m_clipDataStatic.MoveWindow(cr.left + m_DittoWindow.m_dpi.Scale(19), cr.bottom + m_DittoWindow.m_dpi.Scale(2), cr.Width() - cr.left + m_DittoWindow.m_dpi.Scale(19), m_DittoWindow.m_dpi.Scale(17));
 
 	this->Invalidate();
 
@@ -1187,13 +1173,23 @@ LRESULT CToolTipEx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 		SWP_NOZORDER | SWP_NOACTIVATE);
 
 	m_optionsButton.Reset();
-	m_optionsButton.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPIX(), IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, cog_28, IDB_COG_32_32, _T("PNG"));
+	m_optionsButton.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPI(), IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, cog_28, IDB_COG_32_32, _T("PNG"));
 
 	m_clipDataFont.Detach();
-	m_clipDataFont.CreateFont(-m_DittoWindow.m_dpi.PointsToPixels(8), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+	m_clipDataFont.CreateFont(-m_DittoWindow.m_dpi.Scale(8), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 	m_clipDataStatic.SetFont(&m_clipDataFont);
 	m_clipDataStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
 	m_clipDataStatic.SetTextColor(RGB(80, 80, 80));
+
+	LOGFONT lf;
+	m_Font.GetLogFont(&lf);
+	lf.lfHeight = m_DittoWindow.m_dpi.Scale(m_fontHeight);
+
+	// Create the actual font object
+	m_Font.DeleteObject();
+	m_Font.CreateFontIndirect(&lf);
+
+	m_RichEdit.SetFont(&m_Font);
 
 	this->MoveControls();
 	this->Invalidate();

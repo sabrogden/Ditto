@@ -235,8 +235,8 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 		{
 			if (adjustRect)
 			{
-				crRect.right = crRect.left + m_pwndPaste->m_DittoWindow.m_dpi.ScaleX(crRect.Width());
-				crRect.bottom = crRect.top + m_pwndPaste->m_DittoWindow.m_dpi.ScaleY(crRect.Height());
+				crRect.right = crRect.left + m_pwndPaste->m_DittoWindow.m_dpi.Scale(crRect.Width());
+				crRect.bottom = crRect.top + m_pwndPaste->m_DittoWindow.m_dpi.Scale(crRect.Height());
 			}
 
 			m_pwndPaste->MoveWindow(crRect);
@@ -251,8 +251,8 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 		{
 			if (adjustRect)
 			{
-				crRect.right = crRect.left + m_pwndPaste->m_DittoWindow.m_dpi.ScaleX(crRect.Width());
-				crRect.bottom = crRect.top + m_pwndPaste->m_DittoWindow.m_dpi.ScaleY(crRect.Height());
+				crRect.right = crRect.left + m_pwndPaste->m_DittoWindow.m_dpi.Scale(crRect.Width());
+				crRect.bottom = crRect.top + m_pwndPaste->m_DittoWindow.m_dpi.Scale(crRect.Height());
 			}
 			m_pwndPaste->MoveWindow(crRect);
 		}
@@ -348,8 +348,8 @@ void CQuickPaste::OnScreenResolutionChange()
 		CGetSetOptions::GetQuickPastePoint(point);
 		CGetSetOptions::GetQuickPasteSize(csSize);
 
-		csSize.cx = m_pwndPaste->m_DittoWindow.m_dpi.ScaleX(csSize.cx);
-		csSize.cy = m_pwndPaste->m_DittoWindow.m_dpi.ScaleY(csSize.cy);
+		csSize.cx = m_pwndPaste->m_DittoWindow.m_dpi.Scale(csSize.cx);
+		csSize.cy = m_pwndPaste->m_DittoWindow.m_dpi.Scale(csSize.cy);
 
 		m_pwndPaste->MoveWindow(point.x, point.y, csSize.cx, csSize.cy);
 	}
