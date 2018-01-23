@@ -2230,12 +2230,55 @@
     </Midl>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\ChevronLeft_Black_36.png" />
+    <Image Include="res\ChevronLeft_Black_40.png" />
+    <Image Include="res\ChevronLeft_Black_44.png" />
+    <Image Include="res\ChevronLeft_Black_48.png" />
+    <Image Include="res\ChevronLeft_Black_52.png" />
+    <Image Include="res\ChevronLeft_Black_56.png" />
+    <Image Include="res\ChevronRight_Black_36.png" />
+    <Image Include="res\ChevronRight_Black_40.png" />
+    <Image Include="res\ChevronRight_Black_44.png" />
+    <Image Include="res\ChevronRight_Black_48.png" />
+    <Image Include="res\ChevronRight_Black_52.png" />
+    <Image Include="res\ChevronRight_Black_56.png" />
+    <Image Include="res\close_36.png" />
+    <Image Include="res\close_40.png" />
+    <Image Include="res\close_44.png" />
+    <Image Include="res\close_48.png" />
+    <Image Include="res\close_52.png" />
+    <Image Include="res\close_56.png" />
     <Image Include="res\down_16.png" />
     <Image Include="res\down_20.png" />
     <Image Include="res\down_24.png" />
     <Image Include="res\down_28.png" />
     <Image Include="res\down_32.png" />
     <Image Include="res\icon3.ico" />
+    <Image Include="res\maximize_36.png" />
+    <Image Include="res\maximize_40.png" />
+    <Image Include="res\maximize_44.png" />
+    <Image Include="res\maximize_48.png" />
+    <Image Include="res\maximize_512.png" />
+    <Image Include="res\maximize_52.png" />
+    <Image Include="res\maximize_56.png" />
+    <Image Include="res\minimize_36.png" />
+    <Image Include="res\minimize_40.png" />
+    <Image Include="res\minimize_44.png" />
+    <Image Include="res\minimize_48.png" />
+    <Image Include="res\minimize_52.png" />
+    <Image Include="res\minimize_56.png" />
+    <Image Include="res\open_folder_54.png" />
+    <Image Include="res\open_folder_60.png" />
+    <Image Include="res\open_folder_66.png" />
+    <Image Include="res\open_folder_72.png" />
+    <Image Include="res\open_folder_78.png" />
+    <Image Include="res\open_folder_84.png" />
+    <Image Include="res\system_menu_54.png" />
+    <Image Include="res\system_menu_60.png" />
+    <Image Include="res\system_menu_66.png" />
+    <Image Include="res\system_menu_72.png" />
+    <Image Include="res\system_menu_78.png" />
+    <Image Include="res\system_menu_84.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

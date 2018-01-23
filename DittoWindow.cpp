@@ -87,11 +87,11 @@ void CDittoWindow::DoCreate(CWnd *pWnd)
 
 	SetTitleTextHeight(pWnd);
 	
-	m_closeButton.LoadStdImageDPI(m_dpi.GetDPI(), Close_Black_16_16, Close_Black_20_20, Close_Black_24_24, Close_Black_28, Close_Black_32_32, _T("PNG"));
-	m_chevronRightButton.LoadStdImageDPI(m_dpi.GetDPI(), ChevronRight_Black_16_16, ChevronRight_Black_20_20, ChevronRight_Black_24_24, ChevronRight_Black_28, ChevronRight_Black_32_32, _T("PNG"));
-	m_chevronLeftButton.LoadStdImageDPI(m_dpi.GetDPI(), ChevronLeft_Black_16_16, ChevronLeft_Black_20_20, ChevronLeft_Black_24_24, ChevronLeft_Black_28, ChevronLeft_Black_32_32, _T("PNG"));
-	m_maximizeButton.LoadStdImageDPI(m_dpi.GetDPI(), IDB_MAXIMIZE_16_16, maximize_20, maximize_24, maximize_28, maximize_32, _T("PNG"));
-	m_minimizeButton.LoadStdImageDPI(m_dpi.GetDPI(), minimize_16, minimize_20, minimize_24, minimize_28, minimize_32, _T("PNG"));
+	m_closeButton.LoadStdImageDPI(m_dpi.GetDPI(), Close_Black_16_16, Close_Black_20_20, Close_Black_24_24, Close_Black_28, Close_Black_32_32, _T("PNG"), close_36, close_40, close_44, close_48, close_52, close_56);
+	m_chevronRightButton.LoadStdImageDPI(m_dpi.GetDPI(), ChevronRight_Black_16_16, ChevronRight_Black_20_20, ChevronRight_Black_24_24, ChevronRight_Black_28, ChevronRight_Black_32_32, _T("PNG"), ChevronRight_Black_36, ChevronRight_Black_40, ChevronRight_Black_44, ChevronRight_Black_48, ChevronRight_Black_52, ChevronRight_Black_56);
+	m_chevronLeftButton.LoadStdImageDPI(m_dpi.GetDPI(), ChevronLeft_Black_16_16, ChevronLeft_Black_20_20, ChevronLeft_Black_24_24, ChevronLeft_Black_28, ChevronLeft_Black_32_32, _T("PNG"), ChevronLeft_Black_36, ChevronLeft_Black_40, ChevronLeft_Black_44, ChevronLeft_Black_48, ChevronLeft_Black_52, ChevronLeft_Black_56);
+	m_maximizeButton.LoadStdImageDPI(m_dpi.GetDPI(), IDB_MAXIMIZE_16_16, maximize_20, maximize_24, maximize_28, maximize_32, _T("PNG"), maximize_36, maximize_40, maximize_44, maximize_48, maximize_52, maximize_56);
+	m_minimizeButton.LoadStdImageDPI(m_dpi.GetDPI(), minimize_16, minimize_20, minimize_24, minimize_28, minimize_32, _T("PNG"), minimize_36, minimize_40, minimize_44, minimize_48, minimize_52, minimize_56);
 	//m_windowIcon.LoadStdImageDPI(NewWindowIcon_24_14, NewWindowIcon_30, NewWindowIcon_36, NewWindowIcon_48, _T("PNG"));
 }
 
@@ -928,19 +928,19 @@ void CDittoWindow::OnDpiChanged(CWnd *pParent, int dpi)
 		DEFAULT_PITCH | FF_SWISS, _T("Segoe UI"));
 
 	m_closeButton.Reset();
-	m_closeButton.LoadStdImageDPI(m_dpi.GetDPI(), Close_Black_16_16, Close_Black_20_20, Close_Black_24_24, Close_Black_28, Close_Black_32_32, _T("PNG"));
+	m_closeButton.LoadStdImageDPI(m_dpi.GetDPI(), Close_Black_16_16, Close_Black_20_20, Close_Black_24_24, Close_Black_28, Close_Black_32_32, _T("PNG"), close_36, close_40, close_44, close_48, close_52, close_56);
 
 	m_chevronRightButton.Reset();
-	m_chevronRightButton.LoadStdImageDPI(m_dpi.GetDPI(), ChevronRight_Black_16_16, ChevronRight_Black_20_20, ChevronRight_Black_24_24, ChevronRight_Black_28, ChevronRight_Black_32_32, _T("PNG"));
+	m_chevronRightButton.LoadStdImageDPI(m_dpi.GetDPI(), ChevronRight_Black_16_16, ChevronRight_Black_20_20, ChevronRight_Black_24_24, ChevronRight_Black_28, ChevronRight_Black_32_32, _T("PNG"), ChevronRight_Black_36, ChevronRight_Black_40, ChevronRight_Black_44, ChevronRight_Black_48, ChevronRight_Black_52, ChevronRight_Black_56);
 	
 	m_chevronLeftButton.Reset();
-	m_chevronLeftButton.LoadStdImageDPI(m_dpi.GetDPI(), ChevronLeft_Black_16_16, ChevronLeft_Black_20_20, ChevronLeft_Black_24_24, ChevronLeft_Black_28, ChevronLeft_Black_32_32, _T("PNG"));
+	m_chevronLeftButton.LoadStdImageDPI(m_dpi.GetDPI(), ChevronLeft_Black_16_16, ChevronLeft_Black_20_20, ChevronLeft_Black_24_24, ChevronLeft_Black_28, ChevronLeft_Black_32_32, _T("PNG"), ChevronLeft_Black_36, ChevronLeft_Black_40, ChevronLeft_Black_44, ChevronLeft_Black_48, ChevronLeft_Black_52, ChevronLeft_Black_56);
 
 	m_maximizeButton.Reset();
-	m_maximizeButton.LoadStdImageDPI(m_dpi.GetDPI(), IDB_MAXIMIZE_16_16, maximize_20, maximize_24, maximize_28, maximize_32, _T("PNG"));
+	m_maximizeButton.LoadStdImageDPI(m_dpi.GetDPI(), IDB_MAXIMIZE_16_16, maximize_20, maximize_24, maximize_28, maximize_32, _T("PNG"), maximize_36, maximize_40, maximize_44, maximize_48, maximize_52, maximize_56);
 
 	m_minimizeButton.Reset();
-	m_minimizeButton.LoadStdImageDPI(m_dpi.GetDPI(), minimize_16, minimize_20, minimize_24, minimize_28, minimize_32, _T("PNG"));
+	m_minimizeButton.LoadStdImageDPI(m_dpi.GetDPI(), minimize_16, minimize_20, minimize_24, minimize_28, minimize_32, _T("PNG"), minimize_36, minimize_40, minimize_44, minimize_48, minimize_52, minimize_56);
 
 	SetTitleTextHeight(pParent);
 

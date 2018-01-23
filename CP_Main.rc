@@ -1449,6 +1449,90 @@ down_28                 PNG                     "res\\down_28.png"
 
 down_32                 PNG                     "res\\down_32.png"
 
+close_36                PNG                     "res\\close_36.png"
+
+close_40                PNG                     "res\\close_40.png"
+
+close_44                PNG                     "res\\close_44.png"
+
+close_48                PNG                     "res\\close_48.png"
+
+close_52                PNG                     "res\\close_52.png"
+
+close_56                PNG                     "res\\close_56.png"
+
+open_folder_54          PNG                     "res\\open_folder_54.png"
+
+open_folder_60          PNG                     "res\\open_folder_60.png"
+
+open_folder_66          PNG                     "res\\open_folder_66.png"
+
+open_folder_72          PNG                     "res\\open_folder_72.png"
+
+open_folder_78          PNG                     "res\\open_folder_78.png"
+
+open_folder_84          PNG                     "res\\open_folder_84.png"
+
+system_menu_54          PNG                     "res\\system_menu_54.png"
+
+system_menu_60          PNG                     "res\\system_menu_60.png"
+
+system_menu_66          PNG                     "res\\system_menu_66.png"
+
+system_menu_72          PNG                     "res\\system_menu_72.png"
+
+system_menu_78          PNG                     "res\\system_menu_78.png"
+
+system_menu_84          PNG                     "res\\system_menu_84.png"
+
+ChevronLeft_Black_36    PNG                     "res\\ChevronLeft_Black_36.png"
+
+ChevronLeft_Black_40    PNG                     "res\\ChevronLeft_Black_40.png"
+
+ChevronLeft_Black_44    PNG                     "res\\ChevronLeft_Black_44.png"
+
+ChevronLeft_Black_48    PNG                     "res\\ChevronLeft_Black_48.png"
+
+ChevronLeft_Black_52    PNG                     "res\\ChevronLeft_Black_52.png"
+
+ChevronLeft_Black_56    PNG                     "res\\ChevronLeft_Black_56.png"
+
+ChevronRight_Black_36   PNG                     "res\\ChevronRight_Black_36.png"
+
+ChevronRight_Black_40   PNG                     "res\\ChevronRight_Black_40.png"
+
+ChevronRight_Black_44   PNG                     "res\\ChevronRight_Black_44.png"
+
+ChevronRight_Black_48   PNG                     "res\\ChevronRight_Black_48.png"
+
+ChevronRight_Black_52   PNG                     "res\\ChevronRight_Black_52.png"
+
+ChevronRight_Black_56   PNG                     "res\\ChevronRight_Black_56.png"
+
+maximize_36             PNG                     "res\\maximize_36.png"
+
+maximize_40             PNG                     "res\\maximize_40.png"
+
+maximize_44             PNG                     "res\\maximize_44.png"
+
+maximize_48             PNG                     "res\\maximize_48.png"
+
+maximize_52             PNG                     "res\\maximize_52.png"
+
+maximize_56             PNG                     "res\\maximize_56.png"
+
+minimize_36             PNG                     "res\\minimize_36.png"
+
+minimize_40             PNG                     "res\\minimize_40.png"
+
+minimize_44             PNG                     "res\\minimize_44.png"
+
+minimize_48             PNG                     "res\\minimize_48.png"
+
+minimize_52             PNG                     "res\\minimize_52.png"
+
+minimize_56             PNG                     "res\\minimize_56.png"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

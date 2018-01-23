@@ -82,23 +82,47 @@ BEGIN_MESSAGE_MAP(CGdipButton, CButton)
 END_MESSAGE_MAP()
 
 
-BOOL CGdipButton::LoadStdImageDPI(int dpiX, UINT id96, UINT id120, UINT id144, UINT id168, UINT id192, LPCTSTR pType)
+BOOL CGdipButton::LoadStdImageDPI(int dpi, UINT id96, UINT id120, UINT id144, UINT id168, UINT id192, LPCTSTR pType, UINT id225, UINT id250, UINT id275, UINT id300, UINT id325, UINT id350)
 {
 	BOOL ret = FALSE;
 
-	if (dpiX >= 192)
+	if (dpi >= 336 && id350 != 0)
+	{
+		ret = LoadStdImage(id350, pType);
+	}
+	else if (dpi >= 312 && id325 != 0)
+	{
+		ret = LoadStdImage(id325, pType);
+	}
+	else if (dpi >= 288 && id300 != 0)
+	{
+		ret = LoadStdImage(id300, pType);
+	}
+	else if (dpi >= 264 && id275 != 0)
+	{
+		ret = LoadStdImage(id275, pType);
+	}
+	else if (dpi >= 240 && id250 != 0)
+	{
+		ret = LoadStdImage(id250, pType);
+	}
+	else if (dpi >= 216 && id225 != 0)
+	{
+		ret = LoadStdImage(id225, pType);
+	}
+	else if (dpi >= 192)
 	{
 		ret = LoadStdImage(id192, pType);
 	}
-	else if (dpiX >= 168)
+	else if (dpi >= 168)
 	{
 		ret = LoadStdImage(id168, pType);
 	}
-	else if (dpiX >= 144)
+	else if (dpi >= 144)
 	{
 		ret = LoadStdImage(id144, pType);
 	}
-	else if (dpiX >= 120)
+	else if (dpi >= 120)
 	{
 		ret = LoadStdImage(id120, pType);
 	}
