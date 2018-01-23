@@ -271,6 +271,8 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	m_pwndPaste->SetForegroundWindow();
 
 	Log(StrF(_T("END of ShowQPasteWnd, AtPrevPos: %d, FromKeyboard: %d, RefillList: %d, Position, %d %d %d %d"), bAtPrevPos, bFromKeyboard, bReFillList, crRect.left, crRect.top, crRect.right, crRect.bottom));
+
+	m_forceResizeOnNextShow = false;
 }
 
 void CQuickPaste::MoveSelection(bool down)
