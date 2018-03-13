@@ -33,7 +33,7 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 	CString lastMd5;
 
 	m_pProgress = pProgress;
-	m_csRecievingFromIP = csIP;
+	m_csReceivingFromIP = csIP;
 	m_Sock.SetSocket(sock);
 	m_Sock.SetProgressBar(pProgress);
 
@@ -50,7 +50,7 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 			{
 				m_pProgress->SetNumFiles(nNumFiles);
 			}
-			LogSendRecieveInfo(StrF(_T("Start recieving files File Count: %d"), nNumFiles));
+			LogSendRecieveInfo(StrF(_T("Start receiving files File Count: %d"), nNumFiles));
 			break;
 		case MyEnums::DATA_START:
 		{
@@ -74,7 +74,7 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 
 			ULONG lFileSize = (ULONG)Info.m_lParameter1;
 
-			LogSendRecieveInfo(StrF(_T("START of recieving the file %s, size: %d, File %d of %d"), csFileName, lFileSize, nFilesRecieved, nNumFiles));
+			LogSendRecieveInfo(StrF(_T("START of receiving the file %s, size: %d, File %d of %d"), csFileName, lFileSize, nFilesRecieved, nNumFiles));
 
 			long lRecieveRet = RecieveFileData(lFileSize, csFileName, lastMd5);
 			if(lRecieveRet == USER_CANCELED)
@@ -85,11 +85,11 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 			}
 			else if(lRecieveRet == FALSE)
 			{
-				LogSendRecieveInfo(StrF(_T("Error recieving the file %s"), csFileName));
+				LogSendRecieveInfo(StrF(_T("Error receiving the file %s"), csFileName));
 			}
 			else
 			{
-				LogSendRecieveInfo(StrF(_T("END of recieving the file %s, size: %d"), csFileName, lFileSize));
+				LogSendRecieveInfo(StrF(_T("END of receiving the file %s, size: %d"), csFileName, lFileSize));
 				lRet = TRUE;
 			}
 		}
@@ -167,7 +167,7 @@ long CFileRecieve::RecieveFileData(ULONG lFileSize, CString csFileName, CString 
 {
 	CString csFile = CGetSetOptions::GetPath(PATH_REMOTE_FILES);
 	CreateDirectory(csFile, NULL);
-	csFile += m_csRecievingFromIP + "\\";
+	csFile += m_csReceivingFromIP + "\\";
 	CreateDirectory(csFile, NULL);
 	
 	nsPath::CPath path(csFileName);

@@ -354,7 +354,7 @@ HGLOBAL CClient::RequestCopiedFiles(CClipFormat &HDropFormat, CString csIP, CStr
 			}
 			else	
 			{
-				csErrorString = _T("Error recieving files.");
+				csErrorString = _T("Error receiving files.");
 				if (lRet == MD5_MISMATCH)
 				{
 					csErrorString += _T(" MD5 Match Error.");

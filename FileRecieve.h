@@ -25,7 +25,7 @@ protected:
 
 protected:
 	CRecieveSocket m_Sock;
-	CString m_csRecievingFromIP;
+	CString m_csReceivingFromIP;
 	CStringArray m_RecievedFiles;
 	CFileTransferProgressDlg *m_pProgress;
 };
