@@ -288,6 +288,7 @@ public:
 	bool DoActionPromptSendToFriend();
 	bool DoActionSaveCF_HDROP_FileData();
 	bool DoActionToggleClipboardConnection();
+	bool DoActionPasteDontMoveClip();
 
 	bool OnNewClip();
 	bool OnImportClip();
@@ -528,4 +529,7 @@ public:
 	afx_msg void OnCliporderMovetolast();
 	afx_msg void OnUpdateCliporderMovetolast(CCmdUI *pCmdUI);
 	afx_msg LRESULT OnCopyClip(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnSpecialpastePasteDontUpdateOrder();
+	afx_msg void OnUpdateOnSpecialPasteDontUpdateOrder(CCmdUI *pCmdUI);
+
 };

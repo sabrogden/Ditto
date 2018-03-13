@@ -35,7 +35,7 @@ BOOL CProcessPaste::DoPaste()
 			// MarkAsPasted() must be done first since it makes use of
 			//  m_pOle->m_ClipIDs and m_pOle is inaccessible after
 			//  SetClipboard is called.
-			MarkAsPasted();
+			MarkAsPasted(m_pasteOptions.m_updateClipOrder);
 
 			// Ignore the clipboard change that we will cause IF:
 			// 1) we are pasting a single element, since the element is already
@@ -103,7 +103,7 @@ BOOL CProcessPaste::DoDrag()
 		DROPEFFECT de = m_pOle->DoDragDrop(DROPEFFECT_COPY);
 		if (de != DROPEFFECT_NONE)
 		{
-			MarkAsPasted();
+			MarkAsPasted(m_pasteOptions.m_updateClipOrder);
 			ret = TRUE;
 		}		
 	}
@@ -148,7 +148,7 @@ BOOL CProcessPaste::DoDrag()
 	return ret;
 }
 
-void CProcessPaste::MarkAsPasted()
+void CProcessPaste::MarkAsPasted(bool updateClipOrder)
 {
 	Log(_T("start of MarkAsPasted"));
 
@@ -163,6 +163,7 @@ void CProcessPaste::MarkAsPasted()
 		pData->ids.Add(clips.ElementAt(i));
 	}
 	pData->pastedFromGroup = m_pastedFromGroup;
+	pData->updateClipOrder = updateClipOrder;
 
 	//Moved to a thread because when running from from U3 devices the write is time consuming
 	AfxBeginThread(CProcessPaste::MarkAsPastedThread, (LPVOID)pData, THREAD_PRIORITY_LOWEST);
@@ -190,6 +191,7 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 			int clipCount = pData->ids.GetCount();
 
 			if(g_Opt.m_bUpdateTimeOnPaste && 
+				pData->updateClipOrder &&
 				clipCount == 1)
 			{
 				for (int i = 0; i < clipCount; i++)

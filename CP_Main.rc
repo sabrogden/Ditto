@@ -261,6 +261,8 @@ BEGIN
             MENUITEM "Paste + Two Line Feeds",      ID_SPECIALPASTE_PASTE32919
             MENUITEM "Paste + Current Time",        ID_SPECIALPASTE_PASTE32927
             MENUITEM SEPARATOR
+            MENUITEM "Paste, Don't Change Clip Order", ID_SPECIALPASTE_PASTE32945
+            MENUITEM SEPARATOR
             MENUITEM "Typoglycemia",                ID_SPECIALPASTE_TYPOGLYCEMIA
         END
         POPUP "Compare"

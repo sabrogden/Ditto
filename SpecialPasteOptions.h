@@ -21,6 +21,7 @@ public:
 	DWORD m_delayRenderLockout;
 	bool m_dragDropFilesOnly;
 	CString m_pasteScriptGuid;
+	bool m_updateClipOrder;
 
 	bool LimitFormatsToText() 
 	{ 

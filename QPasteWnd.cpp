@@ -302,6 +302,8 @@ ON_COMMAND_RANGE(ChaiScriptMenuStartId, (ChaiScriptMenuStartId + MaxChaiScripts 
 ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
 ON_COMMAND(ID_CLIPORDER_MOVETOLAST, &CQPasteWnd::OnCliporderMovetolast)
 ON_UPDATE_COMMAND_UI(ID_CLIPORDER_MOVETOLAST, &CQPasteWnd::OnUpdateCliporderMovetolast)
+ON_COMMAND(ID_SPECIALPASTE_PASTE32945, &CQPasteWnd::OnSpecialpastePasteDontUpdateOrder)
+ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_PASTE32945, &CQPasteWnd::OnUpdateOnSpecialPasteDontUpdateOrder)
 END_MESSAGE_MAP()
 
 
@@ -3205,9 +3207,21 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::PASTE_SCRIPT:
 		ret = DoActionPasteScript(a.RefData);
 		break;
+	case ActionEnums::PASTE_DONT_MOVE_CLIP:
+		ret = DoActionPasteDontMoveClip();
+		break;
 	}
 
 	return ret;
+}
+
+bool CQPasteWnd::DoActionPasteDontMoveClip()
+{
+	CSpecialPasteOptions pasteOptions;
+	pasteOptions.m_updateClipOrder = false;
+	OpenSelection(pasteOptions);
+
+	return true;
 }
 
 bool CQPasteWnd::DoActionPasteScript(CString scriptGuid)
@@ -6793,4 +6807,21 @@ void CQPasteWnd::OnUpdateCliporderMovetolast(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::MOVE_CLIP_LAST);
+}
+
+
+void CQPasteWnd::OnSpecialpastePasteDontUpdateOrder()
+{
+	DoAction(ActionEnums::PASTE_DONT_MOVE_CLIP);
+}
+
+
+void CQPasteWnd::OnUpdateOnSpecialPasteDontUpdateOrder(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_DONT_MOVE_CLIP);
 }

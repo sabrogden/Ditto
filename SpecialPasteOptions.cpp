@@ -18,6 +18,7 @@ CSpecialPasteOptions::CSpecialPasteOptions()
 	m_delayRenderLockout = 0;
 	m_dragDropFilesOnly = false;
 	m_pasteScriptGuid = _T("");
+	m_updateClipOrder = true;
 }
 
 CSpecialPasteOptions::~CSpecialPasteOptions()

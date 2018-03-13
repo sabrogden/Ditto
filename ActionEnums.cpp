@@ -305,6 +305,8 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case PASTE_SCRIPT:
 		val = "Paste Script";
 		break;
+	case PASTE_DONT_MOVE_CLIP:
+		val = "Paste, Don't Change Clip Order";
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);

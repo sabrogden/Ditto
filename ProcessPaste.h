@@ -32,6 +32,7 @@ public:
 	{
 		CClipIDs ids;
 		bool pastedFromGroup;
+		bool updateClipOrder;
 	};
 	
 	CProcessPaste();
@@ -42,7 +43,7 @@ public:
 	BOOL DoPaste();
 	BOOL DoDrag();
 
-	void MarkAsPasted();
+	void MarkAsPasted(bool updateClipOrder);
 	static UINT MarkAsPastedThread(LPVOID pParam);
 };
 
