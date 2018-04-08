@@ -120,7 +120,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 
 	m_clipDataStatic.Create(_T("some text"), WS_CHILD | WS_VISIBLE | SS_SIMPLE, CRect(0, 0, 0, 0), this, 3);
 
-	m_clipDataFont.CreateFont(-m_DittoWindow.m_dpi.Scale(8), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+	m_clipDataFont.CreateFont(-m_DittoWindow.m_dpi.Scale(11), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 	m_clipDataStatic.SetFont(&m_clipDataFont);
 	m_clipDataStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
 	m_clipDataStatic.SetTextColor(RGB(80, 80, 80));
@@ -665,9 +665,9 @@ void CToolTipEx::MoveControls()
 	m_RichEdit.MoveWindow(cr);
 	m_imageViewer.MoveWindow(cr);
 
-	m_optionsButton.MoveWindow(cr.left, cr.bottom + m_DittoWindow.m_dpi.Scale(2), m_DittoWindow.m_dpi.Scale(17), m_DittoWindow.m_dpi.Scale(17));
+	m_optionsButton.MoveWindow(cr.left, cr.bottom + m_DittoWindow.m_dpi.Scale(3), m_DittoWindow.m_dpi.Scale(17), m_DittoWindow.m_dpi.Scale(17));
 
-	m_clipDataStatic.MoveWindow(cr.left + m_DittoWindow.m_dpi.Scale(19), cr.bottom + m_DittoWindow.m_dpi.Scale(2), cr.Width() - cr.left + m_DittoWindow.m_dpi.Scale(19), m_DittoWindow.m_dpi.Scale(17));
+	m_clipDataStatic.MoveWindow(cr.left + m_DittoWindow.m_dpi.Scale(19), cr.bottom + m_DittoWindow.m_dpi.Scale(4), cr.Width() - cr.left + m_DittoWindow.m_dpi.Scale(19), m_DittoWindow.m_dpi.Scale(17));
 
 	this->Invalidate();
 
