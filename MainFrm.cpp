@@ -835,7 +835,7 @@ BOOL CMainFrame::PreTranslateMessage(MSG *pMsg)
 {
 	//forward the mouse wheel onto the window under the cursor
 	//normally windows only sends it to the window with focus, bypass this
-	if (pMsg->message == WM_MOUSEWHEEL &&
+	if ((pMsg->message == WM_MOUSEWHEEL || pMsg->message == WM_MOUSEHWHEEL) &&
 		::GetCapture() == nullptr)
 	{
 		POINT mouse;
@@ -849,8 +849,13 @@ BOOL CMainFrame::PreTranslateMessage(MSG *pMsg)
 			if (winProcessId == ::GetCurrentProcessId()) //no-fail!
 			{
 				pMsg->hwnd = hwndFromPoint;
+
+				
 			}
 		}
+		
+		//if (GetKeyState(VK_SHIFT) & 0x8000)
+		//	pMsg->message = WM_MOUSEHWHEEL;
 	}
 
     return CFrameWnd::PreTranslateMessage(pMsg);

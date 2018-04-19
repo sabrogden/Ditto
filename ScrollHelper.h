@@ -40,6 +40,7 @@ public:
     void   OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
     void   OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
     BOOL   OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+	BOOL   OnMouseHWheel(UINT nFlags, short zDelta, CPoint pt);
     void   OnSize(UINT nType, int cx, int cy);
 
 private:

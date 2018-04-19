@@ -32,6 +32,7 @@ BEGIN_MESSAGE_MAP(CImageViewer, CWnd)
 	ON_WM_SIZE()
 	ON_WM_SETCURSOR()
 	ON_WM_LBUTTONUP()
+	ON_WM_MOUSEHWHEEL()
 END_MESSAGE_MAP()
 
 BOOL CImageViewer::Create(CWnd* pParent)
@@ -174,6 +175,13 @@ BOOL CImageViewer::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	return wasScrolled;
 }
 
+void CImageViewer::OnMouseHWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+	BOOL wasScrolled = m_scrollHelper.OnMouseHWheel(nFlags, zDelta, pt);
+
+	CWnd::OnMouseHWheel(nFlags, zDelta, pt);
+}
+
 void CImageViewer::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
@@ -219,3 +227,6 @@ void CImageViewer::OnLButtonUp(UINT nFlags, CPoint point)
 
 	CWnd::OnLButtonUp(nFlags, point);
 }
+
+
+

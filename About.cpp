@@ -66,6 +66,11 @@ BOOL CAbout::OnInitDialog()
 
 	CString csText;
 	csText = "    Version " + cs;
+#if _WIN64
+	csText += " 64bit";
+#else
+	csText += " 32bit";
+#endif
 	m_List.AddString(csText);
 
 	const char *SqliteVersion = sqlite3_libversion();
