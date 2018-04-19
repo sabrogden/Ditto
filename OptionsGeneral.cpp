@@ -114,6 +114,14 @@ BOOL COptionsGeneral::OnInitDialog()
 	m_eExpireAfter.SetNumber(CGetSetOptions::GetExpiredEntries());
 	m_eMaxSavedCopies.SetNumber(CGetSetOptions::GetMaxEntries());
 
+	if(CGetSetOptions::GetDisableExpireClipsConfig())
+	{
+		m_btMaximumCheck.EnableWindow(FALSE);
+		m_btExpire.EnableWindow(FALSE);
+		m_eExpireAfter.EnableWindow(FALSE);
+		m_eMaxSavedCopies.EnableWindow(FALSE);
+	}
+
 	m_copyAppInclude.SetWindowText(g_Opt.GetCopyAppInclude());
 	m_copyAppExclude.SetWindowText(g_Opt.GetCopyAppExclude());
 

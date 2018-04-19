@@ -599,6 +599,8 @@ public:
 	static BOOL GetCleanRTFBeforeDrawing();
 	static void SetCleanRTFBeforeDrawing(BOOL val);
 
+	static BOOL GetDisableExpireClipsConfig();
+	static void SetDisableExpireClipsConfig(BOOL val);
 };
 
 // global for easy access and for initialization of fast access variables

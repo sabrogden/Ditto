@@ -2686,3 +2686,13 @@ void CGetSetOptions::SetCleanRTFBeforeDrawing(BOOL val)
 	m_cleanRTFBeforeDrawing = true;
 	SetProfileLong("CleanRTFBeforeDrawing", val);
 }
+
+BOOL CGetSetOptions::GetDisableExpireClipsConfig()
+{
+	return GetProfileLong("DisableExpireClipsConfig", FALSE);
+}
+
+void CGetSetOptions::SetDisableExpireClipsConfig(BOOL val)
+{
+	SetProfileLong("DisableExpireClipsConfig", val);
+}
