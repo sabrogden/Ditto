@@ -38,33 +38,33 @@ CToolTipEx::~CToolTipEx()
 }
 
 BEGIN_MESSAGE_MAP(CToolTipEx, CWnd)
-//{{AFX_MSG_MAP(CToolTipEx)
-ON_WM_PAINT()
-ON_WM_SIZE()
-ON_WM_NCHITTEST()
-ON_WM_ACTIVATE()
-ON_WM_TIMER()
-ON_WM_NCLBUTTONDBLCLK()
-ON_WM_NCPAINT()
-ON_WM_NCCALCSIZE()
-ON_WM_NCLBUTTONDOWN()
-ON_WM_NCMOUSEMOVE()
-ON_WM_NCLBUTTONUP()
-ON_WM_ERASEBKGND()
-ON_COMMAND(ID_FIRST_REMEMBERWINDOWPOSITION, &CToolTipEx::OnRememberwindowposition)
-ON_COMMAND(ID_FIRST_SIZEWINDOWTOCONTENT, &CToolTipEx::OnSizewindowtocontent)
-ON_COMMAND(ID_FIRST_SCALEIMAGESTOFITWINDOW, &CToolTipEx::OnScaleimagestofitwindow)
-ON_COMMAND(2, OnOptions)
-ON_WM_RBUTTONDOWN()
-ON_WM_SETFOCUS()
-ON_COMMAND(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, &CToolTipEx::OnFirstHidedescriptionwindowonm)
-ON_COMMAND(ID_FIRST_WRAPTEXT, &CToolTipEx::OnFirstWraptext)
-ON_WM_WINDOWPOSCHANGING()
-ON_COMMAND(ID_FIRST_ALWAYSONTOP, &CToolTipEx::OnFirstAlwaysontop)
-ON_NOTIFY(EN_MSGFILTER, 1, &CToolTipEx::OnEnMsgfilterRichedit21)
-ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
-ON_WM_MOVING()
-ON_WM_ENTERSIZEMOVE()
+	//{{AFX_MSG_MAP(CToolTipEx)
+	ON_WM_PAINT()
+	ON_WM_SIZE()
+	ON_WM_NCHITTEST()
+	ON_WM_ACTIVATE()
+	ON_WM_TIMER()
+	ON_WM_NCLBUTTONDBLCLK()
+	ON_WM_NCPAINT()
+	ON_WM_NCCALCSIZE()
+	ON_WM_NCLBUTTONDOWN()
+	ON_WM_NCMOUSEMOVE()
+	ON_WM_NCLBUTTONUP()
+	ON_WM_ERASEBKGND()
+	ON_COMMAND(ID_FIRST_REMEMBERWINDOWPOSITION, &CToolTipEx::OnRememberwindowposition)
+	ON_COMMAND(ID_FIRST_SIZEWINDOWTOCONTENT, &CToolTipEx::OnSizewindowtocontent)
+	ON_COMMAND(ID_FIRST_SCALEIMAGESTOFITWINDOW, &CToolTipEx::OnScaleimagestofitwindow)
+	ON_COMMAND(2, OnOptions)
+	ON_WM_RBUTTONDOWN()
+	ON_WM_SETFOCUS()
+	ON_COMMAND(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, &CToolTipEx::OnFirstHidedescriptionwindowonm)
+	ON_COMMAND(ID_FIRST_WRAPTEXT, &CToolTipEx::OnFirstWraptext)
+	ON_WM_WINDOWPOSCHANGING()
+	ON_COMMAND(ID_FIRST_ALWAYSONTOP, &CToolTipEx::OnFirstAlwaysontop)
+	ON_NOTIFY(EN_MSGFILTER, 1, &CToolTipEx::OnEnMsgfilterRichedit21)
+	ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
+	ON_WM_MOVING()
+	ON_WM_ENTERSIZEMOVE()
 END_MESSAGE_MAP()
 
 
@@ -110,7 +110,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 
 	m_RichEdit.SetEventMask(m_RichEdit.GetEventMask() | ENM_SELCHANGE | ENM_LINK | ENM_MOUSEEVENTS | ENM_SCROLLEVENTS);
 	m_RichEdit.SetAutoURLDetect(TRUE);
-
+	
 	ApplyWordWrap();	   
 
 	m_optionsButton.Create(NULL, WS_CHILD | BS_OWNERDRAW | WS_TABSTOP, CRect(0, 0, 0, 0), this, 2);
@@ -135,15 +135,36 @@ BOOL CToolTipEx::Show(CPoint point)
 	m_reducedWindowSize = false;
     if(m_imageViewer.m_pGdiplusBitmap)
     {
-        m_RichEdit.ShowWindow(SW_HIDE);
 		m_imageViewer.ShowWindow(SW_SHOW);
+
+		m_RichEdit.ShowWindow(SW_HIDE);
+		if (::IsWindow(m_browser.m_hWnd))
+		{
+			m_browser.ShowWindow(SW_HIDE);
+		}
 
 		m_imageViewer.UpdateBitmapSize();
     }
+	else if (m_html.GetLength() > 0)
+	{
+		if (::IsWindow(m_browser.m_hWnd))
+		{
+			m_browser.ShowWindow(SW_SHOW);
+		}
+
+		m_imageViewer.ShowWindow(SW_HIDE);
+		m_RichEdit.ShowWindow(SW_HIDE);		
+	}
     else
     {
         m_RichEdit.ShowWindow(SW_SHOW);
+
 		m_imageViewer.ShowWindow(SW_HIDE);
+
+		if (::IsWindow(m_browser.m_hWnd))
+		{
+			m_browser.ShowWindow(SW_HIDE);
+		}
     }
 
 	CRect rect;
@@ -275,6 +296,7 @@ BOOL CToolTipEx::Hide()
 
 	m_csRTF = "";
 	m_csText = "";
+	m_html = "";
 	m_clipId = 0;
 	m_clipRow = -1;
 	m_searchText = _T("");
@@ -664,6 +686,10 @@ void CToolTipEx::MoveControls()
 	cr.DeflateRect(0, 0, 0, m_DittoWindow.m_dpi.Scale(21));
 	m_RichEdit.MoveWindow(cr);
 	m_imageViewer.MoveWindow(cr);
+	if (::IsWindow(m_browser.m_hWnd))
+	{
+		m_browser.MoveWindow(cr);
+	}
 
 	m_optionsButton.MoveWindow(cr.left, cr.bottom + m_DittoWindow.m_dpi.Scale(3), m_DittoWindow.m_dpi.Scale(17), m_DittoWindow.m_dpi.Scale(17));
 
@@ -686,6 +712,43 @@ BOOL CToolTipEx::IsCursorInToolTip()
     GetCursorPos(&cursorPos);
 
     return cr.PtInRect(cursorPos);
+}
+
+void CToolTipEx::SetHtmlText(const CString &html)
+{
+	if (html.GetLength() > 0 &&
+		::IsWindow(m_browser.m_hWnd) == FALSE)
+	{
+		m_browser.Create(WS_CHILD | WS_VISIBLE, CRect(10, 10, 100, 200), this, 2);
+	}
+
+	if (::IsWindow(m_browser.m_hWnd))
+	{		
+		int pos = html.Find(_T("<html>"));
+		if (pos >= 0)
+		{
+			m_html = html.Mid(pos);
+		}
+		else
+		{
+			m_html = html;
+		}
+
+		COLORREF c = g_Opt.m_Theme.DescriptionWindowBG();
+
+		DWORD dwR = GetRValue(c);
+		DWORD dwG = GetGValue(c);
+		DWORD dwB = GetBValue(c);
+
+		CString colorHex;
+		colorHex.Format(_T("#%02X%02X%02X"), dwR, dwG, dwB);
+
+		m_html.Replace(_T("<body>"), StrF(_T("<body bgcolor=\"%s\">"), colorHex));
+
+		m_browser.PutSilent(true);
+		m_browser.Clear();
+		m_browser.Write(m_html);
+	}
 }
 
 void CToolTipEx::SetRTFText(const char *pRTF)
@@ -1125,6 +1188,9 @@ void CToolTipEx::OnFirstAlwaysontop()
 
 BOOL CToolTipEx::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 {
+	CString cs;
+	cs.Format(_T("On Notify: %d\r\n"), ((LPNMHDR)lParam)->code);
+	OutputDebugString(cs);
 	switch (((LPNMHDR)lParam)->code)
 	{
 		case EN_LINK:
@@ -1134,9 +1200,36 @@ BOOL CToolTipEx::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
 			{
 				CString s;
 				m_RichEdit.GetTextRange(enLinkInfo->chrg.cpMin, enLinkInfo->chrg.cpMax, s);
-				CHyperLink::GotoURL(s, SW_SHOW);
+
+				if (s == m_mouseDownOnLink)
+				{
+					CHyperLink::GotoURL(s, SW_SHOW);
+				}
+
+				m_mouseDownOnLink = _T("");
+			}
+			if (enLinkInfo->msg == WM_LBUTTONDOWN)
+			{
+				m_RichEdit.GetTextRange(enLinkInfo->chrg.cpMin, enLinkInfo->chrg.cpMax, m_mouseDownOnLink);
 			}
 		}
+		break;
+		case SimpleBrowser::NotificationType::BeforeNavigate2:
+		{
+			SimpleBrowser::Notification * not = (SimpleBrowser::Notification *)lParam;
+			if (not != NULL)
+			{
+				if (not->URL.Find(_T("http")) >= 0)
+				{
+					CHyperLink::GotoURL(not->URL, SW_SHOW);
+					*pResult = TRUE;
+					//return TRUE;
+				}				
+			}
+		}
+			break;
+		case 5:
+			int x = 0;
 		break;
 	}
 
@@ -1203,7 +1296,7 @@ LRESULT CToolTipEx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 
 void CToolTipEx::OnMoving(UINT fwSide, LPRECT pRect)
 {
-	CWnd::OnMoving(fwSide, pRect);
+	CWnd::OnMoving(fwSide, pRect); 
 
 	m_snap.OnSnapMoving(m_hWnd, pRect);
 	// TODO: Add your message handler code here

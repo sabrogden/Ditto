@@ -442,6 +442,9 @@
       <Filter>ChaiScript</Filter>
     </ClCompile>
     <ClCompile Include="SnapWindow.cpp" />
+    <ClCompile Include="SimpleBrowser.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -924,6 +927,9 @@
       <Filter>ChaiScript</Filter>
     </ClInclude>
     <ClInclude Include="SnapWindow.h" />
+    <ClInclude Include="SimpleBrowser.h">
+      <Filter>header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

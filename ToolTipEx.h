@@ -8,6 +8,7 @@
 #include "GroupStatic.h"
 #include "Accels.h"
 #include "SnapWindow.h"
+#include "SimpleBrowser.h"
 
 class CToolTipEx : public CWnd
 {
@@ -26,6 +27,7 @@ public:
 	BOOL Hide();
 	void SetToolTipText(const CString &csText);
 	void SetRTFText(const char *pRTF);
+	void SetHtmlText(const CString &html);
 	void SetGdiplusBitmap(Gdiplus::Bitmap *gdiplusBitmap);
 	void SetNotifyWnd(CWnd *pNotify)		{ m_pNotifyWnd = pNotify;	}
 	void HideWindowInXMilliSeconds(long lms);
@@ -75,7 +77,9 @@ protected:
 	CFont m_Font;
 	int m_fontHeight;
 	CString m_csRTF;
+	CString m_html;
 	CRichEditCtrlEx m_RichEdit;
+	SimpleBrowser m_browser;
 	CWnd *m_pNotifyWnd;
 	bool m_reducedWindowSize;
 	CGdipButton m_optionsButton;
@@ -102,6 +106,7 @@ protected:
 	void HighlightSearchText();	
 	void ApplyWordWrap();
 	void SaveWindowSize();
+	CString m_mouseDownOnLink;
 
 	// Generated message map functions
 protected:

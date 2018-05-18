@@ -10,6 +10,7 @@
 #include "DittoCopyBuffer.h"
 #include <atlbase.h>
 #include "DrawHTML.h"
+#include "Shared\TextConvert.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -1135,7 +1136,25 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 
 			Clip.Free();
 			Clip.Clear();
-		}				
+		}	
+
+		m_pToolTip->SetHtmlText(_T(""));
+		Clip.m_cfType = GetFormatID(_T("HTML Format"));
+		if (GetClipData(nItem, Clip) && Clip.m_hgData)
+		{
+			LPVOID pvData = GlobalLock(Clip.m_hgData);
+			if (pvData)
+			{
+				CString html;
+				CTextConvert::ConvertFromUTF8(CStringA((char*)pvData), html);
+				m_pToolTip->SetHtmlText(html);
+			}
+
+			GlobalUnlock(Clip.m_hgData);
+
+			Clip.Free();
+			Clip.Clear();
+		}
 
 		Clip.m_cfType = CF_DIB;				
 		if(GetClipData(nItem, Clip) && Clip.m_hgData)
