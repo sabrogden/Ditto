@@ -134,6 +134,7 @@ public:
     CFont m_SearchFont;
     bool m_bHideWnd;
     CString m_strSQLSearch;
+	CString m_strSearch;
     CGroupStatic m_stGroup;
     CFont m_groupFont;
     CString m_Title;
@@ -142,6 +143,7 @@ public:
     CGdipButton m_BackButton;
 	CGroupStatic m_alwaysOnToWarningStatic;
 	CGdipButton m_systemMenu;
+	CGroupStatic m_noSearchResultsStatic;
 
     CString m_SQL;
     CString m_CountSQL;
@@ -289,6 +291,7 @@ public:
 	bool DoActionSaveCF_HDROP_FileData();
 	bool DoActionToggleClipboardConnection();
 	bool DoActionPasteDontMoveClip();
+	bool DoActionPasteTrimWhiteSpace();
 
 	bool OnNewClip();
 	bool OnImportClip();
@@ -532,4 +535,6 @@ public:
 	afx_msg void OnSpecialpastePasteDontUpdateOrder();
 	afx_msg void OnUpdateOnSpecialPasteDontUpdateOrder(CCmdUI *pCmdUI);
 
+	afx_msg void OnSpecialpasteTrim();
+	afx_msg void OnUpdateSpecialpasteTrim(CCmdUI *pCmdUI);
 };

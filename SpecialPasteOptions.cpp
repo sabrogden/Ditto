@@ -19,6 +19,7 @@ CSpecialPasteOptions::CSpecialPasteOptions()
 	m_dragDropFilesOnly = false;
 	m_pasteScriptGuid = _T("");
 	m_updateClipOrder = true;
+	m_trimWhiteSpace = false;
 }
 
 CSpecialPasteOptions::~CSpecialPasteOptions()

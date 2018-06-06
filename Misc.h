@@ -155,6 +155,7 @@ __int64 GetLastWriteTime(const CString &csFile);
 #define WM_REOPEN_DATABASE WM_USER + 225
 #define WM_SHOW_MSG_WINDOW WM_USER + 226
 #define WM_SHOW_DITTO_GROUP WM_USER + 227
+#define WM_PLAIN_TEXT_PASTE WM_USER + 228
 
 
 #if !defined(_BITSET_)

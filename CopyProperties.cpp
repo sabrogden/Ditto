@@ -418,15 +418,7 @@ void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
 	m_description.GetWindowText(Clip.m_Desc);
 	Clip.m_Desc.Replace(_T("'"), _T("''"));
 
-	m_QuickPasteText.GetWindowText(Clip.m_csQuickPaste);
-	Clip.m_csQuickPaste.MakeUpper();
-	Clip.m_csQuickPaste.Replace(_T("'"), _T("''"));
-
-	//remove any other that have the same quick paste text
-	if(Clip.m_csQuickPaste.IsEmpty() == FALSE)
-	{
-		theApp.m_db.execDMLEx(_T("UPDATE Main SET QuickPasteText = '' WHERE QuickPasteText = '%s' AND lID <> %d;"), Clip.m_csQuickPaste, m_lCopyID);
-	}
+	m_QuickPasteText.GetWindowText(Clip.m_csQuickPaste);	
 
 	Clip.m_parentId = m_GroupCombo.GetItemDataFromCursel();
 

@@ -421,17 +421,7 @@
     <ClCompile Include="TinyXml\tinyxmlparser.cpp">
       <Filter>tineyxml</Filter>
     </ClCompile>
-    <ClCompile Include="SymbolEdit.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="Md5.cpp" />
-    <ClCompile Include="FriendPromptDlg.cpp" />
-    <ClCompile Include="DimWnd.cpp" />
     <ClCompile Include="SymbolEdit.cpp" />
-    <ClCompile Include="AdvGeneral.cpp" />
-    <ClCompile Include="RegExFilterHelper.cpp" />
-    <ClCompile Include="CustomFriendsHelper.cpp" />
-    <ClCompile Include="ScriptEditor.cpp" />
     <ClCompile Include="ChaiScriptOnCopy.cpp">
       <Filter>ChaiScript</Filter>
     </ClCompile>
@@ -441,8 +431,34 @@
     <ClCompile Include="DittoChaiScript.cpp">
       <Filter>ChaiScript</Filter>
     </ClCompile>
-    <ClCompile Include="SnapWindow.cpp" />
     <ClCompile Include="SimpleBrowser.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="AdvGeneral.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomFriendsHelper.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="DimWnd.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="FriendPromptDlg.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="Md5.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="RegExFilterHelper.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptEditor.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="SnapWindow.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="SymbolEdit.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -906,17 +922,7 @@
     <ClInclude Include="NTray.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="SymbolEdit.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="Md5.h" />
-    <ClInclude Include="FriendPromptDlg.h" />
-    <ClInclude Include="DimWnd.h" />
     <ClInclude Include="SymbolEdit.h" />
-    <ClInclude Include="AdvGeneral.h" />
-    <ClInclude Include="RegExFilterHelper.h" />
-    <ClInclude Include="CustomFriendsHelper.h" />
-    <ClInclude Include="ScriptEditor.h" />
     <ClInclude Include="ChaiScriptOnCopy.h">
       <Filter>ChaiScript</Filter>
     </ClInclude>
@@ -926,8 +932,34 @@
     <ClInclude Include="DittoChaiScript.h">
       <Filter>ChaiScript</Filter>
     </ClInclude>
-    <ClInclude Include="SnapWindow.h" />
     <ClInclude Include="SimpleBrowser.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="AdvGeneral.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomFriendsHelper.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="DimWnd.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="FriendPromptDlg.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Md5.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="RegExFilterHelper.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptEditor.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="SnapWindow.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="SymbolEdit.h">
       <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1393,9 +1425,15 @@
     <None Include="res\cog_28.png">
       <Filter>res</Filter>
     </None>
-    <None Include="res\cursor1.cur" />
-    <None Include="res\cursor_zoom_in.cur" />
-    <None Include="res\cursor2.cur" />
+    <None Include="res\cursor1.cur">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\cursor2.cur">
+      <Filter>res</Filter>
+    </None>
+    <None Include="res\cursor_zoom_in.cur">
+      <Filter>res</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">
@@ -1432,54 +1470,152 @@
     <Midl Include="CP_Main.idl" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="res\icon3.ico" />
-    <Image Include="res\down_16.png" />
-    <Image Include="res\down_20.png" />
-    <Image Include="res\down_24.png" />
-    <Image Include="res\down_28.png" />
-    <Image Include="res\down_32.png" />
-    <Image Include="res\close_36.png" />
-    <Image Include="res\close_40.png" />
-    <Image Include="res\close_44.png" />
-    <Image Include="res\close_48.png" />
-    <Image Include="res\close_52.png" />
-    <Image Include="res\close_56.png" />
-    <Image Include="res\open_folder_54.png" />
-    <Image Include="res\open_folder_60.png" />
-    <Image Include="res\open_folder_66.png" />
-    <Image Include="res\open_folder_72.png" />
-    <Image Include="res\open_folder_78.png" />
-    <Image Include="res\open_folder_84.png" />
-    <Image Include="res\system_menu_54.png" />
-    <Image Include="res\system_menu_60.png" />
-    <Image Include="res\system_menu_66.png" />
-    <Image Include="res\system_menu_72.png" />
-    <Image Include="res\system_menu_78.png" />
-    <Image Include="res\system_menu_84.png" />
-    <Image Include="res\ChevronLeft_Black_36.png" />
-    <Image Include="res\ChevronLeft_Black_40.png" />
-    <Image Include="res\ChevronLeft_Black_44.png" />
-    <Image Include="res\ChevronLeft_Black_48.png" />
-    <Image Include="res\ChevronLeft_Black_52.png" />
-    <Image Include="res\ChevronLeft_Black_56.png" />
-    <Image Include="res\ChevronRight_Black_36.png" />
-    <Image Include="res\ChevronRight_Black_40.png" />
-    <Image Include="res\ChevronRight_Black_44.png" />
-    <Image Include="res\ChevronRight_Black_48.png" />
-    <Image Include="res\ChevronRight_Black_52.png" />
-    <Image Include="res\ChevronRight_Black_56.png" />
-    <Image Include="res\maximize_36.png" />
-    <Image Include="res\maximize_40.png" />
-    <Image Include="res\maximize_44.png" />
-    <Image Include="res\maximize_48.png" />
-    <Image Include="res\maximize_52.png" />
-    <Image Include="res\maximize_56.png" />
-    <Image Include="res\maximize_512.png" />
-    <Image Include="res\minimize_36.png" />
-    <Image Include="res\minimize_40.png" />
-    <Image Include="res\minimize_44.png" />
-    <Image Include="res\minimize_48.png" />
-    <Image Include="res\minimize_52.png" />
-    <Image Include="res\minimize_56.png" />
+    <Image Include="res\ChevronLeft_Black_36.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\ChevronLeft_Black_40.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\ChevronLeft_Black_44.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\ChevronLeft_Black_48.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\ChevronLeft_Black_52.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\ChevronLeft_Black_56.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\ChevronRight_Black_36.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\ChevronRight_Black_40.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\ChevronRight_Black_44.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\ChevronRight_Black_48.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\ChevronRight_Black_52.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\ChevronRight_Black_56.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\close_36.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\close_40.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\close_44.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\close_48.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\close_52.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\close_56.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\down_16.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\down_20.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\down_24.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\down_28.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\down_32.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\maximize_36.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\maximize_40.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\maximize_44.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\maximize_48.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\maximize_52.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\maximize_56.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\minimize_36.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\maximize_512.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\minimize_40.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\minimize_44.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\minimize_48.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\minimize_52.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\minimize_56.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\open_folder_54.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\open_folder_60.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\open_folder_66.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\open_folder_72.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\open_folder_78.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\open_folder_84.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\system_menu_54.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\system_menu_60.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\system_menu_66.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\system_menu_72.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\system_menu_78.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\system_menu_84.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\icon3.ico">
+      <Filter>res</Filter>
+    </Image>
   </ItemGroup>
 </Project>

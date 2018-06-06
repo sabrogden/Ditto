@@ -724,7 +724,7 @@ void CToolTipEx::SetHtmlText(const CString &html)
 
 	if (::IsWindow(m_browser.m_hWnd))
 	{		
-		int pos = html.Find(_T("<html>"));
+		int pos = html.Find(_T("<html"));
 		if (pos >= 0)
 		{
 			m_html = html.Mid(pos);

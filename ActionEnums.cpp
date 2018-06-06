@@ -307,6 +307,10 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		break;
 	case PASTE_DONT_MOVE_CLIP:
 		val = "Paste, Don't Change Clip Order";
+		break;
+	case PASTE_TRIM_WHITE_SPACE:
+		val = "Paste, Trim White Space";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);

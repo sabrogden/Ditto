@@ -32,6 +32,7 @@ public:
 		m_uacPID = 0;
 		m_bOpenWindow = FALSE;
 		m_bCloseWindow = FALSE;
+		m_plainTextPaste = FALSE;
 	}
 
  	virtual void ParseParam(const TCHAR* pszParam, BOOL bFlag, BOOL bLast)
@@ -64,6 +65,10 @@ public:
 			{
 				m_bCloseWindow = TRUE;
 			}
+			else if (STRICMP(pszParam, _T("PlainTextPaste")) == 0)
+			{
+				m_plainTextPaste = TRUE;
+			}
   		}
  
 		CCommandLineInfo::ParseParam(pszParam, bFlag, bLast);
@@ -74,6 +79,7 @@ public:
 	int m_uacPID;
 	BOOL m_bCloseWindow;
 	BOOL m_bOpenWindow;
+	BOOL m_plainTextPaste;
 };
 
 CCP_MainApp theApp;
@@ -253,6 +259,17 @@ BOOL CCP_MainApp::InitInstance()
 		}
 
 		return FALSE;		
+	}
+	else if (cmdInfo.m_plainTextPaste)
+	{		
+		LRESULT ret = 0;
+		HWND hWnd = (HWND)CGetSetOptions::GetMainHWND();
+		if (hWnd)
+		{
+			ret = ::SendMessage(hWnd, WM_PLAIN_TEXT_PASTE, NULL, NULL);
+		}
+
+		return FALSE;
 	}
 
 	CInternetUpdate update;

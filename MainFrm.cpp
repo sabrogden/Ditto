@@ -70,6 +70,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_FIRST_FIXUPSTICKYCLIPORDER, &CMainFrame::OnFirstFixupstickycliporder)
 	ON_MESSAGE(WM_DISPLAYCHANGE, &CMainFrame::OnResolutionChange)
 	ON_MESSAGE(WM_TRAYNOTIFY, &CMainFrame::OnTrayNotification)
+	ON_MESSAGE(WM_PLAIN_TEXT_PASTE, &CMainFrame::OnPlainTextPaste)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -170,6 +171,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_thread.Start(this);
 
     return 0;
+}
+
+LRESULT CMainFrame::OnPlainTextPaste(WPARAM wParam, LPARAM lParam)
+{
+	DoTextOnlyPaste();
+	return 1;
 }
 
 LRESULT CMainFrame::OnTrayNotification(WPARAM wParam, LPARAM lParam)

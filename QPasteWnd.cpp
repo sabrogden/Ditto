@@ -41,6 +41,7 @@
 #define ID_SEARCH_DESCRIPTION_BUTTON 0x208
 #define ON_TOP_WARNING 0x209
 #define ID_SYSTEM_BUTTON		0x210
+#define ID_NO_SEARCH_RESULTS	0x211
 
 
 #define QPASTE_WIDTH			200
@@ -67,6 +68,7 @@ CQPasteWnd::CQPasteWnd()
     m_Title = QPASTE_TITLE;
     m_bHideWnd = true;
     m_strSQLSearch = "";
+	m_strSearch = "";
     m_bHandleSearchTextChange = true;
     m_bModifersMoveActive = false;
 	m_showScrollBars = false;
@@ -304,6 +306,8 @@ ON_COMMAND(ID_CLIPORDER_MOVETOLAST, &CQPasteWnd::OnCliporderMovetolast)
 ON_UPDATE_COMMAND_UI(ID_CLIPORDER_MOVETOLAST, &CQPasteWnd::OnUpdateCliporderMovetolast)
 ON_COMMAND(ID_SPECIALPASTE_PASTE32945, &CQPasteWnd::OnSpecialpastePasteDontUpdateOrder)
 ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_PASTE32945, &CQPasteWnd::OnUpdateOnSpecialPasteDontUpdateOrder)
+ON_COMMAND(ID_SPECIALPASTE_TRIM, &CQPasteWnd::OnSpecialpasteTrim)
+ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_TRIM, &CQPasteWnd::OnUpdateSpecialpasteTrim)
 END_MESSAGE_MAP()
 
 
@@ -400,34 +404,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
     }
 
     m_Alpha.SetWindowHandle(m_hWnd);	
-	
-    UpdateFont();
-	
-    m_thread.Start(this);	
-	m_extraDataThread.Start(this);
-
-	/*m_actions.AddAccel(ActionEnums::SHOWDESCRIPTION, VK_F3);
-	m_actions.AddAccel(ActionEnums::NEXTDESCRIPTION, 'N');
-	m_actions.AddAccel(ActionEnums::PREVDESCRIPTION, 'P');
-	m_actions.AddAccel(ActionEnums::PREVDESCRIPTION, VK_UP);
-	m_actions.AddAccel(ActionEnums::NEXTDESCRIPTION, VK_DOWN);
-	m_actions.AddAccel(ActionEnums::CLOSEWINDOW, VK_ESCAPE);
-	m_actions.AddAccel(ActionEnums::PREVTABCONTROL, ACCEL_MAKEKEY(VK_TAB, HOTKEYF_CONTROL));
-
-	m_actions.AddAccel(ActionEnums::SHOWMENU, VK_APPS));
-	m_actions.AddAccel(ActionEnums::NEWGROUP, ACCEL_MAKEKEY(VK_F7, HOTKEYF_CONTROL));
-	m_actions.AddAccel(ActionEnums::NEWGROUPSELECTION, VK_F7);	
-	
-	
-	m_actions.AddAccel(ActionEnums::SHOWGROUPS, ACCEL_MAKEKEY('G', HOTKEYF_CONTROL));
-	m_actions.AddAccel(ActionEnums::NEWCLIP, ACCEL_MAKEKEY('N', HOTKEYF_CONTROL));
-	m_actions.AddAccel(ActionEnums::EDITCLIP, ACCEL_MAKEKEY('E', HOTKEYF_CONTROL));	
-	m_actions.AddAccel(ActionEnums::CANCELFILTER, ACCEL_MAKEKEY('C', HOTKEYF_ALT));
-	m_actions.AddAccel(ActionEnums::TOGGLESHOWPERSISTANT, ACCEL_MAKEKEY(VK_SPACE, HOTKEYF_CONTROL));	
-	m_actions.AddAccel(ActionEnums::CLIP_PROPERTIES, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_ALT));
-	m_actions.AddAccel(ActionEnums::PASTE_SELECTED_PLAIN_TEXT, ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_SHIFT));
-	m_actions.AddAccel(ActionEnums::COMPARE_SELECTED_CLIPS, ACCEL_MAKEKEY(VK_F2, HOTKEYF_CONTROL));*/
-
+	    
 	CString onTopMsg = theApp.m_Language.GetString(_T("TurnOfAlwaysOntop"), _T("Always on Top Enabled"));
 	CString shortcutText = m_actions.GetCmdKeyText(ActionEnums::TOGGLESHOWPERSISTANT);
 	if (shortcutText != _T("") &&
@@ -444,7 +421,18 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_alwaysOnToWarningStatic.SetToggleCursor(true);
 	m_alwaysOnToWarningStatic.SetFont(&m_groupFont);
 
+	m_noSearchResultsStatic.Create(onTopMsg, WS_CHILD, CRect(0, 0, 0, 0), this, ID_NO_SEARCH_RESULTS);
+	m_noSearchResultsStatic.SetTextColor(COLORREF(RGB(0, 0, 0)));
+	m_noSearchResultsStatic.SetBkColor(g_Opt.m_Theme.MainWindowBG());
+	m_noSearchResultsStatic.SetFont(&m_SearchFont);
+	m_noSearchResultsStatic.SetWindowText(_T("There are no results"));
+
 	m_popupMsg.m_hWndPosRelativeTo = m_hWnd;
+
+	UpdateFont();
+
+	m_thread.Start(this);
+	m_extraDataThread.Start(this);
 
 	LoadShortcuts();
 
@@ -638,7 +626,23 @@ void CQPasteWnd::MoveControls()
 		m_lstHeader.SetWindowRgn(rgnRect, TRUE);
 	}
 
-	m_lstHeader.MoveWindow(0, topOfListBox, cx+extraSize, cy - listBoxBottomOffset-topOfListBox + extraSize+1);
+
+	if(m_lstHeader.GetItemCount() == 0 &&
+		m_strSearch != _T(""))
+	{
+		m_lstHeader.ShowWindow(SW_HIDE);
+		m_noSearchResultsStatic.ShowWindow(SW_SHOW);
+
+		auto border = m_DittoWindow.m_dpi.Scale(10);
+		m_noSearchResultsStatic.MoveWindow(border, topOfListBox + border, cx - border, cy - listBoxBottomOffset - topOfListBox + 1 - border);
+	}
+	else
+	{
+		m_lstHeader.ShowWindow(SW_SHOW);
+		m_noSearchResultsStatic.ShowWindow(SW_HIDE);
+
+		m_lstHeader.MoveWindow(0, topOfListBox, cx + extraSize, cy - listBoxBottomOffset - topOfListBox + extraSize + 1);
+	}
 	m_search.MoveWindow(m_DittoWindow.m_dpi.Scale(34), cy - m_DittoWindow.m_dpi.Scale(searchRowStart-5), cx - m_DittoWindow.m_dpi.Scale(70), m_DittoWindow.m_dpi.Scale(23));
 
 	m_systemMenu.MoveWindow(cx - m_DittoWindow.m_dpi.Scale(30), cy - m_DittoWindow.m_dpi.Scale(28), m_DittoWindow.m_dpi.Scale(24), m_DittoWindow.m_dpi.Scale(24));
@@ -1335,6 +1339,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
     if(csSQLSearch == "")
     {
         m_strSQLSearch = "";
+		m_strSearch = "";
     }
     else
     {
@@ -1431,6 +1436,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
         }
 
         m_strSQLSearch = strFilter;
+		m_strSearch = csSQLSearch;
     }
 
 	{
@@ -2035,6 +2041,9 @@ void CQPasteWnd::UpdateFont()
 	m_stGroup.SetFont(&m_groupFont);
 	m_stGroup.SetBkColor(g_Opt.m_Theme.MainWindowBG());
 	m_stGroup.SetTextColor(RGB(127, 127, 127));
+
+	m_noSearchResultsStatic.SetBkColor(g_Opt.m_Theme.MainWindowBG());
+	m_noSearchResultsStatic.SetFont(&m_SearchFont);
 }
 
 void CQPasteWnd::OnMenuFirsttenhotkeysUsectrlnum()
@@ -3210,6 +3219,9 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::PASTE_DONT_MOVE_CLIP:
 		ret = DoActionPasteDontMoveClip();
 		break;
+	case ActionEnums::PASTE_TRIM_WHITE_SPACE:
+		ret = DoActionPasteTrimWhiteSpace();
+		break;
 	}
 
 	return ret;
@@ -3219,6 +3231,15 @@ bool CQPasteWnd::DoActionPasteDontMoveClip()
 {
 	CSpecialPasteOptions pasteOptions;
 	pasteOptions.m_updateClipOrder = false;
+	OpenSelection(pasteOptions);
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionPasteTrimWhiteSpace()
+{
+	CSpecialPasteOptions pasteOptions;
+	pasteOptions.m_trimWhiteSpace = true;
 	OpenSelection(pasteOptions);
 
 	return true;
@@ -5752,8 +5773,17 @@ LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 	m_lstHeader.Scroll(CSize(-x, -y));
 
     m_lstHeader.SetItemCountEx((int)wParam);
+
+	if ((int)wParam == 0 &&
+		m_strSearch != _T(""))
+	{
+		m_noSearchResultsStatic.SetWindowText(StrF(_T("There are no results for \"%s\""), m_strSearch));
+	}
+
 	SelectFocusID();
-    UpdateStatus(false);
+    UpdateStatus(false);	
+
+	MoveControls();
 
     return TRUE;
 }
@@ -6824,4 +6854,21 @@ void CQPasteWnd::OnUpdateOnSpecialPasteDontUpdateOrder(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_DONT_MOVE_CLIP);
+}
+
+
+void CQPasteWnd::OnSpecialpasteTrim()
+{
+	DoAction(ActionEnums::PASTE_TRIM_WHITE_SPACE);
+}
+
+
+void CQPasteWnd::OnUpdateSpecialpasteTrim(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_TRIM_WHITE_SPACE);
 }

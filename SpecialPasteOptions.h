@@ -22,6 +22,7 @@ public:
 	bool m_dragDropFilesOnly;
 	CString m_pasteScriptGuid;
 	bool m_updateClipOrder;
+	bool m_trimWhiteSpace;
 
 	bool LimitFormatsToText() 
 	{ 
@@ -34,7 +35,8 @@ public:
 			m_pasteAddOneLineFeed ||
 			m_pasteAddTwoLineFeeds ||
 			m_pasteTypoglycemia ||
-			m_pasteAddingDateTime;
+			m_pasteAddingDateTime || 
+			m_trimWhiteSpace;
 	}
 
 	bool IncludeRTFForTextOnly()

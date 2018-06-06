@@ -195,6 +195,10 @@ BOOL COleClipSource::DoImmediateRender()
 	{
 		AddDateTime(clip);
 	}
+	else if (m_pasteOptions.m_trimWhiteSpace)
+	{
+		TrimWhiteSpace(clip);
+	}
 	
 	SaveDittoFileDataToFile(clip);
 
@@ -748,6 +752,53 @@ void COleClipSource::AddDateTime(CClip &clip)
 			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1)));
 
 			pRTFFormat->Data(hGlobal);
+		}
+	}
+}
+
+void COleClipSource::TrimWhiteSpace(CClip &clip)
+{
+	IClipFormat *pUnicodeText = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (pUnicodeText != NULL)
+	{
+		wchar_t *stringData = (wchar_t *)GlobalLock(pUnicodeText->Data());
+		if (stringData != NULL)
+		{
+			CStringW string(stringData);
+
+			GlobalUnlock(pUnicodeText->Data());
+			pUnicodeText->Free();
+
+			string = string.Trim();
+			string = string.Trim(_T("\t"));
+			string = string.Trim(_T("\r"));
+			string = string.Trim(_T("\n"));			
+
+			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1) * sizeof(wchar_t)));
+
+			pUnicodeText->Data(hGlobal);
+		}
+	}
+
+	IClipFormat *pAsciiText = clip.m_Formats.FindFormatEx(CF_TEXT);
+	if (pAsciiText != NULL)
+	{
+		char *stringData = (char *)GlobalLock(pAsciiText->Data());
+		if (stringData != NULL)
+		{
+			CStringA string(stringData);
+
+			GlobalUnlock(pAsciiText->Data());
+			pAsciiText->Free();
+
+			string = string.Trim();
+			string = string.Trim("\t");
+			string = string.Trim("\r");
+			string = string.Trim("\n");
+
+			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1)));
+
+			pAsciiText->Data(hGlobal);
 		}
 	}
 }

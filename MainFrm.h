@@ -138,4 +138,5 @@ DECLARE_MESSAGE_MAP()public:
 	afx_msg void OnFirstFixupstickycliporder();
 	afx_msg LRESULT OnResolutionChange(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnTrayNotification(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnPlainTextPaste(WPARAM wParam, LPARAM lParam);
 };

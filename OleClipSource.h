@@ -41,4 +41,5 @@ protected:
 	HGLOBAL ConvertToFileDrop();
 	void AddDateTime(CClip &clip);
 	void SaveDittoFileDataToFile(CClip &clip);
+	void TrimWhiteSpace(CClip &clip);
 };
