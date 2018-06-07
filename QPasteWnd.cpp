@@ -422,10 +422,6 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_alwaysOnToWarningStatic.SetFont(&m_groupFont);
 
 	m_noSearchResultsStatic.Create(onTopMsg, WS_CHILD, CRect(0, 0, 0, 0), this, ID_NO_SEARCH_RESULTS);
-	m_noSearchResultsStatic.SetTextColor(COLORREF(RGB(0, 0, 0)));
-	m_noSearchResultsStatic.SetBkColor(g_Opt.m_Theme.MainWindowBG());
-	m_noSearchResultsStatic.SetFont(&m_SearchFont);
-	m_noSearchResultsStatic.SetWindowText(_T("There are no results"));
 
 	m_popupMsg.m_hWndPosRelativeTo = m_hWnd;
 
@@ -2040,9 +2036,10 @@ void CQPasteWnd::UpdateFont()
 	m_groupFont.CreateFont(-m_DittoWindow.m_dpi.Scale(12), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 	m_stGroup.SetFont(&m_groupFont);
 	m_stGroup.SetBkColor(g_Opt.m_Theme.MainWindowBG());
-	m_stGroup.SetTextColor(RGB(127, 127, 127));
+	m_stGroup.SetTextColor(g_Opt.m_Theme.ListBoxEvenRowsText());
 
 	m_noSearchResultsStatic.SetBkColor(g_Opt.m_Theme.MainWindowBG());
+	m_noSearchResultsStatic.SetTextColor(g_Opt.m_Theme.ListBoxEvenRowsText());
 	m_noSearchResultsStatic.SetFont(&m_SearchFont);
 }
 
@@ -5777,7 +5774,8 @@ LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 	if ((int)wParam == 0 &&
 		m_strSearch != _T(""))
 	{
-		m_noSearchResultsStatic.SetWindowText(StrF(_T("There are no results for \"%s\""), m_strSearch));
+		CString text = theApp.m_Language.GetString("NoSearchResults", "There are no results for");
+		m_noSearchResultsStatic.SetWindowText(StrF(_T("%s \"%s\""), text, m_strSearch));
 	}
 
 	SelectFocusID();

@@ -1204,6 +1204,8 @@ LRESULT CMainFrame::OnOptionsClosed(WPARAM wParam, LPARAM lParam)
 
 	if (themeChanged)
 	{
+		g_Opt.m_Theme.Load(g_Opt.GetTheme());
+
 		m_quickPaste.CloseQPasteWnd();
 	}
 	else

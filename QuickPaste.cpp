@@ -68,6 +68,8 @@ BOOL CQuickPaste::CloseQPasteWnd()
 		
 		delete m_pwndPaste;
 		m_pwndPaste = NULL;
+
+		theApp.m_bShowingQuickPaste = false;
 	}
 	
 	return TRUE;
