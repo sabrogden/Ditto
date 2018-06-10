@@ -171,6 +171,7 @@ public:
 	INT64 m_extraDataCounter;
 	CPopup m_popupMsg;
 	CCustomFriendsHelper m_customFriendsHelper;
+	bool m_noSearchResults;
 
     void RefreshNc();
     void UpdateStatus(bool bRepaintImmediately = false); // regenerates the status (caption) text

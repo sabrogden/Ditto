@@ -74,6 +74,7 @@ CQPasteWnd::CQPasteWnd()
 	m_showScrollBars = false;
 	m_leftSelectedCompareId = 0;
 	m_extraDataCounter = 0;
+	m_noSearchResults = false;
 }
 
 CQPasteWnd::~CQPasteWnd()
@@ -623,7 +624,7 @@ void CQPasteWnd::MoveControls()
 	}
 
 
-	if(m_lstHeader.GetItemCount() == 0 &&
+	if(m_noSearchResults &&
 		m_strSearch != _T(""))
 	{
 		m_lstHeader.ShowWindow(SW_HIDE);
@@ -5765,6 +5766,8 @@ void CQPasteWnd::OnUpdateMenuNewclip(CCmdUI *pCmdUI)
 
 LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 {
+	m_noSearchResults = false;
+
 	int x = m_lstHeader.GetScrollPos(SB_HORZ);
 	int y = m_lstHeader.GetScrollPos(SB_VERT);
 	m_lstHeader.Scroll(CSize(-x, -y));
@@ -5774,6 +5777,7 @@ LRESULT CQPasteWnd::OnSetListCount(WPARAM wParam, LPARAM lParam)
 	if ((int)wParam == 0 &&
 		m_strSearch != _T(""))
 	{
+		m_noSearchResults = true;
 		CString text = theApp.m_Language.GetString("NoSearchResults", "There are no results for");
 		m_noSearchResultsStatic.SetWindowText(StrF(_T("%s \"%s\""), text, m_strSearch));
 	}
