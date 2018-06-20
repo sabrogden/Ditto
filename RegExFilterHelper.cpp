@@ -31,7 +31,7 @@ bool CRegExFilterData::MatchesProcessFilters(CString &activeApp)
 		return true;
 	}
 
-	int count = m_parsedProcessFilters.GetCount();
+	int count = (int)m_parsedProcessFilters.GetCount();
 
 	if (count == 0)
 	{

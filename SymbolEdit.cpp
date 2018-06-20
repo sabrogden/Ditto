@@ -188,7 +188,7 @@ CString CSymbolEdit::SavePastSearches()
 	TiXmlElement* outer = new TiXmlElement("PastSearches");
 	doc.LinkEndChild(outer);
 
-	int count = m_searches.GetCount();
+	int count = (int)m_searches.GetCount();
 	for (int i = 0; i < count; i++)
 	{		
 		TiXmlElement* searchElement = new TiXmlElement("Search");
@@ -246,7 +246,7 @@ void CSymbolEdit::AddToSearchHistory()
 		}
 
 		bool existing = false;
-		int count = m_searches.GetCount();
+		int count = (int)m_searches.GetCount();
 		for (int i = 0; i < count; i++)
 		{
 			if (m_searches[i] == cs)
@@ -275,7 +275,7 @@ bool CSymbolEdit::ShowSearchHistoryMenu()
 	CMenu cmPopUp;
 	cmPopUp.CreatePopupMenu();
 
-	int count = min(m_searches.GetCount(), LIST_MAX_COUNT);
+	int count = min((int)m_searches.GetCount(), LIST_MAX_COUNT);
 	for (int i = count-1; i >= 0; i--)
 	{
 		CString text = m_searches[i];

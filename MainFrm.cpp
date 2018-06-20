@@ -572,7 +572,7 @@ void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarg
 		
 		if(isGroup)
 		{
-			int maxDiff = CGetSetOptions::GetGroupDoubleClickTimeMS();
+			DWORD maxDiff = (DWORD)CGetSetOptions::GetGroupDoubleClickTimeMS();
 			DWORD diff = GetTickCount() - m_doubleClickGroupStartTime;		
 
 			if(m_doubleClickGroupId == dbId &&
@@ -743,7 +743,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 
 				Log(StrF(_T("Processing single click of groupId %d in timer, opening ditto to this group"), m_doubleClickGroupId));
 
-				int maxDiff = (CGetSetOptions::GetGroupDoubleClickTimeMS() * 1.5);
+				DWORD maxDiff = (DWORD)(CGetSetOptions::GetGroupDoubleClickTimeMS() * 1.5);
 				DWORD diff = GetTickCount() - m_doubleClickGroupStartTime;					
 
 				if(diff < maxDiff)
@@ -1044,9 +1044,7 @@ CString WndName(HWND hParent)
 
 void CMainFrame::OnFirstHelp()
 {
-    CString csFile = CGetSetOptions::GetPath(PATH_HELP);
-    csFile += "DittoGettingStarted.htm";
-    CHyperLink::GotoURL(csFile, SW_SHOW);
+    CHyperLink::GotoURL(_T("https://sourceforge.net/p/ditto-cp/wiki/"), SW_SHOW);
 }
 
 void CMainFrame::ShowErrorMessage(CString csTitle, CString csMessage)

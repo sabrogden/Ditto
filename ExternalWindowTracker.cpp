@@ -170,7 +170,7 @@ bool ExternalWindowTracker::ActivateTarget()
 	}
 
 	// Save specified timeout period...
-	DWORD timeoutMS = 0;
+	PVOID timeoutMS = 0;
 	SystemParametersInfo(SPI_GETFOREGROUNDLOCKTIMEOUT, 0, &timeoutMS, 0);
 	// ... then set it to zero to disable it
 	SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, (PVOID)0, 0);

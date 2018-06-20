@@ -139,8 +139,7 @@ BOOL CClient::OpenConnection(const TCHAR* servername)
 	//11-5-06 Serge Baranov found that if we are passing in an ip then
 	//don't look the name up using gethostbyname/gethostbyaddr->
 	//on simple networks that don't use DNS these will fail.
-	//So now only lookup the host name if they don't provide an IP.
-
+	//So now only lookup the host name if they don't provide an IP.	
 	addr = inet_addr(csServerNameA);
 	if(addr == INADDR_NONE)
 	{

@@ -59,7 +59,7 @@ BOOL CBitmapHelper::GetCBitmap(void	*pClip2, CDC *pDC, CBitmap *pBitMap, int nMa
 						gdipBitmap->GetHeight() > 0 &&
 						gdipBitmap->GetWidth() > 0)
 					{
-						int nHeight = min(nMaxHeight, gdipBitmap->GetHeight());
+						int nHeight = min(nMaxHeight, (int)gdipBitmap->GetHeight());
 						int nWidth = (nHeight * gdipBitmap->GetWidth()) / gdipBitmap->GetHeight();
 
 						//do the resize

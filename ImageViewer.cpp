@@ -132,7 +132,7 @@ void CImageViewer::OnPaint()
 			}
 
 			Gdiplus::ImageAttributes attrs;
-			Gdiplus::Rect dest(0, 0, newWidth, newHeight);
+			Gdiplus::Rect dest(0, 0, (int)newWidth, (int)newHeight);
 
 			Gdiplus::Graphics graphics(dc);
 			graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);

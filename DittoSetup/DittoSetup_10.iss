@@ -86,7 +86,6 @@ Name: AddFireWallException; Description: Add Windows Firewall exception for Ditt
 Source: Changes.txt; DestDir: {app}
 Source: ..\Debug\Language\*; DestDir: {app}\Language; BeforeInstall: BeforeLanguageInstall()
 Source: ..\Debug\Themes\*; DestDir: {app}\Themes
-Source: ..\Help\*.htm; DestDir: {app}\Help; Flags: ignoreversion
 
 [Icons]
 Name: {group}\Ditto; Filename: {app}\Ditto.exe
@@ -151,6 +150,8 @@ var
     DeleteFile(sDir+'\icuio55.dll')
     DeleteFile(sDir+'\icuin55.dll')
     DeleteFile(sDir+'\icudt55.dll')
+	
+    DelTree(sDir+'\Help', TRUE, TRUE, TRUE)
 end;
 
 

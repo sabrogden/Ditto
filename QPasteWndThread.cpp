@@ -153,12 +153,12 @@ void CQPasteWndThread::OnLoadItems(void *param)
 						else if (pos == pasteWnd->m_listItems.size())
 						{
 							pasteWnd->m_listItems.push_back(table);
-							updateIndex = pasteWnd->m_listItems.size() - 1;
+							updateIndex = (int)pasteWnd->m_listItems.size() - 1;
 							//Log(StrF(_T("adding (same size) list pos = %d, id: %d, size: %d"), pasteWnd->m_listItems.size()-1, table.m_lID, pasteWnd->m_listItems.size() - 1));
 						}
 						else if (pos > pasteWnd->m_listItems.size())
 						{
-							for (int toAdd = pasteWnd->m_listItems.size()-1; toAdd < pos - 1; toAdd++)
+							for (int toAdd = (int)pasteWnd->m_listItems.size()-1; toAdd < pos - 1; toAdd++)
 							{
 								CMainTable empty;
 								empty.m_lID = -1;
@@ -169,7 +169,7 @@ void CQPasteWndThread::OnLoadItems(void *param)
 
 							pasteWnd->m_listItems.push_back(table);
 
-							updateIndex = pasteWnd->m_listItems.size() - 1;
+							updateIndex = (int)pasteWnd->m_listItems.size() - 1;
 
 							//Log(StrF(_T("adding list pos = %d, id: %d, size: %d"), pasteWnd->m_listItems.size()-1, table.m_lID, pasteWnd->m_listItems.size() - 1));
 						}
@@ -257,7 +257,7 @@ void ReduceMapItems(CF_DibTypeMap &mapItem, CCriticalSection &critSection, CStri
 	if (mapItem.size() > maxSize)
 	{
 		//create a vector so we can sort and keep the last x number of events
-		std:vector<INT64> counterArray;
+		vector<INT64> counterArray;
 		for (CF_DibTypeMap::iterator iterDib = mapItem.begin(); iterDib != mapItem.end(); iterDib++)
 		{
 			counterArray.push_back(iterDib->second.m_counter);

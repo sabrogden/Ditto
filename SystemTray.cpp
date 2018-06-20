@@ -149,9 +149,9 @@ void CSystemTray::Initialise()
 	m_bSingleClickSelect = FALSE;
 
 #ifdef SYSTEMTRAY_USEW2K
-    OSVERSIONINFO os = { sizeof(os) };
-    GetVersionEx(&os);
-    m_bWin2K = ( VER_PLATFORM_WIN32_NT == os.dwPlatformId && os.dwMajorVersion >= 5 );
+    //OSVERSIONINFOW os = { sizeof(os) };
+	//GetVersionExW(&os);
+	m_bWin2K = true;// (VER_PLATFORM_WIN32_NT == os.dwPlatformId && os.dwMajorVersion >= 5);
 #else
     m_bWin2K = FALSE;
 #endif
@@ -189,7 +189,7 @@ BOOL CSystemTray::Create(CWnd* pParent, UINT uCallbackMessage, LPCTSTR szToolTip
     m_bEnabled = TRUE;
 #else
     // this is only for Windows 95 (or higher)
-    m_bEnabled = (GetVersion() & 0xff) >= 4;
+	m_bEnabled = true;// (GetVersion() & 0xff) >= 4;
     if (!m_bEnabled) 
     {
         ASSERT(FALSE);

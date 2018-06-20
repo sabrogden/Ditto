@@ -293,7 +293,7 @@ void CDeleteClipData::FilterItems()
 
 	//Remove from the main list the ones that don't match
 	count = rowsToDelete.size();
-	for (int i = count - 1; i >= 0; i--)
+	for (INT_PTR i = count - 1; i >= 0; i--)
 	{
 		int row = rowsToDelete[i];
 		toSelect = row;
@@ -303,7 +303,7 @@ void CDeleteClipData::FilterItems()
 
 	//Remove the rows that were filtered out but now match
 	count = filteredRowsToDelete.size();
-	for (int i = count - 1; i >= 0; i--)
+	for (INT_PTR i = count - 1; i >= 0; i--)
 	{
 		int row = filteredRowsToDelete[i];
 		m_filteredOut.erase(m_filteredOut.begin() + row);
@@ -314,7 +314,7 @@ void CDeleteClipData::FilterItems()
 		m_List.SetItemState(toSelect, LVIS_SELECTED, LVIS_SELECTED);
 	}
 	
-	m_List.SetItemCountEx(m_data.size(), 0);
+	m_List.SetItemCountEx((int)m_data.size(), 0);
 }
 
 bool CDeleteClipData::MatchesFilter(CDeleteData *pdata)
@@ -408,7 +408,7 @@ void CDeleteClipData::OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult)
 		{
 			INT_PTR row = m_List.GetNextSelectedItem(pos);
 
-			if(row >= 0 && row < m_data.size())
+			if(row >= 0 && row < (INT_PTR)m_data.size())
 			{
 				selectedDataSize += m_data[row].m_dataSize;
 				selectedCount++;
@@ -546,12 +546,12 @@ void CDeleteClipData::ApplyDelete()
 
 			CProgressWnd progress;
 			progress.Create(this, _T("Deleting clip items"), TRUE);
-			progress.SetRange(0, rowsToDelete.size() + 4);
+			progress.SetRange(0, (int)rowsToDelete.size() + 4);
 			progress.SetText(_T("Deleting selected items"));
 			progress.SetStep(1);
 
 			INT_PTR count = rowsToDelete.size();
-			for (int i = count - 1; i >= 0; i--)
+			for (INT_PTR i = count - 1; i >= 0; i--)
 			{
 				progress.PeekAndPump();
 				if (m_cancelDelete || progress.Cancelled())
@@ -618,7 +618,7 @@ void CDeleteClipData::ApplyDelete()
 			
 			FilterItems();
 
-			m_List.SetItemCountEx(m_data.size(), 0);
+			m_List.SetItemCountEx((int)m_data.size(), 0);
 		}
 		CATCH_SQLITE_EXCEPTION
 

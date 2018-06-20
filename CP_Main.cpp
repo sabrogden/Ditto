@@ -223,7 +223,7 @@ BOOL CCP_MainApp::InitInstance()
 		//If it didn't handle the message(ditto is not running) then startup this processes of ditto 
 		//disconnected from the clipboard
 		LRESULT ret = 0;
-		HWND hWnd = (HWND)CGetSetOptions::GetMainHWND();
+		HWND hWnd = (HWND)(LONG_PTR)CGetSetOptions::GetMainHWND();
 		if(hWnd)
 		{
 			ret = ::SendMessage(hWnd, WM_SET_CONNECTED, cmdInfo.m_bConnect, cmdInfo.m_bDisconnect);
@@ -252,7 +252,7 @@ BOOL CCP_MainApp::InitInstance()
 		//If it didn't handle the message(ditto is not running) then startup this processes of ditto 
 		//disconnected from the clipboard
 		LRESULT ret = 0;
-		HWND hWnd = (HWND)CGetSetOptions::GetMainHWND();
+		HWND hWnd = (HWND)(LONG_PTR)CGetSetOptions::GetMainHWND();
 		if(hWnd)
 		{
 			ret = ::SendMessage(hWnd, WM_OPEN_CLOSE_WINDWOW, cmdInfo.m_bOpenWindow, cmdInfo.m_bCloseWindow);
@@ -263,7 +263,7 @@ BOOL CCP_MainApp::InitInstance()
 	else if (cmdInfo.m_plainTextPaste)
 	{		
 		LRESULT ret = 0;
-		HWND hWnd = (HWND)CGetSetOptions::GetMainHWND();
+		HWND hWnd = (HWND)(LONG_PTR)CGetSetOptions::GetMainHWND();
 		if (hWnd)
 		{
 			ret = ::SendMessage(hWnd, WM_PLAIN_TEXT_PASTE, NULL, NULL);
@@ -295,7 +295,7 @@ BOOL CCP_MainApp::InitInstance()
 		dwError == ERROR_ALREADY_EXISTS)
 	{
 		Log(StrF(_T("Ditto is already running, closing, mutex: %s"), csMutex));
-		HWND hWnd = (HWND)CGetSetOptions::GetMainHWND();
+		HWND hWnd = (HWND)(LONG_PTR)CGetSetOptions::GetMainHWND();
 		if(hWnd)
 			::SendMessage(hWnd, WM_SHOW_TRAY_ICON, TRUE, TRUE);
 
@@ -335,7 +335,7 @@ void CCP_MainApp::AfterMainCreate()
 {
 	m_MainhWnd = m_pMainFrame->m_hWnd;
 	ASSERT( ::IsWindow(m_MainhWnd) );
-	g_Opt.SetMainHWND((long)m_MainhWnd);
+	g_Opt.SetMainHWND((long)(LONG_PTR)m_MainhWnd);
 
 	g_HotKeys.Init(m_MainhWnd);
 

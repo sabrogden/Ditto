@@ -1182,7 +1182,7 @@ void CGetSetOptions::SetMainHWND(long lhWnd)
 {	
 	SetProfileLong("MainhWnd", lhWnd);		
 }
-BOOL CGetSetOptions::GetMainHWND()				
+long CGetSetOptions::GetMainHWND()				
 {	
 	return GetProfileLong("MainhWnd", 0);	
 }

@@ -188,7 +188,7 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 		MarkAsPastedData* pData = (MarkAsPastedData*)pParam;
 		if(pData)
 		{
-			int clipCount = pData->ids.GetCount();
+			int clipCount = (int)pData->ids.GetCount();
 
 			if(g_Opt.m_bUpdateTimeOnPaste && 
 				pData->updateClipOrder &&

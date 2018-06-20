@@ -551,7 +551,7 @@ int CQuickPasteKeyboard::SelectedCommandRow()
 int CQuickPasteKeyboard::SelectedCommandShortCutId()
 {
 	int index = m_assignedCombo.GetCurSel();
-	int shortCutId = m_assignedCombo.GetItemData(index);
+	int shortCutId = (int)m_assignedCombo.GetItemData(index);
 
 	return shortCutId;
 }
@@ -718,7 +718,7 @@ void CQuickPasteKeyboard::SelectMouseTypeCombo(CComboBox &combo, int value)
 	int count = combo.GetCount();
 	for (int i = 0; i < count; i++)
 	{
-		int itemData = combo.GetItemData(i);
+		int itemData = (int)combo.GetItemData(i);
 		if (itemData == value)
 		{
 			combo.SetCurSel(i);
@@ -863,7 +863,7 @@ void CQuickPasteKeyboard::OnBnClickedButtonReset()
 	int count = m_list.GetItemCount();
 	for (int row = 0; row < count; row++)
 	{
-		int actionId = m_list.GetItemData(row);
+		int actionId = (int)m_list.GetItemData(row);
 		
 		CString sh = GetShortCutText(m_map[actionId]);
 

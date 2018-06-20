@@ -1061,7 +1061,7 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 	else
 	{
 		if (m_pasteOptions.m_delayRenderLockout > 0 &&
-			(GetTickCount() - m_pasteOptions.m_delayRenderLockout) < CGetSetOptions::GetDelayRenderLockout())
+			(GetTickCount() - m_pasteOptions.m_delayRenderLockout) < (DWORD)CGetSetOptions::GetDelayRenderLockout())
 		{
 			bInHere = false;
 			return false;

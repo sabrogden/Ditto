@@ -1,5 +1,5 @@
-﻿// QPasteWnd.cpp : implementation file
-//
+﻿// This is an open source non-commercial project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
 #include "stdafx.h"
 #include "CP_Main.h"
@@ -1453,6 +1453,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 		m_listItems.clear();
 	}
 
+	m_noSearchResults = false;
 	m_lstHeader.SetItemCount(0);
 	m_lstHeader.RefreshVisibleRows();
 	
@@ -2493,10 +2494,7 @@ void CQPasteWnd::OnMenuImport()
 
 void CQPasteWnd::OnMenuHelp()
 {
-    CString csFile = CGetSetOptions::GetPath(PATH_HELP);
-    csFile += "DittoGettingStarted.htm";
-
-    CHyperLink::GotoURL(csFile, SW_SHOW);
+	CHyperLink::GotoURL(_T("https://sourceforge.net/p/ditto-cp/wiki/"), SW_SHOW);
 }
 
 void CQPasteWnd::OnMenuQuickoptionsFont()
@@ -3385,7 +3383,7 @@ bool CQPasteWnd::DoActionPrevDescription()
 	
 	if (Indexes.GetCount() > 1)
 	{
-		for (int i = Indexes.GetCount()-1; i >= 0; i--)
+		for (int i = ((int)Indexes.GetCount())-1; i >= 0; i--)
 		{
 			int index = Indexes[i];
 			if (index == caret)
@@ -3397,7 +3395,7 @@ bool CQPasteWnd::DoActionPrevDescription()
 				}
 				else
 				{
-					caret = Indexes[Indexes.GetCount() - 1];
+					caret = Indexes[((int)Indexes.GetCount()) - 1];
 				}
 			}
 		}
@@ -4178,7 +4176,7 @@ bool CQPasteWnd::DoMoveClipDown()
 	if (IDs.GetCount() > 0)
 	{
 		bool sort = false;
-		for (int i = IDs.GetCount() - 1; i >= 0; i--)
+		for (int i = ((int)IDs.GetCount()) - 1; i >= 0; i--)
 		{
 			int id = IDs[i];
 			CClip clip;
@@ -4568,7 +4566,7 @@ bool CQPasteWnd::OnMakeTopSticky(bool forceSort)
 	if (IDs.GetCount() > 0)
 	{
 		bool sort = forceSort;
-		for (int i = IDs.GetCount() - 1; i >= 0; i--)
+		for (int i = ((int)IDs.GetCount()) - 1; i >= 0; i--)
 		{
 			int id = IDs[i];
 			CClip clip;
@@ -4610,7 +4608,7 @@ bool CQPasteWnd::OnMakeLastSticky()
 	if (IDs.GetCount() > 0)
 	{
 		bool sort = false;
-		for (int i = IDs.GetCount() - 1; i >= 0; i--)
+		for (int i = ((int)IDs.GetCount()) - 1; i >= 0; i--)
 		{
 			int id = IDs[i];
 			CClip clip;
@@ -4652,7 +4650,7 @@ bool CQPasteWnd::OnRemoveStickySetting()
 	if (IDs.GetCount() > 0)
 	{
 		bool sort = false;
-		for (int i = IDs.GetCount() - 1; i >= 0; i--)
+		for (int i = ((int)IDs.GetCount()) - 1; i >= 0; i--)
 		{
 			RemoveStickyInternal(IDs[i], sort);
 		}
@@ -4741,7 +4739,7 @@ bool CQPasteWnd::DoActionReplaceTopStickyClip()
 	if (IDs.GetCount() > 0)
 	{
 		bool sort = false;
-		for (int i = IDs.GetCount() - 1; i >= 0; i--)
+		for (int i = ((int)IDs.GetCount()) - 1; i >= 0; i--)
 		{
 			RemoveStickyInternal(IDs[i], sort);
 		}

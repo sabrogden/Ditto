@@ -835,14 +835,14 @@ DWORD CClip::GenerateCRC()
 					{
 						//i've seen examble where the text size was 10 but the data size was 20, leading to random crc values
 						//try and only check the crc for the actual text
-						int dataLength = GlobalSize(pCF->m_hgData);
+						int dataLength = (int)GlobalSize(pCF->m_hgData);
 						if (pCF->m_cfType == CF_TEXT)
 						{
-							dataLength = min(dataLength, (strlen((char*)Data) + 1));
+							dataLength = min(dataLength, ((int)strlen((char*)Data) + 1));
 						}
 						else if (pCF->m_cfType == CF_UNICODETEXT)
 						{
-							dataLength = min(dataLength, ((wcslen((wchar_t*)Data) + 1) * 2));
+							dataLength = min(dataLength, (((int)wcslen((wchar_t*)Data) + 1) * 2));
 						}
 						pCrc32->GenerateCrc32((const LPBYTE)Data, (DWORD)dataLength, dwCRC);
 					}
@@ -1840,7 +1840,7 @@ bool CClip::AddFileDataToData(CString &errorMessage)
 				CFileException ex;
 				if (file.Open(filePath, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone, &ex))
 				{
-					ULONGLONG fileSize = file.GetLength();
+					int fileSize = (int)file.GetLength();
 					int maxSize = CGetSetOptions::GetMaxFileContentsSize();
 					if (fileSize < maxSize)
 					{
@@ -1848,7 +1848,7 @@ bool CClip::AddFileDataToData(CString &errorMessage)
 						CStringA csFilePath;
 						CTextConvert::ConvertToUTF8(src, csFilePath);
 						
-						int bufferSize = fileSize + csFilePath.GetLength() + 1 + md5StringLength + 1;;
+						int bufferSize = (int)fileSize + csFilePath.GetLength() + 1 + md5StringLength + 1;;
 						char *pBuffer = new char[bufferSize];
 						if (pBuffer != NULL)
 						{
@@ -1857,12 +1857,11 @@ bool CClip::AddFileDataToData(CString &errorMessage)
 
 							memset(pBuffer, 0, bufferSize);
 							strncpy(pBuffer, csFilePath, csFilePath.GetLength());
-							CClipFormat* pCF;
 						
 							//move the buffer start past the file path and md5 string
 							char *bufferStart = pBuffer + csFilePath.GetLength() + 1 + md5StringLength + 1;
 
-							int readBytes = file.Read(bufferStart, fileSize);
+							int readBytes = (int)file.Read(bufferStart, fileSize);
 
 							CMd5 md5;
 							CStringA md5String = md5.CalcMD5FromString(bufferStart, fileSize);

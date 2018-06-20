@@ -119,7 +119,7 @@ void CCustomFriendsHelper::AddToMenu(CMenu *pMenu)
 
 void CCustomFriendsHelper::Add(CString item, CString desc)
 {
-	int count = m_list.size();
+	int count = (int)m_list.size();
 	if (count < MaxCustomFriends)
 	{
 		Name_Desc array_item;

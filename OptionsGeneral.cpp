@@ -306,7 +306,7 @@ BOOL COptionsGeneral::OnApply()
 		}
 	}
 
-	CGetSetOptions::SetQuickPastePosition(m_popupPositionCombo.GetItemData(m_popupPositionCombo.GetCurSel()));
+	CGetSetOptions::SetQuickPastePosition((int)m_popupPositionCombo.GetItemData(m_popupPositionCombo.GetCurSel()));
 
 	if (m_LogFont.lfWeight != 0)
 	{

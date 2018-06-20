@@ -209,7 +209,7 @@ public:
 	static BOOL		GetShowTextForFirstTenHotKeys();
 
 	static void		SetMainHWND(long lhWnd);
-	static BOOL		GetMainHWND();
+	static long		GetMainHWND();
 
 	static void		SetCaptionPos(long lPos);
 	static long		GetCaptionPos();

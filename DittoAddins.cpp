@@ -96,7 +96,7 @@ bool CDittoAddins::AddPrePasteAddinsToMenu(CMenu *pMenu)
 					nMenuId++;
 				}
 
-				::AppendMenu(AllAddinsMenu, MF_ENABLED|MF_POPUP, (UINT)AddinMenu, pAddin->DisplayName());
+				::AppendMenu(AllAddinsMenu, MF_ENABLED|MF_POPUP, (UINT_PTR)AddinMenu, pAddin->DisplayName());
 				bRet = true;
 			}
 			else if(subCount == 1)
@@ -120,7 +120,7 @@ bool CDittoAddins::AddPrePasteAddinsToMenu(CMenu *pMenu)
 	if(bRet)
 	{
 		pMenu->InsertMenu(17, MF_BYPOSITION | MF_SEPARATOR);
-		pMenu->InsertMenu(18, MF_BYPOSITION|MF_ENABLED|MF_STRING|MF_POPUP, (UINT)AllAddinsMenu, theApp.m_Language.GetString("Add_Ins", "Add-Ins"));
+		pMenu->InsertMenu(18, MF_BYPOSITION|MF_ENABLED|MF_STRING|MF_POPUP, (UINT_PTR)AllAddinsMenu, theApp.m_Language.GetString("Add_Ins", "Add-Ins"));
 	}
 
 	return bRet;

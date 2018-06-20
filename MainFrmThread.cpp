@@ -80,7 +80,7 @@ void CMainFrmThread::OnReadDbFile()
 		CString dbFile = CGetSetOptions::GetDBPath();
 		__int64 dbSize = FileSize(dbFile);
 
-		srand(time(NULL));
+		srand((UINT)time(NULL));
 
 		int random = rand() % (dbSize - 1024) + 1;
 
