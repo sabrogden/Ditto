@@ -3804,9 +3804,9 @@ bool CQPasteWnd::ShowProperties(int id, int row)
 				{
 					FillMainTable(m_listItems[row], q);
 				}
-			}
 
-			RemoveFromImageRtfCache(id);
+				RemoveFromImageRtfCache(row);
+			}
 		}
 
 		m_extraDataThread.FireLoadAccelerators();
