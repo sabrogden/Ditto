@@ -416,7 +416,6 @@ void CCopyProperties::LoadDataIntoCClip(CClip &Clip)
 	}
 
 	m_description.GetWindowText(Clip.m_Desc);
-	Clip.m_Desc.Replace(_T("'"), _T("''"));
 
 	m_QuickPasteText.GetWindowText(Clip.m_csQuickPaste);	
 
