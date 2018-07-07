@@ -309,6 +309,22 @@ ON_COMMAND(ID_SPECIALPASTE_PASTE32945, &CQPasteWnd::OnSpecialpastePasteDontUpdat
 ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_PASTE32945, &CQPasteWnd::OnUpdateOnSpecialPasteDontUpdateOrder)
 ON_COMMAND(ID_SPECIALPASTE_TRIM, &CQPasteWnd::OnSpecialpasteTrim)
 ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_TRIM, &CQPasteWnd::OnUpdateSpecialpasteTrim)
+ON_COMMAND(ID_TRANSPARENCY_INCREASE, &CQPasteWnd::OnTransparencyIncrease)
+ON_UPDATE_COMMAND_UI(ID_TRANSPARENCY_INCREASE, &CQPasteWnd::OnUpdateTransparencyIncrease)
+ON_COMMAND(ID_TRANSPARENCY_DECREASE, &CQPasteWnd::OnTransparencyDecrease)
+ON_UPDATE_COMMAND_UI(ID_TRANSPARENCY_DECREASE, &CQPasteWnd::OnUpdateTransparencyDecrease)
+ON_COMMAND(ID_TRANSPARENCY_TOGGLE, &CQPasteWnd::OnTransparencyToggle)
+ON_UPDATE_COMMAND_UI(ID_TRANSPARENCY_TOGGLE, &CQPasteWnd::OnUpdateTransparencyToggle)
+ON_UPDATE_COMMAND_UI(ID_MENU_TRANSPARENCY_NONE, &CQPasteWnd::OnUpdateTransparencyNone)
+ON_UPDATE_COMMAND_UI(ID_MENU_TRANSPARENCY_5, &CQPasteWnd::OnUpdateTransparency5)
+ON_UPDATE_COMMAND_UI(ID_MENU_TRANSPARENCY_10, &CQPasteWnd::OnUpdateTransparency10)
+ON_UPDATE_COMMAND_UI(ID_MENU_TRANSPARENCY_15, &CQPasteWnd::OnUpdateTransparency15)
+ON_UPDATE_COMMAND_UI(ID_MENU_TRANSPARENCY_20, &CQPasteWnd::OnUpdateTransparency20)
+ON_UPDATE_COMMAND_UI(ID_MENU_TRANSPARENCY_25, &CQPasteWnd::OnUpdateTransparency25)
+ON_UPDATE_COMMAND_UI(ID_MENU_TRANSPARENCY_30, &CQPasteWnd::OnUpdateTransparency30)
+ON_UPDATE_COMMAND_UI(ID_TRANSPARENCY_35, &CQPasteWnd::OnUpdateTransparency35)
+ON_UPDATE_COMMAND_UI(ID_MENU_TRANSPARENCY_40, &CQPasteWnd::OnUpdateTransparency40)
+ON_COMMAND(ID_TRANSPARENCY_35, &CQPasteWnd::OnTransparency35)
 END_MESSAGE_MAP()
 
 
@@ -1598,6 +1614,9 @@ void CQPasteWnd::SetMenuChecks(CMenu *pMenu)
             case 30:
                 nCheckID = ID_MENU_TRANSPARENCY_30;
                 break;
+			case 35:
+				nCheckID = ID_TRANSPARENCY_35;
+				break;
             case 40:
                 nCheckID = ID_MENU_TRANSPARENCY_40;
                 break;
@@ -1890,83 +1909,6 @@ void CQPasteWnd::SetLinesPerRow(int lines, bool force, bool resetListCount)
 		m_lstHeader.SetItemCountEx(listCount);
 		m_lstHeader.SetListPos(Indexs[0]);
 		m_lstHeader.RefreshVisibleRows();
-	}
-}
-
-void CQPasteWnd::OnMenuTransparencyNone()
-{
-    SetTransparency(0);
-}
-
-void CQPasteWnd::OnMenuTransparency5()
-{
-    SetTransparency(5);
-}
-
-void CQPasteWnd::OnMenuTransparency10()
-{
-    SetTransparency(10);
-}
-
-void CQPasteWnd::OnMenuTransparency15()
-{
-    SetTransparency(15);
-}
-
-void CQPasteWnd::OnMenuTransparency20()
-{
-    SetTransparency(20);
-}
-
-void CQPasteWnd::OnMenuTransparency25()
-{
-    SetTransparency(25);
-}
-
-void CQPasteWnd::OnMenuTransparency30()
-{
-    SetTransparency(30);
-}
-
-void CQPasteWnd::OnMenuTransparency40()
-{
-    SetTransparency(40);
-}
-
-void CQPasteWnd::SetTransparency(int percent)
-{
-    if(percent)
-    {
-        CGetSetOptions::SetTransparencyPercent(percent);
-        CGetSetOptions::SetEnableTransparency(TRUE);
-
-        m_Alpha.SetTransparent(TRUE);
-
-        float fPercent = percent / (float)100.0;
-
-        m_Alpha.SetOpacity(OPACITY_MAX - (int)(fPercent *OPACITY_MAX));
-    }
-    else
-    {
-        CGetSetOptions::SetEnableTransparency(FALSE);
-        m_Alpha.SetTransparent(FALSE);
-    }
-}
-
-void CQPasteWnd::SetCurrentTransparency()
-{
-	//Set the transparency
-	if (CGetSetOptions::GetEnableTransparency())
-	{
-		m_Alpha.SetTransparent(TRUE);
-
-		float fPercent = CGetSetOptions::GetTransparencyPercent() / (float)100.0;
-
-		m_Alpha.SetOpacity(OPACITY_MAX - (int)(fPercent *OPACITY_MAX));
-	}
-	else
-	{
-		m_Alpha.SetTransparent(FALSE);
 	}
 }
 
@@ -3217,6 +3159,43 @@ bool CQPasteWnd::DoAction(CAccel a)
 		break;
 	case ActionEnums::PASTE_TRIM_WHITE_SPACE:
 		ret = DoActionPasteTrimWhiteSpace();
+		break;
+
+	case ActionEnums::TRANSPARENCY_NONE:
+		SetTransparency(0);
+		break;
+	case ActionEnums::TRANSPARENCY_5:
+		SetTransparency(5);
+		break;
+	case ActionEnums::TRANSPARENCY_10:
+		SetTransparency(10);
+		break;
+	case ActionEnums::TRANSPARENCY_15:
+		SetTransparency(15);
+		break;
+	case ActionEnums::TRANSPARENCY_20:
+		SetTransparency(20);
+		break;
+	case ActionEnums::TRANSPARENCY_25:
+		SetTransparency(25);
+		break;
+	case ActionEnums::TRANSPARENCY_30:
+		SetTransparency(30);
+		break;
+	case ActionEnums::TRANSPARENCY_35:
+		SetTransparency(35);
+		break;
+	case ActionEnums::TRANSPARENCY_40:
+		SetTransparency(40);
+		break;
+	case ActionEnums::TRANSPARENCY_TOGGLE:
+		DoActionToggleTransparency();
+		break;
+	case ActionEnums::TRANSPARENCY_INCREASE:
+		DoActionIncreaseTransparency();
+		break;
+	case ActionEnums::TRANSPARENCY_DECREASE:
+		DoActionDecreaseTransparency();
 		break;
 	}
 
@@ -5340,7 +5319,7 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
         CString cs;
 
         int id = m_lstHeader.GetItemData(pInfo->lItem);
-        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText, lDate, lShortCut, clipOrder, clipGroupOrder, stickyClipOrder, stickyClipGroupOrder, lDontAutoDelete, QuickPasteText, lastPasteDate, globalShortCut FROM Main WHERE lID = %d"), id);
+        CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText, lDate, lShortCut, clipOrder, clipGroupOrder, stickyClipOrder, stickyClipGroupOrder, lDontAutoDelete, QuickPasteText, lastPasteDate, globalShortCut, lParentID FROM Main WHERE lID = %d"), id);
         if(q.eof() == false)
         {
             cs = q.getStringField(1);
@@ -5374,7 +5353,7 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
             int shortCut = q.getIntField(_T("lShortCut"));
             if(shortCut > 0)
             {
-                cs += "\n\n";
+                cs += "\r\n";
                 cs += CHotKey::GetHotKeyDisplayStatic(shortCut);
 
 				BOOL globalShortCut = q.getIntField(_T("globalShortCut"));
@@ -5389,7 +5368,7 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
 				int sticky = q.getIntField(_T("stickyClipGroupOrder"));
 				if (sticky != INVALID_STICKY)
 				{
-					cs += "\n\n";
+					cs += "\r\n";
 					cs += _T(" - Sticky In Group");
 				}
 			}
@@ -5398,9 +5377,16 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
 				int sticky = q.getIntField(_T("stickyClipOrder"));
 				if (sticky != INVALID_STICKY)
 				{
-					cs += "\n\n";
+					cs += "\r\n";
 					cs += _T(" - Sticky");
 				}
+			}
+
+			int parentId = q.getIntField(_T("lParentID"));
+			if (parentId > 0)
+			{
+				cs += "\r\n";
+				cs += FolderPath(parentId);
 			}
         }
 
@@ -6871,4 +6857,254 @@ void CQPasteWnd::OnUpdateSpecialpasteTrim(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_TRIM_WHITE_SPACE);
+}
+
+void CQPasteWnd::OnMenuTransparencyNone()
+{
+	DoAction(ActionEnums::TRANSPARENCY_NONE);
+}
+
+void CQPasteWnd::OnUpdateTransparencyNone(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TRANSPARENCY_NONE);
+}
+
+void CQPasteWnd::OnMenuTransparency5()
+{
+	DoAction(ActionEnums::TRANSPARENCY_5);
+}
+
+void CQPasteWnd::OnUpdateTransparency5(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TRANSPARENCY_5);
+}
+
+void CQPasteWnd::OnMenuTransparency10()
+{
+	DoAction(ActionEnums::TRANSPARENCY_10);
+}
+
+void CQPasteWnd::OnUpdateTransparency10(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TRANSPARENCY_10);
+}
+
+void CQPasteWnd::OnMenuTransparency15()
+{
+	DoAction(ActionEnums::TRANSPARENCY_15);
+}
+
+void CQPasteWnd::OnUpdateTransparency15(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TRANSPARENCY_15);
+}
+
+void CQPasteWnd::OnMenuTransparency20()
+{
+	DoAction(ActionEnums::TRANSPARENCY_20);
+}
+
+void CQPasteWnd::OnUpdateTransparency20(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TRANSPARENCY_20);
+}
+
+void CQPasteWnd::OnMenuTransparency25()
+{
+	DoAction(ActionEnums::TRANSPARENCY_25);
+}
+
+void CQPasteWnd::OnUpdateTransparency25(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TRANSPARENCY_25);
+}
+
+void CQPasteWnd::OnMenuTransparency30()
+{
+	DoAction(ActionEnums::TRANSPARENCY_30);
+}
+
+void CQPasteWnd::OnUpdateTransparency30(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TRANSPARENCY_30);
+}
+
+void CQPasteWnd::OnTransparency35()
+{
+	DoAction(ActionEnums::TRANSPARENCY_35);
+}
+
+void CQPasteWnd::OnUpdateTransparency35(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TRANSPARENCY_35);
+}
+
+void CQPasteWnd::OnMenuTransparency40()
+{
+	DoAction(ActionEnums::TRANSPARENCY_40);
+}
+
+void CQPasteWnd::OnUpdateTransparency40(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TRANSPARENCY_40);
+}
+
+bool CQPasteWnd::DoActionToggleTransparency()
+{
+	CGetSetOptions::SetEnableTransparency(!CGetSetOptions::GetEnableTransparency());
+	SetCurrentTransparency();
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionIncreaseTransparency()
+{
+	int current = CGetSetOptions::GetTransparencyPercent();
+	current += 5;
+	current = min(current, 100);
+	SetTransparency(current);
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionDecreaseTransparency()
+{
+	int current = CGetSetOptions::GetTransparencyPercent();
+	current -= 5;
+	current = max(current, 0);
+	SetTransparency(current);
+
+	return true;
+}
+
+void CQPasteWnd::SetTransparency(int percent)
+{
+	if (percent > 0)
+	{
+		CGetSetOptions::SetTransparencyPercent(percent);
+		CGetSetOptions::SetEnableTransparency(TRUE);
+
+		m_Alpha.SetTransparent(TRUE);
+
+		float fPercent = percent / (float)100.0;
+
+		m_Alpha.SetOpacity(OPACITY_MAX - (int)(fPercent *OPACITY_MAX));
+	}
+	else
+	{
+		CGetSetOptions::SetEnableTransparency(FALSE);
+		m_Alpha.SetTransparent(FALSE);
+	}
+}
+
+void CQPasteWnd::SetCurrentTransparency()
+{
+	//Set the transparency
+	if (CGetSetOptions::GetEnableTransparency())
+	{
+		m_Alpha.SetTransparent(TRUE);
+
+		float fPercent = CGetSetOptions::GetTransparencyPercent() / (float)100.0;
+
+		m_Alpha.SetOpacity(OPACITY_MAX - (int)(fPercent *OPACITY_MAX));
+	}
+	else
+	{
+		m_Alpha.SetTransparent(FALSE);
+	}
+}
+
+void CQPasteWnd::OnTransparencyIncrease()
+{
+	DoAction(ActionEnums::TRANSPARENCY_INCREASE);
+}
+
+
+void CQPasteWnd::OnUpdateTransparencyIncrease(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TRANSPARENCY_INCREASE);
+}
+
+
+void CQPasteWnd::OnTransparencyDecrease()
+{
+	DoAction(ActionEnums::TRANSPARENCY_DECREASE);
+}
+
+
+void CQPasteWnd::OnUpdateTransparencyDecrease(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TRANSPARENCY_DECREASE);
+}
+
+
+void CQPasteWnd::OnTransparencyToggle()
+{
+	DoAction(ActionEnums::TRANSPARENCY_TOGGLE);
+}
+
+
+void CQPasteWnd::OnUpdateTransparencyToggle(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::TRANSPARENCY_TOGGLE);
 }

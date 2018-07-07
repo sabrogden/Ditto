@@ -385,7 +385,12 @@ BEGIN
                 MENUITEM "20 %",                        32796
                 MENUITEM "25 %",                        32798
                 MENUITEM "30 %",                        32799
+                MENUITEM "35 %",                        ID_TRANSPARENCY_35
                 MENUITEM "40 %",                        32790
+                MENUITEM SEPARATOR
+                MENUITEM "Increase",                    ID_TRANSPARENCY_INCREASE
+                MENUITEM "Decrease",                    ID_TRANSPARENCY_DECREASE
+                MENUITEM "Toggle Enabled",              ID_TRANSPARENCY_TOGGLE
             END
             POPUP "Positioning"
             BEGIN

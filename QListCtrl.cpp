@@ -1020,7 +1020,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 
 		try
 		{
-			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, lDate, lastPasteDate, lDontAutoDelete, QuickPasteText, lShortCut, globalShortCut, stickyClipOrder, stickyClipGroupOrder FROM Main WHERE lID = %d"), clipId);
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, lDate, lastPasteDate, lDontAutoDelete, QuickPasteText, lShortCut, globalShortCut, stickyClipOrder, stickyClipGroupOrder, lParentID FROM Main WHERE lID = %d"), clipId);
 			if (q.eof() == false)
 			{
 				CString clipData;
@@ -1072,6 +1072,14 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 						clipData += _T(" | ");
 						clipData += _T(" - Sticky");
 					}
+				}
+
+				int parentId = q.getIntField(_T("lParentID"));
+				if (parentId > 0)
+				{					
+					CString folder = FolderPath(parentId);
+
+					m_pToolTip->SetFolderPath(folder);
 				}
 
 				m_pToolTip->SetClipData(clipData);

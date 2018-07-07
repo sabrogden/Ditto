@@ -293,6 +293,9 @@ public:
 	bool DoActionToggleClipboardConnection();
 	bool DoActionPasteDontMoveClip();
 	bool DoActionPasteTrimWhiteSpace();
+	bool DoActionToggleTransparency();
+	bool DoActionIncreaseTransparency();
+	bool DoActionDecreaseTransparency();
 
 	bool OnNewClip();
 	bool OnImportClip();
@@ -538,4 +541,20 @@ public:
 
 	afx_msg void OnSpecialpasteTrim();
 	afx_msg void OnUpdateSpecialpasteTrim(CCmdUI *pCmdUI);
+	afx_msg void OnTransparencyIncrease();
+	afx_msg void OnUpdateTransparencyIncrease(CCmdUI *pCmdUI);
+	afx_msg void OnTransparencyDecrease();
+	afx_msg void OnUpdateTransparencyDecrease(CCmdUI *pCmdUI);
+	afx_msg void OnTransparencyToggle();
+	afx_msg void OnUpdateTransparencyToggle(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateTransparencyNone(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateTransparency5(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateTransparency10(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateTransparency15(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateTransparency20(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateTransparency25(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateTransparency30(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateTransparency35(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateTransparency40(CCmdUI *pCmdUI);
+	afx_msg void OnTransparency35();
 };

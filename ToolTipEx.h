@@ -42,6 +42,7 @@ public:
 	void SetSearchText(CString text) { m_searchText = text; }
 
 	void SetClipData(CString data) { m_clipData = data; }
+	void SetFolderPath(CString path) { m_folderPath = path; }
 
 	bool GetShowPersistant() { return m_showPersistant; }
 	void ToggleShowPersistant() { OnFirstAlwaysontop(); }
@@ -90,6 +91,7 @@ protected:
 	CDittoWindow m_DittoWindow;
 	CImageViewer m_imageViewer;
 	CGroupStatic m_clipDataStatic;
+	CGroupStatic m_folderPathStatic;
 	CString m_clipData;
 	CFont m_clipDataFont;
 	bool m_saveWindowLockout;
@@ -99,6 +101,7 @@ protected:
 	bool m_bMaxSetTimer;
 	int m_lDelayMaxSeconds;
 	SnapWindow m_snap;
+	CString m_folderPath;
 
 protected:
 	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);	

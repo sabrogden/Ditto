@@ -1439,3 +1439,38 @@ CString NewGuidString()
 
 	return guidString;
 }
+
+CString FolderPath(int folderId)
+{
+	CString folder = _T("");
+	if (folderId > 0)
+	{
+		try
+		{
+			CStringArray arr;
+			for (int i = 0; i < 100; i++)
+			{
+				CppSQLite3Query parent = theApp.m_db.execQueryEx(_T("SELECT lID, mText, lParentID FROM Main WHERE lID = %d"), folderId);
+				if (parent.eof() == false)
+				{
+					arr.Add(parent.getStringField(_T("mText")));
+					folderId = parent.getIntField(_T("lParentID"));
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			folder = _T("Group Path: \\");
+			for (int folderPos = arr.GetCount() - 1; folderPos >= 0; folderPos--)
+			{
+				folder += _T("\\");
+				folder += arr[folderPos];
+			}
+		}
+		CATCH_SQLITE_EXCEPTION
+	}
+
+	return folder;
+}

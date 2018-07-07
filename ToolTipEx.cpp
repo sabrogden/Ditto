@@ -119,11 +119,17 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 	m_optionsButton.ShowWindow(SW_SHOW);
 
 	m_clipDataStatic.Create(_T("some text"), WS_CHILD | WS_VISIBLE | SS_SIMPLE, CRect(0, 0, 0, 0), this, 3);
+	m_folderPathStatic.Create(_T("some text"), WS_CHILD | WS_VISIBLE | SS_SIMPLE, CRect(0, 0, 0, 0), this, 4);
 
 	m_clipDataFont.CreateFont(-m_DittoWindow.m_dpi.Scale(11), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+
 	m_clipDataStatic.SetFont(&m_clipDataFont);
 	m_clipDataStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
 	m_clipDataStatic.SetTextColor(RGB(80, 80, 80));
+
+	m_folderPathStatic.SetFont(&m_clipDataFont);
+	m_folderPathStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
+	m_folderPathStatic.SetTextColor(RGB(80, 80, 80));
 
 	m_saveWindowLockout = false;
 
@@ -256,6 +262,7 @@ BOOL CToolTipEx::Show(CPoint point)
 	}
 
 	m_clipDataStatic.SetWindowText(m_clipData);
+	m_folderPathStatic.SetWindowText(m_folderPath);
 
 	if (m_DittoWindow.m_bMinimized)
 	{
@@ -683,7 +690,20 @@ void CToolTipEx::MoveControls()
 {
 	CRect cr;
 	GetClientRect(cr);
-	cr.DeflateRect(0, 0, 0, m_DittoWindow.m_dpi.Scale(21));
+
+	int bottom = 22;
+
+	if (m_folderPath != _T(""))
+	{
+		bottom += m_DittoWindow.m_dpi.Scale(17);
+		m_folderPathStatic.ShowWindow(SW_SHOW);			}
+	else
+	{
+		m_folderPathStatic.ShowWindow(SW_HIDE);
+	}
+
+	cr.DeflateRect(0, 0, 0, bottom);
+
 	m_RichEdit.MoveWindow(cr);
 	m_imageViewer.MoveWindow(cr);
 	if (::IsWindow(m_browser.m_hWnd))
@@ -693,7 +713,9 @@ void CToolTipEx::MoveControls()
 
 	m_optionsButton.MoveWindow(cr.left, cr.bottom + m_DittoWindow.m_dpi.Scale(3), m_DittoWindow.m_dpi.Scale(17), m_DittoWindow.m_dpi.Scale(17));
 
-	m_clipDataStatic.MoveWindow(cr.left + m_DittoWindow.m_dpi.Scale(19), cr.bottom + m_DittoWindow.m_dpi.Scale(4), cr.Width() - cr.left + m_DittoWindow.m_dpi.Scale(19), m_DittoWindow.m_dpi.Scale(17));
+	m_clipDataStatic.MoveWindow(cr.left + m_DittoWindow.m_dpi.Scale(19), cr.bottom + m_DittoWindow.m_dpi.Scale(4), cr.Width() - cr.left + m_DittoWindow.m_dpi.Scale(19), m_DittoWindow.m_dpi.Scale(20));
+
+	m_folderPathStatic.MoveWindow(cr.left + m_DittoWindow.m_dpi.Scale(19), cr.bottom + m_DittoWindow.m_dpi.Scale(20), cr.Width() - cr.left + m_DittoWindow.m_dpi.Scale(19), m_DittoWindow.m_dpi.Scale(20));
 
 	this->Invalidate();
 
@@ -742,7 +764,7 @@ void CToolTipEx::SetHtmlText(const CString &html)
 
 		CString colorHex;
 		colorHex.Format(_T("#%02X%02X%02X"), dwR, dwG, dwB);
-
+		
 		m_html.Replace(_T("<body>"), StrF(_T("<body bgcolor=\"%s\">"), colorHex));
 
 		m_browser.PutSilent(true);
@@ -1273,9 +1295,14 @@ LRESULT CToolTipEx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 
 	m_clipDataFont.Detach();
 	m_clipDataFont.CreateFont(-m_DittoWindow.m_dpi.Scale(8), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+	
 	m_clipDataStatic.SetFont(&m_clipDataFont);
 	m_clipDataStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
 	m_clipDataStatic.SetTextColor(RGB(80, 80, 80));
+
+	m_folderPathStatic.SetFont(&m_clipDataFont);
+	m_folderPathStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
+	m_folderPathStatic.SetTextColor(RGB(80, 80, 80));
 
 	LOGFONT lf;
 	m_Font.GetLogFont(&lf);

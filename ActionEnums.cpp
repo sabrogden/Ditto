@@ -311,6 +311,42 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case PASTE_TRIM_WHITE_SPACE:
 		val = "Paste, Trim White Space";
 		break;
+	case TRANSPARENCY_NONE:
+		val = "Set Transparency None";
+		break;
+	case TRANSPARENCY_5:
+		val = "Set Transparency 5%";
+		break;
+	case TRANSPARENCY_10:
+		val = "Set Transparency 10%";
+		break;
+	case TRANSPARENCY_15:
+		val = "Set Transparency 15%";
+		break;
+	case TRANSPARENCY_20:
+		val = "Set Transparency 20%";
+		break;
+	case TRANSPARENCY_25:
+		val = "Set Transparency 25%";
+		break;
+	case TRANSPARENCY_30:
+		val = "Set Transparency 30%";
+		break;
+	case TRANSPARENCY_35:
+		val = "Set Transparency 35%";
+		break;
+	case TRANSPARENCY_40:
+		val = "Set Transparency 40%";
+		break;
+	case TRANSPARENCY_TOGGLE:
+		val = "Toggle Transparency Enabled";
+		break;
+	case TRANSPARENCY_INCREASE:
+		val = "Increase Transparency %";
+		break;
+	case TRANSPARENCY_DECREASE:
+		val = "Decrease Transparency %";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
