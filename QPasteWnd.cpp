@@ -2803,26 +2803,7 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 		{
 		}
 	}
-		break;
-	case WM_MBUTTONDBLCLK:
-		break;
-	case WM_LBUTTONDOWN:
-		break;
-
-	/*case WM_LBUTTONDBLCLK:
-	{
-		MSG msg;
-		msg.lParam = 0;
-		msg.wParam = VK_MOUSE_DOUBLE_CLICK;
-		msg.message = WM_KEYDOWN;
-		if (CheckActions(&msg))
-		{
-			return 0;
-		}
-	}
-		break;*/
-	case WM_NOTIFY:
-		break;
+	break;
 	default:
 		if (CheckActions(pMsg))
 		{
@@ -6504,7 +6485,7 @@ void CQPasteWnd::OnNMClickList1(NMHDR *pNMHDR, LRESULT *pResult)
 void CQPasteWnd::OnNMDblclkList1(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
-	
+
 	MSG msg;
 	msg.lParam = 0;
 	msg.wParam = VK_MOUSE_DOUBLE_CLICK;

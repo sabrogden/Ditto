@@ -65,6 +65,7 @@ BEGIN_MESSAGE_MAP(CToolTipEx, CWnd)
 	ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
 	ON_WM_MOVING()
 	ON_WM_ENTERSIZEMOVE()
+	ON_WM_HSCROLL()
 END_MESSAGE_MAP()
 
 
@@ -500,6 +501,7 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
             }
 
 		case WM_MOUSEWHEEL:
+		case WM_MOUSEHWHEEL:
 		{
 			if (m_imageViewer.m_pGdiplusBitmap)
 			{
@@ -1268,9 +1270,20 @@ void CToolTipEx::OnEnMsgfilterRichedit21(NMHDR *pNMHDR, LRESULT *pResult)
 		{
 			//handle click on the rich text control when it doesn't have focus
 			//set focus so the first click is handled by the rich text control
-			case WM_MOUSEACTIVATE:
-				m_RichEdit.SetFocus();
-				break;
+		case WM_MOUSEACTIVATE:
+			m_RichEdit.SetFocus();
+			break;
+		case WM_MOUSEHWHEEL:			
+			int delta = GET_WHEEL_DELTA_WPARAM(pMsgFilter->wParam);
+			if (delta < 0)
+			{			
+				m_RichEdit.SendMessage(WM_HSCROLL, SB_LINERIGHT, NULL);
+			}
+			else
+			{
+				m_RichEdit.SendMessage(WM_HSCROLL, SB_LINELEFT, NULL);
+			}
+			break;
 		}
 	}
 
@@ -1335,4 +1348,11 @@ void CToolTipEx::OnEnterSizeMove()
 	m_snap.OnSnapEnterSizeMove(m_hWnd);
 
 	CWnd::OnEnterSizeMove();
+}
+
+
+void CToolTipEx::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+	int x = 9;
+	//m_scrollHelper.OnHScroll(nSBCode, nPos, pScrollBar);
 }

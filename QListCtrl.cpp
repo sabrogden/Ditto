@@ -130,6 +130,7 @@ BEGIN_MESSAGE_MAP(CQListCtrl, CListCtrl)
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXTA, 0, 0xFFFF, OnToolTipText)
 	ON_WM_KILLFOCUS()
 	ON_WM_MEASUREITEM_REFLECT()
+	ON_WM_MOUSEHWHEEL()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -802,9 +803,10 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 	{
 	case WM_KEYDOWN:
 		if(HandleKeyDown(pMsg->wParam, pMsg->lParam))
-			return TRUE;
-		
+			return TRUE;		
 		break; // end case WM_KEYDOWN
+	case WM_MOUSEWHEEL:
+		break;
 
 	case WM_VSCROLL:
 		ASSERT(FALSE);
@@ -997,7 +999,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		m_pToolTip->SetGdiplusBitmap(NULL);
 		m_pToolTip->SetRTFText("");
 		m_pToolTip->SetToolTipText(_T(""));
-		
+		m_pToolTip->SetFolderPath(_T(""));		
 	}
 	
 	if(VALID_TOOLTIP)
@@ -1710,4 +1712,18 @@ void CQListCtrl::SetDpiInfo(CDPI *dpi)
 	lstrcpy(lf.lfFaceName, _T("Small Font"));
 
 	m_SmallFont = ::CreateFontIndirect(&lf);
+}
+
+void CQListCtrl::OnMouseHWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+	if (zDelta < 0)
+	{
+		this->SendMessage(WM_HSCROLL, SB_LINERIGHT, NULL);
+	}
+	else
+	{
+		this->SendMessage(WM_HSCROLL, SB_LINELEFT, NULL);
+	}
+
+	//CListCtrl::OnMouseHWheel(nFlags, zDelta, pt);
 }

@@ -860,9 +860,9 @@ BOOL CMainFrame::PreTranslateMessage(MSG *pMsg)
 				
 			}
 		}
-		
-		//if (GetKeyState(VK_SHIFT) & 0x8000)
-		//	pMsg->message = WM_MOUSEHWHEEL;
+
+		if (GetKeyState(VK_SHIFT) & 0x8000)
+			pMsg->message = WM_MOUSEHWHEEL;
 	}
 
     return CFrameWnd::PreTranslateMessage(pMsg);

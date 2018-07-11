@@ -459,15 +459,15 @@ header("Pragma: no-cache");
 <br>
 <b>Ditto beta, version %version%</b>
 <br><br>
-<a href="DittoSetup_%versionFileName%.exe">Ditto Setup</a><br>
-<a href="DittoSetup_64bit_%versionFileName%.exe">Ditto Setup 64bit</a><br>
-<a href="DittoPortable_%versionFileName%.zip">Ditto Portable</a><br>
-<a href="DittoPortable_64bit_%versionFileName%.zip">Ditto Portable 64</a><br>
-<a href="Ditto_%versionFileName%.appx">Ditto Windows App</a><br>
+<a href="files\DittoSetup_%versionFileName%.exe">Ditto Setup</a><br>
+<a href="files\DittoSetup_64bit_%versionFileName%.exe">Ditto Setup 64bit</a><br>
+<a href="files\DittoPortable_%versionFileName%.zip">Ditto Portable</a><br>
+<a href="files\DittoPortable_64bit_%versionFileName%.zip">Ditto Portable 64</a><br>
+<a href="files\Ditto_%versionFileName%.appx">Ditto Windows App</a><br>
 
 <br>
-<a href="DittoDebug_%versionFileName%.7z">Ditto Debug Files</a><br>
-<a href="DittoSource_%versionFileName%.zip">Ditto Source</a><br>
+<a href="files\DittoDebug_%versionFileName%.7z">Ditto Debug Files</a><br>
+<a href="files\DittoSource_%versionFileName%.zip">Ditto Source</a><br>
 
 <br>
 
@@ -537,7 +537,24 @@ var sc_security="b3f57099";
 			<TransferType type='3'>1</TransferType>
 			<UserName>sabrogden,ditto-cp</UserName>
 			<indent type='3'>1</indent>
-			<name>Copy to beta folder</name>
+			<name>Copy install files</name>
+		</step>
+		<step action='FTP'>
+			<Ext>*.php</Ext>
+			<Filename>%workDir%\DittoSetup\output\</Filename>
+			<Incremental type='11'>-1</Incremental>
+			<Logging type='3'>6</Logging>
+			<Password encrypted='1'>amkwNSREZkNXUFp3JmFRMlkc1ehlfY06mdLEVJHqyXdFbT0D5VqgTJGtkZ7P6mdnGca+n6FwXTNm9GfdZyIEMg==</Password>
+			<Percent>10</Percent>
+			<Port>22</Port>
+			<Retries>0</Retries>
+			<Server>web.sourceforge.net</Server>
+			<ServerPath>/home/groups/d/di/ditto-cp/htdocs/beta</ServerPath>
+			<Timeout>30</Timeout>
+			<TransferType type='3'>1</TransferType>
+			<UserName>sabrogden,ditto-cp</UserName>
+			<indent type='3'>1</indent>
+			<name>Copy beta web pages</name>
 		</step></steps>
 	<steps type='1'>
 		<step action='Group'>
