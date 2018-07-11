@@ -400,9 +400,25 @@ void CSendKeys::PopUpShiftKeys()
 	{
       SendKeyUp(VK_SHIFT);
 	}
+	if (m_bLShiftDown)
+	{
+		SendKeyUp(VK_LSHIFT);
+	}
+	if (m_bRShiftDown)
+	{
+		SendKeyUp(VK_RSHIFT);
+	}
     if (m_bControlDown)
 	{
       SendKeyUp(VK_CONTROL);
+	}
+	if (m_bLControlDown)
+	{
+		SendKeyUp(VK_LCONTROL);
+	}
+	if (m_bRControlDown)
+	{
+		SendKeyUp(VK_RCONTROL);
 	}
     if (m_bAltDown)
 	{
@@ -413,7 +429,7 @@ void CSendKeys::PopUpShiftKeys()
       SendKeyUp(VK_LWIN);
 	}
 
-    m_bWinDown = m_bShiftDown = m_bControlDown = m_bAltDown = false;
+    m_bWinDown = m_bShiftDown = m_bLShiftDown = m_bRShiftDown = m_bControlDown = m_bLControlDown = m_bRControlDown = m_bAltDown = false;
   }
 }
 
@@ -431,7 +447,7 @@ bool CSendKeys::SendKeys(LPCTSTR KeysString, bool Wait)
 
   m_bWait = Wait;
 
-  m_bWinDown = m_bShiftDown = m_bControlDown = m_bAltDown = m_bUsingParens = false;
+  m_bWinDown = m_bShiftDown = m_bLShiftDown = m_bRShiftDown = m_bControlDown = m_bLControlDown = m_bRControlDown = m_bAltDown = m_bUsingParens = false;
 
   while (ch = *pKey)
   {
@@ -566,10 +582,27 @@ bool CSendKeys::SendKeys(LPCTSTR KeysString, bool Wait)
         }
 
         // A valid key to send?
-        if (MKey != INVALIDKEY)
-        {
-          SendKey(MKey, NumTimes, true);
-          PopUpShiftKeys();
+		if (MKey != INVALIDKEY)
+		{
+			if (MKey == VK_LCONTROL ||
+				MKey == VK_RCONTROL)
+			{
+				m_bLControlDown = (MKey == VK_LCONTROL);
+				m_bRControlDown = (MKey == VK_RCONTROL);
+				SendKeyDown(MKey, 1, false);
+			}
+			else if (MKey == VK_LSHIFT ||
+					 MKey == VK_RSHIFT)
+			{
+				m_bLShiftDown = (MKey == VK_LSHIFT);
+				m_bRShiftDown = (MKey == VK_RSHIFT);
+				SendKeyDown(MKey, 1, false);
+			}
+			else
+			{		
+				SendKey(MKey, NumTimes, true);	
+				PopUpShiftKeys();
+			}
         }
       }
       break;

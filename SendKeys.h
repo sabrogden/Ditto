@@ -8,7 +8,7 @@
 class CSendKeys
 {
 private:
-  bool m_bWait, m_bUsingParens, m_bShiftDown, m_bAltDown, m_bControlDown, m_bWinDown;
+  bool m_bWait, m_bUsingParens, m_bShiftDown, m_bLShiftDown, m_bRShiftDown, m_bAltDown, m_bControlDown, m_bLControlDown, m_bRControlDown, m_bWinDown;
   DWORD  m_nDelayAlways, m_nDelayNow, m_keyDownDelay;
 
   static BOOL CALLBACK enumwindowsProc(HWND hwnd, LPARAM lParam);

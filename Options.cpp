@@ -1865,6 +1865,11 @@ CString CGetSetOptions::GetDefaultPasteString()
 	return GetProfileString(_T("DefaultPasteString"), _T("^{VKEY86}"));
 }
 
+void CGetSetOptions::SetDefaultPasteString(CString val)
+{
+	SetProfileString(_T("DefaultPasteString"), val);
+}
+
 CString CGetSetOptions::GetCopyString(CString csAppName)
 {
 	CString csString = GetProfileString(csAppName, _T(""), _T("CopyStrings"));
@@ -1881,6 +1886,11 @@ CString CGetSetOptions::GetDefaultCopyString()
 	return GetProfileString(_T("DefaultCopyString"), _T("^{VKEY67}"));
 }
 
+void CGetSetOptions::SetDefaultCopyString(CString val)
+{
+	SetProfileString(_T("DefaultCopyString"), val);
+}
+
 CString CGetSetOptions::GetCutString(CString csAppName)
 {
 	CString csString = GetProfileString(csAppName, _T(""), _T("CutStrings"));
@@ -1895,6 +1905,11 @@ CString CGetSetOptions::GetDefaultCutString()
 	//ascii value for x
 	//for other language keyboards x gets converted to something else so send the base ascii value
 	return GetProfileString(_T("DefaultCutString"), _T("^{VKEY88}"));
+}
+
+void CGetSetOptions::SetDefaultCutString(CString val)
+{
+	SetProfileString(_T("DefaultCutString"), val);
 }
 
 BOOL CGetSetOptions::GetEditWordWrap()

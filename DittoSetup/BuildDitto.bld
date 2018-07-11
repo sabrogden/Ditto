@@ -523,6 +523,7 @@ var sc_security="b3f57099";
 			<name><![CDATA[Replace Line Feeds with <br>]]></name>
 		</step>
 		<step action='FTP'>
+			<ExclExt>*.php</ExclExt>
 			<Ext>*.*</Ext>
 			<Filename>%workDir%\DittoSetup\output\</Filename>
 			<Incremental type='11'>-1</Incremental>

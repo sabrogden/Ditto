@@ -108,6 +108,9 @@ END_MESSAGE_MAP()
 #define SETTING_CLIPBOARD_SAVE_DELAY 61
 #define SETTING_SHOW_MSG_WHEN_RECEIVING_MANUAL_SENT_CLIP 62
 #define SETTING_MULTIPASTE_REVERSE_ORDER 63
+#define SETTING_DEFAULT_PASTE_STRING 64
+#define SETTING_DEFAULT_COPY_STRING 65
+#define SETTING_DEFAULT_CUT_STRING 66
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -139,7 +142,10 @@ BOOL CAdvGeneral::OnInitDialog()
 	
 	AddTrueFalse(pGroupTest, _T("Allow Duplicates"), CGetSetOptions::GetAllowDuplicates(), SETTING_ALLOW_DUPLICATES);
 	AddTrueFalse(pGroupTest, _T("Always Show Scroll Bar"), CGetSetOptions::GetShowScrollBar(), SETTING_ALWAYS_SHOW_SCROLL_BAR);
-	pGroupTest->AddSubItem( new CMFCPropertyGridProperty(_T("Amount of text to save for description"), g_Opt.m_bDescTextSize, _T(""), SETTING_DESC_SIZE));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Amount of text to save for description"), g_Opt.m_bDescTextSize, _T(""), SETTING_DESC_SIZE));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default Paste String"), CGetSetOptions::GetDefaultPasteString(), _T(""), SETTING_DEFAULT_PASTE_STRING));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default Copy String"), CGetSetOptions::GetDefaultCopyString(), _T(""), SETTING_DEFAULT_COPY_STRING));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default Cut String"), CGetSetOptions::GetDefaultCutString(), _T(""), SETTING_DEFAULT_CUT_STRING));
 	
 	static TCHAR BASED_CODE szDiffFilter[] = _T("Diff Applications(*.exe)|*.exe||");
 	CMFCPropertyGridFileProperty* pDiffProp = new CMFCPropertyGridFileProperty(_T("Diff Application Path"), TRUE, CGetSetOptions::GetDiffApp(), _T("exe"), 0, szDiffFilter, (LPCTSTR)0, SETTING_DIFF_APP);
@@ -626,6 +632,25 @@ void CAdvGeneral::OnBnClickedOk()
 				if (pNewValue->lVal != pOrigValue->lVal)
 				{
 					CGetSetOptions::SetToolTipTimeout(pNewValue->lVal);
+				}
+				break;
+
+			case SETTING_DEFAULT_PASTE_STRING:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					CGetSetOptions::SetDefaultPasteString(pNewValue->bstrVal);
+				}
+				break;
+			case SETTING_DEFAULT_COPY_STRING:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					CGetSetOptions::SetDefaultCopyString(pNewValue->bstrVal);
+				}
+				break;
+			case SETTING_DEFAULT_CUT_STRING:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					CGetSetOptions::SetDefaultCutString(pNewValue->bstrVal);
 				}
 				break;
 			}

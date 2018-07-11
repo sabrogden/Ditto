@@ -364,13 +364,17 @@ public:
 	static BOOL		GetSetCurrentDirectory();
 
 	static CString GetPasteString(CString csAppName);
+
 	static CString GetDefaultPasteString();
+	static void SetDefaultPasteString(CString val);
 
 	static CString GetCopyString(CString csAppName);
 	static CString GetDefaultCopyString();
+	static void SetDefaultCopyString(CString val);
 
 	static CString GetCutString(CString csAppName);
 	static CString GetDefaultCutString();
+	static void SetDefaultCutString(CString val);
 
 	static BOOL	GetEditWordWrap();
 	static void	SetEditWordWrap(BOOL bSet);
