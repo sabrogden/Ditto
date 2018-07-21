@@ -605,6 +605,12 @@ public:
 
 	static BOOL GetDisableExpireClipsConfig();
 	static void SetDisableExpireClipsConfig(BOOL val);
+
+	static BOOL GetRevertToTopLevelGroup();
+	static void SetRevertToTopLevelGroup(BOOL val);
+
+	static BOOL GetUpdateClipOrderOnCtrlC();
+	static void SetUpdateClipOrderOnCtrlC(BOOL val);
 };
 
 // global for easy access and for initialization of fast access variables

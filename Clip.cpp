@@ -205,6 +205,25 @@ CClipFormat* CClipFormats::FindFormat(UINT cfType)
 	return NULL;
 }
 
+bool CClipFormats::RemoveFormat(CLIPFORMAT cfType)
+{
+	bool removed = false;
+	CClipFormat* pCF;
+	INT_PTR count = GetSize();
+
+	for (int i = 0; i < count; i++)
+	{
+		pCF = &ElementAt(i);
+		if (pCF->m_cfType == cfType)
+		{
+			this->RemoveAt(i);
+			removed = true;
+			break;
+		}
+	}
+	return removed;
+}
+
 
 
 

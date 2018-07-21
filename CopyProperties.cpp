@@ -127,6 +127,15 @@ BOOL CCopyProperties::OnInitDialog()
 	
 	theApp.m_Language.UpdateClipProperties(this);
 
+	if (m_clip.ID() > 0)
+	{
+		CString text;
+		this->GetWindowText(text);
+		CString newText;
+		newText.Format(_T("%s - %d"), text, m_clip.ID());
+		this->SetWindowText(newText);
+	}
+
 	return FALSE;
 }
 
@@ -222,7 +231,7 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 
 	//show the selected data md5
 	OnLbnSelchangeCopyData();
-
+	
 	if(Clip.m_bIsGroup == FALSE)
 	{
 		::ShowWindow(::GetDlgItem(m_hWnd, IDC_STATIC_HOT_KEY_MOVE_TO_GROUP), SW_HIDE);

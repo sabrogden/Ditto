@@ -20,5 +20,10 @@ public:
 	SIZE_T GetClipSize(std::string clipboardFormat);
 
 	std::string GetActiveApp() { return m_activeApp; }
+
+	BOOL RemoveFormat(std::string clipboardFormat);
+	BOOL FormatExists(std::string clipboardFormat);
+	BOOL SetParentId(int parentId);
+	BOOL AsciiTextMatchesRegex(std::string regex);
 };
 

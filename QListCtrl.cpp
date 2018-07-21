@@ -899,12 +899,12 @@ void CQListCtrl::LoadCopyOrCutToClipboard()
 		paste.GetClipIDs().Add(arr[0]);
 	
 	//Don't move these to the top
-	BOOL bItWas = g_Opt.m_bUpdateTimeOnPaste;
-	g_Opt.m_bUpdateTimeOnPaste = FALSE;
-
+	BOOL itWas = g_Opt.m_bUpdateTimeOnPaste;
+	g_Opt.m_bUpdateTimeOnPaste = CGetSetOptions::GetUpdateClipOrderOnCtrlC();
+	
 	paste.DoPaste();
 
-	g_Opt.m_bUpdateTimeOnPaste = bItWas;
+	g_Opt.m_bUpdateTimeOnPaste = itWas;	
 }
 
 bool CQListCtrl::PostEventLoadedCheckDescription(int updatedRow)

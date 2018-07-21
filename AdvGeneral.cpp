@@ -68,7 +68,7 @@ END_MESSAGE_MAP()
 #define SETTING_SHOW_CLIP_PASTED 23
 #define SETTING_DIFF_APP 24
 #define SETTING_TRANSPARENCY 25
-#define SETTING_UPDATE_ORDER 26
+#define SETTING_UPDATE_ORDER_ON_PASTE 26
 #define SETTING_ALLOW_DUPLICATES 27
 #define SETTING_REGEX_FILTERING_1 28
 #define SETTING_REGEX_FILTERING_2 29
@@ -111,6 +111,8 @@ END_MESSAGE_MAP()
 #define SETTING_DEFAULT_PASTE_STRING 64
 #define SETTING_DEFAULT_COPY_STRING 65
 #define SETTING_DEFAULT_CUT_STRING 66
+#define SETTING_REVERT_TO_TOP_LEVEL_GROUP 67
+#define SETTING_UPDATE_ORDER_ON_CTRL_C 68
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -171,6 +173,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Paste Clip in active window after selection"), CGetSetOptions::GetSendPasteAfterSelection(), SETTING_PASTE_IN_ACTIVE_WINDOW);
 	AddTrueFalse(pGroupTest, _T("Prompt when deleting clips"), CGetSetOptions::GetPromptWhenDeletingClips(), SETTING_PROMP_ON_DELETE);
 
+	AddTrueFalse(pGroupTest, _T("Revert to top level group on close"), CGetSetOptions::GetRevertToTopLevelGroup(), SETTING_REVERT_TO_TOP_LEVEL_GROUP);
+
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Save Clipboard Delay (ms, default: 100))"), (long)(CGetSetOptions::GetProcessDrawClipboardDelay()), _T(""), SETTING_CLIPBOARD_SAVE_DELAY));
 
 	AddTrueFalse(pGroupTest, _T("Save Multi-Pastes"), CGetSetOptions::GetSaveMultiPaste(), SETTING_SAVE_MULTI_PASTE);
@@ -195,7 +199,8 @@ BOOL CAdvGeneral::OnInitDialog()
 
 	AddTrueFalse(pGroupTest, _T("Transparency Enabled"), CGetSetOptions::GetEnableTransparency(), SETTING_ENABLE_TRANSPARENCY);
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Transparency Percentage"), CGetSetOptions::GetTransparencyPercent(), _T(""), SETTING_TRANSPARENCY));
-	AddTrueFalse(pGroupTest, _T("Update Clip Order On Paste"), CGetSetOptions::GetUpdateTimeOnPaste(), SETTING_UPDATE_ORDER);
+	AddTrueFalse(pGroupTest, _T("Update Clip Order On Paste"), CGetSetOptions::GetUpdateTimeOnPaste(), SETTING_UPDATE_ORDER_ON_PASTE);
+	AddTrueFalse(pGroupTest, _T("Update Clip Order On Ctrl-C"), CGetSetOptions::GetUpdateClipOrderOnCtrlC(), SETTING_UPDATE_ORDER_ON_CTRL_C);
 
 	CMFCPropertyGridProperty * regexFilterGroup = new CMFCPropertyGridProperty(_T("Exlude clips by Regular Expressions"));
 	m_propertyGrid.AddProperty(regexFilterGroup);	
@@ -542,7 +547,7 @@ void CAdvGeneral::OnBnClickedOk()
 					CGetSetOptions::SetDiffApp(pNewValue->bstrVal);
 				}
 				break;
-			case SETTING_UPDATE_ORDER:
+			case SETTING_UPDATE_ORDER_ON_PASTE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
 					BOOL val = false;
@@ -551,6 +556,17 @@ void CAdvGeneral::OnBnClickedOk()
 						val = true;
 					}
 					CGetSetOptions::SetUpdateTimeOnPaste(val);
+				}
+				break;
+			case SETTING_UPDATE_ORDER_ON_CTRL_C:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = false;
+					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
+					{
+						val = true;
+					}
+					CGetSetOptions::SetUpdateClipOrderOnCtrlC(val);
 				}
 				break;
 			case SETTING_MULTIPASTE_REVERSE_ORDER:
@@ -651,6 +667,17 @@ void CAdvGeneral::OnBnClickedOk()
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
 					CGetSetOptions::SetDefaultCutString(pNewValue->bstrVal);
+				}
+				break;
+			case SETTING_REVERT_TO_TOP_LEVEL_GROUP:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = false;
+					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
+					{
+						val = true;
+					}
+					CGetSetOptions::SetRevertToTopLevelGroup(val);
 				}
 				break;
 			}

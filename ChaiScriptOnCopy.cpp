@@ -32,6 +32,11 @@ bool ChaiScriptOnCopy::ProcessScript(CDittoChaiScript &clipData, std::string scr
 		chai.add(chaiscript::fun(&CDittoChaiScript::SetAsciiString), "SetAsciiString");
 		chai.add(chaiscript::fun(&CDittoChaiScript::GetActiveApp), "GetActiveApp");
 
+		chai.add(chaiscript::fun(&CDittoChaiScript::FormatExists), "FormatExists");
+		chai.add(chaiscript::fun(&CDittoChaiScript::RemoveFormat), "RemoveFormat");
+		chai.add(chaiscript::fun(&CDittoChaiScript::SetParentId), "SetParentId");
+		chai.add(chaiscript::fun(&CDittoChaiScript::AsciiTextMatchesRegex), "AsciiTextMatchesRegex");
+
 		chai.add(chaiscript::var(&clipData), "clip");
 
 		//loop over all scripts

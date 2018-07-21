@@ -855,9 +855,7 @@ BOOL CMainFrame::PreTranslateMessage(MSG *pMsg)
 			::GetWindowThreadProcessId(hwndFromPoint, &winProcessId);
 			if (winProcessId == ::GetCurrentProcessId()) //no-fail!
 			{
-				pMsg->hwnd = hwndFromPoint;
-
-				
+				pMsg->hwnd = hwndFromPoint;				
 			}
 		}
 

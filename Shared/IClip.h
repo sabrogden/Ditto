@@ -26,6 +26,7 @@ public:
 	virtual void DeleteAll() = 0;
 	virtual INT_PTR AddNew(CLIPFORMAT type, HGLOBAL data) = 0;
 	virtual IClipFormat *FindFormatEx(CLIPFORMAT type) = 0;
+	virtual bool RemoveFormat(CLIPFORMAT type) = 0;
 };
 
 class IClip

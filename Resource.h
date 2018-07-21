@@ -412,6 +412,7 @@
 #define IDC_STATIC_HOT_KEY_MOVE_TO_GROUP 2044
 #define IDC_CHECK_WIN4                  2045
 #define IDC_STATIC_SOUND                2045
+#define IDC_STATIC_DATE3                2045
 #define IDC_CHECK_WIN5                  2046
 #define IDC_STATIC_MAX_SIZE             2046
 #define IDC_STATIC_NO_LIMIT             2047

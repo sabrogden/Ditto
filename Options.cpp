@@ -2711,3 +2711,23 @@ void CGetSetOptions::SetDisableExpireClipsConfig(BOOL val)
 {
 	SetProfileLong("DisableExpireClipsConfig", val);
 }
+
+BOOL CGetSetOptions::GetRevertToTopLevelGroup()
+{
+	return GetProfileLong("RevertToTopLevelGroup", FALSE);
+}
+
+void CGetSetOptions::SetRevertToTopLevelGroup(BOOL val)
+{
+	SetProfileLong("RevertToTopLevelGroup", val);
+}
+
+BOOL CGetSetOptions::GetUpdateClipOrderOnCtrlC()
+{
+	return GetProfileLong("UpdateClipOrderOnCtrlC", FALSE);
+}
+
+void CGetSetOptions::SetUpdateClipOrderOnCtrlC(BOOL val)
+{
+	SetProfileLong("UpdateClipOrderOnCtrlC", val);
+}

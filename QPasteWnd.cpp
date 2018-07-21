@@ -808,7 +808,15 @@ BOOL CQPasteWnd::HideQPasteWindow (bool releaseFocus, bool clearSearchData)
 		}
 	}
 
-	theApp.TryEnterOldGroupState();
+	if (theApp.m_GroupID > 0 &&
+		CGetSetOptions::GetRevertToTopLevelGroup())
+	{
+		theApp.EnterGroupID(-1);
+	}
+	else
+	{
+		theApp.TryEnterOldGroupState();
+	}
 
 	DWORD endTick = GetTickCount();
 	if((endTick-startTick) > 150)
