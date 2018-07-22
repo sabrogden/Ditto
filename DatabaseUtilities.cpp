@@ -103,17 +103,25 @@ BOOL CheckDBExists(CString csDBPath)
 	BOOL bRet = FALSE;
 	if(FileExists(csDBPath) == FALSE)
 	{
-		csDBPath = GetDefaultDBName();
-
-		nsPath::CPath FullPath(csDBPath);
-		CString csPath = FullPath.GetPath().GetStr();
-		if(csPath.IsEmpty() == false && FileExists(csDBPath) == FALSE)
-		{
-			CreateDirectory(csPath, NULL);
-		}
-
-		// -- create a new one
+		//first try and create create a db at the same path that was selectd
 		bRet = CreateDB(csDBPath);
+
+		//if that didn't work then go back to the default location
+		if (FileExists(csDBPath) == FALSE)
+		{
+			csDBPath = GetDefaultDBName();
+
+			nsPath::CPath FullPath(csDBPath);
+			CString csPath = FullPath.GetPath().GetStr();
+			if (csPath.IsEmpty() == false && FileExists(csDBPath) == FALSE)
+			{
+				CreateDirectory(csPath, NULL);
+			}
+
+			CGetSetOptions::SetDBPath(csDBPath);
+
+			bRet = CreateDB(csDBPath);
+		}
 	}
 	else
 	{
