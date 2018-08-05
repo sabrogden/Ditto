@@ -930,7 +930,7 @@ CString GetProcessName(HWND hWnd, DWORD processId)
 		GetWindowThreadProcessId(hWnd, &Id);
 	}
 
-	HANDLE active_process = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, Id);
+	HANDLE active_process = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, Id);
 	if (active_process != NULL)
 	{
 		WCHAR image_name[MAX_PATH] = { 0 };
@@ -942,24 +942,29 @@ CString GetProcessName(HWND hWnd, DWORD processId)
 		strProcessName = path.GetName();
 	}
 
-	/*PROCESSENTRY32 processEntry = { 0 };
-
-	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-	processEntry.dwSize = sizeof(PROCESSENTRY32);
-
-	if (Process32First(hSnapShot, &processEntry)) 
+	if (strProcessName == _T(""))
 	{
-		do 
-		{
-			if (processEntry.th32ProcessID == Id) 
-			{
-				strProcessName = processEntry.szExeFile;
-				break;
-			}
-		} while(Process32Next(hSnapShot, &processEntry));
-	}
+		Log(StrF(_T("failed to get process name from open process, LastError: %d, looping over process names to find process"), GetLastError()));
 
-	CloseHandle(hSnapShot);*/
+		PROCESSENTRY32 processEntry = { 0 };
+
+		HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+		processEntry.dwSize = sizeof(PROCESSENTRY32);
+
+		if (Process32First(hSnapShot, &processEntry))
+		{
+			do
+			{
+				if (processEntry.th32ProcessID == Id)
+				{
+					strProcessName = processEntry.szExeFile;
+					break;
+				}
+			} while (Process32Next(hSnapShot, &processEntry));
+		}
+
+		CloseHandle(hSnapShot);
+	}
 
 	//uwp apps are wrapped in another app called, if this has focus then try and find the child uwp process
 	if (strProcessName == _T("ApplicationFrameHost.exe"))
@@ -971,7 +976,7 @@ CString GetProcessName(HWND hWnd, DWORD processId)
 	DWORD diff = endTick - startTick;
 	if(diff > 5)
 	{
-		Log(StrF(_T("GetProcessName Time (ms): %d"), endTick-startTick));
+		Log(StrF(_T("GetProcessName Time (ms): %d, pid: %d, name: %s"), endTick-startTick, Id, strProcessName));
 	}
 
 	return strProcessName;
