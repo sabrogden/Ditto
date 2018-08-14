@@ -7,6 +7,7 @@
 #include "afxdialogex.h"
 #include "Misc.h"
 #include "ProgressWnd.h"
+#include <algorithm>
 
 
 // CDeleteClipData dialog
@@ -82,6 +83,7 @@ BEGIN_MESSAGE_MAP(CDeleteClipData, CDialog)
 	ON_BN_CLICKED(IDC_CHECK_LAST_USE_DATE, &CDeleteClipData::OnBnClickedCheckLastUseDate)
 	ON_BN_CLICKED(IDC_CHECK_DATA_FORMAT, &CDeleteClipData::OnBnClickedCheckDataFormat)
 	ON_NOTIFY(HDN_ITEMCLICK, 0, &CDeleteClipData::OnLvnColumnclickList2)
+
 END_MESSAGE_MAP()
 
 BOOL CDeleteClipData::OnInitDialog()
@@ -681,12 +683,98 @@ void CDeleteClipData::OnBnClickedCheckDataFormat()
 	::SetFocus(::GetDlgItem(m_hWnd, IDC_COMBO_DATA_FORMAT));
 }
 
+static bool SortByTitleDesc(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_Desc > a2.m_Desc;
+}
 
+static bool SortByCreatedDateDesc(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_createdDateTime > a2.m_createdDateTime;
+}
+
+static bool SortByLastUsedDateDesc(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_lastUsedDateTime > a2.m_lastUsedDateTime;
+}
+
+static bool SortByFormatDesc(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_clipboardFormat > a2.m_clipboardFormat;
+}
+
+static bool SortByDataSizeDesc(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_dataSize > a2.m_dataSize;
+}
+
+static bool SortByTitleAsc(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_Desc < a2.m_Desc;
+}
+
+static bool SortByCreatedDateAsc(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_createdDateTime < a2.m_createdDateTime;
+}
+
+static bool SortByLastUsedDateAsc(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_lastUsedDateTime < a2.m_lastUsedDateTime;
+}
+
+static bool SortByFormatAsc(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_clipboardFormat < a2.m_clipboardFormat;
+}
+
+static bool SortByDataSizeAsc(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_dataSize < a2.m_dataSize;
+}
+
+bool desc = true;
 void CDeleteClipData::OnLvnColumnclickList2(NMHDR *pNMHDR, LRESULT *pResult)
 {
-	NMLISTVIEW *pLV = (NMLISTVIEW *) pNMHDR;
+	HD_NOTIFY *phdn = (HD_NOTIFY *)pNMHDR;
 
-	//m_ctlListView.SortItems(SortFunc, pLV->iItem);
+	switch (phdn->iItem)
+	{
+	case 0:
+		if(desc)
+			std::sort(m_data.begin(), m_data.end(), SortByTitleDesc);
+		else
+			std::sort(m_data.begin(), m_data.end(), SortByTitleAsc);
+		break;
+	case 1:
+		if(desc)
+			std::sort(m_data.begin(), m_data.end(), SortByCreatedDateDesc);
+		else
+			std::sort(m_data.begin(), m_data.end(), SortByCreatedDateAsc);
+		break;
+	case 2:
+		if(desc)
+			std::sort(m_data.begin(), m_data.end(), SortByLastUsedDateDesc);
+		else
+			std::sort(m_data.begin(), m_data.end(), SortByLastUsedDateAsc);
+		break;
+	case 3:
+		if(desc)
+			std::sort(m_data.begin(), m_data.end(), SortByFormatDesc);
+		else
+			std::sort(m_data.begin(), m_data.end(), SortByFormatAsc);
+		break;
+	case 4:
+		if(desc)
+			std::sort(m_data.begin(), m_data.end(), SortByDataSizeDesc);
+		else
+			std::sort(m_data.begin(), m_data.end(), SortByDataSizeAsc);
+		break;
+	}
+	
+	desc = !desc;
+
+	m_List.SetItemCountEx((int)m_data.size(), 0);
 
 	*pResult = 0;
 }
