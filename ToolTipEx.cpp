@@ -131,7 +131,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 	m_folderPathStatic.SetFont(&m_clipDataFont);
 	m_folderPathStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
 	m_folderPathStatic.SetTextColor(RGB(80, 80, 80));
-
+	
 	m_saveWindowLockout = false;
 
     return TRUE;
@@ -142,6 +142,8 @@ BOOL CToolTipEx::Show(CPoint point)
 	m_reducedWindowSize = false;
     if(m_imageViewer.m_pGdiplusBitmap)
     {
+		m_clipData += _T(" | ") + StrF(_T("%d x %d"), m_imageViewer.m_pGdiplusBitmap->GetWidth(), m_imageViewer.m_pGdiplusBitmap->GetHeight());
+
 		m_imageViewer.ShowWindow(SW_SHOW);
 
 		m_RichEdit.ShowWindow(SW_HIDE);
@@ -276,6 +278,7 @@ BOOL CToolTipEx::Show(CPoint point)
 	ShowWindow(SW_SHOWNA);
 	this->Invalidate();
 	this->UpdateWindow();
+	MoveControls();
 
 	m_saveWindowLockout = false;
 
@@ -693,12 +696,15 @@ void CToolTipEx::MoveControls()
 	CRect cr;
 	GetClientRect(cr);
 
-	int bottom = 22;
+	int bottom = m_DittoWindow.m_dpi.Scale(22);
+	int optionsExtra = 0;
 
 	if (m_folderPath != _T(""))
 	{
 		bottom += m_DittoWindow.m_dpi.Scale(17);
-		m_folderPathStatic.ShowWindow(SW_SHOW);			}
+		optionsExtra += m_DittoWindow.m_dpi.Scale(10);
+		m_folderPathStatic.ShowWindow(SW_SHOW);			
+	}
 	else
 	{
 		m_folderPathStatic.ShowWindow(SW_HIDE);
@@ -713,7 +719,7 @@ void CToolTipEx::MoveControls()
 		m_browser.MoveWindow(cr);
 	}
 
-	m_optionsButton.MoveWindow(cr.left, cr.bottom + m_DittoWindow.m_dpi.Scale(3), m_DittoWindow.m_dpi.Scale(17), m_DittoWindow.m_dpi.Scale(17));
+	m_optionsButton.MoveWindow(cr.left, cr.bottom + m_DittoWindow.m_dpi.Scale(3) + optionsExtra, m_DittoWindow.m_dpi.Scale(17), m_DittoWindow.m_dpi.Scale(17));
 
 	m_clipDataStatic.MoveWindow(cr.left + m_DittoWindow.m_dpi.Scale(19), cr.bottom + m_DittoWindow.m_dpi.Scale(4), cr.Width() - cr.left + m_DittoWindow.m_dpi.Scale(19), m_DittoWindow.m_dpi.Scale(20));
 
