@@ -83,7 +83,6 @@ Name: AddFireWallException; Description: Add Windows Firewall exception for Ditt
   Source: ..\Release\icudt58.dll; DestDir: {app}; Flags: ignoreversion
 #endif
 
-Source: Changes.txt; DestDir: {app}
 Source: ..\Debug\Language\*; DestDir: {app}\Language; BeforeInstall: BeforeLanguageInstall()
 Source: ..\Debug\Themes\*; DestDir: {app}\Themes
 
@@ -95,7 +94,7 @@ Name: {group}\Uninstall; Filename: {uninstallexe}
 [Run]
 Filename: {app}\Ditto.exe; Description: Launch Ditto; Flags: nowait postinstall skipifsilent
 Filename: {app}\Help\DittoGettingStarted.htm; Description: View Help; Flags: nowait postinstall skipifsilent shellexec unchecked
-Filename: {app}\Changes.txt; Description: View Change History; Flags: nowait postinstall skipifsilent shellexec unchecked
+Filename: https://ditto-cp.sourceforge.io/changeHistory.php; Description: View Change History; Flags: nowait postinstall skipifsilent shellexec unchecked
 
 [Registry]
 Root: HKCU; Subkey: Software\Ditto; Flags: uninsdeletekey
