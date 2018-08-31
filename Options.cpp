@@ -60,6 +60,7 @@ bool CGetSetOptions::m_bInConversion = false;
 bool CGetSetOptions::m_bFromIni = false;
 bool CGetSetOptions::m_portable = false;
 bool CGetSetOptions::m_windowsApp = false;
+bool CGetSetOptions::m_chocolateyApp = false;
 CString CGetSetOptions::m_csIniFileName;
 __int64 CGetSetOptions::nLastDbWriteTime = 0;
 CTheme CGetSetOptions::m_Theme;
@@ -89,11 +90,19 @@ void CGetSetOptions::LoadSettings()
 	FIX_CSTRING_PATH(exeDir);
 
 	CString windowsAppFile = exeDir += _T("WindowsApp");
+	CString chocolateyAppFile = exeDir += _T("chocolatey");
 	if (FileExists(windowsAppFile))
 	{
 		m_windowsApp = true;
 		m_bFromIni = true;
 		//always use the ini file in the app data folder for windows store
+		m_csIniFileName = GetIniFileName(false);
+	}
+	else if (FileExists(chocolateyAppFile))
+	{
+		m_chocolateyApp = true;
+		m_bFromIni = true;
+		//always use the ini file in the app data folder for chocolatey portable
 		m_csIniFileName = GetIniFileName(false);
 	}
 	else
@@ -377,6 +386,25 @@ CString CGetSetOptions::GetAppDataPath()
 		}
 		FIX_CSTRING_PATH(csPath);
 		csPath += "Ditto_WindowsApp\\";
+	}
+	else if (GetIsChocolateyApp())
+	{
+		if (SUCCEEDED(::SHGetMalloc(&pMalloc)))
+		{
+			LPITEMIDLIST pidlPrograms;
+
+			SHGetSpecialFolderLocation(NULL, CSIDL_LOCAL_APPDATA, &pidlPrograms);
+
+			TCHAR string[MAX_PATH];
+			SHGetPathFromIDList(pidlPrograms, string);
+
+			pMalloc->Free(pidlPrograms);
+			pMalloc->Release();
+
+			csPath = string;
+		}
+		FIX_CSTRING_PATH(csPath);
+		csPath += "Ditto_ChocolateyApp\\";
 	}
 	else
 	{
@@ -1840,6 +1868,11 @@ bool CGetSetOptions::GetIsPortableDitto()
 bool CGetSetOptions::GetIsWindowsApp()
 {
 	return m_windowsApp;
+}
+
+bool CGetSetOptions::GetIsChocolateyApp()
+{
+	return m_chocolateyApp;
 }
 
 CString CGetSetOptions::GetPasteString(CString csAppName)

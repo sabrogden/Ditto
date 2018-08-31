@@ -76,6 +76,7 @@ public:
 	static CTheme m_Theme;
 	static bool m_portable;
 	static bool m_windowsApp;
+	static bool m_chocolateyApp;
 
 	static void LoadSettings();
 	static CString GetIniFileName(bool bLocalIniFile);
@@ -383,6 +384,7 @@ public:
 
 	static bool		GetIsPortableDitto();
 	static bool		GetIsWindowsApp();
+	static bool		GetIsChocolateyApp();
 
 	static long		GetAutoMaxDelay();
 	static void		SetAutoMaxDelay(long lDelay);
