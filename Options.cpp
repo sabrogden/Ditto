@@ -89,8 +89,8 @@ void CGetSetOptions::LoadSettings()
 	exeDir = GetFilePath(exeDir);
 	FIX_CSTRING_PATH(exeDir);
 
-	CString windowsAppFile = exeDir += _T("WindowsApp");
-	CString chocolateyAppFile = exeDir += _T("chocolatey");
+	CString windowsAppFile = exeDir + _T("WindowsApp");
+	CString chocolateyAppFile = exeDir + _T("chocolatey");
 	if (FileExists(windowsAppFile))
 	{
 		m_windowsApp = true;
