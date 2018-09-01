@@ -439,11 +439,11 @@ DittoSetup*]]></ExclExt>
 			<name>Chocolatey</name>
 		</step>
 		<step action='Write File'>
-			<Filename>%workDir%\DittoSetup\Chocolatey\ditto-real.nuspec</Filename>
+			<Filename>%workDir%\DittoSetup\Chocolatey\dittonuspec</Filename>
 			<Text><![CDATA[<?xml version="1.0"?>
 <package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <metadata>
-    <id>ditto-real</id>
+    <id>ditto</id>
     <title>Ditto Clipboard</title>
     <version>%version%-beta</version>
     <authors>Scott Brogden</authors>
@@ -1234,11 +1234,11 @@ DittoSetup_%versionFileName%.exe]]></Ext>
 			<name>Chocolatey - Portable</name>
 		</step>
 		<step action='Write File'>
-			<Filename>%workDir%\DittoSetup\Chocolatey-Portable\ditto-portable.nuspec</Filename>
+			<Filename>%workDir%\DittoSetup\Chocolatey-Portable\ditto.portable.nuspec</Filename>
 			<Text><![CDATA[<?xml version="1.0"?>
 <package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <metadata>
-    <id>ditto-portable</id>
+    <id>ditto.portable</id>
     <title>Ditto Clipboard Portable</title>
     <version>%version%-beta</version>
     <authors>Scott Brogden</authors>
@@ -1309,7 +1309,13 @@ Remove-Item $toolsPath\*.zip -ea 0]]></Text>
 		</step>
 		<step action='Write File'>
 			<Filename>%workDir%\DittoSetup\Chocolatey-Portable\tools\chocolateyUninstall.ps1</Filename>
-			<Text><![CDATA[Write-Host "Removing app data settings and database files"
+			<Text><![CDATA[
+Write-Host "Stopping running instances of Ditto"
+
+# Kill ditto before updating
+Get-Process | Where { $_.name -eq 'ditto' } | Stop-Process
+
+Write-Host "Removing app data settings and database files"
 
 #remove the app data where the portable choco app was written, settings and database
 Remove-Item -Recurse -Force $env:LOCALAPPDATA\Ditto_ChocolateyApp]]></Text>
@@ -2040,7 +2046,7 @@ DittoPortable_%versionFileName%.zip]]></Ext>
 			<indent type='3'>2</indent>
 			<name>Choco Push</name>
 			<outputfrom type='3'>1</outputfrom>
-			<startin>%workDir%\DittoSetup\Chocolatey</startin>
+			<startin>%workDir%\DittoSetup\Chocolatey-Portable</startin>
 		</step>
 		<step action='Group'>
 			<indent type='3'>1</indent>
@@ -2137,7 +2143,7 @@ var sc_security="b3f57099";
 			<Filename>%workDir%\DittoSetup\output\</Filename>
 			<Incremental type='11'>-1</Incremental>
 			<Logging type='3'>6</Logging>
-			<Password encrypted='1'>amkwNSREZkNXUFp3JmFRMlkc1ehlfY06mdLEVJHqyXdFbT0D5VqgTJGtkZ7P6mdnGca+n6FwXTNm9GfdZyIEMg==</Password>
+			<Password encrypted='1'>amkwNSREZkNXUFp3JmFRMsZ2vYu8ujkU3rfalDIUyXLQ/1ySM0OzoPq41TvIK4vTEV85mWOA3MqnxucEljiJnA==</Password>
 			<Percent>10</Percent>
 			<Port>22</Port>
 			<Retries>0</Retries>
@@ -2154,7 +2160,7 @@ var sc_security="b3f57099";
 			<Filename>%workDir%\DittoSetup\output\</Filename>
 			<Incremental type='11'>-1</Incremental>
 			<Logging type='3'>6</Logging>
-			<Password encrypted='1'>amkwNSREZkNXUFp3JmFRMlkc1ehlfY06mdLEVJHqyXdFbT0D5VqgTJGtkZ7P6mdnGca+n6FwXTNm9GfdZyIEMg==</Password>
+			<Password encrypted='1'>amkwNSREZkNXUFp3JmFRMsZ2vYu8ujkU3rfalDIUyXLQ/1ySM0OzoPq41TvIK4vTEV85mWOA3MqnxucEljiJnA==</Password>
 			<Percent>10</Percent>
 			<Port>22</Port>
 			<Retries>0</Retries>
