@@ -153,7 +153,6 @@ VersionInfo CInternetUpdate::GetRunningVersion()
 						verInfo.Minor = (lpFFI->dwProductVersionMS >> 0) & 0xffff;
 						verInfo.Revision = (lpFFI->dwProductVersionLS >> 16) & 0xffff;
 						verInfo.Build = (lpFFI->dwProductVersionLS >> 0) & 0xffff;
-
 					}
 				}
 			}

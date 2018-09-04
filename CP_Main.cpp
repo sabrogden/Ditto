@@ -280,7 +280,7 @@ BOOL CCP_MainApp::InitInstance()
 	Log(cs);
 
 	CString csMutex("Ditto Is Now Running");
-	if(g_Opt.GetIsPortableDitto() || g_Opt.GetIsWindowsApp())
+	if(g_Opt.GetIsPortableDitto() || g_Opt.GetIsWindowsApp() || g_Opt.GetIsChocolateyApp())
 	{
 		csMutex += " ";
 		csMutex += g_Opt.GetExeFileName();
