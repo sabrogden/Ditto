@@ -503,7 +503,7 @@ BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg)
 
 	CInternetUpdate update;
 
-	long runningVersion = update.GetRunningVersion();
+	auto runningVersion = update.GetRunningVersion();
 	CString versionString = update.GetVersionString(runningVersion);
 
 	backup += GetFileName(dbPath) += _T("_") + prefix + _T("_") + versionString;

@@ -61,8 +61,8 @@ BOOL CAbout::OnInitDialog()
 
 	CInternetUpdate update;
 
-	long lRunningVersion = update.GetRunningVersion();
-	CString cs = update.GetVersionString(lRunningVersion);
+	auto runningVersion = update.GetRunningVersion();
+	CString cs = update.GetVersionString(runningVersion);
 
 	CString csText;
 	csText = "    Version " + cs;

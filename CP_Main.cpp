@@ -274,8 +274,8 @@ BOOL CCP_MainApp::InitInstance()
 
 	CInternetUpdate update;
 
-	long lRunningVersion = update.GetRunningVersion();
-	CString cs = update.GetVersionString(lRunningVersion);
+	auto runningVersion = update.GetRunningVersion();
+	CString cs = update.GetVersionString(runningVersion);
 	cs.Insert(0, _T("InitInstance  -  Running Version - "));
 	Log(cs);
 
