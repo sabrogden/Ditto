@@ -11,6 +11,7 @@ public:
 	HWND ActiveWnd() const { return m_activeWnd; }
 	HWND FocusWnd() const { return m_focusWnd; }
 	bool DittoHasFocus() const { return m_dittoHasFocus; }
+	bool DesktopHasFocus() const { return m_desktopHasFocus; }
 
 	CString ActiveWndName();
 	CString WndName(HWND hWnd);
@@ -29,6 +30,7 @@ protected:
 	HWND m_activeWnd;
 	HWND m_focusWnd;
 	bool m_dittoHasFocus;
+	bool m_desktopHasFocus;
 	
 protected:
 	bool WaitForActiveWnd(HWND hwndToHaveFocus, int timeout);

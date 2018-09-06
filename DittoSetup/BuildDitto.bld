@@ -177,6 +177,7 @@ End If
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
+			<checked type='11'>0</checked>
 			<indent type='3'>2</indent>
 			<name>Build Ditto 64</name>
 		</step>
@@ -2910,7 +2911,7 @@ var sc_security="b3f57099";
 		</step>
 		<step action='Git'>
 			<Command>log</Command>
-			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2018-01-01</Options>
+			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2018-09-04</Options>
 			<WorkDir>%workDir%</WorkDir>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>
@@ -3029,7 +3030,7 @@ var sc_security="b3f57099";
 			<value>3</value>
 		</macro>
 		<macro name='verMinor'>
-			<value>21</value>
+			<value>22</value>
 		</macro>
 		<macro name='verRevision'>
 			<value>0</value>

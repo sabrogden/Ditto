@@ -11,6 +11,7 @@ ExternalWindowTracker::ExternalWindowTracker(void)
 	m_activeWnd = NULL;
 	m_focusWnd = NULL;
 	m_dittoHasFocus = false;
+	m_desktopHasFocus = false;
 }
 
 ExternalWindowTracker::~ExternalWindowTracker(void)
@@ -25,6 +26,7 @@ bool ExternalWindowTracker::TrackActiveWnd(bool force)
 		return false;
 	}
 
+	m_desktopHasFocus = false;
 	BOOL fromHook = true;
 	HWND newFocus = NULL;
 	HWND newActive = ::GetForegroundWindow();
@@ -78,6 +80,14 @@ bool ExternalWindowTracker::TrackActiveWnd(bool force)
 
 		m_dittoHasFocus = true;
 		return false;
+	}
+
+	TCHAR cName[MAX_PATH];
+	GetClassName(newActive, cName, _countof(cName));
+	CString className(cName);
+	if (className == _T("Progman"))
+	{
+		m_desktopHasFocus = true;
 	}
 
 	m_focusWnd = newFocus;
