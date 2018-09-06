@@ -997,8 +997,7 @@ void CCP_MainApp::ShowCommandLineError(CString csTitle, CString csMessage)
 	pErrorWnd->SetToolTipText(csTitle + "\n\n" + csMessage);
 
 	CPoint pt;
-	CRect rcScreen;
-	GetMonitorRect(0, &rcScreen);
+	CRect rcScreen = DefaultMonitorRect();
 	pt = rcScreen.BottomRight();
 
 	CRect cr = pErrorWnd->GetBoundsRect();

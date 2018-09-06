@@ -139,7 +139,6 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 
 BOOL CToolTipEx::Show(CPoint point)
 {
-	m_reducedWindowSize = false;
     if(m_imageViewer.m_pGdiplusBitmap)
     {
 		m_clipData += _T(" | ") + StrF(_T("%d x %d"), m_imageViewer.m_pGdiplusBitmap->GetWidth(), m_imageViewer.m_pGdiplusBitmap->GetHeight());
@@ -221,25 +220,23 @@ BOOL CToolTipEx::Show(CPoint point)
 
 		
 
-		CRect rcScreen;
+		
 
 		ClientToScreen(rect);
 
 		CRect cr(point, point);
-
-		int nMonitor = GetMonitorFromRect(&cr);
-		GetMonitorRect(nMonitor, &rcScreen);
+		CRect rcScreen = MonitorRectFromRect(cr);
 
 		//ensure that we don't go outside the screen
 		if(point.x < 0)
 		{
 			point.x = 5;
-			m_reducedWindowSize = true;
+			//m_reducedWindowSize = true;
 		}
 		if(point.y < 0)
 		{
 			point.y = 5;
-			m_reducedWindowSize = true;
+			//m_reducedWindowSize = true;
 		}
 
 		rcScreen.DeflateRect(0, 0, 5, 5);
@@ -255,12 +252,12 @@ BOOL CToolTipEx::Show(CPoint point)
 		if (rect.right > rcScreen.right)
 		{
 			rect.right = rcScreen.right;
-			m_reducedWindowSize = true;
+			//m_reducedWindowSize = true;
 		}
 		if (rect.bottom > rcScreen.bottom)
 		{
 			rect.bottom = rcScreen.bottom;
-			m_reducedWindowSize = true;
+			//m_reducedWindowSize = true;
 		}
 	}
 

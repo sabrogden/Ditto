@@ -111,8 +111,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_PowerManager.Start(m_hWnd);
 
     ////Center the main window so message boxes are in the center
-    CRect rcScreen;
-    GetMonitorRect(0, &rcScreen);
+    CRect rcScreen = DefaultMonitorRect();
     CPoint cpCenter = rcScreen.CenterPoint();
     MoveWindow(cpCenter.x, cpCenter.x,  1,  1);
 

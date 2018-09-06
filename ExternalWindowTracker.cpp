@@ -434,25 +434,30 @@ CPoint ExternalWindowTracker::FocusCaret()
 			}
 		}
 
-		if(pt.x < 0 || pt.y < 0)
+		if(pt.x == -1 || pt.y == -1)
 		{
 			if(m_focusWnd != NULL &&
 				m_activeWnd != NULL &&
 				AttachThreadInput(GetWindowThreadProcessId(m_activeWnd, NULL), GetCurrentThreadId(), TRUE))
 			{
 				BOOL ret = GetCaretPos(&pt);
-				if(ret  && (pt.x > 0 || pt.y > 0))
+				if(ret && (pt.x != 0 && pt.y != 0))
 				{
 					::ClientToScreen(m_focusWnd, &pt);
-					if (pt.y > 0 && pt.x > 0)
+					if (pt.y != 0 && pt.x != 0)
 					{
 						pt.y += 20;
 					}
 					else
 					{
-						pt.x = 0;
-						pt.y = 0;
+						pt.x = -1;
+						pt.y = -1;
 					}
+				}
+				else
+				{
+					pt.x = -1;
+					pt.y = -1;
 				}
 
 				AttachThreadInput(GetWindowThreadProcessId(m_activeWnd, NULL), GetCurrentThreadId(), FALSE);

@@ -64,9 +64,7 @@ void CPopup::Init()
 	m_bCenterY = false;
 	m_hWndPosRelativeTo = NULL;
 	
-	RECT rcScreen;
-	
-	GetMonitorRect(-1, &rcScreen);
+	RECT rcScreen = DefaultMonitorRect();
 	
 	m_ScreenMaxX = rcScreen.right;
 	m_ScreenMaxY = rcScreen.bottom;

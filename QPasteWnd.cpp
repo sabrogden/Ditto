@@ -6688,13 +6688,13 @@ LRESULT CQPasteWnd::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 	int dpi = HIWORD(wParam);	
 	m_DittoWindow.OnDpiChanged(this, dpi);
 		
-	RECT* const prcNewWindow = (RECT*)lParam;
-	SetWindowPos(NULL,
-		prcNewWindow->left,
-		prcNewWindow->top,
-		prcNewWindow->right - prcNewWindow->left,
-		prcNewWindow->bottom - prcNewWindow->top,
-		SWP_NOZORDER | SWP_NOACTIVATE);
+	//RECT* const prcNewWindow = (RECT*)lParam;
+	CRect r(*(RECT*)lParam);
+	if (g_Opt.m_bEnsureEntireWindowCanBeSeen)
+	{
+		EnsureWindowVisible(&r);
+	}
+	SetWindowPos(NULL, r.left, r.top, r.Width(), r.Height(), SWP_NOZORDER | SWP_NOACTIVATE);
 	
 	m_systemMenu.Reset();
 	m_systemMenu.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPI(), system_menu_2_24, system_menu_2_30, system_menu_2_36, system_menu_2_42, system_menu_2_48, _T("PNG"), system_menu_54, system_menu_60, system_menu_66, system_menu_72, system_menu_78, system_menu_84);

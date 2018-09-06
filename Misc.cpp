@@ -629,68 +629,6 @@ int GetScreenHeight(void)
 	}
 }
 
-int GetMonitorFromRect(LPRECT lpMonitorRect)
-{
-	// Build up the param
-	MONITOR_ENUM_PARAM	EnumParam;
-	ZeroMemory(&EnumParam, sizeof(EnumParam));
-	EnumParam.lFlags = MONITOR_SEARCH_METOHD;
-	EnumParam.pVirtualRect = lpMonitorRect;
-	EnumParam.iMonitor = -1;
-	
-	// Enum Displays
-	EnumDisplayMonitors(NULL, NULL, MyMonitorEnumProc, (LPARAM)&EnumParam);
-	
-	// Return the result
-	return EnumParam.iMonitor;
-}
-
-void GetMonitorRect(int iMonitor, LPRECT lpDestRect)
-{
-	// Build up the param
-	MONITOR_ENUM_PARAM	EnumParam;
-	ZeroMemory(&EnumParam, sizeof(EnumParam));
-	EnumParam.iMonitor = iMonitor;
-	EnumParam.pVirtualRect = lpDestRect;
-	
-	// Zero out dest rect
-	lpDestRect->bottom = lpDestRect->left = lpDestRect->right = lpDestRect->top = 0;
-	
-	// Enum Displays
-	EnumDisplayMonitors(NULL, NULL, MyMonitorEnumProc, (LPARAM)&EnumParam);
-	
-	// If not successful, default to the screen dimentions
-	if(lpDestRect->right == 0 || lpDestRect->bottom == 0)
-	{
-		lpDestRect->right = GetScreenWidth();
-		lpDestRect->bottom = GetScreenHeight();
-	}
-
-	//adjust the rect for the taskbar
-	APPBARDATA appBarData;
-	appBarData.cbSize=sizeof(appBarData);
-	if (SHAppBarMessage(ABM_GETTASKBARPOS, &appBarData))
-	{
-		switch(appBarData.uEdge)
-		{
-		case ABE_LEFT:
-			lpDestRect->left += appBarData.rc.right - appBarData.rc.left;
-			break;
-		case ABE_RIGHT:
-			lpDestRect->right -= appBarData.rc.right - appBarData.rc.left;
-			break;
-		case ABE_TOP:
-			lpDestRect->top += appBarData.rc.bottom - appBarData.rc.top;
-			break;
-		case ABE_BOTTOM:
-			lpDestRect->bottom -= appBarData.rc.bottom - appBarData.rc.top;
-			break;
-		}
-		return;
-	}
-
-}
-
 /*------------------------------------------------------------------*\
 ID based Globals
 \*------------------------------------------------------------------*/
@@ -769,14 +707,26 @@ BOOL DeleteFormats(int parentID, ARRAY& formatIDs)
 CRect CenterRect(CRect startingRect)
 {
 	CRect crMonitor;
-	int nMonitor = GetMonitorFromRect(&startingRect);
-	if(nMonitor < 0)
+
+	HMONITOR monitorHandle = MonitorFromPoint(startingRect.TopLeft(), MONITOR_DEFAULTTONEAREST);
+	if (monitorHandle == NULL)
 	{
-		GetMonitorRect(0, crMonitor);
+		monitorHandle = MonitorFromPoint(startingRect.TopLeft(), MONITOR_DEFAULTTOPRIMARY);
+		MONITORINFO lpmi;
+		lpmi.cbSize = sizeof(MONITORINFO);
+		if (GetMonitorInfo(monitorHandle, &lpmi))
+		{
+			crMonitor.CopyRect(&lpmi.rcWork);
+		}
 	}
 	else
 	{
-		GetMonitorRect(nMonitor, crMonitor);
+		MONITORINFO lpmi;
+		lpmi.cbSize = sizeof(MONITORINFO);
+		if (GetMonitorInfo(monitorHandle, &lpmi))
+		{
+			crMonitor.CopyRect(&lpmi.rcWork);
+		}
 	}
 
 	return CenterRectFromRect(startingRect, crMonitor);
@@ -796,27 +746,85 @@ CRect CenterRectFromRect(CRect startingRect, CRect outerRect)
 	return centerRect;
 }
 
-BOOL EnsureWindowVisible(CRect *pcrRect)
+CRect DefaultMonitorRect()
 {
-	int nMonitor = GetMonitorFromRect(pcrRect);
-	if(nMonitor < 0)
+	CRect crMonitor;
+	CRect invalidRect(INT32_MAX, INT32_MAX, INT32_MAX, INT32_MAX);
+	HMONITOR monitorHandle = MonitorFromPoint(invalidRect.TopLeft(), MONITOR_DEFAULTTOPRIMARY);
+	MONITORINFO lpmi;
+	lpmi.cbSize = sizeof(MONITORINFO);
+	if (GetMonitorInfo(monitorHandle, &lpmi))
 	{
-		GetMonitorRect(0, pcrRect);
-		pcrRect->right = pcrRect->left + 300;
-		pcrRect->bottom = pcrRect->top + 300;
-
-		return TRUE;
+		crMonitor.CopyRect(&lpmi.rcWork);
 	}
 
+	return crMonitor;
+}
+
+CRect MonitorRectFromRect(CRect rect)
+{
 	BOOL ret = FALSE;
 
 	CRect crMonitor;
-	GetMonitorRect(nMonitor, crMonitor);
+
+	HMONITOR monitorHandle = MonitorFromPoint(rect.TopLeft(), MONITOR_DEFAULTTONEAREST);
+	if (monitorHandle == NULL)
+	{
+		monitorHandle = MonitorFromPoint(rect.TopLeft(), MONITOR_DEFAULTTOPRIMARY);
+		MONITORINFO lpmi;
+		lpmi.cbSize = sizeof(MONITORINFO);
+		if (GetMonitorInfo(monitorHandle, &lpmi))
+		{
+			crMonitor.CopyRect(&lpmi.rcWork);
+		}
+	}
+	else
+	{
+		MONITORINFO lpmi;
+		lpmi.cbSize = sizeof(MONITORINFO);
+		if (GetMonitorInfo(monitorHandle, &lpmi))
+		{
+			crMonitor.CopyRect(&lpmi.rcWork);
+		}
+	}
+
+	return crMonitor;
+}
+
+BOOL EnsureWindowVisible(CRect *pcrRect)
+{
+	BOOL ret = FALSE;
+
+	CRect crMonitor;
+	CDPI dpi;
+
+	HMONITOR monitorHandle = MonitorFromRect(pcrRect, MONITOR_DEFAULTTONEAREST);
+	if (monitorHandle == NULL)
+	{
+		monitorHandle = MonitorFromRect(pcrRect, MONITOR_DEFAULTTOPRIMARY);
+		MONITORINFO lpmi;
+		lpmi.cbSize = sizeof(MONITORINFO);
+		if (GetMonitorInfo(monitorHandle, &lpmi))
+		{
+			crMonitor.CopyRect(&lpmi.rcWork);
+
+			*pcrRect = CenterRectFromRect(*pcrRect, crMonitor);
+		}
+	}
+	else
+	{
+		MONITORINFO lpmi;
+		lpmi.cbSize = sizeof(MONITORINFO);
+		if (GetMonitorInfo(monitorHandle, &lpmi))
+		{
+			crMonitor.CopyRect(&lpmi.rcWork);
+		}
+	}	
 
 	bool movedLeft = false;
 	//Validate the left
 	long lDiff = pcrRect->left - crMonitor.left;
-	if(lDiff < 0)
+	if (lDiff < 0)
 	{
 		pcrRect->left += abs(lDiff);
 		pcrRect->right += abs(lDiff);
@@ -826,9 +834,9 @@ BOOL EnsureWindowVisible(CRect *pcrRect)
 
 	//Right side
 	lDiff = pcrRect->right - crMonitor.right;
-	if(lDiff > 0)
+	if (lDiff > 0)
 	{
-		if(movedLeft == false)
+		if (movedLeft == false)
 		{
 			pcrRect->left -= abs(lDiff);
 		}
@@ -839,7 +847,7 @@ BOOL EnsureWindowVisible(CRect *pcrRect)
 	bool movedTop = false;
 	//Top
 	lDiff = pcrRect->top - crMonitor.top;
-	if(lDiff < 0)
+	if (lDiff < 0)
 	{
 		pcrRect->top += abs(lDiff);
 		pcrRect->bottom += abs(lDiff);
@@ -849,15 +857,15 @@ BOOL EnsureWindowVisible(CRect *pcrRect)
 
 	//Bottom
 	lDiff = pcrRect->bottom - crMonitor.bottom;
-	if(lDiff > 0)
-	{		
-		if(movedTop == false)
+	if (lDiff > 0)
+	{
+		if (movedTop == false)
 		{
 			pcrRect->top -= abs(lDiff);
 		}
-		pcrRect->bottom -= abs(lDiff);		
+		pcrRect->bottom -= abs(lDiff);
 		ret = TRUE;
-	}
+	}	
 
 	return ret;
 }

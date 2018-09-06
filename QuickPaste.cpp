@@ -138,7 +138,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	}
 
 	CPoint ptCaret = theApp.m_activeWnd.FocusCaret();
-	if(ptCaret.x <= 0 || ptCaret.y <= 0)
+	if(ptCaret.x == -1 || ptCaret.y == -1)
 	{
 		CRect cr;
 		::GetWindowRect(theApp.m_activeWnd.ActiveWnd(), cr);
@@ -155,16 +155,11 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 
 			CRect crPoint(point, CSize(1, 1));
 
-			int nMonitor = GetMonitorFromRect(crPoint);
-			if(nMonitor >= 0)
-			{
-				CRect crMonitor;
-				GetMonitorRect(nMonitor, crMonitor);
+			CRect crMonitor = MonitorRectFromRect(crPoint);
 
-				ptCaret = crMonitor.CenterPoint();
-				ptCaret.x -= csSize.cx/2;
-				ptCaret.y -= csSize.cy/2;
-			}
+			ptCaret = crMonitor.CenterPoint();
+			ptCaret.x -= csSize.cx/2;
+			ptCaret.y -= csSize.cy/2;
 		}
 	}
 	

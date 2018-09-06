@@ -82,7 +82,6 @@ protected:
 	CRichEditCtrlEx m_RichEdit;
 	SimpleBrowser m_browser;
 	CWnd *m_pNotifyWnd;
-	bool m_reducedWindowSize;
 	CGdipButton m_optionsButton;
 	int m_clipId;
 	CString m_searchText;

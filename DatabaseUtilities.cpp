@@ -491,8 +491,7 @@ BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg)
 {
 	if ((*popUpMsg) == NULL)
 	{
-		CRect r;
-		GetMonitorRect(0, r);
+		CRect r = DefaultMonitorRect();
 		*popUpMsg = new CDittoPopupWindow();
 		(*popUpMsg)->Create(CRect(r.right - 400, r.bottom - 130, r.right - 10, r.bottom - 10), NULL);		
 		::SetWindowPos((*popUpMsg)->m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);

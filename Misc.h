@@ -110,8 +110,6 @@ BOOL DecryptString(UCHAR *pData, int nLenIn, UCHAR*& pOutput, int &nLenOutput);
 
 int GetScreenWidth();
 int GetScreenHeight();
-void GetMonitorRect(int iMonitor, LPRECT lpDestRect);
-int GetMonitorFromRect(LPRECT lpMonitorRect);
 
 CLIPFORMAT GetFormatID(LPCTSTR cbName);
 CString GetFormatName(CLIPFORMAT cbType);
@@ -121,6 +119,9 @@ CString GetFilePath(CString csFullPath);
 CString GetFileName(CString csFileName);
 
 BOOL EnsureWindowVisible(CRect *pcrRect);
+
+CRect DefaultMonitorRect();
+CRect MonitorRectFromRect(CRect rect);
 
 CRect CenterRect(CRect startingRect);
 CRect CenterRectFromRect(CRect startingRect, CRect outerRect);

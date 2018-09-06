@@ -7,7 +7,7 @@ public:
 	{ 
 	}
 
-	void Update(int dpi) { m_dpi = dpi; }
+	void Update(int dpi) { m_dpi = dpi;  _fInitialized = true; }
 
 	// Get screen DPI.
 	int GetDPI() { _Init(); return m_dpi; }
