@@ -57,6 +57,7 @@ Name: Ukrainian; MessagesFile: Ukrainian.isl
 Name: Hebrew; MessagesFile: Hebrew.isl
 Name: Finnish; MessagesFile: Finnish.isl
 Name: Slovak; MessagesFile: Slovak.isl
+Name: Hungarian; MessagesFile: Hungarian.isl
 
 [Tasks]
 Name: RunAtStartup; Description: Run Ditto on windows startup

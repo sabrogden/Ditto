@@ -2870,9 +2870,14 @@ header("Pragma: no-cache");
 <b>Ditto beta, version %version%</b>
 <br><br>
 <a href="files\DittoSetup_%versionFileName%.exe">Ditto Setup</a><br>
-<a href="files\DittoSetup_64bit_%versionFileName%.exe">Ditto Setup 64bit</a><br>
+<a href="files\DittoSetup_64bit_%versionFileName%.exe">Ditto Setup 64bit</a><br><br>
+
 <a href="files\DittoPortable_%versionFileName%.zip">Ditto Portable</a><br>
-<a href="files\DittoPortable_64bit_%versionFileName%.zip">Ditto Portable 64</a><br>
+<a href="files\DittoPortable_64bit_%versionFileName%.zip">Ditto Portable 64</a><br><br>
+
+<a href="https://chocolatey.org/packages/ditto">Chocolatey</a>    c:\> choco install ditto --pre<br>
+<a href="https://chocolatey.org/packages/ditto.portable">Chocolatey.portable</a>    c:\> choco install ditto.portable --pre<br><br>
+
 <a href="files\Ditto_%versionFileName%.appx">Ditto Windows App</a><br>
 
 <br>
@@ -2884,7 +2889,7 @@ header("Pragma: no-cache");
 <a href="./files/">Previous Builds</a><br>
 <br>
 
-<a href="changes.php">Change Log since last release 9-7-2017</a><br>
+<a href="changes.php">Change Log since last release 9-5-2018</a><br>
 
 <br>
 
