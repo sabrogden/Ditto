@@ -328,7 +328,7 @@ bool CClipboardViewer::ValidActiveWnd()
 	{
 		if(line != "")
 		{
-			if(CWildCardMatch::WildMatch(line, m_activeWindow, ""))
+			if(CWildCardMatch::WildMatch(line.Trim(), m_activeWindow, ""))
 			{
 				Log(StrF(_T("Inlclude app names Found Match %s - %s"), line, m_activeWindow));
 
@@ -352,7 +352,7 @@ bool CClipboardViewer::ValidActiveWnd()
 			{
 				if(line2 != "")
 				{
-					if(CWildCardMatch::WildMatch(line2, m_activeWindow, ""))
+					if(CWildCardMatch::WildMatch(line2.Trim(), m_activeWindow, ""))
 					{
 						Log(StrF(_T("Exclude app names Found Match %s - %s - NOT SAVING COPY"), line2, m_activeWindow));
 
