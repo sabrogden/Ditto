@@ -177,7 +177,6 @@ End If
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
-			<checked type='11'>0</checked>
 			<indent type='3'>2</indent>
 			<name>Build Ditto 64</name>
 		</step>
