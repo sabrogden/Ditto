@@ -461,6 +461,8 @@
     <ClCompile Include="SymbolEdit.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="DropBoxRestClient.cpp" />
+    <ClCompile Include="DropboxInfo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -962,6 +964,8 @@
     <ClInclude Include="SymbolEdit.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="DropBoxRestClient.h" />
+    <ClInclude Include="DropboxInfo.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -1434,6 +1438,7 @@
     <None Include="res\cursor_zoom_in.cur">
       <Filter>res</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">
@@ -1459,6 +1464,9 @@
     </Filter>
     <Filter Include="ChaiScript">
       <UniqueIdentifier>{13844e6c-68be-44ca-93c7-1f0b08f0b319}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DropBox">
+      <UniqueIdentifier>{84e9237d-e636-407d-844b-b9f85eed11d1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

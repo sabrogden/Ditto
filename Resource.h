@@ -232,6 +232,7 @@
 #define minimize_52                     381
 #define IDB_PNG22                       382
 #define minimize_56                     382
+#define IDD_DROPBOX_INFO                383
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -261,7 +262,9 @@
 #define IDC_EDIT_APP_COPY_EXCLUDE       1018
 #define IDC_EDIT_DESCRIP                1018
 #define IDC_EDIT_DESC                   1018
+#define IDC_EDIT_EMAIL                  1018
 #define IDC_ADD_1                       1019
+#define IDC_EDIT_EMAIL2                 1019
 #define IDC_ADD_2                       1020
 #define IDC_EDIT_DISPLAY_TEXT           1020
 #define IDC_ADD_3                       1021
@@ -300,6 +303,8 @@
 #define IDC_BUTTON_CLEAR                1040
 #define IDC_BUTTON_RUN                  1040
 #define IDC_BUTTON_COPY_SCRIPTS         1040
+#define IDC_BUTTON_DROPBOX              1040
+#define IDC_BUTTON_GET_TOKEN            1040
 #define IDC_PARSE_EDIT                  1041
 #define IDC_SEND_PASTE_MESSAGE          1041
 #define IDC_BUTTON_PROPERTIES           1041
@@ -595,6 +600,9 @@
 #define IDC_MFCLINK2_EXAMPLES           2166
 #define IDC_STATIC_MD5                  2167
 #define IDC_EDIT_MD5                    2168
+#define IDC_EDIT_TOKEN                  2172
+#define IDC_STATIC_TOKEN                2173
+#define IDC_STATIC_EMAIL                2174
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -772,9 +780,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        383
+#define _APS_NEXT_RESOURCE_VALUE        385
 #define _APS_NEXT_COMMAND_VALUE         32951
-#define _APS_NEXT_CONTROL_VALUE         2172
+#define _APS_NEXT_CONTROL_VALUE         2175
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

@@ -6,6 +6,7 @@
 #include "OptionFriends.h"
 #include "FriendDetails.h"
 #include "DimWnd.h"
+#include "DropboxInfo.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -57,6 +58,7 @@ BEGIN_MESSAGE_MAP(COptionFriends, CPropertyPage)
 	ON_NOTIFY(LVN_KEYDOWN, IDC_LIST, OnKeydownList)
 	ON_BN_CLICKED(IDC_CHECK_DISABLE_FRIENDS, OnCheckDisableFriends)
 	//}}AFX_MSG_MAP 
+	ON_BN_CLICKED(IDC_BUTTON_DROPBOX, &COptionFriends::OnBnClickedButtonDropbox)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -299,4 +301,16 @@ void COptionFriends::OnCheckDisableFriends()
 		GetDlgItem(IDC_EDIT_PLACE_ON_CLIPBOARD)->EnableWindow(FALSE);
 	else
 		GetDlgItem(IDC_EDIT_PLACE_ON_CLIPBOARD)->EnableWindow(TRUE);
+}
+
+
+void COptionFriends::OnBnClickedButtonDropbox()
+{
+	CDimWnd dim(this->GetParent());
+
+	DropboxInfo dlg(this);
+
+	if (dlg.DoModal() == IDOK)
+	{
+	}
 }

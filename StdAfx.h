@@ -54,4 +54,5 @@ using namespace Gdiplus;
 #include <atlbase.h>
 #include <atlcom.h>
 #include <atlctl.h>
+#include <afxcontrolbars.h>
 #endif // !defined(AFX_STDAFX_H__56F3D184_7208_47FE_AFE2_E270325F356A__INCLUDED_)

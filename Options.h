@@ -613,6 +613,15 @@ public:
 
 	static BOOL GetUpdateClipOrderOnCtrlC();
 	static void SetUpdateClipOrderOnCtrlC(BOOL val);
+
+	static CString GetDropboxToken();
+	static void SetDropboxToken(CString val);
+
+	static CString GetDropboxEmail();
+	static void SetDropboxEmail(CString val);
+
+	static CString GetDropboxName();
+	static void SetDropboxName(CString val);
 };
 
 // global for easy access and for initialization of fast access variables

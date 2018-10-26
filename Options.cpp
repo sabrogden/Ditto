@@ -2764,3 +2764,33 @@ void CGetSetOptions::SetUpdateClipOrderOnCtrlC(BOOL val)
 {
 	SetProfileLong("UpdateClipOrderOnCtrlC", val);
 }
+
+CString CGetSetOptions::GetDropboxToken()
+{
+	return GetProfileString("DropboxToken", "");
+}
+
+void CGetSetOptions::SetDropboxToken(CString val)
+{
+	SetProfileString("DropboxToken", val);
+}
+
+CString CGetSetOptions::GetDropboxEmail()
+{
+	return GetProfileString("DropboxEmail", "");
+}
+
+void CGetSetOptions::SetDropboxEmail(CString val)
+{
+	SetProfileString("DropboxEmail", val);
+}
+
+CString CGetSetOptions::GetDropboxName()
+{
+	return GetProfileString("DropboxName", "");
+}
+
+void CGetSetOptions::SetDropboxName(CString val)
+{
+	SetProfileString("DropboxName", "");
+}

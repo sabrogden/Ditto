@@ -15,6 +15,7 @@
 #include "SendKeys.h"
 #include "MainTableFunctions.h"
 #include "ShowTaskBarIcon.h"
+#include "DropboxRestClient.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -285,6 +286,10 @@ BOOL CCP_MainApp::InitInstance()
 		csMutex += " ";
 		csMutex += g_Opt.GetExeFileName();
 	}
+
+	DropboxRestClient x;
+	x.ListFolder();
+	x.LongPoll();
 
 	//create mutex doesn't like slashes, remove them, it always returns NULL with them in
 	csMutex.Replace(_T("\\"), _T("_"));

@@ -752,7 +752,7 @@ BEGIN
     LTEXT           "Name",IDC_STATIC,7,1,59,10
 END
 
-IDD_OPTIONS_FRIENDS DIALOGEX 0, 0, 367, 275
+IDD_OPTIONS_FRIENDS DIALOGEX 0, 0, 367, 297
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Friends"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
@@ -764,7 +764,7 @@ BEGIN
     EDITTEXT        IDC_EDIT_ADDITIONAL,95,108,210,12,ES_AUTOHSCROLL
     CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | WS_BORDER | WS_TABSTOP,7,186,353,72
     CONTROL         "Log Send Receive Commands",IDC_CHECK_LOG_SEND_RECIEVE,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,260,353,12
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,262,353,12
     LTEXT           "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer.",IDC_STATIC_6,7,159,353,24
     LTEXT           "IP/Computer Names separated by commas",IDC_STATIC_2,7,37,84,17
     LTEXT           "When you receive a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time.",IDC_STATIC_1,7,10,353,26
@@ -774,6 +774,7 @@ BEGIN
     CONTROL         "Request using IP Address",IDC_RADIO_USE_IP,"Button",BS_AUTORADIOBUTTON,15,136,98,10
     GROUPBOX        "Remote Files",IDC_STATIC_REMOTE_FILES,7,124,353,29
     CONTROL         "Request using Host Name",IDC_RADIO_USE_HOST_NAME,"Button",BS_AUTORADIOBUTTON,151,136,98,10
+    PUSHBUTTON      "Dropbox",IDC_BUTTON_DROPBOX,7,280,50,14
 END
 
 IDD_FRIEND_DETAILS DIALOGEX 0, 0, 203, 79
@@ -990,6 +991,22 @@ BEGIN
     CONTROL         "Examples",IDC_MFCLINK2_EXAMPLES,"MfcLink",WS_TABSTOP,294,54,60,10
 END
 
+IDD_DROPBOX_INFO DIALOGEX 0, 0, 309, 113
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,198,92,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,252,92,50,14
+    LTEXT           "Dropbox Token",IDC_STATIC_TOKEN,7,33,50,8
+    EDITTEXT        IDC_EDIT_TOKEN,59,31,243,14,ES_AUTOHSCROLL
+    LTEXT           "Dropbox e-mail",IDC_STATIC_EMAIL,7,51,49,8
+    EDITTEXT        IDC_EDIT_EMAIL,59,49,243,14,ES_AUTOHSCROLL
+    LTEXT           "Machine Name",IDC_STATIC_NAME,7,68,47,8
+    EDITTEXT        IDC_EDIT_NAME,59,67,243,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Get Dropbox Token",IDC_BUTTON_GET_TOKEN,91,7,127,17
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1134,7 +1151,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 360
         TOPMARGIN, 4
-        BOTTOMMARGIN, 272
+        BOTTOMMARGIN, 294
     END
 
     IDD_FRIEND_DETAILS, DIALOG
@@ -1215,6 +1232,14 @@ BEGIN
         RIGHTMARGIN, 426
         TOPMARGIN, 7
         BOTTOMMARGIN, 307
+    END
+
+    IDD_DROPBOX_INFO, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 302
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 106
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -1603,6 +1628,11 @@ BEGIN
 END
 
 IDD_COPY_PROPERTIES AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DROPBOX_INFO AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
