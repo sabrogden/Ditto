@@ -461,8 +461,12 @@
     <ClCompile Include="SymbolEdit.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="DropBoxRestClient.cpp" />
-    <ClCompile Include="DropboxInfo.cpp" />
+    <ClCompile Include="DropboxInfo.cpp">
+      <Filter>DropBox</Filter>
+    </ClCompile>
+    <ClCompile Include="DropBoxRestClient.cpp">
+      <Filter>DropBox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -964,8 +968,12 @@
     <ClInclude Include="SymbolEdit.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="DropBoxRestClient.h" />
-    <ClInclude Include="DropboxInfo.h" />
+    <ClInclude Include="DropboxInfo.h">
+      <Filter>DropBox</Filter>
+    </ClInclude>
+    <ClInclude Include="DropBoxRestClient.h">
+      <Filter>DropBox</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

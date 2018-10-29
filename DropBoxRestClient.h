@@ -10,13 +10,13 @@ public:
 	static void Authenticate();
 	void UploadFile(std::wstring LocalFiletoUpload);
 	void ListFolder();
-	void ListFolderContinue();
-	
-	void LongPoll();
+	static void ListFolderContinue();
+	static void DownloadFile(CString file);
+	static void LongPoll();
 
 protected:
 	//http_client GetApiClient(CString url);
 
-	void ListFolderReturn(web::http::http_response &httpResponse, bool &hasMore);
+	static void ListFolderReturn(web::http::http_response &httpResponse, bool &hasMore);
 };
 

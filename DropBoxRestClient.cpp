@@ -123,77 +123,50 @@ void DropboxRestClient::UploadFile(std::wstring LocalFiletoUpload)
 	});
 }
 
-//void DropboxRestClient::ListFolder()
-//{
-//	web::json::value json;
-//	json[L"path"] = web::json::value::string(U("/Ditto/MyName"));
-//	json[L"recursive"] = web::json::value::boolean(false);
-//	json[L"include_media_info"] = web::json::value::boolean(false);
-//	json[L"include_deleted"] = web::json::value::boolean(false);
-//	json[L"include_has_explicit_shared_members"] = web::json::value::boolean(false);
-//	auto stringValue = json.serialize();
-//
-//	oauth2_config oauth2_config(U("5bb6u8qvhs21whl"), U("h0yeouikmdrmea5"), U("https://www.dropbox.com/oauth2/authorize"), U("https://api.dropboxapi.com/oauth2/token"), U(""));
-//
-//	oauth2_token token;
-//	token.set_access_token(U("vsko34wW-9AAAAAAAAAB1GTack-f3GsKqtQIkg0q0wN1SIETTpm6n6Jv5X41WbBj"));
-//	token.set_token_type(U("bearer"));
-//
-//	oauth2_config.set_token(token);
-//
-//	http_client_config http_config;
-//	http_config.set_oauth2(oauth2_config);
-//
-//	http_client api(U("https://api.dropboxapi.com/2/files/list_folder"), http_config);
-//
-//	http_request request(methods::POST);
-//	request.headers().add(U("Content-Type"), U("application/json"));
-//	request.set_body(stringValue);
-//
-//	api.request(request)
-//		.then([](pplx::task<http_response> previousTask)
-//	{
-//		std::wostringstream ss;
-//		try
-//		{
-//			auto response = previousTask.get();
-//			if (response.status_code() == status_codes::OK)
-//			{
-//				response.extract_json().then([](pplx::task<json::value> task)
-//				{
-//					try
-//					{
-//						auto & jvalue = task.get();
-//
-//						auto xx = jvalue.at(U("cursor"));
-//
-//						auto fileEntries = jvalue.at(U("entries"));
-//
-//						for (auto const & e : fileEntries.as_array())
-//						{
-//							int k = 0;
-//						}
-//
-//						auto dataString = jvalue.serialize();
-//					}
-//					catch (http_exception const & e)
-//					{
-//					}
-//				});
-//			}
-//			else
-//			{
-//				//error, log response.status_code
-//			}
-//		}
-//		catch (const http_exception& e)
-//		{
-//			ss << e.what() << std::endl;
-//			OutputDebugString(ss.str().data());
-//		}
-//	});
-//}
+void DropboxRestClient::DownloadFile(CString file2)
+{
+	auto fileStream = std::make_shared<ostream>();
 
+	utility::string_t s = file2.GetBuffer();
+
+	// Open stream to output file.
+	pplx::task<void> requestTask = fstream::open_ostream(U("results.html")).then([=](ostream outFile)
+	{
+		*fileStream = outFile;
+
+		web::json::value json;
+		json[L"path"] = web::json::value::string(s);
+		auto stringValue = json.serialize();
+		http_client api = GetApiClient(U("https://content.dropboxapi.com/2/files/download"));
+		http_request request(methods::POST);
+		request.headers().add(U("Dropbox-API-Arg"), stringValue);
+
+		return api.request(request);
+	})
+		// Handle response headers arriving.
+	.then([=](http_response response)
+	{
+		printf("Received response status code:%u\n", response.status_code());
+
+		// Write response body into the file.
+		return response.body().read_to_end(fileStream->streambuf());
+	})
+
+		// Close the file stream.
+	.then([=](size_t)
+	{
+		return fileStream->close();
+	});
+
+	try
+	{
+		requestTask.wait();
+	}
+	catch (const std::exception &e)
+	{
+		printf("Error exception:%s\n", e.what());
+	}
+}
 
 CString lastCursor;
 void DropboxRestClient::ListFolder()
@@ -212,17 +185,28 @@ void DropboxRestClient::ListFolder()
 	request.headers().add(U("Content-Type"), U("application/json"));
 	request.set_body(stringValue);
 
-	http_response httpResponse = api.request(request).get();
-
-	if (httpResponse.status_code() == status_codes::OK)
+	api.request(request).then([](pplx::task<http_response> previousTask)
 	{
-		bool hasMore = false;
-		ListFolderReturn(httpResponse, hasMore);
-		if (hasMore)
+		try
 		{
-			ListFolderContinue();
+			auto response = previousTask.get();
+			if (response.status_code() == status_codes::OK)
+			{
+				bool hasMore = false;
+				ListFolderReturn(response, hasMore);
+				if (hasMore)
+				{
+					ListFolderContinue();
+				}
+			}
 		}
-	}
+		catch (const http_exception& e)
+		{
+			//OutputDebugString(ss.str().data());
+		}
+
+		LongPoll();
+	});
 }
 
 void DropboxRestClient::ListFolderContinue()
@@ -237,16 +221,22 @@ void DropboxRestClient::ListFolderContinue()
 	request.headers().add(U("Content-Type"), U("application/json"));
 	request.set_body(stringValue);
 
-	http_response httpResponse = api.request(request).get();
-
-	if (httpResponse.status_code() == status_codes::OK)
+	auto response = api.request(request).get();
+	try
 	{
-		bool hasMore = false;
-		ListFolderReturn(httpResponse, hasMore);
-		if (hasMore)
+		if (response.status_code() == status_codes::OK)
 		{
-			ListFolderContinue();
+			bool hasMore = false;
+			ListFolderReturn(response, hasMore);
+			if (hasMore)
+			{
+				ListFolderContinue();
+			}
 		}
+	}
+	catch (const http_exception& e)
+	{
+		//OutputDebugString(ss.str().data());
 	}
 }
 
@@ -266,6 +256,8 @@ void DropboxRestClient::ListFolderReturn(web::http::http_response &httpResponse,
 		if (e.at(L".tag").as_string() == L"file")
 		{
 			CString file = e.at(L"path_lower").as_string().c_str();
+
+			DownloadFile(file);
 
 			COleDateTime dt;
 
@@ -296,21 +288,34 @@ void DropboxRestClient::LongPoll()
 		request.headers().add(U("Content-Type"), U("application/json"));
 		request.set_body(stringValue);
 
-		http_response httpResponse = api.request(request).get();
-		if (httpResponse.status_code() == status_codes::OK)
+		api.request(request)
+			.then([](pplx::task<http_response> previousTask)
 		{
-			auto jsonData = httpResponse.extract_json().get();
-
-			auto changes = jsonData[L"changes"].as_bool();
-			if (changes)
+			try
 			{
-				ListFolderContinue();
+				auto response = previousTask.get();
+				if (response.status_code() == status_codes::OK)
+				{
+					auto jsonData = response.extract_json().get();
+
+					auto changes = jsonData[L"changes"].as_bool();
+					if (changes)
+					{
+						ListFolderContinue();
+					}
+				}
 			}
-		}
-		else
-		{
-			int y = 9;
-		}
+			catch (const task_canceled& e)
+			{
+				int x = 0;
+			}
+			catch (const http_exception& e)
+			{
+				int y = 0;
+			}			
+
+			LongPoll();
+		});
 	}
 	catch (const std::exception& e)
 	{

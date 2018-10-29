@@ -289,7 +289,6 @@ BOOL CCP_MainApp::InitInstance()
 
 	DropboxRestClient x;
 	x.ListFolder();
-	x.LongPoll();
 
 	//create mutex doesn't like slashes, remove them, it always returns NULL with them in
 	csMutex.Replace(_T("\\"), _T("_"));
