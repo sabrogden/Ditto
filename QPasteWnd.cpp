@@ -325,6 +325,10 @@ ON_UPDATE_COMMAND_UI(ID_MENU_TRANSPARENCY_30, &CQPasteWnd::OnUpdateTransparency3
 ON_UPDATE_COMMAND_UI(ID_TRANSPARENCY_35, &CQPasteWnd::OnUpdateTransparency35)
 ON_UPDATE_COMMAND_UI(ID_MENU_TRANSPARENCY_40, &CQPasteWnd::OnUpdateTransparency40)
 ON_COMMAND(ID_TRANSPARENCY_35, &CQPasteWnd::OnTransparency35)
+ON_COMMAND(ID_IMPORT_EMAILTO, &CQPasteWnd::OnImportEmailto)
+ON_UPDATE_COMMAND_UI(ID_IMPORT_EMAILTO, &CQPasteWnd::OnUpdateImportEmailto)
+ON_COMMAND(ID_IMPORT_GMAIL, &CQPasteWnd::OnImportGmail)
+ON_UPDATE_COMMAND_UI(ID_IMPORT_GMAIL, &CQPasteWnd::OnUpdateImportGmail)
 END_MESSAGE_MAP()
 
 
@@ -3185,6 +3189,12 @@ bool CQPasteWnd::DoAction(CAccel a)
 		break;
 	case ActionEnums::TRANSPARENCY_DECREASE:
 		DoActionDecreaseTransparency();
+		break;
+	case ActionEnums::EMAILTO:
+		DoActionEmailTo();
+		break;
+	case ActionEnums::GMAIL:
+		DoActionGmail();
 		break;
 	}
 
@@ -7011,6 +7021,26 @@ bool CQPasteWnd::DoActionDecreaseTransparency()
 	return true;
 }
 
+bool DoActionEmailTo()
+{
+	CClipIDs IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+
+	CStringW SepW = CTextConvert::ConvertToUnicode(g_Opt.GetMultiPasteSeparator());
+	CCF_UnicodeTextAggregator CFUnicodeText(SepW);
+	if (IDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse))
+	{
+	}
+	CHyperLink::GotoURL(_T("https://sourceforge.net/p/ditto-cp/wiki/"), SW_SHOW);
+
+}
+
+bool DoActionGmail()
+{
+
+}
+
 void CQPasteWnd::SetTransparency(int percent)
 {
 	if (percent > 0)
@@ -7096,4 +7126,36 @@ void CQPasteWnd::OnUpdateTransparencyToggle(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::TRANSPARENCY_TOGGLE);
+}
+
+void CQPasteWnd::OnImportEmailto()
+{
+	DoAction(ActionEnums::EMAILTO);
+}
+
+void CQPasteWnd::OnUpdateImportEmailto(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::EMAILTO);
+}
+
+
+void CQPasteWnd::OnImportGmail()
+{
+	DoAction(ActionEnums::GMAIL);
+}
+
+
+void CQPasteWnd::OnUpdateImportGmail(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::GMAIL);
 }

@@ -347,6 +347,12 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case TRANSPARENCY_DECREASE:
 		val = "Decrease Transparency %";
 		break;
+	case EMAILTO:
+		val = "EMail To";
+		break;
+	case GMAIL:
+		val = "Gmail";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
