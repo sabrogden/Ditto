@@ -1126,7 +1126,14 @@ void CToolTipEx::OnSetFocus(CWnd* pOldWnd)
 {
 	CWnd::OnSetFocus(pOldWnd);
 
-	m_RichEdit.SetFocus();
+	if (m_RichEdit.IsWindowVisible())
+	{
+		m_RichEdit.SetFocus();
+	}
+	else
+	{
+		GetParent()->SetFocus();
+	}
 }
 
 void CToolTipEx::OnPaint()
