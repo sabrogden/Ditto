@@ -652,6 +652,7 @@
     <ClCompile Include="RegExFilterHelper.cpp" />
     <ClCompile Include="ScriptEditor.cpp" />
     <ClCompile Include="ScrollHelper.cpp" />
+    <ClCompile Include="SendMail.cpp" />
     <ClCompile Include="Shared\TextConvert.cpp" />
     <ClCompile Include="Shared\Tokenizer.cpp" />
     <ClCompile Include="ShowTaskBarIcon.cpp" />
@@ -1924,6 +1925,7 @@
     <ClInclude Include="ScriptEditor.h" />
     <ClInclude Include="ScrollHelper.h" />
     <ClInclude Include="SearchEditBox.h" />
+    <ClInclude Include="SendMail.h" />
     <ClInclude Include="Shared\TextConvert.h" />
     <ClInclude Include="Shared\Tokenizer.h" />
     <ClInclude Include="ShowTaskBarIcon.h" />

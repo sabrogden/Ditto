@@ -768,6 +768,7 @@
 #define ID_TRANSPARENCY_35              32950
 #define ID_IMPORT_EMAILTO               32951
 #define ID_IMPORT_GMAIL                 32952
+#define ID_IMPORT_EMAILTOASATTACHMENT   32953
 
 // Next default values for new objects
 // 
@@ -775,7 +776,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        383
-#define _APS_NEXT_COMMAND_VALUE         32953
+#define _APS_NEXT_COMMAND_VALUE         32954
 #define _APS_NEXT_CONTROL_VALUE         2172
 #define _APS_NEXT_SYMED_VALUE           104
 #endif

@@ -153,6 +153,7 @@ public:
 
 	BOOL WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL utf8);
 	BOOL WriteImageToFile(CString path);
+	BOOL WriteTextToHtmlFile(CString path);
 
 	// Allocates a Global containing the requested Clip's Format Data
 	static HGLOBAL LoadFormat(int id, UINT cfType);

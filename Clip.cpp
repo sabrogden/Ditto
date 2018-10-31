@@ -1732,6 +1732,43 @@ BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL utf8)
 	return ret;
 }
 
+BOOL CClip::WriteTextToHtmlFile(CString path)
+{
+	BOOL ret = false;
+
+	CFile f;
+	if (f.Open(path, CFile::modeWrite | CFile::modeCreate))
+	{
+		IClipFormat *pFormat = this->Clips()->FindFormatEx(theApp.m_HTML_Format);
+		if (pFormat != NULL)
+		{
+			char *stringData = (char *)GlobalLock(pFormat->Data());
+			if (stringData != NULL)
+			{
+				CStringA html(stringData);							
+
+				int pos = html.Find("<html");
+				if (pos >= 0)
+				{
+					html = html.Mid(pos);
+				}
+				else
+				{
+					html = html;
+				}
+
+				f.Write(html.GetBuffer(), html.GetLength());
+
+				GlobalUnlock(pFormat->Data());
+			}
+		}
+
+		f.Close();
+	}
+
+	return ret;
+}
+
 BOOL CClip::WriteImageToFile(CString path)
 {
 	BOOL ret = false;

@@ -461,6 +461,7 @@
     <ClCompile Include="SymbolEdit.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="SendMail.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -962,6 +963,7 @@
     <ClInclude Include="SymbolEdit.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="SendMail.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

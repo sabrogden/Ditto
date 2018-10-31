@@ -1311,13 +1311,13 @@ CString InternetEncode(CString text)
 	CString ret = _T("");
 	LPTSTR lpOutputBuffer = new TCHAR[1];
 	DWORD dwSize = 1;
-	BOOL fRes = ::InternetCanonicalizeUrl(text, lpOutputBuffer, &dwSize, ICU_DECODE | ICU_NO_ENCODE);
+	BOOL fRes = ::InternetCanonicalizeUrl(text, lpOutputBuffer, &dwSize, ICU_BROWSER_MODE);
 	DWORD dwError = ::GetLastError();
 	if (!fRes && dwError == ERROR_INSUFFICIENT_BUFFER)
 	{
 		delete lpOutputBuffer;
 		lpOutputBuffer = new TCHAR[dwSize];
-		fRes = ::InternetCanonicalizeUrl(text, lpOutputBuffer, &dwSize, ICU_DECODE | ICU_NO_ENCODE);
+		fRes = ::InternetCanonicalizeUrl(text, lpOutputBuffer, &dwSize, ICU_BROWSER_MODE);
 		if (fRes)
 		{
 			ret = lpOutputBuffer;

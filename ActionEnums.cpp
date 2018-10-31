@@ -84,7 +84,7 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		val = "Back Group";
 		break;
 	case TOGGLESHOWPERSISTANT:
-		val = "Toggle Show Persistant";
+		val = "Toggle Show Persistent";
 		break;
 	case PASTE_SELECTED:
 		val = "Paste Selected";
@@ -102,7 +102,7 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		val = "Move Clip To Group";
 		break;
 	case ELEVATE_PRIVlEGES:
-		val = "Option - Elevate Privleges";
+		val = "Option - Elevate Privileges";
 		break;
 	case SHOW_IN_TASKBAR:
 		val = "Option - Show In TaskBar";
@@ -347,8 +347,11 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case TRANSPARENCY_DECREASE:
 		val = "Decrease Transparency %";
 		break;
-	case EMAILTO:
-		val = "EMail To";
+	case EMAILTO_BODY:
+		val = "EMail To in Body";
+		break;
+	case EMAILTO_ATTACH:
+		val = "EMail To with attachment";
 		break;
 	case GMAIL:
 		val = "Gmail";

@@ -298,6 +298,7 @@ public:
 	bool DoActionDecreaseTransparency();
 	bool DoActionEmailTo();
 	bool DoActionGmail();
+	bool DoActionEmailToAttach();
 
 	bool OnNewClip();
 	bool OnImportClip();
@@ -563,4 +564,6 @@ public:
 	afx_msg void OnUpdateImportEmailto(CCmdUI *pCmdUI);
 	afx_msg void OnImportGmail();
 	afx_msg void OnUpdateImportGmail(CCmdUI *pCmdUI);
+	afx_msg void OnImportEmailtoasattachment();
+	afx_msg void OnUpdateImportEmailtoasattachment(CCmdUI *pCmdUI);
 };
