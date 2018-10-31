@@ -573,9 +573,9 @@ CRect CToolTipEx::GetBoundsRect()
 		rect.right = size.cx;
 		rect.bottom = size.cy * nNumLines;
     }    
-
-    rect.bottom += m_rectMargin.top + m_rectMargin.bottom;
-    rect.right += m_rectMargin.left + m_rectMargin.right + 2;
+	
+    rect.bottom += m_rectMargin.top + m_rectMargin.bottom + GetSystemMetrics(SM_CYVSCROLL);
+    rect.right += m_rectMargin.left + m_rectMargin.right + GetSystemMetrics(SM_CXVSCROLL);
 
     if(m_imageViewer.m_pGdiplusBitmap)
     {
