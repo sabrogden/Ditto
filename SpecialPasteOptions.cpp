@@ -20,6 +20,7 @@ CSpecialPasteOptions::CSpecialPasteOptions()
 	m_pasteScriptGuid = _T("");
 	m_updateClipOrder = true;
 	m_trimWhiteSpace = false;
+	m_pasteSlugify = false;
 }
 
 CSpecialPasteOptions::~CSpecialPasteOptions()

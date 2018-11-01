@@ -42,4 +42,5 @@ protected:
 	void AddDateTime(CClip &clip);
 	void SaveDittoFileDataToFile(CClip &clip);
 	void TrimWhiteSpace(CClip &clip);
+	void Slugify(CClip &clip);
 };

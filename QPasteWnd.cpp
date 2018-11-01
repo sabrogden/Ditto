@@ -335,6 +335,10 @@ ON_COMMAND(ID_IMPORT_GMAIL, &CQPasteWnd::OnImportGmail)
 ON_UPDATE_COMMAND_UI(ID_IMPORT_GMAIL, &CQPasteWnd::OnUpdateImportGmail)
 ON_COMMAND(ID_IMPORT_EMAILTOASATTACHMENT, &CQPasteWnd::OnImportEmailtoasattachment)
 ON_UPDATE_COMMAND_UI(ID_IMPORT_EMAILTOASATTACHMENT, &CQPasteWnd::OnUpdateImportEmailtoasattachment)
+ON_COMMAND(ID_SPECIALPASTE_SLUGIFY, &CQPasteWnd::OnSpecialpasteSlugify)
+ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_SLUGIFY, &CQPasteWnd::OnUpdateSpecialpasteSlugify)
+ON_COMMAND(ID_IMPORT_EMAIL_CONTENT_ATTACH, &CQPasteWnd::OnImportEmailContentAttach)
+ON_UPDATE_COMMAND_UI(ID_IMPORT_EMAIL_CONTENT_ATTACH, &CQPasteWnd::OnUpdateImportEmailContentAttach)
 END_MESSAGE_MAP()
 
 
@@ -3202,8 +3206,14 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::GMAIL:
 		DoActionGmail();
 		break;
-	case ActionEnums::EMAILTO_ATTACH:
-		DoActionEmailToAttach();
+	case ActionEnums::EMAILTO_ATTACH_EXPORT:
+		DoActionEmailToAttachExport();
+		break;
+	case ActionEnums::EMAILTO_ATTACH_CONTENT:
+		DoActionEmailToAttachContent();
+		break;
+	case ActionEnums::SLUGIFY:
+		DoActionSlugify();
 		break;
 	}
 
@@ -5484,6 +5494,12 @@ void CQPasteWnd::OnShowGroupsBottom()
 {
 	m_lstHeader.HidePopup(true);
 
+	if (m_GroupTree.IsWindowVisible())
+	{
+		m_GroupTree.ShowWindow(SW_HIDE);
+		return;
+	}
+
     m_GroupTree.m_bHide = false;
     m_bHideWnd = false;
 
@@ -7222,8 +7238,10 @@ bool CQPasteWnd::DoActionGmail()
 	return true;
 }
 
-bool CQPasteWnd::DoActionEmailToAttach()
+bool CQPasteWnd::DoActionEmailToAttachExport()
 {
+	CWaitCursor wait;
+
 	CClipIDs IDs;
 	m_lstHeader.GetSelectionItemData(IDs);
 
@@ -7236,10 +7254,99 @@ bool CQPasteWnd::DoActionEmailToAttach()
 	file.Format(_T("%sexport_%d.dto"), path, dragId++);
 
 	IDs.Export(file);
-
+	
 	SendMail::Send(_T(""), _T(""), file);
 
 	return true;
+}
+
+bool CQPasteWnd::DoActionEmailToAttachContent()
+{
+	CString path = CGetSetOptions::GetPath(PATH_DRAG_FILES);
+	CreateDirectory(path, NULL);
+
+	CClipIDs clipIds;
+	m_lstHeader.GetSelectionItemData(clipIds);
+
+	int dragId = CGetSetOptions::GetDragId();
+	int origDragId = dragId;
+
+	CStringArray fileList;
+
+	for (int i = 0; i < clipIds.GetCount(); i++)
+	{
+		CClip fileClip;
+		fileClip.LoadFormats(clipIds[i]);
+
+		CClipFormat *unicodeText = fileClip.m_Formats.FindFormat(CF_UNICODETEXT);
+		if (unicodeText)
+		{
+			CString file;
+			file.Format(_T("%stext_%d.txt"), path, dragId++);
+
+			fileClip.WriteTextToFile(file, TRUE, FALSE, FALSE);
+			fileList.Add(file);
+		}
+		else
+		{
+			CClipFormat *asciiText = fileClip.m_Formats.FindFormat(CF_TEXT);
+			if (asciiText)
+			{
+				CString file;
+				file.Format(_T("%stext_%d.txt"), path, dragId++);
+
+				fileClip.WriteTextToFile(file, FALSE, TRUE, FALSE);
+				fileList.Add(file);
+			}
+			else
+			{
+				CClipFormat *png = NULL;
+				CClipFormat *bitmap = fileClip.m_Formats.FindFormat(CF_DIB);
+				if (bitmap == NULL)
+				{
+					png = fileClip.m_Formats.FindFormat(theApp.m_PNG_Format);
+				}
+
+				if (bitmap != NULL ||
+					png != NULL)
+				{
+					CString file;
+					file.Format(_T("%simage_%d.png"), path, dragId++);
+
+					if (fileClip.WriteImageToFile(file))
+					{
+						fileList.Add(file);
+					}
+				}
+			}
+		}
+
+		//couldn't get SendMail::Send to support multiple files
+		break;
+	}
+
+	if (fileList.GetCount() > 0)
+	{
+		SendMail::Send(_T(""), _T(""), fileList[0]);
+	}
+
+	if (dragId != origDragId)
+	{
+		CGetSetOptions::SetDragId(dragId);
+	}
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionSlugify()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteSlugify = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
 }
 
 void CQPasteWnd::SetTransparency(int percent)
@@ -7364,7 +7471,7 @@ void CQPasteWnd::OnUpdateImportGmail(CCmdUI *pCmdUI)
 
 void CQPasteWnd::OnImportEmailtoasattachment()
 {
-	DoAction(ActionEnums::EMAILTO_ATTACH);
+	DoAction(ActionEnums::EMAILTO_ATTACH_EXPORT);
 }
 
 
@@ -7375,5 +7482,38 @@ void CQPasteWnd::OnUpdateImportEmailtoasattachment(CCmdUI *pCmdUI)
 		return;
 	}
 
-	UpdateMenuShortCut(pCmdUI, ActionEnums::EMAILTO_ATTACH);
+	UpdateMenuShortCut(pCmdUI, ActionEnums::EMAILTO_ATTACH_EXPORT);
+}
+
+
+void CQPasteWnd::OnSpecialpasteSlugify()
+{
+	DoAction(ActionEnums::SLUGIFY);
+}
+
+void CQPasteWnd::OnUpdateSpecialpasteSlugify(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::SLUGIFY);
+}
+
+
+void CQPasteWnd::OnImportEmailContentAttach()
+{
+	DoAction(ActionEnums::EMAILTO_ATTACH_CONTENT);
+}
+
+
+void CQPasteWnd::OnUpdateImportEmailContentAttach(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::EMAILTO_ATTACH_CONTENT);
 }

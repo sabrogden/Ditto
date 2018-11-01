@@ -348,13 +348,19 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		val = "Decrease Transparency %";
 		break;
 	case EMAILTO_BODY:
-		val = "EMail To in Body";
+		val = "EMail, Content In Body";
 		break;
-	case EMAILTO_ATTACH:
-		val = "EMail To with attachment";
+	case EMAILTO_ATTACH_EXPORT:
+		val = "EMail, Clip Export As Attachment";
+		break;
+	case EMAILTO_ATTACH_CONTENT:
+		val = "EMail, Content As Attachment";
 		break;
 	case GMAIL:
 		val = "Gmail";
+		break;
+	case SLUGIFY:
+		val = "Slugify";
 		break;
 	}
 

@@ -298,7 +298,9 @@ public:
 	bool DoActionDecreaseTransparency();
 	bool DoActionEmailTo();
 	bool DoActionGmail();
-	bool DoActionEmailToAttach();
+	bool DoActionEmailToAttachExport();
+	bool DoActionEmailToAttachContent();
+	bool DoActionSlugify();
 
 	bool OnNewClip();
 	bool OnImportClip();
@@ -566,4 +568,8 @@ public:
 	afx_msg void OnUpdateImportGmail(CCmdUI *pCmdUI);
 	afx_msg void OnImportEmailtoasattachment();
 	afx_msg void OnUpdateImportEmailtoasattachment(CCmdUI *pCmdUI);
+	afx_msg void OnSpecialpasteSlugify();
+	afx_msg void OnUpdateSpecialpasteSlugify(CCmdUI *pCmdUI);
+	afx_msg void OnImportEmailContentAttach();
+	afx_msg void OnUpdateImportEmailContentAttach(CCmdUI *pCmdUI);
 };

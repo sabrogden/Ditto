@@ -16,6 +16,7 @@
 #include "Md5.h"
 #include "DittoChaiScript.h"
 #include "ChaiScriptOnCopy.h"
+#include "Slugify.h"
 
 /*------------------------------------------------------------------*\
 COleClipSource
@@ -198,6 +199,10 @@ BOOL COleClipSource::DoImmediateRender()
 	else if (m_pasteOptions.m_trimWhiteSpace)
 	{
 		TrimWhiteSpace(clip);
+	}
+	else if (m_pasteOptions.m_pasteSlugify)
+	{
+		Slugify(clip);
 	}
 	
 	SaveDittoFileDataToFile(clip);
@@ -1215,4 +1220,27 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 	HGLOBAL hData = fileList.CreateCF_HDROPBuffer();
 
 	return hData;
+}
+
+void COleClipSource::Slugify(CClip &clip)
+{
+	IClipFormat *unicodeTextFormat = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (unicodeTextFormat != NULL)
+	{
+		HGLOBAL data = unicodeTextFormat->Data();
+		wchar_t * stringData = (wchar_t *)GlobalLock(data);
+		int size = (int)GlobalSize(data);
+		CString cs(stringData);
+		GlobalUnlock(data);
+
+		//free the old text we are going to replace it below with an upper case version
+		unicodeTextFormat->Free();
+
+		CString newString = slugify(cs.GetString()).c_str();
+
+		long len = newString.GetLength();
+		HGLOBAL hGlobal = NewGlobalP(newString.GetBuffer(), ((len + 1) * sizeof(wchar_t)));
+
+		unicodeTextFormat->Data(hGlobal);
+	}
 }

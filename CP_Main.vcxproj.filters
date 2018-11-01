@@ -964,6 +964,7 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="SendMail.h" />
+    <ClInclude Include="Slugify.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

@@ -265,6 +265,7 @@ BEGIN
             MENUITEM "Paste, Don't Change Clip Order", ID_SPECIALPASTE_PASTE32945
             MENUITEM SEPARATOR
             MENUITEM "Typoglycemia",                ID_SPECIALPASTE_TYPOGLYCEMIA
+            MENUITEM "Slugify",                     ID_SPECIALPASTE_SLUGIFY
         END
         POPUP "Compare"
         BEGIN
@@ -312,6 +313,7 @@ BEGIN
             MENUITEM "Import File Contents From CF_HDROP", ID_IMPORT_IMPORTCOPIEDFILE
             MENUITEM SEPARATOR
             MENUITEM "EMail, Content In Body",      ID_IMPORT_EMAILTO
+            MENUITEM "EMail, Content As Attachment", ID_IMPORT_EMAIL_CONTENT_ATTACH
             MENUITEM "EMail, Clip Export As Attachment ", ID_IMPORT_EMAILTOASATTACHMENT
             MENUITEM "Gmail, Content In Body",      ID_IMPORT_GMAIL
         END

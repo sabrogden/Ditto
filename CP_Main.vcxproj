@@ -1930,6 +1930,7 @@
     <ClInclude Include="Shared\Tokenizer.h" />
     <ClInclude Include="ShowTaskBarIcon.h" />
     <ClInclude Include="SimpleBrowser.h" />
+    <ClInclude Include="Slugify.h" />
     <ClInclude Include="SnapWindow.h" />
     <ClInclude Include="SpecialPasteOptions.h" />
     <ClInclude Include="sqlite\sqlite3.h" />

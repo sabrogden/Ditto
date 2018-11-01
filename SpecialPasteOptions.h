@@ -23,6 +23,7 @@ public:
 	CString m_pasteScriptGuid;
 	bool m_updateClipOrder;
 	bool m_trimWhiteSpace;
+	bool m_pasteSlugify;
 
 	bool LimitFormatsToText() 
 	{ 
@@ -36,7 +37,8 @@ public:
 			m_pasteAddTwoLineFeeds ||
 			m_pasteTypoglycemia ||
 			m_pasteAddingDateTime || 
-			m_trimWhiteSpace;
+			m_trimWhiteSpace ||
+			m_pasteSlugify;
 	}
 
 	bool IncludeRTFForTextOnly()
