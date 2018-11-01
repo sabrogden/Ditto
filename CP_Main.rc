@@ -273,7 +273,7 @@ BEGIN
             MENUITEM "Select Right Text And Compare Against Left", ID_COMPARE_COMPAREAGAINST
             MENUITEM "Compare",                     ID_COMPARE_COMPARE
         END
-        MENUITEM "Filter On",                   ID_MENU_FILTERON
+        MENUITEM "Filter On Selected Clip",     ID_MENU_FILTERON
         MENUITEM SEPARATOR
         MENUITEM "Delete Entry",                32801
         MENUITEM SEPARATOR
