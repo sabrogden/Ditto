@@ -382,6 +382,16 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
 				}
 			}
 			break;
+		case WM_LBUTTONUP:
+			if (m_RichEdit.m_hWnd != GetFocus()->m_hWnd)
+			{
+				auto p = GetParent();
+				if (p != NULL)
+				{
+					p->SetFocus();
+				}
+			}
+			break;
     }
 
 	if (m_pToolTipActions != NULL)
@@ -926,6 +936,15 @@ void CToolTipEx::OnTimer(UINT_PTR nIDEvent)
 			{
 				m_DittoWindow.DoNcLButtonUp(this, 0, CPoint(0, 0));
 				KillTimer(TIMER_BUTTON_UP);
+
+				if (m_RichEdit.m_hWnd != GetFocus()->m_hWnd)
+				{
+					auto p = GetParent();
+					if (p != NULL)
+					{
+						p->SetFocus();
+					}
+				}
 			}
 			break;
 		}
@@ -986,11 +1005,8 @@ void CToolTipEx::OnNcLButtonDown(UINT nHitTest, CPoint point)
 {
 	int buttonPressed = m_DittoWindow.DoNcLButtonDown(this, nHitTest, point);
 
-	if (buttonPressed != 0)
-	{
-		SetTimer(TIMER_BUTTON_UP, 100, NULL);
-	}
-
+	SetTimer(TIMER_BUTTON_UP, 100, NULL);
+	
 	CWnd::OnNcLButtonDown(nHitTest, point);
 }
 
@@ -1010,6 +1026,15 @@ void CToolTipEx::OnNcLButtonUp(UINT nHitTest, CPoint point)
 	}
 
 	KillTimer(TIMER_BUTTON_UP);
+
+	if (m_RichEdit.m_hWnd != GetFocus()->m_hWnd)
+	{
+		auto p = GetParent();
+		if (p != NULL)
+		{
+			p->SetFocus();
+		}
+	}
 
 	CWnd::OnNcLButtonUp(nHitTest, point);
 }
@@ -1129,10 +1154,6 @@ void CToolTipEx::OnSetFocus(CWnd* pOldWnd)
 	if (m_RichEdit.IsWindowVisible())
 	{
 		m_RichEdit.SetFocus();
-	}
-	else
-	{
-		GetParent()->SetFocus();
 	}
 }
 
