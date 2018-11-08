@@ -414,6 +414,7 @@ BEGIN
             END
             MENUITEM SEPARATOR
             MENUITEM "Always on Top",               32784
+            MENUITEM "Auto Roll-up",                ID_MENU_AUTOHIDE
             MENUITEM "Select Font",                 32844
             MENUITEM SEPARATOR
             MENUITEM "Show Thumbnails",             32845
