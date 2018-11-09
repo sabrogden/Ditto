@@ -485,8 +485,7 @@ void CQPasteWnd::LoadShortcuts()
 	m_actions.AddAccel(ActionEnums::PREVTABCONTROL, ACCEL_MAKEKEY(VK_TAB, HOTKEYF_CONTROL));
 	m_actions.AddAccel(ActionEnums::BACKGRROUP, VK_BACK);
 	m_actions.AddAccel(ActionEnums::DELETE_SELECTED, VK_DELETE);
-	m_actions.AddAccel(ActionEnums::TOGGLEFILELOGGING, ACCEL_MAKEKEY(VK_F5, HOTKEYF_CONTROL));
-	m_actions.AddAccel(ActionEnums::TOGGLEOUTPUTDEBUGSTRING, VK_F5);
+	
 	m_actions.AddAccel(ActionEnums::HOMELIST, VK_HOME);
 	m_actions.AddAccel(ActionEnums::SHOWMENU, VK_APPS);
 
@@ -554,6 +553,9 @@ void CQPasteWnd::LoadShortcuts()
 			}
 		}
 	}
+
+	m_actions.AddAccel(ActionEnums::TOGGLEFILELOGGING, ACCEL_MAKEKEY('D', HOTKEYF_CONTROL), ACCEL_MAKEKEY('F', HOTKEYF_CONTROL));
+	m_actions.AddAccel(ActionEnums::TOGGLEOUTPUTDEBUGSTRING, ACCEL_MAKEKEY('D', HOTKEYF_CONTROL), ACCEL_MAKEKEY('O', HOTKEYF_CONTROL));
 
 	m_lstHeader.SetTooltipActions(&m_toolTipActions);
 }
