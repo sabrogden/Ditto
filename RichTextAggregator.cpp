@@ -19,7 +19,7 @@ CRichTextAggregator::~CRichTextAggregator(void)
 {
 }
 
-bool CRichTextAggregator::AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount)
+bool CRichTextAggregator::AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount, UINT cfType)
 {
 	LPSTR pText = (LPSTR)lpData;
 	if(pText == NULL)

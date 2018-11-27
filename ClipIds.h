@@ -12,7 +12,7 @@ public:
 	HGLOBAL	Render(UINT cfType);
 	// Fills "types" with the Format Types corresponding to the Clip IDs in this array.
 	void GetTypes(CClipTypes& types);
-	bool AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bReverse);
+	bool AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bReverse, bool textOnly);
 
 // MANAGEMENT FUNCTIONS
 

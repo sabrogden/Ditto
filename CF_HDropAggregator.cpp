@@ -9,7 +9,7 @@ CCF_HDropAggregator::~CCF_HDropAggregator(void)
 {
 }
 
-bool CCF_HDropAggregator::AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount)
+bool CCF_HDropAggregator::AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount, UINT cfType)
 {
 	HDROP drop = (HDROP)GlobalLock((HDROP)lpData);
 	int nNumFiles = DragQueryFile(drop, -1, NULL, 0);

@@ -7,7 +7,7 @@ public:
 	CRichTextAggregator(CStringA csSeparator);
 	~CRichTextAggregator(void);
 
-	virtual bool AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount);
+	virtual bool AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount, UINT cfType);
 	virtual HGLOBAL GetHGlobal();
 
 protected:

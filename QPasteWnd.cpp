@@ -7063,7 +7063,7 @@ bool CQPasteWnd::DoActionEmailTo()
 		CStringW SepW = CTextConvert::ConvertToUnicode(g_Opt.GetMultiPasteSeparator());
 
 		CHTMLFormatAggregator Html(SepA);
-		if (IDs.AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse))
+		if (IDs.AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse, false))
 		{
 			CClipFormat cf(theApp.m_HTML_Format, Html.GetHGlobal());
 			clip.m_Formats.Add(cf);
@@ -7072,7 +7072,7 @@ bool CQPasteWnd::DoActionEmailTo()
 		}
 		
 		CCF_UnicodeTextAggregator CFUnicodeText(SepW);
-		if (IDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse))
+		if (IDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse, false))
 		{
 			CClipFormat cf(CF_UNICODETEXT, CFUnicodeText.GetHGlobal());
 			clip.m_Formats.Add(cf);
@@ -7083,7 +7083,7 @@ bool CQPasteWnd::DoActionEmailTo()
 		{
 			
 			CCF_TextAggregator CFText(SepA);
-			if (IDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse))
+			if (IDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse, false))
 			{
 				CClipFormat cf(CF_TEXT, CFText.GetHGlobal());
 				clip.m_Formats.Add(cf);
@@ -7195,7 +7195,7 @@ bool CQPasteWnd::DoActionGmail()
 	{
 		CStringW SepW = CTextConvert::ConvertToUnicode(g_Opt.GetMultiPasteSeparator());
 		CCF_UnicodeTextAggregator CFUnicodeText(SepW);
-		if (IDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse))
+		if (IDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse, false))
 		{
 			CClipFormat cf(CF_UNICODETEXT, CFUnicodeText.GetHGlobal());
 			clip.m_Formats.Add(cf);
@@ -7206,7 +7206,7 @@ bool CQPasteWnd::DoActionGmail()
 		{
 			CStringA SepA = CTextConvert::ConvertToChar(g_Opt.GetMultiPasteSeparator());
 			CCF_TextAggregator CFText(SepA);
-			if (IDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse))
+			if (IDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse, false))
 			{
 				CClipFormat cf(CF_TEXT, CFText.GetHGlobal());
 				clip.m_Formats.Add(cf);

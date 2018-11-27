@@ -7,7 +7,7 @@ public:
 	CHTMLFormatAggregator(CStringA csSepator);
 	~CHTMLFormatAggregator(void);
 
-	virtual bool AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount);
+	virtual bool AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount, UINT cfType);
 	virtual HGLOBAL GetHGlobal();
 
 protected:

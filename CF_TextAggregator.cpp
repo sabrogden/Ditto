@@ -11,8 +11,38 @@ CCF_TextAggregator::~CCF_TextAggregator(void)
 {
 }
 
-bool CCF_TextAggregator::AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount)
+bool CCF_TextAggregator::AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount, UINT cfType)
 {
+	if (cfType == CF_HDROP)
+	{
+		CStringA hDropFiles = _T("");
+		HDROP drop = (HDROP)GlobalLock((HDROP)lpData);
+		int nNumFiles = DragQueryFileA(drop, -1, NULL, 0);
+		CHAR file[MAX_PATH];
+
+		for (int nFile = 0; nFile < nNumFiles; nFile++)
+		{
+			if (DragQueryFileA(drop, nFile, file, sizeof(file)) > 0)
+			{
+				hDropFiles += file;
+				hDropFiles += "\r\n";
+			}
+		}
+
+		if (hDropFiles != _T(""))
+		{
+			m_csNewText += hDropFiles;
+
+			if (nPos != nCount - 1)
+			{
+				m_csNewText += m_csSeparator;
+			}
+
+			return true;
+		}
+		return false;
+	}
+
 	LPCSTR pText = (LPCSTR)lpData;
 	if(pText == NULL)
 	{

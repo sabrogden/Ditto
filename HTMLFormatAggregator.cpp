@@ -20,7 +20,7 @@ CHTMLFormatAggregator::~CHTMLFormatAggregator(void)
 {
 }
 
-bool CHTMLFormatAggregator::AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount)
+bool CHTMLFormatAggregator::AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount, UINT cfType)
 {
 	LPSTR pText = (LPSTR)lpData;
 	if(pText == NULL)

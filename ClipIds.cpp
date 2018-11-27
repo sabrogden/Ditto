@@ -31,7 +31,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	if(cfType == CF_TEXT)
 	{
 		CCF_TextAggregator CFText(SepA);
-		if(AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse))
+		if(AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse, false))
 		{
 			return CFText.GetHGlobal();
 		}
@@ -39,7 +39,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	else if(cfType == CF_UNICODETEXT)
 	{
 		CCF_UnicodeTextAggregator CFUnicodeText(SepW);
-		if(AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse))
+		if(AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse, false))
 		{
 			return CFUnicodeText.GetHGlobal();
 		}
@@ -47,7 +47,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	else if(cfType == CF_HDROP)
 	{
 		CCF_HDropAggregator HDrop;
-		if(AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
+		if(AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse, false))
 		{
 			return HDrop.GetHGlobal();
 		}
@@ -55,7 +55,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	else if(cfType == theApp.m_HTML_Format)
 	{
 		CHTMLFormatAggregator Html(SepA);
-		if(AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse))
+		if(AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse, false))
 		{
 			return Html.GetHGlobal();
 		}
@@ -63,7 +63,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	else if(cfType == theApp.m_RTFFormat)
 	{
 		CRichTextAggregator RichText(SepA);
-		if(AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse))
+		if(AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse, false))
 		{
 			return RichText.GetHGlobal();
 		}
@@ -124,7 +124,7 @@ void CClipIDs::GetTypes(CClipTypes& types)
 	}
 }
 
-bool CClipIDs::AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bReverse)
+bool CClipIDs::AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bReverse, bool textOnly)
 {
 	CString csSQL;
 	LPWSTR Text = NULL;
@@ -143,11 +143,20 @@ bool CClipIDs::AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bRev
 				nIndex = numIDs - i - 1;
 			}
 
+			CString sqlCF_HDROP = _T("");
+			if (textOnly &&
+				cfType == CF_UNICODETEXT || cfType == CF_TEXT)
+			{
+				sqlCF_HDROP.Format(_T("OR Data.strClipBoardFormat = '%s'"), GetFormatName(CF_HDROP));
+			}
+
 			csSQL.Format(_T("SELECT * FROM Data ")
 				_T("INNER JOIN Main ON Main.lID = Data.lParentID ")
-				_T("WHERE Data.strClipBoardFormat = '%s' ")
+				_T("WHERE (Data.strClipBoardFormat = '%s'")
+				_T(" %s) ")
 				_T("AND Main.lID = %d"),
 				GetFormatName(cfType),
+				sqlCF_HDROP,
 				ElementAt(nIndex));
 
 			CppSQLite3Query q = theApp.m_db.execQuery(csSQL);
@@ -161,15 +170,14 @@ bool CClipIDs::AggregateData(IClipAggregator &Aggregator, UINT cfType, BOOL bRev
 					continue;
 				}
 
-				if(Aggregator.AddClip(pData, nDataLen, (int)i, (int)numIDs))
+				if(Aggregator.AddClip(pData, nDataLen, (int)i, (int)numIDs, GetFormatID(q.getStringField(_T("strClipBoardFormat")))))
 				{
-					bRet = true;
+					bRet |= true;
 				}
 			}
 			else
 			{
-				bRet = false;
-				break;
+				bRet |= false;
 			}
 		}
 	}

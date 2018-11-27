@@ -7,7 +7,7 @@ public:
 	CCF_UnicodeTextAggregator(CStringW csSeparator);
 	~CCF_UnicodeTextAggregator(void);
 
-	virtual bool AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount);
+	virtual bool AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount, UINT cfType);
 	virtual HGLOBAL GetHGlobal();
 
 protected:

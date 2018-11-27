@@ -11,8 +11,38 @@ CCF_UnicodeTextAggregator::~CCF_UnicodeTextAggregator(void)
 {
 }
 
-bool CCF_UnicodeTextAggregator::AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount)
+bool CCF_UnicodeTextAggregator::AddClip(LPVOID lpData, int nDataSize, int nPos, int nCount, UINT cfType)
 {
+	if (cfType == CF_HDROP)
+	{
+		CString hDropFiles = _T("");
+		HDROP drop = (HDROP)GlobalLock((HDROP)lpData);
+		int nNumFiles = DragQueryFile(drop, -1, NULL, 0);
+		TCHAR file[MAX_PATH];
+
+		for (int nFile = 0; nFile < nNumFiles; nFile++)
+		{
+			if (DragQueryFile(drop, nFile, file, sizeof(file)) > 0)
+			{
+				hDropFiles += file;
+				hDropFiles += _T("\r\n");
+			}
+		}
+
+		if (hDropFiles != _T(""))
+		{
+			m_csNewText += hDropFiles;
+
+			if (nPos != nCount - 1)
+			{
+				m_csNewText += m_csSeparator;
+			}
+
+			return true;
+		}
+		return false;
+	}
+
 	LPCWSTR pText = (LPCWSTR)lpData;
 	if(pText == NULL)
 	{

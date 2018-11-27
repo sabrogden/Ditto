@@ -92,7 +92,7 @@ BOOL COleClipSource::DoImmediateRender()
 	{
 		CStringA SepA = CTextConvert::ConvertToChar(g_Opt.GetMultiPasteSeparator());
 		CCF_TextAggregator CFText(SepA);
-		if(m_ClipIDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse))
+		if(m_ClipIDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 		{
 			CClipFormat cf(CF_TEXT, CFText.GetHGlobal());
 			clip.m_Formats.Add(cf);
@@ -102,7 +102,7 @@ BOOL COleClipSource::DoImmediateRender()
 
 		CStringW SepW = CTextConvert::ConvertToUnicode(g_Opt.GetMultiPasteSeparator());
 		CCF_UnicodeTextAggregator CFUnicodeText(SepW);
-		if(m_ClipIDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse))
+		if(m_ClipIDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 		{
 			CClipFormat cf(CF_UNICODETEXT, CFUnicodeText.GetHGlobal());
 			clip.m_Formats.Add(cf);
@@ -110,22 +110,10 @@ BOOL COleClipSource::DoImmediateRender()
 			cf.m_autoDeleteData = false;
 		}
 
-		if ((m_pasteOptions.LimitFormatsToText()) &&
-			clip.m_Formats.GetCount() == 0)
+		if (m_pasteOptions.LimitFormatsToText() == false)
 		{
 			CCF_HDropAggregator HDrop;
-			if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
-			{
-				CClipFormat cf(CF_UNICODETEXT, HDrop.GetHGlobalAsString());
-				clip.m_Formats.Add(cf);
-				//clip.m_Formats now owns the global data
-				cf.m_autoDeleteData = false;
-			}
-		}
-		else if (m_pasteOptions.LimitFormatsToText() == false)
-		{
-			CCF_HDropAggregator HDrop;
-			if(m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
+			if(m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 			{
 				CClipFormat cf(CF_HDROP, HDrop.GetHGlobal());
 				clip.m_Formats.Add(cf);
@@ -134,7 +122,7 @@ BOOL COleClipSource::DoImmediateRender()
 			}
 
 			CRichTextAggregator RichText(SepA);
-			if(m_ClipIDs.AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse))
+			if(m_ClipIDs.AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 			{
 				CClipFormat cf(theApp.m_RTFFormat, RichText.GetHGlobal());
 				clip.m_Formats.Add(cf);
@@ -143,7 +131,7 @@ BOOL COleClipSource::DoImmediateRender()
 			}
 
 			CHTMLFormatAggregator Html(SepA);
-			if(m_ClipIDs.AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse))
+			if(m_ClipIDs.AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 			{
 				CClipFormat cf(theApp.m_HTML_Format, Html.GetHGlobal());
 				clip.m_Formats.Add(cf);
@@ -534,7 +522,7 @@ void COleClipSource::PlainTextFilter(CClip &clip)
 		hDropIndex > -1)
 	{
 		CCF_HDropAggregator HDrop;
-		if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse))
+		if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 		{
 			clip.m_Formats.RemoveAt(hDropIndex);
 
