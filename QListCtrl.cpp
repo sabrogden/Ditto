@@ -755,10 +755,10 @@ int CQListCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		EnableToolTips(FALSE);
 	}	
 
-	m_pToolTip = new CToolTipEx;
-	m_pToolTip->Create(this);
+	//m_pToolTip = new CToolTipEx;
+	//m_pToolTip->Create(this);
 
-	m_pToolTip->SetNotifyWnd(GetParent());
+	//m_pToolTip->SetNotifyWnd(GetParent());
 	
 	return 0;
 }
@@ -983,7 +983,10 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		fromNextPrev == false ||
 		::IsWindow(m_toolTipHwnd) == FALSE)
 	{
-		m_pToolTip->DestroyWindow();
+		if (m_pToolTip != NULL)
+		{
+			m_pToolTip->DestroyWindow();
+		}
 
 		m_pToolTip = new CToolTipEx;
 		m_pToolTip->Create(this);
