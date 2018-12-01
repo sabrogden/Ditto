@@ -124,6 +124,9 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 
 	m_clipDataFont.CreateFont(-m_DittoWindow.m_dpi.Scale(11), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 
+	m_Font.CreateFont(-m_DittoWindow.m_dpi.Scale(13), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+	m_fontHeight = -13;
+
 	m_clipDataStatic.SetFont(&m_clipDataFont);
 	m_clipDataStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
 	m_clipDataStatic.SetTextColor(RGB(80, 80, 80));
