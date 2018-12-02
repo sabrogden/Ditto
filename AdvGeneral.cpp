@@ -703,27 +703,33 @@ void CAdvGeneral::OnSize(UINT nType, int cx, int cy)
 
 void CAdvGeneral::OnBnClickedBtCompactAndRepair()
 {
-	CWaitCursor wait;
+	auto msg = theApp.m_Language.GetString("CompactRepairWarning", "Warning this can take quite a long time and require up to double the hard drive space as your current database size, Continue?");
+	int ret = MessageBox(msg, _T("Ditto"), MB_YESNO);
 
-	try
+	if (ret == IDYES)
 	{
+		CWaitCursor wait;
+
 		try
 		{
-			for (int i = 0; i < 100; i++)
+			try
 			{
-				int toDeleteCount = theApp.m_db.execScalar(_T("SELECT COUNT(clipID) FROM MainDeletes"));
-				if (toDeleteCount <= 0)
-					break;
+				for (int i = 0; i < 100; i++)
+				{
+					int toDeleteCount = theApp.m_db.execScalar(_T("SELECT COUNT(clipID) FROM MainDeletes"));
+					if (toDeleteCount <= 0)
+						break;
 
-				RemoveOldEntries(false);
+					RemoveOldEntries(false);
+				}
 			}
+			CATCH_SQLITE_EXCEPTION
+
+			theApp.m_db.execDML(_T("PRAGMA auto_vacuum = 1"));
+			theApp.m_db.execQuery(_T("VACUUM"));
 		}
 		CATCH_SQLITE_EXCEPTION
-
-		theApp.m_db.execDML(_T("PRAGMA auto_vacuum = 1"));
-		theApp.m_db.execQuery(_T("VACUUM"));
 	}
-	CATCH_SQLITE_EXCEPTION
 }
 
 void CAdvGeneral::OnBnClickedButtonCopyScripts()
