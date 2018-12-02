@@ -709,7 +709,7 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
 {
     CWndEx::OnActivate(nState, pWndOther, bMinimized);
 
-    if(m_bHideWnd == false || m_lstHeader.GetToolTipHWnd() == pWndOther->GetSafeHwnd())
+    if(m_bHideWnd == false || (m_lstHeader.GetToolTipHWnd() != NULL && m_lstHeader.GetToolTipHWnd() == pWndOther->GetSafeHwnd()))
     {
         return ;
     }
