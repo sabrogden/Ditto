@@ -1226,6 +1226,7 @@ DittoSetup_%versionFileName%.exe]]></Ext>
 			<indent type='3'>2</indent>
 			<name>Choco Push</name>
 			<outputfrom type='3'>1</outputfrom>
+			<retries>5</retries>
 			<startin>%workDir%\DittoSetup\Chocolatey</startin>
 		</step>
 		<step action='Group'>
@@ -2021,6 +2022,7 @@ DittoSetup_%versionFileName%.exe]]></Ext>
 			<indent type='3'>2</indent>
 			<name>Choco Push</name>
 			<outputfrom type='3'>1</outputfrom>
+			<retries>5</retries>
 			<startin>%workDir%\DittoSetup\Chocolatey.install</startin>
 		</step>
 		<step action='Group'>
@@ -2845,6 +2847,7 @@ DittoPortable_%versionFileName%.zip]]></Ext>
 			<indent type='3'>2</indent>
 			<name>Choco Push</name>
 			<outputfrom type='3'>1</outputfrom>
+			<retries>5</retries>
 			<startin>%workDir%\DittoSetup\Chocolatey-Portable</startin>
 		</step>
 		<step action='Group'>
