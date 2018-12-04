@@ -255,6 +255,7 @@ BEGIN
             MENUITEM "lower case",                  ID_SPECIALPASTE_LOWERCASE
             MENUITEM "Capitalize Case",             ID_SPECIALPASTE_CAPITALIZE
             MENUITEM "Sentence case",               ID_SPECIALPASTE_SENTENCE
+            MENUITEM "Invert Case",                 ID_SPECIALPASTE_TOGGLECASE
             MENUITEM "Trim White Space",            ID_SPECIALPASTE_TRIM
             MENUITEM SEPARATOR
             MENUITEM "Remove Line Feeds",           ID_SPECIALPASTE_REMOVELINEFEEDS

@@ -339,6 +339,8 @@ ON_COMMAND(ID_SPECIALPASTE_SLUGIFY, &CQPasteWnd::OnSpecialpasteSlugify)
 ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_SLUGIFY, &CQPasteWnd::OnUpdateSpecialpasteSlugify)
 ON_COMMAND(ID_IMPORT_EMAIL_CONTENT_ATTACH, &CQPasteWnd::OnImportEmailContentAttach)
 ON_UPDATE_COMMAND_UI(ID_IMPORT_EMAIL_CONTENT_ATTACH, &CQPasteWnd::OnUpdateImportEmailContentAttach)
+ON_COMMAND(ID_SPECIALPASTE_TOGGLECASE, &CQPasteWnd::OnSpecialpasteTogglecase)
+ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_TOGGLECASE, &CQPasteWnd::OnUpdateSpecialpasteTogglecase)
 END_MESSAGE_MAP()
 
 
@@ -3012,6 +3014,9 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::PASTE_SENTENCE_CASE:
 		ret = DoPasteSentenceCase();
 		break;
+	case ActionEnums::INVERT_CASE:
+		ret = DoInvertCase();
+		break;
 	case ActionEnums::PASTE_REMOVE_LINE_FEEDS:
 		ret = DoPasteRemoveLineFeeds();
 		break;
@@ -4444,6 +4449,19 @@ bool CQPasteWnd::DoPasteSentenceCase()
 	{
 		CSpecialPasteOptions pasteOptions;
 		pasteOptions.m_pasteSentenceCase = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoInvertCase()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_invertCase = true;
 		OpenSelection(pasteOptions);
 		return true;
 	}
@@ -7518,4 +7536,21 @@ void CQPasteWnd::OnUpdateImportEmailContentAttach(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::EMAILTO_ATTACH_CONTENT);
+}
+
+
+void CQPasteWnd::OnSpecialpasteTogglecase()
+{
+	DoAction(ActionEnums::INVERT_CASE);
+}
+
+
+void CQPasteWnd::OnUpdateSpecialpasteTogglecase(CCmdUI *pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::INVERT_CASE);
 }

@@ -362,6 +362,9 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case SLUGIFY:
 		val = "Slugify";
 		break;
+	case INVERT_CASE:
+		val = "Invert Case";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
