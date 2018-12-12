@@ -367,7 +367,7 @@ HGLOBAL CClient::RequestCopiedFiles(CClipFormat &HDropFormat, CString csIP, CStr
 
 	if(hReturn == NULL && csErrorString.IsEmpty() == FALSE)
 	{
-		MessageBox(pProgress->m_hWnd, csErrorString, _T("Ditto"), MB_OK|MB_ICONEXCLAMATION);
+		::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)csErrorString.GetBuffer(csErrorString.GetLength()), 0);
 	}
 
 	pProgress->DestroyWindow();
