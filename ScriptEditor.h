@@ -44,4 +44,6 @@ public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnBnClickedButtonDeleteScript();
 	afx_msg void OnBnClickedButtonRun();
+	CRichEditCtrl m_rich;
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };

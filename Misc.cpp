@@ -228,14 +228,63 @@ CString RemoveEscapes( const TCHAR* str )
 	return ret;
 }
 
-CString GetWndText( HWND hWnd )
+CString GetWndText(HWND hWnd)
 {
-	CString text;
-	if( !IsWindow(hWnd) )
-		return "! NOT A VALID WINDOW !";
-	CWnd* pWnd = CWnd::FromHandle(hWnd);
-	pWnd->GetWindowText(text);
-	return text;
+	TCHAR cWindowText[200];
+	HWND hParent = hWnd;
+
+	::GetWindowText(hParent, cWindowText, 100);
+
+	int nCount = 0;
+
+	while (STRLEN(cWindowText) <= 0)
+	{
+		hParent = ::GetParent(hParent);
+		if (hParent == NULL)
+			break;
+
+		::GetWindowText(hParent, cWindowText, 100);
+
+		nCount++;
+		if (nCount > 100)
+		{
+			Log(_T("GetTargetName reached maximum search depth of 100"));
+			break;
+		}
+	}
+
+	return cWindowText;
+}
+
+CString TopLevelWindowText(DWORD pid)
+{
+	std::pair<CString, DWORD> params = { _T(""), pid };
+
+	// Enumerate the windows using a lambda to process each window
+	BOOL bResult = EnumWindows([](HWND hwnd, LPARAM lParam) -> BOOL
+	{
+		auto pParams = (std::pair<CString, DWORD>*)(lParam);
+
+		DWORD processId;
+		if (GetWindowThreadProcessId(hwnd, &processId) &&
+			processId == pParams->second &&
+			::GetWindow(hwnd, GW_OWNER) == 0)
+		{
+			TCHAR cWindowText[500];
+			::GetWindowText(hwnd, cWindowText, 500);
+
+			if (STRLEN(cWindowText) > 0)
+			{
+				pParams->first = cWindowText;
+				return FALSE;
+			}
+		}
+
+		// Continue enumerating
+		return TRUE;
+	}, (LPARAM)&params);
+
+	return params.first;
 }
 
 bool IsAppWnd( HWND hWnd )

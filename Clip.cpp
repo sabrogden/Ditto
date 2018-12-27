@@ -251,6 +251,7 @@ CClip::CClip() :
 	m_globalMoveToGroupShortCut(FALSE)
 {
 	m_copyReason = CopyReasonEnum::COPY_TO_UNKOWN;
+	m_addToDbStickyEnum = AddToDbStickyEnum::INVALID;
 }
 
 CClip::~CClip()
@@ -359,7 +360,7 @@ bool CClip::AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen, bool setDesc)
 }
 
 // Fills this CClip with the contents of the clipboard.
-int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, CString activeApp)
+int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, CString activeApp, CString activeAppTitle)
 {
 	COleDataObjectEx oleData;
 	CClipTypes defaultTypes;
@@ -602,7 +603,7 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 				Log(StrF(_T("Start of process copy name: %s, script: %s"), listItem.m_name, listItem.m_script));
 
 				ChaiScriptOnCopy onCopy;
-				CDittoChaiScript clipData(this, (LPCSTR)CTextConvert::ConvertToChar(activeApp));
+				CDittoChaiScript clipData(this, (LPCSTR)CTextConvert::ConvertToChar(activeApp), (LPCSTR)CTextConvert::ConvertToChar(activeAppTitle));
 				if (onCopy.ProcessScript(clipData, (LPCSTR)CTextConvert::ConvertToChar(listItem.m_script)) == false)
 				{
 					Log(StrF(_T("End of process copy name: %s, returned false, not saving this copy to Ditto, last Error: %s"), listItem.m_name, onCopy.m_lastError));
@@ -767,6 +768,22 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 		}
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)
+
+	int removeStickySettingClipId = -1;
+
+	if (m_addToDbStickyEnum == AddToDbStickyEnum::MAKE_TOP_STICKY)
+	{
+		m_stickyClipOrder = this->GetNewTopSticky(m_parentId, -1);
+	}
+	else if (m_addToDbStickyEnum == AddToDbStickyEnum::MAKE_LAST_STICKY)
+	{
+		m_stickyClipOrder = this->GetNewLastSticky(m_parentId, -1);
+	}
+	else if (m_addToDbStickyEnum == AddToDbStickyEnum::REPLACE_TOP_STICKY)
+	{
+		m_stickyClipOrder = this->GetNewTopSticky(m_parentId, -1);
+		removeStickySettingClipId = GetExistingTopStickyClipId(m_parentId);
+	}
 	
 	bResult = false;
 	if(AddToMainTable())
@@ -778,6 +795,11 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 	{
 		if(g_Opt.m_csPlaySoundOnCopy.IsEmpty() == FALSE)
 			PlaySound(g_Opt.m_csPlaySoundOnCopy, NULL, SND_FILENAME|SND_ASYNC);
+
+		if (removeStickySettingClipId > 0)
+		{
+			RemoveStickySetting(removeStickySettingClipId, m_parentId);
+		}
 	}
 	
 	// should be emptied by AddToDataTable
@@ -1272,6 +1294,52 @@ bool CClip::RemoveStickySetting(int parentId)
 	return reset;
 }
 
+bool CClip::RemoveStickySetting(int clipId, int parentId)
+{
+	bool reset = false;
+	if (parentId < 0)
+	{
+		int c = theApp.m_db.execDMLEx(_T("UPDATE Main SET stickyClipOrder = %f WHERE lID = %d"), (double)INVALID_STICKY, clipId);
+		int y = 0;
+	}
+	else
+	{
+		int c = theApp.m_db.execDMLEx(_T("UPDATE Main SET stickyClipGroupOrder = %f WHERE lID = %d"), (double)INVALID_STICKY, clipId);
+		int y = 0;
+	}
+
+	return reset;
+}
+
+double CClip::GetExistingTopStickyClipId(int parentId)
+{
+	int existingTopClipId = -1;
+
+	try
+	{
+		if (parentId < 0)
+		{
+			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT lID FROM Main WHERE stickyClipOrder <> -(2147483647) ORDER BY stickyClipOrder DESC LIMIT 1"));
+			if (q.eof() == false)
+			{
+				existingTopClipId = q.getIntField(_T("lID"));
+			}
+		}
+		else
+		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID FROM Main WHERE lParentID = %d AND stickyClipGroupOrder <> -(2147483647) ORDER BY stickyClipGroupOrder DESC LIMIT 1"), parentId);
+			if (q.eof() == false)
+			{
+				existingTopClipId = q.getIntField(_T("lID"));
+			}
+		}
+
+	}
+	CATCH_SQLITE_EXCEPTION
+
+	return existingTopClipId;
+}
+
 double CClip::GetNewTopSticky(int parentId, int clipId)
 {
 	double newOrder = 1;
@@ -1282,7 +1350,7 @@ double CClip::GetNewTopSticky(int parentId, int clipId)
 	{
 		if (parentId < 0)
 		{
-			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT stickyClipOrder, mText FROM Main WHERE stickyClipOrder <> -(2147483647) ORDER BY stickyClipOrder DESC LIMIT 1"));
+			CppSQLite3Query q = theApp.m_db.execQuery(_T("SELECT lID, stickyClipOrder, mText FROM Main WHERE stickyClipOrder <> -(2147483647) ORDER BY stickyClipOrder DESC LIMIT 1"));
 			if (q.eof() == false)
 			{
 				existingMaxOrder = q.getFloatField(_T("stickyClipOrder"));
@@ -1292,7 +1360,7 @@ double CClip::GetNewTopSticky(int parentId, int clipId)
 		}
 		else
 		{
-			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT stickyClipGroupOrder, mText FROM Main WHERE lParentID = %d AND stickyClipGroupOrder <> -(2147483647) ORDER BY stickyClipGroupOrder DESC LIMIT 1"), parentId);
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, stickyClipGroupOrder, mText FROM Main WHERE lParentID = %d AND stickyClipGroupOrder <> -(2147483647) ORDER BY stickyClipGroupOrder DESC LIMIT 1"), parentId);
 			if (q.eof() == false)
 			{
 				existingMaxOrder = q.getFloatField(_T("stickyClipGroupOrder"));

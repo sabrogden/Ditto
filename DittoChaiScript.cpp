@@ -7,10 +7,11 @@
 
 #include <regex>
 
-CDittoChaiScript::CDittoChaiScript(IClip *pClip, std::string activeApp)
+CDittoChaiScript::CDittoChaiScript(IClip *pClip, std::string activeApp, std::string activeAppTitle)
 {
 	m_pClip = pClip;
 	m_activeApp = activeApp;
+	m_activeAppTitle = activeAppTitle;
 }
 
 
@@ -159,4 +160,20 @@ BOOL CDittoChaiScript::AsciiTextMatchesRegex(std::string regex)
 		matches = true;
 	}
 	return matches;
+}
+
+
+void CDittoChaiScript::SetMakeTopSticky()
+{
+	m_pClip->SetSaveToDbSticky(AddToDbStickyEnum::MAKE_LAST_STICKY);
+}
+
+void CDittoChaiScript::SetMakeLastSticky()
+{
+	m_pClip->SetSaveToDbSticky(AddToDbStickyEnum::MAKE_LAST_STICKY);
+}
+
+void CDittoChaiScript::SetReplaceTopSticky()
+{
+	m_pClip->SetSaveToDbSticky(AddToDbStickyEnum::REPLACE_TOP_STICKY);
 }

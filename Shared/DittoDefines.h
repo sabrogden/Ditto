@@ -194,3 +194,15 @@ public:
 		return _T("ERROR");
 	}
 };
+
+class AddToDbStickyEnum
+{
+public:
+	enum AddToDbSticky
+	{
+		INVALID,
+		MAKE_TOP_STICKY,
+		MAKE_LAST_STICKY,
+		REPLACE_TOP_STICKY
+	};
+};

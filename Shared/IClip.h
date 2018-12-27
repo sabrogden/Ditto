@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DittoDefines.h"
+
 //Contains the actual data of a clip format
 // Type is the type of clipboard format
 // Data is a HGLOBAL object pointing to the clipboard format data
@@ -42,6 +44,7 @@ public:
 	virtual void DontAutoDelete(int Dont) = 0;
 	virtual CString QuickPaste() = 0;
 	virtual void QuickPaste(CString csValue) = 0;
+	virtual void SetSaveToDbSticky(AddToDbStickyEnum::AddToDbSticky option) = 0;
 
 	virtual IClipFormats *Clips() = 0;
 };

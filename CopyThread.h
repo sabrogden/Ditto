@@ -62,7 +62,7 @@ public:
 	CCopyConfig         m_LocalConfig;
 
 	// Called within Copy Thread:
-	void OnClipboardChange(CString activeWindow); // called by ClipboardViewer
+	void OnClipboardChange(CString activeWindow, CString activeWindowTitle); // called by ClipboardViewer
 	void SyncConfig(); // safely syncs m_LocalConfig with m_SharedConfig
 
 // Shared (use thread-safe access functions below)

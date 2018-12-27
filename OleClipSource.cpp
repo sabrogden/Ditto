@@ -206,7 +206,7 @@ BOOL COleClipSource::DoImmediateRender()
 					Log(StrF(_T("Start of paste script name: %s, script: %s"), element.m_name, element.m_script));
 
 					ChaiScriptOnCopy onPaste;
-					CDittoChaiScript clipData(&clip, "");
+					CDittoChaiScript clipData(&clip, "", "");
 					if (onPaste.ProcessScript(clipData, (LPCSTR)CTextConvert::ConvertToChar(element.m_script)) == false)
 					{
 						Log(StrF(_T("End of paste script name: %s, returned false, not saving this copy to Ditto, last Error: %s"), element.m_name, onPaste.m_lastError));

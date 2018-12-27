@@ -124,12 +124,14 @@ public:
 	virtual CString QuickPaste() { return m_csQuickPaste; }
 	virtual void QuickPaste(CString csValue) { m_csQuickPaste = csValue; }
 
+	virtual void SetSaveToDbSticky(AddToDbStickyEnum::AddToDbSticky option) { m_addToDbStickyEnum = option; }
+
 	virtual IClipFormats *Clips() { return (IClipFormats*)&m_Formats; }
 
 	void Clear();
 	void EmptyFormats();
 	bool AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen, bool setDesc = false);
-	int LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore = true, CString activeApp = _T(""));
+	int LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore = true, CString activeApp = _T(""), CString activeAppTitle = _T(""));
 	bool SetDescFromText(HGLOBAL hgData, bool unicode);
 	bool SetDescFromType();
 	bool AddToDB(bool bCheckForDuplicates = true);
@@ -166,6 +168,8 @@ public:
 	double GetNewLastOrder(int parentId, int clipId);
 	static double GetNewTopSticky(int parentId, int clipId);
 	static double GetNewLastSticky(int parentId, int clipId);
+	static double GetExistingTopStickyClipId(int parentId);
+	static bool RemoveStickySetting(int clipId, int parentId);
 
 	bool AddFileDataToData(CString &errorMessage);
 
@@ -175,6 +179,8 @@ protected:
 	bool AddToMainTable();
 	bool AddToDataTable();
 	int FindDuplicate();
+
+	AddToDbStickyEnum::AddToDbSticky m_addToDbStickyEnum;
 };
 
 

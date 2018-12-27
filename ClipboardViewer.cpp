@@ -27,7 +27,8 @@ CClipboardViewer::CClipboardViewer(CCopyThread* pHandler) :
 	m_dwLastCopy(0),
 	m_connectOnStartup(true)
 {
-
+	m_activeWindowTitle = _T("");
+	m_activeWindow = _T("");
 }
 
 CClipboardViewer::~CClipboardViewer()
@@ -293,6 +294,7 @@ void CClipboardViewer::OnDrawClipboard()
 bool CClipboardViewer::ValidActiveWnd()
 {
 	m_activeWindow = _T("");
+	m_activeWindowTitle = _T("";)
 
 	HWND owner = ::GetClipboardOwner();
 	if (owner != NULL)
@@ -303,6 +305,7 @@ bool CClipboardViewer::ValidActiveWnd()
 		if (PID != 0)
 		{
 			m_activeWindow = GetProcessName(NULL, PID);
+			m_activeWindowTitle = TopLevelWindowText(PID);			
 		}
 	}
 
@@ -311,6 +314,7 @@ bool CClipboardViewer::ValidActiveWnd()
 	{
 		HWND active = ::GetForegroundWindow();
 		m_activeWindow = GetProcessName(active, 0);
+		m_activeWindowTitle = GetWndText(active);
 	}
 
 	m_activeWindow = m_activeWindow.MakeLower();
@@ -391,7 +395,7 @@ void CClipboardViewer::OnTimer(UINT_PTR nIDEvent)
 				{
 					Log(StrF(_T("OnDrawClipboard::OnTimer %d"), dwNow));
 
-					m_pHandler->OnClipboardChange(m_activeWindow);
+					m_pHandler->OnClipboardChange(m_activeWindow, m_activeWindowTitle);
 
 					m_dwLastCopy = dwNow;
 				}
@@ -402,6 +406,7 @@ void CClipboardViewer::OnTimer(UINT_PTR nIDEvent)
 			}
 
 			m_activeWindow = _T("");
+			m_activeWindowTitle = _T("");
 		}
 		break;
 

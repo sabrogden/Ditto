@@ -262,6 +262,7 @@
 #define IDC_EDIT_DESCRIP                1018
 #define IDC_EDIT_DESC                   1018
 #define IDC_ADD_1                       1019
+#define IDC_EDIT_ACTIVE_APP_TITLE       1019
 #define IDC_ADD_2                       1020
 #define IDC_EDIT_DISPLAY_TEXT           1020
 #define IDC_ADD_3                       1021
@@ -595,6 +596,8 @@
 #define IDC_MFCLINK2_EXAMPLES           2166
 #define IDC_STATIC_MD5                  2167
 #define IDC_EDIT_MD5                    2168
+#define IDC_RICHEDIT21                  2172
+#define IDC_EDIT_ACTIVE_APP             2173
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
 #define ID_FIRST_SHOWQUICKPASTE         32773
@@ -781,7 +784,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        383
 #define _APS_NEXT_COMMAND_VALUE         32958
-#define _APS_NEXT_CONTROL_VALUE         2172
+#define _APS_NEXT_CONTROL_VALUE         2174
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

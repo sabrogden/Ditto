@@ -32,6 +32,12 @@ bool ChaiScriptOnCopy::ProcessScript(CDittoChaiScript &clipData, std::string scr
 		chai.add(chaiscript::fun(&CDittoChaiScript::SetAsciiString), "SetAsciiString");
 		chai.add(chaiscript::fun(&CDittoChaiScript::GetActiveApp), "GetActiveApp");
 
+		chai.add(chaiscript::fun(&CDittoChaiScript::GetActiveAppTitle), "GetActiveAppTitle");
+
+		chai.add(chaiscript::fun(&CDittoChaiScript::SetMakeTopSticky), "SetMakeTopSticky");
+		chai.add(chaiscript::fun(&CDittoChaiScript::SetMakeLastSticky), "SetMakeLastSticky");
+		chai.add(chaiscript::fun(&CDittoChaiScript::SetReplaceTopSticky), "SetReplaceTopSticky");
+
 		chai.add(chaiscript::fun(&CDittoChaiScript::FormatExists), "FormatExists");
 		chai.add(chaiscript::fun(&CDittoChaiScript::RemoveFormat), "RemoveFormat");
 		chai.add(chaiscript::fun(&CDittoChaiScript::SetParentId), "SetParentId");
