@@ -765,7 +765,7 @@ void sqlite_regexp(sqlite3_context* context, int argc, sqlite3_value** values)
 
 	try
 	{
-		if (std::regex_search(text, std::regex(reg)))
+		if (std::regex_search(text, std::regex(reg, std::regex::flag_type::icase)))
 		{
 			sqlite3_result_int(context, 1);
 		}

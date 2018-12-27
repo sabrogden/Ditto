@@ -192,6 +192,10 @@ BOOL COleClipSource::DoImmediateRender()
 	{
 		Slugify(clip);
 	}
+	else if (m_pasteOptions.m_invertCase)
+	{
+		InvertCase(clip);
+	}
 	
 	SaveDittoFileDataToFile(clip);
 
@@ -298,6 +302,87 @@ void COleClipSource::DoUpperLowerCase(CClip &clip, bool upper)
 	}
 }
 
+void COleClipSource::InvertCase(CClip &clip)
+{
+	IClipFormat *unicodeTextFormat = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (unicodeTextFormat != NULL)
+	{
+		HGLOBAL data = unicodeTextFormat->Data();
+		wchar_t * stringData = (wchar_t *)GlobalLock(data);
+		int size = (int)GlobalSize(data);
+		CString cs(stringData);
+		GlobalUnlock(data);
+
+		//free the old text we are going to replace it below with an upper case version
+		unicodeTextFormat->Free();
+
+		long len = cs.GetLength();
+
+		if (len > 0)
+		{
+			wchar_t * pText = cs.GetBuffer();
+			
+			for (int i = 0; i < len; i++)
+			{
+				wchar_t item = pText[i];
+				if (u_isUUppercase(item))
+				{
+					pText[i] = u_tolower(item);
+				}
+				else
+				{
+					pText[i] = u_toupper(item);
+				}
+			}
+		}
+
+		cs.ReleaseBuffer();
+
+		HGLOBAL hGlobal = NewGlobalP(cs.GetBuffer(), ((len + 1) * sizeof(wchar_t)));
+
+		unicodeTextFormat->Data(hGlobal);
+	}
+
+	IClipFormat *asciiTextFormat = clip.m_Formats.FindFormatEx(CF_TEXT);
+	if (asciiTextFormat != NULL)
+	{
+		HGLOBAL data = asciiTextFormat->Data();
+		char * stringData = (char *)GlobalLock(data);
+		int size = (int)GlobalSize(data);
+		CStringA cs(stringData);
+		GlobalUnlock(data);
+
+		//free the old text we are going to replace it below with an upper case version
+		asciiTextFormat->Free();
+
+		long len = cs.GetLength();
+
+		if (len > 0)
+		{
+			char * pText = cs.GetBuffer();
+
+			for (int i = 0; i < len; i++)
+			{
+				char item = pText[i];
+				if (::isupper(item))
+				{
+					pText[i] = ::tolower(item);
+				}
+				else
+				{
+					pText[i] = ::toupper(item);
+				}
+			}
+		}
+
+		cs.ReleaseBuffer();
+
+		HGLOBAL hGlobal = NewGlobalP(cs.GetBuffer(), (len + 1));
+
+		asciiTextFormat->Data(hGlobal);
+	}
+}
+
 void COleClipSource::Capitalize(CClip &clip)
 {
 	IClipFormat *unicodeTextFormat = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
@@ -374,7 +459,7 @@ void COleClipSource::Capitalize(CClip &clip)
 
 			for (int i = 1; i < len; i++)
 			{
-				wchar_t item = pText[i];
+				char item = pText[i];
 				if (item == ' ')
 				{
 					capitalize = true;
@@ -470,7 +555,7 @@ void COleClipSource::SentenceCase(CClip &clip)
 
 			for (int i = 1; i < len; i++)
 			{
-				wchar_t item = pText[i];
+				char item = pText[i];
 				if (item == '.' ||
 					item == '!' ||
 					item == '?')
@@ -636,7 +721,7 @@ void COleClipSource::AddLineFeeds(CClip &clip, int count)
 
 			for (int i = 0; i < count; i++)
 			{
-				string += _T("\r\n");
+				string += "\r\n";
 			}
 
 			HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1)));

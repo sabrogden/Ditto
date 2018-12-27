@@ -21,6 +21,7 @@ CSpecialPasteOptions::CSpecialPasteOptions()
 	m_updateClipOrder = true;
 	m_trimWhiteSpace = false;
 	m_pasteSlugify = false;
+	m_invertCase = false;
 }
 
 CSpecialPasteOptions::~CSpecialPasteOptions()

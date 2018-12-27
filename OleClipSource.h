@@ -43,4 +43,5 @@ protected:
 	void SaveDittoFileDataToFile(CClip &clip);
 	void TrimWhiteSpace(CClip &clip);
 	void Slugify(CClip &clip);
+	void InvertCase(CClip &clip);
 };

@@ -24,6 +24,7 @@ public:
 	bool m_updateClipOrder;
 	bool m_trimWhiteSpace;
 	bool m_pasteSlugify;
+	bool m_invertCase;
 
 	bool LimitFormatsToText() 
 	{ 
@@ -38,7 +39,8 @@ public:
 			m_pasteTypoglycemia ||
 			m_pasteAddingDateTime || 
 			m_trimWhiteSpace ||
-			m_pasteSlugify;
+			m_pasteSlugify || 
+			m_invertCase;
 	}
 
 	bool IncludeRTFForTextOnly()

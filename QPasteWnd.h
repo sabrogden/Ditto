@@ -276,6 +276,7 @@ public:
 	bool DoPasteLowerCase();
 	bool DoPasteCapitalize();
 	bool DoPasteSentenceCase();
+	bool DoInvertCase();
 	bool DoPasteRemoveLineFeeds();
 	bool DoPastePlusAddLineFeed();
 	bool DoPasteAddTwoLineFeeds();
@@ -572,4 +573,6 @@ public:
 	afx_msg void OnUpdateSpecialpasteSlugify(CCmdUI *pCmdUI);
 	afx_msg void OnImportEmailContentAttach();
 	afx_msg void OnUpdateImportEmailContentAttach(CCmdUI *pCmdUI);
+	afx_msg void OnSpecialpasteTogglecase();
+	afx_msg void OnUpdateSpecialpasteTogglecase(CCmdUI *pCmdUI);
 };
