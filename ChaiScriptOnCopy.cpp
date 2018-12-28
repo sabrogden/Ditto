@@ -16,6 +16,11 @@ ChaiScriptOnCopy::~ChaiScriptOnCopy()
 {
 }
 
+std::string FormatCurrentTime(const std::string &format) {
+	CTime t = CTime::GetCurrentTime();
+	CStringA x = t.Format(format.c_str());
+	return x;
+}
 
 bool ChaiScriptOnCopy::ProcessScript(CDittoChaiScript &clipData, std::string script)
 {
@@ -42,6 +47,8 @@ bool ChaiScriptOnCopy::ProcessScript(CDittoChaiScript &clipData, std::string scr
 		chai.add(chaiscript::fun(&CDittoChaiScript::RemoveFormat), "RemoveFormat");
 		chai.add(chaiscript::fun(&CDittoChaiScript::SetParentId), "SetParentId");
 		chai.add(chaiscript::fun(&CDittoChaiScript::AsciiTextMatchesRegex), "AsciiTextMatchesRegex");
+
+		chai.add(chaiscript::fun(&FormatCurrentTime), "FormatCurrentTime");
 
 		chai.add(chaiscript::var(&clipData), "clip");
 
