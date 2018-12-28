@@ -160,9 +160,6 @@ BOOL CCP_MainApp::InitInstance()
 
 	LoadLibrary(TEXT("MSFTEDIT.DLL"));
 
-	setlocale(LC_COLLATE, ".OCP"); // sets the sort order
-	setlocale(LC_MONETARY, ".OCP"); // sets the currency formatting rules
-	setlocale(LC_NUMERIC, ".OCP"); // sets the formatting of numerals
 	setlocale(LC_TIME, ".OCP"); // defines the date/time formatting
 
 	//MessageBox(NULL, _T("ditto starting"), _T("d"), MB_OK);
