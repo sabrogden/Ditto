@@ -32,12 +32,13 @@ void CAccels::RemoveAll()
 	m_multiMap.clear();
 }
 
-CString CAccels::GetCmdKeyText(DWORD cmd)
+CString CAccels::GetCmdKeyText(DWORD cmd, CString refData)
 {
 	CString cmdShortcutText;
 	for (multimap<DWORD, CAccel>::iterator it = m_multiMap.begin(); it != m_multiMap.end(); ++it)
 	{
-		if (it->second.Cmd == cmd)
+		if (it->second.Cmd == cmd &&
+			(refData == _T("") || it->second.RefData == refData))
 		{
 			if (it->second.Key != 0)
 			{

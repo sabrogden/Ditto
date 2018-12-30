@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include "Accels.h"
 
 #define ChaiScriptMenuStartId 5001
 #define MaxChaiScripts 99
@@ -30,7 +31,7 @@ public:
 	CString Save();
 	void Load(CString values);
 	CString GetScript(CString name, BOOL &active);	
-	void AddToMenu(CMenu *pMenu);
+	void AddToMenu(CMenu *pMenu, CAccels *actions);
 
 	std::vector<CDittoChaiScriptXmlItem> m_list;
 	bool m_assignedGuidOnLoad;

@@ -42,7 +42,7 @@ public:
 
 	void RemoveAll();
 
-	CString GetCmdKeyText(DWORD cmd);
+	CString GetCmdKeyText(DWORD cmd, CString refData = _T(""));
 
     // handles a key's first WM_KEYDOWN or WM_SYSKEYDOWN message.
     // it uses GetKeyState to test for modifiers.

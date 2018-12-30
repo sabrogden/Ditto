@@ -3,6 +3,7 @@
 #include "tinyxml\tinyxml.h"
 #include "Shared\TextConvert.h"
 #include "Misc.h"
+#include "ActionEnums.h"
 
 
 CChaiScriptXml::CChaiScriptXml()
@@ -115,7 +116,7 @@ CString CChaiScriptXml::Save()
 	return cs;
 }
 
-void CChaiScriptXml::AddToMenu(CMenu *pMenu)
+void CChaiScriptXml::AddToMenu(CMenu *pMenu, CAccels *actions)
 {
 	if (m_list.size() > 0)
 	{
@@ -138,6 +139,16 @@ void CChaiScriptXml::AddToMenu(CMenu *pMenu)
 			else
 			{
 				cs.Format(_T("%s"), element.m_name);
+			}
+
+			if (actions != NULL)
+			{
+				CString shortcutText = actions->GetCmdKeyText(ActionEnums::PASTE_SCRIPT, element.m_guid);
+				if (shortcutText != _T(""))
+				{
+					cs += "\t";
+					cs += shortcutText;
+				}
 			}
 
 			pMenu->AppendMenuW(MF_STRING, (ChaiScriptMenuStartId + id), cs);

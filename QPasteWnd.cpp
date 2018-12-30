@@ -1550,7 +1550,7 @@ void CQPasteWnd::ShowRightClickMenu()
 		CMenu *sendToMenu = CMultiLanguage::GetMenuPos(cmSubMenu, specialPaste, nPos);
 		if (sendToMenu != NULL)
 		{
-			g_Opt.m_pasteScripts.AddToMenu(sendToMenu);
+			g_Opt.m_pasteScripts.AddToMenu(sendToMenu, &m_actions);
 		}
 
         cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
