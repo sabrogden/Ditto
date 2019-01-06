@@ -27,6 +27,7 @@ public:
 	BOOL FormatExists(std::string clipboardFormat);
 	BOOL SetParentId(int parentId);
 	BOOL AsciiTextMatchesRegex(std::string regex);
+	void AsciiTextReplaceRegex(std::string regex, std::string replaceWith);
 
 	void SetMakeTopSticky();
 	void SetMakeLastSticky();

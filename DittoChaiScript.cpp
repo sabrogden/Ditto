@@ -162,6 +162,17 @@ BOOL CDittoChaiScript::AsciiTextMatchesRegex(std::string regex)
 	return matches;
 }
 
+void CDittoChaiScript::AsciiTextReplaceRegex(std::string regex, std::string replaceWith)
+{
+	BOOL matches = false;
+
+	auto ascii = GetAsciiString();
+	std::regex integer(regex);
+
+	auto newAscii = regex_replace(ascii, integer, replaceWith);
+	SetAsciiString(newAscii);
+}
+
 
 void CDittoChaiScript::SetMakeTopSticky()
 {
