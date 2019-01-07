@@ -22,6 +22,7 @@
 #include <stdexcept>
 #include <typeinfo>
 #include <vector>
+#include <algorithm>
 
 #include "bootstrap.hpp"
 #include "boxed_value.hpp"
@@ -721,6 +722,27 @@ namespace chaiscript
 		  m.add(fun([](String *s, typename String::value_type c) -> decltype(auto) { return (*s += c); } ), "+=");
 		  
 		  m.add(fun([](String *s) { std::reverse(s->begin(), s->end()); } ), "reverse");
+
+		  m.add(fun([](String *s, const String &from, const String &to) 
+		  { 
+			  std::string newString;
+			  newString.reserve(s->length());  // avoids a few memory allocations
+
+			  std::string::size_type lastPos = 0;
+			  std::string::size_type findPos;
+
+			  while (std::string::npos != (findPos = s->find(from, lastPos)))
+			  {
+				  newString.append(*s, lastPos, findPos - lastPos);
+				  newString += to;
+				  lastPos = findPos + from.length();
+			  }
+
+			  // Care for the rest after last occurrence
+			  newString += s->substr(lastPos);
+
+			  return newString;
+		  }), "replace");
 
 
           m.add(fun([](String *s) { s->clear(); } ), "clear");
