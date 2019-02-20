@@ -377,8 +377,10 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
 			break;
 		case WM_RBUTTONDOWN:
 			{
-				if (m_RichEdit.m_hWnd == GetFocus()->m_hWnd ||
-					m_imageViewer.m_hWnd == GetFocus()->m_hWnd)
+				auto f = GetFocus();
+				if (f != NULL &&
+					(m_RichEdit.m_hWnd == f->m_hWnd ||
+					m_imageViewer.m_hWnd == f->m_hWnd))
 				{
 					OnOptions();
 					return TRUE;
@@ -386,7 +388,9 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
 			}
 			break;
 		case WM_LBUTTONUP:
-			if (m_RichEdit.m_hWnd != GetFocus()->m_hWnd)
+			auto f = GetFocus();
+			if (f != NULL &&
+				m_RichEdit.m_hWnd != f->m_hWnd)
 			{
 				auto p = GetParent();
 				if (p != NULL)
@@ -940,7 +944,9 @@ void CToolTipEx::OnTimer(UINT_PTR nIDEvent)
 				m_DittoWindow.DoNcLButtonUp(this, 0, CPoint(0, 0));
 				KillTimer(TIMER_BUTTON_UP);
 
-				if (m_RichEdit.m_hWnd != GetFocus()->m_hWnd)
+				auto f = GetFocus();
+				if (f != NULL &&
+					m_RichEdit.m_hWnd != f->m_hWnd)
 				{
 					auto p = GetParent();
 					if (p != NULL)
@@ -1030,7 +1036,10 @@ void CToolTipEx::OnNcLButtonUp(UINT nHitTest, CPoint point)
 
 	KillTimer(TIMER_BUTTON_UP);
 
-	if (m_RichEdit.m_hWnd != GetFocus()->m_hWnd)
+	auto f = GetFocus();
+
+	if (f != NULL &&
+		m_RichEdit.m_hWnd != f->m_hWnd)
 	{
 		auto p = GetParent();
 		if (p != NULL)
