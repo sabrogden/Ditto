@@ -390,7 +390,8 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
 		case WM_LBUTTONUP:
 			auto f = GetFocus();
 			if (f != NULL &&
-				m_RichEdit.m_hWnd != f->m_hWnd)
+				m_RichEdit.m_hWnd != f->m_hWnd &&
+				m_optionsButton.m_hWnd != f->m_hWnd)
 			{
 				auto p = GetParent();
 				if (p != NULL)
