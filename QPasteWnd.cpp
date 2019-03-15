@@ -26,6 +26,7 @@
 #include "CF_UnicodeTextAggregator.h"
 #include "CF_TextAggregator.h"
 #include "htmlformataggregator.h"
+#include "shared/Tokenizer.h""
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
@@ -5365,7 +5366,20 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
         CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText, lDate, lShortCut, clipOrder, clipGroupOrder, stickyClipOrder, stickyClipGroupOrder, lDontAutoDelete, QuickPasteText, lastPasteDate, globalShortCut, lParentID FROM Main WHERE lID = %d"), id);
         if(q.eof() == false)
         {
-            cs = q.getStringField(1);
+            CString clipText = q.getStringField(1);
+
+			int lines = 0;
+			int maxLines = CGetSetOptions::GetMaxToolTipLines();
+			CTokenizer tokenizer(clipText, "\r\n");
+			CString token;
+			while (tokenizer.Next(token))
+			{
+				cs += token + "\r\n";
+				if (lines > 30)
+					break;
+				lines++;
+			}
+
             cs += "\n\n";
             #ifdef _DEBUG
                 cs += StrF(_T("(Index = %d) (DB ID = %d) (Seq = %f) (Group Seq = %f) (Sticky Seq = %f) (Sticky Group Seq = %f)\n"), 
