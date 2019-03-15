@@ -55,6 +55,7 @@
 #define TIMER_DO_SEARCH			2
 #define TIMER_PASTE_FROM_MODIFER	3
 #define TIMER_ERROR_MSG			4
+#define TIMER_DRAG_HIDE_WINDOW	6
 
 #define THREAD_DO_QUERY				0
 #define THREAD_EXIT_THREAD			1
@@ -5054,7 +5055,11 @@ void CQPasteWnd::OnBegindrag(NMHDR *pNMHDR, LRESULT *pResult)
         clips.Add(m_lstHeader.GetItemData(pLV->iItem));
     }
 
-    paste.DoDrag();
+	this->SetTimer(TIMER_DRAG_HIDE_WINDOW, 500, NULL);
+    
+	paste.DoDrag();
+
+	KillTimer(TIMER_DRAG_HIDE_WINDOW);
 
     *pResult = 0;
 }
@@ -5938,6 +5943,22 @@ void CQPasteWnd::OnTimer(UINT_PTR nIDEvent)
 	{
 		KillTimer(TIMER_ERROR_MSG);
 		m_popupMsg.Hide();
+	}
+	else if (nIDEvent == TIMER_DRAG_HIDE_WINDOW)
+	{
+		OutputDebugString(_T("drag timer\n"));
+
+		CPoint mouse;
+		GetCursorPos(&mouse);
+
+		CRect windowRect;
+		this->GetWindowRect(&windowRect);
+
+		if(PtInRect(&windowRect, mouse) == FALSE)
+		{
+			HideQPasteWindow(false, false);
+			KillTimer(TIMER_DRAG_HIDE_WINDOW);
+		}
 	}
 
     CWndEx::OnTimer(nIDEvent);
