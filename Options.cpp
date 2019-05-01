@@ -2764,3 +2764,13 @@ void CGetSetOptions::SetUpdateClipOrderOnCtrlC(BOOL val)
 {
 	SetProfileLong("UpdateClipOrderOnCtrlC", val);
 }
+
+BOOL CGetSetOptions::GetMaxToolTipLines()
+{
+	return GetProfileLong("MaxToolTipLines", 30);
+}
+
+void CGetSetOptions::SetMaxToolTipLines(int val)
+{
+	SetProfileLong("MaxToolTipLines", val);
+}

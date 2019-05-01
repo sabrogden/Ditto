@@ -613,6 +613,9 @@ public:
 
 	static BOOL GetUpdateClipOrderOnCtrlC();
 	static void SetUpdateClipOrderOnCtrlC(BOOL val);
+
+	static BOOL GetMaxToolTipLines();
+	static void SetMaxToolTipLines(int val);
 };
 
 // global for easy access and for initialization of fast access variables
