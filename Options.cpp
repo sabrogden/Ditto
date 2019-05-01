@@ -2774,3 +2774,13 @@ void CGetSetOptions::SetMaxToolTipLines(int val)
 {
 	SetProfileLong("MaxToolTipLines", val);
 }
+
+BOOL CGetSetOptions::GetMaxToolTipCharacters()
+{
+	return GetProfileLong("MaxToolTipCharacters", 1500);
+}
+
+void CGetSetOptions::SetMaxToolTipCharacters(int val)
+{
+	SetProfileLong("MaxToolTipCharacters", val);
+}

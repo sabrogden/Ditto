@@ -1202,7 +1202,8 @@ void CQListCtrl::GetToolTipText(int nItem, CString &csText)
 		info.hdr.idFrom = GetDlgCtrlID();
 		info.lItem = nItem;
 		//plus 100 for extra info - shortcut and such
-		info.cchTextMax = g_Opt.m_bDescTextSize + 100;
+		int maxCharacters = CGetSetOptions::GetMaxToolTipCharacters();
+		info.cchTextMax = min(maxCharacters, g_Opt.m_bDescTextSize) + 200;
 		info.pszText = csText.GetBufferSetLength(info.cchTextMax);
 		
 		pParent->SendMessage(WM_NOTIFY,(WPARAM)info.hdr.idFrom,(LPARAM)&info);

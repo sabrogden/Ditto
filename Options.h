@@ -616,6 +616,9 @@ public:
 
 	static BOOL GetMaxToolTipLines();
 	static void SetMaxToolTipLines(int val);
+
+	static BOOL GetMaxToolTipCharacters();
+	static void SetMaxToolTipCharacters(int val);
 };
 
 // global for easy access and for initialization of fast access variables

@@ -5361,6 +5361,7 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
     try
     {
         CString cs;
+		CString clipData = _T("");
 
         int id = m_lstHeader.GetItemData(pInfo->lItem);
         CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID, mText, lDate, lShortCut, clipOrder, clipGroupOrder, stickyClipOrder, stickyClipGroupOrder, lDontAutoDelete, QuickPasteText, lastPasteDate, globalShortCut, lParentID FROM Main WHERE lID = %d"), id);
@@ -5375,48 +5376,47 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
 			while (tokenizer.Next(token))
 			{
 				cs += token + "\r\n";
-				if (lines > 30)
+				if (lines > maxLines)
 					break;
 				lines++;
 			}
-
-            cs += "\n\n";
+			
             #ifdef _DEBUG
-                cs += StrF(_T("(Index = %d) (DB ID = %d) (Seq = %f) (Group Seq = %f) (Sticky Seq = %f) (Sticky Group Seq = %f)\n"), 
+			clipData += StrF(_T("(Index = %d) (DB ID = %d) (Seq = %f) (Group Seq = %f) (Sticky Seq = %f) (Sticky Group Seq = %f)\n"),
 								pInfo->lItem, q.getIntField(_T("lID")), 
 													q.getFloatField(_T("clipOrder")), q.getFloatField(_T("clipGroupOrder")), 
 													q.getFloatField(_T("stickyClipOrder")), q.getFloatField(_T("stickyClipGroupOrder")));
             #endif 
 
             COleDateTime time((time_t)q.getIntField(_T("lDate")));
-            cs += "\nAdded: " + time.Format();
+			clipData += "\nAdded: " + time.Format();
 
 			COleDateTime modified((time_t)q.getIntField(_T("lastPasteDate")));
-			cs += "\nLast Used: " + modified.Format();
+			clipData += "\nLast Used: " + modified.Format();
 
             if(q.getIntField(_T("lDontAutoDelete")) > 0)
             {
-                cs += "\nNever Auto Delete";
+				clipData += "\nNever Auto Delete";
             }
 
             CString csQuickPaste = q.getStringField(_T("QuickPasteText"));
 
             if(csQuickPaste.IsEmpty() == FALSE)
             {
-                cs += "\nQuick Paste = ";
-                cs += csQuickPaste;
+				clipData += "\nQuick Paste = ";
+				clipData += csQuickPaste;
             }
 
             int shortCut = q.getIntField(_T("lShortCut"));
             if(shortCut > 0)
             {
-                cs += "\r\n";
-                cs += CHotKey::GetHotKeyDisplayStatic(shortCut);
+				clipData += "\r\n";
+				clipData += CHotKey::GetHotKeyDisplayStatic(shortCut);
 
 				BOOL globalShortCut = q.getIntField(_T("globalShortCut"));
 				if(globalShortCut)
 				{
-					cs += " - Global Shortcut Key";
+					clipData += " - Global Shortcut Key";
 				}
             }
 
@@ -5425,8 +5425,8 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
 				int sticky = q.getIntField(_T("stickyClipGroupOrder"));
 				if (sticky != INVALID_STICKY)
 				{
-					cs += "\r\n";
-					cs += _T(" - Sticky In Group");
+					clipData += "\r\n";
+					clipData += _T(" - Sticky In Group");
 				}
 			}
 			else
@@ -5434,18 +5434,23 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
 				int sticky = q.getIntField(_T("stickyClipOrder"));
 				if (sticky != INVALID_STICKY)
 				{
-					cs += "\r\n";
-					cs += _T(" - Sticky");
+					clipData += "\r\n";
+					clipData += _T(" - Sticky");
 				}
 			}
 
 			int parentId = q.getIntField(_T("lParentID"));
 			if (parentId > 0)
 			{
-				cs += "\r\n";
-				cs += FolderPath(parentId);
+				clipData += "\r\n";
+				clipData += FolderPath(parentId);
 			}
         }
+
+		cs = cs.Left(pInfo->cchTextMax - clipData.GetLength());
+
+		cs += "\r\n\r\n";
+		cs += clipData;
 
         lstrcpyn(pInfo->pszText, cs, pInfo->cchTextMax);
         pInfo->pszText[pInfo->cchTextMax - 1] = '\0';
