@@ -2765,7 +2765,7 @@ void CGetSetOptions::SetUpdateClipOrderOnCtrlC(BOOL val)
 	SetProfileLong("UpdateClipOrderOnCtrlC", val);
 }
 
-BOOL CGetSetOptions::GetMaxToolTipLines()
+int CGetSetOptions::GetMaxToolTipLines()
 {
 	return GetProfileLong("MaxToolTipLines", 30);
 }
@@ -2775,9 +2775,9 @@ void CGetSetOptions::SetMaxToolTipLines(int val)
 	SetProfileLong("MaxToolTipLines", val);
 }
 
-BOOL CGetSetOptions::GetMaxToolTipCharacters()
+int CGetSetOptions::GetMaxToolTipCharacters()
 {
-	return GetProfileLong("MaxToolTipCharacters", 1500);
+	return GetProfileLong("MaxToolTipCharacters", 1000);
 }
 
 void CGetSetOptions::SetMaxToolTipCharacters(int val)

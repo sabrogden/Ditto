@@ -849,6 +849,10 @@ void CToolTipEx::HighlightSearchText()
 	cf.dwEffects = CFE_BOLD | ~CFE_AUTOCOLOR;
 	cf.crTextColor = RGB(255, 0, 0);
 
+	m_RichEdit.SetRedraw(0);
+	auto mask = m_RichEdit.GetEventMask();
+	m_RichEdit.SetEventMask(0);
+
 	do 
 	{
 		ft.chrg.cpMin = n+1;
@@ -862,6 +866,9 @@ void CToolTipEx::HighlightSearchText()
 	} while (n != -1);	
 
 	m_RichEdit.SetSel(0, 0);
+	m_RichEdit.SetEventMask(mask);
+	m_RichEdit.SetRedraw(1);
+	m_RichEdit.UpdateWindow();
 }
 
 void CToolTipEx::DoSearch()

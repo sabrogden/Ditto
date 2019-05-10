@@ -114,6 +114,9 @@ END_MESSAGE_MAP()
 #define SETTING_REVERT_TO_TOP_LEVEL_GROUP 67
 #define SETTING_UPDATE_ORDER_ON_CTRL_C 68
 
+#define SETTING_TOOLTIP_LINES 69
+#define SETTING_TOOLTIP_CHARACTERS 70
+
 BOOL CAdvGeneral::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
@@ -162,7 +165,11 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Find As You Type"), CGetSetOptions::GetFindAsYouType(), SETTING_FIND_AS_TYPE);
 	AddTrueFalse(pGroupTest, _T("Hide Ditto on Hot Key if Ditto is Visible"), CGetSetOptions::GetHideDittoOnHotKeyIfAlreadyShown(), SETTING_HIDE_ON_HOTKEY_IF_VISIBLE);
 	pGroupTest->AddSubItem( new CMFCPropertyGridProperty(_T("Maximum Clip Size in Bytes (0 for no limit)"), g_Opt.m_lMaxClipSizeInBytes, _T(""), SETTING_MAX_CLIP_SIZE));
+	
+	
+	
 	pGroupTest->AddSubItem( new CMFCPropertyGridProperty(_T("Multi-Paste clip separator ([LF] = line feed)"), g_Opt.GetMultiPasteSeparator(false), _T(""), SETTING_CLIP_SEPARATOR));
+
 
 	AddTrueFalse(pGroupTest, _T("Multi-Paste in reverse order"), g_Opt.m_bMultiPasteReverse, SETTING_MULTIPASTE_REVERSE_ORDER);
 
@@ -196,6 +203,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Text Lines per Clip"), CGetSetOptions::GetLinesPerRow(), _T(""), SETTING_LINES_PER_ROW));
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Tooltip display time(ms) max of 32000 (-1 default (5 seconds), 0 to turn off)"), g_Opt.m_tooltipTimeout, _T(""), SETTING_TOOLTIP_TIMEOUT));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Tooltip maximum display lines"), (long)CGetSetOptions::GetMaxToolTipLines(), _T(""), SETTING_TOOLTIP_LINES));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Tooltip display characters"), (long)CGetSetOptions::GetMaxToolTipCharacters(), _T(""), SETTING_TOOLTIP_CHARACTERS));
 
 	AddTrueFalse(pGroupTest, _T("Transparency Enabled"), CGetSetOptions::GetEnableTransparency(), SETTING_ENABLE_TRANSPARENCY);
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Transparency Percentage"), CGetSetOptions::GetTransparencyPercent(), _T(""), SETTING_TRANSPARENCY));
@@ -648,6 +657,20 @@ void CAdvGeneral::OnBnClickedOk()
 				if (pNewValue->lVal != pOrigValue->lVal)
 				{
 					CGetSetOptions::SetToolTipTimeout(pNewValue->lVal);
+				}
+				break;
+
+			case SETTING_TOOLTIP_LINES:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetMaxToolTipLines(pNewValue->lVal);
+				}
+				break;
+
+			case SETTING_TOOLTIP_CHARACTERS:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetMaxToolTipCharacters(pNewValue->lVal);
 				}
 				break;
 

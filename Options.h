@@ -614,10 +614,10 @@ public:
 	static BOOL GetUpdateClipOrderOnCtrlC();
 	static void SetUpdateClipOrderOnCtrlC(BOOL val);
 
-	static BOOL GetMaxToolTipLines();
+	static int GetMaxToolTipLines();
 	static void SetMaxToolTipLines(int val);
 
-	static BOOL GetMaxToolTipCharacters();
+	static int GetMaxToolTipCharacters();
 	static void SetMaxToolTipCharacters(int val);
 };
 
