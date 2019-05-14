@@ -107,8 +107,6 @@ CCP_MainApp::CCP_MainApp()
 
 	m_bShowingQuickPaste = false;
 
-	m_IC_bCopy = false;
-
 	m_GroupDefaultID = 0;
 	m_GroupID = -1;
 	m_GroupParentID = 0;
@@ -622,82 +620,6 @@ void CCP_MainApp::OnCopyCompleted(long lLastID, int count)
 
 	RefreshView();
 }
-
-// Internal Clipboard for cut/copy/paste items between Groups
-
-// if NULL, this uses the current QPaste selection
-void CCP_MainApp::IC_Cut(ARRAY* pIDs)
-{
-	if(pIDs == NULL)
-	{
-		if(QPasteWnd())
-		{
-			QPasteWnd()->m_lstHeader.GetSelectionItemData(m_IC_IDs);
-		}
-		else
-		{
-			m_IC_IDs.SetSize(0);
-		}
-	}
-	else
-	{
-		m_IC_IDs.Copy(*pIDs);
-	}
-
-	m_IC_bCopy = false;
-
-	if(QPasteWnd())
-	{
-		QPasteWnd()->UpdateStatus();
-	}
-}
-
-// if NULL, this uses the current QPaste selection
-void CCP_MainApp::IC_Copy(ARRAY* pIDs)
-{
-	if(pIDs == NULL)
-	{
-		if(QPasteWnd())
-		{
-			QPasteWnd()->m_lstHeader.GetSelectionItemData(m_IC_IDs);
-		}
-		else
-		{
-			m_IC_IDs.SetSize(0);
-		}
-	}
-	else
-	{
-		m_IC_IDs.Copy(*pIDs);
-	}
-
-	m_IC_bCopy = true;
-
-	RefreshView();
-}
-
-void CCP_MainApp::IC_Paste()
-{
-	if(m_IC_IDs.GetSize() <= 0)
-	{
-		return;
-	}
-
-	if(m_IC_bCopy)
-	{
-		m_IC_IDs.CopyTo(GetValidGroupID());
-	}
-	else // Move
-	{
-		m_IC_IDs.MoveTo(GetValidGroupID());
-	}
-
-	// don't process the same items twice.
-	m_IC_IDs.SetSize(0);
-	RefreshView();
-}
-
-// Groups
 
 void CCP_MainApp::SaveCurrentGroupState()
 {

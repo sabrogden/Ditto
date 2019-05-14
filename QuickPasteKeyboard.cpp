@@ -111,6 +111,23 @@ void CQuickPasteKeyboard::InitListCtrlCols()
 	m_list.InsertColumn(1, theApp.m_Language.GetString("QPCommand", "Command"), LVCFMT_LEFT, 350);
 }
 
+int CALLBACK MyCompareProc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
+{
+	CListCtrl* pListCtrl = (CListCtrl*)lParamSort;
+
+	LVFINDINFO pInfo1, pInfo2;
+	pInfo1.flags = LVFI_PARAM;
+	pInfo2.flags = LVFI_PARAM;
+	pInfo1.lParam = lParam1;
+	pInfo2.lParam = lParam2;
+	int ind1 = pListCtrl->FindItem(&pInfo1);
+	int ind2 = pListCtrl->FindItem(&pInfo2);
+	CString strItem1 = pListCtrl->GetItemText(ind1, 1);
+	CString strItem2 = pListCtrl->GetItemText(ind2, 1);
+
+	return strItem1.CompareNoCase(strItem2);
+}
+
 void CQuickPasteKeyboard::LoadItems()
 {
 	m_list.DeleteAllItems();
@@ -186,6 +203,8 @@ void CQuickPasteKeyboard::LoadItems()
 		dummyId--;
 		row++;
 	}
+
+	m_list.SortItems(MyCompareProc, (LPARAM)&m_list);
 
 	SelectedRow(0);
 }

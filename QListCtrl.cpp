@@ -831,35 +831,7 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 	WPARAM vk = wParam;
 	
 	switch( vk )
-	{
-	case 'X': // Ctrl-X = Cut (prepare for moving the items into a Group)
-		if(CONTROL_PRESSED)
-		{
-			LoadCopyOrCutToClipboard();		
-			
-			theApp.IC_Cut(); // uses selection
-			return TRUE;
-		}
-		break;
-		
-	case 'C': // Ctrl-C = Copy (prepare for copying the items into a Group)
-		if(CONTROL_PRESSED)
-		{
-			LoadCopyOrCutToClipboard();
-			
-			theApp.IC_Copy(); // uses selection
-			return TRUE;
-		}
-		break;
-		
-	case 'V': // Ctrl-V = Paste (actually performs the copy or move of items into the current Group)
-		if(CONTROL_PRESSED)
-		{
-			theApp.IC_Paste();
-			return TRUE;
-		}
-		break;
-		
+	{		
 	case 'A': // Ctrl-A = Select All
 		if(CONTROL_PRESSED)
 		{
@@ -878,33 +850,6 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 	} // end switch(vk)
 	
 	return FALSE;
-}
-
-void CQListCtrl::LoadCopyOrCutToClipboard()
-{
-	ARRAY arr;
-	GetSelectionItemData(arr);
-	INT_PTR count = arr.GetSize();
-	if(count <= 0)
-		return;
-	
-	CProcessPaste paste;
-	
-	//Don't send the paste just load it into memory
-	paste.m_bSendPaste = false;
-		
-	if(count > 1)
-		paste.GetClipIDs().Copy(arr);
-	else
-		paste.GetClipIDs().Add(arr[0]);
-	
-	//Don't move these to the top
-	BOOL itWas = g_Opt.m_bUpdateTimeOnPaste;
-	g_Opt.m_bUpdateTimeOnPaste = CGetSetOptions::GetUpdateClipOrderOnCtrlC();
-	
-	paste.DoPaste();
-
-	g_Opt.m_bUpdateTimeOnPaste = itWas;	
 }
 
 bool CQListCtrl::PostEventLoadedCheckDescription(int updatedRow)

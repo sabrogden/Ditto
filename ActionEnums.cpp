@@ -365,6 +365,9 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case INVERT_CASE:
 		val = "Invert Case";
 		break;
+	case COPY_SELECTION:
+		val = "Copy Selection";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
@@ -438,6 +441,8 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 			return VK_ESCAPE;
 		case TOGGLE_DESCRIPTION_WORD_WRAP:
 			return 'W';
+		case COPY_SELECTION:
+			return ACCEL_MAKEKEY('C', HOTKEYF_CONTROL);
 		}
 		break;
 	case 1:

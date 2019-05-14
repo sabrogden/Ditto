@@ -103,13 +103,6 @@ public:
 	void OnCopyCompleted( long lLastID, int count = 1 );
 	void OnPasteCompleted();
 
-// Internal Clipboard for cut/copy/paste items between Groups
-	bool		m_IC_bCopy;   // true to copy the items, false to move them
-	CClipIDs	m_IC_IDs; // buffer
-	void IC_Cut(ARRAY* pIDs = NULL); // if NULL, this uses the current QPaste selection
-	void IC_Copy(ARRAY* pIDs = NULL); // if NULL, this uses the current QPaste selection
-	void IC_Paste();
-
 // Groups
 	long		m_GroupDefaultID; // new clips are saved to this group
 	long		m_GroupID;        // current group

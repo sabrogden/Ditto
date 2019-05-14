@@ -123,6 +123,7 @@ public:
 		GMAIL,
 		SLUGIFY,
 		INVERT_CASE,
+		COPY_SELECTION,
 
 		LAST_ACTION
 	};

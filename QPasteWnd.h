@@ -302,6 +302,7 @@ public:
 	bool DoActionEmailToAttachExport();
 	bool DoActionEmailToAttachContent();
 	bool DoActionSlugify();
+	bool DoCopySelection();
 
 	bool OnNewClip();
 	bool OnImportClip();

@@ -1097,8 +1097,7 @@ LRESULT CQPasteWnd::OnListMoveSelectionToGroup(WPARAM wParam, LPARAM lParam)
 
 LRESULT CQPasteWnd::OnCopyClip(WPARAM wParam, LPARAM lParam)
 {
-	m_lstHeader.LoadCopyOrCutToClipboard();
-	theApp.IC_Copy();
+	DoCopySelection();
 	return TRUE;
 }
 
@@ -1262,20 +1261,6 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
     }
     else
     {
-        title += " - ";
-    }
-
-    if(theApp.m_IC_IDs.GetSize() > 0)
-    {
-        if(theApp.m_IC_bCopy)
-        {
-            title += "Copying";
-        }
-        else
-        {
-            title += "Moving";
-        }
-
         title += " - ";
     }
 
@@ -3223,6 +3208,9 @@ bool CQPasteWnd::DoAction(CAccel a)
 		break;
 	case ActionEnums::SLUGIFY:
 		DoActionSlugify();
+		break;
+	case ActionEnums::COPY_SELECTION:
+		ret = DoCopySelection();
 		break;
 	}
 
@@ -7407,6 +7395,37 @@ bool CQPasteWnd::DoActionSlugify()
 		OpenSelection(pasteOptions);
 		return true;
 	}
+}
+
+bool CQPasteWnd::DoCopySelection()
+{
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	INT_PTR count = IDs.GetSize();
+
+	if (count <= 0)
+	{
+		return FALSE;
+	}
+
+	CProcessPaste paste;
+
+	//Don't send the paste just load it into memory
+	paste.m_bSendPaste = false;
+
+	if (count > 1)
+		paste.GetClipIDs().Copy(IDs);
+	else
+		paste.GetClipIDs().Add(IDs[0]);
+
+	//Don't move these to the top
+	BOOL itWas = g_Opt.m_bUpdateTimeOnPaste;
+	g_Opt.m_bUpdateTimeOnPaste = CGetSetOptions::GetUpdateClipOrderOnCtrlC();
+
+	paste.DoPaste();
+
+	g_Opt.m_bUpdateTimeOnPaste = itWas;
 }
 
 void CQPasteWnd::SetTransparency(int percent)
