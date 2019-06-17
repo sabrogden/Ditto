@@ -117,6 +117,8 @@ END_MESSAGE_MAP()
 #define SETTING_TOOLTIP_LINES 69
 #define SETTING_TOOLTIP_CHARACTERS 70
 
+#define SETTING_ACTIVATE_WINDOW_DELAY 71
+
 BOOL CAdvGeneral::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
@@ -142,9 +144,10 @@ BOOL CAdvGeneral::OnInitDialog()
 	hdItem.cxy = 325; // whatever you want the property name column width to be
 	m_propertyGrid.GetHeaderCtrl().SetItem(0, &hdItem);
 
-	m_propertyGrid.SetFont(this->GetFont());
-	
-	
+	m_propertyGrid.SetFont(this->GetFont());	
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Activate Window Delay (100ms default)"), (long)CGetSetOptions::SendKeysDelay(), _T(""), SETTING_ACTIVATE_WINDOW_DELAY));
+
 	AddTrueFalse(pGroupTest, _T("Allow Duplicates"), CGetSetOptions::GetAllowDuplicates(), SETTING_ALLOW_DUPLICATES);
 	AddTrueFalse(pGroupTest, _T("Always Show Scroll Bar"), CGetSetOptions::GetShowScrollBar(), SETTING_ALWAYS_SHOW_SCROLL_BAR);
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Amount of text to save for description"), g_Opt.m_bDescTextSize, _T(""), SETTING_DESC_SIZE));
@@ -701,6 +704,12 @@ void CAdvGeneral::OnBnClickedOk()
 						val = true;
 					}
 					CGetSetOptions::SetRevertToTopLevelGroup(val);
+				}
+				break;
+			case SETTING_ACTIVATE_WINDOW_DELAY:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetSendKeysDelay(pNewValue->lVal);
 				}
 				break;
 			}

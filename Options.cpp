@@ -1997,7 +1997,12 @@ DWORD CGetSetOptions::GetDittoHotKey()
 
 DWORD CGetSetOptions::SendKeysDelay()
 {
-	return (DWORD)GetProfileLong(_T("SendKeysDelay"), 50);
+	return (DWORD)GetProfileLong(_T("SendKeysDelay"), 100);
+}
+
+void CGetSetOptions::SetSendKeysDelay(DWORD val)
+{
+	SetProfileLong(_T("SendKeysDelay"), val);
 }
 
 DWORD CGetSetOptions::WaitForActiveWndTimeout()

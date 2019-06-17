@@ -396,7 +396,10 @@ public:
 	static long		GetKeyStatePasteDelay();
 
 	static DWORD	GetDittoHotKey();
+	
 	static DWORD	SendKeysDelay();
+	static void		SetSendKeysDelay(DWORD val);
+
 	static DWORD	WaitForActiveWndTimeout();
 	static DWORD	FocusChangedDelay();
 	static DWORD	FocusWndTimerTimeout();
