@@ -5,6 +5,7 @@
 #include "CP_Main.h"
 #include "ImageViewer.h"
 #include "BitmapHelper.h"
+#include "memdc.h"
 
 
 // CImageViewer
@@ -93,15 +94,17 @@ void CImageViewer::OnPaint()
 {
 	CPaintDC dc(this); // device context for painting
 
+	CMemDCEx memDC(&dc);
+
 	CRect rect;
 	GetClientRect(rect);	
 
 	CBrush  Brush, *pOldBrush;
 	Brush.CreateSolidBrush(g_Opt.m_Theme.DescriptionWindowBG());
 
-	pOldBrush = dc.SelectObject(&Brush);
+	pOldBrush = memDC.SelectObject(&Brush);
 
-	dc.FillRect(&rect, &Brush);
+	memDC.FillRect(&rect, &Brush);
 
 	if (m_pGdiplusBitmap)
 	{
@@ -110,6 +113,7 @@ void CImageViewer::OnPaint()
 		
 		if (CGetSetOptions::GetScaleImagesToDescWindow())
 		{
+
 			double newWidth = rect.Width();
 			double newHeight = rect.Height();
 
@@ -134,7 +138,7 @@ void CImageViewer::OnPaint()
 			Gdiplus::ImageAttributes attrs;
 			Gdiplus::Rect dest(0, 0, (int)newWidth, (int)newHeight);
 
-			Gdiplus::Graphics graphics(dc);
+			Gdiplus::Graphics graphics(memDC);
 			graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
 			graphics.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHalf);
 
@@ -144,18 +148,16 @@ void CImageViewer::OnPaint()
 		}
 		else
 		{
-			CSize s = m_scrollHelper.GetScrollPos();
-			Gdiplus::Graphics graphics(dc);
-			graphics.DrawImage(m_pGdiplusBitmap, rect.left, rect.top, s.cx, s.cy, width, height, Gdiplus::UnitPixel);
 
-			//dc.BitBlt(rect.left, rect.top, width, height, &MemDc, s.cx, s.cy, SRCCOPY);
+			CSize s = m_scrollHelper.GetScrollPos();
+			Gdiplus::Graphics graphics(memDC);
+			graphics.DrawImage(m_pGdiplusBitmap, rect.left, rect.top, s.cx, s.cy, width, height, Gdiplus::UnitPixel);
 		}
 		
 		rect.top += height;
 	}
 	
-	// Cleanup
-	dc.SelectObject(pOldBrush);
+	memDC.SelectObject(pOldBrush);
 }
 
 
