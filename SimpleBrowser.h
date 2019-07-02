@@ -149,6 +149,8 @@ public:
 	
 		// print template is being destroyed (printing has completed)		
 
+	void Copy();
+
 	// notifications
 	
 	enum NotificationType {					// Note: SimpleBrowser does NOT support the

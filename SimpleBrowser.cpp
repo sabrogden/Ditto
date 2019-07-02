@@ -174,6 +174,16 @@ void SimpleBrowser::PostNcDestroy()
 
 // Navigate to URL
 
+void SimpleBrowser::Copy()
+{
+	if (_Browser != NULL) {		
+
+		_Browser->ExecWB(OLECMDID_COPY, OLECMDEXECOPT_DONTPROMPTUSER, NULL, NULL);
+
+	}
+
+}
+
 void SimpleBrowser::Navigate(LPCTSTR URL)
 {
 	_Ready   = false;

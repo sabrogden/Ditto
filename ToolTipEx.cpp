@@ -275,10 +275,11 @@ BOOL CToolTipEx::Show(CPoint point)
 
 	m_saveWindowLockout = true;
 	MoveWindow(rect);
-	ShowWindow(SW_SHOWNA);
-	this->Invalidate();
-	this->UpdateWindow();
 	MoveControls();
+	ShowWindow(SW_SHOWNA);
+	//this->Invalidate();
+	//this->UpdateWindow();
+	
 
 	m_saveWindowLockout = false;
 
@@ -301,9 +302,14 @@ BOOL CToolTipEx::Hide()
 	delete m_imageViewer.m_pGdiplusBitmap;
 	m_imageViewer.m_pGdiplusBitmap = NULL;
 
-	SaveWindowSize();
-
+	SaveWindowSize();	
 	ShowWindow(SW_HIDE);
+
+	if (m_browser.m_hWnd != NULL &&
+		::IsWindow(m_browser.m_hWnd))
+	{
+		m_browser.DestroyWindow();
+	}
 
 	m_csRTF = "";
 	m_csText = "";
@@ -454,6 +460,18 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
         case WM_KEYDOWN:
             {
                 WPARAM vk = pMsg->wParam;
+
+				if(vk == 'C')
+				{
+					if (GetKeyState(VK_CONTROL) & 0x8000)
+					{
+						if (::IsWindow(m_browser.m_hWnd))
+						{
+							m_browser.Copy();
+							return TRUE;
+						}
+					}
+				}
                 
                 if(vk == VK_TAB)
                 {
@@ -777,7 +795,15 @@ void CToolTipEx::SetHtmlText(const CString &html)
 		}
 		else
 		{
-			m_html = html;
+			int pos = html.Find(_T("<HTML"));
+			if (pos >= 0)
+			{
+				m_html = html.Mid(pos);
+			}
+			else
+			{
+				m_html = html;
+			}
 		}
 
 		COLORREF c = g_Opt.m_Theme.DescriptionWindowBG();
