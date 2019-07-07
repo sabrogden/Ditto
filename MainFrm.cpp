@@ -71,6 +71,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_DISPLAYCHANGE, &CMainFrame::OnResolutionChange)
 	ON_MESSAGE(WM_TRAYNOTIFY, &CMainFrame::OnTrayNotification)
 	ON_MESSAGE(WM_PLAIN_TEXT_PASTE, &CMainFrame::OnPlainTextPaste)
+		ON_WM_WININICHANGE()
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -780,6 +781,25 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 		}
 		break;
 
+		case SET_WINDOWS_THEME_TIMER:
+		{
+			KillTimer(SET_WINDOWS_THEME_TIMER);
+			auto theme = g_Opt.GetTheme();
+			if (theme == _T(""))
+			{
+				g_Opt.m_Theme.Load(theme);
+
+				auto visible = m_quickPaste.IsWindowVisibleEx();
+				m_quickPaste.CloseQPasteWnd();
+
+				if (visible)
+				{
+					m_quickPaste.ShowQPasteWnd(this, true, false, true);
+				}
+			}
+		}
+		break;
+
     }
 
     CFrameWnd::OnTimer(nIDEvent);
@@ -1382,4 +1402,16 @@ LRESULT CMainFrame::OnResolutionChange(WPARAM wParam, LPARAM lParam)
 	}
 
 	return TRUE;
+}
+
+void CMainFrame::OnWinIniChange(LPCTSTR lpszSection)
+{
+	CFrameWnd::OnWinIniChange(lpszSection);
+
+	if (wcscmp(lpszSection, L"ImmersiveColorSet") == 0)
+	{
+		Log(StrF(_T("OnWinIniChange %s, setting timer to 1000ms to change theme"), lpszSection));
+		KillTimer(SET_WINDOWS_THEME_TIMER);
+		SetTimer(SET_WINDOWS_THEME_TIMER, 1000, NULL);
+	}
 }

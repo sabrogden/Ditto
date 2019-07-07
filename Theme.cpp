@@ -66,12 +66,23 @@ void CTheme::LoadDefaults()
 
 bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)
 {
-	if (csTheme.IsEmpty() || csTheme == _T("Ditto"))
+	if (csTheme.IsEmpty())
+	{
+		if (DarkAppWindows10Setting())
+		{
+			csTheme = _T("DarkerDitto");
+			Log(_T("Loading theme based on windows setting of dark mode for apps"));
+		}
+	}
+
+	if (csTheme.IsEmpty() || csTheme == _T("Ditto") || csTheme == _T("(Default)") || csTheme == _T("(Ditto)"))
 	{
 		LoadDefaults();
 
 		m_LastWriteTime = 0;
 		m_lastTheme = _T("");
+
+		Log(_T("Loading default ditto values for themes"));
 
 		return false;
 	}

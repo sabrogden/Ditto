@@ -23,6 +23,7 @@
 #define CLOSE_POPUP_MSG_WND				14
 #define SCREEN_RESOLUTION_CHANGED		15
 #define DELAYED_SHOW_DITTO_TIMER		16
+#define SET_WINDOWS_THEME_TIMER			17
 
 class CMainFrame: public CFrameWnd
 {
@@ -139,4 +140,5 @@ DECLARE_MESSAGE_MAP()public:
 	afx_msg LRESULT OnResolutionChange(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnTrayNotification(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnPlainTextPaste(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnWinIniChange(LPCTSTR lpszSection);
 };

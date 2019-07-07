@@ -14,7 +14,7 @@
 
 using namespace nsPath;
 
-#define DEFAULT_THEME _T("(Default)")
+#define DEFAULT_THEME _T("(Ditto)")
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -315,17 +315,18 @@ BOOL COptionsGeneral::OnApply()
 
 	CString currentTheme = g_Opt.GetTheme();
 
-	CString csTheme;
+	CString csTheme = _T("");
 	if (m_cbTheme.GetCurSel() >= 0)
 	{
-		m_cbTheme.GetLBText(m_cbTheme.GetCurSel(), csTheme);
-		if (csTheme == DEFAULT_THEME)
+		if (m_cbTheme.GetItemData(m_cbTheme.GetCurSel()) == 1)
 		{
-			g_Opt.SetTheme("");
-			csTheme = _T("");
+			m_cbTheme.GetLBText(m_cbTheme.GetCurSel(), csTheme);			
+			g_Opt.SetTheme(csTheme);
 		}
 		else
-			g_Opt.SetTheme(csTheme);
+		{
+			g_Opt.SetTheme("");
+		}
 	}
 	else
 	{
@@ -466,6 +467,11 @@ void COptionsGeneral::FillThemes()
 	csFile += "*.xml";
 
 	CString csTheme = CGetSetOptions::GetTheme();
+	
+	m_cbTheme.Clear();
+
+	int windowsSettingIndex = m_cbTheme.AddString(_T("(Follow windows light/dark themes)"));
+	m_cbTheme.SetItemData(windowsSettingIndex, 0);
 
 	CFileFind find;
 	BOOL bCont = find.FindFile(csFile);
@@ -481,6 +487,7 @@ void COptionsGeneral::FillThemes()
 			if (theme.FileVersion() >= 2 && theme.FileVersion() < 100)
 			{
 				int nIndex = m_cbTheme.AddString(find.GetFileTitle());
+				m_cbTheme.SetItemData(nIndex, 1);
 
 				if (find.GetFileTitle() == csTheme)
 				{
@@ -492,9 +499,24 @@ void COptionsGeneral::FillThemes()
 	}
 
 	int nIndex = m_cbTheme.AddString(DEFAULT_THEME);
-	if (bSetCurSel == false)
+	m_cbTheme.SetItemData(nIndex, 1);
+	if (csTheme == DEFAULT_THEME)
 	{
 		m_cbTheme.SetCurSel(nIndex);
+		bSetCurSel = true;
+	}
+
+	if (bSetCurSel == false)
+	{
+		int count = m_cbTheme.GetCount();
+		for (int i = 0; i < count; i++)
+		{
+			if (m_cbTheme.GetItemData(i) == 0)
+			{
+				m_cbTheme.SetCurSel(i);
+				break;
+			}
+		}
 	}
 }
 
@@ -505,6 +527,9 @@ void COptionsGeneral::OnBnClickedButtonTheme()
 
 	CString csTheme;
 	m_cbTheme.GetLBText(m_cbTheme.GetCurSel(), csTheme);
+
+	if (m_cbTheme.GetItemData(m_cbTheme.GetCurSel()) == 0)
+		return;
 
 	if (csTheme == DEFAULT_THEME)
 		return;

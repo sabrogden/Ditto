@@ -1536,3 +1536,23 @@ CString FolderPath(int folderId)
 
 	return folder;
 }
+
+BOOL DarkAppWindows10Setting()
+{
+	HKEY hkKey;
+	long lResult = ::RegOpenKeyEx(HKEY_CURRENT_USER, _T("Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize"), NULL, KEY_READ, &hkKey);
+	if (lResult == ERROR_SUCCESS)
+	{
+		DWORD buffer;
+		DWORD len = sizeof(buffer);
+		DWORD type;
+
+		lResult = ::RegQueryValueEx(hkKey, _T("AppsUseLightTheme"), 0, &type, (LPBYTE)&buffer, &len);
+
+		RegCloseKey(hkKey);
+
+		return buffer == 0;
+	}
+
+	return FALSE;
+}
