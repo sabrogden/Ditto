@@ -470,7 +470,9 @@ void COptionsGeneral::FillThemes()
 	
 	m_cbTheme.Clear();
 
-	int windowsSettingIndex = m_cbTheme.AddString(_T("(Follow windows light/dark themes)"));
+	int windowsSettingIndex = m_cbTheme.AddString(theApp.m_Language.GetString("FollowWindowsTheme", "(Follow windows light/dark themes)"));
+		
+		//_T("(Follow windows light/dark themes)"));
 	m_cbTheme.SetItemData(windowsSettingIndex, 0);
 
 	CFileFind find;

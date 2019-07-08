@@ -66,18 +66,26 @@ void CTheme::LoadDefaults()
 
 bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)
 {
+	bool followWindows10Theme = false;
 	if (csTheme.IsEmpty())
 	{
+		followWindows10Theme = true;
+
 		if (DarkAppWindows10Setting())
 		{
 			csTheme = _T("DarkerDitto");
-			Log(_T("Loading theme based on windows setting of dark mode for apps"));
+			Log(_T("Loading theme based on windows setting of dark mode for apps"));			
 		}
 	}
 
 	if (csTheme.IsEmpty() || csTheme == _T("Ditto") || csTheme == _T("(Default)") || csTheme == _T("(Ditto)"))
 	{
 		LoadDefaults();
+
+		if (followWindows10Theme)
+		{
+			LoadWindowsAccentColor();
+		}
 
 		m_LastWriteTime = 0;
 		m_lastTheme = _T("");
@@ -171,7 +179,33 @@ bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)
 	LoadColor(ItemHeader, "DescriptionWindowBG", m_descriptionWindowBG);
 	LoadColor(ItemHeader, "DescriptionWindowText", m_descriptionWindowText);
 
+	if (followWindows10Theme)
+	{
+		LoadWindowsAccentColor();
+	}
+
 	return true;
+}
+
+void CTheme::LoadWindowsAccentColor()
+{
+	DWORD accent = Windows10AccentColor();
+	if (accent != -1)
+	{
+		//windows seems to be bgr, convert to rgb
+		auto r = GetRValue(accent);
+		auto g = GetGValue(accent);
+		auto b = GetBValue(accent);
+
+		m_clipPastedColor = RGB(b, g, r);
+
+		//if (Windows10ColorTitleBar())
+		//{
+		//	m_CaptionRight = m_clipPastedColor;
+		//	m_CaptionLeft = m_clipPastedColor;
+		//	m_Border = m_clipPastedColor;
+		//}
+	}
 }
 
 bool CTheme::LoadColor(TiXmlElement *pParent, CStringA csNode, COLORREF &Color)

@@ -9,7 +9,7 @@ public:
 	CTheme(void);
 	~CTheme(void);
 
-	bool Load(CString csTheme, bool bHeaderOnly = false, bool bCheckLastWriteTime = false);
+	bool Load(CString csTheme, bool bHeaderOnly = false, bool bCheckLastWriteTime = false);	
 
 	COLORREF CaptionLeft() const { return m_CaptionLeft; }
 	COLORREF CaptionRight() const { return m_CaptionRight; }
@@ -57,6 +57,7 @@ protected:
 
 	bool LoadInt(TiXmlElement *pParent, CStringA csNode, int &intValue);
 	bool LoadColor(TiXmlElement *pParent, CStringA csNode, COLORREF &Color);
+	void LoadWindowsAccentColor();
 
 protected:
 	COLORREF m_CaptionLeft;
