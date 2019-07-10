@@ -488,16 +488,11 @@ void CSymbolEdit::OnPaint()
 	{
 		dc.FillSolidRect(rect, g_Opt.m_Theme.SearchTextBoxFocusBG());
 
-	
-		CPen pen(PS_SOLID, 0, g_Opt.m_Theme.SearchTextBoxFocusBorder());
-		CPen* pOldPen = dc.SelectObject(&pen);
-
-		dc.Rectangle(rect);
+		CBrush borderBrush(g_Opt.m_Theme.SearchTextBoxFocusBorder());
+		dc.FrameRect(rect, &borderBrush);
 
 		rect.DeflateRect(1, 1, 1, 1);
 		textRect.DeflateRect(1, 1, 1, 1);
-
-		dc.SelectObject(pOldPen);
 
 		oldFont = dc.SelectObject(GetFont());		
 
