@@ -36,6 +36,8 @@ public:
 	COLORREF MainWindowBG() const { return m_mainWindowBG; }
 	COLORREF SearchTextBoxFocusBG() const { return m_searchTextBoxFocusBG; }
 	COLORREF SearchTextBoxFocusText() const { return m_searchTextBoxFocusText; }
+	COLORREF SearchTextBoxFocusBorder() const { return m_searchTextBoxFocusBorder; }
+	COLORREF SearchTextHighlight() const { return m_searchTextHighlight; }
 
 	COLORREF GroupTreeBG() const { return m_groupTreeBG; }
 	COLORREF GroupTreeText() const { return m_groupTreeText; }
@@ -84,6 +86,8 @@ protected:
 	COLORREF m_BorderNotConnected;
 	COLORREF m_searchTextBoxFocusBG;
 	COLORREF m_searchTextBoxFocusText;
+	COLORREF m_searchTextBoxFocusBorder;
+	COLORREF m_searchTextHighlight;
 
 	COLORREF m_groupTreeBG;
 	COLORREF m_groupTreeText;
