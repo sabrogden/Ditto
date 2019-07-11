@@ -492,7 +492,7 @@ void CSymbolEdit::OnPaint()
 		dc.FrameRect(rect, &borderBrush);
 
 		rect.DeflateRect(1, 1, 1, 1);
-		textRect.DeflateRect(1, 1, 1, 1);
+		textRect.DeflateRect(0, 1, 1, 1);
 
 		oldFont = dc.SelectObject(GetFont());		
 
