@@ -499,7 +499,7 @@ void CSymbolEdit::OnPaint()
 		COLORREF oldColor = dc.GetTextColor();
 		dc.SetTextColor(g_Opt.m_Theme.SearchTextBoxFocusText());
 			
-		dc.DrawText(text, textRect, DT_SINGLELINE | DT_INTERNAL | DT_EDITCONTROL | DT_NOPREFIX | DT_VCENTER);
+		dc.DrawText(text, textRect, DT_SINGLELINE | DT_INTERNAL | DT_EDITCONTROL | DT_NOPREFIX);
 
 		dc.SelectObject(oldFont);
 		dc.SetTextColor(oldColor);
