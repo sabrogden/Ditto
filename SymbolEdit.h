@@ -101,6 +101,7 @@ protected:
 	CDPI *m_windowDpi;
 
 	int m_centerTextDiff;
+	CString m_lastTextOnPaint;
 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg LRESULT OnSetFont(WPARAM wParam, LPARAM lParam);
@@ -121,6 +122,7 @@ public:
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS* lpncsp);
 	afx_msg void OnNcPaint();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
 };
 
 
