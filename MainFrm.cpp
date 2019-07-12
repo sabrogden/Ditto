@@ -1408,7 +1408,8 @@ void CMainFrame::OnWinIniChange(LPCTSTR lpszSection)
 {
 	CFrameWnd::OnWinIniChange(lpszSection);
 
-	if (wcscmp(lpszSection, L"ImmersiveColorSet") == 0)
+	if (lpszSection != NULL &&
+		wcscmp(lpszSection, L"ImmersiveColorSet") == 0)
 	{
 		Log(StrF(_T("OnWinIniChange %s, setting timer to 1000ms to change theme"), lpszSection));
 		KillTimer(SET_WINDOWS_THEME_TIMER);

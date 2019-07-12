@@ -1620,5 +1620,9 @@
     <Image Include="res\icon3.ico">
       <Filter>res</Filter>
     </Image>
+    <Image Include="res\search_close_20.png" />
+    <Image Include="res\search_close_24.png" />
+    <Image Include="res\search_close_28.png" />
+    <Image Include="res\search_close_32.png" />
   </ItemGroup>
 </Project>

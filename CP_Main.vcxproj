@@ -2278,6 +2278,10 @@
     <Image Include="res\open_folder_72.png" />
     <Image Include="res\open_folder_78.png" />
     <Image Include="res\open_folder_84.png" />
+    <Image Include="res\search_close_20.png" />
+    <Image Include="res\search_close_24.png" />
+    <Image Include="res\search_close_28.png" />
+    <Image Include="res\search_close_32.png" />
     <Image Include="res\system_menu_54.png" />
     <Image Include="res\system_menu_60.png" />
     <Image Include="res\system_menu_66.png" />

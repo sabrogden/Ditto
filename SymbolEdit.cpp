@@ -807,7 +807,7 @@ void CSymbolEdit::SetDpiInfo(CDPI *dpi)
 	m_windowDpi = dpi; 
 
 	m_closeButton.Reset();
-	m_closeButton.LoadStdImageDPI(m_windowDpi->GetDPI(), search_close_16, Search_close_20, Search_close_24, Search_close_28, Search_close_32, _T("PNG"));
+	m_closeButton.LoadStdImageDPI(m_windowDpi->GetDPI(), search_close_16, search_close_20, search_close_24, search_close_28, search_close_32, _T("PNG"));
 
 	m_searchesButton.Reset();
 	m_searchesButton.LoadStdImageDPI(m_windowDpi->GetDPI(), down_16, down_20, down_24, down_28, down_32, _T("PNG"));
