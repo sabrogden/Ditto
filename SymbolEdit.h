@@ -76,6 +76,8 @@ public:
 
 	void OnDpiChanged();
 
+	//void SetWindowTextEx(LPCSTR)
+
 protected:
 	
 	//CGdiImageDrawer m_searchButton;
@@ -98,6 +100,8 @@ protected:
 
 	CDPI *m_windowDpi;
 
+	int m_centerTextDiff;
+
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg LRESULT OnSetFont(WPARAM wParam, LPARAM lParam);
 	//afx_msg LRESULT OnMenuExit(WPARAM wParam, LPARAM lParam);
@@ -114,6 +118,9 @@ protected:
 
 public:
 	afx_msg void OnPaint();
+	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	afx_msg void OnNcCalcSize(BOOL bCalcValidRects, NCCALCSIZE_PARAMS* lpncsp);
+	afx_msg void OnNcPaint();
 };
 
 
