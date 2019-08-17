@@ -1386,13 +1386,17 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 			descriptionSql = descriptionFormat.GetSQLString();
 		}
 
-		if(csSQLSearch.Left(3) == _T("/q ") ||
+		if (csSQLSearch.Left(3) == _T("/q ") ||
 			csSQLSearch.Left(3) == _T("\\q ") ||
 			CGetSetOptions::GetSearchQuickPaste())
 		{
 			quickPasteFormat.SetVariable("Main.QuickPasteText");
-			csSQLSearch.TrimLeft(_T("/q "));
-			csSQLSearch.TrimLeft(_T("\\q "));
+
+			if (csSQLSearch.Left(3) == _T("/q ") ||
+				csSQLSearch.Left(3) == _T("\\q "))
+			{
+				csSQLSearch = csSQLSearch.Mid(3);
+			}
 
 			quickPasteFormat.Parse(csSQLSearch);
 			quickPasteSql = quickPasteFormat.GetSQLString();
@@ -1404,8 +1408,11 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 		{
 			dataJoin = _T("INNER JOIN Data on Data.lParentID = Main.lID");
 
-			csSQLSearch.TrimLeft(_T("/f "));
-			csSQLSearch.TrimLeft(_T("\\f "));
+			if (csSQLSearch.Left(3) == _T("/f ") ||
+				csSQLSearch.Left(3) == _T("\\f "))
+			{
+				csSQLSearch = csSQLSearch.Mid(3);
+			}
 
 			fullTextFormat.SetVariable("Data.ooData");
 			fullTextFormat.Parse(csSQLSearch);
