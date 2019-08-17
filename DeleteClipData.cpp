@@ -778,3 +778,18 @@ void CDeleteClipData::OnLvnColumnclickList2(NMHDR *pNMHDR, LRESULT *pResult)
 
 	*pResult = 0;
 }
+
+
+BOOL CDeleteClipData::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN)
+	{
+		if (pMsg->wParam == VK_RETURN)
+		{
+			FilterItems();
+			return TRUE;                // Do not process further
+		}
+	}
+
+	return CDialog::PreTranslateMessage(pMsg);
+}

@@ -104,4 +104,5 @@ public:
 	afx_msg void OnBnClickedCheckLastUseDate();
 	afx_msg void OnBnClickedCheckDataFormat();
 	afx_msg void OnLvnColumnclickList2(NMHDR *pNMHDR, LRESULT *pResult);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
