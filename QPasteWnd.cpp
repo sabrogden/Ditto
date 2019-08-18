@@ -26,7 +26,7 @@
 #include "CF_UnicodeTextAggregator.h"
 #include "CF_TextAggregator.h"
 #include "htmlformataggregator.h"
-#include "shared/Tokenizer.h""
+#include "shared/Tokenizer.h"
 
 #ifdef _DEBUG
     #define new DEBUG_NEW
