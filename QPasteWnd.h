@@ -576,4 +576,5 @@ public:
 	afx_msg void OnUpdateImportEmailContentAttach(CCmdUI *pCmdUI);
 	afx_msg void OnSpecialpasteTogglecase();
 	afx_msg void OnUpdateSpecialpasteTogglecase(CCmdUI *pCmdUI);
+	afx_msg void OnFirstShowstartupmessage();
 };

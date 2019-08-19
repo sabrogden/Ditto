@@ -141,4 +141,6 @@ DECLARE_MESSAGE_MAP()public:
 	afx_msg LRESULT OnTrayNotification(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnPlainTextPaste(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnWinIniChange(LPCTSTR lpszSection);
+	afx_msg void OnFirstShowstartupmessage();
+	afx_msg void OnUpdateFirstShowstartupmessage(CCmdUI *pCmdUI);
 };

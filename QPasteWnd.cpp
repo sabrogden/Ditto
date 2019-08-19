@@ -343,6 +343,7 @@ ON_COMMAND(ID_IMPORT_EMAIL_CONTENT_ATTACH, &CQPasteWnd::OnImportEmailContentAtta
 ON_UPDATE_COMMAND_UI(ID_IMPORT_EMAIL_CONTENT_ATTACH, &CQPasteWnd::OnUpdateImportEmailContentAttach)
 ON_COMMAND(ID_SPECIALPASTE_TOGGLECASE, &CQPasteWnd::OnSpecialpasteTogglecase)
 ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_TOGGLECASE, &CQPasteWnd::OnUpdateSpecialpasteTogglecase)
+ON_COMMAND(ID_FIRST_SHOWSTARTUPMESSAGE, &CQPasteWnd::OnFirstShowstartupmessage)
 END_MESSAGE_MAP()
 
 
@@ -6492,6 +6493,11 @@ void CQPasteWnd::OnSystemButton()
 		{
 			return;
 		}				
+
+		if (CGetSetOptions::GetShowStartupMessage())
+		{
+			cmSubMenu->CheckMenuItem(ID_FIRST_SHOWSTARTUPMESSAGE, MF_CHECKED);
+		}
 		
 		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 
@@ -7619,4 +7625,11 @@ void CQPasteWnd::OnUpdateSpecialpasteTogglecase(CCmdUI *pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::INVERT_CASE);
+}
+
+
+void CQPasteWnd::OnFirstShowstartupmessage()
+{
+	BOOL existing = CGetSetOptions::GetShowStartupMessage();
+	CGetSetOptions::SetShowStartupMessage(!existing);
 }

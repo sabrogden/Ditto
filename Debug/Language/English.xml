@@ -127,6 +127,8 @@
 		<Item English_Text = "Save Current Clipboard" ID = "32905"></Item>	
 		<Item English_Text = "Import" ID = ""></Item>	
 		
+		<Item English_Text = "Show Startup Message" ID = "32959"></Item>
+		
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039"></Item>
@@ -444,6 +446,8 @@
 		//Added 12/17/16
 		<Item English_Text = "Fixup Sticky Clip Order" ID = "32909"></Item>		
 		<Item English_Text = "Save Current Clipboard" ID = "32904"></Item>
+		
+		<Item English_Text = "Show Startup Message" ID = "32959"></Item>
 	</Ditto_Tray_Icon_Menu>
 
 	//Added in 9-11-09

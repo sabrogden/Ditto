@@ -782,6 +782,7 @@
 #define ID_IMPORT_EMAIL_CONTENT_ATTACH  32956
 #define ID_QUICKOPTIONS_AUTO            32957
 #define ID_SPECIALPASTE_TOGGLECASE      32958
+#define ID_FIRST_SHOWSTARTUPMESSAGE     32959
 
 // Next default values for new objects
 // 
@@ -789,7 +790,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        387
-#define _APS_NEXT_COMMAND_VALUE         32959
+#define _APS_NEXT_COMMAND_VALUE         32960
 #define _APS_NEXT_CONTROL_VALUE         2172
 #define _APS_NEXT_SYMED_VALUE           104
 #endif

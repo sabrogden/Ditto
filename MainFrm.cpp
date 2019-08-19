@@ -72,6 +72,8 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_TRAYNOTIFY, &CMainFrame::OnTrayNotification)
 	ON_MESSAGE(WM_PLAIN_TEXT_PASTE, &CMainFrame::OnPlainTextPaste)
 		ON_WM_WININICHANGE()
+		ON_COMMAND(ID_FIRST_SHOWSTARTUPMESSAGE, &CMainFrame::OnFirstShowstartupmessage)
+		ON_UPDATE_COMMAND_UI(ID_FIRST_SHOWSTARTUPMESSAGE, &CMainFrame::OnUpdateFirstShowstartupmessage)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -1414,5 +1416,31 @@ void CMainFrame::OnWinIniChange(LPCTSTR lpszSection)
 		Log(StrF(_T("OnWinIniChange %s, setting timer to 1000ms to change theme"), lpszSection));
 		KillTimer(SET_WINDOWS_THEME_TIMER);
 		SetTimer(SET_WINDOWS_THEME_TIMER, 1000, NULL);
+	}
+}
+
+
+void CMainFrame::OnFirstShowstartupmessage()
+{
+	BOOL existing = CGetSetOptions::GetShowStartupMessage();
+	CGetSetOptions::SetShowStartupMessage(!existing);
+}
+
+
+void CMainFrame::OnUpdateFirstShowstartupmessage(CCmdUI *pCmdUI)
+{
+	if (pCmdUI == NULL ||
+		pCmdUI->m_pMenu == NULL)
+	{
+		return;
+	}
+
+	if (CGetSetOptions::GetShowStartupMessage())
+	{
+		pCmdUI->m_pMenu->CheckMenuItem(ID_FIRST_SHOWSTARTUPMESSAGE, MF_CHECKED);
+	}
+	else
+	{
+		pCmdUI->m_pMenu->CheckMenuItem(ID_FIRST_SHOWSTARTUPMESSAGE, MF_UNCHECKED);
 	}
 }
