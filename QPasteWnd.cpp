@@ -1534,32 +1534,22 @@ void CQPasteWnd::ShowRightClickMenu()
 			pp.y = rc.bottom;
 		}
 
-        theApp.m_Addins.AddPrePasteAddinsToMenu(cmSubMenu);
-        
-		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
+		theApp.m_Addins.AddPrePasteAddinsToMenu(cmSubMenu);
 
 		SetFriendChecks(cmSubMenu);
 
 		CString specialPaste("Special Paste");
 		int nPos = -1;
-		CMenu *sendToMenu = CMultiLanguage::GetMenuPos(cmSubMenu, specialPaste, nPos);
+		CMenu *sendToMenu = CMultiLanguage::GetMenuPos(cmSubMenu, specialPaste, nPos, TRUE);
 		if (sendToMenu != NULL)
 		{
 			g_Opt.m_pasteScripts.AddToMenu(sendToMenu, &m_actions);
 		}
+		
+		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 
         cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
     }
-}
-
-void CQPasteWnd::HideMenuGroup(CMenu* menu, CString text)
-{
-	int nMenuPos;
-	CMenu *pNewMenu = CMultiLanguage::GetMenuPos(menu, text, nMenuPos);
-	if(pNewMenu)
-	{
-		menu->RemoveMenu(nMenuPos, MF_BYPOSITION);
-	}
 }
 
 void CQPasteWnd::SetFriendChecks(CMenu *pMenu)
@@ -1594,7 +1584,7 @@ void CQPasteWnd::SetFriendChecks(CMenu *pMenu)
 	{
 		CString csText("Send To");
 		int nPos = -1;
-		CMenu *sendToMenu = CMultiLanguage::GetMenuPos(pMenu, csText, nPos);
+		CMenu *sendToMenu = CMultiLanguage::GetMenuPos(pMenu, csText, nPos, TRUE);
 
 		if (sendToMenu != NULL)
 		{

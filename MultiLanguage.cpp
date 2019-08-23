@@ -302,7 +302,7 @@ bool CMultiLanguage::UpdateWindowToLanguage(CWnd *pParent, LANGUAGE_ARRAY &Array
 }
 
 
-CMenu * CMultiLanguage::GetMenuPos(CMenu *pMenu, const CString &csLookingForMenuText, int &nMenuPos)
+CMenu * CMultiLanguage::GetMenuPos(CMenu *pMenu, const CString &csLookingForMenuText, int &nMenuPos, bool returnChildIfOne)
 {
 	CMenu *pSubMenu;
 	CString csMenuText;
@@ -315,10 +315,13 @@ CMenu * CMultiLanguage::GetMenuPos(CMenu *pMenu, const CString &csLookingForMenu
 		if(csMenuText == csLookingForMenuText)
 		{
 			nMenuPos = i;
-			pSubMenu = pMenu->GetSubMenu(i);
-			if (pSubMenu != NULL)
+			if (returnChildIfOne)
 			{
-				return pSubMenu;
+				pSubMenu = pMenu->GetSubMenu(i);
+				if (pSubMenu != NULL)
+				{
+					return pSubMenu;
+				}
 			}
 			return pMenu;
 		}
@@ -326,7 +329,7 @@ CMenu * CMultiLanguage::GetMenuPos(CMenu *pMenu, const CString &csLookingForMenu
 		pSubMenu = pMenu->GetSubMenu(i);
 		if(pSubMenu)
 		{
-			CMenu *pMenuReturn = GetMenuPos(pSubMenu, csLookingForMenuText, nMenuPos);
+			CMenu *pMenuReturn = GetMenuPos(pSubMenu, csLookingForMenuText, nMenuPos, returnChildIfOne);
 			if(pMenuReturn)
 				return pMenuReturn;
 		}

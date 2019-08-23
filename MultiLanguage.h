@@ -72,7 +72,7 @@ public:
 	CString GetLangCode() { return m_csLangCode;	}
 
 	void	SetOnlyGetHeader(bool bVal)	{ m_bOnlyGetHeader = true;	}
-	static CMenu* GetMenuPos(CMenu *pMenu, const CString &csLookingForMenuText, int &nMenuPos);
+	static CMenu* GetMenuPos(CMenu *pMenu, const CString &csLookingForMenuText, int &nMenuPos, bool returnChildIfOne = FALSE);
 
 	CString m_csLastError;
 
