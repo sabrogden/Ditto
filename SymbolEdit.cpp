@@ -12,6 +12,7 @@
 #define RANGE_START 3000
 #define CLEAR_LIST 3050
 #define LIST_MAX_COUNT 50
+#define MAX_SAVED_SEARCH_LENGTH 1000
 
 IMPLEMENT_DYNAMIC(CSymbolEdit, CEdit)
 
@@ -232,7 +233,7 @@ void CSymbolEdit::LoadPastSearches(CString values)
 		{
 			CString item = ItemElement->Attribute("text");
 
-			m_searches.Add(item);
+			m_searches.Add(item.Left(MAX_SAVED_SEARCH_LENGTH));
 
 			ItemElement = ItemElement->NextSiblingElement();
 		}
@@ -245,6 +246,10 @@ void CSymbolEdit::AddToSearchHistory()
 	this->GetWindowText(cs);
 	if (cs != _T(""))
 	{
+		//only save up to 1000, had reports of somehow getting extremely large amounts of junk text
+		//save and causing memory issues.
+		cs = cs.Left(MAX_SAVED_SEARCH_LENGTH);
+
 		if (m_searches.GetCount() >= LIST_MAX_COUNT)
 		{
 			m_searches.RemoveAt(0);
