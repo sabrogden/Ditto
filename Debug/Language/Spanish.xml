@@ -20,6 +20,7 @@
 		<Item English_Text = "20 " ID = "32796"></Item>
 		<Item English_Text = "25 " ID = "32798"></Item>
 		<Item English_Text = "30 " ID = "32799"></Item>
+		<Item English_Text = "35 " ID = "32950"></Item>
 		<Item English_Text = "40 " ID = "32790"></Item>
 		<Item English_Text = "Positioning" ID = "-1">Posición</Item>
 		<Item English_Text = "At Caret" ID = "32802">Al comienzo de línea</Item>
@@ -126,6 +127,21 @@
 		<Item English_Text = "New Clip" ID = "32937"></Item>	
 		<Item English_Text = "Save Current Clipboard" ID = "32905"></Item>	
 		<Item English_Text = "Import" ID = ""></Item>	
+		<Item English_Text = "Show Startup Message" ID = "32959"></Item>
+		<Item English_Text = "Filter On Selected Clip" ID = "32910"></Item>		
+		<Item English_Text = "Invert Case" ID = "32958"></Item>
+		<Item English_Text = "Trim White Space" ID = "32946"></Item>
+		<Item English_Text = "Slugify" ID = " 32954"></Item>		
+		<Item English_Text = "Paste, Don't Change Clip Order" ID = " 32945"></Item>		
+		<Item English_Text = "Gmail, Content In Body" ID = "32952"></Item>
+		<Item English_Text = "EMail, Clip Export As Attachment" ID = "32953"></Item>
+		<Item English_Text = "EMail, Content As Attachment" ID = "32956"></Item>
+		<Item English_Text = "EMail, Content In Body" ID = "32951"></Item>		
+		<Item English_Text = "Import File Contents From CF_HDROP" ID = "32941"></Item>		
+		<Item English_Text = "Move To Last" ID = "32943"></Item>
+		<Item English_Text = "Increase" ID = "32947"></Item>
+		<Item English_Text = "Decrease" ID = "32948"></Item>
+		<Item English_Text = "Toggle Enabled" ID = "32949"></Item>
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039">Tecla Rápida</Item>
@@ -173,13 +189,20 @@
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true"></Item>
 		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090"></Item>
 		//New item added 3/1/11
-		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098"></Item>
+		<Item English_Text = "Accepted Copy Applications (separate by ;)" ID = "2098"></Item>
 		<Item English_Text = "Include" ID = "2095"></Item>
 		<Item English_Text = "Exclude" ID = "2096"></Item>
+		<Item English_Text = "Theme" ID = "2092"></Item>
+		<Item English_Text = "About Theme" ID = "2094"></Item>
+		<Item English_Text = "Popup Position" ID = "2100"></Item>
+		<Item English_Text = "Display Font" ID = "2101"></Item>
+		<Item English_Text = "Database Path" ID = "2099"></Item>
+		<Item English_Text = "Environment Variables" ID = "2165"></Item>
+		<Item English_Text = "Default Font" ID = "2031"></Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
-		<Item English_Text = "&Add" ID = "1015">&Añadir</Item>
-		<Item English_Text = "&Delete" ID = "1016">&Borrar</Item>
+		<Item English_Text = "Add" ID = "1015">Añadir</Item>
+		<Item English_Text = "Delete" ID = "1016">Borrar</Item>
 		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">Tipos Soportados</Item>
 		//New item added 12/17/16
 		<Item English_Text = "Current Clipboard Types" ID = "2128"></Item>
@@ -228,44 +251,10 @@
 		<Item English_Text = "Win" ID = "2047"></Item>
 		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044"></Item>
 	</Ditto_Options_Shortcuts>
-	<Ditto_Options_Quick_Paste>
-		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">El histórico comienza por el principio de la lista (vs. por el final)</Item>
-		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">Usar Ctrl - Num para las primeras diez teclas rápidas de copia</Item>
-		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">Mostrar texto de las primeras diez teclas rápidas de copia</Item>
-		<Item English_Text = "Show leading whitespace" ID = "2021">Mostrar espacio al principio</Item>
-		<Item English_Text = "Text Lines per Row" ID = "2062">Líneas de texto por Fila</Item>
-		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">Permitir transparencia en Pegado Rápido</Item>
-		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">Mostrar miniaturas (para tipos CF_DIB)  (Puede aumentar uso de memoria y ralentizar el display)</Item>
-		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">Mostrar texto RTF en la Lista (para tipos RTF)  (Puede aumentar uso de memoria y ralentizar el display)</Item>
-		<Item English_Text = "Find As You Type" ID = "2036">Buscar mientras se teclea</Item>
-		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">Asegurar que se muestra la ventana completa</Item>
-		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">Mostrar Clips que están en Grupos en la Lista Principal</Item>
-		<Item English_Text = "Font" ID = "1040">Fuente</Item>
-		<Item English_Text = "Default Font" ID = "2031">Fuente por Defecto</Item>
-		<Item English_Text = "Popup Positioning" ID = "2063">Posición de la Ventana Emergente</Item>
-		<Item English_Text = "At Caret" ID = "2015">Al comienzo de línea</Item>
-		<Item English_Text = "At Cursor" ID = "2016">En el Cursor</Item>
-		<Item English_Text = "At Previous Position" ID = "2017">En la Posición Anterior</Item>
-		<Item English_Text = "List Item Prefix Legend" ID = "2064">Prefijos de la Lista de Elementos</Item>
-		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">* = No Borrar Automáticamente\n  s = Existe Atajo\n G = El Elemento es un Grupo\n  ! = Elemento Asignado a un Grupo</Item>
-		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Pegado Rápido</Item>
 		
-		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Prompt when deleting clips" ID = "2039">Preguntar antes de borrar clips</Item>
 		
-		//New strings added in 3.15.2 10-6-07
-		<Item English_Text = "Theme" ID = "2092"></Item>
-		<Item English_Text = "About Theme" ID = "2094"></Item>
 		
-		//Added 1/10/15
-		<Item English_Text = "Always Show Scroll Bar" ID = "2040"></Item>
-		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "2041"></Item>
-		<Item English_Text = "Show In Taskbar" ID = "2042"></Item>
-		<Item English_Text = "Diff Application Path" ID = "2122"></Item>
 		
-		//Added 1/10/15
-		<Item English_Text = "Show indicator a clip has been pasted" ID = "2043"></Item>
-	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>
 		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Cuando reciba una copia, si la IP o el nombre del equipo está en esta lista, se pondrá en el portapapeles. En caso contrario se pondrá en los clips guardados para usarse más tarde.</Item>
 		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP/Nombres de equipo separados por comas</Item>
@@ -276,10 +265,10 @@
 		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Si marca 'Enviar Todas las Copias', todas las copias de este equipo se enviarán al otro equipo. Si no se marca habrá una opción con el click derecho para mandar una copia al otro equipo.</Item>
 		<Item English_Text = "Log Send Receive Commands" ID = "1042">Guardar registro de los comandos de Envío y Recepción</Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Amigos</Item>
-		//Added in 9-11-09
-		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">test</Item>
-        	<Item English_Text = "IP/Name" ID = "IP_Name">test</Item>
-        	<Item English_Text = "Descriptions" ID = "Descriptions">test</Item>
+		//Added in 12-17-16
+		<Item English_Text = "Request using IP Address" ID = "2127"></Item>
+		<Item English_Text = "Request using Host Name" ID = "2129"></Item>
+		<Item English_Text = "Remote Files" ID = "2128"></Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015">Enviar Copias a este amigo</Item>
@@ -394,6 +383,12 @@
 		<Item English_Text = "Command" ID = "QPCommand"></Item>
 		
 		<Item English_Text = "[Top Most Window]" ID = "top_most"></Item>
+		<Item English_Text = "[Disconnected]" ID = "disconnected"></Item>
+		<Item English_Text = "Ditto is running minimized, Ditto can be opened by hot keys or by clicking the task tray icon" ID = "StartuMsg"></Item>
+		<Item English_Text = "There are no results for" ID = "NoSearchResults"></Item>
+		<Item English_Text = "Warning this can take quite a long time and require up to double the hard drive space as your current database size, Continue?" ID = "CompactRepairWarning"></Item>
+		<Item English_Text = "Prompt For Name" ID = "prompt_for_name"></Item>
+		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme"></Item>
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1"></Item>
@@ -418,6 +413,7 @@
 		//Added 12/17/16
 		<Item English_Text = "Fixup Sticky Clip Order" ID = "32909"></Item>		
 		<Item English_Text = "Save Current Clipboard" ID = "32904"></Item>
+		<Item English_Text = "Show Startup Message" ID = "32959"></Item>
 	</Ditto_Tray_Icon_Menu>
 	//Added in 9-11-09
 	<Ditto_Options_CopyBuffers>
@@ -597,6 +593,7 @@
 		<Item English_Text = "Import Clip" ID = "82"></Item>
 		<Item English_Text = "Global HotKeys" ID = "83"></Item>
 		<Item English_Text = "Delete Clip Data" ID = "84"></Item>
+		<Item English_Text = "Replace Top Sticky Clip" ID = "85"></Item>		
 			
 	</Ditto_Options_Quick_Paste_Keyboard>
 </Ditto_Language_File>

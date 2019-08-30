@@ -20,6 +20,7 @@
 		<Item English_Text = "20 " ID = "32796">௨௦</Item>
 		<Item English_Text = "25 " ID = "32798">௨௫</Item>
 		<Item English_Text = "30 " ID = "32799">௩௦</Item>
+		<Item English_Text = "35 " ID = "32950"></Item>
 		<Item English_Text = "40 " ID = "32790">௪௦</Item>
 		<Item English_Text = "Positioning" ID = "-1">நிலைப்படுத்தல்</Item>
 		<Item English_Text = "At Caret" ID = "32802">கூரைக்குறியில்</Item>
@@ -120,6 +121,24 @@
 		<Item English_Text = "New Clip" ID = "32937">புதிய இடைநிலைப் பலகை</Item>
 		<Item English_Text = "Save Current Clipboard" ID = "32905">தற்போதைய இடைநிலைப் பலகையைச் சேமி</Item>
 		<Item English_Text = "Import" ID = "">இறக்குமதி</Item>
+		
+		<Item English_Text = "Show Startup Message" ID = "32959"></Item>
+		<Item English_Text = "Filter On Selected Clip" ID = "32910"></Item>		
+		<Item English_Text = "Invert Case" ID = "32958"></Item>
+		<Item English_Text = "Trim White Space" ID = "32946"></Item>
+		<Item English_Text = "Slugify" ID = " 32954"></Item>		
+		<Item English_Text = "Paste, Don't Change Clip Order" ID = " 32945"></Item>		
+		<Item English_Text = "Gmail, Content In Body" ID = "32952"></Item>
+		<Item English_Text = "EMail, Clip Export As Attachment" ID = "32953"></Item>
+		<Item English_Text = "EMail, Content As Attachment" ID = "32956"></Item>
+		<Item English_Text = "EMail, Content In Body" ID = "32951"></Item>		
+		<Item English_Text = "Import File Contents From CF_HDROP" ID = "32941"></Item>		
+		<Item English_Text = "Move To Last" ID = "32943"></Item>
+		
+		<Item English_Text = "Increase" ID = "32947"></Item>
+		<Item English_Text = "Decrease" ID = "32948"></Item>
+		<Item English_Text = "Toggle Enabled" ID = "32949"></Item>
+		
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039">சூடான விசை</Item>
@@ -165,6 +184,17 @@
 		<Item English_Text = "Accepted Copy Applications (separate by ;)" ID = "2098">ஏற்றுக்கொள்ளப்பட்ட நகல் பயன்பாடுகள் ( ; பிரித்தெடுக்கப்பட்டவை)</Item>
 		<Item English_Text = "Include" ID = "2095">சேர்க்க</Item>
 		<Item English_Text = "Exclude" ID = "2096">விலக்கு</Item>
+		
+		<Item English_Text = "Theme" ID = "2092">கருப்பொருள்</Item>
+		<Item English_Text = "About Theme" ID = "2094">கருப்பொருள் பற்றி</Item>
+		
+		<Item English_Text = "Popup Position" ID = "2100"></Item>
+		<Item English_Text = "Display Font" ID = "2101"></Item>
+		<Item English_Text = "Database Path" ID = "2099"></Item>
+		
+		<Item English_Text = "Environment Variables" ID = "2165"></Item>
+		<Item English_Text = "Default Font" ID = "2031"></Item>
+		
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "Add" ID = "1015">சேர்</Item>
@@ -219,40 +249,7 @@
 		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044">கடைசி பத்து நகல்களுக்கு அமோதியின் UI இல் தற்போது தேர்ந்தெடுக்கப்பட்ட குழுவைப் பயன்படுத்தவும்</Item>
 	</Ditto_Options_Shortcuts>
 	
-	<Ditto_Options_Quick_Paste>
-		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">வரலாறு பட்டியலின் மேலே தொடங்குகிறது (எதிராக கீழே)</Item>
-		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">முதல் பத்து நகல் சூடான விசைகளுக்கு Ctrl - Num ஐப் பயன்படுத்தவும்</Item>
-		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">முதல் பத்து நகல் சூடான விசைகளுக்கான உரையைக் காட்டு</Item>
-		<Item English_Text = "Show leading whitespace" ID = "2021">முன்னணி இடைவெளியைக் காட்டு</Item>
-		<Item English_Text = "Text Lines per Entry" ID = "2062">ஒவ்வொரு நுழைவுக்கும் உரை கோடுகள்</Item>
-		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">விரைவான ஒட்டு வெளிப்படைத்தன்மையை இயக்கு</Item>
-		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">சிறு உருவங்களைக் காண்பி (CF_DIB வகைகளுக்கு) (நினைவக பயன்பாடு மற்றும் காட்சி வேகத்தை அதிகரிக்க முடியும்)</Item>
-		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">பட்டியலில் ஆர்டிஎஃப் உரையை வரையவும் (ஆர்டிஎஃப் வகைகளுக்கு) (காட்சி வேகத்தை நினைவக பயன்பாட்டை அதிகரிக்க முடியும்)</Item>
-		<Item English_Text = "Find As You Type" ID = "2036">நீங்கள் தட்டச்சு செய்ததைக் கண்டுபிடி</Item>
-		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">முழு சாளரமும் தெரியும் என்பதை உறுதிப்படுத்தவும்</Item>
-		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">முதன்மை பட்டியலில் உள்ள குழுக்களில் உள்ள இடைநிலைப் பலகைகளைக் காட்டு</Item>
-		<Item English_Text = "Font" ID = "1040">எழுத்துரு</Item>
-		<Item English_Text = "Default Font" ID = "2031">இயல்புநிலை எழுத்துரு</Item>
-		<Item English_Text = "Popup Positioning" ID = "2063">பாப்அப் நிலைப்படுத்தல்</Item>
-		<Item English_Text = "At Caret" ID = "2015">கூரைக்குறியில்</Item>
-		<Item English_Text = "At Cursor" ID = "2016">இடஞ்சுட்டியில்</Item>
-		<Item English_Text = "At Previous Position" ID = "2017">முந்தைய நிலையில்</Item>
-		<Item English_Text = "List Item Prefix Legend" ID = "2064">பட்டியல் உருப்படி முன்னொட்டு புராணக்கதை</Item>
-		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">* = தானாக நீக்க வேண்டாம் \n கள் = குறுக்குவழி உள்ளது \n ஜி = பொருள் ஒரு குழு \n! = உருப்படி ஒரு குழுவுடன் இணைக்கப்பட்டுள்ளது</Item>
-		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">விரைவு ஒட்டு</Item>
-		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Prompt when deleting clips" ID = "2039">இடைநிலைப் பலகைகளை நீக்கும்போது கேட்கவும்</Item>
-		//New strings added in 3.15.2 10-6-07
-		<Item English_Text = "Theme" ID = "2092">கருப்பொருள்</Item>
-		<Item English_Text = "About Theme" ID = "2094">கருப்பொருள் பற்றி</Item>
-		//Added 1/10/15
-		<Item English_Text = "Always Show Scroll Bar" ID = "2040">எப்போதும் உருள் பட்டியைக் காட்டு</Item>
-		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "2041">உயர்த்தப்பட்ட பயன்பாடுகளில் ஒட்டுவதற்கான உயர்ந்த சலுகைகள்</Item>
-		<Item English_Text = "Show In Taskbar" ID = "2042">பணிப்பட்டியில் காண்பி</Item>
-		<Item English_Text = "Diff Application Path" ID = "2122">வேறுபட்ட பயன்பாட்டு பாதை</Item>
-		//Added 1/10/15
-		<Item English_Text = "Show indicator a clip has been pasted" ID = "2043">ஒரு இடைநிலைப் பலகை ஒட்டப்பட்டுள்ளது என காட்டு</Item>
-	</Ditto_Options_Quick_Paste>
+
 	
 	<Ditto_Options_Friends>
 		<Item English_Text = "When you receive a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">நீங்கள் அனுப்பிய நகலைப் பெறும்போது, ​​அவர்களின் ஐபி அல்லது கணினி பெயர் இந்த பட்டியலில் இருந்தால், அது இடைநிலைப் பலகைபோர்டில் வைக்கப்படும். இல்லையெனில் அது பின்னர் சேமிக்கப்படும் இடைநிலைப் பலகைகளில் இருக்கும்</Item>
@@ -383,7 +380,10 @@
 		<Item English_Text = "[Disconnected]" ID = "disconnected">[துண்டிக்கப்பட்டது]</Item>
 		<Item English_Text = "Ditto is running minimized, Ditto can be opened by hot keys or by clicking the task tray icon" ID = "StartuMsg">அமோதி குறைக்கப்படுகிறது, அமோதியை சூடான விசைகள் மூலம் திறக்கலாம் அல்லது பணி தட்டு ஐகானைக் கிளிக் செய்வதன் மூலம்</Item>
 		<Item English_Text = "There are no results for" ID = "NoSearchResults">இதற்க்கான முடிவுகள் எதுவும் இல்லை</Item>
-		<Item English_Text = "Warning this can take quite a long time and require up to double the hard drive space as your current database size, Continue?" ID = "CompactRepairWarning">இதை எச்சரிக்க அதிக நேரம் ஆகலாம் மற்றும் உங்கள் தற்போதைய தரவுத்தள அளவாக வன் இடத்தை இரட்டிப்பாக்க வேண்டும், தொடரவா?</Item>
+		<Item English_Text = "Warning this can take quite a long time and require up to double the hard drive space as your current database size, Continue?" ID = "CompactRepairWarning">இதை எச்சரிக்க அதிக நேரம் ஆகலாம் மற்றும் உங்கள் தற்போதைய தரவுத்தள அளவாக வன் இடத்தை இரட்டிப்பாக்க வேண்டும், தொடரவா?</Item>	
+		<Item English_Text = "Prompt For Name" ID = "prompt_for_name"></Item>
+		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme"></Item>
+		
 	</Ditto_String_Table>
 	
 	<Ditto_Options_Sheet>
@@ -406,6 +406,7 @@
 		//Added 12/17/16
 		<Item English_Text = "Fixup Sticky Clip Order" ID = "32909">ஒட்டும் இடைநிலைப் பலகை ஒழுங்கு சரிசெய்தல்</Item>	
 		<Item English_Text = "Save Current Clipboard" ID = "32904">தற்போதைய இடைநிலைப் பலகைபோர்டைச் சேமி</Item>
+		<Item English_Text = "Show Startup Message" ID = "32959"></Item>
 	</Ditto_Tray_Icon_Menu>
 	//Added in 9-11-09
 	<Ditto_Options_CopyBuffers>
@@ -580,5 +581,6 @@
 		<Item English_Text = "Global HotKeys" ID = "83">உலகளாவிய சூடான விசைகள்</Item>
 		<Item English_Text = "Delete Clip Data" ID = "84">இடைநிலைப் பலகை தரவை நீக்கு</Item>
 		<Item English_Text = "Replace Top Sticky Clip" ID = "85">சிறந்த ஒட்டும் இடைநிலைப் பலகையை மாற்றவும்</Item>
+		
 	</Ditto_Options_Quick_Paste_Keyboard>
 </Ditto_Language_File>

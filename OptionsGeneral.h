@@ -70,6 +70,7 @@ protected:
 	CBrush m_brush;
 	LOGFONT m_LogFont;
 	CFont m_envVarFont;
+	CString m_originalEnvVariables;
 	
 	void FillThemes();	
 	void FillLanguages();

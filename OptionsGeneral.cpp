@@ -88,9 +88,6 @@ BOOL COptionsGeneral::OnInitDialog()
 	CPropertyPage::OnInitDialog();
 
 	CString url = _T("https://sourceforge.net/p/ditto-cp/wiki/EnvironmentVariables/");
-	
-	/*m_envVarLink.SetURL(_T("\"") + url);
-	m_envVarLink.SetFontSize(-9);*/
 
 	m_brush.CreateSolidBrush(RGB(251, 251, 251));
 	
@@ -125,8 +122,6 @@ BOOL COptionsGeneral::OnInitDialog()
 	m_copyAppInclude.SetWindowText(g_Opt.GetCopyAppInclude());
 	m_copyAppExclude.SetWindowText(g_Opt.GetCopyAppExclude());
 
-	CString csPath = CGetSetOptions::GetDBPath(false);
-	m_ePath.SetWindowText(csPath);
 	
 	CGetSetOptions::GetFont(m_LogFont);	
 
@@ -165,7 +160,9 @@ BOOL COptionsGeneral::OnInitDialog()
 
 	theApp.m_Language.UpdateOptionGeneral(this);
 
-	OnEnChangePath();
+	//move after we translate so the en change gets called and we update with the correct translated value for environment variable
+	CString csPath = CGetSetOptions::GetDBPath(false);
+	m_ePath.SetWindowText(csPath);
 
 	return TRUE;
 }
@@ -635,12 +632,10 @@ void COptionsGeneral::OnBnClickedButtonFont()
 
 void COptionsGeneral::OnEnChangePath()
 {
-	// TODO:  If this is a RICHEDIT control, the control will not
-	// send this notification unless you override the CPropertyPage::OnInitDialog()
-	// function and call CRichEditCtrl().SetEventMask()
-	// with the ENM_CHANGE flag ORed into the mask.
-
-	// TODO:  Add your control notification handler code here
+	if (m_originalEnvVariables == _T(""))
+	{
+		m_envVarLink.GetWindowText(m_originalEnvVariables);
+	}
 
 	CString toSavePath;
 	m_ePath.GetWindowText(toSavePath);
@@ -651,7 +646,7 @@ void COptionsGeneral::OnEnChangePath()
 		m_envVarLink.SetWindowText(resolvedPath);		
 	}
 	else
-	{
-		m_envVarLink.SetWindowText(_T("Environment Variables"));
+	{		
+		m_envVarLink.SetWindowText(m_originalEnvVariables);
 	}		
 }
