@@ -114,7 +114,7 @@ void CCustomFriendsHelper::AddToMenu(CMenu *pMenu)
 		pMenu->AppendMenu(MF_SEPARATOR);
 	}
 	
-	pMenu->AppendMenuW(MF_STRING, (CustomFriendStartId + PromptForCustom), _T("Prompt For Name"));	
+	pMenu->AppendMenuW(MF_STRING, (CustomFriendStartId + PromptForCustom), theApp.m_Language.GetString("prompt_for_name", "Prompt For Name"));
 }
 
 void CCustomFriendsHelper::Add(CString item, CString desc)

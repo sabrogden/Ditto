@@ -157,6 +157,9 @@ __int64 GetLastWriteTime(const CString &csFile);
 #define WM_SHOW_MSG_WINDOW WM_USER + 226
 #define WM_SHOW_DITTO_GROUP WM_USER + 227
 #define WM_PLAIN_TEXT_PASTE WM_USER + 228
+#define WM_SHOW_ERROR_MSG	WM_USER + 229
+#define WM_RESTORE_DB	WM_USER + 230
+#define WM_BACKUP_DB	WM_USER + 231
 
 
 #if !defined(_BITSET_)
@@ -201,5 +204,8 @@ CString TopLevelWindowText(DWORD pid);
 BOOL DarkAppWindows10Setting();
 DWORD Windows10AccentColor();
 BOOL Windows10ColorTitleBar();
+
+BOOL BackupDbPrompt(HWND hwnd);
+BOOL RestoreDbPrompt(HWND hwnd);
 
 #endif // !defined(AFX_CP_GUI_GLOBALS__FBCDED09_A6F2_47EB_873F_50A746EBC86B__INCLUDED_)

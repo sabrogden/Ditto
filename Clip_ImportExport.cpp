@@ -3,7 +3,7 @@
 #include ".\clip_importexport.h"
 #include "shared/TextConvert.h"
 #include "sqlite/CppSQLite3.h"
-#include "zlib/zlib.h"
+#include <zlib.h>
 #include "Misc.h"
 
 #define CURRENT_EXPORT_VERSION 1

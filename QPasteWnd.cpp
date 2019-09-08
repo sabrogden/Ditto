@@ -344,6 +344,9 @@ ON_UPDATE_COMMAND_UI(ID_IMPORT_EMAIL_CONTENT_ATTACH, &CQPasteWnd::OnUpdateImport
 ON_COMMAND(ID_SPECIALPASTE_TOGGLECASE, &CQPasteWnd::OnSpecialpasteTogglecase)
 ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_TOGGLECASE, &CQPasteWnd::OnUpdateSpecialpasteTogglecase)
 ON_COMMAND(ID_FIRST_SHOWSTARTUPMESSAGE, &CQPasteWnd::OnFirstShowstartupmessage)
+
+ON_COMMAND(ID_MENU_RESTOREDATABSAE, &CQPasteWnd::OnFirstRestoreDb)
+ON_COMMAND(ID_MENU_BACKUPDATABASE, &CQPasteWnd::OnFirstBackupDb)
 END_MESSAGE_MAP()
 
 
@@ -7622,4 +7625,15 @@ void CQPasteWnd::OnFirstShowstartupmessage()
 {
 	BOOL existing = CGetSetOptions::GetShowStartupMessage();
 	CGetSetOptions::SetShowStartupMessage(!existing);
+}
+
+
+void CQPasteWnd::OnFirstRestoreDb()
+{
+	theApp.m_pMainFrame->PostMessage(WM_RESTORE_DB, 0, 0);
+}
+
+void CQPasteWnd::OnFirstBackupDb()
+{
+	theApp.m_pMainFrame->PostMessage(WM_BACKUP_DB, 0, 0);
 }

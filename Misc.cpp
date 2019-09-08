@@ -1610,3 +1610,75 @@ BOOL Windows10ColorTitleBar()
 
 	return colorTitleBar;
 }
+
+BOOL RestoreDbPrompt(HWND hwnd)
+{
+	BOOL ret = false;
+
+	OPENFILENAME ofn;
+	TCHAR szFile[400];
+	TCHAR szDir[400];
+
+	memset(&szFile, 0, sizeof(szFile));
+	memset(szDir, 0, sizeof(szDir));
+	memset(&ofn, 0, sizeof(ofn));
+
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = hwnd;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = _T("Ditto database backups (.zdb)\0*.zdb\0\0");
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	//ofn.lpstrInitialDir = szDir;
+	ofn.lpstrDefExt = _T("zdb");
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
+
+	if (GetOpenFileName(&ofn))
+	{
+		CWaitCursor wait;
+
+		CString dbPath = CGetSetOptions::GetDBPath();
+		CString backupPath(ofn.lpstrFile);
+		ret = RestoreDB(backupPath);
+	}
+
+	return ret;
+}
+
+BOOL BackupDbPrompt(HWND hwnd)
+{
+	BOOL ret = FALSE;
+
+	OPENFILENAME ofn;
+	TCHAR szFile[400];
+	TCHAR szDir[400];
+
+	memset(&szFile, 0, sizeof(szFile));
+	memset(szDir, 0, sizeof(szDir));
+	memset(&ofn, 0, sizeof(ofn));
+
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = hwnd;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = _T("Ditto database backups (.zdb)\0*.zdb\0\0");
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	//ofn.lpstrInitialDir = szDir;
+	ofn.lpstrDefExt = _T("zdb");
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
+
+	if (GetSaveFileName(&ofn))
+	{
+		CWaitCursor wait;
+
+		CString dbPath = CGetSetOptions::GetDBPath();
+		CString backupPath(ofn.lpstrFile);
+		ret = BackupDB(dbPath, backupPath);
+	}
+
+	return ret;
+}

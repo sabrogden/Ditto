@@ -30,7 +30,8 @@ BOOL RemoveOldEntries(bool checkIdleTime);
 
 BOOL EnsureDirectory(CString csPath);
 
-BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg);
+BOOL BackupDB(CString dbPath, CString backupPath);
+BOOL RestoreDB(CString backupPath);
 
 void ReOrderStickyClips(int parentID, CppSQLite3DB &db);
 

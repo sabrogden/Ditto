@@ -249,7 +249,7 @@
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;Winmm.lib;Pdh.lib;Version.lib;EncryptDecryptD.lib;zlib\zlibstat.lib;focus.lib;Shlwapi.lib;%(AdditionalDependencies);sqlite\lib32\icuuc.lib;sqlite\lib32\icutu.lib;sqlite\lib32\icuio.lib;sqlite\lib32\icuin.lib;sqlite\lib32\icudt.lib</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;Winmm.lib;Pdh.lib;Version.lib;EncryptDecryptD.lib;focus.lib;Shlwapi.lib;%(AdditionalDependencies);sqlite\lib32\icuuc.lib;sqlite\lib32\icutu.lib;sqlite\lib32\icuio.lib;sqlite\lib32\icuin.lib;sqlite\lib32\icudt.lib</AdditionalDependencies>
       <OutputFile>debug\Ditto.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -306,7 +306,7 @@
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;Winmm.lib;Pdh.lib;Version.lib;EncryptDecryptD64.lib;zlib\zlibstat64.lib;focus64.lib;Shlwapi.lib;sqlite\lib64\icuuc.lib;sqlite\lib64\icutu.lib;sqlite\lib64\icuio.lib;sqlite\lib64\icuin.lib;sqlite\lib64\icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;Winmm.lib;Pdh.lib;Version.lib;EncryptDecryptD64.lib;focus64.lib;Shlwapi.lib;sqlite\lib64\icuuc.lib;sqlite\lib64\icutu.lib;sqlite\lib64\icuio.lib;sqlite\lib64\icuin.lib;sqlite\lib64\icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>debug64\Ditto.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -2038,6 +2038,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="CP_Main.rgs" />
+    <None Include="packages.config" />
     <None Include="res\back.bmp" />
     <None Include="res\back1.bmp" />
     <None Include="res\back2.bmp" />
@@ -2291,10 +2292,17 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\zlib-msvc-x86.1.2.11.8900\build\native\zlib-msvc-x86.targets" Condition="Exists('packages\zlib-msvc-x86.1.2.11.8900\build\native\zlib-msvc-x86.targets')" />
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
       <UserProperties RESOURCE_FILE="CP_Main.rc" />
     </VisualStudio>
   </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\zlib-msvc-x86.1.2.11.8900\build\native\zlib-msvc-x86.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\zlib-msvc-x86.1.2.11.8900\build\native\zlib-msvc-x86.targets'))" />
+  </Target>
 </Project>

@@ -48,6 +48,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_WM_CLOSE()
 	ON_MESSAGE(WM_ADD_TO_DATABASE_FROM_SOCKET, OnAddToDatabaseFromSocket)
 	ON_MESSAGE(WM_SEND_RECIEVE_ERROR, OnErrorOnSendRecieve)
+	ON_MESSAGE(WM_SHOW_ERROR_MSG, OnErrorMsg)
 	ON_COMMAND(ID_FIRST_IMPORT, OnFirstImport)
 	ON_MESSAGE(WM_EDIT_WND_CLOSING, OnEditWndClose)
 	ON_WM_DESTROY()
@@ -74,6 +75,10 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 		ON_WM_WININICHANGE()
 		ON_COMMAND(ID_FIRST_SHOWSTARTUPMESSAGE, &CMainFrame::OnFirstShowstartupmessage)
 		ON_UPDATE_COMMAND_UI(ID_FIRST_SHOWSTARTUPMESSAGE, &CMainFrame::OnUpdateFirstShowstartupmessage)
+		ON_COMMAND(ID_FIRST_BACKUPDATABASE, &CMainFrame::OnFirstBackupdatabase)
+		ON_COMMAND(ID_FIRST_RESTOREDATABASE, &CMainFrame::OnFirstRestoredatabase)
+		ON_MESSAGE(WM_BACKUP_DB, OnBackupDb)
+		ON_MESSAGE(WM_RESTORE_DB, OnRestoreDb)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -1032,6 +1037,15 @@ LRESULT CMainFrame::OnErrorOnSendRecieve(WPARAM wParam, LPARAM lParam)
     return TRUE;
 }
 
+LRESULT CMainFrame::OnErrorMsg(WPARAM wParam, LPARAM lParam)
+{
+	CString csNewText = (TCHAR*)wParam;
+
+	ShowErrorMessage(_T("Ditto"), csNewText);
+
+	return TRUE;
+}
+
 CString WndName(HWND hParent)
 {
     TCHAR cWindowText[200];
@@ -1443,4 +1457,27 @@ void CMainFrame::OnUpdateFirstShowstartupmessage(CCmdUI *pCmdUI)
 	{
 		pCmdUI->m_pMenu->CheckMenuItem(ID_FIRST_SHOWSTARTUPMESSAGE, MF_UNCHECKED);
 	}
+}
+
+
+void CMainFrame::OnFirstBackupdatabase()
+{
+	BackupDbPrompt(m_hWnd);
+}
+
+void CMainFrame::OnFirstRestoredatabase()
+{
+	RestoreDbPrompt(m_hWnd);
+}
+
+LRESULT CMainFrame::OnBackupDb(WPARAM wParam, LPARAM lParam)
+{
+	OnFirstBackupdatabase();
+	return TRUE;
+}
+
+LRESULT CMainFrame::OnRestoreDb(WPARAM wParam, LPARAM lParam)
+{
+	OnFirstRestoredatabase();
+	return TRUE;
 }

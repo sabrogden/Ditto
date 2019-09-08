@@ -212,7 +212,6 @@ public:
     void SetKeyModiferState(bool bActive);
 	void SaveWindowSize();
 	void SelectFocusID();
-	void HideMenuGroup(CMenu* menu, CString text);
 	void SetSearchImages();
 	void RemoveStickyInternal(int id, bool &sort);
 
@@ -577,4 +576,6 @@ public:
 	afx_msg void OnSpecialpasteTogglecase();
 	afx_msg void OnUpdateSpecialpasteTogglecase(CCmdUI *pCmdUI);
 	afx_msg void OnFirstShowstartupmessage();
+	afx_msg void CQPasteWnd::OnFirstBackupDb();
+	afx_msg void CQPasteWnd::OnFirstRestoreDb();
 };

@@ -9,6 +9,8 @@
 #include <io.h>
 #include "Path.h"
 #include "InternetUpdate.h"
+#include <zlib.h>
+#include "Shared/TextConvert.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -249,13 +251,8 @@ void ReOrderStickyClips(int parentID, CppSQLite3DB &db)
 
 BOOL ValidDB(CString csPath, BOOL bUpgrade)
 {
-	CDittoPopupWindow *popUpMsg = NULL;
-
 	try
 	{
-		BOOL didBackup = FALSE;
-		CString backupFilePrefix = _T("Before_Update_To");
-
 		CppSQLite3DB db;
 		db.open(csPath);
 		
@@ -295,9 +292,6 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
  		}
 		catch(CppSQLite3Exception& e)
 		{
-			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
-
  			e.errorCode();
  		}
 
@@ -308,9 +302,6 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		}
 		catch(CppSQLite3Exception& e)
 		{
-			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
-
 			e.errorCode();
 
 			db.execDML(_T("CREATE TABLE CopyBuffers(")
@@ -326,9 +317,6 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		}
 		catch(CppSQLite3Exception& e)
 		{
-			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
-
 			e.errorCode();
 
 			db.execDML(_T("CREATE TABLE MainDeletes(")
@@ -359,9 +347,6 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		}
 		catch(CppSQLite3Exception& e)
 		{
-			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
-
 			db.execDML(_T("ALTER TABLE Main ADD clipOrder REAL"));
 			db.execDML(_T("ALTER TABLE Main ADD clipGroupOrder REAL"));
 
@@ -381,10 +366,6 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		}
 		catch(CppSQLite3Exception& e)
 		{
-			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
-
-
 			db.execDML(_T("ALTER TABLE Main ADD globalShortCut INTEGER"));
 
 			e.errorCode();
@@ -396,9 +377,6 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		}
 		catch(CppSQLite3Exception& e)
 		{
-			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
-
 			db.execDML(_T("ALTER TABLE Main ADD lastPasteDate INTEGER"));
 			db.execDML(_T("Update Main set lastPasteDate = lDate"));
 			db.execDMLEx(_T("Update Main set lastPasteDate = %d where lastPasteDate <= 0"), (int)CTime::GetCurrentTime().GetTime());
@@ -412,9 +390,6 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		}
 		catch (CppSQLite3Exception& e)
 		{
-			if (didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
-
 			db.execDML(_T("ALTER TABLE Main ADD stickyClipOrder REAL"));
 			db.execDML(_T("ALTER TABLE Main ADD stickyClipGroupOrder REAL"));
 
@@ -433,9 +408,6 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 
 			if(count == 0)
 			{
-				if (didBackup == FALSE)
-					didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
-
 				db.execDML(_T("Update Main set stickyClipOrder = -(2147483647) where stickyClipOrder IS NULL;"));
 				db.execDML(_T("Update Main set stickyClipGroupOrder = -(2147483647) where stickyClipGroupOrder IS NULL;"));
 				db.execDML(_T("Update Main set stickyClipOrder = -(2147483647) where stickyClipOrder = 0;"));
@@ -448,9 +420,6 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		}
 		catch (CppSQLite3Exception& e)
 		{
-			if (didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
-
 			e.errorCode();
 		}
 
@@ -461,9 +430,6 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 		}
 		catch(CppSQLite3Exception& e)
 		{
-			if(didBackup == FALSE)
-				didBackup = BackupDB(csPath, backupFilePrefix, &popUpMsg);
-
 			db.execDML(_T("ALTER TABLE Main ADD MoveToGroupShortCut INTEGER"));
 			db.execDML(_T("ALTER TABLE Main ADD GlobalMoveToGroupShortCut INTEGER"));			
 
@@ -472,57 +438,16 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 
-	
-
-	if(popUpMsg != NULL &&
-		IsWindow(popUpMsg->m_hWnd))
-	{
-		popUpMsg->CloseWindow();
-		popUpMsg->DestroyWindow();
-		delete popUpMsg;
-		popUpMsg = NULL;
-	}
 	return TRUE;                                                     
 }
 
-
-
-BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg)
+BOOL BackupDB(CString dbPath, CString backupPath)
 {
-	if ((*popUpMsg) == NULL)
-	{
-		CRect r = DefaultMonitorRect();
-		*popUpMsg = new CDittoPopupWindow();
-		(*popUpMsg)->Create(CRect(r.right - 400, r.bottom - 130, r.right - 10, r.bottom - 10), NULL);		
-		::SetWindowPos((*popUpMsg)->m_hWnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_SHOWWINDOW);
-		(*popUpMsg)->ShowWindow(SW_SHOW);
-		(*popUpMsg)->UpdateText(_T("Backing up Ditto's Database"));
-	}
-	CString backup = GetFilePath(dbPath);
-
-	CInternetUpdate update;
-
-	auto runningVersion = update.GetRunningVersion();
-	CString versionString = update.GetVersionString(runningVersion);
-
-	backup += GetFileName(dbPath) += _T("_") + prefix + _T("_") + versionString;
-	backup.Replace(_T(".db"), _T(""));
-	backup.Replace(_T("."), _T("_"));
-
-	CString temp = backup;
-
-	temp += _T(".db");
-
-	int i = 1;
-	while(FileExists(temp))
-	{
-		temp.Format(_T("%s_%d.db"), backup, i);
-		i++;
-	}
-
-	backup = temp;
-
 	BOOL ret = FALSE;
+
+	Log(StrF(_T("Start backing up db, from: %s to %s"), dbPath, backupPath));
+
+	CString errorMessage = _T("");
 
 	try
 	{
@@ -537,25 +462,26 @@ BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg)
 			char *pBuffer = new char[65536];
 			if(pBuffer != NULL)
 			{
-				CFile writeFile;
-				if(writeFile.Open(backup, CFile::modeCreate|CFile::modeWrite|CFile::typeBinary|CFile::shareDenyNone, &ex))
+				gzFile f = gzopen(CTextConvert::ConvertToChar(backupPath), "w");
+				
+				if(f != NULL)
 				{
 					do
 					{
 						readBytes = file.Read(pBuffer, 65536);
-						writeFile.Write(pBuffer, readBytes);
+						gzwrite(f, pBuffer, readBytes);
 						totalReadSize+= readBytes;
 
 						int percent = (int)((totalReadSize * 100) / fileSize);
 						if(percent != percentageComplete)
 						{
 							percentageComplete = percent;
-							(*popUpMsg)->SetProgressBarPercent(percentageComplete);
+							Log(StrF(_T("backing up db percent done: %d"), percentageComplete));
 						}
 
 					}while(readBytes >= 65536);
 
-					writeFile.Close();
+					gzclose(f);
 
 					ret = TRUE;
 				}
@@ -563,18 +489,137 @@ BOOL BackupDB(CString dbPath, CString prefix, CDittoPopupWindow **popUpMsg)
 
 			file.Close();
 		}
+		else
+		{
+			TCHAR szCause[255];
+			ex.GetErrorMessage(szCause, 255);
+			errorMessage = szCause;
+		}
 	}
 	catch(...)
 	{
 
 	}
-	//BOOL ret = CopyFile(dbPath, backup, TRUE);
 
-	if ((*popUpMsg) != NULL)
+	if (errorMessage != _T(""))
 	{
-		(*popUpMsg)->HideProgressBar();
-		(*popUpMsg)->UpdateText(_T("Running Ditto database scripts ..."));
+		CString cs;
+		cs.Format(_T("Restore ERROR: %s"), errorMessage);
+		::SendMessage(theApp.m_MainhWnd, WM_SHOW_ERROR_MSG, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
+		cs.ReleaseBuffer();
 	}
+	
+	Log(StrF(_T("Done restoring db, from: %s, errors: %s"), backupPath, errorMessage));
+
+	return ret;
+}
+
+BOOL RestoreDB(CString backupPath)
+{
+	BOOL ret = FALSE;
+
+	Log(StrF(_T("Start restoring db, from: %s"), backupPath));
+
+	CString errorMessage = _T("");
+
+	using namespace nsPath;
+	CPath backupPathPath(backupPath);
+
+	CString tempPath = CGetSetOptions::GetPath(PATH_RESTORE_TEMP);
+	tempPath += backupPathPath.GetName();
+
+	try
+	{
+		gzFile f = gzopen(CTextConvert::ConvertToChar(backupPath), "r");
+		if (f != NULL)
+		{
+			CFile file;
+			CFileException ex;
+			if (file.Open(tempPath, CFile::bufferWrite | CFile::modeCreate, &ex))
+			{
+				ULONGLONG totalReadSize = 0;
+				int readBytes = 0;
+				char *pBuffer = new char[65536];
+				int percentageComplete = 0;
+
+				do
+				{
+					readBytes = gzread(f, pBuffer, 65536);
+					file.Write(pBuffer, readBytes);
+
+					totalReadSize += readBytes;
+
+					Log(StrF(_T("restoring db uncompressed bytes read: %d"), readBytes));
+
+				} while (readBytes >= 65536);
+
+				file.Close();
+			}
+			else
+			{
+				//errorMessage.Format(_T("Failed to open temp file %s, exception: %s"), tempPath, ex.GetErrorMessage());
+			}
+
+			gzclose(f);
+
+			if (ValidDB(tempPath, true))
+			{
+				CString defaultDbPath = GetDefaultDBName();
+				CPath defaultDbPathPath(defaultDbPath);
+
+				CString path = defaultDbPathPath.GetPath();
+
+				CString newFullPath = path + backupPathPath.GetName();
+
+				int i = 1;
+				while (FileExists(newFullPath))
+				{
+					newFullPath.Format(_T("%s%s_%d.db"), path, backupPathPath.GetTitle(), i);
+					i++;
+				}
+
+				if (MoveFile(tempPath, newFullPath))
+				{
+					CGetSetOptions::SetDBPath(newFullPath);
+					OpenDatabase(newFullPath);
+
+					ret = TRUE;
+				}
+				else
+				{
+					errorMessage.Format(_T("Failed to copy file %s to %s"), tempPath, newFullPath);
+				}
+			}
+			else
+			{
+				errorMessage.Format(_T("Unpacked database is not a valid Ditto database"));
+			}
+		}
+		else
+		{
+			errorMessage.Format(_T("Failed to open file %s"), tempPath);
+		}
+	}
+	catch (CFileException* pEx)
+	{
+		TCHAR cause[255];
+		pEx->GetErrorMessage(cause, 255);
+		errorMessage.Format(_T("Exception: %s"), cause);
+	}
+	catch (...)
+	{
+		errorMessage.Format(_T("Exception: ... catch"));
+	}
+
+	if (errorMessage != _T(""))
+	{
+		CString cs;
+		cs.Format(_T("Restore ERROR: %s"), errorMessage);
+		::SendMessage(theApp.m_MainhWnd, WM_SHOW_ERROR_MSG, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
+		cs.ReleaseBuffer();
+	}
+
+	Log(StrF(_T("Done restoring db, from: %s, error: %s"), backupPath, errorMessage));
 
 	return ret;
 }

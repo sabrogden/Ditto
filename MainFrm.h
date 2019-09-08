@@ -114,6 +114,7 @@ protected:
     afx_msg LRESULT OnClipboardCopied(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnErrorOnSendRecieve(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnErrorMsg(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEditWndClose(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnSetConnected(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnOpenCloseWindow(WPARAM wParam, LPARAM lParam);
@@ -143,4 +144,8 @@ DECLARE_MESSAGE_MAP()public:
 	afx_msg void OnWinIniChange(LPCTSTR lpszSection);
 	afx_msg void OnFirstShowstartupmessage();
 	afx_msg void OnUpdateFirstShowstartupmessage(CCmdUI *pCmdUI);
+	afx_msg void OnFirstBackupdatabase();
+	afx_msg void OnFirstRestoredatabase();
+	afx_msg LRESULT OnRestoreDb(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnBackupDb(WPARAM wParam, LPARAM lParam);
 };

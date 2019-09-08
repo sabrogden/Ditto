@@ -1749,19 +1749,6 @@ CString CGetSetOptions::GetPath(long lPathID)
 
 		break;
 
-	case PATH_UPDATE_FILE:
-		//same path as the executable
-		break;
-
-	case PATH_DATABASE:
-		break;
-
-	case PATH_INI:
-		break;
-
-	case PATH_U3_HWND_INI:
-		break;
-
 	case PATH_ADDINS:
 		csDir += "Addins\\";		
 		break;
@@ -1790,18 +1777,19 @@ CString CGetSetOptions::GetPath(long lPathID)
 		csDir += _T("ClipCompare\\");
 		break;
 
+	case PATH_RESTORE_TEMP:
+		if (CGetSetOptions::GetIsPortableDitto() == false)
+		{
+			csDir = GetTempFilePath();
+		}
+		csDir += _T("RestoreDb\\");
+		break;
+
 	}
 
 	CreateDirectory(csDir, NULL);
 
 	return csDir;
-}
-
-void CGetSetOptions::WriteU3Hwnd(HWND hWnd)
-{
-	CString csIniFile = GetPath(PATH_U3_HWND_INI);
-	csIniFile += _T("DittohWnd.ini");
-	WritePrivateProfileInt(_T("Ditto"), _T("MainhWnd"), (int)hWnd, csIniFile);
 }
 
 long CGetSetOptions::GetDittoRestoreClipboardDelay()

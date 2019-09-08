@@ -55,14 +55,11 @@ public:
 #define PATH_REMOTE_FILES	1
 #define PATH_LOG_FILE		2
 #define PATH_LANGUAGE		3
-#define PATH_UPDATE_FILE	4
-#define PATH_DATABASE		5
-#define PATH_INI			6
-#define PATH_U3_HWND_INI	7
 #define PATH_THEMES			8
 #define PATH_ADDINS			9
 #define PATH_DRAG_FILES		10
 #define PATH_CLIP_DIFF		11
+#define PATH_RESTORE_TEMP	12
 
 class CGetSetOptions
 {
@@ -350,7 +347,6 @@ public:
 
 	static CString  GetPath(long lPathID);
 
-	static void		WriteU3Hwnd(HWND hWnd);
 	static __int64	nLastDbWriteTime;
 
 	static long		GetDittoRestoreClipboardDelay();

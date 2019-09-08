@@ -783,6 +783,11 @@
 #define ID_QUICKOPTIONS_AUTO            32957
 #define ID_SPECIALPASTE_TOGGLECASE      32958
 #define ID_FIRST_SHOWSTARTUPMESSAGE     32959
+#define ID_FIRST_BACKUPDATABASE         32960
+#define ID_FIRST_RESTOREDATABASE        32961
+#define ID_MENU_BACKUPDATABASE          32962
+#define ID_MENU_SDF                     32963
+#define ID_MENU_RESTOREDATABSAE         32964
 
 // Next default values for new objects
 // 
@@ -790,7 +795,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        387
-#define _APS_NEXT_COMMAND_VALUE         32960
+#define _APS_NEXT_COMMAND_VALUE         32965
 #define _APS_NEXT_CONTROL_VALUE         2172
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
