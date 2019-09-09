@@ -126,6 +126,15 @@ End If
 			<indent type='3'>1</indent>
 			<name>Build Ditto</name>
 		</step>
+		<step action='NuGet'>
+			<Command>restore</Command>
+			<NonInteractive type='11'>-1</NonInteractive>
+			<Opt>-SolutionDirectory %workDir%</Opt>
+			<PackageId>%workDir%\CP_Main.vcxproj</PackageId>
+			<buildfailsteps type='11'>0</buildfailsteps>
+			<indent type='3'>2</indent>
+			<name>Restore NuGet</name>
+		</step>
 		<step action='Make VS 2017'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
