@@ -135,7 +135,7 @@
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;Winmm.lib;Version.lib;EncryptDecrypt.lib;zlib\zlibstat.lib;focus.lib;Shlwapi.lib;sqlite\lib32\icuuc.lib;sqlite\lib32\icutu.lib;sqlite\lib32\icuio.lib;sqlite\lib32\icuin.lib;sqlite\lib32\icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;Winmm.lib;Version.lib;EncryptDecrypt.lib;focus.lib;Shlwapi.lib;sqlite\lib32\icuuc.lib;sqlite\lib32\icutu.lib;sqlite\lib32\icuio.lib;sqlite\lib32\icuin.lib;sqlite\lib32\icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>release\Ditto.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -194,7 +194,7 @@
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;Winmm.lib;Version.lib;EncryptDecrypt64.lib;zlib\zlibstat64.lib;focus64.lib;Shlwapi.lib;sqlite\lib64\icuuc.lib;sqlite\lib64\icutu.lib;sqlite\lib64\icuio.lib;sqlite\lib64\icuin.lib;sqlite\lib64\icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;Winmm.lib;Version.lib;EncryptDecrypt64.lib;focus64.lib;Shlwapi.lib;sqlite\lib64\icuuc.lib;sqlite\lib64\icutu.lib;sqlite\lib64\icuio.lib;sqlite\lib64\icuin.lib;sqlite\lib64\icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>release64\Ditto.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
