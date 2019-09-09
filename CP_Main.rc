@@ -430,7 +430,7 @@ BEGIN
         MENUITEM "Delete Clip Data",            ID_MENU_DELETECLIPDATA32934
         MENUITEM SEPARATOR
         MENUITEM "Backup Database",             ID_MENU_BACKUPDATABASE
-        MENUITEM "Restore Databsae",            ID_MENU_RESTOREDATABSAE
+        MENUITEM "Restore Database",            ID_MENU_RESTOREDATABSAE
         MENUITEM SEPARATOR
         MENUITEM "Import Clip(s)",              ID_MENU_IMPORTCLIP32935
         MENUITEM "New Clip",                    ID_MENU_NEWCLIP32937

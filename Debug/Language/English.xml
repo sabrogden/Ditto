@@ -145,6 +145,9 @@
 		<Item English_Text = "Decrease" ID = "32948"></Item>
 		<Item English_Text = "Toggle Enabled" ID = "32949"></Item>
 		
+		<Item English_Text = "Backup Database" ID = "32962"></Item>
+		<Item English_Text = "Restore Dastabase" ID = "32964"></Item>
+		
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039"></Item>
@@ -401,8 +404,13 @@
 		<Item English_Text = "Ditto is running minimized, Ditto can be opened by hot keys or by clicking the task tray icon" ID = "StartuMsg"></Item>
 		<Item English_Text = "There are no results for" ID = "NoSearchResults"></Item>
 		<Item English_Text = "Warning this can take quite a long time and require up to double the hard drive space as your current database size, Continue?" ID = "CompactRepairWarning"></Item>
-		<Item English_Text = "Prompt For Name" ID = "prompt_for_name">tt</Item>
+		<Item English_Text = "Prompt For Name" ID = "prompt_for_name"></Item>
 		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme"></Item>
+		
+		<Item English_Text = "BackupDbMsg" ID = "Backing up database"></Item>
+		<Item English_Text = "RestoreDbMsg" ID = "Restoring database"></Item>
+		
+		
 		
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
@@ -431,6 +439,10 @@
 		<Item English_Text = "Save Current Clipboard" ID = "32904"></Item>
 		
 		<Item English_Text = "Show Startup Message" ID = "32959"></Item>
+		
+		<Item English_Text = "Backup Database" ID = "32960"></Item>
+		<Item English_Text = "Restore Database" ID = "32961"></Item>
+		
 	</Ditto_Tray_Icon_Menu>
 
 	//Added in 9-11-09

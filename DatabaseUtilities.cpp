@@ -443,6 +443,13 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 
 BOOL BackupDB(CString dbPath, CString backupPath)
 {
+	CRect r = DefaultMonitorRect();
+	CPopup status((r.right - 500), r.bottom - 100, ::GetForegroundWindow());
+
+	CString msg = theApp.m_Language.GetString("BackupDbMsg", "Backing up database");
+
+	status.Show(StrF(_T("Ditto - %s - %s"), msg, backupPath));
+
 	BOOL ret = FALSE;
 
 	Log(StrF(_T("Start backing up db, from: %s to %s"), dbPath, backupPath));
@@ -477,6 +484,8 @@ BOOL BackupDB(CString dbPath, CString backupPath)
 						{
 							percentageComplete = percent;
 							Log(StrF(_T("backing up db percent done: %d"), percentageComplete));
+
+							status.Show(StrF(_T("Ditto - %02d%% %s - %s"), percentageComplete, msg, backupPath));
 						}
 
 					}while(readBytes >= 65536);
@@ -516,6 +525,12 @@ BOOL BackupDB(CString dbPath, CString backupPath)
 
 BOOL RestoreDB(CString backupPath)
 {
+	CRect r = DefaultMonitorRect();
+	CPopup status((r.right - 500), r.bottom - 100, ::GetForegroundWindow());
+
+	CString msg = theApp.m_Language.GetString("RestoreDbMsg", "Restoring database");
+	status.Show(StrF(_T("Ditto - %s - %s"), msg, backupPath));
+
 	BOOL ret = FALSE;
 
 	Log(StrF(_T("Start restoring db, from: %s"), backupPath));
@@ -526,6 +541,7 @@ BOOL RestoreDB(CString backupPath)
 	CPath backupPathPath(backupPath);
 
 	CString tempPath = CGetSetOptions::GetPath(PATH_RESTORE_TEMP);
+	
 	tempPath += backupPathPath.GetName();
 
 	try
@@ -569,6 +585,7 @@ BOOL RestoreDB(CString backupPath)
 
 				CString path = defaultDbPathPath.GetPath();
 
+				backupPathPath.RenameExtension(_T("db"));
 				CString newFullPath = path + backupPathPath.GetName();
 
 				int i = 1;
