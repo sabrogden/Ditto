@@ -22,6 +22,11 @@ public:
 
 	bool m_hoveringOverImage;
 
+
+	CPoint m_ptFirst;
+	CPoint m_ptSecond;
+	DWORD m_dwArguments;
+
 protected:
 	DECLARE_MESSAGE_MAP()
 
@@ -35,6 +40,8 @@ public:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseHWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
+	afx_msg LRESULT OnGesture(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnGestureNotify(WPARAM wParam, LPARAM lParam);
 };
 
 

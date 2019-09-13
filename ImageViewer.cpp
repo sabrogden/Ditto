@@ -35,6 +35,8 @@ BEGIN_MESSAGE_MAP(CImageViewer, CWnd)
 	ON_WM_LBUTTONUP()
 	ON_WM_MOUSEHWHEEL()
 	ON_WM_ERASEBKGND()
+	ON_MESSAGE(WM_GESTURE, &CImageViewer::OnGesture)
+	ON_MESSAGE(WM_GESTURENOTIFY, &CImageViewer::OnGestureNotify)
 END_MESSAGE_MAP()
 
 BOOL CImageViewer::Create(CWnd* pParent)
@@ -164,22 +166,27 @@ void CImageViewer::OnPaint()
 
 void CImageViewer::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
+	//OutputDebugString(_T("OnHScroll\r\n"));
 	m_scrollHelper.OnHScroll(nSBCode, nPos, pScrollBar);
 }
 
 void CImageViewer::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
+	//OutputDebugString(_T("OnVScroll\r\n"));
 	m_scrollHelper.OnVScroll(nSBCode, nPos, pScrollBar);
 }
 
 BOOL CImageViewer::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
+	//OutputDebugString(_T("OnMouseWheel\r\n"));
 	BOOL wasScrolled = m_scrollHelper.OnMouseWheel(nFlags, zDelta, pt);
 	return wasScrolled;
 }
 
 void CImageViewer::OnMouseHWheel(UINT nFlags, short zDelta, CPoint pt)
 {
+	//OutputDebugString(_T("OnMouseHWheel\r\n"));
+
 	BOOL wasScrolled = m_scrollHelper.OnMouseHWheel(nFlags, zDelta, pt);
 
 	CWnd::OnMouseHWheel(nFlags, zDelta, pt);
@@ -238,4 +245,165 @@ BOOL CImageViewer::OnEraseBkgnd(CDC* pDC)
 	return FALSE;
 }
 
+LRESULT CImageViewer::OnGesture(WPARAM wParam, LPARAM lParam)
+{
+	CPoint ptZoomCenter;
+	double k;
+	GESTUREINFO gi;
 
+	ZeroMemory(&gi, sizeof(GESTUREINFO));
+
+	gi.cbSize = sizeof(GESTUREINFO);
+
+	BOOL bResult = GetGestureInfo((HGESTUREINFO)lParam, &gi);
+	BOOL bHandled = FALSE;
+
+	if (bResult) {
+		// now interpret the gesture
+		switch (gi.dwID) {
+		case GID_ZOOM:
+			//OutputDebugString(_T("zoom\r\n"));
+			// Code for zooming goes here     
+			bHandled = TRUE;
+
+			switch (gi.dwFlags)
+			{
+			case GF_BEGIN:
+				m_dwArguments = LODWORD(gi.ullArguments);
+				m_ptFirst.x = gi.ptsLocation.x;
+				m_ptFirst.y = gi.ptsLocation.y;
+				::ScreenToClient(m_hWnd, &m_ptFirst);
+				break;
+
+			default:
+				// We read here the second point of the gesture. This is middle point between 
+				// fingers in this new position.
+				m_ptSecond.x = gi.ptsLocation.x;
+				m_ptSecond.y = gi.ptsLocation.y;
+				::ScreenToClient(m_hWnd, &m_ptSecond);
+
+				// We have to calculate zoom center point 
+				ptZoomCenter.x = (m_ptFirst.x + m_ptSecond.x) / 2;
+				ptZoomCenter.y = (m_ptFirst.y + m_ptSecond.y) / 2;
+
+				// The zoom factor is the ratio between the new and the old distance. 
+				// The new distance between two fingers is stored in gi.ullArguments 
+				// (lower DWORD) and the old distance is stored in _dwArguments.
+				k = (double)(LODWORD(gi.ullArguments)) / (double)(m_dwArguments);
+
+				// Now we process zooming in/out of the object
+				//ProcessZoom(k, ptZoomCenter.x, ptZoomCenter.y);
+
+				//m_scrollHelper.Update(ptZoomCenter);
+
+				//CString cs;
+				//cs.Format(_T("ZOOM k: %f, x: %d, y: %d\r\n"), k, ptZoomCenter.x, ptZoomCenter.y);
+				//OutputDebugString(cs);
+
+				//InvalidateRect(hWnd, NULL, TRUE);
+
+				// Now we have to store new information as a starting information 
+				// for the next step in this gesture.
+				m_ptFirst = m_ptSecond;
+				m_dwArguments = LODWORD(gi.ullArguments);
+				break;
+			}
+			break;
+		case GID_PAN:
+			//OutputDebugString(_T("pan\r\n"));
+			// Code for panning goes here
+			bHandled = TRUE;
+			switch (gi.dwFlags)
+			{
+			case GF_BEGIN:
+				m_ptFirst.x = gi.ptsLocation.x;
+				m_ptFirst.y = gi.ptsLocation.y;
+				::ScreenToClient(m_hWnd, &m_ptFirst);
+				break;
+
+			default:
+				// We read the second point of this gesture. It is a middle point
+				// between fingers in this new position
+				m_ptSecond.x = gi.ptsLocation.x;
+				m_ptSecond.y = gi.ptsLocation.y;
+				::ScreenToClient(m_hWnd, &m_ptSecond);
+
+				int xDiff = m_ptSecond.x - m_ptFirst.x;
+
+				int yDiff = m_ptSecond.y - m_ptFirst.y;
+
+				m_scrollHelper.Update(CPoint(-xDiff, -yDiff));
+
+				//CString cs;
+				//cs.Format(_T("x: %d, y: %d\r\n"), xDiff, yDiff);
+				//OutputDebugString(cs);
+
+				// We apply move operation of the object
+				//ProcessMove(_ptSecond.x - _ptFirst.x, _ptSecond.y - _ptFirst.y);
+
+				//InvalidateRect(hWnd, NULL, TRUE);
+
+				// We have to copy second point into first one to prepare
+				// for the next step of this gesture.
+				m_ptFirst = m_ptSecond;
+				break;
+			}
+
+			break;
+			break;
+		case GID_ROTATE:
+			//OutputDebugString(_T("rotate\r\n"));
+			// Code for rotation goes here
+			bHandled = TRUE;
+			break;
+		case GID_TWOFINGERTAP:
+			//OutputDebugString(_T("two finger\r\n"));
+			// Code for two-finger tap goes here
+			bHandled = TRUE;
+			break;
+		case GID_PRESSANDTAP:
+			//OutputDebugString(_T("press and tap\r\n"));
+			// Code for roll over goes here
+			bHandled = TRUE;
+			break;
+		default:
+			// A gesture was not recognized
+			break;
+		}
+	}
+	else {
+		DWORD dwErr = GetLastError();
+		if (dwErr > 0) {
+			//MessageBoxW(hWnd, L"Error!", L"Could not retrieve a GESTUREINFO structure.", MB_OK);
+		}
+	}
+
+	return FALSE;
+}
+
+LRESULT CImageViewer::OnGestureNotify(WPARAM wParam, LPARAM lParam)
+{
+	// This is the right place to define the list of gestures that this
+			// application will support. By populating GESTURECONFIG structure 
+			// and calling SetGestureConfig function. We can choose gestures 
+			// that we want to handle in our application. In this app we
+			// decide to handle all gestures.
+	GESTURECONFIG gc = {
+		GID_PAN,              // gesture ID
+		GC_PAN | GC_PAN_WITH_SINGLE_FINGER_VERTICALLY | GC_PAN_WITH_SINGLE_FINGER_HORIZONTALLY | GC_PAN_WITH_GUTTER | GC_PAN_WITH_INERTIA, // settings related to gesture ID that are to be 
+						// turned on
+		0               // settings related to gesture ID that are to be 
+						// turned off
+	};
+
+	BOOL bResult = ::SetGestureConfig(
+		m_hWnd,                 // window for which configuration is specified  
+		0,                    // reserved, must be 0
+		1,                    // count of GESTURECONFIG structures
+		&gc,                  // array of GESTURECONFIG structures, dwIDs will be processed in the
+							  // order specified and repeated occurances will overwrite previous ones
+		sizeof(GESTURECONFIG) // sizeof(GESTURECONFIG)
+	);
+
+	return TRUE;
+}

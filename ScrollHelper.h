@@ -43,6 +43,8 @@ public:
 	BOOL   OnMouseHWheel(UINT nFlags, short zDelta, CPoint pt);
     void   OnSize(UINT nType, int cx, int cy);
 
+	BOOL   Update(CPoint changes);
+
 private:
     int    Get32BitScrollPos(int bar, CScrollBar* pScrollBar);
     void   UpdateScrollInfo();

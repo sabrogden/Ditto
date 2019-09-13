@@ -251,6 +251,57 @@ void CScrollHelper::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
     }
 }
 
+BOOL CScrollHelper::Update(CPoint changes)
+{
+	int deltaYPos = changes.y;
+
+	int newYScrollPos = m_scrollPos.cy + deltaYPos;
+
+	// If the new scroll position is negative, we adjust
+	// deltaPos in order to scroll the window back to origin.
+	if (newYScrollPos < 0)
+		deltaYPos = -m_scrollPos.cy;
+
+	// If the new scroll position is greater than the max scroll position,
+	// we adjust deltaPos in order to scroll the window precisely to the
+	// maximum position.
+	int maxYScrollPos = m_displaySize.cy - m_pageSize.cy;
+	if (newYScrollPos > maxYScrollPos)
+		deltaYPos = maxYScrollPos - m_scrollPos.cy;
+
+	if (changes.y != 0)
+	{
+		m_scrollPos.cy += deltaYPos;
+		m_attachWnd->SetScrollPos(SB_VERT, m_scrollPos.cy, TRUE);
+	}
+
+	int deltaXPos = changes.x;
+
+	int newXScrollPos = m_scrollPos.cx + deltaXPos;
+
+	// If the new scroll position is negative, we adjust
+	// deltaPos in order to scroll the window back to origin.
+	if (newXScrollPos < 0)
+		deltaXPos = -m_scrollPos.cx;
+
+	// If the new scroll position is greater than the max scroll position,
+	// we adjust deltaPos in order to scroll the window precisely to the
+	// maximum position.
+	int maxXScrollPos = m_displaySize.cx - m_pageSize.cx;
+	if (newXScrollPos > maxXScrollPos)
+		deltaXPos = maxXScrollPos - m_scrollPos.cx;
+
+	if (changes.x != 0)
+	{
+		m_scrollPos.cx += deltaXPos;
+		m_attachWnd->SetScrollPos(SB_HORZ, m_scrollPos.cx, TRUE);
+	}
+		
+	m_attachWnd->ScrollWindow(-deltaXPos, -deltaYPos);
+
+	return 1;
+}
+
 BOOL CScrollHelper::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
     if ( m_attachWnd == NULL )
@@ -418,7 +469,7 @@ void CScrollHelper::UpdateScrollBar(int bar, int windowSize, int displaySize,
             scrollPos = (LONG)(1.0 * scrollPos * windowSize / pageSize);
         }
         pageSize = windowSize;
-        scrollPos = min(scrollPos, displaySize - pageSize - 1);
+		scrollPos = min(scrollPos, displaySize - pageSize - 1);
         deltaPos = m_attachWnd->GetScrollPos(bar) - scrollPos;
     }
     else
