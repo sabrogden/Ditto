@@ -187,7 +187,7 @@ void CImageViewer::OnMouseHWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	//OutputDebugString(_T("OnMouseHWheel\r\n"));
 
-	BOOL wasScrolled = m_scrollHelper.OnMouseHWheel(nFlags, zDelta, pt);
+	BOOL wasScrolled = m_scrollHelper.OnMouseHWheel(nFlags, -zDelta, pt);
 
 	CWnd::OnMouseHWheel(nFlags, zDelta, pt);
 }
