@@ -60,7 +60,11 @@ void CScrollHelper::DetachWnd()
 void CScrollHelper::SetDisplaySize(int displayWidth, int displayHeight)
 {
 	int cxSB = ::GetSystemMetrics(SM_CXVSCROLL);
-	int cySB = ::GetSystemMetrics(SM_CYHSCROLL);
+	int cySB = ::GetSystemMetrics(SM_CYHSCROLL);	
+
+	CString msg;
+	msg.Format(_T("width: %d, height: %d"), displayWidth, displayHeight);
+	OutputDebugString(msg);
 
     m_displaySize = CSize(displayWidth + cxSB, displayHeight + cySB);
 

@@ -72,6 +72,8 @@ BOOL CImageViewer::Create(CWnd* pParent)
 	return TRUE;
 }
 
+double m_scale = 1;
+
 void CImageViewer::UpdateBitmapSize()
 {
 	if (m_pGdiplusBitmap != NULL)
@@ -88,7 +90,7 @@ void CImageViewer::UpdateBitmapSize()
 		else
 		{
 			m_scrollHelper.AttachWnd(this);
-			m_scrollHelper.SetDisplaySize(m_pGdiplusBitmap->GetWidth(), m_pGdiplusBitmap->GetHeight());
+			m_scrollHelper.SetDisplaySize(m_pGdiplusBitmap->GetWidth() * m_scale, m_pGdiplusBitmap->GetHeight() * m_scale);
 		}
 	}
 }
@@ -154,7 +156,17 @@ void CImageViewer::OnPaint()
 
 			CSize s = m_scrollHelper.GetScrollPos();
 			Gdiplus::Graphics graphics(memDC);
-			graphics.DrawImage(m_pGdiplusBitmap, rect.left, rect.top, s.cx, s.cy, width, height, Gdiplus::UnitPixel);
+
+			graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+
+			graphics.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHalf);
+			//graphics.ScaleTransform(m_scale, m_scale);
+			double x = m_scale;
+			if (x != 1)
+			{
+				x = 1.0 + (1.0 - m_scale);
+			}
+			graphics.DrawImage(m_pGdiplusBitmap, rect.left, rect.top, s.cx, s.cy, width * (x), height * (x), Gdiplus::UnitPixel);
 		}
 		
 		rect.top += height;
@@ -178,14 +190,75 @@ void CImageViewer::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 BOOL CImageViewer::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
-	//OutputDebugString(_T("OnMouseWheel\r\n"));
-	BOOL wasScrolled = m_scrollHelper.OnMouseWheel(nFlags, zDelta, pt);
-	return wasScrolled;
+	OutputDebugString(_T("OnMouseWheel\r\n"));
+
+	if (nFlags == 8)
+	{
+		this->LockWindowUpdate();
+		CPoint delta;
+
+		int upDown = 1;
+
+
+		m_scrollHelper.GetScrollPos();
+
+		if (zDelta > 0)
+		{
+			m_scale -= .1;
+			upDown = -1;
+
+		}
+		else
+		{
+			m_scale += .1;
+		}		
+		
+		/*int n = (m_pGdiplusBitmap->GetWidth() - m_scrollHelper.GetPageSize().cx) * m_scale;
+		int n2 = (m_pGdiplusBitmap->GetHeight() - m_scrollHelper.GetPageSize().cy) * m_scale;
+		int d = n - o;
+		int d2 = n2 - o2;*/
+
+		
+
+		POINT pointInImage;
+		pointInImage.x = pt.x;
+		pointInImage.y = pt.y;
+
+		::ScreenToClient(m_hWnd, &pointInImage);
+
+		pointInImage.x += m_scrollHelper.GetScrollPos().cx;
+		pointInImage.y += m_scrollHelper.GetScrollPos().cy;
+
+		UpdateBitmapSize();
+
+		POINT b;
+		b.x = pointInImage.x + (pointInImage.x * .1);
+		b.y = pointInImage.y + (pointInImage.y * .1);
+
+		delta.x = (b.x - pointInImage.x) * upDown;
+		delta.y = (b.y - pointInImage.y) * upDown;
+
+		CString cs;
+		cs.Format(_T("pos in image: x: %d, y: %d, new x: %d, y: %d, diff: x: %d, y: %d\r\n"), pointInImage.x, pointInImage.y, b.x, b.y, delta.x, delta.y);
+		OutputDebugString(cs);
+		m_scrollHelper.Update(delta);
+
+		Invalidate();
+
+		this->UnlockWindowUpdate();
+	}
+	else
+	{
+		BOOL wasScrolled = m_scrollHelper.OnMouseWheel(nFlags, zDelta, pt);
+		return wasScrolled;
+	}
+
+	return TRUE;
 }
 
 void CImageViewer::OnMouseHWheel(UINT nFlags, short zDelta, CPoint pt)
 {
-	//OutputDebugString(_T("OnMouseHWheel\r\n"));
+	OutputDebugString(_T("OnMouseHWheel\r\n"));
 
 	BOOL wasScrolled = m_scrollHelper.OnMouseHWheel(nFlags, -zDelta, pt);
 
@@ -273,6 +346,11 @@ LRESULT CImageViewer::OnGesture(WPARAM wParam, LPARAM lParam)
 				m_ptFirst.x = gi.ptsLocation.x;
 				m_ptFirst.y = gi.ptsLocation.y;
 				::ScreenToClient(m_hWnd, &m_ptFirst);
+				OutputDebugString(_T("zoom start\r\n"));
+				break;
+
+			case GF_END:
+				OutputDebugString(_T("zoom end\r\n"));
 				break;
 
 			default:
@@ -296,16 +374,16 @@ LRESULT CImageViewer::OnGesture(WPARAM wParam, LPARAM lParam)
 
 				//m_scrollHelper.Update(ptZoomCenter);
 
-				//CString cs;
-				//cs.Format(_T("ZOOM k: %f, x: %d, y: %d\r\n"), k, ptZoomCenter.x, ptZoomCenter.y);
-				//OutputDebugString(cs);
+				CString cs;
+				cs.Format(_T("ZOOM k: %f, x: %d, y: %d\r\n"), k, ptZoomCenter.x, ptZoomCenter.y);
+				OutputDebugString(cs);
 
 				//InvalidateRect(hWnd, NULL, TRUE);
 
 				// Now we have to store new information as a starting information 
 				// for the next step in this gesture.
 				m_ptFirst = m_ptSecond;
-				m_dwArguments = LODWORD(gi.ullArguments);
+				//m_dwArguments = LODWORD(gi.ullArguments);
 				break;
 			}
 			break;
@@ -352,21 +430,22 @@ LRESULT CImageViewer::OnGesture(WPARAM wParam, LPARAM lParam)
 			break;
 			break;
 		case GID_ROTATE:
-			//OutputDebugString(_T("rotate\r\n"));
+			OutputDebugString(_T("rotate\r\n"));
 			// Code for rotation goes here
 			bHandled = TRUE;
 			break;
 		case GID_TWOFINGERTAP:
-			//OutputDebugString(_T("two finger\r\n"));
+			OutputDebugString(_T("two finger\r\n"));
 			// Code for two-finger tap goes here
 			bHandled = TRUE;
 			break;
 		case GID_PRESSANDTAP:
-			//OutputDebugString(_T("press and tap\r\n"));
+			OutputDebugString(_T("press and tap\r\n"));
 			// Code for roll over goes here
 			bHandled = TRUE;
 			break;
 		default:
+			OutputDebugString(_T("default\r\n"));
 			// A gesture was not recognized
 			break;
 		}
@@ -374,6 +453,7 @@ LRESULT CImageViewer::OnGesture(WPARAM wParam, LPARAM lParam)
 	else {
 		DWORD dwErr = GetLastError();
 		if (dwErr > 0) {
+			OutputDebugString(_T("error\r\n"));
 			//MessageBoxW(hWnd, L"Error!", L"Could not retrieve a GESTUREINFO structure.", MB_OK);
 		}
 	}
@@ -389,8 +469,9 @@ LRESULT CImageViewer::OnGestureNotify(WPARAM wParam, LPARAM lParam)
 			// that we want to handle in our application. In this app we
 			// decide to handle all gestures.
 	GESTURECONFIG gc = {
-		GID_PAN,              // gesture ID
-		GC_PAN | GC_PAN_WITH_SINGLE_FINGER_VERTICALLY | GC_PAN_WITH_SINGLE_FINGER_HORIZONTALLY | GC_PAN_WITH_GUTTER | GC_PAN_WITH_INERTIA, // settings related to gesture ID that are to be 
+		0,              // gesture ID
+		GC_ALLGESTURES,
+		//GC_PAN | GC_PAN_WITH_SINGLE_FINGER_VERTICALLY | GC_PAN_WITH_SINGLE_FINGER_HORIZONTALLY | GC_PAN_WITH_GUTTER | GC_PAN_WITH_INERTIA, // settings related to gesture ID that are to be 
 						// turned on
 		0               // settings related to gesture ID that are to be 
 						// turned off
