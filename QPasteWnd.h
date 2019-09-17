@@ -172,6 +172,7 @@ public:
 	CPopup m_popupMsg;
 	CCustomFriendsHelper m_customFriendsHelper;
 	bool m_noSearchResults;
+	CAccel m_timerAction;
 
     void RefreshNc();
     void UpdateStatus(bool bRepaintImmediately = false); // regenerates the status (caption) text
@@ -232,6 +233,7 @@ public:
 	bool DoActionToggleFileLogging();
 	bool DoActionToggleOutputDebugString();
 	bool DoActionCloseWindow();
+	bool DoActionForceCloseWindow();
 	bool DoActionNextTabControl();
 	bool DoActionPrevTabControl();
 	bool DoActionShowGroups();

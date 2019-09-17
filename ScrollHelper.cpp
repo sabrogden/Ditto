@@ -40,6 +40,7 @@ CScrollHelper::CScrollHelper()
     m_pageSize    = CSize(0,0);
     m_displaySize = CSize(0,0);
     m_scrollPos   = CSize(0,0);
+	m_zoomScale = 1;
 }
 
 CScrollHelper::~CScrollHelper()
@@ -57,16 +58,17 @@ void CScrollHelper::DetachWnd()
     m_attachWnd = NULL;
 }
 
-void CScrollHelper::SetDisplaySize(int displayWidth, int displayHeight)
+void CScrollHelper::SetDisplaySize(int displayWidth, int displayHeight, double zoomScale)
 {
+	m_zoomScale = zoomScale;
 	int cxSB = ::GetSystemMetrics(SM_CXVSCROLL);
 	int cySB = ::GetSystemMetrics(SM_CYHSCROLL);	
 
 	CString msg;
-	msg.Format(_T("width: %d, height: %d"), displayWidth, displayHeight);
+	msg.Format(_T("width: %d, height: %d, scale: %f"), displayWidth, displayHeight, m_zoomScale);
 	OutputDebugString(msg);
 
-    m_displaySize = CSize(displayWidth + cxSB, displayHeight + cySB);
+    m_displaySize = CSize((displayWidth) + cxSB, (displayHeight) + cySB);
 
     if ( m_attachWnd != NULL && ::IsWindow(m_attachWnd->m_hWnd) )
         UpdateScrollInfo();
@@ -182,6 +184,7 @@ void CScrollHelper::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
         m_scrollPos.cx += deltaPos;
         m_attachWnd->SetScrollPos(SB_HORZ, m_scrollPos.cx, TRUE);
         m_attachWnd->ScrollWindow(-deltaPos, 0);
+		m_attachWnd->Invalidate();
     }
 }
 
@@ -252,6 +255,7 @@ void CScrollHelper::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
         m_scrollPos.cy += deltaPos;
         m_attachWnd->SetScrollPos(SB_VERT, m_scrollPos.cy, TRUE);
         m_attachWnd->ScrollWindow(0, -deltaPos);
+		m_attachWnd->Invalidate();
     }
 }
 
@@ -436,7 +440,7 @@ void CScrollHelper::UpdateScrollInfo()
     // expect.
     CRect rect;
     GetClientRectSB(m_attachWnd, rect);
-    CSize windowSize(rect.Width(), rect.Height());
+    CSize windowSize(rect.Width() * (1/m_zoomScale), rect.Height() * (1/m_zoomScale));
 
     // Update horizontal scrollbar.
     CSize deltaPos(0,0);

@@ -57,6 +57,7 @@
 #define TIMER_PASTE_FROM_MODIFER	3
 #define TIMER_ERROR_MSG			4
 #define TIMER_DRAG_HIDE_WINDOW	6
+#define TIMER_DO_ACTION	7
 
 #define THREAD_DO_QUERY				0
 #define THREAD_EXIT_THREAD			1
@@ -2845,7 +2846,13 @@ bool CQPasteWnd::CheckActions(MSG * pMsg)
 	{
 		if (m_actions.OnMsg(pMsg, a))
 		{
+			KillTimer(TIMER_DO_ACTION);
 			ret = DoAction(a);
+		}
+		else if (a.Cmd > 0)
+		{
+			m_timerAction = a;
+			SetTimer(TIMER_DO_ACTION, 500, NULL);
 		}
 	}
 
@@ -2890,6 +2897,9 @@ bool CQPasteWnd::DoAction(CAccel a)
 		break;
 	case ActionEnums::CLOSEWINDOW:
 		ret = DoActionCloseWindow();
+		break;
+	case ActionEnums::FORCE_CLOSE_WINDOW:
+		ret = DoActionForceCloseWindow();
 		break;
 	case ActionEnums::NEXTTABCONTROL:
 		ret = DoActionNextTabControl();
@@ -3459,6 +3469,14 @@ bool CQPasteWnd::DoActionToggleOutputDebugString()
 	{
 		Log(_T("turning DebugString logging ON"));
 	}
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionForceCloseWindow()
+{
+	Log(_T("Force closing window from hot keys"));
+	HideQPasteWindow(true);
 
 	return true;
 }
@@ -5967,6 +5985,18 @@ void CQPasteWnd::OnTimer(UINT_PTR nIDEvent)
 			HideQPasteWindow(false, false);
 			KillTimer(TIMER_DRAG_HIDE_WINDOW);
 		}
+	}
+	else if (nIDEvent == TIMER_DO_ACTION)
+	{
+		KillTimer(TIMER_DO_ACTION);
+
+		OutputDebugString(StrF(_T("DoActionTimer, cmd: %d"), m_timerAction.Cmd));
+
+		if (m_timerAction.Cmd > 0)
+		{
+			DoAction(m_timerAction);
+		}
+		m_timerAction = CAccel();		
 	}
 
     CWndEx::OnTimer(nIDEvent);

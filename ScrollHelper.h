@@ -23,7 +23,7 @@ public:
     // scrollbars will appear. Set either the display width or display
     // height to zero if you don't want to enable the scrollbar in the
     // corresponding direction.
-    void   SetDisplaySize(int displayWidth, int displayHeight);
+    void   SetDisplaySize(int displayWidth, int displayHeight, double zoomScale);
     const CSize& GetDisplaySize() const;
 
     // Get current scroll position. This is needed if you are scrolling
@@ -55,6 +55,7 @@ private:
     CSize  m_pageSize;
     CSize  m_displaySize;
     CSize  m_scrollPos;
+	double m_zoomScale;
 };
 
 #endif // SCROLL_HELPER_INCLUDED

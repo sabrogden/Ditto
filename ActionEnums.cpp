@@ -368,6 +368,9 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case COPY_SELECTION:
 		val = "Copy Selection";
 		break;
+	case FORCE_CLOSE_WINDOW:
+		val = "Force Close Window";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
@@ -439,6 +442,8 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 			return ACCEL_MAKEKEY('0', HOTKEYF_CONTROL);
 		case CLOSEWINDOW:
 			return VK_ESCAPE;
+		case FORCE_CLOSE_WINDOW:
+			return VK_ESCAPE;
 		case TOGGLE_DESCRIPTION_WORD_WRAP:
 			return 'W';
 		case COPY_SELECTION:
@@ -482,9 +487,11 @@ int ActionEnums::GetDefaultShortCutKeyB(ActionEnumValues value, int pos)
 	switch (pos)
 	{
 	case 0:
-		//switch (value)
-		//{
-		//}
+		switch (value)
+		{
+		case FORCE_CLOSE_WINDOW:
+			return VK_ESCAPE;
+		}
 		break;
 	}
 

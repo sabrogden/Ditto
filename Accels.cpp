@@ -124,7 +124,8 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
 			if (it2->second.Key2 == 0)
 			{
 				a = (*it2).second;
-				return true;				
+				//return now as a another command could have a second key defined
+				//if they don't press the second key this will be handled by a timer on the outside				
 			}
 			else
 			{
@@ -132,6 +133,11 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
 				m_firstMapTick = GetTickCount();
 				break;
 			}
+		}
+
+		if (a.Cmd > 0 && m_activeFirstKey == 0)
+		{
+			return true;
 		}
 	}
 
