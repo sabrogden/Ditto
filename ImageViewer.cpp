@@ -203,67 +203,36 @@ BOOL CImageViewer::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	{
 		this->LockWindowUpdate();
 		CPoint delta;
-
-		int upDown = 1;
-
 		double oldScale = m_scale;
-
-
-		m_scrollHelper.GetScrollPos();
 
 		if (zDelta > 0)
 		{
 			m_scale += .1;
-			
-
 		}
 		else
 		{
-			upDown = -1;
 			m_scale -= .1;
-		}		
-		
-		/*int n = (m_pGdiplusBitmap->GetWidth() - m_scrollHelper.GetPageSize().cx) * m_scale;
-		int n2 = (m_pGdiplusBitmap->GetHeight() - m_scrollHelper.GetPageSize().cy) * m_scale;
-		int d = n - o;
-		int d2 = n2 - o2;*/
-				
-		
+		}
 
 		POINT pointInImage;
 		pointInImage.x = pt.x;
 		pointInImage.y = pt.y;
-		
 
 		::ScreenToClient(m_hWnd, &pointInImage);
 
-		pointInImage.x += m_scrollHelper.GetScrollPos().cx;
-		pointInImage.y += m_scrollHelper.GetScrollPos().cy;
-
-		POINT b;
-		b.x = pointInImage.x;
-		b.y = pointInImage.y;
-
-		pointInImage.x = pointInImage.x * oldScale;
-		pointInImage.y = pointInImage.y * oldScale;
-
-		b.x = b.x * m_scale;
-		b.y = b.y * m_scale;
-		
+		//point in image is the scrolled pos (un scaled) and the current mouse point in the image (scalled)
+		//so unscale the point in image and add it to the scrolled pos
+		pointInImage.x = (pointInImage.x * (1 / oldScale)) + m_scrollHelper.GetScrollPos().cx;
+		pointInImage.y = (pointInImage.y * (1 / oldScale)) + m_scrollHelper.GetScrollPos().cy;
 
 		UpdateBitmapSize();
 
-		//POINT b;
-		//b.x = pointInImage.x + (pointInImage.x * .1);
-		//b.y = pointInImage.y + (pointInImage.y * .1);
+		//find the difference between the scaled point and and not scaled
+		int xScroll = pointInImage.x - (pointInImage.x * (1 / m_scale));
+		int yScroll = pointInImage.y - (pointInImage.y * (1 / m_scale));
 
-		delta.x = (b.x - pointInImage.x) * upDown;
-		delta.y = (b.y - pointInImage.y) * upDown;
-
-		//CString cs;
-		//cs.Format(_T("pos in image: x: %d, y: %d, new x: %d, y: %d, diff: x: %d, y: %d\r\n"), pointInImage.x, pointInImage.y, b.x, b.y, delta.x, delta.y);
-		//OutputDebugString(cs);
-		//m_scrollHelper.Update(delta);
+		delta.x = xScroll - m_scrollHelper.GetScrollPos().cx;
+		delta.y = yScroll - m_scrollHelper.GetScrollPos().cy;
 
 		Invalidate();
 

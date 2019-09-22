@@ -474,7 +474,7 @@ void CScrollHelper::UpdateScrollBar(int bar, int windowSize, int displaySize,
         if ( pageSize > 0 && scrollPos > 0 )
         {
             // Adjust the scroll position when the window size is changed.
-            scrollPos = (LONG)(1.0 * scrollPos * windowSize / pageSize);
+            //scrollPos = (LONG)(1.0 * scrollPos * windowSize / pageSize);
         }
         pageSize = windowSize;
 		scrollPos = min(scrollPos, displaySize - pageSize - 1);
