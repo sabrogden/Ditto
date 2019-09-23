@@ -17,6 +17,7 @@ CImageViewer::CImageViewer()
 	m_scrollHelper.AttachWnd(this);
 	m_hoveringOverImage = false;
 	m_pGdiplusBitmap = NULL;
+	m_scale = 1;
 }
 
 CImageViewer::~CImageViewer()
@@ -72,26 +73,28 @@ BOOL CImageViewer::Create(CWnd* pParent)
 	return TRUE;
 }
 
-double m_scale = 1;
-
-void CImageViewer::UpdateBitmapSize()
+void CImageViewer::UpdateBitmapSize(bool setScale)
 {
 	if (m_pGdiplusBitmap != NULL)
 	{
-		if (CGetSetOptions::GetScaleImagesToDescWindow())
+		if (setScale)
 		{
-			CRect rect;
-			GetClientRect(rect);
+			BOOL newScaleImage = CGetSetOptions::GetScaleImagesToDescWindow();
+			if (newScaleImage)
+			{
+				CRect rect;
+				GetClientRect(rect);
 
-			m_scrollHelper.SetDisplaySize(0, 0, 1);
-			m_scrollHelper.DetachWnd();
-			
+				double w = m_pGdiplusBitmap->GetWidth();
+				if (w > 0)
+				{
+					m_scale = rect.Width() / w;
+				}
+			}
 		}
-		else
-		{
-			m_scrollHelper.AttachWnd(this);
-			m_scrollHelper.SetDisplaySize(m_pGdiplusBitmap->GetWidth(), m_pGdiplusBitmap->GetHeight(), m_scale);
-		}
+
+		m_scrollHelper.AttachWnd(this);
+		m_scrollHelper.SetDisplaySize(m_pGdiplusBitmap->GetWidth(), m_pGdiplusBitmap->GetHeight(), m_scale);		
 	}
 }
 
@@ -116,67 +119,21 @@ void CImageViewer::OnPaint()
 		int width = m_pGdiplusBitmap->GetWidth();
 		int height = m_pGdiplusBitmap->GetHeight();
 		
-		if (CGetSetOptions::GetScaleImagesToDescWindow())
-		{
+		Gdiplus::ImageAttributes attrs;
+		CSize s = m_scrollHelper.GetScrollPos();
 
-			double newWidth = rect.Width();
-			double newHeight = rect.Height();
+		Gdiplus::Graphics graphics(memDC);
+		graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+		graphics.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHalf);
 
-			if (width > 0 &&
-				height > 0 &&
-				rect.Width() > 0 &&
-				rect.Height() > 0)
-			{
-				float origAspect = (width / (float)height);
-				float newAspect = (rect.Width() / (float)rect.Height());
+		Gdiplus::Rect dest((int)0, (int)0, (int)rect.Width(), (int)rect.Height());
 
-				if (origAspect > newAspect)
-				{
-					newHeight = (rect.Width() * height) / width;
-				}
-				else
-				{
-					newWidth = (rect.Height() * width) / height;
-				}
-			}
+		double nW = rect.Width() * (1 / m_scale);
+		double nH = rect.Height() * (1 / m_scale);
 
-			Gdiplus::ImageAttributes attrs;
-			Gdiplus::Rect dest(0, 0, (int)newWidth, (int)newHeight);
+		graphics.DrawImage(m_pGdiplusBitmap, dest, s.cx, s.cy, nW, nH, Gdiplus::UnitPixel, &attrs);
 
-			Gdiplus::Graphics graphics(memDC);
-			graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
-			graphics.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHalf);
-
-			graphics.DrawImage(m_pGdiplusBitmap, dest, 0, 0, width, height, Gdiplus::UnitPixel, &attrs);
-
-
-		}
-		else
-		{
-
-			Gdiplus::ImageAttributes attrs;
-			CSize s = m_scrollHelper.GetScrollPos();
-
-			Gdiplus::Graphics graphics(memDC);
-
-			graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
-
-			graphics.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHalf);
-			//graphics.ScaleTransform(m_scale, m_scale);
-			//double x = m_scale;
-			//if (x != 1)
-			//{
-			//	x = 1.0 + (1.0 - m_scale);
-			//}
-
-			Gdiplus::Rect dest((int)0, (int)0, (int)rect.Width(), (int)rect.Height());
-
-			graphics.DrawImage(m_pGdiplusBitmap, dest, s.cx, s.cy, rect.Width() * (1/m_scale), rect.Height() * (1/m_scale), Gdiplus::UnitPixel, &attrs);
-
-			OutputDebugString(_T("OnPaint\r\n"));
-		}
-		
-		rect.top += height;
+		//OutputDebugString(StrF(_T("OnPaint, Width: %d, New Width: %d\r\n"), rect.Width(), (int)nW));
 	}
 	
 	memDC.SelectObject(pOldBrush);
@@ -225,7 +182,7 @@ BOOL CImageViewer::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 		pointInImage.x = (pointInImage.x * (1 / oldScale)) + m_scrollHelper.GetScrollPos().cx;
 		pointInImage.y = (pointInImage.y * (1 / oldScale)) + m_scrollHelper.GetScrollPos().cy;
 
-		UpdateBitmapSize();
+		UpdateBitmapSize(false);
 
 		//find the difference between the scaled point and and not scaled
 		int xScroll = pointInImage.x - (pointInImage.x * (1 / m_scale));
@@ -234,7 +191,9 @@ BOOL CImageViewer::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 		delta.x = xScroll - m_scrollHelper.GetScrollPos().cx;
 		delta.y = yScroll - m_scrollHelper.GetScrollPos().cy;
 
-		Invalidate();
+		m_scrollHelper.Update(delta);
+
+		this->Invalidate();
 
 		this->UnlockWindowUpdate();
 	}
@@ -293,10 +252,15 @@ void CImageViewer::OnLButtonUp(UINT nFlags, CPoint point)
 	if (this->m_pGdiplusBitmap &&
 		m_hoveringOverImage)
 	{
-		CGetSetOptions::SetScaleImagesToDescWindow(!CGetSetOptions::GetScaleImagesToDescWindow());
-		this->UpdateBitmapSize();
 		m_scale = 1;
+
+		CGetSetOptions::SetScaleImagesToDescWindow(!CGetSetOptions::GetScaleImagesToDescWindow());
+		
+		UpdateBitmapSize(true);
+		
 		Invalidate();
+
+		
 		return;
 	}
 

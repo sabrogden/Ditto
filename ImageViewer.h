@@ -16,7 +16,7 @@ public:
 	Gdiplus::Bitmap *m_pGdiplusBitmap;
 	CScrollHelper m_scrollHelper;
 
-	void UpdateBitmapSize();
+	void UpdateBitmapSize(bool setScale);
 
 	BOOL Create(CWnd* pParent);
 
@@ -26,6 +26,8 @@ public:
 	CPoint m_ptFirst;
 	CPoint m_ptSecond;
 	DWORD m_dwArguments;
+
+	double m_scale;
 
 protected:
 	DECLARE_MESSAGE_MAP()

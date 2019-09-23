@@ -64,9 +64,9 @@ void CScrollHelper::SetDisplaySize(int displayWidth, int displayHeight, double z
 	int cxSB = ::GetSystemMetrics(SM_CXVSCROLL);
 	int cySB = ::GetSystemMetrics(SM_CYHSCROLL);	
 
-	CString msg;
-	msg.Format(_T("width: %d, height: %d, scale: %f"), displayWidth, displayHeight, m_zoomScale);
-	OutputDebugString(msg);
+	//CString msg;
+	//msg.Format(_T("width: %d, height: %d, scale: %f\r\n"), displayWidth, displayHeight, m_zoomScale);
+	//OutputDebugString(msg);
 
     m_displaySize = CSize((displayWidth) + cxSB, (displayHeight) + cySB);
 

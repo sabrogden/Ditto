@@ -153,8 +153,6 @@ BOOL CToolTipEx::Show(CPoint point)
 		{
 			m_browser.ShowWindow(SW_HIDE);
 		}
-
-		m_imageViewer.UpdateBitmapSize();
     }
 	else if (m_html.GetLength() > 0)
 	{
@@ -276,6 +274,12 @@ BOOL CToolTipEx::Show(CPoint point)
 	m_saveWindowLockout = true;
 	MoveWindow(rect);
 	MoveControls();
+
+	if (m_imageViewer.m_pGdiplusBitmap)
+	{
+		m_imageViewer.UpdateBitmapSize(true);
+	}
+
 	ShowWindow(SW_SHOWNA);
 	//this->Invalidate();
 	//this->UpdateWindow();
@@ -709,7 +713,7 @@ void CToolTipEx::SetGdiplusBitmap(Gdiplus::Bitmap *gdiplusBitmap)
 	m_imageViewer.m_pGdiplusBitmap = NULL;
 
 	m_imageViewer.m_pGdiplusBitmap = gdiplusBitmap;
-	m_imageViewer.UpdateBitmapSize();
+	m_imageViewer.UpdateBitmapSize(true);
 	Invalidate();
 }
 
@@ -1182,7 +1186,7 @@ void CToolTipEx::OnSizewindowtocontent()
 void CToolTipEx::OnScaleimagestofitwindow()
 {
 	CGetSetOptions::SetScaleImagesToDescWindow(!CGetSetOptions::GetScaleImagesToDescWindow());
-	m_imageViewer.UpdateBitmapSize();
+	m_imageViewer.UpdateBitmapSize(true);
 	Invalidate();
 }
 
