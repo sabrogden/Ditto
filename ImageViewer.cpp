@@ -188,13 +188,18 @@ BOOL CImageViewer::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 			m_scale -= .1;
 		}
 
+		m_scale = max(m_scale, 0.01);
+
 		::ScreenToClient(m_hWnd, &pt);
 		UpdateBitmapSize(false);
 
-		delta.x = round((pt.x * (1 / oldScale)) - (pt.x * (1 / m_scale)));
-		delta.y = round((pt.y * (1 / oldScale)) - (pt.y * (1 / m_scale)));
+		if (oldScale > 0 && m_scale > 0)
+		{
+			delta.x = round((pt.x * (1 / oldScale)) - (pt.x * (1 / m_scale)));
+			delta.y = round((pt.y * (1 / oldScale)) - (pt.y * (1 / m_scale)));
 
-		m_scrollHelper.Update(delta);
+			m_scrollHelper.Update(delta);
+		}
 
 		this->Invalidate();
 
