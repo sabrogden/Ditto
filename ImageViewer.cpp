@@ -191,8 +191,8 @@ BOOL CImageViewer::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 		::ScreenToClient(m_hWnd, &pt);
 		UpdateBitmapSize(false);
 
-		delta.x = (pt.x * (1 / oldScale)) - (pt.x * (1 / m_scale));
-		delta.y = (pt.y * (1 / oldScale)) - (pt.y * (1 / m_scale));
+		delta.x = round((pt.x * (1 / oldScale)) - (pt.x * (1 / m_scale)));
+		delta.y = round((pt.y * (1 / oldScale)) - (pt.y * (1 / m_scale)));
 
 		m_scrollHelper.Update(delta);
 
