@@ -1445,18 +1445,8 @@ LRESULT CToolTipEx::OnRefreshFooter(WPARAM wParam, LPARAM lParam)
 {
 	m_clipData = m_originalClipData;
 	if (m_imageViewer.m_pGdiplusBitmap)
-	{%
-		double round = -.5;
-		if (m_imageViewer.m_scale < 1)
-		{
-			round = .5;
-		}
-		int percent = ((m_imageViewer.m_scale) * 100.0) + .5;
-		/*CString scaleString;
-		if (percent != 0)
-		{
-			scaleString.Format(_T(", %d%%"), percent);
-		}*/
+	{
+		int percent = ((m_imageViewer.m_scale) * 100.0) + .5;	
 		m_clipData = m_originalClipData + _T(" | ") + StrF(_T("%d x %d, %d%%"), m_imageViewer.m_pGdiplusBitmap->GetWidth(), m_imageViewer.m_pGdiplusBitmap->GetHeight(), percent);
 	}
 
