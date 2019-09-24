@@ -85,16 +85,33 @@ void CImageViewer::UpdateBitmapSize(bool setScale)
 				CRect rect;
 				GetClientRect(rect);
 
+				SCROLLINFO si;
+				if (this->GetScrollInfo(SB_HORZ, &si) && si.nPage > 0)
+				{
+					int cxSB = ::GetSystemMetrics(SM_CXVSCROLL);
+					rect.right += cxSB;
+					int cySB = ::GetSystemMetrics(SM_CYHSCROLL);
+					rect.bottom += cySB;
+				}
+
 				double w = m_pGdiplusBitmap->GetWidth();
 				if (w > 0)
 				{
 					m_scale = rect.Width() / w;
 				}
 			}
+			else
+			{
+				m_scale = 1;
+			}
+
+			m_scrollHelper.ScrollToOrigin(true, true);
 		}
 
-		m_scrollHelper.AttachWnd(this);
+		m_scrollHelper.AttachWnd(this);		
 		m_scrollHelper.SetDisplaySize(m_pGdiplusBitmap->GetWidth(), m_pGdiplusBitmap->GetHeight(), m_scale);		
+
+		this->GetParent()->PostMessage(WM_REFRESH_FOOTER, 0, 0);
 	}
 }
 
@@ -156,7 +173,7 @@ BOOL CImageViewer::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 {
 	OutputDebugString(_T("OnMouseWheel\r\n"));
 
-	if (nFlags == 8)
+	if (nFlags == MK_CONTROL)
 	{
 		this->LockWindowUpdate();
 		CPoint delta;
@@ -171,25 +188,11 @@ BOOL CImageViewer::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 			m_scale -= .1;
 		}
 
-		POINT pointInImage;
-		pointInImage.x = pt.x;
-		pointInImage.y = pt.y;
-
-		::ScreenToClient(m_hWnd, &pointInImage);
-
-		//point in image is the scrolled pos (un scaled) and the current mouse point in the image (scalled)
-		//so unscale the point in image and add it to the scrolled pos
-		pointInImage.x = (pointInImage.x * (1 / oldScale)) + m_scrollHelper.GetScrollPos().cx;
-		pointInImage.y = (pointInImage.y * (1 / oldScale)) + m_scrollHelper.GetScrollPos().cy;
-
+		::ScreenToClient(m_hWnd, &pt);
 		UpdateBitmapSize(false);
 
-		//find the difference between the scaled point and and not scaled
-		int xScroll = pointInImage.x - (pointInImage.x * (1 / m_scale));
-		int yScroll = pointInImage.y - (pointInImage.y * (1 / m_scale));
-
-		delta.x = xScroll - m_scrollHelper.GetScrollPos().cx;
-		delta.y = yScroll - m_scrollHelper.GetScrollPos().cy;
+		delta.x = (pt.x * (1 / oldScale)) - (pt.x * (1 / m_scale));
+		delta.y = (pt.y * (1 / oldScale)) - (pt.y * (1 / m_scale));
 
 		m_scrollHelper.Update(delta);
 
@@ -252,8 +255,6 @@ void CImageViewer::OnLButtonUp(UINT nFlags, CPoint point)
 	if (this->m_pGdiplusBitmap &&
 		m_hoveringOverImage)
 	{
-		m_scale = 1;
-
 		CGetSetOptions::SetScaleImagesToDescWindow(!CGetSetOptions::GetScaleImagesToDescWindow());
 		
 		UpdateBitmapSize(true);

@@ -41,7 +41,7 @@ public:
 
 	void SetSearchText(CString text) { m_searchText = text; }
 
-	void SetClipData(CString data) { m_clipData = data; }
+	void SetClipData(CString data) { m_clipData = data; m_originalClipData = data; }
 	void SetFolderPath(CString path) { m_folderPath = path; }
 
 	bool GetShowPersistant() { return m_showPersistant; }
@@ -92,6 +92,7 @@ protected:
 	CGroupStatic m_clipDataStatic;
 	CGroupStatic m_folderPathStatic;
 	CString m_clipData;
+	CString m_originalClipData;
 	CFont m_clipDataFont;
 	bool m_saveWindowLockout;
 	int m_clipRow;
@@ -143,4 +144,5 @@ public:
 	afx_msg void OnMoving(UINT fwSide, LPRECT pRect);
 	afx_msg void OnEnterSizeMove();
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	afx_msg LRESULT OnRefreshFooter(WPARAM wParam, LPARAM lParam);
 };

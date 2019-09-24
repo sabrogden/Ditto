@@ -66,6 +66,7 @@ BEGIN_MESSAGE_MAP(CToolTipEx, CWnd)
 	ON_WM_MOVING()
 	ON_WM_ENTERSIZEMOVE()
 	ON_WM_HSCROLL()
+	ON_MESSAGE(WM_REFRESH_FOOTER, OnRefreshFooter)
 END_MESSAGE_MAP()
 
 
@@ -144,7 +145,8 @@ BOOL CToolTipEx::Show(CPoint point)
 {
     if(m_imageViewer.m_pGdiplusBitmap)
     {
-		m_clipData += _T(" | ") + StrF(_T("%d x %d"), m_imageViewer.m_pGdiplusBitmap->GetWidth(), m_imageViewer.m_pGdiplusBitmap->GetHeight());
+		int percent = (m_imageViewer.m_scale - 1.0) * 100.0;
+		m_clipData = m_originalClipData + _T(" | ") + StrF(_T("%d x %d, %d%%"), m_imageViewer.m_pGdiplusBitmap->GetWidth(), m_imageViewer.m_pGdiplusBitmap->GetHeight(), percent);
 
 		m_imageViewer.ShowWindow(SW_SHOW);
 
@@ -1437,4 +1439,31 @@ void CToolTipEx::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	int x = 9;
 	//m_scrollHelper.OnHScroll(nSBCode, nPos, pScrollBar);
+}
+
+LRESULT CToolTipEx::OnRefreshFooter(WPARAM wParam, LPARAM lParam)
+{
+	m_clipData = m_originalClipData;
+	if (m_imageViewer.m_pGdiplusBitmap)
+	{%
+		double round = -.5;
+		if (m_imageViewer.m_scale < 1)
+		{
+			round = .5;
+		}
+		int percent = ((m_imageViewer.m_scale) * 100.0) + .5;
+		/*CString scaleString;
+		if (percent != 0)
+		{
+			scaleString.Format(_T(", %d%%"), percent);
+		}*/
+		m_clipData = m_originalClipData + _T(" | ") + StrF(_T("%d x %d, %d%%"), m_imageViewer.m_pGdiplusBitmap->GetWidth(), m_imageViewer.m_pGdiplusBitmap->GetHeight(), percent);
+	}
+
+	m_clipDataStatic.SetWindowText(m_clipData);
+	m_clipDataStatic.Invalidate();
+
+	this->Invalidate();
+
+	return TRUE;
 }

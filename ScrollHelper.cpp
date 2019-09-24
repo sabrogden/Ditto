@@ -64,6 +64,22 @@ void CScrollHelper::SetDisplaySize(int displayWidth, int displayHeight, double z
 	int cxSB = ::GetSystemMetrics(SM_CXVSCROLL);
 	int cySB = ::GetSystemMetrics(SM_CYHSCROLL);	
 
+	CRect rect;
+	GetClientRectSB(m_attachWnd, rect);
+	double width = (rect.Width() * (1 / m_zoomScale)) + .5;
+	double height = (rect.Height() * (1 / m_zoomScale)) + .5;
+	CSize windowSize(width, height);
+
+	if (windowSize.cx >= displayWidth)
+	{
+		cxSB = 0;
+	}
+
+	if (windowSize.cy >= displayHeight)
+	{
+		cySB = 0;
+	}
+
 	//CString msg;
 	//msg.Format(_T("width: %d, height: %d, scale: %f\r\n"), displayWidth, displayHeight, m_zoomScale);
 	//OutputDebugString(msg);
@@ -277,7 +293,7 @@ BOOL CScrollHelper::Update(CPoint changes)
 	if (newYScrollPos > maxYScrollPos)
 		deltaYPos = maxYScrollPos - m_scrollPos.cy;
 
-	if (changes.y != 0)
+	if (deltaYPos != 0)
 	{
 		m_scrollPos.cy += deltaYPos;
 		m_attachWnd->SetScrollPos(SB_VERT, m_scrollPos.cy, TRUE);
@@ -299,7 +315,7 @@ BOOL CScrollHelper::Update(CPoint changes)
 	if (newXScrollPos > maxXScrollPos)
 		deltaXPos = maxXScrollPos - m_scrollPos.cx;
 
-	if (changes.x != 0)
+	if (deltaXPos != 0)
 	{
 		m_scrollPos.cx += deltaXPos;
 		m_attachWnd->SetScrollPos(SB_HORZ, m_scrollPos.cx, TRUE);
@@ -440,7 +456,9 @@ void CScrollHelper::UpdateScrollInfo()
     // expect.
     CRect rect;
     GetClientRectSB(m_attachWnd, rect);
-    CSize windowSize(rect.Width() * (1/m_zoomScale), rect.Height() * (1/m_zoomScale));
+	double width = (rect.Width() * (1 / m_zoomScale)) + .5;
+	double height = (rect.Height() * (1 / m_zoomScale)) + .5;
+    CSize windowSize(width, height * (1/m_zoomScale));
 
     // Update horizontal scrollbar.
     CSize deltaPos(0,0);
