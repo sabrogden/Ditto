@@ -73,6 +73,7 @@ CChaiScriptXml CGetSetOptions::m_copyScripts;
 CChaiScriptXml CGetSetOptions::m_pasteScripts;
 long CGetSetOptions::m_tooltipTimeout;
 BOOL CGetSetOptions::m_cleanRTFBeforeDrawing = TRUE;
+int CGetSetOptions::m_doubleKeyStrokeTimeout = 350;
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -192,6 +193,7 @@ void CGetSetOptions::LoadSettings()
 	m_showScrollBar = GetShowScrollBar();
 	m_bShowAlwaysOnTopWarning = GetShowAlwaysOnTopWarning();
 	m_excludeCF_DIBInExcel = GetExcludeCF_DIBInExcel();
+	m_doubleKeyStrokeTimeout = GetDoubleKeyStrokeTimeout();
 
 	GetExtraNetworkPassword(true);
 
@@ -2776,4 +2778,15 @@ int CGetSetOptions::GetMaxToolTipCharacters()
 void CGetSetOptions::SetMaxToolTipCharacters(int val)
 {
 	SetProfileLong("MaxToolTipCharacters", val);
+}
+
+int CGetSetOptions::GetDoubleKeyStrokeTimeout()
+{
+	return GetProfileLong("DoubleKeyStrokeTimeout", 350);
+}
+
+void CGetSetOptions::SetDoubleKeyStrokeTimeout(int val)
+{
+	m_doubleKeyStrokeTimeout = val;
+	SetProfileLong("DoubleKeyStrokeTimeout", val);
 }

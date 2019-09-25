@@ -2852,7 +2852,7 @@ bool CQPasteWnd::CheckActions(MSG * pMsg)
 		else if (a.Cmd > 0)
 		{
 			m_timerAction = a;
-			SetTimer(TIMER_DO_ACTION, 500, NULL);
+			SetTimer(TIMER_DO_ACTION, CGetSetOptions::m_doubleKeyStrokeTimeout, NULL);
 		}
 	}
 

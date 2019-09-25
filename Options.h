@@ -618,6 +618,10 @@ public:
 
 	static int GetMaxToolTipCharacters();
 	static void SetMaxToolTipCharacters(int val);
+
+	static int m_doubleKeyStrokeTimeout;
+	static int GetDoubleKeyStrokeTimeout();
+	static void SetDoubleKeyStrokeTimeout(int val);
 };
 
 // global for easy access and for initialization of fast access variables

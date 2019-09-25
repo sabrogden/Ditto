@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Accels.h"
 #include "HotKeys.h"
+#include "Options.h"
 
 CAccels::CAccels()
 {
@@ -90,12 +91,12 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
 	}
     DWORD key = ACCEL_MAKEKEY(vkey, mod);
 
-    CString cs;
-    cs.Format(_T("Key: %d, Mod: %d, vkey: %d\r\n"), key, mod, vkey);
-    OutputDebugString(cs);
+    //CString cs;
+    //cs.Format(_T("Key: %d, Mod: %d, vkey: %d, diff: %d\r\n"), key, mod, vkey, (GetTickCount() - m_firstMapTick));
+    //OutputDebugString(cs);
 		
 	if (m_firstMapTick != 0 &&
-		(GetTickCount() - m_firstMapTick) < 500)
+		(GetTickCount() - m_firstMapTick) < CGetSetOptions::m_doubleKeyStrokeTimeout)
 	{
 		pair<multimap<DWORD, CAccel>::iterator, multimap<DWORD, CAccel>::iterator> ppp;
 		ppp = m_multiMap.equal_range(m_activeFirstKey);

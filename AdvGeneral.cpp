@@ -118,6 +118,7 @@ END_MESSAGE_MAP()
 #define SETTING_TOOLTIP_CHARACTERS 70
 
 #define SETTING_ACTIVATE_WINDOW_DELAY 71
+#define SETTING_DOUBLE_KEYSTROKE_TIMEOUT 72
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -161,6 +162,9 @@ BOOL CAdvGeneral::OnInitDialog()
 
 
 	AddTrueFalse(pGroupTest, _T("Display Icon in System Tray"), CGetSetOptions::GetShowIconInSysTray(), SETTING_SHOW_TASKBAR_ICON);
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Double shortcut keystroke timeout)"), (long)CGetSetOptions::GetDoubleKeyStrokeTimeout(), _T(""), SETTING_DOUBLE_KEYSTROKE_TIMEOUT));
+
 	AddTrueFalse(pGroupTest, _T("Draw RTF Text in List(for RTF types) (Could Increase Memory Usage an Display Speed)"), CGetSetOptions::GetDrawRTF(), SETTING_DRAW_RTF);
 	AddTrueFalse(pGroupTest, _T("Elevated privileges to paste into elevated apps"), CGetSetOptions::GetPasteAsAdmin(), SETTING_PASTE_AS_ADMIN);
 	AddTrueFalse(pGroupTest, _T("Ensure Ditto is always connected to the clipboard"), CGetSetOptions::GetEnsureConnectToClipboard(), SETTING_ENSURE_CONNECTED);
@@ -710,6 +714,12 @@ void CAdvGeneral::OnBnClickedOk()
 				if (pNewValue->lVal != pOrigValue->lVal)
 				{
 					CGetSetOptions::SetSendKeysDelay(pNewValue->lVal);
+				}
+				break;
+			case SETTING_DOUBLE_KEYSTROKE_TIMEOUT:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetDoubleKeyStrokeTimeout(pNewValue->lVal);
 				}
 				break;
 			}
