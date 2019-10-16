@@ -100,7 +100,7 @@ public:
 	static BOOL SetProfileLong(CString csName, long lValue);
 	static long GetProfileLong(CString csName, long lDefaultValue = -1, CString csNewPath = _T(""));
 
-	static CString GetProfileString(CString csName, CString csDefault, CString csNewPath = _T(""));
+	static CString GetProfileString(CString csName, CString csDefault, CString csNewPath = _T(""), int maxSize = -1);
 	static BOOL	SetProfileString(CString csName, CString csValue);
 
 	static LPVOID GetProfileData(CString csName, DWORD &dwLength);

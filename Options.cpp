@@ -510,7 +510,7 @@ long CGetSetOptions::GetProfileLong(CString csName, long lDefaultValue, CString 
 	return lDefaultValue;
 }
 
-CString CGetSetOptions::GetProfileString(CString csName, CString csDefault, CString csNewPath)
+CString CGetSetOptions::GetProfileString(CString csName, CString csDefault, CString csNewPath, int maxSize)
 {
 	CString returnString;
 	DWORD dwBufLen = 0;
@@ -526,14 +526,22 @@ CString CGetSetOptions::GetProfileString(CString csName, CString csDefault, CStr
 
 		bool doBreak = false;
 		dwBufLen = 10000;
+		bool setMaxSize = false;
 		while (true)
 		{
+			if (maxSize > -1 && maxSize < dwBufLen)
+			{
+				dwBufLen = maxSize;
+				setMaxSize = true;
+			}
+
 			TCHAR *szString = new TCHAR[dwBufLen];
 			ZeroMemory(szString, dwBufLen);
 
 			DWORD readLength = GetPrivateProfileString(csApp, csName, csDefault, szString, dwBufLen, m_csIniFileName);
 
-			if (readLength < (dwBufLen - 1))
+			if (setMaxSize ||
+				readLength < (dwBufLen - 1))
 			{
 				returnString = szString;
 				doBreak = true; //delay break so we can delete the string
@@ -567,6 +575,11 @@ CString CGetSetOptions::GetProfileString(CString csName, CString csDefault, CStr
 		if (lResult == ERROR_SUCCESS &&
 			dwBufLen > 0)
 		{
+			if (maxSize > -1 && maxSize < dwBufLen)
+			{
+				dwBufLen = maxSize;
+			}
+
 			dwBufLen++;
 			TCHAR *szString = new TCHAR[dwBufLen];
 			ZeroMemory(szString, dwBufLen);
@@ -2700,7 +2713,9 @@ void CGetSetOptions::SetToolTipTimeout(long val)
 
 CString CGetSetOptions::GetPastSearchXml()
 {
-	return GetProfileString("PastSearchXml", "");
+	//max this out at 100000, this should be more than the allowed length in SymbolEdit.cpp
+	//had reports of this being really large and causing memory issues, this will prevent us from this
+	return GetProfileString("PastSearchXml", "", "", 100000);
 }
 
 void CGetSetOptions::SetPastSearchXml(CString val)

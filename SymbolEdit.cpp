@@ -233,7 +233,11 @@ void CSymbolEdit::LoadPastSearches(CString values)
 		{
 			CString item = ItemElement->Attribute("text");
 
-			m_searches.Add(item.Left(MAX_SAVED_SEARCH_LENGTH));
+			CString toAdd = item.Left(MAX_SAVED_SEARCH_LENGTH);
+			if (toAdd != _T(""))
+			{
+				m_searches.Add(toAdd);
+			}
 
 			ItemElement = ItemElement->NextSiblingElement();
 		}
