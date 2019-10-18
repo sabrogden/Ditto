@@ -2713,9 +2713,9 @@ void CGetSetOptions::SetToolTipTimeout(long val)
 
 CString CGetSetOptions::GetPastSearchXml()
 {
-	//max this out at 100000, this should be more than the allowed length in SymbolEdit.cpp
+	//max this out at 1000, this should be more than the allowed length in SymbolEdit.cpp
 	//had reports of this being really large and causing memory issues, this will prevent us from this
-	return GetProfileString("PastSearchXml", "", "", 100000);
+	return GetProfileString("PastSearchXml", "", "", 1000);
 }
 
 void CGetSetOptions::SetPastSearchXml(CString val)
