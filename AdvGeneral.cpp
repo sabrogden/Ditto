@@ -165,7 +165,7 @@ BOOL CAdvGeneral::OnInitDialog()
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Double shortcut keystroke timeout)"), (long)CGetSetOptions::GetDoubleKeyStrokeTimeout(), _T(""), SETTING_DOUBLE_KEYSTROKE_TIMEOUT));
 
-	AddTrueFalse(pGroupTest, _T("Draw RTF Text in List(for RTF types) (Could Increase Memory Usage an Display Speed)"), CGetSetOptions::GetDrawRTF(), SETTING_DRAW_RTF);
+	AddTrueFalse(pGroupTest, _T("Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)"), CGetSetOptions::GetDrawRTF(), SETTING_DRAW_RTF);
 	AddTrueFalse(pGroupTest, _T("Elevated privileges to paste into elevated apps"), CGetSetOptions::GetPasteAsAdmin(), SETTING_PASTE_AS_ADMIN);
 	AddTrueFalse(pGroupTest, _T("Ensure Ditto is always connected to the clipboard"), CGetSetOptions::GetEnsureConnectToClipboard(), SETTING_ENSURE_CONNECTED);
 	AddTrueFalse(pGroupTest, _T("Ensure Entire Window is Visible"), CGetSetOptions::GetEnsureEntireWindowCanBeSeen(), SETTING_ENSURE_WINDOW_IS_VISIBLE);
