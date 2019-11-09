@@ -489,8 +489,6 @@ int ActionEnums::GetDefaultShortCutKeyB(ActionEnumValues value, int pos)
 	case 0:
 		switch (value)
 		{
-		case FORCE_CLOSE_WINDOW:
-			return VK_ESCAPE;
 		}
 		break;
 	}
