@@ -930,6 +930,8 @@ void CCP_MainApp::ShowCommandLineError(CString csTitle, CString csMessage)
 	pt.y -= max(cr.Height()+50, 150);
 
 	pErrorWnd->Show(pt);
+
+	PumpMessageEx(pErrorWnd->m_hWnd);
 	
 	Sleep(4000);
 
