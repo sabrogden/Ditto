@@ -443,7 +443,7 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 		case CLOSEWINDOW:
 			return VK_ESCAPE;
 		case FORCE_CLOSE_WINDOW:
-			return VK_ESCAPE;
+			return ACCEL_MAKEKEY(VK_ESCAPE, HOTKEYF_SHIFT);
 		case TOGGLE_DESCRIPTION_WORD_WRAP:
 			return 'W';
 		case COPY_SELECTION:
