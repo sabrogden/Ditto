@@ -638,6 +638,8 @@ BOOL RestoreDB(CString backupPath)
 
 	Log(StrF(_T("Done restoring db, from: %s, error: %s"), backupPath, errorMessage));
 
+	theApp.RefreshView();
+
 	return ret;
 }
 
