@@ -1387,6 +1387,8 @@ LRESULT CToolTipEx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 		prcNewWindow->bottom - prcNewWindow->top,
 		SWP_NOZORDER | SWP_NOACTIVATE);
 
+	log(StrF(_T("CQPasteWnd::OnDpiChanged dpi: %d width: %d, height: %d"), dpi, (prcNewWindow->right - prcNewWindow->left), (prcNewWindow->bottom - prcNewWindow->top)));
+
 	m_optionsButton.Reset();
 	m_optionsButton.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPI(), IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, cog_28, IDB_COG_32_32, _T("PNG"));
 

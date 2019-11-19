@@ -269,6 +269,7 @@ LRESULT CEditFrameWnd::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 		prcNewWindow->bottom - prcNewWindow->top,
 		SWP_NOZORDER | SWP_NOACTIVATE);
 
+	log(StrF(_T("CEditFrameWnd::OnDpiChanged dpi: %d width: %d, height: %d"), dpi, (prcNewWindow->right - prcNewWindow->left), (prcNewWindow->bottom - prcNewWindow->top)));
 
 	this->Invalidate();
 	this->UpdateWindow();

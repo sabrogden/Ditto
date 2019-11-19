@@ -294,6 +294,8 @@ LRESULT QRCodeViewer::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 		prcNewWindow->bottom - prcNewWindow->top,
 		SWP_NOZORDER | SWP_NOACTIVATE);
 
+	log(StrF(_T("QRCodeViewer::OnDpiChanged dpi: %d width: %d, height: %d"), dpi, (prcNewWindow->right - prcNewWindow->left), (prcNewWindow->bottom - prcNewWindow->top)));
+
 	MoveControls();
 
 	m_logFont.lfHeight = m_DittoWindow.m_dpi.Scale(m_originalFontHeight);
