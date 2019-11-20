@@ -772,7 +772,21 @@ BOOL CQuickPasteKeyboard::PreTranslateMessage(MSG* pMsg)
 	switch(pMsg->message)
 	{
 	case WM_KILLFOCUS:
-		int i = 9;
+		break;
+	case WM_KEYDOWN:
+		if (pMsg->wParam == VK_ESCAPE)
+		{
+			if (pMsg->hwnd == m_hotKey1.m_hWnd)
+			{
+				m_hotKey1.SetHotKey(VK_ESCAPE, CAccels::GetKeyStateModifiers());
+				return TRUE;
+			}
+			if (pMsg->hwnd == m_hotKey2.m_hWnd)
+			{
+				m_hotKey2.SetHotKey(VK_ESCAPE, CAccels::GetKeyStateModifiers());
+				return TRUE;
+			}
+		}
 		break;
 	}
 
