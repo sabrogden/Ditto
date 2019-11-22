@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Ditto_Language_File Version = "3.22.70" Author = "Nardog, maboroshin" Notes = "for v3.22.70 ( update: 2019/11, errer no honyku mikakunin, https://pc.genkaku.in/ )" LanguageCode="jpn">
+<Ditto_Language_File Version = "3.22.70" Author = "Nardog, maboroshin" Notes = "for v3.22.72 ( update: 2019/11, errer no honyaku mikakunin, https://pc.genkaku.in/ )" LanguageCode="jpn">
 	<Ditto_Right_Click_Menu>
-		<Item English_Text = "Groups" ID = "-1">グループ</Item>
-		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">グループ作成</Item>
-		<Item English_Text = "New Group Selection	F7" ID = "32812">選択項目でグループ作成</Item>
-		<Item English_Text = "Move to Group" ID = "32840">グループへ移動</Item>
-		<Item English_Text = "Quick Options" ID = "-1">クイックオプション</Item>
-		<Item English_Text = "Lines Per Clip" ID = "-1">クリップごとの表示行数</Item>
+		<Item English_Text = "Groups" ID = "-1">グループ(&amp;G)</Item>
+		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">グループ作成(&amp;N)...</Item>
+		<Item English_Text = "New Group Selection	F7" ID = "32812">選択項目でグループ作成(&amp;S)...</Item>
+		<Item English_Text = "Move to Group" ID = "32840">グループへ移動(&amp;M)...</Item>
+		<Item English_Text = "Quick Options" ID = "-1">クイックオプション(&amp;Q)</Item>
+		<Item English_Text = "Lines Per Clip" ID = "-1">クリップごとの表示行数(&amp;N)</Item>
 		<Item English_Text = "1" ID = "32807"></Item>
 		<Item English_Text = "2" ID = "32786"></Item>
 		<Item English_Text = "3" ID = "32787"></Item>
 		<Item English_Text = "4" ID = "32788"></Item>
 		<Item English_Text = "5" ID = "32789"></Item>
-		<Item English_Text = "Transparency" ID = "-1">透明度</Item>
-		<Item English_Text = "None" ID = "32800">なし</Item>
+		<Item English_Text = "Transparency" ID = "-1">透明度(&amp;T)</Item>
+		<Item English_Text = "None" ID = "32800">なし(&amp;N)</Item>
 		<Item English_Text = "5 " ID = "32808"></Item>
 		<Item English_Text = "10 " ID = "32792"></Item>
 		<Item English_Text = "15 " ID = "32794"></Item>
@@ -22,137 +22,137 @@
 		<Item English_Text = "30 " ID = "32799"></Item>
 		<Item English_Text = "35 " ID = "32950"></Item>
 		<Item English_Text = "40 " ID = "32790"></Item>
-		<Item English_Text = "Positioning" ID = "-1">表示位置</Item>
+		<Item English_Text = "Positioning" ID = "-1">表示位置(&amp;P)</Item>
 		<Item English_Text = "At Caret" ID = "32802">キャレット</Item>
-		<Item English_Text = "At Cursor" ID = "32803">カーソル</Item>
-		<Item English_Text = "At Previous Position" ID = "32804">前回の位置</Item>
+		<Item English_Text = "At Cursor" ID = "32803">カーソル(&amp;M)</Item>
+		<Item English_Text = "At Previous Position" ID = "32804">前回の位置(&amp;P)</Item>
 		<Item English_Text = "First Ten Hot Keys" ID = "-1">最初の 10 個のホット キー</Item>
 		<Item English_Text = "Use Ctrl - Num" ID = "32777">Ctrl - Num の使用</Item>
 		<Item English_Text = "Show Hot Key Text" ID = "32778">ホットキー テキストの表示</Item>
-		<Item English_Text = "View Caption Bar On" ID = "-1">見出しバーの表示位置</Item>
-		<Item English_Text = "Top" ID = "32783">上</Item>
-		<Item English_Text = "Right" ID = "32780">右</Item>
-		<Item English_Text = "Bottom" ID = "32781">下</Item>
-		<Item English_Text = "Left" ID = "32782">左</Item>
+		<Item English_Text = "View Caption Bar On" ID = "-1">見出しバーの表示位置(&amp;B)</Item>
+		<Item English_Text = "Top" ID = "32783">上(&amp;T)</Item>
+		<Item English_Text = "Right" ID = "32780">右(&amp;R)</Item>
+		<Item English_Text = "Bottom" ID = "32781">下(&amp;B)</Item>
+		<Item English_Text = "Left" ID = "32782">左(&amp;L)</Item>
 		<Item English_Text = "Order" ID = "-1">整列</Item>
-		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">昇順 (上が最新)</Item>
-		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">降順 (下が最新)</Item>
+		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">昇順 (上が最新)(&amp;A)</Item>
+		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">降順 (下が最新)(&amp;D)</Item>
 		<Item English_Text = "Double Clicking on Caption" ID = "-1">見出しのダブルクリック</Item>
 		<Item English_Text = "Toggles Always on Top" ID = "32814">常に手前に表示の切替</Item>
 		<Item English_Text = "Rolls-up Window" ID = "32815">ウィンドウを折りたたむ</Item>
 		<Item English_Text = "Toggles Always Show Description" ID = "32816">常に説明の表示を切替</Item>
 		<Item English_Text = "Always on Top" ID = "32784">常に手前に表示</Item>
-		<Item English_Text = "Auto Roll-up" ID = "32791">自動で折りたたむ</Item>
+		<Item English_Text = "Auto Roll-up" ID = "32791">自動で折りたたむ(&amp;R)</Item>
 		<Item English_Text = "Always Show Description" ID = "32813">常に説明を表示</Item>
 		<Item English_Text = "Prompt For New Group Names" ID = "32817">新しいグループ名の確認</Item>
-		<Item English_Text = "Select Font" ID = "32844">フォントの選択</Item>
-		<Item English_Text = "Show Thumbnails" ID = "32845">サムネイルの表示</Item>
-		<Item English_Text = "Draw RTF Text" ID = "32846">RTF テキストの描画</Item>
+		<Item English_Text = "Select Font" ID = "32844">フォントの選択(&amp;F)</Item>
+		<Item English_Text = "Show Thumbnails" ID = "32845">サムネイルの表示(&amp;S)</Item>
+		<Item English_Text = "Draw RTF Text" ID = "32846">RTF テキストの描画(&amp;D)</Item>
 		<Item English_Text = "Paste Clip after selection" ID = "32847">選択後のクリップの貼り付け</Item>
 		<Item English_Text = "Find As You Type" ID = "32848">入力の検索</Item>
 		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">ウィンドウの全体の表示を確実にする</Item>
 		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">メインの一覧のグループにあるクリップの表示</Item>
-		<Item English_Text = "Send To" ID = "-1">送信</Item>
+		<Item English_Text = "Send To" ID = "-1">送信(&amp;S)</Item>
 		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">(192.168.1.101) - 同じコンピュータ</Item>
 		<Item English_Text = "View Full Description	F3" ID = "32793">内容をすべて表示</Item>
-		<Item English_Text = "View Groups" ID = "32819">グループの表示</Item>
+		<Item English_Text = "View Groups" ID = "32819">グループの表示(&amp;V)</Item>
 		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">プレーンテキストのみ貼り付け</Item>
 		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">プレーンテキストとして HTML を貼り付け</Item>
 		<Item English_Text = "Delete Entry" ID = "32801">項目の削除</Item>
-		<Item English_Text = "Properties" ID = "32776">プロパティ</Item>
-		<Item English_Text = "Quick Properties" ID = "-1">クイックプロパティ</Item>
-		<Item English_Text = "Never Auto Delete" ID = "32820">自動削除しない</Item>
-		<Item English_Text = "Auto Delete" ID = "32821">自動削除する</Item>
-		<Item English_Text = "Remove Hot Key" ID = "32822">ホットキーの削除</Item>
-		<Item English_Text = "Options..." ID = "32805">オプション (Option)...</Item>
-		<Item English_Text = "Help" ID = "32842">ヘルプ (ウェブ)</Item>
-		<Item English_Text = "Disconnect from Clipboard" ID = "32775">クリップボードから切断</Item>
-		<Item English_Text = "Exit Program" ID = "32806">プログラムの終了</Item>
+		<Item English_Text = "Properties" ID = "32776">プロパティ(&amp;P)</Item>
+		<Item English_Text = "Quick Properties" ID = "-1">クイックプロパティ(&amp;Q)</Item>
+		<Item English_Text = "Never Auto Delete" ID = "32820">自動削除しない(&amp;N)</Item>
+		<Item English_Text = "Auto Delete" ID = "32821">自動削除する(&amp;Y)</Item>
+		<Item English_Text = "Remove Hot Key" ID = "32822">ホットキーの削除(&amp;H)</Item>
+		<Item English_Text = "Options..." ID = "32805">オプション(&amp;O)...</Item>
+		<Item English_Text = "Help" ID = "32842">ヘルプ (ウェブ)(&amp;H)...</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "32775">クリップボードから切断(&amp;D)</Item>
+		<Item English_Text = "Exit Program" ID = "32806">プログラムの終了(&amp;X)</Item>
 		
 		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Prompt to Delete Clip" ID = "32852">クリップの削除の確認</Item>	
-		<Item English_Text = "Import Clip(s)" ID = "32855">インポート</Item>
-		<Item English_Text = "Export Clip(s)" ID = "32853">エクスポート</Item>
-		<Item English_Text = "Remove Quick Paste" ID = "32856">クイックペーストの削除</Item>	
-		<Item English_Text = "Edit Clip" ID = "32860">クリップの編集</Item>
-		<Item English_Text = "New Clip" ID = "32867">新しいクリップ</Item>	
+		<Item English_Text = "Import Clip(s)" ID = "32855">インポート(&amp;I)</Item>
+		<Item English_Text = "Export Clip(s)" ID = "32853">エクスポート(&amp;E)</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">クイックペーストの削除(&amp;Q)</Item>	
+		<Item English_Text = "Edit Clip" ID = "32860">クリップの編集...</Item>
+		<Item English_Text = "New Clip" ID = "32867">新しいクリップ...</Item>	
 		
 		//Added 1/10/15
-		<Item English_Text = "Compare" ID = "-1">比較</Item>	
-		<Item English_Text = "Select Left Text" ID = "32893">左窓のテキストに選択</Item>	
-		<Item English_Text = "Select Right Text And Compare Against Left" ID = "32894">右窓のテキストに選択し、左窓と比較</Item>	
-		<Item English_Text = "Compare" ID = "32895">比較 (複数選択に対し)</Item>
+		<Item English_Text = "Compare" ID = "-1">比較(&amp;D)</Item>	
+		<Item English_Text = "Select Left Text" ID = "32893">左窓のテキストに選択(&amp;L)</Item>	
+		<Item English_Text = "Select Right Text And Compare Against Left" ID = "32894">右窓のテキストに選択し、左窓と比較(&amp;R)...</Item>	
+		<Item English_Text = "Compare" ID = "32895">比較 (複数選択に対し)(&amp;C)...</Item>
 		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "32881">権限起動のソフトへの貼り付けに管理者権限で起動</Item>
 		<Item English_Text = "Show In Taskbar" ID = "32885">タスクバーに表示</Item>
 		<Item English_Text = "Sticky Clips" ID = "-1">クリップ付箋</Item>	
-		<Item English_Text = "Make Top Sticky Clip" ID = "32878">クリップ付箋の最初へ</Item>	
-		<Item English_Text = "Make Last Sticky Clip" ID = "32879">クリップ付箋の最後へ</Item>	
-		<Item English_Text = "Remove Sticky Setting" ID = "32880">クリップ付箋をやめる</Item>
-		<Item English_Text = "Import/Export" ID = "-1">インポート/エクスポート</Item>	
-		<Item English_Text = "View as QRCode" ID = "32887">QRコードで表示</Item>	
-		<Item English_Text = "Export Clip(s) to Text File" ID = "32889">クリップをテキストファイルでエクスポート</Item>	
+		<Item English_Text = "Make Top Sticky Clip" ID = "32878">クリップ付箋の最初へ(&amp;T)</Item>	
+		<Item English_Text = "Make Last Sticky Clip" ID = "32879">クリップ付箋の最後へ(&amp;L)</Item>	
+		<Item English_Text = "Remove Sticky Setting" ID = "32880">クリップ付箋をやめる(&amp;R)</Item>
+		<Item English_Text = "Import/Export" ID = "-1">インポート/エクスポート(&amp;I)</Item>	
+		<Item English_Text = "View as QRCode" ID = "32887">QRコードで表示(&amp;Q)</Item>	
+		<Item English_Text = "Export Clip(s) to Text File" ID = "32889">クリップをテキストファイルでエクスポート(&amp;T)</Item>	
 		
 		//Added 12/17/16
-		<Item English_Text = "Special Paste" ID = "-1">変換して貼り付け</Item>			
-		<Item English_Text = "UPPER CASE" ID = "32912">大文字に</Item>	
-		<Item English_Text = "lower case" ID = "32913">小文字に</Item>	
-		<Item English_Text = "Capitalize Case" ID = "32914">単語の頭を大文字</Item>	
-		<Item English_Text = "Sentence case" ID = "32915">文頭を大文字</Item>	
-		<Item English_Text = "Remove Line Feeds" ID = "32916">改行除去</Item>	
-		<Item English_Text = "Paste + One Line Feed" ID = "32918">貼り付けて改行</Item>	
-		<Item English_Text = "Paste + Two Line Feeds" ID = "32919">貼り付けて改行2回</Item>	
-		<Item English_Text = "Paste + Current Time" ID = "32927">貼り付けて改行と日時</Item>	
-		<Item English_Text = "Typoglycemia" ID = "32922">タイポグリセミア</Item>	
-		<Item English_Text = "Filter On" ID = "-1">フィルター</Item>			
-		<Item English_Text = "Toggle Last Group Toggle" ID = "32925">直前のグループに表示切替</Item>			
-		<Item English_Text = "Clip Order" ID = "-1">クリップの順番</Item>			
-		<Item English_Text = "Move To Top" ID = "32908">最初に移動</Item>	
-		<Item English_Text = "Move Up" ID = "32906">上に移動</Item>	
-		<Item English_Text = "Move Down" ID = "32907">下に移動</Item>			
-		<Item English_Text = "Export Clip(s) to Image File" ID = "32902">クロップを画像でエクスポート</Item>	
-		<Item English_Text = "Export to Google Translate" ID = "32900">Google翻訳にエクスポート (ウェブ)</Item>	
+		<Item English_Text = "Special Paste" ID = "-1">変換して貼り付け(&amp;C)</Item>			
+		<Item English_Text = "UPPER CASE" ID = "32912">大文字に(&amp;U)</Item>	
+		<Item English_Text = "lower case" ID = "32913">小文字に(&amp;L)</Item>	
+		<Item English_Text = "Capitalize Case" ID = "32914">単語の頭を大文字(&amp;C)</Item>	
+		<Item English_Text = "Sentence case" ID = "32915">文頭を大文字(&amp;S)</Item>	
+		<Item English_Text = "Remove Line Feeds" ID = "32916">改行除去(&amp;R)</Item>	
+		<Item English_Text = "Paste + One Line Feed" ID = "32918">貼り付けて改行(&amp;B)</Item>	
+		<Item English_Text = "Paste + Two Line Feeds" ID = "32919">貼り付けて改行2回(&amp;T)</Item>	
+		<Item English_Text = "Paste + Current Time" ID = "32927">貼り付けて改行と日時(&amp;D)</Item>	
+		<Item English_Text = "Typoglycemia" ID = "32922">タイポグリセミア(&amp;T)</Item>	
+		<Item English_Text = "Filter On" ID = "-1">フィルター(&amp;F)</Item>			
+		<Item English_Text = "Toggle Last Group Toggle" ID = "32925">直前のグループに表示切替(&amp;T)</Item>			
+		<Item English_Text = "Clip Order" ID = "-1">クリップの順番(&amp;O)</Item>			
+		<Item English_Text = "Move To Top" ID = "32908">最初に移動(&amp;T)</Item>	
+		<Item English_Text = "Move Up" ID = "32906">上に移動(&amp;U)</Item>	
+		<Item English_Text = "Move Down" ID = "32907">下に移動(&amp;D)</Item>			
+		<Item English_Text = "Export Clip(s) to Image File" ID = "32902">クリップを画像でエクスポート(&amp;I)</Item>	
+		<Item English_Text = "Export to Google Translate" ID = "32900">Google翻訳にエクスポート (ウェブ)(&amp;G)</Item>	
 		
-		<Item English_Text = "Search Options" ID = "-1">検索オプション</Item>	
-		<Item English_Text = "Search Description" ID = "32873">’内容を検索</Item>	
-		<Item English_Text = "Search Full Text" ID = "32874">テキストすべてを検索</Item>	
-		<Item English_Text = "Search Quick Paste" ID = "32875">クイックペーストを検索</Item>	
-		<Item English_Text = "Contains Text Search" ID = "32876">文字列検索</Item>	
-		<Item English_Text = "Regular Expression Search" ID = "32899">正規表現</Item>	
-		<Item English_Text = "Wildcard Search" ID = "32903">ワイルドカード</Item>	
+		<Item English_Text = "Search Options" ID = "-1">検索オプション(&amp;E)</Item>	
+		<Item English_Text = "Search Description" ID = "32873">内容を検索(&amp;D)</Item>	
+		<Item English_Text = "Search Full Text" ID = "32874">テキストすべてを検索(&amp;T)</Item>	
+		<Item English_Text = "Search Quick Paste" ID = "32875">クイックペーストを検索(&amp;Q)</Item>	
+		<Item English_Text = "Contains Text Search" ID = "32876">文字列検索(&amp;S)</Item>	
+		<Item English_Text = "Regular Expression Search" ID = "32899">正規表現(&amp;R)</Item>	
+		<Item English_Text = "Wildcard Search" ID = "32903">ワイルドカード(&amp;W)</Item>	
 		<Item English_Text = "Show text for first ten copy hot keys" ID = "32923">最近10項目にホットキーのテキストを表示</Item>	
 		<Item English_Text = "Show indicator a clip has been pasted" ID = "32924">貼り付けたクリップにマーク</Item>	
-		<Item English_Text = "Global Hot Keys" ID = "32933">グローバルホットキー</Item>	
-		<Item English_Text = "Delete Clip Data" ID = "32934">クリップデータの削除</Item>	
-		<Item English_Text = "Import Clip(s)" ID = "32935">クリップのインポート</Item>	
+		<Item English_Text = "Global Hot Keys" ID = "32933">グローバルホットキー(&amp;G)...</Item>	
+		<Item English_Text = "Delete Clip Data" ID = "32934">クリップデータの削除(&amp;D)</Item>	
+		<Item English_Text = "Import Clip(s)" ID = "32935">クリップのインポート(&amp;I)...</Item>	
 		<Item English_Text = "New Clip" ID = "32937">新規クリップの作成</Item>	
-		<Item English_Text = "Save Current Clipboard" ID = "32905">現在のクリップボードを保存</Item>	
+		<Item English_Text = "Save Current Clipboard" ID = "32905">現在のクリップボードを保存(&amp;S)</Item>	
 		<Item English_Text = "Import" ID = "">インポート</Item>	
 		
-		<Item English_Text = "Show Startup Message" ID = "32959">起動時にメッセージを表示</Item>
-		<Item English_Text = "Filter On Selected Clip" ID = "32910">選択項目でフィルター</Item>		
-		<Item English_Text = "Invert Case" ID = "32958">大/小文字を反転</Item>
-		<Item English_Text = "Trim White Space" ID = "32946">空白をトリムし除去</Item>
-		<Item English_Text = "Slugify" ID = " 32954">空白をハイフンに</Item>		
-		<Item English_Text = "Paste, Don't Change Clip Order" ID = " 32945">順番そのままで貼り付け</Item>		
-		<Item English_Text = "Gmail, Content In Body" ID = "32952">Gmail/内容を本文へ (ブラウザ)</Item>
-		<Item English_Text = "EMail, Clip Export As Attachment" ID = "32953">メール/エクスポートして添付ファイルへ</Item>
-		<Item English_Text = "EMail, Content As Attachment" ID = "32956">メール/内容を添付ファイルへ</Item>
-		<Item English_Text = "EMail, Content In Body" ID = "32951">メール/内容を本文</Item>		
-		<Item English_Text = "Import File Contents From CF_HDROP" ID = "32941">CF_HDROP からファイルをインポート</Item>		
-		<Item English_Text = "Move To Last" ID = "32943">最後に移動</Item>
+		<Item English_Text = "Show Startup Message" ID = "32959">起動時にメッセージを表示(&amp;M)</Item>
+		<Item English_Text = "Filter On Selected Clip" ID = "32910">選択項目でフィルター(&amp;F)</Item>		
+		<Item English_Text = "Invert Case" ID = "32958">大/小文字を反転(&amp;I)</Item>
+		<Item English_Text = "Trim White Space" ID = "32946">空白をトリムし除去(&amp;T)</Item>
+		<Item English_Text = "Slugify" ID = " 32954">空白をハイフンに(&amp;H)</Item>		
+		<Item English_Text = "Paste, Don't Change Clip Order" ID = " 32945">順番そのままで貼り付け(&amp;O)</Item>		
+		<Item English_Text = "Gmail, Content In Body" ID = "32952">Gmail/内容を本文へ (ブラウザ)(&amp;G)</Item>
+		<Item English_Text = "EMail, Clip Export As Attachment" ID = "32953">メール/エクスポートして添付ファイルへ(&amp;E)</Item>
+		<Item English_Text = "EMail, Content As Attachment" ID = "32956">メール/内容を添付ファイルへ(&amp;A)</Item>
+		<Item English_Text = "EMail, Content In Body" ID = "32951">メール/内容を本文(&amp;B)</Item>		
+		<Item English_Text = "Import File Contents From CF_HDROP" ID = "32941">CF_HDROP からファイルをインポート(&amp;C)</Item>		
+		<Item English_Text = "Move To Last" ID = "32943">最後に移動(&amp;L)</Item>
 		
-		<Item English_Text = "Increase" ID = "32947">増加</Item>
-		<Item English_Text = "Decrease" ID = "32948">減少</Item>
-		<Item English_Text = "Toggle Enabled" ID = "32949">透明化を切替</Item>
+		<Item English_Text = "Increase" ID = "32947">増加(&amp;I)</Item>
+		<Item English_Text = "Decrease" ID = "32948">減少(&amp;D)</Item>
+		<Item English_Text = "Toggle Enabled" ID = "32949">透明化を切替(&amp;T)</Item>
 		
-		<Item English_Text = "Backup Database" ID = "32962">データベースをバックアップ</Item>
-		<Item English_Text = "Restore Dastabase" ID = "32964">データベースを復元</Item>
+		<Item English_Text = "Backup Database" ID = "32962">データベースをバックアップ(&amp;B)...</Item>
+		<Item English_Text = "Restore Dastabase" ID = "32964">データベースを復元(&amp;R)...</Item>
 		
 		//Added by maboroshin 2019/11
-		<Item English_Text = "Replace Top Sticky Clip" ID = "32938">クリップ付箋の先頭と入替</Item>
+		<Item English_Text = "Replace Top Sticky Clip" ID = "32938">クリップ付箋の先頭と入替(&amp;R)</Item>
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
-		<Item English_Text = "Hot Key" ID = "2039">ホット キー</Item>
+		<Item English_Text = "Hot Key" ID = "2039">ホットキー</Item>
 		<Item English_Text = "Date" ID = "2040">日時</Item>
 		<Item English_Text = "Never Auto Delete" ID = "1025">自動削除しない</Item>
 		<Item English_Text = "Move To Group" ID = "2041">グループへ移動</Item>
@@ -169,7 +169,7 @@
 		<Item English_Text = "Quick Paste Text" ID = "2125">クイックペースト文</Item>
 		
 		//Added by maboroshin 2019/11
-		<Item English_Text = "Selected format MD5" ID = "2167">MD5:選択コピー形式</Item>
+		<Item English_Text = "Selected format MD5" ID = "2167">MD&amp;5:選択コピー形式</Item>
 				
 	</Ditto_Clip_Properties>
 	<Ditto_Options_General>
@@ -338,7 +338,7 @@
 		
 	</Ditto_Options_Supported_Types_Add>
 	<Ditto_Move_To_Groups>
-		<Item English_Text = "New Group" ID = "1040">新しいグループ</Item>
+		<Item English_Text = "New Group" ID = "1040">新規グループ(&amp;N)</Item>
 		<Item English_Text = "OK" ID = "1">OK</Item>
 		<Item English_Text = "Cancel" ID = "2">キャンセル</Item>
 		<Item English_Text = "Move to Group" ID = "-1">グループへ移動</Item>
@@ -361,8 +361,8 @@
 		<Item English_Text = "Download updated version?" ID = "Download_Update">最新版をダウンロードしますか?</Item>			
 		<Item English_Text = "No updates available" ID = "No_Updates">更新はありません</Item>			
 		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">すべてのコピー項目を削除します！\n\nよろしいですか？</Item>
-		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">クリップボードから切断</Item>
-		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">クリップボードに接続</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">クリップボードから切断(&amp;D)</Item>
+		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">クリップボードに接続(&amp;C)</Item>
 		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">DAO/Jet db エンジンが初期化できませんでした。DAO は今すぐインストールされます。\n\nDAO のインストール後に Ditto を再起動します。</Item>
 		<Item English_Text = "NO TARGET" ID = "No_Target">対象なし</Item>
 		
@@ -397,7 +397,7 @@
 		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">Ditto がコピーを受信しませんでした</Item> 
 		
 		//New strings added in 3.17 2-28-10
-		<Item English_Text = "Add-Ins" ID = "Add_Ins">アドオン</Item> 
+		<Item English_Text = "Add-Ins" ID = "Add_Ins">アドオン(&amp;A)</Item> 
 		
 		<Item English_Text = "Copy Buffers" ID = "CopyBuffers">コピーバッファー</Item>
 		
@@ -437,29 +437,29 @@
 		<Item English_Text = "Apply" ID = "12321">適用</Item>
 	</Ditto_Options_Sheet>
 	<Ditto_Tray_Icon_Menu>
-		<Item English_Text = "Show Quick Paste" ID = "32773">クイックペーストの表示</Item>
-		<Item English_Text = "Options" ID = "32771">オプション (Option)</Item>
-		<Item English_Text = "Help" ID = "32843">ヘルプ</Item>
-		<Item English_Text = "Exit" ID = "32772">終了</Item>
+		<Item English_Text = "Show Quick Paste" ID = "32773">クイックペーストの表示(&amp;Q)</Item>
+		<Item English_Text = "Options" ID = "32771">オプション(&amp;O)...</Item>
+		<Item English_Text = "Help" ID = "32843">ヘルプ (ウェブ)(&amp;H)...</Item>
+		<Item English_Text = "Exit" ID = "32772">終了(&amp;X)</Item>
 
 		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Import" ID = "32854">インポート</Item>
-		<Item English_Text = "New Clip" ID = "32868">新しいクリップ</Item>
+		<Item English_Text = "Import" ID = "32854">インポート(&amp;I)...</Item>
+		<Item English_Text = "New Clip" ID = "32868">新しいクリップ(&amp;N)...</Item>
 		
 		//Added 12/10/11
-		<Item English_Text = "Global Hot Keys" ID = "32872">グローバルホットキー</Item>
+		<Item English_Text = "Global Hot Keys" ID = "32872">グローバルホットキー(&amp;G)...</Item>
 		
 		//Added 1/10/15
-		<Item English_Text = "Delete Clip Data" ID = "32886">クリップデータの削除</Item>
+		<Item English_Text = "Delete Clip Data" ID = "32886">クリップデータの削除(&amp;D)</Item>
 		
 		//Added 12/17/16
-		<Item English_Text = "Fixup Sticky Clip Order" ID = "32909">クリップ付箋の順番を修復</Item>		
-		<Item English_Text = "Save Current Clipboard" ID = "32904">現在のクリップボードを保存</Item>
+		<Item English_Text = "Fixup Sticky Clip Order" ID = "32909">クリップ付箋の順番を修復(&amp;F)</Item>		
+		<Item English_Text = "Save Current Clipboard" ID = "32904">現在のクリップボードを保存(&amp;S)</Item>
 		
-		<Item English_Text = "Show Startup Message" ID = "32959">起動時にメッセージを表示</Item>
+		<Item English_Text = "Show Startup Message" ID = "32959">起動時にメッセージを表示(&amp;M)</Item>
 		
-		<Item English_Text = "Backup Database" ID = "32960">データベースをバックアップ</Item>
-		<Item English_Text = "Restore Database" ID = "32961">データベースを復元</Item>
+		<Item English_Text = "Backup Database" ID = "32960">データベースをバックアップ(&amp;B)...</Item>
+		<Item English_Text = "Restore Database" ID = "32961">データベースを復元(&amp;R)...</Item>
 		
 	</Ditto_Tray_Icon_Menu>
 
@@ -506,9 +506,9 @@
 
 	//Added 1/10/15
 	<Ditto_Groups_Right_Click_Menu>
-		<Item English_Text = "New Sub Group" ID = "32896">サブグループの追加</Item>
-		<Item English_Text = "Delete Group" ID = "32897">グループの削除</Item>
-		<Item English_Text = "Properties" ID = "32898">プロパティ</Item>	
+		<Item English_Text = "New Sub Group" ID = "32896">サブグループの追加(&amp;S)</Item>
+		<Item English_Text = "Delete Group" ID = "32897">グループの削除(&amp;D)</Item>
+		<Item English_Text = "Properties" ID = "32898">プロパティ(&amp;P)</Item>	
 	</Ditto_Groups_Right_Click_Menu>
 	
 	//Added 1/10/15
@@ -516,11 +516,11 @@
 		<Item English_Text = "Delete Clip Data" ID = "-1">クリップデータの削除</Item>
 		<Item English_Text = "Each clip in Ditto is made of multiple clipboard items, all clipboard items in Ditto are listed below." ID = "2126">Ditto のそれぞれのクリップは複数の項目から構成され、すべてのクリップボードの項目は以下となります。</Item>
 		<Item English_Text = "Search Options" ID = "2120">検索オプション</Item>
-		<Item English_Text = "Title" ID = "1042">内容</Item>
-		<Item English_Text = "Create Date Range" ID = "1043">作成日時の範囲</Item>
-		<Item English_Text = "Format" ID = "1045">形式</Item>
-		<Item English_Text = "Last Used Range" ID = "1044">最終使用の範囲</Item>
-		<Item English_Text = "Search" ID = "1040">検索</Item>
+		<Item English_Text = "Title" ID = "1042">内容(&amp;T)</Item>
+		<Item English_Text = "Create Date Range" ID = "1043">作成日時/範囲(&amp;C)</Item>
+		<Item English_Text = "Format" ID = "1045">形式(&amp;F)</Item>
+		<Item English_Text = "Last Used Range" ID = "1044">最終使用/範囲(&amp;L)</Item>
+		<Item English_Text = "Search" ID = "1040">検索(&amp;S)</Item>
 		<Item English_Text = "Database Size" ID = "2115">Database容量</Item>
 		<Item English_Text = "Selected Size" ID = "2116">選択容量</Item>
 		<Item English_Text = "Selected Count" ID = "2117">選択数</Item>
