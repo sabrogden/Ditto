@@ -6,8 +6,7 @@
 #include "CopyProperties.h"
 
 CDittoRulerRichEditCtrl::CDittoRulerRichEditCtrl(void)
-{
-	m_SaveTypes = stCF_UNICODETEXT|stCF_TEXT|stRTF;
+{	
 	m_lID = -1;
 }
 
@@ -134,10 +133,6 @@ void CDittoRulerRichEditCtrl::d()
 int CDittoRulerRichEditCtrl::SaveToDB(BOOL bUpdateDesc)
 {
 	int nRet = FALSE;
-	if(m_SaveTypes == stNONE && m_lID >= 0)
-	{
-		return DIDNT_NEED_TO_SAVE;
-	}
 
 	if(m_rtf.GetModify() == FALSE)
 	{
@@ -148,14 +143,33 @@ int CDittoRulerRichEditCtrl::SaveToDB(BOOL bUpdateDesc)
 	bool bSetModifyToFalse = true;
 	try
 	{
+		//only save the types if they have them set as save types, mainly rtf type
+		int saveTypes = 0;
+		CClipTypes* pTypes = theApp.LoadTypesFromDB();
+
+		INT_PTR numTypes = pTypes->GetSize();
+		for (int i = 0; i < numTypes; i++)
+		{
+			if (pTypes->ElementAt(i) == theApp.m_RTFFormat)
+			{
+				saveTypes |= stRTF;
+			}
+			else if (pTypes->ElementAt(i) == CF_TEXT ||
+				pTypes->ElementAt(i) == CF_UNICODETEXT)
+			{
+				saveTypes |= stCF_TEXT;
+				saveTypes |= stCF_UNICODETEXT;
+			}
+		}
+
 		CClip Clip;
 		Clip.m_id = m_lID;
-		if(m_SaveTypes & stRTF)
+		if(saveTypes & stRTF)
 		{
 			LoadRTFData(Clip);
 		}
 
-		if(m_SaveTypes & stCF_TEXT || m_SaveTypes & stCF_UNICODETEXT)
+		if(saveTypes & stCF_TEXT || saveTypes & stCF_UNICODETEXT)
 		{
 			LoadTextData(Clip);
 		}

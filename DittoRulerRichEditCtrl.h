@@ -22,7 +22,6 @@ public:
 	    
 protected:
 	long m_lID;
-	long m_SaveTypes;
 	CString m_csDescription;
 
 	bool LoadRTFData(CClip &Clip);
