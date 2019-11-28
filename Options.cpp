@@ -853,7 +853,7 @@ BOOL CGetSetOptions::SetQuickPastePosition(long lPosition)
 
 long CGetSetOptions::GetQuickPastePosition()
 {
-	return GetProfileLong("ShowQuickPastePosition", POS_AT_CURSOR);
+	return GetProfileLong("ShowQuickPastePosition", POS_AT_CARET);
 }
 
 BOOL CGetSetOptions::SetQuickPasteSize(CSize size)
