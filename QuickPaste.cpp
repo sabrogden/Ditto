@@ -236,6 +236,11 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 			{
 				crRect.right = crRect.left + m_pwndPaste->m_DittoWindow.m_dpi.Scale(crRect.Width());
 				crRect.bottom = crRect.top + m_pwndPaste->m_DittoWindow.m_dpi.Scale(crRect.Height());
+
+				if (g_Opt.m_bEnsureEntireWindowCanBeSeen)
+				{
+					EnsureWindowVisible(&crRect);
+				}
 			}
 
 			m_pwndPaste->MoveWindow(crRect);
@@ -252,6 +257,11 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 			{
 				crRect.right = crRect.left + m_pwndPaste->m_DittoWindow.m_dpi.Scale(crRect.Width());
 				crRect.bottom = crRect.top + m_pwndPaste->m_DittoWindow.m_dpi.Scale(crRect.Height());
+
+				if (g_Opt.m_bEnsureEntireWindowCanBeSeen)
+				{
+					EnsureWindowVisible(&crRect);
+				}
 			}
 			m_pwndPaste->MoveWindow(crRect);
 		}
