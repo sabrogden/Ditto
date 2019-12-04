@@ -119,6 +119,7 @@ END_MESSAGE_MAP()
 
 #define SETTING_ACTIVATE_WINDOW_DELAY 71
 #define SETTING_DOUBLE_KEYSTROKE_TIMEOUT 72
+#define SETTING_SEND_KEYS_DELAY 73
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -194,6 +195,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Save Multi-Pastes"), CGetSetOptions::GetSaveMultiPaste(), SETTING_SAVE_MULTI_PASTE);
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Selected Index"), (long)(CGetSetOptions::SelectedIndex()+1), _T(""), SETTING_SELECTED_INDEX));
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Send Keys Delay (ms)"), (long)CGetSetOptions::RealSendKeysDelay(), _T(""), SETTING_SEND_KEYS_DELAY));
 
 	AddTrueFalse(pGroupTest, _T("Show Clips That are in Groups in Main List"), CGetSetOptions::GetShowAllClipsInMainList(), SETTING_SHOW_GROUP_CLIPS_IN_LIST);
 	AddTrueFalse(pGroupTest, _T("Show leading whitespace"), CGetSetOptions::GetDescShowLeadingWhiteSpace(), SETTING_SHOW_LEADING_WHITESPACE);
@@ -714,6 +717,12 @@ void CAdvGeneral::OnBnClickedOk()
 				if (pNewValue->lVal != pOrigValue->lVal)
 				{
 					CGetSetOptions::SetSendKeysDelay(pNewValue->lVal);
+				}
+				break;
+			case SETTING_SEND_KEYS_DELAY:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetRealSendKeysDelay(pNewValue->lVal);
 				}
 				break;
 			case SETTING_DOUBLE_KEYSTROKE_TIMEOUT:

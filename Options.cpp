@@ -2008,6 +2008,16 @@ void CGetSetOptions::SetSendKeysDelay(DWORD val)
 	SetProfileLong(_T("SendKeysDelay"), val);
 }
 
+DWORD CGetSetOptions::RealSendKeysDelay()
+{
+	return (DWORD)GetProfileLong(_T("RealSendKeysDelay"), 10);
+}
+
+void CGetSetOptions::SetRealSendKeysDelay(DWORD val)
+{
+	SetProfileLong(_T("RealSendKeysDelay"), val);
+}
+
 DWORD CGetSetOptions::WaitForActiveWndTimeout()
 {
 	return (DWORD)GetProfileLong(_T("WaitForActiveWndTimeout"), 500);

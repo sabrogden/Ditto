@@ -235,6 +235,7 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	CString csPasteToApp = GetProcessName(activeWnd);
 	CString csPasteString = g_Opt.GetPasteString(csPasteToApp);
 	DWORD delay = g_Opt.SendKeysDelay();
+	DWORD sendKeysDelay = g_Opt.RealSendKeysDelay();
 
 	DWORD startTick = GetTickCount();
 
@@ -277,7 +278,7 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 		{
 			Sleep(delay);
 		}
-		send.SetKeyDownDelay(max(50, delay));
+		send.SetKeyDownDelay(sendKeysDelay);
 		send.SendKeys(csPasteString, true);
 	}
 
@@ -294,6 +295,7 @@ void ExternalWindowTracker::SendCopy(CopyReasonEnum::CopyReason copyReason)
 	CString csToApp = GetProcessName(activeWnd);
 	CString csString = g_Opt.GetCopyString(csToApp);
 	DWORD delay = g_Opt.SendKeysDelay();
+	DWORD SendKeysDelay = g_Opt.RealSendKeysDelay();
 
 	Sleep(delay);
 
@@ -324,7 +326,7 @@ void ExternalWindowTracker::SendCopy(CopyReasonEnum::CopyReason copyReason)
 	{
 		//give the app some time to take focus before sending paste
 		Sleep(delay);
-		send.SetKeyDownDelay(max(50, delay));
+		send.SetKeyDownDelay(SendKeysDelay);
 
 		theApp.SetCopyReason(copyReason);
 
@@ -343,6 +345,7 @@ void ExternalWindowTracker::SendCut()
 	CString csToApp = GetProcessName(m_activeWnd);
 	CString csString = g_Opt.GetCutString(csToApp);
 	DWORD delay = g_Opt.SendKeysDelay();
+	DWORD sendKeysDelay = g_Opt.RealSendKeysDelay();
 
 	Sleep(delay);
 
@@ -374,7 +377,7 @@ void ExternalWindowTracker::SendCut()
 	{
 		//give the app some time to take focus before sending paste
 		Sleep(delay);
-		send.SetKeyDownDelay(max(50, delay));
+		send.SetKeyDownDelay(sendKeysDelay);
 
 		send.SendKeys(csString, true);
 	}		
