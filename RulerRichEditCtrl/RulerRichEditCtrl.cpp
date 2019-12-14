@@ -49,6 +49,7 @@
 #include "TextFile/TextFile.h"
 #include "..\Options.h"
 #include "..\Misc.h"
+#include "..\HyperLink.h"
 
 #include "ids.h"
 #include ".\rulerricheditctrl.h"
@@ -323,16 +324,28 @@ BOOL CRulerRichEditCtrl::CreateRTFControl( BOOL autohscroll )
  
  		// Setting default character format
  		CharFormat	cf;
- 		cf.dwMask = CFM_SIZE | CFM_FACE | CFM_BOLD | CFM_ITALIC | CFM_UNDERLINE;
+ 		cf.dwMask = CFM_SIZE | CFM_FACE | CFM_BOLD | CFM_ITALIC | CFM_UNDERLINE | CFM_LINK;
  		cf.yHeight = 200;
  		cf.dwEffects = 0;
  		lstrcpy( cf.szFaceName, _T( "Times New Roman" ) );
  		m_rtf.SendMessage(EM_SETCHARFORMAT, 0, (LPARAM)&cf);
+
+#ifndef SES_HYPERLINKTOOLTIPS
+#define SES_HYPERLINKTOOLTIPS   8
+#endif
+#ifndef SES_NOFOCUSLINKNOTIFY
+#define SES_NOFOCUSLINKNOTIFY   32
+#endif 
+
+		DWORD style = SES_HYPERLINKTOOLTIPS | SES_NOFOCUSLINKNOTIFY;
+		m_rtf.SendMessage(EM_SETEDITSTYLE, style, style);
+
+		m_rtf.SendMessage(EM_AUTOURLDETECT, TRUE, 0);
  
  		// Set the internal tabs array
  		SetTabStops( ( LPLONG ) ( para.rgxTabs ), MAX_TAB_STOPS );
  
- 		m_rtf.SetEventMask( m_rtf.GetEventMask() | ENM_SELCHANGE | ENM_SCROLL | ENM_CHANGE );
+ 		m_rtf.SetEventMask( m_rtf.GetEventMask() | ENM_SELCHANGE | ENM_SCROLL | ENM_CHANGE | ENM_LINK );
  		SetReadOnly( GetReadOnly() ); 
 
 		result = TRUE;
@@ -407,10 +420,28 @@ BEGIN_MESSAGE_MAP(CRulerRichEditCtrl, CWnd)
 	ON_REGISTERED_MESSAGE(urm_GETSCROLLPOS, OnGetScrollPos)
 	ON_REGISTERED_MESSAGE(urm_SETCURRENTFONTNAME, OnSetCurrentFontName)
 	ON_REGISTERED_MESSAGE(urm_SETCURRENTFONTSIZE, OnSetCurrentFontSize)
+	ON_NOTIFY(EN_LINK, RTF_CONTROL, OnLink)
 	ON_REGISTERED_MESSAGE(urm_SETCURRENTFONTCOLOR, OnSetCurrentFontColor)
 	//}}AFX_MSG_MAP
 	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
+
+void CRulerRichEditCtrl::OnLink(NMHDR* pnm, LRESULT* pResult)
+{
+	ENLINK* pnml = reinterpret_cast<ENLINK*>(pnm);
+
+	if (pnml->msg == WM_LBUTTONDOWN ||
+		(pnml->msg == WM_KEYDOWN && pnml->wParam == VK_RETURN))
+	{
+		CString url;
+		m_rtf.GetTextRange(pnml->chrg.cpMin, pnml->chrg.cpMax, url);
+		CHyperLink::GotoURL(url, SW_SHOW);
+
+		*pResult = 1; // message handled
+	}
+
+	*pResult = 0;  // enable default processing
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // CRulerRichEditCtrl message handlers
