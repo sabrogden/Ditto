@@ -325,9 +325,9 @@ BOOL CRulerRichEditCtrl::CreateRTFControl( BOOL autohscroll )
  		// Setting default character format
  		CharFormat	cf;
  		cf.dwMask = CFM_SIZE | CFM_FACE | CFM_BOLD | CFM_ITALIC | CFM_UNDERLINE | CFM_LINK;
- 		cf.yHeight = 200;
+ 		cf.yHeight = 14 * 20;
  		cf.dwEffects = 0;
- 		lstrcpy( cf.szFaceName, _T( "Times New Roman" ) );
+ 		lstrcpy( cf.szFaceName, _T( "Segoe UI" ) );
  		m_rtf.SendMessage(EM_SETCHARFORMAT, 0, (LPARAM)&cf);
 
 #ifndef SES_HYPERLINKTOOLTIPS
