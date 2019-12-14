@@ -117,9 +117,12 @@ END_MESSAGE_MAP()
 #define SETTING_TOOLTIP_LINES 69
 #define SETTING_TOOLTIP_CHARACTERS 70
 
+
 #define SETTING_ACTIVATE_WINDOW_DELAY 71
 #define SETTING_DOUBLE_KEYSTROKE_TIMEOUT 72
 #define SETTING_SEND_KEYS_DELAY 73
+#define SETTING_FIRST_TEN_HOTKEYS_START 74
+#define SETTING_FIRST_TEN_HOTKEYS_FONT_SIZE 75
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -171,6 +174,10 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Ensure Ditto is always connected to the clipboard"), CGetSetOptions::GetEnsureConnectToClipboard(), SETTING_ENSURE_CONNECTED);
 	AddTrueFalse(pGroupTest, _T("Ensure Entire Window is Visible"), CGetSetOptions::GetEnsureEntireWindowCanBeSeen(), SETTING_ENSURE_WINDOW_IS_VISIBLE);
 	AddTrueFalse(pGroupTest, _T("Find As You Type"), CGetSetOptions::GetFindAsYouType(), SETTING_FIND_AS_TYPE);
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("First Ten HotHeys Start Index)"), (long)CGetSetOptions::GetFirstTenHotKeysStart(), _T(""), SETTING_FIRST_TEN_HOTKEYS_START));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("First Ten HotHeys Font Size)"), (long)CGetSetOptions::GetFirstTenHotKeysFontSize(), _T(""), SETTING_FIRST_TEN_HOTKEYS_FONT_SIZE));
+
 	AddTrueFalse(pGroupTest, _T("Hide Ditto on Hot Key if Ditto is Visible"), CGetSetOptions::GetHideDittoOnHotKeyIfAlreadyShown(), SETTING_HIDE_ON_HOTKEY_IF_VISIBLE);
 	pGroupTest->AddSubItem( new CMFCPropertyGridProperty(_T("Maximum Clip Size in Bytes (0 for no limit)"), g_Opt.m_lMaxClipSizeInBytes, _T(""), SETTING_MAX_CLIP_SIZE));
 	
@@ -729,6 +736,18 @@ void CAdvGeneral::OnBnClickedOk()
 				if (pNewValue->lVal != pOrigValue->lVal)
 				{
 					CGetSetOptions::SetDoubleKeyStrokeTimeout(pNewValue->lVal);
+				}
+				break;
+			case SETTING_FIRST_TEN_HOTKEYS_START:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetFirstTenHotKeysStart(pNewValue->lVal);
+				}
+				break;
+			case SETTING_FIRST_TEN_HOTKEYS_FONT_SIZE:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetFirstTenHotKeysFontSize(pNewValue->lVal);
 				}
 				break;
 			}

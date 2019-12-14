@@ -74,6 +74,8 @@ CChaiScriptXml CGetSetOptions::m_pasteScripts;
 long CGetSetOptions::m_tooltipTimeout;
 BOOL CGetSetOptions::m_cleanRTFBeforeDrawing = TRUE;
 int CGetSetOptions::m_doubleKeyStrokeTimeout = 350;
+int CGetSetOptions::m_firstTenHotKeysStart = 1;
+int CGetSetOptions::m_firstTenHotKeysFontSize = 5;
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -194,6 +196,8 @@ void CGetSetOptions::LoadSettings()
 	m_bShowAlwaysOnTopWarning = GetShowAlwaysOnTopWarning();
 	m_excludeCF_DIBInExcel = GetExcludeCF_DIBInExcel();
 	m_doubleKeyStrokeTimeout = GetDoubleKeyStrokeTimeout();
+	m_firstTenHotKeysStart = GetFirstTenHotKeysStart();
+	m_firstTenHotKeysFontSize = GetFirstTenHotKeysFontSize();
 
 	GetExtraNetworkPassword(true);
 
@@ -2814,4 +2818,26 @@ void CGetSetOptions::SetDoubleKeyStrokeTimeout(int val)
 {
 	m_doubleKeyStrokeTimeout = val;
 	SetProfileLong("DoubleKeyStrokeTimeout", val);
+}
+
+int CGetSetOptions::GetFirstTenHotKeysStart()
+{
+	return GetProfileLong("FirstTenHotKeysStart", 1);
+}
+
+void CGetSetOptions::SetFirstTenHotKeysStart(int val)
+{
+	m_firstTenHotKeysStart = val;
+	SetProfileLong("FirstTenHotKeysStart", val);
+}
+
+int CGetSetOptions::GetFirstTenHotKeysFontSize()
+{
+	return GetProfileLong("FirstTenHotKeysFontSize", 5);
+}
+
+void CGetSetOptions::SetFirstTenHotKeysFontSize(int val)
+{
+	m_firstTenHotKeysFontSize = val;
+	SetProfileLong("FirstTenHotKeysFontSize", val);
 }

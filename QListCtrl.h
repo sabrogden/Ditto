@@ -97,14 +97,9 @@ public:
 public:
 	virtual ~CQListCtrl();
 
-	// The "FirstTen" block is either at the top or the bottom
-	//  of the list based upon m_bStartTop.
 	BOOL	m_bShowTextForFirstTenHotKeys;
-	BOOL	m_bStartTop;
 	// returns the position 1-10 if the index is in the FirstTen block else -1
 	int GetFirstTenNum( int index );
-	// returns the list index corresponding to the given FirstTen position number.
-	int GetFirstTenIndex( int num );
 
 	void SetNumberOfLinesPerRow(int nLines, bool force);
 	void GetSelectionIndexes(ARRAY &arr);
@@ -161,6 +156,8 @@ public:
 	void SetSearchText(CString text);
 
 	void SetDpiInfo(CDPI *dpi);
+
+	void CreateSmallFont();
 
 	void OnDpiChanged();
 	

@@ -625,6 +625,14 @@ public:
 	static int m_doubleKeyStrokeTimeout;
 	static int GetDoubleKeyStrokeTimeout();
 	static void SetDoubleKeyStrokeTimeout(int val);
+
+	static int m_firstTenHotKeysStart;
+	static int GetFirstTenHotKeysStart();
+	static void SetFirstTenHotKeysStart(int val);
+
+	static int m_firstTenHotKeysFontSize;
+	static int GetFirstTenHotKeysFontSize();
+	static void SetFirstTenHotKeysFontSize(int val);
 };
 
 // global for easy access and for initialization of fast access variables

@@ -177,8 +177,7 @@ BOOL CFileSend::SendFile(CString csFile)
 						Info.m_lParameter1 = lastWriteTime.dwLowDateTime;
 						Info.m_lParameter2 = lastWriteTime.dwHighDateTime;
 					}
-
-					
+										
 					CStringA csMd5 = md5.MD5FinalToString();
 					strncpy(Info.m_md5, csMd5, sizeof(Info.m_md5));
 
