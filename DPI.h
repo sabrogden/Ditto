@@ -3,8 +3,9 @@
 class CDPI
 {
 public:
-	CDPI() : _fInitialized(false), m_dpi(96)
-	{ 
+	CDPI(HWND hwnd = NULL) : _fInitialized(false), m_dpi(96)
+	{
+		m_hWnd = hwnd;
 	}
 
 	void Update(int dpi) { m_dpi = dpi;  _fInitialized = true; }
@@ -24,7 +25,7 @@ private:
 	{
 		if (!_fInitialized)
 		{
-			HDC hdc = GetDC(NULL);
+			HDC hdc = GetDC(m_hWnd);
 			if (hdc)
 			{
 				m_dpi = GetDeviceCaps(hdc, LOGPIXELSX);
@@ -37,4 +38,5 @@ private:
 private:
 	bool _fInitialized;
 	int m_dpi;
+	HWND m_hWnd;
 };

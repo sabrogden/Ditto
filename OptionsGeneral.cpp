@@ -559,7 +559,6 @@ void COptionsGeneral::OnBnClickedButtonTheme()
 
 void COptionsGeneral::OnBnClickedButtonDefaultFault()
 {
-
 	memset(&m_LogFont, 0, sizeof(m_LogFont));
 
 	m_LogFont.lfHeight = -13;
@@ -574,34 +573,27 @@ void COptionsGeneral::OnBnClickedButtonDefaultFault()
 
 int COptionsGeneral::GetFontSize(HWND hWnd, const LOGFONT& lf)
 {
-	int nFontSize = 0;
-
-	HDC hDC = ::GetWindowDC(hWnd);
-
-	if (lf.lfHeight < 0)
-	{
-		nFontSize = -::MulDiv(lf.lfHeight, 72, ::GetDeviceCaps(hDC, LOGPIXELSY));
-	}
-	else
-	{
-		TEXTMETRIC tm;
-		::ZeroMemory(&tm, sizeof(TEXTMETRIC));
-		::GetTextMetrics(hDC, &tm);
-
-		nFontSize = ::MulDiv(lf.lfHeight - tm.tmInternalLeading, 72, ::GetDeviceCaps(hDC, LOGPIXELSY));
-	}
-	::ReleaseDC(hWnd, hDC);
-
+	//font is saved un scaled, so scale it with the default values to get the font size
+	int nFontSize = -::MulDiv(lf.lfHeight, 72, 96);
+	
 	return nFontSize;
 }
 
 void COptionsGeneral::OnBnClickedButtonFont()
 {
+	CDPI d(m_hWnd);
+
+	//scale it back up so the font dialog shows the correct value
+	m_LogFont.lfHeight = d.Scale(m_LogFont.lfHeight);
+
 	CFontDialog dlg(&m_LogFont, (CF_TTONLY | CF_SCREENFONTS), 0, this);
 	if (dlg.DoModal() == IDOK)
 	{
 		memcpy(&m_LogFont, dlg.m_cf.lpLogFont, sizeof(LOGFONT));
-				
+		
+		//save the font unscaled, we will scale it as needed when we what to use it
+		m_LogFont.lfHeight = d.UnScale(m_LogFont.lfHeight);
+
 		CString cs;
 		cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, GetFontSize(m_hWnd, m_LogFont));
 		m_btFont.SetWindowText(cs);

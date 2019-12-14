@@ -146,7 +146,8 @@ BOOL CAdvGeneral::OnInitDialog()
 
 	HDITEM hdItem;
 	hdItem.mask = HDI_WIDTH; // indicating cxy is width
-	hdItem.cxy = 325; // whatever you want the property name column width to be
+	CDPI dpi(m_hWnd);
+	hdItem.cxy = dpi.Scale(325); // whatever you want the property name column width to be
 	m_propertyGrid.GetHeaderCtrl().SetItem(0, &hdItem);
 
 	m_propertyGrid.SetFont(this->GetFont());	
