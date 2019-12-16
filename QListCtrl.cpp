@@ -1629,7 +1629,7 @@ void CQListCtrl::CreateSmallFont()
 {
 	LOGFONT lf;
 
-	lf.lfHeight = -MulDiv(g_Opt.GetFirstTenHotKeysFontSize(), GetDeviceCaps(::GetDC(m_hWnd), LOGPIXELSY), 72);
+	lf.lfHeight = -MulDiv(g_Opt.GetFirstTenHotKeysFontSize(), m_windowDpi->GetDPI(), 72);
 	lf.lfWidth = 0;
 	lf.lfEscapement = 0;
 	lf.lfOrientation = 0;

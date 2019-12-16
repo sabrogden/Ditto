@@ -581,18 +581,10 @@ int COptionsGeneral::GetFontSize(HWND hWnd, const LOGFONT& lf)
 
 void COptionsGeneral::OnBnClickedButtonFont()
 {
-	CDPI d(m_hWnd);
-
-	//scale it back up so the font dialog shows the correct value
-	m_LogFont.lfHeight = d.Scale(m_LogFont.lfHeight);
-
 	CFontDialog dlg(&m_LogFont, (CF_TTONLY | CF_SCREENFONTS), 0, this);
 	if (dlg.DoModal() == IDOK)
 	{
 		memcpy(&m_LogFont, dlg.m_cf.lpLogFont, sizeof(LOGFONT));
-		
-		//save the font unscaled, we will scale it as needed when we what to use it
-		m_LogFont.lfHeight = d.UnScale(m_LogFont.lfHeight);
 
 		CString cs;
 		cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, GetFontSize(m_hWnd, m_LogFont));

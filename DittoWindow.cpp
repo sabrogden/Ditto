@@ -45,37 +45,8 @@ CDittoWindow::~CDittoWindow(void)
 
 void CDittoWindow::DoCreate(CWnd *pWnd)
 {
-	HMODULE hUser32 = LoadLibrary(_T("USER32.dll"));
-	if (hUser32)
-	{
-		//windows 10
-		typedef UINT(__stdcall *GetDpiForWindow)(HWND hwnd);
-		GetDpiForWindow getDpi = (GetDpiForWindow)GetProcAddress(hUser32, "GetDpiForWindow");
-		if (getDpi)
-		{
-			int dpi = getDpi(pWnd->m_hWnd);
-			m_dpi.Update(dpi);
-		}
-		else
-		{
-			//windows 8
-			auto monitor = MonitorFromWindow(pWnd->m_hWnd, MONITOR_DEFAULTTONEAREST);
-			HMODULE shCore = LoadLibrary(_T("Shcore.dll"));
-			if (shCore)
-			{
-				typedef HRESULT(__stdcall *GetDpiForMonitor)(HMONITOR, UINT, UINT*, UINT*);
-				GetDpiForMonitor monDpi = (GetDpiForMonitor)GetProcAddress(shCore, "GetDpiForMonitor");
-				if (monDpi)
-				{
-					UINT x = 0;
-					UINT y = 0;
-					monDpi(monitor, MDT_EFFECTIVE_DPI, &x, &y);
-
-					m_dpi.Update(x);
-				}
-			}
-		}
-	}	
+	m_dpi.SetHwnd(pWnd->m_hWnd);
+	
 
 	m_VertFont.CreateFont(-m_dpi.Scale(19), 0, -900, 0, 400, FALSE, FALSE, 0, DEFAULT_CHARSET,
 							OUT_DEFAULT_PRECIS,	CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, 
