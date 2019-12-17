@@ -29,35 +29,38 @@ private:
 	{
 		if (m_Initialized == false)
 		{
-			HMODULE hUser32 = LoadLibrary(_T("USER32.dll"));
-			if (hUser32)
+			if (m_hWnd != NULL)
 			{
-				//windows 10
-				typedef UINT(__stdcall *GetDpiForWindow)(HWND hwnd);
-				GetDpiForWindow getDpi = (GetDpiForWindow)GetProcAddress(hUser32, "GetDpiForWindow");
-				if (getDpi)
+				HMODULE hUser32 = LoadLibrary(_T("USER32.dll"));
+				if (hUser32)
 				{
-					int dpi = getDpi(m_hWnd);
-					this->Update(dpi);
-					m_Initialized = true;
-				}
-				else
-				{
-					//windows 8
-					auto monitor = MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST);
-					HMODULE shCore = LoadLibrary(_T("Shcore.dll"));
-					if (shCore)
+					//windows 10
+					typedef UINT(__stdcall *GetDpiForWindow)(HWND hwnd);
+					GetDpiForWindow getDpi = (GetDpiForWindow)GetProcAddress(hUser32, "GetDpiForWindow");
+					if (getDpi)
 					{
-						typedef HRESULT(__stdcall *GetDpiForMonitor)(HMONITOR, UINT, UINT*, UINT*);
-						GetDpiForMonitor monDpi = (GetDpiForMonitor)GetProcAddress(shCore, "GetDpiForMonitor");
-						if (monDpi)
+						int dpi = getDpi(m_hWnd);
+						this->Update(dpi);
+						m_Initialized = true;
+					}
+					else
+					{
+						//windows 8
+						auto monitor = MonitorFromWindow(m_hWnd, MONITOR_DEFAULTTONEAREST);
+						HMODULE shCore = LoadLibrary(_T("Shcore.dll"));
+						if (shCore)
 						{
-							UINT x = 0;
-							UINT y = 0;
-							monDpi(monitor, MDT_EFFECTIVE_DPI, &x, &y);
+							typedef HRESULT(__stdcall *GetDpiForMonitor)(HMONITOR, UINT, UINT*, UINT*);
+							GetDpiForMonitor monDpi = (GetDpiForMonitor)GetProcAddress(shCore, "GetDpiForMonitor");
+							if (monDpi)
+							{
+								UINT x = 0;
+								UINT y = 0;
+								monDpi(monitor, MDT_EFFECTIVE_DPI, &x, &y);
 
-							this->Update(x);
-							m_Initialized = true;
+								this->Update(x);
+								m_Initialized = true;
+							}
 						}
 					}
 				}

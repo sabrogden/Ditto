@@ -581,11 +581,19 @@ int COptionsGeneral::GetFontSize(HWND hWnd, const LOGFONT& lf)
 
 void COptionsGeneral::OnBnClickedButtonFont()
 {
+	//don't pass in an hwnd so it uses GetDeviceCaps to get the dpi, system not per monitor
+	CDPI dpi;
+
+	m_LogFont.lfHeight = dpi.Scale(m_LogFont.lfHeight);
+
 	CFontDialog dlg(&m_LogFont, (CF_TTONLY | CF_SCREENFONTS), 0, this);
 	if (dlg.DoModal() == IDOK)
 	{
 		memcpy(&m_LogFont, dlg.m_cf.lpLogFont, sizeof(LOGFONT));
 
+		//save the font unscaled, we will scale it per monitor later
+		m_LogFont.lfHeight = dpi.UnScale(m_LogFont.lfHeight);
+		
 		CString cs;
 		cs.Format(_T("Font - %s (%d)"), m_LogFont.lfFaceName, GetFontSize(m_hWnd, m_LogFont));
 		m_btFont.SetWindowText(cs);

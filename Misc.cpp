@@ -845,7 +845,6 @@ BOOL EnsureWindowVisible(CRect *pcrRect)
 	BOOL ret = FALSE;
 
 	CRect crMonitor;
-	CDPI dpi;
 
 	HMONITOR monitorHandle = MonitorFromRect(pcrRect, MONITOR_DEFAULTTONEAREST);
 	if (monitorHandle == NULL)
