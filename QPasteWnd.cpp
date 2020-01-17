@@ -1317,8 +1317,8 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 	if (theApp.m_GroupID < 0)
 	{
 		//do not change this this directly relates to the views in the Main table
-		csSort = "Main.bIsGroup ASC, "
-			"Main.stickyClipOrder DESC, "
+		csSort = "Main.stickyClipOrder DESC, "
+			"Main.bIsGroup ASC, "			
 			"Main.clipOrder DESC";
 
 		if (g_Opt.m_bShowAllClipsInMainList)
@@ -1342,8 +1342,8 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 		// it's some other group
 	{
 		//do not change this this directly relates to the views in the Main table
-		csSort = "Main.bIsGroup ASC, "
-			"Main.stickyClipGroupOrder DESC, "
+		csSort = "Main.stickyClipGroupOrder DESC, "
+			"Main.bIsGroup ASC, "			
 			"Main.clipGroupOrder DESC";
 
 		//Main.stickyClipGroupOrder DESC, Main.clipGroupOrder DESC";//

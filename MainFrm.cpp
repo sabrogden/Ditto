@@ -1249,6 +1249,15 @@ LRESULT CMainFrame::OnOptionsClosed(WPARAM wParam, LPARAM lParam)
 
 	m_trayIcon.SetMenu(NULL, IDR_MENU);
 	theApp.m_Language.UpdateTrayIconRightClickMenu(&m_trayIcon.GetMenu());
+
+	if (CGetSetOptions::GetShowIconInSysTray())
+	{
+		m_trayIcon.Show();
+	}
+	else
+	{
+		m_trayIcon.Hide();
+	}
 	
 
 	return 0;

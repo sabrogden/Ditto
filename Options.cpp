@@ -2663,7 +2663,7 @@ CString	CGetSetOptions::GetRegexFilterByProcessName(int pos)
 
 BOOL CGetSetOptions::GetOpenToGroupByActiveExe()
 {
-	return GetProfileLong(_T("OpenToGroupByActiveExe"), TRUE);
+	return GetProfileLong(_T("OpenToGroupByActiveExe"), FALSE);
 }
 
 void CGetSetOptions::SetOpenToGroupByActiveExe(int val)
