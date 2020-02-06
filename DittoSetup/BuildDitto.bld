@@ -2944,7 +2944,7 @@ var sc_security="b3f57099";
 		</step>
 		<step action='Git'>
 			<Command>log</Command>
-			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2020-01-01</Options>
+			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2018-12-23</Options>
 			<WorkDir>%workDir%</WorkDir>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>
@@ -3063,7 +3063,7 @@ var sc_security="b3f57099";
 			<value>3</value>
 		</macro>
 		<macro name='verMinor'>
-			<value>23</value>
+			<value>22</value>
 		</macro>
 		<macro name='verRevision'>
 			<value>0</value>
