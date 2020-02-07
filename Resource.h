@@ -602,6 +602,7 @@
 #define IDC_STATIC_MD5                  2167
 #define IDC_EDIT_MD5                    2168
 #define IDC_RICHEDIT21                  2172
+#define IDC_MFCLINK2                    2172
 #define IDC_EDIT_ACTIVE_APP             2173
 #define ID_FIRST_OPTION                 32771
 #define ID_FIRST_EXIT                   32772
@@ -796,7 +797,7 @@
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        387
 #define _APS_NEXT_COMMAND_VALUE         32965
-#define _APS_NEXT_CONTROL_VALUE         2172
+#define _APS_NEXT_CONTROL_VALUE         2173
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif
