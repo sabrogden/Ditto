@@ -435,6 +435,18 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 
 			e.errorCode();
 		}
+
+		db.execDML(_T("DROP INDEX IF EXISTS Main_NoGroup"));
+		db.execDML(_T("DROP INDEX IF EXISTS Main_InGroup"));
+		db.execDML(_T("DROP INDEX IF EXISTS Main_ShortCut"));
+
+		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_TopLevelParentID ON Main(lParentId ASC, stickyClipOrder DESC, bIsGroup ASC, clipOrder DESC);"));
+		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_TopLevel ON Main(stickyClipOrder DESC, bIsGroup ASC, clipOrder DESC);"));
+		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_InGroup2 ON Main(lParentId ASC, stickyClipGroupOrder DESC, bIsGroup ASC, clipGroupOrder DESC);"));
+
+		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_ShortCut2 on Main(lShortCut DESC, globalShortCut DESC)"));
+		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_MoveToGroup on Main(MoveToGroupShortCut DESC, GlobalMoveToGroupShortCut DESC)"));
+		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_CRC on Main(CRC ASC)"));
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
 
@@ -687,7 +699,6 @@ BOOL CreateDB(CString csFile)
 		db.execDML(_T("CREATE INDEX Main_ClipGroupOrder on Main(clipGroupOrder DESC)"));
 		db.execDML(_T("CREATE INDEX Main_ParentId on Main(lParentID DESC)"));
 		db.execDML(_T("CREATE INDEX Main_IsGroup on Main(bIsGroup DESC)"));
-        db.execDML(_T("CREATE INDEX Main_ShortCut on Main(lShortCut DESC)"));
 
 		db.execDML(_T("CREATE TRIGGER delete_data_trigger BEFORE DELETE ON Main FOR EACH ROW\n")
 			_T("BEGIN\n")
@@ -709,9 +720,15 @@ BOOL CreateDB(CString csFile)
 				_T("DELETE FROM Data WHERE lParentID = old.clipID;\n")
 			_T("END\n"));
 
-		db.execDML(_T("CREATE INDEX Main_NoGroup ON Main(bIsGroup ASC, stickyClipOrder DESC, clipOrder DESC);"));
-		db.execDML(_T("CREATE INDEX Main_InGroup ON Main(lParentId ASC, bIsGroup ASC, stickyClipGroupOrder DESC, clipGroupOrder DESC);"));
 		db.execDML(_T("CREATE INDEX Data_ParentId_Format ON Data(lParentID COLLATE BINARY ASC, strClipBoardFormat COLLATE NOCASE ASC);"));
+
+		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_TopLevelParentID ON Main(lParentId ASC, stickyClipOrder DESC, bIsGroup ASC, clipOrder DESC);"));
+		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_TopLevel ON Main(stickyClipOrder DESC, bIsGroup ASC, clipOrder DESC);"));
+		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_InGroup2 ON Main(lParentId ASC, stickyClipGroupOrder DESC, bIsGroup ASC, clipGroupOrder DESC);"));
+
+		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_ShortCut2 on Main(lShortCut DESC, globalShortCut DESC)"));
+		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_MoveToGroup on Main(MoveToGroupShortCut DESC, GlobalMoveToGroupShortCut DESC)"));
+		db.execDML(_T("CREATE INDEX IF NOT EXISTS Main_CRC on Main(CRC ASC)"));
 
 		db.close();
 	}

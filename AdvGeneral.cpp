@@ -124,6 +124,8 @@ END_MESSAGE_MAP()
 #define SETTING_FIRST_TEN_HOTKEYS_START 74
 #define SETTING_FIRST_TEN_HOTKEYS_FONT_SIZE 75
 
+#define SETTING_OPEN_TO_GROUP_AS_ACTIVE_EXE 76
+
 BOOL CAdvGeneral::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
@@ -188,6 +190,8 @@ BOOL CAdvGeneral::OnInitDialog()
 
 
 	AddTrueFalse(pGroupTest, _T("Multi-Paste in reverse order"), g_Opt.m_bMultiPasteReverse, SETTING_MULTIPASTE_REVERSE_ORDER);
+
+	AddTrueFalse(pGroupTest, _T("Open to group same as active exe"), CGetSetOptions::GetOpenToGroupByActiveExe(), SETTING_OPEN_TO_GROUP_AS_ACTIVE_EXE);
 
 	static TCHAR BASED_CODE szFilter[] = _T("Sounds(*.wav)|*.wav||");
 	CMFCPropertyGridFileProperty* pFileProp = new CMFCPropertyGridFileProperty(_T("On copy play the sound"), TRUE, CGetSetOptions::GetPlaySoundOnCopy(), _T("wav"), 0, szFilter, (LPCTSTR)0, SETTING_COPY_PLAY_SOUND);
@@ -749,6 +753,17 @@ void CAdvGeneral::OnBnClickedOk()
 				if (pNewValue->lVal != pOrigValue->lVal)
 				{
 					CGetSetOptions::SetFirstTenHotKeysFontSize(pNewValue->lVal);
+				}
+				break;
+			case SETTING_OPEN_TO_GROUP_AS_ACTIVE_EXE:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = false;
+					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
+					{
+						val = true;
+					}
+					CGetSetOptions::SetOpenToGroupByActiveExe(val);
 				}
 				break;
 			}
