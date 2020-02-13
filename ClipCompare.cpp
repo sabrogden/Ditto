@@ -100,8 +100,26 @@ CString CClipCompare::GetComparePath()
 		return path;
 	}
 
+	path = _T("C:\\Program Files (x86)\\Beyond Compare 4\\BCompare.exe");
+	if (FileExists(path))
+	{
+		return path;
+	}
+
+	path = _T("C:\\Program Files\\Beyond Compare 4\\BCompare.exe");
+	if (FileExists(path))
+	{
+		return path;
+	}
+
 	path = _T("C:\\Program Files (x86)\\WinMerge\\WinMergeU.exe");
 	if(FileExists(path))
+	{
+		return path;
+	}
+
+	path = _T("C:\\Program Files\\WinMerge\\WinMergeU.exe");
+	if (FileExists(path))
 	{
 		return path;
 	}
@@ -118,6 +136,17 @@ CString CClipCompare::GetComparePath()
 		return path;
 	}
 
+	path = _T("C:\\Program Files (x86)\\Perforce\\p4merge.exe");
+	if (FileExists(path))
+	{
+		return path;
+	}
+
+	path = _T("C:\\Program Files\\Perforce\\p4merge.exe");
+	if (FileExists(path))
+	{
+		return path;
+	}
 	return _T("");
 }
 
