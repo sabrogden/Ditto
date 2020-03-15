@@ -97,6 +97,8 @@ public:
 	//afx_msg void OnNMClickSyslinkEnvVarInfo(NMHDR *pNMHDR, LRESULT *pResult);
 	//afx_msg void OnEnChangePath();
 	afx_msg void OnEnChangePath();
+	afx_msg void OnClickedMaximumEntries();
+	afx_msg void OnClickedExpireEntries();
 };
 
 //{{AFX_INSERT_LOCATION}}

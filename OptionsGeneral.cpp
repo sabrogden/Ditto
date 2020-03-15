@@ -78,6 +78,8 @@ BEGIN_MESSAGE_MAP(COptionsGeneral, CPropertyPage)
 	ON_BN_CLICKED(IDC_BUTTON_DEFAULT_FAULT, &COptionsGeneral::OnBnClickedButtonDefaultFault)
 	ON_BN_CLICKED(IDC_BUTTON_FONT, &COptionsGeneral::OnBnClickedButtonFont)
 	ON_EN_CHANGE(IDC_PATH, &COptionsGeneral::OnEnChangePath)
+	ON_BN_CLICKED(IDC_MAXIMUM, &COptionsGeneral::OnClickedMaximumEntries)
+	ON_BN_CLICKED(IDC_EXPIRE, &COptionsGeneral::OnClickedExpireEntries)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -107,7 +109,15 @@ BOOL COptionsGeneral::OnInitDialog()
 #endif
 
 	m_btMaximumCheck.SetCheck(CGetSetOptions::GetCheckForMaxEntries());
-	m_btExpire.SetCheck(CGetSetOptions::GetCheckForExpiredEntries());	
+	if (CGetSetOptions::GetCheckForMaxEntries() == FALSE)
+	{
+		m_eMaxSavedCopies.EnableWindow(FALSE);		
+	}
+	m_btExpire.SetCheck(CGetSetOptions::GetCheckForExpiredEntries());
+	if (CGetSetOptions::GetCheckForExpiredEntries() == FALSE)
+	{
+		m_eExpireAfter.EnableWindow(FALSE);
+	}
 	m_eExpireAfter.SetNumber(CGetSetOptions::GetExpiredEntries());
 	m_eMaxSavedCopies.SetNumber(CGetSetOptions::GetMaxEntries());
 
@@ -641,4 +651,30 @@ void COptionsGeneral::OnEnChangePath()
 	{		
 		m_envVarLink.SetWindowText(m_originalEnvVariables);
 	}		
+}
+
+
+void COptionsGeneral::OnClickedMaximumEntries()
+{
+	if (m_btMaximumCheck.GetCheck() == BST_CHECKED)
+	{
+		m_eMaxSavedCopies.EnableWindow(TRUE);
+	}
+	else
+	{
+		m_eMaxSavedCopies.EnableWindow(FALSE);
+	}
+}
+
+
+void COptionsGeneral::OnClickedExpireEntries()
+{
+	if (m_btExpire.GetCheck() == BST_CHECKED)
+	{
+		m_eExpireAfter.EnableWindow(TRUE);
+	}
+	else
+	{
+		m_eExpireAfter.EnableWindow(FALSE);
+	}
 }
