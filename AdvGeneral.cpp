@@ -125,6 +125,7 @@ END_MESSAGE_MAP()
 #define SETTING_FIRST_TEN_HOTKEYS_FONT_SIZE 75
 
 #define SETTING_OPEN_TO_GROUP_AS_ACTIVE_EXE 76
+#define SETTING_ADD_CF_HDROP_ON_DRAG 77
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -155,6 +156,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	m_propertyGrid.SetFont(this->GetFont());	
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Activate Window Delay (100ms default)"), (long)CGetSetOptions::SendKeysDelay(), _T(""), SETTING_ACTIVATE_WINDOW_DELAY));
+
+	AddTrueFalse(pGroupTest, _T("Add File Drop when dragging clips"), CGetSetOptions::GetAddCFHDROP_OnDrag(), SETTING_ADD_CF_HDROP_ON_DRAG);
 
 	AddTrueFalse(pGroupTest, _T("Allow Duplicates"), CGetSetOptions::GetAllowDuplicates(), SETTING_ALLOW_DUPLICATES);
 	AddTrueFalse(pGroupTest, _T("Always Show Scroll Bar"), CGetSetOptions::GetShowScrollBar(), SETTING_ALWAYS_SHOW_SCROLL_BAR);
@@ -764,6 +767,18 @@ void CAdvGeneral::OnBnClickedOk()
 						val = true;
 					}
 					CGetSetOptions::SetOpenToGroupByActiveExe(val);
+				}
+				break;
+
+			case SETTING_ADD_CF_HDROP_ON_DRAG:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = false;
+					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
+					{
+						val = true;
+					}
+					CGetSetOptions::SetAddCFHDROP_OnDrag(val);
 				}
 				break;
 			}

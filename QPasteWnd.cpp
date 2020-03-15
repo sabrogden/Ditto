@@ -5050,6 +5050,10 @@ void CQPasteWnd::OnBegindrag(NMHDR *pNMHDR, LRESULT *pResult)
 	{
 		paste.m_pasteOptions.m_dragDropFilesOnly = true;
 	}
+	else
+	{
+		paste.m_pasteOptions.m_placeCF_HDROP_OnDrag = g_Opt.GetAddCFHDROP_OnDrag();
+	}
 
 	CClipIDs &clips = paste.GetClipIDs();
 

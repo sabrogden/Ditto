@@ -633,6 +633,9 @@ public:
 	static int m_firstTenHotKeysFontSize;
 	static int GetFirstTenHotKeysFontSize();
 	static void SetFirstTenHotKeysFontSize(int val);
+
+	static BOOL GetAddCFHDROP_OnDrag();
+	static void SetAddCFHDROP_OnDrag(BOOL val);
 };
 
 // global for easy access and for initialization of fast access variables

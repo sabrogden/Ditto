@@ -25,6 +25,7 @@ public:
 	bool m_trimWhiteSpace;
 	bool m_pasteSlugify;
 	bool m_invertCase;
+	bool m_placeCF_HDROP_OnDrag;
 
 	bool LimitFormatsToText() 
 	{ 

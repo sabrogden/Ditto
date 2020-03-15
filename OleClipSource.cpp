@@ -61,7 +61,8 @@ BOOL COleClipSource::DoDelayRender()
 		}
 	}
 
-	if (foundHDrop == false)
+	if (m_pasteOptions.m_placeCF_HDROP_OnDrag &&
+		foundHDrop == false)
 	{
 		DelayRenderData(CF_HDROP);
 		m_convertToHDROPOnDelayRender = true;

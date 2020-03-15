@@ -2841,3 +2841,13 @@ void CGetSetOptions::SetFirstTenHotKeysFontSize(int val)
 	m_firstTenHotKeysFontSize = val;
 	SetProfileLong("FirstTenHotKeysFontSize", val);
 }
+
+BOOL CGetSetOptions::GetAddCFHDROP_OnDrag()
+{
+	return GetProfileLong(_T("AddCFHDROP_OnDrag"), TRUE);
+}
+
+void CGetSetOptions::SetAddCFHDROP_OnDrag(BOOL val)
+{
+	SetProfileLong(_T("AddCFHDROP_OnDrag"), val);
+}
