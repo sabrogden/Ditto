@@ -45,6 +45,7 @@ public:
 	CHotKeyCtrl	m_HotKey2;
 	CHotKeyCtrl	m_HotKey3;
 	CHotKeyCtrl m_TextOnlyKey;
+	CHotKeyCtrl m_copyAndSaveClipboardCtrl;
 	//}}AFX_DATA
 
 

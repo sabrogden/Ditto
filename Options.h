@@ -636,6 +636,9 @@ public:
 
 	static BOOL GetAddCFHDROP_OnDrag();
 	static void SetAddCFHDROP_OnDrag(BOOL val);
+
+	static int GetCopyAndSveDelay();
+	static void SetCopyAndSveDelay(int val);
 };
 
 // global for easy access and for initialization of fast access variables

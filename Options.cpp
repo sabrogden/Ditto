@@ -2851,3 +2851,13 @@ void CGetSetOptions::SetAddCFHDROP_OnDrag(BOOL val)
 {
 	SetProfileLong(_T("AddCFHDROP_OnDrag"), val);
 }
+
+int CGetSetOptions::GetCopyAndSveDelay()
+{
+	return GetProfileLong("CopyAndSveDelay", 1000);
+}
+
+void CGetSetOptions::SetCopyAndSveDelay(int val)
+{
+	SetProfileLong("CopyAndSveDelay", val);
+}

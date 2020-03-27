@@ -344,6 +344,7 @@
 #define IDC_HOTKEY_ACTIVATE_3           2006
 #define IDD_OPTIONS_UTILITIES           2007
 #define IDC_TRANS_PERC                  2007
+#define IDC_HOTKEY_COPYSAVECLIPBOARD    2007
 #define IDC_MAXIMUM                     2008
 #define IDD_DELETE_CLIPS                2008
 #define IDD_DELETE_CLIP_DATA            2008
@@ -451,7 +452,10 @@
 #define IDC_STATIC_11                   2066
 #define IDC_STATIC_ACTIVATE4            2066
 #define IDC_STATIC_12                   2067
+#define IDC_CHECK_WIN_SAVE_CLIPBOARD2   2067
+#define IDC_CHECK_WIN_COPY_SAVE_CLIPBOARD 2067
 #define IDC_STATIC_13                   2068
+#define IDC_STATIC_COLLECT_CLIPBOARD2   2068
 #define IDC_STATIC_LANGUAGE             2069
 #define IDC_COMBO_LANGUAGE              2070
 #define IDC_EDIT_SAVE_DELAY             2071

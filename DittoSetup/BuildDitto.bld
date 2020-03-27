@@ -1241,6 +1241,7 @@ DittoSetup_%versionFileName%.exe]]></Ext>
 		<step action='Run Program'>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<command>choco push --key %ChocolateyApiKey% --source https://push.chocolatey.org/</command>
+			<continueonfail type='3'>1</continueonfail>
 			<indent type='3'>2</indent>
 			<name>Choco Push</name>
 			<outputfrom type='3'>1</outputfrom>
@@ -2038,6 +2039,7 @@ DittoSetup_%versionFileName%.exe]]></Ext>
 		<step action='Run Program'>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<command>choco push --key %ChocolateyApiKey% --source https://push.chocolatey.org/</command>
+			<continueonfail type='3'>1</continueonfail>
 			<indent type='3'>2</indent>
 			<name>Choco Push</name>
 			<outputfrom type='3'>1</outputfrom>
@@ -2864,6 +2866,7 @@ DittoPortable_%versionFileName%.zip]]></Ext>
 		<step action='Run Program'>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<command>choco push --key %ChocolateyApiKey% --source https://push.chocolatey.org/</command>
+			<continueonfail type='3'>1</continueonfail>
 			<indent type='3'>2</indent>
 			<name>Choco Push</name>
 			<outputfrom type='3'>1</outputfrom>

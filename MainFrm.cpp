@@ -405,6 +405,21 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 	{
 		OnFirstSavecurrentclipboard();
 	}
+	else if (theApp.m_pCopyAndSaveClipboard && wParam == theApp.m_pCopyAndSaveClipboard->m_Atom)
+	{
+		Log(StrF(_T("START of copy and save clipboard, sending copy")));
+
+		theApp.m_activeWnd.SendCopy(CopyReasonEnum::COPY_TO_UNKOWN);
+
+		int delay = g_Opt.GetCopyAndSveDelay();
+		Log(StrF(_T("Copy and save clipboard, sending copy, delaying %dms before saving clipboard"), delay));
+		Sleep(delay);
+
+		Log(StrF(_T("Copy and save clipboard, saving clipboard")));
+		OnFirstSavecurrentclipboard();
+
+		Log(StrF(_T("END of copy and save clipboard")));
+	}
 	else
 	{
 		for(int i = 0; i < g_HotKeys.GetCount(); i++)

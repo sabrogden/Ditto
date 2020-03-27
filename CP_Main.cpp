@@ -371,6 +371,8 @@ void CCP_MainApp::AfterMainCreate()
 
 	m_pSaveClipboard = new CHotKey("SaveClipboard", 0, false);
 
+	m_pCopyAndSaveClipboard = new CHotKey("CopyAndSaveClipboard", 0, false);
+
 	LoadGlobalClips();
 
 	g_HotKeys.RegisterAll();

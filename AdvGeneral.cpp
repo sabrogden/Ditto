@@ -126,6 +126,7 @@ END_MESSAGE_MAP()
 
 #define SETTING_OPEN_TO_GROUP_AS_ACTIVE_EXE 76
 #define SETTING_ADD_CF_HDROP_ON_DRAG 77
+#define SETTING_COPY_SAVE_DELAY 78
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -162,6 +163,7 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Allow Duplicates"), CGetSetOptions::GetAllowDuplicates(), SETTING_ALLOW_DUPLICATES);
 	AddTrueFalse(pGroupTest, _T("Always Show Scroll Bar"), CGetSetOptions::GetShowScrollBar(), SETTING_ALWAYS_SHOW_SCROLL_BAR);
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Amount of text to save for description"), g_Opt.m_bDescTextSize, _T(""), SETTING_DESC_SIZE));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Copy and save clipboard delay (ms)"), (long)CGetSetOptions::GetCopyAndSveDelay(), _T(""), SETTING_COPY_SAVE_DELAY));
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default Paste String"), CGetSetOptions::GetDefaultPasteString(), _T(""), SETTING_DEFAULT_PASTE_STRING));
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default Copy String"), CGetSetOptions::GetDefaultCopyString(), _T(""), SETTING_DEFAULT_COPY_STRING));
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default Cut String"), CGetSetOptions::GetDefaultCutString(), _T(""), SETTING_DEFAULT_CUT_STRING));
@@ -779,6 +781,12 @@ void CAdvGeneral::OnBnClickedOk()
 						val = true;
 					}
 					CGetSetOptions::SetAddCFHDROP_OnDrag(val);
+				}
+				break;
+			case SETTING_COPY_SAVE_DELAY:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetCopyAndSveDelay(pNewValue->lVal);
 				}
 				break;
 			}
