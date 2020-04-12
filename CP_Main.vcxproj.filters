@@ -462,6 +462,7 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="SendMail.cpp" />
+    <ClCompile Include="NoDbFrameWnd.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -965,6 +966,7 @@
     </ClInclude>
     <ClInclude Include="SendMail.h" />
     <ClInclude Include="Slugify.h" />
+    <ClInclude Include="NoDbFrameWnd.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -1625,5 +1627,6 @@
     <Image Include="res\search_close_24.png" />
     <Image Include="res\search_close_28.png" />
     <Image Include="res\search_close_32.png" />
+    <Image Include="res\Ditto2_NoDb.ico" />
   </ItemGroup>
 </Project>

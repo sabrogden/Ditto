@@ -495,6 +495,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="NoDbFrameWnd.cpp" />
     <ClCompile Include="CopyProperties.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -1878,6 +1879,7 @@
     <ClInclude Include="ChaiScriptXml.h" />
     <ClInclude Include="ClipCompare.h" />
     <ClInclude Include="ClipFormatQListCtrl.h" />
+    <ClInclude Include="NoDbFrameWnd.h" />
     <ClInclude Include="CreateQRCodeImage.h" />
     <ClInclude Include="CustomFriendsHelper.h" />
     <ClInclude Include="DeleteClipData.h" />
@@ -2254,6 +2256,7 @@
     <Image Include="res\close_48.png" />
     <Image Include="res\close_52.png" />
     <Image Include="res\close_56.png" />
+    <Image Include="res\Ditto2_NoDb.ico" />
     <Image Include="res\down_16.png" />
     <Image Include="res\down_20.png" />
     <Image Include="res\down_24.png" />

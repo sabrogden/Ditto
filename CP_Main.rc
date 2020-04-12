@@ -72,6 +72,8 @@ IDR_CP_MAITYPE          ICON                    "res\\CP_MainDoc.ico"
 
 IDI_DITTO_NOCOPYCB      ICON                    "res\\Ditto2_NoCopyCb.ico"
 
+IDI_MAINFRAME_NO_DB     ICON                    "res\\Ditto2_NoDb.ico"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -441,6 +443,15 @@ BEGIN
         MENUITEM "Save Current Clipboard",      ID_MENU_SAVECURRENTCLIPBOARD
         MENUITEM SEPARATOR
         MENUITEM "Exit",                        32806
+    END
+END
+
+IDR_MENU_NO_DB MENU
+BEGIN
+    POPUP "First"
+    BEGIN
+        MENUITEM "Options",                     ID_FIRST_OPTIONS
+        MENUITEM "Exit",                        ID_FIRST_EXIT_NO_DB
     END
 END
 

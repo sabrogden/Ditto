@@ -44,6 +44,7 @@ public:
 // MainFrame
 	HWND m_MainhWnd;
 	CMainFrame*	m_pMainFrame;
+	CFrameWnd* m_pNoDbMainFrame;
 	void AfterMainCreate();  // called after main window creation
 	void BeforeMainClose();  // called before main window close
 
@@ -182,6 +183,8 @@ public:
 	void SetCopyReason(CopyReasonEnum::CopyReason copyReason);
 	CopyReasonEnum::CopyReason GetCopyReason();
 
+	void CreateMainWnd();
+	void CloseNoDbWindow();
 
 public:
 	virtual BOOL InitInstance();

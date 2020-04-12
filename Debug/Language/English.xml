@@ -410,6 +410,8 @@
 		<Item English_Text = "BackupDbMsg" ID = "Backing up database"></Item>
 		<Item English_Text = "RestoreDbMsg" ID = "Restoring database"></Item>
 		
+		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg"></Item>
+		
 		
 		
 	</Ditto_String_Table>

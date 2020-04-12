@@ -24,6 +24,7 @@
 #define SCREEN_RESOLUTION_CHANGED		15
 #define DELAYED_SHOW_DITTO_TIMER		16
 #define SET_WINDOWS_THEME_TIMER			17
+#define CLOSE_NO_DB_WINDOW_TIMER        18
 
 class CMainFrame: public CFrameWnd
 {

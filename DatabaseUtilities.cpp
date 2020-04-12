@@ -11,6 +11,7 @@
 #include "InternetUpdate.h"
 #include <zlib.h>
 #include "Shared/TextConvert.h"
+using namespace nsPath;
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -95,6 +96,8 @@ CString GetDefaultDBName()
 
 BOOL CheckDBExists(CString csDBPath)
 {
+	CPath path(csDBPath);
+
 	//If this is the first time running this version then convert the old database to the new db
 	if(csDBPath.IsEmpty())
 	{
@@ -105,6 +108,18 @@ BOOL CheckDBExists(CString csDBPath)
 	BOOL bRet = FALSE;
 	if(FileExists(csDBPath) == FALSE)
 	{
+		//if the database is on a shared drive, network share or anything other than C:\ than don't create a new db
+		//Ditto will wait until that drive is available
+		int len = 0;
+		auto rootType = path.GetRootType(&len);
+		auto driveLetter = path.GetDriveLetter();
+
+		if (rootType == ERootType::rtServerShare ||
+			((rootType == ERootType::rtDriveCur || rootType == rtDriveRoot) && driveLetter >= 'A' && driveLetter != 'C'))
+		{
+			return FALSE;
+		}
+
 		//first try and create create a db at the same path that was selectd
 		bRet = CreateDB(csDBPath);
 
@@ -171,6 +186,11 @@ BOOL CheckDBExists(CString csDBPath)
 	}
 	
 	return bRet;
+}
+
+BOOL IsDatabaseOpen()
+{
+	return theApp.m_db.IsDatabaseOpen();
 }
 
 BOOL OpenDatabase(CString csDB)

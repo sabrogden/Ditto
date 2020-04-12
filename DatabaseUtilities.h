@@ -19,6 +19,7 @@ BOOL CreateBackup(CString csPath);
 CString GetDBName();
 CString GetDefaultDBName();
 BOOL OpenDatabase(CString csDB);
+BOOL IsDatabaseOpen();
 
 BOOL CheckDBExists(CString csDBPath);
 BOOL ValidDB(CString csPath, BOOL bUpgrade=TRUE);

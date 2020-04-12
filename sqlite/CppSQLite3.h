@@ -201,6 +201,8 @@ public:
 
     static const TCHAR* SQLiteVersion() { return _T(SQLITE_VERSION); }
 
+    bool IsDatabaseOpen() { return mpDB != NULL; }
+
 private:
 
     CppSQLite3DB(const CppSQLite3DB& db);

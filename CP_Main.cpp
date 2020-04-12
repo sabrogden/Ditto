@@ -15,6 +15,7 @@
 #include "SendKeys.h"
 #include "MainTableFunctions.h"
 #include "ShowTaskBarIcon.h"
+#include "NoDbFrameWnd.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -133,6 +134,8 @@ CCP_MainApp::CCP_MainApp()
 	m_RemoteCF_HDROP = ::RegisterClipboardFormat(_T("Ditto Remote CF_HDROP"));
 	m_DittoFileData = ::RegisterClipboardFormat(_T("Ditto File Data"));
 	m_PNG_Format = GetFormatID(_T("PNG"));
+
+	m_pNoDbMainFrame = NULL;
 }
 
 CCP_MainApp::~CCP_MainApp()
@@ -317,18 +320,39 @@ BOOL CCP_MainApp::InitInstance()
 	int nRet = CheckDBExists(CGetSetOptions::GetDBPath());
 	if(nRet == FALSE)
 	{
-		AfxMessageBox(theApp.m_Language.GetString("Error_Opening_Database", "Error Opening Database."));
-		return FALSE;
+		m_pNoDbMainFrame = new CNoDbFrameWnd();
+		m_pMainWnd = m_pNoDbMainFrame;
+
+		m_pNoDbMainFrame->LoadFrame(IDR_MAINFRAME, WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, NULL, NULL);
+		m_pNoDbMainFrame->ShowWindow(SW_SHOW);
+		m_pNoDbMainFrame->UpdateWindow();
+	}
+	else
+	{
+		CreateMainWnd();
 	}
 
+	return TRUE;
+}
+
+void CCP_MainApp::CreateMainWnd()
+{
 	CMainFrame* pFrame = new CMainFrame;
 	m_pMainWnd = m_pMainFrame = pFrame;
 
 	pFrame->LoadFrame(IDR_MAINFRAME, WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, NULL, NULL);
 	pFrame->ShowWindow(SW_SHOW);
 	pFrame->UpdateWindow();
+}
 
-	return TRUE;
+void CCP_MainApp::CloseNoDbWindow()
+{
+	if (m_pNoDbMainFrame != NULL)
+	{
+		m_pNoDbMainFrame->CloseWindow();
+		delete m_pNoDbMainFrame;
+		m_pNoDbMainFrame = NULL;
+	}
 }
 
 void CCP_MainApp::AfterMainCreate()
