@@ -173,6 +173,7 @@ public:
 	CCustomFriendsHelper m_customFriendsHelper;
 	bool m_noSearchResults;
 	CAccel m_timerAction;
+	__int64 m_lastDbWrite;
 
     void RefreshNc();
     void UpdateStatus(bool bRepaintImmediately = false); // regenerates the status (caption) text
@@ -304,6 +305,7 @@ public:
 	bool DoActionEmailToAttachContent();
 	bool DoActionSlugify();
 	bool DoCopySelection();
+	bool DoRefreshList();
 
 	bool OnNewClip();
 	bool OnImportClip();

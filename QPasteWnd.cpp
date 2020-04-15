@@ -82,6 +82,7 @@ CQPasteWnd::CQPasteWnd()
 	m_leftSelectedCompareId = 0;
 	m_extraDataCounter = 0;
 	m_noSearchResults = false;
+	m_lastDbWrite = 0;
 }
 
 CQPasteWnd::~CQPasteWnd()
@@ -754,7 +755,22 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
 		{
 			if (theApp.m_bShowingQuickPaste == false)
 			{
-				ShowQPasteWindow(m_listItems.size() == 0);
+				BOOL fillList = FALSE;
+				if (m_listItems.size() == 0)
+				{
+					fillList = TRUE;
+				}
+				else if(theApp.m_databaseOnNetworkShare)
+				{
+					__int64 lastWrite = GetLastWriteTime(CGetSetOptions::GetDBPath());
+					if (lastWrite > m_lastDbWrite)
+					{
+						m_lastDbWrite = lastWrite;
+						fillList = TRUE;
+					}
+				}
+
+				ShowQPasteWindow(fillList);
 			}
 
 			//Unregister the global hot keys for the last ten copies
@@ -3166,7 +3182,6 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::PASTE_TRIM_WHITE_SPACE:
 		ret = DoActionPasteTrimWhiteSpace();
 		break;
-
 	case ActionEnums::TRANSPARENCY_NONE:
 		SetTransparency(0);
 		break;
@@ -3221,6 +3236,8 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::COPY_SELECTION:
 		ret = DoCopySelection();
 		break;
+	case ActionEnums::REFRESH_LIST:
+		ret = DoRefreshList();
 	}
 
 	return ret;
@@ -7436,6 +7453,12 @@ bool CQPasteWnd::DoActionSlugify()
 		OpenSelection(pasteOptions);
 		return true;
 	}
+}
+
+bool CQPasteWnd::DoRefreshList()
+{
+	FillList(_T(""));
+	return true;
 }
 
 bool CQPasteWnd::DoCopySelection()

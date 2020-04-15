@@ -136,6 +136,7 @@ CCP_MainApp::CCP_MainApp()
 	m_PNG_Format = GetFormatID(_T("PNG"));
 
 	m_pNoDbMainFrame = NULL;
+	m_databaseOnNetworkShare = false;
 }
 
 CCP_MainApp::~CCP_MainApp()

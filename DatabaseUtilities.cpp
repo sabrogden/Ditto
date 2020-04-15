@@ -193,12 +193,26 @@ BOOL IsDatabaseOpen()
 	return theApp.m_db.IsDatabaseOpen();
 }
 
-BOOL OpenDatabase(CString csDB)
+BOOL OpenDatabase(CString dbPath)
 {
 	try
 	{
+		CPath path(dbPath);
+
+		int len = 0;
+		auto rootType = path.GetRootType(&len);
+		auto driveLetter = path.GetDriveLetter();
+
+		theApp.m_databaseOnNetworkShare = false;
+		if (rootType == ERootType::rtServerShare ||
+			((rootType == ERootType::rtDriveCur || rootType == rtDriveRoot) && driveLetter >= 'A' && driveLetter != 'C'))
+		{
+			theApp.m_databaseOnNetworkShare = true;
+		}
+		
+
 		theApp.m_db.close();
-		theApp.m_db.open(csDB);		
+		theApp.m_db.open(dbPath);
 
 		theApp.m_db.setBusyTimeout(CGetSetOptions::GetDbTimeout());
 
