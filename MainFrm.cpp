@@ -79,6 +79,7 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 		ON_COMMAND(ID_FIRST_RESTOREDATABASE, &CMainFrame::OnFirstRestoredatabase)
 		ON_MESSAGE(WM_BACKUP_DB, OnBackupDb)
 		ON_MESSAGE(WM_RESTORE_DB, OnRestoreDb)
+		ON_COMMAND(ID_FIRST_DELETEALLNONUSEDCLIPS, &CMainFrame::OnFirstDeleteallnonusedclips)
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -1510,4 +1511,15 @@ LRESULT CMainFrame::OnRestoreDb(WPARAM wParam, LPARAM lParam)
 {
 	OnFirstRestoredatabase();
 	return TRUE;
+}
+
+void CMainFrame::OnFirstDeleteallnonusedclips()
+{
+	int nRet = MessageBox(theApp.m_Language.GetString("Delete_All_Non_Used_Clips", "Delete all clips that are not groups, in groups, marked as never auto delete, has a shortcut key or marked as sticky.\r\n\r\nThis cannot be undone."), _T("Ditto"), MB_YESNO | MB_TOPMOST);
+	if (nRet == IDNO)
+	{
+		return;
+	}
+
+	DeleteNonUsedClips(false);
 }

@@ -349,7 +349,9 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 
 	ON_COMMAND(ID_MENU_RESTOREDATABSAE, &CQPasteWnd::OnFirstRestoreDb)
 	ON_COMMAND(ID_MENU_BACKUPDATABASE, &CQPasteWnd::OnFirstBackupDb)
-END_MESSAGE_MAP()
+		ON_COMMAND(ID_MENU_DELETEALLNONUSEDCLIPS, &CQPasteWnd::OnMenuDeleteallnonusedclips)
+		ON_UPDATE_COMMAND_UI(ID_MENU_DELETEALLNONUSEDCLIPS, &CQPasteWnd::OnUpdateMenuDeleteallnonusedclips)
+		END_MESSAGE_MAP()
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -3238,6 +3240,10 @@ bool CQPasteWnd::DoAction(CAccel a)
 		break;
 	case ActionEnums::REFRESH_LIST:
 		ret = DoRefreshList();
+		break;
+	case ActionEnums::DELETE_ALL_NON_USED_CLIPS:
+		ret = DoDeleteAllNonUsedClips();
+		break;
 	}
 
 	return ret;
@@ -7461,6 +7467,32 @@ bool CQPasteWnd::DoRefreshList()
 	return true;
 }
 
+bool CQPasteWnd::DoDeleteAllNonUsedClips()
+{
+	bool bStartValue = m_bHideWnd;
+	m_bHideWnd = false;
+
+	int nRet = MessageBox(theApp.m_Language.GetString("Delete_All_Non_Used_Clips", "Delete all clips that are not groups, in groups, marked as never auto delete, has a shortcut key or marked as sticky.\r\n\r\nThis cannot be undone."), _T("Ditto"), MB_YESNO | MB_TOPMOST);
+
+	m_bHideWnd = bStartValue;
+	if (nRet == IDNO)
+	{
+		return false;
+	}
+
+	CWaitCursor wait;
+
+	DeleteNonUsedClips(true);
+	FillList();
+
+	m_cf_dibCache.clear();
+	m_cf_NO_dibCache.clear();
+	m_cf_rtfCache.clear();
+	m_cf_NO_rtfCache.clear();
+
+	return true;
+}
+
 bool CQPasteWnd::DoCopySelection()
 {
 	ARRAY IDs;
@@ -7694,4 +7726,19 @@ void CQPasteWnd::OnFirstRestoreDb()
 void CQPasteWnd::OnFirstBackupDb()
 {
 	theApp.m_pMainFrame->PostMessage(WM_BACKUP_DB, 0, 0);
+}
+
+void CQPasteWnd::OnMenuDeleteallnonusedclips()
+{
+	DoAction(ActionEnums::DELETE_ALL_NON_USED_CLIPS);
+}
+
+void CQPasteWnd::OnUpdateMenuDeleteallnonusedclips(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::DELETE_ALL_NON_USED_CLIPS);
 }

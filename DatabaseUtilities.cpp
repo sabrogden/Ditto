@@ -959,6 +959,37 @@ BOOL RemoveOldEntries(bool checkIdleTime)
 	return TRUE;
 }
 
+BOOL DeleteNonUsedClips(bool fromAppWindow)
+{
+	Log(_T("Start of delete all non used clips"));
+	CClipIDs IDs;
+
+	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID FROM Main WHERE bIsGroup = 0 AND lShortCut = 0 AND lParentID <= 0 AND lDontAutoDelete = 0 AND stickyClipOrder = -(2147483647) AND stickyClipGroupOrder = -(2147483647)"));
+
+	while (q.eof() == false)
+	{
+		IDs.Add(q.getIntField(_T("lID")));
+
+		Log(StrF(_T("From Clips DeleteNonUsedClips - Deleting Id: %d"), q.getIntField(_T("lID"))));
+
+		q.nextRow();
+	}
+
+	int clipsDeleted = IDs.GetCount();
+	int deletedTableCount = 0;
+
+	if (IDs.GetCount() > 0)
+	{
+		IDs.DeleteIDs(fromAppWindow, theApp.m_db);
+
+		deletedTableCount = theApp.m_db.execDMLEx(_T("DELETE FROM MainDeletes"));
+	}
+
+	Log(StrF(_T("End of delete all non used clips, clips deleted: %d, delete table delted: %d"), clipsDeleted, deletedTableCount));
+
+	return TRUE;
+}
+
 BOOL EnsureDirectory(CString csPath)
 {
 	TCHAR drive[_MAX_DRIVE];

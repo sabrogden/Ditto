@@ -306,6 +306,7 @@ public:
 	bool DoActionSlugify();
 	bool DoCopySelection();
 	bool DoRefreshList();
+	bool DoDeleteAllNonUsedClips();
 
 	bool OnNewClip();
 	bool OnImportClip();
@@ -582,4 +583,6 @@ public:
 	afx_msg void OnFirstShowstartupmessage();
 	afx_msg void CQPasteWnd::OnFirstBackupDb();
 	afx_msg void CQPasteWnd::OnFirstRestoreDb();
+	afx_msg void OnMenuDeleteallnonusedclips();
+	afx_msg void OnUpdateMenuDeleteallnonusedclips(CCmdUI* pCmdUI);
 };

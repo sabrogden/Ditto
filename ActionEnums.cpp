@@ -374,6 +374,8 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case REFRESH_LIST:
 		val = "Refresh List";
 		break;
+	case DELETE_ALL_NON_USED_CLIPS:
+		val = "Delete all non used clips";
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);

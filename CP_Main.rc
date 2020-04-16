@@ -203,6 +203,7 @@ BEGIN
         MENUITEM "Show Startup Message",        ID_FIRST_SHOWSTARTUPMESSAGE
         MENUITEM "Global Hot Keys",             ID_FIRST_GLOBALHOTKEYS
         MENUITEM "Delete Clip Data",            ID_FIRST_DELETECLIPDATA
+        MENUITEM "Delete All Non Used Clips",   ID_FIRST_DELETEALLNONUSEDCLIPS
         MENUITEM SEPARATOR
         MENUITEM "Backup Database",             ID_FIRST_BACKUPDATABASE
         MENUITEM "Restore Database",            ID_FIRST_RESTOREDATABASE
@@ -430,6 +431,7 @@ BEGIN
         MENUITEM "Show Startup Message",        ID_FIRST_SHOWSTARTUPMESSAGE
         MENUITEM "Global Hot Keys",             ID_MENU_GLOBALHOTKEYS32933
         MENUITEM "Delete Clip Data",            ID_MENU_DELETECLIPDATA32934
+        MENUITEM "Delete All Non Used Clips",   ID_MENU_DELETEALLNONUSEDCLIPS
         MENUITEM SEPARATOR
         MENUITEM "Backup Database",             ID_MENU_BACKUPDATABASE
         MENUITEM "Restore Database",            ID_MENU_RESTOREDATABSAE
@@ -439,7 +441,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Help",                        32842
         MENUITEM SEPARATOR
-        MENUITEM "Connect To Clipboard",        32775
+        MENUITEM "Connect to Clipboard",        32775
         MENUITEM "Save Current Clipboard",      ID_MENU_SAVECURRENTCLIPBOARD
         MENUITEM SEPARATOR
         MENUITEM "Exit",                        32806
