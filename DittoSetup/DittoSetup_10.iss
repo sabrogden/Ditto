@@ -90,12 +90,11 @@ Source: ..\Debug\Themes\*; DestDir: {app}\Themes
 
 [Icons]
 Name: {group}\Ditto; Filename: {app}\Ditto.exe
-Name: {group}\Ditto Help; Filename: {app}\Help\DittoGettingStarted.htm
 Name: {group}\Uninstall; Filename: {uninstallexe}
 
 [Run]
 Filename: {app}\Ditto.exe; Description: Launch Ditto; Flags: nowait postinstall
-Filename: {app}\Help\DittoGettingStarted.htm; Description: View Help; Flags: nowait postinstall skipifsilent shellexec unchecked
+Filename: https://sourceforge.net/p/ditto-cp/wiki/Getting%20Started; Description: View Help; Flags: nowait postinstall skipifsilent shellexec unchecked
 Filename: https://ditto-cp.sourceforge.io/changeHistory.php; Description: View Change History; Flags: nowait postinstall skipifsilent shellexec unchecked
 
 [Registry]
