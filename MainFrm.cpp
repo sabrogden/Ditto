@@ -1522,4 +1522,6 @@ void CMainFrame::OnFirstDeleteallnonusedclips()
 	}
 
 	DeleteNonUsedClips(false);
+
+	theApp.RefreshView();
 }
