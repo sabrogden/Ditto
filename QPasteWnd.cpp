@@ -4058,6 +4058,7 @@ bool CQPasteWnd::DoExportToTextFile()
 		CString csFileName = path.GetName();
 
 		CGetSetOptions::SetLastExportDir(csPath);
+		int lastFileCheckId = 1;
 
 		for (int i = 0; i < IDs.GetCount(); i++)
 		{
@@ -4072,13 +4073,14 @@ bool CQPasteWnd::DoExportToTextFile()
 				{
 					savePath = _T("");
 
-					for (int y = 1; y < 1001; y++)
+					for (int y = lastFileCheckId; y < 1000000; y++)
 					{
 						CString testFilePath;
 						testFilePath.Format(_T("%s%s_%d.%s"), csPath, csFileName, y, csExt);
 						if (FileExists(testFilePath) == FALSE)
 						{
 							savePath = testFilePath;
+							lastFileCheckId = y+1;
 							break;
 						}
 					}
@@ -4974,6 +4976,8 @@ bool CQPasteWnd::DoExportToBitMapFile()
 
 		CGetSetOptions::SetLastExportDir(csPath);
 
+		int lastFileCheckId = 1;
+
 		for (int i = 0; i < IDs.GetCount(); i++)
 		{
 			int id = IDs[i];
@@ -4997,13 +5001,14 @@ bool CQPasteWnd::DoExportToBitMapFile()
 				{
 					savePath = _T("");
 
-					for (int y = 1; y < 1001; y++)
+					for (int y = lastFileCheckId; y < 1000000; y++)
 					{
 						CString testFilePath;
 						testFilePath.Format(_T("%s%s_%d.%s"), csPath, csFileName, y, csExt);
 						if (FileExists(testFilePath) == FALSE)
 						{
 							savePath = testFilePath;
+							lastFileCheckId = y+1;
 							break;
 						}
 					}
