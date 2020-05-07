@@ -1380,6 +1380,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 
 	CString csSQL;
 	CString dataJoin;
+	CString IsDistinct = _T("");
 
 	if (csSQLSearch == "")
 	{
@@ -1439,15 +1440,15 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 
 			fullTextSql.Insert(1, _T("Data.strClipBoardFormat = 'CF_UNICODETEXT' AND "));
 
-			//If we are also search for other formats limit it them to unicode text, otherwise multiple rows could be returned
+			//If we are also search for other text make sure we only get one entry, including the data rows will cause multiple rows to be returned
 			if (descriptionSql != _T(""))
 			{
-				descriptionSql.Insert(1, _T("Data.strClipBoardFormat = 'CF_UNICODETEXT' AND "));
+				IsDistinct = _T("DISTINCT");
 			}
 
 			if (quickPasteSql != _T(""))
 			{
-				quickPasteSql.Insert(1, _T("Data.strClipBoardFormat = 'CF_UNICODETEXT' AND "));
+				IsDistinct = _T("DISTINCT");
 			}
 		}
 
@@ -1497,10 +1498,10 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 		//Format the count and select sql queries for the thread
 		m_CountSQL.Format(_T("SELECT COUNT(Main.lID) FROM Main %s where %s"), dataJoin, strFilter);
 
-		m_SQL.Format(_T("SELECT Main.lID, Main.mText, Main.lParentID, Main.lDontAutoDelete, ")
+		m_SQL.Format(_T("SELECT %s Main.lID, Main.mText, Main.lParentID, Main.lDontAutoDelete, ")
 			_T("Main.lShortCut, Main.bIsGroup, Main.QuickPasteText, Main.clipOrder, Main.clipGroupOrder, ")
 			_T("Main.stickyClipOrder, Main.stickyClipGroupOrder, Main.lDate, Main.lastPasteDate FROM Main %s ")
-			_T("where %s order by %s"), dataJoin, strFilter, csSort);
+			_T("where %s order by %s"), IsDistinct, dataJoin, strFilter, csSort);
 	}
 
 	{
@@ -7464,6 +7465,8 @@ bool CQPasteWnd::DoActionSlugify()
 		OpenSelection(pasteOptions);
 		return true;
 	}
+
+	return false;
 }
 
 bool CQPasteWnd::DoRefreshList()
@@ -7527,6 +7530,8 @@ bool CQPasteWnd::DoCopySelection()
 	paste.DoPaste();
 
 	g_Opt.m_bUpdateTimeOnPaste = itWas;
+
+	return TRUE;
 }
 
 void CQPasteWnd::SetTransparency(int percent)
