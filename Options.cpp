@@ -2861,3 +2861,13 @@ void CGetSetOptions::SetCopyAndSveDelay(int val)
 {
 	SetProfileLong("CopyAndSveDelay", val);
 }
+
+int CGetSetOptions::GetEditorDefaultFontSize()
+{
+	return GetProfileLong("EditorDefaultFontSize", 14);
+}
+
+void CGetSetOptions::SetEditorDefaultFontSize(int val)
+{
+	SetProfileLong("EditorDefaultFontSize", val);
+}

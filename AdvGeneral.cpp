@@ -127,6 +127,7 @@ END_MESSAGE_MAP()
 #define SETTING_OPEN_TO_GROUP_AS_ACTIVE_EXE 76
 #define SETTING_ADD_CF_HDROP_ON_DRAG 77
 #define SETTING_COPY_SAVE_DELAY 78
+#define SETTING_EDITOR_FONT_SIZE 79
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -178,6 +179,7 @@ BOOL CAdvGeneral::OnInitDialog()
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Double shortcut keystroke timeout)"), (long)CGetSetOptions::GetDoubleKeyStrokeTimeout(), _T(""), SETTING_DOUBLE_KEYSTROKE_TIMEOUT));
 
 	AddTrueFalse(pGroupTest, _T("Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)"), CGetSetOptions::GetDrawRTF(), SETTING_DRAW_RTF);
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Editor default font size"), (long)CGetSetOptions::GetEditorDefaultFontSize(), _T(""), SETTING_EDITOR_FONT_SIZE));
 	AddTrueFalse(pGroupTest, _T("Elevated privileges to paste into elevated apps"), CGetSetOptions::GetPasteAsAdmin(), SETTING_PASTE_AS_ADMIN);
 	AddTrueFalse(pGroupTest, _T("Ensure Ditto is always connected to the clipboard"), CGetSetOptions::GetEnsureConnectToClipboard(), SETTING_ENSURE_CONNECTED);
 	AddTrueFalse(pGroupTest, _T("Ensure Entire Window is Visible"), CGetSetOptions::GetEnsureEntireWindowCanBeSeen(), SETTING_ENSURE_WINDOW_IS_VISIBLE);
@@ -787,6 +789,12 @@ void CAdvGeneral::OnBnClickedOk()
 				if (pNewValue->lVal != pOrigValue->lVal)
 				{
 					CGetSetOptions::SetCopyAndSveDelay(pNewValue->lVal);
+				}
+				break;
+			case SETTING_EDITOR_FONT_SIZE:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetEditorDefaultFontSize(pNewValue->lVal);
 				}
 				break;
 			}

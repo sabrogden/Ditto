@@ -639,6 +639,11 @@ public:
 
 	static int GetCopyAndSveDelay();
 	static void SetCopyAndSveDelay(int val);
+
+	static int GetEditorDefaultFontSize();
+	static void SetEditorDefaultFontSize(int val);
+
+
 };
 
 // global for easy access and for initialization of fast access variables
