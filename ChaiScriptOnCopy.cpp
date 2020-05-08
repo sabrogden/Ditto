@@ -49,6 +49,9 @@ bool ChaiScriptOnCopy::ProcessScript(CDittoChaiScript &clipData, std::string scr
 		chai.add(chaiscript::fun(&CDittoChaiScript::AsciiTextMatchesRegex), "AsciiTextMatchesRegex");
 		chai.add(chaiscript::fun(&CDittoChaiScript::AsciiTextReplaceRegex), "AsciiTextReplaceRegex");
 
+		chai.add(chaiscript::fun(&CDittoChaiScript::DescriptionMatchesRegex), "DescriptionMatchesRegex");
+		chai.add(chaiscript::fun(&CDittoChaiScript::SetDescription), "SetDescription");
+
 		chai.add(chaiscript::fun(&FormatCurrentTime), "FormatCurrentTime");
 
 		chai.add(chaiscript::var(&clipData), "clip");

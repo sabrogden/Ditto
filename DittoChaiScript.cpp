@@ -4,6 +4,7 @@
 #include "Md5.h"
 #include "Misc.h"
 #include "CP_Main.h"
+#include "Shared\TextConvert.h"
 
 #include <regex>
 
@@ -187,4 +188,29 @@ void CDittoChaiScript::SetMakeLastSticky()
 void CDittoChaiScript::SetReplaceTopSticky()
 {
 	m_pClip->SetSaveToDbSticky(AddToDbStickyEnum::REPLACE_TOP_STICKY);
+}
+
+BOOL CDittoChaiScript::DescriptionMatchesRegex(std::string regex)
+{
+	BOOL matches = false;
+
+	if (m_pClip)
+	{
+		std:string ascii(CTextConvert::ConvertToChar(m_pClip->Description()).GetBuffer());
+		std::regex integer(regex);
+		if (regex_match(ascii, integer))
+		{
+			matches = true;
+		}
+		return matches;
+	}
+}
+
+void CDittoChaiScript::SetDescription(std::string stringVal)
+{
+	if (m_pClip)
+	{
+		CString cstr(stringVal.c_str());
+		m_pClip->Description(cstr);
+	}
 }

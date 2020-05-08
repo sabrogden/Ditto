@@ -29,6 +29,9 @@ public:
 	BOOL AsciiTextMatchesRegex(std::string regex);
 	void AsciiTextReplaceRegex(std::string regex, std::string replaceWith);
 
+	BOOL DescriptionMatchesRegex(std::string regex);
+	void SetDescription(std::string stringVal);
+
 	void SetMakeTopSticky();
 	void SetMakeLastSticky();
 	void SetReplaceTopSticky();
