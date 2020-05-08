@@ -165,8 +165,6 @@ BOOL CDittoChaiScript::AsciiTextMatchesRegex(std::string regex)
 
 void CDittoChaiScript::AsciiTextReplaceRegex(std::string regex, std::string replaceWith)
 {
-	BOOL matches = false;
-
 	auto ascii = GetAsciiString();
 	std::regex integer(regex);
 
@@ -206,11 +204,16 @@ BOOL CDittoChaiScript::DescriptionMatchesRegex(std::string regex)
 	}
 }
 
-void CDittoChaiScript::SetDescription(std::string stringVal)
+void CDittoChaiScript::DescriptionReplaceRegex(std::string regex, std::string replaceWith)
 {
 	if (m_pClip)
 	{
-		CString cstr(stringVal.c_str());
+		std:string ascii(CTextConvert::ConvertToChar(m_pClip->Description()).GetBuffer());
+		std::regex integer(regex);
+
+		auto newAscii = regex_replace(ascii, integer, replaceWith);
+
+		CString cstr(newAscii.c_str());
 		m_pClip->Description(cstr);
 	}
 }

@@ -285,7 +285,7 @@ void CScriptEditor::OnBnClickedButtonRun()
 	ChaiScriptOnCopy test;
 	CDittoChaiScript clipData(&clip, (LPCSTR)CTextConvert::UnicodeStringToMultiByte(app), (LPCSTR)CTextConvert::UnicodeStringToMultiByte(appTitle));
 	clipData.SetAsciiString((LPCSTR)CTextConvert::UnicodeStringToMultiByte(input));
-	clipData.SetDescription((LPCSTR)CTextConvert::UnicodeStringToMultiByte(input));
+	clipData.DescriptionReplaceRegex(".*", (LPCSTR)CTextConvert::UnicodeStringToMultiByte(input));
 	
 	test.ProcessScript(clipData, (LPCSTR)CTextConvert::UnicodeStringToMultiByte(script));
 

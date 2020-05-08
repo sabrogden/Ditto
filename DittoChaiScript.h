@@ -30,7 +30,7 @@ public:
 	void AsciiTextReplaceRegex(std::string regex, std::string replaceWith);
 
 	BOOL DescriptionMatchesRegex(std::string regex);
-	void SetDescription(std::string stringVal);
+	void DescriptionReplaceRegex(std::string regex, std::string replaceWith);
 
 	void SetMakeTopSticky();
 	void SetMakeLastSticky();
