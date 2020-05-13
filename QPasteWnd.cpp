@@ -1496,7 +1496,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
 		ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
 		//Format the count and select sql queries for the thread
-		m_CountSQL.Format(_T("SELECT COUNT(Main.lID) FROM Main %s where %s"), dataJoin, strFilter);
+		m_CountSQL.Format(_T("SELECT COUNT(%s Main.lID) FROM Main %s where %s"), IsDistinct, dataJoin, strFilter);
 
 		m_SQL.Format(_T("SELECT %s Main.lID, Main.mText, Main.lParentID, Main.lDontAutoDelete, ")
 			_T("Main.lShortCut, Main.bIsGroup, Main.QuickPasteText, Main.clipOrder, Main.clipGroupOrder, ")
