@@ -67,7 +67,7 @@ Name: AddFireWallException; Description: Add Windows Firewall exception for Ditt
 #ifdef bit64
 	Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_64');
 	Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
-	Source: mfc-crt64\vcredist_x64_2017.exe; Flags: dontcopy;      
+	Source: mfc-crt64\VC_redist.x64.exe; Flags: dontcopy;      
   Source: ..\Release64\icuuc58.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release64\icuin58.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release64\icutu58.dll; DestDir: {app}; Flags: ignoreversion
@@ -77,7 +77,7 @@ Name: AddFireWallException; Description: Add Windows Firewall exception for Ditt
 #ifndef bit64
 	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_32');
   Source: ..\Release\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
-	Source: mfc-crt\vcredist_x86_2017.exe; Flags: dontcopy;
+	Source: mfc-crt\VC_redist.x86.exe; Flags: dontcopy;
   Source: ..\Release\icuuc58.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release\icuin58.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release\icutu58.dll; DestDir: {app}; Flags: ignoreversion
@@ -243,12 +243,12 @@ begin
   Log('Installing VS 2017 C++ redistributable');
 
   #ifdef bit64
-    ExtractTemporaryFile('vcredist_x64_2017.exe');
-    ShellExec('', ExpandConstant('{tmp}\vcredist_x64_2017.exe'), '/q', '' , SW_HIDE, ewWaitUntilTerminated, nErrorCode);
+    ExtractTemporaryFile('VC_redist.x64.exe');
+    ShellExec('', ExpandConstant('{tmp}\VC_redist.x64.exe'), '/q', '' , SW_HIDE, ewWaitUntilTerminated, nErrorCode);
   #endif
   #ifndef bit64
-    ExtractTemporaryFile('vcredist_x86_2017.exe');
-    ShellExec('', ExpandConstant('{tmp}\vcredist_x86_2017.exe'), '/q', '' , SW_HIDE, ewWaitUntilTerminated, nErrorCode);
+    ExtractTemporaryFile('VC_redist.x86.exe');
+    ShellExec('', ExpandConstant('{tmp}\VC_redist.x86.exe'), '/q', '' , SW_HIDE, ewWaitUntilTerminated, nErrorCode);
   #endif
 end;
 

@@ -294,7 +294,6 @@ DittoSetup*]]></ExclExt>
 ".\Ditto\vcruntime140.dll" "vcruntime140.dll"
 ".\Ditto\msvcp140.dll" "msvcp140.dll"
 ".\Ditto\mfc140u.dll" "mfc140u.dll"
-".\Ditto\mfc140enu.dll" "mfc140enu.dll"
 
 ".\WindowsApp" "WindowsApp"
 
