@@ -578,6 +578,7 @@ CClipTypes* CCP_MainApp::LoadTypesFromDB()
 		pTypes->Add(CF_UNICODETEXT);
 		pTypes->Add(CF_HDROP);
 		pTypes->Add(CF_DIB);
+		pTypes->Add(GetFormatID(_T("HTML Format")));
 	}
 
 	return pTypes;

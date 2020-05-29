@@ -6,6 +6,7 @@
 #include "OptionsTypes.h"
 #include "Shared/ArrayEx.h"
 #include "DimWnd.h"
+#include "Misc.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -93,6 +94,7 @@ BOOL COptionsTypes::OnInitDialog()
 			m_List.AddString(_T("CF_UNICODETEXT"));
 			m_List.AddString(_T("CF_HDROP"));
 			m_List.AddString(_T("CF_DIB"));
+			m_List.AddString(GetFormatName(GetFormatID(_T("HTML Format"))));
 		}
 
 		while(q.eof() == false)
