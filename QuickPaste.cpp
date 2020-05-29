@@ -135,6 +135,12 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	{
 		CGetSetOptions::GetQuickPastePoint(point);
 		CGetSetOptions::GetQuickPasteSize(csSize);
+
+		if (IsWindow(m_pwndPaste->m_hWnd))
+		{
+			csSize.cx = m_pwndPaste->m_DittoWindow.m_dpi.Scale(csSize.cx);
+			csSize.cy = m_pwndPaste->m_DittoWindow.m_dpi.Scale(csSize.cy);
+		}
 	}
 
 	CPoint ptCaret = theApp.m_activeWnd.FocusCaret();
