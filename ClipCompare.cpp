@@ -39,14 +39,15 @@ void CClipCompare::Compare(int leftId, int rightId)
 				CString leftFile = SaveToFile(leftId, &leftClip, saveW, saveA);
 				CString rightFile = SaveToFile(rightId, &rightClip, saveW, saveA);
 
-				CString path = GetComparePath();
+				CString params = _T("");
+				CString path = GetComparePath(params);
 
 				if(path != _T(""))
 				{
 					SHELLEXECUTEINFO sei = { sizeof(sei) };
 					sei.lpFile = path;
 					CString csParam;
-					csParam.Format(_T("\"%s\" \"%s\""), leftFile, rightFile);
+					csParam.Format(_T("%s\"%s\" \"%s\""), params, leftFile, rightFile);
 					sei.lpParameters = csParam;
 					sei.nShow = SW_NORMAL;
 
@@ -79,12 +80,17 @@ void CClipCompare::Compare(int leftId, int rightId)
 	}
 }
 
-CString CClipCompare::GetComparePath()
+CString CClipCompare::GetComparePath(CString &params)
 {
 	CString path = CGetSetOptions::GetDiffApp();
 
 	if(path != _T(""))
 	{
+		if (path.Find(_T("totalcmd.exe")) != -1 || 
+			path.Find(_T("totalcmd64.exe")) != -1)
+		{
+			params = _T(" /S=C ");
+		}
 		return path;
 	}
 
@@ -147,6 +153,36 @@ CString CClipCompare::GetComparePath()
 	{
 		return path;
 	}
+
+	path = _T("c:\\Program Files\\totalcmd\\totalcmd64.exe");
+	if (FileExists(path))
+	{
+		params = _T(" /S=C ");
+		return path;
+	}
+
+	path = _T("c:\\Program Files (x86)\\totalcmd\\totalcmd.exe");
+	if (FileExists(path))
+	{
+		params = _T(" /S=C ");
+		return path;
+	}
+
+	path = _T("c:\\totalcmd\\totalcmd64.exe");
+	if (FileExists(path))
+	{
+		params = _T(" /S=C ");
+		return path;
+	}
+
+	path = _T("c:\\totalcmd\\totalcmd.exe");
+	if (FileExists(path))
+	{
+		params = _T(" /S=C ");
+		return path;
+	}
+
+
 	return _T("");
 }
 

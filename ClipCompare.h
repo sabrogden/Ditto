@@ -11,6 +11,6 @@ public:
 
 protected:
 	CString SaveToFile(int id, CClip *clip, bool saveW, bool SaveA);
-	CString GetComparePath();
+	CString GetComparePath(CString &params);
 };
 
