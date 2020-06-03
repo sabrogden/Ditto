@@ -27,6 +27,7 @@
 #include "CF_TextAggregator.h"
 #include "htmlformataggregator.h"
 #include "shared/Tokenizer.h"
+#include <signal.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -6628,6 +6629,19 @@ void CQPasteWnd::OnUpdateSpecialpasteTypoglycemia(CCmdUI *pCmdUI)
 
 void CQPasteWnd::OnNMClickList1(NMHDR *pNMHDR, LRESULT *pResult)
 {
+	CString csText;
+	m_search.GetWindowText(csText);
+	if (csText == _T("crash"))
+	{
+		if (CONTROL_PRESSED)
+		{
+			if (GetKeyState(VK_SHIFT) & 0x8000)
+			{
+				raise(SIGSEGV);
+			}
+		}
+	}
+
 	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
 	MSG msg;
 	msg.lParam = 0;
