@@ -29,13 +29,7 @@ std::string CDittoChaiScript::GetAsciiString()
 		IClipFormat *pFormat = m_pClip->Clips()->FindFormatEx(CF_TEXT);
 		if (pFormat)
 		{
-			char *stringData = (char *)GlobalLock(pFormat->Data());
-			if (stringData != NULL)
-			{
-				s = stringData;
-
-				GlobalUnlock(pFormat->Data());
-			}
+			s = pFormat->GetAsCStringA();
 		}
 	}
 

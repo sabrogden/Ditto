@@ -26,7 +26,7 @@ public:
 	BOOL Show(CPoint point);
 	BOOL Hide();
 	void SetToolTipText(const CString &csText);
-	void SetRTFText(const char *pRTF);
+	void SetRTFText(const CStringA &rtf);
 	void SetHtmlText(const CString &html);
 	void SetGdiplusBitmap(Gdiplus::Bitmap *gdiplusBitmap);
 	void SetNotifyWnd(CWnd *pNotify)		{ m_pNotifyWnd = pNotify;	}

@@ -31,14 +31,9 @@ bool CDittoRulerRichEditCtrl::LoadItem(long lID, CString csDesc)
 	Clip.m_cfType = RegisterClipboardFormat(CF_RTF);
 	if(theApp.GetClipData(lID, Clip) && Clip.m_hgData)
 	{
-		LPVOID pvData = GlobalLock(Clip.m_hgData);
-		if(pvData)
-		{
-			SetRTF((char*)pvData);
-			bSetText = true;
-		}
-
-		GlobalUnlock(Clip.m_hgData);
+		CString cs(Clip.GetAsCStringA());
+		SetRTF(cs);
+		bSetText = true;		
 
 		Clip.Free();
 		Clip.Clear();
@@ -49,15 +44,8 @@ bool CDittoRulerRichEditCtrl::LoadItem(long lID, CString csDesc)
 		Clip.m_cfType = CF_UNICODETEXT;
 		if(theApp.GetClipData(lID, Clip) && Clip.m_hgData)
 		{
-			LPVOID pvData = GlobalLock(Clip.m_hgData);
-			if(pvData)
-			{
-				CString csText = (WCHAR*)pvData;
-				SetText(csText);
-				bSetText = true;
-			}
-
-			GlobalUnlock(Clip.m_hgData);
+			SetText(Clip.GetAsCString());
+			bSetText = true;		
 
 			Clip.Free();
 			Clip.Clear();
@@ -69,17 +57,11 @@ bool CDittoRulerRichEditCtrl::LoadItem(long lID, CString csDesc)
 		Clip.m_cfType = CF_TEXT;
 		if(theApp.GetClipData(lID, Clip) && Clip.m_hgData)
 		{
-			LPVOID pvData = GlobalLock(Clip.m_hgData);
-			if(pvData)
-			{
-				CString csText = (char*)pvData;
-				SetText(csText);
+			CString csText(Clip.GetAsCStringA());
+			SetText(csText);
 
-				bSetText = true;
-			}
-
-			GlobalUnlock(Clip.m_hgData);
-
+			bSetText = true;
+		
 			Clip.Free();
 			Clip.Clear();
 		}

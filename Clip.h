@@ -54,6 +54,42 @@ public:
 	virtual void AutoDeleteData(bool autoDeleteData) { m_autoDeleteData = autoDeleteData; }
 	virtual bool AutoDeleteData()	{ return m_autoDeleteData; }
 
+	CStringA GetAsCStringA() {
+		CStringA ret;
+
+		if (m_hgData)
+		{
+			LPVOID data = GlobalLock(m_hgData);
+			SIZE_T size = GlobalSize(m_hgData);
+			if (data != NULL && size > 0)
+			{
+				ret = CStringA((char *)data, size);
+			}
+
+			GlobalUnlock(m_hgData);
+		}
+
+		return ret;
+	}
+
+	CString GetAsCString() {
+		CString ret;
+		
+		if (m_hgData)
+		{
+			LPVOID data = GlobalLock(m_hgData);
+			SIZE_T size = GlobalSize(m_hgData);
+			if (data != NULL && size > 0)
+			{
+				ret = CString((wchar_t *)data, size / (sizeof(wchar_t)));
+			}
+
+			GlobalUnlock(m_hgData);
+		}
+
+		return ret;
+	}
+	
 	Gdiplus::Bitmap *CreateGdiplusBitmap();
 };
 

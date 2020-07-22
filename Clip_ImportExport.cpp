@@ -295,32 +295,21 @@ bool CClip_ImportExport::Append_CF_TEXT_AND_CF_UNICODETEXT(CStringA &csCF_TEXT, 
 		{
 		case CF_TEXT:
 			{	
-				const char *Data = (const char *)GlobalLock(pCF->m_hgData);
-				if(Data)
-				{
-					if(csCF_TEXT.IsEmpty() == FALSE)
-						csCF_TEXT += "\r\n";
+			
+				if(csCF_TEXT.IsEmpty() == FALSE)
+					csCF_TEXT += "\r\n";
 
-					csCF_TEXT += Data;
-					bRet = true;
-
-					GlobalUnlock(pCF->m_hgData);
-				}
+				csCF_TEXT += pCF->GetAsCStringA();
+				bRet = true;
 			}
 			break;
 		case CF_UNICODETEXT:
 			{	
-				const wchar_t *Data = (const wchar_t *)GlobalLock(pCF->m_hgData);
-				if(Data)
-				{
-					if(csCF_UNICODETEXT.IsEmpty() == FALSE)
-						csCF_UNICODETEXT += _T("\r\n");
+				if(csCF_UNICODETEXT.IsEmpty() == FALSE)
+					csCF_UNICODETEXT += _T("\r\n");
 
-					csCF_UNICODETEXT += Data;
-					bRet = true;
-
-					GlobalUnlock(pCF->m_hgData);
-				}
+				csCF_UNICODETEXT += pCF->GetAsCString();;
+				bRet = true;
 			}
 			break;
 		}

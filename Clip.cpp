@@ -439,7 +439,7 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 			TCHAR* text = (TCHAR *)GlobalLock(cfDesc.m_hgData);
 			if (text != NULL)
 			{
-				std::wstring stringData(text);
+				std::wstring stringData(text, GlobalSize(cfDesc.m_hgData));
 				GlobalUnlock(cfDesc.m_hgData);
 				if (g_Opt.m_regexHelper.TextMatchFilters(activeApp, stringData))
 				{
@@ -648,7 +648,7 @@ bool CClip::SetDescFromText(HGLOBAL hgData, bool unicode)
 		TCHAR* text = (TCHAR *) GlobalLock(hgData);
 		bufLen = GlobalSize(hgData);
 
-		m_Desc = text;
+		m_Desc = CString(text, bufLen/(sizeof(wchar_t)));
 		bRet = true;
 	}
 	else
@@ -656,7 +656,7 @@ bool CClip::SetDescFromText(HGLOBAL hgData, bool unicode)
 		char* text = (char *) GlobalLock(hgData);
 		bufLen = GlobalSize(hgData);
 	
-		m_Desc = text;
+		m_Desc = CString(text, bufLen);
 		bRet = true;
 	}
 		
@@ -1722,15 +1722,7 @@ CStringW CClip::GetUnicodeTextFormat()
 	IClipFormat *pFormat = this->Clips()->FindFormatEx(CF_UNICODETEXT);
 	if(pFormat != NULL)
 	{
-		wchar_t *stringData = (wchar_t *)GlobalLock(pFormat->Data());
-		if(stringData != NULL)
-		{
-			CStringW string(stringData);
-
-			GlobalUnlock(pFormat->Data());
-
-			return string;
-		}
+		return pFormat->GetAsCString();
 	}
 
 	return _T("");
@@ -1741,15 +1733,7 @@ CStringA CClip::GetCFTextTextFormat()
 	IClipFormat *pFormat = this->Clips()->FindFormatEx(CF_TEXT);
 	if(pFormat != NULL)
 	{
-		char *stringData = (char *)GlobalLock(pFormat->Data());
-		if(stringData != NULL)
-		{
-			CStringA string(stringData);
-			
-			GlobalUnlock(pFormat->Data());
-
-			return string;
-		}
+		return pFormat->GetAsCStringA();
 	}
 
 	return _T("");
@@ -1810,25 +1794,19 @@ BOOL CClip::WriteTextToHtmlFile(CString path)
 		IClipFormat *pFormat = this->Clips()->FindFormatEx(theApp.m_HTML_Format);
 		if (pFormat != NULL)
 		{
-			char *stringData = (char *)GlobalLock(pFormat->Data());
-			if (stringData != NULL)
+			CStringA html = pFormat->GetAsCStringA();
+
+			int pos = html.Find("<html");
+			if (pos >= 0)
 			{
-				CStringA html(stringData);							
-
-				int pos = html.Find("<html");
-				if (pos >= 0)
-				{
-					html = html.Mid(pos);
-				}
-				else
-				{
-					html = html;
-				}
-
-				f.Write(html.GetBuffer(), html.GetLength());
-
-				GlobalUnlock(pFormat->Data());
+				html = html.Mid(pos);
 			}
+			else
+			{
+				html = html;
+			}
+
+			f.Write(html.GetBuffer(), html.GetLength());			
 		}
 
 		f.Close();

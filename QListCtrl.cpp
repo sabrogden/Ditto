@@ -518,21 +518,17 @@ BOOL CQListCtrl::DrawRtfText(int nItem, CRect &crRect, CDC *pDC)
 
 	if (m_pFormatter)
 	{
-		char *pData = (char*)GlobalLock(pThumbnail->m_hgData);
-		if (pData)
-		{
-			//somehow ms word places crazy rtf text onto the clipboard and our draw routine doesn't handle that
-			//pass the rtf text into a richtext control and get it out and the contorl will clean  the rtf so our routine can draw it
-			m_rtfFormater.SetRTF((char*)pData);
-			CString betterRTF = m_rtfFormater.GetRTF();
+		//somehow ms word places crazy rtf text onto the clipboard and our draw routine doesn't handle that
+		//pass the rtf text into a richtext control and get it out and the contorl will clean  the rtf so our routine can draw it
+		m_rtfFormater.SetRTF(pThumbnail->GetAsCStringA());
+		CString betterRTF = m_rtfFormater.GetRTF();
 
-			CComBSTR bStr(betterRTF);
-			m_pFormatter->put_RTFText(bStr);
+		CComBSTR bStr(betterRTF);
+		m_pFormatter->put_RTFText(bStr);
 
-			m_pFormatter->Draw(pDC->m_hDC, crRect);
+		m_pFormatter->Draw(pDC->m_hDC, crRect);
 
-			bRet = TRUE;
-		}
+		bRet = TRUE;
 	}
 
 	return bRet;
@@ -1016,18 +1012,11 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		}
 		CATCH_SQLITE_EXCEPTION
 
-			Clip.m_cfType = CF_UNICODETEXT;
+		Clip.m_cfType = CF_UNICODETEXT;
 		if (GetClipData(nItem, Clip) && Clip.m_hgData)
 		{
-			LPVOID pvData = GlobalLock(Clip.m_hgData);
-			if (pvData)
-			{
-				CString csText = (WCHAR*)pvData;
-				m_pToolTip->SetToolTipText(csText);
-				bSetPlainText = true;
-			}
-
-			GlobalUnlock(Clip.m_hgData);
+			m_pToolTip->SetToolTipText(Clip.GetAsCString());
+			bSetPlainText = true;		
 
 			Clip.Free();
 			Clip.Clear();
@@ -1037,17 +1026,11 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		{
 			Clip.m_cfType = CF_TEXT;
 			if (GetClipData(nItem, Clip) && Clip.m_hgData)
-			{
-				LPVOID pvData = GlobalLock(Clip.m_hgData);
-				if (pvData)
-				{
-					CString csText = (char*)pvData;
-					m_pToolTip->SetToolTipText(csText);
+			{	
+				CString cs(Clip.GetAsCStringA());
 
-					bSetPlainText = true;
-				}
-
-				GlobalUnlock(Clip.m_hgData);
+				m_pToolTip->SetToolTipText(cs);
+				bSetPlainText = true;
 
 				Clip.Free();
 				Clip.Clear();
@@ -1063,14 +1046,8 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 
 		if (GetClipData(nItem, Clip) && Clip.m_hgData)
 		{
-			LPVOID pvData = GlobalLock(Clip.m_hgData);
-			if (pvData)
-			{
-				m_pToolTip->SetRTFText((char*)pvData);
-			}
-
-			GlobalUnlock(Clip.m_hgData);
-
+			m_pToolTip->SetRTFText(Clip.GetAsCStringA());
+		
 			Clip.Free();
 			Clip.Clear();
 		}
@@ -1079,15 +1056,9 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		Clip.m_cfType = GetFormatID(_T("HTML Format"));
 		if (GetClipData(nItem, Clip) && Clip.m_hgData)
 		{
-			LPVOID pvData = GlobalLock(Clip.m_hgData);
-			if (pvData)
-			{
-				CString html;
-				CTextConvert::ConvertFromUTF8(CStringA((char*)pvData), html);
-				m_pToolTip->SetHtmlText(html);
-			}
-
-			GlobalUnlock(Clip.m_hgData);
+			CString html;
+			CTextConvert::ConvertFromUTF8(Clip.GetAsCStringA(), html);
+			m_pToolTip->SetHtmlText(html);		
 
 			Clip.Free();
 			Clip.Clear();
@@ -1103,7 +1074,6 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 			Clip.m_cfType = theApp.m_PNG_Format;
 			if (GetClipData(nItem, Clip) && Clip.m_hgData)
 			{
-
 				m_pToolTip->SetGdiplusBitmap(Clip.CreateGdiplusBitmap());
 			}
 		}

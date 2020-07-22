@@ -15,6 +15,8 @@ public:
 	virtual void Data(HGLOBAL data) = 0;
 	virtual void AutoDeleteData(bool autoDelete) = 0;
 	virtual void Free() = 0;
+	virtual CStringA GetAsCStringA() = 0;
+	virtual CString GetAsCString() = 0;
 };
 
 //Contains a list of IClipFormats

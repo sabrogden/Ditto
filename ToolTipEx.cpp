@@ -829,10 +829,10 @@ void CToolTipEx::SetHtmlText(const CString &html)
 	}
 }
 
-void CToolTipEx::SetRTFText(const char *pRTF)
+void CToolTipEx::SetRTFText(const CStringA &rtf)
 {
-    m_RichEdit.SetRTF(pRTF);
-    m_csRTF = pRTF;
+    m_RichEdit.SetRTF(rtf);
+    m_csRTF = rtf;
 	m_RichEdit.SetSel(0, 0);
 	
 	HighlightSearchText();
