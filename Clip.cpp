@@ -439,7 +439,7 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 			TCHAR* text = (TCHAR *)GlobalLock(cfDesc.m_hgData);
 			if (text != NULL)
 			{
-				std::wstring stringData(text, GlobalSize(cfDesc.m_hgData));
+				std::wstring stringData(text, GlobalSize(cfDesc.m_hgData)/(sizeof(wchar_t)));
 				GlobalUnlock(cfDesc.m_hgData);
 				if (g_Opt.m_regexHelper.TextMatchFilters(activeApp, stringData))
 				{
