@@ -820,7 +820,23 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 		break;
 
 	case VK_HOME:
-		SetListPos(0);
+
+		if (GetKeyState(VK_SHIFT) & 0x8000)
+		{
+			int pos = (int)GetFirstSelectedItemPosition();
+			if (pos >= 0 && pos < GetItemCount())
+			{
+				for (int i = 0; i < pos; i++)
+				{
+					SetSelection(i, (i == 0));
+				}
+			}
+
+		}
+		else
+		{
+			SetListPos(0);
+		}
 		break;
 	} // end switch(vk)
 
