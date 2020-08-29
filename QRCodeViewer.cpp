@@ -300,7 +300,7 @@ LRESULT QRCodeViewer::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 
 	m_logFont.lfHeight = m_DittoWindow.m_dpi.Scale(m_originalFontHeight);
 
-	m_font.Detach();
+	m_font.DeleteObject();
 	m_font.CreateFontIndirect(&m_logFont);
 	m_desc.SetFont(&m_font);
 

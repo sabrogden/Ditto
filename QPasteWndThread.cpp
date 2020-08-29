@@ -371,7 +371,11 @@ void CQPasteWndThread::OnLoadExtraData(void *param)
 				{
 					DWORD startConvertImage = GetTickCount();
 
-					it->GetDibFittingToHeight(CDC::FromHandle(GetDC(NULL)), m_rowHeight);
+					HDC dc = GetDC(NULL);
+
+					it->GetDibFittingToHeight(CDC::FromHandle(dc), m_rowHeight);
+
+					ReleaseDC(NULL, dc);
 
 					DWORD timeTook = GetTickCount() - startConvertImage;
 					if (timeTook > 20)

@@ -1392,7 +1392,7 @@ LRESULT CToolTipEx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 	m_optionsButton.Reset();
 	m_optionsButton.LoadStdImageDPI(m_DittoWindow.m_dpi.GetDPI(), IDB_COG_16_16, IDB_COG_20_20, IDB_COG_24_24, cog_28, IDB_COG_32_32, _T("PNG"));
 
-	m_clipDataFont.Detach();
+	m_clipDataFont.DeleteObject();
 	m_clipDataFont.CreateFont(-m_DittoWindow.m_dpi.Scale(8), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 	
 	m_clipDataStatic.SetFont(&m_clipDataFont);

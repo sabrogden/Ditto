@@ -2000,14 +2000,14 @@ void CQPasteWnd::UpdateFont()
 	lf.lfHeight = m_DittoWindow.m_dpi.Scale(lf.lfHeight);
 	m_lstHeader.SetLogFont(lf);
 
-	m_SearchFont.Detach();
+	m_SearchFont.DeleteObject();
 	m_SearchFont.CreateFont(-m_DittoWindow.m_dpi.Scale(15), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 	m_search.SetFont(&m_SearchFont);
 	m_search.SetPromptFont(m_SearchFont);
 
 	m_GroupTree.SetFont(&m_SearchFont);
 
-	m_groupFont.Detach();
+	m_groupFont.DeleteObject();
 	m_groupFont.CreateFont(-m_DittoWindow.m_dpi.Scale(12), 0, 0, 0, 400, 0, 1, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 	m_stGroup.SetFont(&m_groupFont);
 	m_stGroup.SetBkColor(g_Opt.m_Theme.MainWindowBG());
@@ -5098,8 +5098,14 @@ void CQPasteWnd::OnBegindrag(NMHDR *pNMHDR, LRESULT *pResult)
 	this->SetTimer(TIMER_DRAG_HIDE_WINDOW, 500, NULL);
 
 	paste.DoDrag();
-
+	
 	KillTimer(TIMER_DRAG_HIDE_WINDOW);
+
+
+	if (g_Opt.m_bShowPersistent)
+	{
+		ShowQPasteWindow(0);
+	}
 
 	*pResult = 0;
 }

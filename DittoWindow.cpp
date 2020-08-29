@@ -716,12 +716,12 @@ void CDittoWindow::SetCaptionOn(CWnd *pWnd, int nPos, bool bOnstartup, int capti
 {
 	m_captionFontSize = captionFontSize;
 
-	m_VertFont.Detach();
+	m_VertFont.DeleteObject();
 	m_VertFont.CreateFont(-m_dpi.Scale(captionFontSize), 0, -900, 0, 400, FALSE, FALSE, 0, DEFAULT_CHARSET,
 		OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
 		DEFAULT_PITCH | FF_SWISS, _T("Segoe UI"));
 
-	m_HorFont.Detach();
+	m_HorFont.DeleteObject();
 	m_HorFont.CreateFont(-m_dpi.Scale(captionFontSize), 0, 0, 0, 500, FALSE, FALSE, 0, DEFAULT_CHARSET,
 		OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
 		DEFAULT_PITCH | FF_SWISS, _T("Segoe UI"));
@@ -887,8 +887,8 @@ void CDittoWindow::OnDpiChanged(CWnd *pParent, int dpi)
 	m_captionBorderWidth = m_dpi.Scale(25);
 	m_borderSize = m_dpi.Scale(2);
 
-	m_VertFont.Detach();
-	m_HorFont.Detach();
+	m_VertFont.DeleteObject();
+	m_HorFont.DeleteObject();
 
 	m_VertFont.CreateFont(-m_dpi.Scale(m_captionFontSize), 0, -900, 0, 400, FALSE, FALSE, 0, DEFAULT_CHARSET,
 		OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
