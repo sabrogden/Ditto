@@ -607,19 +607,28 @@ LRESULT CSymbolEdit::OnSetFont(WPARAM wParam, LPARAM lParam)
 
 HBRUSH CSymbolEdit::CtlColor(CDC* pDC, UINT n)
 {
-	OutputDebugString(_T("CtlColor \r\n"));
+	COLORREF color = -1;	
 
 	if (::GetFocus() == m_hWnd)
 	{
 		pDC->SetTextColor(g_Opt.m_Theme.SearchTextBoxFocusText());
 		pDC->SetBkColor(g_Opt.m_Theme.SearchTextBoxFocusBG());
-		return CreateSolidBrush(g_Opt.m_Theme.SearchTextBoxFocusBG());
+		color = g_Opt.m_Theme.SearchTextBoxFocusBG();
 	}
 	else
 	{
 		pDC->SetBkColor(g_Opt.m_Theme.MainWindowBG());
-		return CreateSolidBrush(g_Opt.m_Theme.MainWindowBG());
+		color = g_Opt.m_Theme.MainWindowBG();
 	}
+
+	if (color != m_lastBrushColor)
+	{
+		DeleteObject(m_brush);
+		m_brush.CreateSolidBrush(color);
+		m_lastBrushColor = color;
+	}
+
+	return m_brush;
 }
 
 void CSymbolEdit::OnSetFocus(CWnd* pOldWnd)

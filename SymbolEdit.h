@@ -42,6 +42,9 @@ class CSymbolEdit : public CEdit
 	CString m_strPromptText;
 	COLORREF m_colorPromptText;
 
+	CBrush m_brush;
+	COLORREF m_lastBrushColor;
+
 	void DestroyIcon();
 
 public:
