@@ -194,8 +194,9 @@ BOOL CDittoChaiScript::DescriptionMatchesRegex(std::string regex)
 		{
 			matches = true;
 		}
-		return matches;
 	}
+
+	return matches;
 }
 
 void CDittoChaiScript::DescriptionReplaceRegex(std::string regex, std::string replaceWith)

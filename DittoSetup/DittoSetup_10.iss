@@ -66,23 +66,15 @@ Name: AddFireWallException; Description: Add Windows Firewall exception for Ditt
 [Files]
 #ifdef bit64
 	Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_64');
+  Source: ..\Release64\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
 	Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
-	Source: mfc-crt64\VC_redist.x64.exe; Flags: dontcopy;      
-  Source: ..\Release64\icuuc58.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release64\icuin58.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release64\icutu58.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release64\icuio58.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release64\icudt58.dll; DestDir: {app}; Flags: ignoreversion
+	Source: mfc-crt64\VC_redist.x64.exe; Flags: dontcopy;
 #endif
 #ifndef bit64
 	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_32');
+  Source: ..\Release\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 	Source: mfc-crt\VC_redist.x86.exe; Flags: dontcopy;
-  Source: ..\Release\icuuc58.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release\icuin58.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release\icutu58.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release\icuio58.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release\icudt58.dll; DestDir: {app}; Flags: ignoreversion
 #endif
 
 Source: ..\Debug\Language\*; DestDir: {app}\Language; BeforeInstall: BeforeLanguageInstall()
@@ -150,7 +142,15 @@ var
     DeleteFile(sDir+'\icuio55.dll')
     DeleteFile(sDir+'\icuin55.dll')
     DeleteFile(sDir+'\icudt55.dll')
-	
+
+
+    //moved to use the windows included dll
+    DeleteFile(sDir+'\icuuc58.dll')
+    DeleteFile(sDir+'\icuin58.dll')
+    DeleteFile(sDir+'\icutu58.dll')
+    DeleteFile(sDir+'\icuio58.dll')
+    DeleteFile(sDir+'\icudt58.dll')
+
     DelTree(sDir+'\Help', TRUE, TRUE, TRUE)
 end;
 

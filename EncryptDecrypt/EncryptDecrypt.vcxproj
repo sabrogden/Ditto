@@ -20,32 +20,32 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F08A8736-1116-4166-AF88-CF533E41E958}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseOfMfc>Dynamic</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseOfMfc>Dynamic</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseOfMfc>Dynamic</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseOfMfc>Dynamic</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -69,14 +69,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.21006.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\Debug64\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\Debug64\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\Release64\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\Release64\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)$(Configuration)64\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Configuration)64\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
@@ -89,10 +89,10 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EncryptDecryptD</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EncryptDecryptD64</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EncryptDecrypt</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">EncryptDecrypt</TargetName>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">EncryptDecrypt</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EncryptDecrypt64</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">EncryptDecrypt</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -116,7 +116,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Lib>
-      <OutputFile>Debug\EncryptDecryptD.lib</OutputFile>
+      <OutputFile>$(SolutionDir)$(Configuration)\EncryptDecrypt.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetMachine>MachineX86</TargetMachine>
     </Lib>
@@ -125,7 +125,8 @@
       <OutputFile>.\EncryptDecrypt___Win32_Unicode_Debug/EncryptDecrypt.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib $(SolutionDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -152,7 +153,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Lib>
-      <OutputFile>Release\EncryptDecrypt.lib</OutputFile>
+      <OutputFile>$(SolutionDir)$(Configuration)\EncryptDecrypt.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetMachine>MachineX86</TargetMachine>
     </Lib>
@@ -161,7 +162,8 @@
       <OutputFile>.\EncryptDecrypt___Win32_Unicode_Release/EncryptDecrypt.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib $(SolutionDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -188,7 +190,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Lib>
-      <OutputFile>Release64\EncryptDecrypt64.lib</OutputFile>
+      <OutputFile>$(SolutionDir)$(Configuration)64\EncryptDecrypt.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetMachine>MachineX64</TargetMachine>
     </Lib>
@@ -197,7 +199,8 @@
       <OutputFile>.\EncryptDecrypt___Win32_Unicode_Release/EncryptDecrypt.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib $(SolutionDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -205,11 +208,12 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib $(SolutionDir)</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <Lib>
       <TargetMachine>MachineX64</TargetMachine>
-      <OutputFile>Debug64\EncryptDecryptD64.lib</OutputFile>
+      <OutputFile>$(SolutionDir)$(Configuration)64\EncryptDecrypt.lib</OutputFile>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

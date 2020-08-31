@@ -16,6 +16,7 @@
 #include "MainTableFunctions.h"
 #include "ShowTaskBarIcon.h"
 #include "NoDbFrameWnd.h"
+#include <clocale>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

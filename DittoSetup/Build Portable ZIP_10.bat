@@ -14,34 +14,24 @@ MkDir Ditto\Addins
 if "%2" == "bit64" goto bit64
 
 copy ..\Release\Ditto.exe Ditto\Ditto.exe
+copy ..\Release\ICU_Loader.dll Ditto\ICU_Loader.dll
 copy ..\Release\Addins\*.dll Ditto\Addins\
 
 copy mfc-crt\vcruntime140.dll Ditto\vcruntime140.dll
 copy mfc-crt\msvcp140.dll Ditto\msvcp140.dll
 copy mfc-crt\mfc140u.dll Ditto\mfc140u.dll
 
-copy ..\Release\icuuc58.dll; Ditto\icuuc58.dll
-copy ..\Release\icuin58.dll; Ditto\icuin58.dll
-copy ..\Release\icutu58.dll; Ditto\icutu58.dll
-copy ..\Release\icuio58.dll; Ditto\icuio58.dll
-copy ..\Release\icudt58.dll; Ditto\icudt58.dll
-
 if "%2"=="" GOTO skipBit64
 if "%2"=="bit32" GOTO skipBit64	
 :bit64
 
 copy ..\Release64\Ditto.exe Ditto\Ditto.exe
+copy ..\Release64\ICU_Loader.dll Ditto\ICU_Loader.dll
 copy ..\Release64\Addins\*.dll Ditto\Addins\
 
 copy mfc-crt64\vcruntime140.dll Ditto\vcruntime140.dll
 copy mfc-crt64\msvcp140.dll Ditto\msvcp140.dll
 copy mfc-crt64\mfc140u.dll Ditto\mfc140u.dll
-
-copy ..\Release64\icuuc58.dll; Ditto\icuuc58.dll
-copy ..\Release64\icuin58.dll; Ditto\icuin58.dll
-copy ..\Release64\icutu58.dll; Ditto\icutu58.dll
-copy ..\Release64\icuio58.dll; Ditto\icuio58.dll
-copy ..\Release64\icudt58.dll; Ditto\icudt58.dll
 
 :skipBit64
 
@@ -49,7 +39,6 @@ copy Changes.txt Ditto\Changes.txt
 
 copy portable Ditto\portable
 
-copy ..\Help\*.* Ditto\Help\
 copy ..\Debug\language\*.xml Ditto\language\
 copy ..\Debug\themes\*.xml Ditto\themes\
 

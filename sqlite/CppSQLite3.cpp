@@ -799,10 +799,11 @@ void CppSQLite3DB::open(const TCHAR* szFile)
 	int ret = sqlite3_create_function(mpDB, "regexp", 2, SQLITE_ANY, 0, &sqlite_regexp, 0, 0);
 
 	setBusyTimeout(mnBusyTimeoutMs);
+
+	sqlite3_enable_load_extension(mpDB, 1);
+	char* e;
+	sqlite3_load_extension(mpDB, "ICU_Loader.dll", "sqlite3_icu_init", &e);
 }
-
-
-
 
 bool CppSQLite3DB::close()
 {

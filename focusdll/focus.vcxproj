@@ -21,32 +21,32 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E4AB8C80-F35F-451E-853B-07CEDD49E500}</ProjectGuid>
     <RootNamespace>focus</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -70,16 +70,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.21006.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\Release64\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\Release\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\Release64\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)$(Configuration)64\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</OutDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\Debug64\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\Debug\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\Debug64\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)$(Configuration)64\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
@@ -94,8 +94,8 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">focus64</TargetName>
-    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">focus64</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectName)</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
@@ -127,22 +127,22 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>.\Release/focus.dll</OutputFile>
+      <OutputFile>$(SolutionDir)$(Configuration)\focus.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/focus.pdb</ProgramDatabaseFile>
-      <ImportLibrary>.\Release/focus.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>.\Release/focus.map</MapFileName>
       <MapExports>true</MapExports>
+      <ImportLibrary />
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>.\Release/focus.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib $(SolutionDir)
-copy $(TargetDir)*.dll $(SolutionDir)Release</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -161,7 +161,7 @@ copy $(TargetDir)*.dll $(SolutionDir)Release</Command>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <PrecompiledHeaderOutputFile>.\Release64/focus64.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>.\Release64/focus.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\Release64/</AssemblerListingLocation>
       <ObjectFileName>.\Release64/</ObjectFileName>
       <ProgramDataBaseFileName>.\Release64/</ProgramDataBaseFileName>
@@ -174,9 +174,9 @@ copy $(TargetDir)*.dll $(SolutionDir)Release</Command>
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>.\Release64/focus64.dll</OutputFile>
+      <OutputFile>$(SolutionDir)$(Configuration)64\focus.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <ProgramDatabaseFile>.\Release64/focus64.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>.\Release64/focus.pdb</ProgramDatabaseFile>
       <ImportLibrary>
       </ImportLibrary>
       <GenerateMapFile>true</GenerateMapFile>
@@ -188,10 +188,8 @@ copy $(TargetDir)*.dll $(SolutionDir)Release</Command>
       <OutputFile>.\Release/focus64.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>mkdir $(SolutionDir)Release64
-copy $(TargetDir)*.lib $(SolutionDir)
-copy $(TargetDir)*.dll $(SolutionDir)Release64
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -224,11 +222,12 @@ copy $(TargetDir)*.dll $(SolutionDir)Release64
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>.\Debug/focus.dll</OutputFile>
+      <OutputFile>$(SolutionDir)$(Configuration)\focus.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Debug/focus.pdb</ProgramDatabaseFile>
-      <ImportLibrary>.\Debug/focus.lib</ImportLibrary>
+      <ImportLibrary>
+      </ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>.\Debug/focus.map</MapFileName>
@@ -239,9 +238,8 @@ copy $(TargetDir)*.dll $(SolutionDir)Release64
       <OutputFile>.\Debug/focus.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>copy $(TargetDir)*.lib $(SolutionDir)
-copy $(TargetDir)*.dll $(SolutionDir)Debug
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -249,7 +247,7 @@ copy $(TargetDir)*.dll $(SolutionDir)Debug
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TypeLibraryName>.\Debug64/focus64.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug64/focus.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -258,13 +256,15 @@ copy $(TargetDir)*.dll $(SolutionDir)Debug
       <PreprocessorDefinitions>UNICODE;WIN32;_DEBUG;_WINDOWS;_USRDLL;FOCUS_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <PrecompiledHeaderOutputFile>.\Debug64/focus64.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>.\Debug64/focus.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\Debug64/</AssemblerListingLocation>
       <ObjectFileName>.\Debug64/</ObjectFileName>
       <ProgramDataBaseFileName>.\Debug64/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <OmitFramePointers>false</OmitFramePointers>
+      <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -272,24 +272,23 @@ copy $(TargetDir)*.dll $(SolutionDir)Debug
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>odbc32.lib;odbccp32.lib;Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>.\Debug64/focus64.dll</OutputFile>
+      <OutputFile>$(SolutionDir)$(Configuration)64\focus.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug64/focus64.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>.\Debug64/focus.pdb</ProgramDatabaseFile>
       <ImportLibrary>
       </ImportLibrary>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>.\Debug64/focus64.map</MapFileName>
+      <MapFileName>.\Debug64/focus.map</MapFileName>
       <MapExports>true</MapExports>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Debug64/focus64.bsc</OutputFile>
+      <OutputFile>.\Debug64/focus.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>mkdir $(SolutionDir)Debug64
-copy $(TargetDir)*.lib $(SolutionDir)
-copy $(TargetDir)*.dll $(SolutionDir)Debug64</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

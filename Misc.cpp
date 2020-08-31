@@ -6,7 +6,6 @@
 #include "AlphaBlend.h"
 #include "Tlhelp32.h"
 #include <Wininet.h>
-#include "sqlite\utext.h"
 #include <sys/types.h>  
 #include <sys/stat.h> 
 #include "Path.h"
@@ -1181,22 +1180,17 @@ int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, C
 
 		int firstFindPos = 0;
 
-		//use icu::UnicodeString because it handles upper/lowercase characters for all languages, CSTring only hanldes ascii characters
-		icu::UnicodeString mainLow(mainStr);
-		mainLow.foldCase(U_FOLD_CASE_DEFAULT);
-
-		icu::UnicodeString findLow(findStr);
-		findLow.foldCase(U_FOLD_CASE_DEFAULT);
-
+		CString mainLow = mainStr.MakeLower();
+		CString findLow = mainStr.MakeLower();
 		
 		int preLength = preInsert.GetLength();
 		int postLength = postInsert.GetLength();
 
-		int x = mainLow.indexOf(findLow, 0);
+		int x = mainLow.Find(findLow, 0);
 		
 		while(TRUE)
 		{
-			foundPos = mainLow.indexOf(findLow, startFindPos);
+			foundPos = mainLow.Find(findLow, startFindPos);
 			if (foundPos < 0)
 				break;
 

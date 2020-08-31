@@ -10,8 +10,6 @@
 #include "Shared\Tokenizer.h"
 #include <random>
 #include "Client.h"
-#include "sqlite\unicode\unistr.h"
-#include "sqlite\unicode\uchar.h"
 #include "Path.h"
 #include "Md5.h"
 #include "DittoChaiScript.h"
@@ -247,24 +245,24 @@ void COleClipSource::DoUpperLowerCase(CClip &clip, bool upper)
 	IClipFormat *unicodeTextFormat = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
 	if (unicodeTextFormat != NULL)
 	{		
-		icu::UnicodeString s = unicodeTextFormat->GetAsCString();
+		CString cs = unicodeTextFormat->GetAsCString();
 
 		//free the old text we are going to replace it below with an upper case version
 		unicodeTextFormat->Free();
-
-		icu::UnicodeString val;
+				
+		CString val;
 		if (upper)
 		{
-			val = s.toUpper();
+			val = cs.MakeUpper();
 		}
 		else
 		{
-			val = s.toLower();
+			val = cs.MakeLower();
 		}
 		
-		long lLen = val.length();
-		HGLOBAL hGlobal = NewGlobalP((LPVOID)val.getTerminatedBuffer(), ((lLen+1) * sizeof(wchar_t)));
-		val.releaseBuffer();
+		long lLen = val.GetLength();
+		HGLOBAL hGlobal = NewGlobalP(val.GetBuffer(lLen), ((lLen+1) * sizeof(wchar_t)));
+		val.ReleaseBuffer();
 
 		unicodeTextFormat->Data(hGlobal);		
 	}
@@ -314,13 +312,13 @@ void COleClipSource::InvertCase(CClip &clip)
 			for (int i = 0; i < len; i++)
 			{
 				wchar_t item = pText[i];
-				if (u_isUUppercase(item))
+				if (isupper(item))
 				{
-					pText[i] = u_tolower(item);
+					pText[i] = tolower(item);
 				}
 				else
 				{
-					pText[i] = u_toupper(item);
+					pText[i] = toupper(item);
 				}
 			}
 		}
@@ -378,16 +376,14 @@ void COleClipSource::Capitalize(CClip &clip)
 		//free the old text we are going to replace it below with an upper case version
 		unicodeTextFormat->Free();
 
-		icu::UnicodeString temp = cs;
-
-		CString val = temp.toLower().getTerminatedBuffer();
+		CString val = cs.MakeLower();
 		long len = val.GetLength();
 
 		if (len > 0)
 		{
 			wchar_t * pText = val.GetBuffer();
 			
-			pText[0] = u_toupper(pText[0]);
+			pText[0] = toupper(pText[0]);
 			bool capitalize = false;
 			
 			for (int i = 1; i < len; i++)
@@ -399,7 +395,7 @@ void COleClipSource::Capitalize(CClip &clip)
 				}
 				else if (capitalize)
 				{
-					pText[i] = u_toupper(item);
+					pText[i] = toupper(item);
 					capitalize = false;
 				}
 			}
@@ -467,16 +463,14 @@ void COleClipSource::SentenceCase(CClip &clip)
 		//free the old text we are going to replace it below with an upper case version
 		unicodeTextFormat->Free();
 
-		icu::UnicodeString temp = cs;
-
-		CString val = temp.toLower().getTerminatedBuffer();
+		CString val = cs.MakeLower();
 		long len = val.GetLength();
 
 		if (len > 0)
 		{
 			wchar_t * pText = val.GetBuffer();
 
-			pText[0] = u_toupper(pText[0]);
+			pText[0] = toupper(pText[0]);
 			bool capitalize = false;
 
 			for (int i = 1; i < len; i++)
@@ -490,7 +484,7 @@ void COleClipSource::SentenceCase(CClip &clip)
 				}
 				else if (capitalize && item != ' ')
 				{
-					pText[i] = u_toupper(item);
+					pText[i] = toupper(item);
 					capitalize = false;
 				}
 			}

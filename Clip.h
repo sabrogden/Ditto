@@ -60,7 +60,7 @@ public:
 		if (m_hgData)
 		{
 			LPVOID data = GlobalLock(m_hgData);
-			SIZE_T size = GlobalSize(m_hgData);
+			int size = (int)GlobalSize(m_hgData);
 			if (data != NULL && size > 0)
 			{
 				ret = CStringA((char *)data, size-1);
@@ -78,7 +78,7 @@ public:
 		if (m_hgData)
 		{
 			LPVOID data = GlobalLock(m_hgData);
-			SIZE_T size = GlobalSize(m_hgData);
+			int size = (int)GlobalSize(m_hgData);
 			if (data != NULL && size > 0)
 			{
 				ret = CString((wchar_t *)data, ((size / (sizeof(wchar_t))) - 1));

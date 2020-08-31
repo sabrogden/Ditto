@@ -285,11 +285,7 @@ DittoSetup*]]></ExclExt>
 
 ".\Ditto\Ditto.exe"     "Ditto.exe"
 
-".\Ditto\icudt58.dll" "icudt58.dll"
-".\Ditto\icuin58.dll" "icuin58.dll"
-".\Ditto\icuio58.dll" "icuio58.dll"
-".\Ditto\icutu58.dll" "icutu58.dll"
-".\Ditto\icuuc58.dll" "icuuc58.dll"
+".\Ditto\ICU_Loader.dll"     "ICU_Loader.dll"
 
 ".\Ditto\vcruntime140.dll" "vcruntime140.dll"
 ".\Ditto\msvcp140.dll" "msvcp140.dll"
@@ -302,19 +298,6 @@ DittoSetup*]]></ExclExt>
 ".\Ditto_44.png"     "Ditto_44.png"
 
 ".\Ditto\Addins\DittoUtil.dll" "Addins\DittoUtil.dll"
-
-".\Ditto\Help\DittoConfig.htm" "Help\DittoConfig.htm"
-".\Ditto\Help\DittoCustomKeys.htm" "Help\DittoCustomKeys.htm"
-".\Ditto\Help\DittoFAQ.htm" "Help\DittoFAQ.htm"
-".\Ditto\Help\DittoGettingStarted.htm" "Help\DittoGettingStarted.htm"
-".\Ditto\Help\Dutch_DittoConfig.htm" "Help\Dutch_DittoConfig.htm"
-".\Ditto\Help\Dutch_DittoFAQ.htm" "Help\Dutch_DittoFAQ.htm"
-".\Ditto\Help\Dutch_DittoGettingStarted.htm" "Help\Dutch_DittoGettingStarted.htm"
-".\Ditto\Help\Persian_DittoCustomKeys.htm" "Help\Persian_DittoCustomKeys.htm"
-".\Ditto\Help\Persian_DittoGettingStarted.htm" "Help\Persian_DittoGettingStarted.htm"
-".\Ditto\Help\RegCustomKeys.jpg" "Help\RegCustomKeys.jpg"
-".\Ditto\Help\U3_Install.htm" "Help\U3_Install.htm"
-
      
 ".\Ditto\Language\Chinese.xml" "Language\Chinese.xml"
 ".\Ditto\Language\Chinese Traditional.xml" "Language\Chinese Traditional.xml"

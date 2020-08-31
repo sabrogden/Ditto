@@ -1,12 +1,11 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26228.4
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CP_Main", "CP_Main.vcxproj", "{8ECC3EF2-AF07-27B6-A773-779874943C0D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F08A8736-1116-4166-AF88-CF533E41E958} = {F08A8736-1116-4166-AF88-CF533E41E958}
+		{1FA87564-F5EC-42F8-978C-E827AAB54CB1} = {1FA87564-F5EC-42F8-978C-E827AAB54CB1}
 		{CF8F6379-5340-4494-8E59-2807ADF37B95} = {CF8F6379-5340-4494-8E59-2807ADF37B95}
 		{E4AB8C80-F35F-451E-853B-07CEDD49E500} = {E4AB8C80-F35F-451E-853B-07CEDD49E500}
 	EndProjectSection
@@ -18,6 +17,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "focus", "focusdll\focus.vcxproj", "{E4AB8C80-F35F-451E-853B-07CEDD49E500}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FocusHighlight", "FocusHighlight\FocusHighlight.vcxproj", "{385F3F81-896E-41EF-AE32-98D8A026588F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ICU_Loader", "ICU_Loader\ICU_Loader.vcxproj", "{1FA87564-F5EC-42F8-978C-E827AAB54CB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,8 +66,19 @@ Global
 		{385F3F81-896E-41EF-AE32-98D8A026588F}.Release|Win32.ActiveCfg = Release|Win32
 		{385F3F81-896E-41EF-AE32-98D8A026588F}.Release|Win32.Build.0 = Release|Win32
 		{385F3F81-896E-41EF-AE32-98D8A026588F}.Release|x64.ActiveCfg = Release|Win32
+		{1FA87564-F5EC-42F8-978C-E827AAB54CB1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1FA87564-F5EC-42F8-978C-E827AAB54CB1}.Debug|Win32.Build.0 = Debug|Win32
+		{1FA87564-F5EC-42F8-978C-E827AAB54CB1}.Debug|x64.ActiveCfg = Debug|x64
+		{1FA87564-F5EC-42F8-978C-E827AAB54CB1}.Debug|x64.Build.0 = Debug|x64
+		{1FA87564-F5EC-42F8-978C-E827AAB54CB1}.Release|Win32.ActiveCfg = Release|Win32
+		{1FA87564-F5EC-42F8-978C-E827AAB54CB1}.Release|Win32.Build.0 = Release|Win32
+		{1FA87564-F5EC-42F8-978C-E827AAB54CB1}.Release|x64.ActiveCfg = Release|x64
+		{1FA87564-F5EC-42F8-978C-E827AAB54CB1}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ADD68868-6B60-4589-84C4-2244AE013366}
 	EndGlobalSection
 EndGlobal
