@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<project version='9' encrypted='1'>
+<project version='10' encrypted='1'>
 	<steps type='0'>
 		<step action='Set Macro'>
 			<MacroName>LOGFILE</MacroName>
@@ -135,7 +135,7 @@ End If
 			<indent type='3'>2</indent>
 			<name>Restore NuGet</name>
 		</step>
-		<step action='Make VS 2017'>
+		<step action='Make VS 2019'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
 			<Config>Release|x64</Config>
@@ -147,7 +147,7 @@ End If
 			<indent type='3'>2</indent>
 			<name>Build Ditto 64</name>
 		</step>
-		<step action='Make VS 2017'>
+		<step action='Make VS 2019'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
 			<Config>Release|Win32</Config>
@@ -186,7 +186,7 @@ End If
 			<indent type='3'>2</indent>
 			<name>Restore NuGet</name>
 		</step>
-		<step action='Make VS 2017'>
+		<step action='Make VS 2019'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
 			<Config>Release|x64</Config>
@@ -198,7 +198,7 @@ End If
 			<indent type='3'>2</indent>
 			<name>Build Ditto 64</name>
 		</step>
-		<step action='Make VS 2017'>
+		<step action='Make VS 2019'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
 			<Config>Release|x64</Config>
@@ -2965,6 +2965,7 @@ var sc_security="b3f57099";
 			<Timeout>30</Timeout>
 			<TransferType type='3'>1</TransferType>
 			<UserName>sabrogden,ditto-cp</UserName>
+			<checked type='11'>0</checked>
 			<indent type='3'>1</indent>
 			<name>Copy install files</name>
 		</step>
@@ -2982,6 +2983,7 @@ var sc_security="b3f57099";
 			<Timeout>30</Timeout>
 			<TransferType type='3'>1</TransferType>
 			<UserName>sabrogden,ditto-cp</UserName>
+			<checked type='11'>0</checked>
 			<indent type='3'>1</indent>
 			<name>Copy beta web pages</name>
 		</step></steps>

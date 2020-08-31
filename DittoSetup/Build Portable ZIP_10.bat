@@ -30,6 +30,7 @@ copy ..\Release64\ICU_Loader.dll Ditto\ICU_Loader.dll
 copy ..\Release64\Addins\*.dll Ditto\Addins\
 
 copy mfc-crt64\vcruntime140.dll Ditto\vcruntime140.dll
+copy mfc-crt64\vcruntime140_1.dll Ditto\vcruntime140_1.dll
 copy mfc-crt64\msvcp140.dll Ditto\msvcp140.dll
 copy mfc-crt64\mfc140u.dll Ditto\mfc140u.dll
 
@@ -41,8 +42,6 @@ copy portable Ditto\portable
 
 copy ..\Debug\language\*.xml Ditto\language\
 copy ..\Debug\themes\*.xml Ditto\themes\
-
-pause
 
 7za.exe a -tzip Output\%arg1%.zip "Ditto\*" -r
 

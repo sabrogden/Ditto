@@ -68,13 +68,22 @@ Name: AddFireWallException; Description: Add Windows Firewall exception for Ditt
 	Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_64');
   Source: ..\Release64\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
 	Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
-	Source: mfc-crt64\VC_redist.x64.exe; Flags: dontcopy;
+	
+  Source: mfc-crt64\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: mfc-crt64\vcruntime140_1.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: mfc-crt64\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: mfc-crt64\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
+
 #endif
 #ifndef bit64
 	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_32');
   Source: ..\Release\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
-	Source: mfc-crt\VC_redist.x86.exe; Flags: dontcopy;
+	
+  Source: mfc-crt\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: mfc-crt\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: mfc-crt\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
+
 #endif
 
 Source: ..\Debug\Language\*; DestDir: {app}\Language; BeforeInstall: BeforeLanguageInstall()
@@ -236,40 +245,11 @@ begin
   Result := Installed;
 end;
 
-function InstallVc2017Runtime(): Boolean;
-var
-  nErrorCode: Integer;
-begin
-  Log('Installing VS 2017 C++ redistributable');
-
-  #ifdef bit64
-    ExtractTemporaryFile('VC_redist.x64.exe');
-    ShellExec('', ExpandConstant('{tmp}\VC_redist.x64.exe'), '/q', '' , SW_HIDE, ewWaitUntilTerminated, nErrorCode);
-  #endif
-  #ifndef bit64
-    ExtractTemporaryFile('VC_redist.x86.exe');
-    ShellExec('', ExpandConstant('{tmp}\VC_redist.x86.exe'), '/q', '' , SW_HIDE, ewWaitUntilTerminated, nErrorCode);
-  #endif
-end;
-
 procedure CheckForPreReqs();
 var
-  VCRuntime2017Installed: Boolean;
   nReturnCode: Integer;
 begin
-  VCRuntime2017Installed := IsVC2017CRuntimeInstalled();
-
-  if VCRuntime2017Installed = true then
-    Log('Microsoft VS 2017 C++ redistributable is already installed.')
-  else
-  begin
-    InstallVc2017Runtime();
-    if not IsVC2017CRuntimeInstalled then
-    begin
-      Log('VS 2017 C++ redistributable install failed!');
-      SuppressibleMsgBox(CustomMessage('VCRuntimeInstallFailed'), mbInformation, MB_OK, idOK);
-    end;
-  end;
+ 
 
 end;
 
