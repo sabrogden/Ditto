@@ -253,11 +253,11 @@ void COleClipSource::DoUpperLowerCase(CClip &clip, bool upper)
 		CString val;
 		if (upper)
 		{
-			val = cs.MakeUpper();
+			val = theApp.m_icuString.ToUpperStringEx(cs);
 		}
 		else
 		{
-			val = cs.MakeLower();
+			val = theApp.m_icuString.ToLowerStringEx(cs);
 		}
 		
 		long lLen = val.GetLength();
@@ -303,22 +303,21 @@ void COleClipSource::InvertCase(CClip &clip)
 		//free the old text we are going to replace it below with an upper case version
 		unicodeTextFormat->Free();
 
-		long len = cs.GetLength();
-
+		const int len = cs.GetLength();
 		if (len > 0)
 		{
-			wchar_t * pText = cs.GetBuffer();
+			wchar_t* pText = cs.GetBuffer();
 			
 			for (int i = 0; i < len; i++)
 			{
 				wchar_t item = pText[i];
-				if (isupper(item))
+				if (theApp.m_icuString.IsUpperEx(item))
 				{
-					pText[i] = tolower(item);
+					pText[i] = theApp.m_icuString.ToLowerEx(item);
 				}
 				else
 				{
-					pText[i] = toupper(item);
+					pText[i] = theApp.m_icuString.ToUpperEx(item);
 				}
 			}
 		}
@@ -376,14 +375,14 @@ void COleClipSource::Capitalize(CClip &clip)
 		//free the old text we are going to replace it below with an upper case version
 		unicodeTextFormat->Free();
 
-		CString val = cs.MakeLower();
+		CString val = theApp.m_icuString.ToLowerStringEx(cs);
 		long len = val.GetLength();
 
 		if (len > 0)
 		{
 			wchar_t * pText = val.GetBuffer();
 			
-			pText[0] = toupper(pText[0]);
+			pText[0] = theApp.m_icuString.ToUpperEx(pText[0]);
 			bool capitalize = false;
 			
 			for (int i = 1; i < len; i++)
@@ -395,7 +394,7 @@ void COleClipSource::Capitalize(CClip &clip)
 				}
 				else if (capitalize)
 				{
-					pText[i] = toupper(item);
+					pText[i] = theApp.m_icuString.ToUpperEx(item);
 					capitalize = false;
 				}
 			}
@@ -463,14 +462,14 @@ void COleClipSource::SentenceCase(CClip &clip)
 		//free the old text we are going to replace it below with an upper case version
 		unicodeTextFormat->Free();
 
-		CString val = cs.MakeLower();
+		CString val = theApp.m_icuString.ToLowerStringEx(cs);;
 		long len = val.GetLength();
 
 		if (len > 0)
 		{
 			wchar_t * pText = val.GetBuffer();
 
-			pText[0] = toupper(pText[0]);
+			pText[0] = theApp.m_icuString.ToUpperEx(pText[0]);
 			bool capitalize = false;
 
 			for (int i = 1; i < len; i++)
@@ -484,7 +483,7 @@ void COleClipSource::SentenceCase(CClip &clip)
 				}
 				else if (capitalize && item != ' ')
 				{
-					pText[i] = toupper(item);
+					pText[i] = theApp.m_icuString.ToUpperEx(item);
 					capitalize = false;
 				}
 			}

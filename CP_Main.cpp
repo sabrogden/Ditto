@@ -318,6 +318,8 @@ BOOL CCP_MainApp::InitInstance()
 
 		m_Language.LoadLanguageFile(_T("English.xml"));
 	}
+
+	m_icuString.Load();
 	
 	int nRet = CheckDBExists(CGetSetOptions::GetDBPath());
 	if(nRet == FALSE)

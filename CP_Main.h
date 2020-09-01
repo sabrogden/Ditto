@@ -21,6 +21,7 @@
 #include "externalwindowtracker.h"
 #include "HotKeys.h"
 #include "UAC_Thread.h"
+#include "ICU_String.h"
 
 extern class CCP_MainApp theApp;
 
@@ -186,6 +187,8 @@ public:
 
 	void CreateMainWnd();
 	void CloseNoDbWindow();
+
+	CICU_String m_icuString;
 
 public:
 	virtual BOOL InitInstance();

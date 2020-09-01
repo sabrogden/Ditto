@@ -461,8 +461,15 @@
     <ClCompile Include="SymbolEdit.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="SendMail.cpp" />
-    <ClCompile Include="NoDbFrameWnd.cpp" />
+    <ClCompile Include="SendMail.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="NoDbFrameWnd.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="ICU_String.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -964,9 +971,18 @@
     <ClInclude Include="SymbolEdit.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="SendMail.h" />
-    <ClInclude Include="Slugify.h" />
-    <ClInclude Include="NoDbFrameWnd.h" />
+    <ClInclude Include="SendMail.h">
+      <Filter>source</Filter>
+    </ClInclude>
+    <ClInclude Include="Slugify.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="NoDbFrameWnd.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="ICU_String.h">
+      <Filter>header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -1623,10 +1639,20 @@
     <Image Include="res\icon3.ico">
       <Filter>res</Filter>
     </Image>
-    <Image Include="res\search_close_20.png" />
-    <Image Include="res\search_close_24.png" />
-    <Image Include="res\search_close_28.png" />
-    <Image Include="res\search_close_32.png" />
-    <Image Include="res\Ditto2_NoDb.ico" />
+    <Image Include="res\search_close_20.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\search_close_24.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\search_close_28.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\search_close_32.png">
+      <Filter>res</Filter>
+    </Image>
+    <Image Include="res\Ditto2_NoDb.ico">
+      <Filter>res</Filter>
+    </Image>
   </ItemGroup>
 </Project>
