@@ -80,7 +80,7 @@ CString CICU_String::ToLowerStringEx(CString source)
 {
 	if (m_dllHandle == NULL || u_tolower == NULL)
 	{
-		return source.MakeLower();
+		return CString(source).MakeLower();
 	}
 
 	CString dest;
@@ -99,7 +99,7 @@ CString CICU_String::ToUpperStringEx(CString source)
 {
 	if (m_dllHandle == NULL || u_tolower == NULL)
 	{
-		return source.MakeUpper();
+		return CString(source).MakeUpper();
 	}
 
 	CString dest;
