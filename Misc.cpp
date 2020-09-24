@@ -1180,8 +1180,9 @@ int FindNoCaseAndInsert(CString& mainStr, CString& findStr, CString preInsert, C
 
 		int firstFindPos = 0;
 
-		CString mainLow = mainStr.MakeLower();
-		CString findLow = mainStr.MakeLower();
+		CString mainLow(theApp.m_icuString.ToLowerStringEx(mainStr));		
+		CString findLow(theApp.m_icuString.ToLowerStringEx(findStr));
+		findLow.MakeLower();
 		
 		int preLength = preInsert.GetLength();
 		int postLength = postInsert.GetLength();
