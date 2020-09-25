@@ -84,6 +84,7 @@ CQPasteWnd::CQPasteWnd()
 	m_extraDataCounter = 0;
 	m_noSearchResults = false;
 	m_lastDbWrite = 0;
+	m_pendingRefresh = false;
 }
 
 CQPasteWnd::~CQPasteWnd()
@@ -832,7 +833,7 @@ BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus, bool clearSearchData)
 		m_search.SetWindowText(_T(""));
 		m_bHandleSearchTextChange = true;
 
-		if (m_strSQLSearch.IsEmpty() == FALSE)
+		if (m_strSQLSearch.IsEmpty() == FALSE || m_pendingRefresh)
 		{
 			{
 				ATL::CCritSecLock csLock(m_CritSection.m_sect);
@@ -861,6 +862,8 @@ BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus, bool clearSearchData)
 	{
 		theApp.TryEnterOldGroupState();
 	}
+
+	m_pendingRefresh = false;
 
 	DWORD endTick = GetTickCount();
 	if ((endTick - startTick) > 150)
@@ -1213,6 +1216,16 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 	// remove all additional refresh view messages from the queue
 	while (::PeekMessage(&msg, m_hWnd, WM_REFRESH_VIEW, WM_REFRESH_VIEW, PM_REMOVE)) {}
 
+	if (theApp.m_bShowingQuickPaste)
+	{
+		CopyReasonEnum::CopyReason copyReason = (CopyReasonEnum::CopyReason)wParam;
+		if (copyReason == CopyReasonEnum::COPY_FROM_TOOLTIP)
+		{
+			m_pendingRefresh = true;
+			return FALSE;
+		}
+	}
+
 	Log(_T("OnRefreshView - Start"));
 	CString action;
 
@@ -1224,8 +1237,8 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 
 	if (theApp.m_bShowingQuickPaste)
 	{
-		FillList();
-		action = _T("Filled List");
+		FillList(_T(""));
+		action = _T("Filled List");		
 	}
 	else
 	{
@@ -1314,10 +1327,12 @@ void CQPasteWnd::UpdateStatus(bool bRepaintImmediately)
 	SetCustomWindowTitle(windowTitle);
 }
 
-BOOL CQPasteWnd::FillList(CString csSQLSearch /*=""*/)
+BOOL CQPasteWnd::FillList(CString csSQLSearch)
 {
 	KillTimer(TIMER_DO_SEARCH);
+	
 	m_lstHeader.HidePopup(true);
+	
 
 	Log(StrF(_T("Start Fill List - %s"), csSQLSearch));
 

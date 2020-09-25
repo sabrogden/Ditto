@@ -916,7 +916,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 	GetToolTipText(nItem, csDescription);
 
 	if (m_pToolTip == NULL ||
-		fromNextPrev == false ||
+		//fromNextPrev == false ||
 		::IsWindow(m_toolTipHwnd) == FALSE)
 	{
 		if (m_pToolTip != NULL)
@@ -931,9 +931,12 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 	}
 	else if (VALID_TOOLTIP)
 	{
-		CRect r;
-		m_pToolTip->GetWindowRectEx(r);
-		pt = r.TopLeft();
+		if (fromNextPrev)
+		{
+			CRect r;
+			m_pToolTip->GetWindowRectEx(r);
+			pt = r.TopLeft();
+		}
 
 		m_pToolTip->SetGdiplusBitmap(NULL);
 		m_pToolTip->SetRTFText("");

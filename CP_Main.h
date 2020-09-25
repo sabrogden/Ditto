@@ -1,7 +1,7 @@
 #pragma once
 
 #ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
+#error include 'stdafx.h' before including this file for PCH
 #endif
 
 #include "resource.h"       // main symbols
@@ -43,53 +43,53 @@ public:
 
 	bool	m_bExitServerThread;
 
-// MainFrame
+	// MainFrame
 	HWND m_MainhWnd;
-	CMainFrame*	m_pMainFrame;
+	CMainFrame* m_pMainFrame;
 	CFrameWnd* m_pNoDbMainFrame;
 	void AfterMainCreate();  // called after main window creation
 	void BeforeMainClose();  // called before main window close
 
 // System-wide HotKeys
-	CHotKey*	m_pDittoHotKey; // activate ditto's qpaste window
-	CHotKey*	m_pDittoHotKey2; // activate ditto's qpaste window
-	CHotKey*	m_pDittoHotKey3; // activate ditto's qpaste window
-	
-	CHotKey*	m_pPosOne;
-	CHotKey*	m_pPosTwo;
-	CHotKey*	m_pPosThree;
-	CHotKey*	m_pPosFour;
-	CHotKey*	m_pPosFive;
-	CHotKey*	m_pPosSix;
-	CHotKey*	m_pPosSeven;
-	CHotKey*	m_pPosEight;
-	CHotKey*	m_pPosNine;
-	CHotKey*	m_pPosTen;
+	CHotKey* m_pDittoHotKey; // activate ditto's qpaste window
+	CHotKey* m_pDittoHotKey2; // activate ditto's qpaste window
+	CHotKey* m_pDittoHotKey3; // activate ditto's qpaste window
 
-	CHotKey		*m_pCopyBuffer1;
-	CHotKey		*m_pPasteBuffer1;
-	CHotKey		*m_pCutBuffer1;
-	CHotKey		*m_pCopyBuffer2;
-	CHotKey		*m_pPasteBuffer2;
-	CHotKey		*m_pCutBuffer2;
-	CHotKey		*m_pCopyBuffer3;
-	CHotKey		*m_pPasteBuffer3;
-	CHotKey		*m_pCutBuffer3;
-	CHotKey		*m_pTextOnlyPaste;
-	CHotKey		*m_pSaveClipboard;
-	CHotKey		*m_pCopyAndSaveClipboard;
+	CHotKey* m_pPosOne;
+	CHotKey* m_pPosTwo;
+	CHotKey* m_pPosThree;
+	CHotKey* m_pPosFour;
+	CHotKey* m_pPosFive;
+	CHotKey* m_pPosSix;
+	CHotKey* m_pPosSeven;
+	CHotKey* m_pPosEight;
+	CHotKey* m_pPosNine;
+	CHotKey* m_pPosTen;
+
+	CHotKey* m_pCopyBuffer1;
+	CHotKey* m_pPasteBuffer1;
+	CHotKey* m_pCutBuffer1;
+	CHotKey* m_pCopyBuffer2;
+	CHotKey* m_pPasteBuffer2;
+	CHotKey* m_pCutBuffer2;
+	CHotKey* m_pCopyBuffer3;
+	CHotKey* m_pPasteBuffer3;
+	CHotKey* m_pCutBuffer3;
+	CHotKey* m_pTextOnlyPaste;
+	CHotKey* m_pSaveClipboard;
+	CHotKey* m_pCopyAndSaveClipboard;
 
 	ExternalWindowTracker m_activeWnd;
-	
-// CopyThread and ClipViewer (Copy and Paste Management)
+
+	// CopyThread and ClipViewer (Copy and Paste Management)
 	CCopyThread	m_CopyThread;
 	void StartCopyThread();
 	void StopCopyThread();
 	// for posting messages
-	HWND GetClipboardViewer()			{ return m_CopyThread.m_pClipboardViewer->m_hWnd; }
-	bool EnableCbCopy(bool bState)		{ return m_CopyThread.SetCopyOnChange(bState); }
-	bool IsClipboardViewerConnected()	{ return m_CopyThread.IsClipboardViewerConnected(); }
-	bool GetConnectCV()					{ return m_CopyThread.GetConnectCV(); }
+	HWND GetClipboardViewer() { return m_CopyThread.m_pClipboardViewer->m_hWnd; }
+	bool EnableCbCopy(bool bState) { return m_CopyThread.SetCopyOnChange(bState); }
+	bool IsClipboardViewerConnected() { return m_CopyThread.IsClipboardViewerConnected(); }
+	bool GetConnectCV() { return m_CopyThread.GetConnectCV(); }
 	void SetConnectCV(bool bConnect);
 	bool ToggleConnectCV();
 	void UpdateMenuConnectCV(CMenu* pMenu, UINT nMenuID);
@@ -97,17 +97,17 @@ public:
 	void LoadGlobalClips();
 
 	void OnDeleteID(long lID);
-	BOOL GetClipData(long lID, CClipFormat &Clip);
-	bool EditItems(CClipIDs &Ids, bool bShowError); 
+	BOOL GetClipData(long lID, CClipFormat& Clip);
+	bool EditItems(CClipIDs& Ids, bool bShowError);
 
 	CClipTypes* LoadTypesFromDB(); // returns a "new" allocated object
 	void ReloadTypes();
-	void RefreshView(); // refreshes the view if it is visible
+	void RefreshView(CopyReasonEnum::CopyReason copyReason = CopyReasonEnum::COPY_TO_UNKOWN); // refreshes the view if it is visible
 	void RefreshClipAfterPaste(int clipId, int updateFlags);
-	void OnCopyCompleted( long lLastID, int count = 1 );
+	void OnCopyCompleted(long lLastID, int count = 1, CopyReasonEnum::CopyReason copyReason = CopyReasonEnum::COPY_TO_UNKOWN);
 	void OnPasteCompleted();
 
-// Groups
+	// Groups
 	long		m_GroupDefaultID; // new clips are saved to this group
 	long		m_GroupID;        // current group
 	long		m_GroupParentID;  // current group's parent
@@ -138,7 +138,6 @@ public:
 	void SetStatus(const TCHAR* status = NULL, bool bRepaintImmediately = false);
 
 	void ShowPersistent(bool bVal);
-
 	bool	m_bAsynchronousRefreshView;
 
 	//Socket Info
@@ -193,14 +192,14 @@ public:
 public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
-	
+
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()
 	virtual BOOL OnIdle(LONG lCount);
 
 protected:
 	void ShowCommandLineError(CString csTitle, CString csMessage);
-	CUAC_Thread *m_pUacPasteThread;
+	CUAC_Thread* m_pUacPasteThread;
 
 	int m_activeGroupId;
 	DWORD m_activeGroupStartTime;

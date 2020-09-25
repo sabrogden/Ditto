@@ -118,7 +118,6 @@ CCP_MainApp::CCP_MainApp()
 	ClearOldGroupState();
 
 	m_bAsynchronousRefreshView = true;
-
 	m_lClipsSent = 0;
 	m_lClipsRecieved = 0;
 	m_oldtStartUp = COleDateTime::GetCurrentTime();
@@ -597,18 +596,18 @@ void CCP_MainApp::ReloadTypes()
 	}
 }
 
-void CCP_MainApp::RefreshView()
+void CCP_MainApp::RefreshView(CopyReasonEnum::CopyReason copyReason)
 {
 	CQPasteWnd *pWnd = QPasteWnd();
 	if(pWnd)
 	{
 		if(m_bAsynchronousRefreshView)
 		{
-			pWnd->PostMessage(WM_REFRESH_VIEW);
+			pWnd->PostMessage(WM_REFRESH_VIEW, copyReason, 0);
 		}
 		else
 		{
-			pWnd->SendMessage(WM_REFRESH_VIEW);
+			pWnd->SendMessage(WM_REFRESH_VIEW, copyReason, 0);
 		}
 	}
 }
@@ -620,7 +619,7 @@ void CCP_MainApp::RefreshClipAfterPaste(int clipId, int updateFlags)
 	{
 		if(m_bAsynchronousRefreshView)
 		{
-			pWnd->PostMessage(WM_RELOAD_CLIP_AFTER_PASTE, clipId, updateFlags);
+			pWnd->PostMessage(WM_RELOAD_CLIP_AFTER_PASTE, clipId, updateFlags);		
 		}
 		else
 		{
@@ -633,7 +632,7 @@ void CCP_MainApp::OnPasteCompleted()
 {
 }
 
-void CCP_MainApp::OnCopyCompleted(long lLastID, int count)
+void CCP_MainApp::OnCopyCompleted(long lLastID, int count, CopyReasonEnum::CopyReason copyReason)
 {
 	if(count <= 0)
 	{
@@ -649,7 +648,7 @@ void CCP_MainApp::OnCopyCompleted(long lLastID, int count)
 		m_CopyBuffer.EndCopy(lLastID);
 	}
 
-	RefreshView();
+	RefreshView(copyReason);
 }
 
 void CCP_MainApp::SaveCurrentGroupState()

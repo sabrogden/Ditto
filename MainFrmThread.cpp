@@ -110,6 +110,8 @@ void CMainFrmThread::OnSaveClips()
 {
 	CClipList *pLocalClips = new CClipList();
 
+	CopyReasonEnum::CopyReason copyReason = CopyReasonEnum::COPY_TO_UNKOWN;
+
 	//Save the clips locally
 	{
 		ATL::CCritSecLock csLock(m_cs.m_sect);
@@ -121,6 +123,7 @@ void CMainFrmThread::OnSaveClips()
 		while(pos)
 		{
 			pClip = m_saveClips.GetNext(pos);
+			copyReason = pClip->m_copyReason;
 			pLocalClips->AddTail(pClip);
 		}
 
@@ -140,7 +143,7 @@ void CMainFrmThread::OnSaveClips()
 
 		Log(StrF(_T("SaveCopyclips After AddToDb, Id: %d Before OnCopyCopyCompleted"), Id));
 
-		theApp.OnCopyCompleted(Id, count);
+		theApp.OnCopyCompleted(Id, count, copyReason);
 
 		Log(StrF(_T("SaveCopyclips After AddToDb, Id: %d After OnCopyCopyCompleted"), Id));
 

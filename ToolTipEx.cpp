@@ -383,6 +383,7 @@ BOOL CToolTipEx::PreTranslateMessage(MSG *pMsg)
                 if(GetKeyState(VK_CONTROL) &0x8000)
                 {
                     m_RichEdit.Copy();
+					theApp.SetCopyReason(CopyReasonEnum::COPY_FROM_TOOLTIP);
 					return TRUE;
                 }
                 break;

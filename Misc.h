@@ -35,7 +35,8 @@ public:
 	{ 
 		COPY_TO_UNKOWN,
 		COPY_TO_GROUP,
-		COPY_TO_BUFFER
+		COPY_TO_BUFFER,
+		COPY_FROM_TOOLTIP
 	};
 };
 
