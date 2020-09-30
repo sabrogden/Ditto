@@ -3653,8 +3653,7 @@ bool CQPasteWnd::DoActionEditClip()
 	m_lstHeader.GetSelectionItemData(IDs);
 
 	theApp.EditItems(IDs, true);
-
-	HideQPasteWindow(false);
+	
 	return true;
 }
 
