@@ -29,6 +29,7 @@ ChangesAssociations=yes
 CloseApplications=yes
 ;vista forward
 MinVersion=6.0.6000
+SetupLogging=yes
 
 [Languages]
 Name: English; MessagesFile: compiler:Default.isl
