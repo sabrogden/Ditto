@@ -475,6 +475,7 @@ BOOL CToolTipEx::OnMsg(MSG *pMsg)
 						if (::IsWindow(m_browser.m_hWnd))
 						{
 							m_browser.Copy();
+							theApp.SetCopyReason(CopyReasonEnum::COPY_FROM_TOOLTIP);
 							return TRUE;
 						}
 					}
