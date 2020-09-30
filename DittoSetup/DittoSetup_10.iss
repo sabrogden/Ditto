@@ -128,9 +128,6 @@ procedure BeforeLanguageInstall();
 var
   sDir: String;
 begin
-    sDir := ExpandConstant('{app}');
-
-    RenameFile(sDir+'\Language\Italian.xml', sDir+'\Language\Italian.xml.old')
 end;
 
 procedure CleanupOldFiles();
