@@ -85,6 +85,7 @@ CQPasteWnd::CQPasteWnd()
 	m_noSearchResults = false;
 	m_lastDbWrite = 0;
 	m_pendingRefresh = false;
+	m_lastNonActiveMouseMove = 0;
 }
 
 CQPasteWnd::~CQPasteWnd()
@@ -2850,6 +2851,28 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 		if (CheckActions(&msg) == false)
 		{
 		}
+	}
+	break;
+	case WM_NCMOUSEMOVE:
+	case WM_MOUSEMOVE:
+	{
+		if (g_Opt.m_bShowPersistent)
+		{
+			bool hasFocus = ::GetForegroundWindow() == m_hWnd;
+			if (hasFocus == false)
+			{
+				DWORD tick = GetTickCount();
+				if ((tick - m_lastNonActiveMouseMove) > 1000)
+				{
+					theApp.m_activeWnd.TrackActiveWnd(true);
+					m_lastNonActiveMouseMove = GetTickCount();
+				}
+			}
+			else
+			{
+				m_lastNonActiveMouseMove = 0;
+			}
+		}		
 	}
 	break;
 	default:
