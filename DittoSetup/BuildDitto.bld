@@ -160,6 +160,7 @@ End If
 			<name>Build Ditto 32</name>
 		</step>
 		<step action='Group'>
+			<checked type='11'>0</checked>
 			<indent type='3'>1</indent>
 			<name>Zip Source</name>
 		</step>
@@ -174,6 +175,7 @@ End If
 			<Source>%workDir%\dittosetup\output\DittoSource_%versionFileName%.zip</Source>
 			<SysOn type='11'>-1</SysOn>
 			<buildfailsteps type='11'>0</buildfailsteps>
+			<checked type='11'>0</checked>
 			<indent type='3'>2</indent>
 			<name>Enhanced Unzip Files</name>
 		</step>
@@ -183,6 +185,7 @@ End If
 			<Opt>-SolutionDirectory %testBuildWorkDir%</Opt>
 			<PackageId>%testBuildWorkDir%\CP_Main.vcxproj</PackageId>
 			<buildfailsteps type='11'>0</buildfailsteps>
+			<checked type='11'>0</checked>
 			<indent type='3'>2</indent>
 			<name>Restore NuGet</name>
 		</step>
@@ -195,6 +198,7 @@ End If
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
+			<checked type='11'>0</checked>
 			<indent type='3'>2</indent>
 			<name>Build Ditto 64</name>
 		</step>
@@ -207,17 +211,18 @@ End If
 			<ProdVer type='11'>-1</ProdVer>
 			<Version>%version%</Version>
 			<VersionSel type='3'>2</VersionSel>
+			<checked type='11'>0</checked>
 			<indent type='3'>2</indent>
 			<name>Build Ditto 32</name>
 		</step>
 		<step action='Run Program'>
-			<command>"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /F"DittoSetup_%versionFileName%" "%workDir%\DittoSetup\DittoSetup_10.iss"</command>
+			<command>"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" /F"DittoSetup_%versionFileName%" "%workDir%\DittoSetup\DittoSetup_10.iss"</command>
 			<indent type='3'>1</indent>
 			<name>Build Installer 32</name>
 			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
-			<command>"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /F"DittoSetup_64bit_%versionFileName%" "%workDir%\DittoSetup\DittoSetup_10.iss" "/dbit64=1"</command>
+			<command>"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" /F"DittoSetup_64bit_%versionFileName%" "%workDir%\DittoSetup\DittoSetup_10.iss" "/dbit64=1"</command>
 			<indent type='3'>1</indent>
 			<name>Build Installer 64</name>
 			<outputfrom type='3'>1</outputfrom>
