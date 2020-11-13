@@ -67,7 +67,7 @@
 		</step>
 		<step action='Run Program'>
 			<buildfailsteps type='11'>0</buildfailsteps>
-			<command>C:\Program Files\Git\bin\git.exe clone git://git.code.sf.net/p/ditto-cp/ditto %workDir%</command>
+			<command>C:\Program Files\Git\bin\git.exe clone https://github.com/sabrogden/Ditto.git %workDir%</command>
 			<indent type='3'>1</indent>
 			<name>Run Program</name>
 			<outputfrom type='3'>1</outputfrom>
@@ -2934,7 +2934,7 @@ var sc_security="b3f57099";
 		</step>
 		<step action='Git'>
 			<Command>log</Command>
-			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2020-01-01</Options>
+			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2020-10-26</Options>
 			<WorkDir>%workDir%</WorkDir>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>
