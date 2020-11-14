@@ -28,7 +28,6 @@
 #include "htmlformataggregator.h"
 #include "shared/Tokenizer.h"
 #include <signal.h>
-//test
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
