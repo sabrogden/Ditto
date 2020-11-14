@@ -30,8 +30,6 @@ void CFormatSQL::Parse(CString cs)
 {
 	//Replace all single ' with a double '
 	cs.Replace(_T("'"), _T("''"));
-	//Replace all "|" with a space
-	cs.Replace(_T("|"), _T(" "));
 
 	if(CGetSetOptions::GetSimpleTextSearch() ||
 		CGetSetOptions::GetRegExTextSearch())
