@@ -4248,6 +4248,8 @@ bool CQPasteWnd::DoMoveClipDown()
 	ARRAY IDs;
 	m_lstHeader.GetSelectionItemData(IDs);
 
+	m_actions.m_handleRepeatKeys = true;
+
 	if (IDs.GetCount() > 0)
 	{
 		bool sort = false;
@@ -4289,6 +4291,8 @@ bool CQPasteWnd::DoMoveClipUp()
 {
 	ARRAY IDs;
 	m_lstHeader.GetSelectionItemData(IDs);
+
+	m_actions.m_handleRepeatKeys = true;
 
 	if (IDs.GetCount() > 0)
 	{
