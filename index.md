@@ -16,8 +16,8 @@ Ditto is an extension to the standard windows clipboard. It saves each item plac
 2. [Installer 64bit](https://github.com/sabrogden/Ditto/releases/download/3.23.124.0/DittoSetup_64bit_3_23_124_0.exe)
 3. [Portable 32bit](https://github.com/sabrogden/Ditto/releases/download/3.23.124.0/DittoPortable_3_23_124_0.zip)
 4. [Portable 64bit](https://github.com/sabrogden/Ditto/releases/download/3.23.124.0/DittoPortable_64bit_3_23_124_0.zip)
-5. [Chocolatey](https://chocolatey.org/packages/ditto)
-6. [Chocolatey Portable](https://chocolatey.org/packages/ditto.portable)
+5. [Chocolatey](https://chocolatey.org/packages/ditto/3.23.124.0)
+6. [Chocolatey Portable](https://chocolatey.org/packages/ditto.portable/3.23.124.0)
 7. [Windows Store App](https://www.microsoft.com/en-us/store/p/ditto-cp/9nblggh3zbjq)  
 
 <br>
