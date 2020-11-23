@@ -1,37 +1,25 @@
-## Welcome to GitHub Pages
+# Ditto - [Clipboard Manager](https://github.com/sabrogden/Ditto/releases/download/3.23.124.0/DittoSetup_3_23_124_0.exe)
 
-You can use the [editor on GitHub](https://github.com/sabrogden/Ditto/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+[Help/Wiki](https://github.com/sabrogden/Ditto/wiki)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Forums](https://github.com/sabrogden/Ditto/issues)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Donate](https://www.paypal.com/donate/?item_name=Donation+to+Ditto&cmd=_donations&business=sabrogden%40gmail.com&Z3JncnB0=)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Donate with Crypto](https://commerce.coinbase.com/checkout/f3b7a516-5733-4c96-b1a7-f7602422984a)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Beta](https://ditto-cp.sourceforge.io/beta/)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Ditto is an extension to the standard windows clipboard. It saves each item placed on the clipboard allowing you access to any of those items at a later time. Ditto allows you to save any type of information that can be put on the clipboard, text, images, html, custom formats, .....
 
-### Markdown
+## Download
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+[Installer 32bit](https://github.com/sabrogden/Ditto/releases/download/3.23.124.0/DittoSetup_3_23_124_0.exe)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;[Installer 64bit](https://github.com/sabrogden/Ditto/releases/download/3.23.124.0/DittoSetup_64bit_3_23_124_0.exe)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;[Portable 32bit](https://github.com/sabrogden/Ditto/releases/download/3.23.124.0/DittoPortable_3_23_124_0.zip)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp;&nbsp;[Portable 64bit](https://github.com/sabrogden/Ditto/releases/download/3.23.124.0/DittoPortable_64bit_3_23_124_0.zip)
 
-```markdown
-Syntax highlighted code block
+[Chocolatey](https://chocolatey.org/packages/ditto)&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Chocolatey Portable](https://chocolatey.org/packages/ditto.portable)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[Windows Store App](https://www.microsoft.com/en-us/store/p/ditto-cp/9nblggh3zbjq)  
 
-# Header 1
-## Header 2
-### Header 3
+# Basic Usage
 
-- Bulleted
-- List
+1) Run Ditto
+2) Copy things to the clipboard, e.g. using Ctrl-C with text selected in a text editor.
+3) Open Ditto by clicking its icon in the system tray or by pressing its Hot Key which defaults to Ctrl + ` – i.e. hold down Ctrl and press the back-quote (tilde ~) key.
+4) Double click or press enter on the item to paste it to the previous window.
 
-1. Numbered
-2. List
 
-**Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
-```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
-### Jekyll Themes
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/sabrogden/Ditto/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+![image](ditto.gif)
