@@ -1,6 +1,6 @@
 <link rel="icon" 
 		  type="image/png" 
-		  href="ditto.png" />
+		  href="Ditto.png" />
 		  
 # Ditto - [Clipboard Manager](https://github.com/sabrogden/Ditto/releases/download/3.23.124.0/DittoSetup_3_23_124_0.exe)
 
@@ -20,11 +20,11 @@ Ditto is an extension to the standard windows clipboard. It saves each item plac
 6. [Chocolatey Portable](https://chocolatey.org/packages/ditto.portable)
 7. [Windows Store App](https://www.microsoft.com/en-us/store/p/ditto-cp/9nblggh3zbjq)  
 
-<br>  
-<br>  
-<br>  
-<br>  
-<br>  
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Basic Usage
 
