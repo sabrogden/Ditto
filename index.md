@@ -22,6 +22,5 @@ Ditto is an extension to the standard windows clipboard. It saves each item plac
 4. Double click or press enter on the item to paste it to the previous window.
 
 <br>  
-<br>  
 
 ![image](ditto.gif)
