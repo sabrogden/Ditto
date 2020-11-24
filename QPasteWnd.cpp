@@ -2485,7 +2485,7 @@ void CQPasteWnd::OnMenuImport()
 
 void CQPasteWnd::OnMenuHelp()
 {
-	CHyperLink::GotoURL(_T("https://sourceforge.net/p/ditto-cp/wiki/"), SW_SHOW);
+	CHyperLink::GotoURL(_T("https://github.com/sabrogden/Ditto/wiki"), SW_SHOW);
 }
 
 void CQPasteWnd::OnMenuQuickoptionsFont()

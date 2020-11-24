@@ -89,7 +89,7 @@ BOOL COptionsGeneral::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
 
-	CString url = _T("https://sourceforge.net/p/ditto-cp/wiki/EnvironmentVariables/");
+	CString url = _T("https://github.com/sabrogden/Ditto/wiki/Environment-Variables");
 
 	m_brush.CreateSolidBrush(RGB(251, 251, 251));
 	

@@ -69,9 +69,7 @@ BOOL COptionsKeyBoard::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
 
-	CString csHelpPath = CGetSetOptions::GetPath(PATH_HELP);
-	csHelpPath += "DittoCustomKeys.htm";
-	m_CustomeKeysHelp.SetURL(csHelpPath);
+	m_CustomeKeysHelp.SetURL(_T("https://github.com/sabrogden/Ditto/wiki/Custom-Key-Strokes"));
 
 	m_pParent = (COptionsSheet *)GetParent();
 

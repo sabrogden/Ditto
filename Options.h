@@ -643,6 +643,10 @@ public:
 	static int GetEditorDefaultFontSize();
 	static void SetEditorDefaultFontSize(int val);
 
+	static BOOL m_moveSelectionOnOpenHotkey;
+	static BOOL GetMoveSelectionOnOpenHotkey();
+	static void SetMoveSelectionOnOpenHotkey(BOOL val);
+
 
 };
 

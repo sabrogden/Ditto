@@ -573,11 +573,14 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 
 void CMainFrame::StartKeyModifyerTimer()
 {
-	m_keyModifiersTimerCount = 0;
-	m_bMovedSelectionMoveKeyState = false;
-	m_startKeyStateTime = GetTickCount();
-	m_keyStateModifiers = CAccels::GetKeyStateModifiers();
-	SetTimer(KEY_STATE_MODIFIERS, 50, NULL);
+	if (g_Opt.m_moveSelectionOnOpenHotkey)
+	{
+		m_keyModifiersTimerCount = 0;
+		m_bMovedSelectionMoveKeyState = false;
+		m_startKeyStateTime = GetTickCount();
+		m_keyStateModifiers = CAccels::GetKeyStateModifiers();
+		SetTimer(KEY_STATE_MODIFIERS, 50, NULL);
+	}
 }
 
 void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarget, BOOL sendPaste, bool pastedFromGroup)
@@ -1099,7 +1102,7 @@ CString WndName(HWND hParent)
 
 void CMainFrame::OnFirstHelp()
 {
-    CHyperLink::GotoURL(_T("https://sourceforge.net/p/ditto-cp/wiki/"), SW_SHOW);
+    CHyperLink::GotoURL(_T("https://github.com/sabrogden/Ditto/wiki"), SW_SHOW);
 }
 
 void CMainFrame::ShowErrorMessage(CString csTitle, CString csMessage)

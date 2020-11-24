@@ -76,6 +76,7 @@ BOOL CGetSetOptions::m_cleanRTFBeforeDrawing = TRUE;
 int CGetSetOptions::m_doubleKeyStrokeTimeout = 350;
 int CGetSetOptions::m_firstTenHotKeysStart = 1;
 int CGetSetOptions::m_firstTenHotKeysFontSize = 5;
+BOOL CGetSetOptions::m_moveSelectionOnOpenHotkey = TRUE;
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -198,6 +199,7 @@ void CGetSetOptions::LoadSettings()
 	m_doubleKeyStrokeTimeout = GetDoubleKeyStrokeTimeout();
 	m_firstTenHotKeysStart = GetFirstTenHotKeysStart();
 	m_firstTenHotKeysFontSize = GetFirstTenHotKeysFontSize();
+	m_moveSelectionOnOpenHotkey = GetMoveSelectionOnOpenHotkey();
 
 	GetExtraNetworkPassword(true);
 
@@ -2870,4 +2872,15 @@ int CGetSetOptions::GetEditorDefaultFontSize()
 void CGetSetOptions::SetEditorDefaultFontSize(int val)
 {
 	SetProfileLong("EditorDefaultFontSize", val);
+}
+
+BOOL CGetSetOptions::GetMoveSelectionOnOpenHotkey()
+{
+	return GetProfileLong("MoveSelectionOnOpenHotkey", TRUE);
+}
+
+void CGetSetOptions::SetMoveSelectionOnOpenHotkey(BOOL val)
+{
+	m_moveSelectionOnOpenHotkey = val;
+	SetProfileLong("MoveSelectionOnOpenHotkey", val);
 }
