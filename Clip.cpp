@@ -817,8 +817,11 @@ int CClip::FindDuplicate()
 		//the last copied item
 		if(g_Opt.m_bAllowDuplicates)
 		{
-			if(m_CRC == m_LastAddedCRC)
-				return m_lastAddedID;
+			if (g_Opt.m_allowBackToBackDuplicates == FALSE)
+			{
+				if (m_CRC == m_LastAddedCRC)
+					return m_lastAddedID;
+			}
 		}
 		else
 		{

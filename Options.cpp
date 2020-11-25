@@ -77,6 +77,7 @@ int CGetSetOptions::m_doubleKeyStrokeTimeout = 350;
 int CGetSetOptions::m_firstTenHotKeysStart = 1;
 int CGetSetOptions::m_firstTenHotKeysFontSize = 5;
 BOOL CGetSetOptions::m_moveSelectionOnOpenHotkey = TRUE;
+BOOL CGetSetOptions::m_allowBackToBackDuplicates = FALSE;
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -200,6 +201,7 @@ void CGetSetOptions::LoadSettings()
 	m_firstTenHotKeysStart = GetFirstTenHotKeysStart();
 	m_firstTenHotKeysFontSize = GetFirstTenHotKeysFontSize();
 	m_moveSelectionOnOpenHotkey = GetMoveSelectionOnOpenHotkey();
+	m_allowBackToBackDuplicates = GetAllowBackToBackDuplicates();
 
 	GetExtraNetworkPassword(true);
 
@@ -2883,4 +2885,15 @@ void CGetSetOptions::SetMoveSelectionOnOpenHotkey(BOOL val)
 {
 	m_moveSelectionOnOpenHotkey = val;
 	SetProfileLong("MoveSelectionOnOpenHotkey", val);
+}
+
+BOOL CGetSetOptions::GetAllowBackToBackDuplicates()
+{
+	return GetProfileLong("AllowBackToBackDuplicates", FALSE);
+}
+
+void CGetSetOptions::SetAllowBackToBackDuplicates(BOOL val)
+{
+	m_allowBackToBackDuplicates = val;
+	SetProfileLong("AllowBackToBackDuplicates", val);
 }

@@ -647,6 +647,10 @@ public:
 	static BOOL GetMoveSelectionOnOpenHotkey();
 	static void SetMoveSelectionOnOpenHotkey(BOOL val);
 
+	static BOOL m_allowBackToBackDuplicates;
+	static BOOL GetAllowBackToBackDuplicates();
+	static void SetAllowBackToBackDuplicates(BOOL val);
+
 
 };
 
