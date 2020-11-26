@@ -2821,21 +2821,27 @@ void CQPasteWnd::MoveSelection(bool down, bool requireModifersActive)
 
 void CQPasteWnd::OnKeyStateUp()
 {
-	if (m_bModifersMoveActive)
+	if (g_Opt.m_moveSelectionOnOpenHotkey)
 	{
-		Log(_T("OnKeyStateUp"));
-		SetTimer(TIMER_PASTE_FROM_MODIFER, g_Opt.GetKeyStatePasteDelay(), NULL);
-	}
-	else
-	{
-		Log(_T("OnKeyStateUp - Modifers not active"));
+		if (m_bModifersMoveActive)
+		{
+			Log(_T("OnKeyStateUp"));
+			SetTimer(TIMER_PASTE_FROM_MODIFER, g_Opt.GetKeyStatePasteDelay(), NULL);
+		}
+		else
+		{
+			Log(_T("OnKeyStateUp - Modifers not active"));
+		}
 	}
 }
 
 void CQPasteWnd::SetKeyModiferState(bool bActive)
 {
-	Log(StrF(_T("SetKeyModiferState %d"), bActive));
-	m_bModifersMoveActive = bActive;
+	if (g_Opt.m_moveSelectionOnOpenHotkey)
+	{
+		Log(StrF(_T("SetKeyModiferState %d"), bActive));
+		m_bModifersMoveActive = bActive;
+	}
 }
 
 BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
