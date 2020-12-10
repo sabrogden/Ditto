@@ -131,6 +131,7 @@ End If
 			<NonInteractive type='11'>-1</NonInteractive>
 			<Opt>-SolutionDirectory %workDir%</Opt>
 			<PackageId>%workDir%\CP_Main.vcxproj</PackageId>
+			<ShowCmd type='11'>-1</ShowCmd>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>
 			<name>Restore NuGet</name>
@@ -409,7 +410,7 @@ DittoSetup*]]></ExclExt>
 		</step>
 		<step action='Run Program'>
 			<buildfailsteps type='11'>0</buildfailsteps>
-			<command>"c:\Program Files (x86)\Windows Kits\10\bin\x86\MakeAppx.exe" pack /f "%workDir%\DittoSetup\appx\files.ini" /p "%workDir%\DittoSetup\appx\Ditto_%versionFileName%.appx"</command>
+			<command>"C:\Program Files (x86)\Windows Kits\10\App Certification Kit\makeappx.exe" pack /f "%workDir%\DittoSetup\appx\files.ini" /p "%workDir%\DittoSetup\appx\Ditto_%versionFileName%.appx"</command>
 			<indent type='3'>2</indent>
 			<name>Gen appx</name>
 			<outputfrom type='3'>1</outputfrom>
@@ -418,7 +419,7 @@ DittoSetup*]]></ExclExt>
 		<step action='Run Program'>
 			<ShowCmd type='11'>-1</ShowCmd>
 			<buildfailsteps type='11'>0</buildfailsteps>
-			<command>"c:\Program Files (x86)\Windows Kits\10\bin\x86\signtool.exe" sign -f "%workDir%\DittoSetup\appx\my.pfx" -fd SHA256 -v "%workDir%\DittoSetup\appx\Ditto_%versionFileName%.appx</command>
+			<command>"C:\Program Files (x86)\Windows Kits\10\App Certification Kit\signtool.exe" sign -f "%workDir%\DittoSetup\appx\my.pfx" -fd SHA256 -v "%workDir%\DittoSetup\appx\Ditto_%versionFileName%.appx</command>
 			<indent type='3'>2</indent>
 			<name>Sign appx</name>
 			<outputfrom type='3'>1</outputfrom>

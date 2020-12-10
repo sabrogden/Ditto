@@ -1403,6 +1403,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch)
 
 	if (csSQLSearch == "")
 	{
+		m_strSQLSearch = "";
 		m_strSearch = "";
 	}
 	else
@@ -2883,29 +2884,28 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 			}
 		}		
 	}
-	break;
-	case WM_CHAR:
-	{
-		auto f = this->GetFocus();
-		if (f != NULL && f->m_hWnd == m_lstHeader.m_hWnd)
-		{
-			CString x((TCHAR)pMsg->wParam);
-			m_search.SetWindowText(x);
-			m_search.SetFocus();
-			m_search.SetSel(1, 1);
-
-			OnSearchEditChange();
-
-			return TRUE;
-		}
-	}
-		break;
+	break;	
 	default:
 		if (CheckActions(pMsg))
 		{
 			return TRUE;
 		}
-		break;
+		else if (pMsg->message == WM_CHAR)
+		{
+			auto f = this->GetFocus();
+			if (f != NULL && f->m_hWnd == m_lstHeader.m_hWnd)
+			{
+				CString x((TCHAR)pMsg->wParam);
+				m_search.SetWindowText(x);
+				m_search.SetFocus();
+				m_search.SetSel(1, 1);
+
+				OnSearchEditChange();
+
+				return TRUE;
+			}
+		}	
+		break;	
 	}
 	return CWndEx::PreTranslateMessage(pMsg);
 }
