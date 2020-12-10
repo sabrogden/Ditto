@@ -145,8 +145,6 @@ public:
 	CGdipButton m_systemMenu;
 	CGroupStatic m_noSearchResultsStatic;
 
-    CString m_SQL;
-    CString m_CountSQL;
     long m_lRecordCount;
     bool m_bStopQuery;
     bool m_bHandleSearchTextChange;
@@ -209,7 +207,7 @@ public:
 
     CString GetDisplayText(int lDontAutoDelete, int lShortCut, bool bIsGroup, int lParentID, CString csText);
 
-    void FillMainTable(CMainTable &table, CppSQLite3Query &q);
+    static void FillMainTable(CMainTable &table, CppSQLite3Query &q);
     void RunThread();
     void MoveSelection(bool down, bool requireModifersActive);
     void OnKeyStateUp();

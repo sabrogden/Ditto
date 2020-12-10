@@ -45,6 +45,7 @@ public:
     HANDLE m_SearchingEvent;
 
 	void SetRowHeight(int height) { m_rowHeight = height; }
+    void SetSearchSql(CString sql, CString countSql) { m_sql = sql; m_countSql = countSql; }
 
 protected:
     virtual void OnEvent(int eventId, void *param);
@@ -60,4 +61,7 @@ protected:
 	CString EnumName(eCQPasteWndThreadEvents e);
 
 	int m_rowHeight;
+
+    CString m_sql;
+    CString m_countSql;
 };

@@ -1399,9 +1399,10 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch)
 	CString dataJoin;
 	CString IsDistinct = _T("");
 
+	CString sqlSearch = "";
+
 	if (csSQLSearch == "")
 	{
-		m_strSQLSearch = "";
 		m_strSearch = "";
 	}
 	else
@@ -1509,17 +1510,17 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch)
 		m_strSearch = csSQLSearch;
 	}
 
-	{
-		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+	CString sql;
+	CString countSql;
 
-		//Format the count and select sql queries for the thread
-		m_CountSQL.Format(_T("SELECT COUNT(%s Main.lID) FROM Main %s where %s"), IsDistinct, dataJoin, strFilter);
+	//Format the count and select sql queries for the thread
+	countSql.Format(_T("SELECT COUNT(%s Main.lID) FROM Main %s where %s"), IsDistinct, dataJoin, strFilter);
 
-		m_SQL.Format(_T("SELECT %s Main.lID, Main.mText, Main.lParentID, Main.lDontAutoDelete, ")
-			_T("Main.lShortCut, Main.bIsGroup, Main.QuickPasteText, Main.clipOrder, Main.clipGroupOrder, ")
-			_T("Main.stickyClipOrder, Main.stickyClipGroupOrder, Main.lDate, Main.lastPasteDate FROM Main %s ")
-			_T("where %s order by %s"), IsDistinct, dataJoin, strFilter, csSort);
-	}
+	sql.Format(_T("SELECT %s Main.lID, Main.mText, Main.lParentID, Main.lDontAutoDelete, ")
+		_T("Main.lShortCut, Main.bIsGroup, Main.QuickPasteText, Main.clipOrder, Main.clipGroupOrder, ")
+		_T("Main.stickyClipOrder, Main.stickyClipGroupOrder, Main.lDate, Main.lastPasteDate FROM Main %s ")
+		_T("where %s order by %s"), IsDistinct, dataJoin, strFilter, csSort);
+	
 
 	{
 		ATL::CCritSecLock csLock(m_CritSection.m_sect);
@@ -1532,13 +1533,15 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch)
 
 	CPoint loadItem(-1, m_lstHeader.GetCountPerPage() + 2);
 	m_loadItems.push_back(loadItem);
+	
+	m_thread.SetSearchSql(sql, countSql);
 	m_thread.FireLoadItems(true);
 
 	MoveControls();
 
-	m_CountSQL.Replace(_T("%"), _T("%%"));
-	m_SQL.Replace(_T("%"), _T("%%"));
-	Log(StrF(_T("Start Fill List - Count SQL: %s, Query SQL: %s"), m_CountSQL, m_SQL));
+	countSql.Replace(_T("%"), _T("%%"));
+	sql.Replace(_T("%"), _T("%%"));
+	Log(StrF(_T("Start Fill List - Count SQL: %s, Query SQL: %s"), countSql, sql));
 
 	return TRUE;
 }
@@ -2881,6 +2884,22 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 		}		
 	}
 	break;
+	case WM_CHAR:
+	{
+		auto f = this->GetFocus();
+		if (f != NULL && f->m_hWnd == m_lstHeader.m_hWnd)
+		{
+			CString x((TCHAR)pMsg->wParam);
+			m_search.SetWindowText(x);
+			m_search.SetFocus();
+			m_search.SetSel(1, 1);
+
+			OnSearchEditChange();
+
+			return TRUE;
+		}
+	}
+		break;
 	default:
 		if (CheckActions(pMsg))
 		{
@@ -5557,14 +5576,14 @@ void CQPasteWnd::OnFindItem(NMHDR *pNMHDR, LRESULT *pResult)
 
 	if (fndItem.flags &LVFI_STRING)
 	{
-		m_search.SetWindowText(fndItem.psz);
-		m_search.SetFocus();
-		m_search.SetSel(1, 1);
+		//m_search.SetWindowText(fndItem.psz);
+		//m_search.SetFocus();
+		//m_search.SetSel(1, 1);
 
-		OnSearchEditChange();
+		//OnSearchEditChange();
 
-		*pResult = m_lstHeader.GetCaret();
-		return;
+		//*pResult = m_lstHeader.GetCaret();
+		//return;
 	}
 
 	*pResult = -1; // Default action.

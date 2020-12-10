@@ -69,17 +69,13 @@ void CQPasteWndThread::OnSetListCount(void *param)
     ResetEvent(m_SearchingEvent);
     long lTick = GetTickCount();
 
-	CString CountSQL;
-	{
-		ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
-	    CountSQL = pasteWnd->m_CountSQL;
-	}
+	CString countSQL = m_countSql;
 
     long lRecordCount = 0;
 
     try
     {
-        lRecordCount = theApp.m_db.execScalar(CountSQL);
+        lRecordCount = theApp.m_db.execScalar(countSQL);
         ::PostMessage(pasteWnd->m_hWnd, NM_SET_LIST_COUNT, lRecordCount, 0);
     }
     CATCH_SQLITE_EXCEPTION 
@@ -101,9 +97,10 @@ void CQPasteWndThread::OnLoadItems(void *param)
 	    int loadItemsIndex = 0;
 	    int loadItemsCount = 0;
 	    int loadCount = 0;
-	    CString localSql;
+		CString localSql = m_sql;
 	    bool clearFirstLoadItem = false;
 		bool firstLoad = false;
+		int listSize = 0;
 
 		{
 			ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
@@ -113,8 +110,8 @@ void CQPasteWndThread::OnLoadItems(void *param)
 				firstLoad = (pasteWnd->m_loadItems.begin()->x == -1);
 		        loadItemsIndex = max(pasteWnd->m_loadItems.begin()->x, 0);
 		        loadItemsCount = pasteWnd->m_loadItems.begin()->y - pasteWnd->m_loadItems.begin()->x;
-		        localSql = pasteWnd->m_SQL;
 		        pasteWnd->m_bStopQuery = false;
+				listSize = pasteWnd->m_listItems.size();
 		        clearFirstLoadItem = true;
 		    }
 		}
@@ -123,7 +120,7 @@ void CQPasteWndThread::OnLoadItems(void *param)
 	    {
 			try
 			{
-				Log(StrF(_T("Load Items start = %d, count = %d, list size: %d"), loadItemsIndex, loadItemsCount, pasteWnd->m_listItems.size()));
+				Log(StrF(_T("Load Items start = %d, count = %d, list size: %d"), loadItemsIndex, loadItemsCount, listSize));
 
 				int pos = loadItemsIndex;
 				CString limit;
@@ -135,7 +132,7 @@ void CQPasteWndThread::OnLoadItems(void *param)
 				CppSQLite3Query q = theApp.m_db.execQuery(localSql);
 				while(!q.eof())
 				{
-					pasteWnd->FillMainTable(table, q);
+					CQPasteWnd::FillMainTable(table, q);
 
 					int updateIndex = -1;
 
@@ -383,13 +380,15 @@ void CQPasteWndThread::OnLoadExtraData(void *param)
 						Log(StrF(_T("GetDibFittingToHeight for clip %d, took: %d"), it->m_parentId, GetTickCount() - startConvertImage));
 					}
 
-					ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
+					{
+						ATL::CCritSecLock csLock(pasteWnd->m_CritSection.m_sect);
 
-					pasteWnd->m_cf_dibCache[it->m_parentId] = *it;
-					//the cache now owns the format data, set it to delete the data in the destructor
-					pasteWnd->m_cf_dibCache[it->m_parentId].m_autoDeleteData = true;
+						pasteWnd->m_cf_dibCache[it->m_parentId] = *it;
+						//the cache now owns the format data, set it to delete the data in the destructor
+						pasteWnd->m_cf_dibCache[it->m_parentId].m_autoDeleteData = true;
 
-					Log(StrF(_T("Loaded, extra data for clipId: %d, Row: %d image cache count: %d"), it->m_parentId, it->m_clipRow, pasteWnd->m_cf_dibCache.size()));
+						Log(StrF(_T("Loaded, extra data for clipId: %d, Row: %d image cache count: %d"), it->m_parentId, it->m_clipRow, pasteWnd->m_cf_dibCache.size()));
+					}
 				}
 				else if (it->m_cfType == theApp.m_RTFFormat)
 				{
