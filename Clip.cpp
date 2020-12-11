@@ -415,6 +415,7 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 	//  for both... i.e. we only fetch the description format type once.
 	CClipFormat cfDesc;
 	bool bIsDescSet = false;
+	bool checkedRegEx = false;
 
 	cfDesc.m_cfType = CF_UNICODETEXT;	
 	if(oleData.IsDataAvailable(cfDesc.m_cfType))
@@ -434,22 +435,14 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 		}
 		bIsDescSet = SetDescFromText(cfDesc.m_hgData, true);
 
-		if (activeApp != _T(""))
+		if (bIsDescSet)
 		{
-			TCHAR* text = (TCHAR *)GlobalLock(cfDesc.m_hgData);
-			if (text != NULL)
+			checkedRegEx = true;
+			std::wstring stringData(this->m_Desc);
+			if (g_Opt.m_regexHelper.TextMatchFilters(activeApp, stringData))
 			{
-				std::wstring stringData(text, GlobalSize(cfDesc.m_hgData)/(sizeof(wchar_t)));
-				GlobalUnlock(cfDesc.m_hgData);
-				if (g_Opt.m_regexHelper.TextMatchFilters(activeApp, stringData))
-				{
-					return -1;
-				}
-			}
-			else
-			{
-				GlobalUnlock(cfDesc.m_hgData);
-			}
+				return -1;
+			}		
 		}
 
 		Log(StrF(_T("Tried to set description from cf_unicode text, Set: %d, Desc: [%s]"), bIsDescSet, m_Desc.Left(30)));
@@ -578,7 +571,7 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 	
 	oleData.Release();
 
-	if (!bIsDescSet &&
+	if (checkedRegEx == false &&
 		this->m_Desc != _T(""))
 	{
 		std::wstring stringData(this->m_Desc);
