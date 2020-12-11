@@ -456,10 +456,10 @@ DittoSetup*]]></ExclExt>
     <owners>Scott Brogden</owners>
     <summary>Ditto Clipboard</summary>
     
-    <docsUrl>https://sourceforge.net/p/ditto-cp/wiki/</docsUrl>
-    <mailingListUrl>https://sourceforge.net/p/ditto-cp/discussion/</mailingListUrl>
-    <bugTrackerUrl>https://sourceforge.net/p/ditto-cp/discussion/</bugTrackerUrl>
-    <projectSourceUrl>https://sourceforge.net/projects/ditto-cp/files/</projectSourceUrl>
+    <docsUrl>https://github.com/sabrogden/Ditto/wiki</docsUrl>
+    <mailingListUrl>https://github.com/sabrogden/Ditto/issues</mailingListUrl>
+    <bugTrackerUrl>https://github.com/sabrogden/Ditto/issues</bugTrackerUrl>
+    <projectSourceUrl>https://github.com/sabrogden/Ditto</projectSourceUrl>
     
     <description>Ditto is an extension to the standard windows clipboard. It saves each item placed on the clipboard allowing you access to any of those items at a later time. Ditto allows you to save any type of information that can be put on the clipboard, text, images, html, custom formats, .....
 
@@ -1254,10 +1254,10 @@ DittoSetup_%versionFileName%.exe]]></Ext>
     <owners>Scott Brogden</owners>
     <summary>Ditto Clipboard</summary>
     
-    <docsUrl>https://sourceforge.net/p/ditto-cp/wiki/</docsUrl>
-    <mailingListUrl>https://sourceforge.net/p/ditto-cp/discussion/</mailingListUrl>
-    <bugTrackerUrl>https://sourceforge.net/p/ditto-cp/discussion/</bugTrackerUrl>
-    <projectSourceUrl>https://sourceforge.net/projects/ditto-cp/files/</projectSourceUrl>
+    <docsUrl>https://github.com/sabrogden/Ditto/wiki</docsUrl>
+    <mailingListUrl>https://github.com/sabrogden/Ditto/issues</mailingListUrl>
+    <bugTrackerUrl>https://github.com/sabrogden/Ditto/issues</bugTrackerUrl>
+    <projectSourceUrl>https://github.com/sabrogden/Ditto</projectSourceUrl>
     
     <description>Ditto is an extension to the standard windows clipboard. It saves each item placed on the clipboard allowing you access to any of those items at a later time. Ditto allows you to save any type of information that can be put on the clipboard, text, images, html, custom formats, .....
 
@@ -2052,10 +2052,10 @@ DittoSetup_%versionFileName%.exe]]></Ext>
     <owners>Scott Brogden</owners>
     <summary>Ditto Clipboard Portable</summary>
     
-    <docsUrl>https://sourceforge.net/p/ditto-cp/wiki/</docsUrl>
-    <mailingListUrl>https://sourceforge.net/p/ditto-cp/discussion/</mailingListUrl>
-    <bugTrackerUrl>https://sourceforge.net/p/ditto-cp/discussion/</bugTrackerUrl>
-    <projectSourceUrl>https://sourceforge.net/projects/ditto-cp/files/</projectSourceUrl>  
+    <docsUrl>https://github.com/sabrogden/Ditto/wiki</docsUrl>
+    <mailingListUrl>https://github.com/sabrogden/Ditto/issues</mailingListUrl>
+    <bugTrackerUrl>https://github.com/sabrogden/Ditto/issues</bugTrackerUrl>
+    <projectSourceUrl>https://github.com/sabrogden/Ditto</projectSourceUrl>  
       
     <description>Ditto is an extension to the standard windows clipboard. It saves each item placed on the clipboard allowing you access to any of those items at a later time. Ditto allows you to save any type of information that can be put on the clipboard, text, images, html, custom formats, .....
 
