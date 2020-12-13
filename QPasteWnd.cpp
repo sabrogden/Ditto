@@ -3606,6 +3606,7 @@ bool CQPasteWnd::DoActionCloseWindow()
 		{
 			m_lstHeader.HidePopup(true);
 			Log(_T("close 2"));
+			ret = true;
 		}
 		else if (m_strSQLSearch.IsEmpty() == FALSE)
 		{
@@ -3621,6 +3622,8 @@ bool CQPasteWnd::DoActionCloseWindow()
 				theApp.m_activeWnd.ReleaseFocus();
 
 				Log(_T("close 4"));
+
+				ret = true;
 			}
 			else
 			{

@@ -203,6 +203,7 @@ void CGetSetOptions::LoadSettings()
 	m_firstTenHotKeysFontSize = GetFirstTenHotKeysFontSize();
 	m_moveSelectionOnOpenHotkey = GetMoveSelectionOnOpenHotkey();
 	m_allowBackToBackDuplicates = GetAllowBackToBackDuplicates();
+	m_maintainSearchView = GetMaintainSearchView();
 
 	GetExtraNetworkPassword(true);
 
