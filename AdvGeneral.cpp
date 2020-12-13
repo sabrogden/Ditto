@@ -130,6 +130,7 @@ END_MESSAGE_MAP()
 #define SETTING_EDITOR_FONT_SIZE 79
 #define SETTING_MOVE_SELECTION_ON_OPEN_HOTKEY 80
 #define SETTING_ALOW_BACK_TO_BACK_DUPLICATES 81
+#define SETTING_MAINTAIN_SEARCH_VIEW 82
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -195,6 +196,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Hide Ditto on Hot Key if Ditto is Visible"), CGetSetOptions::GetHideDittoOnHotKeyIfAlreadyShown(), SETTING_HIDE_ON_HOTKEY_IF_VISIBLE);
 	pGroupTest->AddSubItem( new CMFCPropertyGridProperty(_T("Maximum Clip Size in Bytes (0 for no limit)"), g_Opt.m_lMaxClipSizeInBytes, _T(""), SETTING_MAX_CLIP_SIZE));
 	
+	AddTrueFalse(pGroupTest, _T("Maintain Search View"), CGetSetOptions::GetMaintainSearchView(), SETTING_MAINTAIN_SEARCH_VIEW);
+
 	AddTrueFalse(pGroupTest, _T("Move Selection On Open Hot Key"), CGetSetOptions::GetMoveSelectionOnOpenHotkey(), SETTING_MOVE_SELECTION_ON_OPEN_HOTKEY);
 	
 	pGroupTest->AddSubItem( new CMFCPropertyGridProperty(_T("Multi-Paste clip separator ([LF] = line feed)"), g_Opt.GetMultiPasteSeparator(false), _T(""), SETTING_CLIP_SEPARATOR));
@@ -821,6 +824,17 @@ void CAdvGeneral::OnBnClickedOk()
 						val = true;
 					}
 					CGetSetOptions::SetMoveSelectionOnOpenHotkey(val);
+				}
+				break;
+			case SETTING_MAINTAIN_SEARCH_VIEW:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					BOOL val = false;
+					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
+					{
+						val = true;
+					}
+					CGetSetOptions::SetMaintainSearchView(val);
 				}
 				break;
 			}

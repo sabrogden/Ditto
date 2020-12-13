@@ -78,6 +78,7 @@ int CGetSetOptions::m_firstTenHotKeysStart = 1;
 int CGetSetOptions::m_firstTenHotKeysFontSize = 5;
 BOOL CGetSetOptions::m_moveSelectionOnOpenHotkey = TRUE;
 BOOL CGetSetOptions::m_allowBackToBackDuplicates = FALSE;
+BOOL CGetSetOptions::m_maintainSearchView = FALSE;
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -2896,4 +2897,15 @@ void CGetSetOptions::SetAllowBackToBackDuplicates(BOOL val)
 {
 	m_allowBackToBackDuplicates = val;
 	SetProfileLong("AllowBackToBackDuplicates", val);
+}
+
+BOOL CGetSetOptions::GetMaintainSearchView()
+{
+	return GetProfileLong("MaintainSearchView", FALSE);
+}
+
+void CGetSetOptions::SetMaintainSearchView(BOOL val)
+{
+	m_maintainSearchView = val;
+	SetProfileLong("MaintainSearchView", val);
 }

@@ -438,7 +438,7 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 		if (bIsDescSet)
 		{
 			checkedRegEx = true;
-			std::wstring stringData(this->m_Desc);
+			std::wstring stringData(this->m_Desc); 
 			if (g_Opt.m_regexHelper.TextMatchFilters(activeApp, stringData))
 			{
 				return -1;

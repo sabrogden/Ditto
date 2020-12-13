@@ -651,6 +651,10 @@ public:
 	static BOOL GetAllowBackToBackDuplicates();
 	static void SetAllowBackToBackDuplicates(BOOL val);
 
+	static BOOL m_maintainSearchView;
+	static BOOL GetMaintainSearchView();
+	static void SetMaintainSearchView(BOOL val);
+
 
 };
 

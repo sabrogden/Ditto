@@ -739,7 +739,14 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
 
 		if (!g_Opt.m_bShowPersistent)
 		{
-			HideQPasteWindow(false);
+			bool clearSearch = true;
+			if (g_Opt.m_maintainSearchView &&
+				m_strSearch != _T(""))
+			{
+				Log(_T("Currently searching for something and setting to maintain search view is enabled, not refreshing"));
+				clearSearch = false;
+			}
+			HideQPasteWindow(false, clearSearch);
 		}
 		else if (g_Opt.GetAutoHide())
 		{
@@ -1148,6 +1155,13 @@ LRESULT CQPasteWnd::OnListEnd(WPARAM wParam, LPARAM lParam)
 
 LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
 {
+	if (g_Opt.m_maintainSearchView &&
+		m_strSearch != _T(""))
+	{
+		Log(_T("Currently searching for something and setting to maintain search view is enabled, not refreshing clip order"));
+		return FALSE;
+	}
+
 	DWORD startTick = GetTickCount();
 
 	BOOL foundClip = FALSE;
@@ -1213,6 +1227,13 @@ LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
 
 LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 {
+	if (g_Opt.m_maintainSearchView &&
+		m_strSearch != _T(""))
+	{
+		Log(_T("Currently searching for something and setting to maintain search view is enabled, not refreshing"));
+		return FALSE;
+	}
+
 	MSG msg;
 	// remove all additional refresh view messages from the queue
 	while (::PeekMessage(&msg, m_hWnd, WM_REFRESH_VIEW, WM_REFRESH_VIEW, PM_REMOVE)) {}
@@ -7557,7 +7578,13 @@ bool CQPasteWnd::DoActionSlugify()
 
 bool CQPasteWnd::DoRefreshList()
 {
-	FillList(_T(""));
+	theApp.m_FocusID = -1;
+
+	CString csText;
+	m_search.GetWindowText(csText);
+
+	FillList(csText);
+	
 	return true;
 }
 
