@@ -503,6 +503,7 @@ void CQPasteWnd::LoadShortcuts()
 
 	m_actions.AddAccel(ActionEnums::HOMELIST, VK_HOME);
 	m_actions.AddAccel(ActionEnums::SHOWMENU, VK_APPS);
+	m_actions.AddAccel(ActionEnums::SYSTEM_MENU, ACCEL_MAKEKEY(VK_APPS, HOTKEYF_CONTROL));
 
 	m_search.SetLastSearchAccel(CAccel(0, ActionEnums::APPLY_LAST_SEARCH, 0));
 
@@ -2985,6 +2986,9 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::SHOWMENU:
 		ret = DoActionShowMenu();
 		break;
+	case ActionEnums::SYSTEM_MENU:
+		ret = DoActionShowSystemMenu();
+		break;
 	case ActionEnums::NEWGROUP:
 		ret = DoActionNewGroup();
 		break;
@@ -3528,7 +3532,12 @@ bool CQPasteWnd::DoActionPrevDescription()
 bool CQPasteWnd::DoActionShowMenu()
 {
 	ShowRightClickMenu();
+	return true;
+}
 
+bool CQPasteWnd::DoActionShowSystemMenu()
+{
+	OnSystemButton();
 	return true;
 }
 
@@ -6539,12 +6548,10 @@ void CQPasteWnd::OnUpdateCliporderMovetotop(CCmdUI *pCmdUI)
 	UpdateMenuShortCut(pCmdUI, ActionEnums::MOVE_CLIP_TOP);
 }
 
-
 void CQPasteWnd::OnMenuFilteron()
 {
 	DoAction(ActionEnums::FILTER_ON_SELECTED_CLIP);
 }
-
 
 void CQPasteWnd::OnUpdateMenuFilteron(CCmdUI *pCmdUI)
 {

@@ -32,6 +32,9 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case SHOWMENU:
 		val = "Show Context Menu";
 		break;
+	case SYSTEM_MENU:
+		val = "Show System Context Menu";
+		break;
 	case NEWGROUP:
 		val = "New Group";
 		break;
@@ -424,7 +427,7 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 		case ActionEnums::PASTE_SELECTED:
 			return VK_RETURN;
 		case ActionEnums::SHOWMENU:
-			return VK_MOUSE_RIGHT_CLICK;
+			return VK_MOUSE_RIGHT_CLICK;		
 		case PASTE_POSITION_1:
 			return ACCEL_MAKEKEY('1', HOTKEYF_CONTROL);
 		case PASTE_POSITION_2:

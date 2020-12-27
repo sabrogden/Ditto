@@ -229,6 +229,7 @@ public:
 	bool DoActionNextDescription(); 
 	bool DoActionPrevDescription();
 	bool DoActionShowMenu();
+	bool DoActionShowSystemMenu();
 	bool DoActionNewGroup();
 	bool DoActionNewGroupSelection();
 	bool DoActionToggleFileLogging();
