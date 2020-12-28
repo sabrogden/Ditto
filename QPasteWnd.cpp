@@ -29,6 +29,7 @@
 #include "shared/Tokenizer.h"
 #include <signal.h>
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -740,14 +741,7 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
 
 		if (!g_Opt.m_bShowPersistent)
 		{
-			bool clearSearch = true;
-			if (g_Opt.m_maintainSearchView &&
-				m_strSearch != _T(""))
-			{
-				Log(_T("Currently searching for something and setting to maintain search view is enabled, not refreshing"));
-				clearSearch = false;
-			}
-			HideQPasteWindow(false, clearSearch);
+			HideQPasteWindow(false);
 		}
 		else if (g_Opt.GetAutoHide())
 		{
@@ -792,8 +786,22 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd *pWndOther, BOOL bMinimized)
 	}
 }
 
-BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus, bool clearSearchData)
+BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus, BOOL clearSearchData)
 {
+	if (clearSearchData = -1)
+	{
+		if (g_Opt.m_maintainSearchView &&
+			m_strSearch != _T(""))
+		{
+			Log(_T("Currently searching for something and setting to maintain search view is enabled, not refreshing"));
+			clearSearchData = FALSE;
+		}
+		else
+		{
+			clearSearchData = TRUE;
+		}
+	}
+
 	Log(_T("Start of HideQPasteWindow"));
 	DWORD startTick = GetTickCount();
 
@@ -835,7 +843,7 @@ BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus, bool clearSearchData)
 		ShowWindow(SW_HIDE);
 	}
 
-	if (clearSearchData)
+	if (clearSearchData == TRUE)
 	{
 		//Reset the selection in the search combo
 		m_bHandleSearchTextChange = false;
@@ -1228,13 +1236,6 @@ LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
 
 LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 {
-	if (g_Opt.m_maintainSearchView &&
-		m_strSearch != _T(""))
-	{
-		Log(_T("Currently searching for something and setting to maintain search view is enabled, not refreshing"));
-		return FALSE;
-	}
-
 	MSG msg;
 	// remove all additional refresh view messages from the queue
 	while (::PeekMessage(&msg, m_hWnd, WM_REFRESH_VIEW, WM_REFRESH_VIEW, PM_REMOVE)) {}
@@ -2914,17 +2915,20 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 		}
 		else if (pMsg->message == WM_CHAR)
 		{
-			auto f = this->GetFocus();
-			if (f != NULL && f->m_hWnd == m_lstHeader.m_hWnd)
+			if (CAccels::GetKeyStateModifiers() == 0)
 			{
-				CString x((TCHAR)pMsg->wParam);
-				m_search.SetWindowText(x);
-				m_search.SetFocus();
-				m_search.SetSel(1, 1);
+				auto f = this->GetFocus();
+				if (f != NULL && f->m_hWnd == m_lstHeader.m_hWnd)
+				{
+					CString x((TCHAR)pMsg->wParam);
+					m_search.SetWindowText(x);
+					m_search.SetFocus();
+					m_search.SetSel(1, 1);
 
-				OnSearchEditChange();
+					OnSearchEditChange();
 
-				return TRUE;
+					return TRUE;
+				}
 			}
 		}	
 		break;	
@@ -5606,6 +5610,7 @@ void CQPasteWnd::OnFindItem(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	NMLVFINDITEM *pFindInfo = (NMLVFINDITEM*)pNMHDR;
 	LVFINDINFO fndItem = pFindInfo->lvfi;
+
 
 	if (fndItem.flags &LVFI_STRING)
 	{

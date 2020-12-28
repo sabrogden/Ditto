@@ -178,7 +178,7 @@ public:
     void RefreshNc();
     void UpdateStatus(bool bRepaintImmediately = false); // regenerates the status (caption) text
     BOOL FillList(CString csSQLSearch = "");
-    BOOL HideQPasteWindow(bool releaseFocus, bool clearSearchData = true);
+    BOOL HideQPasteWindow(bool releaseFocus, BOOL clearSearchData = -1);
     BOOL ShowQPasteWindow(BOOL bFillList = TRUE);
     void MoveControls();
 

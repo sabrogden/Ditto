@@ -1749,9 +1749,9 @@ BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL utf8)
 		{
 			CStringA convToUtf8;
 			CTextConvert::ConvertToUTF8(w, convToUtf8);
-			byte header[2];
-			header[0] = 0xEF;
-			header[1] = 0xBB;
+			std::byte header[2];
+			header[0] = (std::byte)0xEF;
+			header[1] = (std::byte)0xBB;
 			f.Write(&header, 2);
 			f.Write(convToUtf8.GetBuffer(), convToUtf8.GetLength());
 
@@ -1759,9 +1759,9 @@ BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL utf8)
 		}
 		else if(unicode && w != _T(""))
 		{
-			byte header[2];
-			header[0] = 0xFF;
-			header[1] = 0xFE;
+			std::byte header[2];
+			header[0] = (std::byte)0xFF;
+			header[1] = (std::byte)0xFE;
 			f.Write(&header, 2);
 			f.Write(w.GetBuffer(), w.GetLength() * sizeof(wchar_t));
 
