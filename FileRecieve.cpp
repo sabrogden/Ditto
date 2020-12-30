@@ -167,7 +167,9 @@ long CFileRecieve::RecieveFileData(ULONG lFileSize, CString csFileName, CString 
 {
 	CString csFile = CGetSetOptions::GetPath(PATH_REMOTE_FILES);
 	CreateDirectory(csFile, NULL);
-	csFile += m_csReceivingFromIP + "\\";
+
+	csFile += nsPath::ReplaceInvalid(m_csReceivingFromIP) + "\\";
+
 	CreateDirectory(csFile, NULL);
 	
 	nsPath::CPath path(csFileName);

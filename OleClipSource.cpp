@@ -1065,8 +1065,20 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 					
 					GlobalUnlock(pDittoDelayCF_HDROP->m_hgData);
 
+					CString ipPort = csIP;
+					if (pData->respondPort > 0)
+					{
+						ipPort.Format(_T("%s:%d"), csIP, pData->respondPort);
+					}
+
+					CString namePort = csComputerName;
+					if (pData->respondPort > 0)
+					{
+						namePort.Format(_T("%s:%d"), csComputerName, pData->respondPort);
+					}
+
 					CClient cl;
-					hData = cl.RequestCopiedFiles(*pCF_HDROP, csIP, csComputerName);
+					hData = cl.RequestCopiedFiles(*pCF_HDROP, ipPort, namePort);
 				}
 			}
 			else

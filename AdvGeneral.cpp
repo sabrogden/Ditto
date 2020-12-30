@@ -131,6 +131,10 @@ END_MESSAGE_MAP()
 #define SETTING_MOVE_SELECTION_ON_OPEN_HOTKEY 80
 #define SETTING_ALOW_BACK_TO_BACK_DUPLICATES 81
 #define SETTING_MAINTAIN_SEARCH_VIEW 82
+#define SETTING_SEND_RECV_PORT 83
+#define SETTING_DEBUG_TO_FILE 84
+#define SETTING_DEBUG_TO_OUTPUT_STRING 85
+
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -224,6 +228,8 @@ BOOL CAdvGeneral::OnInitDialog()
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Send Keys Delay (ms)"), (long)CGetSetOptions::RealSendKeysDelay(), _T(""), SETTING_SEND_KEYS_DELAY));
 
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Network Send Receive Port (default: 23443)"), (long)CGetSetOptions::GetPort(), _T(""), SETTING_SEND_RECV_PORT));
+
 	AddTrueFalse(pGroupTest, _T("Show Clips That are in Groups in Main List"), CGetSetOptions::GetShowAllClipsInMainList(), SETTING_SHOW_GROUP_CLIPS_IN_LIST);
 	AddTrueFalse(pGroupTest, _T("Show leading whitespace"), CGetSetOptions::GetDescShowLeadingWhiteSpace(), SETTING_SHOW_LEADING_WHITESPACE);
 	AddTrueFalse(pGroupTest, _T("Show In Taskbar"), CGetSetOptions::GetShowInTaskBar(), SETTTING_SHOW_IN_TASKBAR);
@@ -246,6 +252,9 @@ BOOL CAdvGeneral::OnInitDialog()
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Transparency Percentage"), CGetSetOptions::GetTransparencyPercent(), _T(""), SETTING_TRANSPARENCY));
 	AddTrueFalse(pGroupTest, _T("Update Clip Order On Paste"), CGetSetOptions::GetUpdateTimeOnPaste(), SETTING_UPDATE_ORDER_ON_PASTE);
 	AddTrueFalse(pGroupTest, _T("Update Clip Order On Ctrl-C"), CGetSetOptions::GetUpdateClipOrderOnCtrlC(), SETTING_UPDATE_ORDER_ON_CTRL_C);
+
+	AddTrueFalse(pGroupTest, _T("Write debug to file"), CGetSetOptions::GetEnableDebugLogging(), SETTING_DEBUG_TO_FILE);
+	AddTrueFalse(pGroupTest, _T("Write debug to OutputDebugString"), CGetSetOptions::GetEnableDebugLogging(), SETTING_DEBUG_TO_OUTPUT_STRING);
 
 	CMFCPropertyGridProperty * regexFilterGroup = new CMFCPropertyGridProperty(_T("Exlude clips by Regular Expressions"));
 	m_propertyGrid.AddProperty(regexFilterGroup);	
@@ -835,6 +844,34 @@ void CAdvGeneral::OnBnClickedOk()
 						val = true;
 					}
 					CGetSetOptions::SetMaintainSearchView(val);
+				}
+				break;
+			case SETTING_SEND_RECV_PORT:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetPort(pNewValue->lVal);
+				}
+				break;
+			case SETTING_DEBUG_TO_FILE:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					BOOL val = false;
+					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
+					{
+						val = true;
+					}
+					CGetSetOptions::SetEnableDebugLogging(val);
+				}
+				break;
+			case SETTING_DEBUG_TO_OUTPUT_STRING:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					BOOL val = false;
+					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
+					{
+						val = true;
+					}
+					CGetSetOptions::SetEnableOutputDebugStringLogging(val);
 				}
 				break;
 			}

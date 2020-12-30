@@ -111,6 +111,7 @@ CServer::CServer()
 	m_pClip = NULL;
 	m_bSetToClipBoard = FALSE;
 	m_manualSend = false;
+	m_respondPort = 0;
 }
 
 CServer::~CServer()
@@ -199,6 +200,7 @@ void CServer::OnStart(CSendInfo &info)
 	CTextConvert::ConvertFromUTF8(info.m_cDesc, m_csDesc);
 
 	m_manualSend = info.m_manualSend;
+	m_respondPort = info.m_respondPort;
 
 	if(m_pClip != NULL)
 	{
@@ -369,6 +371,8 @@ void CServer::AddRemoteCF_HDROPFormat()
 	CClipFormat cf;
 
 	CDittoCF_HDROP Drop;
+
+	Drop.respondPort = m_respondPort;
 
 	CTextConvert Convert;
 

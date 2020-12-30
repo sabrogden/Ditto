@@ -9,6 +9,7 @@
 #include <sys/types.h>  
 #include <sys/stat.h> 
 #include "Path.h"
+#include <regex>
 
 CString GetIPAddress()
 {
@@ -89,7 +90,7 @@ void log(const TCHAR* msg, bool bFromSendRecieve, CString csFile, long lLine)
 	csText += "\n";
 
 #ifndef _DEBUG
-	if(CGetSetOptions::m_bOutputDebugString)
+	if(CGetSetOptions::m_outputDebugStringLogging)
 #endif
 	{
 		OutputDebugString(csText);

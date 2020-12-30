@@ -341,7 +341,9 @@ public:
 	static BOOL		GetUpdateDescWhenSavingClip();
 	static void		SetUpdateDescWhenSavingClip(BOOL bSet);
 
-	static bool		m_bOutputDebugString;
+	static BOOL		m_outputDebugStringLogging;
+	static BOOL		GetEnableOutputDebugStringLogging();
+	static void		SetEnableOutputDebugStringLogging(BOOL bSet);
 
 	static CStringArray m_csNetworkPasswordArray;
 

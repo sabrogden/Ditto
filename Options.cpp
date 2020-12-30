@@ -55,7 +55,7 @@ DWORD CGetSetOptions::m_dwSaveClipDelay;
 long CGetSetOptions::m_lProcessDrawClipboardDelay;
 BOOL CGetSetOptions::m_bEnableDebugLogging;
 BOOL CGetSetOptions::m_bEnsureConnectToClipboard;
-bool CGetSetOptions::m_bOutputDebugString;
+BOOL CGetSetOptions::m_outputDebugStringLogging;
 bool CGetSetOptions::m_bInConversion = false;
 bool CGetSetOptions::m_bFromIni = false;
 bool CGetSetOptions::m_portable = false;
@@ -193,8 +193,8 @@ void CGetSetOptions::LoadSettings()
 	m_dwSaveClipDelay = GetSaveClipDelay();
 	m_lProcessDrawClipboardDelay = GetProcessDrawClipboardDelay();
 	m_bEnableDebugLogging = GetEnableDebugLogging();
+	m_outputDebugStringLogging = GetEnableOutputDebugStringLogging();
 	m_bEnsureConnectToClipboard = GetEnsureConnectToClipboard();
-	m_bOutputDebugString = false;
 	m_showScrollBar = GetShowScrollBar();
 	m_bShowAlwaysOnTopWarning = GetShowAlwaysOnTopWarning();
 	m_excludeCF_DIBInExcel = GetExcludeCF_DIBInExcel();
@@ -1692,6 +1692,17 @@ void CGetSetOptions::SetEnableDebugLogging(BOOL bEnable)
 {
 	m_bEnableDebugLogging = bEnable;
 	SetProfileLong("EnableDebugLogging", bEnable);
+}
+
+BOOL CGetSetOptions::GetEnableOutputDebugStringLogging()
+{
+	return GetProfileLong("EnableOutputDebugStringLogging", FALSE);
+}
+
+void CGetSetOptions::SetEnableOutputDebugStringLogging(BOOL bEnable)
+{
+	m_outputDebugStringLogging = bEnable;
+	SetProfileLong("EnableOutputDebugStringLogging", bEnable);
 }
 
 BOOL CGetSetOptions::GetEnsureConnectToClipboard()

@@ -3583,7 +3583,7 @@ bool CQPasteWnd::DoActionToggleOutputDebugString()
 		Log(_T("turning DebugString logging OFF"));
 	}
 
-	CGetSetOptions::m_bOutputDebugString = !CGetSetOptions::m_bOutputDebugString;
+	CGetSetOptions::m_outputDebugStringLogging = !CGetSetOptions::m_outputDebugStringLogging;
 
 	if (CGetSetOptions::m_bEnableDebugLogging)
 	{

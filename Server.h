@@ -40,6 +40,7 @@ protected:
 	BOOL m_bSetToClipBoard;
 	CString m_csIP;
 	bool m_manualSend;
+	short m_respondPort;
 	CString m_csComputerName;
 	CString m_csDesc;
 	CRecieveSocket m_Sock;

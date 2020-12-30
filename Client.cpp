@@ -9,6 +9,7 @@
 #include "RecieveSocket.h"
 #include "FileRecieve.h"
 #include "FileTransferProgressDlg.h"
+#include "Shared/Tokenizer.h"
 
 
 #ifdef _DEBUG
@@ -134,7 +135,26 @@ BOOL CClient::OpenConnection(const TCHAR* servername)
 		return FALSE;
 	}
 
-	CStringA csServerNameA = CTextConvert::ConvertToChar(servername);
+	CString parsedServerName = servername;
+	auto port = g_Opt.m_lPort;
+
+	CTokenizer tokenizer(servername, ":");
+	CString token;
+	int pos = 0;
+	while (tokenizer.Next(token))
+	{
+		if (pos == 0)
+		{
+			parsedServerName = token;
+		}
+		else if (pos == 1)
+		{
+			port = ATOI(token);
+		}
+		pos++;
+	}
+
+	CStringA csServerNameA = CTextConvert::ConvertToChar(parsedServerName);
 
 	//11-5-06 Serge Baranov found that if we are passing in an ip then
 	//don't look the name up using gethostbyname/gethostbyaddr->
@@ -161,7 +181,7 @@ BOOL CClient::OpenConnection(const TCHAR* servername)
 
 	server.sin_addr.s_addr = addr;
 	server.sin_family = AF_INET;
-	server.sin_port = htons((u_short)g_Opt.m_lPort);
+	server.sin_port = htons((u_short)port);
 	if(connect(m_Connection, (struct sockaddr*)&server, sizeof(server)))
 	{
 		int nWhy = WSAGetLastError();
@@ -179,6 +199,12 @@ BOOL CClient::SendItem(CClip *pClip, bool manualSend)
 	CSendInfo Info;
 
 	Info.m_manualSend = manualSend;
+
+	////only send a response port if it's different than the default
+	if (g_Opt.m_lPort != 23443)
+	{
+		Info.m_respondPort = g_Opt.m_lPort;
+	}
 
 	//Send all text over as UTF-8
 	CStringA dest;

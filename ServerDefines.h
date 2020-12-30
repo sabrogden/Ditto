@@ -20,6 +20,7 @@ public:
 		m_lParameter1 = -1;
 		m_lParameter2 = -1;
 		m_manualSend = 0;
+		m_respondPort = 0;
 	}
 	int					m_nSize;
 	MyEnums::eSendType	m_Type;
@@ -31,7 +32,8 @@ public:
 	long				m_lParameter2;
 	CHAR				m_md5[32];
 	char				m_manualSend;
-	char				m_cExtra[17];
+	short				m_respondPort;
+	char				m_cExtra[15];
 };
 
 class CDittoCF_HDROP
@@ -41,7 +43,9 @@ public:
 	{
 		memset(m_cIP, 0, sizeof(m_cIP));
 		memset(m_cComputerName, 0, sizeof(m_cComputerName));
+		respondPort = 0;
 	}
 	char m_cIP[25];
 	char m_cComputerName[MAX_COMPUTERNAME_LENGTH + 1];
+	short respondPort;
 };
