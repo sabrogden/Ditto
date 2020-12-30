@@ -55,6 +55,7 @@ public:
 
 protected:
 	SOCKET m_Connection;
+	int m_connectionPort;
 
 	CSendSocket m_SendSocket;
 

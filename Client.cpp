@@ -90,6 +90,7 @@ BOOL SendToFriend(CSendToFriendInfo &Info)
 CClient::CClient()
 {
 	m_Connection = NULL;
+	m_connectionPort = 0;
 }
 
 CClient::~CClient()
@@ -136,7 +137,7 @@ BOOL CClient::OpenConnection(const TCHAR* servername)
 	}
 
 	CString parsedServerName = servername;
-	auto port = g_Opt.m_lPort;
+	m_connectionPort = g_Opt.m_lPort;
 
 	CTokenizer tokenizer(servername, ":");
 	CString token;
@@ -149,7 +150,7 @@ BOOL CClient::OpenConnection(const TCHAR* servername)
 		}
 		else if (pos == 1)
 		{
-			port = ATOI(token);
+			m_connectionPort = ATOI(token);
 		}
 		pos++;
 	}
@@ -181,7 +182,7 @@ BOOL CClient::OpenConnection(const TCHAR* servername)
 
 	server.sin_addr.s_addr = addr;
 	server.sin_family = AF_INET;
-	server.sin_port = htons((u_short)port);
+	server.sin_port = htons((u_short)m_connectionPort);
 	if(connect(m_Connection, (struct sockaddr*)&server, sizeof(server)))
 	{
 		int nWhy = WSAGetLastError();
@@ -201,7 +202,7 @@ BOOL CClient::SendItem(CClip *pClip, bool manualSend)
 	Info.m_manualSend = manualSend;
 
 	////only send a response port if it's different than the default
-	if (g_Opt.m_lPort != 23443)
+	if (g_Opt.m_lPort != 23443 && m_connectionPort != 23443)
 	{
 		Info.m_respondPort = g_Opt.m_lPort;
 	}
