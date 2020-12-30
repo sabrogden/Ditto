@@ -202,7 +202,7 @@ BOOL CClient::SendItem(CClip *pClip, bool manualSend)
 	Info.m_manualSend = manualSend;
 
 	////only send a response port if it's different than the default
-	if (g_Opt.m_lPort != 23443 && m_connectionPort != 23443)
+	if (g_Opt.m_lPort != 23443 || m_connectionPort != 23443)
 	{
 		Info.m_respondPort = g_Opt.m_lPort;
 	}
