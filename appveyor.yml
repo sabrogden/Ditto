@@ -31,7 +31,7 @@ after_build:
   - DittoSetup\BuildPortableZIP.bat "DittoPortable_%VERSION_FILENAME%" bit32
   - DittoSetup\BuildPortableZIP.bat "DittoPortable_64bit_%VERSION_FILENAME%" bit64
   
-  - ps: (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "%APPVEYOR_BUILD_VERSION%") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
+  - ps: (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", %APPVEYOR_BUILD_VERSION%) | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
   - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\DittoSetup_%VERSION_FILENAME%.exe
   - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\DittoSetup_64bit_%VERSION_FILENAME%.exe
   - cd DittoSetup\Chocolatey

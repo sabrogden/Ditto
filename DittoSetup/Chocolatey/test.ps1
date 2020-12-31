@@ -1,1 +1,0 @@
-(Get-Content '.\ditto.nuspec' -Raw).Replace("%version%", "xyz") | Out-File '.\ditto.nuspec'
