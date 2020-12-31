@@ -34,9 +34,9 @@ build_script:
 #- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
 
 after_build:
-- iscc /F"DittoSetup_%versionFileName%" "Ditto_Build\DittoSetup\DittoSetup_10.iss"
+- iscc /F"DittoSetup_%versionFileName%" "DittoSetup\DittoSetup_10.iss"
 
 artifacts:
-- path: Ditto_Build\DittoSetup\output\DittoSetup_%versionFileName%.exe
+- path: DittoSetup\output\DittoSetup_%versionFileName%.exe
   name: DittoSetup
 
