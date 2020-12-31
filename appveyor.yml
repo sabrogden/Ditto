@@ -18,6 +18,7 @@ environment:
 
 platform:
   - Win32
+  - x64
 
 configuration:
   - Release
@@ -39,9 +40,13 @@ build:
 #- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
 
 after_build:
-  - iscc /F"DittoSetup_%versionFileName%" "DittoSetup\DittoSetup_10.iss"
+  - iscc /F"DittoSetup_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss"
+  - iscc /F"DittoSetup_64bit_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss" "/dbit64=1"
+  #- "DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_%VERSION_FILENAME%" bit32
 
 artifacts:
   - path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
-    name: DittoSetup
+    name: Ditto Setup
+  - path: DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe
+    name: Ditto Setup
 
