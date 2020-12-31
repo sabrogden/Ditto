@@ -10,33 +10,34 @@ branches:
     - master
     
 install:
-- set INNOSETUPPATH=C:\Program Files (x86)\Inno Setup 6
-- set versionFileName=3_24_{build}_0
-- set Path=%INNOSETUPPATH%;%PATH%
+  - set versionFileName=3_24_%APPVEYOR_BUILD_VERSION%_0
 
+platform:
+  - Win32
+
+configuration:
+  - Release
  
-dotnet_csproj:
-  patch: true
-  file: '**\*.csproj'
-  version: '{version}'
-  version_prefix: '{version}'
-  package_version: '{version}'
-  assembly_version: '{version}'
-  file_version: '{version}'
-  informational_version: '{version}'
+before_build:
+  - nuget restore
+ 
+build:
+  parallel: true
+  project: CP_Main_10.sln   
 
-build_script:
-- echo Building version:%appveyor_build_version%
-- cmd: nuget restore
-- echo Building 32Bit
-- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
+
+#build_script:
+#- echo Building version:%appveyor_build_version%
+#- cmd: nuget restore
+#- echo Building 32Bit
+#- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
 #- echo Building 64Bit
 #- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
 
 after_build:
-- iscc /F"DittoSetup_%versionFileName%" "DittoSetup\DittoSetup_10.iss"
+  - C:\Program Files (x86)\Inno Setup 6\iscc /F"DittoSetup_%versionFileName%" "DittoSetup\DittoSetup_10.iss"
 
 artifacts:
-- path: DittoSetup\output\DittoSetup_%versionFileName%.exe
-  name: DittoSetup
+  - path: DittoSetup\output\DittoSetup_%versionFileName%.exe
+   name: DittoSetup
 
