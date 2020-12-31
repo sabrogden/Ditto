@@ -39,5 +39,5 @@ after_build:
 
 artifacts:
   - path: DittoSetup\output\DittoSetup_%versionFileName%.exe
-   name: DittoSetup
+    name: DittoSetup
 
