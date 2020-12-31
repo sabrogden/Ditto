@@ -10,7 +10,8 @@ branches:
     - master
     
 install:
-   - set Path = "C:\Program Files (x86)\Inno Setup 6";%PATH%
+- set INNOSETUPPATH=C:\Program Files (x86)\Inno Setup 6
+- set Path=%INNOSETUPPATH%;%PATH%
     
 environment:
   VERSION_FILENAME: 3_24_%APPVEYOR_BUILD_VERSION%_0  
@@ -38,7 +39,7 @@ build:
 #- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
 
 after_build:
-  - cmd iscc /F"DittoSetup_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss"
+- iscc /F"DittoSetup_%versionFileName%" "DittoSetup\DittoSetup_10.iss"
 
 artifacts:
   - path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
