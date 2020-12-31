@@ -48,3 +48,5 @@ copy ..\Debug\themes\*.xml Ditto\themes\
 7za.exe a -tzip Output\%arg1%.zip "Ditto\*" -r
 
 Rmdir Ditto /s /q
+
+cd ..
