@@ -29,7 +29,7 @@ after_build:
   #- "DittoSetup\StampVer" -f%APPVEYOR_BUILD_VERSION% -p%APPVEYOR_BUILD_VERSION% Release64\Ditto.exe
   #- iscc /F"DittoSetup_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss"
   #- iscc /F"DittoSetup_64bit_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss" "/dbit64=1"
-  - cmd: 'DittoSetup\Build Portable ZIP_10.bat' "DittoPortable_%VERSION_FILENAME%" bit32
+  - cmd: 'DittoSetup\Build Portable ZIP_10.bat "DittoPortable_%VERSION_FILENAME%" bit32'
 
 artifacts:
   #- path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
