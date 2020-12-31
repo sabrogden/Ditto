@@ -33,7 +33,7 @@ jobs:
     
     - name: Build Setup
       run: |
-        "C:\Program Files (x86)\Inno Setup 6\iscc.exe" /F"DittoSetup" "Ditto_Build\DittoSetup\DittoSetup_10.iss"
+        "C:\Program Files (x86)\Inno Setup 6\iscc.exe" /F"DittoSetup" "./Ditto_Build\DittoSetup\DittoSetup_10.iss"
       shell: cmd
     
     - name: Upload
