@@ -14,12 +14,9 @@ environment:
     secure: ZeAW38gXYNcJmxTOEGhA1RC5XzmJVvxVM8bsCCARnbYHEDmtQiRZxV4G+/KY4wW9
 
 build_script:
-  - echo Building version:%appveyor_build_version%
-  - cmd: nuget restore
-  - echo Building 32Bit
-  - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
-  - echo Building 64Bit
-  - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
+  - nuget restore
+  - msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
+  - msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
 
 afer_build:
   - DittoSetup\rcedit-x86 Release\Ditto.exe --set-file-version %APPVEYOR_BUILD_VERSION% --set-product-version %APPVEYOR_BUILD_VERSION%
@@ -30,6 +27,9 @@ afer_build:
   
   - DittoSetup\BuildPortableZIP.bat "DittoPortable_%VERSION_FILENAME%" bit32
   - DittoSetup\BuildPortableZIP.bat "DittoPortable_64bit_%VERSION_FILENAME%" bit64
+  
+  - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.pdb -r
+  - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.map -r
   
   - ps: (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
   - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\DittoSetup_%VERSION_FILENAME%.exe
@@ -48,4 +48,6 @@ artifacts:
     name: Ditto Portable
   - path: DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip
     name: Ditto Portable 64bit
+  - path: DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z
+    name: Ditto Debug
 
