@@ -10,7 +10,7 @@ branches:
     - master
     
 platform:
-  - Win32
+  - Win43
   - x64
 
 configuration:
