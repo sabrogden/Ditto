@@ -9,38 +9,23 @@ branches:
   only:
     - master
     
-platform:
-  - Win43
-  - x64
-
-configuration:
-  - Release
-    
 install:
 - set INNOSETUPPATH=C:\Program Files (x86)\Inno Setup 6
 - set versionFileName=3_24_{build}_0
 - set Path=%INNOSETUPPATH%;%PATH%
 
- 
-dotnet_csproj:
+assembly_info:
   patch: true
-  file: '**\*.csproj'
-  version: '{version}'
-  version_prefix: '{version}'
-  package_version: '{version}'
+  file: '**\AssemblyInfo.*'
   assembly_version: '{version}'
-  file_version: '{version}'
-  informational_version: '{version}'
-  
-build:
-  parallel: true
-  project: CP_Main_10.sln   
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
 
-# build_script:
-# - echo Building version:%appveyor_build_version%
-# - cmd: nuget restore
-# - echo Building 32Bit
-# - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
+build_script:
+- echo Building version:%appveyor_build_version%
+- cmd: nuget restore
+- echo Building 32Bit
+- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
 #- echo Building 64Bit
 #- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
 
