@@ -38,4 +38,4 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Install
-        path: Ditto_Build\DittoSetup\DittoSetup.exe
+        path: DittoSetup\DittoSetup.exe
