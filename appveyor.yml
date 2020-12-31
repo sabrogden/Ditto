@@ -29,7 +29,7 @@ build_script:
 - echo Building version:%appveyor_build_version%
 - cmd: nuget restore
 - echo Building 32Bit
-#- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
+- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
 #- echo Building 64Bit
 #- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
 
