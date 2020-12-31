@@ -9,9 +9,11 @@ branches:
   only:
     - master
     
+install:
+   - set Path = "C:\Program Files (x86)\Inno Setup 6";%PATH%
+    
 environment:
-  VERSION_FILENAME: 3_24_%APPVEYOR_BUILD_VERSION%_0
-  Path:"C:\Program Files (x86)\Inno Setup 6";%PATH%
+  VERSION_FILENAME: 3_24_%APPVEYOR_BUILD_VERSION%_0  
 
 platform:
   - Win32
