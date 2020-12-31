@@ -14,7 +14,7 @@ install:
 - set Path=%INNOSETUPPATH%;%PATH%
     
 environment:
-  VERSION_FILENAME: 3_24_%APPVEYOR_BUILD_VERSION%_0  
+  VERSION_FILENAME: 3_24_%APPVEYOR_BUILD_NUMBER%_0  
 
 platform:
   - Win32
@@ -39,7 +39,7 @@ build:
 #- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
 
 after_build:
-- iscc /F"DittoSetup_%versionFileName%" "DittoSetup\DittoSetup_10.iss"
+  - iscc /F"DittoSetup_%versionFileName%" "DittoSetup\DittoSetup_10.iss"
 
 artifacts:
   - path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
