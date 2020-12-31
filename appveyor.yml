@@ -16,23 +16,24 @@ build_script:
   - cmd: nuget restore
   - echo Building 32Bit
   - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
-  #- echo Building 64Bit
-  #- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
+  - echo Building 64Bit
+  - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
 
 after_build:
   - DittoSetup\StampVer -f%APPVEYOR_BUILD_VERSION% -p%APPVEYOR_BUILD_VERSION% Release\Ditto.exe
-  #- DittoSetup\StampVer -f%APPVEYOR_BUILD_VERSION% -p%APPVEYOR_BUILD_VERSION% Release64\Ditto.exe
-  #- iscc /F"DittoSetup_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss"
-  #- iscc /F"DittoSetup_64bit_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss" "/dbit64=1"
+  - DittoSetup\StampVer -f%APPVEYOR_BUILD_VERSION% -p%APPVEYOR_BUILD_VERSION% Release64\Ditto.exe
+  - iscc /F"DittoSetup_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss"
+  - iscc /F"DittoSetup_64bit_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss" "/dbit64=1"
   - DittoSetup\BuildPortableZIP.bat "DittoPortable_%VERSION_FILENAME%" bit32
+  - DittoSetup\BuildPortableZIP.bat "DittoPortable_64bit_%VERSION_FILENAME%" bit64
 
 artifacts:
-  #- path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
-  #  name: Ditto Setup
-  #- path: DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe
-  #  name: Ditto Setup 64bit
+  - path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
+    name: Ditto Setup
+  - path: DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe
+    name: Ditto Setup 64bit
   - path: DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip
     name: Ditto Portable
-  #- path: DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip
-  #  name: Ditto Portable 64bit
+  - path: DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip
+    name: Ditto Portable 64bit
 

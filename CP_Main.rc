@@ -1021,7 +1021,7 @@ BEGIN
     CONTROL         "ChaiScript (http://chaiscript.com/)",IDC_MFCLINK_CHAISCRIPT,
                     "MfcLink",WS_TABSTOP,142,54,119,10
     CONTROL         "Examples",IDC_MFCLINK2_EXAMPLES,"MfcLink",WS_TABSTOP,294,54,60,10
-    CONTROL         "",IDC_RICHEDIT21,"RichEdit20W",ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | WS_BORDER | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP,100,66,326,105
+    CONTROL         "",IDC_RICHEDIT21,"RichEdit20W",WS_BORDER | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP | 0x10c4,100,66,326,105
     EDITTEXT        IDC_EDIT_ACTIVE_APP,371,196,55,14,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT_ACTIVE_APP_TITLE,371,213,55,14,ES_AUTOHSCROLL
 END
@@ -1033,8 +1033,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 3,20,0,0
- PRODUCTVERSION 3,20,0,0
+ FILEVERSION 999,999,999,999
+ PRODUCTVERSION 999,999,999,999
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -1050,12 +1050,12 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "FileDescription", "Ditto"
-            VALUE "FileVersion", "3.20.0.0"
+            VALUE "FileVersion", "999.999.999.999"
             VALUE "InternalName", "CP_Main"
             VALUE "LegalCopyright", "Copyright (C) 2003"
             VALUE "OriginalFilename", "Ditto"
             VALUE "ProductName", "Ditto"
-            VALUE "ProductVersion", "3.20.0.0"
+            VALUE "ProductVersion", "999.999.999.999"
         END
     END
     BLOCK "VarFileInfo"
