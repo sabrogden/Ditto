@@ -19,9 +19,9 @@ copy ..\Release\Ditto.exe Ditto\Ditto.exe
 copy ..\Release\ICU_Loader.dll Ditto\ICU_Loader.dll
 copy ..\Release\Addins\*.dll Ditto\Addins\
 
-copy 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll' Ditto\vcruntime140.dll
-copy 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll' Ditto\msvcp140.dll
-copy 'C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.MFC\mfc140u.dll' Ditto\mfc140u.dll
+copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll" Ditto\vcruntime140.dll
+copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" Ditto\msvcp140.dll
+copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.MFC\mfc140u.dll" Ditto\mfc140u.dll
 
 if "%2"=="" GOTO skipBit64
 if "%2"=="bit32" GOTO skipBit64	
@@ -48,5 +48,3 @@ copy ..\Debug\themes\*.xml Ditto\themes\
 7za.exe a -tzip Output\%arg1%.zip "Ditto\*" -r
 
 Rmdir Ditto /s /q
-
-cd ..
