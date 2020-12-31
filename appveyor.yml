@@ -21,6 +21,8 @@ install:
 - set versionFileName=3_24_{build}_0
 - set Path=%INNOSETUPPATH%;%PATH%
 
+before_build:
+  - nuget restore
  
 dotnet_csproj:
   patch: true
