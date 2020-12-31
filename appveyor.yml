@@ -1,6 +1,5 @@
 image: Visual Studio 2019
 
-
 version: 3.24.{build}.0
 
 clone_folder: c:\projects\ditto
@@ -11,7 +10,7 @@ branches:
     - master
     
 platform:
-  - Win32
+  - Win43
   - x64
 
 configuration:

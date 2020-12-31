@@ -1,41 +1,41 @@
-# name: MSBuild
+name: MSBuild
 
-# on: [push]
+on: [push]
 
-# env:
+env:
   # Path to the solution file relative to the root of the project.
-  # SOLUTION_FILE_PATH: CP_Main_10.sln 
+  SOLUTION_FILE_PATH: CP_Main_10.sln 
 
   # Configuration type to build.
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-  # BUILD_CONFIGURATION: Release  
+  BUILD_CONFIGURATION: Release  
 
-# jobs:
-  # build:
-    # runs-on: windows-latest
+jobs:
+  build:
+    runs-on: windows-latest
 
-    # steps:
-    # - uses: actions/checkout@v2
+    steps:
+    - uses: actions/checkout@v2
 
-    # - name: Add MSBuild to PATH
-      # uses: microsoft/setup-msbuild@v1
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1
 
-    # - name: Restore NuGet packages
-      # working-directory: ${{env.GITHUB_WORKSPACE}}
-      # run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+    - name: Restore NuGet packages
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
-    # - name: Build
-      # working-directory: ${{env.GITHUB_WORKSPACE}}
-      # run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}} /p:Platform=Win32
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}} /p:Platform=Win32
     
-    # - name: Build Setup
-      # run: |
-        # "C:\Program Files (x86)\Inno Setup 6\iscc.exe" /F"DittoSetup" DittoSetup\DittoSetup_10.iss
-      # shell: cmd
+    - name: Build Setup
+      run: |
+        "C:\Program Files (x86)\Inno Setup 6\iscc.exe" /F"DittoSetup" DittoSetup\DittoSetup_10.iss
+      shell: cmd
     
-    # - name: Upload
-      # uses: actions/upload-artifact@v2
-      # with:
-        # name: Install
-        # path: DittoSetup\Output\DittoSetup.exe
+    - name: Upload
+      uses: actions/upload-artifact@v2
+      with:
+        name: Install
+        path: DittoSetup\Output\DittoSetup.exe
