@@ -22,21 +22,22 @@ build_script:
   - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
 
 after_build:
-  #- DittoSetup\StampVer -f%APPVEYOR_BUILD_VERSION% -p%APPVEYOR_BUILD_VERSION% Release\Ditto.exe
-  #- DittoSetup\StampVer -f%APPVEYOR_BUILD_VERSION% -p%APPVEYOR_BUILD_VERSION% Release64\Ditto.exe
+  - DittoSetup\rcedit-x86 Release\Ditto.exe --set-file-version %APPVEYOR_BUILD_VERSION% --set-product-version %APPVEYOR_BUILD_VERSION%
+  - DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version %APPVEYOR_BUILD_VERSION% --set-product-version %APPVEYOR_BUILD_VERSION%
+  
   - iscc /F"DittoSetup_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss"
   - iscc /F"DittoSetup_64bit_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss" "/dbit64=1"
+  
   - DittoSetup\BuildPortableZIP.bat "DittoPortable_%VERSION_FILENAME%" bit32
   - DittoSetup\BuildPortableZIP.bat "DittoPortable_64bit_%VERSION_FILENAME%" bit64
   
   - ps: (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "%APPVEYOR_BUILD_VERSION%") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
-  - cmd: >-
-      copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\DittoSetup_%VERSION_FILENAME%.exe
-      copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\DittoSetup_64bit_%VERSION_FILENAME%.exe
-      cd DittoSetup\Chocolatey
-      choco pack     
-      cd ..
-      cd ..
+  - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\DittoSetup_%VERSION_FILENAME%.exe
+  - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\DittoSetup_64bit_%VERSION_FILENAME%.exe
+  - cd DittoSetup\Chocolatey
+  - choco pack     
+  - cd ..
+  - cd ..
 
 artifacts:
   - path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
