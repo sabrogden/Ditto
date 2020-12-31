@@ -70,10 +70,10 @@ Name: AddFireWallException; Description: Add Windows Firewall exception for Ditt
   Source: ..\Release64\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
 	Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 	
-  Source: mfc-crt64\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
   Source: mfc-crt64\vcruntime140_1.dll;  DestDir: {app}; Flags: ignoreversion
-  Source: mfc-crt64\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion
-  Source: mfc-crt64\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.MFC\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
 
 #endif
 #ifndef bit64
@@ -81,9 +81,9 @@ Name: AddFireWallException; Description: Add Windows Firewall exception for Ditt
   Source: ..\Release\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 	
-  Source: mfc-crt\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
-  Source: mfc-crt\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion
-  Source: mfc-crt\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.MFC\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
 
 #endif
 
