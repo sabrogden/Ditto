@@ -2,6 +2,8 @@ set arg1=%1
 
 IF (%1) == () set arg1="DittoPortable"
 
+cd DittoSetup
+
 
 Rmdir Ditto /s /q
 
@@ -47,4 +49,4 @@ copy ..\Debug\themes\*.xml Ditto\themes\
 
 Rmdir Ditto /s /q
 
-
+cd ..

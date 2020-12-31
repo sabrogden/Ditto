@@ -20,18 +20,22 @@ build_script:
   - echo Building version:%appveyor_build_version%
   - cmd: nuget restore
   - echo Building 32Bit
-  - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
-  - echo Building 64Bit
-  - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
+  #- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
+  #- echo Building 64Bit
+  #- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
 
 after_build:
-  - iscc /F"DittoSetup_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss"
-  - iscc /F"DittoSetup_64bit_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss" "/dbit64=1"
-  #- "DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_%VERSION_FILENAME%" bit32
+  #- iscc /F"DittoSetup_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss"
+  #- iscc /F"DittoSetup_64bit_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss" "/dbit64=1"
+  - "DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_%VERSION_FILENAME%" bit32
 
 artifacts:
-  - path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
-    name: Ditto Setup
-  - path: DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe
-    name: Ditto Setup
+  #- path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
+  #  name: Ditto Setup
+  #- path: DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe
+  #  name: Ditto Setup 64bit
+  - path: DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip
+    name: Ditto Portable
+  #- path: DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip
+  #  name: Ditto Portable 64bit
 
