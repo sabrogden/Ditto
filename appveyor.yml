@@ -18,7 +18,7 @@ build_script:
   - msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
   - msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
 
-afer_build:
+after_build:
   - DittoSetup\rcedit-x86 Release\Ditto.exe --set-file-version %APPVEYOR_BUILD_VERSION% --set-product-version %APPVEYOR_BUILD_VERSION%
   - DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version %APPVEYOR_BUILD_VERSION% --set-product-version %APPVEYOR_BUILD_VERSION%
   
