@@ -14,28 +14,56 @@ environment:
     secure: ZeAW38gXYNcJmxTOEGhA1RC5XzmJVvxVM8bsCCARnbYHEDmtQiRZxV4G+/KY4wW9
 
 build_script:
-  - nuget restore
-  - msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
-  - msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
+  - echo Building version:%appveyor_build_version%
+  - cmd: nuget restore
+  - appveyor AddMessage -Category Information "Building 32bit"
+  - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
+  - appveyor AddMessage -Category Information "Building 32bit"
+  - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
 
 after_build:
+  - appveyor AddMessage -Category Information "Setting version"
   - DittoSetup\rcedit-x86 Release\Ditto.exe --set-file-version %APPVEYOR_BUILD_VERSION% --set-product-version %APPVEYOR_BUILD_VERSION%
   - DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version %APPVEYOR_BUILD_VERSION% --set-product-version %APPVEYOR_BUILD_VERSION%
   
+  - appveyor AddMessage -Category Information "Building Installers"
   - iscc /F"DittoSetup_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss"
   - iscc /F"DittoSetup_64bit_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss" "/dbit64=1"
   
+  - appveyor AddMessage -Category Information "Building Portables"  
   - DittoSetup\BuildPortableZIP.bat "DittoPortable_%VERSION_FILENAME%" bit32
   - DittoSetup\BuildPortableZIP.bat "DittoPortable_64bit_%VERSION_FILENAME%" bit64
   
   - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.pdb -r
   - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.map -r
   
+  - appveyor AddMessage -Category Information "Building ditto choco"
   - ps: (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
   - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\DittoSetup_%VERSION_FILENAME%.exe
   - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\DittoSetup_64bit_%VERSION_FILENAME%.exe
   - cd DittoSetup\Chocolatey
   - choco pack     
+  - chco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+  - cd ..
+  - cd ..
+  
+  - appveyor AddMessage -Category Information "Building ditto choco.install"
+  - ps: (Get-Content 'DittoSetup\Chocolatey.install\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
+  - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.install\DittoSetup_%VERSION_FILENAME%.exe
+  - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.install\DittoSetup_64bit_%VERSION_FILENAME%.exe
+  - cd DittoSetup\Chocolatey.install
+  - choco pack     
+  - chco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+  - cd ..
+  - cd ..
+  
+  - appveyor AddMessage -Category Information "Building ditto choco.portable"
+  - ps: (Get-Content 'DittoSetup\Chocolatey.portable\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
+  - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.portable\DittoSetup_%VERSION_FILENAME%.exe
+  - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.portable\DittoSetup_64bit_%VERSION_FILENAME%.exe
+  - cd DittoSetup\Chocolatey.portable
+  - choco pack     
+  - chco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
   - cd ..
   - cd ..
 
@@ -48,6 +76,6 @@ artifacts:
     name: Ditto Portable
   - path: DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip
     name: Ditto Portable 64bit
-  - path: DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z
+   - path: DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z
     name: Ditto Debug
 
