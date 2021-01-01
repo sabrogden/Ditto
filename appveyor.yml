@@ -18,7 +18,7 @@ build_script:
   - cmd: nuget restore
   - appveyor AddMessage -Category Information "Building 32bit"
   - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
-  - appveyor AddMessage -Category Information "Building 32bit"
+  - appveyor AddMessage -Category Information "Building 64bit"
   - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
 
 after_build:
@@ -27,13 +27,14 @@ after_build:
   - DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version %APPVEYOR_BUILD_VERSION% --set-product-version %APPVEYOR_BUILD_VERSION%
   
   - appveyor AddMessage -Category Information "Building Installers"
-  - iscc /F"DittoSetup_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss"
-  - iscc /F"DittoSetup_64bit_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss" "/dbit64=1"
+  - iscc /Q /F"DittoSetup_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss"
+  - iscc /Q /F"DittoSetup_64bit_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss" "/dbit64=1"
   
   - appveyor AddMessage -Category Information "Building Portables"  
   - DittoSetup\BuildPortableZIP.bat "DittoPortable_%VERSION_FILENAME%" bit32
   - DittoSetup\BuildPortableZIP.bat "DittoPortable_64bit_%VERSION_FILENAME%" bit64
   
+  - appveyor AddMessage -Category Information "Zipping Debug files"  
   - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.pdb -r
   - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.map -r
   
@@ -43,7 +44,7 @@ after_build:
   - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\DittoSetup_64bit_%VERSION_FILENAME%.exe
   - cd DittoSetup\Chocolatey
   - choco pack     
-  - chco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+  - choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
   - cd ..
   - cd ..
   
@@ -53,7 +54,7 @@ after_build:
   - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.install\DittoSetup_64bit_%VERSION_FILENAME%.exe
   - cd DittoSetup\Chocolatey.install
   - choco pack     
-  - chco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+  - choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
   - cd ..
   - cd ..
   
@@ -63,7 +64,7 @@ after_build:
   - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.portable\DittoSetup_64bit_%VERSION_FILENAME%.exe
   - cd DittoSetup\Chocolatey.portable
   - choco pack     
-  - chco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+  - choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
   - cd ..
   - cd ..
 
