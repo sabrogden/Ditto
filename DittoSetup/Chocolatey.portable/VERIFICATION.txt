@@ -1,0 +1,3 @@
+VERIFICATION Verification is intended to assist the Chocolatey moderators and community in verifying that this package's contents are trustworthy.
+
+This package is published by the Ditto Project itself. The binaries are identical to other package types published by the project, https://ditto-cp.sourceforge.io/beta/files/
