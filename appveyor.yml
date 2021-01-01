@@ -60,8 +60,8 @@ after_build:
   
   - appveyor AddMessage -Category Information "Building ditto choco.portable"
   - ps: (Get-Content 'DittoSetup\Chocolatey.portable\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey.portable\ditto.nuspec'
-  - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.portable\DittoSetup_%VERSION_FILENAME%.exe
-  - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.portable\DittoSetup_64bit_%VERSION_FILENAME%.exe
+  - copy DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip DittoSetup\Chocolatey.portable\DittoSetup_%VERSION_FILENAME%.exe
+  - copy DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip DittoSetup\Chocolatey.portable\DittoSetup_64bit_%VERSION_FILENAME%.exe
   - cd DittoSetup\Chocolatey.portable
   - choco pack     
   - choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
