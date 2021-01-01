@@ -49,7 +49,7 @@ after_build:
   - cd ..
   
   - appveyor AddMessage -Category Information "Building ditto choco.install"
-  - ps: (Get-Content 'DittoSetup\Chocolatey.install\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
+  - ps: (Get-Content 'DittoSetup\Chocolatey.install\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey.install\ditto.nuspec'
   - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.install\DittoSetup_%VERSION_FILENAME%.exe
   - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.install\DittoSetup_64bit_%VERSION_FILENAME%.exe
   - cd DittoSetup\Chocolatey.install
@@ -59,7 +59,7 @@ after_build:
   - cd ..
   
   - appveyor AddMessage -Category Information "Building ditto choco.portable"
-  - ps: (Get-Content 'DittoSetup\Chocolatey.portable\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
+  - ps: (Get-Content 'DittoSetup\Chocolatey.portable\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey.portable\ditto.nuspec'
   - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.portable\DittoSetup_%VERSION_FILENAME%.exe
   - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.portable\DittoSetup_64bit_%VERSION_FILENAME%.exe
   - cd DittoSetup\Chocolatey.portable
