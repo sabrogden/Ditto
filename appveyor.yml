@@ -79,7 +79,7 @@ after_build:
   - ps: (Get-Content 'DittoSetup\appx\appxmanifest.xml' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\appx\appxmanifest.xml'  
   - cd DittoSetup\appx
   - makeappx.exe pack /f files.ini /p Ditto_%VERSION_FILENAME%.appx
-  - signtool.exe sign -f my.pfx" -fd SHA256 -v Ditto_%VERSION_FILENAME%.appx
+  - signtool.exe sign -f my.pfx -fd SHA256 -v Ditto_%VERSION_FILENAME%.appx
   - cd ..
   - cd ..
   - copy DittoSetup\appx\Ditto_%VERSION_FILENAME%.appx DittoSetup\Output\Ditto_%VERSION_FILENAME%.appx
