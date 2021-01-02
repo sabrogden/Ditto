@@ -13,10 +13,9 @@ environment:
   VERSION_FILENAME: 3_24_%APPVEYOR_BUILD_NUMBER%_0  
   CHOCO_API_KEY:
     secure: ZeAW38gXYNcJmxTOEGhA1RC5XzmJVvxVM8bsCCARnbYHEDmtQiRZxV4G+/KY4wW9
-#  APPVEYOR_RDP_PASSWORD:
-#    secure: QJjXumwuObU7BFtpXrIoPg==
+#  APPVEYOR_RDP_PASSWORD: Letmein1!
 
-init:
+#init:
 #  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 build_script:
