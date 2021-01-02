@@ -12,21 +12,26 @@ environment:
   VERSION_FILENAME: 3_24_%APPVEYOR_BUILD_NUMBER%_0  
   CHOCO_API_KEY:
     secure: ZeAW38gXYNcJmxTOEGhA1RC5XzmJVvxVM8bsCCARnbYHEDmtQiRZxV4G+/KY4wW9
-  SIGNTOOL_PATH: '"C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86"'
-  APPVEYOR_RDP_PASSWORD: Hastings1!
+  SIGNTOOL_PATH: '"C:\Program Files (x86)\Windows Kits\10\App Certification Kit"'
+  APPVEYOR_RDP_PASSWORD:
+    secure: QJjXumwuObU7BFtpXrIoPg==
 
 init:
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 build_script:
   - echo Building version:%appveyor_build_version%
-  - cmd: nuget restore
+  #- cmd: nuget restore
   - appveyor AddMessage -Category Information "Building 32bit"
-  - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
-  - appveyor AddMessage -Category Information "Building 64bit"
-  - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
+  #- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
+  #- appveyor AddMessage -Category Information "Building 64bit"
+  #- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
 
 after_build:
+
+  - |
+    %SIGNTOOL_PATH%\makeappx.exe'" pack /f "DittoSetup\appx\files.ini" /p "DittoSetup\appx\Ditto_%VERSION_FILENAME%.appx"
+
   - appveyor AddMessage -Category Information "Setting version"
   - DittoSetup\rcedit-x86 Release\Ditto.exe --set-file-version %APPVEYOR_BUILD_VERSION% --set-product-version %APPVEYOR_BUILD_VERSION%
   - DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version %APPVEYOR_BUILD_VERSION% --set-product-version %APPVEYOR_BUILD_VERSION%
