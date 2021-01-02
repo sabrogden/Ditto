@@ -78,8 +78,11 @@ after_build:
   - 7z e DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip -oDittoSetup\appx -r
   - ps: (Get-Content 'DittoSetup\appx\appxmanifest.xml' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\appx\appxmanifest.xml'  
   - |
-    %SIGNTOOL_PATH%\makeappx.exe pack /f "DittoSetup\appx\files.ini" /p "DittoSetup\appx\Ditto_%VERSION_FILENAME%.appx"
-    %SIGNTOOL_PATH%\signtool.exe sign -f "\DittoSetup\appx\my.pfx" -fd SHA256 -v "\DittoSetup\appx\Ditto_%VERSION_FILENAME%.appx
+    cd DittoSetup\appx
+    %SIGNTOOL_PATH%\makeappx.exe pack /f files.ini /p Ditto_%VERSION_FILENAME%.appx
+    %SIGNTOOL_PATH%\signtool.exe sign -f my.pfx" -fd SHA256 -v Ditto_%VERSION_FILENAME%.appx
+    cd ..
+    cd ..
   - copy DittoSetup\appx\Ditto_%VERSION_FILENAME%.appx DittoSetup\Output\Ditto_%VERSION_FILENAME%.appx
 
 artifacts:
