@@ -12,6 +12,11 @@ environment:
   VERSION_FILENAME: 3_24_%APPVEYOR_BUILD_NUMBER%_0  
   CHOCO_API_KEY:
     secure: ZeAW38gXYNcJmxTOEGhA1RC5XzmJVvxVM8bsCCARnbYHEDmtQiRZxV4G+/KY4wW9
+  SIGNTOOL_PATH: '"C:\Program Files (x86)\Windows Kits\10\bin\10.0.18362.0\x86"'
+  APPVEYOR_RDP_PASSWORD: Hastings1!
+
+init:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 build_script:
   - echo Building version:%appveyor_build_version%
@@ -68,6 +73,14 @@ after_build:
   - cd ..
   - cd ..
 
+  - appveyor AddMessage -Category Information "Building appx"
+  - 7z e DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip -oDittoSetup\appx -r
+  - ps: (Get-Content 'DittoSetup\appx\appxmanifest.xml' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\appx\appxmanifest.xml'  
+  - |
+    %SIGNTOOL_PATH%\makeappx.exe'" pack /f "DittoSetup\appx\files.ini" /p "DittoSetup\appx\Ditto_%VERSION_FILENAME%.appx"
+    %SIGNTOOL_PATH%\signtool.exe' sign -f "\DittoSetup\appx\my.pfx" -fd SHA256 -v "\DittoSetup\appx\Ditto_%VERSION_FILENAME%.appx
+  - copy DittoSetup\appx\Ditto_%VERSION_FILENAME%.appx DittoSetup\Output\Ditto_%VERSION_FILENAME%.appx
+
 artifacts:
   - path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
     name: Ditto Setup
@@ -79,4 +92,6 @@ artifacts:
     name: Ditto Portable 64bit
   - path: DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z
     name: Ditto Debug
+  - path: DittoSetup\output\Ditto_%VERSION_FILENAME%.appx
+    name: Ditto appx
 
