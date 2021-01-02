@@ -3,41 +3,97 @@ image: Visual Studio 2019
 version: 3.24.{build}.0
 
 clone_folder: c:\projects\ditto
-
-branches:
-  # whitelist
-  only:
-    - master
     
 install:
-- set INNOSETUPPATH=C:\Program Files (x86)\Inno Setup 6
-- set Path=%INNOSETUPPATH%;%PATH%
+- set INNO_SETUP_PATH=C:\Program Files (x86)\Inno Setup 6
+- set APP_CERT_KIT_PATH=C:\Program Files (x86)\Windows Kits\10\App Certification Kit
+- set Path=%INNO_SETUP_PATH%;%APP_CERT_KIT_PATH%;%PATH%
     
 environment:
   VERSION_FILENAME: 3_24_%APPVEYOR_BUILD_NUMBER%_0  
+  CHOCO_API_KEY:
+    secure: ZeAW38gXYNcJmxTOEGhA1RC5XzmJVvxVM8bsCCARnbYHEDmtQiRZxV4G+/KY4wW9
+#  APPVEYOR_RDP_PASSWORD: Letmein1!
+
+#init:
+#  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 build_script:
   - echo Building version:%appveyor_build_version%
   - cmd: nuget restore
-  - echo Building 32Bit
+  - appveyor AddMessage -Category Information "Building 32bit"
   - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
-  #- echo Building 64Bit
-  #- cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
+  - appveyor AddMessage -Category Information "Building 64bit"
+  - cmd: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
 
 after_build:
-  - DittoSetup\StampVer -f%APPVEYOR_BUILD_VERSION% -p%APPVEYOR_BUILD_VERSION% Release\Ditto.exe
-  #- DittoSetup\StampVer -f%APPVEYOR_BUILD_VERSION% -p%APPVEYOR_BUILD_VERSION% Release64\Ditto.exe
-  #- iscc /F"DittoSetup_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss"
-  #- iscc /F"DittoSetup_64bit_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss" "/dbit64=1"
+  - appveyor AddMessage -Category Information "Setting version"
+  - DittoSetup\rcedit-x86 Release\Ditto.exe --set-file-version %APPVEYOR_BUILD_VERSION% --set-product-version %APPVEYOR_BUILD_VERSION%
+  - DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version %APPVEYOR_BUILD_VERSION% --set-product-version %APPVEYOR_BUILD_VERSION%
+  
+  - appveyor AddMessage -Category Information "Building Installers"
+  - iscc /Q /F"DittoSetup_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss"
+  - iscc /Q /F"DittoSetup_64bit_%VERSION_FILENAME%" "DittoSetup\DittoSetup_10.iss" "/dbit64=1"
+  
+  - appveyor AddMessage -Category Information "Building Portables"  
   - DittoSetup\BuildPortableZIP.bat "DittoPortable_%VERSION_FILENAME%" bit32
+  - DittoSetup\BuildPortableZIP.bat "DittoPortable_64bit_%VERSION_FILENAME%" bit64
+  
+  - appveyor AddMessage -Category Information "Zipping Debug files"  
+  - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.pdb -r
+  - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.map -r
+  
+  - appveyor AddMessage -Category Information "Building ditto choco"
+  - ps: (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
+  - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\DittoSetup_%VERSION_FILENAME%.exe
+  - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\DittoSetup_64bit_%VERSION_FILENAME%.exe
+  - cd DittoSetup\Chocolatey
+  - choco pack     
+  - choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+  - cd ..
+  - cd ..
+  
+  - appveyor AddMessage -Category Information "Building ditto choco.install"
+  - ps: (Get-Content 'DittoSetup\Chocolatey.install\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey.install\ditto.nuspec'
+  - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.install\DittoSetup_%VERSION_FILENAME%.exe
+  - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.install\DittoSetup_64bit_%VERSION_FILENAME%.exe
+  - cd DittoSetup\Chocolatey.install
+  - choco pack     
+  - choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+  - cd ..
+  - cd ..
+  
+  - appveyor AddMessage -Category Information "Building ditto choco.portable"
+  - ps: (Get-Content 'DittoSetup\Chocolatey.portable\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey.portable\ditto.nuspec'
+  - copy DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip DittoSetup\Chocolatey.portable\DittoPortable_%VERSION_FILENAME%.zip
+  - copy DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip DittoSetup\Chocolatey.portable\DittoPortable_64bit_%VERSION_FILENAME%.zip
+  - cd DittoSetup\Chocolatey.portable
+  - choco pack     
+  - choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+  - cd ..
+  - cd ..
+
+  - appveyor AddMessage -Category Information "Building appx"
+  - 7z x DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip -oDittoSetup\appx -r
+  - ps: (Get-Content 'DittoSetup\appx\appxmanifest.xml' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\appx\appxmanifest.xml'  
+  - cd DittoSetup\appx
+  - makeappx.exe pack /f files.ini /p Ditto_%VERSION_FILENAME%.appx
+  - signtool.exe sign -f my.pfx -fd SHA256 -v Ditto_%VERSION_FILENAME%.appx
+  - cd ..
+  - cd ..
+  - copy DittoSetup\appx\Ditto_%VERSION_FILENAME%.appx DittoSetup\Output\Ditto_%VERSION_FILENAME%.appx
 
 artifacts:
-  #- path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
-  #  name: Ditto Setup
-  #- path: DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe
-  #  name: Ditto Setup 64bit
+  - path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
+    name: Ditto Setup
+  - path: DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe
+    name: Ditto Setup 64bit
   - path: DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip
     name: Ditto Portable
-  #- path: DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip
-  #  name: Ditto Portable 64bit
+  - path: DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip
+    name: Ditto Portable 64bit
+  - path: DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z
+    name: Ditto Debug
+  - path: DittoSetup\output\Ditto_%VERSION_FILENAME%.appx
+    name: Ditto appx
 

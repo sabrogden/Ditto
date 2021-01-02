@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <metadata>
+    <id>ditto.install</id>
+    <title>Ditto Clipboard</title>
+    <version>%version%-beta</version>
+    <authors>Scott Brogden</authors>
+    <owners>Scott Brogden</owners>
+    <summary>Ditto Clipboard</summary>
+    
+    <docsUrl>https://github.com/sabrogden/Ditto/wiki</docsUrl>
+    <mailingListUrl>https://github.com/sabrogden/Ditto/issues</mailingListUrl>
+    <bugTrackerUrl>https://github.com/sabrogden/Ditto/issues</bugTrackerUrl>
+    <projectSourceUrl>https://github.com/sabrogden/Ditto</projectSourceUrl>
+    
+    <description>Ditto is an extension to the standard windows clipboard. It saves each item placed on the clipboard allowing you access to any of those items at a later time. Ditto allows you to save any type of information that can be put on the clipboard, text, images, html, custom formats, .....
+
+#### Features
+
+* Easy to use interface
+* Search and paste previous copy entries
+* Keep multiple computer's clipboards in sync
+* Data is encrypted when sent over the network
+* Accessed from tray icon or global hot key
+* Select entry by double click, enter key or drag drop
+* Paste into any window that excepts standard copy/paste entries
+* Display thumbnail of copied images in list
+* Full Unicode support(display foreign characters)
+* UTF-8 support for language files(create language files in any language)
+* Uses sqlite database (www.sqlite.org)</description>
+    <projectUrl>https://ditto-cp.sourceforge.io/</projectUrl>
+    <tags>Ditto clipboard</tags>
+    <licenseUrl>http://www.gnu.org/licenses/gpl-3.0.txt</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance> <!-- or true if you require the user to accept the License before installing -->
+    <iconUrl>https://ditto-cp.sourceforge.io/Ditto2.png</iconUrl>
+  </metadata>
+</package>
