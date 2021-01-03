@@ -2921,3 +2921,13 @@ void CGetSetOptions::SetMaintainSearchView(BOOL val)
 	m_maintainSearchView = val;
 	SetProfileLong("MaintainSearchView", val);
 }
+
+CString CGetSetOptions::GetNetworkBindIPAddress()
+{
+	return GetProfileString("NetworkBindIPAddress", "*");
+}
+
+void CGetSetOptions::SetNetworkBindIPAddress(CString val)
+{
+	SetProfileString("NetworkBindIPAddress", val);
+}

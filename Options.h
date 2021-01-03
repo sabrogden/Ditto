@@ -657,7 +657,8 @@ public:
 	static BOOL GetMaintainSearchView();
 	static void SetMaintainSearchView(BOOL val);
 
-
+	static CString GetNetworkBindIPAddress();
+	static void SetNetworkBindIPAddress(CString val);
 };
 
 // global for easy access and for initialization of fast access variables

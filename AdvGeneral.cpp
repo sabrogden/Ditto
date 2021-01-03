@@ -134,6 +134,7 @@ END_MESSAGE_MAP()
 #define SETTING_SEND_RECV_PORT 83
 #define SETTING_DEBUG_TO_FILE 84
 #define SETTING_DEBUG_TO_OUTPUT_STRING 85
+#define SETTING_NETWORK_BIND_IP_ADDRESS 86
 
 
 BOOL CAdvGeneral::OnInitDialog()
@@ -206,8 +207,10 @@ BOOL CAdvGeneral::OnInitDialog()
 	
 	pGroupTest->AddSubItem( new CMFCPropertyGridProperty(_T("Multi-Paste clip separator ([LF] = line feed)"), g_Opt.GetMultiPasteSeparator(false), _T(""), SETTING_CLIP_SEPARATOR));
 
-
 	AddTrueFalse(pGroupTest, _T("Multi-Paste in reverse order"), g_Opt.m_bMultiPasteReverse, SETTING_MULTIPASTE_REVERSE_ORDER);
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Network Send Receive Port (default: 23443)"), (long)CGetSetOptions::GetPort(), _T(""), SETTING_SEND_RECV_PORT));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Network Server Bind IP (default: *)"), CGetSetOptions::GetNetworkBindIPAddress(), _T(""), SETTING_NETWORK_BIND_IP_ADDRESS));
 
 	AddTrueFalse(pGroupTest, _T("Open to group same as active exe"), CGetSetOptions::GetOpenToGroupByActiveExe(), SETTING_OPEN_TO_GROUP_AS_ACTIVE_EXE);
 
@@ -228,7 +231,7 @@ BOOL CAdvGeneral::OnInitDialog()
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Send Keys Delay (ms)"), (long)CGetSetOptions::RealSendKeysDelay(), _T(""), SETTING_SEND_KEYS_DELAY));
 
-	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Network Send Receive Port (default: 23443)"), (long)CGetSetOptions::GetPort(), _T(""), SETTING_SEND_RECV_PORT));
+	
 
 	AddTrueFalse(pGroupTest, _T("Show Clips That are in Groups in Main List"), CGetSetOptions::GetShowAllClipsInMainList(), SETTING_SHOW_GROUP_CLIPS_IN_LIST);
 	AddTrueFalse(pGroupTest, _T("Show leading whitespace"), CGetSetOptions::GetDescShowLeadingWhiteSpace(), SETTING_SHOW_LEADING_WHITESPACE);
@@ -872,6 +875,12 @@ void CAdvGeneral::OnBnClickedOk()
 						val = true;
 					}
 					CGetSetOptions::SetEnableOutputDebugStringLogging(val);
+				}
+				break;
+			case SETTING_NETWORK_BIND_IP_ADDRESS:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					CGetSetOptions::SetNetworkBindIPAddress(pNewValue->bstrVal);
 				}
 				break;
 			}
