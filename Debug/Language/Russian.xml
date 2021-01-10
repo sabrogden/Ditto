@@ -265,8 +265,8 @@
 		<Item English_Text = "Show indicator a clip has been pasted" ID = "2043"></Item>
 	</Ditto_Options_Quick_Paste>	
 	<Ditto_Options_Friends>
-		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Объект будет принят и помещён в буфер обмена, если IP-адрес или имя компьютера-отправителя будет в этом списке. В противном случае объект будет помещён в список сохранённых.</Item>
-		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP-адреса или имена компьютеров (через «,»)</Item>
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Объект будет принят и помещён в буфер обмена, если IP адрес или имя компьютера-отправителя будет в этом списке. В противном случае объект будет помещён в список сохранённых.</Item>
+		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP/имена компьютеров (через запятую)</Item>
 		<Item English_Text = "Disable Recieving Clips" ID = "2026">отключить приём объектов</Item>
 		<Item English_Text = "Network Password" ID = "2054">Сетевой пароль</Item>
 		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">Чтобы принимать объекты с компьютеров с разными сетевыми паролями, укажите несколько паролей через запятую.</Item>
