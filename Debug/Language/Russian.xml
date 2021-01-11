@@ -60,7 +60,7 @@
 		<Item English_Text = "Delete Entry	Del" ID = "32801">Удалить объект</Item>
 		<Item English_Text = "Properties	Alt-Enter" ID = "32776">Свойства</Item>
 		<Item English_Text = "Quick Properties" ID = "-1">Быстрые свойства</Item>
-		<Item English_Text = "Never Auto Delete" ID = "32820">Никогда не удалять автоматически</Item>
+		<Item English_Text = "Never Auto Delete" ID = "32820">Не удалять автоматически</Item>
 		<Item English_Text = "Auto Delete" ID = "32821">Удалять автоматически</Item>
 		<Item English_Text = "Remove Hot Key" ID = "32822">Удалить горячую клавишу</Item>
 		<Item English_Text = "Options..." ID = "32805">Параметры...</Item>
@@ -139,8 +139,8 @@
 		<Item English_Text = "Copy Properties" ID = "-1">Копировать свойства</Item>
 		//Added 1/10/15
 		<Item English_Text = "Hotkey available globally" ID = "1026"></Item>
-		<Item English_Text = "Last Used" ID = "2043"></Item>
-		<Item English_Text = "Quick Paste Text" ID = "2125"></Item>
+		<Item English_Text = "Last Used" ID = "2043">Использовалось</Item>
+		<Item English_Text = "Quick Paste Text" ID = "2125">Текст быстрой вставки</Item>
 	</Ditto_Clip_Properties>
 	<Ditto_Options_General>
 		<Item English_Text = "Start Ditto on System Startup" ID = "2004">Запускать Ditto вместе с системой</Item>
