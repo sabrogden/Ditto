@@ -1,0 +1,44 @@
+<Ditto_Theme_File Version="1" Author="Yaroslav Kargin" Notes="Terminal like theme">
+
+	<CaptionLeft>RGB(20, 20, 20)</CaptionLeft>
+	<CaptionRight>RGB(20, 20, 20)</CaptionRight>	
+	
+	<CaptionLeftTopMost>RGB(20, 20, 20)</CaptionLeftTopMost>
+	<CaptionRightTopMost>RGB(20, 20, 20)</CaptionRightTopMost>
+	
+	<CaptionLeftNotConnected>RGB(20, 20, 20)</CaptionLeftNotConnected>
+	<CaptionRightNotConnected>RGB(20, 20, 20)</CaptionRightNotConnected>
+	
+	<CaptionTextColor>RGB(255, 255, 255)</CaptionTextColor>
+	
+	<ListBoxOddRowsBG>RGB(0, 0, 0)</ListBoxOddRowsBG>
+	<ListBoxEvenRowsBG>RGB(0, 0, 0)</ListBoxEvenRowsBG>
+	
+	<ListBoxOddRowsText>RGB(12, 155, 12)</ListBoxOddRowsText>
+	<ListBoxEvenRowsText>RGB(12, 155, 12)</ListBoxEvenRowsText>
+	
+	<ListBoxSelectedBG>RGB(0, 0, 0)</ListBoxSelectedBG>
+	<ListBoxSelectedNoFocusBG>RGB(12, 12, 12)</ListBoxSelectedNoFocusBG>
+	
+	<ListBoxSelectedText>RGB(44, 241, 41)</ListBoxSelectedText>
+	<ListBoxSelectedNoFocusText>RGB(44, 241, 41)</ListBoxSelectedNoFocusText>	
+	
+	<Border>RGB(0, 15, 0)</Border>
+	<BorderTopMost>RGB(0, 15, 0)</BorderTopMost>
+	<BorderNotConnected>RGB(0, 15, 0)</BorderNotConnected>
+	
+	<GroupTreeBG>RGB(0, 0, 0)</GroupTreeBG>
+	<GroupTreeText></GroupTreeText>
+	
+	<CaptionSize>18</CaptionSize>
+	<CaptionFontSize>15</CaptionFontSize>
+
+	<DescriptionWindowBG>RGB(0, 0, 0)</DescriptionWindowBG>
+	<DescriptionWindowText></DescriptionWindowText>
+	
+	<MainWindowBG>RGB(20, 20, 20)</MainWindowBG>
+	
+	<SearchTextBoxFocusBG>RGB(20, 20, 20)</SearchTextBoxFocusBG>
+	<SearchTextBoxFocusText>RGB(44, 241, 41)</SearchTextBoxFocusText>
+	
+</Ditto_Theme_File>
