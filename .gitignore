@@ -12,7 +12,7 @@
 *.def
 *.mk
 *.tlb
-*
+
 
 # Precompiled Headers
 *.gch
