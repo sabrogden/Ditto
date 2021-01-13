@@ -3,6 +3,10 @@ image: Visual Studio 2019
 version: 3.24.{build}.0
 
 clone_folder: c:\projects\ditto
+
+branches:
+  only:
+    - master
     
 install:
 - set INNO_SETUP_PATH=C:\Program Files (x86)\Inno Setup 6
