@@ -7,6 +7,9 @@ clone_folder: c:\projects\ditto
 branches:
   only:
     - master
+
+# Do not build feature branch with open Pull Requests
+skip_branch_with_pr: true    
     
 install:
 - set INNO_SETUP_PATH=C:\Program Files (x86)\Inno Setup 6
