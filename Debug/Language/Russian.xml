@@ -129,7 +129,7 @@
 		<Item English_Text = "Hot Key" ID = "2039">Клавиша</Item>
 		<Item English_Text = "Hot Key" ID = "2039">Клавиша</Item>
 		<Item English_Text = "Date" ID = "2040">Дата</Item>
-		<Item English_Text = "&Never Auto Delete" ID = "1025">&никогда не удалять автоматически</Item>
+		<Item English_Text = "&Never Auto Delete" ID = "1025">&не удалять автоматически</Item>
 		<Item English_Text = "Move To Group" ID = "2041">Переместить в группу</Item>
 		<Item English_Text = "Item Title" ID = "2042">Заголовок объекта</Item>
 		<Item English_Text = "Copy Formats" ID = "2029">Форматы копирования</Item>
@@ -267,7 +267,7 @@
 	<Ditto_Options_Friends>
 		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Объект будет принят и помещён в буфер обмена, если IP адрес или имя компьютера-отправителя будет в этом списке. В противном случае объект будет помещён в список сохранённых.</Item>
 		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP/имена компьютеров (через запятую)</Item>
-		<Item English_Text = "Disable Recieving Clips" ID = "2026">отключить приём объектов</Item>
+		<Item English_Text = "Disable Recieving Clips" ID = "2026">Отключить приём объектов</Item>
 		<Item English_Text = "Network Password" ID = "2054">Сетевой пароль</Item>
 		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">Чтобы принимать объекты с компьютеров с разными сетевыми паролями, укажите несколько паролей через запятую.</Item>
 		<Item English_Text = "Receive Passwords" ID = "2056">Пароли на приём</Item>
@@ -375,12 +375,12 @@
 		<Item English_Text = "Add-Ins" ID = "Add_Ins">Дополнения</Item> 
 		
 		<Item English_Text = "Copy Buffers" ID = "CopyBuffers">Буферы копирования</Item>
-		<Item English_Text = "Search Options" ID = "SearchOptionsTooltip"></Item>
-		<Item English_Text = "Groups" ID = "GroupsTooltip"></Item>
+		<Item English_Text = "Search Options" ID = "SearchOptionsTooltip">Опции поиска</Item>
+		<Item English_Text = "Groups" ID = "GroupsTooltip">Группы</Item>
 		//New strings added in 3.17 2-28-10
 		<Item English_Text = "Search" ID = "Search">Поиск</Item>
-		<Item English_Text = "Send All Copies" ID = "Send_All_Copies"></Item>
-        <Item English_Text = "IP/Name" ID = "IP_Name"></Item>
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">Отправить все копии</Item>
+        <Item English_Text = "IP/Name" ID = "IP_Name">IP или имя</Item>
         <Item English_Text = "Descriptions" ID = "Descriptions"></Item>
 		<Item English_Text = "Quick Paste Keyboard" ID = "QuickPasteKeyboardTitle"></Item>
 		<Item English_Text = "Hot Key" ID = "QPHotKey"></Item>
@@ -453,9 +453,9 @@
 	</Ditto_GlobalHotKeys>
 	//Added 1/10/15
 	<Ditto_Groups_Right_Click_Menu>
-		<Item English_Text = "New Sub Group" ID = "32896"></Item>
-		<Item English_Text = "Delete Group" ID = "32897"></Item>
-		<Item English_Text = "Properties" ID = "32898"></Item>	
+		<Item English_Text = "New Sub Group" ID = "32896">Новая подгруппа</Item>
+		<Item English_Text = "Delete Group" ID = "32897">Удалить группу</Item>
+		<Item English_Text = "Properties" ID = "32898">Свойства</Item>	
 	</Ditto_Groups_Right_Click_Menu>
 	//Added 1/10/15
 	<Ditto_DeleteClipData>
