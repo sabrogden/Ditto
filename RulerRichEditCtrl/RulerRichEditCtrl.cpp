@@ -906,6 +906,7 @@ CString CRulerRichEditCtrl::GetText()
 #ifdef _UNICODE
   	GETTEXTEX stex;
   	stex.codepage = 1200;  // Unicode code page(set SETTEXTEX documentation)
+	stex.flags = GT_USECRLF;
   
   	int nSize = m_rtf.GetTextLength();
   	//increase the size incase of unicode text
