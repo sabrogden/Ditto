@@ -50,30 +50,30 @@ bool CICU_String::IsUpperEx(wchar_t c)
 {
 	if (m_dllHandle == NULL || u_tolower == NULL)
 	{
-		return u_isUUppercase(c);
+		return ::isupper(c);
 	}
 
-	return ::isupper(c);
+	return u_isUUppercase(c);
 }
 
 wchar_t CICU_String::ToLowerEx(wchar_t c)
 {
 	if (m_dllHandle == NULL || u_tolower == NULL)
 	{
-		return u_tolower(c);
+		return ::tolower(c);
 	}
 
-	return ::tolower(c);
+	return u_tolower(c);
 }
 
 wchar_t CICU_String::ToUpperEx(wchar_t c)
 {
 	if (m_dllHandle == NULL || u_tolower == NULL)
 	{
-		return u_toupper(c);
+		return ::toupper(c);
 	}
 
-	return ::toupper(c);
+	return u_toupper(c);
 }
 
 CString CICU_String::ToLowerStringEx(CString source)
