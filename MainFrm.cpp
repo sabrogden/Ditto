@@ -31,7 +31,7 @@
 	
 IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 
-	BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
+BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	//{{AFX_MSG_MAP(CMainFrame)
 	ON_WM_CREATE()
 	ON_COMMAND(ID_FIRST_OPTION, OnFirstOption)
@@ -72,14 +72,17 @@ IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_DISPLAYCHANGE, &CMainFrame::OnResolutionChange)
 	ON_MESSAGE(WM_TRAYNOTIFY, &CMainFrame::OnTrayNotification)
 	ON_MESSAGE(WM_PLAIN_TEXT_PASTE, &CMainFrame::OnPlainTextPaste)
-		ON_WM_WININICHANGE()
-		ON_COMMAND(ID_FIRST_SHOWSTARTUPMESSAGE, &CMainFrame::OnFirstShowstartupmessage)
-		ON_UPDATE_COMMAND_UI(ID_FIRST_SHOWSTARTUPMESSAGE, &CMainFrame::OnUpdateFirstShowstartupmessage)
-		ON_COMMAND(ID_FIRST_BACKUPDATABASE, &CMainFrame::OnFirstBackupdatabase)
-		ON_COMMAND(ID_FIRST_RESTOREDATABASE, &CMainFrame::OnFirstRestoredatabase)
-		ON_MESSAGE(WM_BACKUP_DB, OnBackupDb)
-		ON_MESSAGE(WM_RESTORE_DB, OnRestoreDb)
-		ON_COMMAND(ID_FIRST_DELETEALLNONUSEDCLIPS, &CMainFrame::OnFirstDeleteallnonusedclips)
+	ON_WM_WININICHANGE()
+	ON_COMMAND(ID_FIRST_SHOWSTARTUPMESSAGE, &CMainFrame::OnFirstShowstartupmessage)
+	ON_UPDATE_COMMAND_UI(ID_FIRST_SHOWSTARTUPMESSAGE, &CMainFrame::OnUpdateFirstShowstartupmessage)
+	ON_COMMAND(ID_FIRST_BACKUPDATABASE, &CMainFrame::OnFirstBackupdatabase)
+	ON_COMMAND(ID_FIRST_RESTOREDATABASE, &CMainFrame::OnFirstRestoredatabase)
+	ON_MESSAGE(WM_BACKUP_DB, OnBackupDb)
+	ON_MESSAGE(WM_RESTORE_DB, OnRestoreDb)
+	ON_COMMAND(ID_FIRST_DELETEALLNONUSEDCLIPS, &CMainFrame::OnFirstDeleteallnonusedclips)
+	ON_MESSAGE(WM_PASTE_CLIP, OnPasteClip)
+	ON_MESSAGE(WM_EDIT_CLIP, OnEditClip)
+
 	END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
@@ -1527,4 +1530,18 @@ void CMainFrame::OnFirstDeleteallnonusedclips()
 	DeleteNonUsedClips(false);
 
 	theApp.RefreshView();
+}
+
+LRESULT CMainFrame::OnPasteClip(WPARAM wParam, LPARAM lParam)
+{
+	PasteOrShowGroup(wParam, TRUE, FALSE, TRUE, false);
+	return TRUE;
+}
+
+LRESULT CMainFrame::OnEditClip(WPARAM wParam, LPARAM lParam)
+{
+	CClipIDs IDs;
+	IDs.Add(wParam);
+	theApp.EditItems(IDs, true);
+	return TRUE;
 }

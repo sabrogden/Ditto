@@ -150,4 +150,6 @@ DECLARE_MESSAGE_MAP()public:
 	afx_msg LRESULT OnRestoreDb(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnBackupDb(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnFirstDeleteallnonusedclips();
+    afx_msg LRESULT OnPasteClip(WPARAM wParam, LPARAM lParam);
+    afx_msg LRESULT OnEditClip(WPARAM wParam, LPARAM lParam);
 };

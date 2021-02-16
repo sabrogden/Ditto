@@ -35,6 +35,9 @@ public:
 		m_bOpenWindow = FALSE;
 		m_bCloseWindow = FALSE;
 		m_plainTextPaste = FALSE;
+		m_pasteClip = FALSE;
+		m_clipID = -1;
+		m_editClip = FALSE;
 	}
 
  	virtual void ParseParam(const TCHAR* pszParam, BOOL bFlag, BOOL bLast)
@@ -71,6 +74,28 @@ public:
 			{
 				m_plainTextPaste = TRUE;
 			}
+			else if (wcsnicmp(pszParam, _T("paste"), 5) == 0)
+			{
+				CString pidCommand(pszParam);
+				long sep = pidCommand.ReverseFind(':');
+				if (sep > -1)
+				{
+					CString id = pidCommand.Right(pidCommand.GetLength() - sep - 1);
+					m_clipID = ATOI(id);
+					m_pasteClip = TRUE;
+				}
+			}
+			else if (wcsnicmp(pszParam, _T("edit"), 4) == 0)
+			{
+				CString pidCommand(pszParam);
+				long sep = pidCommand.ReverseFind(':');
+				if (sep > -1)
+				{
+					CString id = pidCommand.Right(pidCommand.GetLength() - sep - 1);
+					m_clipID = ATOI(id);
+					m_editClip = TRUE;
+				}
+			}
   		}
  
 		CCommandLineInfo::ParseParam(pszParam, bFlag, bLast);
@@ -78,10 +103,13 @@ public:
 
 	BOOL m_bDisconnect;
 	BOOL m_bConnect;
+	BOOL m_pasteClip;
 	int m_uacPID;
+	int m_clipID;
 	BOOL m_bCloseWindow;
 	BOOL m_bOpenWindow;
 	BOOL m_plainTextPaste;
+	BOOL m_editClip;
 };
 
 CCP_MainApp theApp;
@@ -271,6 +299,28 @@ BOOL CCP_MainApp::InitInstance()
 		if (hWnd)
 		{
 			ret = ::SendMessage(hWnd, WM_PLAIN_TEXT_PASTE, NULL, NULL);
+		}
+
+		return FALSE;
+	}
+	else if (cmdInfo.m_pasteClip)
+	{
+		LRESULT ret = 0;
+		HWND hWnd = (HWND)(LONG_PTR)CGetSetOptions::GetMainHWND();
+		if (hWnd)
+		{
+			ret = ::SendMessage(hWnd, WM_PASTE_CLIP, cmdInfo.m_clipID, NULL);
+		}
+
+		return FALSE;
+	}
+	else if (cmdInfo.m_editClip)
+	{
+		LRESULT ret = 0;
+		HWND hWnd = (HWND)(LONG_PTR)CGetSetOptions::GetMainHWND();
+		if (hWnd)
+		{
+			ret = ::SendMessage(hWnd, WM_EDIT_CLIP, cmdInfo.m_clipID, NULL);
 		}
 
 		return FALSE;
