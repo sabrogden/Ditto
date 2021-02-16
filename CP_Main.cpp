@@ -38,6 +38,7 @@ public:
 		m_pasteClip = FALSE;
 		m_clipID = -1;
 		m_editClip = FALSE;
+		m_restartFromRestartManager = FALSE;
 	}
 
  	virtual void ParseParam(const TCHAR* pszParam, BOOL bFlag, BOOL bLast)
@@ -96,6 +97,10 @@ public:
 					m_editClip = TRUE;
 				}
 			}
+			else if (wcsnicmp(pszParam, _T("RestartByRestartManager"), 23) == 0)
+			{
+				m_restartFromRestartManager = true;
+			}
   		}
  
 		CCommandLineInfo::ParseParam(pszParam, bFlag, bLast);
@@ -110,6 +115,7 @@ public:
 	BOOL m_bOpenWindow;
 	BOOL m_plainTextPaste;
 	BOOL m_editClip;
+	BOOL m_restartFromRestartManager;
 };
 
 CCP_MainApp theApp;
@@ -165,6 +171,8 @@ CCP_MainApp::CCP_MainApp()
 
 	m_pNoDbMainFrame = NULL;
 	m_databaseOnNetworkShare = false;
+
+	m_dwRestartManagerSupportFlags = AFX_RESTART_MANAGER_SUPPORT_RESTART;
 }
 
 CCP_MainApp::~CCP_MainApp()
@@ -216,7 +224,11 @@ BOOL CCP_MainApp::InitInstance()
 		return FALSE;
 	}
 
-	if(cmdInfo.m_strFileName.IsEmpty() == FALSE)
+	if (cmdInfo.m_restartFromRestartManager)
+	{
+		Log(StrF(_T("Ditto was restarted from restart manager")));
+	}
+	else if(cmdInfo.m_strFileName.IsEmpty() == FALSE)
 	{
 		try
 		{
@@ -324,7 +336,7 @@ BOOL CCP_MainApp::InitInstance()
 		}
 
 		return FALSE;
-	}
+	}	
 
 	CInternetUpdate update;
 
@@ -339,6 +351,8 @@ BOOL CCP_MainApp::InitInstance()
 		csMutex += " ";
 		csMutex += g_Opt.GetExeFileName();
 	}
+
+	CWinApp::RegisterWithRestartManager(false, csMutex);
 
 	//create mutex doesn't like slashes, remove them, it always returns NULL with them in
 	csMutex.Replace(_T("\\"), _T("_"));

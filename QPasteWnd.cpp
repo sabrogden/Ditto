@@ -5528,23 +5528,26 @@ void CQPasteWnd::OnGetToolTipText(NMHDR *pNMHDR, LRESULT *pResult)
 					break;
 				lines++;
 			}
+						
 
 #ifdef _DEBUG
-			clipData += StrF(_T("(Index = %d) (DB ID = %d) (Seq = %f) (Group Seq = %f) (Sticky Seq = %f) (Sticky Group Seq = %f)\n"),
-				pInfo->lItem, q.getIntField(_T("lID")),
+			clipData += StrF(_T("(Index = %d) (Seq = %f) (Group Seq = %f) (Sticky Seq = %f) (Sticky Group Seq = %f)\n"),
+				pInfo->lItem, 
 				q.getFloatField(_T("clipOrder")), q.getFloatField(_T("clipGroupOrder")),
 				q.getFloatField(_T("stickyClipOrder")), q.getFloatField(_T("stickyClipGroupOrder")));
 #endif 
 
+			clipData += StrF(_T("\r\nDatabase ID: %d"), q.getIntField(_T("lID")));
+
 			COleDateTime time((time_t)q.getIntField(_T("lDate")));
-			clipData += "\nAdded: " + time.Format();
+			clipData += "\r\nAdded: " + time.Format();
 
 			COleDateTime modified((time_t)q.getIntField(_T("lastPasteDate")));
-			clipData += "\nLast Used: " + modified.Format();
+			clipData += "\r\nLast Used: " + modified.Format();
 
 			if (q.getIntField(_T("lDontAutoDelete")) > 0)
 			{
-				clipData += "\nNever Auto Delete";
+				clipData += "\r\nNever Auto Delete";
 			}
 
 			CString csQuickPaste = q.getStringField(_T("QuickPasteText"));

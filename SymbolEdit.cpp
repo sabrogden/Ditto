@@ -563,14 +563,14 @@ void CSymbolEdit::OnPaint()
 
 	if (text.GetLength() > 0)
 	{
-		OutputDebugString(_T("showing close button\n"));
+		//OutputDebugString(_T("showing close button\n"));
 
 		m_closeButtonRect.SetRect(right - m_windowDpi->Scale(16), 0, right, rect.bottom);
 		m_closeButton.Draw(&dc, *m_windowDpi, this, m_closeButtonRect.left, 4, m_mouseHoveringOverClose, m_mouseDownOnClose);
 	}
 	else
 	{
-		OutputDebugString(_T("not showing close button\n"));
+		//OutputDebugString(_T("not showing close button\n"));
 		m_closeButtonRect.SetRect(0, 0, 0, 0);
 		//m_searchButton.Draw(&dc, this, rect.right - 22, 4, false, false);
 	}
@@ -585,7 +585,7 @@ void CSymbolEdit::OnPaint()
 
 	m_lastTextOnPaint = text;
 
-	OutputDebugString(_T("OnPaint \r\n"));
+	//OutputDebugString(_T("OnPaint \r\n"));
 
 }
 
@@ -633,7 +633,7 @@ HBRUSH CSymbolEdit::CtlColor(CDC* pDC, UINT n)
 
 void CSymbolEdit::OnSetFocus(CWnd* pOldWnd)
 {
-	OutputDebugString(_T("OnSetFocus \r\n"));
+	//OutputDebugString(_T("OnSetFocus \r\n"));
 
 	//was seeing issues when refreshing non client area inline, do it delayed
 	SetTimer(1, 500, NULL);
@@ -652,7 +652,7 @@ void CSymbolEdit::OnSetFocus(CWnd* pOldWnd)
 
 void CSymbolEdit::OnKillFocus(CWnd* pNewWnd)
 {
-	OutputDebugString(_T("OnKillFocus \r\n"));
+	//OutputDebugString(_T("OnKillFocus \r\n"));
 	AddToSearchHistory();
 
 	//was seeing issues when refreshing non client area inline, do it delayed
@@ -981,7 +981,7 @@ void CSymbolEdit::OnNcPaint()
 		}
 	}
 
-	OutputDebugString(_T("OnNCPaint \r\n"));
+	//OutputDebugString(_T("OnNCPaint \r\n"));
 }
 
 void CSymbolEdit::OnTimer(UINT_PTR nIDEvent)
