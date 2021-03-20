@@ -722,6 +722,8 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 	bool bResult;
 	try
 	{
+		m_Time = CTime::GetCurrentTime().GetTime();
+
 		m_CRC = GenerateCRC();
 
 		if(bCheckForDuplicates &&
@@ -2086,8 +2088,6 @@ int CClipList::AddToDB(bool bLatestOrder)
 			pClip->MakeLatestOrder();
 			pClip->MakeLatestGroupOrder();
 		}
-
-		pClip->m_Time = CTime::GetCurrentTime().GetTime();
 
 		bResult = pClip->AddToDB();
 		if(bResult)

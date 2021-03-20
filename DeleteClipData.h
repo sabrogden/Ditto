@@ -25,6 +25,7 @@ public:
 	CTime m_lastUsedDateTime;
 	CString m_clipboardFormat;
 	DWORD m_dataSize;
+	CString m_quickPasteText;
 };
 	
 	

@@ -131,10 +131,11 @@ void CDeleteClipData::InitListCtrlCols()
 	m_List.SetExtendedStyle(LVS_EX_FULLROWSELECT);
 
 	m_List.InsertColumn(0, theApp.m_Language.GetDeleteClipDataString("Title", "Title"), LVCFMT_LEFT, 350);
-	m_List.InsertColumn(1, theApp.m_Language.GetDeleteClipDataString("Created", "Created"), LVCFMT_LEFT, 150);
-	m_List.InsertColumn(2, theApp.m_Language.GetDeleteClipDataString("LastUsed", "Last Used"), LVCFMT_LEFT, 150);
-	m_List.InsertColumn(3, theApp.m_Language.GetDeleteClipDataString("Format", "Format"), LVCFMT_LEFT, 150);
-	m_List.InsertColumn(4, theApp.m_Language.GetDeleteClipDataString("DataSize", "Data Size"), LVCFMT_LEFT, 100);
+	m_List.InsertColumn(1, theApp.m_Language.GetDeleteClipDataString("QuickPasteText", "Quick Paste Text"), LVCFMT_LEFT, 200);
+	m_List.InsertColumn(2, theApp.m_Language.GetDeleteClipDataString("Created", "Created"), LVCFMT_LEFT, 150);
+	m_List.InsertColumn(3, theApp.m_Language.GetDeleteClipDataString("LastUsed", "Last Used"), LVCFMT_LEFT, 150);
+	m_List.InsertColumn(4, theApp.m_Language.GetDeleteClipDataString("Format", "Format"), LVCFMT_LEFT, 150);
+	m_List.InsertColumn(5, theApp.m_Language.GetDeleteClipDataString("DataSize", "Data Size"), LVCFMT_LEFT, 100);
 }
 
 void CDeleteClipData::LoadItems()
@@ -155,11 +156,10 @@ void CDeleteClipData::LoadItems()
 		}
 	}
 
-	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT Main.lID, Main.mText, Main.lDate, Main.lastPasteDate, "
-														  _T("Data.lID AS DataID, Data.strClipBoardFormat, length(Data.ooData) AS DataLength ")
+	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT Main.lID, Main.mText, Main.lDate, Main.lastPasteDate, Main.QuickPasteText, Data.lID AS DataID, Data.strClipBoardFormat, length(Data.ooData) AS DataLength ")
 													_T("FROM Data ")
 													_T("INNER JOIN Main on Main.lID = Data.lParentID ")
-													_T("ORDER BY length(ooData) DESC")));
+													_T("ORDER BY length(ooData) DESC"));
 
 	int row = 0;
 	while (q.eof() == false)
@@ -172,6 +172,7 @@ void CDeleteClipData::LoadItems()
 		data.m_clipboardFormat = q.getStringField(_T("strClipBoardFormat"));
 		data.m_dataSize = q.getIntField(_T("DataLength"));
 		data.m_DatalID = q.getIntField(_T("DataID"));
+		data.m_quickPasteText = q.getStringField(_T("QuickPasteText"));
 
 		m_data.push_back(data);
 
@@ -469,25 +470,31 @@ void CDeleteClipData::OnLvnGetdispinfoList2(NMHDR *pNMHDR, LRESULT *pResult)
 				break;
 				case 1:
 				{
+					lstrcpyn(pDispInfo->item.pszText, m_data[pDispInfo->item.iItem].m_quickPasteText, pDispInfo->item.cchTextMax);
+					pDispInfo->item.pszText[pDispInfo->item.cchTextMax - 1] = '\0';
+				}
+				break;
+				case 2:
+				{
 					  COleDateTime dtTime(m_data[pDispInfo->item.iItem].m_createdDateTime.GetTime());
 					  lstrcpyn(pDispInfo->item.pszText, dtTime.Format(), pDispInfo->item.cchTextMax);
 					  pDispInfo->item.pszText[pDispInfo->item.cchTextMax - 1] = '\0';
 				}
 				break;
-				case 2:
+				case 3:
 				{	
 					  COleDateTime dtTime(m_data[pDispInfo->item.iItem].m_lastUsedDateTime.GetTime());
 					  lstrcpyn(pDispInfo->item.pszText, dtTime.Format(), pDispInfo->item.cchTextMax);
 					  pDispInfo->item.pszText[pDispInfo->item.cchTextMax - 1] = '\0';
 				}
 				break;
-				case 3:
+				case 4:
 				{
 					  lstrcpyn(pDispInfo->item.pszText, m_data[pDispInfo->item.iItem].m_clipboardFormat, pDispInfo->item.cchTextMax);
 					  pDispInfo->item.pszText[pDispInfo->item.cchTextMax - 1] = '\0';
 				}
 				break;
-				case 4:
+				case 5:
 				{
 					  const int MAX_FILE_SIZE_BUFFER = 255;
 					  TCHAR szFileSize[MAX_FILE_SIZE_BUFFER];
