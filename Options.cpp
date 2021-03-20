@@ -1979,6 +1979,11 @@ void CGetSetOptions::SetEditWordWrap(BOOL bSet)
 	SetProfileLong(_T("EditWordWrap"), bSet);
 }
 
+void CGetSetOptions::SetAllowFriends(BOOL val)
+{
+	SetProfileLong("AllowFriends", val);
+}
+
 bool CGetSetOptions::GetAllowFriends()
 {
 	return (GetProfileLong("AllowFriends", TRUE) == TRUE);

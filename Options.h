@@ -378,6 +378,7 @@ public:
 	static BOOL	GetEditWordWrap();
 	static void	SetEditWordWrap(BOOL bSet);
 
+	static void SetAllowFriends(BOOL val);
 	static bool GetAllowFriends();
 
 	static bool		GetIsPortableDitto();
