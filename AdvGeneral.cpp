@@ -830,7 +830,7 @@ void CAdvGeneral::OnBnClickedOk()
 				}
 				break;
 			case SETTING_MOVE_SELECTION_ON_OPEN_HOTKEY:
-				if (pNewValue->lVal != pOrigValue->lVal)
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
 					BOOL val = false;
 					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
@@ -841,7 +841,7 @@ void CAdvGeneral::OnBnClickedOk()
 				}
 				break;
 			case SETTING_MAINTAIN_SEARCH_VIEW:
-				if (pNewValue->lVal != pOrigValue->lVal)
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
 					BOOL val = false;
 					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
@@ -858,7 +858,7 @@ void CAdvGeneral::OnBnClickedOk()
 				}
 				break;
 			case SETTING_DEBUG_TO_FILE:
-				if (pNewValue->lVal != pOrigValue->lVal)
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
 					BOOL val = false;
 					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
@@ -869,7 +869,7 @@ void CAdvGeneral::OnBnClickedOk()
 				}
 				break;
 			case SETTING_DEBUG_TO_OUTPUT_STRING:
-				if (pNewValue->lVal != pOrigValue->lVal)
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
 					BOOL val = false;
 					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
@@ -886,7 +886,7 @@ void CAdvGeneral::OnBnClickedOk()
 				}
 				break;
 			case SETTING_DISABLE_FRIENDS:
-				if (pNewValue->lVal != pOrigValue->lVal)
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
 					BOOL val = true;
 					if (wcscmp(pNewValue->bstrVal, L"True") == 0)

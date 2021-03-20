@@ -58,7 +58,7 @@ BOOL CProcessPaste::DoPaste()
 			// when new data is put on the Clipboard
 			m_pOle = NULL; // m_pOle should not be accessed past this point
 
-			if (m_bSendPaste)
+			/*if (m_bSendPaste)
 			{
 				Log(_T("Sending Paste to active window"));
 				theApp.m_activeWnd.SendPaste(m_bActivateTarget);
@@ -67,7 +67,7 @@ BOOL CProcessPaste::DoPaste()
 			{
 				Log(_T("Activating active window"));
 				theApp.m_activeWnd.ActivateTarget();
-			}
+			}*/
 
 			ret = TRUE;
 		}
@@ -242,25 +242,12 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 			}
 			CATCH_SQLITE_EXCEPTION
 
-			int refreshFlags = 0;
-
-			//if multiple clips are selected then don't change selection
-			if (clipCount == 1)
-			{
-				refreshFlags |= UPDATE_AFTER_PASTE_SELECT_CLIP;
-			}
-
 			for (int i = 0; i < clipCount; i++)
 			{
 				int id = pData->ids.ElementAt(i);
 
-				//refresh the window on the last clip
-				if (i == clipCount - 1)
-				{
-					refreshFlags |= UPDATE_AFTER_PASTE_REFRESH_VISIBLE;
-				}
-
-				theApp.RefreshClipAfterPaste(id, refreshFlags);
+				theApp.RefreshClipAfterPaste(id, 0);
+				break;
 			}			
 
 			delete pData;

@@ -1208,17 +1208,19 @@ LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
 
 				foundClip = TRUE;
 
-				if (updateFlags & UPDATE_AFTER_PASTE_SELECT_CLIP)
+				//if (updateFlags & UPDATE_AFTER_PASTE_SELECT_CLIP)
 				{
-					theApp.m_FocusID = clipId;
-					SelectFocusID();
+					theApp.m_FocusID = -1;
+					
 				}
 
-				if (updateFlags & UPDATE_AFTER_PASTE_REFRESH_VISIBLE)
+				//if (updateFlags & UPDATE_AFTER_PASTE_REFRESH_VISIBLE)
 				{
 					m_lstHeader.RefreshVisibleRows();
 					m_lstHeader.RedrawWindow();
 				}
+
+				SelectFocusID();
 
 				break;
 			}
@@ -1256,6 +1258,7 @@ LRESULT CQPasteWnd::OnRefreshView(WPARAM wParam, LPARAM lParam)
 	theApp.m_FocusID = -1;
 
 	m_bHandleSearchTextChange = false;
+
 	m_search.SetWindowText(_T(""));
 	m_bHandleSearchTextChange = true;
 
@@ -6046,6 +6049,7 @@ void CQPasteWnd::SelectFocusID()
 
 	if (selectedItem == false)
 	{
+		m_lstHeader.EnsureVisible(0, FALSE);
 		m_lstHeader.SetListPos(g_Opt.SelectedIndex());
 	}
 }
