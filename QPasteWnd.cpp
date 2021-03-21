@@ -2918,20 +2918,17 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG *pMsg)
 		}
 		else if (pMsg->message == WM_CHAR)
 		{
-			if (CAccels::GetKeyStateModifiers() == 0)
+			auto f = this->GetFocus();
+			if (f != NULL && f->m_hWnd == m_lstHeader.m_hWnd)
 			{
-				auto f = this->GetFocus();
-				if (f != NULL && f->m_hWnd == m_lstHeader.m_hWnd)
-				{
-					CString x((TCHAR)pMsg->wParam);
-					m_search.SetWindowText(x);
-					m_search.SetFocus();
-					m_search.SetSel(1, 1);
+				CString x((TCHAR)pMsg->wParam);
+				m_search.SetWindowText(x);
+				m_search.SetFocus();
+				m_search.SetSel(1, 1);
 
-					OnSearchEditChange();
+				OnSearchEditChange();
 
-					return TRUE;
-				}
+				return TRUE;
 			}
 		}	
 		break;	
