@@ -18,6 +18,7 @@ install:
     
 environment:
   VERSION_FILENAME: 3_24_%APPVEYOR_BUILD_NUMBER%_0  
+  VERSION_DOT_FILENAME: 3.24.%APPVEYOR_BUILD_NUMBER%.0  
   CHOCO_API_KEY:
     secure: ZeAW38gXYNcJmxTOEGhA1RC5XzmJVvxVM8bsCCARnbYHEDmtQiRZxV4G+/KY4wW9
 #  APPVEYOR_RDP_PASSWORD: Letmein1!
@@ -103,4 +104,6 @@ artifacts:
     name: Ditto Debug
   - path: DittoSetup\output\Ditto_%VERSION_FILENAME%.appx
     name: Ditto appx
+  - path: DittoSetup\Chocolatey\ditto.%VERSION_DOT_FILENAME%-beta.nupkg
+    name: Ditto Choco
 
