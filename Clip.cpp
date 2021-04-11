@@ -415,7 +415,6 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 	//  for both... i.e. we only fetch the description format type once.
 	CClipFormat cfDesc;
 	bool bIsDescSet = false;
-	bool checkedRegEx = false;
 
 	cfDesc.m_cfType = CF_UNICODETEXT;	
 	if(oleData.IsDataAvailable(cfDesc.m_cfType))
@@ -434,16 +433,6 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 			Sleep(10);
 		}
 		bIsDescSet = SetDescFromText(cfDesc.m_hgData, true);
-
-		if (bIsDescSet)
-		{
-			checkedRegEx = true;
-			std::wstring stringData(this->m_Desc); 
-			if (g_Opt.m_regexHelper.TextMatchFilters(activeApp, stringData))
-			{
-				return -1;
-			}		
-		}
 
 		Log(StrF(_T("Tried to set description from cf_unicode text, Set: %d, Desc: [%s]"), bIsDescSet, m_Desc.Left(30)));
 	}
@@ -570,16 +559,6 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 	}
 	
 	oleData.Release();
-
-	if (checkedRegEx == false &&
-		this->m_Desc != _T(""))
-	{
-		std::wstring stringData(this->m_Desc);
-		if (g_Opt.m_regexHelper.TextMatchFilters(activeApp, stringData))
-		{
-			return -1;
-		}
-	}
 	
 	if(m_Formats.GetSize() == 0)
 	{
@@ -587,6 +566,7 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 		return FALSE;
 	}
 
+	bool calledOnCopyScript = false;
 	try
 	{
 		for (auto & listItem : g_Opt.m_copyScripts.m_list)
@@ -603,6 +583,8 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 
 					return -1;
 				}
+
+				calledOnCopyScript = true;
 
 				Log(StrF(_T("End of process copy name: %s, returned true, last Error: %s"), listItem.m_name, onCopy.m_lastError));
 			}
@@ -622,7 +604,47 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 	}
 	catch (...)
 	{
-		Log(_T("save copy exception 2"));
+		Log(_T("save copy exception 2"));	
+	}
+
+	//copy script could have changed the data, make sure the description matches
+	if (calledOnCopyScript)
+	{
+		auto uString = this->GetUnicodeTextFormat();
+		if (uString != _T(""))
+		{
+			if (uString.GetLength() > g_Opt.m_bDescTextSize)
+			{
+				m_Desc = uString.Left(g_Opt.m_bDescTextSize);
+			}
+			else
+			{
+				m_Desc = uString;
+			}
+		}
+		else
+		{
+			auto aString = this->GetCFTextTextFormat();
+			if (aString.GetLength() > g_Opt.m_bDescTextSize)
+			{
+				m_Desc = aString.Left(g_Opt.m_bDescTextSize);
+			}
+			else
+			{
+				m_Desc = aString;
+			}
+		}
+
+		Log(StrF(_T("Called on copy script, this could change the description, regenerated desc: %s"), m_Desc));
+	}
+
+	if (this->m_Desc != _T(""))
+	{
+		std::wstring stringData(this->m_Desc);
+		if (g_Opt.m_regexHelper.TextMatchFilters(activeApp, stringData))
+		{
+			return -1;
+		}
 	}
 
 	return TRUE;
