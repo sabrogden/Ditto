@@ -94,8 +94,7 @@ bool CPasteImageAsHtmlImage::ConvertPathToHtmlImageTag(const CDittoInfo &DittoIn
 		if(csIMG.IsEmpty() == FALSE)
 		{
 			pFormats->DeleteAll();
-			CStringA utf8;
-			CTextConvert::ConvertToUTF8(csIMG, utf8);
+			CStringA utf8 = CTextConvert::UnicodeToUTF8(csIMG);
 			pFormats->AddNew(DittoAddinHelpers::GetFormatID(_T("HTML Format")), DittoAddinHelpers::NewGlobalP(utf8.GetBuffer(), utf8.GetLength()));
 			bRet = true;
 		}

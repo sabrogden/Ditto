@@ -54,9 +54,8 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 			break;
 		case MyEnums::DATA_START:
 		{
-			CString csFileName;
+			CString csFileName = CTextConvert::Utf8ToUnicode(Info.m_cDesc);
 			nFilesRecieved++;
-			CTextConvert::ConvertFromUTF8(Info.m_cDesc, csFileName);
 
 			if(m_pProgress != NULL)
 			{
@@ -118,16 +117,16 @@ long CFileRecieve::RecieveFiles(SOCKET sock, CString csIP, CFileTransferProgress
 						md5Error = true;
 						::DeleteFile(fileName);
 
-						LogSendRecieveInfo(StrF(_T("MD5 ERROR Receiving data_end for file: %s, local md5: %s remote md5: %s"), fileName, CTextConvert::MultiByteToUnicodeString(localMd5), CTextConvert::MultiByteToUnicodeString(remoteMd5)));
+						LogSendRecieveInfo(StrF(_T("MD5 ERROR Receiving data_end for file: %s, local md5: %s remote md5: %s"), fileName, CTextConvert::AnsiToUnicode(localMd5), CTextConvert::AnsiToUnicode(remoteMd5)));
 					}
 					else
 					{
-						LogSendRecieveInfo(StrF(_T("Receiving data_end for file: %s, MD5 MATCH local md5: %s remote md5: %s"), fileName, CTextConvert::MultiByteToUnicodeString(localMd5), CTextConvert::MultiByteToUnicodeString(remoteMd5)));
+						LogSendRecieveInfo(StrF(_T("Receiving data_end for file: %s, MD5 MATCH local md5: %s remote md5: %s"), fileName, CTextConvert::AnsiToUnicode(localMd5), CTextConvert::AnsiToUnicode(remoteMd5)));
 					}
 				}
 				else
 				{
-					LogSendRecieveInfo(StrF(_T("Not checking mdf on file transfer, either setting is off or md5 is not sent, md5 Passed In: %s, setting to check: %d"), CTextConvert::MultiByteToUnicodeString(Info.m_md5), CGetSetOptions::GetCheckMd5OnFileTransfers()));
+					LogSendRecieveInfo(StrF(_T("Not checking mdf on file transfer, either setting is off or md5 is not sent, md5 Passed In: %s, setting to check: %d"), CTextConvert::AnsiToUnicode(Info.m_md5), CGetSetOptions::GetCheckMd5OnFileTransfers()));
 				}
 
 				if (md5Error == false)

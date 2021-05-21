@@ -155,7 +155,7 @@ BOOL CClient::OpenConnection(const TCHAR* servername)
 		pos++;
 	}
 
-	CStringA csServerNameA = CTextConvert::ConvertToChar(parsedServerName);
+	CStringA csServerNameA = CTextConvert::UnicodeToAnsi(parsedServerName);
 
 	//11-5-06 Serge Baranov found that if we are passing in an ip then
 	//don't look the name up using gethostbyname/gethostbyaddr->
@@ -208,21 +208,15 @@ BOOL CClient::SendItem(CClip *pClip, bool manualSend)
 	}
 
 	//Send all text over as UTF-8
-	CStringA dest;
-	if(CTextConvert::ConvertToUTF8(GetComputerName(), dest))
-	{
-		strncpy(Info.m_cComputerName, dest, sizeof(Info.m_cComputerName));
-	}
-
-	if(CTextConvert::ConvertToUTF8(GetIPAddress(), dest))
-	{
-		strncpy(Info.m_cIP, dest, sizeof(Info.m_cIP));	
-	}
-
-	if(CTextConvert::ConvertToUTF8(pClip->m_Desc, dest))
-	{
-		strncpy(Info.m_cDesc, dest, sizeof(Info.m_cDesc));
-	}
+	CStringA dest = CTextConvert::UnicodeToUTF8(GetComputerName());
+	strncpy(Info.m_cComputerName, dest, sizeof(Info.m_cComputerName));
+	
+	dest = CTextConvert::UnicodeToUTF8(GetIPAddress());
+	strncpy(Info.m_cIP, dest, sizeof(Info.m_cIP));	
+	
+	dest = CTextConvert::UnicodeToUTF8(pClip->m_Desc);
+	strncpy(Info.m_cDesc, dest, sizeof(Info.m_cDesc));
+	
 	
 	Info.m_cDesc[sizeof(Info.m_cDesc)-1] = 0;
 	Info.m_cComputerName[sizeof(Info.m_cComputerName)-1] = 0;
@@ -274,13 +268,10 @@ BOOL CClient::SendClipFormat(CClipFormat* pCF)
 			Info.m_lParameter1 = nLenOutput;
 
 			//Send over as UTF-8
-			CStringA dest;
-			if(CTextConvert::ConvertToUTF8(GetFormatName(pCF->m_cfType), dest))
-			{
-				strncpy(Info.m_cDesc, dest, sizeof(Info.m_cDesc));
-				Info.m_cDesc[sizeof(Info.m_cDesc)-1] = 0;
-			}
-
+			CStringA dest = CTextConvert::UnicodeToUTF8(GetFormatName(pCF->m_cfType));
+			strncpy(Info.m_cDesc, dest, sizeof(Info.m_cDesc));
+			Info.m_cDesc[sizeof(Info.m_cDesc)-1] = 0;
+			
 			if(m_SendSocket.SendCSendData(Info, MyEnums::DATA_START) == FALSE)
 				return FALSE;
 

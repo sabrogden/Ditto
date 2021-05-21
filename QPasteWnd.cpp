@@ -4267,7 +4267,7 @@ bool CQPasteWnd::DoExportToGoogleTranslate()
 					CStringA aText = clip.GetCFTextTextFormat();
 					if (aText != _T(""))
 					{
-						clipText = CTextConvert::MultiByteToUnicodeString(aText);
+						clipText = CTextConvert::AnsiToUnicode(aText);
 					}
 				}
 
@@ -7301,8 +7301,8 @@ bool CQPasteWnd::DoActionEmailTo()
 
 	if (IDs.GetCount() > 1)
 	{
-		CStringA SepA = CTextConvert::ConvertToChar(g_Opt.GetMultiPasteSeparator());
-		CStringW SepW = CTextConvert::ConvertToUnicode(g_Opt.GetMultiPasteSeparator());
+		CStringA SepA = CTextConvert::UnicodeToAnsi(g_Opt.GetMultiPasteSeparator());
+		CStringW SepW = g_Opt.GetMultiPasteSeparator();
 
 		CHTMLFormatAggregator Html(SepA);
 		if (IDs.AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse, false))
@@ -7397,8 +7397,7 @@ bool CQPasteWnd::DoActionEmailTo()
 					CString html;
 					html.Format(_T("<html><img src=\"%s\"></html>"), file);
 
-					CStringA convToUtf8;
-					CTextConvert::ConvertToUTF8(html, convToUtf8);
+					CStringA convToUtf8 = CTextConvert::UnicodeToUTF8(html);
 					f.Write(convToUtf8.GetBuffer(), convToUtf8.GetLength());
 
 					f.Close();
@@ -7435,7 +7434,7 @@ bool CQPasteWnd::DoActionGmail()
 
 	if (IDs.GetCount() > 1)
 	{
-		CStringW SepW = CTextConvert::ConvertToUnicode(g_Opt.GetMultiPasteSeparator());
+		CStringW SepW = g_Opt.GetMultiPasteSeparator();
 		CCF_UnicodeTextAggregator CFUnicodeText(SepW);
 		if (IDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse, false))
 		{
@@ -7446,7 +7445,7 @@ bool CQPasteWnd::DoActionGmail()
 		}
 		else
 		{
-			CStringA SepA = CTextConvert::ConvertToChar(g_Opt.GetMultiPasteSeparator());
+			CStringA SepA = CTextConvert::UnicodeToAnsi(g_Opt.GetMultiPasteSeparator());
 			CCF_TextAggregator CFText(SepA);
 			if (IDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse, false))
 			{

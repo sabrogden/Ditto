@@ -38,8 +38,7 @@ void CChaiScriptXml::Load(CString values)
 	m_list.clear();
 	
 	TiXmlDocument doc;
-	CStringA xmlA;
-	CTextConvert::ConvertToUTF8(values, xmlA);
+	CStringA xmlA = CTextConvert::UnicodeToUTF8(values);
 	doc.Parse(xmlA);
 
 	TiXmlElement *ItemHeader = doc.FirstChildElement("ChaiScripts");
@@ -85,24 +84,19 @@ CString CChaiScriptXml::Save()
 
 		friendElement->SetAttribute("active", listItem.m_active);
 
-		CStringA name;
-		CTextConvert::ConvertToUTF8(listItem.m_name, name);
+		CStringA name = CTextConvert::UnicodeToUTF8(listItem.m_name);
 		friendElement->SetAttribute("name", name);
 
-		CStringA desc;
-		CTextConvert::ConvertToUTF8(listItem.m_description, desc);
+		CStringA desc = CTextConvert::UnicodeToUTF8(listItem.m_description);
 		friendElement->SetAttribute("description", desc);
 
-		CStringA script;
-		CTextConvert::ConvertToUTF8(listItem.m_script, script);
+		CStringA script = CTextConvert::UnicodeToUTF8(listItem.m_script);
 		friendElement->SetAttribute("script", script);
 
-		CStringA guid;
-		CTextConvert::ConvertToUTF8(listItem.m_guid, guid);
+		CStringA guid = CTextConvert::UnicodeToUTF8(listItem.m_guid);
 		friendElement->SetAttribute("guid", guid);
 
-		CStringA version;
-		CTextConvert::ConvertToUTF8(listItem.m_version, version);
+		CStringA version = CTextConvert::UnicodeToUTF8(listItem.m_version);
 		friendElement->SetAttribute("version", version);
 
 		friendOuter->LinkEndChild(friendElement);

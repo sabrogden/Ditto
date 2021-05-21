@@ -1075,8 +1075,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		Clip.m_cfType = GetFormatID(_T("HTML Format"));
 		if (GetClipData(nItem, Clip) && Clip.m_hgData)
 		{
-			CString html;
-			CTextConvert::ConvertFromUTF8(Clip.GetAsCStringA(), html);
+			CString html = CTextConvert::Utf8ToUnicode(Clip.GetAsCStringA());
 			m_pToolTip->SetHtmlText(html);		
 
 			Clip.Free();

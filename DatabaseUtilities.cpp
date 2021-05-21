@@ -515,7 +515,7 @@ BOOL BackupDB(CString dbPath, CString backupPath)
 			char *pBuffer = new char[65536];
 			if(pBuffer != NULL)
 			{
-				gzFile f = gzopen(CTextConvert::ConvertToChar(backupPath), "w");
+				gzFile f = gzopen(CTextConvert::UnicodeToAnsi(backupPath), "w");
 				
 				if(f != NULL)
 				{
@@ -592,7 +592,7 @@ BOOL RestoreDB(CString backupPath)
 
 	try
 	{
-		gzFile f = gzopen(CTextConvert::ConvertToChar(backupPath), "r");
+		gzFile f = gzopen(CTextConvert::UnicodeToAnsi(backupPath), "r");
 		if (f != NULL)
 		{
 			CFile file;

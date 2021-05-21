@@ -119,7 +119,7 @@ bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)
 
 	Log(StrF(_T("Loading Theme %s"), csPath));
 
-	CStringA csPathA = CTextConvert::ConvertToChar(csPath);
+	CStringA csPathA = CTextConvert::UnicodeToAnsi(csPath);
 
 	TiXmlDocument doc(csPathA);
 	if(!doc.LoadFile())

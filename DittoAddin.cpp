@@ -80,7 +80,7 @@ bool CDittoAddin::SupportedFunctions(const CDittoInfo &DittoInfo, FunctionType t
 			for(int i = 0; i < nCount; i++)
 			{
 				CFunction func = Functions[i];
-				Log(StrF(_T("Ditto Addin - Supported Function Display: %s, Function: %s, Desc: %s"), func.m_csDisplayName, CTextConvert::MultiByteToUnicodeString(func.m_csFunction), func.m_csDetailDescription));
+				Log(StrF(_T("Ditto Addin - Supported Function Display: %s, Function: %s, Desc: %s"), func.m_csDisplayName, CTextConvert::AnsiToUnicode(func.m_csFunction), func.m_csDetailDescription));
 			}
 		}
 		else

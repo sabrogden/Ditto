@@ -217,7 +217,7 @@ bool CDittoRulerRichEditCtrl::LoadRTFData(CClip &Clip)
 		csRTFOriginal = r;
 	}
 
-	CStringA csRTF = CTextConvert::ConvertToChar(csRTFOriginal);
+	CStringA csRTF = CTextConvert::UnicodeToAnsi(csRTFOriginal);
 	CClipFormat format;
 	format.m_cfType = RegisterClipboardFormat(_T("Rich Text Format"));
 	int nLength = csRTF.GetLength() + 1;

@@ -75,14 +75,14 @@ bool ChaiScriptOnCopy::ProcessScript(CDittoChaiScript &clipData, std::string scr
 		std::string eString;
 		eString += ee.pretty_print();
 
-		m_lastError = CTextConvert::MultiByteToUnicodeString(eString.c_str());
+		m_lastError = CTextConvert::AnsiToUnicode(eString.c_str());
 	}
 	catch (std::exception &e)
 	{
 		std::string eString;
 		eString += e.what();
 
-		m_lastError = CTextConvert::MultiByteToUnicodeString(eString.c_str());
+		m_lastError = CTextConvert::AnsiToUnicode(eString.c_str());
 	}
 	catch (CException *ex)
 	{

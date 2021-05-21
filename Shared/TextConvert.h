@@ -4,17 +4,29 @@ class CTextConvert
 {
 public:
 
-	CTextConvert();
-	~CTextConvert();
+	static CStringA UnicodeToAnsi(CString unicode)
+	{
+		CStringA ansi = CW2A(unicode, CP_ACP);
+		return ansi;
+	}
 
-	static bool ConvertFromUTF8(const CStringA &src, CString &dest);
-	static bool ConvertToUTF8(const CString &src, CStringA &dest);
+	static CStringA UnicodeToUTF8(CString unicode)
+	{
+		CStringA utf8 = CW2A(unicode, CP_UTF8);
+		return utf8;
+	}
 
-	static CStringA UnicodeStringToMultiByte(const CStringW &srcString);
-	static CStringW MultiByteToUnicodeString(const CStringA &srcString);
+	static CString AnsiToUnicode(CStringA ansi)
+	{
+		CString unicode = CA2W(ansi);
+		return unicode;
+	}
 
-	static CStringA ConvertToChar(const CString &src);
-	static CStringW ConvertToUnicode(const CString &src);
+	static CString Utf8ToUnicode(CStringA ansi)
+	{
+		CString unicode = CA2W(ansi, CP_UTF8);
+		return unicode;
+	}
 
 protected:
 };

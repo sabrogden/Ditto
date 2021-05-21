@@ -354,12 +354,12 @@ bool CMultiLanguage::LoadLanguageFile(CString csFile)
 		return false;
 	}
 
-	CStringA csPathA = CTextConvert::ConvertToChar(csPath);
+	CStringA csPathA = CTextConvert::UnicodeToAnsi(csPath);
 
 	TiXmlDocument doc(csPathA);
 	if(!doc.LoadFile())
 	{
-		m_csLastError.Format(_T("Error loading file %s - reason = %s, Line: %d, column: %d"), csFile, CTextConvert::ConvertToUnicode(doc.ErrorDesc()), doc.ErrorRow(), doc.ErrorCol());
+		m_csLastError.Format(_T("Error loading file %s - reason = %s, Line: %d, column: %d"), csFile, CTextConvert::AnsiToUnicode(doc.ErrorDesc()), doc.ErrorRow(), doc.ErrorCol());
 		Log(m_csLastError);
 		return false;
 	}
@@ -408,7 +408,7 @@ bool CMultiLanguage::LoadLanguageFile(CString csFile)
 
 bool CMultiLanguage::LoadSection(TiXmlNode &doc, LANGUAGE_ARRAY &Array, CString csSection)
 {
-	CStringA csSectionA = CTextConvert::ConvertToChar(csSection);
+	CStringA csSectionA = CTextConvert::UnicodeToAnsi(csSection);
 	TiXmlNode *node = doc.FirstChild(csSectionA);
 	if(!node)
 	{
@@ -444,7 +444,7 @@ bool CMultiLanguage::LoadSection(TiXmlNode &doc, LANGUAGE_ARRAY &Array, CString 
 				}
  				
 				LPCSTR Value = ForeignNode->Value();
-				CTextConvert::ConvertFromUTF8(Value, plItem->m_csForeignLang);
+				plItem->m_csForeignLang = CTextConvert::Utf8ToUnicode(Value);
 
 				//Replace the literal "\n" with line feeds
  				plItem->m_csForeignLang.Replace(_T("\\n"), csLineFeed);
@@ -461,7 +461,7 @@ bool CMultiLanguage::LoadSection(TiXmlNode &doc, LANGUAGE_ARRAY &Array, CString 
 
 bool CMultiLanguage::LoadStringTableSection(TiXmlNode &doc, LANGUAGE_MAP &Map, CString csSection)
 {
-	CStringA csSectionA = CTextConvert::ConvertToChar(csSection);
+	CStringA csSectionA = CTextConvert::UnicodeToAnsi(csSection);
 	TiXmlNode *node = doc.FirstChild(csSectionA);
 	if(!node)
 	{
@@ -491,7 +491,7 @@ bool CMultiLanguage::LoadStringTableSection(TiXmlNode &doc, LANGUAGE_MAP &Map, C
 		if(ForeignNode) 
 		{
 			LPCSTR Value = ForeignNode->Value();
-			CTextConvert::ConvertFromUTF8(Value, plItem->m_csForeignLang);
+			plItem->m_csForeignLang = CTextConvert::Utf8ToUnicode(Value);
 
 			//Replace the literal "\n" with line feeds
 			plItem->m_csForeignLang.Replace(_T("\\n"), csLineFeed);

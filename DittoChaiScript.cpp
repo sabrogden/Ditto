@@ -20,13 +20,44 @@ CDittoChaiScript::~CDittoChaiScript()
 {
 }
 
+std::wstring CDittoChaiScript::GetUnicodeString()
+{
+	std::wstring s = _T("");
+	if (m_pClip)
+	{
+		IClipFormat* pFormat = m_pClip->Clips()->FindFormatEx(CF_UNICODETEXT);
+		if (pFormat)
+		{
+			s = pFormat->GetAsCString();
+		}
+		else
+		{
+			s = CTextConvert::AnsiToUnicode(GetAsciiString().c_str());
+		}
+	}
+
+	return s;
+}
+
+void CDittoChaiScript::SetUnicodeString(std::wstring stringVal)
+{
+	if (m_pClip)
+	{
+		m_pClip->Clips()->DeleteAll();
+
+		HGLOBAL hGlobal = ::NewGlobalP((LPVOID)stringVal.c_str(), (stringVal.size() + 1) * 2);
+		ASSERT(hGlobal);
+
+		m_pClip->Clips()->AddNew(CF_UNICODETEXT, hGlobal);
+	}
+}
 
 std::string CDittoChaiScript::GetAsciiString()
 {
 	std::string s = "";
 	if (m_pClip)
 	{
-		IClipFormat *pFormat = m_pClip->Clips()->FindFormatEx(CF_TEXT);
+		IClipFormat* pFormat = m_pClip->Clips()->FindFormatEx(CF_TEXT);
 		if (pFormat)
 		{
 			s = pFormat->GetAsCStringA();
@@ -49,6 +80,8 @@ void CDittoChaiScript::SetAsciiString(std::string stringVal)
 	}
 }
 
+
+
 std::string CDittoChaiScript::GetClipMD5(std::string clipboardFormat)
 {
 	CMd5 md5;
@@ -58,7 +91,7 @@ std::string CDittoChaiScript::GetClipMD5(std::string clipboardFormat)
 
 	if (m_pClip)
 	{
-		int formatId = GetFormatID(CTextConvert::MultiByteToUnicodeString(clipboardFormat.c_str()));
+		int formatId = GetFormatID(CTextConvert::AnsiToUnicode(clipboardFormat.c_str()));
 
 		IClipFormat *pFormat = m_pClip->Clips()->FindFormatEx(formatId);
 		if (pFormat)
@@ -84,7 +117,7 @@ SIZE_T CDittoChaiScript::GetClipSize(std::string clipboardFormat)
 	SIZE_T size = 0;
 	if (m_pClip)
 	{
-		int formatId = GetFormatID(CTextConvert::MultiByteToUnicodeString(clipboardFormat.c_str()));
+		int formatId = GetFormatID(CTextConvert::AnsiToUnicode(clipboardFormat.c_str()));
 
 		IClipFormat *pFormat = m_pClip->Clips()->FindFormatEx(formatId);
 		if (pFormat)
@@ -101,7 +134,7 @@ BOOL CDittoChaiScript::FormatExists(std::string clipboardFormat)
 	BOOL exists = FALSE;
 	if (m_pClip)
 	{
-		int formatId = GetFormatID(CTextConvert::MultiByteToUnicodeString(clipboardFormat.c_str()));
+		int formatId = GetFormatID(CTextConvert::AnsiToUnicode(clipboardFormat.c_str()));
 
 		IClipFormat *pFormat = m_pClip->Clips()->FindFormatEx(formatId);
 		if (pFormat)
@@ -118,7 +151,7 @@ BOOL CDittoChaiScript::RemoveFormat(std::string clipboardFormat)
 	BOOL removed = FALSE;
 	if (m_pClip)
 	{
-		int formatId = GetFormatID(CTextConvert::MultiByteToUnicodeString(clipboardFormat.c_str()));
+		int formatId = GetFormatID(CTextConvert::AnsiToUnicode(clipboardFormat.c_str()));
 
 		if (m_pClip->Clips()->RemoveFormat(formatId))
 		{
@@ -148,8 +181,8 @@ BOOL CDittoChaiScript::AsciiTextMatchesRegex(std::string regex)
 {
 	BOOL matches = false;
 
-	auto ascii = GetAsciiString();
-	std::regex integer(regex);
+	auto ascii = GetUnicodeString();
+	std::wregex integer(CTextConvert::AnsiToUnicode(regex.c_str()));
 	if (regex_match(ascii, integer))
 	{
 		matches = true;
@@ -159,11 +192,14 @@ BOOL CDittoChaiScript::AsciiTextMatchesRegex(std::string regex)
 
 void CDittoChaiScript::AsciiTextReplaceRegex(std::string regex, std::string replaceWith)
 {
-	auto ascii = GetAsciiString();
-	std::regex integer(regex);
+	if (AsciiTextMatchesRegex(regex))
+	{
+		CStringA ascii = CTextConvert::UnicodeToUTF8(GetUnicodeString().c_str());
+		std::regex integer(regex.c_str());
 
-	auto newAscii = regex_replace(ascii, integer, replaceWith);
-	SetAsciiString(newAscii);
+		auto newAscii = std::regex_replace(ascii.GetBuffer(), integer, replaceWith);
+		SetUnicodeString(CTextConvert::Utf8ToUnicode(newAscii.c_str()).GetBuffer());
+	}
 }
 
 
@@ -188,7 +224,7 @@ BOOL CDittoChaiScript::DescriptionMatchesRegex(std::string regex)
 
 	if (m_pClip)
 	{
-		std:string ascii(CTextConvert::ConvertToChar(m_pClip->Description()).GetBuffer());
+		std:string ascii(CTextConvert::UnicodeToAnsi(m_pClip->Description()).GetBuffer());
 		std::regex integer(regex);
 		if (regex_match(ascii, integer))
 		{
@@ -203,7 +239,7 @@ void CDittoChaiScript::DescriptionReplaceRegex(std::string regex, std::string re
 {
 	if (m_pClip)
 	{
-		std:string ascii(CTextConvert::ConvertToChar(m_pClip->Description()).GetBuffer());
+		std:string ascii(CTextConvert::UnicodeToAnsi(m_pClip->Description()).GetBuffer());
 		std::regex integer(regex);
 
 		auto newAscii = regex_replace(ascii, integer, replaceWith);

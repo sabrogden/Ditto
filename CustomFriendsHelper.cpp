@@ -21,8 +21,7 @@ void CCustomFriendsHelper::Load()
 	CString oldValues = CGetSetOptions::GetCustomSendToList();
 
 	TiXmlDocument doc;
-	CStringA xmlA;
-	CTextConvert::ConvertToUTF8(oldValues, xmlA);
+	CStringA xmlA = CTextConvert::UnicodeToUTF8(oldValues);
 	doc.Parse(xmlA);
 
 	TiXmlElement *ItemHeader = doc.FirstChildElement("CustomFriends");
@@ -65,12 +64,10 @@ void CCustomFriendsHelper::Save()
 	{
 		TiXmlElement* friendElement = new TiXmlElement("Friend");
 
-		CStringA nameA;
-		CTextConvert::ConvertToUTF8(listItem.m_name, nameA);
+		CStringA nameA = CTextConvert::UnicodeToUTF8(listItem.m_name);
 		friendElement->SetAttribute("name",  nameA);
 
-		CStringA descA;
-		CTextConvert::ConvertToUTF8(listItem.m_desc, descA);
+		CStringA descA = CTextConvert::UnicodeToUTF8(listItem.m_desc);
 		friendElement->SetAttribute("desc", descA);
 
 		friendOuter->LinkEndChild(friendElement);

@@ -576,8 +576,8 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 				Log(StrF(_T("Start of process copy name: %s, script: %s"), listItem.m_name, listItem.m_script));
 
 				ChaiScriptOnCopy onCopy;
-				CDittoChaiScript clipData(this, (LPCSTR)CTextConvert::ConvertToChar(activeApp), (LPCSTR)CTextConvert::ConvertToChar(activeAppTitle));
-				if (onCopy.ProcessScript(clipData, (LPCSTR)CTextConvert::ConvertToChar(listItem.m_script)) == false)
+				CDittoChaiScript clipData(this, (LPCSTR)CTextConvert::UnicodeToAnsi(activeApp), (LPCSTR)CTextConvert::UnicodeToAnsi(activeAppTitle));
+				if (onCopy.ProcessScript(clipData, (LPCSTR)CTextConvert::UnicodeToAnsi(listItem.m_script)) == false)
 				{
 					Log(StrF(_T("End of process copy name: %s, returned false, not saving this copy to Ditto, last Error: %s"), listItem.m_name, onCopy.m_lastError));
 
@@ -625,13 +625,20 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 		else
 		{
 			auto aString = this->GetCFTextTextFormat();
-			if (aString.GetLength() > g_Opt.m_bDescTextSize)
+			if (aString != "")
 			{
-				m_Desc = aString.Left(g_Opt.m_bDescTextSize);
+				if (aString.GetLength() > g_Opt.m_bDescTextSize)
+				{
+					m_Desc = aString.Left(g_Opt.m_bDescTextSize);
+				}
+				else
+				{
+					m_Desc = aString;
+				}
 			}
 			else
 			{
-				m_Desc = aString;
+				SetDescFromType();
 			}
 		}
 
@@ -1771,8 +1778,7 @@ BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL utf8)
 		
 		if(utf8 && w != _T(""))
 		{
-			CStringA convToUtf8;
-			CTextConvert::ConvertToUTF8(w, convToUtf8);
+			CStringA convToUtf8 = CTextConvert::UnicodeToUTF8(w);
 			std::byte header[2];
 			header[0] = (std::byte)0xEF;
 			header[1] = (std::byte)0xBB;
@@ -1967,8 +1973,7 @@ bool CClip::AddFileDataToData(CString &errorMessage)
 					if (fileSize < maxSize)
 					{
 						CString src(filePath);
-						CStringA csFilePath;
-						CTextConvert::ConvertToUTF8(src, csFilePath);
+						CStringA csFilePath = CTextConvert::UnicodeToUTF8(src);
 						
 						int bufferSize = (int)fileSize + csFilePath.GetLength() + 1 + md5StringLength + 1;;
 						char *pBuffer = new char[bufferSize];

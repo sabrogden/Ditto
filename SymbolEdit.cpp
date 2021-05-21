@@ -199,8 +199,7 @@ CString CSymbolEdit::SavePastSearches()
 	{		
 		TiXmlElement* searchElement = new TiXmlElement("Search");
 
-		CStringA t;
-		CTextConvert::ConvertToUTF8(m_searches[i], t);
+		CStringA t = CTextConvert::UnicodeToUTF8(m_searches[i]);
 		searchElement->SetAttribute("text", t);
 
 		outer->LinkEndChild(searchElement);
@@ -219,8 +218,7 @@ void CSymbolEdit::LoadPastSearches(CString values)
 	m_searches.RemoveAll();
 
 	TiXmlDocument doc;
-	CStringA xmlA;
-	CTextConvert::ConvertToUTF8(values, xmlA);
+	CStringA xmlA = CTextConvert::UnicodeToUTF8(values);
 	doc.Parse(xmlA);
 
 	TiXmlElement *ItemHeader = doc.FirstChildElement("PastSearches");

@@ -570,7 +570,7 @@ void CCopyProperties::OnLbnSelchangeCopyData()
 
 								CStringA md5String = md5.MD5FinalToString();
 
-								this->SetDlgItemText(IDC_EDIT_MD5, CTextConvert::MultiByteToUnicodeString(md5String));
+								this->SetDlgItemText(IDC_EDIT_MD5, CTextConvert::AnsiToUnicode(md5String));
 							}
 						}
 					}

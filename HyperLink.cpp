@@ -421,7 +421,7 @@ HINSTANCE CHyperLink::GotoURL(LPCTSTR url, int showcmd)
                 lstrcat(pos, _T(" "));
                 lstrcat(pos, url);
 				
-				CStringA keyA = CTextConvert::ConvertToChar(key);
+				CStringA keyA = CTextConvert::UnicodeToAnsi(key);
                 result = (HINSTANCE)WinExec(keyA, showcmd);
             }
         }

@@ -89,7 +89,7 @@ BOOL COleClipSource::DoImmediateRender()
 
 	if(count > 1)
 	{
-		CStringA SepA = CTextConvert::ConvertToChar(g_Opt.GetMultiPasteSeparator());
+		CStringA SepA = CTextConvert::UnicodeToAnsi(g_Opt.GetMultiPasteSeparator());
 		CCF_TextAggregator CFText(SepA);
 		if(m_ClipIDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 		{
@@ -99,7 +99,7 @@ BOOL COleClipSource::DoImmediateRender()
 			cf.m_autoDeleteData = false;
 		}
 
-		CStringW SepW = CTextConvert::ConvertToUnicode(g_Opt.GetMultiPasteSeparator());
+		CStringW SepW = g_Opt.GetMultiPasteSeparator();
 		CCF_UnicodeTextAggregator CFUnicodeText(SepW);
 		if(m_ClipIDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 		{
@@ -210,7 +210,7 @@ BOOL COleClipSource::DoImmediateRender()
 
 					ChaiScriptOnCopy onPaste;
 					CDittoChaiScript clipData(&clip, "", "");
-					if (onPaste.ProcessScript(clipData, (LPCSTR)CTextConvert::ConvertToChar(element.m_script)) == false)
+					if (onPaste.ProcessScript(clipData, (LPCSTR)CTextConvert::UnicodeToAnsi(element.m_script)) == false)
 					{
 						Log(StrF(_T("End of paste script name: %s, returned false, not saving this copy to Ditto, last Error: %s"), element.m_name, onPaste.m_lastError));
 
@@ -716,7 +716,7 @@ void COleClipSource::AddDateTime(CClip &clip)
 		string += "\r\n\r\n";
 
 		COleDateTime now(COleDateTime::GetCurrentTime());
-		string += CTextConvert::UnicodeStringToMultiByte(now.Format());
+		string += CTextConvert::UnicodeToAnsi(now.Format());
 
 		HGLOBAL hGlobal = NewGlobalP(string.GetBuffer(), ((string.GetLength() + 1)));
 
@@ -738,7 +738,7 @@ void COleClipSource::AddDateTime(CClip &clip)
 			COleDateTime now(COleDateTime::GetCurrentTime());
 				
 			CStringA insert;
-			insert.Format("\\par\r\n\\par\r\n%s", CTextConvert::UnicodeStringToMultiByte(now.Format()));
+			insert.Format("\\par\r\n\\par\r\n%s", CTextConvert::UnicodeToAnsi(now.Format()));
 
 			int count = string.Insert(pos, insert);
 		}
@@ -817,11 +817,9 @@ void COleClipSource::SaveDittoFileDataToFile(CClip &clip)
 				CMd5 calcMd5;
 				CStringA md5String = calcMd5.CalcMD5FromString(stringData, dataSize);
 
-				CString unicodeFilePath;
-				CTextConvert::ConvertFromUTF8(src, unicodeFilePath);
+				CString unicodeFilePath = CTextConvert::Utf8ToUnicode(src);
 
-				CString unicodeMd5;
-				CTextConvert::ConvertFromUTF8(md5String, unicodeMd5);
+				CString unicodeMd5 = CTextConvert::Utf8ToUnicode(md5String);
 
 				Log(StrF(_T("Saving file contents from Ditto, original file: %s, size: %d, md5: %s"), unicodeFilePath, dataSize, unicodeMd5));
 
@@ -1060,8 +1058,8 @@ BOOL COleClipSource::OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlob
 					CString csComputerName;
 					CString csIP;
 
-					CTextConvert::ConvertFromUTF8(pData->m_cIP, csIP);
-					CTextConvert::ConvertFromUTF8(pData->m_cComputerName, csComputerName);
+					csIP = CTextConvert::Utf8ToUnicode(pData->m_cIP);
+					csComputerName = CTextConvert::Utf8ToUnicode(pData->m_cComputerName);
 					
 					GlobalUnlock(pDittoDelayCF_HDROP->m_hgData);
 

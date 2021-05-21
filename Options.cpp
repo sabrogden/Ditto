@@ -1544,20 +1544,14 @@ CString CGetSetOptions::GetExtraNetworkPassword(bool bFillArray)
 
 void CGetSetOptions::SetNetworkPassword(CString csPassword)
 {
-	CTextConvert Con;
-	Con.ConvertToUTF8(csPassword, m_csPassword);
-
+	m_csPassword = CTextConvert::UnicodeToUTF8(csPassword);
 	SetProfileString("NetworkStringPassword", csPassword);
 }
 
 CStringA CGetSetOptions::GetNetworkPassword()
 {
 	CString cs = GetProfileString("NetworkStringPassword", "LetMeIn");
-
-	CTextConvert Con;
-	CStringA csReturn;
-	Con.ConvertToUTF8(cs, csReturn);
-
+	CString csReturn = CTextConvert::UnicodeToUTF8(cs);
 	return csReturn;
 }
 

@@ -25,8 +25,8 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 		return CClip::LoadFormat(ElementAt(0), cfType);
 	}
 
-	CStringA SepA = CTextConvert::ConvertToChar(g_Opt.GetMultiPasteSeparator());
-	CStringW SepW = CTextConvert::ConvertToUnicode(g_Opt.GetMultiPasteSeparator());
+	CStringA SepA = CTextConvert::UnicodeToAnsi(g_Opt.GetMultiPasteSeparator());
+	CStringW SepW = g_Opt.GetMultiPasteSeparator();
 
 	if(cfType == CF_TEXT)
 	{

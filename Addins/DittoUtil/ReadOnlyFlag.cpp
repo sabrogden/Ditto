@@ -126,7 +126,7 @@ bool CReadOnlyFlag::LoadTextFiles(CStringArray &lines, IClipFormats *pFormats)
 		if(stringData != NULL)
 		{
 			CStringA string(stringData);
-			CStringW unicodeString(CTextConvert::MultiByteToUnicodeString(string));
+			CStringW unicodeString(CTextConvert::AnsiToUnicode(string));
 			CString delim(_T("\r\n"));
 
 			CTokenizer token(unicodeString, delim);

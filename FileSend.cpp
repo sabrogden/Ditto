@@ -124,12 +124,9 @@ BOOL CFileSend::SendFile(CString csFile)
 		CFileException ex;
 		if(file.Open(csFile, CFile::modeRead|CFile::typeBinary|CFile::shareDenyNone, &ex))
 		{
-			CStringA dest;
-			if(CTextConvert::ConvertToUTF8(csFile, dest))
-			{
-				strncpy(Info.m_cDesc, dest, sizeof(Info.m_cDesc));
-				Info.m_cDesc[sizeof(Info.m_cDesc)-1] = 0;
-			}
+			CStringA dest = CTextConvert::UnicodeToUTF8(csFile);
+			strncpy(Info.m_cDesc, dest, sizeof(Info.m_cDesc));
+			Info.m_cDesc[sizeof(Info.m_cDesc)-1] = 0;			
 
 			Info.m_lParameter1 = (long)file.GetLength();
 			if(m_Send.SendCSendData(Info, MyEnums::DATA_START))
@@ -181,7 +178,7 @@ BOOL CFileSend::SendFile(CString csFile)
 					CStringA csMd5 = md5.MD5FinalToString();
 					strncpy(Info.m_md5, csMd5, sizeof(Info.m_md5));
 
-					LogSendRecieveInfo(StrF(_T("Sending data_end for file: %s, md5: %s"), csFile, CTextConvert::MultiByteToUnicodeString(csMd5)));
+					LogSendRecieveInfo(StrF(_T("Sending data_end for file: %s, md5: %s"), csFile, CTextConvert::AnsiToUnicode(csMd5)));
 
 					if(m_Send.SendCSendData(Info, MyEnums::DATA_END))
 						bRet = TRUE;

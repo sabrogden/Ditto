@@ -283,15 +283,15 @@ void CScriptEditor::OnBnClickedButtonRun()
 	CClip clip;
 
 	ChaiScriptOnCopy test;
-	CDittoChaiScript clipData(&clip, (LPCSTR)CTextConvert::UnicodeStringToMultiByte(app), (LPCSTR)CTextConvert::UnicodeStringToMultiByte(appTitle));
-	clipData.SetAsciiString((LPCSTR)CTextConvert::UnicodeStringToMultiByte(input));
-	clipData.DescriptionReplaceRegex(".*", (LPCSTR)CTextConvert::UnicodeStringToMultiByte(input));
+	CDittoChaiScript clipData(&clip, (LPCSTR)CTextConvert::UnicodeToAnsi(app), (LPCSTR)CTextConvert::UnicodeToAnsi(appTitle));
+	clipData.SetAsciiString((LPCSTR)CTextConvert::UnicodeToAnsi(input));
+	clipData.DescriptionReplaceRegex(".*", (LPCSTR)CTextConvert::UnicodeToAnsi(input));
 	
-	test.ProcessScript(clipData, (LPCSTR)CTextConvert::UnicodeStringToMultiByte(script));
+	test.ProcessScript(clipData, (LPCSTR)CTextConvert::UnicodeToAnsi(script));
 
 	if (test.m_lastError == _T(""))
 	{
-		SetDlgItemText(IDC_EDIT_OUTPUT, _T("returned false\r\n") + CTextConvert::MultiByteToUnicodeString(clipData.GetAsciiString().c_str()));
+		SetDlgItemText(IDC_EDIT_OUTPUT, _T("returned false\r\n") + CTextConvert::AnsiToUnicode(clipData.GetAsciiString().c_str()));
 	}
 	else
 	{

@@ -45,7 +45,7 @@ UINT  MTServerThread(LPVOID pParam)
 	}
 	else
 	{
-		local.sin_addr.s_addr = inet_addr(CTextConvert::ConvertToChar(bindToIpAddress));
+		local.sin_addr.s_addr = inet_addr(CTextConvert::UnicodeToAnsi(bindToIpAddress));
 	}
 	local.sin_port = htons((u_short)g_Opt.m_lPort);
 	theApp.m_sSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -202,10 +202,10 @@ void CServer::OnStart(CSendInfo &info)
 	}
 	else
 	{
-		CTextConvert::ConvertFromUTF8(info.m_cIP, m_csIP);
+		m_csIP = CTextConvert::Utf8ToUnicode(info.m_cIP);
 	}
-	CTextConvert::ConvertFromUTF8(info.m_cComputerName, m_csComputerName);
-	CTextConvert::ConvertFromUTF8(info.m_cDesc, m_csDesc);
+	m_csComputerName = CTextConvert::Utf8ToUnicode(info.m_cComputerName);
+	m_csDesc = CTextConvert::Utf8ToUnicode(info.m_cDesc);
 
 	m_manualSend = info.m_manualSend;
 	m_respondPort = info.m_respondPort;
@@ -261,8 +261,7 @@ void CServer::OnDataStart(CSendInfo &info)
 {
 	LogSendRecieveInfo("::DATA_START -- START");
 
-	CString csFormat;
-	CTextConvert::ConvertFromUTF8(info.m_cDesc, csFormat);
+	CString csFormat = CTextConvert::Utf8ToUnicode(info.m_cDesc);
 	m_cf.m_cfType = GetFormatID(csFormat);
 	m_cf.m_hgData = 0;
 	
@@ -384,16 +383,12 @@ void CServer::AddRemoteCF_HDROPFormat()
 
 	CTextConvert Convert;
 
-	CStringA dest;
-	if(CTextConvert::ConvertToUTF8(m_csIP, dest))
-	{
-		strncpy(Drop.m_cIP, dest, sizeof(Drop.m_cIP)-1);
-	}
-	if(CTextConvert::ConvertToUTF8(m_csComputerName, dest))
-	{
-		strncpy(Drop.m_cComputerName, dest, sizeof(Drop.m_cComputerName)-1);
-	}
-
+	CStringA dest = CTextConvert::UnicodeToUTF8(m_csIP);
+	strncpy(Drop.m_cIP, dest, sizeof(Drop.m_cIP)-1);
+	
+	dest = CTextConvert::UnicodeToUTF8(m_csComputerName);
+	strncpy(Drop.m_cComputerName, dest, sizeof(Drop.m_cComputerName)-1);
+	
 	cf.m_hgData = NewGlobalP(&Drop, sizeof(Drop));
 	cf.m_cfType = theApp.m_RemoteCF_HDROP;
 

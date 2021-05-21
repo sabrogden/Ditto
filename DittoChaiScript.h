@@ -17,6 +17,9 @@ public:
 	std::string GetAsciiString();
 	void SetAsciiString(std::string stringVal);
 
+	std::wstring CDittoChaiScript::GetUnicodeString();
+	void SetUnicodeString(std::wstring stringVal);
+
 	std::string GetClipMD5(std::string clipboardFormat);
 	SIZE_T GetClipSize(std::string clipboardFormat);
 

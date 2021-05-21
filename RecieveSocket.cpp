@@ -82,7 +82,7 @@ LPVOID CRecieveSocket::ReceiveEncryptedData(long lInSize, long &lOutSize)
 				{
 					if(nIndex >= 0 && nIndex < count)
 					{
-						CTextConvert::ConvertToUTF8(g_Opt.m_csNetworkPasswordArray[nIndex], csPassword);
+						csPassword = CTextConvert::UnicodeToUTF8(g_Opt.m_csNetworkPasswordArray[nIndex]);
 					}
 					else
 					{
