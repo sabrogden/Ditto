@@ -120,12 +120,12 @@ BOOL CAbout::OnInitDialog()
 	
 	m_HyperLink.MoveWindow(rect);
 
-	m_HyperLink.SetURL(_T("mailto:sabrogden@users.sourceforge.net"));
+	m_HyperLink.SetURL(_T("mailto:sabrogden@gmail.com"));
 
 	rect.top = rect.bottom + 5;
 	rect.bottom = rect.top + 5;
 	m_Link.MoveWindow(rect);
-	m_Link.SetURL(_T("http://ditto-cp.sourceforge.net"));
+	m_Link.SetURL(_T("https://ditto-cp.sourceforge.io/"));
 		
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
