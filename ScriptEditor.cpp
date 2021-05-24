@@ -291,7 +291,13 @@ void CScriptEditor::OnBnClickedButtonRun()
 
 	if (test.m_lastError == _T(""))
 	{
-		SetDlgItemText(IDC_EDIT_OUTPUT, _T("returned false\r\n") + CTextConvert::AnsiToUnicode(clipData.GetAsciiString().c_str()));
+		CString currentString = CTextConvert::AnsiToUnicode(clipData.GetAsciiString().c_str());
+		if (currentString == _T(""))
+		{
+			currentString = clipData.GetUnicodeString().c_str();
+		}
+
+		SetDlgItemText(IDC_EDIT_OUTPUT, _T("returned false\r\n") + currentString);
 	}
 	else
 	{

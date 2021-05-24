@@ -170,7 +170,9 @@ BOOL CDittoChaiScript::SetParentId(int parentId)
 		CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT lID FROM Main WHERE lID = %d"), parentId);
 		if (q.eof() == false)
 		{
-			m_pClip->Parent(parentId);			
+			m_pClip->Parent(parentId);		
+
+			set = TRUE;
 		}
 	}
 
@@ -181,9 +183,9 @@ BOOL CDittoChaiScript::AsciiTextMatchesRegex(std::string regex)
 {
 	BOOL matches = false;
 
-	auto ascii = GetUnicodeString();
+	std::wstring unicode = GetUnicodeString();
 	std::wregex integer(CTextConvert::AnsiToUnicode(regex.c_str()));
-	if (regex_match(ascii, integer))
+	if (regex_match(unicode, integer))
 	{
 		matches = true;
 	}
@@ -192,13 +194,13 @@ BOOL CDittoChaiScript::AsciiTextMatchesRegex(std::string regex)
 
 void CDittoChaiScript::AsciiTextReplaceRegex(std::string regex, std::string replaceWith)
 {
-	if (AsciiTextMatchesRegex(regex))
-	{
-		CStringA ascii = CTextConvert::UnicodeToUTF8(GetUnicodeString().c_str());
-		std::regex integer(regex.c_str());
+	CStringA utf8 = CTextConvert::UnicodeToUTF8(GetUnicodeString().c_str());
+	std::regex integer(regex.c_str());
 
-		auto newAscii = std::regex_replace(ascii.GetBuffer(), integer, replaceWith);
-		SetUnicodeString(CTextConvert::Utf8ToUnicode(newAscii.c_str()).GetBuffer());
+	CStringA newUtf8 = std::regex_replace(utf8.GetBuffer(), integer, replaceWith).c_str();
+	if (utf8 != newUtf8)
+	{
+		SetUnicodeString(CTextConvert::Utf8ToUnicode(newUtf8).GetBuffer());
 	}
 }
 
@@ -224,9 +226,9 @@ BOOL CDittoChaiScript::DescriptionMatchesRegex(std::string regex)
 
 	if (m_pClip)
 	{
-		std:string ascii(CTextConvert::UnicodeToAnsi(m_pClip->Description()).GetBuffer());
-		std::regex integer(regex);
-		if (regex_match(ascii, integer))
+		std::wstring unicode = m_pClip->Description();
+		std::wregex integer(CTextConvert::AnsiToUnicode(regex.c_str()));
+		if (regex_match(unicode, integer))
 		{
 			matches = true;
 		}
@@ -239,12 +241,11 @@ void CDittoChaiScript::DescriptionReplaceRegex(std::string regex, std::string re
 {
 	if (m_pClip)
 	{
-		std:string ascii(CTextConvert::UnicodeToAnsi(m_pClip->Description()).GetBuffer());
-		std::regex integer(regex);
+		CStringA utf8 = CTextConvert::UnicodeToUTF8(m_pClip->Description());
+		std::regex integer(regex.c_str());
 
-		auto newAscii = regex_replace(ascii, integer, replaceWith);
+		auto newAscii = std::regex_replace(utf8.GetBuffer(), integer, replaceWith);
 
-		CString cstr(newAscii.c_str());
-		m_pClip->Description(cstr);
+		m_pClip->Description(CTextConvert::Utf8ToUnicode(newAscii.c_str()).GetBuffer());
 	}
 }
