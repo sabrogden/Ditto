@@ -1,5 +1,5 @@
 #define MyAppName "Ditto"
-#define MyAppVersion GetFileVersion("..\Release\DittoU.exe")
+#define MyAppVersion GetFileVersion("..\Release\Ditto.exe")
 #define MyAppVerName MyAppName + " " + MyAppVersion
 
 ;#define bit64
