@@ -7,6 +7,7 @@
 
 [Setup]
 AppName={#MyAppName}
+AppVersion={#MyAppVersion}
 AppVerName={#MyAppVerName}
 OutputBaseFilename=DittoSetup_{#MyAppVersion}
 AppPublisher=Scott Brogden
