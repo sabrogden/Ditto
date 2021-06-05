@@ -2330,7 +2330,7 @@ int CGetSetOptions::GetQRCodeBorderPixels()
 
 CString	CGetSetOptions::GetTranslateUrl()
 {
-	return GetProfileString(_T("TranslateUrl"), _T("https://translate.google.com/?tl=en#auto/en/%s"));
+	return GetProfileString(_T("TranslateUrl"), _T("https://translate.google.com/?text=%s"));
 }
 
 void CGetSetOptions::SetNetworkReadTimeoutMS(int val)
