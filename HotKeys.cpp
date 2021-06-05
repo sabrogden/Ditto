@@ -27,6 +27,7 @@ CHotKey::CHotKey(CString name, DWORD defKey, bool bUnregOnShowDitto, HotKeyType 
 CHotKey::~CHotKey()
 {
 	Unregister();
+	::GlobalDeleteAtom(m_Atom);
 }
 
 CString CHotKey::GetHotKeyDisplay()
