@@ -307,7 +307,7 @@
 		<Item English_Text = "Clips Sent" ID = "2066">Gönderilen Klipler</Item>
 		<Item English_Text = "Clips received" ID = "2067">Alýnan Klipler</Item>
 		<Item English_Text = "Since Last Start" ID = "2068">Son Baþlatmadan Beri</Item>
-		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true">Ýstatistikler</Item>
+		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true"></Item>
 	</Ditto_Options_Stats>
 	<Ditto_Options_Supported_Types_Add>
 		<Item English_Text = "Main Types" ID = "2052">Ana Türler</Item>
