@@ -1147,6 +1147,28 @@ LRESULT CQPasteWnd::OnCopyClip(WPARAM wParam, LPARAM lParam)
 
 LRESULT CQPasteWnd::OnSearchEnterKeyPressed(WPARAM wParam, LPARAM lParam)
 {
+	CString csText;
+	m_search.GetWindowText(csText);
+	if (csText.MakeLower().Left(2) == _T("/n") ||
+		csText.MakeLower().Left(2) == _T("\\n"))
+	{
+		CString dragFile = csText.TrimLeft(_T("/n"));
+		dragFile = dragFile.TrimLeft(_T("\\n"));
+		dragFile = dragFile.TrimLeft();
+		if (dragFile != _T(""))
+		{
+			g_Opt.SeTempDragFileName(dragFile);
+
+			CRect r;
+			this->GetWindowRect(r);
+			m_popupMsg.Show(StrF(_T("Drag file name set to: %s"), dragFile), CPoint(5, r.Height()/2), true);
+			SetTimer(TIMER_ERROR_MSG, CGetSetOptions::GetErrorMsgPopupTimeout(), NULL);
+
+			DoActionCancelFilter();
+		}
+		return FALSE;
+	}
+
 	MSG msg;
 	msg.lParam = 0;
 	msg.wParam = VK_RETURN;
@@ -1359,7 +1381,12 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch)
 	KillTimer(TIMER_DO_SEARCH);
 	
 	m_lstHeader.HidePopup(true);
-	
+
+	if (csSQLSearch.MakeLower().Left(2) == _T("/n") ||
+		csSQLSearch.MakeLower().Left(2) == _T("\\n"))
+	{
+		return FALSE;
+	}	
 
 	Log(StrF(_T("Start Fill List - %s"), csSQLSearch));
 

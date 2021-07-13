@@ -660,6 +660,11 @@ public:
 
 	static CString GetNetworkBindIPAddress();
 	static void SetNetworkBindIPAddress(CString val);
+
+	static CString m_tempDragFileName;
+	static CTime m_tempDragFileNameSetTime;
+	static CString GetTempDragFileName();
+	static void SeTempDragFileName(CString val);
 };
 
 // global for easy access and for initialization of fast access variables

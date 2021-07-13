@@ -79,6 +79,8 @@ int CGetSetOptions::m_firstTenHotKeysFontSize = 5;
 BOOL CGetSetOptions::m_moveSelectionOnOpenHotkey = TRUE;
 BOOL CGetSetOptions::m_allowBackToBackDuplicates = FALSE;
 BOOL CGetSetOptions::m_maintainSearchView = FALSE;
+CString CGetSetOptions::m_tempDragFileName = "";
+CTime CGetSetOptions::m_tempDragFileNameSetTime;
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -2929,4 +2931,21 @@ CString CGetSetOptions::GetNetworkBindIPAddress()
 void CGetSetOptions::SetNetworkBindIPAddress(CString val)
 {
 	SetProfileString("NetworkBindIPAddress", val);
+}
+
+CString CGetSetOptions::GetTempDragFileName()
+{
+	auto diff = CTime::GetCurrentTime() - m_tempDragFileNameSetTime;
+	if (diff.GetTotalSeconds() < 60 * 5)
+	{
+		return m_tempDragFileName;
+	}
+
+	return _T("");
+}
+
+void CGetSetOptions::SeTempDragFileName(CString val)
+{
+	m_tempDragFileName = val;
+	m_tempDragFileNameSetTime = CTime::GetCurrentTime();
 }

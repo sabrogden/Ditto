@@ -64,10 +64,8 @@ void CPopup::Init()
 	m_bCenterY = false;
 	m_hWndPosRelativeTo = NULL;
 	
-	RECT rcScreen = DefaultMonitorRect();
-	
-	m_ScreenMaxX = rcScreen.right;
-	m_ScreenMaxY = rcScreen.bottom;
+	m_ScreenMaxX = GetSystemMetrics(SM_CXVIRTUALSCREEN);
+	m_ScreenMaxY = GetSystemMetrics(SM_CYVIRTUALSCREEN);
 	
 	m_hWndInsertAfter = HWND_TOP; //HWND_TOPMOST
 	
