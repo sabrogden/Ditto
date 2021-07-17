@@ -391,6 +391,7 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_search.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL, CRect(0, 0, 0, 0), this, ID_EDIT_SEARCH);
 	m_search.SetDpiInfo(&m_DittoWindow.m_dpi);
 	m_search.SetPromptText(theApp.m_Language.GetString(_T("Search"), _T("Search")));
+	::SHAutoComplete(m_search.m_hWnd, SHACF_AUTOSUGGEST_FORCE_OFF);
 	SetSearchImages();
 	m_search.LoadPastSearches(CGetSetOptions::GetPastSearchXml());
 
