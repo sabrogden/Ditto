@@ -136,6 +136,7 @@ END_MESSAGE_MAP()
 #define SETTING_DEBUG_TO_OUTPUT_STRING 85
 #define SETTING_NETWORK_BIND_IP_ADDRESS 86
 #define SETTING_DISABLE_FRIENDS 87
+#define SETTING_IGNORE_FALSE_COPIES_DEALY 88
 
 
 BOOL CAdvGeneral::OnInitDialog()
@@ -201,8 +202,11 @@ BOOL CAdvGeneral::OnInitDialog()
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("First ten hot heys font size"), (long)CGetSetOptions::GetFirstTenHotKeysFontSize(), _T(""), SETTING_FIRST_TEN_HOTKEYS_FONT_SIZE));
 
 	AddTrueFalse(pGroupTest, _T("Hide Ditto on hot key if Ditto is visible"), CGetSetOptions::GetHideDittoOnHotKeyIfAlreadyShown(), SETTING_HIDE_ON_HOTKEY_IF_VISIBLE);
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Ignore copies faster than (ms) (default: 500)"), (long)CGetSetOptions::GetSaveClipDelay(), _T(""), SETTING_IGNORE_FALSE_COPIES_DEALY));
+
 	pGroupTest->AddSubItem( new CMFCPropertyGridProperty(_T("Maximum clip size in bytes (0 for no limit)"), g_Opt.m_lMaxClipSizeInBytes, _T(""), SETTING_MAX_CLIP_SIZE));
-	
+		
 	AddTrueFalse(pGroupTest, _T("Maintain search view"), CGetSetOptions::GetMaintainSearchView(), SETTING_MAINTAIN_SEARCH_VIEW);
 
 	AddTrueFalse(pGroupTest, _T("Move selection on open hot key"), CGetSetOptions::GetMoveSelectionOnOpenHotkey(), SETTING_MOVE_SELECTION_ON_OPEN_HOTKEY);
@@ -894,6 +898,12 @@ void CAdvGeneral::OnBnClickedOk()
 						val = false;
 					}
 					CGetSetOptions::SetAllowFriends(val);
+				}
+				break;
+			case SETTING_IGNORE_FALSE_COPIES_DEALY:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetSaveClipDelay(pNewValue->lVal);
 				}
 				break;
 			}
