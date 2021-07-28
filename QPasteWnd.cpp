@@ -355,6 +355,8 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_BACKUPDATABASE, &CQPasteWnd::OnFirstBackupDb)
 		ON_COMMAND(ID_MENU_DELETEALLNONUSEDCLIPS, &CQPasteWnd::OnMenuDeleteallnonusedclips)
 		ON_UPDATE_COMMAND_UI(ID_MENU_DELETEALLNONUSEDCLIPS, &CQPasteWnd::OnUpdateMenuDeleteallnonusedclips)
+		ON_COMMAND(ID_IMPORT_SETDRAGFILENAME, &CQPasteWnd::OnImportSetdragfilename)
+		ON_UPDATE_COMMAND_UI(ID_IMPORT_SETDRAGFILENAME, &CQPasteWnd::OnUpdateImportSetdragfilename)
 		END_MESSAGE_MAP()
 
 
@@ -1150,25 +1152,6 @@ LRESULT CQPasteWnd::OnSearchEnterKeyPressed(WPARAM wParam, LPARAM lParam)
 {
 	CString csText;
 	m_search.GetWindowText(csText);
-	if (csText.MakeLower().Left(2) == _T("/n") ||
-		csText.MakeLower().Left(2) == _T("\\n"))
-	{
-		CString dragFile = csText.TrimLeft(_T("/n"));
-		dragFile = dragFile.TrimLeft(_T("\\n"));
-		dragFile = dragFile.TrimLeft();
-		if (dragFile != _T(""))
-		{
-			g_Opt.SeTempDragFileName(dragFile);
-
-			CRect r;
-			this->GetWindowRect(r);
-			m_popupMsg.Show(StrF(_T("Drag file name set to: %s"), dragFile), CPoint(5, r.Height()/2), true);
-			SetTimer(TIMER_ERROR_MSG, CGetSetOptions::GetErrorMsgPopupTimeout(), NULL);
-
-			DoActionCancelFilter();
-		}
-		return FALSE;
-	}
 
 	MSG msg;
 	msg.lParam = 0;
@@ -1382,12 +1365,6 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch)
 	KillTimer(TIMER_DO_SEARCH);
 	
 	m_lstHeader.HidePopup(true);
-
-	if (csSQLSearch.MakeLower().Left(2) == _T("/n") ||
-		csSQLSearch.MakeLower().Left(2) == _T("\\n"))
-	{
-		return FALSE;
-	}	
 
 	Log(StrF(_T("Start Fill List - %s"), csSQLSearch));
 
@@ -3366,9 +3343,33 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::DELETE_ALL_NON_USED_CLIPS:
 		ret = DoDeleteAllNonUsedClips();
 		break;
+	case ActionEnums::SET_DRAG_FILE_NAME:
+		ret = DoSetDragFileName();
+		break;
 	}
 
 	return ret;
+}
+
+bool CQPasteWnd::DoSetDragFileName()
+{
+	m_bHideWnd = false;
+
+	CGroupName Name;
+
+	CDimWnd dimmer(this);
+
+	INT_PTR nRet = Name.DoModal();
+
+	if (nRet == IDOK)
+	{
+		CString csName = Name.m_csName;
+		g_Opt.SetTempDragFileName(csName);
+	}
+
+	m_bHideWnd = true;
+		
+	return true;
 }
 
 bool CQPasteWnd::DoActionPasteDontMoveClip()
@@ -3879,6 +3880,7 @@ bool CQPasteWnd::DoActionDeleteSelected()
 {
 	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
 	{
+		m_actions.m_handleRepeatKeys = true;
 		DeleteSelectedRows();
 		return true;
 	}
@@ -7910,4 +7912,19 @@ void CQPasteWnd::OnUpdateMenuDeleteallnonusedclips(CCmdUI* pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::DELETE_ALL_NON_USED_CLIPS);
+}
+
+void CQPasteWnd::OnImportSetdragfilename()
+{
+	DoAction(ActionEnums::SET_DRAG_FILE_NAME);
+}
+
+void CQPasteWnd::OnUpdateImportSetdragfilename(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::SET_DRAG_FILE_NAME);
 }

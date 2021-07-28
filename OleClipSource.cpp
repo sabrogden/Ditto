@@ -1151,12 +1151,20 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 		if (unicodeText)
 		{
 			CString name = _T("text");
+			CString file;
 			if (g_Opt.GetTempDragFileName() != _T(""))
 			{
 				name = g_Opt.GetTempDragFileName();
+				CString id;
+				id.Format(_T("%d", dragId++));
+				name.Replace(_T("#"), id);
+
+				file.Format(_T("%s%s.txt"), path, name);
 			}
-			CString file;
-			file.Format(_T("%s%s_%d.txt"), path, name, dragId++);
+			else
+			{				
+				file.Format(_T("%s%s_%d.txt"), path, name, dragId++);
+			}
 
 			fileClip.WriteTextToFile(file, TRUE, FALSE, FALSE);
 			fileList.AddFile(file);
@@ -1167,12 +1175,20 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 			if (asciiText)
 			{
 				CString name = _T("text");
+				CString file;
 				if (g_Opt.GetTempDragFileName() != _T(""))
 				{
 					name = g_Opt.GetTempDragFileName();
+					CString id;
+					id.Format(_T("%d", dragId++));
+					name.Replace(_T("#"), id);
+
+					file.Format(_T("%s%s.txt"), path, name);
 				}
-				CString file;
-				file.Format(_T("%s%s_%d.txt"), path, name, dragId++);
+				else
+				{
+					file.Format(_T("%s%s_%d.txt"), path, name, dragId++);
+				}
 
 				fileClip.WriteTextToFile(file, FALSE, TRUE, FALSE);
 				fileList.AddFile(file);
@@ -1186,16 +1202,24 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 					png = fileClip.m_Formats.FindFormat(theApp.m_PNG_Format);
 				}
 
-				if(bitmap != NULL ||
+				if (bitmap != NULL ||
 					png != NULL)
 				{
 					CString name = _T("image");
+					CString file;
 					if (g_Opt.GetTempDragFileName() != _T(""))
 					{
 						name = g_Opt.GetTempDragFileName();
+						CString id;
+						id.Format(_T("%d", dragId++));
+						name.Replace(_T("#"), id);
+
+						file.Format(_T("%s%s.txt"), path, name);
 					}
-					CString file;
-					file.Format(_T("%s%s_%d.png"), path, name, dragId++);
+					else
+					{
+						file.Format(_T("%s%s_%d.png"), path, name, dragId++);
+					}
 
 					if (fileClip.WriteImageToFile(file))
 					{

@@ -323,6 +323,8 @@ BEGIN
             MENUITEM "EMail, Content As Attachment", ID_IMPORT_EMAIL_CONTENT_ATTACH
             MENUITEM "EMail, Clip Export As Attachment ", ID_IMPORT_EMAILTOASATTACHMENT
             MENUITEM "Gmail, Content In Body",      ID_IMPORT_GMAIL
+            MENUITEM SEPARATOR
+            MENUITEM "Set Drag File Name",          ID_IMPORT_SETDRAGFILENAME
         END
     END
 END

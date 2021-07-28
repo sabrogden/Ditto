@@ -296,6 +296,7 @@ public:
 	bool DoActionSaveCF_HDROP_FileData();
 	bool DoActionToggleClipboardConnection();
 	bool DoActionPasteDontMoveClip();
+	bool DoSetDragFileName();
 	bool DoActionPasteTrimWhiteSpace();
 	bool DoActionToggleTransparency();
 	bool DoActionIncreaseTransparency();
@@ -586,4 +587,6 @@ public:
 	afx_msg void CQPasteWnd::OnFirstRestoreDb();
 	afx_msg void OnMenuDeleteallnonusedclips();
 	afx_msg void OnUpdateMenuDeleteallnonusedclips(CCmdUI* pCmdUI);
+	afx_msg void OnImportSetdragfilename();
+	afx_msg void OnUpdateImportSetdragfilename(CCmdUI* pCmdUI);
 };

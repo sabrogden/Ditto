@@ -379,6 +379,10 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 		break;
 	case DELETE_ALL_NON_USED_CLIPS:
 		val = "Delete all non used clips";
+		break;
+	case SET_DRAG_FILE_NAME:
+		val = "Set Drag File Name";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
@@ -458,6 +462,8 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 			return ACCEL_MAKEKEY('C', HOTKEYF_CONTROL);
 		case REFRESH_LIST:
 			return VK_F5;
+		case SET_DRAG_FILE_NAME:
+			return VK_F4;
 		}
 		break;
 	case 1:

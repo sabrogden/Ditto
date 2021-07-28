@@ -2944,7 +2944,7 @@ CString CGetSetOptions::GetTempDragFileName()
 	return _T("");
 }
 
-void CGetSetOptions::SeTempDragFileName(CString val)
+void CGetSetOptions::SetTempDragFileName(CString val)
 {
 	m_tempDragFileName = val;
 	m_tempDragFileNameSetTime = CTime::GetCurrentTime();
