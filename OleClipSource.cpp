@@ -1156,7 +1156,7 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 			{
 				name = g_Opt.GetTempDragFileName();
 				CString id;
-				id.Format(_T("%d", dragId++));
+				id.Format(_T("%d"), dragId++);
 				name.Replace(_T("#"), id);
 
 				file.Format(_T("%s%s.txt"), path, name);
@@ -1180,7 +1180,7 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 				{
 					name = g_Opt.GetTempDragFileName();
 					CString id;
-					id.Format(_T("%d", dragId++));
+					id.Format(_T("%d"), dragId++);
 					name.Replace(_T("#"), id);
 
 					file.Format(_T("%s%s.txt"), path, name);
@@ -1211,10 +1211,10 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 					{
 						name = g_Opt.GetTempDragFileName();
 						CString id;
-						id.Format(_T("%d", dragId++));
+						id.Format(_T("%d"), dragId++);
 						name.Replace(_T("#"), id);
 
-						file.Format(_T("%s%s.txt"), path, name);
+						file.Format(_T("%s%s.png"), path, name);
 					}
 					else
 					{

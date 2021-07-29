@@ -2936,7 +2936,7 @@ void CGetSetOptions::SetNetworkBindIPAddress(CString val)
 CString CGetSetOptions::GetTempDragFileName()
 {
 	auto diff = CTime::GetCurrentTime() - m_tempDragFileNameSetTime;
-	if (diff.GetTotalSeconds() < 60 * 5)
+	if (diff.GetTotalSeconds() < 60 * 2)
 	{
 		return m_tempDragFileName;
 	}
