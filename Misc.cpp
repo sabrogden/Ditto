@@ -1677,3 +1677,30 @@ BOOL BackupDbPrompt(HWND hwnd)
 
 	return ret;
 }
+
+int WordCount(const CString &text)
+{
+	#define OUT 0
+	#define IN 1
+
+	int state = OUT;
+	unsigned wc = 0; // word count
+
+	// Scan all characters one by one
+	for(int pos = 0; pos < text.GetLength(); pos++)	
+	{
+		auto str = text[pos];
+		
+		if (str == ' ' || str == '\r' || str == '\n' || str == '\t')
+		{
+			state = OUT;
+		}
+		else if (state == OUT)
+		{
+			state = IN;
+			wc++;
+		}
+	}
+
+	return wc;
+}

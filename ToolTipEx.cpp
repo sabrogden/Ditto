@@ -218,13 +218,6 @@ BOOL CToolTipEx::Show(CPoint point)
 			rect.bottom = rect.top + lNewHeight;
 		}
 
-		//rect.right += CAPTION_BORDER * 2;
-		//rect.bottom += CAPTION_BORDER * 2;
-
-		
-
-		
-
 		ClientToScreen(rect);
 
 		CRect cr(point, point);
@@ -244,13 +237,18 @@ BOOL CToolTipEx::Show(CPoint point)
 
 		rcScreen.DeflateRect(0, 0, 5, 5);
 
-		long lWidth = rect.Width();
-		long lHeight = rect.Height();
+		long width = rect.Width();
+		long height = rect.Height();
+
+		if (width < 500)
+		{
+			width = 500;
+		}
 
 		rect.left = point.x;
 		rect.top = point.y;
-		rect.right = rect.left + lWidth;
-		rect.bottom = rect.top + lHeight;
+		rect.right = rect.left + width;
+		rect.bottom = rect.top + height;
 		
 		if (rect.right > rcScreen.right)
 		{
@@ -262,6 +260,12 @@ BOOL CToolTipEx::Show(CPoint point)
 			rect.bottom = rcScreen.bottom;
 			//m_reducedWindowSize = true;
 		}
+	}
+
+	if (m_csText.GetLength())
+	{
+		int wordCount = WordCount(m_csText);
+		m_clipData = StrF(_T("%s | Length: %d | Words: %d"), m_originalClipData, m_csText.GetLength(), wordCount);
 	}
 
 	m_clipDataStatic.SetWindowText(m_clipData);
