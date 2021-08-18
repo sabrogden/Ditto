@@ -31,16 +31,16 @@ distribution.
 
 #include "tinyxml.h"
 
-FILE* TiXmlFOpen( const char* filename, const char* mode );
+FILE* TiXmlFOpen(wchar_t* filename, wchar_t* mode );
 
 bool TiXmlBase::condenseWhiteSpace = true;
 
 // Microsoft compiler security
-FILE* TiXmlFOpen( const char* filename, const char* mode )
+FILE* TiXmlFOpen(wchar_t* filename, wchar_t* mode )
 {
 	#if defined(_MSC_VER) && (_MSC_VER >= 1400 )
 		FILE* fp = 0;
-		errno_t err = fopen_s( &fp, filename, mode );
+		errno_t err = _wfopen_s( &fp, filename, mode );
 		if ( !err && fp )
 			return fp;
 		return 0;
@@ -951,24 +951,22 @@ TiXmlDocument& TiXmlDocument::operator=( const TiXmlDocument& copy )
 }
 
 
-bool TiXmlDocument::LoadFile( TiXmlEncoding encoding )
+//bool TiXmlDocument::LoadFile( TiXmlEncoding encoding )
+//{
+//	return false;
+//	//return LoadFile( Value(), encoding );
+//}
+
+
+//bool TiXmlDocument::SaveFile() const
+//{
+//	return SaveFile( Value() );
+//}
+
+bool TiXmlDocument::LoadFile(wchar_t* _filename, TiXmlEncoding encoding )
 {
-	return LoadFile( Value(), encoding );
-}
-
-
-bool TiXmlDocument::SaveFile() const
-{
-	return SaveFile( Value() );
-}
-
-bool TiXmlDocument::LoadFile( const char* _filename, TiXmlEncoding encoding )
-{
-	TIXML_STRING filename( _filename );
-	value = filename;
-
 	// reading in binary mode so that tinyxml can normalize the EOL
-	FILE* file = TiXmlFOpen( value.c_str (), "rb" );	
+	FILE* file = TiXmlFOpen( _filename, L"rb" );	
 
 	if ( file )
 	{
@@ -1081,10 +1079,10 @@ bool TiXmlDocument::LoadFile( FILE* file, TiXmlEncoding encoding )
 }
 
 
-bool TiXmlDocument::SaveFile( const char * filename ) const
+bool TiXmlDocument::SaveFile(wchar_t* filename ) const
 {
 	// The old c stuff lives on...
-	FILE* fp = TiXmlFOpen( filename, "w" );
+	FILE* fp = TiXmlFOpen( filename, L"w" );
 	if ( fp )
 	{
 		bool result = SaveFile( fp );

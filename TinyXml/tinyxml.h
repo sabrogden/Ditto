@@ -1412,13 +1412,13 @@ public:
 		Returns true if successful. Will delete any existing
 		document data before loading.
 	*/
-	bool LoadFile( TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
+	//bool LoadFile( TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
 	/// Save a file using the current document value. Returns true if successful.
-	bool SaveFile() const;
+	//bool SaveFile() const;
 	/// Load a file using the given filename. Returns true if successful.
-	bool LoadFile( const char * filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
+	bool LoadFile(wchar_t* filename, TiXmlEncoding encoding = TIXML_DEFAULT_ENCODING );
 	/// Save a file using the given filename. Returns true if successful.
-	bool SaveFile( const char * filename ) const;
+	bool SaveFile(wchar_t* filename ) const;
 	/** Load a file using the given FILE*. Returns true if successful. Note that this method
 		doesn't stream - the entire object pointed at by the FILE*
 		will be interpreted as an XML file. TinyXML doesn't stream in XML from the current

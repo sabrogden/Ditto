@@ -119,10 +119,8 @@ bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)
 
 	Log(StrF(_T("Loading Theme %s"), csPath));
 
-	CStringA csPathA = CTextConvert::UnicodeToAnsi(csPath);
-
-	TiXmlDocument doc(csPathA);
-	if(!doc.LoadFile())
+	TiXmlDocument doc;
+	if(!doc.LoadFile(csPath.GetBuffer()))
 	{
 		m_csLastError.Format(_T("Error loading Theme %s - reason = %s"), csPath, doc.ErrorDesc());
 		ASSERT(!m_csLastError);

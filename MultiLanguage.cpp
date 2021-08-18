@@ -1,4 +1,4 @@
-// MultiLanguage.cpp: implementation of the CMultiLanguage class.
+﻿// MultiLanguage.cpp: implementation of the CMultiLanguage class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -354,10 +354,8 @@ bool CMultiLanguage::LoadLanguageFile(CString csFile)
 		return false;
 	}
 
-	CStringA csPathA = CTextConvert::UnicodeToAnsi(csPath);
-
-	TiXmlDocument doc(csPathA);
-	if(!doc.LoadFile())
+	TiXmlDocument doc;
+	if(!doc.LoadFile(csPath.GetBuffer()))
 	{
 		m_csLastError.Format(_T("Error loading file %s - reason = %s, Line: %d, column: %d"), csFile, CTextConvert::AnsiToUnicode(doc.ErrorDesc()), doc.ErrorRow(), doc.ErrorCol());
 		Log(m_csLastError);
