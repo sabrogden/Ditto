@@ -3,7 +3,7 @@
   <metadata>
     <id>ditto.portable</id>
     <title>Ditto Clipboard</title>
-    <version>%version%</version>
+    <version>%version%-beta</version>
     <authors>Scott Brogden</authors>
     <owners>Scott Brogden</owners>
     <summary>Ditto Clipboard</summary>
