@@ -229,14 +229,14 @@ End If
 			<outputfrom type='3'>1</outputfrom>
 		</step>
 		<step action='Run Program'>
-			<command>"%workDir%\DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_%versionFileName%" bit32</command>
+			<command>"%workDir%\DittoSetup\BuildPortableZIP.bat" "DittoPortable_%versionFileName%" bit32</command>
 			<indent type='3'>1</indent>
 			<name>Build Portable 32</name>
 			<outputfrom type='3'>1</outputfrom>
 			<startin>%workDir%\DittoSetup\</startin>
 		</step>
 		<step action='Run Program'>
-			<command>"%workDir%\DittoSetup\Build Portable ZIP_10.bat" "DittoPortable_64bit_%versionFileName%" bit64</command>
+			<command>"%workDir%\DittoSetup\BuildPortableZIP.bat" "DittoPortable_64bit_%versionFileName%" bit64</command>
 			<indent type='3'>1</indent>
 			<name>Build Portable 64</name>
 			<outputfrom type='3'>1</outputfrom>
@@ -2935,7 +2935,7 @@ var sc_security="b3f57099";
 		</step>
 		<step action='Git'>
 			<Command>log</Command>
-			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2020-10-26</Options>
+			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2021-02-27</Options>
 			<WorkDir>%workDir%</WorkDir>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>
@@ -3054,7 +3054,7 @@ var sc_security="b3f57099";
 			<value>3</value>
 		</macro>
 		<macro name='verMinor'>
-			<value>23</value>
+			<value>24</value>
 		</macro>
 		<macro name='verRevision'>
 			<value>0</value>

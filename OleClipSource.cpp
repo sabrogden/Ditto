@@ -1155,11 +1155,16 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 			if (g_Opt.GetTempDragFileName() != _T(""))
 			{
 				name = g_Opt.GetTempDragFileName();
-				CString id;
+				CString id;				
 				id.Format(_T("%d"), dragId++);
-				name.Replace(_T("#"), id);
 
-				file.Format(_T("%s%s.txt"), path, name);
+				CString fileId = "";
+				if (name.Replace(_T("#"), id) == 0 && m_ClipIDs.GetCount() > 0)
+				{
+					fileId = "_" + id;
+				}
+
+				file.Format(_T("%s%s%s.txt"), path, name, fileId);
 			}
 			else
 			{				
@@ -1180,10 +1185,15 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 				{
 					name = g_Opt.GetTempDragFileName();
 					CString id;
-					id.Format(_T("%d"), dragId++);
-					name.Replace(_T("#"), id);
+					id.Format(_T("%d"), dragId++);				
 
-					file.Format(_T("%s%s.txt"), path, name);
+					CString fileId = "";
+					if (name.Replace(_T("#"), id) == 0 && m_ClipIDs.GetCount() > 0)
+					{
+						fileId = "_" + id;
+					}
+
+					file.Format(_T("%s%s%s.txt"), path, name, fileId);
 				}
 				else
 				{
@@ -1212,9 +1222,13 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 						name = g_Opt.GetTempDragFileName();
 						CString id;
 						id.Format(_T("%d"), dragId++);
-						name.Replace(_T("#"), id);
+						CString fileId = "";
+						if (name.Replace(_T("#"), id) == 0 && m_ClipIDs.GetCount() > 0)
+						{
+							fileId = "_" + id;
+						}
 
-						file.Format(_T("%s%s.png"), path, name);
+						file.Format(_T("%s%s%s.png"), path, name, fileId);
 					}
 					else
 					{
