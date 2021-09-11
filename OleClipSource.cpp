@@ -1142,6 +1142,12 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 	int dragId = CGetSetOptions::GetDragId();
 	int origDragId = dragId;
 
+	auto customDragName = g_Opt.GetTempDragFileName();
+	if (customDragName != _T(""))
+	{
+		dragId = 1;
+	}
+
 	for (int i = 0; i < m_ClipIDs.GetCount(); i++)
 	{
 		CClip fileClip;
@@ -1152,9 +1158,9 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 		{
 			CString name = _T("text");
 			CString file;
-			if (g_Opt.GetTempDragFileName() != _T(""))
+			if (customDragName != _T(""))
 			{
-				name = g_Opt.GetTempDragFileName();
+				name = customDragName;
 				CString id;				
 				id.Format(_T("%d"), dragId++);
 
@@ -1181,9 +1187,9 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 			{
 				CString name = _T("text");
 				CString file;
-				if (g_Opt.GetTempDragFileName() != _T(""))
+				if (customDragName != _T(""))
 				{
-					name = g_Opt.GetTempDragFileName();
+					name = customDragName;
 					CString id;
 					id.Format(_T("%d"), dragId++);				
 
@@ -1217,9 +1223,9 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 				{
 					CString name = _T("image");
 					CString file;
-					if (g_Opt.GetTempDragFileName() != _T(""))
+					if (customDragName != _T(""))
 					{
-						name = g_Opt.GetTempDragFileName();
+						name = customDragName;
 						CString id;
 						id.Format(_T("%d"), dragId++);
 						CString fileId = "";
@@ -1244,7 +1250,8 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 		}
 	}
 
-	if(dragId != origDragId)
+	if(customDragName == _T("") &&
+		dragId != origDragId)
 	{
 		CGetSetOptions::SetDragId(dragId);
 	}
