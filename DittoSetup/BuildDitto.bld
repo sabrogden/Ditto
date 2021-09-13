@@ -2908,7 +2908,7 @@ header("Pragma: no-cache");
 <a href="./files/">Previous Builds</a><br>
 <br>
 
-<a href="changes.php">Change Log since last release 10-26-2020</a><br>
+<a href="changes.php">Change Log since last release 2021-09-10</a><br>
 
 <br>
 
@@ -2935,7 +2935,7 @@ var sc_security="b3f57099";
 		</step>
 		<step action='Git'>
 			<Command>log</Command>
-			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2021-02-27</Options>
+			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2021-09-10</Options>
 			<WorkDir>%workDir%</WorkDir>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>
