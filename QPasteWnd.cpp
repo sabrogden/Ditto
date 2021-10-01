@@ -2965,6 +2965,8 @@ bool CQPasteWnd::CheckActions(MSG * pMsg)
 		{
 			m_timerAction = a;
 			SetTimer(TIMER_DO_ACTION, CGetSetOptions::m_doubleKeyStrokeTimeout, NULL);
+
+			ret = true;
 		}
 	}
 
