@@ -276,7 +276,7 @@ static void icuRegexpDelete(void* p) {
 ** Uses the following ICU regexp APIs:
 **
 **     uregex_open()
-**     uregex_matches()
+**     uregex_find()
 **     uregex_close()
 */
 static void icuRegexpFunc(sqlite3_context* p, int nArg, sqlite3_value** apArg) {
@@ -319,10 +319,13 @@ static void icuRegexpFunc(sqlite3_context* p, int nArg, sqlite3_value** apArg) {
         return;
     }
 
-    /* Attempt the match */
-    res = uregex_matches(pExpr, 0, &status);
+    /* Attempt the search
+    * Mattwmaster58: This was originally uregex_match, but you usually 
+    * you want partial matches when you're searching pastes (the only place we use this)
+    */
+    res = uregex_find(pExpr, 0, &status);
     if (!U_SUCCESS(status)) {
-        icuFunctionError(p, "uregex_matches", status);
+        icuFunctionError(p, "uregex_find", status);
         return;
     }
 
