@@ -136,7 +136,7 @@ End If
 			<indent type='3'>2</indent>
 			<name>Restore NuGet</name>
 		</step>
-		<step action='Make VS 2019'>
+		<step action='Make VS 2022'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
 			<Config>Release|x64</Config>
@@ -148,7 +148,7 @@ End If
 			<indent type='3'>2</indent>
 			<name>Build Ditto 64</name>
 		</step>
-		<step action='Make VS 2019'>
+		<step action='Make VS 2022'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
 			<Config>Release|Win32</Config>
@@ -190,7 +190,7 @@ End If
 			<indent type='3'>2</indent>
 			<name>Restore NuGet</name>
 		</step>
-		<step action='Make VS 2019'>
+		<step action='Make VS 2022'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
 			<Config>Release|x64</Config>
@@ -203,7 +203,7 @@ End If
 			<indent type='3'>2</indent>
 			<name>Build Ditto 64</name>
 		</step>
-		<step action='Make VS 2019'>
+		<step action='Make VS 2022'>
 			<AssemblyVer type='11'>-1</AssemblyVer>
 			<Attr type='11'>-1</Attr>
 			<Config>Release|x64</Config>

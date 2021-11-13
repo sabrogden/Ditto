@@ -19,9 +19,9 @@ copy ..\Release\Ditto.exe Ditto\Ditto.exe
 copy ..\Release\ICU_Loader.dll Ditto\ICU_Loader.dll
 copy ..\Release\Addins\*.dll Ditto\Addins\
 
-copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\vcruntime140.dll" Ditto\vcruntime140.dll
-copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.CRT\msvcp140.dll" Ditto\msvcp140.dll
-copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x86\Microsoft.VC140.MFC\mfc140u.dll" Ditto\mfc140u.dll
+copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x86\Microsoft.VC143.CRT\vcruntime140.dll" Ditto\vcruntime140.dll
+copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x86\Microsoft.VC143.CRT\msvcp140.dll" Ditto\msvcp140.dll
+copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x86\Microsoft.VC143.CRT\mfc140u.dll" Ditto\mfc140u.dll
 
 if "%2"=="" GOTO skipBit64
 if "%2"=="bit32" GOTO skipBit64	
@@ -31,10 +31,10 @@ copy ..\Release64\Ditto.exe Ditto\Ditto.exe
 copy ..\Release64\ICU_Loader.dll Ditto\ICU_Loader.dll
 copy ..\Release64\Addins\*.dll Ditto\Addins\
 
-copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\vcruntime140.dll" Ditto\vcruntime140.dll
-copy mfc-crt64\vcruntime140_1.dll Ditto\vcruntime140_1.dll
-copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.CRT\msvcp140.dll" Ditto\msvcp140.dll
-copy "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\redist\x64\Microsoft.VC140.MFC\mfc140u.dll" Ditto\mfc140u.dll
+copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x64\Microsoft.VC143.CRT\vcruntime140.dll" Ditto\vcruntime140.dll
+copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x64\Microsoft.VC143.CRT\vcruntime140_1.dll" Ditto\vcruntime140_1.dll
+copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x64\Microsoft.VC143.CRT\msvcp140.dll" Ditto\msvcp140.dll
+copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x64\Microsoft.VC143.CRT\mfc140u.dll" Ditto\mfc140u.dll
 
 :skipBit64
 
