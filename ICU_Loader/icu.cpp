@@ -320,7 +320,7 @@ static void icuRegexpFunc(sqlite3_context* p, int nArg, sqlite3_value** apArg) {
     }
 
     /* Attempt the match */
-    res = uregex_matches(pExpr, 0, &status);
+    res = uregex_find(pExpr, 0, &status);
     if (!U_SUCCESS(status)) {
         icuFunctionError(p, "uregex_matches", status);
         return;
