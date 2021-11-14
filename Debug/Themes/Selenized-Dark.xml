@@ -1,0 +1,30 @@
+<Ditto_Theme_File Version="3" Author="Martin Arndt" Notes="Adapted from https://github.com/jan-warchol/selenized/">
+  <Border>RGB(114, 137, 143)</Border>
+  <BorderTopMost>RGB(114, 137, 143)</BorderTopMost>
+  <CaptionFontSize />
+  <CaptionLeft>RGB(16, 60, 72)</CaptionLeft>
+  <CaptionRight>RGB(16, 60, 72)</CaptionRight>
+  <CaptionSize />
+  <CaptionTextColor>RGB(114, 137, 143)</CaptionTextColor>
+  <GroupTreeBG>RGB(16, 60, 72)</GroupTreeBG>
+  <GroupTreeText>RGB(173, 188, 188)</GroupTreeText>
+  <ListBoxEvenRowsBG>RGB(45, 91, 105)</ListBoxEvenRowsBG>
+  <ListBoxEvenRowsText>RGB(202, 216, 217)</ListBoxEvenRowsText>
+  <ListBoxOddRowsBG>RGB(24, 73, 86)</ListBoxOddRowsBG>
+  <ListBoxOddRowsText>RGB(173, 188, 188)</ListBoxOddRowsText>
+  <ListBoxSelectedBG>RGB(114, 137, 143)</ListBoxSelectedBG>
+  <ListBoxSelectedNoFocusBG>RGB(114, 137, 143)</ListBoxSelectedNoFocusBG>
+  <ListBoxSelectedNoFocusText>RGB(202, 216, 217)</ListBoxSelectedNoFocusText>
+  <ListBoxSelectedText>RGB(202, 216, 217)</ListBoxSelectedText>
+  <MainWindowBG>RGB(16, 60, 72)</MainWindowBG>
+  <SearchTextBoxFocusBG>RGB(114, 137, 143)</SearchTextBoxFocusBG>
+  <SearchTextBoxFocusText>RGB(202, 216, 217)</SearchTextBoxFocusText>
+  <!-- Set to magenta until visually noticed anywhere upon usage. -->
+  <BorderNotConnected>RGB(255, 0, 255)</BorderNotConnected>
+  <CaptionLeftNotConnected>RGB(255, 0, 255)</CaptionLeftNotConnected>
+  <CaptionLeftTopMost>RGB(255, 0, 255)</CaptionLeftTopMost>
+  <CaptionRightNotConnected>RGB(255, 0, 255)</CaptionRightNotConnected>
+  <CaptionRightTopMost>RGB(255, 0, 255)</CaptionRightTopMost>
+  <DescriptionWindowBG>RGB(255, 0, 255)</DescriptionWindowBG>
+  <DescriptionWindowText>RGB(255, 0, 255)</DescriptionWindowText>
+</Ditto_Theme_File>
