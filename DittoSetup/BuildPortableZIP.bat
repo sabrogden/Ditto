@@ -21,7 +21,7 @@ copy ..\Release\Addins\*.dll Ditto\Addins\
 
 copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x86\Microsoft.VC143.CRT\vcruntime140.dll" Ditto\vcruntime140.dll
 copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x86\Microsoft.VC143.CRT\msvcp140.dll" Ditto\msvcp140.dll
-copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x86\Microsoft.VC143.CRT\mfc140u.dll" Ditto\mfc140u.dll
+copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x86\Microsoft.VC143.MFC\mfc140u.dll" Ditto\mfc140u.dll
 
 if "%2"=="" GOTO skipBit64
 if "%2"=="bit32" GOTO skipBit64	
@@ -34,7 +34,7 @@ copy ..\Release64\Addins\*.dll Ditto\Addins\
 copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x64\Microsoft.VC143.CRT\vcruntime140.dll" Ditto\vcruntime140.dll
 copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x64\Microsoft.VC143.CRT\vcruntime140_1.dll" Ditto\vcruntime140_1.dll
 copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x64\Microsoft.VC143.CRT\msvcp140.dll" Ditto\msvcp140.dll
-copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x64\Microsoft.VC143.CRT\mfc140u.dll" Ditto\mfc140u.dll
+copy "C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x64\Microsoft.VC143.MFC\mfc140u.dll" Ditto\mfc140u.dll
 
 :skipBit64
 
