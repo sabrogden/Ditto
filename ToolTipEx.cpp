@@ -224,15 +224,13 @@ BOOL CToolTipEx::Show(CPoint point)
 		CRect rcScreen = MonitorRectFromRect(cr);
 
 		//ensure that we don't go outside the screen
-		if(point.x < 0)
+		if(point.x < rcScreen.left)
 		{
-			point.x = 5;
-			//m_reducedWindowSize = true;
+			point.x = rcScreen.left + 5;
 		}
-		if(point.y < 0)
+		if(point.y < rcScreen.top)
 		{
-			point.y = 5;
-			//m_reducedWindowSize = true;
+			point.y = rcScreen.top + 5;
 		}
 
 		rcScreen.DeflateRect(0, 0, 5, 5);
@@ -253,12 +251,10 @@ BOOL CToolTipEx::Show(CPoint point)
 		if (rect.right > rcScreen.right)
 		{
 			rect.right = rcScreen.right;
-			//m_reducedWindowSize = true;
 		}
 		if (rect.bottom > rcScreen.bottom)
 		{
 			rect.bottom = rcScreen.bottom;
-			//m_reducedWindowSize = true;
 		}
 	}
 
