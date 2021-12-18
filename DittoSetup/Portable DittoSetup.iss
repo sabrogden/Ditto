@@ -19,15 +19,35 @@ CreateUninstallRegKey=no
 
 [Languages]
 Name: "English"; MessagesFile: "compiler:Default.isl"
-Name: "German"; MessagesFile: "German.isl"
-Name: "Italiano"; MessagesFile: "Italian.isl"
-Name: "French"; MessagesFile: "French.isl"
-Name: "Portuguese"; MessagesFile: "Portuguese.isl"
-Name: "Spanish"; MessagesFile: "Spanish.isl"
-Name: "Polski"; MessagesFile: "Polish.isl"
-Name: "Dutch"; MessagesFile: "Dutch.isl"
-Name: "Swedish"; MessagesFile: "Swedish.isl"
-Name: "Croatian"; MessagesFile: "Croatian.isl"
+;Inno Setup Official translations
+Name: Czech; MessagesFile: compiler:Languages\Czech.isl
+Name: Danish; MessagesFile: compiler:Languages\Danish.isl
+Name: Dutch; MessagesFile: compiler:Languages\Dutch.isl
+Name: Finnish; MessagesFile: compiler:Languages\Finnish.isl
+Name: French; MessagesFile: compiler:Languages\French.isl
+Name: German; MessagesFile: compiler:Languages\German.isl
+Name: Hebrew; MessagesFile: compiler:Languages\Hebrew.isl
+Name: Italiano; MessagesFile: compiler:Languages\Italian.isl
+Name: Japanese; MessagesFile: compiler:Languages\Japanese.isl
+Name: Polish; MessagesFile: compiler:Languages\Polish.isl
+Name: Portuguese_Brazil; MessagesFile: compiler:Languages\BrazilianPortuguese.isl
+Name: Portuguese_Portugal; MessagesFile: compiler:Languages\Portuguese.isl
+Name: Russian; MessagesFile: compiler:Languages\Russian.isl
+Name: Slovak; MessagesFile: compiler:Languages\Slovak.isl
+Name: Slovenian; MessagesFile: compiler:Languages\Slovenian.isl
+Name: Spanish; MessagesFile: compiler:Languages\Spanish.isl
+Name: Turkish; MessagesFile: compiler:Languages\Turkish.isl
+Name: Ukrainian; MessagesFile: compiler:Languages\Ukrainian.isl
+
+;Inno Setup Unofficial translations
+Name: Simplified_Chinese; MessagesFile: ChineseSimplified.isl
+Name: Traditional_Chinese; MessagesFile: ChineseTraditional.isl
+Name: Croatian; MessagesFile: Croatian.isl
+Name: Greek; MessagesFile: Greek.isl
+Name: Hungarian; MessagesFile: Hungarian.isl
+Name: Korean; MessagesFile: Korean.isl
+Name: Romanian; MessagesFile: Romanian.isl
+Name: Swedish; MessagesFile: Swedish.isl
 
 [Files]
 Source: "..\Release\DittoU.exe"; DestDir: "{app}"; DestName: "Ditto.exe"; Flags: ignoreversion;

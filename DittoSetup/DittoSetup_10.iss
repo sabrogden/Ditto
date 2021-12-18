@@ -35,31 +35,35 @@ SetupLogging=yes
 [Languages]
 Name: English; MessagesFile: compiler:Default.isl
 
+;Inno Setup Official translations
+Name: Czech; MessagesFile: compiler:Languages\Czech.isl
+Name: Danish; MessagesFile: compiler:Languages\Danish.isl
+Name: Dutch; MessagesFile: compiler:Languages\Dutch.isl
+Name: Finnish; MessagesFile: compiler:Languages\Finnish.isl
+Name: French; MessagesFile: compiler:Languages\French.isl
+Name: German; MessagesFile: compiler:Languages\German.isl
+Name: Hebrew; MessagesFile: compiler:Languages\Hebrew.isl
+Name: Italiano; MessagesFile: compiler:Languages\Italian.isl
+Name: Japanese; MessagesFile: compiler:Languages\Japanese.isl
+Name: Polish; MessagesFile: compiler:Languages\Polish.isl
+Name: Portuguese_Brazil; MessagesFile: compiler:Languages\BrazilianPortuguese.isl
+Name: Portuguese_Portugal; MessagesFile: compiler:Languages\Portuguese.isl
+Name: Russian; MessagesFile: compiler:Languages\Russian.isl
+Name: Slovak; MessagesFile: compiler:Languages\Slovak.isl
+Name: Slovenian; MessagesFile: compiler:Languages\Slovenian.isl
+Name: Spanish; MessagesFile: compiler:Languages\Spanish.isl
+Name: Turkish; MessagesFile: compiler:Languages\Turkish.isl
+Name: Ukrainian; MessagesFile: compiler:Languages\Ukrainian.isl
 
-Name: Deutsch; MessagesFile: German.isl
-Name: Italiano; MessagesFile: Italian.isl
-Name: French; MessagesFile: French.isl
-Name: Portuguese; MessagesFile: Portuguese.isl
-Name: Spanish; MessagesFile: Spanish.isl
-Name: Polski; MessagesFile: Polish.isl
-Name: Dutch; MessagesFile: Dutch.isl
-Name: Swedish; MessagesFile: Swedish.isl
+;Inno Setup Unofficial translations
+Name: Simplified_Chinese; MessagesFile: ChineseSimplified.isl
+Name: Traditional_Chinese; MessagesFile: ChineseTraditional.isl
 Name: Croatian; MessagesFile: Croatian.isl
-Name: Turkish; MessagesFile: Turkish.isl
-Name: Japanese; MessagesFile: Japanese.isl
-Name: Chinese; MessagesFile: ChineseSimp.isl
-Name: Romanian; MessagesFile: Romanian.isl
-Name: Korean; MessagesFile: Korean.isl
-Name: Russian; MessagesFile: Russian.isl
-Name: Slovenian; MessagesFile: Slovenian.isl
-Name: Czech; MessagesFile: Czech.isl
-Name: Danish; MessagesFile: Danish.isl
 Name: Greek; MessagesFile: Greek.isl
-Name: Ukrainian; MessagesFile: Ukrainian.isl
-Name: Hebrew; MessagesFile: Hebrew.isl
-Name: Finnish; MessagesFile: Finnish.isl
-Name: Slovak; MessagesFile: Slovak.isl
 Name: Hungarian; MessagesFile: Hungarian.isl
+Name: Korean; MessagesFile: Korean.isl
+Name: Romanian; MessagesFile: Romanian.isl
+Name: Swedish; MessagesFile: Swedish.isl
 
 [Tasks]
 Name: RunAtStartup; Description: Run Ditto on windows startup
@@ -67,25 +71,22 @@ Name: AddFireWallException; Description: Add Windows Firewall exception for Ditt
 
 [Files]
 #ifdef bit64
-	Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_64');
+  Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_64');
   Source: ..\Release64\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
-	Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
+  Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 	
-  Source: C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x64\Microsoft.VC143.CRT\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
-  Source: C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x64\Microsoft.VC143.CRT\vcruntime140_1.dll;  DestDir: {app}; Flags: ignoreversion
-  Source: C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x64\Microsoft.VC143.CRT\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion
-  Source: C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x64\Microsoft.VC143.MFC\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
-
+  Source: C:\Windows\SysWOW64\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: C:\Windows\SysWOW64\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: C:\Windows\SysWOW64\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
 #endif
 #ifndef bit64
-	Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_32');
+  Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_32');
   Source: ..\Release\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
   Source: ..\Release\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
-	
-  Source: C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x86\Microsoft.VC143.CRT\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
-  Source: C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x86\Microsoft.VC143.CRT\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion
-  Source: C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Redist\MSVC\14.30.30704\x86\Microsoft.VC143.MFC\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
 
+  Source: C:\Windows\System32\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: C:\Windows\System32\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion
+  Source: C:\Windows\System32\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
 #endif
 
 Source: ..\Debug\Language\*; DestDir: {app}\Language; BeforeInstall: BeforeLanguageInstall()
