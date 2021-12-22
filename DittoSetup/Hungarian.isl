@@ -1,26 +1,6 @@
-; *** Inno Setup version 5.5.3+ Hungarian messages with "a(z)" definite articles ***
-; Copyright (C) 1999-2012 Kornél Pál
-; All rights reserved.
-; E-mail: kornelpal@gmail.com
-; Hungarian Inno Setup translation home page: http://www.kornelpal.hu/ishu
-;
-; You can download the versions with "a" and "az" definite articles and read
-; about the usage of different Hungarian definite articles on this page.
-;
-; For conditions of use and distribution see Readme.htm file contained in the
-; Hungarian Inno Setup messages package available on the above home page.
-;
-; *** Inno Setup 5.1.11+ verzió magyar üzenetek "a(z)" határozott névelõkkel ***
-; Copyright (C) 1999-2012 Pál Kornél
-; Minden jog fenntartva.
-; E-mail: kornelpal@gmail.com
-; Magyar Inno Setup oldal: http://www.palkornel.hu/innosetup
-;
-; Az oldalról letölthetõ az "a" és az "az" névelõket tartalmazó változat, és
-; olvashatsz a különbözõ magyar határozott névelõk használatáról is.
-;
-; A használat és a továbbadás feltételei a fenti oldalról letölthetõ Magyar
-; Inno Setup üzenetek csomagban található Fontos.htm fájlban olvashatóak.
+ï»¿; *** Inno Setup version 6.1.0+ Hungarian messages ***
+;	Based on the translation of KornÃ©l PÃ¡l, kornelpal@gmail.com
+;	IstvÃ¡n SzabÃ³, E-mail: istvanszabo890629@gmail.com
 ;
 ; To download user-contributed translations of this file, go to:
 ;   http://www.jrsoftware.org/files/istrans/
@@ -42,317 +22,365 @@ LanguageCodePage=1250
 ;DialogFontSize=8
 ;WelcomeFontName=Verdana
 ;WelcomeFontSize=12
-TitleFontName=Arial CE
+;TitleFontName=Arial CE
 ;TitleFontSize=29
-CopyrightFontName=Arial CE
+;CopyrightFontName=Arial CE
 ;CopyrightFontSize=8
 
 [Messages]
 
 ; *** Application titles
-SetupAppTitle=Telepítõ
-SetupWindowTitle=%1 Telepítõ
-UninstallAppTitle=Eltávolító
-UninstallAppFullTitle=%1 Eltávolító
+SetupAppTitle=TelepÃ­tÅ‘
+SetupWindowTitle=%1 - TelepÃ­tÅ‘
+UninstallAppTitle=EltÃ¡volÃ­tÃ³
+UninstallAppFullTitle=%1 EltÃ¡volÃ­tÃ³
 
 ; *** Misc. common
-InformationTitle=Információk
-ConfirmTitle=Megerõsítés
+InformationTitle=InformÃ¡ciÃ³k
+ConfirmTitle=MegerÅ‘sÃ­t
 ErrorTitle=Hiba
 
 ; *** SetupLdr messages
-SetupLdrStartupMessage=A(z) %1 telepítésre fog kerülni. Kívánja folytatni a telepítést?
-LdrCannotCreateTemp=Nem lehet átmeneti fájlt létrehozni. A telepítés megszakadt
-LdrCannotExecTemp=Az átmeneti könyvtárban nem lehet fájlt végrehajtani. A telepítés megszakadt
+SetupLdrStartupMessage=%1 telepÃ­tve lesz. SzeretnÃ© folytatni?
+LdrCannotCreateTemp=Ãtmeneti fÃ¡jl lÃ©trehozÃ¡sa nem lehetsÃ©ges. A telepÃ­tÃ©s megszakÃ­tva
+LdrCannotExecTemp=FÃ¡jl futattÃ¡sa nem lehetsÃ©ges az Ã¡tmeneti kÃ¶nyvtÃ¡rban. A telepÃ­tÃ©s megszakÃ­tva
+HelpTextNote=
 
 ; *** Startup error messages
 LastErrorMessage=%1.%n%nHiba %2: %3
-SetupFileMissing=A(z) %1 fájl hiányzik a telepítõ könyvtárából. Hárítsa el a hibát, vagy szerezzen be egy új másolatot a programról.
-SetupFileCorrupt=A telepítõfájlok megsérültek. Szerezzen be egy új másolatot a programról.
-SetupFileCorruptOrWrongVer=A telepítõfájlok megsérültek, vagy nem kompatibilisek a Telepítõ jelen verziójával. Hárítsa el a hibát, vagy szerezzen be egy új másolatot a programról.
-InvalidParameter=Az egyik parancssorban átadott paraméter érvénytelen:%n%n%1
-SetupAlreadyRunning=A Telepítõ már fut.
-WindowsVersionNotSupported=A program nem támogatja a Windows számítógépén futó verzióját.
-WindowsServicePackRequired=A program futtatásához %1 Service Pack %2 vagy késõbbi verzió szükséges.
-NotOnThisPlatform=Ez a program nem futtatható %1 alatt.
+SetupFileMissing=A(z) %1 fÃ¡jl hiÃ¡nyzik a telepÃ­tÅ‘ kÃ¶nyvtÃ¡rÃ¡bÃ³l. KÃ©rem hÃ¡rÃ­tsa el a problÃ©mÃ¡t, vagy szerezzen be egy mÃ¡sik pÃ©ldÃ¡nyt a programbÃ³l!
+SetupFileCorrupt=A telepÃ­tÃ©si fÃ¡jlok sÃ©rÃ¼ltek. KÃ©rem, szerezzen be Ãºj mÃ¡solatot a programbÃ³l!
+SetupFileCorruptOrWrongVer=A telepÃ­tÃ©si fÃ¡jlok sÃ©rÃ¼ltek, vagy inkompatibilisek a telepÃ­tÅ‘ ezen verziÃ³jÃ¡val. HÃ¡rÃ­tsa el a problÃ©mÃ¡t, vagy szerezzen be egy mÃ¡sik pÃ©ldÃ¡nyt a programbÃ³l!
+InvalidParameter=A parancssorba Ã¡tadott paramÃ©ter Ã©rvÃ©nytelen:%n%n%1
+SetupAlreadyRunning=A TelepÃ­tÅ‘ mÃ¡r fut.
+WindowsVersionNotSupported=A program nem tÃ¡mogatja a Windows ezen verziÃ³jÃ¡t.
+WindowsServicePackRequired=A program futtatÃ¡sÃ¡hoz %1 Service Pack %2 vagy Ãºjabb szÃ¼ksÃ©ges.
+NotOnThisPlatform=Ez a program nem futtathatÃ³ %1 alatt.
 OnlyOnThisPlatform=Ezt a programot %1 alatt kell futtatni.
-OnlyOnTheseArchitectures=Ezt a programot csak a Windows következõ processzorarchitektúrákhoz tervezett változataira lehet telepíteni:%n%n%1
-MissingWOW64APIs=A Windows Ön által futtatott verziója nem tartalmazza a Telepítõ által a 64-bites telepítés elvégzéséhez igényelt funkcionalitást. A hiba elhárításához a Service Pack %1 telepítése szükséges.
-WinVersionTooLowError=A program a %1 %2 vagy késõbbi verzióját igényli.
-WinVersionTooHighError=A programot nem lehet a %1 %2 vagy késõbbi verziójára telepíteni.
-AdminPrivilegesRequired=A program telepítéséhez rendszergazdaként kell bejelentkezni.
-PowerUserPrivilegesRequired=A program telepítéséhez rendszergazdaként vagy a kiemelt felhasználók csoport tagjaként kell bejelentkezni.
-SetupAppRunningError=A Telepítõ megállapította, hogy a(z) %1 jelenleg fut.%n%nKérem, zárja be az összes példányát, majd a folytatáshoz kattintson az OK gombra, vagy a Mégse gombra a kilépéshez.
-UninstallAppRunningError=Az Eltávolító megállapította, hogy a(z) %1 jelenleg fut.%n%nKérem, zárja be az összes példányát, majd a folytatáshoz kattintson az OK gombra, vagy a Mégse gombra a kilépéshez.
+OnlyOnTheseArchitectures=A program kizÃ¡rÃ³lag a kÃ¶vetkezÅ‘ processzor architektÃºrÃ¡khoz tervezett Windows-on telepÃ­thetÅ‘:%n%n%1
+WinVersionTooLowError=A program futtatÃ¡sÃ¡hoz %1 %2 verziÃ³ja vagy kÃ©sÅ‘bbi szÃ¼ksÃ©ges.
+WinVersionTooHighError=Ez a program nem telepÃ­thetÅ‘ %1 %2 vagy kÃ©sÅ‘bbire.
+AdminPrivilegesRequired=Csak rendszergazdai mÃ³dban telepÃ­thetÅ‘ ez a program.
+PowerUserPrivilegesRequired=Csak rendszergazdakÃ©nt vagy kiemelt felhasznÃ¡lÃ³kÃ©nt telepÃ­thetÅ‘ ez a program.
+SetupAppRunningError=A telepÃ­tÅ‘ Ãºgy Ã©szlelte %1 jelenleg fut.%n%nZÃ¡rja be az Ã¶sszes pÃ©ldÃ¡nyt, majd kattintson az 'OK'-ra a folytatÃ¡shoz, vagy a 'MÃ©gse'-re a kilÃ©pÃ©shez.
+UninstallAppRunningError=Az eltÃ¡volÃ­tÃ³ Ãºgy Ã©szlelte %1 jelenleg fut.%n%nZÃ¡rja be az Ã¶sszes pÃ©ldÃ¡nyt, majd kattintson az 'OK'-ra a folytatÃ¡shoz, vagy a 'MÃ©gse'-re a kilÃ©pÃ©shez.
+
+; *** Startup questions
+PrivilegesRequiredOverrideTitle=TelepÃ­tÃ©si mÃ³d kivÃ¡lasztÃ¡sa
+PrivilegesRequiredOverrideInstruction=VÃ¡lasszon telepÃ­tÃ©si mÃ³dot
+PrivilegesRequiredOverrideText1=%1 telepÃ­thetÅ‘ az Ã¶sszes felhasznÃ¡lÃ³nak (rendszergazdai jogok szÃ¼ksÃ©gesek), vagy csak magÃ¡nak.
+PrivilegesRequiredOverrideText2=%1 csak magÃ¡nak telepÃ­thetÅ‘, vagy az Ã¶sszes felhasznÃ¡lÃ³nak (rendszergazdai jogok szÃ¼ksÃ©gesek).
+PrivilegesRequiredOverrideAllUsers=TelepÃ­tÃ©s &mindenkinek
+PrivilegesRequiredOverrideAllUsersRecommended=TelepÃ­tÃ©s &mindenkinek (ajÃ¡nlott)
+PrivilegesRequiredOverrideCurrentUser=TelepÃ­tÃ©s csak &nekem
+PrivilegesRequiredOverrideCurrentUserRecommended=TelepÃ­tÃ©s csak &nekem (ajÃ¡nlott)
 
 ; *** Misc. errors
-ErrorCreatingDir=A Telepítõ nem tudta létrehozni a(z) "%1" könyvtárat
-ErrorTooManyFilesInDir=Nem hozható létre fájl a(z) "%1" könyvtárban, mert az már túl sok fájlt tartalmaz
+ErrorCreatingDir=A TelepÃ­tÅ‘ nem tudta lÃ©trehozni a(z) "%1" kÃ¶nyvtÃ¡rat
+ErrorTooManyFilesInDir=Nem hozhatÃ³ lÃ©tre fÃ¡jl a(z) "%1" kÃ¶nyvtÃ¡rban, mert az mÃ¡r tÃºl sok fÃ¡jlt tartalmaz
 
 ; *** Setup common messages
-ExitSetupTitle=Kilépés a Telepítõbõl
-ExitSetupMessage=A telepítés még nem fejezõdött be. Ha most kilép, a program nem kerül telepítésre.%n%nA Telepítõt késõbb is futtathatja a telepítés befejezéséhez.%n%nKilép a Telepítõbõl?
-AboutSetupMenuItem=&Névjegy...
-AboutSetupTitle=Telepítõ névjegye
-AboutSetupMessage=%1 %2 verzió%n%3%n%nAz %1 honlapja:%n%4
+ExitSetupTitle=KilÃ©pÃ©s a telepÃ­tÅ‘bÅ‘l
+ExitSetupMessage=A telepÃ­tÃ©s mÃ©g folyamatban van. Ha most kilÃ©p, a program nem kerÃ¼l telepÃ­tÃ©sre.%n%nMÃ¡sik alkalommal is futtathatÃ³ a telepÃ­tÃ©s befejezÃ©sÃ©hez%n%nKilÃ©p a telepÃ­tÅ‘bÅ‘l?
+AboutSetupMenuItem=&NÃ©vjegy...
+AboutSetupTitle=TelepÃ­tÅ‘ nÃ©vjegye
+AboutSetupMessage=%1 %2 verziÃ³%n%3%n%nAz %1 honlapja:%n%4
 AboutSetupNote=
-TranslatorNote=Magyar változat:%nCopyright (C) 1999-2012 Pál Kornél%nMinden jog fenntartva.%n%nMagyar Inno Setup oldal:%nhttp://www.palkornel.hu/innosetup
+TranslatorNote=
 
 ; *** Buttons
 ButtonBack=< &Vissza
-ButtonNext=&Tovább >
-ButtonInstall=&Telepítés
+ButtonNext=&TovÃ¡bb >
+ButtonInstall=&TelepÃ­t
 ButtonOK=OK
-ButtonCancel=Mégse
+ButtonCancel=MÃ©gse
 ButtonYes=&Igen
-ButtonYesToAll=Igen, &mindet
+ButtonYesToAll=&Mindet
 ButtonNo=&Nem
-ButtonNoToAll=&Egyiket sem
-ButtonFinish=&Befejezés
-ButtonBrowse=&Tallózás...
-ButtonWizardBrowse=T&allózás...
-ButtonNewFolder=Ú&j mappa
+ButtonNoToAll=&Egyiket se
+ButtonFinish=&BefejezÃ©s
+ButtonBrowse=&TallÃ³zÃ¡s...
+ButtonWizardBrowse=T&allÃ³zÃ¡s...
+ButtonNewFolder=Ãšj &kÃ¶nyvtÃ¡r
 
 ; *** "Select Language" dialog messages
-SelectLanguageTitle=Válasszon telepítési nyelvet
-SelectLanguageLabel=Válassza ki a telepítés során használandó nyelvet:
+SelectLanguageTitle=TelepÃ­tÅ‘ nyelvi beÃ¡llÃ­tÃ¡s
+SelectLanguageLabel=VÃ¡lassza ki a telepÃ­tÃ©s alatt hasznÃ¡lt nyelvet.
 
 ; *** Common wizard text
-ClickNext=A folytatáshoz kattintson a Tovább gombra, vagy a Mégse gombra a Telepítõbõl történõ kilépéshez.
+ClickNext=A folytatÃ¡shoz kattintson a 'TovÃ¡bb'-ra, a kilÃ©pÃ©shez a 'MÃ©gse'-re.
 BeveledLabel=
-BrowseDialogTitle=Tallózás a mappák között
-BrowseDialogLabel=Válasszon egy mappát az alábbi listából, majd kattintson az OK gombra.
-NewFolderName=Új mappa
+BrowseDialogTitle=VÃ¡lasszon kÃ¶nyvtÃ¡rt 
+BrowseDialogLabel=VÃ¡lasszon egy kÃ¶nyvtÃ¡rat az alÃ¡bbi listÃ¡bÃ³l, majd kattintson az 'OK'-ra.
+NewFolderName=Ãšj kÃ¶nyvtÃ¡r
 
 ; *** "Welcome" wizard page
-WelcomeLabel1=Üdvözli a(z) [name] Telepítõvarázsló.
-WelcomeLabel2=A(z) [name/ver] a számítógépére fog kerülni.%n%nA telepítés folytatása elõtt ajánlott minden más futó alkalmazást bezárni.
+WelcomeLabel1=ÃœdvÃ¶zli a(z) [name] TelepÃ­tÅ‘varÃ¡zslÃ³ja.
+WelcomeLabel2=A(z) [name/ver] telepÃ­tÃ©sre kerÃ¼l a szÃ¡mÃ­tÃ³gÃ©pÃ©n.%n%nAjÃ¡nlott minden, egyÃ©b futÃ³ alkalmazÃ¡s bezÃ¡rÃ¡sa a folytatÃ¡s elÅ‘tt.
 
 ; *** "Password" wizard page
-WizardPassword=Jelszó
-PasswordLabel1=Ez a telepítés jelszóval van védve.
-PasswordLabel3=Adja meg a jelszót, majd a folytatáshoz kattintson a Tovább gombra. A jelszavakban a kis- és a nagybetûk különbözõnek számítanak.
-PasswordEditLabel=&Jelszó:
-IncorrectPassword=A megadott jelszó helytelen. Próbálja újra.
+WizardPassword=JelszÃ³
+PasswordLabel1=Ez a telepÃ­tÃ©s jelszÃ³val vÃ©dett.
+PasswordLabel3=KÃ©rem adja meg a jelszÃ³t, majd kattintson a 'TovÃ¡bb'-ra. A jelszavak kis- Ã©s nagy betÅ± Ã©rzÃ©kenyek lehetnek.
+PasswordEditLabel=&JelszÃ³:
+IncorrectPassword=Az Ã¶n Ã¡ltal megadott jelszÃ³ helytelen. PrÃ³bÃ¡lja Ãºjra.
 
 ; *** "License Agreement" wizard page
-WizardLicense=Licencszerzõdés
-LicenseLabel=Olvassa el a következõ fontos információkat a folytatás elõtt.
-LicenseLabel3=Kérem, olvassa el az alábbi licencszerzõdést. El kell fogadnia a szerzõdés feltételeit a telepítés folytatása elõtt.
-LicenseAccepted=&Elfogadom a szerzõdést
-LicenseNotAccepted=&Nem fogadom el a szerzõdést
+WizardLicense=LicencszerzÅ‘dÃ©s
+LicenseLabel=Olvassa el figyelmesen az informÃ¡ciÃ³kat folytatÃ¡s elÅ‘tt.
+LicenseLabel3=KÃ©rem, olvassa el az alÃ¡bbi licencszerzÅ‘dÃ©st. A telepÃ­tÃ©s folytatÃ¡sÃ¡hoz, el kell fogadnia a szerzÅ‘dÃ©st.
+LicenseAccepted=&Elfogadom a szerzÅ‘dÃ©st
+LicenseNotAccepted=&Nem fogadom el a szerzÅ‘dÃ©st
 
 ; *** "Information" wizard pages
-WizardInfoBefore=Információk
-InfoBeforeLabel=Olvassa el a következõ fontos információkat a folytatás elõtt.
-InfoBeforeClickLabel=Ha felkészült a telepítés folytatására, kattintson a Tovább gombra.
-WizardInfoAfter=Információk
-InfoAfterLabel=Olvassa el a következõ fontos információkat a folytatás elõtt.
-InfoAfterClickLabel=Ha felkészült a telepítés folytatására, kattintson a Tovább gombra.
+WizardInfoBefore=InformÃ¡ciÃ³k
+InfoBeforeLabel=Olvassa el a kÃ¶vetkezÅ‘ fontos informÃ¡ciÃ³kat a folytatÃ¡s elÅ‘tt.
+InfoBeforeClickLabel=Ha kÃ©szen Ã¡ll, kattintson a 'TovÃ¡bb'-ra.
+WizardInfoAfter=InformÃ¡ciÃ³k
+InfoAfterLabel=Olvassa el a kÃ¶vetkezÅ‘ fontos informÃ¡ciÃ³kat a folytatÃ¡s elÅ‘tt.
+InfoAfterClickLabel=Ha kÃ©szen Ã¡ll, kattintson a 'TovÃ¡bb'-ra.
 
 ; *** "User Information" wizard page
-WizardUserInfo=Felhasználó adatai
-UserInfoDesc=Kérem, adja meg az adatait.
-UserInfoName=&Felhasználónév:
+WizardUserInfo=FelhasznÃ¡lÃ³ adatai
+UserInfoDesc=KÃ©rem, adja meg az adatait!
+UserInfoName=&FelhasznÃ¡lÃ³nÃ©v:
 UserInfoOrg=&Szervezet:
-UserInfoSerial=&Sorozatszám:
-UserInfoNameRequired=Meg kell adnia egy nevet.
+UserInfoSerial=&SorozatszÃ¡m:
+UserInfoNameRequired=Meg kell adnia egy nevet!
 
 ; *** "Select Destination Location" wizard page
-WizardSelectDir=Válasszon telepítési helyet
-SelectDirDesc=Hova kerüljön telepítésre a(z) [name]?
-SelectDirLabel3=A Telepítõ a(z) [name] alkalmazást a következõ mappába fogja telepíteni.
-SelectDirBrowseLabel=A folytatáshoz kattintson a Tovább gombra. Másik mappa kiválasztásához kattintson a Tallózás gombra.
-DiskSpaceMBLabel=Legalább [mb] MB szabad lemezterületre van szükség.
-CannotInstallToNetworkDrive=A Telepítõ nem tud hálózati meghajtóra telepíteni.
-CannotInstallToUNCPath=A Telepítõ nem tud hálózati UNC elérési útra telepíteni.
-InvalidPath=Teljes útvonalat írjon be a meghajtó betûjelével; például:%n%nC:\Alkalmazás%n%nvagy egy hálózati útvonalat a következõ alakban:%n%n\\kiszolgáló\megosztás
-InvalidDrive=A kiválasztott meghajtó vagy hálózati megosztás nem létezik vagy nem érhetõ el. Válasszon másikat.
-DiskSpaceWarningTitle=Nincs elég szabad lemezterület a meghajtón
-DiskSpaceWarning=A Telepítõnek legalább %1 KB szabad lemezterületre van szüksége, de a kiválasztott meghajtón csak %2 KB áll rendelkezésre.%n%nMindenképpen folytatni kívánja?
-DirNameTooLong=A mappanév vagy az útvonal túl hosszú.
-InvalidDirName=A mappanév érvénytelen.
-BadDirName32=A mappanevekben nem szerepelhetnek a következõ karakterek:%n%n%1
-DirExistsTitle=A mappa már létezik
-DirExists=A következõ mappa már létezik:%n%n%1 %n%nEbbe a mappába kívánja telepíteni a programot?
-DirDoesntExistTitle=A mappa nem létezik
-DirDoesntExist= A következõ mappa nem létezik:%n%n%1%n%nLétre kívánja hozni a mappát?
+WizardSelectDir=VÃ¡lasszon cÃ©lkÃ¶nyvtÃ¡rat
+SelectDirDesc=Hova telepÃ¼ljÃ¶n a(z) [name]?
+SelectDirLabel3=A(z) [name] az alÃ¡bbi kÃ¶nyvtÃ¡rba lesz telepÃ­tve.
+SelectDirBrowseLabel=A folytatÃ¡shoz, kattintson a 'TovÃ¡bb'-ra. Ha mÃ¡sik kÃ¶nyvtÃ¡rat vÃ¡lasztana, kattintson a 'TallÃ³zÃ¡s'-ra.
+DiskSpaceGBLabel=LegalÃ¡bb [gb] GB szabad terÃ¼letre van szÃ¼ksÃ©g.
+DiskSpaceMBLabel=LegalÃ¡bb [mb] MB szabad terÃ¼letre van szÃ¼ksÃ©g.
+CannotInstallToNetworkDrive=A TelepÃ­tÅ‘ nem tud hÃ¡lÃ³zati meghajtÃ³ra telepÃ­teni.
+CannotInstallToUNCPath=A TelepÃ­tÅ‘ nem tud hÃ¡lÃ³zati UNC elÃ©rÃ©si Ãºtra telepÃ­teni.
+InvalidPath=Teljes Ãºtvonalat adjon meg, a meghajtÃ³ betÅ±jelÃ©vel; pÃ©ldÃ¡ul:%n%nC:\AlkalmazÃ¡s%n%nvagy egy hÃ¡lÃ³zati Ãºtvonalat a kÃ¶vetkezÅ‘ alakban:%n%n\\kiszolgÃ¡lÃ³\megosztÃ¡s
+InvalidDrive=A kivÃ¡lasztott meghajtÃ³ vagy hÃ¡lÃ³zati megosztÃ¡s nem lÃ©tezik vagy nem elÃ©rhetÅ‘. VÃ¡lasszon egy mÃ¡sikat.
+DiskSpaceWarningTitle=Nincs elÃ©g szabad terÃ¼let
+DiskSpaceWarning=A TelepÃ­tÅ‘nek legalÃ¡bb %1 KB szabad lemezterÃ¼letre van szÃ¼ksÃ©ge, viszont a kivÃ¡lasztott meghajtÃ³n csupÃ¡n %2 KB Ã¡ll rendelkezÃ©sre.%n%nMindenkÃ©ppen folytatja?
+DirNameTooLong=A kÃ¶nyvtÃ¡r neve vagy az Ãºtvonal tÃºl hosszÃº.
+InvalidDirName=A kÃ¶nyvtÃ¡r neve Ã©rvÃ©nytelen.
+BadDirName32=A kÃ¶nyvtÃ¡rak nevei ezen karakterek egyikÃ©t sem tartalmazhatjÃ¡k:%n%n%1
+DirExistsTitle=A kÃ¶nyvtÃ¡r mÃ¡r lÃ©tezik
+DirExists=A kÃ¶nyvtÃ¡r:%n%n%1%n%nmÃ¡r lÃ©tezik. MindenkÃ©pp ide akar telepÃ­teni?
+DirDoesntExistTitle=A kÃ¶nyvtÃ¡r nem lÃ©tezik
+DirDoesntExist=A kÃ¶nyvtÃ¡r:%n%n%1%n%nnem lÃ©tezik. SzeretnÃ© lÃ©trehozni?
 
 ; *** "Select Components" wizard page
-WizardSelectComponents=Összetevõk kiválasztása
-SelectComponentsDesc=Mely összetevõk kerüljenek telepítésre?
-SelectComponentsLabel2=Válassza ki a telepítendõ összetevõket; törölje a telepíteni nem kívánt összetevõket. Kattintson a Tovább gombra, ha készen áll a folytatásra.
-FullInstallation=Teljes telepítés
+WizardSelectComponents=Ã–sszetevÅ‘k kivÃ¡lasztÃ¡sa
+SelectComponentsDesc=Mely Ã¶sszetevÅ‘k kerÃ¼ljenek telepÃ­tÃ©sre?
+SelectComponentsLabel2=JelÃ¶lje ki a telepÃ­tendÅ‘ Ã¶sszetevÅ‘ket; tÃ¶rÃ¶lje a telepÃ­teni nem kÃ­vÃ¡nt Ã¶sszetevÅ‘ket. Kattintson a 'TovÃ¡bb'-ra, ha kÃ©szen Ã¡ll a folytatÃ¡sra.
+FullInstallation=Teljes telepÃ­tÃ©s
 ; if possible don't translate 'Compact' as 'Minimal' (I mean 'Minimal' in your language)
-CompactInstallation=Szokásos telepítés
-CustomInstallation=Egyéni telepítés
-NoUninstallWarningTitle=Létezõ összetevõ
-NoUninstallWarning=A Telepítõ megállapította, hogy a következõ összetevõk már telepítve vannak a számítógépére:%n%n%1%n%nEzen összetevõk kijelölésének törlése nem távolítja el azokat a számítógépérõl.%n%nMindenképpen folytatja?
+CompactInstallation=SzokÃ¡sos telepÃ­tÃ©s
+CustomInstallation=EgyÃ©ni telepÃ­tÃ©s
+NoUninstallWarningTitle=LÃ©tezÅ‘ Ã¶sszetevÅ‘
+NoUninstallWarning=A telepÃ­tÅ‘ Ãºgy talÃ¡lta, hogy a kÃ¶vetkezÅ‘ Ã¶sszetevÅ‘k mÃ¡r telepÃ­tve vannak a szÃ¡mÃ­tÃ³gÃ©pre:%n%n%1%n%nEzen Ã¶sszetevÅ‘k kijelÃ¶lÃ©sÃ©nek tÃ¶rlÃ©se, nem tÃ¡volÃ­tja el azokat a szÃ¡mÃ­tÃ³gÃ©prÅ‘l.%n%nMindenkÃ©ppen folytatja?
 ComponentSize1=%1 KB
 ComponentSize2=%1 MB
-ComponentsDiskSpaceMBLabel=A jelenlegi kijelölés legalább [mb] MB lemezterületet igényel.
+ComponentsDiskSpaceGBLabel=A jelenlegi kijelÃ¶lÃ©s legalÃ¡bb [gb] GB lemezterÃ¼letet igÃ©nyel.																					 
+ComponentsDiskSpaceMBLabel=A jelenlegi kijelÃ¶lÃ©s legalÃ¡bb [mb] MB lemezterÃ¼letet igÃ©nyel.
 
 ; *** "Select Additional Tasks" wizard page
-WizardSelectTasks=Jelöljön ki kiegészítõ feladatokat
-SelectTasksDesc=Mely kiegészítõ feladatok kerüljenek végrehajtásra?
-SelectTasksLabel2=Jelölje ki, mely kiegészítõ feladatokat hajtsa végre a Telepítõ a(z) [name] telepítése során, majd kattintson a Tovább gombra.
+WizardSelectTasks=TovÃ¡bbi feladatok
+SelectTasksDesc=Mely kiegÃ©szÃ­tÅ‘ feladatok kerÃ¼ljenek vÃ©grehajtÃ¡sra?
+SelectTasksLabel2=JelÃ¶lje ki, mely kiegÃ©szÃ­tÅ‘ feladatokat hajtsa vÃ©gre a TelepÃ­tÅ‘ a(z) [name] telepÃ­tÃ©se sorÃ¡n, majd kattintson a 'TovÃ¡bb'-ra.
 
 ; *** "Select Start Menu Folder" wizard page
-WizardSelectProgramGroup=Válasszon mappát a Start menüben
-SelectStartMenuFolderDesc=Hova helyezze a Telepítõ a program parancsikonjait?
-SelectStartMenuFolderLabel3=A Telepítõ a program parancsikonjait a Start menü következõ mappájában fogja létrehozni.
-SelectStartMenuFolderBrowseLabel=A folytatáshoz kattintson a Tovább gombra. Másik mappa kiválasztásához kattintson a Tallózás gombra.
+WizardSelectProgramGroup=Start MenÃ¼ kÃ¶nyvtÃ¡ra
+SelectStartMenuFolderDesc=Hova helyezze a TelepÃ­tÅ‘ a program parancsikonjait?
+SelectStartMenuFolderLabel3=A TelepÃ­tÅ‘ a program parancsikonjait a Start menÃ¼ kÃ¶vetkezÅ‘ mappÃ¡jÃ¡ban fogja lÃ©trehozni.
+SelectStartMenuFolderBrowseLabel=A folytatÃ¡shoz kattintson a 'TovÃ¡bb'-ra. Ha mÃ¡sik mappÃ¡t vÃ¡lasztana, kattintson a 'TallÃ³zÃ¡s'-ra.
 MustEnterGroupName=Meg kell adnia egy mappanevet.
-GroupNameTooLong=A mappanév vagy az útvonal túl hosszú.
-InvalidGroupName=A mappanév érvénytelen.
-BadGroupName=A mappa nevében nem szerepelhetnek a következõ karakterek:%n%n%1
-NoProgramGroupCheck2=&Ne hozzon létre mappát a Start menüben
+GroupNameTooLong=A kÃ¶nyvtÃ¡r neve vagy az Ãºtvonal tÃºl hosszÃº.
+InvalidGroupName=A kÃ¶nyvtÃ¡r neve Ã©rvÃ©nytelen.
+BadGroupName=A kÃ¶nyvtÃ¡rak nevei ezen karakterek egyikÃ©t sem tartalmazhatjÃ¡k:%n%n%1
+NoProgramGroupCheck2=&Ne hozzon lÃ©tre mappÃ¡t a Start menÃ¼ben
 
 ; *** "Ready to Install" wizard page
-WizardReady=A Telepítõ felkészült
-ReadyLabel1=A Telepítõ felkészült a(z) [name] számítógépére történõ telepítésére.
-ReadyLabel2a=Kattintson a Telepítés gombra a folytatáshoz, vagy a Vissza gombra a beállítások áttekintéséhez, megváltoztatásához.
-ReadyLabel2b=Kattintson a Telepítés gombra a folytatáshoz.
-ReadyMemoUserInfo=Felhasználó adatai:
-ReadyMemoDir=Telepítés helye:
-ReadyMemoType=Telepítés típusa:
-ReadyMemoComponents=Választott összetevõk:
-ReadyMemoGroup=Start menü mappája:
-ReadyMemoTasks=Kiegészítõ feladatok:
+WizardReady=KÃ©szen Ã¡llunk a telepÃ­tÃ©sre
+ReadyLabel1=A TelepÃ­tÅ‘ kÃ©szen Ã¡ll, a(z) [name] szÃ¡mÃ­tÃ³gÃ©pre telepÃ­tÃ©shez.
+ReadyLabel2a=Kattintson a 'TelepÃ­tÃ©s'-re a folytatÃ¡shoz, vagy a "Vissza"-ra a beÃ¡llÃ­tÃ¡sok Ã¡ttekintÃ©sÃ©hez vagy megvÃ¡ltoztatÃ¡sÃ¡hoz.
+ReadyLabel2b=Kattintson a 'TelepÃ­tÃ©s'-re a folytatÃ¡shoz.
+ReadyMemoUserInfo=FelhasznÃ¡lÃ³ adatai:
+ReadyMemoDir=TelepÃ­tÃ©s cÃ©lkÃ¶nyvtÃ¡ra:
+ReadyMemoType=TelepÃ­tÃ©s tÃ­pusa:
+ReadyMemoComponents=VÃ¡lasztott Ã¶sszetevÅ‘k:
+ReadyMemoGroup=Start menÃ¼ mappÃ¡ja:
+ReadyMemoTasks=KiegÃ©szÃ­tÅ‘ feladatok:
+
+; *** TDownloadWizardPage wizard page and DownloadTemporaryFile
+DownloadingLabel=TovÃ¡bbi fÃ¡jlok letÃ¶ltÃ©se...
+ButtonStopDownload=&LetÃ¶ltÃ©s megÃ¡llÃ­tÃ¡sa
+StopDownload=Biztos, hogy leakarja Ã¡llÃ­tani a letÃ¶ltÃ©st?
+ErrorDownloadAborted=LetÃ¶ltÃ©s megszakÃ­tva
+ErrorDownloadFailed=A letÃ¶ltÃ©s meghiÃºsult: %1 %2
+ErrorDownloadSizeFailed=Hiba a fÃ¡jlmÃ©ret lekÃ©rÃ©se sorÃ¡n: %1 %2
+ErrorFileHash1=FÃ¡jl Hash (hasÃ­tÃ³Ã©rtÃ©k) hiba: %1
+ErrorFileHash2=Ã‰rvÃ©nytelen hash fÃ¡jl, vÃ¡rt Ã©rtÃ©k: %1, szÃ¡mÃ­tott: %2
+ErrorProgress=Ã‰rvÃ©nytelen folyamat: %1 : %2
+ErrorFileSize=Ã‰rvÃ©nytelen fÃ¡jlmÃ©ret, vÃ¡rt mÃ©ret %1, szÃ¡mÃ­tott: %2
 
 ; *** "Preparing to Install" wizard page
-WizardPreparing=Felkészülés a telepítésre
-PreparingDesc=A Telepítõ felkészül a(z) [name] számítógépére történõ telepítésére.
-PreviousInstallNotCompleted=Egy korábbi program telepítése/eltávolítása nem fejezõdött be. Újra kell indítania a számítógépét a másik telepítés befejezéséhez.%n%nA számítógépe újraindítása után ismét futtassa a Telepítõt a(z) [name] telepítésének befejezéséhez.
-CannotContinue=A telepítés nem folytatható. A kilépéshez kattintson a Mégse gombra.
-ApplicationsFound=A következõ alkalmazások olyan fájlokat használnak, amelyeket a Telepítõnek frissíteni kell. Ajánlott, hogy engedélyezze a Telepítõnek ezen alkalmazások automatikus bezárását.
-ApplicationsFound2=A következõ alkalmazások olyan fájlokat használnak, amelyeket a Telepítõnek frissíteni kell. Ajánlott, hogy engedélyezze a Telepítõnek ezen alkalmazások automatikus bezárását. A telepítés befejezése után a Telepítõ megkísérli az alkalmazások újraindítását.
-CloseApplications=&Alkalmazások automatikus bezárása
-DontCloseApplications=&Ne zárja be az alkalmazásokat
-ErrorCloseApplications=A Telepítõ nem tudott minden alkalmazást automatikusan bezárni. A folytatás elõtt ajánlott minden, a Telepítõ által frissítendõ fájlokat használó alkalmazást bezárni.
+WizardPreparing=FelkÃ©szÃ¼lÃ©s a telepÃ­tÃ©sre
+PreparingDesc=A TelepÃ­tÅ‘ felkÃ©szÃ¼l a(z) [name] szÃ¡mÃ­tÃ³gÃ©pre tÃ¶rtÃ©nÅ‘ telepÃ­tÃ©shez.
+PreviousInstallNotCompleted=gy korÃ¡bbi program telepÃ­tÃ©se/eltÃ¡volÃ­tÃ¡sa nem fejezÅ‘dÃ¶tt be. Ãšjra kell indÃ­tania a szÃ¡mÃ­tÃ³gÃ©pÃ©t a mÃ¡sik telepÃ­tÃ©s befejezÃ©sÃ©hez.%n%nA szÃ¡mÃ­tÃ³gÃ©pe ÃºjraindÃ­tÃ¡sa utÃ¡n ismÃ©t futtassa a TelepÃ­tÅ‘t a(z) [name] telepÃ­tÃ©sÃ©nek befejezÃ©sÃ©hez.
+CannotContinue=A telepÃ­tÃ©s nem folytathatÃ³. A kilÃ©pÃ©shez kattintson a 'MÃ©gse'-re.
+ApplicationsFound=A kÃ¶vetkezÅ‘ alkalmazÃ¡sok olyan fÃ¡jlokat hasznÃ¡lnak, amelyeket a TelepÃ­tÅ‘nek frissÃ­teni kell. AjÃ¡nlott, hogy engedÃ©lyezze a TelepÃ­tÅ‘nek ezen alkalmazÃ¡sok automatikus bezÃ¡rÃ¡sÃ¡t.
+ApplicationsFound2=A kÃ¶vetkezÅ‘ alkalmazÃ¡sok olyan fÃ¡jlokat hasznÃ¡lnak, amelyeket a TelepÃ­tÅ‘nek frissÃ­teni kell. AjÃ¡nlott, hogy engedÃ©lyezze a TelepÃ­tÅ‘nek ezen alkalmazÃ¡sok automatikus bezÃ¡rÃ¡sÃ¡t. A telepÃ­tÃ©s befejezÃ©se utÃ¡n, a TelepÃ­tÅ‘ megkÃ­sÃ©rli az alkalmazÃ¡sok ÃºjraindÃ­tÃ¡sÃ¡t.
+CloseApplications=&AlkalmazÃ¡sok automatikus bezÃ¡rÃ¡sa
+DontCloseApplications=&Ne zÃ¡rja be az alkalmazÃ¡sokat
+ErrorCloseApplications=A TelepÃ­tÅ‘ nem tudott minden alkalmazÃ¡st automatikusan bezÃ¡rni. A folytatÃ¡s elÅ‘tt ajÃ¡nlott minden, a TelepÃ­tÅ‘ Ã¡ltal frissÃ­tendÅ‘ fÃ¡jlokat hasznÃ¡lÃ³ alkalmazÃ¡st bezÃ¡rni.
+PrepareToInstallNeedsRestart=A telepÃ­tÅ‘nek most Ãºjra kell indÃ­tania a szÃ¡mÃ­tÃ³gÃ©pet. Az ÃºjraindÃ­tÃ¡s utÃ¡n, futtassa ÃºjbÃ³l ezt a telepÃ­tÅ‘t, hogy befejezze a [name] telepÃ­tÃ©sÃ©t.%n%nÃšjra szeretnÃ© most indÃ­tani a gÃ©pet?
 
 ; *** "Installing" wizard page
-WizardInstalling=Telepítés állapota
-InstallingLabel=Legyen türelemmel, amíg a(z) [name] számítógépére történõ telepítése folyik.
+WizardInstalling=TelepÃ­tÃ©s
+InstallingLabel=KÃ©rem vÃ¡rjon, amÃ­g a(z) [name] telepÃ­tÃ©se zajlik.
 
 ; *** "Setup Completed" wizard page
-FinishedHeadingLabel=A(z) [name] Telepítõvarázsló befejezése
-FinishedLabelNoIcons=A(z) [name] telepítése befejezõdött.
-FinishedLabel=A(z) [name] telepítése befejezõdött. Az alkalmazást a létrehozott ikonok kiválasztásával indíthatja.
-ClickFinish=Kattintson a Befejezés gombra a Telepítõbõl történõ kilépéshez.
-FinishedRestartLabel=A(z) [name] telepítésének befejezéséhez újra kell indítani a számítógépet. Újraindítja most?
-FinishedRestartMessage=A(z) [name] telepítésének befejezéséhez újra kell indítani a számítógépet.%n%nÚjraindítja most?
-ShowReadmeCheck=Igen, szeretném elolvasni a FONTOS fájlt
-YesRadio=&Igen, újraindítom
-NoRadio=&Nem, késõbb indítom újra
+FinishedHeadingLabel=A(z) [name] telepÃ­tÃ©sÃ©nek befejezÃ©se
+FinishedLabelNoIcons=A TelepÃ­tÅ‘ vÃ©gzett a(z) [name] telepÃ­tÃ©sÃ©vel.
+FinishedLabel=A TelepÃ­tÅ‘ vÃ©gzett a(z) [name] telepÃ­tÃ©sÃ©vel. Az alkalmazÃ¡st a lÃ©trehozott ikonok kivÃ¡lasztÃ¡sÃ¡val indÃ­thatja.
+ClickFinish=Kattintson a 'BefejezÃ©s'-re a kilÃ©pÃ©shez.
+FinishedRestartLabel=A(z) [name] telepÃ­tÃ©sÃ©nek befejezÃ©sÃ©hez Ãºjra kell indÃ­tani a szÃ¡mÃ­tÃ³gÃ©pet. ÃšjraindÃ­tja most?
+FinishedRestartMessage=A(z) [name] telepÃ­tÃ©sÃ©nek befejezÃ©sÃ©hez, a TelepÃ­tÅ‘nek Ãºjra kell indÃ­tani a szÃ¡mÃ­tÃ³gÃ©pet.%n%nÃšjraindÃ­tja most?
+ShowReadmeCheck=Igen, szeretnÃ©m elolvasni a FONTOS fÃ¡jlt
+YesRadio=&Igen, ÃºjraindÃ­tÃ¡s most
+NoRadio=&Nem, kÃ©sÅ‘bb indÃ­tom Ãºjra
 ; used for example as 'Run MyProg.exe'
-RunEntryExec=%1 futtatása
+RunEntryExec=%1 futtatÃ¡sa
 ; used for example as 'View Readme.txt'
-RunEntryShellExec=%1 megtekintése
+RunEntryShellExec=%1 megtekintÃ©se
 
 ; *** "Setup Needs the Next Disk" stuff
-ChangeDiskTitle=A Telepítõnek szüksége van a következõ lemezre
-SelectDiskLabel2=Helyezze be a(z) %1. lemezt és kattintson az OK gombra.%n%nHa a fájlok a lemez egy a megjelenítettõl különbözõ mappájában találhatók, írja be a helyes útvonalat vagy kattintson a Tallózás gombra.
-PathLabel=Ú&tvonal:
-FileNotInDir2=A(z) "%1" fájl nem található a következõ helyen: "%2". Helyezze be a megfelelõ lemezt vagy válasszon egy másik mappát.
-SelectDirectoryLabel=Adja meg a következõ lemez helyét.
+ChangeDiskTitle=A TelepÃ­tÅ‘nek szÃ¼ksÃ©ge van a kÃ¶vetkezÅ‘ lemezre
+SelectDiskLabel2=Helyezze be a(z) %1. lemezt Ã©s kattintson az 'OK'-ra.%n%nHa a fÃ¡jlok a lemez egy a megjelenÃ­tettÅ‘l kÃ¼lÃ¶nbÃ¶zÅ‘ mappÃ¡jÃ¡ban talÃ¡lhatÃ³k, Ã­rja be a helyes Ãºtvonalat vagy kattintson a 'TallÃ³zÃ¡s'-ra.
+PathLabel=Ãš&tvonal:
+FileNotInDir2=A(z) "%1" fÃ¡jl nem talÃ¡lhatÃ³ a kÃ¶vetkezÅ‘ helyen: "%2". Helyezze be a megfelelÅ‘ lemezt vagy vÃ¡lasszon egy mÃ¡sik mappÃ¡t.
+SelectDirectoryLabel=Adja meg a kÃ¶vetkezÅ‘ lemez helyÃ©t.
 
 ; *** Installation phase messages
-SetupAborted=A telepítés nem fejezõdött be.%n%nHárítsa el a hibát, és futtassa újra a Telepítõt.
-EntryAbortRetryIgnore=Kilépés: megszakítás, Ismét: megismétlés, Tovább: folytatás
+SetupAborted=A telepÃ­tÃ©s nem fejezÅ‘dÃ¶tt be.%n%nHÃ¡rÃ­tsa el a hibÃ¡t Ã©s futtassa ÃºjbÃ³l a TelepÃ­tÅ‘t.
+AbortRetryIgnoreSelectAction=VÃ¡lasszon mÅ±veletet
+AbortRetryIgnoreRetry=&Ãšjra
+AbortRetryIgnoreIgnore=&Hiba elvetÃ©se Ã©s folytatÃ¡s
+AbortRetryIgnoreCancel=TelepÃ­tÃ©s megszakÃ­tÃ¡sa
 
 ; *** Installation status messages
-StatusClosingApplications=Alkalmazások bezárása...
-StatusCreateDirs=Könyvtárak létrehozása...
-StatusExtractFiles=Fájlok kibontása...
-StatusCreateIcons=Parancsikonok létrehozása...
-StatusCreateIniEntries=INI bejegyzések létrehozása...
-StatusCreateRegistryEntries=Rendszerleíró bejegyzések létrehozása...
-StatusRegisterFiles=Fájlok regisztrálása...
-StatusSavingUninstall=Eltávolító információk mentése...
-StatusRunProgram=Telepítés befejezése...
-StatusRestartingApplications=Alkalmazások újraindítása...
-StatusRollback=Változtatások visszavonása...
+StatusClosingApplications=AlkalmazÃ¡sok bezÃ¡rÃ¡sa...
+StatusCreateDirs=KÃ¶nyvtÃ¡rak lÃ©trehozÃ¡sa...
+StatusExtractFiles=FÃ¡jlok kibontÃ¡sa...
+StatusCreateIcons=Parancsikonok lÃ©trehozÃ¡sa...
+StatusCreateIniEntries=INI bejegyzÃ©sek lÃ©trehozÃ¡sa...
+StatusCreateRegistryEntries=RendszerleÃ­rÃ³ bejegyzÃ©sek lÃ©trehozÃ¡sa...
+StatusRegisterFiles=FÃ¡jlok regisztrÃ¡lÃ¡sa...
+StatusSavingUninstall=EltÃ¡volÃ­tÃ³ informÃ¡ciÃ³k mentÃ©se...
+StatusRunProgram=TelepÃ­tÃ©s befejezÃ©se...
+StatusRestartingApplications=AlkalmazÃ¡sok ÃºjraindÃ­tÃ¡sa...
+StatusRollback=VÃ¡ltoztatÃ¡sok visszavonÃ¡sa...
 
 ; *** Misc. errors
-ErrorInternal2=Belsõ hiba: %1
+ErrorInternal2=BelsÅ‘ hiba: %1
 ErrorFunctionFailedNoCode=Sikertelen %1
-ErrorFunctionFailed=Sikertelen %1; kód: %2
-ErrorFunctionFailedWithMessage=Sikertelen %1; kód: %2.%n%3
-ErrorExecutingProgram=Nem hajtható végre a fájl:%n%1
+ErrorFunctionFailed=Sikertelen %1; kÃ³d: %2
+ErrorFunctionFailedWithMessage=Sikertelen %1; kÃ³d: %2.%n%3
+ErrorExecutingProgram=Nem hajthatÃ³ vÃ©gre a fÃ¡jl:%n%1
 
 ; *** Registry errors
-ErrorRegOpenKey=Nem nyitható meg a rendszerleíró kulcs:%n%1\%2
-ErrorRegCreateKey=Nem hozható létre a rendszerleíró kulcs:%n%1\%2
-ErrorRegWriteKey=Nem módosítható a rendszerleíró kulcs:%n%1\%2
+ErrorRegOpenKey=Nem nyithatÃ³ meg a rendszerleÃ­rÃ³ kulcs:%n%1\%2
+ErrorRegCreateKey=Nem hozhatÃ³ lÃ©tre a rendszerleÃ­rÃ³ kulcs:%n%1\%2
+ErrorRegWriteKey=Nem mÃ³dosÃ­thatÃ³ a rendszerleÃ­rÃ³ kulcs:%n%1\%2
 
 ; *** INI errors
-ErrorIniEntry=Hiba az INI bejegyzés létrehozása közben a(z) "%1" fájlban.
+ErrorIniEntry=Hiba lÃ©pett fel az INI bejegyzÃ©s sorÃ¡n, ebben a fÃ¡jlban: "%1".
 
 ; *** File copying errors
-FileAbortRetryIgnore=Kilépés: megszakítás, Ismét: megismétlés, Tovább: a fájl átlépése (nem ajánlott)
-FileAbortRetryIgnore2=Kilépés: megszakítás, Ismét: megismétlés, Tovább: folytatás (nem ajánlott)
-SourceIsCorrupted=A forrásfájl megsérült
-SourceDoesntExist=A(z) "%1" forrásfájl nem létezik
-ExistingFileReadOnly=A fájl csak olvashatóként van jelölve.%n%nKilépés: megszakítás, Ismét: csak olvasható jelölés megszüntetése, és megismétlés, Tovább: a fájl átlépése (nem ajánlott)
-ErrorReadingExistingDest=Hiba lépett fel a fájl olvasása közben:
-FileExists=A fájl már létezik.%n%nFelül kívánja írni?
-ExistingFileNewer=A létezõ fájl újabb a telepítésre kerülõnél. Ajánlott a létezõ fájl megtartása.%n%nMeg kívánja tartani a létezõ fájlt?
-ErrorChangingAttr=Hiba lépett fel a fájl attribútumának módosítása közben:
-ErrorCreatingTemp=Hiba lépett fel a fájl telepítési könyvtárban történõ létrehozása közben:
-ErrorReadingSource=Hiba lépett fel a forrásfájl olvasása közben:
-ErrorCopying=Hiba lépett fel a fájl másolása közben:
-ErrorReplacingExistingFile=Hiba lépett fel a létezõ fájl cseréje közben:
-ErrorRestartReplace=A fájl cseréje az újraindítás után sikertelen volt:
-ErrorRenamingTemp=Hiba lépett fel fájl telepítési könyvtárban történõ átnevezése közben:
-ErrorRegisterServer=Nem lehet regisztrálni a DLL-t/OCX-et: %1
-ErrorRegSvr32Failed=Sikertelen RegSvr32. A visszaadott kód: %1
-ErrorRegisterTypeLib=Nem lehet regisztrálni a típustárat: %1
+FileAbortRetryIgnoreSkipNotRecommended=&FÃ¡jl kihagyÃ¡sa (nem ajÃ¡nlott)
+FileAbortRetryIgnoreIgnoreNotRecommended=&Hiba elvetÃ©se Ã©s folytatÃ¡s (nem ajÃ¡nlott)
+SourceIsCorrupted=A forrÃ¡sfÃ¡jl megsÃ©rÃ¼lt
+SourceDoesntExist=A(z) "%1" forrÃ¡sfÃ¡jl nem lÃ©tezik
+ExistingFileReadOnly2=A fÃ¡jl csak olvashatÃ³kÃ©nt van jelÃ¶lve, ezÃ©rt nem cserÃ©lhetÅ‘ le.
+ExistingFileReadOnlyRetry=Csak &olvashatÃ³ tulajdonsÃ¡g eltÃ¡volÃ­tÃ¡sa Ã©s Ãºjra prÃ³bÃ¡lkozÃ¡s
+ExistingFileReadOnlyKeepExisting=&LÃ©tezÅ‘ fÃ¡jl megtartÃ¡sa
+ErrorReadingExistingDest=Hiba lÃ©pett fel a fÃ¡jl olvasÃ¡sa kÃ¶zben:
+FileExistsSelectAction=Mit tegyÃ¼nk?
+FileExists2=A fÃ¡jl mÃ¡r lÃ©tezik.
+FileExistsOverwriteExisting=A &lÃ©tezÅ‘ fÃ¡jl felÃ¼lÃ­rÃ¡sa
+FileExistsKeepExisting=A &mÃ¡r lÃ©tezÅ‘ fÃ¡jl megtartÃ¡sa
+FileExistsOverwriteOrKeepAll=&TegyÃ¼k ezt, a kÃ¶vetkezÅ‘ fÃ¡jlÃ¼tkÃ¶zÃ©sek esetÃ©n is
+ExistingFileNewerSelectAction=Mit kÃ­vÃ¡n tenni?
+ExistingFileNewer2=A lÃ©tezÅ‘ fÃ¡jl Ãºjabb a telepÃ­tÃ©sre kerÃ¼lÅ‘nÃ©l
+ExistingFileNewerOverwriteExisting=A &lÃ©tezÅ‘ fÃ¡jl felÃ¼lÃ­rÃ¡sa
+ExistingFileNewerKeepExisting=&Tartsuk meg a lÃ©tezÅ‘ fÃ¡jlt (ajÃ¡nlott)
+ExistingFileNewerOverwriteOrKeepAll=&TegyÃ¼k ezt, a kÃ¶vetkezÅ‘ fÃ¡jlÃ¼tkÃ¶zÃ©sek esetÃ©n is
+ErrorChangingAttr=Hiba lÃ©pett fel a fÃ¡jl attribÃºtumÃ¡nak mÃ³dosÃ­tÃ¡sa kÃ¶zben:
+ErrorCreatingTemp=Hiba lÃ©pett fel a fÃ¡jl telepÃ­tÃ©si kÃ¶nyvtÃ¡rban tÃ¶rtÃ©nÅ‘ lÃ©trehozÃ¡sa kÃ¶zben:
+ErrorReadingSource=Hiba lÃ©pett fel a forrÃ¡sfÃ¡jl olvasÃ¡sa kÃ¶zben:
+ErrorCopying=Hiba lÃ©pett fel a fÃ¡jl mÃ¡solÃ¡sa kÃ¶zben:
+ErrorReplacingExistingFile=Hiba lÃ©pett fel a lÃ©tezÅ‘ fÃ¡jl cserÃ©je kÃ¶zben:
+ErrorRestartReplace=A fÃ¡jl cserÃ©je az ÃºjraindÃ­tÃ¡s utÃ¡n sikertelen volt:
+ErrorRenamingTemp=Hiba lÃ©pett fel fÃ¡jl telepÃ­tÃ©si kÃ¶nyvtÃ¡rban tÃ¶rtÃ©nÅ‘ Ã¡tnevezÃ©se kÃ¶zben:
+ErrorRegisterServer=Nem lehet regisztrÃ¡lni a DLL-t/OCX-et: %1
+ErrorRegSvr32Failed=Sikertelen RegSvr32. A visszaadott kÃ³d: %1
+ErrorRegisterTypeLib=Nem lehet regisztrÃ¡lni a tÃ­pustÃ¡rat: %1
+
+; *** Uninstall display name markings
+; used for example as 'My Program (32-bit)'
+UninstallDisplayNameMark=%1 (%2)
+; used for example as 'My Program (32-bit, All users)'
+UninstallDisplayNameMarks=%1 (%2, %3)
+UninstallDisplayNameMark32Bit=32-bit
+UninstallDisplayNameMark64Bit=64-bit
+UninstallDisplayNameMarkAllUsers=Minden felhasznÃ¡lÃ³
+UninstallDisplayNameMarkCurrentUser=Jelenlegi felhasznÃ¡lÃ³
 
 ; *** Post-installation errors
-ErrorOpeningReadme=Hiba lépett fel a FONTOS fájl megnyitása közben.
-ErrorRestartingComputer=A Telepítõ nem tudta újraindítani a számítógépet. Indítsa újra kézileg.
+ErrorOpeningReadme=Hiba lÃ©pett fel a FONTOS fÃ¡jl megnyitÃ¡sa kÃ¶zben.
+ErrorRestartingComputer=A TelepÃ­tÅ‘ nem tudta ÃºjraindÃ­tani a szÃ¡mÃ­tÃ³gÃ©pet. IndÃ­tsa Ãºjra kÃ©zileg.
 
 ; *** Uninstaller messages
-UninstallNotFound=A(z) "%1" fájl nem létezik. Nem távolítható el.
-UninstallOpenError=A(z) "%1" fájl nem nyitható meg. Nem távolítható el
-UninstallUnsupportedVer=A(z) "%1" eltávolítási naplófájl formátumát nem tudja felismerni az eltávolító jelen verziója. Az eltávolítás nem folytatható
-UninstallUnknownEntry=Egy ismeretlen bejegyzés (%1) található az eltávolítási naplófájlban
-ConfirmUninstall=Biztosan el kívánja távolítani a(z) %1 programot és minden összetevõjét?
-UninstallOnlyOnWin64=Ezt a telepítést csak 64-bites Windowson lehet eltávolítani.
-OnlyAdminCanUninstall=Ezt a telepítést csak adminisztrációs jogokkal rendelkezõ felhasználó távolíthatja el.
-UninstallStatusLabel=Legyen türelemmel, amíg a(z) %1 számítógépérõl történõ eltávolítása befejezõdik.
-UninstalledAll=A(z) %1 sikeresen el lett távolítva a számítógéprõl.
-UninstalledMost=A(z) %1 eltávolítása befejezõdött.%n%nNéhány elemet nem lehetetett eltávolítani. Törölje kézileg.
-UninstalledAndNeedsRestart=A(z) %1 eltávolításának befejezéséhez újra kell indítania a számítógépét.%n%nÚjraindítja most?
-UninstallDataCorrupted=A(z) "%1" fájl sérült. Nem távolítható el.
+UninstallNotFound=A(z) "%1" fÃ¡jl nem lÃ©tezik. Nem tÃ¡volÃ­thatÃ³ el.
+UninstallOpenError=A(z) "%1" fÃ¡jl nem nyithatÃ³ meg. Nem tÃ¡volÃ­thatÃ³ el
+UninstallUnsupportedVer=A(z) "%1" eltÃ¡volÃ­tÃ¡si naplÃ³fÃ¡jl formÃ¡tumÃ¡t nem tudja felismerni az eltÃ¡volÃ­tÃ³ jelen verziÃ³ja. Az eltÃ¡volÃ­tÃ¡s nem folytathatÃ³
+UninstallUnknownEntry=Egy ismeretlen bejegyzÃ©s (%1) talÃ¡lhatÃ³ az eltÃ¡volÃ­tÃ¡si naplÃ³fÃ¡jlban
+ConfirmUninstall=Biztosan el kÃ­vÃ¡nja tÃ¡volÃ­tani a(z) %1 programot Ã©s minden Ã¶sszetevÅ‘jÃ©t?
+UninstallOnlyOnWin64=Ezt a telepÃ­tÃ©st csak 64-bites Windows operÃ¡ciÃ³s rendszerrÅ‘l lehet eltÃ¡volÃ­tani.
+OnlyAdminCanUninstall=Ezt a telepÃ­tÃ©st csak adminisztrÃ¡ciÃ³s jogokkal rendelkezÅ‘ felhasznÃ¡lÃ³ tÃ¡volÃ­thatja el.
+UninstallStatusLabel=Legyen tÃ¼relemmel, amÃ­g a(z) %1 szÃ¡mÃ­tÃ³gÃ©pÃ©rÅ‘l tÃ¶rtÃ©nÅ‘ eltÃ¡volÃ­tÃ¡sa befejezÅ‘dik.
+UninstalledAll=A(z) %1 sikeresen el lett tÃ¡volÃ­tva a szÃ¡mÃ­tÃ³gÃ©prÅ‘l.
+UninstalledMost=A(z) %1 eltÃ¡volÃ­tÃ¡sa befejezÅ‘dÃ¶tt.%n%nNÃ©hÃ¡ny elemet nem lehetettet eltÃ¡volÃ­tani. TÃ¶rÃ¶lje kÃ©zileg.
+UninstalledAndNeedsRestart=A(z) %1 eltÃ¡volÃ­tÃ¡sÃ¡nak befejezÃ©sÃ©hez Ãºjra kell indÃ­tania a szÃ¡mÃ­tÃ³gÃ©pÃ©t.%n%nÃšjraindÃ­tja most?
+UninstallDataCorrupted=A(z) "%1" fÃ¡jl sÃ©rÃ¼lt. Nem tÃ¡volÃ­thatÃ³ el.
 
 ; *** Uninstallation phase messages
-ConfirmDeleteSharedFileTitle=Törli a megosztott fájlt?
-ConfirmDeleteSharedFile2=A rendszer azt jelzi, hogy a következõ megosztott fájlra már nincs szüksége egyetlen programnak sem. Eltávolítja a megosztott fájlt?%n%nHa más programok még mindig használják a megosztott fájlt, akkor az eltávolítása után lehet, hogy nem fognak megfelelõen mûködni. Ha bizonytalan, válassza a Nemet. A fájl megtartása nem okoz problémát a rendszerben.
-SharedFileNameLabel=Fájlnév:
+ConfirmDeleteSharedFileTitle=TÃ¶rli a megosztott fÃ¡jlt?
+ConfirmDeleteSharedFile2=A rendszer azt jelzi, hogy a kÃ¶vetkezÅ‘ megosztott fÃ¡jlra mÃ¡r nincs szÃ¼ksÃ©ge egyetlen programnak sem. EltÃ¡volÃ­tja a megosztott fÃ¡jlt?%n%nHa mÃ¡s programok mÃ©g mindig hasznÃ¡ljÃ¡k a megosztott fÃ¡jlt, akkor az eltÃ¡volÃ­tÃ¡sa utÃ¡n lehet, hogy nem fognak megfelelÅ‘en mÅ±kÃ¶dni. Ha bizonytalan, vÃ¡lassza a Nemet. A fÃ¡jl megtartÃ¡sa nem okoz problÃ©mÃ¡t a rendszerben.
+SharedFileNameLabel=FÃ¡jlnÃ©v:
 SharedFileLocationLabel=Helye:
-WizardUninstalling=Eltávolítás állapota
-StatusUninstalling=%1 eltávolítása...
+WizardUninstalling=EltÃ¡volÃ­tÃ¡s Ã¡llapota
+StatusUninstalling=%1 eltÃ¡volÃ­tÃ¡sa...
 
 ; *** Shutdown block reasons
-ShutdownBlockReasonInstallingApp=%1 telepítése.
-ShutdownBlockReasonUninstallingApp=%1 eltávolítása.
+ShutdownBlockReasonInstallingApp=%1 telepÃ­tÃ©se.
+ShutdownBlockReasonUninstallingApp=%1 eltÃ¡volÃ­tÃ¡sa.
 
 ; The custom messages below aren't used by Setup itself, but if you make
 ; use of them in your scripts, you'll want to translate them.
 
 [CustomMessages]
 
-NameAndVersion=%1 %2 verzió
-AdditionalIcons=További ikonok:
-CreateDesktopIcon=Ikon létrehozása az &Asztalon
-CreateQuickLaunchIcon=Ikon létrehozása a &Gyorsindítás eszköztáron
-ProgramOnTheWeb=%1 a weben
-UninstallProgram=%1 eltávolítása
-LaunchProgram=%1 elindítása
-AssocFileExtension=A(z) %1 &társítása a(z) %2 fájlkiterjesztéssel
-AssocingFileExtension=A(z) %1 társítása a(z) %2 fájlkiterjesztéssel...
-AutoStartProgramGroupDescription=Indítópult:
-AutoStartProgram=%1 automatikus indítása
-AddonHostProgramNotFound=A(z) %1 nem található a kiválasztott mappában.%n%nMindenképpen folytatni kívánja?
+NameAndVersion=%1, verziÃ³: %2
+AdditionalIcons=TovÃ¡bbi parancsikonok:
+CreateDesktopIcon=&Asztali ikon lÃ©trehozÃ¡sa
+CreateQuickLaunchIcon=&GyorsindÃ­tÃ³ parancsikon lÃ©trehozÃ¡sa
+ProgramOnTheWeb=%1 az interneten
+UninstallProgram=EltÃ¡volÃ­tÃ¡s - %1
+LaunchProgram=IndÃ­tÃ¡s %1
+AssocFileExtension=A(z) %1 &tÃ¡rsÃ­tÃ¡sa a(z) %2 fÃ¡jlkiterjesztÃ©ssel
+AssocingFileExtension=A(z) %1 tÃ¡rsÃ­tÃ¡sa a(z) %2 fÃ¡jlkiterjesztÃ©ssel...
+AutoStartProgramGroupDescription=IndÃ­tÃ³pult:
+AutoStartProgram=%1 automatikus indÃ­tÃ¡sa
+AddonHostProgramNotFound=A(z) %1 nem talÃ¡lhatÃ³ a kivÃ¡lasztott kÃ¶nyvtÃ¡rban.%n%nMindenkÃ©ppen folytatja?
