@@ -276,6 +276,7 @@ public:
 	bool DoMoveClipLast();
 	bool DoFilterOnSelectedClip();
 	bool DoPasteUpperCase();
+	bool DoPasteCamelCase();
 	bool DoPasteLowerCase();
 	bool DoPasteCapitalize();
 	bool DoPasteSentenceCase();
@@ -589,4 +590,6 @@ public:
 	afx_msg void OnUpdateMenuDeleteallnonusedclips(CCmdUI* pCmdUI);
 	afx_msg void OnImportSetdragfilename();
 	afx_msg void OnUpdateImportSetdragfilename(CCmdUI* pCmdUI);
+	afx_msg void OnSpecialpasteCamelcase();
+	afx_msg void OnUpdateSpecialpasteCamelcase(CCmdUI* pCmdUI);
 };

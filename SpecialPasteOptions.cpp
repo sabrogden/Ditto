@@ -23,6 +23,7 @@ CSpecialPasteOptions::CSpecialPasteOptions()
 	m_pasteSlugify = false;
 	m_invertCase = false;
 	m_placeCF_HDROP_OnDrag = true;
+	m_pasteCamelCase = false;
 }
 
 CSpecialPasteOptions::~CSpecialPasteOptions()

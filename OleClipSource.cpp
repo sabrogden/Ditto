@@ -195,6 +195,10 @@ BOOL COleClipSource::DoImmediateRender()
 	{
 		InvertCase(clip);
 	}
+	else if (m_pasteOptions.m_pasteCamelCase)
+	{
+		CamelCase(clip);
+	}
 	
 	SaveDittoFileDataToFile(clip);
 
@@ -358,6 +362,99 @@ void COleClipSource::InvertCase(CClip &clip)
 		}
 
 		cs.ReleaseBuffer();
+
+		HGLOBAL hGlobal = NewGlobalP(cs.GetBuffer(), (len + 1));
+
+		asciiTextFormat->Data(hGlobal);
+	}
+}
+
+void COleClipSource::CamelCase(CClip& clip)
+{
+	IClipFormat* unicodeTextFormat = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (unicodeTextFormat != NULL)
+	{
+		CString cs(unicodeTextFormat->GetAsCString());
+
+		//free the old text we are going to replace it below with an upper case version
+		unicodeTextFormat->Free();
+
+		const int len = cs.GetLength();
+		if (len > 0)
+		{
+			wchar_t* pText = cs.GetBuffer();
+
+			bool setCapital = false;
+			for (int i = 0; i < len; i++)
+			{
+				wchar_t item = pText[i];
+				if (item == ' ')
+				{
+					setCapital = true;
+				}
+				else if (setCapital || i == 0)
+				{
+					if (theApp.m_icuString.IsUpperEx(item) == false)
+					{
+						pText[i] = theApp.m_icuString.ToUpperEx(item);
+					}
+					setCapital = false;
+				}
+				else if (theApp.m_icuString.IsUpperEx(item))
+				{
+					pText[i] = theApp.m_icuString.ToLowerEx(item);
+				}
+			}
+		}
+
+		cs.ReleaseBuffer();
+
+		cs.Remove(' ');
+
+		HGLOBAL hGlobal = NewGlobalP(cs.GetBuffer(), ((len + 1) * sizeof(wchar_t)));
+
+		unicodeTextFormat->Data(hGlobal);
+	}
+
+	IClipFormat* asciiTextFormat = clip.m_Formats.FindFormatEx(CF_TEXT);
+	if (asciiTextFormat != NULL)
+	{
+		CStringA cs(asciiTextFormat->GetAsCStringA());
+
+		//free the old text we are going to replace it below with an upper case version
+		asciiTextFormat->Free();
+
+		long len = cs.GetLength();
+
+		if (len > 0)
+		{
+			char* pText = cs.GetBuffer();
+
+			bool setCapital = false;
+			for (int i = 0; i < len; i++)
+			{
+				char item = pText[i];
+				if (item == ' ')
+				{
+					setCapital = true;
+				}
+				else if (setCapital || i == 0)
+				{
+					if (::isupper(item) == false)
+					{
+						pText[i] = ::toupper(item);
+					}
+					setCapital = false;
+				}
+				else if(::isupper(item))
+				{
+					pText[i] = ::tolower(item);
+				}
+			}
+		}
+
+		cs.ReleaseBuffer();
+		cs.Remove(' ');
 
 		HGLOBAL hGlobal = NewGlobalP(cs.GetBuffer(), (len + 1));
 

@@ -9,6 +9,7 @@ public:
 
 	bool m_pasteAsPlainText;
 	bool m_pasteUpperCase;
+	bool m_pasteCamelCase;
 	bool m_pasteLowerCase;
 	bool m_pasteCapitalize;
 	bool m_pasteSentenceCase;
@@ -41,7 +42,8 @@ public:
 			m_pasteAddingDateTime || 
 			m_trimWhiteSpace ||
 			m_pasteSlugify || 
-			m_invertCase;
+			m_invertCase ||
+			m_pasteCamelCase;
 	}
 
 	bool IncludeRTFForTextOnly()

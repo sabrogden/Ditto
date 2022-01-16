@@ -357,6 +357,8 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 		ON_UPDATE_COMMAND_UI(ID_MENU_DELETEALLNONUSEDCLIPS, &CQPasteWnd::OnUpdateMenuDeleteallnonusedclips)
 		ON_COMMAND(ID_IMPORT_SETDRAGFILENAME, &CQPasteWnd::OnImportSetdragfilename)
 		ON_UPDATE_COMMAND_UI(ID_IMPORT_SETDRAGFILENAME, &CQPasteWnd::OnUpdateImportSetdragfilename)
+		ON_COMMAND(ID_SPECIALPASTE_CAMELCASE, &CQPasteWnd::OnSpecialpasteCamelcase)
+		ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_CAMELCASE, &CQPasteWnd::OnUpdateSpecialpasteCamelcase)
 		END_MESSAGE_MAP()
 
 
@@ -3348,6 +3350,9 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::SET_DRAG_FILE_NAME:
 		ret = DoSetDragFileName();
 		break;
+	case ActionEnums::PASTE_CAMEL_CASE:
+		ret = DoPasteCamelCase();
+		break;
 	}
 
 	return ret;
@@ -4579,6 +4584,19 @@ bool CQPasteWnd::DoPasteUpperCase()
 	{
 		CSpecialPasteOptions pasteOptions;
 		pasteOptions.m_pasteUpperCase = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoPasteCamelCase()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteCamelCase = true;
 		OpenSelection(pasteOptions);
 		return true;
 	}
@@ -7929,4 +7947,19 @@ void CQPasteWnd::OnUpdateImportSetdragfilename(CCmdUI* pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::SET_DRAG_FILE_NAME);
+}
+
+void CQPasteWnd::OnSpecialpasteCamelcase()
+{
+	DoAction(ActionEnums::PASTE_CAMEL_CASE);
+}
+
+void CQPasteWnd::OnUpdateSpecialpasteCamelcase(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_CAMEL_CASE);
 }
