@@ -383,6 +383,9 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case SET_DRAG_FILE_NAME:
 		val = "Set Drag File Name";
 		break;
+	case PASTE_CAMEL_CASE:
+		val = "Paste CamelCase";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);

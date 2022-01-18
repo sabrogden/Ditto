@@ -305,7 +305,7 @@ DittoSetup*]]></ExclExt>
 
 ".\Ditto\Addins\DittoUtil.dll" "Addins\DittoUtil.dll"
      
-".\Ditto\Language\Chinese.xml" "Language\Chinese.xml"
+".\Ditto\Language\Chinese Simplified.xml" "Language\Chinese Simplified.xml"
 ".\Ditto\Language\Chinese Traditional.xml" "Language\Chinese Traditional.xml"
 ".\Ditto\Language\Croatian.xml" "Language\Croatian.xml"
 ".\Ditto\Language\Czech.xml" "Language\Czech.xml"
