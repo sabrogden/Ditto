@@ -695,6 +695,11 @@ static bool SortByTitleDesc(const CDeleteData& a1, const CDeleteData& a2)
 	return a1.m_Desc > a2.m_Desc;
 }
 
+static bool SortByQuickPaste(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_quickPasteText > a2.m_quickPasteText;
+}
+
 static bool SortByCreatedDateDesc(const CDeleteData& a1, const CDeleteData& a2)
 {
 	return a1.m_createdDateTime > a2.m_createdDateTime;
@@ -754,24 +759,30 @@ void CDeleteClipData::OnLvnColumnclickList2(NMHDR *pNMHDR, LRESULT *pResult)
 			std::sort(m_data.begin(), m_data.end(), SortByTitleAsc);
 		break;
 	case 1:
+		if (desc)
+			std::sort(m_data.begin(), m_data.end(), SortByQuickPaste);
+		else
+			std::sort(m_data.begin(), m_data.end(), SortByQuickPaste);
+		break;
+	case 2:
 		if(desc)
 			std::sort(m_data.begin(), m_data.end(), SortByCreatedDateDesc);
 		else
 			std::sort(m_data.begin(), m_data.end(), SortByCreatedDateAsc);
 		break;
-	case 2:
+	case 3:
 		if(desc)
 			std::sort(m_data.begin(), m_data.end(), SortByLastUsedDateDesc);
 		else
 			std::sort(m_data.begin(), m_data.end(), SortByLastUsedDateAsc);
 		break;
-	case 3:
+	case 4:
 		if(desc)
 			std::sort(m_data.begin(), m_data.end(), SortByFormatDesc);
 		else
 			std::sort(m_data.begin(), m_data.end(), SortByFormatAsc);
 		break;
-	case 4:
+	case 5:
 		if(desc)
 			std::sort(m_data.begin(), m_data.end(), SortByDataSizeDesc);
 		else
