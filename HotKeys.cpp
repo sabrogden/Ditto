@@ -9,8 +9,9 @@ CHotKeys g_HotKeys;
 
 int CHotKey::m_nextId = 0;
 
-CHotKey::CHotKey(CString name, DWORD defKey, bool bUnregOnShowDitto, HotKeyType hkType) 
+CHotKey::CHotKey(CString name, DWORD defKey, bool bUnregOnShowDitto, HotKeyType hkType, CString description) 
 	: m_Name(name), 
+	m_description(description),
 	m_bIsRegistered(false), 
 	m_bUnRegisterOnShowDitto(bUnregOnShowDitto),
 	m_clipId(0)

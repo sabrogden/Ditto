@@ -79,6 +79,8 @@ void GlobalClips::LoadItems()
 
 		if(pHotKey->m_clipId > 0)
 		{
+			strItem = pHotKey->m_description;
+
 			if(pHotKey->m_hkType == CHotKey::PASTE_OPEN_CLIP)
 			{
 				strItem.Insert(0, theApp.m_Language.GetGlobalHotKeyString("(Clip)", "(Clip) "));

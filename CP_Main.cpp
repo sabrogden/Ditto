@@ -482,15 +482,16 @@ void CCP_MainApp::LoadGlobalClips()
 	try
 	{
 		{
-			CppSQLite3Query q = m_db.execQuery(_T("SELECT lID, lShortCut FROM Main WHERE lShortCut > 0 AND globalShortCut = 1"));
+			CppSQLite3Query q = m_db.execQuery(_T("SELECT lID, lShortCut, mText FROM Main WHERE lShortCut > 0 AND globalShortCut = 1"));
 
 			while(q.eof() == false)
 			{
 				int id = q.getIntField(_T("lID"));
 				int shortcut = q.getIntField(_T("lShortCut"));
+				CString desc = q.getStringField(_T("mText"));
 
 				//Constructor will add to a global list and free
-				CHotKey* globalHotKey = new CHotKey(StrF(_T("GlobalClip: %d"), id), shortcut, true, CHotKey::PASTE_OPEN_CLIP);
+				CHotKey* globalHotKey = new CHotKey(StrF(_T("GlobalClip: %d"), id), shortcut, true, CHotKey::PASTE_OPEN_CLIP, desc);
 				if(globalHotKey != NULL)
 				{
 					globalHotKey->m_clipId = id;
@@ -510,7 +511,7 @@ void CCP_MainApp::LoadGlobalClips()
 				CString desc = q2.getStringField(_T("mText"));
 
 				//Constructor will add to a global list and free
-				CHotKey* globalHotKey = new CHotKey(desc, shortcut, true, CHotKey::MOVE_TO_GROUP);
+				CHotKey* globalHotKey = new CHotKey(StrF(_T("MoveToGroup: %d"), id), shortcut, true, CHotKey::MOVE_TO_GROUP, desc);
 				if(globalHotKey != NULL)
 				{
 					globalHotKey->m_clipId = id;

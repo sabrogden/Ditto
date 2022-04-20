@@ -12,6 +12,7 @@ public:
 	};
 
 	CString	m_Name;
+	CString m_description;
 	ATOM	m_Atom;
 	DWORD	m_Key; //704 is ctrl-tilda
 	bool	m_bIsRegistered;
@@ -21,7 +22,7 @@ public:
 	HotKeyType m_hkType;
 	static int m_nextId;
 	
-	CHotKey( CString name, DWORD defKey = 0, bool bUnregOnShowDitto = false, HotKeyType hkType = PASTE_OPEN_CLIP );
+	CHotKey( CString name, DWORD defKey = 0, bool bUnregOnShowDitto = false, HotKeyType hkType = PASTE_OPEN_CLIP, CString description = _T(""));
 	~CHotKey();
 
 	bool	IsRegistered() { return m_bIsRegistered; }
