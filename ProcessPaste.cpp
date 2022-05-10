@@ -185,6 +185,8 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 
 	try
 	{
+		int refreshFlags = 0;
+
 		MarkAsPastedData* pData = (MarkAsPastedData*)pParam;
 		if(pData)
 		{
@@ -194,6 +196,8 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 				pData->updateClipOrder &&
 				clipCount == 1)
 			{
+				refreshFlags |= UPDATE_AFTER_PASTE_SELECT_CLIP;
+
 				for (int i = 0; i < clipCount; i++)
 				{
 					int id = pData->ids.ElementAt(i);
@@ -246,7 +250,7 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 			{
 				int id = pData->ids.ElementAt(i);
 
-				theApp.RefreshClipAfterPaste(id, 0);
+				theApp.RefreshClipAfterPaste(id, refreshFlags);
 				break;
 			}			
 

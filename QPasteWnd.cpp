@@ -1216,19 +1216,17 @@ LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
 
 				foundClip = TRUE;
 
-				//if (updateFlags & UPDATE_AFTER_PASTE_SELECT_CLIP)
-				{
-					theApp.m_FocusID = -1;
-					
-				}
-
 				//if (updateFlags & UPDATE_AFTER_PASTE_REFRESH_VISIBLE)
 				{
 					m_lstHeader.RefreshVisibleRows();
 					m_lstHeader.RedrawWindow();
 				}
 
-				SelectFocusID();
+				if (updateFlags & UPDATE_AFTER_PASTE_SELECT_CLIP)
+				{
+					theApp.m_FocusID = -1;
+					SelectFocusID();
+				}
 
 				break;
 			}
