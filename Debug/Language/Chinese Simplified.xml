@@ -269,11 +269,6 @@
 		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044">使用当前所选组中的最后十个复制项目</Item>
                 <Item English_Text = "Copy And Save Current Clipboard" ID = "2068">复制并保存至剪贴板</Item>
 	</Ditto_Options_Shortcuts>
-	<Ditto_Options_Quick_Paste>
-		<Item English_Text = "At Caret" ID = "2015">光标处</Item>
-		<Item English_Text = "At Cursor" ID = "2016">插入符号处</Item>
-		<Item English_Text = "At Previous Position" ID = "2017">之前位置</Item>
-	</Ditto_Options_Quick_Paste>
 	<Ditto_Options_Friends>
 		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">当您收到其他计算机发来的一个复制项时，如果发送者的 IP 地址或计算机名在此列表中，它将被放入剪贴板。否则，将保存剪贴项以供后续使用。</Item>
 		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP 地址/计算机名称，以逗号分隔</Item>
