@@ -147,6 +147,7 @@
 		
 		<Item English_Text = "Backup Database" ID = "32962">备份数据库</Item>
 		<Item English_Text = "Restore Dastabase" ID = "32964">还原数据库</Item>
+		<Item English_Text = "Delete All Non Used Clips" ID = "32968">删除所有未使用的剪贴项</Item>
         
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
@@ -264,6 +265,7 @@
 		<Item English_Text = "Win" ID = "2065"></Item>
 		<Item English_Text = "Save Current Clipboard" ID = "2062">保存当前剪贴板内容</Item>
 		<Item English_Text = "Win" ID = "2047"></Item>
+		<Item English_Text = "Copy And Save Current Clipboard" ID = "2068">复制并保存至剪贴板</Item>
         
 		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044">使用当前所选组中的最后十个复制项目</Item>
         
@@ -444,6 +446,7 @@
 		
 		<Item English_Text = "Backup Database" ID = "32960">备份数据库</Item>
 		<Item English_Text = "Restore Database" ID = "32961">还原数据库</Item>
+		<Item English_Text = "Delete All Non Used Clips" ID = "32969">删除所有未使用的剪贴项</Item>
         
 	</Ditto_Tray_Icon_Menu>
 
