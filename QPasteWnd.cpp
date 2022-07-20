@@ -795,7 +795,7 @@ BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus, BOOL clearSearchData)
 {
 	if (clearSearchData = -1)
 	{
-		if (g_Opt.m_maintainSearchView &&
+		if ((g_Opt.m_maintainSearchView || g_Opt.m_refreshViewAfterPasting) &&
 			m_strSearch != _T(""))
 		{
 			Log(_T("Currently searching for something and setting to maintain search view is enabled, not refreshing"));
@@ -1199,33 +1199,36 @@ LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
 			{
 				iter->m_datePasted = lastPasted;
 
-				if (iter->m_clipOrder != order || iter->m_clipGroupOrder != orderGroup)
-				{
-					iter->m_clipOrder = order;
-					iter->m_clipGroupOrder = orderGroup;
-
-					if (theApp.m_GroupID > 0)
-					{
-						std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::GroupSortDesc);
-					}
-					else
-					{
-						std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::SortDesc);
-					}
-				}
-
-				foundClip = TRUE;
-
-				//if (updateFlags & UPDATE_AFTER_PASTE_REFRESH_VISIBLE)
-				{
-					m_lstHeader.RefreshVisibleRows();
-					m_lstHeader.RedrawWindow();
-				}
-
 				if (updateFlags & UPDATE_AFTER_PASTE_SELECT_CLIP)
 				{
-					theApp.m_FocusID = -1;
-					SelectFocusID();
+					if (iter->m_clipOrder != order || iter->m_clipGroupOrder != orderGroup)
+					{
+						iter->m_clipOrder = order;
+						iter->m_clipGroupOrder = orderGroup;
+
+						if (theApp.m_GroupID > 0)
+						{
+							std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::GroupSortDesc);
+						}
+						else
+						{
+							std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::SortDesc);
+						}
+					}
+
+					foundClip = TRUE;
+
+					//if (updateFlags & UPDATE_AFTER_PASTE_REFRESH_VISIBLE)
+					{
+						m_lstHeader.RefreshVisibleRows();
+						m_lstHeader.RedrawWindow();
+					}
+
+
+					{
+						theApp.m_FocusID = -1;
+						SelectFocusID();
+					}
 				}
 
 				break;

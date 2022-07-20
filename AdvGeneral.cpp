@@ -137,6 +137,7 @@ END_MESSAGE_MAP()
 #define SETTING_NETWORK_BIND_IP_ADDRESS 86
 #define SETTING_DISABLE_FRIENDS 87
 #define SETTING_IGNORE_FALSE_COPIES_DEALY 88
+#define SETTING_REFRESH_VIEW_AFTER_PASTE 89
 
 
 BOOL CAdvGeneral::OnInitDialog()
@@ -228,6 +229,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Prompt when deleting clips"), CGetSetOptions::GetPromptWhenDeletingClips(), SETTING_PROMP_ON_DELETE);
 
 	AddTrueFalse(pGroupTest, _T("Revert to top level group on close"), CGetSetOptions::GetRevertToTopLevelGroup(), SETTING_REVERT_TO_TOP_LEVEL_GROUP);
+
+	AddTrueFalse(pGroupTest, _T("Refresh view after paste"), CGetSetOptions::GetRefreshViewAfterPasting(), SETTING_REFRESH_VIEW_AFTER_PASTE);
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Save clipboard delay (ms, default: 100))"), (long)(CGetSetOptions::GetProcessDrawClipboardDelay()), _T(""), SETTING_CLIPBOARD_SAVE_DELAY));
 
@@ -904,6 +907,12 @@ void CAdvGeneral::OnBnClickedOk()
 				if (pNewValue->lVal != pOrigValue->lVal)
 				{
 					CGetSetOptions::SetSaveClipDelay(pNewValue->lVal);
+				}
+				break;
+			case SETTING_REFRESH_VIEW_AFTER_PASTE:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetRefreshViewAfterPasting(pNewValue->lVal);
 				}
 				break;
 			}
