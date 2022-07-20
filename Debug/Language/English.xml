@@ -411,8 +411,10 @@
 		<Item English_Text = "RestoreDbMsg" ID = "Restoring database"></Item>
 		
 		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg"></Item>
-		
-		
+				
+		<Item English_Text = "At Caret" ID = "AtCaret"></Item>
+		<Item English_Text = "At Cursor" ID = "AtCursor"></Item>
+		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition"></Item>
 		
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>

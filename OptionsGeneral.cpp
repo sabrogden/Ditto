@@ -142,13 +142,13 @@ BOOL COptionsGeneral::OnInitDialog()
 	FillThemes();
 	FillLanguages();
 
-	int caretPos = m_popupPositionCombo.AddString(_T("At Caret"));
+	int caretPos = m_popupPositionCombo.AddString(theApp.m_Language.GetString("AtCaret", "At Caret"));
 	m_popupPositionCombo.SetItemData(caretPos, POS_AT_CARET);
 
-	int cursorPos = m_popupPositionCombo.AddString(_T("At Cursor"));
+	int cursorPos = m_popupPositionCombo.AddString(theApp.m_Language.GetString("AtCursor", "At Cursor"));
 	m_popupPositionCombo.SetItemData(cursorPos, POS_AT_CURSOR);
 
-	int prevPos = m_popupPositionCombo.AddString(_T("At Previous Position"));
+	int prevPos = m_popupPositionCombo.AddString(theApp.m_Language.GetString("AtPreviousPosition", "At Previous Position"));
 	m_popupPositionCombo.SetItemData(prevPos, POS_AT_PREVIOUS);
 
 	switch (CGetSetOptions::GetQuickPastePosition())
