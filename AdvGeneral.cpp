@@ -910,9 +910,14 @@ void CAdvGeneral::OnBnClickedOk()
 				}
 				break;
 			case SETTING_REFRESH_VIEW_AFTER_PASTE:
-				if (pNewValue->lVal != pOrigValue->lVal)
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					CGetSetOptions::SetRefreshViewAfterPasting(pNewValue->lVal);
+					BOOL val = false;
+					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
+					{
+						val = true;
+					}
+					CGetSetOptions::SetRefreshViewAfterPasting(val);
 				}
 				break;
 			}
