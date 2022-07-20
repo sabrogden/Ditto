@@ -81,7 +81,7 @@ BOOL CGetSetOptions::m_allowBackToBackDuplicates = FALSE;
 BOOL CGetSetOptions::m_maintainSearchView = FALSE;
 CString CGetSetOptions::m_tempDragFileName = "";
 CTime CGetSetOptions::m_tempDragFileNameSetTime;
-BOOL CGetSetOptions::m_refreshViewAfterPasting = FALSE;
+BOOL CGetSetOptions::m_refreshViewAfterPasting = TRUE;
 
 
 CGetSetOptions::CGetSetOptions()
