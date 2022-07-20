@@ -34,6 +34,7 @@ public:
 		m_uacPID = 0;
 		m_bOpenWindow = FALSE;
 		m_bCloseWindow = FALSE;
+		m_exit = FALSE;
 		m_plainTextPaste = FALSE;
 		m_pasteClip = FALSE;
 		m_clipID = -1;
@@ -70,6 +71,10 @@ public:
 			else if(STRICMP(pszParam, _T("close")) == 0)
 			{
 				m_bCloseWindow = TRUE;
+			}
+			else if (STRICMP(pszParam, _T("exit")) == 0)
+			{
+				m_exit = TRUE;
 			}
 			else if (STRICMP(pszParam, _T("PlainTextPaste")) == 0)
 			{
@@ -112,6 +117,7 @@ public:
 	int m_uacPID;
 	int m_clipID;
 	BOOL m_bCloseWindow;
+	BOOL m_exit;
 	BOOL m_bOpenWindow;
 	BOOL m_plainTextPaste;
 	BOOL m_editClip;
@@ -303,6 +309,22 @@ BOOL CCP_MainApp::InitInstance()
 		}
 
 		return FALSE;		
+	}
+	else if (cmdInfo.m_exit)
+	{
+		//First get the saved hwnd and send it a message
+		//If ditt is running then this will return 1, meening the running ditto process
+		//handled this message
+		//If it didn't handle the message(ditto is not running) then startup this processes of ditto 
+		//disconnected from the clipboard
+		LRESULT ret = 0;
+		HWND hWnd = (HWND)(LONG_PTR)CGetSetOptions::GetMainHWND();
+		if (hWnd)
+		{
+			ret = ::SendMessage(hWnd, WM_CLOSE, NULL, NULL);
+		}
+
+		return FALSE;
 	}
 	else if (cmdInfo.m_plainTextPaste)
 	{		
