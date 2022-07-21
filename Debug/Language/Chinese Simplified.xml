@@ -414,9 +414,9 @@
 		
 		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">Ditto 无法打开数据库，将等待它可以打开的时候。 如果需要，更新选项中的路径。 路径： </Item>
 		
-		<Item English_Text = "At Caret" ID = "AtCaret"></Item>
-		<Item English_Text = "At Cursor" ID = "AtCursor"></Item>
-		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition"></Item>
+		<Item English_Text = "At Caret" ID = "AtCaret">插入符号处</Item>
+		<Item English_Text = "At Cursor" ID = "AtCursor">光标处</Item>
+		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition">之前位置</Item>
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">确定</Item>
