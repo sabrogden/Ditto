@@ -25,7 +25,7 @@
 		<Item English_Text = "Positioning" ID = "-1">窗口弹出位置</Item>
 		<Item English_Text = "At Caret" ID = "32802">插入符号处</Item>
 		<Item English_Text = "At Cursor" ID = "32803">光标处</Item>
-		<Item English_Text = "At Previous Position" ID = "32804">之前位置</Item>
+		<Item English_Text = "At Previous Position" ID = "32804">上次打开的位置</Item>
 		<Item English_Text = "First Ten Hot Keys" ID = "-1">前十个热键</Item>
 		<Item English_Text = "Use Ctrl - Num" ID = "32777">使用 Ctrl + 数字键</Item>
 		<Item English_Text = "Show Hot Key Text" ID = "32778">显示热键文本</Item>
@@ -416,7 +416,7 @@
 		
 		<Item English_Text = "At Caret" ID = "AtCaret">插入符号处</Item>
 		<Item English_Text = "At Cursor" ID = "AtCursor">光标处</Item>
-		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition">之前位置</Item>
+		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition">上次打开的位置</Item>
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">确定</Item>
