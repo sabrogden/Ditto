@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Ditto_Language_File Version = "20200413" Author = "iYoung, wevsty" Notes = "" LanguageCode = "CHN">
+<Ditto_Language_File Version = "20220719" Author = "iYoung, wevsty, n78" Notes = "" LanguageCode = "CHN">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">组</Item>
 		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">新建组</Item>
@@ -25,7 +25,7 @@
 		<Item English_Text = "Positioning" ID = "-1">窗口弹出位置</Item>
 		<Item English_Text = "At Caret" ID = "32802">插入符号处</Item>
 		<Item English_Text = "At Cursor" ID = "32803">光标处</Item>
-		<Item English_Text = "At Previous Position" ID = "32804">之前位置</Item>
+		<Item English_Text = "At Previous Position" ID = "32804">上次打开的位置</Item>
 		<Item English_Text = "First Ten Hot Keys" ID = "-1">前十个热键</Item>
 		<Item English_Text = "Use Ctrl - Num" ID = "32777">使用 Ctrl + 数字键</Item>
 		<Item English_Text = "Show Hot Key Text" ID = "32778">显示热键文本</Item>
@@ -147,6 +147,7 @@
 		
 		<Item English_Text = "Backup Database" ID = "32962">备份数据库</Item>
 		<Item English_Text = "Restore Dastabase" ID = "32964">还原数据库</Item>
+		<Item English_Text = "Delete All Non Used Clips" ID = "32968">删除所有未使用的剪贴项</Item>
         
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
@@ -264,6 +265,7 @@
 		<Item English_Text = "Win" ID = "2065"></Item>
 		<Item English_Text = "Save Current Clipboard" ID = "2062">保存当前剪贴板内容</Item>
 		<Item English_Text = "Win" ID = "2047"></Item>
+		<Item English_Text = "Copy And Save Current Clipboard" ID = "2068">复制并保存至剪贴板</Item>
         
 		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044">使用当前所选组中的最后十个复制项目</Item>
         
@@ -405,15 +407,16 @@
 		<Item English_Text = "There are no results for" ID = "NoSearchResults">没有任何结果</Item>
 		<Item English_Text = "Warning this can take quite a long time and require up to double the hard drive space as your current database size, Continue?" ID = "CompactRepairWarning">警告，这可能需要相当长的时间，并且需要两倍于你当前数据库大小的硬盘空间，是否继续？</Item>
 		<Item English_Text = "Prompt For Name" ID = "prompt_for_name">提示名字</Item>
-		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme">（遵循 windows 明/暗主题）</Item>
+		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme">（遵循 Windows 明/暗主题）</Item>
 		
 		<Item English_Text = "BackupDbMsg" ID = "Backing up database">备份数据库信息</Item>
 		<Item English_Text = "RestoreDbMsg" ID = "Restoring database">还原数据库信息</Item>
 		
 		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">Ditto 无法打开数据库，将等待它可以打开的时候。 如果需要，更新选项中的路径。 路径： </Item>
 		
-        
-        
+		<Item English_Text = "At Caret" ID = "AtCaret">插入符号处</Item>
+		<Item English_Text = "At Cursor" ID = "AtCursor">光标处</Item>
+		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition">上次打开的位置</Item>
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">确定</Item>
@@ -444,6 +447,7 @@
 		
 		<Item English_Text = "Backup Database" ID = "32960">备份数据库</Item>
 		<Item English_Text = "Restore Database" ID = "32961">还原数据库</Item>
+		<Item English_Text = "Delete All Non Used Clips" ID = "32969">删除所有未使用的剪贴项</Item>
         
 	</Ditto_Tray_Icon_Menu>
 
