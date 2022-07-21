@@ -665,6 +665,10 @@ public:
 	static CTime m_tempDragFileNameSetTime;
 	static CString GetTempDragFileName();
 	static void SetTempDragFileName(CString val);
+
+	static BOOL m_refreshViewAfterPasting;
+	static BOOL GetRefreshViewAfterPasting();
+	static void SetRefreshViewAfterPasting(BOOL val);
 };
 
 // global for easy access and for initialization of fast access variables

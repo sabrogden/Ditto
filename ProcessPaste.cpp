@@ -196,7 +196,10 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 				pData->updateClipOrder &&
 				clipCount == 1)
 			{
-				refreshFlags |= UPDATE_AFTER_PASTE_SELECT_CLIP;
+				if (CGetSetOptions::m_refreshViewAfterPasting)
+				{
+					refreshFlags |= UPDATE_AFTER_PASTE_SELECT_CLIP;
+				}
 
 				for (int i = 0; i < clipCount; i++)
 				{

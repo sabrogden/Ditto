@@ -81,6 +81,8 @@ BOOL CGetSetOptions::m_allowBackToBackDuplicates = FALSE;
 BOOL CGetSetOptions::m_maintainSearchView = FALSE;
 CString CGetSetOptions::m_tempDragFileName = "";
 CTime CGetSetOptions::m_tempDragFileNameSetTime;
+BOOL CGetSetOptions::m_refreshViewAfterPasting = TRUE;
+
 
 CGetSetOptions::CGetSetOptions()
 {
@@ -2948,4 +2950,15 @@ void CGetSetOptions::SetTempDragFileName(CString val)
 {
 	m_tempDragFileName = val;
 	m_tempDragFileNameSetTime = CTime::GetCurrentTime();
+}
+
+BOOL CGetSetOptions::GetRefreshViewAfterPasting()
+{
+	return GetProfileLong("RefreshViewAfterPasting", FALSE);
+}
+
+void CGetSetOptions::SetRefreshViewAfterPasting(BOOL val)
+{
+	m_refreshViewAfterPasting = val;
+	SetProfileLong("RefreshViewAfterPasting", val);
 }
