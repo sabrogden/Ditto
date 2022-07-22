@@ -795,7 +795,7 @@ BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus, BOOL clearSearchData)
 {
 	if (clearSearchData = -1)
 	{
-		if ((g_Opt.m_maintainSearchView || g_Opt.m_refreshViewAfterPasting) &&
+		if ((g_Opt.m_maintainSearchView || g_Opt.m_refreshViewAfterPasting == false) &&
 			m_strSearch != _T(""))
 		{
 			Log(_T("Currently searching for something and setting to maintain search view is enabled, not refreshing"));
@@ -1040,6 +1040,7 @@ BOOL CQPasteWnd::OpenSelection(CSpecialPasteOptions pasteOptions)
 	paste.m_pasteOptions = pasteOptions;
 	paste.m_pastedFromGroup = (theApp.m_GroupID > 0);
 
+
 	paste.GetClipIDs().Copy(IDs);
 	if (paste.DoPaste())
 	{
@@ -1185,6 +1186,8 @@ LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
 	int clipId = (int)wParam;
 	int updateFlags = (int)lParam;
 
+	theApp.m_FocusID = -1;
+
 	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipOrder, clipGroupOrder, lastPasteDate FROM Main WHERE lID = %d"), clipId);
 	if (q.eof() == false)
 	{
@@ -1218,17 +1221,9 @@ LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
 
 					foundClip = TRUE;
 
-					//if (updateFlags & UPDATE_AFTER_PASTE_REFRESH_VISIBLE)
-					{
-						m_lstHeader.RefreshVisibleRows();
-						m_lstHeader.RedrawWindow();
-					}
-
-
-					{
-						theApp.m_FocusID = -1;
-						SelectFocusID();
-					}
+					m_lstHeader.RefreshVisibleRows();
+					m_lstHeader.RedrawWindow();
+					SelectFocusID();
 				}
 
 				break;
