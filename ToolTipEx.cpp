@@ -285,9 +285,8 @@ BOOL CToolTipEx::Show(CPoint point)
 		if (::IsWindow(m_browser.m_hWnd))
 		{
 			m_browser.ShowWindow(SW_SHOW);
-			m_browser.Refresh();
+			m_browser.Invalidate();
 		}
-
 
 		m_showingHTML = true;
 		//OutputDebugString(_T("Showing html\r\n"));
@@ -308,9 +307,8 @@ BOOL CToolTipEx::Show(CPoint point)
 	}
 
 	ShowWindow(SW_SHOWNA);
-	//this->Invalidate();
-	//this->UpdateWindow();
-	
+	this->Invalidate();
+	this->UpdateWindow();	
 
 	m_saveWindowLockout = false;
 
