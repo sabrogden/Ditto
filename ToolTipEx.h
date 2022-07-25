@@ -77,7 +77,7 @@ protected:
 	CString m_csText;
 	CFont m_Font;
 	int m_fontHeight;
-	CString m_csRTF;
+	CStringA m_csRTF;
 	CString m_html;
 	CRichEditCtrlEx m_RichEdit;
 	SimpleBrowser m_browser;
@@ -102,6 +102,9 @@ protected:
 	int m_lDelayMaxSeconds;
 	SnapWindow m_snap;
 	CString m_folderPath;
+	bool m_showingText;
+	bool m_showingRTF;
+	bool m_showingHTML;
 
 protected:
 	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);	
@@ -145,4 +148,10 @@ public:
 	afx_msg void OnEnterSizeMove();
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg LRESULT OnRefreshFooter(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnFirstViewtext();
+	afx_msg void OnFirstViewrtf();
+	afx_msg void OnFirstViewhtml();
+	afx_msg void OnUpdateFirstViewtext(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateFirstViewrtf(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateFirstViewhtml(CCmdUI* pCmdUI);
 };

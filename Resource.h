@@ -803,6 +803,9 @@
 #define ID_FIRST_DELETEALLNONUSEDCLIPS  32969
 #define ID_IMPORT_SETDRAGFILENAME       32970
 #define ID_SPECIALPASTE_CAMELCASE       32971
+#define ID_FIRST_VIEWTEXT               32972
+#define ID_FIRST_VIEWRTF                32973
+#define ID_FIRST_VIEWHTML               32974
 
 // Next default values for new objects
 // 
@@ -810,7 +813,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        389
-#define _APS_NEXT_COMMAND_VALUE         32972
+#define _APS_NEXT_COMMAND_VALUE         32975
 #define _APS_NEXT_CONTROL_VALUE         2173
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
