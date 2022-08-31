@@ -304,8 +304,8 @@ BOOL CToolTipEx::Show(CPoint point)
 	}
 
 	ShowWindow(SW_SHOWNA);
-	this->Invalidate();
-	this->UpdateWindow();	
+	//this->Invalidate();
+	//this->UpdateWindow();	
 
 	m_saveWindowLockout = false;
 
@@ -1532,7 +1532,6 @@ LRESULT CToolTipEx::OnRefreshFooter(WPARAM wParam, LPARAM lParam)
 
 void CToolTipEx::OnFirstViewtext()
 {
-
 	if (::IsWindow(m_browser.m_hWnd))
 	{
 		m_browser.ShowWindow(SW_HIDE);
@@ -1545,6 +1544,9 @@ void CToolTipEx::OnFirstViewtext()
 	HighlightSearchText();
 
 	m_RichEdit.ShowWindow(SW_SHOW);
+
+	this->Invalidate();
+	this->UpdateWindow();
 
 	m_showingText = true;
 	m_showingRTF = false;
@@ -1565,6 +1567,9 @@ void CToolTipEx::OnFirstViewrtf()
 	HighlightSearchText();
 
 	m_RichEdit.ShowWindow(SW_SHOW);
+
+	this->Invalidate();
+	this->UpdateWindow();
 
 	m_showingText = false;
 	m_showingRTF = true;
