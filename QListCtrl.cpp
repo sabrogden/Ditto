@@ -957,7 +957,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 
 		m_pToolTip->SetClipData(_T(""));
 		m_pToolTip->SetToolTipText(_T(""));
-		m_pToolTip->SetRTFText("    ");
+		m_pToolTip->SetRTFText("");
 		bool bSetPlainText = false;
 
 		CClipFormat Clip;

@@ -175,7 +175,7 @@ BOOL CToolTipEx::Show(CPoint point)
 
 		//account for the scroll bars
 		rect.right += 20;
-		rect.bottom += 20;
+		rect.bottom += 20;		
 
 		if (m_imageViewer.m_pGdiplusBitmap)
 		{
@@ -185,16 +185,13 @@ BOOL CToolTipEx::Show(CPoint point)
 			rect.right = rect.left + nWidth;
 			rect.bottom = rect.top + nHeight;
 		}
-		else if(m_csRTF != "")
-		{
-			//if showing rtf then increase the size because
-			//rtf will probably draw bigger
-			long lNewWidth = (long)rect.Width() + (long)(rect.Width() *1.5);
-			rect.right = rect.left + lNewWidth;
+		
+		
+		long lNewWidth = (long)rect.Width() + (long)(rect.Width() *1.5);
+		rect.right = rect.left + lNewWidth;
 
-			long lNewHeight = (long)rect.Height() + (long)(rect.Height() *1.5);
-			rect.bottom = rect.top + lNewHeight;
-		}
+		long lNewHeight = (long)rect.Height() + (long)(rect.Height() *1.5);
+		rect.bottom = rect.top + lNewHeight;
 
 		ClientToScreen(rect);
 
@@ -277,7 +274,7 @@ BOOL CToolTipEx::Show(CPoint point)
 
 		m_showingText = true;
 	}
-	else if (m_html.GetLength() > 0)
+	else if (m_html.GetLength() > 0 && m_csRTF.GetLength() <= 0)
 	{
 		m_imageViewer.ShowWindow(SW_HIDE);
 		m_RichEdit.ShowWindow(SW_HIDE);
@@ -961,6 +958,14 @@ void CToolTipEx::DoSearch()
 	n = m_RichEdit.FindText(searchDirection, &ft);
 	if (n != -1)
 	{
+		//if needing to scroll back to the left make sure the full text is visible
+		//setSel scrolls to the end of the selection
+		int start = ft.chrgText.cpMin - 5;
+		if (start < 0)
+		{
+			start = 0;
+		}
+		m_RichEdit.SetSel(start, start);
 		m_RichEdit.SetSel(ft.chrgText);
 	}
 	else
@@ -978,6 +983,14 @@ void CToolTipEx::DoSearch()
 		n = m_RichEdit.FindText(searchDirection, &ft);
 		if (n != -1)
 		{
+			//if needing to scroll back to the left make sure the full text is visible
+			//setSel scrolls to the end of the selection
+			int start = ft.chrgText.cpMin - 5;
+			if (start < 0)
+			{
+				start = 0;
+			}
+			m_RichEdit.SetSel(start, start);
 			m_RichEdit.SetSel(ft.chrgText);
 		}
 	}
@@ -1168,25 +1181,43 @@ void CToolTipEx::OnOptions()
 			cmSubMenu->CheckMenuItem(ID_FIRST_SCALEIMAGESTOFITWINDOW, MF_CHECKED);
 
 		if (CGetSetOptions::GetMouseClickHidesDescription())
-			cmSubMenu->CheckMenuItem(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, MF_CHECKED);
-
-		if (CGetSetOptions::GetWrapDescriptionText())
-			cmSubMenu->CheckMenuItem(ID_FIRST_WRAPTEXT, MF_CHECKED);
+			cmSubMenu->CheckMenuItem(ID_FIRST_HIDEDESCRIPTIONWINDOWONM, MF_CHECKED);		
 
 		if (m_showPersistant)
 			cmSubMenu->CheckMenuItem(ID_FIRST_ALWAYSONTOP, MF_CHECKED);
 
-		if(m_showingText)
+		if (m_showingText)
+		{
 			cmSubMenu->CheckMenuItem(ID_FIRST_VIEWTEXT, MF_CHECKED);
+		}
+		if (m_csText.GetLength() <= 0)
+		{
+			cmSubMenu->EnableMenuItem(ID_FIRST_VIEWTEXT, MF_DISABLED);
+		}
 
-		if(m_showingRTF)
+		if (m_showingRTF)
+		{
 			cmSubMenu->CheckMenuItem(ID_FIRST_VIEWRTF, MF_CHECKED);
+		}
+		if (m_csRTF.GetLength() <= 0)
+		{
+			cmSubMenu->EnableMenuItem(ID_FIRST_VIEWRTF, MF_DISABLED);
+		}
 
-		if(m_showingHTML)
-			cmSubMenu->CheckMenuItem(ID_FIRST_VIEWHTML, MF_CHECKED);	
+		if (m_showingHTML)
+		{
+			cmSubMenu->CheckMenuItem(ID_FIRST_VIEWHTML, MF_CHECKED);
+		}
+		if (m_html.GetLength() <= 0)
+		{
+			cmSubMenu->EnableMenuItem(ID_FIRST_VIEWHTML, MF_DISABLED);
+		}
 
 		UpdateMenuShortCut(cmSubMenu, ID_FIRST_WRAPTEXT, ActionEnums::TOGGLE_DESCRIPTION_WORD_WRAP);
 		UpdateMenuShortCut(cmSubMenu, ID_FIRST_ALWAYSONTOP, ActionEnums::TOGGLESHOWPERSISTANT);
+
+		if (CGetSetOptions::GetWrapDescriptionText())
+			cmSubMenu->CheckMenuItem(ID_FIRST_WRAPTEXT, MF_CHECKED);
 		
 		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
 	}

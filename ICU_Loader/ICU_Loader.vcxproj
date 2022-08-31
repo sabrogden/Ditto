@@ -23,7 +23,7 @@
     <ProjectGuid>{1FA87564-F5EC-42F8-978C-E827AAB54CB1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ICULoader</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

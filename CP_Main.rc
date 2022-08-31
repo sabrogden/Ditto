@@ -354,6 +354,7 @@ BEGIN
         MENUITEM "Hide description window on mouse clip selection", ID_FIRST_HIDEDESCRIPTIONWINDOWONM
         MENUITEM "Wrap Text",                   ID_FIRST_WRAPTEXT
         MENUITEM "Always on top",               ID_FIRST_ALWAYSONTOP
+        MENUITEM SEPARATOR
         MENUITEM "View as Text",                ID_FIRST_VIEWTEXT
         MENUITEM "View as RTF",                 ID_FIRST_VIEWRTF
         MENUITEM "View as HTML",                ID_FIRST_VIEWHTML

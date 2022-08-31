@@ -3443,6 +3443,8 @@ bool CQPasteWnd::DoActionShowDescription()
 {
 	bool ret = false;
 
+	m_actions.m_handleRepeatKeys = true;
+
 	CString csText;
 	m_search.GetWindowText(csText);
 	if (csText != _T(""))
