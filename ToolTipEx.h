@@ -105,6 +105,7 @@ protected:
 	bool m_showingText;
 	bool m_showingRTF;
 	bool m_showingHTML;
+	bool m_showingImage;
 
 protected:
 	CString GetFieldFromString(CString ref, int nIndex, TCHAR ch);	
@@ -151,6 +152,7 @@ public:
 	afx_msg void OnFirstViewtext();
 	afx_msg void OnFirstViewrtf();
 	afx_msg void OnFirstViewhtml();
+	afx_msg void OnFirstViewImage();
 	afx_msg void OnUpdateFirstViewtext(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateFirstViewrtf(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateFirstViewhtml(CCmdUI* pCmdUI);

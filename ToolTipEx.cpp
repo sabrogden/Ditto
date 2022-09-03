@@ -73,6 +73,7 @@ BEGIN_MESSAGE_MAP(CToolTipEx, CWnd)
 	ON_COMMAND(ID_FIRST_VIEWTEXT, &CToolTipEx::OnFirstViewtext)
 	ON_COMMAND(ID_FIRST_VIEWRTF, &CToolTipEx::OnFirstViewrtf)
 	ON_COMMAND(ID_FIRST_VIEWHTML, &CToolTipEx::OnFirstViewhtml)
+	ON_COMMAND(ID_FIRST_VIEWASIMAGE, &CToolTipEx::OnFirstViewImage)
 	ON_UPDATE_COMMAND_UI(ID_FIRST_VIEWTEXT, &CToolTipEx::OnUpdateFirstViewtext)
 	ON_UPDATE_COMMAND_UI(ID_FIRST_VIEWRTF, &CToolTipEx::OnUpdateFirstViewrtf)
 	ON_UPDATE_COMMAND_UI(ID_FIRST_VIEWHTML, &CToolTipEx::OnUpdateFirstViewhtml)
@@ -155,6 +156,7 @@ BOOL CToolTipEx::Show(CPoint point)
 	m_showingText = false;
 	m_showingRTF = false;
 	m_showingHTML = false;
+	m_showingImage = false;
 
 	CRect rect;
 
@@ -187,10 +189,10 @@ BOOL CToolTipEx::Show(CPoint point)
 		}
 		
 		
-		long lNewWidth = (long)rect.Width() + (long)(rect.Width() *1.5);
+		long lNewWidth = (long)rect.Width() + (long)(rect.Width() *1.25);
 		rect.right = rect.left + lNewWidth;
 
-		long lNewHeight = (long)rect.Height() + (long)(rect.Height() *1.5);
+		long lNewHeight = (long)rect.Height() + (long)(rect.Height() *1.25);
 		rect.bottom = rect.top + lNewHeight;
 
 		ClientToScreen(rect);
@@ -272,7 +274,7 @@ BOOL CToolTipEx::Show(CPoint point)
 
 		m_imageViewer.ShowWindow(SW_SHOW);
 
-		m_showingText = true;
+		m_showingImage = true;
 	}
 	else if (m_html.GetLength() > 0 && m_csRTF.GetLength() <= 0)
 	{
@@ -300,7 +302,14 @@ BOOL CToolTipEx::Show(CPoint point)
 		m_RichEdit.ShowWindow(SW_SHOW);
 
 		//OutputDebugString(_T("Showing rich text\r\n"));
-		m_showingRTF = true;
+		if (m_csRTF.GetLength() > 0)
+		{
+			m_showingRTF = true;
+		}
+		else
+		{
+			m_showingText = true;
+		}
 	}
 
 	ShowWindow(SW_SHOWNA);
@@ -960,7 +969,7 @@ void CToolTipEx::DoSearch()
 	{
 		//if needing to scroll back to the left make sure the full text is visible
 		//setSel scrolls to the end of the selection
-		int start = ft.chrgText.cpMin - 5;
+		int start = ft.chrgText.cpMin;
 		if (start < 0)
 		{
 			start = 0;
@@ -985,7 +994,7 @@ void CToolTipEx::DoSearch()
 		{
 			//if needing to scroll back to the left make sure the full text is visible
 			//setSel scrolls to the end of the selection
-			int start = ft.chrgText.cpMin - 5;
+			int start = ft.chrgText.cpMin;
 			if (start < 0)
 			{
 				start = 0;
@@ -1211,6 +1220,15 @@ void CToolTipEx::OnOptions()
 		if (m_html.GetLength() <= 0)
 		{
 			cmSubMenu->EnableMenuItem(ID_FIRST_VIEWHTML, MF_DISABLED);
+		}
+
+		if (m_showingImage)
+		{
+			cmSubMenu->CheckMenuItem(ID_FIRST_VIEWASIMAGE, MF_CHECKED);
+		}
+		if (m_imageViewer.m_pGdiplusBitmap == NULL)
+		{
+			cmSubMenu->EnableMenuItem(ID_FIRST_VIEWASIMAGE, MF_DISABLED);
 		}
 
 		UpdateMenuShortCut(cmSubMenu, ID_FIRST_WRAPTEXT, ActionEnums::TOGGLE_DESCRIPTION_WORD_WRAP);
@@ -1551,6 +1569,7 @@ void CToolTipEx::OnFirstViewtext()
 	m_showingText = true;
 	m_showingRTF = false;
 	m_showingHTML = false;
+	m_showingImage = false;
 }
 
 void CToolTipEx::OnFirstViewrtf()
@@ -1574,6 +1593,7 @@ void CToolTipEx::OnFirstViewrtf()
 	m_showingText = false;
 	m_showingRTF = true;
 	m_showingHTML = false;
+	m_showingImage = false;
 }
 
 
@@ -1590,6 +1610,27 @@ void CToolTipEx::OnFirstViewhtml()
 	m_showingText = false;
 	m_showingRTF = false;
 	m_showingHTML = true;
+	m_showingImage = false;
+}
+
+void CToolTipEx::OnFirstViewImage()
+{
+	m_RichEdit.ShowWindow(SW_HIDE);
+	if (::IsWindow(m_browser.m_hWnd))
+	{
+		m_browser.ShowWindow(SW_HIDE);
+	}
+
+	if (m_imageViewer.m_pGdiplusBitmap)
+	{
+		m_imageViewer.UpdateBitmapSize(true);
+		m_imageViewer.ShowWindow(SW_SHOW);
+	}
+
+	m_showingText = false;
+	m_showingRTF = false;
+	m_showingHTML = false;
+	m_showingImage = true;
 }
 
 

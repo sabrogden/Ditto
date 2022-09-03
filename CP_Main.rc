@@ -358,6 +358,7 @@ BEGIN
         MENUITEM "View as Text",                ID_FIRST_VIEWTEXT
         MENUITEM "View as RTF",                 ID_FIRST_VIEWRTF
         MENUITEM "View as HTML",                ID_FIRST_VIEWHTML
+        MENUITEM "View as Image",               ID_FIRST_VIEWASIMAGE
     END
 END
 
