@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Ditto_Language_File Version = "3.22.70" Author = "Nardog, maboroshin" Notes = "for v3.22.72 ( update: 2019/11, errer no honyaku mikakunin, https://pc.genkaku.in/ )" LanguageCode="jpn">
+<Ditto_Language_File Version = "3.24.238" Author = "Nardog, maboroshin" Notes = "Update: 2022/10, errer no honyaku mikakunin, https://pc.genkaku.in/ )" LanguageCode="jpn">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">グループ(&amp;G)</Item>
 		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">グループ作成(&amp;N)...</Item>
@@ -23,7 +23,7 @@
 		<Item English_Text = "35 " ID = "32950"></Item>
 		<Item English_Text = "40 " ID = "32790"></Item>
 		<Item English_Text = "Positioning" ID = "-1">表示位置(&amp;P)</Item>
-		<Item English_Text = "At Caret" ID = "32802">キャレット</Item>
+		<Item English_Text = "At Caret" ID = "32802">キャレット(&amp;C)</Item>
 		<Item English_Text = "At Cursor" ID = "32803">カーソル(&amp;M)</Item>
 		<Item English_Text = "At Previous Position" ID = "32804">前回の位置(&amp;P)</Item>
 		<Item English_Text = "First Ten Hot Keys" ID = "-1">最初の 10 個のホット キー</Item>
@@ -150,6 +150,8 @@
 		
 		//Added by maboroshin 2019/11
 		<Item English_Text = "Replace Top Sticky Clip" ID = "32938">クリップ付箋の先頭と入替(&amp;R)</Item>
+		<Item English_Text = "Delete All Non Used Clips" ID = "32968">未使用のクリップをすべて削除</Item>
+		<Item English_Text = "Set Drag File Name" ID = "32970">ドラッグ時のファイル名を設定</Item>
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039">ホットキー</Item>
@@ -215,7 +217,7 @@
 		<Item English_Text = "Default Font" ID = "2031">既定のフォント</Item>
 		
 		//Added by maboroshin. 11/2019
-		<Item English_Text = "Advanced" ID = "2124">上級</Item>
+		<Item English_Text = "Advanced" ID = "2124">高度</Item>
 		<Item English_Text = "At Caret" ID = "2015">キャレット</Item>
 		<Item English_Text = "At Cursor" ID = "2016">カーソル</Item>
 		<Item English_Text = "At Previous Position" ID = "2017">前回の位置</Item>
@@ -275,6 +277,7 @@
 		<Item English_Text = "Win" ID = "2065"></Item>
 		<Item English_Text = "Save Current Clipboard" ID = "2062">現在のクリップボードを保存</Item>
 		<Item English_Text = "Win" ID = "2047"></Item>
+		<Item English_Text = "Copy And Save Current Clipboard" ID = "2068">現在のクリップボードをコピーして保存</Item>
 		
 		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044">現在の選択しているグループの最近の10個を使用</Item>
 		
@@ -428,7 +431,11 @@
 		<Item English_Text = "BackupDbMsg" ID = "Backing up database">データベースをバックアップ中</Item>
 		<Item English_Text = "RestoreDbMsg" ID = "Restoring database">データベースを復元中</Item>
 		
-		
+		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">Ditto がデータベースを開けないため、可能になるまで待機します。必要であれば、設定からパスを更新してください。パス: </Item>
+			
+		<Item English_Text = "At Caret" ID = "AtCaret">キャレット</Item>
+		<Item English_Text = "At Cursor" ID = "AtCursor">カーソル</Item>
+		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition">前回の位置</Item>
 		
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
@@ -461,6 +468,7 @@
 		<Item English_Text = "Backup Database" ID = "32960">データベースをバックアップ(&amp;B)...</Item>
 		<Item English_Text = "Restore Database" ID = "32961">データベースを復元(&amp;R)...</Item>
 		
+		<Item English_Text = "Delete All Non Used Clips" ID = "32969">未使用のクリップをすべて削除</Item>
 	</Ditto_Tray_Icon_Menu>
 
 	//Added in 9-11-09
@@ -677,6 +685,11 @@
 		<Item English_Text = "Invert Case" ID = "115">貼り付け/変換 小文字を反転</Item>
 		<Item English_Text = "Copy Selection" ID = "116">選択クリップをクリップボードにコピー</Item>
 		<Item English_Text = "Force Close Window" ID = "117">ウインドウを強制的に閉じる</Item>
+		<Item English_Text = "Refresh List" ID = "118">一覧の更新</Item>
+		<Item English_Text = "Delete all non used clips" ID = "119">未使用のクリップをすべて削除</Item>
+		<Item English_Text = "Show System Context Menu" ID = "120">システムの右クリックメニューを表示</Item>
+		<Item English_Text = "Set Drag File Name" ID = "121">ドラッグ時のファイル名を設定</Item>
+		<Item English_Text = "Paste CamelCase" ID = "122">貼り付け CamelCase</Item>
 	</Ditto_Options_Quick_Paste_Keyboard>
 	
 </Ditto_Language_File>
