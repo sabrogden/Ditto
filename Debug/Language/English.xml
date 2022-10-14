@@ -148,6 +148,9 @@
 		<Item English_Text = "Backup Database" ID = "32962"></Item>
 		<Item English_Text = "Restore Dastabase" ID = "32964"></Item>
 		
+		<Item English_Text = "Replace Top Sticky Clip" ID = "32938"></Item>
+		<Item English_Text = "Delete All Non Used Clips" ID = "32968"></Item>
+		<Item English_Text = "Set Drag File Name" ID = "32970"></Item>
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039"></Item>
@@ -166,6 +169,7 @@
 		<Item English_Text = "Last Used" ID = "2043"></Item>
 		<Item English_Text = "Quick Paste Text" ID = "2125"></Item>
 				
+		<Item English_Text = "Selected format MD5" ID = "2167"></Item>
 	</Ditto_Clip_Properties>
 	<Ditto_Options_General>
 		<Item English_Text = "Start Ditto on System Startup" ID = "2004"></Item>
@@ -208,6 +212,11 @@
 		<Item English_Text = "Environment Variables" ID = "2165"></Item>
 		
 		<Item English_Text = "Default Font" ID = "2031"></Item>
+		
+		<Item English_Text = "Advanced" ID = "2124"></Item>
+		<Item English_Text = "At Caret" ID = "2015"></Item>
+		<Item English_Text = "At Cursor" ID = "2016"></Item>
+		<Item English_Text = "At Previous Position" ID = "2017"></Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "Add" ID = "1015"></Item>
@@ -264,6 +273,7 @@
 		<Item English_Text = "Win" ID = "2065"></Item>
 		<Item English_Text = "Save Current Clipboard" ID = "2062"></Item>
 		<Item English_Text = "Win" ID = "2047"></Item>
+		<Item English_Text = "Copy And Save Current Clipboard" ID = "2068"></Item>
 		
 		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044"></Item>
 		
@@ -319,6 +329,9 @@
 		<Item English_Text = "Add" ID = "1021"></Item>
 		<Item English_Text = "Cancel" ID = "2"></Item>
 		<Item English_Text = "Add Supported Type" ID = "-1"></Item>
+		<Item English_Text = "Current Clipboard Types" ID = "2128"></Item>
+		<Item English_Text = "Primary Clipboard Types" ID = "2145"></Item>
+		<Item English_Text = "Custom Clipboard Type" ID = "2130"></Item>
 	</Ditto_Options_Supported_Types_Add>
 	<Ditto_Move_To_Groups>
 		<Item English_Text = "New Group" ID = "1040"></Item>
@@ -398,7 +411,8 @@
 		<Item English_Text = "Hot Key" ID = "QPHotKey"></Item>
 		<Item English_Text = "Command" ID = "QPCommand"></Item>
 		
-		<Item English_Text = "[Always on top]" ID = "top_most"></Item>
+		//ID chenged from "top_most"
+		<Item English_Text = "[Always on top]" ID = "top_window"></Item>
 		
 		<Item English_Text = "[Disconnected]" ID = "disconnected"></Item>
 		<Item English_Text = "Ditto is running minimized, Ditto can be opened by hot keys or by clicking the task tray icon" ID = "StartuMsg"></Item>
@@ -446,6 +460,8 @@
 		
 		<Item English_Text = "Backup Database" ID = "32960"></Item>
 		<Item English_Text = "Restore Database" ID = "32961"></Item>
+		
+		<Item English_Text = "Delete All Non Used Clips" ID = "32969">
 		
 	</Ditto_Tray_Icon_Menu>
 
@@ -629,7 +645,43 @@
 		<Item English_Text = "Import Clip" ID = "82"></Item>
 		<Item English_Text = "Global HotKeys" ID = "83"></Item>
 		<Item English_Text = "Delete Clip Data" ID = "84"></Item>
-		<Item English_Text = "Replace Top Sticky Clip" ID = "85"></Item>		
+		<Item English_Text = "Replace Top Sticky Clip" ID = "85"></Item>
+		<Item English_Text = "Prompt send to friend" ID = "86"></Item>
+		<Item English_Text = "Save copied file (cf_hdrop) contents into Ditto" ID = "87"></Item>
+		<Item English_Text = "Toggle clipboard connection" ID = "88"></Item>
+		<Item English_Text = "Move Selection Up" ID = "89"></Item>
+		<Item English_Text = "Move Selection Down" ID = "90"></Item>
+		<Item English_Text = "Toggle Description Word Wrap" ID = "91"></Item>
+		<Item English_Text = "Apply Last Search" ID = "92"></Item>
+		<Item English_Text = "Toggle Search Method" ID = "93"></Item>
+		<Item English_Text = "Move Clip Last" ID = "95"></Item>
+		<Item English_Text = "Paste, Don't Change Clip Order" ID = "96"></Item>
+		<Item English_Text = "Paste, Trim White Space" ID = "97"></Item>
+		<Item English_Text = "Set Transparency None" ID = "98"></Item>
+		<Item English_Text = "Set Transparency 5%" ID = "99"></Item>
+		<Item English_Text = "Set Transparency 10%" ID = "100"></Item>
+		<Item English_Text = "Set Transparency 15%" ID = "101"></Item>
+		<Item English_Text = "Set Transparency 20%" ID = "102"></Item>
+		<Item English_Text = "Set Transparency 25%" ID = "103"></Item>
+		<Item English_Text = "Set Transparency 30%" ID = "104"></Item>
+		<Item English_Text = "Set Transparency 35%" ID = "105"></Item>
+		<Item English_Text = "Set Transparency 40%" ID = "106"></Item>
+		<Item English_Text = "Prompt send to friend" ID = "107"></Item>
+		<Item English_Text = "Increase Transparency %" ID = "108"></Item>
+		<Item English_Text = "Decrease Transparency %" ID = "109"></Item>
+		<Item English_Text = "EMail, Content In Body" ID = "110"></Item>
+		<Item English_Text = "EMail, Clip Export As Attachment" ID = "111"></Item>
+		<Item English_Text = "EMail, Content As Attachment" ID = "112"></Item>
+		<Item English_Text = "Gmail" ID = "113"></Item>
+		<Item English_Text = "Slugify" ID = "114"></Item>
+		<Item English_Text = "Invert Case" ID = "115"></Item>
+		<Item English_Text = "Copy Selection" ID = "116"></Item>
+		<Item English_Text = "Force Close Window" ID = "117"></Item>
+		<Item English_Text = "Refresh List" ID = "118"></Item>
+		<Item English_Text = "Delete all non used clips" ID = "119"></Item>
+		<Item English_Text = "Show System Context Menu" ID = "120"></Item>
+		<Item English_Text = "Set Drag File Name" ID = "121"></Item>
+		<Item English_Text = "Paste CamelCase" ID = "122"></Item>		
 	
 	</Ditto_Options_Quick_Paste_Keyboard>
 	
