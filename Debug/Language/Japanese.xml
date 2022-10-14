@@ -148,7 +148,6 @@
 		<Item English_Text = "Backup Database" ID = "32962">データベースをバックアップ(&amp;B)...</Item>
 		<Item English_Text = "Restore Dastabase" ID = "32964">データベースを復元(&amp;R)...</Item>
 		
-		//Added by maboroshin 2019/11
 		<Item English_Text = "Replace Top Sticky Clip" ID = "32938">クリップ付箋の先頭と入替(&amp;R)</Item>
 		<Item English_Text = "Delete All Non Used Clips" ID = "32968">未使用のクリップをすべて削除</Item>
 		<Item English_Text = "Set Drag File Name" ID = "32970">ドラッグ時のファイル名を設定</Item>
@@ -170,9 +169,7 @@
 		<Item English_Text = "Last Used" ID = "2043">最終使用</Item>
 		<Item English_Text = "Quick Paste Text" ID = "2125">クイックペースト文</Item>
 		
-		//Added by maboroshin 2019/11
-		<Item English_Text = "Selected format MD5" ID = "2167">MD&amp;5:選択コピー形式</Item>
-				
+		<Item English_Text = "Selected format MD5" ID = "2167">選択した形式のMD5:</Item>
 	</Ditto_Clip_Properties>
 	<Ditto_Options_General>
 		<Item English_Text = "Start Ditto on System Startup" ID = "2004">システム起動時に Ditto を開始する</Item>
@@ -216,7 +213,6 @@
 		
 		<Item English_Text = "Default Font" ID = "2031">既定のフォント</Item>
 		
-		//Added by maboroshin. 11/2019
 		<Item English_Text = "Advanced" ID = "2124">高度</Item>
 		<Item English_Text = "At Caret" ID = "2015">キャレット</Item>
 		<Item English_Text = "At Cursor" ID = "2016">カーソル</Item>
@@ -333,12 +329,9 @@
 		<Item English_Text = "Add" ID = "1021">追加</Item>
 		<Item English_Text = "Cancel" ID = "2">キャンセル</Item>
 		<Item English_Text = "Add Supported Type" ID = "-1">対応形式の追加</Item>
-		
-		//New item added 12/17/16
 		<Item English_Text = "Current Clipboard Types" ID = "2128">現在のクリップボード形式</Item>
 		<Item English_Text = "Primary Clipboard Types" ID = "2145">主なクリップボード形式</Item>
 		<Item English_Text = "Custom Clipboard Type" ID = "2130">独自のクリップボード形式</Item>
-		
 	</Ditto_Options_Supported_Types_Add>
 	<Ditto_Move_To_Groups>
 		<Item English_Text = "New Group" ID = "1040">新規グループ(&amp;N)</Item>
@@ -418,7 +411,7 @@
 		<Item English_Text = "Hot Key" ID = "QPHotKey">ホットキー</Item>
 		<Item English_Text = "Command" ID = "QPCommand">コマンド</Item>
 		
-		//ID chenged from "top_most", by maboroshin. 11/2019
+		//ID chenged from "top_most"
 		<Item English_Text = "[Always on top]" ID = "top_window">[前面]</Item>
 		
 		<Item English_Text = "[Disconnected]" ID = "disconnected">[切断]</Item>
@@ -432,7 +425,7 @@
 		<Item English_Text = "RestoreDbMsg" ID = "Restoring database">データベースを復元中</Item>
 		
 		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">Ditto がデータベースを開けないため、可能になるまで待機します。必要であれば、設定からパスを更新してください。パス: </Item>
-			
+		
 		<Item English_Text = "At Caret" ID = "AtCaret">キャレット</Item>
 		<Item English_Text = "At Cursor" ID = "AtCursor">カーソル</Item>
 		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition">前回の位置</Item>
@@ -651,9 +644,7 @@
 		<Item English_Text = "Import Clip" ID = "82">クリップのインポート</Item>
 		<Item English_Text = "Global HotKeys" ID = "83">グローバルホットキー</Item>
 		<Item English_Text = "Delete Clip Data" ID = "84">クリップデータの削除</Item>
-		<Item English_Text = "Replace Top Sticky Clip" ID = "85">クリップ付箋を最初のものと入替</Item>		
-	
-		//Added by maboroshin. Nothig: 94  11/2019
+		<Item English_Text = "Replace Top Sticky Clip" ID = "85">クリップ付箋を最初のものと入替</Item>	
 		<Item English_Text = "Prompt send to friend" ID = "86">送信/宛先の入力</Item>
 		<Item English_Text = "Save copied file (cf_hdrop) contents into Ditto" ID = "87">CF_HDROP形式からファイルを保存</Item>
 		<Item English_Text = "Toggle clipboard connection" ID = "88">切替/クリップボード接続</Item>
