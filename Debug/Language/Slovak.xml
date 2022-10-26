@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Ditto_Language_File Version = "1" Author = "Vladimír Kubala" Notes = "" LanguageCode = "slo">
+<Ditto_Language_File Version = "3.24.238" Author = "Vladimír Kubala" Notes = "" LanguageCode = "slo">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Skupiny</Item>
 		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Nová skupina</Item>
@@ -88,6 +88,7 @@
 		<Item English_Text = "Make Top Sticky Clip" ID = "32878">Pripnúť výstrižok navrchu</Item>	
 		<Item English_Text = "Make Last Sticky Clip" ID = "32879">Pripnúť výstrižok naspodku</Item>	
 		<Item English_Text = "Remove Sticky Setting" ID = "32880">Odopnúť výstrižok</Item>
+        <Item English_Text = "Replace Top Sticky Clip" ID = "32938">Nahradiť pripnutý výstrižok navrchu</Item>
 		<Item English_Text = "Import/Export" ID = "-1">Importovať/Exportovať</Item>	
 		<Item English_Text = "View as QRCode" ID = "32887">Zobraziť ako QR kód</Item>	
 		<Item English_Text = "Export Clip(s) to Text File" ID = "32889">Exportovať výstrižok(ky) ako textový súbor</Item>	
@@ -123,6 +124,7 @@
 		<Item English_Text = "Show indicator a clip has been pasted" ID = "32924">Zobraziť indikátor vloženia výstrižku</Item>	
 		<Item English_Text = "Global Hot Keys" ID = "32933">Všeobecné klávesové skratky</Item>	
 		<Item English_Text = "Delete Clip Data" ID = "32934">Odstrániť údaje výstrižku</Item>	
+        <Item English_Text = "Replace Top Sticky Clip" ID = "85">クリップ付箋を最初のものと入替</Item>
 		<Item English_Text = "Import Clip(s)" ID = "32935">Importovať výstrižok(ky)</Item>	
 		<Item English_Text = "New Clip" ID = "32937">Nový výstrižok</Item>	
 		<Item English_Text = "Save Current Clipboard" ID = "32905">Uložiť obsah schránky</Item>	
@@ -140,6 +142,7 @@
 		<Item English_Text = "EMail, Content In Body" ID = "32951">EMail, Obsah v tele</Item>		
 		<Item English_Text = "Import File Contents From CF_HDROP" ID = "32941">Importovať obsah súboru z CF_HDROP</Item>		
 		<Item English_Text = "Move To Last" ID = "32943">Presunúť na posledné</Item>
+        <Item English_Text = "Set Drag File Name" ID = "32970">Zadať názov presúvaného súboru</Item>
 		
 		<Item English_Text = "Increase" ID = "32947">Zvýšiť</Item>
 		<Item English_Text = "Decrease" ID = "32948">Znížiť</Item>
@@ -178,7 +181,7 @@
 		<Item English_Text = "Allow Duplicates" ID = "1037">Povoliť duplikáty</Item>
 		<Item English_Text = "Update Clip Order On Paste" ID = "1038">Aktualizovať poradie výstrižkov po vložení</Item>
 		<Item English_Text = "Save Multi-Pastes" ID = "1039">Uložiť viacnásobné vloženie</Item>
-		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Skryť Ditto klávesovou skratkou ak je viditeľný</Item>
+		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Skryť Ditto klávesovou skratkou, ak je viditeľný</Item>
 		<Item English_Text = "Amount of text to save for description" ID = "2044">Množstvo textu pre uloženie popisu</Item>
 		<Item English_Text = "On copy play the sound" ID = "2045">Po skopírovaní prehrať zvuk</Item>
 		<Item English_Text = "Play" ID = "2034">Prehrať</Item>
@@ -194,7 +197,7 @@
 		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090">Oddeľovač viacnás. vloženia ([LF] = line feed)</Item>
 		
 		//New item added 3/1/11
-		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098">Kopírovať možno z týchto aplikácií (oddeľujte ;)</Item>
+		<Item English_Text = "Accepted Copy Applications (separate by ;)" ID = "2098">Kopírovať možno z týchto aplikácií (oddeľujte ;)</Item>
 		<Item English_Text = "Include" ID = "2095">Zahrnuté</Item>
 		<Item English_Text = "Exclude" ID = "2096">Vylúčené</Item>
 		
@@ -208,6 +211,8 @@
 		<Item English_Text = "Environment Variables" ID = "2165">Premenné prostredia</Item>
 		
 		<Item English_Text = "Default Font" ID = "2031">Predvolené písmo</Item>
+        
+        <Item English_Text = "Advanced" ID = "2124">Pokročilé</Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "Add" ID = "1015">Pridať</Item>
@@ -224,6 +229,7 @@
 		<Item English_Text = "Activate Ditto" ID = "2048">Aktivovať Ditto</Item>
 		<Item English_Text = "Win" ID = "2035">Win</Item>
 		<Item English_Text = "Named Copy" ID = "2049">Názov kópie</Item>
+        <Item English_Text = "Copy And Save Current Clipboard" ID = "2068">Kopírovať a uložiť aktuálny obsah</Item>
 		<Item English_Text = "Win" ID = "2036">Win</Item>
 		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">Všeobecné klávesové skratky pre posledných 10 kopírovaných položiek</Item>
 		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Vložiť (inak sa iba načíta obsah položky do schránky)</Item>
@@ -269,9 +275,9 @@
 		
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Friends>
-		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Keď prijmete požiadavku na kópiu a IP alebo názov počítača sa nachádza v zozname, potom sa uloží do schránky.  V opačnom prípade sa uloží medzi uložené výstrižky pre neskoršie použitie.</Item>
+		<Item English_Text = "When you receive a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Keď prijmete požiadavku na kópiu a IP alebo názov počítača sa nachádza v zozname, potom sa uloží do schránky.  V opačnom prípade sa uloží medzi uložené výstrižky pre neskoršie použitie.</Item>
 		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP/Názov počítača oddeľujte čiarkami</Item>
-		<Item English_Text = "Disable Recieving Clips" ID = "2026">Zakázať prijímanie výstrižkov</Item>
+		<Item English_Text = "Disable Receiving Clips" ID = "2026">Zakázať prijímanie výstrižkov</Item>
 		<Item English_Text = "Group Password" ID = "2054">Heslo skupiny</Item>
 		<Item English_Text = "If you are receiving clips from computers where your group password does not match, enter additional group passwords separated by commas" ID = "2055">Ak prijmete výstrižky z počítačov, ktorých heslo skupiny nesúhlasí, zadajte ďalšie heslá skupiny oddelené čiarkami</Item>
 		<Item English_Text = "Receive Passwords" ID = "2056">Heslá pre príjem</Item>
@@ -392,13 +398,13 @@
 		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">Odoslať všetky kópie</Item>
         <Item English_Text = "IP/Name" ID = "IP_Name">IP/Názov</Item>
         <Item English_Text = "Descriptions" ID = "Descriptions">Popis</Item>
-		
+        
 		<Item English_Text = "Quick Paste Keyboard" ID = "QuickPasteKeyboardTitle">Skratky rýchleho vloženia</Item>
 		
 		<Item English_Text = "Hot Key" ID = "QPHotKey">Klávesová skratka</Item>
 		<Item English_Text = "Command" ID = "QPCommand">Príkaz</Item>
 		
-		<Item English_Text = "[Top Most Window]" ID = "top_most">[Aktuálne okno]</Item>
+		<Item English_Text = "[Always on top]" ID = "top_most">[Vždy navrchu]</Item>
 		
 		<Item English_Text = "[Disconnected]" ID = "disconnected">[Odpojené]</Item>
 		<Item English_Text = "Ditto is running minimized, Ditto can be opened by hot keys or by clicking the task tray icon" ID = "StartuMsg">Ditto je spustený minimalizovane, Ditto môžete spustiť klávesovou skratkou alebo kliknutím na ikonu v oblasti oznámení</Item>
@@ -409,12 +415,14 @@
 		
 		<Item English_Text = "BackupDbMsg" ID = "Backing up database">Zálohuje sa databáza</Item>
 		<Item English_Text = "RestoreDbMsg" ID = "Restoring database">Obnovuje sa databáza</Item>
+			
+		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">Ditto nedokázal otvoriť svoju databázu, čaká, dokiaľ ju nebude možné otvoriť. V prípade potreby aktualizujte cestu v Možnostiach. Cesta: </Item>
 		
-		<Item English_Text = "Ditto nedokázal otvoriť svoju databázu, čaká, dokiaľ ju nebude možné otvoriť. V prípade potreby aktualizujte cestu v Možnostiach. Cesta: " ID = "StartupNoDbMsg"></Item>
+		<Item English_Text = "At Caret" ID = "AtCaret">Textový kurzor</Item>
+		<Item English_Text = "At Cursor" ID = "AtCursor">Kurzore</Item>
+		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition">Predchádzajúca pozícia</Item>
 	
-    
-    
-    </Ditto_String_Table>
+	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">OK</Item>
 		<Item English_Text = "Cancel" ID = "2">Zrušiť</Item>
@@ -444,7 +452,7 @@
 		
 		<Item English_Text = "Backup Database" ID = "32960">Zálohovať databázu</Item>
 		<Item English_Text = "Restore Database" ID = "32961">Obnoviť databázu</Item>
-
+        <Item English_Text = "Delete All Non Used Clips" ID = "32969">Odstrániť všetky nepoužité výstrižky</Item>
 	</Ditto_Tray_Icon_Menu>
 
 	//Added in 9-11-09
@@ -627,8 +635,7 @@
 		<Item English_Text = "Import Clip" ID = "82">Importovať výstrižok</Item>
 		<Item English_Text = "Global HotKeys" ID = "83">Všeobecné klávesové skratky</Item>
 		<Item English_Text = "Delete Clip Data" ID = "84">Odstrániť údaje výstrižku</Item>
-		<Item English_Text = "Replace Top Sticky Clip" ID = "85">Nahradiť pripnutý výstrižok navrchu</Item>		
-			
+        <Item English_Text = "Paste CamelCase" ID = "122">Ťavia notácia (CamelCase)</Item>
 	</Ditto_Options_Quick_Paste_Keyboard>
 	
 </Ditto_Language_File>
