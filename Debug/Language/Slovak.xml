@@ -88,7 +88,7 @@
 		<Item English_Text = "Make Top Sticky Clip" ID = "32878">Pripnúť výstrižok navrchu</Item>	
 		<Item English_Text = "Make Last Sticky Clip" ID = "32879">Pripnúť výstrižok naspodku</Item>	
 		<Item English_Text = "Remove Sticky Setting" ID = "32880">Odopnúť výstrižok</Item>
-        <Item English_Text = "Replace Top Sticky Clip" ID = "32938">Nahradiť pripnutý výstrižok navrchu</Item>
+		<Item English_Text = "Replace Top Sticky Clip" ID = "32938">Nahradiť pripnutý výstrižok navrchu</Item>
 		<Item English_Text = "Import/Export" ID = "-1">Importovať/Exportovať</Item>	
 		<Item English_Text = "View as QRCode" ID = "32887">Zobraziť ako QR kód</Item>	
 		<Item English_Text = "Export Clip(s) to Text File" ID = "32889">Exportovať výstrižok(ky) ako textový súbor</Item>	
@@ -124,7 +124,6 @@
 		<Item English_Text = "Show indicator a clip has been pasted" ID = "32924">Zobraziť indikátor vloženia výstrižku</Item>	
 		<Item English_Text = "Global Hot Keys" ID = "32933">Všeobecné klávesové skratky</Item>	
 		<Item English_Text = "Delete Clip Data" ID = "32934">Odstrániť údaje výstrižku</Item>	
-        <Item English_Text = "Replace Top Sticky Clip" ID = "85">クリップ付箋を最初のものと入替</Item>
 		<Item English_Text = "Import Clip(s)" ID = "32935">Importovať výstrižok(ky)</Item>	
 		<Item English_Text = "New Clip" ID = "32937">Nový výstrižok</Item>	
 		<Item English_Text = "Save Current Clipboard" ID = "32905">Uložiť obsah schránky</Item>	
@@ -142,7 +141,7 @@
 		<Item English_Text = "EMail, Content In Body" ID = "32951">EMail, Obsah v tele</Item>		
 		<Item English_Text = "Import File Contents From CF_HDROP" ID = "32941">Importovať obsah súboru z CF_HDROP</Item>		
 		<Item English_Text = "Move To Last" ID = "32943">Presunúť na posledné</Item>
-        <Item English_Text = "Set Drag File Name" ID = "32970">Zadať názov presúvaného súboru</Item>
+		<Item English_Text = "Set Drag File Name" ID = "32970">Zadať názov presúvaného súboru</Item>
 		
 		<Item English_Text = "Increase" ID = "32947">Zvýšiť</Item>
 		<Item English_Text = "Decrease" ID = "32948">Znížiť</Item>
@@ -212,7 +211,7 @@
 		
 		<Item English_Text = "Default Font" ID = "2031">Predvolené písmo</Item>
         
-        <Item English_Text = "Advanced" ID = "2124">Pokročilé</Item>
+		<Item English_Text = "Advanced" ID = "2124">Pokročilé</Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "Add" ID = "1015">Pridať</Item>
@@ -229,7 +228,7 @@
 		<Item English_Text = "Activate Ditto" ID = "2048">Aktivovať Ditto</Item>
 		<Item English_Text = "Win" ID = "2035">Win</Item>
 		<Item English_Text = "Named Copy" ID = "2049">Názov kópie</Item>
-        <Item English_Text = "Copy And Save Current Clipboard" ID = "2068">Kopírovať a uložiť aktuálny obsah</Item>
+		<Item English_Text = "Copy And Save Current Clipboard" ID = "2068">Kopírovať a uložiť aktuálny obsah</Item>
 		<Item English_Text = "Win" ID = "2036">Win</Item>
 		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">Všeobecné klávesové skratky pre posledných 10 kopírovaných položiek</Item>
 		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Vložiť (inak sa iba načíta obsah položky do schránky)</Item>
@@ -452,7 +451,7 @@
 		
 		<Item English_Text = "Backup Database" ID = "32960">Zálohovať databázu</Item>
 		<Item English_Text = "Restore Database" ID = "32961">Obnoviť databázu</Item>
-        <Item English_Text = "Delete All Non Used Clips" ID = "32969">Odstrániť všetky nepoužité výstrižky</Item>
+		<Item English_Text = "Delete All Non Used Clips" ID = "32969">Odstrániť všetky nepoužité výstrižky</Item>
 	</Ditto_Tray_Icon_Menu>
 
 	//Added in 9-11-09
@@ -635,7 +634,7 @@
 		<Item English_Text = "Import Clip" ID = "82">Importovať výstrižok</Item>
 		<Item English_Text = "Global HotKeys" ID = "83">Všeobecné klávesové skratky</Item>
 		<Item English_Text = "Delete Clip Data" ID = "84">Odstrániť údaje výstrižku</Item>
-        <Item English_Text = "Paste CamelCase" ID = "122">Ťavia notácia (CamelCase)</Item>
+		<Item English_Text = "Paste CamelCase" ID = "122">Ťavia notácia (CamelCase)</Item>
 	</Ditto_Options_Quick_Paste_Keyboard>
 	
 </Ditto_Language_File>
