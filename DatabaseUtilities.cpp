@@ -9,7 +9,7 @@
 #include <io.h>
 #include "Path.h"
 #include "InternetUpdate.h"
-#include <zlib.h>
+#include "zlib/zlib.h"
 #include "Shared/TextConvert.h"
 using namespace nsPath;
 

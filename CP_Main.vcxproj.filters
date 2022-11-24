@@ -481,12 +481,6 @@
     <ClInclude Include="sqlite\sqlite3ext.h">
       <Filter>sqlite</Filter>
     </ClInclude>
-    <ClInclude Include="zlib\zlib.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="zlib\zconf.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
     <ClInclude Include="About.h">
       <Filter>header</Filter>
     </ClInclude>
@@ -1455,14 +1449,10 @@
     <None Include="res\cursor_zoom_in.cur">
       <Filter>res</Filter>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="sqlite">
       <UniqueIdentifier>{eaee7285-53ac-40cb-bbb1-ad1b2d062d76}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="zlib">
-      <UniqueIdentifier>{617bf80c-2d1a-4899-96c0-94794c119fa9}</UniqueIdentifier>
     </Filter>
     <Filter Include="source">
       <UniqueIdentifier>{1214d206-a595-4227-bc65-0bec059e6cca}</UniqueIdentifier>

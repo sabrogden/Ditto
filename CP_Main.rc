@@ -1041,8 +1041,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 999,999,999,999
- PRODUCTVERSION 999,999,999,999
+ FILEVERSION 3,24,238,2
+ PRODUCTVERSION 3,24,238,2
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -1058,12 +1058,12 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "FileDescription", "Ditto"
-            VALUE "FileVersion", "999.999.999.999"
+            VALUE "FileVersion", "3.24.238.2"
             VALUE "InternalName", "CP_Main"
             VALUE "LegalCopyright", "Copyright (C) 2003"
             VALUE "OriginalFilename", "Ditto"
             VALUE "ProductName", "Ditto"
-            VALUE "ProductVersion", "999.999.999.999"
+            VALUE "ProductVersion", "3.24.238.2"
         END
     END
     BLOCK "VarFileInfo"
