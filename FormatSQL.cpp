@@ -140,11 +140,18 @@ bool CFormatSQL::AddToSQL(CString cs, eSpecialTypes &eNOTValue, eSpecialTypes &e
 	}
 	else if (CGetSetOptions::GetSimpleTextSearch())
 	{
-		csThisSQL.Format(_T("%s LIKE \'%%%s%%\'"), m_csVariable, cs);
-	}
-	else if(cs.Find(_T("%")) < 0 && cs.Find(_T("?")) < 0)
-	{
-		csThisSQL.Format(_T("%s%sLIKE \'%%%s%%\'"), m_csVariable, GetKeyWordString(eNOTValue), cs);
+		if (m_csVariable.Find(_T("%")))
+		{
+			CString local(cs);
+			local.Replace(_T("%"), _T("\\%"));
+			
+			//escape the % character, https://www.sqlitetutorial.net/sqlite-like/
+			csThisSQL.Format(_T("%s LIKE \'%%%s%%\' ESCAPE \'\\\'"), m_csVariable, local);
+		}
+		else
+		{
+			csThisSQL.Format(_T("%s LIKE \'%%%s%%\'"), m_csVariable, cs);
+		}
 	}
 	else
 	{
