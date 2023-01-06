@@ -6538,6 +6538,10 @@ bool CQPasteWnd::SelectIds(ARRAY &ids)
 	int row = 0;
 	bool found = false;
 	std::vector<CMainTable>::iterator iter = m_listItems.begin();
+
+	//sort so .Find works
+	ids.SortAscending();
+
 	while (iter != m_listItems.end())
 	{
 		if (ids.Find(iter->m_lID))
