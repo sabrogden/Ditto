@@ -922,6 +922,8 @@ void CToolTipEx::HighlightSearchText()
 	auto mask = m_RichEdit.GetEventMask();
 	m_RichEdit.SetEventMask(0);
 
+
+	int matches = 0;
 	do 
 	{
 		ft.chrg.cpMin = n+1;
@@ -932,7 +934,9 @@ void CToolTipEx::HighlightSearchText()
 			m_RichEdit.SetSelectionCharFormat(cf);
 		}
 
-	} while (n != -1);	
+		matches++;
+
+	} while (n != -1 && matches < 100);	
 
 	m_RichEdit.SetSel(0, 0);
 	m_RichEdit.SetEventMask(mask);
