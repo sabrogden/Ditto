@@ -411,13 +411,14 @@ BOOL CCP_MainApp::InitInstance()
 	{
 		m_pNoDbMainFrame = new CNoDbFrameWnd();
 		m_pMainWnd = m_pNoDbMainFrame;
-
+				
 		m_pNoDbMainFrame->LoadFrame(IDR_MAINFRAME, WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, NULL, NULL);
 		m_pNoDbMainFrame->ShowWindow(SW_SHOW);
 		m_pNoDbMainFrame->UpdateWindow();
 	}
 	else
 	{
+		//Sleep(1000);
 		CreateMainWnd();
 	}
 
@@ -430,8 +431,11 @@ void CCP_MainApp::CreateMainWnd()
 	m_pMainWnd = m_pMainFrame = pFrame;
 
 	pFrame->LoadFrame(IDR_MAINFRAME, WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, NULL, NULL);
-	pFrame->ShowWindow(SW_SHOW);
-	pFrame->UpdateWindow();
+
+	//removed to keep ditto from taking focus on startup
+	//pFrame->ShowWindow(SW_SHOW);
+	//pFrame->UpdateWindow();
+
 }
 
 void CCP_MainApp::CloseNoDbWindow()

@@ -152,4 +152,5 @@ DECLARE_MESSAGE_MAP()public:
 	afx_msg void OnFirstDeleteallnonusedclips();
     afx_msg LRESULT OnPasteClip(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEditClip(WPARAM wParam, LPARAM lParam);
+    afx_msg void OnSetFocus(CWnd* pOldWnd);
 };

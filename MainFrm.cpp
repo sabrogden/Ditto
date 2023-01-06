@@ -83,7 +83,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_PASTE_CLIP, OnPasteClip)
 	ON_MESSAGE(WM_EDIT_CLIP, OnEditClip)
 
-	END_MESSAGE_MAP()
+	ON_WM_SETFOCUS()
+END_MESSAGE_MAP()
 
 	static UINT indicators[] = 
 {
@@ -145,7 +146,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	
 	m_trayIcon.Create(this, IDR_MENU, _T("Ditto"), CTrayNotifyIcon::LoadIcon(IDR_MAINFRAME), WM_TRAYNOTIFY, 0, 1);
 	m_trayIcon.SetDefaultMenuItem(ID_FIRST_SHOWQUICKPASTE, FALSE);	    
-    m_trayIcon.MinimiseToTray(this);
+
+	//removed to keep Ditto from taking focus on start
+    //m_trayIcon.MinimiseToTray(this);
 
 	if (CGetSetOptions::GetShowStartupMessage())
 	{
@@ -1544,4 +1547,13 @@ LRESULT CMainFrame::OnEditClip(WPARAM wParam, LPARAM lParam)
 	IDs.Add(wParam);
 	theApp.EditItems(IDs, true);
 	return TRUE;
+}
+
+void CMainFrame::OnSetFocus(CWnd* pOldWnd)
+{
+	CFrameWnd::OnSetFocus(pOldWnd);
+
+	//int nRet = MessageBox(_T("focused"), _T("Ditto"), MB_YESNO | MB_TOPMOST);
+
+	// TODO: Add your message handler code here
 }
