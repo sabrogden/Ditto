@@ -642,6 +642,7 @@
     <ClCompile Include="CF_UnicodeTextAggregator.cpp" />
     <ClCompile Include="ChaiScriptOnCopy.cpp" />
     <ClCompile Include="ChaiScriptXml.cpp" />
+    <ClCompile Include="ImageFormatAggregator.cpp" />
     <ClCompile Include="Clip.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">Disabled</Optimization>
@@ -2900,6 +2901,7 @@
     <ClInclude Include="CGdiPlusBitmap.h" />
     <ClInclude Include="ChaiScriptOnCopy.h" />
     <ClInclude Include="ChaiScriptXml.h" />
+    <ClInclude Include="ImageFormatAggregator.h" />
     <ClInclude Include="ClipCompare.h" />
     <ClInclude Include="ClipFormatQListCtrl.h" />
     <ClInclude Include="ICU_String.h" />

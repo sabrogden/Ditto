@@ -353,13 +353,20 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 
 	ON_COMMAND(ID_MENU_RESTOREDATABSAE, &CQPasteWnd::OnFirstRestoreDb)
 	ON_COMMAND(ID_MENU_BACKUPDATABASE, &CQPasteWnd::OnFirstBackupDb)
-		ON_COMMAND(ID_MENU_DELETEALLNONUSEDCLIPS, &CQPasteWnd::OnMenuDeleteallnonusedclips)
-		ON_UPDATE_COMMAND_UI(ID_MENU_DELETEALLNONUSEDCLIPS, &CQPasteWnd::OnUpdateMenuDeleteallnonusedclips)
-		ON_COMMAND(ID_IMPORT_SETDRAGFILENAME, &CQPasteWnd::OnImportSetdragfilename)
-		ON_UPDATE_COMMAND_UI(ID_IMPORT_SETDRAGFILENAME, &CQPasteWnd::OnUpdateImportSetdragfilename)
-		ON_COMMAND(ID_SPECIALPASTE_CAMELCASE, &CQPasteWnd::OnSpecialpasteCamelcase)
-		ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_CAMELCASE, &CQPasteWnd::OnUpdateSpecialpasteCamelcase)
-		END_MESSAGE_MAP()
+	ON_COMMAND(ID_MENU_DELETEALLNONUSEDCLIPS, &CQPasteWnd::OnMenuDeleteallnonusedclips)
+	ON_UPDATE_COMMAND_UI(ID_MENU_DELETEALLNONUSEDCLIPS, &CQPasteWnd::OnUpdateMenuDeleteallnonusedclips)
+	ON_COMMAND(ID_IMPORT_SETDRAGFILENAME, &CQPasteWnd::OnImportSetdragfilename)
+	ON_UPDATE_COMMAND_UI(ID_IMPORT_SETDRAGFILENAME, &CQPasteWnd::OnUpdateImportSetdragfilename)
+	ON_COMMAND(ID_SPECIALPASTE_CAMELCASE, &CQPasteWnd::OnSpecialpasteCamelcase)
+	ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_CAMELCASE, &CQPasteWnd::OnUpdateSpecialpasteCamelcase)
+
+		ON_COMMAND(ID_SPECIALPASTE_MULTIPLEIMAGESHORIZONTALLY, &CQPasteWnd::OnSpecialpasteMultipleImagesHorz)
+		ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_MULTIPLEIMAGESHORIZONTALLY, &CQPasteWnd::OnUpdateSpecialpasteMultipleImagesHorz)
+
+		ON_COMMAND(ID_SPECIALPASTE_MULTIPLEIMAGESVERTICALLY, &CQPasteWnd::OnSpecialpasteMultipleImagesVert)
+		ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_MULTIPLEIMAGESVERTICALLY, &CQPasteWnd::OnUpdateSpecialpasteMultipleImagesVert)
+
+END_MESSAGE_MAP()
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -3349,6 +3356,12 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::PASTE_CAMEL_CASE:
 		ret = DoPasteCamelCase();
 		break;
+	case ActionEnums::PASTE_MULTI_IMAGE_HORIZONTAL:
+		ret = DoPasteImagesHorz();
+		break;
+	case ActionEnums::PASTE_MULTI_IMAGE_VERTICAL:
+		ret = DoPasteImagesVert();
+		break;
 	}
 
 	return ret;
@@ -4595,6 +4608,32 @@ bool CQPasteWnd::DoPasteCamelCase()
 	{
 		CSpecialPasteOptions pasteOptions;
 		pasteOptions.m_pasteCamelCase = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoPasteImagesHorz()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteImagesHorizontal = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoPasteImagesVert()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteImagesVertically = true;
 		OpenSelection(pasteOptions);
 		return true;
 	}
@@ -7964,4 +8003,34 @@ void CQPasteWnd::OnUpdateSpecialpasteCamelcase(CCmdUI* pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_CAMEL_CASE);
+}
+
+void CQPasteWnd::OnSpecialpasteMultipleImagesHorz()
+{
+	DoAction(ActionEnums::PASTE_MULTI_IMAGE_HORIZONTAL);
+}
+
+void CQPasteWnd::OnUpdateSpecialpasteMultipleImagesHorz(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_MULTI_IMAGE_HORIZONTAL);
+}
+
+void CQPasteWnd::OnSpecialpasteMultipleImagesVert()
+{
+	DoAction(ActionEnums::PASTE_MULTI_IMAGE_VERTICAL);
+}
+
+void CQPasteWnd::OnUpdateSpecialpasteMultipleImagesVert(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_MULTI_IMAGE_VERTICAL);
 }

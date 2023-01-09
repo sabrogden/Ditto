@@ -470,6 +470,7 @@
     <ClCompile Include="ICU_String.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="ImageFormatAggregator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -977,6 +978,7 @@
     <ClInclude Include="ICU_String.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="ImageFormatAggregator.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

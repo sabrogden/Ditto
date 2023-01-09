@@ -85,31 +85,99 @@ BOOL CBitmapHelper::GetCBitmap(void	*pClip2, CDC *pDC, CBitmap *pBitMap, int nMa
 
 					delete gdipBitmap;
 				}
-				/*else
-				{
-					pBitMap->CreateCompatibleBitmap(pDC, nWidth, nHeight);
-					ASSERT(pBitMap->m_hObject != NULL);
-
-					CDC MemDc;
-					MemDc.CreateCompatibleDC(pDC);
-
-					CBitmap* oldBitmap = MemDc.SelectObject(pBitMap);
-
-
-					::StretchDIBits(MemDc.m_hDC,
-						0, 0,
-						lpBI->bmiHeader.biWidth, lpBI->bmiHeader.biHeight,
-						0, 0, lpBI->bmiHeader.biWidth,
-						lpBI->bmiHeader.biHeight,
-						pDIBBits, lpBI, DIB_PAL_COLORS, SRCCOPY);
-
-					MemDc.SelectObject(oldBitmap);
-				}*/
 
 				bRet = TRUE;
 			}
 	}
 	
+
+	return bRet;
+}
+
+BOOL CBitmapHelper::GetCBitmap(CClipFormats &clips, CDC* pDC, CBitmap* pBitMap, BOOL horizontal)
+{
+	BOOL bRet = FALSE;
+
+	int count = clips.GetCount();
+	int width = 0;
+	int height = 0;
+
+	for (int i = 0; i < count; i++)
+	{
+		CClipFormat clip = clips[i];
+
+		Gdiplus::Bitmap* gdipBitmap = clip.CreateGdiplusBitmap();
+
+		if (horizontal)
+		{
+			width += (int)gdipBitmap->GetWidth();
+			height = max((int)gdipBitmap->GetHeight(), height);
+		}
+		else
+		{
+			width = max((int)gdipBitmap->GetWidth(), width);
+			height += (int)gdipBitmap->GetHeight();
+		}
+	
+
+		delete gdipBitmap;
+	}
+
+	pBitMap->CreateCompatibleBitmap(pDC, width, height);
+	ASSERT(pBitMap->m_hObject != NULL);
+
+	CDC MemDc2;
+	MemDc2.CreateCompatibleDC(pDC);
+
+	CBitmap* oldBitmap2 = MemDc2.SelectObject(pBitMap);
+
+	Gdiplus::Graphics graphics(MemDc2);
+	graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+	graphics.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHalf);
+
+	graphics.Clear(Gdiplus::Color::White);
+
+	int destX = 0;
+	int destY = 0;
+
+	for (int i = 0; i < count; i++)
+	{
+		CClipFormat clip = clips[i];
+
+		if (clip.m_cfType == CF_DIB ||
+			clip.m_cfType == theApp.m_PNG_Format)
+		{
+			if (pBitMap)
+			{
+				Gdiplus::Bitmap* gdipBitmap = clip.CreateGdiplusBitmap();
+
+				if (gdipBitmap != NULL &&
+					gdipBitmap->GetHeight() > 0 &&
+					gdipBitmap->GetWidth() > 0)
+				{
+					Gdiplus::ImageAttributes attrs;
+					Gdiplus::Rect dest(destX, destY, gdipBitmap->GetWidth(), gdipBitmap->GetHeight());
+
+					graphics.DrawImage(gdipBitmap, dest, 0, 0, gdipBitmap->GetWidth(), gdipBitmap->GetHeight(), Gdiplus::UnitPixel, &attrs);
+
+					if (horizontal)
+					{
+						destX += gdipBitmap->GetWidth();
+					}
+					else
+					{
+						destY += gdipBitmap->GetHeight();
+					}
+
+					delete gdipBitmap;
+
+					bRet = TRUE;
+				}
+			}
+		}
+	}
+
+	MemDc2.SelectObject(oldBitmap2);
 
 	return bRet;
 }

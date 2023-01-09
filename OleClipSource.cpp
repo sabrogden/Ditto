@@ -15,6 +15,7 @@
 #include "DittoChaiScript.h"
 #include "ChaiScriptOnCopy.h"
 #include "Slugify.h"
+#include "ImageFormatAggregator.h"
 
 /*------------------------------------------------------------------*\
 COleClipSource
@@ -89,53 +90,68 @@ BOOL COleClipSource::DoImmediateRender()
 
 	if(count > 1)
 	{
-		CStringA SepA = CTextConvert::UnicodeToAnsi(g_Opt.GetMultiPasteSeparator());
-		CCF_TextAggregator CFText(SepA);
-		if(m_ClipIDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+		if (m_pasteOptions.m_pasteImagesHorizontal ||
+			m_pasteOptions.m_pasteImagesVertically)
 		{
-			CClipFormat cf(CF_TEXT, CFText.GetHGlobal());
-			clip.m_Formats.Add(cf);
-			//clip.m_Formats now owns the global data
-			cf.m_autoDeleteData = false;
-		}
-
-		CStringW SepW = g_Opt.GetMultiPasteSeparator();
-		CCF_UnicodeTextAggregator CFUnicodeText(SepW);
-		if(m_ClipIDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
-		{
-			CClipFormat cf(CF_UNICODETEXT, CFUnicodeText.GetHGlobal());
-			clip.m_Formats.Add(cf);
-			//clip.m_Formats now owns the global data
-			cf.m_autoDeleteData = false;
-		}
-
-		if (m_pasteOptions.LimitFormatsToText() == false)
-		{
-			CCF_HDropAggregator HDrop;
-			if(m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+			CImageFormatAggregator bigImage(m_pasteOptions.m_pasteImagesHorizontal);
+			if (m_ClipIDs.AggregateData(bigImage, CF_DIB, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 			{
-				CClipFormat cf(CF_HDROP, HDrop.GetHGlobal());
+				CClipFormat cf(CF_DIB, bigImage.GetHGlobal());
+				clip.m_Formats.Add(cf);
+				//clip.m_Formats now owns the global data
+				cf.m_autoDeleteData = false;
+			}
+		}
+		else
+		{
+			CStringA SepA = CTextConvert::UnicodeToAnsi(g_Opt.GetMultiPasteSeparator());
+			CCF_TextAggregator CFText(SepA);
+			if (m_ClipIDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+			{
+				CClipFormat cf(CF_TEXT, CFText.GetHGlobal());
 				clip.m_Formats.Add(cf);
 				//clip.m_Formats now owns the global data
 				cf.m_autoDeleteData = false;
 			}
 
-			CRichTextAggregator RichText(SepA);
-			if(m_ClipIDs.AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+			CStringW SepW = g_Opt.GetMultiPasteSeparator();
+			CCF_UnicodeTextAggregator CFUnicodeText(SepW);
+			if (m_ClipIDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 			{
-				CClipFormat cf(theApp.m_RTFFormat, RichText.GetHGlobal());
+				CClipFormat cf(CF_UNICODETEXT, CFUnicodeText.GetHGlobal());
 				clip.m_Formats.Add(cf);
 				//clip.m_Formats now owns the global data
 				cf.m_autoDeleteData = false;
 			}
 
-			CHTMLFormatAggregator Html(SepA);
-			if(m_ClipIDs.AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+			if (m_pasteOptions.LimitFormatsToText() == false)
 			{
-				CClipFormat cf(theApp.m_HTML_Format, Html.GetHGlobal());
-				clip.m_Formats.Add(cf);
-				//clip.m_Formats now owns the global data
-				cf.m_autoDeleteData = false;
+				CCF_HDropAggregator HDrop;
+				if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+				{
+					CClipFormat cf(CF_HDROP, HDrop.GetHGlobal());
+					clip.m_Formats.Add(cf);
+					//clip.m_Formats now owns the global data
+					cf.m_autoDeleteData = false;
+				}
+
+				CRichTextAggregator RichText(SepA);
+				if (m_ClipIDs.AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+				{
+					CClipFormat cf(theApp.m_RTFFormat, RichText.GetHGlobal());
+					clip.m_Formats.Add(cf);
+					//clip.m_Formats now owns the global data
+					cf.m_autoDeleteData = false;
+				}
+
+				CHTMLFormatAggregator Html(SepA);
+				if (m_ClipIDs.AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+				{
+					CClipFormat cf(theApp.m_HTML_Format, Html.GetHGlobal());
+					clip.m_Formats.Add(cf);
+					//clip.m_Formats now owns the global data
+					cf.m_autoDeleteData = false;
+				}
 			}
 		}
 	}

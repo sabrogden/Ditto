@@ -386,6 +386,12 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case PASTE_CAMEL_CASE:
 		val = "Paste CamelCase";
 		break;
+	case PASTE_MULTI_IMAGE_HORIZONTAL:
+		val = "Paste Muliple Images Horizontally";
+		break;
+	case PASTE_MULTI_IMAGE_VERTICAL:
+		val = "Paste Muliple Images Vertically";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);

@@ -807,6 +807,9 @@
 #define ID_FIRST_VIEWRTF                32973
 #define ID_FIRST_VIEWHTML               32974
 #define ID_FIRST_VIEWASIMAGE            32975
+#define ID_SPECIALPASTE_MULTIPLEIMAGESHORIZONTALLY 32976
+#define ID_SPECIALPASTE_MULTIPLEIMAGES  32977
+#define ID_SPECIALPASTE_MULTIPLEIMAGESVERTICALLY 32978
 
 // Next default values for new objects
 // 
@@ -814,7 +817,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        389
-#define _APS_NEXT_COMMAND_VALUE         32976
+#define _APS_NEXT_COMMAND_VALUE         32979
 #define _APS_NEXT_CONTROL_VALUE         2173
 #define _APS_NEXT_SYMED_VALUE           104
 #endif

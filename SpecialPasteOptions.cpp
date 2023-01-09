@@ -24,6 +24,8 @@ CSpecialPasteOptions::CSpecialPasteOptions()
 	m_invertCase = false;
 	m_placeCF_HDROP_OnDrag = true;
 	m_pasteCamelCase = false;
+	m_pasteImagesHorizontal = false;
+	m_pasteImagesVertically = false;
 }
 
 CSpecialPasteOptions::~CSpecialPasteOptions()
