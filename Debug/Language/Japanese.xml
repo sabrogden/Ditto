@@ -411,7 +411,7 @@
 		<Item English_Text = "Hot Key" ID = "QPHotKey">ホットキー</Item>
 		<Item English_Text = "Command" ID = "QPCommand">コマンド</Item>
 		
-		//ID chenged from "top_most"
+		//ID chnged from "top_most"
 		<Item English_Text = "[Always on top]" ID = "top_window">[前面]</Item>
 		
 		<Item English_Text = "[Disconnected]" ID = "disconnected">[切断]</Item>
