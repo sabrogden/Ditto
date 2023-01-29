@@ -153,9 +153,15 @@ bool CFormatSQL::AddToSQL(CString cs, eSpecialTypes &eNOTValue, eSpecialTypes &e
 			csThisSQL.Format(_T("%s LIKE \'%%%s%%\'"), m_csVariable, cs);
 		}
 	}
+	else if (cs.Find(_T("%")) < 0)
+	{
+		csThisSQL.Format(_T("%s%sLIKE \'%%%s%%\'"), m_csVariable, GetKeyWordString(eNOTValue), cs);
+	}
 	else
 	{
-		csThisSQL.Format(_T("%s%sLIKE \'%s%%\'"), m_csVariable, GetKeyWordString(eNOTValue), cs);
+		CString local(cs);
+		local.Replace(_T("%"), _T("\\%"));
+		csThisSQL.Format(_T("%s%sLIKE \'%%%s%%\' ESCAPE \'\\\'"), m_csVariable, GetKeyWordString(eNOTValue), local);
 	}
 
 	if(m_csWhere.GetLength() > 0)
