@@ -255,7 +255,7 @@
 		<Item English_Text = "Send custom strokes Per Application" ID = "2091">Особливі послідовності клавіш</Item>
 		
 		//Added 1/10/15
-		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043">Перемістити об'єкт вгору цього списку вставки</Item>
+		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043">Перемістити об'єкт нагору списку вставки</Item>
 		
 		//Added 12/17/16
 		<Item English_Text = "Activate Ditto" ID = "2064">Активувати Ditto</Item>
@@ -470,7 +470,7 @@
 		<Item English_Text = "Win" ID = "2092">Win</Item>
 		<Item English_Text = "Win" ID = "2096">Win</Item>
 		
-		<Item English_Text = "Copy Buffer 3" ID = "2108"></Item>
+		<Item English_Text = "Copy Buffer 3" ID = "2108">Буффер 3</Item>
 		<Item English_Text = "Copy" ID = "2103">Копіювати</Item>
 		<Item English_Text = "Paste" ID = "2104">Вставити</Item>
 		<Item English_Text = "Cut" ID = "2107">Вирізати</Item>
