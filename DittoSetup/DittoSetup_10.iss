@@ -1,6 +1,9 @@
-#define MyAppName "Ditto"
-#define MyAppVersion GetFileVersion("..\Release\Ditto.exe")
-#define MyAppVerName MyAppName + " " + MyAppVersion
+#define MyAppName               "Ditto"
+#define MyAppVersion            GetFileVersion("..\Release\Ditto.exe")
+#define MyAppVerName            MyAppName + " " + MyAppVersion
+#define MyAppPublisher          "Scott Brogden"
+#define MyAppSupportURL         "ditto-cp.sourceforge.net"
+#define MyAppCopyrighEndYear    GetDateTimeString('yyyy','','')
 
 ;#define bit64
   
@@ -9,11 +12,26 @@
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppVerName={#MyAppVerName}
+
+AppPublisher={# MyAppPublisher}
+
+AppPublisherURL={#MyAppSupportURL}
+AppSupportURL={#MyAppSupportURL}
+AppUpdatesURL={#MyAppSupportURL}
+
+WizardStyle=modern
+
+UninstallDisplayIcon={app}\Ditto.exe
+UninstallDisplayName={#MyAppName}
+
+VersionInfoDescription={#MyAppName} installer
+VersionInfoVersion={#MyAppVersion}
+VersionInfoProductName={#MyAppName}
+VersionInfoProductVersion={#MyAppVersion}
+
+AppCopyright={#MyAppPublisher} {#MyAppCopyrighEndYear}
+
 OutputBaseFilename=DittoSetup_{#MyAppVersion}
-AppPublisher=Scott Brogden
-AppPublisherURL=ditto-cp.sourceforge.net
-AppSupportURL=ditto-cp.sourceforge.net
-AppUpdatesURL=ditto-cp.sourceforge.net
 #ifdef bit64
   ArchitecturesInstallIn64BitMode=x64
   ArchitecturesAllowed=x64
@@ -36,38 +54,55 @@ SetupLogging=yes
 Name: English; MessagesFile: compiler:Default.isl
 
 ;Inno Setup Official translations
-Name: Czech; MessagesFile: compiler:Languages\Czech.isl
-Name: Danish; MessagesFile: compiler:Languages\Danish.isl
-Name: Dutch; MessagesFile: compiler:Languages\Dutch.isl
-Name: Finnish; MessagesFile: compiler:Languages\Finnish.isl
-Name: French; MessagesFile: compiler:Languages\French.isl
-Name: German; MessagesFile: compiler:Languages\German.isl
-Name: Hebrew; MessagesFile: compiler:Languages\Hebrew.isl
-Name: Italiano; MessagesFile: compiler:Languages\Italian.isl
-Name: Japanese; MessagesFile: compiler:Languages\Japanese.isl
-Name: Polish; MessagesFile: compiler:Languages\Polish.isl
-Name: Portuguese_Brazil; MessagesFile: compiler:Languages\BrazilianPortuguese.isl
+Name: Czech;               MessagesFile: compiler:Languages\Czech.isl
+Name: Danish;              MessagesFile: compiler:Languages\Danish.isl
+Name: Dutch;               MessagesFile: compiler:Languages\Dutch.isl
+Name: Finnish;             MessagesFile: compiler:Languages\Finnish.isl
+Name: French;              MessagesFile: compiler:Languages\French.isl
+Name: German;              MessagesFile: compiler:Languages\German.isl
+Name: Hebrew;              MessagesFile: compiler:Languages\Hebrew.isl
+Name: Italiano;            MessagesFile: compiler:Languages\Italian.isl
+Name: Japanese;            MessagesFile: compiler:Languages\Japanese.isl
+Name: Polish;              MessagesFile: compiler:Languages\Polish.isl
+Name: Portuguese_Brazil;   MessagesFile: compiler:Languages\BrazilianPortuguese.isl
 Name: Portuguese_Portugal; MessagesFile: compiler:Languages\Portuguese.isl
-Name: Russian; MessagesFile: compiler:Languages\Russian.isl
-Name: Slovak; MessagesFile: compiler:Languages\Slovak.isl
-Name: Slovenian; MessagesFile: compiler:Languages\Slovenian.isl
-Name: Spanish; MessagesFile: compiler:Languages\Spanish.isl
-Name: Turkish; MessagesFile: compiler:Languages\Turkish.isl
-Name: Ukrainian; MessagesFile: compiler:Languages\Ukrainian.isl
+Name: Russian;             MessagesFile: compiler:Languages\Russian.isl
+Name: Slovak;              MessagesFile: compiler:Languages\Slovak.isl
+Name: Slovenian;           MessagesFile: compiler:Languages\Slovenian.isl
+Name: Spanish;             MessagesFile: compiler:Languages\Spanish.isl
+Name: Turkish;             MessagesFile: compiler:Languages\Turkish.isl
+Name: Ukrainian;           MessagesFile: compiler:Languages\Ukrainian.isl
 
 ;Inno Setup Unofficial translations
-Name: Simplified_Chinese; MessagesFile: ChineseSimplified.isl
+Name: Simplified_Chinese;  MessagesFile: ChineseSimplified.isl
 Name: Traditional_Chinese; MessagesFile: ChineseTraditional.isl
-Name: Croatian; MessagesFile: Croatian.isl
-Name: Greek; MessagesFile: Greek.isl
-Name: Hungarian; MessagesFile: Hungarian.isl
-Name: Korean; MessagesFile: Korean.isl
-Name: Romanian; MessagesFile: Romanian.isl
-Name: Swedish; MessagesFile: Swedish.isl
+Name: Croatian;            MessagesFile: Croatian.isl
+Name: Greek;               MessagesFile: Greek.isl
+Name: Hungarian;           MessagesFile: Hungarian.isl
+Name: Korean;              MessagesFile: Korean.isl
+Name: Romanian;            MessagesFile: Romanian.isl
+Name: Swedish;             MessagesFile: Swedish.isl
+
+[CustomMessages]
+english.RunDittoOnStartup=Run Ditto on windows startup
+english.AddFirewallException=Add Windows Firewall exception for Ditto on port 23443
+english.LaunchDitto=Launch Ditto
+english.ViewHelp=View Help
+english.ViewChangeHistory=View Change History
+english.UninstallDitto=Uninstall Ditto
+english.VCRuntimeInstallFailed=VCRuntime prerequisite install failed.
+
+italian.RunDittoOnStartup=Run Ditto on windows startup
+italian.AddFirewallException=Aggiungi eccezione a Windows Firewall per Ditto e la porta 23443
+italian.LaunchDitto=Esegui Ditto
+italian.ViewHelp=Visualizza guida in linea
+italian.ViewChangeHistory=Visualizza cronologia versioni programma
+italian.UninstallDitto=Disinstalla Ditto
+italian.VCRuntimeInstallFailed=Installazione prerequisito VCRuntime non riuscita.
 
 [Tasks]
-Name: RunAtStartup; Description: Run Ditto on windows startup
-Name: AddFireWallException; Description: Add Windows Firewall exception for Ditto on port 23443;  Flags: unchecked
+Name: RunAtStartup; Description: {cm:.RunDittoOnStartup}
+Name: AddFireWallException; Description: {cm:AddFirewallException};  Flags: unchecked
 
 [Files]
 #ifdef bit64
@@ -97,12 +132,12 @@ Source: ..\Debug\Themes\*; DestDir: {app}\Themes
 
 [Icons]
 Name: {group}\Ditto; Filename: {app}\Ditto.exe
-Name: {group}\Uninstall; Filename: {uninstallexe}
+Name: {group}\{cm:UninstallDitto}; Filename: {uninstallexe}
 
 [Run]
-Filename: {app}\Ditto.exe; Description: Launch Ditto; Flags: nowait postinstall
-Filename: https://sourceforge.net/p/ditto-cp/wiki/Getting%20Started; Description: View Help; Flags: nowait postinstall skipifsilent shellexec unchecked
-Filename: https://ditto-cp.sourceforge.io/changeHistory.php; Description: View Change History; Flags: nowait postinstall skipifsilent shellexec unchecked
+Filename: {app}\Ditto.exe; Description: {cm:LaunchDitto}; Flags: nowait postinstall
+Filename: https://sourceforge.net/p/ditto-cp/wiki/Getting%20Started; Description: {cm:ViewHelp}; Flags: nowait postinstall skipifsilent shellexec unchecked
+Filename: https://ditto-cp.sourceforge.io/changeHistory.php; Description: {cm:ViewChangeHistory}; Flags: nowait postinstall skipifsilent shellexec unchecked
 
 [Registry]
 Root: HKCU; Subkey: Software\Ditto; Flags: uninsdeletekey
@@ -323,7 +358,3 @@ begin
   end
 end;
 
-
-
-[CustomMessages]
-VCRuntimeInstallFailed=VCRuntime prerequisite install failed.
