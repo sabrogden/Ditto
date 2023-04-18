@@ -84,24 +84,24 @@ Name: Romanian;            MessagesFile: Romanian.isl
 Name: Swedish;             MessagesFile: Swedish.isl
 
 [CustomMessages]
-english.RunDittoOnStartup=Run Ditto on windows startup
-english.AddFirewallException=Add Windows Firewall exception for Ditto on port 23443
-english.LaunchDitto=Launch Ditto
-english.ViewHelp=View Help
-english.ViewChangeHistory=View Change History
-english.UninstallDitto=Uninstall Ditto
-english.VCRuntimeInstallFailed=VCRuntime prerequisite install failed.
+English.RunDittoOnStartup=Run Ditto on windows startup
+English.AddFirewallException=Add Windows Firewall exception for Ditto on port 23443
+English.LaunchDitto=Launch Ditto
+English.ViewHelp=View Help
+English.ViewChangeHistory=View Change History
+English.UninstallDitto=Uninstall Ditto
+English.VCRuntimeInstallFailed=VCRuntime prerequisite install failed.
 
-italian.RunDittoOnStartup=Run Ditto on windows startup
-italian.AddFirewallException=Aggiungi eccezione a Windows Firewall per Ditto e la porta 23443
-italian.LaunchDitto=Esegui Ditto
-italian.ViewHelp=Visualizza guida in linea
-italian.ViewChangeHistory=Visualizza cronologia versioni programma
-italian.UninstallDitto=Disinstalla Ditto
-italian.VCRuntimeInstallFailed=Installazione prerequisito VCRuntime non riuscita.
+Italiano.RunDittoOnStartup=Run Ditto on windows startup
+Italiano.AddFirewallException=Aggiungi eccezione a Windows Firewall per Ditto e la porta 23443
+Italiano.LaunchDitto=Esegui Ditto
+Italiano.ViewHelp=Visualizza guida in linea
+Italiano.ViewChangeHistory=Visualizza cronologia versioni programma
+Italiano.UninstallDitto=Disinstalla Ditto
+Italiano.VCRuntimeInstallFailed=Installazione prerequisito VCRuntime non riuscita.
 
 [Tasks]
-Name: RunAtStartup; Description: {cm:.RunDittoOnStartup}
+Name: RunAtStartup; Description: {cm:RunDittoOnStartup}
 Name: AddFireWallException; Description: {cm:AddFirewallException};  Flags: unchecked
 
 [Files]
