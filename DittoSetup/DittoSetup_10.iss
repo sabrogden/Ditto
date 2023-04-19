@@ -6,8 +6,7 @@
 #define MyAppCopyrighEndYear    GetDateTimeString('yyyy','','')
 
 ;#define bit64
-  
-
+ 
 [Setup]
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
@@ -84,7 +83,7 @@ Name: Romanian;            MessagesFile: Romanian.isl
 Name: Swedish;             MessagesFile: Swedish.isl
 
 [CustomMessages]
-English.RunDittoOnStartup=Run Ditto on windows startup
+English.RunDittoOnStartup=Run Ditto on Windows startup
 English.AddFirewallException=Add Windows Firewall exception for Ditto on port 23443
 English.LaunchDitto=Launch Ditto
 English.ViewHelp=View Help
@@ -92,7 +91,7 @@ English.ViewChangeHistory=View Change History
 English.UninstallDitto=Uninstall Ditto
 English.VCRuntimeInstallFailed=VCRuntime prerequisite install failed.
 
-Italiano.RunDittoOnStartup=Run Ditto on windows startup
+Italiano.RunDittoOnStartup=Esegui Ditto all'avvio di Windows
 Italiano.AddFirewallException=Aggiungi eccezione a Windows Firewall per Ditto e la porta 23443
 Italiano.LaunchDitto=Esegui Ditto
 Italiano.ViewHelp=Visualizza guida in linea
