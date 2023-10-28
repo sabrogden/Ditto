@@ -148,6 +148,14 @@
 		<Item English_Text = "Backup Database" ID = "32962"></Item>
 		<Item English_Text = "Restore Dastabase" ID = "32964"></Item>
 		
+		<Item English_Text = "Delete All Non Used Clips" ID = "32968"></Item>				
+		
+		<Item English_Text = "CamelCase" ID = "32971"></Item>
+		<Item English_Text = "Multiple Images Horizontally" ID = "32976"></Item>
+		<Item English_Text = "Multiple Images Vertically" ID = "32978"></Item>
+		<Item English_Text = "Replace Top Sticky Clip" ID = "32938"></Item>
+		<Item English_Text = "Set Drag File Name" ID = "32970"></Item>
+		
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039"></Item>
@@ -165,6 +173,7 @@
 		<Item English_Text = "Hotkey available globally" ID = "1026"></Item>
 		<Item English_Text = "Last Used" ID = "2043"></Item>
 		<Item English_Text = "Quick Paste Text" ID = "2125"></Item>
+		<Item English_Text = "Selected format MD5" ID = "2167"></Item>
 				
 	</Ditto_Clip_Properties>
 	<Ditto_Options_General>
@@ -208,6 +217,8 @@
 		<Item English_Text = "Environment Variables" ID = "2165"></Item>
 		
 		<Item English_Text = "Default Font" ID = "2031"></Item>
+		
+		<Item English_Text = "Advanced" ID = "2124"></Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "Add" ID = "1015"></Item>
@@ -266,6 +277,8 @@
 		<Item English_Text = "Win" ID = "2047"></Item>
 		
 		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044"></Item>
+		
+		<Item English_Text = "Copy And Save Current Clipboard" ID = "2068"></Item>
 		
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Friends>
@@ -447,6 +460,8 @@
 		<Item English_Text = "Backup Database" ID = "32960"></Item>
 		<Item English_Text = "Restore Database" ID = "32961"></Item>
 		
+		<Item English_Text = "Delete All Non Used Clips" ID = "32969"></Item>
+		
 	</Ditto_Tray_Icon_Menu>
 
 	//Added in 9-11-09
@@ -517,6 +532,7 @@
 		<Item English_Text = "Last Used" ID = "LastUsed"></Item>
 		<Item English_Text = "Format" ID = "Format"></Item>
 		<Item English_Text = "Data Size" ID = "DataSize"></Item>
+		<Item English_Text = "Quick Paste Text" ID = "QuickPasteText"></Item>
 	</Ditto_DeleteClipData>
 	
 	<Ditto_Options_Quick_Paste_Keyboard>
