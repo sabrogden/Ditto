@@ -79,7 +79,7 @@ CString CMainTableFunctions::GetDisplayText(int nMaxLines, const CString &OrigTe
 	// get the lines
 	CString token;
 	CStringArray tokens;
-	CTokenizer tokenizer(text,"\r\n");
+	CTokenizer tokenizer(text, "\r\n");
 	for(int nLines=0; nLines < 100 && tokenizer.Next(token); nLines++)
 	{
 		tokens.Add(token);
@@ -89,21 +89,23 @@ CString CMainTableFunctions::GetDisplayText(int nMaxLines, const CString &OrigTe
 	TCHAR chFirst;
 	CString line;
 	INT_PTR count = tokens.GetSize();
-	text = "";
+	text = _T("");
 	for(int i=0; i < count; i++)
 	{
 		line = tokens.ElementAt(i);
 		chFirst = line.GetAt(0);
 		if(chFirst == ' ' || chFirst == '\t')
 		{
-			text += "» "; // show indication that the line is modified
+			text += _T("Â» "); // show indication that the line is modified
 			line.TrimLeft();
 			text += line;
 		}
 		else
+		{
 			text += line;
+		}
 
-		text += "\n";
+		text += _T("\n");
 	}
 
 	return text;
