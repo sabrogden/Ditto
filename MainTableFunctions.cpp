@@ -1,4 +1,4 @@
-// MainTableFunctions.cpp: implementation of the CMainTableFunctions class.
+﻿// MainTableFunctions.cpp: implementation of the CMainTableFunctions class.
 //
 //////////////////////////////////////////////////////////////////////
 
