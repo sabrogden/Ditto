@@ -434,8 +434,8 @@
 		<Item English_Text = "Prompt For Name" ID = "prompt_for_name">Запрос имени</Item>
 		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme">Тёмная/светлая тема как в сисетме</Item>
 		
-		<Item English_Text = "BackupDbMsg" ID = "Backing up database">Резервное копирование базы данных</Item>
-		<Item English_Text = "RestoreDbMsg" ID = "Restoring database">Восстановление базы данных</Item>
+		<Item English_Text = "Backing up database" ID = "BackupDbMsg">Резервное копирование базы данных</Item>
+		<Item English_Text = "Restoring database" ID = "RestoreDbMsg">Восстановление базы данных</Item>
 		
 		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">Ditto не смог открыть свою базу данных. При необходимости обновите путь в Параметрах. Путь:</Item>
 		

@@ -420,8 +420,8 @@
 		<Item English_Text = "Prompt For Name" ID = "prompt_for_name">提示名字</Item>
 		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme">（遵循 Windows 明/暗主题）</Item>
 		
-		<Item English_Text = "BackupDbMsg" ID = "Backing up database">备份数据库信息</Item>
-		<Item English_Text = "RestoreDbMsg" ID = "Restoring database">还原数据库信息</Item>
+		<Item English_Text = "Backing up database" ID = "BackupDbMsg">备份数据库信息</Item>
+		<Item English_Text = "Restoring database" ID = "RestoreDbMsg">还原数据库信息</Item>
 		
 		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">Ditto 无法打开数据库，将等待它可以打开的时候。 如果需要，更新选项中的路径。 路径： </Item>
 				

@@ -389,8 +389,8 @@
 		<Item English_Text = "Warning this can take quite a long time and require up to double the hard drive space as your current database size, Continue?" ID = "CompactRepairWarning">Warnung, dass dies ziemlich lange dauern kann und bis zur Verdoppelung des Festplattenspeichers als aktuelle Datenbankgröße erforderlich ist, fortfahren?</Item>
 		<Item English_Text = "Prompt For Name" ID = "prompt_for_name">Frage nach Name</Item>
 		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme">(folge Windows Hell/Dunkel-Einstellung)</Item>
-		<Item English_Text = "BackupDbMsg" ID = "Backing up database">Sichere Datenbank</Item>
-		<Item English_Text = "RestoreDbMsg" ID = "Restoring database">Stelle Datenbank wieder her</Item>
+		<Item English_Text = "Backing up database" ID = "BackupDbMsg">Sichere Datenbank</Item>
+		<Item English_Text = "Restoring database" ID = "RestoreDbMsg">Stelle Datenbank wieder her</Item>
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">OK</Item>
