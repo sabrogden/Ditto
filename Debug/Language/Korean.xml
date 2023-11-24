@@ -420,8 +420,8 @@
 		<Item English_Text = "Prompt For Name" ID = "prompt_for_name">친구에게 보내기</Item>
 		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme">(윈도우 테마와 동일한 테마 사용)</Item>
 		
-		<Item English_Text = "BackupDbMsg" ID = "Backing up database">데이터베이스 백업중</Item>
-		<Item English_Text = "RestoreDbMsg" ID = "Restoring database">데이터베이스 복구중</Item>
+		<Item English_Text = "Backing up database" ID = "BackupDbMsg">데이터베이스 백업중</Item>
+		<Item English_Text = "Restoring database" ID = "RestoreDbMsg">데이터베이스 복구중</Item>
 		
 		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">데이터베이스를 열리지 않아 열 수 있을 때까지 기다리고 있습니다. 필요한 경우 옵션에서 경로를 업데이트하세요. 경로:</Item>
 				

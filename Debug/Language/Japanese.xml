@@ -428,8 +428,8 @@
 		<Item English_Text = "Prompt For Name" ID = "prompt_for_name">名前の入力</Item>
 		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme">(Windowsのライト/ダークテーマに従う)</Item>
 		
-		<Item English_Text = "BackupDbMsg" ID = "Backing up database">データベースをバックアップ中</Item>
-		<Item English_Text = "RestoreDbMsg" ID = "Restoring database">データベースを復元中</Item>
+		<Item English_Text = "Backing up database" ID = "BackupDbMsg">データベースをバックアップ中</Item>
+		<Item English_Text = "Restoring database" ID = "RestoreDbMsg">データベースを復元中</Item>
 		
 		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">Ditto がデータベースを開けないため、可能になるまで待機します。必要であれば、設定からパスを更新してください。パス: </Item>
 			

@@ -412,8 +412,8 @@
 		<Item English_Text = "Prompt For Name" ID = "prompt_for_name">Výzva na zadanie názvu</Item>
 		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme">(Podľa motívu Windowsu)</Item>
 		
-		<Item English_Text = "BackupDbMsg" ID = "Backing up database">Zálohuje sa databáza</Item>
-		<Item English_Text = "RestoreDbMsg" ID = "Restoring database">Obnovuje sa databáza</Item>
+		<Item English_Text = "Backing up database" ID = "BackupDbMsg">Zálohuje sa databáza</Item>
+		<Item English_Text = "Restoring database" ID = "RestoreDbMsg">Obnovuje sa databáza</Item>
 			
 		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">Ditto nedokázal otvoriť svoju databázu, čaká, dokiaľ ju nebude možné otvoriť. V prípade potreby aktualizujte cestu v Možnostiach. Cesta: </Item>
 		
