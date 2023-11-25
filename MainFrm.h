@@ -82,7 +82,7 @@ public:
     void DoFirstTenPositionsPaste(int nPos);
 	void PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarget, BOOL sendPaste, bool pastedFromGroup);
 
-	void StartKeyModifyerTimer();
+	void StartKeyModifierTimer();
 
 	bool PasteQuickPasteEntry(CString csQuickPaste);
     bool SaveQuickPasteEntry(CString csQuickPaste, CClipList *pClipList);

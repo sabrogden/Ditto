@@ -268,7 +268,7 @@ BOOL CCP_MainApp::InitInstance()
 	else if(cmdInfo.m_bConnect || cmdInfo.m_bDisconnect)
 	{
 		//First get the saved hwnd and send it a message
-		//If ditt is running then this will return 1, meening the running ditto process
+		//If ditto is running then this will return 1, meaning the running ditto process
 		//handled this message
 		//If it didn't handle the message(ditto is not running) then startup this processes of ditto 
 		//disconnected from the clipboard
@@ -297,7 +297,7 @@ BOOL CCP_MainApp::InitInstance()
 	else if(cmdInfo.m_bOpenWindow || cmdInfo.m_bCloseWindow)
 	{
 		//First get the saved hwnd and send it a message
-		//If ditt is running then this will return 1, meening the running ditto process
+		//If ditto is running then this will return 1, meaning the running ditto process
 		//handled this message
 		//If it didn't handle the message(ditto is not running) then startup this processes of ditto 
 		//disconnected from the clipboard
@@ -305,7 +305,7 @@ BOOL CCP_MainApp::InitInstance()
 		HWND hWnd = (HWND)(LONG_PTR)CGetSetOptions::GetMainHWND();
 		if(hWnd)
 		{
-			ret = ::SendMessage(hWnd, WM_OPEN_CLOSE_WINDWOW, cmdInfo.m_bOpenWindow, cmdInfo.m_bCloseWindow);
+			ret = ::SendMessage(hWnd, WM_OPEN_CLOSE_WINDOW, cmdInfo.m_bOpenWindow, cmdInfo.m_bCloseWindow);
 		}
 
 		return FALSE;		
@@ -313,7 +313,7 @@ BOOL CCP_MainApp::InitInstance()
 	else if (cmdInfo.m_exit)
 	{
 		//First get the saved hwnd and send it a message
-		//If ditt is running then this will return 1, meening the running ditto process
+		//If ditto is running then this will return 1, meaning the running ditto process
 		//handled this message
 		//If it didn't handle the message(ditto is not running) then startup this processes of ditto 
 		//disconnected from the clipboard
