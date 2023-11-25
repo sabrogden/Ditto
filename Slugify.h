@@ -29,7 +29,7 @@ std::wstring trim(const std::wstring &s)
 }
 
 // SLUGIFY
-std::wstring slugify(std::wstring input)
+std::wstring slugify(std::wstring input, std::wstring separator)
 {
 	std::unordered_map<std::wstring, std::wstring> charMap{
 		// latin
@@ -117,9 +117,11 @@ std::wstring slugify(std::wstring input)
 
 	trim(input);
 
-	//replace spaces with hyphens
-	std::wregex e3(_T("[-\\s]+"));
-	input = std::regex_replace(input, e3, _T("-"));
+	auto replaceSpacesAndSep = _T("[") + separator + _T("\\s]+");
+
+	//replace spaces with separator
+	std::wregex e3(replaceSpacesAndSep);
+	input = std::regex_replace(input, e3, separator);
 
 	return input;
 };

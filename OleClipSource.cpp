@@ -1358,7 +1358,7 @@ void COleClipSource::Slugify(CClip &clip)
 		//free the old text we are going to replace it below with an upper case version
 		unicodeTextFormat->Free();
 
-		CString newString = slugify(cs.GetString()).c_str();
+		CString newString = slugify(cs.GetString(), CGetSetOptions::GetSlugifySeparator().GetString()).c_str();
 
 		long len = newString.GetLength();
 		HGLOBAL hGlobal = NewGlobalP(newString.GetBuffer(), ((len + 1) * sizeof(wchar_t)));

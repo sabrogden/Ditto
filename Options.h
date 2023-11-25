@@ -669,6 +669,9 @@ public:
 	static BOOL m_refreshViewAfterPasting;
 	static BOOL GetRefreshViewAfterPasting();
 	static void SetRefreshViewAfterPasting(BOOL val);
+
+	static CString GetSlugifySeparator();
+	static void SetSlugifySeparator(CString val);
 };
 
 // global for easy access and for initialization of fast access variables

@@ -138,6 +138,7 @@ END_MESSAGE_MAP()
 #define SETTING_DISABLE_FRIENDS 87
 #define SETTING_IGNORE_FALSE_COPIES_DEALY 88
 #define SETTING_REFRESH_VIEW_AFTER_PASTE 89
+#define SETTING_SLUGIFY_SEPARATOR 90
 
 
 BOOL CAdvGeneral::OnInitDialog()
@@ -254,6 +255,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Show text for first ten copy hot keys"), CGetSetOptions::GetShowTextForFirstTenHotKeys(), SETTING_TEXT_FIRST_TEN);
 	AddTrueFalse(pGroupTest, _T("Show thumbnails(for CF_DIB types) (could increase memory usage and display speed)"), CGetSetOptions::GetDrawThumbnail(), SETTING_DRAW_THUMBNAILS);
 	
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Slugify Separator (default: -)"), CGetSetOptions::GetSlugifySeparator(), _T(""), SETTING_SLUGIFY_SEPARATOR));
+
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Text lines per clip"), CGetSetOptions::GetLinesPerRow(), _T(""), SETTING_LINES_PER_ROW));
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Tooltip display time(ms) max of 32000 (-1 default (5 seconds), 0 to turn off)"), g_Opt.m_tooltipTimeout, _T(""), SETTING_TOOLTIP_TIMEOUT));
@@ -758,6 +761,12 @@ void CAdvGeneral::OnBnClickedOk()
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
 					CGetSetOptions::SetDefaultCutString(pNewValue->bstrVal);
+				}
+				break;
+			case SETTING_SLUGIFY_SEPARATOR:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					CGetSetOptions::SetSlugifySeparator(pNewValue->bstrVal);
 				}
 				break;
 			case SETTING_REVERT_TO_TOP_LEVEL_GROUP:

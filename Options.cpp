@@ -2962,3 +2962,15 @@ void CGetSetOptions::SetRefreshViewAfterPasting(BOOL val)
 	m_refreshViewAfterPasting = val;
 	SetProfileLong("RefreshViewAfterPasting", val);
 }
+
+
+CString CGetSetOptions::GetSlugifySeparator()
+{
+	return GetProfileString("SlugifySeparator", _T("-"));
+}
+
+void CGetSetOptions::SetSlugifySeparator(CString val)
+{
+	SetProfileString("SlugifySeparator", val);
+}
+
