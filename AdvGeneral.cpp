@@ -139,6 +139,7 @@ END_MESSAGE_MAP()
 #define SETTING_IGNORE_FALSE_COPIES_DEALY 88
 #define SETTING_REFRESH_VIEW_AFTER_PASTE 89
 #define SETTING_SLUGIFY_SEPARATOR 90
+#define SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY 91
 
 
 BOOL CAdvGeneral::OnInitDialog()
@@ -232,6 +233,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Revert to top level group on close"), CGetSetOptions::GetRevertToTopLevelGroup(), SETTING_REVERT_TO_TOP_LEVEL_GROUP);
 
 	AddTrueFalse(pGroupTest, _T("Refresh view after paste"), CGetSetOptions::GetRefreshViewAfterPasting(), SETTING_REFRESH_VIEW_AFTER_PASTE);
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("clipboard restore after copy buffer sent paste delay (ms, default: 750))"), (long)(CGetSetOptions::GetDittoRestoreClipboardDelay()), _T(""), SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY));
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Save clipboard delay (ms, default: 100))"), (long)(CGetSetOptions::GetProcessDrawClipboardDelay()), _T(""), SETTING_CLIPBOARD_SAVE_DELAY));
 
@@ -790,6 +793,12 @@ void CAdvGeneral::OnBnClickedOk()
 				if (pNewValue->lVal != pOrigValue->lVal)
 				{
 					CGetSetOptions::SetRealSendKeysDelay(pNewValue->lVal);
+				}
+				break;
+			case SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetDittoRestoreClipboardDelay(pNewValue->lVal);
 				}
 				break;
 			case SETTING_DOUBLE_KEYSTROKE_TIMEOUT:
