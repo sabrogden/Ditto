@@ -2863,133 +2863,18 @@ DittoPortable_%versionFileName%.zip]]></Ext>
 			<startin>%workDir%\DittoSetup\Chocolatey-Portable</startin>
 		</step>
 		<step action='Group'>
+			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>1</indent>
-			<name>Create Web Page</name>
+			<name>Publish to Github</name>
 		</step>
-		<step action='Write File'>
-			<Filename>%workDir%\DittoSetup\output\index.php</Filename>
-			<Text><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title>Ditto clipboard manager - Beta %version%</title>
-<meta name="description" content="" />
-</head>
-
-<?php
-header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");
-?>
-
-<body>       
-%DATETIME%
-<br>
-<br>
-<b>Ditto beta, version %version%</b>
-<br><br>
-<a href="files\DittoSetup_%versionFileName%.exe">Ditto Setup</a><br>
-<a href="files\DittoSetup_64bit_%versionFileName%.exe">Ditto Setup 64bit</a><br><br>
-
-<a href="files\DittoPortable_%versionFileName%.zip">Ditto Portable</a><br>
-<a href="files\DittoPortable_64bit_%versionFileName%.zip">Ditto Portable 64</a><br><br>
-
-<a href="https://chocolatey.org/packages/ditto">Chocolatey</a>    c:\> choco install ditto --pre<br>
-<a href="https://chocolatey.org/packages/ditto.portable">Chocolatey.portable</a>    c:\> choco install ditto.portable --pre<br><br>
-
-<a href="files\Ditto_%versionFileName%.appx">Ditto Windows App</a><br>
-
-<br>
-<a href="files\DittoDebug_%versionFileName%.7z">Ditto Debug Files</a><br>
-<a href="files\DittoSource_%versionFileName%.zip">Ditto Source</a><br>
-
-<br>
-
-<a href="./files/">Previous Builds</a><br>
-<br>
-
-<a href="changes.php">Change Log since last release 2021-09-10</a><br>
-
-<br>
-
-<?php Include("changes.php");?>
-
-<br>
-<br>
-
-<!-- Start of StatCounter Code -->
-<script type="text/javascript">
-var sc_project=4303469; 
-var sc_invisible=0; 
-var sc_partition=54; 
-var sc_click_stat=1; 
-var sc_security="b3f57099"; 
-</script>
-
-<script type="text/javascript" src="http://www.statcounter.com/counter/counter.js"></script><noscript><div class="statcounter"><a title="site stats" href="http://www.statcounter.com/" target="_blank"><img class="statcounter" src="http://c.statcounter.com/4303469/0/b3f57099/0/" alt="site stats" ></a></div></noscript>
-<!-- End of StatCounter Code --><br><a href="http://my.statcounter.com/project/standard/stats.php?project_id=4303469&guest=1">View My Stats</a>
-
-</body>]]></Text>
-			<indent type='3'>2</indent>
-			<name>Beta web page</name>
-		</step>
-		<step action='Git'>
-			<Command>log</Command>
-			<Options>--pretty=format:"%%ad %%s" --date=short   --since=2023-04-15</Options>
-			<WorkDir>%workDir%</WorkDir>
+		<step action='Batch File'>
+			<CmdStr><![CDATA[npm install && SET "token=%GitHubApiKey%" && SET "uploadPath=%workDir%\DittoSetup\output\" && node .\index.js]]></CmdStr>
+			<CmdType type='3'>1</CmdType>
+			<NoEcho type='11'>-1</NoEcho>
 			<buildfailsteps type='11'>0</buildfailsteps>
 			<indent type='3'>2</indent>
-			<name>Git</name>
-		</step>
-		<step action='Write File'>
-			<Filename>%workDir%\DittoSetup\output\changes.php</Filename>
-			<Text>%LASTSTEP_OUTPUT%</Text>
-			<buildfailsteps type='11'>0</buildfailsteps>
-			<indent type='3'>2</indent>
-			<name>Log Changes to File</name>
-		</step>
-		<step action='Replace in File'>
-			<FileIn>%workDir%\DittoSetup\output\changes.php</FileIn>
-			<Find>\r\n</Find>
-			<NoModS type='11'>-1</NoModS>
-			<Replace><![CDATA[<br>\r\n]]></Replace>
-			<indent type='3'>2</indent>
-			<name><![CDATA[Replace Line Feeds with <br>]]></name>
-		</step>
-		<step action='FTP'>
-			<ExclExt>*.php</ExclExt>
-			<Ext>*.*</Ext>
-			<Filename>%workDir%\DittoSetup\output\</Filename>
-			<Incremental type='11'>-1</Incremental>
-			<Logging type='3'>6</Logging>
-			<Password encrypted='1'>amkwNSREZkNXUFp3JmFRMsZ2vYu8ujkU3rfalDIUyXLQ/1ySM0OzoPq41TvIK4vTEV85mWOA3MqnxucEljiJnA==</Password>
-			<Percent>10</Percent>
-			<Port>22</Port>
-			<Retries>0</Retries>
-			<Server>web.sourceforge.net</Server>
-			<ServerPath>/home/groups/d/di/ditto-cp/htdocs/beta/files</ServerPath>
-			<Timeout>30</Timeout>
-			<TransferType type='3'>1</TransferType>
-			<UserName>sabrogden,ditto-cp</UserName>
-			<indent type='3'>1</indent>
-			<name>Copy install files</name>
-		</step>
-		<step action='FTP'>
-			<Ext>*.php</Ext>
-			<Filename>%workDir%\DittoSetup\output\</Filename>
-			<Incremental type='11'>-1</Incremental>
-			<Logging type='3'>6</Logging>
-			<Password encrypted='1'>amkwNSREZkNXUFp3JmFRMsZ2vYu8ujkU3rfalDIUyXLQ/1ySM0OzoPq41TvIK4vTEV85mWOA3MqnxucEljiJnA==</Password>
-			<Percent>10</Percent>
-			<Port>22</Port>
-			<Retries>0</Retries>
-			<Server>web.sourceforge.net</Server>
-			<ServerPath>/home/groups/d/di/ditto-cp/htdocs/beta</ServerPath>
-			<Timeout>30</Timeout>
-			<TransferType type='3'>1</TransferType>
-			<UserName>sabrogden,ditto-cp</UserName>
-			<indent type='3'>1</indent>
-			<name>Copy beta web pages</name>
+			<name>Upload to GitHub</name>
+			<startin>%workDir%\DittoSetup\GitHubRelease\</startin>
 		</step></steps>
 	<steps type='1'>
 		<step action='Group'>
