@@ -235,6 +235,8 @@
 		<Item English_Text = "Activate Ditto" ID = "2048">Ditto 활성화</Item>
 		<Item English_Text = "Win" ID = "2035">Win</Item>
 		<Item English_Text = "Named Copy" ID = "2049">지명 복사</Item>
+		<!-- No more Named Copy -->
+		<Item English_Text = "Text Only Paste" ID = "2049">텍스트만 붙이기</Item>
 		<Item English_Text = "Win" ID = "2036">Win</Item>
 		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">최근 10개 클립 접근 단축키</Item>
 		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">붙여넣기(미선택 시, 붙여넣기 없이 클립보드에 불러오기만 수행)</Item>
@@ -460,7 +462,7 @@
 		<Item English_Text = "Backup Database" ID = "32960">데이터베이스 백업</Item>
 		<Item English_Text = "Restore Database" ID = "32961">데이터베이스 복구</Item>
 		
-		<Item English_Text = "Delete All Non Used Clips" ID = "32968">미사용 클립 전체 삭제</Item>				
+		<Item English_Text = "Delete All Non Used Clips" ID = "32969">미사용 클립 전체 삭제</Item>				
 		
 	</Ditto_Tray_Icon_Menu>
 
@@ -607,7 +609,7 @@
 		<Item English_Text = "Paste Capitalize" ID = "44">단어별 첫글자만 대문자로 붙여넣기</Item>
 		<Item English_Text = "Paste Sentence Case" ID = "45">문장별 첫글자만 대문자로 붙여넣기</Item>
 		<Item English_Text = "Paste Remove Line Feeds" ID = "46">줄바꿈 없이 붙여넣기</Item>
-		<Item English_Text = "Paste Add One Line Feed" ID = "47">붙여넣고 줄바꿈 추기</Item>
+		<Item English_Text = "Paste Add One Line Feed" ID = "47">붙여넣고 줄바꿈 추가</Item>
 		<Item English_Text = "Paste Add Two Line Feeds" ID = "48">붙여넣고 줄바꿈 두번 추가</Item>
 		<Item English_Text = "Paste Typoglycemia" ID = "49">단어내 글자 섞어 붙여넣기</Item>
 		<Item English_Text = "Send to friend 1" ID = "50">친구 1에게 보내기</Item>

@@ -76,7 +76,7 @@ public:
 	afx_msg void OnCbnSelchangeComboAllAssigned();
 	afx_msg void OnBnClickedButtonRemove();
 	afx_msg void OnBnClickedButtonAdd();
-	afx_msg void OnCbnKillfocusComboEnterModifyer();
+	afx_msg void OnCbnKillfocusComboEnterModifier();
 	afx_msg void OnEnKillfocusEdit1();
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);

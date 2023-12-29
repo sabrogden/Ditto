@@ -557,7 +557,7 @@
 #define IDC_RADIO_ENTER                 2128
 #define IDC_RADIO_CURRENT_TYPES         2128
 #define IDC_RADIO_USE_HOST_NAME         2129
-#define IDC_COMBO_ENTER_MODIFYER        2129
+#define IDC_COMBO_ENTER_MODIFIER        2129
 #define IDC_STATIC_REMOTE_FILE_REQUEST  2130
 #define IDC_RADIO3                      2130
 #define IDC_RADIO_MOUSE                 2130
@@ -568,7 +568,7 @@
 #define IDC_RADIO_KEYBOARD2             2133
 #define IDC_RADIO_KEYBOARD_2            2133
 #define IDC_RADIO_ENTER2                2134
-#define IDC_COMBO_ENTER_MODIFYER2       2135
+#define IDC_COMBO_ENTER_MODIFIER2       2135
 #define IDC_BUTTON_ENTER                2135
 #define IDC_RADIO4                      2136
 #define IDC_RADIO_MOUSE_2               2136
