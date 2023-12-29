@@ -59,15 +59,16 @@ BOOL CBitmapHelper::GetCBitmap(void	*pClip2, CDC *pDC, CBitmap *pBitMap, int nMa
 		return false;
 	}
 
-	UINT gdipHeight = gdipBitmap->GetHeight();
-	UINT gdipWidth = gdipBitmap->GetWidth();
-	if (gdipHeight == 0 || gdipWidth == 0) {
+	const UINT gdipHeight = gdipBitmap->GetHeight();
+	const UINT gdipWidth = gdipBitmap->GetWidth();
+	if (gdipHeight == 0 || gdipWidth == 0) 
+	{
 		delete gdipBitmap;
 		return false;
 	}
 
-	int nHeight = min(nMaxHeight, (int)gdipHeight);
-	int nWidth = (nHeight * gdipWidth) / gdipHeight;
+	const int nHeight = min(nMaxHeight, (int)gdipHeight);
+	const int nWidth = (nHeight * gdipWidth) / gdipHeight;
 
 	//do the resize
 	pBitMap->CreateCompatibleBitmap(pDC, nWidth, nHeight);
@@ -81,7 +82,14 @@ BOOL CBitmapHelper::GetCBitmap(void	*pClip2, CDC *pDC, CBitmap *pBitMap, int nMa
 	Gdiplus::Rect dest(0, 0, nWidth, nHeight);
 	Gdiplus::ImageAttributes attrs;
 	Gdiplus::Graphics graphics(MemDc2);
-	graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
+	
+	Gdiplus::InterpolationMode interpolationMode = Gdiplus::InterpolationModeHighQualityBicubic;
+	if (CGetSetOptions::GetFastThumbnailMode())
+	{
+		interpolationMode = Gdiplus::InterpolationModeNearestNeighbor;
+	}
+	graphics.SetInterpolationMode(interpolationMode);
+	graphics.SetCompositingMode(Gdiplus::CompositingModeSourceOver);
 	graphics.SetPixelOffsetMode(Gdiplus::PixelOffsetModeHalf);
 	graphics.DrawImage(gdipBitmap, dest, 0, 0, gdipWidth, gdipHeight, Gdiplus::UnitPixel, &attrs);
 

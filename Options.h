@@ -271,6 +271,10 @@ public:
 	static void		SetDrawThumbnail(long bDraw);
 	static BOOL		GetDrawThumbnail();
 
+	static BOOL		m_bFastThumbnailMode;
+	static void		SetFastThumbnailMode(BOOL bval);
+	static BOOL		GetFastThumbnailMode();
+
 	static CStringA	m_csPassword;
 	static void		SetNetworkPassword(CString csPassword);
 	static CStringA	GetNetworkPassword();
