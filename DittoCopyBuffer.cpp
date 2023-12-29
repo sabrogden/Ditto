@@ -215,7 +215,7 @@ UINT CDittoCopyBuffer::DelayRestoreClipboard(LPVOID pParam)
 
 		if(GetKeyState(VK_SHIFT) & 0x8000)
 		{
-			Log(_T("Shift key is down not restoring clipbard, custom Buffer on normal clipboard"));
+			Log(_T("Shift key is down not restoring clipboard, custom Buffer on normal clipboard"));
 		}
 		else
 		{

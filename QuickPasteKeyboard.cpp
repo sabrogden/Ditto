@@ -43,7 +43,7 @@ BEGIN_MESSAGE_MAP(CQuickPasteKeyboard, CPropertyPage)
 	ON_CBN_SELCHANGE(IDC_COMBO_ALL_ASSIGNED, &CQuickPasteKeyboard::OnCbnSelchangeComboAllAssigned)
 	ON_BN_CLICKED(IDC_BUTTON_REMOVE, &CQuickPasteKeyboard::OnBnClickedButtonRemove)
 	ON_BN_CLICKED(IDC_BUTTON_ADD, &CQuickPasteKeyboard::OnBnClickedButtonAdd)
-	ON_CBN_KILLFOCUS(IDC_COMBO_ENTER_MODIFYER, &CQuickPasteKeyboard::OnCbnKillfocusComboEnterModifyer)
+	ON_CBN_KILLFOCUS(IDC_COMBO_ENTER_MODIFIER, &CQuickPasteKeyboard::OnCbnKillfocusComboEnterModifier)
 	ON_EN_KILLFOCUS(IDC_HOTKEY1, &CQuickPasteKeyboard::OnEnKillfocusEdit1)
 	ON_WM_KILLFOCUS()
 	ON_BN_CLICKED(IDC_BUTTON_ENTER, &CQuickPasteKeyboard::OnBnClickedButtonEnter)
@@ -747,7 +747,7 @@ void CQuickPasteKeyboard::SelectMouseTypeCombo(CComboBox &combo, int value)
 }
 
 
-void CQuickPasteKeyboard::OnCbnKillfocusComboEnterModifyer()
+void CQuickPasteKeyboard::OnCbnKillfocusComboEnterModifier()
 {
 	// TODO: Add your control notification handler code here
 }

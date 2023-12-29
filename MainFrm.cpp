@@ -54,7 +54,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_WM_DESTROY()
 	ON_COMMAND(ID_FIRST_NEWCLIP, OnFirstNewclip)
 	ON_MESSAGE(WM_SET_CONNECTED, OnSetConnected)
-	ON_MESSAGE(WM_OPEN_CLOSE_WINDWOW, OnOpenCloseWindow)
+	ON_MESSAGE(WM_OPEN_CLOSE_WINDOW, OnOpenCloseWindow)
 	ON_MESSAGE(WM_LOAD_ClIP_ON_CLIPBOARD, OnLoadClipOnClipboard)
 	ON_COMMAND(ID_FIRST_GLOBALHOTKEYS, &CMainFrame::OnFirstGlobalhotkeys)
 	ON_MESSAGE(WM_GLOBAL_CLIPS_CLOSED, OnGlobalClipsClosed)
@@ -287,7 +287,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 
             if(m_bMovedSelectionMoveKeyState == false)
             {
-                Log(_T("Setting flag m_bMovedSelectionMoveKeyState to true, will paste when modifer keys are up"));
+                Log(_T("Setting flag m_bMovedSelectionMoveKeyState to true, will paste when modifier keys are up"));
             }
 
             m_quickPaste.MoveSelection(true);
@@ -295,14 +295,14 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
         }
         else if(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown && m_quickPaste.IsWindowTopLevel() && g_Opt.GetShowPersistent() == FALSE)
         {
-            Log(_T("On Show Ditto HotKey, window is alread visible, hiding window"));
+            Log(_T("On Show Ditto HotKey, window is already visible, hiding window"));
             m_quickPaste.HideQPasteWnd();
         }
         else
         {
             Log(_T("On Show Ditto HotKey, showing window"));
 
-			StartKeyModifyerTimer();
+			StartKeyModifierTimer();
 
 			ShowQPasteWithActiveWindowCheck();
         }
@@ -577,7 +577,7 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
     CATCH_SQLITE_EXCEPTION
 }
 
-void CMainFrame::StartKeyModifyerTimer()
+void CMainFrame::StartKeyModifierTimer()
 {
 	if (g_Opt.m_moveSelectionOnOpenHotkey)
 	{
@@ -629,7 +629,7 @@ void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarg
 
 				SetTimer(GROUP_DOUBLE_CLICK, doubleClickTime, 0);
 
-				Log(StrF(_T("First Press of group hot key, group Id: %d, timout: %d"), dbId, doubleClickTime));
+				Log(StrF(_T("First Press of group hot key, group Id: %d, timeout: %d"), dbId, doubleClickTime));
 			}
 		}
 		else
@@ -786,7 +786,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 						if (theApp.EnterGroupID(m_doubleClickGroupId, FALSE, TRUE))
 						{
 							theApp.m_activeWnd.TrackActiveWnd(true);
-							StartKeyModifyerTimer();
+							StartKeyModifierTimer();
 							m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
 						}
 					}
@@ -1179,7 +1179,7 @@ LRESULT CMainFrame::OnOpenCloseWindow(WPARAM wParam, LPARAM lParam)
 {
 	if(wParam)
 	{
-		StartKeyModifyerTimer();
+		StartKeyModifierTimer();
 		ShowQPasteWithActiveWindowCheck();
 	}
 	else if(lParam)

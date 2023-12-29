@@ -61,7 +61,7 @@ END_MESSAGE_MAP()
 #define SETTING_FIND_AS_TYPE 16
 #define SETTING_ENSURE_WINDOW_IS_VISIBLE 17
 #define SETTING_SHOW_GROUP_CLIPS_IN_LIST 18
-#define SETTING_PROMP_ON_DELETE 19
+#define SETTING_PROMPT_ON_DELETE 19
 #define SETTING_ALWAYS_SHOW_SCROLL_BAR 20
 #define SETTING_PASTE_AS_ADMIN 21
 #define SETTTING_SHOW_IN_TASKBAR 22
@@ -136,9 +136,10 @@ END_MESSAGE_MAP()
 #define SETTING_DEBUG_TO_OUTPUT_STRING 85
 #define SETTING_NETWORK_BIND_IP_ADDRESS 86
 #define SETTING_DISABLE_FRIENDS 87
-#define SETTING_IGNORE_FALSE_COPIES_DEALY 88
+#define SETTING_IGNORE_FALSE_COPIES_DELAY 88
 #define SETTING_REFRESH_VIEW_AFTER_PASTE 89
 #define SETTING_SLUGIFY_SEPARATOR 90
+#define SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY 91
 
 
 BOOL CAdvGeneral::OnInitDialog()
@@ -200,12 +201,12 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Ensure entire window is visible"), CGetSetOptions::GetEnsureEntireWindowCanBeSeen(), SETTING_ENSURE_WINDOW_IS_VISIBLE);
 	AddTrueFalse(pGroupTest, _T("Find as you type"), CGetSetOptions::GetFindAsYouType(), SETTING_FIND_AS_TYPE);
 
-	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("First ten hot heys start index"), (long)CGetSetOptions::GetFirstTenHotKeysStart(), _T(""), SETTING_FIRST_TEN_HOTKEYS_START));
-	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("First ten hot heys font size"), (long)CGetSetOptions::GetFirstTenHotKeysFontSize(), _T(""), SETTING_FIRST_TEN_HOTKEYS_FONT_SIZE));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("First ten hot keys start index"), (long)CGetSetOptions::GetFirstTenHotKeysStart(), _T(""), SETTING_FIRST_TEN_HOTKEYS_START));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("First ten hot keys font size"), (long)CGetSetOptions::GetFirstTenHotKeysFontSize(), _T(""), SETTING_FIRST_TEN_HOTKEYS_FONT_SIZE));
 
 	AddTrueFalse(pGroupTest, _T("Hide Ditto on hot key if Ditto is visible"), CGetSetOptions::GetHideDittoOnHotKeyIfAlreadyShown(), SETTING_HIDE_ON_HOTKEY_IF_VISIBLE);
 
-	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Ignore copies faster than (ms) (default: 500)"), (long)CGetSetOptions::GetSaveClipDelay(), _T(""), SETTING_IGNORE_FALSE_COPIES_DEALY));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Ignore copies faster than (ms) (default: 500)"), (long)CGetSetOptions::GetSaveClipDelay(), _T(""), SETTING_IGNORE_FALSE_COPIES_DELAY));
 
 	pGroupTest->AddSubItem( new CMFCPropertyGridProperty(_T("Maximum clip size in bytes (0 for no limit)"), g_Opt.m_lMaxClipSizeInBytes, _T(""), SETTING_MAX_CLIP_SIZE));
 		
@@ -227,11 +228,13 @@ BOOL CAdvGeneral::OnInitDialog()
 	pGroupTest->AddSubItem(pFileProp);
 
 	AddTrueFalse(pGroupTest, _T("Paste clip in active window after selection"), CGetSetOptions::GetSendPasteAfterSelection(), SETTING_PASTE_IN_ACTIVE_WINDOW);
-	AddTrueFalse(pGroupTest, _T("Prompt when deleting clips"), CGetSetOptions::GetPromptWhenDeletingClips(), SETTING_PROMP_ON_DELETE);
+	AddTrueFalse(pGroupTest, _T("Prompt when deleting clips"), CGetSetOptions::GetPromptWhenDeletingClips(), SETTING_PROMPT_ON_DELETE);
 
 	AddTrueFalse(pGroupTest, _T("Revert to top level group on close"), CGetSetOptions::GetRevertToTopLevelGroup(), SETTING_REVERT_TO_TOP_LEVEL_GROUP);
 
 	AddTrueFalse(pGroupTest, _T("Refresh view after paste"), CGetSetOptions::GetRefreshViewAfterPasting(), SETTING_REFRESH_VIEW_AFTER_PASTE);
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("clipboard restore after copy buffer sent paste delay (ms, default: 750))"), (long)(CGetSetOptions::GetDittoRestoreClipboardDelay()), _T(""), SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY));
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Save clipboard delay (ms, default: 100))"), (long)(CGetSetOptions::GetProcessDrawClipboardDelay()), _T(""), SETTING_CLIPBOARD_SAVE_DELAY));
 
@@ -271,7 +274,7 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Write debug to file"), CGetSetOptions::GetEnableDebugLogging(), SETTING_DEBUG_TO_FILE);
 	AddTrueFalse(pGroupTest, _T("Write debug to OutputDebugString"), CGetSetOptions::GetEnableDebugLogging(), SETTING_DEBUG_TO_OUTPUT_STRING);
 
-	CMFCPropertyGridProperty * regexFilterGroup = new CMFCPropertyGridProperty(_T("Exlude clips by Regular Expressions"));
+	CMFCPropertyGridProperty * regexFilterGroup = new CMFCPropertyGridProperty(_T("Exclude clips by Regular Expressions"));
 	m_propertyGrid.AddProperty(regexFilterGroup);	
 
 	CString processFilterDesc = _T("Process making the copy first must match this before the Regex will be applied (empty or * for all processes) (separate multiples by ;)");
@@ -544,7 +547,7 @@ void CAdvGeneral::OnBnClickedOk()
 					CGetSetOptions::SetShowAllClipsInMainList(val);
 				}
 				break;
-			case SETTING_PROMP_ON_DELETE:
+			case SETTING_PROMPT_ON_DELETE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
 					BOOL val = false;
@@ -792,6 +795,12 @@ void CAdvGeneral::OnBnClickedOk()
 					CGetSetOptions::SetRealSendKeysDelay(pNewValue->lVal);
 				}
 				break;
+			case SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetDittoRestoreClipboardDelay(pNewValue->lVal);
+				}
+				break;
 			case SETTING_DOUBLE_KEYSTROKE_TIMEOUT:
 				if (pNewValue->lVal != pOrigValue->lVal)
 				{
@@ -912,7 +921,7 @@ void CAdvGeneral::OnBnClickedOk()
 					CGetSetOptions::SetAllowFriends(val);
 				}
 				break;
-			case SETTING_IGNORE_FALSE_COPIES_DEALY:
+			case SETTING_IGNORE_FALSE_COPIES_DELAY:
 				if (pNewValue->lVal != pOrigValue->lVal)
 				{
 					CGetSetOptions::SetSaveClipDelay(pNewValue->lVal);
