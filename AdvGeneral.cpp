@@ -139,8 +139,8 @@ END_MESSAGE_MAP()
 #define SETTING_IGNORE_FALSE_COPIES_DELAY 88
 #define SETTING_REFRESH_VIEW_AFTER_PASTE 89
 #define SETTING_SLUGIFY_SEPARATOR 90
-#define SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY 91
-
+#define SETTING_FAST_THUMBNAIL_MODE 91
+#define SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY 92
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -199,6 +199,9 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Elevated privileges to paste into elevated apps"), CGetSetOptions::GetPasteAsAdmin(), SETTING_PASTE_AS_ADMIN);
 	AddTrueFalse(pGroupTest, _T("Ensure Ditto is always connected to the clipboard"), CGetSetOptions::GetEnsureConnectToClipboard(), SETTING_ENSURE_CONNECTED);
 	AddTrueFalse(pGroupTest, _T("Ensure entire window is visible"), CGetSetOptions::GetEnsureEntireWindowCanBeSeen(), SETTING_ENSURE_WINDOW_IS_VISIBLE);
+
+	AddTrueFalse(pGroupTest, _T("Fast thumbnail mode (default: true means NearestNeighbor, low quality but fast. false means HighQualityBicubic, high quality but slow)"), CGetSetOptions::GetFastThumbnailMode(), SETTING_FAST_THUMBNAIL_MODE);
+
 	AddTrueFalse(pGroupTest, _T("Find as you type"), CGetSetOptions::GetFindAsYouType(), SETTING_FIND_AS_TYPE);
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("First ten hot keys start index"), (long)CGetSetOptions::GetFirstTenHotKeysStart(), _T(""), SETTING_FIRST_TEN_HOTKEYS_START));
@@ -244,7 +247,6 @@ BOOL CAdvGeneral::OnInitDialog()
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Send keys delay (ms)"), (long)CGetSetOptions::RealSendKeysDelay(), _T(""), SETTING_SEND_KEYS_DELAY));
 
-	
 
 	AddTrueFalse(pGroupTest, _T("Show clips that are in groups in main list"), CGetSetOptions::GetShowAllClipsInMainList(), SETTING_SHOW_GROUP_CLIPS_IN_LIST);
 	AddTrueFalse(pGroupTest, _T("Show leading whitespace"), CGetSetOptions::GetDescShowLeadingWhiteSpace(), SETTING_SHOW_LEADING_WHITESPACE);
@@ -501,6 +503,17 @@ void CAdvGeneral::OnBnClickedOk()
 						val = true;
 					}
 					CGetSetOptions::SetDrawThumbnail(val);
+				}
+				break;
+			case SETTING_FAST_THUMBNAIL_MODE:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = false;
+					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
+					{
+						val = true;
+					}
+					CGetSetOptions::SetFastThumbnailMode(val);
 				}
 				break;
 			case SETTING_DRAW_RTF:

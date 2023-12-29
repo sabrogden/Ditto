@@ -41,6 +41,7 @@ BOOL CGetSetOptions::m_bLogSendReceiveErrors;
 BOOL CGetSetOptions::m_HideDittoOnHotKeyIfAlreadyShown;
 long CGetSetOptions::m_lPort;
 BOOL CGetSetOptions::m_bDrawThumbnail;
+BOOL CGetSetOptions::m_bFastThumbnailMode;
 CStringA CGetSetOptions::m_csPassword;
 BOOL CGetSetOptions::m_bDrawRTF;
 BOOL CGetSetOptions::m_bMultiPasteReverse;
@@ -185,6 +186,7 @@ void CGetSetOptions::LoadSettings()
 	m_HideDittoOnHotKeyIfAlreadyShown = GetHideDittoOnHotKeyIfAlreadyShown();
 	m_lPort = GetPort();
 	m_bDrawThumbnail = GetDrawThumbnail();
+	m_bFastThumbnailMode = GetFastThumbnailMode();
 	m_csPassword = GetNetworkPassword();
 	m_bDrawRTF = GetDrawRTF();
 	m_bMultiPasteReverse = GetMultiPasteReverse();
@@ -1506,6 +1508,17 @@ BOOL CGetSetOptions::GetDrawThumbnail()
 	BOOL bDrawThumbnails = TRUE;
 
 	return GetProfileLong("DrawThumbnail", bDrawThumbnails);
+}
+
+void CGetSetOptions::SetFastThumbnailMode(BOOL thumbnailDrawMode)
+{
+	SetProfileLong("FastThumbnailMode", thumbnailDrawMode); 
+	m_bFastThumbnailMode = thumbnailDrawMode;
+}
+
+BOOL CGetSetOptions::GetFastThumbnailMode()
+{
+	return GetProfileLong("FastThumbnailMode", TRUE);
 }
 
 void CGetSetOptions::SetExtraNetworkPassword(CString csPassword)
