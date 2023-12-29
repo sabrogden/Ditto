@@ -81,7 +81,8 @@ async function UpdateReleaseNotes(nightlyRelease) {
                         },
             url: `https://api.github.com/repos/sabrogden/Ditto/releases/generate-notes`,
             data: {                        
-                    "tag_name": "nightly"
+                    "tag_name": env.tag,
+                    "previous_tag_name": env.previous_tag
                 }
         }
         
