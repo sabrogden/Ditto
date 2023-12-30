@@ -55,7 +55,6 @@ BOOL CBitmapHelper::GetCBitmap(void	*pClip2, CDC *pDC, CBitmap *pBitMap, int nMa
 	Gdiplus::Bitmap *gdipBitmap = pClip->CreateGdiplusBitmap();
 	if (gdipBitmap == NULL)
 	{
-		delete gdipBitmap;
 		return false;
 	}
 
@@ -86,7 +85,7 @@ BOOL CBitmapHelper::GetCBitmap(void	*pClip2, CDC *pDC, CBitmap *pBitMap, int nMa
 	Gdiplus::InterpolationMode interpolationMode = Gdiplus::InterpolationModeHighQualityBicubic;
 	if (CGetSetOptions::GetFastThumbnailMode())
 	{
-		interpolationMode = Gdiplus::InterpolationModeNearestNeighbor;
+		interpolationMode = Gdiplus::InterpolationModeBicubic;
 	}
 	graphics.SetInterpolationMode(interpolationMode);
 	graphics.SetCompositingMode(Gdiplus::CompositingModeSourceOver);
