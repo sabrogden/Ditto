@@ -394,9 +394,10 @@ WORD CSendKeys::StringToVKey(LPCTSTR KeyString, int &idx)
 // If we are in a modifier group this function does nothing
 void CSendKeys::PopUpShiftKeys()
 {
-  if (!m_bUsingParens)
-  {
-    if (m_bShiftDown)
+  if (m_bUsingParens)
+		return;
+
+  if (m_bShiftDown)
 	{
       SendKeyUp(VK_SHIFT);
 	}
@@ -429,8 +430,7 @@ void CSendKeys::PopUpShiftKeys()
       SendKeyUp(VK_LWIN);
 	}
 
-    m_bWinDown = m_bShiftDown = m_bLShiftDown = m_bRShiftDown = m_bControlDown = m_bLControlDown = m_bRControlDown = m_bAltDown = false;
-  }
+	m_bWinDown = m_bShiftDown = m_bLShiftDown = m_bRShiftDown = m_bControlDown = m_bLControlDown = m_bRControlDown = m_bAltDown = false;
 }
 
 // Sends a key string
@@ -582,27 +582,25 @@ bool CSendKeys::SendKeys(LPCTSTR KeysString, bool Wait)
         }
 
         // A valid key to send?
-		if (MKey != INVALIDKEY)
-		{
-			if (MKey == VK_LCONTROL ||
-				MKey == VK_RCONTROL)
-			{
-				m_bLControlDown = (MKey == VK_LCONTROL);
-				m_bRControlDown = (MKey == VK_RCONTROL);
-				SendKeyDown(MKey, 1, false);
-			}
-			else if (MKey == VK_LSHIFT ||
-					 MKey == VK_RSHIFT)
-			{
-				m_bLShiftDown = (MKey == VK_LSHIFT);
-				m_bRShiftDown = (MKey == VK_RSHIFT);
-				SendKeyDown(MKey, 1, false);
-			}
-			else
-			{		
-				SendKey(MKey, NumTimes, true);	
-				PopUpShiftKeys();
-			}
+        if (MKey != INVALIDKEY)
+        {
+          if (MKey == VK_LCONTROL || MKey == VK_RCONTROL)
+          {
+            m_bLControlDown = (MKey == VK_LCONTROL);
+            m_bRControlDown = (MKey == VK_RCONTROL);
+            SendKeyDown(MKey, 1, false);
+          }
+          else if (MKey == VK_LSHIFT || MKey == VK_RSHIFT)
+          {
+            m_bLShiftDown = (MKey == VK_LSHIFT);
+            m_bRShiftDown = (MKey == VK_RSHIFT);
+            SendKeyDown(MKey, 1, false);
+          }
+          else
+          {
+            SendKey(MKey, NumTimes, true);	
+            PopUpShiftKeys();
+          }
         }
       }
       break;

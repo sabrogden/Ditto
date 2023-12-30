@@ -29,48 +29,45 @@ BOOL CProcessPaste::DoPaste()
 	try
 	{
 		m_pOle->m_pasteOptions = m_pasteOptions;
-
-		if (m_pOle->DoImmediateRender())
+		if (!m_pOle->DoImmediateRender())
 		{
-			// MarkAsPasted() must be done first since it makes use of
-			//  m_pOle->m_ClipIDs and m_pOle is inaccessible after
-			//  SetClipboard is called.
-			MarkAsPasted(m_pasteOptions.m_updateClipOrder);
-
-			// Ignore the clipboard change that we will cause IF:
-			// 1) we are pasting a single element, since the element is already
-			//    in the db and its lDate was updated by MarkAsPas???ted().
-			// OR
-			// 2) we are pasting multiple, but g_Opt.m_bSaveMultiPaste is false
-			if (GetClipIDs().GetSize() == 1 || !g_Opt.m_bSaveMultiPaste)
-			{
-				m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
-			}
-			else
-			{
-				m_pOle->CacheGlobalData(theApp.m_cfDelaySavingData, NewGlobalP("Delay", sizeof("Delay")));
-			}
-
-			m_pOle->SetClipboard(); // m_pOle is now managed by the OLE clipboard
-
-			// The Clipboard now owns the allocated memory
-			// and will delete this data object
-			// when new data is put on the Clipboard
-			m_pOle = NULL; // m_pOle should not be accessed past this point
-
-			if (m_bSendPaste)
-			{
-				Log(_T("Sending Paste to active window"));
-				theApp.m_activeWnd.SendPaste(m_bActivateTarget);
-			}
-			else if (m_bActivateTarget)
-			{
-				Log(_T("Activating active window"));
-				theApp.m_activeWnd.ActivateTarget();
-			}
-
-			ret = TRUE;
+			return ret;
 		}
+
+		// MarkAsPasted() must be done first since it makes use of
+		//  m_pOle->m_ClipIDs and m_pOle is inaccessible after
+		//  SetClipboard is called.
+		MarkAsPasted(m_pasteOptions.m_updateClipOrder);
+
+		// Ignore the clipboard change that we will cause IF:
+		// 1) we are pasting a single element, since the element is already
+		//    in the db and its lDate was updated by MarkAsPasted().
+		// OR
+		// 2) we are pasting multiple, but g_Opt.m_bSaveMultiPaste is false
+		if (GetClipIDs().GetSize() == 1 || !g_Opt.m_bSaveMultiPaste)
+		{
+			m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
+		}
+		else
+		{
+			m_pOle->CacheGlobalData(theApp.m_cfDelaySavingData, NewGlobalP("Delay", sizeof("Delay")));
+		}
+
+		m_pOle->SetClipboard(); // m_pOle is now managed by the OLE clipboard
+
+		if (m_bSendPaste)
+		{
+			Log(_T("Sending Paste to active window"));
+			theApp.m_activeWnd.SendPaste(m_bActivateTarget);
+		}
+		else if (m_bActivateTarget)
+		{
+			Log(_T("Activating active window"));
+			theApp.m_activeWnd.ActivateTarget();
+		}
+
+		ret = TRUE;
+	
 	}
 	catch (CException *ex)
 	{
