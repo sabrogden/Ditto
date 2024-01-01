@@ -101,6 +101,8 @@ BOOL CBitmapHelper::GetCBitmap(void	*pClip2, CDC *pDC, CBitmap *pBitMap, int nMa
 BOOL CBitmapHelper::GetCBitmap(CClipFormats &clips, CDC* pDC, CBitmap* pBitMap, BOOL horizontal)
 {
 	BOOL bRet = FALSE;
+	if (!pBitMap)
+		return bRet;
 
 	int count = clips.GetCount();
 	int width = 0;
@@ -123,7 +125,6 @@ BOOL CBitmapHelper::GetCBitmap(CClipFormats &clips, CDC* pDC, CBitmap* pBitMap, 
 			height += (int)gdipBitmap->GetHeight();
 		}
 	
-
 		delete gdipBitmap;
 	}
 
@@ -148,37 +149,33 @@ BOOL CBitmapHelper::GetCBitmap(CClipFormats &clips, CDC* pDC, CBitmap* pBitMap, 
 	{
 		CClipFormat clip = clips[i];
 
-		if (clip.m_cfType == CF_DIB ||
-			clip.m_cfType == theApp.m_PNG_Format)
+		if (clip.m_cfType != CF_DIB &&
+			clip.m_cfType != theApp.m_PNG_Format)
+			continue;
+	
+		Gdiplus::Bitmap* gdipBitmap = clip.CreateGdiplusBitmap();
+		if (gdipBitmap == NULL)
+			continue;
+
+		const UINT gdipHeight = gdipBitmap->GetHeight();
+		const UINT gdipWidth = gdipBitmap->GetWidth();
+		if (gdipHeight == 0 || gdipWidth == 0) 
 		{
-			if (pBitMap)
-			{
-				Gdiplus::Bitmap* gdipBitmap = clip.CreateGdiplusBitmap();
-
-				if (gdipBitmap != NULL &&
-					gdipBitmap->GetHeight() > 0 &&
-					gdipBitmap->GetWidth() > 0)
-				{
-					Gdiplus::ImageAttributes attrs;
-					Gdiplus::Rect dest(destX, destY, gdipBitmap->GetWidth(), gdipBitmap->GetHeight());
-
-					graphics.DrawImage(gdipBitmap, dest, 0, 0, gdipBitmap->GetWidth(), gdipBitmap->GetHeight(), Gdiplus::UnitPixel, &attrs);
-
-					if (horizontal)
-					{
-						destX += gdipBitmap->GetWidth();
-					}
-					else
-					{
-						destY += gdipBitmap->GetHeight();
-					}
-
-					delete gdipBitmap;
-
-					bRet = TRUE;
-				}
-			}
+			delete gdipBitmap;
+			continue;
 		}
+
+		Gdiplus::Rect dest(destX, destY, gdipBitmap->GetWidth(), gdipBitmap->GetHeight());
+		Gdiplus::ImageAttributes attrs;
+		graphics.DrawImage(gdipBitmap, dest, 0, 0, gdipBitmap->GetWidth(), gdipBitmap->GetHeight(), Gdiplus::UnitPixel, &attrs);
+
+		if (horizontal)
+			destX += gdipBitmap->GetWidth();
+		else
+			destY += gdipBitmap->GetHeight();
+
+		delete gdipBitmap;
+		bRet = TRUE;
 	}
 
 	MemDc2.SelectObject(oldBitmap2);
@@ -280,16 +277,16 @@ HANDLE CBitmapHelper::hBitmapToDIB(HBITMAP hBitmap, DWORD dwCompression, HPALETT
 
     // We need a device context to get the DIB from
     hDC = GetDC(NULL);
-    hPal = SelectPalette(hDC,hPal,FALSE);
+    hPal = SelectPalette(hDC, hPal, FALSE);
     (void)RealizePalette(hDC);
 
     // Allocate enough memory to hold bitmapinfoheader and color table
-    hDIB = GlobalAlloc(GMEM_FIXED,dwLen);
+    hDIB = GlobalAlloc(GMEM_FIXED, dwLen);
 
     if (!hDIB)
 	{
-        (void)SelectPalette(hDC,hPal,FALSE);
-        ReleaseDC(NULL,hDC);
+        (void)SelectPalette(hDC, hPal, FALSE);
+        ReleaseDC(NULL, hDC);
         return NULL;
     }
 
@@ -320,25 +317,23 @@ HANDLE CBitmapHelper::hBitmapToDIB(HBITMAP hBitmap, DWORD dwCompression, HPALETT
     // Realloc the buffer so that it can hold all the bits
     dwLen += bi.biSizeImage;
 	handle = GlobalReAlloc(hDIB, dwLen, GMEM_MOVEABLE);
-    if(handle)
-	{
-		hDIB = handle;
-	}
-    else
+    if(!handle)
 	{
 		GlobalFree(hDIB);
 
 		// Reselect the original palette
-		(void)SelectPalette(hDC,hPal,FALSE);
-		ReleaseDC(NULL,hDC);
+		(void)SelectPalette(hDC, hPal, FALSE);
+		ReleaseDC(NULL, hDC);
 		return NULL;
-    }
+	}
+	
+	hDIB = handle;
 
     // Get the bitmap bits
     lpbi = (LPBITMAPINFOHEADER)hDIB;
 
     // FINALLY get the DIB
-    BOOL bGotBits = GetDIBits( hDC, hBitmap,
+    BOOL bGotBits = GetDIBits(hDC, hBitmap,
                             0L,                             // Start scan line
                             (DWORD)bi.biHeight,             // # of scan lines
                             (LPBYTE)lpbi                    // address for bitmap bits
@@ -350,13 +345,13 @@ HANDLE CBitmapHelper::hBitmapToDIB(HBITMAP hBitmap, DWORD dwCompression, HPALETT
     {
         GlobalFree(hDIB);
         
-        (void)SelectPalette(hDC,hPal,FALSE);
+        (void)SelectPalette(hDC, hPal, FALSE);
         ReleaseDC(NULL,hDC);
         return NULL;
     }
 
-    (void)SelectPalette(hDC,hPal,FALSE);
-    ReleaseDC(NULL,hDC);
+    (void)SelectPalette(hDC, hPal, FALSE);
+    ReleaseDC(NULL, hDC);
     return hDIB;
 }
 
@@ -365,36 +360,33 @@ bool CBitmapHelper::DrawDIB(CDC *pDC, HANDLE hData, int nLeft, int nRight, int &
 {
 	LPBITMAPINFO	lpBI ;
 	void*           pDIBBits;
-	bool bRet = false;
 	
 	lpBI = (LPBITMAPINFO)GlobalLock(hData);
-	if(lpBI)
+	if (!lpBI)
+		return false;
+
+	int nColors = lpBI->bmiHeader.biClrUsed ? lpBI->bmiHeader.biClrUsed : 1 << lpBI->bmiHeader.biBitCount;
+
+	if( lpBI->bmiHeader.biBitCount > 8 )
 	{
-		int nColors = lpBI->bmiHeader.biClrUsed ? lpBI->bmiHeader.biClrUsed : 1 << lpBI->bmiHeader.biBitCount;
-
-		if( lpBI->bmiHeader.biBitCount > 8 )
-		{
-			pDIBBits = (LPVOID)((LPDWORD)(lpBI->bmiColors + lpBI->bmiHeader.biClrUsed) + 
-				((lpBI->bmiHeader.biCompression == BI_BITFIELDS) ? 3 : 0));
-		}
-		else
-		{
-			pDIBBits = (LPVOID)(lpBI->bmiColors + nColors);
-		}
-
-		::StretchDIBits(pDC->m_hDC,
-					nLeft, nRight, 
-					lpBI->bmiHeader.biWidth, lpBI->bmiHeader.biHeight,
-					0, 0, lpBI->bmiHeader.biWidth, 
-					lpBI->bmiHeader.biHeight,
-					pDIBBits, lpBI, DIB_PAL_COLORS, SRCCOPY);
-
-		nWidth = lpBI->bmiHeader.biWidth;
-
-		GlobalUnlock(hData) ;
-
-		bRet = true;
+		pDIBBits = (LPVOID)((LPDWORD)(lpBI->bmiColors + lpBI->bmiHeader.biClrUsed) + 
+			((lpBI->bmiHeader.biCompression == BI_BITFIELDS) ? 3 : 0));
+	}
+	else
+	{
+		pDIBBits = (LPVOID)(lpBI->bmiColors + nColors);
 	}
 
-	return bRet;
+	::StretchDIBits(pDC->m_hDC,
+				nLeft, nRight, 
+				lpBI->bmiHeader.biWidth, lpBI->bmiHeader.biHeight,
+				0, 0, lpBI->bmiHeader.biWidth, 
+				lpBI->bmiHeader.biHeight,
+				pDIBBits, lpBI, DIB_PAL_COLORS, SRCCOPY);
+
+	nWidth = lpBI->bmiHeader.biWidth;
+
+	GlobalUnlock(hData);
+
+	return true;
 }

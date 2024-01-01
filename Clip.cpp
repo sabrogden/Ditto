@@ -1,4 +1,4 @@
-// ProcessCopy.cpp: implementation of the CProcessCopy class.
+// Clip.cpp: implementations of the Clip interfaces
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -14,8 +14,10 @@
 #include "Md5.h"
 #include "ChaiScriptOnCopy.h"
 #include "DittoChaiScript.h"
+#include "ImageHelper.h"
 
 #include <Mmsystem.h>
+#include <memory>
 
 #include "Path.h"
 
@@ -124,67 +126,26 @@ void CClipFormat::Clear()
 
 void CClipFormat::Free()
 {
-	if(m_autoDeleteData)
+	if(m_autoDeleteData && m_hgData)
 	{
-		if(m_hgData)
-		{
-			m_hgData = ::GlobalFree( m_hgData );
-			m_hgData = NULL;
-		}
+		m_hgData = ::GlobalFree( m_hgData );
+		m_hgData = NULL;
 	}
 }
 
 Gdiplus::Bitmap *CClipFormat::CreateGdiplusBitmap()
 {
-	Gdiplus::Bitmap *gdipBitmap = NULL;
-	IStream* pIStream = NULL;
+	if (this->m_cfType != CF_DIB && this->m_cfType == theApp.m_PNG_Format)
+		return NULL;
 
-	if (CreateStreamOnHGlobal(NULL, TRUE, (LPSTREAM*)&pIStream) == S_OK)
-	{
-		if (this->m_cfType == CF_DIB)
-		{
-			LPVOID pvData = GlobalLock(this->m_hgData);
-			ULONG size = (ULONG)GlobalSize(this->m_hgData);
-
-			BITMAPINFO *lpBI = (BITMAPINFO *)pvData;
-
-			int nPaletteEntries = 1 << lpBI->bmiHeader.biBitCount;
-			if (lpBI->bmiHeader.biBitCount > 8)
-				nPaletteEntries = 0;
-			else if (lpBI->bmiHeader.biClrUsed != 0)
-				nPaletteEntries = lpBI->bmiHeader.biClrUsed;
-
-			BITMAPFILEHEADER BFH;
-			memset(&BFH, 0, sizeof(BITMAPFILEHEADER));
-			BFH.bfType = 'MB';
-			BFH.bfSize = sizeof(BITMAPFILEHEADER) + size;
-			BFH.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + nPaletteEntries * sizeof(RGBQUAD);
-
-			pIStream->Write(&BFH, sizeof(BITMAPFILEHEADER), NULL);
-			pIStream->Write(pvData, size, NULL);
-
-			GlobalUnlock(this->m_hgData);
-
-			gdipBitmap = Gdiplus::Bitmap::FromStream(pIStream);
-		}
-		else if (this->m_cfType == theApp.m_PNG_Format)
-		{
-			LPVOID pvData = GlobalLock(this->m_hgData);
-			ULONG size = (ULONG)GlobalSize(this->m_hgData);
-			pIStream->Write(pvData, size, NULL);
-
-			GlobalUnlock(this->m_hgData);
-
-			gdipBitmap = Gdiplus::Bitmap::FromStream(pIStream);
-		}
-
-		pIStream->Release();
-	}
+	Gdiplus::Bitmap *gdipBitmap;
+	if (this->m_cfType == CF_DIB)
+		gdipBitmap = DIBImageHelper::GdipImageFromHGLOBAL(this->m_hgData);
+	else
+		gdipBitmap = PNGImageHelper::GdipImageFromHGLOBAL(this->m_hgData);
 
 	return gdipBitmap;
 }
-
-
 
 /*----------------------------------------------------------------------------*\
 CClipFormats - holds an array of CClipFormat
@@ -1843,76 +1804,17 @@ BOOL CClip::WriteTextToHtmlFile(CString path)
 
 BOOL CClip::WriteImageToFile(CString path)
 {
-	BOOL ret = false;
-
 	CClipFormat *bitmap = this->m_Formats.FindFormat(CF_DIB);
-	if (bitmap)
-	{
-		LPVOID pvData = GlobalLock(bitmap->m_hgData);
-		ULONG size = (ULONG)GlobalSize(bitmap->m_hgData);
-
-		BITMAPINFO *lpBI = (BITMAPINFO *)pvData;
-
-		int nPaletteEntries = 1 << lpBI->bmiHeader.biBitCount;
-		if (lpBI->bmiHeader.biBitCount > 8)
-			nPaletteEntries = 0;
-		else if (lpBI->bmiHeader.biClrUsed != 0)
-			nPaletteEntries = lpBI->bmiHeader.biClrUsed;
-
-		BITMAPFILEHEADER BFH;
-		memset(&BFH, 0, sizeof(BITMAPFILEHEADER));
-		BFH.bfType = 'MB';
-		BFH.bfSize = sizeof(BITMAPFILEHEADER) + size;
-		BFH.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + nPaletteEntries * sizeof(RGBQUAD);
-
-		// Create stream with 0 size
-		IStream* pIStream = NULL;
-		if (CreateStreamOnHGlobal(NULL, TRUE, (LPSTREAM*)&pIStream) == S_OK)
-		{
-
-			//write the file to the stream object
-			pIStream->Write(&BFH, sizeof(BITMAPFILEHEADER), NULL);
-			pIStream->Write(pvData, size, NULL);
-
-			CImage i;
-			i.Load(pIStream);
-
-			if (i.Save(path) == S_OK)
-			{
-				ret = true;
-			}
-
-			pIStream->Release();
-		}
-	}
+	CClipFormat *png = this->m_Formats.FindFormat(theApp.m_PNG_Format);
+	if (!bitmap && !png) return false;
+	
+	std::shared_ptr<CImage> i;
+	if (bitmap) 
+		i = DIBImageHelper::CImageFromHGLOBAL(bitmap->m_hgData);
 	else
-	{
-		CClipFormat *png = this->m_Formats.FindFormat(theApp.m_PNG_Format);
-		if (png)
-		{
-			IStream* pIStream = NULL;
-			if (CreateStreamOnHGlobal(NULL, TRUE, (LPSTREAM*)&pIStream) == S_OK)
-			{
-				LPVOID pvData = GlobalLock(png->m_hgData);
-				ULONG size = (ULONG)GlobalSize(png->m_hgData);
+		i = PNGImageHelper::CImageFromHGLOBAL(bitmap->m_hgData);
 
-				pIStream->Write(pvData, size, NULL);
-
-				GlobalUnlock(png->m_hgData);
-
-				CImage i;
-				i.Load(pIStream);
-
-				if (i.Save(path) == S_OK)
-				{
-					ret = true;
-				}
-
-				pIStream->Release();
-			}
-		}
-	}
-	return ret;
+	return i->Save(path) == S_OK;
 }
 
 bool CClip::AddFileDataToData(CString &errorMessage)
@@ -2056,23 +1958,13 @@ bool CClip::AddFileDataToData(CString &errorMessage)
 
 Gdiplus::Bitmap *CClip::CreateGdiplusBitmap()
 {
-	Gdiplus::Bitmap *gdipBitmap = NULL;
-
 	CClipFormat *png = this->m_Formats.FindFormat(GetFormatID(_T("PNG")));
 	if (png != NULL)
-	{
-		gdipBitmap = png->CreateGdiplusBitmap();
-	}
-	else
-	{
-		CClipFormat *dib = this->m_Formats.FindFormat(CF_DIB);
-		if (dib != NULL)
-		{
-			gdipBitmap = dib->CreateGdiplusBitmap();
-		}
-	}
+		return png->CreateGdiplusBitmap();
 
-	return gdipBitmap;
+	CClipFormat *dib = this->m_Formats.FindFormat(CF_DIB);
+	if (dib != NULL)
+		return dib->CreateGdiplusBitmap();
 }
 
 /*----------------------------------------------------------------------------*\
