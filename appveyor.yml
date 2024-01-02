@@ -52,7 +52,7 @@ after_build:
   - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.pdb -r
   - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.map -r
   
-  - npm install ./DittoSetup/GitHubRelease && SET "token=%GITHUB_API_KEY%" && SET "uploadPath=DittoSetup\output\" && SET "tag=%APPVEYOR_BUILD_VERSION%"  && SET "previous_tag=3.24.246.0" && node .\index.js
+  - npm install ./DittoSetup/GitHubRelease && SET "token=%GITHUB_API_KEY%" && SET "uploadPath=DittoSetup\output\" && SET "tag=%APPVEYOR_BUILD_VERSION%"  && SET "previous_tag=3.24.246.0" && node ./DittoSetup/GitHubRelease/index.js
   
 #  - appveyor AddMessage -Category Information "Building ditto choco"
 #  - ps: (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
