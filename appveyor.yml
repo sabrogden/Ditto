@@ -52,47 +52,48 @@ after_build:
   - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.pdb -r
   - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.map -r
   
+  - appveyor AddMessage -Category Information "Publishing to GitHub"
   - npm install ./DittoSetup/GitHubRelease && SET "token=%GITHUB_API_KEY%" && SET "uploadPath=DittoSetup\output\" && SET "tag=%APPVEYOR_BUILD_VERSION%"  && SET "previous_tag=3.24.246.0" && node ./DittoSetup/GitHubRelease/index.js
   
-#  - appveyor AddMessage -Category Information "Building ditto choco"
-#  - ps: (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
-#  - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\tools\DittoSetup_%VERSION_FILENAME%.exe
-#  - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\tools\DittoSetup_64bit_%VERSION_FILENAME%.exe
-#  - cd DittoSetup\Chocolatey
-#  - choco pack     
-#  - choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
-#  - cd ..
-#  - cd ..
-#  
-#  - appveyor AddMessage -Category Information "Building ditto choco.install"
-#  - ps: (Get-Content 'DittoSetup\Chocolatey.install\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey.install\ditto.nuspec'
-#  - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.install\tools\DittoSetup_%VERSION_FILENAME%.exe
-#  - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.install\tools\DittoSetup_64bit_%VERSION_FILENAME%.exe
-#  - cd DittoSetup\Chocolatey.install
-#  - choco pack     
-#  - choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
-#  - cd ..
-#  - cd ..
-#  
-#  - appveyor AddMessage -Category Information "Building ditto choco.portable"
-#  - ps: (Get-Content 'DittoSetup\Chocolatey.portable\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey.portable\ditto.nuspec'
-#  - copy DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip DittoSetup\Chocolatey.portable\tools\DittoPortable_%VERSION_FILENAME%.zip
-#  - copy DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip DittoSetup\Chocolatey.portable\tools\DittoPortable_64bit_%VERSION_FILENAME%.zip
-#  - cd DittoSetup\Chocolatey.portable
-#  - choco pack     
-#  - choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
-#  - cd ..
-#  - cd ..
-#
-#  - appveyor AddMessage -Category Information "Building appx"
-#  - 7z x DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip -oDittoSetup\appx -r
-#  - ps: (Get-Content 'DittoSetup\appx\appxmanifest.xml' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\appx\appxmanifest.xml'  
-#  - cd DittoSetup\appx
-#  - makeappx.exe pack /f files.ini /p Ditto_%VERSION_FILENAME%.appx
-#  - signtool.exe sign -f my.pfx -fd SHA256 -v Ditto_%VERSION_FILENAME%.appx
-#  - cd ..
-#  - cd ..
-#  - copy DittoSetup\appx\Ditto_%VERSION_FILENAME%.appx DittoSetup\Output\Ditto_%VERSION_FILENAME%.appx
+  - appveyor AddMessage -Category Information "Building ditto choco"
+  - ps: (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
+  - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\tools\DittoSetup_%VERSION_FILENAME%.exe
+  - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\tools\DittoSetup_64bit_%VERSION_FILENAME%.exe
+  - cd DittoSetup\Chocolatey
+  - choco pack     
+  - choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+  - cd ..
+  - cd ..
+  
+  - appveyor AddMessage -Category Information "Building ditto choco.install"
+  - ps: (Get-Content 'DittoSetup\Chocolatey.install\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey.install\ditto.nuspec'
+  - copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.install\tools\DittoSetup_%VERSION_FILENAME%.exe
+  - copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey.install\tools\DittoSetup_64bit_%VERSION_FILENAME%.exe
+  - cd DittoSetup\Chocolatey.install
+  - choco pack     
+  - choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+  - cd ..
+  - cd ..
+  
+  - appveyor AddMessage -Category Information "Building ditto choco.portable"
+  - ps: (Get-Content 'DittoSetup\Chocolatey.portable\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey.portable\ditto.nuspec'
+  - copy DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip DittoSetup\Chocolatey.portable\tools\DittoPortable_%VERSION_FILENAME%.zip
+  - copy DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip DittoSetup\Chocolatey.portable\tools\DittoPortable_64bit_%VERSION_FILENAME%.zip
+  - cd DittoSetup\Chocolatey.portable
+  - choco pack     
+  - choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+  - cd ..
+  - cd ..
+
+  - appveyor AddMessage -Category Information "Building appx"
+  - 7z x DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip -oDittoSetup\appx -r
+  - ps: (Get-Content 'DittoSetup\appx\appxmanifest.xml' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\appx\appxmanifest.xml'  
+  - cd DittoSetup\appx
+  - makeappx.exe pack /f files.ini /p Ditto_%VERSION_FILENAME%.appx
+  - signtool.exe sign -f my.pfx -fd SHA256 -v Ditto_%VERSION_FILENAME%.appx
+  - cd ..
+  - cd ..
+  - copy DittoSetup\appx\Ditto_%VERSION_FILENAME%.appx DittoSetup\Output\Ditto_%VERSION_FILENAME%.appx
 
 #artifacts:
 #  - path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
