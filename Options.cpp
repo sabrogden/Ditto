@@ -83,6 +83,7 @@ BOOL CGetSetOptions::m_maintainSearchView = FALSE;
 CString CGetSetOptions::m_tempDragFileName = "";
 CTime CGetSetOptions::m_tempDragFileNameSetTime;
 BOOL CGetSetOptions::m_refreshViewAfterPasting = TRUE;
+BOOL CGetSetOptions::m_supportAllTypes = FALSE;
 
 
 CGetSetOptions::CGetSetOptions()
@@ -2982,3 +2983,13 @@ void CGetSetOptions::SetSlugifySeparator(CString val)
 	SetProfileString("SlugifySeparator", val);
 }
 
+BOOL CGetSetOptions::GetSupportAllTypes()
+{
+	return GetProfileLong("SupportAllTypes", FALSE);
+}
+
+void CGetSetOptions::SetSupportAllTypes(BOOL val)
+{
+	m_refreshViewAfterPasting = val;
+	SetProfileLong("SupportAllTypes", val);
+}

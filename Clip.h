@@ -1,4 +1,4 @@
-// ProcessCopy.h: classes for saving the clipboard to db
+// Clip.h: classes for manage clips
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -10,6 +10,7 @@
 #endif // _MSC_VER > 1000
 #include <afxole.h>
 #include <afxtempl.h>
+#include <memory>
 #include "tinyxml\tinyxml.h"
 #include "Shared\IClip.h"
 #include "Misc.h"
@@ -27,6 +28,7 @@ class COleDataObjectEx : public COleDataObject
 public:
 	// creates global from IStream if necessary
 	HGLOBAL GetGlobalData(CLIPFORMAT cfFormat, LPFORMATETC lpFormatEtc = NULL);
+	std::shared_ptr<CClipTypes> GetAvailableTypes();
 };
 
 /*----------------------------------------------------------------------------*\

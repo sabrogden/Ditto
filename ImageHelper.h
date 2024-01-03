@@ -46,10 +46,14 @@ public:
 	};
 };
 
-class PNGImageHelper : public ImageHelper<PNGImageHelper, Gdiplus::Bitmap>
+class BitmapImageHelper : public ImageHelper<BitmapImageHelper, Gdiplus::Bitmap>
 {
 public:
 	static void prependStream(IStream* pIStream, LPVOID pvData, ULONG size) {};
+};
+
+class PNGImageHelper : public BitmapImageHelper
+{
 };
 
 class DIBImageHelper : public ImageHelper<DIBImageHelper, Gdiplus::Bitmap>

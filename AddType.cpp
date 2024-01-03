@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "cp_main.h"
+#include "Misc.h"
 #include "AddType.h"
 
 #ifdef _DEBUG
@@ -85,27 +86,9 @@ void CAddType::AddCurrentClipboardTypes()
 void CAddType::AddCommonTypes()
 {
 	m_lbCandidateTypes.ResetContent();
-	m_lbCandidateTypes.AddString(_T("CF_TEXT"));
-	m_lbCandidateTypes.AddString(_T("CF_BITMAP"));
-	m_lbCandidateTypes.AddString(_T("CF_METAFILEPICT"));
-	m_lbCandidateTypes.AddString(_T("CF_SYLK"));
-	m_lbCandidateTypes.AddString(_T("CF_DIF"));
-	m_lbCandidateTypes.AddString(_T("CF_TIFF"));
-	m_lbCandidateTypes.AddString(_T("CF_OEMTEXT"));
-	m_lbCandidateTypes.AddString(_T("CF_DIB"));
-	m_lbCandidateTypes.AddString(_T("CF_PALETTE"));
-	m_lbCandidateTypes.AddString(_T("CF_PENDATA"));
-	m_lbCandidateTypes.AddString(_T("CF_RIFF"));
-	m_lbCandidateTypes.AddString(_T("CF_WAVE"));
-	m_lbCandidateTypes.AddString(_T("CF_UNICODETEXT"));
-	m_lbCandidateTypes.AddString(_T("CF_ENHMETAFILE"));
-	m_lbCandidateTypes.AddString(_T("CF_HDROP"));
-	m_lbCandidateTypes.AddString(_T("CF_LOCALE"));
-	m_lbCandidateTypes.AddString(_T("CF_OWNERDISPLAY"));
-	m_lbCandidateTypes.AddString(_T("CF_DSPTEXT"));
-	m_lbCandidateTypes.AddString(_T("CF_DSPBITMAP"));
-	m_lbCandidateTypes.AddString(_T("CF_DSPMETAFILEPICT"));
-	m_lbCandidateTypes.AddString(_T("CF_DSPENHMETAFILE"));
+	for (auto systemClipFormat : GetSystemClipFormats()) {
+		m_lbCandidateTypes.AddString(GetFormatName(systemClipFormat));
+	}
 	m_lbCandidateTypes.AddString(GetFormatName(RegisterClipboardFormat(CF_RTF)));
 	m_lbCandidateTypes.AddString(GetFormatName(RegisterClipboardFormat(CF_RTFNOOBJS)));
 	m_lbCandidateTypes.AddString(GetFormatName(RegisterClipboardFormat(CF_RETEXTOBJ)));

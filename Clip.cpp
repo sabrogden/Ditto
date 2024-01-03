@@ -20,6 +20,7 @@
 #include <memory>
 
 #include "Path.h"
+#include <set>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -100,6 +101,41 @@ HGLOBAL COleDataObjectEx::GetGlobalData(CLIPFORMAT cfFormat, LPFORMATETC lpForma
 	return hGlobal;
 }
 
+std::shared_ptr<CClipTypes> COleDataObjectEx::GetAvailableTypes()
+{
+	if (!this->AttachClipboard())
+		return NULL;
+
+	std::set<CLIPFORMAT> typeSet;
+
+	FORMATETC format;
+	this->BeginEnumFormats();
+	while (this->GetNextFormat(&format))
+	{
+		typeSet.insert(format.cfFormat);
+	}
+
+	// GetNextFormat has a bug that cannot find avaliable formats correctly. (ex. CF_DIB)
+	// So, recheck about system formats and insert it if available.
+	for (auto systemClipFormat : GetSystemClipFormats())
+	{
+		if (typeSet.count(systemClipFormat) > 0)
+			continue;
+		if (this->IsDataAvailable(systemClipFormat))
+			typeSet.insert(systemClipFormat);
+	}
+
+	this->Release();
+
+	std::shared_ptr<CClipTypes> types = std::make_shared<CClipTypes>();
+	for (auto format : typeSet)
+	{
+		types->Add(format);
+	}
+
+	return types;
+}
+
 /*----------------------------------------------------------------------------*\
 CClipFormat - holds the data of one clip format.
 \*----------------------------------------------------------------------------*/
@@ -139,10 +175,10 @@ Gdiplus::Bitmap *CClipFormat::CreateGdiplusBitmap()
 		return NULL;
 
 	Gdiplus::Bitmap *gdipBitmap;
-	if (this->m_cfType == CF_DIB)
-		gdipBitmap = DIBImageHelper::GdipImageFromHGLOBAL(this->m_hgData);
-	else
+	if (this->m_cfType == theApp.m_PNG_Format)
 		gdipBitmap = PNGImageHelper::GdipImageFromHGLOBAL(this->m_hgData);
+	else
+		gdipBitmap = DIBImageHelper::GdipImageFromHGLOBAL(this->m_hgData);
 
 	return gdipBitmap;
 }
@@ -456,15 +492,13 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 		}
 		else
 		{
-			for (int i = 0; i < 2; i++)
+			for (int tries = 0; tries < 2; tries++)
 			{
 				cf.m_hgData = oleData.GetGlobalData(cf.m_cfType);
 				if (cf.m_hgData != NULL)
-				{
 					break;
-				}
 
-				Log(StrF(_T("Tried to get data for type: %s, data is NULL, try: %d"), GetFormatName(cf.m_cfType), i + 1));
+				Log(StrF(_T("Tried to get data for type: %s, data is NULL, try: %d"), GetFormatName(cf.m_cfType), tries + 1));
 				Sleep(5);
 			}
 		}
@@ -1809,10 +1843,11 @@ BOOL CClip::WriteImageToFile(CString path)
 	if (!bitmap && !png) return false;
 	
 	std::shared_ptr<CImage> i;
-	if (bitmap) 
-		i = DIBImageHelper::CImageFromHGLOBAL(bitmap->m_hgData);
+	// png is more closer to original
+	if (png)
+		i = PNGImageHelper::CImageFromHGLOBAL(png->m_hgData);
 	else
-		i = PNGImageHelper::CImageFromHGLOBAL(bitmap->m_hgData);
+		i = DIBImageHelper::CImageFromHGLOBAL(bitmap->m_hgData);
 
 	return i->Save(path) == S_OK;
 }
@@ -1851,106 +1886,96 @@ bool CClip::AddFileDataToData(CString &errorMessage)
 	{
 		return false;
 	}
+
+	using namespace nsPath;
+
+	HDROP drop = (HDROP)GlobalLock(m_Formats[nCF_HDROPIndex].m_hgData);
+	int nNumFiles = DragQueryFile(drop, -1, NULL, 0);
+
+	TCHAR filePath[MAX_PATH];
+
+	CString newDesc = _T("File Contents - ");
+	int maxSize = CGetSetOptions::GetMaxFileContentsSize();
+	for (int nFile = 0; nFile < nNumFiles; nFile++)
+	{
+		if (DragQueryFile(drop, nFile, filePath, sizeof(filePath)) == 0)
+			continue;
+
+		CFile file;
+		CFileException ex;
+		if (!file.Open(filePath, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone, &ex))
+		{
+			TCHAR szError[200];
+			ex.GetErrorMessage(szError, 200);
+			errorMessage += StrF(_T("Error opening file: %s, Error: %s\r\n"), filePath, szError);
+			continue;
+		}
+
+		int fileSize = (int)file.GetLength();
+		if (fileSize >= maxSize)
+		{
+			const int MAX_FILE_SIZE_BUFFER = 255;
+			TCHAR szFileSize[MAX_FILE_SIZE_BUFFER];
+			TCHAR szMaxFileSize[MAX_FILE_SIZE_BUFFER];
+			StrFormatByteSize(fileSize, szFileSize, MAX_FILE_SIZE_BUFFER);
+			StrFormatByteSize(maxSize, szMaxFileSize, MAX_FILE_SIZE_BUFFER);
+
+			errorMessage += StrF(_T("File is to large: %s, Size: %s, Max Size: %s\r\n"), filePath, szFileSize, szMaxFileSize);
+			continue;
+		}
+
+		CString src(filePath);
+		CStringA csFilePath = CTextConvert::UnicodeToUTF8(src);
+
+		//data contents
+		//original file<null terminator>md5<null terminator>file data
+		int bufferSize = (int)fileSize + csFilePath.GetLength() + 1 + md5StringLength + 1;;
+		char* pBuffer = new char[bufferSize]();
+		strncpy(pBuffer, csFilePath, csFilePath.GetLength());
+
+		//move the buffer start past the file path and md5 string
+		char* bufferStart = pBuffer + csFilePath.GetLength() + 1 + md5StringLength + 1;
+
+		int readBytes = (int)file.Read(bufferStart, fileSize);
+
+		CMd5 md5;
+		CStringA md5String = md5.CalcMD5FromString(bufferStart, fileSize);
+
+		char* bufferMd5 = pBuffer + csFilePath.GetLength() + 1;
+		strncpy(bufferMd5, md5String, md5StringLength);
+
+		AddFormat(theApp.m_DittoFileData, pBuffer, bufferSize);
+
+		addedFileData = true;
+
+		newDesc += filePath;
+		newDesc += _T("\n");
+
+		Log(StrF(_T("Saving file contents to Ditto Database, file: %s, size: %d, md5: %s"), filePath, fileSize, md5String));
+	}
+
+	GlobalUnlock(m_Formats[nCF_HDROPIndex].m_hgData);
+
+	if (!addedFileData)
+		return false;
+
+	for (int i = 0; i < size; i++)
+	{
+		this->m_Formats.RemoveAt(i, 1);
+	}
+
+	this->m_Desc = newDesc;
+
+	if (this->ModifyDescription())
+	{
+		if (this->AddToDataTable() == FALSE)
+		{
+			errorMessage += _T("Error saving data to database.");
+		}
+	}
 	else
 	{
-		using namespace nsPath;
-
-		HDROP drop = (HDROP)GlobalLock(m_Formats[nCF_HDROPIndex].m_hgData);
-		int nNumFiles = DragQueryFile(drop, -1, NULL, 0);
-		
-		TCHAR filePath[MAX_PATH];
-
-		CString newDesc = _T("File Contents - ");
-				
-		for (int nFile = 0; nFile < nNumFiles; nFile++)
-		{
-			if (DragQueryFile(drop, nFile, filePath, sizeof(filePath)) > 0)
-			{
-				CFile file;
-				CFileException ex;
-				if (file.Open(filePath, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone, &ex))
-				{
-					int fileSize = (int)file.GetLength();
-					int maxSize = CGetSetOptions::GetMaxFileContentsSize();
-					if (fileSize < maxSize)
-					{
-						CString src(filePath);
-						CStringA csFilePath = CTextConvert::UnicodeToUTF8(src);
-						
-						int bufferSize = (int)fileSize + csFilePath.GetLength() + 1 + md5StringLength + 1;;
-						char *pBuffer = new char[bufferSize];
-						if (pBuffer != NULL)
-						{
-							//data contents
-							//original file<null terminator>md5<null terminator>file data
-
-							memset(pBuffer, 0, bufferSize);
-							strncpy(pBuffer, csFilePath, csFilePath.GetLength());
-						
-							//move the buffer start past the file path and md5 string
-							char *bufferStart = pBuffer + csFilePath.GetLength() + 1 + md5StringLength + 1;
-
-							int readBytes = (int)file.Read(bufferStart, fileSize);
-
-							CMd5 md5;
-							CStringA md5String = md5.CalcMD5FromString(bufferStart, fileSize);
-
-							char *bufferMd5 = pBuffer + csFilePath.GetLength() + 1;
-							strncpy(bufferMd5, md5String, md5StringLength);
-
-							AddFormat(theApp.m_DittoFileData, pBuffer, bufferSize);
-
-							addedFileData = true;
-
-							newDesc += filePath;
-							newDesc += _T("\n");
-
-							Log(StrF(_T("Saving file contents to Ditto Database, file: %s, size: %d, md5: %s"), filePath, fileSize, md5String));
-						}
-					}
-					else
-					{
-						const int MAX_FILE_SIZE_BUFFER = 255;
-						TCHAR szFileSize[MAX_FILE_SIZE_BUFFER];
-						TCHAR szMaxFileSize[MAX_FILE_SIZE_BUFFER];
-						StrFormatByteSize(fileSize, szFileSize, MAX_FILE_SIZE_BUFFER);
-						StrFormatByteSize(maxSize, szMaxFileSize, MAX_FILE_SIZE_BUFFER);
-
-						errorMessage += StrF(_T("File is to large: %s, Size: %s, Max Size: %s\r\n"), filePath, szFileSize, szMaxFileSize);
-					}
-				}
-				else
-				{
-					TCHAR szError[200];
-					ex.GetErrorMessage(szError, 200);
-					errorMessage += StrF(_T("Error opening file: %s, Error: %s\r\n"), filePath, szError);
-				}
-			}
-		}
-
-		GlobalUnlock(m_Formats[nCF_HDROPIndex].m_hgData);
-
-		if (addedFileData)
-		{
-			for (int i = 0; i < size; i++)
-			{
-				this->m_Formats.RemoveAt(i, 1);
-			}
-
-			this->m_Desc = newDesc;
-
-			if (this->ModifyDescription())
-			{
-				if (this->AddToDataTable() == FALSE)
-				{
-					errorMessage += _T("Error saving data to database.");
-				}
-			}
-			else
-			{
-				errorMessage += _T("Error saving main table to database.");
-			}
-		}
+		errorMessage += _T("Error saving main table to database.");
 	}
 
 	return addedFileData;
