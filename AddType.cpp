@@ -28,7 +28,7 @@ void CAddType::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CAddType)
-	DDX_Control(pDX, IDC_LIST1, m_lbDefaultTypes);
+	DDX_Control(pDX, IDC_LIST1, m_lbCandidateTypes);
 	DDX_Text(pDX, IDC_EDIT1, m_eCustomType);
 	DDV_MaxChars(pDX, m_eCustomType, 50);
 	//}}AFX_DATA_MAP
@@ -54,7 +54,7 @@ BOOL CAddType::OnInitDialog()
 	::CheckDlgButton(m_hWnd, IDC_RADIO_CURRENT_TYPES, BST_CHECKED);
 	OnBnClickedRadioCurrentTypes();
 	
-	m_lbDefaultTypes.SetFocus();
+	m_lbCandidateTypes.SetFocus();
 
 	theApp.m_Language.UpdateOptionSupportedTypesAdd(this);
 	return FALSE;
@@ -62,7 +62,7 @@ BOOL CAddType::OnInitDialog()
 
 void CAddType::AddCurrentClipboardTypes()
 {
-	m_lbDefaultTypes.ResetContent();
+	m_lbCandidateTypes.ResetContent();
 
 	COleDataObject oleData;
 
@@ -76,7 +76,7 @@ void CAddType::AddCurrentClipboardTypes()
 	while (oleData.GetNextFormat(&test))
 	{
 		BOOL b = oleData.IsDataAvailable(test.cfFormat);
-		m_lbDefaultTypes.AddString(GetFormatName(test.cfFormat));
+		m_lbCandidateTypes.AddString(GetFormatName(test.cfFormat));
 	}
 
 	oleData.Release();
@@ -84,32 +84,32 @@ void CAddType::AddCurrentClipboardTypes()
 
 void CAddType::AddCommonTypes()
 {
-	m_lbDefaultTypes.ResetContent();
-	m_lbDefaultTypes.AddString(_T("CF_TEXT"));
-	m_lbDefaultTypes.AddString(_T("CF_BITMAP"));
-	m_lbDefaultTypes.AddString(_T("CF_METAFILEPICT"));
-	m_lbDefaultTypes.AddString(_T("CF_SYLK"));
-	m_lbDefaultTypes.AddString(_T("CF_DIF"));
-	m_lbDefaultTypes.AddString(_T("CF_TIFF"));
-	m_lbDefaultTypes.AddString(_T("CF_OEMTEXT"));
-	m_lbDefaultTypes.AddString(_T("CF_DIB"));
-	m_lbDefaultTypes.AddString(_T("CF_PALETTE"));
-	m_lbDefaultTypes.AddString(_T("CF_PENDATA"));
-	m_lbDefaultTypes.AddString(_T("CF_RIFF"));
-	m_lbDefaultTypes.AddString(_T("CF_WAVE"));
-	m_lbDefaultTypes.AddString(_T("CF_UNICODETEXT"));
-	m_lbDefaultTypes.AddString(_T("CF_ENHMETAFILE"));
-	m_lbDefaultTypes.AddString(_T("CF_HDROP"));
-	m_lbDefaultTypes.AddString(_T("CF_LOCALE"));
-	m_lbDefaultTypes.AddString(_T("CF_OWNERDISPLAY"));
-	m_lbDefaultTypes.AddString(_T("CF_DSPTEXT"));
-	m_lbDefaultTypes.AddString(_T("CF_DSPBITMAP"));
-	m_lbDefaultTypes.AddString(_T("CF_DSPMETAFILEPICT"));
-	m_lbDefaultTypes.AddString(_T("CF_DSPENHMETAFILE"));
-	m_lbDefaultTypes.AddString(GetFormatName(RegisterClipboardFormat(CF_RTF)));
-	m_lbDefaultTypes.AddString(GetFormatName(RegisterClipboardFormat(CF_RTFNOOBJS)));
-	m_lbDefaultTypes.AddString(GetFormatName(RegisterClipboardFormat(CF_RETEXTOBJ)));
-	m_lbDefaultTypes.AddString(GetFormatName(RegisterClipboardFormat(_T("HTML Format"))));
+	m_lbCandidateTypes.ResetContent();
+	m_lbCandidateTypes.AddString(_T("CF_TEXT"));
+	m_lbCandidateTypes.AddString(_T("CF_BITMAP"));
+	m_lbCandidateTypes.AddString(_T("CF_METAFILEPICT"));
+	m_lbCandidateTypes.AddString(_T("CF_SYLK"));
+	m_lbCandidateTypes.AddString(_T("CF_DIF"));
+	m_lbCandidateTypes.AddString(_T("CF_TIFF"));
+	m_lbCandidateTypes.AddString(_T("CF_OEMTEXT"));
+	m_lbCandidateTypes.AddString(_T("CF_DIB"));
+	m_lbCandidateTypes.AddString(_T("CF_PALETTE"));
+	m_lbCandidateTypes.AddString(_T("CF_PENDATA"));
+	m_lbCandidateTypes.AddString(_T("CF_RIFF"));
+	m_lbCandidateTypes.AddString(_T("CF_WAVE"));
+	m_lbCandidateTypes.AddString(_T("CF_UNICODETEXT"));
+	m_lbCandidateTypes.AddString(_T("CF_ENHMETAFILE"));
+	m_lbCandidateTypes.AddString(_T("CF_HDROP"));
+	m_lbCandidateTypes.AddString(_T("CF_LOCALE"));
+	m_lbCandidateTypes.AddString(_T("CF_OWNERDISPLAY"));
+	m_lbCandidateTypes.AddString(_T("CF_DSPTEXT"));
+	m_lbCandidateTypes.AddString(_T("CF_DSPBITMAP"));
+	m_lbCandidateTypes.AddString(_T("CF_DSPMETAFILEPICT"));
+	m_lbCandidateTypes.AddString(_T("CF_DSPENHMETAFILE"));
+	m_lbCandidateTypes.AddString(GetFormatName(RegisterClipboardFormat(CF_RTF)));
+	m_lbCandidateTypes.AddString(GetFormatName(RegisterClipboardFormat(CF_RTFNOOBJS)));
+	m_lbCandidateTypes.AddString(GetFormatName(RegisterClipboardFormat(CF_RETEXTOBJ)));
+	m_lbCandidateTypes.AddString(GetFormatName(RegisterClipboardFormat(_T("HTML Format"))));
 }
 
 void CAddType::OnBnClickedRadioPrimaryTypes()
@@ -117,11 +117,11 @@ void CAddType::OnBnClickedRadioPrimaryTypes()
 	AddCommonTypes();
 	::ShowWindow(::GetDlgItem(m_hWnd, IDC_LIST1), SW_SHOW);
 	::ShowWindow(::GetDlgItem(m_hWnd, IDC_EDIT1), SW_HIDE);
-	m_lbDefaultTypes.SetFocus();
-	if (m_lbDefaultTypes.GetCount() > 0)
+	m_lbCandidateTypes.SetFocus();
+	if (m_lbCandidateTypes.GetCount() > 0)
 	{
-		m_lbDefaultTypes.SetCurSel(0);
-		m_lbDefaultTypes.SetSel(0);
+		m_lbCandidateTypes.SetCurSel(0);
+		m_lbCandidateTypes.SetSel(0);
 	}
 }
 
@@ -130,11 +130,11 @@ void CAddType::OnBnClickedRadioCurrentTypes()
 	AddCurrentClipboardTypes();
 	::ShowWindow(::GetDlgItem(m_hWnd, IDC_LIST1), SW_SHOW);
 	::ShowWindow(::GetDlgItem(m_hWnd, IDC_EDIT1), SW_HIDE);
-	m_lbDefaultTypes.SetFocus();
-	if (m_lbDefaultTypes.GetCount() > 0)
+	m_lbCandidateTypes.SetFocus();
+	if (m_lbCandidateTypes.GetCount() > 0)
 	{
-		m_lbDefaultTypes.SetCurSel(0);
-		m_lbDefaultTypes.SetSel(0);
+		m_lbCandidateTypes.SetCurSel(0);
+		m_lbCandidateTypes.SetSel(0);
 
 	}
 }
@@ -153,17 +153,17 @@ void CAddType::OnBnClickedAdd()
 	if (IsDlgButtonChecked(IDC_RADIO_PRIMARY_TYPES) == BST_CHECKED ||
 		IsDlgButtonChecked(IDC_RADIO_CURRENT_TYPES) == BST_CHECKED)
 	{
-		int nCount = m_lbDefaultTypes.GetSelCount();
+		int nCount = m_lbCandidateTypes.GetSelCount();
 		if (nCount)
 		{
 			CString cs;
 			CArray<int, int> items;
 			items.SetSize(nCount);
-			m_lbDefaultTypes.GetSelItems(nCount, items.GetData());
+			m_lbCandidateTypes.GetSelItems(nCount, items.GetData());
 
 			for (int i = 0; i < nCount; i++)
 			{
-				m_lbDefaultTypes.GetText(items[i], cs);
+				m_lbCandidateTypes.GetText(items[i], cs);
 				m_csSelectedTypes.Add(cs);
 			}
 		}
