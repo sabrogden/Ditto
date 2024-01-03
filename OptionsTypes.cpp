@@ -95,6 +95,7 @@ BOOL COptionsTypes::OnInitDialog()
 			m_List.AddString(_T("CF_HDROP"));
 			m_List.AddString(_T("CF_DIB"));
 			m_List.AddString(GetFormatName(GetFormatID(_T("HTML Format"))));
+			m_List.AddString(GetFormatName(GetFormatID(_T("PNG"))));
 		}
 
 		while(q.eof() == false)

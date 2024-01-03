@@ -1283,56 +1283,49 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 
 			fileClip.WriteTextToFile(file, TRUE, FALSE, FALSE);
 			fileList.AddFile(file);
+			continue;
 		}
-		else
-		{
-			CClipFormat *asciiText = fileClip.m_Formats.FindFormat(CF_TEXT);
-			if (asciiText)
-			{
-				CString name = _T("text");
-				CString file;
-				if (customDragName != _T(""))
-				{
-					name = customDragName;
-					file.Format(_T("%s%s.txt"), path, name);
-				}
-				else
-				{
-					file.Format(_T("%s%s_%d.txt"), path, name, dragId++);
-				}
 
-				fileClip.WriteTextToFile(file, FALSE, TRUE, FALSE);
-				fileList.AddFile(file);
+		CClipFormat *asciiText = fileClip.m_Formats.FindFormat(CF_TEXT);
+		if (asciiText)
+		{
+			CString name = _T("text");
+			CString file;
+			if (customDragName != _T(""))
+			{
+				name = customDragName;
+				file.Format(_T("%s%s.txt"), path, name);
 			}
 			else
 			{
-				CClipFormat *png = NULL;
-				CClipFormat *bitmap = fileClip.m_Formats.FindFormat(CF_DIB);
-				if (bitmap == NULL)
-				{
-					png = fileClip.m_Formats.FindFormat(theApp.m_PNG_Format);
-				}
+				file.Format(_T("%s%s_%d.txt"), path, name, dragId++);
+			}
 
-				if (bitmap != NULL ||
-					png != NULL)
-				{
-					CString name = _T("image");
-					CString file;
-					if (customDragName != _T(""))
-					{
-						name = customDragName;
-						file.Format(_T("%s%s.png"), path, name);
-					}
-					else
-					{
-						file.Format(_T("%s%s_%d.png"), path, name, dragId++);
-					}
+			fileClip.WriteTextToFile(file, FALSE, TRUE, FALSE);
+			fileList.AddFile(file);
+			continue;
+		}
 
-					if (fileClip.WriteImageToFile(file))
-					{
-						fileList.AddFile(file);
-					}
-				}
+		CClipFormat *png = fileClip.m_Formats.FindFormat(theApp.m_PNG_Format);
+		CClipFormat *bitmap = fileClip.m_Formats.FindFormat(CF_DIB);
+		if (bitmap != NULL ||
+			png != NULL)
+		{
+			CString name = _T("image");
+			CString file;
+			if (customDragName != _T(""))
+			{
+				name = customDragName;
+				file.Format(_T("%s%s.png"), path, name);
+			}
+			else
+			{
+				file.Format(_T("%s%s_%d.png"), path, name, dragId++);
+			}
+
+			if (fileClip.WriteImageToFile(file))
+			{
+				fileList.AddFile(file);
 			}
 		}
 	}
