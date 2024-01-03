@@ -6,7 +6,7 @@ clone_folder: c:\projects\ditto
 
 branches:
   only:
-    - appveyor
+    - master
 
 skip_branch_with_pr: false    
     
