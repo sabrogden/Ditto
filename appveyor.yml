@@ -1,4 +1,4 @@
-image: Visual Studio 2019
+image: Visual Studio 2022
 
 version: 3.24.{build}.0
 
@@ -8,8 +8,7 @@ branches:
   only:
     - master
 
-# Do not build feature branch with open Pull Requests
-skip_branch_with_pr: true    
+skip_branch_with_pr: false    
     
 install:
 - set INNO_SETUP_PATH=C:\Program Files (x86)\Inno Setup 6
@@ -21,6 +20,8 @@ environment:
   VERSION_DOT_FILENAME: 3.24.%APPVEYOR_BUILD_NUMBER%.0  
   CHOCO_API_KEY:
     secure: ZeAW38gXYNcJmxTOEGhA1RC5XzmJVvxVM8bsCCARnbYHEDmtQiRZxV4G+/KY4wW9
+  GITHUB_API_KEY:
+    secure: xDmRXGs7zIdLE5NoI6UZQMLUpbK55imdrQKy594A1WHS8ig0pk0DblQr+70/2rrh
 #  APPVEYOR_RDP_PASSWORD: Letmein1!
 
 #init:
@@ -90,20 +91,7 @@ after_build:
   - cd ..
   - cd ..
   - copy DittoSetup\appx\Ditto_%VERSION_FILENAME%.appx DittoSetup\Output\Ditto_%VERSION_FILENAME%.appx
-
-artifacts:
-  - path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
-    name: Ditto Setup
-  - path: DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe
-    name: Ditto Setup 64bit
-  - path: DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip
-    name: Ditto Portable
-  - path: DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip
-    name: Ditto Portable 64bit
-  - path: DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z
-    name: Ditto Debug
-  - path: DittoSetup\output\Ditto_%VERSION_FILENAME%.appx
-    name: Ditto appx
-  - path: DittoSetup\Chocolatey\ditto.%VERSION_DOT_FILENAME%-beta.nupkg
-    name: Ditto Choco
+  
+  - appveyor AddMessage -Category Information "Publishing to GitHub"
+  - npm install ./DittoSetup/GitHubRelease && SET "token=%GITHUB_API_KEY%" && SET "uploadPath=DittoSetup\output\" && SET "tag=%APPVEYOR_BUILD_VERSION%"  && SET "previous_tag=3.24.246.0" && node ./DittoSetup/GitHubRelease/index.js
 
