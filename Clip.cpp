@@ -103,36 +103,25 @@ HGLOBAL COleDataObjectEx::GetGlobalData(CLIPFORMAT cfFormat, LPFORMATETC lpForma
 
 std::shared_ptr<CClipTypes> COleDataObjectEx::GetAvailableTypes()
 {
-	if (!this->AttachClipboard())
-		return NULL;
-
-	std::set<CLIPFORMAT> typeSet;
-
-	FORMATETC format;
-	this->BeginEnumFormats();
-	while (this->GetNextFormat(&format))
-	{
-		typeSet.insert(format.cfFormat);
-	}
-
-	// GetNextFormat has a bug that cannot find avaliable formats correctly. (ex. CF_DIB)
-	// So, recheck about system formats and insert it if available.
-	for (auto systemClipFormat : GetSystemClipFormats())
-	{
-		if (typeSet.count(systemClipFormat) > 0)
-			continue;
-		if (this->IsDataAvailable(systemClipFormat))
-			typeSet.insert(systemClipFormat);
-	}
-
-	this->Release();
-
 	std::shared_ptr<CClipTypes> types = std::make_shared<CClipTypes>();
-	for (auto format : typeSet)
-	{
-		types->Add(format);
-	}
 
+	// GetNextFormat API has a bug that cannot find avaliable formats correctly. (ex. CF_DIB)
+	// So, Use EnumClipboardFormats API.
+	if (!OpenClipboard(theApp.m_MainhWnd))
+		return types;
+
+	int format = EnumClipboardFormats(0);
+	do
+	{
+		format = EnumClipboardFormats(format);
+		// Currently CF_MAX is not valid format
+		// See https://learn.microsoft.com/en-us/windows/win32/dataxchg/standard-clipboard-formats
+		if (format == CF_MAX)
+			continue;
+		types->Add(format);
+	} while (format != 0);
+
+	CloseClipboard();
 	return types;
 }
 
