@@ -19,7 +19,7 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CAddType)
 	enum { IDD = IDD_ADD_TYPE };
-	CListBox	m_lbDefaultTypes;
+	CListBox	m_lbCandidateTypes;
 	CString	m_eCustomType;
 	//}}AFX_DATA
 

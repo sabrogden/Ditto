@@ -141,6 +141,7 @@ END_MESSAGE_MAP()
 #define SETTING_SLUGIFY_SEPARATOR 90
 #define SETTING_FAST_THUMBNAIL_MODE 91
 #define SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY 92
+#define SETTING_SUPPORT_ALL_TYPES 93
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -180,6 +181,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Always show scroll bar"), CGetSetOptions::GetShowScrollBar(), SETTING_ALWAYS_SHOW_SCROLL_BAR);
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Amount of text to save for description"), g_Opt.m_bDescTextSize, _T(""), SETTING_DESC_SIZE));
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Copy and save clipboard delay (ms)"), (long)CGetSetOptions::GetCopyAndSveDelay(), _T(""), SETTING_COPY_SAVE_DELAY));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Clipboard restore delay after copy buffer sent paste (ms, default: 750))"), (long)(CGetSetOptions::GetDittoRestoreClipboardDelay()), _T(""), SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY));
+
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default paste string"), CGetSetOptions::GetDefaultPasteString(), _T(""), SETTING_DEFAULT_PASTE_STRING));
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default copy string"), CGetSetOptions::GetDefaultCopyString(), _T(""), SETTING_DEFAULT_COPY_STRING));
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default cut string"), CGetSetOptions::GetDefaultCutString(), _T(""), SETTING_DEFAULT_CUT_STRING));
@@ -237,8 +240,6 @@ BOOL CAdvGeneral::OnInitDialog()
 
 	AddTrueFalse(pGroupTest, _T("Refresh view after paste"), CGetSetOptions::GetRefreshViewAfterPasting(), SETTING_REFRESH_VIEW_AFTER_PASTE);
 
-	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("clipboard restore after copy buffer sent paste delay (ms, default: 750))"), (long)(CGetSetOptions::GetDittoRestoreClipboardDelay()), _T(""), SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY));
-
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Save clipboard delay (ms, default: 100))"), (long)(CGetSetOptions::GetProcessDrawClipboardDelay()), _T(""), SETTING_CLIPBOARD_SAVE_DELAY));
 
 	AddTrueFalse(pGroupTest, _T("Save multi-pastes"), CGetSetOptions::GetSaveMultiPaste(), SETTING_SAVE_MULTI_PASTE);
@@ -258,9 +259,11 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Show startup tooltip message"), CGetSetOptions::GetShowStartupMessage(), SETTING_SHOW_STARTUP_MESSAGE);
 
 	AddTrueFalse(pGroupTest, _T("Show text for first ten copy hot keys"), CGetSetOptions::GetShowTextForFirstTenHotKeys(), SETTING_TEXT_FIRST_TEN);
-	AddTrueFalse(pGroupTest, _T("Show thumbnails(for CF_DIB types) (could increase memory usage and display speed)"), CGetSetOptions::GetDrawThumbnail(), SETTING_DRAW_THUMBNAILS);
+	AddTrueFalse(pGroupTest, _T("Show thumbnails(for CF_DIB and PNG types) (could increase memory usage and display speed)"), CGetSetOptions::GetDrawThumbnail(), SETTING_DRAW_THUMBNAILS);
 	
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Slugify Separator (default: -)"), CGetSetOptions::GetSlugifySeparator(), _T(""), SETTING_SLUGIFY_SEPARATOR));
+
+	AddTrueFalse(pGroupTest, _T("Support all types ignoring supported type list (default: false))"), CGetSetOptions::GetSupportAllTypes(), SETTING_SUPPORT_ALL_TYPES);
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Text lines per clip"), CGetSetOptions::GetLinesPerRow(), _T(""), SETTING_LINES_PER_ROW));
 
@@ -372,44 +375,28 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_SHOW_TASKBAR_ICON:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetShowIconInSysTray(val);
 				}
 				break;
 			case SETTING_SAVE_MULTI_PASTE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetSaveMultiPaste(val);
 				}
 				break;
 			case SETTING_HIDE_ON_HOTKEY_IF_VISIBLE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetHideDittoOnHotKeyIfAlreadyShown(val);
 				}
 				break;
 			case SETTING_PASTE_IN_ACTIVE_WINDOW:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetSendPasteAfterSelection(val);
 				}
 				break;
@@ -429,11 +416,7 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_ENSURE_CONNECTED:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetEnsureConnectToClipboard(val);
 				}
 				break;
@@ -446,22 +429,14 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_TEXT_FIRST_TEN:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetShowTextForFirstTenHotKeys(val);
 				}
 				break;
 			case SETTING_SHOW_LEADING_WHITESPACE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetDescShowLeadingWhiteSpace(val);
 				}
 				break;
@@ -474,11 +449,7 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_ENABLE_TRANSPARENCY:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetEnableTransparency(val);
 				}
 				break;
@@ -497,132 +468,84 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_DRAW_THUMBNAILS:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetDrawThumbnail(val);
 				}
 				break;
 			case SETTING_FAST_THUMBNAIL_MODE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetFastThumbnailMode(val);
 				}
 				break;
 			case SETTING_DRAW_RTF:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetDrawRTF(val);
 				}
 				break;
 			case SETTING_FIND_AS_TYPE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetFindAsYouType(val);
 				}
 				break;
 			case SETTING_ENSURE_WINDOW_IS_VISIBLE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetEnsureEntireWindowCanBeSeen(val);
 				}
 				break;
 			case SETTING_SHOW_GROUP_CLIPS_IN_LIST:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetShowAllClipsInMainList(val);
 				}
 				break;
 			case SETTING_PROMPT_ON_DELETE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetPromptWhenDeletingClips(val);
 				}
 				break;
 			case SETTING_ALWAYS_SHOW_SCROLL_BAR:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetShowScrollBar(val);
 				}
 				break;
 			case SETTING_PASTE_AS_ADMIN:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetPasteAsAdmin(val);
 				}
 				break;
 			case SETTTING_SHOW_IN_TASKBAR:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetShowInTaskBar(val);
 				}
 				break;
 			case SETTING_SHOW_CLIP_PASTED:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetShowIfClipWasPasted(val);
 				}
 				break;
 			case SETTING_SHOW_MSG_WHEN_RECEIVING_MANUAL_SENT_CLIP:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetShowMsgWhenReceivingManualSentClip(val);
 				}
 				break;
@@ -635,55 +558,35 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_UPDATE_ORDER_ON_PASTE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetUpdateTimeOnPaste(val);
 				}
 				break;
 			case SETTING_UPDATE_ORDER_ON_CTRL_C:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetUpdateClipOrderOnCtrlC(val);
 				}
 				break;
 			case SETTING_MULTIPASTE_REVERSE_ORDER:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetMultiPasteReverse(val);
 				}
 				break;
 			case SETTING_ALLOW_DUPLICATES:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetAllowDuplicates(val);
 				}
 				break;
 			case SETTING_ALOW_BACK_TO_BACK_DUPLICATES:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetAllowBackToBackDuplicates(val);
 				}
 				break;
@@ -731,11 +634,7 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_SHOW_STARTUP_MESSAGE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetShowStartupMessage(val);
 				}
 				break;
@@ -788,11 +687,7 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_REVERT_TO_TOP_LEVEL_GROUP:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetRevertToTopLevelGroup(val);
 				}
 				break;
@@ -835,11 +730,7 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_OPEN_TO_GROUP_AS_ACTIVE_EXE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetOpenToGroupByActiveExe(val);
 				}
 				break;
@@ -847,11 +738,7 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_ADD_CF_HDROP_ON_DRAG:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetAddCFHDROP_OnDrag(val);
 				}
 				break;
@@ -870,22 +757,14 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_MOVE_SELECTION_ON_OPEN_HOTKEY:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetMoveSelectionOnOpenHotkey(val);
 				}
 				break;
 			case SETTING_MAINTAIN_SEARCH_VIEW:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetMaintainSearchView(val);
 				}
 				break;
@@ -898,22 +777,14 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_DEBUG_TO_FILE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetEnableDebugLogging(val);
 				}
 				break;
 			case SETTING_DEBUG_TO_OUTPUT_STRING:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetEnableOutputDebugStringLogging(val);
 				}
 				break;
@@ -926,11 +797,7 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_DISABLE_FRIENDS:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = true;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = false;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetAllowFriends(val);
 				}
 				break;
@@ -943,14 +810,18 @@ void CAdvGeneral::OnBnClickedOk()
 			case SETTING_REFRESH_VIEW_AFTER_PASTE:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
-					BOOL val = false;
-					if (wcscmp(pNewValue->bstrVal, L"True") == 0)
-					{
-						val = true;
-					}
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetRefreshViewAfterPasting(val);
 				}
 				break;
+			case SETTING_SUPPORT_ALL_TYPES:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
+					CGetSetOptions::SetSupportAllTypes(val);
+				}
+				break;
+
 			}
 		}
 	}

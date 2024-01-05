@@ -1,4 +1,4 @@
-// ProcessCopy.cpp: implementation of the CProcessCopy class.
+// Clip.cpp: implementations of the Clip interfaces
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -14,10 +14,13 @@
 #include "Md5.h"
 #include "ChaiScriptOnCopy.h"
 #include "DittoChaiScript.h"
+#include "ImageHelper.h"
 
 #include <Mmsystem.h>
+#include <memory>
 
 #include "Path.h"
+#include <set>
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -98,6 +101,30 @@ HGLOBAL COleDataObjectEx::GetGlobalData(CLIPFORMAT cfFormat, LPFORMATETC lpForma
 	return hGlobal;
 }
 
+std::shared_ptr<CClipTypes> COleDataObjectEx::GetAvailableTypes()
+{
+	std::shared_ptr<CClipTypes> types = std::make_shared<CClipTypes>();
+
+	// GetNextFormat API has a bug that cannot find avaliable formats correctly. (ex. CF_DIB)
+	// So, Use EnumClipboardFormats API.
+	if (!OpenClipboard(theApp.m_MainhWnd))
+		return types;
+
+	int format = 0;
+	do
+	{
+		format = EnumClipboardFormats(format);
+		// Currently CF_MAX is not valid format
+		// See https://learn.microsoft.com/en-us/windows/win32/dataxchg/standard-clipboard-formats
+		if (format == 0 || format == CF_MAX)
+			continue;
+		types->Add(format);
+	} while (format != 0);
+
+	CloseClipboard();
+	return types;
+}
+
 /*----------------------------------------------------------------------------*\
 CClipFormat - holds the data of one clip format.
 \*----------------------------------------------------------------------------*/
@@ -124,67 +151,26 @@ void CClipFormat::Clear()
 
 void CClipFormat::Free()
 {
-	if(m_autoDeleteData)
+	if(m_autoDeleteData && m_hgData)
 	{
-		if(m_hgData)
-		{
-			m_hgData = ::GlobalFree( m_hgData );
-			m_hgData = NULL;
-		}
+		m_hgData = ::GlobalFree( m_hgData );
+		m_hgData = NULL;
 	}
 }
 
 Gdiplus::Bitmap *CClipFormat::CreateGdiplusBitmap()
 {
-	Gdiplus::Bitmap *gdipBitmap = NULL;
-	IStream* pIStream = NULL;
+	if (this->m_cfType != CF_DIB && this->m_cfType == theApp.m_PNG_Format)
+		return NULL;
 
-	if (CreateStreamOnHGlobal(NULL, TRUE, (LPSTREAM*)&pIStream) == S_OK)
-	{
-		if (this->m_cfType == CF_DIB)
-		{
-			LPVOID pvData = GlobalLock(this->m_hgData);
-			ULONG size = (ULONG)GlobalSize(this->m_hgData);
-
-			BITMAPINFO *lpBI = (BITMAPINFO *)pvData;
-
-			int nPaletteEntries = 1 << lpBI->bmiHeader.biBitCount;
-			if (lpBI->bmiHeader.biBitCount > 8)
-				nPaletteEntries = 0;
-			else if (lpBI->bmiHeader.biClrUsed != 0)
-				nPaletteEntries = lpBI->bmiHeader.biClrUsed;
-
-			BITMAPFILEHEADER BFH;
-			memset(&BFH, 0, sizeof(BITMAPFILEHEADER));
-			BFH.bfType = 'MB';
-			BFH.bfSize = sizeof(BITMAPFILEHEADER) + size;
-			BFH.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + nPaletteEntries * sizeof(RGBQUAD);
-
-			pIStream->Write(&BFH, sizeof(BITMAPFILEHEADER), NULL);
-			pIStream->Write(pvData, size, NULL);
-
-			GlobalUnlock(this->m_hgData);
-
-			gdipBitmap = Gdiplus::Bitmap::FromStream(pIStream);
-		}
-		else if (this->m_cfType == theApp.m_PNG_Format)
-		{
-			LPVOID pvData = GlobalLock(this->m_hgData);
-			ULONG size = (ULONG)GlobalSize(this->m_hgData);
-			pIStream->Write(pvData, size, NULL);
-
-			GlobalUnlock(this->m_hgData);
-
-			gdipBitmap = Gdiplus::Bitmap::FromStream(pIStream);
-		}
-
-		pIStream->Release();
-	}
+	Gdiplus::Bitmap *gdipBitmap;
+	if (this->m_cfType == theApp.m_PNG_Format)
+		gdipBitmap = PNGImageHelper::GdipImageFromHGLOBAL(this->m_hgData);
+	else
+		gdipBitmap = DIBImageHelper::GdipImageFromHGLOBAL(this->m_hgData);
 
 	return gdipBitmap;
 }
-
-
 
 /*----------------------------------------------------------------------------*\
 CClipFormats - holds an array of CClipFormat
@@ -362,8 +348,14 @@ bool CClip::AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen, bool setDesc)
 // Fills this CClip with the contents of the clipboard.
 int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, CString activeApp, CString activeAppTitle)
 {
+	if(pClipTypes == NULL || pClipTypes->GetSize() == 0)
+	{
+		ASSERT(0); // this feature is not currently used... it is an error if it is.
+		Log(_T("no types were given to accept, skipping this clipboard change"));
+		return FALSE;
+	}
+
 	COleDataObjectEx oleData;
-	CClipTypes defaultTypes;
 	CClipTypes* pTypes = pClipTypes;
 
 	// m_Formats should be empty when this is called.
@@ -394,18 +386,6 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 	
 	oleData.EnsureClipboardObject();
 	
-	// if no types were given, get only the first (most important) type.
-	//  (subsequent types could be synthetic due to automatic type conversions)
-	if(pTypes == NULL || pTypes->GetSize() == 0)
-	{
-		ASSERT(0); // this feature is not currently used... it is an error if it is.
-		
-		FORMATETC formatEtc;
-		oleData.BeginEnumFormats();
-		oleData.GetNextFormat(&formatEtc);
-		defaultTypes.Add(formatEtc.cfFormat);
-		pTypes = &defaultTypes;
-	}
 	
 	m_Desc = "[Ditto Error] BAD DESCRIPTION";
 	
@@ -495,15 +475,13 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 		}
 		else
 		{
-			for (int i = 0; i < 2; i++)
+			for (int tries = 0; tries < 2; tries++)
 			{
 				cf.m_hgData = oleData.GetGlobalData(cf.m_cfType);
 				if (cf.m_hgData != NULL)
-				{
 					break;
-				}
 
-				Log(StrF(_T("Tried to get data for type: %s, data is NULL, try: %d"), GetFormatName(cf.m_cfType), i + 1));
+				Log(StrF(_T("Tried to get data for type: %s, data is NULL, try: %d"), GetFormatName(cf.m_cfType), tries + 1));
 				Sleep(5);
 			}
 		}
@@ -1843,76 +1821,18 @@ BOOL CClip::WriteTextToHtmlFile(CString path)
 
 BOOL CClip::WriteImageToFile(CString path)
 {
-	BOOL ret = false;
-
 	CClipFormat *bitmap = this->m_Formats.FindFormat(CF_DIB);
-	if (bitmap)
-	{
-		LPVOID pvData = GlobalLock(bitmap->m_hgData);
-		ULONG size = (ULONG)GlobalSize(bitmap->m_hgData);
-
-		BITMAPINFO *lpBI = (BITMAPINFO *)pvData;
-
-		int nPaletteEntries = 1 << lpBI->bmiHeader.biBitCount;
-		if (lpBI->bmiHeader.biBitCount > 8)
-			nPaletteEntries = 0;
-		else if (lpBI->bmiHeader.biClrUsed != 0)
-			nPaletteEntries = lpBI->bmiHeader.biClrUsed;
-
-		BITMAPFILEHEADER BFH;
-		memset(&BFH, 0, sizeof(BITMAPFILEHEADER));
-		BFH.bfType = 'MB';
-		BFH.bfSize = sizeof(BITMAPFILEHEADER) + size;
-		BFH.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + nPaletteEntries * sizeof(RGBQUAD);
-
-		// Create stream with 0 size
-		IStream* pIStream = NULL;
-		if (CreateStreamOnHGlobal(NULL, TRUE, (LPSTREAM*)&pIStream) == S_OK)
-		{
-
-			//write the file to the stream object
-			pIStream->Write(&BFH, sizeof(BITMAPFILEHEADER), NULL);
-			pIStream->Write(pvData, size, NULL);
-
-			CImage i;
-			i.Load(pIStream);
-
-			if (i.Save(path) == S_OK)
-			{
-				ret = true;
-			}
-
-			pIStream->Release();
-		}
-	}
+	CClipFormat *png = this->m_Formats.FindFormat(theApp.m_PNG_Format);
+	if (!bitmap && !png) return false;
+	
+	std::shared_ptr<CImage> i;
+	// png is more closer to original
+	if (png)
+		i = PNGImageHelper::CImageFromHGLOBAL(png->m_hgData);
 	else
-	{
-		CClipFormat *png = this->m_Formats.FindFormat(theApp.m_PNG_Format);
-		if (png)
-		{
-			IStream* pIStream = NULL;
-			if (CreateStreamOnHGlobal(NULL, TRUE, (LPSTREAM*)&pIStream) == S_OK)
-			{
-				LPVOID pvData = GlobalLock(png->m_hgData);
-				ULONG size = (ULONG)GlobalSize(png->m_hgData);
+		i = DIBImageHelper::CImageFromHGLOBAL(bitmap->m_hgData);
 
-				pIStream->Write(pvData, size, NULL);
-
-				GlobalUnlock(png->m_hgData);
-
-				CImage i;
-				i.Load(pIStream);
-
-				if (i.Save(path) == S_OK)
-				{
-					ret = true;
-				}
-
-				pIStream->Release();
-			}
-		}
-	}
-	return ret;
+	return i->Save(path) == S_OK;
 }
 
 bool CClip::AddFileDataToData(CString &errorMessage)
@@ -1949,106 +1869,96 @@ bool CClip::AddFileDataToData(CString &errorMessage)
 	{
 		return false;
 	}
+
+	using namespace nsPath;
+
+	HDROP drop = (HDROP)GlobalLock(m_Formats[nCF_HDROPIndex].m_hgData);
+	int nNumFiles = DragQueryFile(drop, -1, NULL, 0);
+
+	TCHAR filePath[MAX_PATH];
+
+	CString newDesc = _T("File Contents - ");
+	int maxSize = CGetSetOptions::GetMaxFileContentsSize();
+	for (int nFile = 0; nFile < nNumFiles; nFile++)
+	{
+		if (DragQueryFile(drop, nFile, filePath, sizeof(filePath)) == 0)
+			continue;
+
+		CFile file;
+		CFileException ex;
+		if (!file.Open(filePath, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone, &ex))
+		{
+			TCHAR szError[200];
+			ex.GetErrorMessage(szError, 200);
+			errorMessage += StrF(_T("Error opening file: %s, Error: %s\r\n"), filePath, szError);
+			continue;
+		}
+
+		int fileSize = (int)file.GetLength();
+		if (fileSize >= maxSize)
+		{
+			const int MAX_FILE_SIZE_BUFFER = 255;
+			TCHAR szFileSize[MAX_FILE_SIZE_BUFFER];
+			TCHAR szMaxFileSize[MAX_FILE_SIZE_BUFFER];
+			StrFormatByteSize(fileSize, szFileSize, MAX_FILE_SIZE_BUFFER);
+			StrFormatByteSize(maxSize, szMaxFileSize, MAX_FILE_SIZE_BUFFER);
+
+			errorMessage += StrF(_T("File is to large: %s, Size: %s, Max Size: %s\r\n"), filePath, szFileSize, szMaxFileSize);
+			continue;
+		}
+
+		CString src(filePath);
+		CStringA csFilePath = CTextConvert::UnicodeToUTF8(src);
+
+		//data contents
+		//original file<null terminator>md5<null terminator>file data
+		int bufferSize = (int)fileSize + csFilePath.GetLength() + 1 + md5StringLength + 1;;
+		char* pBuffer = new char[bufferSize]();
+		strncpy(pBuffer, csFilePath, csFilePath.GetLength());
+
+		//move the buffer start past the file path and md5 string
+		char* bufferStart = pBuffer + csFilePath.GetLength() + 1 + md5StringLength + 1;
+
+		int readBytes = (int)file.Read(bufferStart, fileSize);
+
+		CMd5 md5;
+		CStringA md5String = md5.CalcMD5FromString(bufferStart, fileSize);
+
+		char* bufferMd5 = pBuffer + csFilePath.GetLength() + 1;
+		strncpy(bufferMd5, md5String, md5StringLength);
+
+		AddFormat(theApp.m_DittoFileData, pBuffer, bufferSize);
+
+		addedFileData = true;
+
+		newDesc += filePath;
+		newDesc += _T("\n");
+
+		Log(StrF(_T("Saving file contents to Ditto Database, file: %s, size: %d, md5: %s"), filePath, fileSize, md5String));
+	}
+
+	GlobalUnlock(m_Formats[nCF_HDROPIndex].m_hgData);
+
+	if (!addedFileData)
+		return false;
+
+	for (int i = 0; i < size; i++)
+	{
+		this->m_Formats.RemoveAt(i, 1);
+	}
+
+	this->m_Desc = newDesc;
+
+	if (this->ModifyDescription())
+	{
+		if (this->AddToDataTable() == FALSE)
+		{
+			errorMessage += _T("Error saving data to database.");
+		}
+	}
 	else
 	{
-		using namespace nsPath;
-
-		HDROP drop = (HDROP)GlobalLock(m_Formats[nCF_HDROPIndex].m_hgData);
-		int nNumFiles = DragQueryFile(drop, -1, NULL, 0);
-		
-		TCHAR filePath[MAX_PATH];
-
-		CString newDesc = _T("File Contents - ");
-				
-		for (int nFile = 0; nFile < nNumFiles; nFile++)
-		{
-			if (DragQueryFile(drop, nFile, filePath, sizeof(filePath)) > 0)
-			{
-				CFile file;
-				CFileException ex;
-				if (file.Open(filePath, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone, &ex))
-				{
-					int fileSize = (int)file.GetLength();
-					int maxSize = CGetSetOptions::GetMaxFileContentsSize();
-					if (fileSize < maxSize)
-					{
-						CString src(filePath);
-						CStringA csFilePath = CTextConvert::UnicodeToUTF8(src);
-						
-						int bufferSize = (int)fileSize + csFilePath.GetLength() + 1 + md5StringLength + 1;;
-						char *pBuffer = new char[bufferSize];
-						if (pBuffer != NULL)
-						{
-							//data contents
-							//original file<null terminator>md5<null terminator>file data
-
-							memset(pBuffer, 0, bufferSize);
-							strncpy(pBuffer, csFilePath, csFilePath.GetLength());
-						
-							//move the buffer start past the file path and md5 string
-							char *bufferStart = pBuffer + csFilePath.GetLength() + 1 + md5StringLength + 1;
-
-							int readBytes = (int)file.Read(bufferStart, fileSize);
-
-							CMd5 md5;
-							CStringA md5String = md5.CalcMD5FromString(bufferStart, fileSize);
-
-							char *bufferMd5 = pBuffer + csFilePath.GetLength() + 1;
-							strncpy(bufferMd5, md5String, md5StringLength);
-
-							AddFormat(theApp.m_DittoFileData, pBuffer, bufferSize);
-
-							addedFileData = true;
-
-							newDesc += filePath;
-							newDesc += _T("\n");
-
-							Log(StrF(_T("Saving file contents to Ditto Database, file: %s, size: %d, md5: %s"), filePath, fileSize, md5String));
-						}
-					}
-					else
-					{
-						const int MAX_FILE_SIZE_BUFFER = 255;
-						TCHAR szFileSize[MAX_FILE_SIZE_BUFFER];
-						TCHAR szMaxFileSize[MAX_FILE_SIZE_BUFFER];
-						StrFormatByteSize(fileSize, szFileSize, MAX_FILE_SIZE_BUFFER);
-						StrFormatByteSize(maxSize, szMaxFileSize, MAX_FILE_SIZE_BUFFER);
-
-						errorMessage += StrF(_T("File is to large: %s, Size: %s, Max Size: %s\r\n"), filePath, szFileSize, szMaxFileSize);
-					}
-				}
-				else
-				{
-					TCHAR szError[200];
-					ex.GetErrorMessage(szError, 200);
-					errorMessage += StrF(_T("Error opening file: %s, Error: %s\r\n"), filePath, szError);
-				}
-			}
-		}
-
-		GlobalUnlock(m_Formats[nCF_HDROPIndex].m_hgData);
-
-		if (addedFileData)
-		{
-			for (int i = 0; i < size; i++)
-			{
-				this->m_Formats.RemoveAt(i, 1);
-			}
-
-			this->m_Desc = newDesc;
-
-			if (this->ModifyDescription())
-			{
-				if (this->AddToDataTable() == FALSE)
-				{
-					errorMessage += _T("Error saving data to database.");
-				}
-			}
-			else
-			{
-				errorMessage += _T("Error saving main table to database.");
-			}
-		}
+		errorMessage += _T("Error saving main table to database.");
 	}
 
 	return addedFileData;
@@ -2056,23 +1966,13 @@ bool CClip::AddFileDataToData(CString &errorMessage)
 
 Gdiplus::Bitmap *CClip::CreateGdiplusBitmap()
 {
-	Gdiplus::Bitmap *gdipBitmap = NULL;
-
 	CClipFormat *png = this->m_Formats.FindFormat(GetFormatID(_T("PNG")));
 	if (png != NULL)
-	{
-		gdipBitmap = png->CreateGdiplusBitmap();
-	}
-	else
-	{
-		CClipFormat *dib = this->m_Formats.FindFormat(CF_DIB);
-		if (dib != NULL)
-		{
-			gdipBitmap = dib->CreateGdiplusBitmap();
-		}
-	}
+		return png->CreateGdiplusBitmap();
 
-	return gdipBitmap;
+	CClipFormat *dib = this->m_Formats.FindFormat(CF_DIB);
+	if (dib != NULL)
+		return dib->CreateGdiplusBitmap();
 }
 
 /*----------------------------------------------------------------------------*\

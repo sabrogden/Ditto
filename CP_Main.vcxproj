@@ -759,6 +759,7 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <ClCompile Include="ICU_String.cpp" />
+    <ClCompile Include="ImageHelper.cpp" />
     <ClCompile Include="NoDbFrameWnd.cpp" />
     <ClCompile Include="CopyProperties.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
@@ -2905,6 +2906,7 @@
     <ClInclude Include="ClipCompare.h" />
     <ClInclude Include="ClipFormatQListCtrl.h" />
     <ClInclude Include="ICU_String.h" />
+    <ClInclude Include="ImageHelper.h" />
     <ClInclude Include="NoDbFrameWnd.h" />
     <ClInclude Include="CreateQRCodeImage.h" />
     <ClInclude Include="CustomFriendsHelper.h" />

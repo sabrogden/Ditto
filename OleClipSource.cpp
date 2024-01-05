@@ -913,58 +913,58 @@ void COleClipSource::SaveDittoFileDataToFile(CClip &clip)
 		if (pCF->m_cfType == theApp.m_DittoFileData)
 		{
 			IClipFormat *dittoFileData = &clip.m_Formats.ElementAt(i);
-			if (dittoFileData != NULL)
+			if (dittoFileData == NULL) 
+				continue;
+
+			HGLOBAL data = dittoFileData->Data();
+			char * stringData = (char *)GlobalLock(data);
+
+			//original source is store in the first string ending in the null terminator
+			CStringA src(stringData);
+			stringData += src.GetLength() + 1;
+
+			CStringA originalMd5(stringData);
+			stringData += originalMd5.GetLength() + 1;
+
+			int dataSize = (int)GlobalSize(data) - (src.GetLength() + 1) - (originalMd5.GetLength() + 1);
+
+			CMd5 calcMd5;
+			CStringA md5String = calcMd5.CalcMD5FromString(stringData, dataSize);
+
+			CString unicodeFilePath = CTextConvert::Utf8ToUnicode(src);
+
+			CString unicodeMd5 = CTextConvert::Utf8ToUnicode(md5String);
+
+			Log(StrF(_T("Saving file contents from Ditto, original file: %s, size: %d, md5: %s"), unicodeFilePath, dataSize, unicodeMd5));
+
+			if (md5String != originalMd5)
 			{
-				HGLOBAL data = dittoFileData->Data();
-				char * stringData = (char *)GlobalLock(data);
-
-				//original source is store in the first string ending in the null terminator
-				CStringA src(stringData);
-				stringData += src.GetLength() + 1;
-
-				CStringA originalMd5(stringData);
-				stringData += originalMd5.GetLength() + 1;
-
-				int dataSize = (int)GlobalSize(data) - (src.GetLength() + 1) - (originalMd5.GetLength() + 1);
-
-				CMd5 calcMd5;
-				CStringA md5String = calcMd5.CalcMD5FromString(stringData, dataSize);
-
-				CString unicodeFilePath = CTextConvert::Utf8ToUnicode(src);
-
-				CString unicodeMd5 = CTextConvert::Utf8ToUnicode(md5String);
-
-				Log(StrF(_T("Saving file contents from Ditto, original file: %s, size: %d, md5: %s"), unicodeFilePath, dataSize, unicodeMd5));
-
-				if (md5String == originalMd5)
-				{
-					using namespace nsPath;
-					CPath path(unicodeFilePath);
-					CString fileName = path.GetName();
-
-					CString newFilePath = CGetSetOptions::GetPath(PATH_DRAG_FILES);
-					newFilePath += fileName;
-
-					CFile f;
-					if (f.Open(newFilePath, CFile::modeWrite | CFile::modeCreate))
-					{
-						f.Write(stringData, dataSize);
-
-						f.Close();
-
-						savedFile = true;
-						hDrpData.AddFile(newFilePath);
-					}
-					else
-					{
-						Log(StrF(_T("Error saving file: %s"), unicodeFilePath));
-					}
-				}
-				else
-				{
-					Log(StrF(_T("MD5 ERROR, file: %s, original md5: %s, calc md5: %s"), unicodeFilePath, originalMd5, md5String));
-				}
+				Log(StrF(_T("MD5 ERROR, file: %s, original md5: %s, calc md5: %s"), unicodeFilePath, originalMd5, md5String));
+				continue;
 			}
+
+			using namespace nsPath;
+			CPath path(unicodeFilePath);
+			CString fileName = path.GetName();
+
+			CString newFilePath = CGetSetOptions::GetPath(PATH_DRAG_FILES);
+			newFilePath += fileName;
+
+			CFile f;
+			if (f.Open(newFilePath, CFile::modeWrite | CFile::modeCreate))
+			{
+				f.Write(stringData, dataSize);
+
+				f.Close();
+
+				savedFile = true;
+				hDrpData.AddFile(newFilePath);
+			}
+			else
+			{
+				Log(StrF(_T("Error saving file: %s"), unicodeFilePath));
+			}
+
 		}
 		else if (pCF->m_cfType == CF_HDROP)
 		{
@@ -1283,56 +1283,49 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 
 			fileClip.WriteTextToFile(file, TRUE, FALSE, FALSE);
 			fileList.AddFile(file);
+			continue;
 		}
-		else
-		{
-			CClipFormat *asciiText = fileClip.m_Formats.FindFormat(CF_TEXT);
-			if (asciiText)
-			{
-				CString name = _T("text");
-				CString file;
-				if (customDragName != _T(""))
-				{
-					name = customDragName;
-					file.Format(_T("%s%s.txt"), path, name);
-				}
-				else
-				{
-					file.Format(_T("%s%s_%d.txt"), path, name, dragId++);
-				}
 
-				fileClip.WriteTextToFile(file, FALSE, TRUE, FALSE);
-				fileList.AddFile(file);
+		CClipFormat *asciiText = fileClip.m_Formats.FindFormat(CF_TEXT);
+		if (asciiText)
+		{
+			CString name = _T("text");
+			CString file;
+			if (customDragName != _T(""))
+			{
+				name = customDragName;
+				file.Format(_T("%s%s.txt"), path, name);
 			}
 			else
 			{
-				CClipFormat *png = NULL;
-				CClipFormat *bitmap = fileClip.m_Formats.FindFormat(CF_DIB);
-				if (bitmap == NULL)
-				{
-					png = fileClip.m_Formats.FindFormat(theApp.m_PNG_Format);
-				}
+				file.Format(_T("%s%s_%d.txt"), path, name, dragId++);
+			}
 
-				if (bitmap != NULL ||
-					png != NULL)
-				{
-					CString name = _T("image");
-					CString file;
-					if (customDragName != _T(""))
-					{
-						name = customDragName;
-						file.Format(_T("%s%s.png"), path, name);
-					}
-					else
-					{
-						file.Format(_T("%s%s_%d.png"), path, name, dragId++);
-					}
+			fileClip.WriteTextToFile(file, FALSE, TRUE, FALSE);
+			fileList.AddFile(file);
+			continue;
+		}
 
-					if (fileClip.WriteImageToFile(file))
-					{
-						fileList.AddFile(file);
-					}
-				}
+		CClipFormat *png = fileClip.m_Formats.FindFormat(theApp.m_PNG_Format);
+		CClipFormat *bitmap = fileClip.m_Formats.FindFormat(CF_DIB);
+		if (bitmap != NULL ||
+			png != NULL)
+		{
+			CString name = _T("image");
+			CString file;
+			if (customDragName != _T(""))
+			{
+				name = customDragName;
+				file.Format(_T("%s%s.png"), path, name);
+			}
+			else
+			{
+				file.Format(_T("%s%s_%d.png"), path, name, dragId++);
+			}
+
+			if (fileClip.WriteImageToFile(file))
+			{
+				fileList.AddFile(file);
 			}
 		}
 	}

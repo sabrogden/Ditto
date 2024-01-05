@@ -676,6 +676,10 @@ public:
 
 	static CString GetSlugifySeparator();
 	static void SetSlugifySeparator(CString val);
+
+	static BOOL m_supportAllTypes;
+	static BOOL GetSupportAllTypes();
+	static void SetSupportAllTypes(BOOL val);
 };
 
 // global for easy access and for initialization of fast access variables

@@ -471,6 +471,7 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="ImageFormatAggregator.cpp" />
+    <ClCompile Include="ImageHelper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
@@ -979,6 +980,7 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="ImageFormatAggregator.h" />
+    <ClInclude Include="ImageHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">

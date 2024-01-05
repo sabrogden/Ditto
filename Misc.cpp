@@ -10,6 +10,7 @@
 #include <sys/stat.h> 
 #include "Path.h"
 #include <regex>
+#include <vector>
 
 CString GetIPAddress()
 {
@@ -383,6 +384,35 @@ int CompareGlobalHH( HGLOBAL hLeft, HGLOBAL hRight, SIZE_T ulBufLen)
 	return result;
 }
 
+// https://learn.microsoft.com/en-us/windows/win32/dataxchg/standard-clipboard-formats
+std::vector<CLIPFORMAT> GetSystemClipFormats()
+{
+	std::vector<CLIPFORMAT> v = {
+		CF_TEXT,
+		CF_BITMAP,
+		CF_METAFILEPICT,
+		CF_SYLK,
+		CF_DIF,
+		CF_TIFF,
+		CF_OEMTEXT,
+		CF_DIB,
+		CF_PALETTE,
+		CF_PENDATA,
+		CF_RIFF,
+		CF_WAVE,
+		CF_UNICODETEXT,
+		CF_ENHMETAFILE,
+		CF_HDROP,
+		CF_LOCALE,
+		CF_OWNERDISPLAY,
+		CF_DSPTEXT,
+		CF_DSPBITMAP,
+		CF_DSPMETAFILEPICT,
+		CF_DSPENHMETAFILE
+	};
+
+	return v;
+}
 
 //Do not change these these are stored in the database
 CLIPFORMAT GetFormatID(LPCTSTR cbName)

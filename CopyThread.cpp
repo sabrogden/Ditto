@@ -70,40 +70,20 @@ void CCopyThread::OnClipboardChange(CString activeWindow, CString activeWindowTi
 	CClip* pClip = new CClip;
 	pClip->m_copyReason = theApp.GetCopyReason();
 
+	COleDataObjectEx oleData;
+	std::shared_ptr<CClipTypes> availableTypes = oleData.GetAvailableTypes();
 	CClipTypes* pSupportedTypes = m_LocalConfig.m_pSupportedTypes;
-	bool bDeleteMemory = false;
 
 	//If we are copying from a Ditto Buffer then save all to the database, so when we paste this it will paste 
 	//just like you were using Ctrl-V
 	if(theApp.m_CopyBuffer.Active())
 	{
 		Log(_T("LoadFromClipboard - Copy buffer Active Start"));
-
-		pSupportedTypes = new CClipTypes;
-		if(pSupportedTypes)
-		{
-			bDeleteMemory = true;
-			COleDataObject oleData;
-
-			if(oleData.AttachClipboard())
-			{
-				oleData.BeginEnumFormats();
-
-				FORMATETC format;
-				while(oleData.GetNextFormat(&format))
-				{
-					pSupportedTypes->Add(format.cfFormat);
-				}
-
-				oleData.Release();
-			}
-		}
-		else
-		{
-			pSupportedTypes = m_LocalConfig.m_pSupportedTypes;
-		}
-
+		pSupportedTypes = availableTypes.get();
 		Log(_T("LoadFromClipboard - Copy buffer Active End"));
+	}
+	else if (CGetSetOptions::GetSupportAllTypes()) {
+		pSupportedTypes = availableTypes.get();
 	}
 
 	Log(_T("LoadFromClipboard - Before"));
@@ -128,11 +108,7 @@ void CCopyThread::OnClipboardChange(CString activeWindow, CString activeWindowTi
 		}
 	}
 
-	if(bDeleteMemory)
-	{
-		delete pSupportedTypes;
-		pSupportedTypes = NULL;
-	}
+	pSupportedTypes = NULL;
 	
 	if(bResult != TRUE)
 	{

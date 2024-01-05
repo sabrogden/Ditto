@@ -671,6 +671,7 @@ CClipTypes* CCP_MainApp::LoadTypesFromDB()
 		pTypes->Add(CF_HDROP);
 		pTypes->Add(CF_DIB);
 		pTypes->Add(GetFormatID(_T("HTML Format")));
+		pTypes->Add(GetFormatID(_T("PNG")));
 	}
 
 	return pTypes;

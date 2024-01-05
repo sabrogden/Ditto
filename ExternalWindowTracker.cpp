@@ -227,7 +227,19 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	CSendKeys send;
 	send.AllKeysUp();
 
-	if(activateTarget == false)
+	if(activateTarget)
+	{
+		DWORD startTick = GetTickCount();
+
+		ActivateTarget();
+		theApp.PumpMessageEx();
+		WaitForActiveWnd(activeWnd, max(25, g_Opt.WaitForActiveWndTimeout()));
+	
+		DWORD endTick = GetTickCount();
+		if((endTick-startTick) > 150)
+			Log(StrF(_T("Paste Timing Send Paste around activate Target: %d"), endTick-startTick));
+	}
+	else
 	{
 		activeWnd = ::GetForegroundWindow();
 	}
@@ -236,19 +248,6 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	CString csPasteString = g_Opt.GetPasteString(csPasteToApp);
 	DWORD delay = g_Opt.SendKeysDelay();
 	DWORD sendKeysDelay = g_Opt.RealSendKeysDelay();
-
-	DWORD startTick = GetTickCount();
-
-	if(activateTarget)
-	{
-		ActivateTarget();
-		theApp.PumpMessageEx();
-		WaitForActiveWnd(activeWnd, max(25, g_Opt.WaitForActiveWndTimeout()));
-	}
-
-	DWORD endTick = GetTickCount();
-	if((endTick-startTick) > 150)
-		Log(StrF(_T("Paste Timing Send Paste around activate Target: %d"), endTick-startTick));
 
 	m_dittoHasFocus = false;
 	Log(StrF(_T("Sending paste to app %s key stroke: %s, SeDelay: %d"), csPasteToApp, csPasteString, delay));
@@ -432,51 +431,79 @@ CPoint ExternalWindowTracker::FocusCaret()
 {
 	CPoint pt(-1, -1);
 
-	if(m_activeWnd)
+	if(!m_activeWnd || !m_focusWnd)
+		return pt;
+
+	GUITHREADINFO guiThreadInfo;
+	guiThreadInfo.cbSize = sizeof(GUITHREADINFO);
+	DWORD OtherThreadID = GetWindowThreadProcessId(m_activeWnd, NULL);
+	if(GetGUIThreadInfo(OtherThreadID, &guiThreadInfo))
 	{
-		GUITHREADINFO guiThreadInfo;
-		guiThreadInfo.cbSize = sizeof(GUITHREADINFO);
-		DWORD OtherThreadID = GetWindowThreadProcessId(m_activeWnd, NULL);
-		if(GetGUIThreadInfo(OtherThreadID, &guiThreadInfo))
+		CRect rc(guiThreadInfo.rcCaret);
+		if(rc.IsRectEmpty() == FALSE)
 		{
-			CRect rc(guiThreadInfo.rcCaret);
-			if(rc.IsRectEmpty() == FALSE)
-			{
-				pt = rc.BottomRight();
-				::ClientToScreen(m_focusWnd, &pt);
-			}
-		}
-
-		if(pt.x == -1 || pt.y == -1)
-		{
-			if(m_focusWnd != NULL &&
-				m_activeWnd != NULL &&
-				AttachThreadInput(GetWindowThreadProcessId(m_activeWnd, NULL), GetCurrentThreadId(), TRUE))
-			{
-				BOOL ret = GetCaretPos(&pt);
-				if(ret && (pt.x != 0 && pt.y != 0))
-				{
-					::ClientToScreen(m_focusWnd, &pt);
-					if (pt.y != 0 && pt.x != 0)
-					{
-						pt.y += 20;
-					}
-					else
-					{
-						pt.x = -1;
-						pt.y = -1;
-					}
-				}
-				else
-				{
-					pt.x = -1;
-					pt.y = -1;
-				}
-
-				AttachThreadInput(GetWindowThreadProcessId(m_activeWnd, NULL), GetCurrentThreadId(), FALSE);
-			}
+			pt = rc.BottomRight();
+			::ClientToScreen(m_focusWnd, &pt);
 		}
 	}
+	if(pt.x != -1 && pt.y != -1)
+		return pt;
+
+	DWORD currentThreadId = GetCurrentThreadId();
+	if(AttachThreadInput(OtherThreadID, currentThreadId, TRUE))
+	{
+		BOOL ok = GetCaretPos(&pt);
+		if(ok && (pt.x != 0 && pt.y != 0))
+		{
+			::ClientToScreen(m_focusWnd, &pt);
+			if (pt.y != 0 && pt.x != 0)
+			{
+				// calculate offset of caret by GetCaretPos
+				pt.y += 20;
+			}
+			else
+			{
+				pt.x = -1;
+				pt.y = -1;
+			}
+		}
+		else
+		{
+			pt.x = -1;
+			pt.y = -1;
+		}
+
+		AttachThreadInput(OtherThreadID, currentThreadId, FALSE);
+	}
+	if(pt.x != -1 && pt.y != -1)
+		return pt;
+
+	// trying to get caret for some hard applications like Chrome.
+	HMODULE hOleacc = LoadLibrary(_T("oleacc.dll"));
+	if (!hOleacc)
+		return pt;
+
+	typedef HRESULT(__stdcall *AccessibleObjectFromWindow)(_In_ HWND hwnd, _In_ DWORD dwId, _In_ REFIID riid, _Outptr_ void** ppvObject);
+	AccessibleObjectFromWindow getObject = (AccessibleObjectFromWindow)GetProcAddress(hOleacc, "AccessibleObjectFromWindow");
+	if (!getObject)
+		return pt;
+
+	IAccessible* pIAccessible = NULL;
+	HRESULT hr = getObject(m_activeWnd, OBJID_CARET, __uuidof(IAccessible), (void**)&pIAccessible);
+	if(hr != S_OK)
+		return pt;
+
+	long left = 0, top = 0, width = 0, height = 0;
+	VARIANT varCaret;
+	varCaret.vt = VT_I4;
+	varCaret.lVal = CHILDID_SELF;
+	hr = pIAccessible->accLocation(&left, &top, &width, &height, varCaret);
+	pIAccessible->Release();
+	if (hr != S_OK)
+		return pt;
+
+	// calculate offset of caret by Accessible 
+	pt.SetPoint(left + width, top + 20);
 
 	return pt;
 }
