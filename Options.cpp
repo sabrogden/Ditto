@@ -83,6 +83,7 @@ BOOL CGetSetOptions::m_maintainSearchView = FALSE;
 CString CGetSetOptions::m_tempDragFileName = "";
 CTime CGetSetOptions::m_tempDragFileNameSetTime;
 BOOL CGetSetOptions::m_refreshViewAfterPasting = TRUE;
+BOOL CGetSetOptions::m_supportAllTypes = FALSE;
 
 
 CGetSetOptions::CGetSetOptions()
@@ -1915,11 +1916,6 @@ CString CGetSetOptions::GetPasteString(CString csAppName)
 	CString csString = GetProfileString(csAppName, _T(""), _T("PasteStrings"));
 	if (csString.IsEmpty())
 	{
-		//edge is really slow to set focus so add a delay before sending the paste
-		if (csAppName == L"MicrosoftEdge.exe")
-		{
-			return _T("{DELAY 500}^{VKEY86}");
-		}
 		return GetDefaultPasteString();
 	}
 
@@ -2987,3 +2983,13 @@ void CGetSetOptions::SetSlugifySeparator(CString val)
 	SetProfileString("SlugifySeparator", val);
 }
 
+BOOL CGetSetOptions::GetSupportAllTypes()
+{
+	return GetProfileLong("SupportAllTypes", FALSE);
+}
+
+void CGetSetOptions::SetSupportAllTypes(BOOL val)
+{
+	m_refreshViewAfterPasting = val;
+	SetProfileLong("SupportAllTypes", val);
+}

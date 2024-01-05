@@ -5184,38 +5184,37 @@ bool CQPasteWnd::DoExportToBitMapFile()
 				png = toSave.m_Formats.FindFormat(theApp.m_PNG_Format);
 			}
 
-			if (bitmap != NULL ||
-				png != NULL)
-			{
-				CString savePath = startingFilePath;
-				if (IDs.GetCount() > 1 ||
-					FileExists(startingFilePath))
-				{
-					savePath = _T("");
+			if (bitmap == NULL && png == NULL)
+				continue;
 
-					for (int y = lastFileCheckId; y < 1000000; y++)
+			CString savePath = startingFilePath;
+			if (IDs.GetCount() > 1 ||
+				FileExists(startingFilePath))
+			{
+				savePath = _T("");
+
+				for (int y = lastFileCheckId; y < 1000000; y++)
+				{
+					CString testFilePath;
+					testFilePath.Format(_T("%s%s_%d.%s"), csPath, csFileName, y, csExt);
+					if (FileExists(testFilePath) == FALSE)
 					{
-						CString testFilePath;
-						testFilePath.Format(_T("%s%s_%d.%s"), csPath, csFileName, y, csExt);
-						if (FileExists(testFilePath) == FALSE)
-						{
-							savePath = testFilePath;
-							lastFileCheckId = y+1;
-							break;
-						}
+						savePath = testFilePath;
+						lastFileCheckId = y+1;
+						break;
 					}
 				}
+			}
 
-				if (savePath != _T(""))
-				{
-					toSave.WriteImageToFile(savePath);
+			if (savePath != _T(""))
+			{
+				toSave.WriteImageToFile(savePath);
 
-					ret = true;
-				}
-				else
-				{
-					Log(StrF(_T("Failed to find a valid file name for starting path: %s"), startingFilePath));
-				}
+				ret = true;
+			}
+			else
+			{
+				Log(StrF(_T("Failed to find a valid file name for starting path: %s"), startingFilePath));
 			}
 		}
 	}

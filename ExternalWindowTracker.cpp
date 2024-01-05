@@ -227,7 +227,19 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	CSendKeys send;
 	send.AllKeysUp();
 
-	if(activateTarget == false)
+	if(activateTarget)
+	{
+		DWORD startTick = GetTickCount();
+
+		ActivateTarget();
+		theApp.PumpMessageEx();
+		WaitForActiveWnd(activeWnd, max(25, g_Opt.WaitForActiveWndTimeout()));
+	
+		DWORD endTick = GetTickCount();
+		if((endTick-startTick) > 150)
+			Log(StrF(_T("Paste Timing Send Paste around activate Target: %d"), endTick-startTick));
+	}
+	else
 	{
 		activeWnd = ::GetForegroundWindow();
 	}
@@ -236,19 +248,6 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	CString csPasteString = g_Opt.GetPasteString(csPasteToApp);
 	DWORD delay = g_Opt.SendKeysDelay();
 	DWORD sendKeysDelay = g_Opt.RealSendKeysDelay();
-
-	DWORD startTick = GetTickCount();
-
-	if(activateTarget)
-	{
-		ActivateTarget();
-		theApp.PumpMessageEx();
-		WaitForActiveWnd(activeWnd, max(25, g_Opt.WaitForActiveWndTimeout()));
-	}
-
-	DWORD endTick = GetTickCount();
-	if((endTick-startTick) > 150)
-		Log(StrF(_T("Paste Timing Send Paste around activate Target: %d"), endTick-startTick));
 
 	m_dittoHasFocus = false;
 	Log(StrF(_T("Sending paste to app %s key stroke: %s, SeDelay: %d"), csPasteToApp, csPasteString, delay));

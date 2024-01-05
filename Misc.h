@@ -7,6 +7,7 @@
 #endif // _MSC_VER > 1000
 
 #include "Shared/ArrayEx.h"
+#include <vector>
 
 #define VK_MOUSE_CLICK 0x01
 #define VK_MOUSE_DOUBLE_CLICK 0x02
@@ -112,6 +113,7 @@ BOOL DecryptString(UCHAR *pData, int nLenIn, UCHAR*& pOutput, int &nLenOutput);
 int GetScreenWidth();
 int GetScreenHeight();
 
+std::vector<CLIPFORMAT> GetSystemClipFormats();
 CLIPFORMAT GetFormatID(LPCTSTR cbName);
 CString GetFormatName(CLIPFORMAT cbType);
 BOOL PreTranslateGuiDll(MSG *pMsg);
