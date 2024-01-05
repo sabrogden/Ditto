@@ -7,8 +7,9 @@ clone_folder: c:\projects\ditto
 branches:
   only:
     - master
+    - appveyor
 
-skip_branch_with_pr: false    
+skip_branch_with_pr: true    
     
 install:
 - set INNO_SETUP_PATH=C:\Program Files (x86)\Inno Setup 6
@@ -95,3 +96,24 @@ after_build:
   - appveyor AddMessage -Category Information "Publishing to GitHub"
   - npm install ./DittoSetup/GitHubRelease && SET "token=%GITHUB_API_KEY%" && SET "uploadPath=DittoSetup\output\" && SET "tag=%APPVEYOR_BUILD_VERSION%"  && SET "previous_tag=3.24.246.0" && node ./DittoSetup/GitHubRelease/index.js
 
+artifacts:
+  - path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
+    name: Ditto Setup
+  - path: DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe
+    name: Ditto Setup 64bit
+  - path: DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip
+    name: Ditto Portable
+  - path: DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip
+    name: Ditto Portable 64bit
+  - path: DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z
+    name: Ditto Debug
+  - path: DittoSetup\output\Ditto_%VERSION_FILENAME%.appx
+    name: Ditto appx
+  - path: DittoSetup\Chocolatey\ditto.%VERSION_DOT_FILENAME%-beta.nupkg
+    name: Ditto Choco
+
+#deploy:
+#- provider: Webhook
+#  url: https://app.signpath.io/API/v1/11add37b-5875-49ff-a233-919a1833b6d8/Integrations/AppVeyor?ProjectSlug=Ditto&SigningPolicySlug=release-signing&ArtifactConfigurationSlug=initial
+#  authorization:
+#     secure: /YrIyb25bbTkbgBsg/1ttvD6y9GC4BqSNqSewTSIVMmYYrmyWw1VaJ7a80ixX6uXVYQ38UAn/qniQnWpDDNYbw==
