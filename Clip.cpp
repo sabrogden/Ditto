@@ -110,13 +110,13 @@ std::shared_ptr<CClipTypes> COleDataObjectEx::GetAvailableTypes()
 	if (!OpenClipboard(theApp.m_MainhWnd))
 		return types;
 
-	int format = EnumClipboardFormats(0);
+	int format = 0;
 	do
 	{
 		format = EnumClipboardFormats(format);
 		// Currently CF_MAX is not valid format
 		// See https://learn.microsoft.com/en-us/windows/win32/dataxchg/standard-clipboard-formats
-		if (format == CF_MAX)
+		if (format == 0 || format == CF_MAX)
 			continue;
 		types->Add(format);
 	} while (format != 0);
