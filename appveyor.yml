@@ -116,4 +116,4 @@ deploy:
 - provider: Webhook
   url: https://app.signpath.io/API/v1/11add37b-5875-49ff-a233-919a1833b6d8/Integrations/AppVeyor?ProjectSlug=Ditto&SigningPolicySlug=release-signing&ArtifactConfigurationSlug=initial
   authorization:
-     secure: 3H00GmVOxYXt9AnEMf/RmPDI9WeNUxJ7Jjh07yY56UgTI/TLkPlIfJ9YbmKizlMVN7zRV8aLChOkoMCmUGoeow==
+     secure: /YrIyb25bbTkbgBsg/1ttvD6y9GC4BqSNqSewTSIVMmYYrmyWw1VaJ7a80ixX6uXVYQ38UAn/qniQnWpDDNYbw==
