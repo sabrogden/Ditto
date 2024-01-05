@@ -348,8 +348,14 @@ bool CClip::AddFormat(CLIPFORMAT cfType, void* pData, UINT nLen, bool setDesc)
 // Fills this CClip with the contents of the clipboard.
 int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, CString activeApp, CString activeAppTitle)
 {
+	if(pClipTypes == NULL || pClipTypes->GetSize() == 0)
+	{
+		ASSERT(0); // this feature is not currently used... it is an error if it is.
+		Log(_T("no types were given to accept, skipping this clipboard change"));
+		return FALSE;
+	}
+
 	COleDataObjectEx oleData;
-	CClipTypes defaultTypes;
 	CClipTypes* pTypes = pClipTypes;
 
 	// m_Formats should be empty when this is called.
@@ -380,18 +386,6 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 	
 	oleData.EnsureClipboardObject();
 	
-	// if no types were given, get only the first (most important) type.
-	//  (subsequent types could be synthetic due to automatic type conversions)
-	if(pTypes == NULL || pTypes->GetSize() == 0)
-	{
-		ASSERT(0); // this feature is not currently used... it is an error if it is.
-		
-		FORMATETC formatEtc;
-		oleData.BeginEnumFormats();
-		oleData.GetNextFormat(&formatEtc);
-		defaultTypes.Add(formatEtc.cfFormat);
-		pTypes = &defaultTypes;
-	}
 	
 	m_Desc = "[Ditto Error] BAD DESCRIPTION";
 	
