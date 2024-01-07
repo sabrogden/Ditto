@@ -71,18 +71,15 @@ void CCopyThread::OnClipboardChange(CString activeWindow, CString activeWindowTi
 	pClip->m_copyReason = theApp.GetCopyReason();
 
 	COleDataObjectEx oleData;
-	std::shared_ptr<CClipTypes> availableTypes = oleData.GetAvailableTypes();
 	CClipTypes* pSupportedTypes = m_LocalConfig.m_pSupportedTypes;
 
-	//If we are copying from a Ditto Buffer then save all to the database, so when we paste this it will paste 
-	//just like you were using Ctrl-V
-	if(theApp.m_CopyBuffer.Active())
+	// If we are copying from a Ditto Buffer or use advanced option
+	// then save all to the database, so when we paste this it will paste 
+	// just like you were using Ctrl-V
+	std::shared_ptr<CClipTypes> availableTypes;
+	if (theApp.m_CopyBuffer.Active() || CGetSetOptions::GetSupportAllTypes())
 	{
-		Log(_T("LoadFromClipboard - Copy buffer Active Start"));
-		pSupportedTypes = availableTypes.get();
-		Log(_T("LoadFromClipboard - Copy buffer Active End"));
-	}
-	else if (CGetSetOptions::GetSupportAllTypes()) {
+		availableTypes = oleData.GetAvailableTypes();
 		pSupportedTypes = availableTypes.get();
 	}
 
