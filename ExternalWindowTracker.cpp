@@ -12,10 +12,20 @@ ExternalWindowTracker::ExternalWindowTracker(void)
 	m_focusWnd = NULL;
 	m_dittoHasFocus = false;
 	m_desktopHasFocus = false;
+	
+	m_hOleacc = LoadLibrary(_T("oleacc.dll"));
+	if (m_hOleacc)
+		m_AccessibleObjectFromWindow = (AccessibleObjectFromWindow)GetProcAddress(m_hOleacc, "AccessibleObjectFromWindow");
 }
 
 ExternalWindowTracker::~ExternalWindowTracker(void)
 {
+	if (m_hOleacc)
+	{
+		FreeLibrary(m_hOleacc);
+		m_hOleacc = NULL;
+		m_AccessibleObjectFromWindow = NULL;
+	}
 }
 
 bool ExternalWindowTracker::TrackActiveWnd(bool force)
@@ -479,17 +489,11 @@ CPoint ExternalWindowTracker::FocusCaret()
 		return pt;
 
 	// trying to get caret for some hard applications like Chrome.
-	HMODULE hOleacc = LoadLibrary(_T("oleacc.dll"));
-	if (!hOleacc)
-		return pt;
-
-	typedef HRESULT(__stdcall *AccessibleObjectFromWindow)(_In_ HWND hwnd, _In_ DWORD dwId, _In_ REFIID riid, _Outptr_ void** ppvObject);
-	AccessibleObjectFromWindow getObject = (AccessibleObjectFromWindow)GetProcAddress(hOleacc, "AccessibleObjectFromWindow");
-	if (!getObject)
+	if (!m_AccessibleObjectFromWindow)
 		return pt;
 
 	IAccessible* pIAccessible = NULL;
-	HRESULT hr = getObject(m_activeWnd, OBJID_CARET, __uuidof(IAccessible), (void**)&pIAccessible);
+	HRESULT hr = m_AccessibleObjectFromWindow(m_activeWnd, OBJID_CARET, __uuidof(IAccessible), (void**)&pIAccessible);
 	if(hr != S_OK)
 		return pt;
 
