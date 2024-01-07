@@ -453,9 +453,10 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 		cf.m_cfType = pTypes->ElementAt(i);
 
 		if (cf.m_cfType == CF_DIB &&
-			g_Opt.m_excludeCF_DIBInExcel &&
-			activeApp.MakeLower() == _T("excel.exe"))
+			oleData.IsDataAvailable(CF_TEXT) &&
+			g_Opt.GetIgnoreAnnoyingCFDIBSet(TRUE).count(activeApp.MakeLower()))
 		{
+			Log(StrF(_T("Ignore CF_DIB from %s"), activeApp));
 			continue;
 		}
 

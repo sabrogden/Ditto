@@ -3,6 +3,7 @@
 #include "Theme.h"
 #include "RegExFilterHelper.h"
 #include "ChaiScriptXml.h"
+#include <set>
 
 #define MAX_SEND_CLIENTS	15
 class CSendClients
@@ -585,10 +586,6 @@ public:
 	static BOOL GetOpenToGroupByActiveExe();
 	static void SetOpenToGroupByActiveExe(int val);
 
-	static BOOL m_excludeCF_DIBInExcel;
-	static BOOL GetExcludeCF_DIBInExcel();
-	static void SetExcludeCF_DIBInExcel(int val);
-
 	static BOOL GetShowStartupMessage();
 	static void SetShowStartupMessage(int val);
 
@@ -680,6 +677,11 @@ public:
 	static BOOL m_supportAllTypes;
 	static BOOL GetSupportAllTypes();
 	static void SetSupportAllTypes(BOOL val);
+
+	static CString GetIgnoreAnnoyingCFDIB(BOOL useCache = FALSE);
+	static CString m_ignoreAnnoyingCFDIB;
+	static void SetIgnoreAnnoyingCFDIB(CString val);
+	static std::set<CString> GetIgnoreAnnoyingCFDIBSet(BOOL useCache = FALSE);
 };
 
 // global for easy access and for initialization of fast access variables
