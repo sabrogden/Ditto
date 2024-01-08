@@ -7,6 +7,8 @@
 #include "Path.h"
 #include "CP_Main.h"
 #include "ActionEnums.h"
+#include "Shared/Tokenizer.h"
+#include <set>
 
 using namespace nsPath;
 
@@ -69,7 +71,7 @@ BOOL CGetSetOptions::m_showScrollBar = false;
 CGetSetOptions g_Opt;
 BOOL CGetSetOptions::m_bShowAlwaysOnTopWarning = TRUE;
 CRegExFilterHelper CGetSetOptions::m_regexHelper;
-BOOL CGetSetOptions::m_excludeCF_DIBInExcel = TRUE;
+CString CGetSetOptions::m_ignoreAnnoyingCFDIB = "";
 CChaiScriptXml CGetSetOptions::m_copyScripts;
 CChaiScriptXml CGetSetOptions::m_pasteScripts;
 long CGetSetOptions::m_tooltipTimeout;
@@ -204,7 +206,7 @@ void CGetSetOptions::LoadSettings()
 	m_bEnsureConnectToClipboard = GetEnsureConnectToClipboard();
 	m_showScrollBar = GetShowScrollBar();
 	m_bShowAlwaysOnTopWarning = GetShowAlwaysOnTopWarning();
-	m_excludeCF_DIBInExcel = GetExcludeCF_DIBInExcel();
+	m_ignoreAnnoyingCFDIB = GetIgnoreAnnoyingCFDIB();
 	m_doubleKeyStrokeTimeout = GetDoubleKeyStrokeTimeout();
 	m_firstTenHotKeysStart = GetFirstTenHotKeysStart();
 	m_firstTenHotKeysFontSize = GetFirstTenHotKeysFontSize();
@@ -2700,17 +2702,6 @@ void CGetSetOptions::SetOpenToGroupByActiveExe(int val)
 	SetProfileLong(_T("OpenToGroupByActiveExe"), val);
 }
 
-BOOL CGetSetOptions::GetExcludeCF_DIBInExcel()
-{
-	return GetProfileLong(_T("ExcludeCF_DIBInExcel"), TRUE);
-}
-
-void CGetSetOptions::SetExcludeCF_DIBInExcel(int val)
-{
-	m_excludeCF_DIBInExcel = val;
-	SetProfileLong(_T("ExcludeCF_DIBInExcel"), val);
-}
-
 BOOL CGetSetOptions::GetShowStartupMessage()
 {
 	return GetProfileLong(_T("ShowStartupMessage"), TRUE);
@@ -2992,4 +2983,34 @@ void CGetSetOptions::SetSupportAllTypes(BOOL val)
 {
 	m_refreshViewAfterPasting = val;
 	SetProfileLong("SupportAllTypes", val);
+}
+
+CString CGetSetOptions::GetIgnoreAnnoyingCFDIB(BOOL useCache)
+{
+	if (useCache)
+		return m_ignoreAnnoyingCFDIB;
+	else
+		return GetProfileString("IgnoreAnnoyingCFDIB", _T(""));
+}
+
+void CGetSetOptions::SetIgnoreAnnoyingCFDIB(CString val)
+{
+	m_ignoreAnnoyingCFDIB = val;
+	SetProfileString("IgnoreAnnoyingCFDIB", val);
+}
+
+std::set<CString> CGetSetOptions::GetIgnoreAnnoyingCFDIBSet(BOOL useCache)
+{
+	CString rawString = CGetSetOptions::GetIgnoreAnnoyingCFDIB(useCache);
+	std:set<CString> processSet;
+	CTokenizer token(rawString, _T(";"));
+	CString process;
+	while (token.Next(process))
+	{
+		if (process == "")
+			continue;
+		processSet.insert(process.MakeLower());
+	}
+
+	return processSet;
 }

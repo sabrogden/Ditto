@@ -27,10 +27,14 @@ public:
 	bool NotifyTrayhWnd(HWND hWnd);
 
 protected:
+	typedef HRESULT(__stdcall *AccessibleObjectFromWindow)(_In_ HWND hwnd, _In_ DWORD dwId, _In_ REFIID riid, _Outptr_ void** ppvObject);
+
 	HWND m_activeWnd;
 	HWND m_focusWnd;
 	bool m_dittoHasFocus;
 	bool m_desktopHasFocus;
+	HMODULE m_hOleacc;
+	AccessibleObjectFromWindow m_AccessibleObjectFromWindow;
 	
 protected:
 	bool WaitForActiveWnd(HWND hwndToHaveFocus, int timeout);

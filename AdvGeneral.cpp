@@ -142,6 +142,7 @@ END_MESSAGE_MAP()
 #define SETTING_FAST_THUMBNAIL_MODE 91
 #define SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY 92
 #define SETTING_SUPPORT_ALL_TYPES 93
+#define SETTING_IGNORE_ANNOYING_CF_DIB 94
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -181,7 +182,7 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Always show scroll bar"), CGetSetOptions::GetShowScrollBar(), SETTING_ALWAYS_SHOW_SCROLL_BAR);
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Amount of text to save for description"), g_Opt.m_bDescTextSize, _T(""), SETTING_DESC_SIZE));
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Copy and save clipboard delay (ms)"), (long)CGetSetOptions::GetCopyAndSveDelay(), _T(""), SETTING_COPY_SAVE_DELAY));
-	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Clipboard restore delay after copy buffer sent paste (ms, default: 750))"), (long)(CGetSetOptions::GetDittoRestoreClipboardDelay()), _T(""), SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Clipboard restore delay after copy buffer sent paste (ms, default: 750)"), (long)(CGetSetOptions::GetDittoRestoreClipboardDelay()), _T(""), SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY));
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default paste string"), CGetSetOptions::GetDefaultPasteString(), _T(""), SETTING_DEFAULT_PASTE_STRING));
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default copy string"), CGetSetOptions::GetDefaultCopyString(), _T(""), SETTING_DEFAULT_COPY_STRING));
@@ -213,6 +214,7 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Hide Ditto on hot key if Ditto is visible"), CGetSetOptions::GetHideDittoOnHotKeyIfAlreadyShown(), SETTING_HIDE_ON_HOTKEY_IF_VISIBLE);
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Ignore copies faster than (ms) (default: 500)"), (long)CGetSetOptions::GetSaveClipDelay(), _T(""), SETTING_IGNORE_FALSE_COPIES_DELAY));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Ignore annoying CF_DIB when a clip is detected as text content"), CGetSetOptions::GetIgnoreAnnoyingCFDIB(), _T("Case insensitive. Recommended option is \"excel.exe; onenote.exe; powerpnt.exe\" "), SETTING_IGNORE_ANNOYING_CF_DIB));
 
 	pGroupTest->AddSubItem( new CMFCPropertyGridProperty(_T("Maximum clip size in bytes (0 for no limit)"), g_Opt.m_lMaxClipSizeInBytes, _T(""), SETTING_MAX_CLIP_SIZE));
 		
@@ -240,7 +242,7 @@ BOOL CAdvGeneral::OnInitDialog()
 
 	AddTrueFalse(pGroupTest, _T("Refresh view after paste"), CGetSetOptions::GetRefreshViewAfterPasting(), SETTING_REFRESH_VIEW_AFTER_PASTE);
 
-	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Save clipboard delay (ms, default: 100))"), (long)(CGetSetOptions::GetProcessDrawClipboardDelay()), _T(""), SETTING_CLIPBOARD_SAVE_DELAY));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Save clipboard delay (ms, default: 100)"), (long)(CGetSetOptions::GetProcessDrawClipboardDelay()), _T(""), SETTING_CLIPBOARD_SAVE_DELAY));
 
 	AddTrueFalse(pGroupTest, _T("Save multi-pastes"), CGetSetOptions::GetSaveMultiPaste(), SETTING_SAVE_MULTI_PASTE);
 
@@ -821,7 +823,12 @@ void CAdvGeneral::OnBnClickedOk()
 					CGetSetOptions::SetSupportAllTypes(val);
 				}
 				break;
-
+			case SETTING_IGNORE_ANNOYING_CF_DIB:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					CGetSetOptions::SetIgnoreAnnoyingCFDIB(pNewValue->bstrVal);
+				}
+				break;
 			}
 		}
 	}
