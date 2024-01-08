@@ -112,8 +112,10 @@ artifacts:
 #  - path: DittoSetup\Chocolatey\ditto.%VERSION_DOT_FILENAME%-beta.nupkg
 #    name: Ditto Choco
 
+#  url: https://app.signpath.io/API/v1/11add37b-5875-49ff-a233-919a1833b6d8/Integrations/AppVeyor?ProjectSlug=Ditto&SigningPolicySlug=test_certificate&ArtifactConfigurationSlug=initial
+
 deploy:
 - provider: Webhook
-  url: https://app.signpath.io/API/v1/11add37b-5875-49ff-a233-919a1833b6d8/Integrations/AppVeyor?ProjectSlug=Ditto&SigningPolicySlug=test_certificate&ArtifactConfigurationSlug=initial
+  url: https://webhook.site/6ea14bca-8b48-4754-b0d8-6677c689da78
   authorization:
      secure: hH+DZj/nTKsaapP9rXDj5jl/pSBUX8y4t+VteHV9Z/1lqHcDdg10M2eAc9qlGJ6Z2O41r8MmJI/FO6wjSnF/vA==
