@@ -99,18 +99,18 @@ after_build:
 artifacts:
   - path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
     name: Ditto Setup
-  - path: DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe
-    name: Ditto Setup 64bit
-  - path: DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip
-    name: Ditto Portable
-  - path: DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip
-    name: Ditto Portable 64bit
-  - path: DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z
-    name: Ditto Debug
-  - path: DittoSetup\output\Ditto_%VERSION_FILENAME%.appx
-    name: Ditto appx
-  - path: DittoSetup\Chocolatey\ditto.%VERSION_DOT_FILENAME%-beta.nupkg
-    name: Ditto Choco
+#  - path: DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe
+#    name: Ditto Setup 64bit
+#  - path: DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip
+#    name: Ditto Portable
+#  - path: DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip
+#    name: Ditto Portable 64bit
+#  - path: DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z
+#    name: Ditto Debug
+#  - path: DittoSetup\output\Ditto_%VERSION_FILENAME%.appx
+#    name: Ditto appx
+#  - path: DittoSetup\Chocolatey\ditto.%VERSION_DOT_FILENAME%-beta.nupkg
+#    name: Ditto Choco
 
 deploy:
 - provider: Webhook
