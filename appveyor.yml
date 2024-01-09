@@ -99,8 +99,8 @@ after_build:
 artifacts:
   - path: DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe
     name: Ditto Setup
-#  - path: DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe
-#    name: Ditto Setup 64bit
+  - path: DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe
+    name: Ditto Setup 64bit
 #  - path: DittoSetup\output\DittoPortable_%VERSION_FILENAME%.zip
 #    name: Ditto Portable
 #  - path: DittoSetup\output\DittoPortable_64bit_%VERSION_FILENAME%.zip
