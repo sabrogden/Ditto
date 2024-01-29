@@ -200,7 +200,9 @@ void CDittoChaiScript::AsciiTextReplaceRegex(std::string regex, std::string repl
 	CStringA newUtf8 = std::regex_replace(utf8.GetBuffer(), integer, replaceWith).c_str();
 	if (utf8 != newUtf8)
 	{
-		SetUnicodeString(CTextConvert::Utf8ToUnicode(newUtf8).GetBuffer());
+		CString uni = CTextConvert::Utf8ToUnicode(newUtf8).GetBuffer();
+		SetUnicodeString(uni.GetBuffer());
+		SetAsciiString(CTextConvert::UnicodeToAnsi(uni).GetBuffer());
 	}
 }
 

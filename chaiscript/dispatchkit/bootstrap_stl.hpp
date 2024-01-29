@@ -720,6 +720,7 @@ namespace chaiscript
 		  m.add(fun([](const String *s, typename String::value_type c, size_t pos) { return s->find_first_not_of(c, pos); } ), "find_first_not_of");
 
 		  m.add(fun([](String *s, typename String::value_type c) -> decltype(auto) { return (*s += c); } ), "+=");
+		  m.add(fun([](String *s, typename String::value_type c) -> decltype(auto) { return (*s + c); } ), "+");
 		  
 		  m.add(fun([](String *s) { std::reverse(s->begin(), s->end()); } ), "reverse");
 
