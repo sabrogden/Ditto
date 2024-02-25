@@ -143,6 +143,7 @@ END_MESSAGE_MAP()
 #define SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY 92
 #define SETTING_SUPPORT_ALL_TYPES 93
 #define SETTING_IGNORE_ANNOYING_CF_DIB 94
+#define SETTING_REGEX_CASE_INSENSITIVE 95
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -241,6 +242,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Revert to top level group on close"), CGetSetOptions::GetRevertToTopLevelGroup(), SETTING_REVERT_TO_TOP_LEVEL_GROUP);
 
 	AddTrueFalse(pGroupTest, _T("Refresh view after paste"), CGetSetOptions::GetRefreshViewAfterPasting(), SETTING_REFRESH_VIEW_AFTER_PASTE);
+
+	AddTrueFalse(pGroupTest, _T("Regex case insensitive search"), CGetSetOptions::GetRegexCaseInsensitive(), SETTING_REGEX_CASE_INSENSITIVE);
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Save clipboard delay (ms, default: 100)"), (long)(CGetSetOptions::GetProcessDrawClipboardDelay()), _T(""), SETTING_CLIPBOARD_SAVE_DELAY));
 
@@ -829,6 +832,12 @@ void CAdvGeneral::OnBnClickedOk()
 					CGetSetOptions::SetIgnoreAnnoyingCFDIB(pNewValue->bstrVal);
 				}
 				break;
+			case SETTING_REGEX_CASE_INSENSITIVE:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
+					CGetSetOptions::SetRegexCaseInsensitive(val);
+				}
 			}
 		}
 	}

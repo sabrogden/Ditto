@@ -805,6 +805,28 @@ void CppSQLite3DB::open(const TCHAR* szFile)
 	sqlite3_load_extension(mpDB, "ICU_Loader.dll", "sqlite3_icu_init", &e);
 }
 
+void CppSQLite3DB::SetRegexCaseInsensitive(bool insensitive)
+{
+	auto h = ::LoadLibrary(_T("ICU_Loader.dll"));
+	if (h != NULL)
+	{
+		void(__cdecl * SetRegexFlags)(int flags);
+
+		SetRegexFlags = (void(__cdecl*)(int flags))GetProcAddress(h, "sqlite3_icu_regex_flags");
+		if (SetRegexFlags != NULL)
+		{
+			if (insensitive)
+			{
+				SetRegexFlags(2); // 2 is the enum URegexpFlag::UREGEX_CASE_INSENSITIVE
+			}
+			else
+			{
+				SetRegexFlags(0);
+			}
+		}
+	}
+}
+
 bool CppSQLite3DB::close()
 {
 	bool bRet = true;

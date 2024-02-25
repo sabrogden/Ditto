@@ -48,6 +48,7 @@ SQLITE_EXTENSION_INIT1
 #endif
 
 
+URegexpFlag regexFlags = (URegexpFlag)0;
 
 /*
 ** This function is called when an ICU function called from within
@@ -300,7 +301,7 @@ static void icuRegexpFunc(sqlite3_context* p, int nArg, sqlite3_value** apArg) {
         if (!zPattern) {
             return;
         }
-        pExpr = uregex_open(zPattern, -1, 0, 0, &status);
+        pExpr = uregex_open(zPattern, -1, regexFlags, 0, &status);
 
         if (U_SUCCESS(status)) {
             sqlite3_set_auxdata(p, 0, pExpr, icuRegexpDelete);
@@ -557,6 +558,11 @@ extern "C"
         SQLITE_EXTENSION_INIT2(pApi)
 
             return brogden(db);
+    }
+
+    void __declspec(dllexport) sqlite3_icu_regex_flags(int flags)
+    {
+        regexFlags = (URegexpFlag)flags;
     }
 }
 

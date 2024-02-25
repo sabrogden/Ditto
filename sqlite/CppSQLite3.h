@@ -178,6 +178,8 @@ public:
 
     void open(const TCHAR* szFile);
 
+    void SetRegexCaseInsensitive(bool insensitive);
+
     bool close();
 
 	bool tableExists(const TCHAR* szTable);

@@ -3014,3 +3014,13 @@ std::set<CString> CGetSetOptions::GetIgnoreAnnoyingCFDIBSet(BOOL useCache)
 
 	return processSet;
 }
+
+BOOL CGetSetOptions::GetRegexCaseInsensitive()
+{
+	return GetProfileLong("RegexCaseInsensitive", FALSE);
+}
+
+void CGetSetOptions::SetRegexCaseInsensitive(BOOL val)
+{
+	SetProfileLong("RegexCaseInsensitive", val);
+}

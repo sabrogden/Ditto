@@ -682,6 +682,9 @@ public:
 	static CString m_ignoreAnnoyingCFDIB;
 	static void SetIgnoreAnnoyingCFDIB(CString val);
 	static std::set<CString> GetIgnoreAnnoyingCFDIBSet(BOOL useCache = FALSE);
+
+	static BOOL GetRegexCaseInsensitive();
+	static void SetRegexCaseInsensitive(BOOL val);
 };
 
 // global for easy access and for initialization of fast access variables

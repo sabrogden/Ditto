@@ -215,6 +215,7 @@ BOOL OpenDatabase(CString dbPath)
 		theApp.m_db.open(dbPath);
 
 		theApp.m_db.setBusyTimeout(CGetSetOptions::GetDbTimeout());
+		theApp.m_db.SetRegexCaseInsensitive(CGetSetOptions::GetRegexCaseInsensitive());
 
 		return TRUE;
 	}
