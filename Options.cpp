@@ -3017,7 +3017,7 @@ std::set<CString> CGetSetOptions::GetIgnoreAnnoyingCFDIBSet(BOOL useCache)
 
 BOOL CGetSetOptions::GetRegexCaseInsensitive()
 {
-	return GetProfileLong("RegexCaseInsensitive", FALSE);
+	return GetProfileLong("RegexCaseInsensitive", TRUE);
 }
 
 void CGetSetOptions::SetRegexCaseInsensitive(BOOL val)
