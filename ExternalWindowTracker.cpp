@@ -12,10 +12,13 @@ ExternalWindowTracker::ExternalWindowTracker(void)
 	m_focusWnd = NULL;
 	m_dittoHasFocus = false;
 	m_desktopHasFocus = false;
-	
+
+	m_AccessibleObjectFromWindow = NULL;
 	m_hOleacc = LoadLibrary(_T("oleacc.dll"));
 	if (m_hOleacc)
+	{
 		m_AccessibleObjectFromWindow = (AccessibleObjectFromWindow)GetProcAddress(m_hOleacc, "AccessibleObjectFromWindow");
+	}
 }
 
 ExternalWindowTracker::~ExternalWindowTracker(void)
