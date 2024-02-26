@@ -58,13 +58,12 @@ Name: Danish;              MessagesFile: compiler:Languages\Danish.isl
 Name: Dutch;               MessagesFile: compiler:Languages\Dutch.isl
 Name: Finnish;             MessagesFile: compiler:Languages\Finnish.isl
 Name: French;              MessagesFile: compiler:Languages\French.isl
-Name: German;              MessagesFile: compiler:Languages\German.isl
+Name: Deutsch;             MessagesFile: compiler:Languages\German.isl
 Name: Hebrew;              MessagesFile: compiler:Languages\Hebrew.isl
 Name: Italiano;            MessagesFile: compiler:Languages\Italian.isl
 Name: Japanese;            MessagesFile: compiler:Languages\Japanese.isl
-Name: Polish;              MessagesFile: compiler:Languages\Polish.isl
-Name: Portuguese_Brazil;   MessagesFile: compiler:Languages\BrazilianPortuguese.isl
-Name: Portuguese_Portugal; MessagesFile: compiler:Languages\Portuguese.isl
+Name: Polski;              MessagesFile: compiler:Languages\Polish.isl
+Name: Portuguese;          MessagesFile: compiler:Languages\Portuguese.isl
 Name: Russian;             MessagesFile: compiler:Languages\Russian.isl
 Name: Slovak;              MessagesFile: compiler:Languages\Slovak.isl
 Name: Slovenian;           MessagesFile: compiler:Languages\Slovenian.isl
@@ -73,8 +72,8 @@ Name: Turkish;             MessagesFile: compiler:Languages\Turkish.isl
 Name: Ukrainian;           MessagesFile: compiler:Languages\Ukrainian.isl
 
 ;Inno Setup Unofficial translations
-Name: Simplified_Chinese;  MessagesFile: ChineseSimplified.isl
-Name: Traditional_Chinese; MessagesFile: ChineseTraditional.isl
+Name: ChineseSimplified;   MessagesFile: ChineseSimplified.isl
+Name: ChineseTraditional;  MessagesFile: ChineseTraditional.isl
 Name: Croatian;            MessagesFile: Croatian.isl
 Name: Greek;               MessagesFile: Greek.isl
 Name: Hungarian;           MessagesFile: Hungarian.isl
@@ -144,7 +143,7 @@ Root: HKCU; Subkey: SOFTWARE\Microsoft\Windows\CurrentVersion\Run; ValueType: st
 
 Root: HKCU; Subkey: Software\Ditto; ValueType: dword; ValueName: SetFocus_iexplore.exe; ValueData: 00000001
 
-Root: HKCU; Subkey: Software\Ditto; ValueType: string; ValueName: LanguageFile; ValueData: {language}
+Root: HKCU; Subkey: Software\Ditto; ValueType: string; ValueName: LanguageFile; ValueData: "{code:AdjustedLanguage|{language}}"
 
 Root: HKCU; Subkey: Software\Ditto\PasteStrings; ValueType: string; ValueName: gvim.exe; ValueData: """{{PLUS}gP"
 Root: HKCU; Subkey: Software\Ditto\CopyStrings; ValueType: string; ValueName: gvim.exe; ValueData: """{{PLUS}y"
@@ -168,6 +167,16 @@ procedure BeforeLanguageInstall();
 var
   sDir: String;
 begin
+end;
+
+function AdjustedLanguage(Param: String): String;  
+begin
+  Case Param of
+    'ChineseSimplified' : Result := 'Chinese Simplified';
+    'ChineseTraditional' : Result := 'Chinese Traditional';
+  else
+    Result := Param;
+  end;
 end;
 
 procedure CleanupOldFiles();
