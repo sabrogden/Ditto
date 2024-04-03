@@ -31,6 +31,7 @@ ExternalWindowTracker::~ExternalWindowTracker(void)
 	}
 }
 
+
 bool ExternalWindowTracker::TrackActiveWnd(bool force)
 {
 	if(force == false && IdleSeconds() < (CGetSetOptions::GetMinIdleTimeBeforeTrackFocus() / 1000.0))
@@ -229,6 +230,8 @@ bool ExternalWindowTracker::ActivateTarget()
 	}
 
 	SystemParametersInfo(SPI_SETFOREGROUNDLOCKTIMEOUT, 0, (PVOID)timeoutMS, 0);
+
+	//Sleep(250);
 
 	return true;
 }
@@ -447,6 +450,32 @@ CPoint ExternalWindowTracker::FocusCaret()
 	if(!m_activeWnd || !m_focusWnd)
 		return pt;
 
+	//first try getting the caret position using IAccessible object
+	if (m_AccessibleObjectFromWindow)
+	{
+		{
+			IAccessible* pIAccessible = NULL;
+			HRESULT hr = m_AccessibleObjectFromWindow(m_activeWnd, OBJID_CARET, __uuidof(IAccessible), (void**)&pIAccessible);
+			if (hr == S_OK)
+			{
+				long left = 0, top = 0, width = 0, height = 0;
+				VARIANT varCaret;
+				varCaret.vt = VT_I4;
+				varCaret.lVal = CHILDID_SELF;
+				hr = pIAccessible->accLocation(&left, &top, &width, &height, varCaret);
+				pIAccessible->Release();
+				if (hr == S_OK && left != 0 && top != 0)
+				{
+					// calculate offset of caret by Accessible 
+					pt.SetPoint(left + width, top + 20);
+				}
+			}
+		}
+	}
+	if (pt.x != -1 && pt.y != -1)
+		return pt;
+
+	//next try GetGUIThreadInfo
 	GUITHREADINFO guiThreadInfo;
 	guiThreadInfo.cbSize = sizeof(GUITHREADINFO);
 	DWORD OtherThreadID = GetWindowThreadProcessId(m_activeWnd, NULL);
@@ -462,6 +491,7 @@ CPoint ExternalWindowTracker::FocusCaret()
 	if(pt.x != -1 && pt.y != -1)
 		return pt;
 
+	//last try attatching to there thread
 	DWORD currentThreadId = GetCurrentThreadId();
 	if(AttachThreadInput(OtherThreadID, currentThreadId, TRUE))
 	{
@@ -488,29 +518,6 @@ CPoint ExternalWindowTracker::FocusCaret()
 
 		AttachThreadInput(OtherThreadID, currentThreadId, FALSE);
 	}
-	if(pt.x != -1 && pt.y != -1)
-		return pt;
-
-	// trying to get caret for some hard applications like Chrome.
-	if (!m_AccessibleObjectFromWindow)
-		return pt;
-
-	IAccessible* pIAccessible = NULL;
-	HRESULT hr = m_AccessibleObjectFromWindow(m_activeWnd, OBJID_CARET, __uuidof(IAccessible), (void**)&pIAccessible);
-	if(hr != S_OK)
-		return pt;
-
-	long left = 0, top = 0, width = 0, height = 0;
-	VARIANT varCaret;
-	varCaret.vt = VT_I4;
-	varCaret.lVal = CHILDID_SELF;
-	hr = pIAccessible->accLocation(&left, &top, &width, &height, varCaret);
-	pIAccessible->Release();
-	if (hr != S_OK)
-		return pt;
-
-	// calculate offset of caret by Accessible 
-	pt.SetPoint(left + width, top + 20);
 
 	return pt;
 }

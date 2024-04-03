@@ -366,7 +366,9 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 		ON_COMMAND(ID_SPECIALPASTE_MULTIPLEIMAGESVERTICALLY, &CQPasteWnd::OnSpecialpasteMultipleImagesVert)
 		ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_MULTIPLEIMAGESVERTICALLY, &CQPasteWnd::OnUpdateSpecialpasteMultipleImagesVert)
 
-END_MESSAGE_MAP()
+		ON_COMMAND(ID_SPECIALPASTE_ASCIITEXTONLY, &CQPasteWnd::OnSpecialpasteAsciitextonly)
+		ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_ASCIITEXTONLY, &CQPasteWnd::OnUpdateSpecialpasteAsciitextonly)
+		END_MESSAGE_MAP()
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -3362,6 +3364,9 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::PASTE_MULTI_IMAGE_VERTICAL:
 		ret = DoPasteImagesVert();
 		break;
+	case ActionEnums::ASCII_TEXT_ONLY:
+		ret = DoPasteAsciiOnly();
+		break;
 	}
 
 	return ret;
@@ -4634,6 +4639,19 @@ bool CQPasteWnd::DoPasteImagesVert()
 	{
 		CSpecialPasteOptions pasteOptions;
 		pasteOptions.m_pasteImagesVertically = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoPasteAsciiOnly()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteAsciiOnly = true;
 		OpenSelection(pasteOptions);
 		return true;
 	}
@@ -8032,4 +8050,20 @@ void CQPasteWnd::OnUpdateSpecialpasteMultipleImagesVert(CCmdUI* pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_MULTI_IMAGE_VERTICAL);
+}
+
+void CQPasteWnd::OnSpecialpasteAsciitextonly()
+{
+	DoAction(ActionEnums::ASCII_TEXT_ONLY);
+}
+
+
+void CQPasteWnd::OnUpdateSpecialpasteAsciitextonly(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::ASCII_TEXT_ONLY);
 }

@@ -215,6 +215,10 @@ BOOL COleClipSource::DoImmediateRender()
 	{
 		CamelCase(clip);
 	}
+	else if (m_pasteOptions.m_pasteAsciiOnly)
+	{
+		AsciiOnly(clip);
+	}
 	
 	SaveDittoFileDataToFile(clip);
 
@@ -648,6 +652,65 @@ void COleClipSource::SentenceCase(CClip &clip)
 		val.ReleaseBuffer();
 
 		HGLOBAL hGlobal = NewGlobalP(val.GetBuffer(), (len + 1));
+
+		asciiTextFormat->Data(hGlobal);
+	}
+}
+
+void COleClipSource::AsciiOnly(CClip& clip)
+{
+	IClipFormat* unicodeTextFormat = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (unicodeTextFormat != NULL)
+	{
+		CString cs(unicodeTextFormat->GetAsCString());
+		CString newString;
+
+		//free the old text we are going to replace it below with an upper case version
+		unicodeTextFormat->Free();
+		
+		long len = cs.GetLength();
+
+		if (len > 0)
+		{
+			for (int i = 0; i < len; i++)
+			{
+				wchar_t item = cs[i];
+				if (item >= 0x00 && item <= 0x7F)
+				{
+					newString += item;
+				}				
+			}
+		}
+
+		HGLOBAL hGlobal = NewGlobalP(newString.GetBuffer(), ((newString.GetLength() + 1) * sizeof(wchar_t)));
+
+		unicodeTextFormat->Data(hGlobal);
+	}
+
+	IClipFormat* asciiTextFormat = clip.m_Formats.FindFormatEx(CF_TEXT);
+	if (asciiTextFormat != NULL)
+	{
+		CStringA cs(asciiTextFormat->GetAsCStringA());
+		CStringA newString;
+
+		//free the old text we are going to replace it below with an upper case version
+		asciiTextFormat->Free();
+				
+		long len = cs.GetLength();
+
+		if (len > 0)
+		{
+			for (int i = 0; i < len; i++)
+			{
+				char item = cs[i];
+				if (item >= 0x00 && item <= 0x7F)
+				{
+					newString += item;
+				}
+			}
+		}
+
+		HGLOBAL hGlobal = NewGlobalP(newString.GetBuffer(), (newString.GetLength() + 1));
 
 		asciiTextFormat->Data(hGlobal);
 	}

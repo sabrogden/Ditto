@@ -264,6 +264,7 @@ BEGIN
             MENUITEM "Invert Case",                 ID_SPECIALPASTE_TOGGLECASE
             MENUITEM "Trim White Space",            ID_SPECIALPASTE_TRIM
             MENUITEM "CamelCase",                   ID_SPECIALPASTE_CAMELCASE
+            MENUITEM "Ascii Text Only",             ID_SPECIALPASTE_ASCIITEXTONLY
             MENUITEM SEPARATOR
             MENUITEM "Remove Line Feeds",           ID_SPECIALPASTE_REMOVELINEFEEDS
             MENUITEM "Paste + One Line Feed",       ID_SPECIALPASTE_PASTE

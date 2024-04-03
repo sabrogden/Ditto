@@ -824,6 +824,8 @@ void CppSQLite3DB::SetRegexCaseInsensitive(bool insensitive)
 				SetRegexFlags(0);
 			}
 		}
+
+		FreeLibrary(h);
 	}
 }
 

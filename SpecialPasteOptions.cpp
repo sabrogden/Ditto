@@ -26,6 +26,7 @@ CSpecialPasteOptions::CSpecialPasteOptions()
 	m_pasteCamelCase = false;
 	m_pasteImagesHorizontal = false;
 	m_pasteImagesVertically = false;
+	m_pasteAsciiOnly = false;
 }
 
 CSpecialPasteOptions::~CSpecialPasteOptions()

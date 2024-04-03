@@ -803,7 +803,7 @@ void CAdvGeneral::OnBnClickedOk()
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
 					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
-					CGetSetOptions::SetAllowFriends(val);
+					CGetSetOptions::SetAllowFriends(!val);
 				}
 				break;
 			case SETTING_IGNORE_FALSE_COPIES_DELAY:
