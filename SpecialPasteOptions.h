@@ -29,6 +29,7 @@ public:
 	bool m_pasteSlugify;
 	bool m_invertCase;
 	bool m_placeCF_HDROP_OnDrag;
+	bool m_pasteAsciiOnly;
 
 	bool LimitFormatsToText() 
 	{ 
@@ -45,7 +46,8 @@ public:
 			m_trimWhiteSpace ||
 			m_pasteSlugify || 
 			m_invertCase ||
-			m_pasteCamelCase;
+			m_pasteCamelCase ||
+			m_pasteAsciiOnly;
 	}
 
 	bool IncludeRTFForTextOnly()

@@ -278,6 +278,7 @@ public:
 	bool DoPasteUpperCase();
 	bool DoPasteCamelCase();
 	bool DoPasteImagesVert();
+	bool DoPasteAsciiOnly();
 	bool DoPasteImagesHorz();
 	bool DoPasteLowerCase();
 	bool DoPasteCapitalize();
@@ -598,4 +599,6 @@ public:
 	afx_msg void OnUpdateSpecialpasteMultipleImagesHorz(CCmdUI* pCmdUI);
 	afx_msg void OnSpecialpasteMultipleImagesVert();
 	afx_msg void OnUpdateSpecialpasteMultipleImagesVert(CCmdUI* pCmdUI);
+	afx_msg void OnSpecialpasteAsciitextonly();
+	afx_msg void OnUpdateSpecialpasteAsciitextonly(CCmdUI* pCmdUI);
 };
