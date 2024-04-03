@@ -45,4 +45,5 @@ protected:
 	void Slugify(CClip &clip);
 	void InvertCase(CClip &clip);
 	void CamelCase(CClip& clip);
+	void AsciiOnly(CClip& clip);
 };
