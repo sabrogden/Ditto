@@ -685,6 +685,10 @@ public:
 
 	static BOOL GetRegexCaseInsensitive();
 	static void SetRegexCaseInsensitive(BOOL val);
+
+	static BOOL		m_bDrawCopiedColorCode;
+	static void		SetDrawCopiedColorCode(long bDraw);
+	static BOOL		GetDrawCopiedColorCode();
 };
 
 // global for easy access and for initialization of fast access variables

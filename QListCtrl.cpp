@@ -348,8 +348,9 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		nOldBKMode = pDC->SetBkMode(TRANSPARENT);
 
 		CRect rcText = rcItem;
-		rcText.left += ROW_LEFT_BORDER;
-		rcText.top++;
+		rcText.left += m_windowDpi->Scale(ROW_LEFT_BORDER);
+		rcText.top += m_windowDpi->Scale(1);
+		rcText.bottom -= m_windowDpi->Scale(1);
 
 		if (m_showIfClipWasPasted &&
 			strSymbols.GetLength() > 0 &&
@@ -357,11 +358,9 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		{
 			CRect pastedRect(rcItem);
 			pastedRect.left++;
-			pastedRect.right = rcItem.left + m_windowDpi->Scale(3);
+			pastedRect.right = pastedRect.left + m_windowDpi->Scale(2);
 
 			pDC->FillSolidRect(pastedRect, g_Opt.m_Theme.ClipPastedColor());
-
-			rcText.left += m_windowDpi->Scale(4);
 		}
 
 		// set firstTenNum to the first ten number (1-10) corresponding to
@@ -373,6 +372,10 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		{
 			rcText.left += m_windowDpi->Scale(12);
 		}
+		else
+		{
+			rcText.left += m_windowDpi->Scale(3);
+		}
 
 		bool drawInGroupIcon = true;
 		// if we are inside a group, don't display the "in group" flag
@@ -382,6 +385,8 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			if (nFlag >= 0)
 				drawInGroupIcon = false;
 		}
+
+		DrawCopiedColorCode(csText, rcText, pDC);
 
 		DrawBitMap(nItem, rcText, pDC, csText);
 
@@ -485,6 +490,57 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			pDC->SetBkMode(nOldBKMode);
 
 		*pResult = CDRF_SKIPDEFAULT;    // We've painted everything.
+	}
+}
+
+void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
+{
+	if (g_Opt.m_bDrawCopiedColorCode == FALSE)
+		return;
+
+	//draw hex color copied like #FF0000
+	if ((csText.GetLength() >= 7 &&
+		csText.GetLength() < 14 &&
+		csText[0] == '#'))
+	{
+		int r, g, b;
+		int scanRet = swscanf(csText, _T("#%02x%02x%02x"), &r, &g, &b);
+		if (scanRet == 3)
+		{
+			CRect pastedRect(rcText);
+			//pastedRect.left += 2;
+			pastedRect.right = pastedRect.left + m_windowDpi->Scale(rcText.Height());
+
+			pDC->FillSolidRect(pastedRect, COLORREF(RGB(r, g, b)));
+
+			rcText.left += m_windowDpi->Scale(rcText.Height());
+			rcText.left += m_windowDpi->Scale(ROW_LEFT_BORDER);
+		}
+	}
+
+	//draw rgb color copied like rgb(255,0,0)
+	if (csText.GetLength() >= 10 &&
+		csText.Left(4).MakeLower() == _T("rgb("))
+	{
+		int endBracket = csText.Find(_T(")"), 4);
+		if (endBracket > 0)
+		{
+			int startBracket = 4;
+			CString rgb = csText.Mid(startBracket, endBracket - startBracket);
+			int r, g, b;
+			int scanRet = swscanf(rgb, _T("%d,%d,%d"), &r, &g, &b);
+			if (scanRet == 3)
+			{
+				CRect pastedRect(rcText);
+				//pastedRect.left += 2;
+				pastedRect.right = pastedRect.left + m_windowDpi->Scale(rcText.Height());
+
+				pDC->FillSolidRect(pastedRect, COLORREF(RGB(r, g, b)));
+
+				rcText.left += m_windowDpi->Scale(rcText.Height());
+				rcText.left += m_windowDpi->Scale(ROW_LEFT_BORDER);
+			}
+		}
 	}
 }
 

@@ -144,6 +144,7 @@ END_MESSAGE_MAP()
 #define SETTING_SUPPORT_ALL_TYPES 93
 #define SETTING_IGNORE_ANNOYING_CF_DIB 94
 #define SETTING_REGEX_CASE_INSENSITIVE 95
+#define SETTING_DRAW_COPIED_COLOR_CODE 96
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -198,6 +199,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Display icon in system tray"), CGetSetOptions::GetShowIconInSysTray(), SETTING_SHOW_TASKBAR_ICON);
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Double shortcut keystroke timeout)"), (long)CGetSetOptions::GetDoubleKeyStrokeTimeout(), _T(""), SETTING_DOUBLE_KEYSTROKE_TIMEOUT));
+
+	AddTrueFalse(pGroupTest, _T("Draw copied copied color code (hex #RRGGBB or rgb(r,g,b)"), CGetSetOptions::GetDrawCopiedColorCode(), SETTING_DRAW_COPIED_COLOR_CODE);
 
 	AddTrueFalse(pGroupTest, _T("Draw RTF text in list (for RTF types) (could increase memory usage an display speed)"), CGetSetOptions::GetDrawRTF(), SETTING_DRAW_RTF);
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Editor default font size"), (long)CGetSetOptions::GetEditorDefaultFontSize(), _T(""), SETTING_EDITOR_FONT_SIZE));
@@ -838,6 +841,14 @@ void CAdvGeneral::OnBnClickedOk()
 					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetRegexCaseInsensitive(val);
 				}
+				break;
+			case SETTING_DRAW_COPIED_COLOR_CODE:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
+					CGetSetOptions::SetDrawCopiedColorCode(val);
+				}
+				break;
 			}
 		}
 	}
