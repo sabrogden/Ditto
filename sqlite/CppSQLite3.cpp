@@ -782,6 +782,31 @@ void sqlite_regexp(sqlite3_context* context, int argc, sqlite3_value** values)
 	}
 }
 
+bool CppSQLite3DB::DBEncrypted()
+{
+	bool encrypted = false;
+	CFile file;
+	CFileException ex;
+	if (file.Open(m_dbFile, CFile::modeRead | CFile::shareDenyNone, &ex))
+	{
+		if (file.GetLength() > 10)
+		{
+			//an unencrypted database will start with "SQLite format 3\000", if it's encrypted it will start with "Salted__"
+			CStringA b;
+			file.Read(b.GetBufferSetLength(6), 6);
+			b.ReleaseBuffer();
+
+			if (b != "SQLite")
+			{
+				encrypted = true;
+			}
+		}
+		file.Close();
+	}
+
+	return encrypted;
+}
+
 void CppSQLite3DB::open(const TCHAR* szFile)
 {
 #ifdef _UNICODE
@@ -789,6 +814,18 @@ void CppSQLite3DB::open(const TCHAR* szFile)
 #else
 	int nRet = sqlite3_open(szFile, &mpDB);
 #endif
+
+	//sqlite3_exec(mpDB, "PRAGMA rekey=123456", 0, 0, 0);
+	//sqlite3_exec(mpDB, "PRAGMA key=123456", 0, 0, 0);
+
+	//int r = sqlite3_rekey(mpDB, "123456", 6);
+	
+	//if (encrypted)
+	//{
+	//	int rr = sqlite3_key(mpDB, "123456", 6);
+	//}
+
+	m_dbFile = szFile;
 
 	if (nRet != SQLITE_OK)
 	{
@@ -834,7 +871,9 @@ bool CppSQLite3DB::close()
 	bool bRet = true;
 	if (mpDB)
 	{
+		//sqlite3_shutdown();
 		int nClose = sqlite3_close(mpDB);
+		
 		if(nClose != SQLITE_OK)
 		{
 			ASSERT(!"Error closing sqlite db");
@@ -892,7 +931,7 @@ int CppSQLite3DB::execDML(const TCHAR* szSQL)
 	{
 		nRet = sqlite3_changes(mpDB);
 		sqlite3_finalize(pVM);
-	}
+	}	
 	else
 	{
 		nRet = sqlite3_finalize(pVM);

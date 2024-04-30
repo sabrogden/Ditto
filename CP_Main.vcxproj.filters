@@ -4,12 +4,6 @@
     <ClCompile Include="sqlite\CppSQLite3.cpp">
       <Filter>sqlite</Filter>
     </ClCompile>
-    <ClCompile Include="sqlite\shell.c">
-      <Filter>sqlite</Filter>
-    </ClCompile>
-    <ClCompile Include="sqlite\sqlite3.c">
-      <Filter>sqlite</Filter>
-    </ClCompile>
     <ClCompile Include="ClipboardSaveRestore.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -472,15 +466,12 @@
     </ClCompile>
     <ClCompile Include="ImageFormatAggregator.cpp" />
     <ClCompile Include="ImageHelper.cpp" />
+    <ClCompile Include="sqlite\sqlite3mc_amalgamation.c">
+      <Filter>sqlite</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sqlite\CppSQLite3.h">
-      <Filter>sqlite</Filter>
-    </ClInclude>
-    <ClInclude Include="sqlite\sqlite3.h">
-      <Filter>sqlite</Filter>
-    </ClInclude>
-    <ClInclude Include="sqlite\sqlite3ext.h">
       <Filter>sqlite</Filter>
     </ClInclude>
     <ClInclude Include="About.h">
@@ -981,6 +972,9 @@
     </ClInclude>
     <ClInclude Include="ImageFormatAggregator.h" />
     <ClInclude Include="ImageHelper.h" />
+    <ClInclude Include="sqlite\sqlite3mc_amalgamation.h">
+      <Filter>sqlite</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
