@@ -105,7 +105,10 @@ CString CMainTableFunctions::GetDisplayText(int nMaxLines, const CString &OrigTe
 			text += line;
 		}
 
-		text += _T("\n");
+		if (i != count - 1)
+		{
+			text += _T("\n");
+		}
 	}
 
 	return text;

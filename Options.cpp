@@ -9,6 +9,7 @@
 #include "ActionEnums.h"
 #include "Shared/Tokenizer.h"
 #include <set>
+#include <Wincrypt.h>
 
 using namespace nsPath;
 
@@ -43,6 +44,7 @@ BOOL CGetSetOptions::m_bLogSendReceiveErrors;
 BOOL CGetSetOptions::m_HideDittoOnHotKeyIfAlreadyShown;
 long CGetSetOptions::m_lPort;
 BOOL CGetSetOptions::m_bDrawThumbnail;
+BOOL CGetSetOptions::m_bDrawCopiedColorCode;
 BOOL CGetSetOptions::m_bFastThumbnailMode;
 CStringA CGetSetOptions::m_csPassword;
 BOOL CGetSetOptions::m_bDrawRTF;
@@ -90,6 +92,79 @@ BOOL CGetSetOptions::m_supportAllTypes = FALSE;
 
 CGetSetOptions::CGetSetOptions()
 {
+	//DATA_BLOB DataIn;
+	//DATA_BLOB DataOut;
+	//DATA_BLOB DataVerify;
+	//BYTE* pbDataInput = (BYTE*)"Hello world of data protection.";
+	//DWORD cbDataInput = strlen((char*)pbDataInput) + 1;
+	//DataIn.pbData = pbDataInput;
+	//DataIn.cbData = cbDataInput;
+	//CRYPTPROTECT_PROMPTSTRUCT PromptStruct;
+	//LPWSTR pDescrOut = NULL;
+
+	//CRYPTPROTECT_LOCAL_MACHINE
+
+	////-------------------------------------------------------------------
+	////  Begin processing.
+
+	//printf("The data to be encrypted is: %s\n", pbDataInput);
+
+	////-------------------------------------------------------------------
+	////  Initialize PromptStruct.
+
+	////ZeroMemory(&PromptStruct, sizeof(PromptStruct));
+	////PromptStruct.cbSize = sizeof(PromptStruct);
+	////PromptStruct.dwPromptFlags = CRYPTPROTECT_PROMPT_ON_PROTECT;
+	////PromptStruct.szPrompt = L"This is a user prompt.";
+
+	////-------------------------------------------------------------------
+	////  Begin protect phase.
+
+	//if (CryptProtectData(
+	//	&DataIn,
+	//	L"This is the description string.", // A description string. 
+	//	NULL,                               // Optional entropy
+	//	// not used.
+	//	NULL,                               // Reserved.
+	//	NULL,                      // Pass a PromptStruct.
+	//	0,
+	//	&DataOut))
+	//{
+	//	printf("The encryption phase worked. \n");
+	//}
+	//else
+	//{
+	//	//MyHandleError("Encryption error!");
+	//}
+
+	//if (CryptUnprotectData(
+	//	&DataOut,
+	//	&pDescrOut,
+	//	NULL,                 // Optional entropy
+	//	NULL,                 // Reserved
+	//	NULL,        // Optional PromptStruct
+	//	0,
+	//	&DataVerify))
+	//{
+	//	printf("The decrypted data is: %s\n", DataVerify.pbData);
+	//	printf("The description of the data was: %S\n", pDescrOut);
+	//}
+	//else
+	//{
+	//	//MyHandleError("Decryption error!");
+	//}
+	////-------------------------------------------------------------------
+	//// At this point, memcmp could be used to compare DataIn.pbData and 
+	//// DataVerify.pbDate for equality. If the two functions worked
+	//// correctly, the two byte strings are identical. 
+
+	////-------------------------------------------------------------------
+	////  Clean up.
+
+	//LocalFree(pDescrOut);
+	//LocalFree(DataOut.pbData);
+	//LocalFree(DataVerify.pbData);
+ // End of main
 }
 
 CGetSetOptions::~CGetSetOptions()
@@ -189,6 +264,7 @@ void CGetSetOptions::LoadSettings()
 	m_HideDittoOnHotKeyIfAlreadyShown = GetHideDittoOnHotKeyIfAlreadyShown();
 	m_lPort = GetPort();
 	m_bDrawThumbnail = GetDrawThumbnail();
+	m_bDrawCopiedColorCode = GetDrawCopiedColorCode();
 	m_bFastThumbnailMode = GetFastThumbnailMode();
 	m_csPassword = GetNetworkPassword();
 	m_bDrawRTF = GetDrawRTF();
@@ -3023,4 +3099,17 @@ BOOL CGetSetOptions::GetRegexCaseInsensitive()
 void CGetSetOptions::SetRegexCaseInsensitive(BOOL val)
 {
 	SetProfileLong("RegexCaseInsensitive", val);
+}
+
+void CGetSetOptions::SetDrawCopiedColorCode(long bDraw)
+{
+	SetProfileLong("DrawCopiedColorCode", bDraw);
+	m_bDrawCopiedColorCode = bDraw;
+}
+
+BOOL CGetSetOptions::GetDrawCopiedColorCode()
+{
+	BOOL drawCopiedColorCode = TRUE;
+
+	return GetProfileLong("DrawCopiedColorCode", drawCopiedColorCode);
 }
