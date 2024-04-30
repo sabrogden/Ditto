@@ -130,22 +130,22 @@ sha2_void sha512_compile(sha512_ctx ctx[1]);
 sha2_void sha256_begin(sha256_ctx ctx[1]);
 sha2_void sha256_hash(const unsigned char data[], unsigned long len, sha256_ctx ctx[1]);
 sha2_void sha256_end(unsigned char hval[], sha256_ctx ctx[1]);
-sha2_void sha256(unsigned char hval[], const unsigned char data[], unsigned long len); 
+sha2_void sha256Lib(unsigned char hval[], const unsigned char data[], unsigned long len); 
 
 sha2_void sha384_begin(sha384_ctx ctx[1]);
 #define sha384_hash sha512_hash
 sha2_void sha384_end(unsigned char hval[], sha384_ctx ctx[1]);
-sha2_void sha384(unsigned char hval[], const unsigned char data[], unsigned long len); 
+sha2_void sha384Lib(unsigned char hval[], const unsigned char data[], unsigned long len); 
 
 sha2_void sha512_begin(sha512_ctx ctx[1]);
 sha2_void sha512_hash(const unsigned char data[], unsigned long len, sha512_ctx ctx[1]);
 sha2_void sha512_end(unsigned char hval[], sha512_ctx ctx[1]);
-sha2_void sha512(unsigned char hval[], const unsigned char data[], unsigned long len); 
+sha2_void sha512Lib(unsigned char hval[], const unsigned char data[], unsigned long len); 
 
 sha2_int  sha2_begin(unsigned long size, sha2_ctx ctx[1]);
 sha2_void sha2_hash(const unsigned char data[], unsigned long len, sha2_ctx ctx[1]);
 sha2_void sha2_end(unsigned char hval[], sha2_ctx ctx[1]);
-sha2_int  sha2(unsigned char hval[], unsigned long size, const unsigned char data[], unsigned long len); 
+sha2_int  sha2Lib(unsigned char hval[], unsigned long size, const unsigned char data[], unsigned long len); 
 
 #if defined(__cplusplus)
 }

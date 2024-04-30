@@ -28,7 +28,8 @@
 #ifndef _CppSQLite3_H_
 #define _CppSQLite3_H_
 
-#include "sqlite3.h"
+//#include "sqlite3.h"
+#include "sqlite3mc_amalgamation.h"
 #include <cstdio>
 #include <cstring>
 
@@ -205,6 +206,8 @@ public:
 
     bool IsDatabaseOpen() { return mpDB != NULL; }
 
+    bool DBEncrypted();
+
 private:
 
     CppSQLite3DB(const CppSQLite3DB& db);
@@ -216,6 +219,7 @@ private:
 
     sqlite3* mpDB;
     int mnBusyTimeoutMs;
+    CString m_dbFile;
 };
 
 #endif

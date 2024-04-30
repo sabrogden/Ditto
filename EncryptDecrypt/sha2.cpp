@@ -393,7 +393,7 @@ sha2_void sha256_end(unsigned char hval[], sha256_ctx ctx[1])
         hval[i] = (unsigned char)(ctx->hash[i >> 2] >> (8 * (~i & 3)));
 }
 
-sha2_void sha256(unsigned char hval[], const unsigned char data[], unsigned long len) 
+sha2_void sha256Lib(unsigned char hval[], const unsigned char data[], unsigned long len) 
 {   sha256_ctx  cx[1];
     
     sha256_begin(cx); sha256_hash(data, len, cx); sha256_end(hval, cx);
@@ -616,7 +616,7 @@ sha2_void sha384_end(unsigned char hval[], sha384_ctx ctx[1])
     sha_end(hval, ctx, SHA384_DIGEST_SIZE);
 }
 
-sha2_void sha384(unsigned char hval[], const unsigned char data[], unsigned long len)
+sha2_void sha384Lib(unsigned char hval[], const unsigned char data[], unsigned long len)
 {   sha384_ctx  cx[1];
     
     sha384_begin(cx); sha384_hash(data, len, cx); sha384_end(hval, cx);
@@ -647,7 +647,7 @@ sha2_void sha512_end(unsigned char hval[], sha512_ctx ctx[1])
     sha_end(hval, ctx, SHA512_DIGEST_SIZE);
 }
 
-sha2_void sha512(unsigned char hval[], const unsigned char data[], unsigned long len) 
+sha2_void sha512Lib(unsigned char hval[], const unsigned char data[], unsigned long len) 
 {   sha512_ctx  cx[1];
     
     sha512_begin(cx); sha512_hash(data, len, cx); sha512_end(hval, cx);
@@ -702,7 +702,7 @@ sha2_void sha2_end(unsigned char hval[], sha2_ctx ctx[1])
     }
 }
 
-sha2_int sha2(unsigned char hval[], unsigned long size,
+sha2_int sha2Lib(unsigned char hval[], unsigned long size,
                                 const unsigned char data[], unsigned long len)
 {   sha2_ctx    cx[1];
 
