@@ -18,7 +18,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define ROW_BOTTOM_BORDER		2
+#define ROW_BOTTOM_BORDER		4
 #define ROW_LEFT_BORDER			3
 #define COLOR_SHADOW			RGB(245, 245, 245)
 #define DUMMY_COL_WIDTH			2
