@@ -498,17 +498,17 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 	if (g_Opt.m_bDrawCopiedColorCode == FALSE)
 		return;
 
-	//draw hex color copied like #FF0000
-	if ((csText.GetLength() >= 7 &&
-		csText.GetLength() < 14 &&
-		csText[0] == '#'))
+	CString trimmedText = CString(csText).Trim(L'»').Trim().Trim('#');
+
+	//draw hex color copied like #FF0000, FF0000, FF0000 other text with a space before other text
+	if (trimmedText.GetLength() == 6 ||
+		trimmedText.Find(' ') == 6)
 	{
 		int r, g, b;
-		int scanRet = swscanf(csText, _T("#%02x%02x%02x"), &r, &g, &b);
+		int scanRet = swscanf(trimmedText, _T("%02x%02x%02x"), &r, &g, &b);
 		if (scanRet == 3)
 		{
 			CRect pastedRect(rcText);
-			//pastedRect.left += 2;
 			pastedRect.right = pastedRect.left + m_windowDpi->Scale(rcText.Height());
 
 			pDC->FillSolidRect(pastedRect, COLORREF(RGB(r, g, b)));
@@ -518,27 +518,30 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 		}
 	}
 
-	//draw rgb color copied like rgb(255,0,0)
-	if (csText.GetLength() >= 10 &&
-		csText.Left(4).MakeLower() == _T("rgb("))
+	// draw rgb color copied like 255,0,0 and rgb(255,0,0)
+	int firstCommaPos = trimmedText.Find(',');
+	if (firstCommaPos >= 0)
 	{
-		int endBracket = csText.Find(_T(")"), 4);
-		if (endBracket > 0)
+		int secondCommaPos = trimmedText.Find(',', firstCommaPos+1);
+		if (secondCommaPos)
 		{
-			int startBracket = 4;
-			CString rgb = csText.Mid(startBracket, endBracket - startBracket);
-			int r, g, b;
-			int scanRet = swscanf(rgb, _T("%d,%d,%d"), &r, &g, &b);
-			if (scanRet == 3)
+			int noThirdCommaPos = trimmedText.Find(',', secondCommaPos+1);
+			
+			if (noThirdCommaPos < 0)
 			{
-				CRect pastedRect(rcText);
-				//pastedRect.left += 2;
-				pastedRect.right = pastedRect.left + m_windowDpi->Scale(rcText.Height());
+				int r, g, b;
+				CString noRGB = trimmedText.MakeLower().Trim(_T("rgb(")).Trim(')');
+				int scanRet = swscanf(noRGB, _T("%d,%d,%d"), &r, &g, &b);
+				if (scanRet == 3)
+				{
+					CRect pastedRect(rcText);
+					pastedRect.right = pastedRect.left + m_windowDpi->Scale(rcText.Height());
 
-				pDC->FillSolidRect(pastedRect, COLORREF(RGB(r, g, b)));
+					pDC->FillSolidRect(pastedRect, COLORREF(RGB(r, g, b)));
 
-				rcText.left += m_windowDpi->Scale(rcText.Height());
-				rcText.left += m_windowDpi->Scale(ROW_LEFT_BORDER);
+					rcText.left += m_windowDpi->Scale(rcText.Height());
+					rcText.left += m_windowDpi->Scale(ROW_LEFT_BORDER);
+				}
 			}
 		}
 	}
