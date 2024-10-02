@@ -75,6 +75,15 @@ public:
 	CHotKey* m_pCopyBuffer3;
 	CHotKey* m_pPasteBuffer3;
 	CHotKey* m_pCutBuffer3;
+
+	CHotKey* m_pCopyBuffer4;
+	CHotKey* m_pPasteBuffer4;
+	CHotKey* m_pCutBuffer4;
+
+	CHotKey* m_pCopyBuffer5;
+	CHotKey* m_pPasteBuffer5;
+	CHotKey* m_pCutBuffer5;
+
 	CHotKey* m_pTextOnlyPaste;
 	CHotKey* m_pSaveClipboard;
 	CHotKey* m_pCopyAndSaveClipboard;

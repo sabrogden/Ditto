@@ -484,6 +484,14 @@ void CCP_MainApp::AfterMainCreate()
 	m_pPasteBuffer3 = new CHotKey("CopyBufferPasteHotKey_2", 0, true);
 	m_pCutBuffer3 = new CHotKey("CopyBufferCutHotKey_2", 0, true);
 
+	m_pCopyBuffer4 = new CHotKey("CopyBufferCopyHotKey_3", 0, true);
+	m_pPasteBuffer4 = new CHotKey("CopyBufferPasteHotKey_3", 0, true);
+	m_pCutBuffer4 = new CHotKey("CopyBufferCutHotKey_3", 0, true);
+
+	m_pCopyBuffer5 = new CHotKey("CopyBufferCopyHotKey_4", 0, true);
+	m_pPasteBuffer5 = new CHotKey("CopyBufferPasteHotKey_4", 0, true);
+	m_pCutBuffer5 = new CHotKey("CopyBufferCutHotKey_4", 0, true);
+
 	m_pTextOnlyPaste = new CHotKey("TextOnlyPaste", 0, true);
 
 	m_pSaveClipboard = new CHotKey("SaveClipboard", 0, false);
