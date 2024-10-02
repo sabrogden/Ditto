@@ -36,4 +36,10 @@ public:
 	CHotKeyCtrl m_CopyBuffer3;
 	CHotKeyCtrl m_PasteBuffer3;
 	CHotKeyCtrl m_CutBuffer3;
+	CHotKeyCtrl m_CopyBuffer4;
+	CHotKeyCtrl m_PasteBuffer4;
+	CHotKeyCtrl m_CutBuffer4;
+	CHotKeyCtrl m_CopyBuffer5;
+	CHotKeyCtrl m_PasteBuffer5;
+	CHotKeyCtrl m_CutBuffer5;
 };

@@ -33,6 +33,14 @@ void COptionsCopyBuffers::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_COPY_3, m_CopyBuffer3);
 	DDX_Control(pDX, IDC_PASTE_3, m_PasteBuffer3);
 	DDX_Control(pDX, IDC_CUT_3, m_CutBuffer3);
+
+	DDX_Control(pDX, IDC_COPY_4, m_CopyBuffer4);
+	DDX_Control(pDX, IDC_PASTE_4, m_PasteBuffer4);
+	DDX_Control(pDX, IDC_CUT_4, m_CutBuffer4);
+
+	DDX_Control(pDX, IDC_COPY_5, m_CopyBuffer5);
+	DDX_Control(pDX, IDC_PASTE_5, m_PasteBuffer5);
+	DDX_Control(pDX, IDC_CUT_5, m_CutBuffer5);
 }
 
 
@@ -63,6 +71,18 @@ BOOL COptionsCopyBuffers::OnInitDialog()
 	theApp.m_pCutBuffer3->CopyToCtrl(m_CutBuffer3, m_hWnd, IDC_WIN_CUT_3);
 	CheckDlgButton(IDC_PLAY_SOUND_3, Item.m_bPlaySoundOnCopy);
 
+	g_Opt.GetCopyBufferItem(3, Item);
+	theApp.m_pCopyBuffer4->CopyToCtrl(m_CopyBuffer4, m_hWnd, IDC_WIN_COPY_4);
+	theApp.m_pPasteBuffer4->CopyToCtrl(m_PasteBuffer4, m_hWnd, IDC_WIN_PASTE_4);
+	theApp.m_pCutBuffer4->CopyToCtrl(m_CutBuffer4, m_hWnd, IDC_WIN_CUT_4);
+	CheckDlgButton(IDC_PLAY_SOUND_4, Item.m_bPlaySoundOnCopy);
+
+	g_Opt.GetCopyBufferItem(4, Item);
+	theApp.m_pCopyBuffer5->CopyToCtrl(m_CopyBuffer5, m_hWnd, IDC_WIN_COPY_5);
+	theApp.m_pPasteBuffer5->CopyToCtrl(m_PasteBuffer5, m_hWnd, IDC_WIN_PASTE_5);
+	theApp.m_pCutBuffer5->CopyToCtrl(m_CutBuffer5, m_hWnd, IDC_WIN_CUT_5);
+	CheckDlgButton(IDC_PLAY_SOUND_5, Item.m_bPlaySoundOnCopy);
+
 	theApp.m_Language.UpdateOptionCopyBuffers(this);
 
 	return TRUE;
@@ -85,6 +105,14 @@ BOOL COptionsCopyBuffers::OnApply()
 	theApp.m_pPasteBuffer3->CopyFromCtrl(m_PasteBuffer3, m_hWnd, IDC_WIN_PASTE_3);
 	theApp.m_pCutBuffer3->CopyFromCtrl(m_CutBuffer3, m_hWnd, IDC_WIN_CUT_3);
 
+	theApp.m_pCopyBuffer4->CopyFromCtrl(m_CopyBuffer4, m_hWnd, IDC_WIN_COPY_4);
+	theApp.m_pPasteBuffer4->CopyFromCtrl(m_PasteBuffer4, m_hWnd, IDC_WIN_PASTE_4);
+	theApp.m_pCutBuffer4->CopyFromCtrl(m_CutBuffer4, m_hWnd, IDC_WIN_CUT_4);
+
+	theApp.m_pCopyBuffer5->CopyFromCtrl(m_CopyBuffer5, m_hWnd, IDC_WIN_COPY_5);
+	theApp.m_pPasteBuffer5->CopyFromCtrl(m_PasteBuffer5, m_hWnd, IDC_WIN_PASTE_5);
+	theApp.m_pCutBuffer5->CopyFromCtrl(m_CutBuffer5, m_hWnd, IDC_WIN_CUT_5);
+
 	CCopyBufferItem Item;
 	g_Opt.GetCopyBufferItem(0, Item);
 	Item.m_bPlaySoundOnCopy = IsDlgButtonChecked(IDC_PLAY_SOUND_1);
@@ -97,6 +125,14 @@ BOOL COptionsCopyBuffers::OnApply()
 	g_Opt.GetCopyBufferItem(2, Item);
 	Item.m_bPlaySoundOnCopy = IsDlgButtonChecked(IDC_PLAY_SOUND_3);
 	g_Opt.SetCopyBufferItem(2, Item);
+
+	g_Opt.GetCopyBufferItem(3, Item);
+	Item.m_bPlaySoundOnCopy = IsDlgButtonChecked(IDC_PLAY_SOUND_4);
+	g_Opt.SetCopyBufferItem(3, Item);
+
+	g_Opt.GetCopyBufferItem(4, Item);
+	Item.m_bPlaySoundOnCopy = IsDlgButtonChecked(IDC_PLAY_SOUND_5);
+	g_Opt.SetCopyBufferItem(4, Item);
 
 	INT_PTR x;
 	INT_PTR y;

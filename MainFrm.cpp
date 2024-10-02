@@ -405,6 +405,36 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
         Log(_T("Cut buffer 3 hot key"));
         theApp.m_CopyBuffer.StartCopy(2, true);
     }
+	else if (theApp.m_pCopyBuffer4 && wParam == theApp.m_pCopyBuffer4->m_Atom)
+	{
+		Log(_T("Copy buffer 4 hot key"));
+		theApp.m_CopyBuffer.StartCopy(3);
+	}
+	else if (theApp.m_pPasteBuffer4 && wParam == theApp.m_pPasteBuffer4->m_Atom)
+	{
+		Log(_T("Paste buffer 4 hot key"));
+		theApp.m_CopyBuffer.PastCopyBuffer(3);
+	}
+	else if (theApp.m_pCutBuffer4 && wParam == theApp.m_pCutBuffer4->m_Atom)
+	{
+		Log(_T("Cut buffer 4 hot key"));
+		theApp.m_CopyBuffer.StartCopy(3, true);
+	}
+	else if (theApp.m_pCopyBuffer5 && wParam == theApp.m_pCopyBuffer5->m_Atom)
+	{
+		Log(_T("Copy buffer 5 hot key"));
+		theApp.m_CopyBuffer.StartCopy(4);
+		}
+	else if (theApp.m_pPasteBuffer5 && wParam == theApp.m_pPasteBuffer5->m_Atom)
+	{
+		Log(_T("Paste buffer 5 hot key"));
+		theApp.m_CopyBuffer.PastCopyBuffer(4);
+	}
+	else if (theApp.m_pCutBuffer5 && wParam == theApp.m_pCutBuffer5->m_Atom)
+	{
+		Log(_T("Cut buffer 5 hot key"));
+		theApp.m_CopyBuffer.StartCopy(4, true);
+	}
 	else if(theApp.m_pTextOnlyPaste && wParam == theApp.m_pTextOnlyPaste->m_Atom)
 	{
 		DoTextOnlyPaste();
