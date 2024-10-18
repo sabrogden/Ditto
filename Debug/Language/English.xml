@@ -180,7 +180,7 @@
 		<Item English_Text = "Start Ditto on System Startup" ID = "2004"></Item>
 		<Item English_Text = "Display Icon in System Tray" ID = "2003"></Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008"></Item>
-		<Item English_Text = "Paste Entries Expire after" ID = "2009"></Item>
+		<Item English_Text = "Pasted Entries Expire after" ID = "2009"></Item>
 		<Item English_Text = "Days" ID = "2043"></Item>
 		<Item English_Text = "Compact and Repair" ID = "1028"></Item>
 		<Item English_Text = "Check Now" ID = "1030"></Item>
