@@ -45,6 +45,7 @@ BOOL CGetSetOptions::m_HideDittoOnHotKeyIfAlreadyShown;
 long CGetSetOptions::m_lPort;
 BOOL CGetSetOptions::m_bDrawThumbnail;
 BOOL CGetSetOptions::m_bDrawCopiedColorCode;
+BOOL CGetSetOptions::m_centerWindowBelowCursorOrCaret;
 BOOL CGetSetOptions::m_bFastThumbnailMode;
 CStringA CGetSetOptions::m_csPassword;
 BOOL CGetSetOptions::m_bDrawRTF;
@@ -265,6 +266,7 @@ void CGetSetOptions::LoadSettings()
 	m_lPort = GetPort();
 	m_bDrawThumbnail = GetDrawThumbnail();
 	m_bDrawCopiedColorCode = GetDrawCopiedColorCode();
+	m_centerWindowBelowCursorOrCaret = GetCenterWindowBelowCursorOrCaret();
 	m_bFastThumbnailMode = GetFastThumbnailMode();
 	m_csPassword = GetNetworkPassword();
 	m_bDrawRTF = GetDrawRTF();
@@ -3110,6 +3112,17 @@ void CGetSetOptions::SetDrawCopiedColorCode(long bDraw)
 BOOL CGetSetOptions::GetDrawCopiedColorCode()
 {
 	BOOL drawCopiedColorCode = TRUE;
-
 	return GetProfileLong("DrawCopiedColorCode", drawCopiedColorCode);
+}
+
+void CGetSetOptions::SetCenterWindowBelowCursorOrCaret(BOOL center)
+{
+	SetProfileLong("CenterWindowBelowCursorOrCaret", center);
+	m_centerWindowBelowCursorOrCaret = center;
+}
+
+BOOL CGetSetOptions::GetCenterWindowBelowCursorOrCaret()
+{
+	BOOL centerWindowBelowCursorOrCaret = FALSE;
+	return GetProfileLong("CenterWindowBelowCursorOrCaret", centerWindowBelowCursorOrCaret);
 }

@@ -179,6 +179,10 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	else if (nPosition == POS_AT_CARET)
 	{
 		point = ptCaret;
+		if (CGetSetOptions::m_centerWindowBelowCursorOrCaret)
+		{
+			point.x -= csSize.cx / 2;
+		}
 	}
 	else if (nPosition == POS_AT_CURSOR)
 	{
@@ -186,6 +190,11 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 		//keep the mouse from showing the tooltip because if overlaps with the top corner
 		point.x += 2;
 		point.y += 2;
+
+		if (CGetSetOptions::m_centerWindowBelowCursorOrCaret)
+		{
+			point.x -= csSize.cx / 2;
+		}
 	}
 	else if(nPosition == POS_AT_PREVIOUS)
 		CGetSetOptions::GetQuickPastePoint(point);
