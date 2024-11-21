@@ -689,6 +689,11 @@ public:
 	static BOOL		m_bDrawCopiedColorCode;
 	static void		SetDrawCopiedColorCode(long bDraw);
 	static BOOL		GetDrawCopiedColorCode();
+
+
+	static BOOL m_centerWindowBelowCursorOrCaret;
+	static void SetCenterWindowBelowCursorOrCaret(BOOL center);
+	static BOOL GetCenterWindowBelowCursorOrCaret();
 };
 
 // global for easy access and for initialization of fast access variables
