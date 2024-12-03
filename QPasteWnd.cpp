@@ -15,8 +15,6 @@
 #include "Path.h"
 #include "ActionEnums.h"
 #include <algorithm>
-#include "QRCodeViewer.h"
-#include "CreateQRCodeImage.h"
 #include "ClipCompare.h"
 #include "Misc.h"
 #include "FriendPromptDlg.h"
@@ -4292,22 +4290,22 @@ bool CQPasteWnd::DoExportToQRCode()
 			{
 				CString clipText = clip.GetUnicodeTextFormat();
 
-				CCreateQRCodeImage p;
-				int imageSize = 0;
-				unsigned char* bitmapData = p.CreateImage(clipText, imageSize);
+				CString clipTextUrlEncoded = InternetEncode(clipText);
+				CString qrCodeUrl = CGetSetOptions::GetQRCodeUrl();
+				CString url = StrF(_T("%s%s"), qrCodeUrl, clipTextUrlEncoded);
 
-				if (bitmapData != NULL)
+				Log(StrF(_T("Opening qr code url: %s")), url);
+
+				if (!g_Opt.m_bShowPersistent)
 				{
-					QRCodeViewer *viewer = new QRCodeViewer();
-
-					LOGFONT lf;
-					CGetSetOptions::GetFont(lf);
-
-					viewer->CreateEx(this, bitmapData, imageSize, clip.Description(), m_lstHeader.GetRowHeight(), lf);
-					viewer->ShowWindow(SW_SHOW);
-
-					ret = true;
+					HideQPasteWindow(false, false);
 				}
+				else if (g_Opt.GetAutoHide())
+				{
+					MinMaxWindow(FORCE_MIN);
+				}
+
+				CHyperLink::GotoURL(url, SW_SHOW);
 			}
 		}
 	}
