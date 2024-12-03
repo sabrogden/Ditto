@@ -137,7 +137,7 @@ BOOL CClient::OpenConnection(const TCHAR* servername)
 	}
 
 	CString parsedServerName = servername;
-	m_connectionPort = g_Opt.m_lPort;
+	m_connectionPort = CGetSetOptions::m_lPort;
 
 	CTokenizer tokenizer(servername, ":");
 	CString token;
@@ -202,9 +202,9 @@ BOOL CClient::SendItem(CClip *pClip, bool manualSend)
 	Info.m_manualSend = manualSend;
 
 	////only send a response port if it's different than the default
-	if (g_Opt.m_lPort != 23443 || m_connectionPort != 23443)
+	if (CGetSetOptions::m_lPort != 23443 || m_connectionPort != 23443)
 	{
-		Info.m_respondPort = g_Opt.m_lPort;
+		Info.m_respondPort = CGetSetOptions::m_lPort;
 	}
 
 	//Send all text over as UTF-8
@@ -261,7 +261,7 @@ BOOL CClient::SendClipFormat(CClipFormat* pCF)
 
 	if(m_SendSocket.m_pEncryptor)
 	{
-		if(m_SendSocket.m_pEncryptor->Encrypt((UCHAR*)pvData, (int)length, g_Opt.m_csPassword, pOutput, nLenOutput))
+		if(m_SendSocket.m_pEncryptor->Encrypt((UCHAR*)pvData, (int)length, CGetSetOptions::m_csPassword, pOutput, nLenOutput))
 		{
 			LogSendRecieveInfo(StrF(_T("AFTER Encrypt clip data %d"), nLenOutput));
 
@@ -320,7 +320,7 @@ HGLOBAL CClient::RequestCopiedFiles(CClipFormat &HDropFormat, CString csIP, CStr
 	pProgress->PumpMessages();
 
 	CString requestFrom;
-	if(g_Opt.GetRequestFilesUsingIP())
+	if(CGetSetOptions::GetRequestFilesUsingIP())
 	{
 		requestFrom = csIP;
 	}

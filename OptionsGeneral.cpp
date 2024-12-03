@@ -129,8 +129,8 @@ BOOL COptionsGeneral::OnInitDialog()
 		m_eMaxSavedCopies.EnableWindow(FALSE);
 	}
 
-	m_copyAppInclude.SetWindowText(g_Opt.GetCopyAppInclude());
-	m_copyAppExclude.SetWindowText(g_Opt.GetCopyAppExclude());
+	m_copyAppInclude.SetWindowText(CGetSetOptions::GetCopyAppInclude());
+	m_copyAppExclude.SetWindowText(CGetSetOptions::GetCopyAppExclude());
 
 	
 	CGetSetOptions::GetFont(m_LogFont);	
@@ -234,15 +234,15 @@ BOOL COptionsGeneral::OnApply()
 	CString stringVal;
 
 	m_copyAppInclude.GetWindowText(stringVal);
-	g_Opt.SetCopyAppInclude(stringVal);
+	CGetSetOptions::SetCopyAppInclude(stringVal);
 	m_copyAppExclude.GetWindowText(stringVal);
-	g_Opt.SetCopyAppExclude(stringVal);
+	CGetSetOptions::SetCopyAppExclude(stringVal);
 
 	CString csLanguage;
 	if(m_cbLanguage.GetCurSel() >= 0)
 	{
 		m_cbLanguage.GetLBText(m_cbLanguage.GetCurSel(), csLanguage);
-		g_Opt.SetLanguageFile(csLanguage);
+		CGetSetOptions::SetLanguageFile(csLanguage);
 	}
 	
 	if(csLanguage.IsEmpty() == FALSE)
@@ -320,7 +320,7 @@ BOOL COptionsGeneral::OnApply()
 		CGetSetOptions::SetFont(m_LogFont);
 	}
 
-	CString currentTheme = g_Opt.GetTheme();
+	CString currentTheme = CGetSetOptions::GetTheme();
 
 	CString csTheme = _T("");
 	if (m_cbTheme.GetCurSel() >= 0)
@@ -328,16 +328,16 @@ BOOL COptionsGeneral::OnApply()
 		if (m_cbTheme.GetItemData(m_cbTheme.GetCurSel()) == 1)
 		{
 			m_cbTheme.GetLBText(m_cbTheme.GetCurSel(), csTheme);			
-			g_Opt.SetTheme(csTheme);
+			CGetSetOptions::SetTheme(csTheme);
 		}
 		else
 		{
-			g_Opt.SetTheme("");
+			CGetSetOptions::SetTheme("");
 		}
 	}
 	else
 	{
-		g_Opt.SetTheme("");
+		CGetSetOptions::SetTheme("");
 	}
 
 	if (currentTheme != csTheme)

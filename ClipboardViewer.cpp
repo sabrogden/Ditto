@@ -157,7 +157,7 @@ void CClipboardViewer::Disconnect(bool bSendPing)
 
 void CClipboardViewer::SendPing()
 {
-	if(g_Opt.m_bEnsureConnectToClipboard)
+	if(CGetSetOptions::m_bEnsureConnectToClipboard)
 	{
 		if(OpenClipboard())
 		{
@@ -267,7 +267,7 @@ void CClipboardViewer::OnDrawClipboard()
 					Log(StrF(_T("OnDrawClipboard:: *** SetTimer *** %d"), GetTickCount()));
 
 					KillTimer(TIMER_DRAW_CLIPBOARD);
-					SetTimer(TIMER_DRAW_CLIPBOARD, g_Opt.m_lProcessDrawClipboardDelay, NULL);		
+					SetTimer(TIMER_DRAW_CLIPBOARD, CGetSetOptions::m_lProcessDrawClipboardDelay, NULL);		
 				}
 			}
 		}
@@ -389,7 +389,7 @@ void CClipboardViewer::OnTimer(UINT_PTR nIDEvent)
 		
 			DWORD dwNow = GetTickCount();
 
-			if(dwNow - m_dwLastCopy > g_Opt.m_dwSaveClipDelay || m_dwLastCopy > dwNow)
+			if(dwNow - m_dwLastCopy > CGetSetOptions::m_dwSaveClipDelay || m_dwLastCopy > dwNow)
 			{
 				if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
 				{

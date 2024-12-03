@@ -454,7 +454,7 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 
 		if (cf.m_cfType == CF_DIB &&
 			oleData.IsDataAvailable(CF_TEXT) &&
-			g_Opt.GetIgnoreAnnoyingCFDIBSet(TRUE).count(activeApp.MakeLower()))
+			CGetSetOptions::GetIgnoreAnnoyingCFDIBSet(TRUE).count(activeApp.MakeLower()))
 		{
 			Log(StrF(_T("Ignore CF_DIB from %s"), activeApp));
 			continue;
@@ -492,10 +492,10 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 			nSize = GlobalSize(cf.m_hgData);
 			if(nSize > 0)
 			{
-				if(g_Opt.m_lMaxClipSizeInBytes > 0 && (int)nSize > g_Opt.m_lMaxClipSizeInBytes)
+				if(CGetSetOptions::m_lMaxClipSizeInBytes > 0 && (int)nSize > CGetSetOptions::m_lMaxClipSizeInBytes)
 				{
 					CString cs;
-					cs.Format(_T("Maximum clip size reached max size = %d, clip size = %d"), g_Opt.m_lMaxClipSizeInBytes, nSize);
+					cs.Format(_T("Maximum clip size reached max size = %d, clip size = %d"), CGetSetOptions::m_lMaxClipSizeInBytes, nSize);
 					Log(cs);
 
 					oleData.Release();
@@ -548,7 +548,7 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 	bool calledOnCopyScript = false;
 	try
 	{
-		for (auto & listItem : g_Opt.m_copyScripts.m_list)
+		for (auto & listItem : CGetSetOptions::m_copyScripts.m_list)
 		{
 			if (listItem.m_active)
 			{
@@ -592,9 +592,9 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 		auto uString = this->GetUnicodeTextFormat();
 		if (uString != _T(""))
 		{
-			if (uString.GetLength() > g_Opt.m_bDescTextSize)
+			if (uString.GetLength() > CGetSetOptions::m_bDescTextSize)
 			{
-				m_Desc = uString.Left(g_Opt.m_bDescTextSize);
+				m_Desc = uString.Left(CGetSetOptions::m_bDescTextSize);
 			}
 			else
 			{
@@ -606,9 +606,9 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 			auto aString = this->GetCFTextTextFormat();
 			if (aString != "")
 			{
-				if (aString.GetLength() > g_Opt.m_bDescTextSize)
+				if (aString.GetLength() > CGetSetOptions::m_bDescTextSize)
 				{
-					m_Desc = aString.Left(g_Opt.m_bDescTextSize);
+					m_Desc = aString.Left(CGetSetOptions::m_bDescTextSize);
 				}
 				else
 				{
@@ -627,7 +627,7 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 	if (this->m_Desc != _T(""))
 	{
 		std::wstring stringData(this->m_Desc);
-		if (g_Opt.m_regexHelper.TextMatchFilters(activeApp, stringData))
+		if (CGetSetOptions::m_regexHelper.TextMatchFilters(activeApp, stringData))
 		{
 			return -1;
 		}
@@ -661,9 +661,9 @@ bool CClip::SetDescFromText(HGLOBAL hgData, bool unicode)
 		bRet = true;
 	}
 		
-	if(bufLen > g_Opt.m_bDescTextSize)
+	if(bufLen > CGetSetOptions::m_bDescTextSize)
 	{
-		m_Desc = m_Desc.Left(g_Opt.m_bDescTextSize);
+		m_Desc = m_Desc.Left(CGetSetOptions::m_bDescTextSize);
 	}
 	
 	//Unlock the data
@@ -796,8 +796,8 @@ bool CClip::AddToDB(bool bCheckForDuplicates)
 
 	if(bResult)
 	{
-		if(g_Opt.m_csPlaySoundOnCopy.IsEmpty() == FALSE)
-			PlaySound(g_Opt.m_csPlaySoundOnCopy, NULL, SND_FILENAME|SND_ASYNC);
+		if(CGetSetOptions::m_csPlaySoundOnCopy.IsEmpty() == FALSE)
+			PlaySound(CGetSetOptions::m_csPlaySoundOnCopy, NULL, SND_FILENAME|SND_ASYNC);
 
 		if (removeStickySettingClipId > 0)
 		{
@@ -818,9 +818,9 @@ int CClip::FindDuplicate()
 	{
 		//If they are allowing duplicates still check 
 		//the last copied item
-		if(g_Opt.m_bAllowDuplicates)
+		if(CGetSetOptions::m_bAllowDuplicates)
 		{
-			if (g_Opt.m_allowBackToBackDuplicates == FALSE)
+			if (CGetSetOptions::m_allowBackToBackDuplicates == FALSE)
 			{
 				if (m_CRC == m_LastAddedCRC)
 					return m_lastAddedID;

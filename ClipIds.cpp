@@ -25,13 +25,13 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 		return CClip::LoadFormat(ElementAt(0), cfType);
 	}
 
-	CStringA SepA = CTextConvert::UnicodeToAnsi(g_Opt.GetMultiPasteSeparator());
-	CStringW SepW = g_Opt.GetMultiPasteSeparator();
+	CStringA SepA = CTextConvert::UnicodeToAnsi(CGetSetOptions::GetMultiPasteSeparator());
+	CStringW SepW = CGetSetOptions::GetMultiPasteSeparator();
 
 	if(cfType == CF_TEXT)
 	{
 		CCF_TextAggregator CFText(SepA);
-		if(AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse, false))
+		if(AggregateData(CFText, CF_TEXT, CGetSetOptions::m_bMultiPasteReverse, false))
 		{
 			return CFText.GetHGlobal();
 		}
@@ -39,7 +39,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	else if(cfType == CF_UNICODETEXT)
 	{
 		CCF_UnicodeTextAggregator CFUnicodeText(SepW);
-		if(AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse, false))
+		if(AggregateData(CFUnicodeText, CF_UNICODETEXT, CGetSetOptions::m_bMultiPasteReverse, false))
 		{
 			return CFUnicodeText.GetHGlobal();
 		}
@@ -47,7 +47,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	else if(cfType == CF_HDROP)
 	{
 		CCF_HDropAggregator HDrop;
-		if(AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse, false))
+		if(AggregateData(HDrop, CF_HDROP, CGetSetOptions::m_bMultiPasteReverse, false))
 		{
 			return HDrop.GetHGlobal();
 		}
@@ -55,7 +55,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	else if(cfType == theApp.m_HTML_Format)
 	{
 		CHTMLFormatAggregator Html(SepA);
-		if(AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse, false))
+		if(AggregateData(Html, theApp.m_HTML_Format, CGetSetOptions::m_bMultiPasteReverse, false))
 		{
 			return Html.GetHGlobal();
 		}
@@ -63,7 +63,7 @@ HGLOBAL CClipIDs::Render(UINT cfType)
 	else if(cfType == theApp.m_RTFFormat)
 	{
 		CRichTextAggregator RichText(SepA);
-		if(AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse, false))
+		if(AggregateData(RichText, theApp.m_RTFFormat, CGetSetOptions::m_bMultiPasteReverse, false))
 		{
 			return RichText.GetHGlobal();
 		}

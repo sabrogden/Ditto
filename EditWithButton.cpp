@@ -89,7 +89,7 @@ BOOL CEditWithButton::PreTranslateMessage(MSG* pMsg)
 				CWnd *pWnd = GetParent();
 				if(pWnd)
 				{
-					if(g_Opt.m_bFindAsYouType)
+					if(CGetSetOptions::m_bFindAsYouType)
 					{
 						pWnd->SendMessage(NM_SEARCH_ENTER_PRESSED, 0, 0);
 					}

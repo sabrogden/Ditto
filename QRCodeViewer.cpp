@@ -60,14 +60,14 @@ BOOL QRCodeViewer::CreateEx(CWnd *pParentWnd, unsigned char* bitmapData, int ima
 
 	if(CWnd::CreateEx(0, szClassName, _T(""), WS_POPUP, 0, 0, 0, 0, NULL, 0, NULL))
 	{	
-		BOOL r = m_desc.Create(CMainTableFunctions::GetDisplayText(g_Opt.m_nLinesPerRow, desc), WS_CHILD|WS_VISIBLE, CRect(0,0,0,0), this, 2);
+		BOOL r = m_desc.Create(CMainTableFunctions::GetDisplayText(CGetSetOptions::m_nLinesPerRow, desc), WS_CHILD|WS_VISIBLE, CRect(0,0,0,0), this, 2);
 
 		m_font.CreateFontIndirect(&logFont);
 		m_desc.SetFont(&m_font);	
 
 		m_DittoWindow.DoCreate(this);
-		m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeft(), g_Opt.m_Theme.CaptionRight(), g_Opt.m_Theme.Border());
-		m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
+		m_DittoWindow.SetCaptionColors(CGetSetOptions::m_Theme.CaptionLeft(), CGetSetOptions::m_Theme.CaptionRight(), CGetSetOptions::m_Theme.Border());
+		m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true, CGetSetOptions::m_Theme.GetCaptionSize(), CGetSetOptions::m_Theme.GetCaptionFontSize());
 		m_DittoWindow.m_bDrawMinimize = false;
 		m_DittoWindow.m_bDrawMaximize = true;
 		m_DittoWindow.m_bDrawChevron = false;

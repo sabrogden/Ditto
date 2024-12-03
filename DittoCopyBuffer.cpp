@@ -125,7 +125,7 @@ bool CDittoCopyBuffer::PutClipOnDittoCopyBuffer(long lClipId, long lBuffer)
 		theApp.m_db.execDMLEx(_T("UPDATE CopyBuffers SET lClipID = %d WHERE lCopyBuffer = %d"), lClipId, lBuffer);
 
 		CCopyBufferItem Item;
-		g_Opt.GetCopyBufferItem(lBuffer, Item);
+		CGetSetOptions::GetCopyBufferItem(lBuffer, Item);
 		if(Item.m_bPlaySoundOnCopy)
 		{
 			PlaySound(_T("ding.wav"), NULL, SND_FILENAME|SND_ASYNC);
@@ -172,7 +172,7 @@ bool CDittoCopyBuffer::PastCopyBuffer(long lCopyBuffer)
 				{
 					theApp.m_pMainFrame->PasteOrShowGroup(q.getIntField(_T("lID")), -1, FALSE, TRUE, false);
 
-					m_pClipboard->m_lRestoreDelay = g_Opt.GetDittoRestoreClipboardDelay();
+					m_pClipboard->m_lRestoreDelay = CGetSetOptions::GetDittoRestoreClipboardDelay();
 
 					Log(StrF(_T("PastCopyBuffer sent paste, starting thread to restore clipboard, Delay = %d"), m_pClipboard->m_lRestoreDelay));
 

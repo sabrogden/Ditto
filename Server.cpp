@@ -47,7 +47,7 @@ UINT  MTServerThread(LPVOID pParam)
 	{
 		local.sin_addr.s_addr = inet_addr(CTextConvert::UnicodeToAnsi(bindToIpAddress));
 	}
-	local.sin_port = htons((u_short)g_Opt.m_lPort);
+	local.sin_port = htons((u_short)CGetSetOptions::m_lPort);
 	theApp.m_sSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if(theApp.m_sSocket == INVALID_SOCKET)
 	{
@@ -195,7 +195,7 @@ void CServer::RunThread(SocketParams *pParams)
 void CServer::OnStart(CSendInfo &info)
 {
 	if (m_recieveIP != _T("") &&
-		g_Opt.GetUseIPFromAccept())
+		CGetSetOptions::GetUseIPFromAccept())
 	{
 		LogSendRecieveInfo(StrF(_T("Using ip address from the Accept Call - %s"), m_recieveIP));
 		m_csIP = m_recieveIP;
@@ -228,7 +228,7 @@ void CServer::OnStart(CSendInfo &info)
 	
 	m_bSetToClipBoard = FALSE;
 
-	CTokenizer token(g_Opt.m_csIPListToPutOnClipboard, ",");
+	CTokenizer token(CGetSetOptions::m_csIPListToPutOnClipboard, ",");
 	CString line;
 
 	while(token.Next(line))

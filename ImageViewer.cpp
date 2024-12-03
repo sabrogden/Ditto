@@ -125,7 +125,7 @@ void CImageViewer::OnPaint()
 	GetClientRect(rect);	
 
 	CBrush  Brush, *pOldBrush;
-	Brush.CreateSolidBrush(g_Opt.m_Theme.DescriptionWindowBG());
+	Brush.CreateSolidBrush(CGetSetOptions::m_Theme.DescriptionWindowBG());
 
 	pOldBrush = memDC.SelectObject(&Brush);
 

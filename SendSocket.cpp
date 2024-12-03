@@ -52,7 +52,7 @@ BOOL CSendSocket::SendExactSize(char *pData, long lLength, bool bEncrypt)
 	int nLenOutput = lLength;
 	long lBytesRead = 0;
 
-	if(bEncrypt == false || m_pEncryptor->Encrypt((UCHAR*)pData, lLength, g_Opt.m_csPassword, pOutput, nLenOutput))
+	if(bEncrypt == false || m_pEncryptor->Encrypt((UCHAR*)pData, lLength, CGetSetOptions::m_csPassword, pOutput, nLenOutput))
 	{
 		long lExpected = nLenOutput;
 

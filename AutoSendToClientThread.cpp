@@ -105,29 +105,29 @@ bool CAutoSendToClientThread::SendToClient(CClipList *pClipList)
 
 	for(int nClient = 0; nClient < MAX_SEND_CLIENTS; nClient++)
 	{
-		if(g_Opt.m_SendClients[nClient].bSendAll && 
-			g_Opt.m_SendClients[nClient].csIP.GetLength() > 0)
+		if(CGetSetOptions::m_SendClients[nClient].bSendAll && 
+			CGetSetOptions::m_SendClients[nClient].csIP.GetLength() > 0)
 		{
 			CClient client;
-			if(client.OpenConnection(g_Opt.m_SendClients[nClient].csIP) == FALSE)
+			if(client.OpenConnection(CGetSetOptions::m_SendClients[nClient].csIP) == FALSE)
 			{
-				LogSendRecieveInfo(StrF(_T("ERROR opening connection to %s"), g_Opt.m_SendClients[nClient].csIP));
+				LogSendRecieveInfo(StrF(_T("ERROR opening connection to %s"), CGetSetOptions::m_SendClients[nClient].csIP));
 
-				if(g_Opt.m_SendClients[nClient].bShownFirstError == FALSE)
+				if(CGetSetOptions::m_SendClients[nClient].bShownFirstError == FALSE)
 				{
 					CString cs;
-					cs.Format(_T("Error opening connection to %s"), g_Opt.m_SendClients[nClient].csIP);
+					cs.Format(_T("Error opening connection to %s"), CGetSetOptions::m_SendClients[nClient].csIP);
 					::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
 					cs.ReleaseBuffer();
 
-					g_Opt.m_SendClients[nClient].bShownFirstError = TRUE;
+					CGetSetOptions::m_SendClients[nClient].bShownFirstError = TRUE;
 				}
 
 				continue;
 			}
 
 			//We were connected successfully show an error next time we can't connect
-			g_Opt.m_SendClients[nClient].bShownFirstError = FALSE;
+			CGetSetOptions::m_SendClients[nClient].bShownFirstError = FALSE;
 
 			CClip* pClip;
 			POSITION pos;
@@ -142,12 +142,12 @@ bool CAutoSendToClientThread::SendToClient(CClipList *pClipList)
 					break;
 				}
 
-				LogSendRecieveInfo(StrF(_T("Sending clip to %s"), g_Opt.m_SendClients[nClient].csIP));
+				LogSendRecieveInfo(StrF(_T("Sending clip to %s"), CGetSetOptions::m_SendClients[nClient].csIP));
 
 				if(client.SendItem(pClip, false) == FALSE)
 				{
 					CString cs;
-					cs.Format(_T("Error sending clip to %s"), g_Opt.m_SendClients[nClient].csIP);
+					cs.Format(_T("Error sending clip to %s"), CGetSetOptions::m_SendClients[nClient].csIP);
 					::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
 					cs.ReleaseBuffer();
 					break;

@@ -94,7 +94,7 @@ BOOL COleClipSource::DoImmediateRender()
 			m_pasteOptions.m_pasteImagesVertically)
 		{
 			CImageFormatAggregator bigImage(m_pasteOptions.m_pasteImagesHorizontal);
-			if (m_ClipIDs.AggregateData(bigImage, CF_DIB, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+			if (m_ClipIDs.AggregateData(bigImage, CF_DIB, CGetSetOptions::m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 			{
 				CClipFormat cf(CF_DIB, bigImage.GetHGlobal());
 				clip.m_Formats.Add(cf);
@@ -104,9 +104,9 @@ BOOL COleClipSource::DoImmediateRender()
 		}
 		else
 		{
-			CStringA SepA = CTextConvert::UnicodeToAnsi(g_Opt.GetMultiPasteSeparator());
+			CStringA SepA = CTextConvert::UnicodeToAnsi(CGetSetOptions::GetMultiPasteSeparator());
 			CCF_TextAggregator CFText(SepA);
-			if (m_ClipIDs.AggregateData(CFText, CF_TEXT, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+			if (m_ClipIDs.AggregateData(CFText, CF_TEXT, CGetSetOptions::m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 			{
 				CClipFormat cf(CF_TEXT, CFText.GetHGlobal());
 				clip.m_Formats.Add(cf);
@@ -114,9 +114,9 @@ BOOL COleClipSource::DoImmediateRender()
 				cf.m_autoDeleteData = false;
 			}
 
-			CStringW SepW = g_Opt.GetMultiPasteSeparator();
+			CStringW SepW = CGetSetOptions::GetMultiPasteSeparator();
 			CCF_UnicodeTextAggregator CFUnicodeText(SepW);
-			if (m_ClipIDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+			if (m_ClipIDs.AggregateData(CFUnicodeText, CF_UNICODETEXT, CGetSetOptions::m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 			{
 				CClipFormat cf(CF_UNICODETEXT, CFUnicodeText.GetHGlobal());
 				clip.m_Formats.Add(cf);
@@ -127,7 +127,7 @@ BOOL COleClipSource::DoImmediateRender()
 			if (m_pasteOptions.LimitFormatsToText() == false)
 			{
 				CCF_HDropAggregator HDrop;
-				if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+				if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, CGetSetOptions::m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 				{
 					CClipFormat cf(CF_HDROP, HDrop.GetHGlobal());
 					clip.m_Formats.Add(cf);
@@ -136,7 +136,7 @@ BOOL COleClipSource::DoImmediateRender()
 				}
 
 				CRichTextAggregator RichText(SepA);
-				if (m_ClipIDs.AggregateData(RichText, theApp.m_RTFFormat, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+				if (m_ClipIDs.AggregateData(RichText, theApp.m_RTFFormat, CGetSetOptions::m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 				{
 					CClipFormat cf(theApp.m_RTFFormat, RichText.GetHGlobal());
 					clip.m_Formats.Add(cf);
@@ -145,7 +145,7 @@ BOOL COleClipSource::DoImmediateRender()
 				}
 
 				CHTMLFormatAggregator Html(SepA);
-				if (m_ClipIDs.AggregateData(Html, theApp.m_HTML_Format, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+				if (m_ClipIDs.AggregateData(Html, theApp.m_HTML_Format, CGetSetOptions::m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 				{
 					CClipFormat cf(theApp.m_HTML_Format, Html.GetHGlobal());
 					clip.m_Formats.Add(cf);
@@ -224,7 +224,7 @@ BOOL COleClipSource::DoImmediateRender()
 
 	if (m_pasteOptions.m_pasteScriptGuid != _T(""))
 	{
-		for (auto & element : g_Opt.m_pasteScripts.m_list)
+		for (auto & element : CGetSetOptions::m_pasteScripts.m_list)
 		{
 			if (element.m_guid == m_pasteOptions.m_pasteScriptGuid)
 			{
@@ -745,7 +745,7 @@ void COleClipSource::PlainTextFilter(CClip &clip)
 		hDropIndex > -1)
 	{
 		CCF_HDropAggregator HDrop;
-		if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, g_Opt.m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
+		if (m_ClipIDs.AggregateData(HDrop, CF_HDROP, CGetSetOptions::m_bMultiPasteReverse, m_pasteOptions.LimitFormatsToText()))
 		{
 			clip.m_Formats.RemoveAt(hDropIndex);
 
@@ -1318,7 +1318,7 @@ HGLOBAL COleClipSource::ConvertToFileDrop()
 	int dragId = CGetSetOptions::GetDragId();
 	int origDragId = dragId;
 
-	auto customDragName = g_Opt.GetTempDragFileName();
+	auto customDragName = CGetSetOptions::GetTempDragFileName();
 	if (customDragName != _T(""))
 	{
 		dragId = 1;

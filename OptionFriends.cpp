@@ -77,11 +77,11 @@ BOOL COptionFriends::OnInitDialog()
 	m_SendRecieve.SetCheck(CGetSetOptions::GetLogSendReceiveErrors());
 	m_bDisableRecieve.SetCheck(CGetSetOptions::GetDisableRecieve());
 
-	m_PlaceOnClipboard = g_Opt.m_csIPListToPutOnClipboard;
-	m_csPassword = g_Opt.m_csPassword;
+	m_PlaceOnClipboard = CGetSetOptions::m_csIPListToPutOnClipboard;
+	m_csPassword = CGetSetOptions::m_csPassword;
 	m_csAdditionalPasswords = CGetSetOptions::GetExtraNetworkPassword(false);
 
-	if(g_Opt.GetRequestFilesUsingIP())
+	if(CGetSetOptions::GetRequestFilesUsingIP())
 	{
 		::CheckDlgButton(m_hWnd, IDC_RADIO_USE_IP, BST_CHECKED);
 	}
@@ -115,7 +115,7 @@ BOOL COptionFriends::OnApply()
 		if(client.csDescription == EMPTRY_STRING)
 			client.csDescription = "";
 
-		g_Opt.SetSendClients(client, i);
+		CGetSetOptions::SetSendClients(client, i);
 	}
 
 	CGetSetOptions::SetNetworkPassword(m_csPassword);
@@ -126,21 +126,21 @@ BOOL COptionFriends::OnApply()
 
 	UpdateData();
 
-	g_Opt.SetListToPutOnClipboard(m_PlaceOnClipboard);
-	g_Opt.SetNetworkPassword(m_csPassword);
-	g_Opt.GetClientSendCount();
+	CGetSetOptions::SetListToPutOnClipboard(m_PlaceOnClipboard);
+	CGetSetOptions::SetNetworkPassword(m_csPassword);
+	CGetSetOptions::GetClientSendCount();
 
-	g_Opt.SetExtraNetworkPassword(m_csAdditionalPasswords);
+	CGetSetOptions::SetExtraNetworkPassword(m_csAdditionalPasswords);
 	//get get to refill the array extra passwords
-	g_Opt.GetExtraNetworkPassword(true);
+	CGetSetOptions::GetExtraNetworkPassword(true);
 
 	if(::IsDlgButtonChecked(m_hWnd, IDC_RADIO_USE_IP) == BST_CHECKED)
 	{
-		g_Opt.SetRequestFilesUsingIP(TRUE);
+		CGetSetOptions::SetRequestFilesUsingIP(TRUE);
 	}
 	else if(::IsDlgButtonChecked(m_hWnd, IDC_RADIO_USE_HOST_NAME) == BST_CHECKED)
 	{
-		g_Opt.SetRequestFilesUsingIP(FALSE);
+		CGetSetOptions::SetRequestFilesUsingIP(FALSE);
 	}
 	
 	return CPropertyPage::OnApply();
@@ -181,7 +181,7 @@ void COptionFriends::InsertItems()
 		m_List.InsertItem(&lvi);
 
 //-------------------------------------------------------------------
-		if(g_Opt.m_SendClients[i].bSendAll)
+		if(CGetSetOptions::m_SendClients[i].bSendAll)
 			strItem = "X";
 		else
 			strItem = EMPTRY_STRING;
@@ -190,8 +190,8 @@ void COptionFriends::InsertItems()
 
 //-------------------------------------------------------------------
 
-		strItem = g_Opt.m_SendClients[i].csIP;
-		if(g_Opt.m_SendClients[i].csIP.GetLength() <= 0)
+		strItem = CGetSetOptions::m_SendClients[i].csIP;
+		if(CGetSetOptions::m_SendClients[i].csIP.GetLength() <= 0)
 		{
 			strItem = EMPTRY_STRING;
 		}
@@ -200,8 +200,8 @@ void COptionFriends::InsertItems()
 
 //-------------------------------------------------------------------
 
-		strItem = g_Opt.m_SendClients[i].csDescription;
-		if(g_Opt.m_SendClients[i].csDescription.GetLength() <= 0)
+		strItem = CGetSetOptions::m_SendClients[i].csDescription;
+		if(CGetSetOptions::m_SendClients[i].csDescription.GetLength() <= 0)
 		{
 			strItem = EMPTRY_STRING;
 		}

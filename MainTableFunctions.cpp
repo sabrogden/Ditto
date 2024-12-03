@@ -72,7 +72,7 @@ CString CMainTableFunctions::GetDisplayText(int nMaxLines, const CString &OrigTe
 	// assign tabs to 2 spaces (rather than the default 8)
 	text.Replace(_T("\t"), _T("  "));
 
-	if(g_Opt.m_bDescShowLeadingWhiteSpace)
+	if(CGetSetOptions::m_bDescShowLeadingWhiteSpace)
 		return text;
 	// else, remove the leading indent from every line.
 

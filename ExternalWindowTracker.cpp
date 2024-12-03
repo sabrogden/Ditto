@@ -224,7 +224,7 @@ bool ExternalWindowTracker::ActivateTarget()
 	//check to see if this app should set focus
 	//this is off by default
 	CString csApp = GetProcessName(m_activeWnd);
-	if(g_Opt.GetSetFocusToApp(csApp))
+	if(CGetSetOptions::GetSetFocusToApp(csApp))
 	{
 		ActivateFocus(m_activeWnd, m_focusWnd);
 	}
@@ -249,7 +249,7 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 
 		ActivateTarget();
 		theApp.PumpMessageEx();
-		WaitForActiveWnd(activeWnd, max(25, g_Opt.WaitForActiveWndTimeout()));
+		WaitForActiveWnd(activeWnd, max(25, CGetSetOptions::WaitForActiveWndTimeout()));
 	
 		DWORD endTick = GetTickCount();
 		if((endTick-startTick) > 150)
@@ -261,16 +261,16 @@ void ExternalWindowTracker::SendPaste(bool activateTarget)
 	}
 
 	CString csPasteToApp = GetProcessName(activeWnd);
-	CString csPasteString = g_Opt.GetPasteString(csPasteToApp);
-	DWORD delay = g_Opt.SendKeysDelay();
-	DWORD sendKeysDelay = g_Opt.RealSendKeysDelay();
+	CString csPasteString = CGetSetOptions::GetPasteString(csPasteToApp);
+	DWORD delay = CGetSetOptions::SendKeysDelay();
+	DWORD sendKeysDelay = CGetSetOptions::RealSendKeysDelay();
 
 	m_dittoHasFocus = false;
 	Log(StrF(_T("Sending paste to app %s key stroke: %s, SeDelay: %d"), csPasteToApp, csPasteString, delay));
 
 	bool pasteAsAdmin = false;
 
-	if (g_Opt.GetPasteAsAdmin())
+	if (CGetSetOptions::GetPasteAsAdmin())
 	{
 		pasteAsAdmin = CUAC_Helper::PasteAsAdmin(activeWnd);
 	}
@@ -308,9 +308,9 @@ void ExternalWindowTracker::SendCopy(CopyReasonEnum::CopyReason copyReason)
 	HWND activeWnd = GetForegroundWindow();
 
 	CString csToApp = GetProcessName(activeWnd);
-	CString csString = g_Opt.GetCopyString(csToApp);
-	DWORD delay = g_Opt.SendKeysDelay();
-	DWORD SendKeysDelay = g_Opt.RealSendKeysDelay();
+	CString csString = CGetSetOptions::GetCopyString(csToApp);
+	DWORD delay = CGetSetOptions::SendKeysDelay();
+	DWORD SendKeysDelay = CGetSetOptions::RealSendKeysDelay();
 
 	Sleep(delay);
 
@@ -320,7 +320,7 @@ void ExternalWindowTracker::SendCopy(CopyReasonEnum::CopyReason copyReason)
 
 	bool pasteAsAdmin = false;
 
-	if (g_Opt.GetPasteAsAdmin())
+	if (CGetSetOptions::GetPasteAsAdmin())
 	{
 		pasteAsAdmin = CUAC_Helper::PasteAsAdmin(activeWnd);
 	}
@@ -358,9 +358,9 @@ void ExternalWindowTracker::SendCut()
 	send.AllKeysUp();
 
 	CString csToApp = GetProcessName(m_activeWnd);
-	CString csString = g_Opt.GetCutString(csToApp);
-	DWORD delay = g_Opt.SendKeysDelay();
-	DWORD sendKeysDelay = g_Opt.RealSendKeysDelay();
+	CString csString = CGetSetOptions::GetCutString(csToApp);
+	DWORD delay = CGetSetOptions::SendKeysDelay();
+	DWORD sendKeysDelay = CGetSetOptions::RealSendKeysDelay();
 
 	Sleep(delay);
 
@@ -371,7 +371,7 @@ void ExternalWindowTracker::SendCut()
 
 	bool pasteAsAdmin = false;
 
-	if (g_Opt.GetPasteAsAdmin())
+	if (CGetSetOptions::GetPasteAsAdmin())
 	{
 		pasteAsAdmin = CUAC_Helper::PasteAsAdmin(m_activeWnd);
 	}

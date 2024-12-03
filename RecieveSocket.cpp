@@ -26,7 +26,7 @@ CRecieveSocket::~CRecieveSocket()
 
 void CRecieveSocket::FreeDecryptedData()
 { 
-	if(g_Opt.m_csPassword == "")
+	if(CGetSetOptions::m_csPassword == "")
 	{
 		delete [] m_pDataReturnedFromDecrypt;
 	}
@@ -59,7 +59,7 @@ LPVOID CRecieveSocket::ReceiveEncryptedData(long lInSize, long &lOutSize)
 		if(RecieveExactSize(pInput, lInSize))
 		{
 			CStringA csPassword;
-			INT_PTR count = g_Opt.m_csNetworkPasswordArray.GetSize();
+			INT_PTR count = CGetSetOptions::m_csNetworkPasswordArray.GetSize();
 			INT_PTR nIndex;
 			for(int i = -2; i < count; i++)
 			{
@@ -76,13 +76,13 @@ LPVOID CRecieveSocket::ReceiveEncryptedData(long lInSize, long &lOutSize)
 
 				if(nIndex == -1)
 				{
-					csPassword = g_Opt.m_csPassword;
+					csPassword = CGetSetOptions::m_csPassword;
 				}
 				else
 				{
 					if(nIndex >= 0 && nIndex < count)
 					{
-						csPassword = CTextConvert::UnicodeToUTF8(g_Opt.m_csNetworkPasswordArray[nIndex]);
+						csPassword = CTextConvert::UnicodeToUTF8(CGetSetOptions::m_csNetworkPasswordArray[nIndex]);
 					}
 					else
 					{
@@ -92,7 +92,7 @@ LPVOID CRecieveSocket::ReceiveEncryptedData(long lInSize, long &lOutSize)
 
 				if(m_pEncryptor->Decrypt((UCHAR*)pInput, lInSize, csPassword, pOutput, nOut) == FALSE)
 				{
-					LogSendRecieveInfo(StrF(_T("ReceiveEncryptedData:: Failed to Decrypt data password = %s"), g_Opt.m_csPassword));
+					LogSendRecieveInfo(StrF(_T("ReceiveEncryptedData:: Failed to Decrypt data password = %s"), CGetSetOptions::m_csPassword));
 				}
 				else
 				{

@@ -126,7 +126,7 @@ BOOL CSymbolEdit::PreTranslateMessage(MSG* pMsg)
 			CWnd *pWnd = GetParent();
 			if (pWnd)
 			{
-				if (g_Opt.m_bFindAsYouType)
+				if (CGetSetOptions::m_bFindAsYouType)
 				{
 					pWnd->SendMessage(NM_SEARCH_ENTER_PRESSED, 0, 0);
 				}
@@ -507,9 +507,9 @@ void CSymbolEdit::OnPaint()
 
 	if(this == GetFocus() || text.GetLength() > 0)
 	{
-		dc.FillSolidRect(rect, g_Opt.m_Theme.SearchTextBoxFocusBG());
+		dc.FillSolidRect(rect, CGetSetOptions::m_Theme.SearchTextBoxFocusBG());
 
-		//CBrush borderBrush(g_Opt.m_Theme.SearchTextBoxFocusBorder());
+		//CBrush borderBrush(CGetSetOptions::m_Theme.SearchTextBoxFocusBorder());
 		//dc.FrameRect(rect, &borderBrush);
 
 		//rect.DeflateRect(1, 1, 1, 1);
@@ -518,7 +518,7 @@ void CSymbolEdit::OnPaint()
 		oldFont = dc.SelectObject(GetFont());		
 
 		COLORREF oldColor = dc.GetTextColor();
-		dc.SetTextColor(g_Opt.m_Theme.SearchTextBoxFocusText());
+		dc.SetTextColor(CGetSetOptions::m_Theme.SearchTextBoxFocusText());
 			
 		dc.DrawText(text, textRect, DT_SINGLELINE | DT_INTERNAL | DT_EDITCONTROL | DT_NOPREFIX);
 
@@ -527,7 +527,7 @@ void CSymbolEdit::OnPaint()
 	}
 	else
 	{
-		dc.FillSolidRect(rect, g_Opt.m_Theme.MainWindowBG());
+		dc.FillSolidRect(rect, CGetSetOptions::m_Theme.MainWindowBG());
 	}
 
 
@@ -609,14 +609,14 @@ HBRUSH CSymbolEdit::CtlColor(CDC* pDC, UINT n)
 
 	if (::GetFocus() == m_hWnd)
 	{
-		pDC->SetTextColor(g_Opt.m_Theme.SearchTextBoxFocusText());
-		pDC->SetBkColor(g_Opt.m_Theme.SearchTextBoxFocusBG());
-		color = g_Opt.m_Theme.SearchTextBoxFocusBG();
+		pDC->SetTextColor(CGetSetOptions::m_Theme.SearchTextBoxFocusText());
+		pDC->SetBkColor(CGetSetOptions::m_Theme.SearchTextBoxFocusBG());
+		color = CGetSetOptions::m_Theme.SearchTextBoxFocusBG();
 	}
 	else
 	{
-		pDC->SetBkColor(g_Opt.m_Theme.MainWindowBG());
-		color = g_Opt.m_Theme.MainWindowBG();
+		pDC->SetBkColor(CGetSetOptions::m_Theme.MainWindowBG());
+		color = CGetSetOptions::m_Theme.MainWindowBG();
 	}
 
 	if (color != m_lastBrushColor)
@@ -639,7 +639,7 @@ void CSymbolEdit::OnSetFocus(CWnd* pOldWnd)
 	CWnd *pWnd = GetParent();
 	if (pWnd)
 	{
-		if (g_Opt.m_bFindAsYouType)
+		if (CGetSetOptions::m_bFindAsYouType)
 		{
 			pWnd->SendMessage(NM_FOCUS_ON_SEARCH, 0, 0);
 		}
@@ -944,19 +944,19 @@ void CSymbolEdit::OnNcPaint()
 
 	CRect b(0, r.Height() - m_centerTextDiff- m_windowDpi->Scale(1), r.Width(), r.Height());
 
-	COLORREF c = g_Opt.m_Theme.MainWindowBG();
+	COLORREF c = CGetSetOptions::m_Theme.MainWindowBG();
 
 	if (this == GetFocus() || text.GetLength() > 0)
 	{		
-		dc.FillSolidRect(t, g_Opt.m_Theme.SearchTextBoxFocusBG());
-		dc.FillSolidRect(b, g_Opt.m_Theme.SearchTextBoxFocusBG());
+		dc.FillSolidRect(t, CGetSetOptions::m_Theme.SearchTextBoxFocusBG());
+		dc.FillSolidRect(b, CGetSetOptions::m_Theme.SearchTextBoxFocusBG());
 
-		c = g_Opt.m_Theme.SearchTextBoxFocusBorder();
+		c = CGetSetOptions::m_Theme.SearchTextBoxFocusBorder();
 	}
 	else
 	{
-		dc.FillSolidRect(t, g_Opt.m_Theme.MainWindowBG());
-		dc.FillSolidRect(b, g_Opt.m_Theme.MainWindowBG());
+		dc.FillSolidRect(t, CGetSetOptions::m_Theme.MainWindowBG());
+		dc.FillSolidRect(b, CGetSetOptions::m_Theme.MainWindowBG());
 	}	
 
 	//if ((text.GetLength() > 0 || this == GetFocus()) && m_windowDpi)
