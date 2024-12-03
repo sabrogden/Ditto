@@ -1218,7 +1218,7 @@ LRESULT CQPasteWnd::OnReloadClipInUI(WPARAM wParam, LPARAM lParam)
 					if (iter->m_clipOrder != order || iter->m_clipGroupOrder != orderGroup)
 					{
 						iter->m_clipOrder = order;
-						iter->m_clipGroupOrder = orderGroup;						
+						iter->m_clipGroupOrder = orderGroup;
 
 						if (theApp.m_GroupID > 0)
 						{
@@ -1229,8 +1229,6 @@ LRESULT CQPasteWnd::OnReloadClipInUI(WPARAM wParam, LPARAM lParam)
 							std::sort(m_listItems.begin(), m_listItems.end(), CMainTable::SortDesc);
 						}
 					}
-
-					iter->m_Desc = description;
 
 					foundClip = TRUE;
 

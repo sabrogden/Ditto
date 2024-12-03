@@ -363,8 +363,17 @@ BOOL CClipEditThread::GetTextFromRTF(CStringA rtf, CString &unicodeText)
 		unicodeText = cc.GetTextFromRTF(rtf);
 		cc.DestroyWindow();
 
+		if (rtf != "" && unicodeText == "")
+		{
+			log(StrF(_T("Failed to convert rtf to text, rtf text is not empty but text is empty")));
+		}
+
 		return true;
 	}
+	else
+	{
+		log(StrF(_T("Failed to create rtf to text window")));
+	}	
 
 	return false;
 }

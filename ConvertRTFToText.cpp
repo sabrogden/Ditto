@@ -23,6 +23,33 @@ CString CConvertRTFToText::GetTextFromRTF(CStringA rtf)
 {
 	m_richEditTextConverter.SetRTF(rtf);
 
+	auto x = m_richEditTextConverter.GetRTF();
+
+	int loops = 0;
+	MSG msg;
+	while (::PeekMessage(&msg, m_hWnd, 0, 0, PM_REMOVE))
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+
+		loops++;
+		if (loops > 100)
+			break;
+	}
+
+	loops = 0;
+	while (::PeekMessage(&msg, m_richEditTextConverter.m_hWnd, 0, 0, PM_REMOVE))
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+
+		loops++;
+		if (loops > 100)
+			break;
+	}
+
+	Sleep(50);
+
 	CString text = m_richEditTextConverter.GetText();
 
 	return text;
