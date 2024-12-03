@@ -50,7 +50,6 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_SEND_RECIEVE_ERROR, OnErrorOnSendRecieve)
 	ON_MESSAGE(WM_SHOW_ERROR_MSG, OnErrorMsg)
 	ON_COMMAND(ID_FIRST_IMPORT, OnFirstImport)
-	ON_MESSAGE(WM_EDIT_WND_CLOSING, OnEditWndClose)
 	ON_WM_DESTROY()
 	ON_COMMAND(ID_FIRST_NEWCLIP, OnFirstNewclip)
 	ON_MESSAGE(WM_SET_CONNECTED, OnSetConnected)
@@ -97,7 +96,6 @@ END_MESSAGE_MAP()
 
 CMainFrame::CMainFrame()
 {
-    m_pEditFrameWnd = NULL;
     m_keyStateModifiers = 0;
     m_startKeyStateTime = 0;
     m_bMovedSelectionMoveKeyState = false;
@@ -957,14 +955,6 @@ void CMainFrame::OnClose()
 {
     CloseAllOpenDialogs();
 
-    if(m_pEditFrameWnd)
-    {
-        if(m_pEditFrameWnd->CloseAll() == false)
-        {
-            return ;
-        }
-    }
-
     Log(_T("OnClose - before stop MainFrm thread"));
     m_thread.Stop();
     Log(_T("OnClose - after stop MainFrm thread"));
@@ -1152,45 +1142,6 @@ void CMainFrame::OnFirstImport()
     theApp.ImportClips(theApp.m_MainhWnd);
 }
 
-void CMainFrame::ShowEditWnd(CClipIDs &Ids)
-{
-    CWaitCursor wait;
-
-    bool bCreatedWindow = false;
-    if(m_pEditFrameWnd == NULL)
-    {
-        m_pEditFrameWnd = new CEditFrameWnd;
-        m_pEditFrameWnd->LoadFrame(IDR_MAINFRAME);
-        bCreatedWindow = true;
-    }
-    if(m_pEditFrameWnd)
-    {
-        m_pEditFrameWnd->EditIds(Ids);
-        m_pEditFrameWnd->SetNotifyWnd(m_hWnd);
-
-        if(bCreatedWindow)
-        {
-            CSize sz;
-            CPoint pt;
-            CGetSetOptions::GetEditWndSize(sz);
-            CGetSetOptions::GetEditWndPoint(pt);
-            CRect cr(pt, sz);
-            EnsureWindowVisible(&cr);
-            m_pEditFrameWnd->MoveWindow(cr);
-        }
-
-        m_pEditFrameWnd->ShowWindow(SW_SHOW);
-        m_pEditFrameWnd->SetForegroundWindow();
-        m_pEditFrameWnd->SetFocus();
-    }
-}
-
-LRESULT CMainFrame::OnEditWndClose(WPARAM wParam, LPARAM lParam)
-{
-    m_pEditFrameWnd = NULL;
-    return TRUE;
-}
-
 LRESULT CMainFrame::OnSetConnected(WPARAM wParam, LPARAM lParam)
 {
     if(wParam)
@@ -1223,18 +1174,13 @@ LRESULT CMainFrame::OnOpenCloseWindow(WPARAM wParam, LPARAM lParam)
 void CMainFrame::OnDestroy()
 {
     CFrameWnd::OnDestroy();
-
-    if(m_pEditFrameWnd)
-    {
-        m_pEditFrameWnd->DestroyWindow();
-    }
 }
 
 void CMainFrame::OnFirstNewclip()
 {
     CClipIDs IDs;
     IDs.Add( - 1);
-    theApp.EditItems(IDs, true);
+    theApp.EditItems(IDs, true, true);
 }
 
 void CMainFrame::OnFirstOption()
@@ -1575,7 +1521,14 @@ LRESULT CMainFrame::OnEditClip(WPARAM wParam, LPARAM lParam)
 {
 	CClipIDs IDs;
 	IDs.Add(wParam);
-	theApp.EditItems(IDs, true);
+
+	bool textOnly = false;
+	if (GetKeyState(VK_SHIFT) & 0x8000)
+	{
+		textOnly = true;
+	}
+
+	theApp.EditItems(IDs, true, textOnly);
 	return TRUE;
 }
 

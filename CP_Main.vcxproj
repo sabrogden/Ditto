@@ -38,6 +38,7 @@
     <UseOfMfc>Dynamic</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -170,6 +171,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <IncludePath>$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnableManifest>false</VcpkgEnableManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -637,11 +641,13 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <ClCompile Include="ClipEditThread.cpp" />
     <ClCompile Include="CF_HDropAggregator.cpp" />
     <ClCompile Include="CF_TextAggregator.cpp" />
     <ClCompile Include="CF_UnicodeTextAggregator.cpp" />
     <ClCompile Include="ChaiScriptOnCopy.cpp" />
     <ClCompile Include="ChaiScriptXml.cpp" />
+    <ClCompile Include="ConvertRTFToText.cpp" />
     <ClCompile Include="ImageFormatAggregator.cpp" />
     <ClCompile Include="Clip.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
@@ -1112,10 +1118,7 @@
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)%(FileName)1.obj</ObjectFileName>
       <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">$(IntDir)%(FileName)1.obj</ObjectFileName>
     </ClCompile>
-    <ClCompile Include="DittoRulerRichEditCtrl.cpp" />
     <ClCompile Include="DittoWindow.cpp" />
-    <ClCompile Include="EditFrameWnd.cpp" />
-    <ClCompile Include="EditWnd.cpp" />
     <ClCompile Include="ExternalWindowTracker.cpp" />
     <ClCompile Include="FileTransferProgressDlg.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Disabled</Optimization>
@@ -2844,17 +2847,6 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="RulerRichEditCtrl\FontComboBox.cpp" />
-    <ClCompile Include="RulerRichEditCtrl\RRECRuler.cpp" />
-    <ClCompile Include="RulerRichEditCtrl\RRECToolbar.cpp" />
-    <ClCompile Include="RulerRichEditCtrl\RulerRichEdit.cpp" />
-    <ClCompile Include="RulerRichEditCtrl\RulerRichEditCtrl.cpp" />
-    <ClCompile Include="RulerRichEditCtrl\SizeComboBox.cpp" />
-    <ClCompile Include="RulerRichEditCtrl\StdGrfx.cpp" />
-    <ClCompile Include="RulerRichEditCtrl\External\ColourPicker.cpp" />
-    <ClCompile Include="RulerRichEditCtrl\External\ColourPopup.cpp" />
-    <ClCompile Include="RulerRichEditCtrl\External\StdioFileEx.cpp" />
-    <ClCompile Include="RulerRichEditCtrl\TextFile\TextFile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -2865,18 +2857,6 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NDEBUG;_AFXDLL</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">NDEBUG;_AFXDLL</PreprocessorDefinitions>
     </ResourceCompile>
-    <ResourceCompile Include="RulerRichEditCtrl\RulerRichEditCtrl.rc">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
-    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Accels.h" />
@@ -2885,9 +2865,11 @@
     <ClInclude Include="AlphaBlend.h" />
     <ClInclude Include="ArrayEx.h" />
     <ClInclude Include="AutoSendToClientThread.h" />
+    <ClInclude Include="ClipEditThread.h" />
     <ClInclude Include="CGdiPlusBitmap.h" />
     <ClInclude Include="ChaiScriptOnCopy.h" />
     <ClInclude Include="ChaiScriptXml.h" />
+    <ClInclude Include="ConvertRTFToText.h" />
     <ClInclude Include="ImageFormatAggregator.h" />
     <ClInclude Include="ClipCompare.h" />
     <ClInclude Include="ClipFormatQListCtrl.h" />
@@ -2985,10 +2967,7 @@
     <ClInclude Include="DittoAddins.h" />
     <ClInclude Include="DittoCopyBuffer.h" />
     <ClInclude Include="Shared\DittoDefines.h" />
-    <ClInclude Include="DittoRulerRichEditCtrl.h" />
     <ClInclude Include="DittoWindow.h" />
-    <ClInclude Include="EditFrameWnd.h" />
-    <ClInclude Include="EditWnd.h" />
     <ClInclude Include="ExternalWindowTracker.h" />
     <ClInclude Include="FileTransferProgressDlg.h" />
     <ClInclude Include="FormatSQL.h" />
@@ -3036,18 +3015,8 @@
     <ClInclude Include="UnicodeMacros.h" />
     <ClInclude Include="TinyXml\tinystr.h" />
     <ClInclude Include="TinyXml\tinyxml.h" />
-    <ClInclude Include="RulerRichEditCtrl\FontComboBox.h" />
     <ClInclude Include="RulerRichEditCtrl\ids.h" />
-    <ClInclude Include="RulerRichEditCtrl\RRECRuler.h" />
-    <ClInclude Include="RulerRichEditCtrl\RRECToolbar.h" />
-    <ClInclude Include="RulerRichEditCtrl\RulerRichEdit.h" />
-    <ClInclude Include="RulerRichEditCtrl\RulerRichEditCtrl.h" />
-    <ClInclude Include="RulerRichEditCtrl\SizeComboBox.h" />
     <ClInclude Include="RulerRichEditCtrl\StdGrfx.h" />
-    <ClInclude Include="RulerRichEditCtrl\External\ColourPicker.h" />
-    <ClInclude Include="RulerRichEditCtrl\External\ColourPopup.h" />
-    <ClInclude Include="RulerRichEditCtrl\External\StdioFileEx.h" />
-    <ClInclude Include="RulerRichEditCtrl\TextFile\TextFile.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CP_Main.rgs" />

@@ -192,7 +192,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_NOTIFY(NM_GETTOOLTIPTEXT, ID_LIST_HEADER, OnGetToolTipText)
 	ON_MESSAGE(NM_SELECT_DB_ID, OnListSelect_DB_ID)
 	ON_MESSAGE(WM_REFRESH_VIEW, OnRefreshView)
-	ON_MESSAGE(WM_RELOAD_CLIP_AFTER_PASTE, OnReloadClipAfterPaste)
+	ON_MESSAGE(WM_RELOAD_CLIP_IN_UI, OnReloadClipInUI)
 	ON_WM_NCLBUTTONDBLCLK()
 	ON_WM_WINDOWPOSCHANGING()
 	ON_COMMAND(ID_VIEWCAPTIONBARON_RIGHT, OnViewcaptionbaronRight)
@@ -1180,43 +1180,45 @@ LRESULT CQPasteWnd::OnListEnd(WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
+LRESULT CQPasteWnd::OnReloadClipInUI(WPARAM wParam, LPARAM lParam)
 {
+	BOOL foundClip = FALSE;
+	int clipId = (int)wParam;
+	int updateFlags = (int)lParam;
+
 	if (g_Opt.m_maintainSearchView &&
-		m_strSearch != _T(""))
+		m_strSearch != _T("") &&
+		updateFlags & UPDATE_AFTER_PASTE_SELECT_CLIP)
 	{
 		Log(_T("Currently searching for something and setting to maintain search view is enabled, not refreshing clip order"));
 		return FALSE;
 	}
 
-	DWORD startTick = GetTickCount();
-
-	BOOL foundClip = FALSE;
-	int clipId = (int)wParam;
-	int updateFlags = (int)lParam;
+	DWORD startTick = GetTickCount();	
 
 	theApp.m_FocusID = -1;
 
-	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipOrder, clipGroupOrder, lastPasteDate FROM Main WHERE lID = %d"), clipId);
+	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipOrder, clipGroupOrder, lastPasteDate, mText FROM Main WHERE lID = %d"), clipId);
 	if (q.eof() == false)
 	{
 		double order = q.getFloatField(_T("clipOrder"));
 		double orderGroup = q.getFloatField(_T("clipGroupOrder"));
 		int lastPasted = q.getIntField(_T("lastPasteDate"));
+		CString description = q.getStringField(_T("mText"));
 
 		std::vector<CMainTable>::iterator iter = m_listItems.begin();
 		while (iter != m_listItems.end())
 		{
 			if (iter->m_lID == clipId)
 			{
-				iter->m_datePasted = lastPasted;
-
 				if (updateFlags & UPDATE_AFTER_PASTE_SELECT_CLIP)
 				{
+					iter->m_datePasted = lastPasted;
+
 					if (iter->m_clipOrder != order || iter->m_clipGroupOrder != orderGroup)
 					{
 						iter->m_clipOrder = order;
-						iter->m_clipGroupOrder = orderGroup;
+						iter->m_clipGroupOrder = orderGroup;						
 
 						if (theApp.m_GroupID > 0)
 						{
@@ -1228,11 +1230,22 @@ LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
 						}
 					}
 
+					iter->m_Desc = description;
+
 					foundClip = TRUE;
 
 					m_lstHeader.RefreshVisibleRows();
 					m_lstHeader.RedrawWindow();
 					SelectFocusID();
+				}
+				else if (updateFlags & UPDATE_CLIP_DESCRIPTION)
+				{
+					iter->m_Desc = description;
+
+					foundClip = TRUE;
+
+					m_lstHeader.RefreshVisibleRows();
+					m_lstHeader.RedrawWindow();
 				}
 
 				break;
@@ -1244,7 +1257,7 @@ LRESULT CQPasteWnd::OnReloadClipAfterPaste(WPARAM wParam, LPARAM lParam)
 
 	DWORD endTick = GetTickCount();
 	if ((endTick - startTick) > 150)
-		Log(StrF(_T("Paste Timing OnReloadClipAfterPaste: %d, ClipId: %d"), endTick - startTick, clipId));
+		Log(StrF(_T("Paste Timing OnReloadClipInUI: %d, ClipId: %d"), endTick - startTick, clipId));
 
 	return foundClip;
 }
@@ -3750,9 +3763,8 @@ bool CQPasteWnd::DoActionNewClip()
 {
 	CClipIDs IDs;
 	IDs.Add(-1);
-	theApp.EditItems(IDs, true);
+	theApp.EditItems(IDs, true, true);
 
-	HideQPasteWindow(false);
 	return true;
 }
 
@@ -3766,7 +3778,13 @@ bool CQPasteWnd::DoActionEditClip()
 	CClipIDs IDs;
 	m_lstHeader.GetSelectionItemData(IDs);
 
-	theApp.EditItems(IDs, true);
+	bool textOnly = false;
+	if (GetKeyState(VK_SHIFT) & 0x8000)
+	{
+		textOnly = true;
+	}
+
+	theApp.EditItems(IDs, true, textOnly);
 	
 	return true;
 }

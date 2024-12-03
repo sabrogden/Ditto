@@ -52,12 +52,6 @@
     <ClCompile Include="ClipIds.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="RulerRichEditCtrl\External\ColourPicker.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="RulerRichEditCtrl\External\ColourPopup.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="CopyProperties.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -82,12 +76,6 @@
     <ClCompile Include="DittoCopyBuffer.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="DittoRulerRichEditCtrl.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="EditFrameWnd.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="ExternalWindowTracker.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -98,9 +86,6 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="FileTransferProgressDlg.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="RulerRichEditCtrl\FontComboBox.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="FormattedTextDraw.cpp">
@@ -223,18 +208,6 @@
     <ClCompile Include="RichTextAggregator.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="RulerRichEditCtrl\RRECRuler.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="RulerRichEditCtrl\RRECToolbar.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="RulerRichEditCtrl\RulerRichEdit.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="RulerRichEditCtrl\RulerRichEditCtrl.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="SaveAnimation.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -250,16 +223,7 @@
     <ClCompile Include="Server.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="RulerRichEditCtrl\SizeComboBox.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="StdAfx.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="RulerRichEditCtrl\StdGrfx.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="RulerRichEditCtrl\External\StdioFileEx.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="SystemTray.cpp">
@@ -269,9 +233,6 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="Shared\TextConvert.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="RulerRichEditCtrl\TextFile\TextFile.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="Theme.cpp">
@@ -293,9 +254,6 @@
       <Filter>header</Filter>
     </ClCompile>
     <ClCompile Include="DittoWindow.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="EditWnd.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="EventThread.cpp">
@@ -464,10 +422,20 @@
     <ClCompile Include="ICU_String.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="ImageFormatAggregator.cpp" />
-    <ClCompile Include="ImageHelper.cpp" />
     <ClCompile Include="sqlite\sqlite3mc_amalgamation.c">
       <Filter>sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="ClipEditThread.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="ConvertRTFToText.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageHelper.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageFormatAggregator.cpp">
+      <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -525,12 +493,6 @@
     <ClInclude Include="ClipIds.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="RulerRichEditCtrl\External\ColourPicker.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="RulerRichEditCtrl\External\ColourPopup.h">
-      <Filter>header</Filter>
-    </ClInclude>
     <ClInclude Include="CopyProperties.h">
       <Filter>header</Filter>
     </ClInclude>
@@ -561,16 +523,7 @@
     <ClInclude Include="Shared\DittoDefines.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="DittoRulerRichEditCtrl.h">
-      <Filter>header</Filter>
-    </ClInclude>
     <ClInclude Include="DittoWindow.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="EditFrameWnd.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="EditWnd.h">
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="EventThread.h">
@@ -586,9 +539,6 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="FileTransferProgressDlg.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="RulerRichEditCtrl\FontComboBox.h">
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="FormatSQL.h">
@@ -735,18 +685,6 @@
     <ClInclude Include="RichTextAggregator.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="RulerRichEditCtrl\RRECRuler.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="RulerRichEditCtrl\RRECToolbar.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="RulerRichEditCtrl\RulerRichEdit.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="RulerRichEditCtrl\RulerRichEditCtrl.h">
-      <Filter>header</Filter>
-    </ClInclude>
     <ClInclude Include="SaveAnimation.h">
       <Filter>header</Filter>
     </ClInclude>
@@ -765,16 +703,10 @@
     <ClInclude Include="ServerDefines.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="RulerRichEditCtrl\SizeComboBox.h">
-      <Filter>header</Filter>
-    </ClInclude>
     <ClInclude Include="StdAfx.h">
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="RulerRichEditCtrl\StdGrfx.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="RulerRichEditCtrl\External\StdioFileEx.h">
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="SystemTray.h">
@@ -784,9 +716,6 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="Shared\TextConvert.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="RulerRichEditCtrl\TextFile\TextFile.h">
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="Theme.h">
@@ -970,17 +899,24 @@
     <ClInclude Include="ICU_String.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="ImageFormatAggregator.h" />
-    <ClInclude Include="ImageHelper.h" />
     <ClInclude Include="sqlite\sqlite3mc_amalgamation.h">
       <Filter>sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="ClipEditThread.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="ConvertRTFToText.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageFormatAggregator.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageHelper.h">
+      <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
-      <Filter>res</Filter>
-    </ResourceCompile>
-    <ResourceCompile Include="RulerRichEditCtrl\RulerRichEditCtrl.rc">
       <Filter>res</Filter>
     </ResourceCompile>
   </ItemGroup>

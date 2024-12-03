@@ -15,7 +15,7 @@
 #define VK_MOUSE_MIDDLE_CLICK 0x04
 
 #define UPDATE_AFTER_PASTE_SELECT_CLIP 0x1
-#define UPDATE_AFTER_PASTE_REFRESH_VISIBLE 0x2
+#define UPDATE_CLIP_DESCRIPTION 0x2
 
 #define REMOTE_CLIP_ADD_TO_CLIPBOARD 0x1
 #define REMOTE_CLIP_MANUAL_SEND 0x2
@@ -148,7 +148,7 @@ __int64 GetLastWriteTime(const CString &csFile);
 #define WM_LOAD_ClIP_ON_CLIPBOARD		WM_USER	+ 214
 //defined in tray icon #define WM_CUSTOMIZE_TRAY_MENU	WM_USER + 215
 //defined in tray icon #define WM_TRAY_MENU_MOUSE_MOVE	WM_USER + 216
-#define WM_RELOAD_CLIP_AFTER_PASTE	WM_USER	+ 217
+#define WM_RELOAD_CLIP_IN_UI	WM_USER	+ 217
 #define WM_GLOBAL_CLIPS_CLOSED	WM_USER	+ 218
 #define WM_OPTIONS_CLOSED	WM_USER	+ 219
 #define WM_SHOW_OPTIONS	WM_USER	+ 220
@@ -185,7 +185,7 @@ bool IsRunningLimited();
 BOOL IsVista();
 
 void DeleteDittoTempFiles(BOOL checkFileLastAccess);
-void DeleteFolderFiles(CString csDir, BOOL checkFileLastAccess);
+void DeleteFolderFiles(CString csDir, BOOL checkFileLastAccess, CTimeSpan lastAccessOffset);
 
 __int64 FileSize(const TCHAR *fileName);
 

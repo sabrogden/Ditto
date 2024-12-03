@@ -250,7 +250,7 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 			{
 				int id = pData->ids.ElementAt(i);
 
-				theApp.RefreshClipAfterPaste(id, refreshFlags);
+				theApp.RefreshClipInUI(id, refreshFlags);
 				break;
 			}			
 

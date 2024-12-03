@@ -146,6 +146,9 @@ END_MESSAGE_MAP()
 #define SETTING_REGEX_CASE_INSENSITIVE 95
 #define SETTING_DRAW_COPIED_COLOR_CODE 96
 #define SETTING_CENTER_WINDOW_BELOW_CURSOR_CARET 97
+#define SETTING_TEXT_EDITOR_PATH 98
+#define SETTING_RTF_EDITOR_PATH 99
+#define SETTING_UPDATE_DESC_ON_CLIP_EDIT 100
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -241,6 +244,10 @@ BOOL CAdvGeneral::OnInitDialog()
 	CMFCPropertyGridFileProperty* pFileProp = new CMFCPropertyGridFileProperty(_T("On copy play the sound"), TRUE, CGetSetOptions::GetPlaySoundOnCopy(), _T("wav"), 0, szFilter, (LPCTSTR)0, SETTING_COPY_PLAY_SOUND);
 	pGroupTest->AddSubItem(pFileProp);
 
+	static TCHAR BASED_CODE szTextEditorFilter[] = _T("Applications(*.exe)|*.exe||");
+	CMFCPropertyGridFileProperty* pTextEditorProp = new CMFCPropertyGridFileProperty(_T("Text editor path"), TRUE, CGetSetOptions::GetTextEditorPath(), _T("exe"), 0, szTextEditorFilter, (LPCTSTR)0, SETTING_TEXT_EDITOR_PATH);
+	pGroupTest->AddSubItem(pTextEditorProp);
+
 	AddTrueFalse(pGroupTest, _T("Paste clip in active window after selection"), CGetSetOptions::GetSendPasteAfterSelection(), SETTING_PASTE_IN_ACTIVE_WINDOW);
 	AddTrueFalse(pGroupTest, _T("Prompt when deleting clips"), CGetSetOptions::GetPromptWhenDeletingClips(), SETTING_PROMPT_ON_DELETE);
 
@@ -249,6 +256,10 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Refresh view after paste"), CGetSetOptions::GetRefreshViewAfterPasting(), SETTING_REFRESH_VIEW_AFTER_PASTE);
 
 	AddTrueFalse(pGroupTest, _T("Regex case insensitive search"), CGetSetOptions::GetRegexCaseInsensitive(), SETTING_REGEX_CASE_INSENSITIVE);
+
+	static TCHAR BASED_CODE szRTFEditorFilter[] = _T("Applications(*.exe)|*.exe||");
+	CMFCPropertyGridFileProperty* pRTFEditorProp = new CMFCPropertyGridFileProperty(_T("RTF editor path"), TRUE, CGetSetOptions::GetRTFEditorPath(), _T("exe"), 0, szRTFEditorFilter, (LPCTSTR)0, SETTING_RTF_EDITOR_PATH);
+	pGroupTest->AddSubItem(pRTFEditorProp);
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Save clipboard delay (ms, default: 100)"), (long)(CGetSetOptions::GetProcessDrawClipboardDelay()), _T(""), SETTING_CLIPBOARD_SAVE_DELAY));
 
@@ -283,6 +294,7 @@ BOOL CAdvGeneral::OnInitDialog()
 
 	AddTrueFalse(pGroupTest, _T("Transparency enabled"), CGetSetOptions::GetEnableTransparency(), SETTING_ENABLE_TRANSPARENCY);
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Transparency percentage"), CGetSetOptions::GetTransparencyPercent(), _T(""), SETTING_TRANSPARENCY));
+	AddTrueFalse(pGroupTest, _T("Update description on clip edit"), CGetSetOptions::GetUpdateDescWhenSavingClip(), SETTING_UPDATE_DESC_ON_CLIP_EDIT);
 	AddTrueFalse(pGroupTest, _T("Update clip order on paste"), CGetSetOptions::GetUpdateTimeOnPaste(), SETTING_UPDATE_ORDER_ON_PASTE);
 	AddTrueFalse(pGroupTest, _T("Update clip Order on ctrl-c"), CGetSetOptions::GetUpdateClipOrderOnCtrlC(), SETTING_UPDATE_ORDER_ON_CTRL_C);
 
@@ -856,6 +868,25 @@ void CAdvGeneral::OnBnClickedOk()
 				{
 					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetCenterWindowBelowCursorOrCaret(val);
+				}
+				break;
+			case SETTING_TEXT_EDITOR_PATH:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					CGetSetOptions::SetTextEditorPath(pNewValue->bstrVal);
+				}
+				break;
+			case SETTING_RTF_EDITOR_PATH:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					CGetSetOptions::SetRTFEditorPath(pNewValue->bstrVal);
+				}
+				break;
+			case SETTING_UPDATE_DESC_ON_CLIP_EDIT:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
+					CGetSetOptions::SetUpdateDescWhenSavingClip(val);
 				}
 				break;
 			}

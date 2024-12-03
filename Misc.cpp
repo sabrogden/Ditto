@@ -766,7 +766,6 @@ BOOL DeleteFormats(int parentID, ARRAY& formatIDs)
 		for(int i = 0; i < count; i++)
 		{
 			int count = theApp.m_db.execDMLEx(_T("DELETE FROM Data WHERE lID = %d;"), formatIDs[i]);
-			int k = 0;
 		}
 
 		CClip clip;
@@ -1119,25 +1118,25 @@ void DeleteDittoTempFiles(BOOL checkFileLastAccess)
 	CString csDir = CGetSetOptions::GetPath(PATH_REMOTE_FILES);
 	if (FileExists(csDir))
 	{
-		DeleteFolderFiles(csDir, checkFileLastAccess);
+		DeleteFolderFiles(csDir, checkFileLastAccess, CTimeSpan(0, 1, 0, 0));
 	}
 
 	csDir = CGetSetOptions::GetPath(PATH_DRAG_FILES);
 	if (FileExists(csDir))
 	{
-		DeleteFolderFiles(csDir, checkFileLastAccess);
+		DeleteFolderFiles(csDir, checkFileLastAccess, CTimeSpan(0, 1, 0, 0));
 	}
 
 	csDir = CGetSetOptions::GetPath(PATH_CLIP_DIFF);
 	if (FileExists(csDir))
 	{
-		DeleteFolderFiles(csDir, checkFileLastAccess);
+		DeleteFolderFiles(csDir, checkFileLastAccess, CTimeSpan(0, 1, 0, 0));
 	}
 }
 
-void DeleteFolderFiles(CString csDir, BOOL checkFileLastAccess)
+void DeleteFolderFiles(CString csDir, BOOL checkFileLastAccess, CTimeSpan lastAccessOffset)
 {
-	if (csDir.Find(_T("\\ReceivedFiles\\")) == -1 && csDir.Find(_T("\\DragFiles\\")) == -1 && csDir.Find(_T("ClipCompare")) == -1)
+	if (csDir.Find(_T("\\ReceivedFiles\\")) == -1 && csDir.Find(_T("\\DragFiles\\")) == -1 && csDir.Find(_T("ClipCompare")) == -1 && csDir.Find(_T("EditClips")) == -1)
 		return;
 
 	Log(StrF(_T("Deleting files in Folder %s Check Last Access %d"), csDir, checkFileLastAccess));
@@ -1146,7 +1145,7 @@ void DeleteFolderFiles(CString csDir, BOOL checkFileLastAccess)
 
 	CTime ctOld = CTime::GetCurrentTime();
 	CTime ctFile;
-	ctOld -= CTimeSpan(0, 0, 0, 1);
+	ctOld -= lastAccessOffset;
 
 	CFileFind Find;
 
@@ -1160,13 +1159,6 @@ void DeleteFolderFiles(CString csDir, BOOL checkFileLastAccess)
 
 		if(Find.IsDots())
 			continue;
-
-		if(Find.IsDirectory())
-		{
-			CString csDir(Find.GetFilePath());
-			DeleteFolderFiles(csDir, checkFileLastAccess);
-			RemoveDirectory(csDir);
-		}
 
 		if(checkFileLastAccess &&
 			Find.GetLastAccessTime(ctFile))

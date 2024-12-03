@@ -221,7 +221,7 @@ DWORD CClip::m_LastAddedCRC = 0;
 int CClip::m_lastAddedID = -1;
 
 CClip::CClip() : 
-	m_id(0), 
+	m_id(-1), 
 	m_CRC(0),
 	m_parentId(-1),
 	m_dontAutoDelete(FALSE),
@@ -1696,33 +1696,6 @@ void CClip::LoadTypes(int id, CClipTypes& types)
 	CATCH_SQLITE_EXCEPTION
 }
 
-bool CClip::SaveFromEditWnd(BOOL bUpdateDesc)
-{
-	bool bRet = false;
-
-	try
-	{
-		theApp.m_db.execDMLEx(_T("DELETE FROM Data WHERE lParentID = %d;"), m_id);
-
-		DWORD CRC = GenerateCRC();
-
-		AddToDataTable();
-
-		theApp.m_db.execDMLEx(_T("UPDATE Main SET CRC = %d WHERE lID = %d"), CRC, m_id);
-		
-		if(bUpdateDesc)
-		{
-			m_Desc.Replace(_T("'"), _T("''"));
-			theApp.m_db.execDMLEx(_T("UPDATE Main SET mText = '%s' WHERE lID = %d"), m_Desc, m_id);
-		}
-
-		bRet = true;
-	}
-	CATCH_SQLITE_EXCEPTION
-
-	return bRet;
-}
-
 CStringW CClip::GetUnicodeTextFormat()
 {
 	IClipFormat *pFormat = this->Clips()->FindFormatEx(CF_UNICODETEXT);
@@ -1745,7 +1718,23 @@ CStringA CClip::GetCFTextTextFormat()
 	return _T("");
 }
 
-BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL utf8)
+CStringA CClip::GetRTFTextFormat()
+{
+	IClipFormat* pFormat = this->Clips()->FindFormatEx(theApp.m_RTFFormat);
+	if (pFormat != NULL)
+	{
+		return pFormat->GetAsCStringA();
+	}
+
+	return _T("");
+}
+
+BOOL CClip::ContainsClipFormat(CLIPFORMAT clipFormat)
+{
+	return this->Clips()->FindFormatEx(clipFormat) != NULL;
+}
+
+BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL rtf, BOOL forceUnicode)
 {
 	BOOL ret = false;
 
@@ -1754,19 +1743,9 @@ BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL utf8)
 	{
 		CStringW w = GetUnicodeTextFormat();
 		CStringA a = GetCFTextTextFormat();
-		
-		if(utf8 && w != _T(""))
-		{
-			CStringA convToUtf8 = CTextConvert::UnicodeToUTF8(w);
-			std::byte header[2];
-			header[0] = (std::byte)0xEF;
-			header[1] = (std::byte)0xBB;
-			f.Write(&header, 2);
-			f.Write(convToUtf8.GetBuffer(), convToUtf8.GetLength());
+		CStringA rtfA = GetRTFTextFormat();		
 
-			ret = true;
-		}
-		else if(unicode && w != _T(""))
+		if(unicode && (w != _T("") || forceUnicode))
 		{
 			std::byte header[2];
 			header[0] = (std::byte)0xFF;
@@ -1779,6 +1758,12 @@ BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL utf8)
 		else if(asci && a != _T(""))
 		{
 			f.Write(a.GetBuffer(), a.GetLength());
+
+			ret = true;
+		}
+		else if (rtf && rtfA != _T(""))
+		{
+			f.Write(rtfA.GetBuffer(), rtfA.GetLength());
 
 			ret = true;
 		}
@@ -1818,6 +1803,69 @@ BOOL CClip::WriteTextToHtmlFile(CString path)
 	}
 
 	return ret;
+}
+
+BOOL CClip::SaveFormats(CString *unicode, CStringA *asci, CStringA *rtf, BOOL updateDescription)
+{
+	ARRAY deletedData;
+	for (INT_PTR i = m_Formats.GetSize() - 1; i >= 0; i--)
+	{
+		deletedData.Add(m_Formats[i].m_dataId);
+	}
+
+	EmptyFormats();
+
+	if (rtf != nullptr)
+	{
+		const int nLength = rtf->GetLength() + sizeof(char);
+		AddFormat(theApp.m_RTFFormat, rtf->GetBuffer(nLength), nLength, true);
+	}
+
+	if (asci != nullptr)
+	{
+		const int nLength = asci->GetLength() + sizeof(char);
+		AddFormat(CF_TEXT, asci->GetBuffer(nLength), nLength, true);
+	}
+
+	if (unicode != nullptr)
+	{
+		const int nLength = unicode->GetLength() * sizeof(wchar_t) + sizeof(wchar_t);
+		AddFormat(CF_UNICODETEXT, unicode->GetBuffer(nLength), nLength, true);
+	}
+
+	try
+	{
+		m_CRC = GenerateCRC();
+
+		theApp.m_db.execDML(_T("begin transaction;"));
+
+		auto count = deletedData.GetSize();
+		for (int i = 0; i < count; i++)
+		{
+			int count = theApp.m_db.execDMLEx(_T("DELETE FROM Data WHERE lID = %d;"), deletedData[i]);
+		}
+
+		AddToDataTable();
+
+		if (m_id >= 0)
+		{
+			if (updateDescription)
+			{
+				ModifyDescription();
+			}
+		}
+		else
+		{
+			MakeLatestOrder();
+			MakeLatestGroupOrder();
+			AddToMainTable();
+		}
+
+		theApp.m_db.execDML(_T("commit transaction;"));
+	}
+	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)
+
+	return TRUE;
 }
 
 BOOL CClip::WriteImageToFile(CString path)

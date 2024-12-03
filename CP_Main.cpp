@@ -496,7 +496,9 @@ void CCP_MainApp::AfterMainCreate()
 
 	m_pSaveClipboard = new CHotKey("SaveClipboard", 0, false);
 
-	m_pCopyAndSaveClipboard = new CHotKey("CopyAndSaveClipboard", 0, false);
+	m_pCopyAndSaveClipboard = new CHotKey("CopyAndSaveClipboard", 0, false);	
+
+	m_editThread.StartWatchingFolderForChanges();
 
 	LoadGlobalClips();
 
@@ -711,18 +713,18 @@ void CCP_MainApp::RefreshView(CopyReasonEnum::CopyReason copyReason)
 	}
 }
 
-void CCP_MainApp::RefreshClipAfterPaste(int clipId, int updateFlags)
+void CCP_MainApp::RefreshClipInUI(int clipId, int updateFlags)
 {
 	CQPasteWnd *pWnd = QPasteWnd();
 	if(pWnd)
 	{
 		if(m_bAsynchronousRefreshView)
 		{
-			pWnd->PostMessage(WM_RELOAD_CLIP_AFTER_PASTE, clipId, updateFlags);		
+			pWnd->PostMessage(WM_RELOAD_CLIP_IN_UI, clipId, updateFlags);		
 		}
 		else
 		{
-			pWnd->SendMessage(WM_RELOAD_CLIP_AFTER_PASTE, clipId, updateFlags);
+			pWnd->SendMessage(WM_RELOAD_CLIP_IN_UI, clipId, updateFlags);
 		}
 	}
 }
@@ -1093,9 +1095,130 @@ BOOL CCP_MainApp::GetClipData(long parentId, CClipFormat &Clip)
 	return bRet;
 }
 
-bool CCP_MainApp::EditItems(CClipIDs &Ids, bool bShowError)
+
+
+bool CCP_MainApp::EditItems(CClipIDs &Ids, bool bShowError, bool forceTextEdit)
 {
-	m_pMainFrame->ShowEditWnd(Ids);
+	bool ret = false;	
+	
+	int lastFileCheckId = 1;
+
+	for (int i = 0; i < min(Ids.GetCount(), 20); i++)
+	{
+		const int id = Ids[i];		
+
+		CClip clip;
+		if (id >= 0 && clip.LoadFormats(id, true, true) == false)
+		{
+			Log(StrF(_T("Failed to load formats for clipId: %d"), id));
+			continue;
+		}
+
+		bool unicodeFile = false;
+		bool asciFile = false;
+		bool rtfFile = false;
+		CString exePath;
+		CString extension;
+		if (forceTextEdit == false && clip.ContainsClipFormat(theApp.m_RTFFormat))
+		{
+			extension = _T("rtf");
+			rtfFile = true;
+			exePath = CGetSetOptions::GetRTFEditorPath();
+		}
+		else if (clip.ContainsClipFormat(CF_UNICODETEXT))
+		{
+			extension = _T("txt");
+			unicodeFile = true;
+			exePath = CGetSetOptions::GetTextEditorPath();
+		}
+		else if (clip.ContainsClipFormat(CF_TEXT))
+		{
+			extension = _T("txt");
+			asciFile = true;
+			exePath = CGetSetOptions::GetTextEditorPath();
+		}
+		else if (id == -1)
+		{
+			extension = _T("txt");
+			unicodeFile = true;
+			exePath = CGetSetOptions::GetTextEditorPath();
+		}
+		else
+		{
+			continue;
+		}
+
+		CString startingFilePath = StrF(_T("%sEditClip_%d.%s"), CGetSetOptions::GetPath(PATH_EDIT_CLIPS), id, extension);
+
+		if (id == -1)
+		{
+			startingFilePath = StrF(_T("%sNewClip_1.%s"), CGetSetOptions::GetPath(PATH_EDIT_CLIPS), extension);
+		}
+
+		CString savePath = startingFilePath;
+
+		//for new files make a unique file name
+		if (id < 0 &&
+			FileExists(startingFilePath))
+		{
+			savePath = _T("");
+
+			for (int y = lastFileCheckId; y < 1000000; y++)
+			{
+				CString testFilePath = StrF(_T("%sNewClip_%d.%s"), CGetSetOptions::GetPath(PATH_EDIT_CLIPS), y, extension);
+
+				if (FileExists(testFilePath) == FALSE)
+				{
+					savePath = testFilePath;
+					lastFileCheckId = y + 1;
+					break;
+				}
+			}
+		}
+
+		m_editThread.WatchFile(savePath);
+
+		clip.WriteTextToFile(savePath, unicodeFile, asciFile, rtfFile, (id == -1));
+
+		SHELLEXECUTEINFO sei = { sizeof(sei) };
+		sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+		sei.lpVerb = _T("open");
+
+		if (exePath != _T(""))
+		{
+			sei.lpFile = exePath;
+			sei.lpParameters = savePath;
+
+			Log(StrF(_T("Launching editor path: %s, file: %s"), exePath, savePath));
+		}
+		else
+		{
+			sei.lpFile = savePath;
+
+			Log(StrF(_T("Launching editor without specific exe path, file: %s"), savePath));
+		}
+		
+		sei.nShow = SW_NORMAL;
+
+		if (ShellExecuteEx(&sei) == FALSE)
+		{
+			Log(StrF(_T("ShellExecuteEx failed, not editing clipid: %d"), id));
+			continue;
+		}		
+
+		/*DWORD PID = GetProcessId(sei.hProcess);
+
+		HANDLE hProcess = sei.hProcess;
+		if (m_editThread.IsRunning() == false)
+		{
+			m_editThread.SubscribeToFileChanges();
+			m_editThread.Start();
+		}
+
+		m_editThread.WatchFileForChange(savePath, id, hProcess);*/
+
+		ret = true;
+	}
 
 	return true;
 }
