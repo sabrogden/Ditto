@@ -85,12 +85,12 @@ BOOL COptionsQuickPaste::OnInitDialog()
 	m_eTransparencyPercent.SetNumber(CGetSetOptions::GetTransparencyPercent());
 	m_eLinesPerRow.SetNumber(CGetSetOptions::GetLinesPerRow());
 	m_alwaysShowScrollBar.SetCheck(CGetSetOptions::GetShowScrollBar());
-	m_btShowThumbnails.SetCheck(g_Opt.m_bDrawThumbnail);
-	m_btDrawRTF.SetCheck(g_Opt.m_bDrawRTF);
+	m_btShowThumbnails.SetCheck(CGetSetOptions::m_bDrawThumbnail);
+	m_btDrawRTF.SetCheck(CGetSetOptions::m_bDrawRTF);
 
-	m_EnsureEntireWindowVisible.SetCheck(g_Opt.m_bEnsureEntireWindowCanBeSeen);
-	m_ShowAllInMainList.SetCheck(g_Opt.m_bShowAllClipsInMainList);
-	m_FindAsYouType.SetCheck(g_Opt.m_bFindAsYouType);
+	m_EnsureEntireWindowVisible.SetCheck(CGetSetOptions::m_bEnsureEntireWindowCanBeSeen);
+	m_ShowAllInMainList.SetCheck(CGetSetOptions::m_bShowAllClipsInMainList);
+	m_FindAsYouType.SetCheck(CGetSetOptions::m_bFindAsYouType);
 
 	if(CGetSetOptions::GetQuickPastePosition() == POS_AT_CARET)
 		CheckDlgButton(IDC_AT_CARET, BST_CHECKED);
@@ -99,7 +99,7 @@ BOOL COptionsQuickPaste::OnInitDialog()
 	else if(CGetSetOptions::GetQuickPastePosition() == POS_AT_PREVIOUS)
 		CheckDlgButton(IDC_AT_PREVIOUS, BST_CHECKED);
 
-	m_btDescShowLeadingWhiteSpace.SetCheck(g_Opt.m_bDescShowLeadingWhiteSpace);
+	m_btDescShowLeadingWhiteSpace.SetCheck(CGetSetOptions::m_bDescShowLeadingWhiteSpace);
 
 	m_btShowText.SetCheck(CGetSetOptions::GetShowTextForFirstTenHotKeys());
 	m_PromptForDelete.SetCheck(CGetSetOptions::GetPromptWhenDeletingClips());
@@ -147,7 +147,7 @@ BOOL COptionsQuickPaste::OnApply()
 	else if(IsDlgButtonChecked(IDC_AT_PREVIOUS))
 		CGetSetOptions::SetQuickPastePosition(POS_AT_PREVIOUS);
 
-	g_Opt.SetDescShowLeadingWhiteSpace(m_btDescShowLeadingWhiteSpace.GetCheck());
+	CGetSetOptions::SetDescShowLeadingWhiteSpace(m_btDescShowLeadingWhiteSpace.GetCheck());
 	CGetSetOptions::SetShowTextForFirstTenHotKeys(m_btShowText.GetCheck());
 	CGetSetOptions::SetDrawThumbnail(m_btShowThumbnails.GetCheck());
 	CGetSetOptions::SetDrawRTF(m_btDrawRTF.GetCheck());
@@ -169,7 +169,7 @@ BOOL COptionsQuickPaste::OnApply()
 		CGetSetOptions::SetFont(m_LogFont);
 	}
 
-	CString currentTheme = g_Opt.GetTheme();
+	CString currentTheme = CGetSetOptions::GetTheme();
 
 	CString csTheme;
 	if(m_cbTheme.GetCurSel() >= 0)
@@ -177,15 +177,15 @@ BOOL COptionsQuickPaste::OnApply()
 		m_cbTheme.GetLBText(m_cbTheme.GetCurSel(), csTheme);
 		if (csTheme == DEFAULT_THEME)
 		{
-			g_Opt.SetTheme("");
+			CGetSetOptions::SetTheme("");
 			csTheme = _T("");
 		}
 		else
-			g_Opt.SetTheme(csTheme);
+			CGetSetOptions::SetTheme(csTheme);
 	}
 	else
 	{
-		g_Opt.SetTheme("");
+		CGetSetOptions::SetTheme("");
 	}
 
 	if (currentTheme != csTheme)
@@ -195,7 +195,7 @@ BOOL COptionsQuickPaste::OnApply()
 
 	CString diffPath;
 	m_diffPathEditBox.GetWindowText(diffPath);
-	g_Opt.SetDiffApp(diffPath);
+	CGetSetOptions::SetDiffApp(diffPath);
 
 	if (IsDlgButtonChecked(IDC_CHECK_SHOW_CLIP_WAS_PASTED))
 		CGetSetOptions::SetShowIfClipWasPasted(TRUE);

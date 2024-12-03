@@ -63,7 +63,7 @@ COptionsSheet::COptionsSheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT iSelectP
 	AddPage(m_pCopyBuffers);
 	//AddPage(m_pQuickPasteOptions);
 	AddPage(m_pQuickPasteShortCuts);
-	if(g_Opt.GetAllowFriends())
+	if(CGetSetOptions::GetAllowFriends())
 	{
 		m_pFriends = new COptionFriends;
 		AddPage(m_pFriends);

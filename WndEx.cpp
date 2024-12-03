@@ -109,7 +109,7 @@ int CWndEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		SWP_NOZORDER | SWP_NOACTIVATE);
 
 	SetCaptionColorActive(false, TRUE);
-	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
+	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true, CGetSetOptions::m_Theme.GetCaptionSize(), CGetSetOptions::m_Theme.GetCaptionFontSize());
 	SetAutoMaxDelay(CGetSetOptions::GetAutoMaxDelay());
 
 	m_toolTip.Create(this);
@@ -128,21 +128,21 @@ bool CWndEx::SetCaptionColorActive(BOOL bPersistant, BOOL ConnectedToClipboard)
 
 	if(ConnectedToClipboard == false)
 	{
-		bResult = m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeftNotConnected(), g_Opt.m_Theme.CaptionRightNotConnected(), g_Opt.m_Theme.BorderNotConnected());
+		bResult = m_DittoWindow.SetCaptionColors(CGetSetOptions::m_Theme.CaptionLeftNotConnected(), CGetSetOptions::m_Theme.CaptionRightNotConnected(), CGetSetOptions::m_Theme.BorderNotConnected());
 	}
 	else
 	{
 		if(bPersistant)
 		{
-			bResult = m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeftTopMost(), g_Opt.m_Theme.CaptionRightTopMost(), g_Opt.m_Theme.BorderTopMost());
+			bResult = m_DittoWindow.SetCaptionColors(CGetSetOptions::m_Theme.CaptionLeftTopMost(), CGetSetOptions::m_Theme.CaptionRightTopMost(), CGetSetOptions::m_Theme.BorderTopMost());
 		}
 		else
 		{
-			bResult = m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeft(), g_Opt.m_Theme.CaptionRight(), g_Opt.m_Theme.Border());
+			bResult = m_DittoWindow.SetCaptionColors(CGetSetOptions::m_Theme.CaptionLeft(), CGetSetOptions::m_Theme.CaptionRight(), CGetSetOptions::m_Theme.Border());
 		}
 	}
 
-	m_DittoWindow.SetCaptionTextColor(g_Opt.m_Theme.CaptionTextColor());
+	m_DittoWindow.SetCaptionTextColor(CGetSetOptions::m_Theme.CaptionTextColor());
 
 	return bResult;
 }

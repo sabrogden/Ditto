@@ -1117,7 +1117,7 @@ BOOL EnsureDirectory(CString csPath)
 // 		Log(_T("Failed to copy files from device zip file"));
 // 	}
 // 
-// 	g_Opt.nLastDbWriteTime = GetLastWriteTime(csLocalPath);
+// 	CGetSetOptions::nLastDbWriteTime = GetLastWriteTime(csLocalPath);
 // 
 // 	return bRet;
 // }

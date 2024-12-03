@@ -106,8 +106,8 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 	
 	
 	m_DittoWindow.DoCreate(this);
-	m_DittoWindow.SetCaptionColors(g_Opt.m_Theme.CaptionLeft(), g_Opt.m_Theme.CaptionRight(), g_Opt.m_Theme.Border());
-	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true, g_Opt.m_Theme.GetCaptionSize(), g_Opt.m_Theme.GetCaptionFontSize());
+	m_DittoWindow.SetCaptionColors(CGetSetOptions::m_Theme.CaptionLeft(), CGetSetOptions::m_Theme.CaptionRight(), CGetSetOptions::m_Theme.Border());
+	m_DittoWindow.SetCaptionOn(this, CGetSetOptions::GetCaptionPos(), true, CGetSetOptions::m_Theme.GetCaptionSize(), CGetSetOptions::m_Theme.GetCaptionFontSize());
 	m_DittoWindow.m_bDrawMaximize = false;
 	m_DittoWindow.m_bDrawMinimize = false;
 	m_DittoWindow.m_bDrawChevron = true;
@@ -118,7 +118,7 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
                       ES_AUTOHSCROLL, CRect(10, 10, 100, 200), this, 1);
 
     m_RichEdit.SetReadOnly();
-    m_RichEdit.SetBackgroundColor(FALSE, g_Opt.m_Theme.DescriptionWindowBG());
+    m_RichEdit.SetBackgroundColor(FALSE, CGetSetOptions::m_Theme.DescriptionWindowBG());
 
 	m_RichEdit.SetEventMask(m_RichEdit.GetEventMask() | ENM_SELCHANGE | ENM_LINK | ENM_MOUSEEVENTS | ENM_SCROLLEVENTS);
 	m_RichEdit.SetAutoURLDetect(TRUE);
@@ -139,11 +139,11 @@ BOOL CToolTipEx::Create(CWnd *pParentWnd)
 	m_fontHeight = -13;
 
 	m_clipDataStatic.SetFont(&m_clipDataFont);
-	m_clipDataStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
+	m_clipDataStatic.SetBkColor(CGetSetOptions::m_Theme.DescriptionWindowBG());
 	m_clipDataStatic.SetTextColor(RGB(80, 80, 80));
 
 	m_folderPathStatic.SetFont(&m_clipDataFont);
-	m_folderPathStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
+	m_folderPathStatic.SetBkColor(CGetSetOptions::m_Theme.DescriptionWindowBG());
 	m_folderPathStatic.SetTextColor(RGB(80, 80, 80));
 	
 	m_saveWindowLockout = false;
@@ -845,7 +845,7 @@ void CToolTipEx::SetHtmlText(const CString &html)
 			}
 		}
 
-		COLORREF c = g_Opt.m_Theme.DescriptionWindowBG();
+		COLORREF c = CGetSetOptions::m_Theme.DescriptionWindowBG();
 
 		DWORD dwR = GetRValue(c);
 		DWORD dwG = GetGValue(c);
@@ -892,7 +892,7 @@ void CToolTipEx::SetToolTipText(const CString &csText)
 	cfNew.dwMask = CFM_COLOR;
 	cfNew.dwEffects = CFM_COLOR;
 	cfNew.dwEffects &= ~CFE_AUTOCOLOR;
-	cfNew.crTextColor = g_Opt.m_Theme.DescriptionWindowText();
+	cfNew.crTextColor = CGetSetOptions::m_Theme.DescriptionWindowText();
 	m_RichEdit.SetDefaultCharFormat(cfNew);
 
 	HighlightSearchText();
@@ -1310,7 +1310,7 @@ void CToolTipEx::OnPaint()
 	GetClientRect(rect);
 	
 	CBrush  Brush, *pOldBrush;
-	Brush.CreateSolidBrush(g_Opt.m_Theme.DescriptionWindowBG());
+	Brush.CreateSolidBrush(CGetSetOptions::m_Theme.DescriptionWindowBG());
 
 	pOldBrush = dc.SelectObject(&Brush);
 
@@ -1488,11 +1488,11 @@ LRESULT CToolTipEx::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 	m_clipDataFont.CreateFont(-m_DittoWindow.m_dpi.Scale(8), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 	
 	m_clipDataStatic.SetFont(&m_clipDataFont);
-	m_clipDataStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
+	m_clipDataStatic.SetBkColor(CGetSetOptions::m_Theme.DescriptionWindowBG());
 	m_clipDataStatic.SetTextColor(RGB(80, 80, 80));
 
 	m_folderPathStatic.SetFont(&m_clipDataFont);
-	m_folderPathStatic.SetBkColor(g_Opt.m_Theme.DescriptionWindowBG());
+	m_folderPathStatic.SetBkColor(CGetSetOptions::m_Theme.DescriptionWindowBG());
 	m_folderPathStatic.SetTextColor(RGB(80, 80, 80));
 
 	LOGFONT lf;

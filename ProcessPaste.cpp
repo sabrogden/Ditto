@@ -43,8 +43,8 @@ BOOL CProcessPaste::DoPaste()
 		// 1) we are pasting a single element, since the element is already
 		//    in the db and its lDate was updated by MarkAsPasted().
 		// OR
-		// 2) we are pasting multiple, but g_Opt.m_bSaveMultiPaste is false
-		if (GetClipIDs().GetSize() == 1 || !g_Opt.m_bSaveMultiPaste)
+		// 2) we are pasting multiple, but CGetSetOptions::m_bSaveMultiPaste is false
+		if (GetClipIDs().GetSize() == 1 || !CGetSetOptions::m_bSaveMultiPaste)
 		{
 			m_pOle->CacheGlobalData(theApp.m_cfIgnoreClipboard, NewGlobalP("Ignore", sizeof("Ignore")));
 		}
@@ -189,7 +189,7 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 		{
 			int clipCount = (int)pData->ids.GetCount();
 
-			if(g_Opt.m_bUpdateTimeOnPaste && 
+			if(CGetSetOptions::m_bUpdateTimeOnPaste && 
 				pData->updateClipOrder &&
 				clipCount == 1)
 			{

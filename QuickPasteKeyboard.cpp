@@ -150,8 +150,8 @@ void CQuickPasteKeyboard::LoadItems()
 			KeyboardArray ar;
 			for (int x = 0; x < 10; x++)
 			{
-				ar.Array[x].A = g_Opt.GetActionShortCutA(action, x);
-				ar.Array[x].B = g_Opt.GetActionShortCutB(action, x);
+				ar.Array[x].A = CGetSetOptions::GetActionShortCutA(action, x);
+				ar.Array[x].B = CGetSetOptions::GetActionShortCutB(action, x);
 			}
 
 			CString shortCutText = GetShortCutText(ar);
@@ -172,7 +172,7 @@ void CQuickPasteKeyboard::LoadItems()
 
 	int dummyId = -1;
 
-	for (auto & element : g_Opt.m_pasteScripts.m_list)
+	for (auto & element : CGetSetOptions::m_pasteScripts.m_list)
 	{
 		// Insert the first item
 		lvi.mask = LVIF_TEXT;
@@ -182,8 +182,8 @@ void CQuickPasteKeyboard::LoadItems()
 		ar.m_refData = element.m_guid;
 		for (int x = 0; x < 10; x++)
 		{
-			ar.Array[x].A = g_Opt.GetActionShortCutA(ActionEnums::PASTE_SCRIPT, x, element.m_guid);
-			ar.Array[x].B = g_Opt.GetActionShortCutB(ActionEnums::PASTE_SCRIPT, x, element.m_guid);
+			ar.Array[x].A = CGetSetOptions::GetActionShortCutA(ActionEnums::PASTE_SCRIPT, x, element.m_guid);
+			ar.Array[x].B = CGetSetOptions::GetActionShortCutB(ActionEnums::PASTE_SCRIPT, x, element.m_guid);
 		}
 
 		CString shortCutText = GetShortCutText(ar);
@@ -412,8 +412,8 @@ BOOL CQuickPasteKeyboard::OnApply()
 					actionEnum = ActionEnums::PASTE_SCRIPT;
 				}
 
-				g_Opt.SetActionShortCutA(actionEnum, it->second.Array[i].A, i, it->second.m_refData);
-				g_Opt.SetActionShortCutB(actionEnum, it->second.Array[i].B, i, it->second.m_refData);
+				CGetSetOptions::SetActionShortCutA(actionEnum, it->second.Array[i].A, i, it->second.m_refData);
+				CGetSetOptions::SetActionShortCutB(actionEnum, it->second.Array[i].B, i, it->second.m_refData);
 				it->second.Array[i].Dirty = false;
 			}
 		}

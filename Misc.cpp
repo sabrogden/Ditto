@@ -100,7 +100,7 @@ void log(const TCHAR* msg, bool bFromSendRecieve, CString csFile, long lLine)
 #ifndef _DEBUG
 	if(!bFromSendRecieve)
 	{
-		if(!g_Opt.m_bEnableDebugLogging)
+		if(!CGetSetOptions::m_bEnableDebugLogging)
 			return;
 	}
 #endif
@@ -113,7 +113,7 @@ void log(const TCHAR* msg, bool bFromSendRecieve, CString csFile, long lLine)
 
 void logsendrecieveinfo(CString cs, CString csFile, long lLine)
 {
-	if(g_Opt.m_bLogSendReceiveErrors)
+	if(CGetSetOptions::m_bLogSendReceiveErrors)
 		log(cs, true, csFile, lLine);
 }
 

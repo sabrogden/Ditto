@@ -43,7 +43,7 @@ BOOL CSearchEditBox::PreTranslateMessage(MSG* pMsg)
 				CWnd *pWnd = GetParent();
 				if(pWnd)
 				{
-					if(g_Opt.m_bFindAsYouType)
+					if(CGetSetOptions::m_bFindAsYouType)
 					{
 						pWnd->SendMessage(NM_SEARCH_ENTER_PRESSED, 0, 0);
 					}
@@ -60,7 +60,7 @@ BOOL CSearchEditBox::PreTranslateMessage(MSG* pMsg)
 						pMsg->wParam == VK_UP ||
 						pMsg->wParam == VK_F3)
 			{
-				if(g_Opt.m_bFindAsYouType)
+				if(CGetSetOptions::m_bFindAsYouType)
 				{
 					CWnd *pWnd = GetParent();
 					if(pWnd)

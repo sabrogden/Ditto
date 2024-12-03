@@ -175,8 +175,8 @@ bool CGroupTree::DoActionClipProperties()
 
 void CGroupTree::FillTree()
 {	
-	this->SetBkColor(g_Opt.m_Theme.GroupTreeBG());
-	this->SetTextColor(g_Opt.m_Theme.GroupTreeText());
+	this->SetBkColor(CGetSetOptions::m_Theme.GroupTreeBG());
+	this->SetTextColor(CGetSetOptions::m_Theme.GroupTreeText());
 
 	DeleteAllItems();
 	m_bSendAllready = false;

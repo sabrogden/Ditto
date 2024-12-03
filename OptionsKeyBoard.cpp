@@ -95,10 +95,10 @@ BOOL COptionsKeyBoard::OnInitDialog()
 	//Unregister hotkeys and Reregister them on cancel or ok
 	g_HotKeys.UnregisterAll();
 
-	m_btSendPaste.SetCheck(g_Opt.m_bSendPasteOnFirstTenHotKeys);
-	m_UseUiGroupForLastTen.SetCheck(g_Opt.GetUseUISelectedGroupForLastTenCopies());
+	m_btSendPaste.SetCheck(CGetSetOptions::m_bSendPasteOnFirstTenHotKeys);
+	m_UseUiGroupForLastTen.SetCheck(CGetSetOptions::GetUseUISelectedGroupForLastTenCopies());
 
-	m_btMoveClipOnGlobal10.SetCheck(g_Opt.GetMoveClipsOnGlobal10());
+	m_btMoveClipOnGlobal10.SetCheck(CGetSetOptions::GetMoveClipsOnGlobal10());
 
 	m_HotKey.SetFocus();
 

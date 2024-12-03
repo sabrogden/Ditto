@@ -136,9 +136,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     SetWindowText(_T(""));
 
     Log(_T("Setting polling timer to track focus"));
-    SetTimer(ACTIVE_WINDOW_TIMER, g_Opt.FocusWndTimerTimeout(), 0);
+    SetTimer(ACTIVE_WINDOW_TIMER, CGetSetOptions::FocusWndTimerTimeout(), 0);
 
-	SetTimer(READ_RANDOM_DB_FILE, g_Opt.ReadRandomFileInterval() * 1000, 0);
+	SetTimer(READ_RANDOM_DB_FILE, CGetSetOptions::ReadRandomFileInterval() * 1000, 0);
 
     SetWindowText(_T("Ditto"));
 	
@@ -291,7 +291,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
             m_quickPaste.MoveSelection(true);
             m_bMovedSelectionMoveKeyState = true;
         }
-        else if(g_Opt.m_HideDittoOnHotKeyIfAlreadyShown && m_quickPaste.IsWindowTopLevel() && g_Opt.GetShowPersistent() == FALSE)
+        else if(CGetSetOptions::m_HideDittoOnHotKeyIfAlreadyShown && m_quickPaste.IsWindowTopLevel() && CGetSetOptions::GetShowPersistent() == FALSE)
         {
             Log(_T("On Show Ditto HotKey, window is already visible, hiding window"));
             m_quickPaste.HideQPasteWnd();
@@ -447,7 +447,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 
 		theApp.m_activeWnd.SendCopy(CopyReasonEnum::COPY_TO_UNKOWN);
 
-		int delay = g_Opt.GetCopyAndSveDelay();
+		int delay = CGetSetOptions::GetCopyAndSveDelay();
 		Log(StrF(_T("Copy and save clipboard, sending copy, delaying %dms before saving clipboard"), delay));
 		Sleep(delay);
 
@@ -531,7 +531,7 @@ void CMainFrame::DoTextOnlyPaste()
 	Log(_T("Text Only paste, Add cf_text or cf_unicodetext to clipboard"));
 	textOnlyPaste.RestoreTextOnly();
 
-	DWORD pasteDelay = g_Opt.GetTextOnlyPasteDelay();
+	DWORD pasteDelay = CGetSetOptions::GetTextOnlyPasteDelay();
 
 	Log(StrF(_T("Text Only paste, delaying %d ms before sending paste"), pasteDelay));
 
@@ -559,7 +559,7 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 				"Main.stickyClipOrder DESC, "
 				"Main.clipOrder DESC";
 
-			if (g_Opt.m_bShowAllClipsInMainList)
+			if (CGetSetOptions::m_bShowAllClipsInMainList)
 			{
 				if (CGetSetOptions::GetShowGroupsInMainList())
 				{
@@ -599,7 +599,7 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 
         if(q.eof() == false)
         {
-			PasteOrShowGroup(q.getIntField(_T("lID")), CGetSetOptions::GetMoveClipsOnGlobal10(), false, g_Opt.m_bSendPasteOnFirstTenHotKeys, pastedFromGroup);
+			PasteOrShowGroup(q.getIntField(_T("lID")), CGetSetOptions::GetMoveClipsOnGlobal10(), false, CGetSetOptions::m_bSendPasteOnFirstTenHotKeys, pastedFromGroup);
         }
     }
     CATCH_SQLITE_EXCEPTION
@@ -607,7 +607,7 @@ void CMainFrame::DoFirstTenPositionsPaste(int nPos)
 
 void CMainFrame::StartKeyModifierTimer()
 {
-	if (g_Opt.m_moveSelectionOnOpenHotkey)
+	if (CGetSetOptions::m_moveSelectionOnOpenHotkey)
 	{
 		m_keyModifiersTimerCount = 0;
 		m_bMovedSelectionMoveKeyState = false;
@@ -666,10 +666,10 @@ void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarg
 			m_doubleClickGroupId = -1;
 			m_doubleClickGroupStartTime = 0;
 
-			BOOL bItWas = g_Opt.m_bUpdateTimeOnPaste;
+			BOOL bItWas = CGetSetOptions::m_bUpdateTimeOnPaste;
 			if (updateClipTime != -1)
 			{				
-				g_Opt.m_bUpdateTimeOnPaste = updateClipTime;
+				CGetSetOptions::m_bUpdateTimeOnPaste = updateClipTime;
 			}
 
 			CProcessPaste paste;
@@ -690,7 +690,7 @@ void CMainFrame::PasteOrShowGroup(int dbId, BOOL updateClipTime, BOOL activeTarg
 
 			if (updateClipTime != -1)
 			{
-				g_Opt.m_bUpdateTimeOnPaste = bItWas;
+				CGetSetOptions::m_bUpdateTimeOnPaste = bItWas;
 			}
 		}
 	}
@@ -706,8 +706,8 @@ void CMainFrame::DoDittoCopyBufferPaste(int nCopyBuffer)
         if(q.eof() == false)
         {
             //Don't move these to the top
-            BOOL bItWas = g_Opt.m_bUpdateTimeOnPaste;
-            g_Opt.m_bUpdateTimeOnPaste = FALSE;
+            BOOL bItWas = CGetSetOptions::m_bUpdateTimeOnPaste;
+            CGetSetOptions::m_bUpdateTimeOnPaste = FALSE;
 
             CProcessPaste paste;
             paste.GetClipIDs().Add(q.getIntField(_T("lID")));
@@ -715,7 +715,7 @@ void CMainFrame::DoDittoCopyBufferPaste(int nCopyBuffer)
             paste.DoPaste();
             theApp.OnPasteCompleted();
 
-            g_Opt.m_bUpdateTimeOnPaste = bItWas;
+            CGetSetOptions::m_bUpdateTimeOnPaste = bItWas;
         }
     }
     CATCH_SQLITE_EXCEPTION
@@ -761,14 +761,14 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
                     KillTimer(KEY_STATE_MODIFIERS);
                     long waitTime = (long)(GetTickCount() - m_startKeyStateTime);
 
-                    if(m_bMovedSelectionMoveKeyState || m_keyModifiersTimerCount > g_Opt.GetKeyStateWaitTimerCount())
+                    if(m_bMovedSelectionMoveKeyState || m_keyModifiersTimerCount > CGetSetOptions::GetKeyStateWaitTimerCount())
                     {
-                        Log(StrF(_T("Timer KEY_STATE_MODIFIERS timeout count hit(%d), count (%d), time (%d), Move Selection from Modifer (%d) sending paste"), g_Opt.GetKeyStateWaitTimerCount(), m_keyModifiersTimerCount, waitTime, m_bMovedSelectionMoveKeyState));
+                        Log(StrF(_T("Timer KEY_STATE_MODIFIERS timeout count hit(%d), count (%d), time (%d), Move Selection from Modifer (%d) sending paste"), CGetSetOptions::GetKeyStateWaitTimerCount(), m_keyModifiersTimerCount, waitTime, m_bMovedSelectionMoveKeyState));
                         m_quickPaste.OnKeyStateUp();
                     }
                     else
                     {
-                        Log(StrF(_T("Timer KEY_STATE_MODIFIERS count NOT hit(%d), count (%d) time (%d)"), g_Opt.GetKeyStateWaitTimerCount(), m_keyModifiersTimerCount, waitTime));
+                        Log(StrF(_T("Timer KEY_STATE_MODIFIERS count NOT hit(%d), count (%d) time (%d)"), CGetSetOptions::GetKeyStateWaitTimerCount(), m_keyModifiersTimerCount, waitTime));
                         m_quickPaste.SetKeyModiferState(false);
                     }
 
@@ -845,10 +845,10 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 		case SET_WINDOWS_THEME_TIMER:
 		{
 			KillTimer(SET_WINDOWS_THEME_TIMER);
-			auto theme = g_Opt.GetTheme();
+			auto theme = CGetSetOptions::GetTheme();
 			if (theme == _T(""))
 			{
-				g_Opt.m_Theme.Load(theme);
+				CGetSetOptions::m_Theme.Load(theme);
 
 				auto visible = m_quickPaste.IsWindowVisibleEx();
 				m_quickPaste.CloseQPasteWnd();
@@ -1242,7 +1242,7 @@ LRESULT CMainFrame::OnOptionsClosed(WPARAM wParam, LPARAM lParam)
 
 	if (themeChanged)
 	{
-		g_Opt.m_Theme.Load(g_Opt.GetTheme());
+		CGetSetOptions::m_Theme.Load(CGetSetOptions::GetTheme());
 
 		m_quickPaste.CloseQPasteWnd();
 	}

@@ -211,7 +211,7 @@ BOOL CCP_MainApp::InitInstance()
 	DittoCommandLineInfo cmdInfo;
 	ParseCommandLine(cmdInfo);
 
-	g_Opt.LoadSettings();
+	CGetSetOptions::LoadSettings();
 
 	theApp.m_activeWnd.TrackActiveWnd(false);
 
@@ -238,7 +238,7 @@ BOOL CCP_MainApp::InitInstance()
 	{
 		try
 		{
-			g_Opt.m_bEnableDebugLogging = g_Opt.GetEnableDebugLogging();
+			CGetSetOptions::m_bEnableDebugLogging = CGetSetOptions::GetEnableDebugLogging();
 
 			CClip_ImportExport Clip;
 			CppSQLite3DB db;
@@ -368,10 +368,10 @@ BOOL CCP_MainApp::InitInstance()
 	Log(cs);
 
 	CString csMutex("Ditto Is Now Running");
-	if(g_Opt.GetIsPortableDitto() || g_Opt.GetIsWindowsApp() || g_Opt.GetIsChocolateyApp())
+	if(CGetSetOptions::GetIsPortableDitto() || CGetSetOptions::GetIsWindowsApp() || CGetSetOptions::GetIsChocolateyApp())
 	{
 		csMutex += " ";
-		csMutex += g_Opt.GetExeFileName();
+		csMutex += CGetSetOptions::GetExeFileName();
 	}
 
 	CWinApp::RegisterWithRestartManager(false, csMutex);
@@ -452,7 +452,7 @@ void CCP_MainApp::AfterMainCreate()
 {
 	m_MainhWnd = m_pMainFrame->m_hWnd;
 	ASSERT( ::IsWindow(m_MainhWnd) );
-	g_Opt.SetMainHWND((long)(LONG_PTR)m_MainhWnd);
+	CGetSetOptions::SetMainHWND((long)(LONG_PTR)m_MainhWnd);
 
 	g_HotKeys.Init(m_MainhWnd);
 
@@ -562,7 +562,7 @@ void CCP_MainApp::LoadGlobalClips()
 
 void CCP_MainApp::StartStopServerThread()
 {
-	if(CGetSetOptions::GetDisableRecieve() == FALSE && g_Opt.GetAllowFriends())
+	if(CGetSetOptions::GetDisableRecieve() == FALSE && CGetSetOptions::GetAllowFriends())
 	{
 		AfxBeginThread(MTServerThread, m_MainhWnd);
 	}
@@ -600,10 +600,10 @@ void CCP_MainApp::StartCopyThread()
 	// - pTypes = the supported types to use
 	m_CopyThread.Init(CCopyConfig(m_MainhWnd, true, true, pTypes));
 	
-	if(m_connectOnStartup == FALSE || g_Opt.GetConnectedToClipboard() == FALSE)
+	if(m_connectOnStartup == FALSE || CGetSetOptions::GetConnectedToClipboard() == FALSE)
 	{
 		m_CopyThread.m_connectOnStartup = false;
-		Log(StrF(_T("Starting Ditto up disconnected from the clipboard, commandLine: %d, saved value: %d"), m_connectOnStartup, g_Opt.GetConnectedToClipboard()));
+		Log(StrF(_T("Starting Ditto up disconnected from the clipboard, commandLine: %d, saved value: %d"), m_connectOnStartup, CGetSetOptions::GetConnectedToClipboard()));
 		SetConnectCV(false);
 	}
 	else if(m_connectOnStartup == TRUE)
@@ -893,13 +893,13 @@ void CCP_MainApp::SetStatus(const TCHAR* status, bool bRepaintImmediately)
 
 void CCP_MainApp::ShowPersistent(bool bVal)
 {
-	g_Opt.SetShowPersistent(bVal);
+	CGetSetOptions::SetShowPersistent(bVal);
 
 	// give some visual indication
 	if(m_bShowingQuickPaste)
 	{
 		ASSERT(QPasteWnd());
-		QPasteWnd()->SetCaptionColorActive(g_Opt.m_bShowPersistent, theApp.GetConnectCV());
+		QPasteWnd()->SetCaptionColorActive(CGetSetOptions::m_bShowPersistent, theApp.GetConnectCV());
 		QPasteWnd()->RefreshNc();
 	}
 }
@@ -942,7 +942,7 @@ BOOL CCP_MainApp::OnIdle(LONG lCount)
 void CCP_MainApp::SetConnectCV(bool bConnect)
 { 
 	m_CopyThread.SetConnectCV(bConnect); 
-	g_Opt.SetConnectedToClipboard(bConnect == true);
+	CGetSetOptions::SetConnectedToClipboard(bConnect == true);
 
 	if(bConnect)
 	{
@@ -960,7 +960,7 @@ void CCP_MainApp::SetConnectCV(bool bConnect)
 
 	if(QPasteWnd())
 	{
-		QPasteWnd()->SetCaptionColorActive(g_Opt.m_bShowPersistent, theApp.GetConnectCV());
+		QPasteWnd()->SetCaptionColorActive(CGetSetOptions::m_bShowPersistent, theApp.GetConnectCV());
 		QPasteWnd()->RefreshNc();
 	}
 }

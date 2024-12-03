@@ -98,7 +98,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 		return;
 	}
 
-	if(g_Opt.m_bShowPersistent && m_pwndPaste != NULL)
+	if(CGetSetOptions::m_bShowPersistent && m_pwndPaste != NULL)
 	{
 		m_pwndPaste->ShowWindow(SW_SHOW);
 		m_pwndPaste->MinMaxWindow(FORCE_MAX);
@@ -203,7 +203,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 
 	bool forceMoveWindow = m_forceResizeOnNextShow;
 
-	if(g_Opt.m_bEnsureEntireWindowCanBeSeen)
+	if(CGetSetOptions::m_bEnsureEntireWindowCanBeSeen)
 	{
 		if(EnsureWindowVisible(&crRect))
 		{
@@ -252,7 +252,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 				crRect.right = crRect.left + m_pwndPaste->m_DittoWindow.m_dpi.Scale(crRect.Width());
 				crRect.bottom = crRect.top + m_pwndPaste->m_DittoWindow.m_dpi.Scale(crRect.Height());
 
-				if (g_Opt.m_bEnsureEntireWindowCanBeSeen)
+				if (CGetSetOptions::m_bEnsureEntireWindowCanBeSeen)
 				{
 					EnsureWindowVisible(&crRect);
 				}
@@ -273,7 +273,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 				crRect.right = crRect.left + m_pwndPaste->m_DittoWindow.m_dpi.Scale(crRect.Width());
 				crRect.bottom = crRect.top + m_pwndPaste->m_DittoWindow.m_dpi.Scale(crRect.Height());
 
-				if (g_Opt.m_bEnsureEntireWindowCanBeSeen)
+				if (CGetSetOptions::m_bEnsureEntireWindowCanBeSeen)
 				{
 					EnsureWindowVisible(&crRect);
 				}
@@ -301,7 +301,7 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 
 void CQuickPaste::MoveSelection(bool down)
 {
-	if(m_pwndPaste && g_Opt.m_moveSelectionOnOpenHotkey)
+	if(m_pwndPaste && CGetSetOptions::m_moveSelectionOnOpenHotkey)
 	{
 		if (IsWindow(m_pwndPaste->m_hWnd))
 		{
@@ -312,7 +312,7 @@ void CQuickPaste::MoveSelection(bool down)
 
 void CQuickPaste::OnKeyStateUp()
 {
-	if(m_pwndPaste && g_Opt.m_moveSelectionOnOpenHotkey)
+	if(m_pwndPaste && CGetSetOptions::m_moveSelectionOnOpenHotkey)
 	{
 		if (IsWindow(m_pwndPaste->m_hWnd))
 		{
@@ -323,7 +323,7 @@ void CQuickPaste::OnKeyStateUp()
 
 void CQuickPaste::SetKeyModiferState(bool bActive)
 {
-	if(m_pwndPaste && g_Opt.m_moveSelectionOnOpenHotkey)
+	if(m_pwndPaste && CGetSetOptions::m_moveSelectionOnOpenHotkey)
 	{
 		if (IsWindow(m_pwndPaste->m_hWnd))
 		{
