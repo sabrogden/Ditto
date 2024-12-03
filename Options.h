@@ -695,6 +695,9 @@ public:
 
 	static BOOL SetRTFEditorPath(CString path);
 	static CString GetRTFEditorPath();
+
+	static BOOL SetQRCodeUrl(CString path);
+	static CString GetQRCodeUrl();
 };
 
 // global for easy access and for initialization of fast access variables

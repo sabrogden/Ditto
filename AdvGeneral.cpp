@@ -149,6 +149,7 @@ END_MESSAGE_MAP()
 #define SETTING_TEXT_EDITOR_PATH 98
 #define SETTING_RTF_EDITOR_PATH 99
 #define SETTING_UPDATE_DESC_ON_CLIP_EDIT 100
+#define SETTING_QR_CODE_URL 101
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -239,6 +240,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Network server bind IP (default: *)"), CGetSetOptions::GetNetworkBindIPAddress(), _T(""), SETTING_NETWORK_BIND_IP_ADDRESS));
 
 	AddTrueFalse(pGroupTest, _T("Open to group same as active exe"), CGetSetOptions::GetOpenToGroupByActiveExe(), SETTING_OPEN_TO_GROUP_AS_ACTIVE_EXE);
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("QRCode Url"), CGetSetOptions::GetQRCodeUrl(), _T(""), SETTING_QR_CODE_URL));
 
 	static TCHAR BASED_CODE szFilter[] = _T("Sounds(*.wav)|*.wav||");
 	CMFCPropertyGridFileProperty* pFileProp = new CMFCPropertyGridFileProperty(_T("On copy play the sound"), TRUE, CGetSetOptions::GetPlaySoundOnCopy(), _T("wav"), 0, szFilter, (LPCTSTR)0, SETTING_COPY_PLAY_SOUND);
@@ -887,6 +890,12 @@ void CAdvGeneral::OnBnClickedOk()
 				{
 					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetUpdateDescWhenSavingClip(val);
+				}
+				break;
+			case SETTING_QR_CODE_URL:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					CGetSetOptions::SetQRCodeUrl(pNewValue->bstrVal);
 				}
 				break;
 			}
