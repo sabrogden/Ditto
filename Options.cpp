@@ -356,12 +356,6 @@ void CGetSetOptions::ConverSettingsToIni()
 	GetQuickPastePoint(pt);
 	SetQuickPastePoint(pt);
 
-	GetEditWndSize(sz);
-	SetEditWndSize(sz);
-
-	GetEditWndPoint(pt);
-	SetEditWndPoint(pt);
-
 	SetShowIconInSysTray(GetShowIconInSysTray());
 	SetRunOnStartUp(GetRunOnStartUp());
 	SetEnableTransparency(GetEnableTransparency());
@@ -984,51 +978,6 @@ void CGetSetOptions::GetQuickPastePoint(CPoint &point)
 {
 	point.x = GetResolutionProfileLong("QuickPasteX", 300);
 	point.y = GetResolutionProfileLong("QuickPasteY", 300);
-
-	/*if(point.x <= 0 && point.y <= 0)
-	{
-		point.x = 300;
-		point.y = 300;
-	}*/
-}
-
-BOOL CGetSetOptions::SetEditWndSize(CSize size)
-{
-	BOOL bRet = SetResolutionProfileLong("EditWndCX", size.cx);
-	bRet = SetResolutionProfileLong("EditWndCY", size.cy);
-
-	return bRet;
-}
-
-void CGetSetOptions::GetEditWndSize(CSize &size)
-{
-	size.cx = GetResolutionProfileLong("EditWndCX", 600);
-	size.cy = GetResolutionProfileLong("EditWndCY", 600);
-	if(size.cx <= 0 && size.cy <= 0)
-	{
-		size.cx = 600;
-		size.cy = 600;
-	}
-}
-
-BOOL CGetSetOptions::SetEditWndPoint(CPoint point)
-{
-	BOOL bRet = SetResolutionProfileLong("EditWndX", point.x);
-	bRet = SetResolutionProfileLong("EditWndY", point.y);
-
-	return bRet;
-}
-
-void CGetSetOptions::GetEditWndPoint(CPoint &point)
-{
-	point.x = GetResolutionProfileLong("EditWndX", 100);
-	point.y = GetResolutionProfileLong("EditWndY", 100);
-
-	if(point.x <= 0 && point.y <= 0)
-	{
-		point.x = 100;
-		point.y = 100;
-	}
 }
 
 long CGetSetOptions::GetCopyGap()
@@ -1911,6 +1860,14 @@ CString CGetSetOptions::GetPath(long lPathID)
 			csDir = GetTempFilePath();
 		}
 		csDir += _T("RestoreDb\\");
+		break;
+
+	case PATH_EDIT_CLIPS:
+		if (CGetSetOptions::GetIsPortableDitto() == false)
+		{
+			csDir = GetTempFilePath();
+		}
+		csDir += _T("EditClips\\");
 		break;
 
 	}
@@ -3125,4 +3082,24 @@ BOOL CGetSetOptions::GetCenterWindowBelowCursorOrCaret()
 {
 	BOOL centerWindowBelowCursorOrCaret = FALSE;
 	return GetProfileLong("CenterWindowBelowCursorOrCaret", centerWindowBelowCursorOrCaret);
+}
+
+BOOL CGetSetOptions::SetTextEditorPath(CString path)
+{
+	return SetProfileString("TextEditorPath", path);
+}
+
+CString CGetSetOptions::GetTextEditorPath()
+{
+	return GetProfileString("TextEditorPath", _T(""));
+}
+
+BOOL CGetSetOptions::SetRTFEditorPath(CString path)
+{
+	return SetProfileString("RTFEditorPath", path);
+}
+
+CString CGetSetOptions::GetRTFEditorPath()
+{
+	return GetProfileString("RTFEditorPath", _T(""));
 }

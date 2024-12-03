@@ -3,7 +3,6 @@
 //#include "SystemTray.h"
 #include "QuickPaste.h"
 #include "ToolTipEx.h"
-#include "EditFrameWnd.h"
 #include "MainFrmThread.h"
 #include "ClipboardSaveRestore.h"
 #include "PowerManager.h"
@@ -77,6 +76,7 @@ public:
 	CPowerManager m_PowerManager;
 	int m_startupScreenWidth;
 	int m_startupScreenHeight;
+    CRichEditCtrlEx m_richEditTextConverter;
 
     void DoDittoCopyBufferPaste(int nCopyBuffer);
     void DoFirstTenPositionsPaste(int nPos);
@@ -92,7 +92,6 @@ public:
 	void RefreshShowInTaskBar();
 
     void ShowEditWnd(CClipIDs &Ids);
-    CEditFrameWnd *m_pEditFrameWnd;
 
 
     // Generated message map functions
@@ -116,7 +115,6 @@ protected:
     afx_msg LRESULT OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnErrorOnSendRecieve(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnErrorMsg(WPARAM wParam, LPARAM lParam);
-    afx_msg LRESULT OnEditWndClose(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnSetConnected(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnOpenCloseWindow(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnLoadClipOnClipboard(WPARAM wParam, LPARAM lParam);

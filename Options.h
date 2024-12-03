@@ -61,6 +61,7 @@ public:
 #define PATH_DRAG_FILES		10
 #define PATH_CLIP_DIFF		11
 #define PATH_RESTORE_TEMP	12
+#define PATH_EDIT_CLIPS		13
 
 class CGetSetOptions
 {
@@ -112,12 +113,6 @@ public:
 
 	static BOOL SetQuickPastePoint(CPoint point);
 	static void GetQuickPastePoint(CPoint &point);
-
-	static BOOL SetEditWndSize(CSize size);
-	static void GetEditWndSize(CSize &size);
-
-	static BOOL SetEditWndPoint(CPoint point);
-	static void GetEditWndPoint(CPoint &point);
 
 	static BOOL SetEnableTransparency(BOOL bCheck);
 	static BOOL GetEnableTransparency();
@@ -694,6 +689,12 @@ public:
 	static BOOL m_centerWindowBelowCursorOrCaret;
 	static void SetCenterWindowBelowCursorOrCaret(BOOL center);
 	static BOOL GetCenterWindowBelowCursorOrCaret();
+
+	static BOOL SetTextEditorPath(CString path);
+	static CString GetTextEditorPath();
+
+	static BOOL SetRTFEditorPath(CString path);
+	static CString GetRTFEditorPath();
 };
 
 // global for easy access and for initialization of fast access variables

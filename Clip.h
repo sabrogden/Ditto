@@ -174,8 +174,7 @@ public:
 	bool SetDescFromType();
 	bool AddToDB(bool bCheckForDuplicates = true);
 	bool ModifyMainTable();
-	bool ModifyDescription();
-	bool SaveFromEditWnd(BOOL bUpdateDesc);
+	bool ModifyDescription();	
 	void MakeLatestOrder();
 	void MakeLatestGroupOrder();
 	void MakeLastOrder();
@@ -190,10 +189,15 @@ public:
 
 	CStringW GetUnicodeTextFormat();
 	CStringA GetCFTextTextFormat();
+	CStringA GetRTFTextFormat();
 
-	BOOL WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL utf8);
+	BOOL ContainsClipFormat(CLIPFORMAT clipFormat);
+
+	BOOL WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL rtf, BOOL forceUnicode = FALSE);
 	BOOL WriteImageToFile(CString path);
 	BOOL WriteTextToHtmlFile(CString path);
+
+	BOOL SaveFormats(CString* unicode, CStringA* asci, CStringA* rtf, BOOL updateDescription);
 
 	// Allocates a Global containing the requested Clip's Format Data
 	static HGLOBAL LoadFormat(int id, UINT cfType);

@@ -22,6 +22,8 @@
 #include "HotKeys.h"
 #include "UAC_Thread.h"
 #include "ICU_String.h"
+#include "ClipEditThread.h"
+
 
 extern class CCP_MainApp theApp;
 
@@ -90,6 +92,8 @@ public:
 
 	ExternalWindowTracker m_activeWnd;
 
+	CClipEditThread m_editThread;
+
 	// CopyThread and ClipViewer (Copy and Paste Management)
 	CCopyThread	m_CopyThread;
 	void StartCopyThread();
@@ -107,12 +111,12 @@ public:
 
 	void OnDeleteID(long lID);
 	BOOL GetClipData(long lID, CClipFormat& Clip);
-	bool EditItems(CClipIDs& Ids, bool bShowError);
+	bool EditItems(CClipIDs& Ids, bool bShowError, bool forceTextEdit);
 
 	CClipTypes* LoadTypesFromDB(); // returns a "new" allocated object
 	void ReloadTypes();
 	void RefreshView(CopyReasonEnum::CopyReason copyReason = CopyReasonEnum::COPY_TO_UNKOWN); // refreshes the view if it is visible
-	void RefreshClipAfterPaste(int clipId, int updateFlags);
+	void RefreshClipInUI(int clipId, int updateFlags);
 	void OnCopyCompleted(long lLastID, int count = 1, CopyReasonEnum::CopyReason copyReason = CopyReasonEnum::COPY_TO_UNKOWN);
 	void OnPasteCompleted();
 

@@ -3,15 +3,18 @@
 #include "Misc.h"
 
 #define EXIT_EVENT -1
+#define REBUILD_EVENTS -2
 
 CEventThread::CEventThread(void)
 {
-	AddEvent(EXIT_EVENT);
 	m_hEvt = CreateEvent(NULL, FALSE, FALSE, NULL);
 	m_waitTimeout = INFINITE;
 	m_threadRunning = false;
 	m_exitThread = false;
 	m_threadWasStarted = false;
+
+	AddEvent(EXIT_EVENT);
+	AddEvent(REBUILD_EVENTS);
 }
 
 CEventThread::~CEventThread(void)
@@ -34,7 +37,29 @@ UINT CEventThread::EventThreadFnc(void* thisptr)
 void CEventThread::AddEvent(int eventId)
 {
 	HANDLE handle = CreateEvent(NULL, FALSE, FALSE, _T(""));
-	m_eventMap[handle] = eventId;
+
+	{
+		ATL::CCritSecLock csLock(m_lock.m_sect);
+		m_eventMap[handle] = eventId;
+	}
+
+	if (m_threadRunning)
+	{
+		FireEvent(REBUILD_EVENTS);
+	}
+}
+
+void CEventThread::AddEvent(int eventId, HANDLE handle)
+{
+	{
+		ATL::CCritSecLock csLock(m_lock.m_sect);
+		m_eventMap[handle] = eventId;
+	}
+
+	if (m_threadRunning)
+	{
+		FireEvent(REBUILD_EVENTS);
+	}
 }
 
 void CEventThread::AddEvent(int eventId, CString name)
@@ -51,52 +76,73 @@ void CEventThread::AddEvent(int eventId, CString name)
 	sa.lpSecurityDescriptor = &sd;
 
 	HANDLE handle = CreateEvent(&sa, FALSE, FALSE, name);
-	m_eventMap[handle] = eventId;
+
+	{
+		ATL::CCritSecLock csLock(m_lock.m_sect);
+		m_eventMap[handle] = eventId;
+	}
+
+	if (m_threadRunning)
+	{
+		FireEvent(REBUILD_EVENTS);
+	}
 }
 
 bool CEventThread::FireEvent(int eventId)
 {
-	//Log(StrF(_T("Begin FireEvent, eventId: %d"), eventId));
-
-	bool ret = false;
-
-	HANDLE eventHandle = NULL;
-	for(EventMapType::iterator it = m_eventMap.begin(); it != m_eventMap.end(); it++)
-	{
-		if(it->second == eventId)
-		{
-			eventHandle = it->first;
-			break;
-		}
-	}
-
-	if(eventHandle != NULL)
+	HANDLE eventHandle = GetHandle(eventId);
+	if(eventHandle != nullptr)
 	{
 		SetEvent(eventHandle);
-		ret = true;
-	}
-	
-	//Log(StrF(_T("End FireEvent, eventId: %d"), eventId));
+		return true;
+	}	
 
 	return false;
 }
 
 bool CEventThread::UndoFireEvent(int eventId)
 {
-	HANDLE eventHandle = NULL;
-	for(EventMapType::iterator it = m_eventMap.begin(); it != m_eventMap.end(); it++)
-	{
-		if(it->second == eventId)
-		{
-			eventHandle = it->first;
-			break;
-		}
-	}
-
-	if(eventHandle != NULL)
+	HANDLE eventHandle = GetHandle(eventId);
+	if (eventHandle != nullptr)
 	{
 		ResetEvent(eventHandle);
 		return true;
+	}
+
+	return false;
+}
+
+HANDLE CEventThread::GetHandle(int eventId)
+{	
+	ATL::CCritSecLock csLock(m_lock.m_sect);
+	for (auto it = m_eventMap.begin(); it != m_eventMap.end(); it++)
+	{
+		if (it->second == eventId)
+		{
+			return it->first;
+		}
+	}
+
+	return nullptr;
+}
+
+bool CEventThread::RemoveEvent(int eventId)
+{
+	ATL::CCritSecLock csLock(m_lock.m_sect);
+	for (auto it = m_eventMap.begin(); it != m_eventMap.end(); it++)
+	{
+		if (it->second == eventId)
+		{
+			if (m_threadRunning)
+			{
+				FireEvent(REBUILD_EVENTS);
+			}
+
+			CloseHandle(it->first);
+			m_eventMap.erase(it);
+
+			return true;
+		}
 	}
 
 	return false;
@@ -149,47 +195,66 @@ void CEventThread::Stop(int waitTime)
 	Log(StrF(_T("End of CEventThread::Stop(int waitTime) %d - Name: %s"), waitTime, m_threadName));
 };
 
+void CEventThread::GetHandleVector(std::vector<HANDLE> &handles)
+{
+	ATL::CCritSecLock csLock(m_lock.m_sect);
+	handles.clear();
+	for (auto it = m_eventMap.begin(); it != m_eventMap.end(); it++)
+	{
+		if (it->first != 0)
+		{
+			handles.push_back(it->first);
+		}
+	}
+}
+
+void CEventThread::CheckForRebuildHandleVector(std::vector<HANDLE>& handles)
+{
+	ATL::CCritSecLock csLock(m_lock.m_sect);
+	for (auto it = m_eventMap.begin(); it != m_eventMap.end(); it++)
+	{
+		if (it->second == REBUILD_EVENTS)
+		{
+			DWORD result = WaitForSingleObject(it->first, 0);
+			if (result == WAIT_OBJECT_0)
+			{
+				GetHandleVector(handles);
+			}
+			break;
+		}
+	}
+}
+
 void CEventThread::RunThread()
 {
 	Log(StrF(_T("Start of CEventThread::RunThread() Name: %s"), m_threadName));
 
 	m_threadRunning = true;
 	m_threadWasStarted = true;
-	HANDLE *pHandleArray = new HANDLE[m_eventMap.size()];
+	std::vector<HANDLE> handles;
 
-	int indexPos = 0;
-	for(EventMapType::iterator it = m_eventMap.begin(); it != m_eventMap.end(); it++)
-	{
-		if (it->first != 0)
-		{
-			pHandleArray[indexPos] = it->first;
-			indexPos++;
-		}
-	}
+	GetHandleVector(handles);
 
 	SetEvent(m_hEvt);
 	ResetEvent(m_hEvt);
 
 	while(m_exitThread == false)
 	{
-		DWORD event = WaitForMultipleObjects((DWORD)m_eventMap.size(), pHandleArray, FALSE, m_waitTimeout);
+		CheckForRebuildHandleVector(handles);
+
+		DWORD event = WaitForMultipleObjects(handles.size(), handles.data(), FALSE, m_waitTimeout);
 
 		if(event == WAIT_FAILED)
 		{
-			LPVOID lpMsgBuf = NULL;
-			DWORD dwErr = GetLastError();
-			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
-							FORMAT_MESSAGE_FROM_SYSTEM |
-							FORMAT_MESSAGE_IGNORE_INSERTS,
-							NULL,
-							dwErr,
-							MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-							(LPTSTR) &lpMsgBuf,
-							0,
-							NULL);
+			const DWORD errorMessageId = GetLastError();
+			LPSTR messageBuffer = nullptr;
+			size_t size = FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, errorMessageId, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, nullptr);
 
-			ASSERT(!lpMsgBuf);
-			LocalFree(lpMsgBuf);
+			CString message(messageBuffer, size);
+
+			LocalFree(messageBuffer);
+
+			Log(StrF(_T("CEventThread::RunThread() Error, error: %s - Name %s"), message, m_threadName));
 
 			Sleep(1000);
 		}
@@ -199,17 +264,28 @@ void CEventThread::RunThread()
 		}
 		else
 		{
-			HANDLE firedHandle = pHandleArray[event - WAIT_OBJECT_0];
-			int eventId = m_eventMap[firedHandle];
+			const int handleIndex = event - WAIT_OBJECT_0;
+			if (handleIndex < 0 || handleIndex >= handles.size())
+			{
+				Log(StrF(_T("CEventThread::RunThread() Error, Invalid handle index, index: %d, size: %d - Name %s"), handleIndex, handles.size(), m_threadName));
+				continue;
+			}
+
+			HANDLE firedHandle = handles[handleIndex];
+			const int eventId = m_eventMap[firedHandle];
 			if(eventId == EXIT_EVENT)
 			{				
 				break;
+			}
+			else if (eventId == REBUILD_EVENTS)
+			{
+				GetHandleVector(handles);				
 			}
 			else
 			{
 				Log(StrF(_T("Start of CEventThread::RunThread() - OnEvent %d - Name %s"), eventId, m_threadName));
 				OnEvent(eventId, m_param);
-				Log(StrF(_T("End of CEventThread::RunThread() - OnEvent %d - Name: %d"), eventId, m_threadName));
+				Log(StrF(_T("End of CEventThread::RunThread() - OnEvent %d - Name: %s"), eventId, m_threadName));
 			}
 		}
 	}

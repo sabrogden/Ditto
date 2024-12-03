@@ -11,35 +11,3 @@
 // Add manually edited resources here...
 
 /////////////////////////////////////////////////////////////////////////////
-
-#include "RulerRichEditCtrl/RulerRichEditCtrl.rc"
-
-/*
-/////////////////////////////////////////////////////////////////////////////
-//
-// Toolbar resources
-//
-
-#include "RulerRichEditCtrl/ids.h"
-
-TOOLBAR_CONTROL         BITMAP  DISCARDABLE     "RulerRichEditCtrl/toolbar.bmp"
-
-TOOLBAR_CONTROL TOOLBAR DISCARDABLE  16, 15
-BEGIN
-    BUTTON      BUTTON_1
-    BUTTON      BUTTON_2
-    SEPARATOR
-    BUTTON      BUTTON_3
-    BUTTON      BUTTON_4
-    BUTTON      BUTTON_5
-    SEPARATOR
-    BUTTON      BUTTON_6
-    BUTTON      BUTTON_7
-    BUTTON      BUTTON_8
-    SEPARATOR
-    BUTTON      BUTTON_9
-    BUTTON      BUTTON_10
-    BUTTON      BUTTON_11
-END
-
-*/
