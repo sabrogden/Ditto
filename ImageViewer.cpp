@@ -145,8 +145,8 @@ void CImageViewer::OnPaint()
 
 		Gdiplus::Rect dest((int)0, (int)0, (int)rect.Width(), (int)rect.Height());
 
-		double nW = rect.Width() * (1 / m_scale);
-		double nH = rect.Height() * (1 / m_scale);
+		int nW = (int)(rect.Width() * (1 / m_scale));
+		int nH = (int)(rect.Height() * (1 / m_scale));
 
 		graphics.DrawImage(m_pGdiplusBitmap, dest, s.cx, s.cy, nW, nH, Gdiplus::UnitPixel, &attrs);
 

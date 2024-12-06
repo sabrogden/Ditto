@@ -118,9 +118,6 @@
     <ClCompile Include="HyperLink.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="InternetUpdate.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="MainFrm.cpp">
       <Filter>source</Filter>
     </ClCompile>
@@ -554,9 +551,6 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="RulerRichEditCtrl\ids.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="InternetUpdate.h">
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="MainFrm.h">

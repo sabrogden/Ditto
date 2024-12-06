@@ -649,7 +649,7 @@ bool CClip::SetDescFromText(HGLOBAL hgData, bool unicode)
 		TCHAR* text = (TCHAR *) GlobalLock(hgData);
 		bufLen = GlobalSize(hgData);
 
-		m_Desc = CString(text, bufLen/(sizeof(wchar_t)));
+		m_Desc = CString(text, (int)(bufLen/(sizeof(wchar_t))));
 		bRet = true;
 	}
 	else
@@ -657,7 +657,7 @@ bool CClip::SetDescFromText(HGLOBAL hgData, bool unicode)
 		char* text = (char *) GlobalLock(hgData);
 		bufLen = GlobalSize(hgData);
 	
-		m_Desc = CString(text, bufLen);
+		m_Desc = CString(text, (int)bufLen);
 		bRet = true;
 	}
 		
@@ -1317,7 +1317,7 @@ bool CClip::RemoveStickySetting(int clipId, int parentId)
 	return reset;
 }
 
-double CClip::GetExistingTopStickyClipId(int parentId)
+int CClip::GetExistingTopStickyClipId(int parentId)
 {
 	int existingTopClipId = -1;
 
@@ -1419,7 +1419,7 @@ double CClip::GetNewLastSticky(int parentId, int clipId)
 	}
 	CATCH_SQLITE_EXCEPTION
 
-		return newOrder;
+	return newOrder;
 }
 
 void CClip::MakeLatestOrder()
@@ -1845,8 +1845,6 @@ BOOL CClip::SaveFormats(CString *unicode, CStringA *asci, CStringA *rtf, BOOL up
 			int count = theApp.m_db.execDMLEx(_T("DELETE FROM Data WHERE lID = %d;"), deletedData[i]);
 		}
 
-		AddToDataTable();
-
 		if (m_id >= 0)
 		{
 			if (updateDescription)
@@ -1860,6 +1858,8 @@ BOOL CClip::SaveFormats(CString *unicode, CStringA *asci, CStringA *rtf, BOOL up
 			MakeLatestGroupOrder();
 			AddToMainTable();
 		}
+
+		AddToDataTable();
 
 		theApp.m_db.execDML(_T("commit transaction;"));
 	}
@@ -2022,6 +2022,8 @@ Gdiplus::Bitmap *CClip::CreateGdiplusBitmap()
 	CClipFormat *dib = this->m_Formats.FindFormat(CF_DIB);
 	if (dib != NULL)
 		return dib->CreateGdiplusBitmap();
+
+	return nullptr;
 }
 
 /*----------------------------------------------------------------------------*\

@@ -5,7 +5,6 @@
 #include ".\cp_main.h"
 #include "server.h"
 #include "Client.h"
-#include "InternetUpdate.h"
 #include <io.h>
 #include "Path.h"
 #include "Clip_ImportExport.h"
@@ -80,7 +79,7 @@ public:
 			{
 				m_plainTextPaste = TRUE;
 			}
-			else if (wcsnicmp(pszParam, _T("paste"), 5) == 0)
+			else if (_wcsnicmp(pszParam, _T("paste"), 5) == 0)
 			{
 				CString pidCommand(pszParam);
 				long sep = pidCommand.ReverseFind(':');
@@ -91,7 +90,7 @@ public:
 					m_pasteClip = TRUE;
 				}
 			}
-			else if (wcsnicmp(pszParam, _T("edit"), 4) == 0)
+			else if (_wcsnicmp(pszParam, _T("edit"), 4) == 0)
 			{
 				CString pidCommand(pszParam);
 				long sep = pidCommand.ReverseFind(':');
@@ -102,7 +101,7 @@ public:
 					m_editClip = TRUE;
 				}
 			}
-			else if (wcsnicmp(pszParam, _T("RestartByRestartManager"), 23) == 0)
+			else if (_wcsnicmp(pszParam, _T("RestartByRestartManager"), 23) == 0)
 			{
 				m_restartFromRestartManager = true;
 			}
@@ -358,12 +357,10 @@ BOOL CCP_MainApp::InitInstance()
 		}
 
 		return FALSE;
-	}	
+	}		
 
-	CInternetUpdate update;
-
-	auto runningVersion = update.GetRunningVersion();
-	CString cs = update.GetVersionString(runningVersion);
+	auto runningVersion = GetRunningVersion();
+	CString cs = GetVersionString(runningVersion);
 	cs.Insert(0, _T("InitInstance  -  Running Version - "));
 	Log(cs);
 

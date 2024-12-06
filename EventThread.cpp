@@ -242,7 +242,7 @@ void CEventThread::RunThread()
 	{
 		CheckForRebuildHandleVector(handles);
 
-		DWORD event = WaitForMultipleObjects(handles.size(), handles.data(), FALSE, m_waitTimeout);
+		DWORD event = WaitForMultipleObjects((DWORD)handles.size(), handles.data(), FALSE, m_waitTimeout);
 
 		if(event == WAIT_FAILED)
 		{
@@ -250,7 +250,7 @@ void CEventThread::RunThread()
 			LPSTR messageBuffer = nullptr;
 			size_t size = FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, errorMessageId, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, nullptr);
 
-			CString message(messageBuffer, size);
+			CString message(messageBuffer, (int)size);
 
 			LocalFree(messageBuffer);
 

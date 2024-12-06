@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include ".\dittoaddins.h"
-#include "InternetUpdate.h"
+#include "misc.h"
 #include "CP_Main.h"
 
 CDittoAddins::CDittoAddins(void)
@@ -144,9 +144,7 @@ bool CDittoAddins::CallPrePasteFunction(int Id, IClip *pClip)
 void CDittoAddins::LoadDittoInfo(CDittoInfo &DittoInfo)
 {
 	DittoInfo.m_csDatabasePath = CGetSetOptions::GetDBPath();
-	DittoInfo.m_csLanguageCode = theApp.m_Language.GetLangCode();
-	CInternetUpdate update;
-	//DittoInfo.m_nVersion = update.GetRunningVersion();
+	DittoInfo.m_csLanguageCode = theApp.m_Language.GetLangCode();	
 	DittoInfo.m_csSqliteVersion = sqlite3_libversion();
 	DittoInfo.m_hWndDitto = theApp.QPastehWnd();
 }

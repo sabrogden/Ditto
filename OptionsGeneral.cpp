@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "CP_Main.h"
 #include "OptionsGeneral.h"
-#include "InternetUpdate.h"
 #include <io.h>
 #include <Mmsystem.h> //play sound
 #include "Path.h"
