@@ -210,7 +210,7 @@ public:
 	double GetNewLastOrder(int parentId, int clipId);
 	static double GetNewTopSticky(int parentId, int clipId);
 	static double GetNewLastSticky(int parentId, int clipId);
-	static double GetExistingTopStickyClipId(int parentId);
+	static int GetExistingTopStickyClipId(int parentId);
 	static bool RemoveStickySetting(int clipId, int parentId);
 
 	bool AddFileDataToData(CString &errorMessage);

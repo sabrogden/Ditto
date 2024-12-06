@@ -83,20 +83,20 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
         return NULL;
     }
 
-    BYTE vkey = LOBYTE(pMsg->wParam);
+    const BYTE vkey = LOBYTE(pMsg->wParam);
 	BYTE mod = 0;
 	if (m_checkModifierKeys)
 	{
 		mod = GetKeyStateModifiers();
 	}
-    DWORD key = ACCEL_MAKEKEY(vkey, mod);
+    const DWORD key = ACCEL_MAKEKEY(vkey, mod);
 
     //CString cs;
     //cs.Format(_T("Key: %d, Mod: %d, vkey: %d, diff: %d\r\n"), key, mod, vkey, (GetTickCount() - m_firstMapTick));
     //OutputDebugString(cs);
 		
 	if (m_firstMapTick != 0 &&
-		(GetTickCount() - m_firstMapTick) < CGetSetOptions::m_doubleKeyStrokeTimeout)
+		(GetTickCount64() - m_firstMapTick) < CGetSetOptions::m_doubleKeyStrokeTimeout)
 	{
 		pair<multimap<DWORD, CAccel>::iterator, multimap<DWORD, CAccel>::iterator> ppp;
 		ppp = m_multiMap.equal_range(m_activeFirstKey);
@@ -131,7 +131,7 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
 			else
 			{
 				m_activeFirstKey = key;
-				m_firstMapTick = GetTickCount();
+				m_firstMapTick = GetTickCount64();
 				break;
 			}
 		}
@@ -148,7 +148,7 @@ bool CAccels::OnMsg(MSG *pMsg, CAccel &a)
 bool CAccels::ContainsKey(int vKey)
 {
 	CString cmdShortcutText;
-	for (multimap<DWORD, CAccel>::iterator it = m_multiMap.begin(); it != m_multiMap.end(); ++it)
+	for (auto it = m_multiMap.begin(); it != m_multiMap.end(); ++it)
 	{
 		if (LOBYTE(it->second.Key) == vKey || LOBYTE(it->second.Key2) == vKey)
 		{

@@ -512,9 +512,6 @@ int ActionEnums::GetDefaultShortCutKeyB(ActionEnumValues value, int pos)
 	switch (pos)
 	{
 	case 0:
-		switch (value)
-		{
-		}
 		break;
 	}
 

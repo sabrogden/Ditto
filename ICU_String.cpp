@@ -87,7 +87,7 @@ CString CICU_String::ToLowerStringEx(CString source)
 
 	int length = source.GetLength();
 	int errorCode = 0;
-	u_strToLower(dest.GetBufferSetLength(length * 1.2), length*1.2, source.GetBuffer(), length, NULL, &errorCode);
+	u_strToLower(dest.GetBufferSetLength((int)(length * 1.2)), (int)(length * 1.2), source.GetBuffer(), length, NULL, &errorCode);
 
 	source.ReleaseBuffer();
 	dest.ReleaseBuffer();
@@ -106,7 +106,7 @@ CString CICU_String::ToUpperStringEx(CString source)
 
 	int length = source.GetLength();
 	int errorCode = 0;
-	u_strToUpper(dest.GetBufferSetLength(length*1.2), length*1.2, source.GetBuffer(), length, NULL, &errorCode);
+	u_strToUpper(dest.GetBufferSetLength((int)(length * 1.2)), (int)(length * 1.2), source.GetBuffer(), length, NULL, &errorCode);
 
 	source.ReleaseBuffer();
 	dest.ReleaseBuffer();

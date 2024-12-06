@@ -7,7 +7,6 @@
 #include "afxole.h"
 #include "Misc.h"
 #include "CopyProperties.h"
-#include "InternetUpdate.h"
 #include ".\mainfrm.h"
 #include "HyperLink.h"
 #include "tinyxml\tinyxml.h"
@@ -1513,14 +1512,14 @@ void CMainFrame::OnFirstDeleteallnonusedclips()
 
 LRESULT CMainFrame::OnPasteClip(WPARAM wParam, LPARAM lParam)
 {
-	PasteOrShowGroup(wParam, TRUE, FALSE, TRUE, false);
+	PasteOrShowGroup((int)wParam, TRUE, FALSE, TRUE, false);
 	return TRUE;
 }
 
 LRESULT CMainFrame::OnEditClip(WPARAM wParam, LPARAM lParam)
 {
 	CClipIDs IDs;
-	IDs.Add(wParam);
+	IDs.Add((int)wParam);
 
 	bool textOnly = false;
 	if (GetKeyState(VK_SHIFT) & 0x8000)

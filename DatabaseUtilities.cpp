@@ -8,7 +8,6 @@
 #include "ProcessPaste.h"
 #include <io.h>
 #include "Path.h"
-#include "InternetUpdate.h"
 #include "zlib/zlib.h"
 #include "Shared/TextConvert.h"
 using namespace nsPath;
@@ -976,7 +975,7 @@ BOOL DeleteNonUsedClips(bool fromAppWindow)
 		q.nextRow();
 	}
 
-	int clipsDeleted = IDs.GetCount();
+	int clipsDeleted = (int)IDs.GetCount();
 	int deletedTableCount = 0;
 
 	if (IDs.GetCount() > 0)

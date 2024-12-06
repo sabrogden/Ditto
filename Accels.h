@@ -61,5 +61,5 @@ protected:
 	multimap<DWORD, CAccel> m_multiMap;
 	DWORD m_activeFirstKey;
 
-	DWORD m_firstMapTick;
+	ULONGLONG m_firstMapTick;
 };

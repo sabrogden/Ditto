@@ -1597,7 +1597,7 @@ void CGetSetOptions::SetNetworkPassword(CString csPassword)
 CStringA CGetSetOptions::GetNetworkPassword()
 {
 	CString cs = GetProfileString("NetworkStringPassword", "LetMeIn");
-	CString csReturn = CTextConvert::UnicodeToUTF8(cs);
+	CStringA csReturn = CTextConvert::UnicodeToUTF8(cs);
 	return csReturn;
 }
 
@@ -3033,10 +3033,10 @@ void CGetSetOptions::SetIgnoreAnnoyingCFDIB(CString val)
 	SetProfileString("IgnoreAnnoyingCFDIB", val);
 }
 
-std::set<CString> CGetSetOptions::GetIgnoreAnnoyingCFDIBSet(BOOL useCache)
+set<CString> CGetSetOptions::GetIgnoreAnnoyingCFDIBSet(BOOL useCache)
 {
 	CString rawString = CGetSetOptions::GetIgnoreAnnoyingCFDIB(useCache);
-	std:set<CString> processSet;
+	set<CString> processSet;
 	CTokenizer token(rawString, _T(";"));
 	CString process;
 	while (token.Next(process))

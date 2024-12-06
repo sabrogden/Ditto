@@ -104,7 +104,7 @@ BOOL CBitmapHelper::GetCBitmap(CClipFormats &clips, CDC* pDC, CBitmap* pBitMap, 
 	if (!pBitMap)
 		return bRet;
 
-	int count = clips.GetCount();
+	int count = (int)clips.GetCount();
 	int width = 0;
 	int height = 0;
 

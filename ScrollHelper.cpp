@@ -66,8 +66,8 @@ void CScrollHelper::SetDisplaySize(int displayWidth, int displayHeight, double z
 
 	CRect rect;
 	GetClientRectSB(m_attachWnd, rect);
-	double width = (rect.Width() * (1 / m_zoomScale)) + .5;
-	double height = (rect.Height() * (1 / m_zoomScale)) + .5;
+	int width = (int)((rect.Width() * (1 / m_zoomScale)) + .5);
+	int height = (int)((rect.Height() * (1 / m_zoomScale)) + .5);
 	CSize windowSize(width, height);
 
 	if (windowSize.cx >= displayWidth)
@@ -458,7 +458,7 @@ void CScrollHelper::UpdateScrollInfo()
     GetClientRectSB(m_attachWnd, rect);
 	double width = (rect.Width() * (1 / m_zoomScale)) + .5;
 	double height = (rect.Height() * (1 / m_zoomScale)) + .5;
-    CSize windowSize(width, height * (1/m_zoomScale));
+    CSize windowSize((int)width, (int)(height * (1/m_zoomScale)));
 
     // Update horizontal scrollbar.
     CSize deltaPos(0,0);

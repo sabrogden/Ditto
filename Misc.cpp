@@ -1726,3 +1726,52 @@ int WordCount(const CString &text)
 
 	return wc;
 }
+
+CString GetVersionString(VersionInfo version)
+{
+	CString csLine;
+	csLine.Format(_T("%02i.%02i.%02i.%02i"),
+		version.Major,
+		version.Minor,
+		version.Revision,
+		version.Build);
+
+	return csLine;
+}
+
+VersionInfo GetRunningVersion()
+{
+	VersionInfo verInfo;
+	CString csFileName = CGetSetOptions::GetExeFileName();
+
+	DWORD dwSize, dwHandle;
+	LPBYTE lpData;
+	UINT iBuffSize;
+	VS_FIXEDFILEINFO* lpFFI;
+
+	dwSize = GetFileVersionInfoSize(csFileName.GetBuffer(csFileName.GetLength()), &dwHandle);
+
+	if (dwSize != 0)
+	{
+		csFileName.ReleaseBuffer();
+		if ((lpData = (unsigned char*)malloc(dwSize)) != NULL)
+		{
+			if (GetFileVersionInfo(csFileName.GetBuffer(csFileName.GetLength()), dwHandle, dwSize, lpData) != 0)
+			{
+				if (VerQueryValue(lpData, _T("\\"), (LPVOID*)&lpFFI, &iBuffSize) != 0)
+				{
+					if (iBuffSize > 0)
+					{
+						verInfo.Major = (lpFFI->dwProductVersionMS >> 16) & 0xffff;
+						verInfo.Minor = (lpFFI->dwProductVersionMS >> 0) & 0xffff;
+						verInfo.Revision = (lpFFI->dwProductVersionLS >> 16) & 0xffff;
+						verInfo.Build = (lpFFI->dwProductVersionLS >> 0) & 0xffff;
+					}
+				}
+			}
+			free(lpData);
+		}
+	}
+
+	return(verInfo);
+}

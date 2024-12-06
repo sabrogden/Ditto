@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "cp_main.h"
 #include "About.h"
-#include "InternetUpdate.h"
+#include "misc.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -59,10 +59,8 @@ BOOL CAbout::OnInitDialog()
 
 	m_List.AddString(_T("Ditto"));
 
-	CInternetUpdate update;
-
-	auto runningVersion = update.GetRunningVersion();
-	CString cs = update.GetVersionString(runningVersion);
+	auto runningVersion = GetRunningVersion();
+	CString cs = GetVersionString(runningVersion);
 
 	CString csText;
 	csText = "    Version " + cs;
