@@ -1,0 +1,48 @@
+<Ditto_Theme_File Version="3" Author="stoyana" Notes="Selenized Dark">
+
+  <CaptionLeft>RGB(16,60,72)</CaptionLeft>
+  <CaptionRight>RGB(16,60,72)</CaptionRight>
+
+  <CaptionLeftTopMost>RGB(16,60,72)</CaptionLeftTopMost>
+  <CaptionRightTopMost>RGB(16,60,72)</CaptionRightTopMost>
+
+  <CaptionLeftNotConnected>RGB(219,179,45)</CaptionLeftNotConnected>
+  <CaptionRightNotConnected>RGB(219,179,45)</CaptionRightNotConnected>
+
+  <CaptionTextColor>RGB(114,137,143)</CaptionTextColor>
+
+  <ListBoxOddRowsBG>RGB(16,60,72)</ListBoxOddRowsBG>
+  <ListBoxEvenRowsBG>RGB(23,73,86)</ListBoxEvenRowsBG>
+
+  <ListBoxOddRowsText>RGB(173,188,188)</ListBoxOddRowsText>
+  <ListBoxEvenRowsText>RGB(202,216,217)</ListBoxEvenRowsText>
+
+  <ListBoxSelectedBG>RGB(50,91,102)</ListBoxSelectedBG>
+  <ListBoxSelectedNoFocusBG>RGB(50,91,102)</ListBoxSelectedNoFocusBG>
+
+  <ListBoxSelectedText>RGB(202,216,217)</ListBoxSelectedText>
+  <ListBoxSelectedNoFocusText>RGB(202,216,217)</ListBoxSelectedNoFocusText>
+
+  <Border>RGB(114,137,143)</Border>
+  <BorderTopMost>RGB(114,137,143)</BorderTopMost>
+  <BorderNotConnected>RGB(219,179,45)</BorderNotConnected>
+
+  <GroupTreeBG>RGB(16,60,72)</GroupTreeBG>
+  <GroupTreeText>RGB(173,188,188)</GroupTreeText>
+
+  <CaptionSize>20</CaptionSize>
+  <CaptionFontSize>12</CaptionFontSize>
+
+  <DescriptionWindowBG>RGB(50,91,102)</DescriptionWindowBG>
+  <DescriptionWindowText>RGB(202,216,217)</DescriptionWindowText>
+
+  <ClipPastedColor>RGB(65,199,185)</ClipPastedColor>
+
+  <MainWindowBG>RGB(16,60,72)</MainWindowBG>
+
+  <SearchTextBoxFocusBG>RGB(173,188,188)</SearchTextBoxFocusBG>
+  <SearchTextBoxFocusText>RGB(16,60,72)</SearchTextBoxFocusText>
+  <SearchTextBoxFocusBorder>RGB(50,91,102)</SearchTextBoxFocusBorder>
+  <SearchTextHighlight>RGB(255,102,92)</SearchTextHighlight>
+
+</Ditto_Theme_File>
