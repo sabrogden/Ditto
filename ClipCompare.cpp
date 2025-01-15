@@ -94,14 +94,8 @@ CString CClipCompare::GetComparePath(CString &params)
 		return path;
 	}
 
-	path = _T("C:\\Program Files (x86)\\Beyond Compare 3\\BCompare.exe");
-	if(FileExists(path))
-	{
-		return path;
-	}
-
-	path = _T("C:\\Program Files\\Beyond Compare 3\\BCompare.exe");
-	if(FileExists(path))
+	path = _T("C:\\Program Files\\Beyond Compare 5\\BCompare.exe");
+	if (FileExists(path))
 	{
 		return path;
 	}
@@ -113,6 +107,18 @@ CString CClipCompare::GetComparePath(CString &params)
 	}
 
 	path = _T("C:\\Program Files\\Beyond Compare 4\\BCompare.exe");
+	if (FileExists(path))
+	{
+		return path;
+	}
+
+	path = _T("C:\\Program Files (x86)\\Beyond Compare 3\\BCompare.exe");
+	if (FileExists(path))
+	{
+		return path;
+	}
+
+	path = _T("C:\\Program Files\\Beyond Compare 3\\BCompare.exe");
 	if (FileExists(path))
 	{
 		return path;
