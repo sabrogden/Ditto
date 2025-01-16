@@ -698,6 +698,9 @@ public:
 
 	static BOOL SetQRCodeUrl(CString path);
 	static CString GetQRCodeUrl();
+
+	static void SetAppendRemoveComputerNameAndIPToDescription(BOOL val);
+	static BOOL GetAppendRemoveComputerNameAndIPToDescription();
 };
 
 // global for easy access and for initialization of fast access variables

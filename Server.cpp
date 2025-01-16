@@ -219,7 +219,14 @@ void CServer::OnStart(CSendInfo &info)
 	m_pClip = new CClip;
 	
 	CString cs;
-	cs.Format(_T("%s\n(%s)(%s)"), m_csDesc, m_csComputerName, m_csIP);
+	if (CGetSetOptions::GetAppendRemoveComputerNameAndIPToDescription())
+	{
+		cs.Format(_T("%s\n(%s)(%s)"), m_csDesc, m_csComputerName, m_csIP);
+	}
+	else
+	{
+		cs = m_csDesc;
+	}
 	
 	if(m_pClip)
 	{

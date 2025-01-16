@@ -150,6 +150,7 @@ END_MESSAGE_MAP()
 #define SETTING_RTF_EDITOR_PATH 99
 #define SETTING_UPDATE_DESC_ON_CLIP_EDIT 100
 #define SETTING_QR_CODE_URL 101
+#define SETTING_APPEND_NAME_IP 120
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -174,7 +175,7 @@ BOOL CAdvGeneral::OnInitDialog()
 	HDITEM hdItem;
 	hdItem.mask = HDI_WIDTH; // indicating cxy is width
 	CDPI dpi(m_hWnd);
-	hdItem.cxy = dpi.Scale(325); // whatever you want the property name column width to be
+	hdItem.cxy = dpi.Scale(400); // whatever you want the property name column width to be
 	m_propertyGrid.GetHeaderCtrl().SetItem(0, &hdItem);
 
 	m_propertyGrid.SetFont(this->GetFont());	
@@ -187,6 +188,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Allow back to back duplicates (if allowing duplicates)"), CGetSetOptions::GetAllowBackToBackDuplicates(), SETTING_ALOW_BACK_TO_BACK_DUPLICATES);
 
 	AddTrueFalse(pGroupTest, _T("Always show scroll bar"), CGetSetOptions::GetShowScrollBar(), SETTING_ALWAYS_SHOW_SCROLL_BAR);
+	AddTrueFalse(pGroupTest, _T("Append Computer Name and IP when receiving clips"), CGetSetOptions::GetAppendRemoveComputerNameAndIPToDescription(), SETTING_APPEND_NAME_IP);
+
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Amount of text to save for description"), CGetSetOptions::m_bDescTextSize, _T(""), SETTING_DESC_SIZE));
 	AddTrueFalse(pGroupTest, _T("Center window below cursor or caret"), CGetSetOptions::GetCenterWindowBelowCursorOrCaret(), SETTING_CENTER_WINDOW_BELOW_CURSOR_CARET);
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Copy and save clipboard delay (ms)"), (long)CGetSetOptions::GetCopyAndSveDelay(), _T(""), SETTING_COPY_SAVE_DELAY));
@@ -896,6 +899,13 @@ void CAdvGeneral::OnBnClickedOk()
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
 					CGetSetOptions::SetQRCodeUrl(pNewValue->bstrVal);
+				}
+				break;
+			case SETTING_APPEND_NAME_IP:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
+					CGetSetOptions::SetAppendRemoveComputerNameAndIPToDescription(val);
 				}
 				break;
 			}
