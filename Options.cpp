@@ -3119,3 +3119,13 @@ CString CGetSetOptions::GetQRCodeUrl()
 
 	return url;
 }
+
+void CGetSetOptions::SetAppendRemoveComputerNameAndIPToDescription(BOOL val)
+{
+	SetProfileLong("AppendRemoveComputerNameAndIPToDescription", val);	
+}
+
+BOOL CGetSetOptions::GetAppendRemoveComputerNameAndIPToDescription()
+{
+	return GetProfileLong("AppendRemoveComputerNameAndIPToDescription", TRUE);
+}
