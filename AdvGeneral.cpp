@@ -150,7 +150,8 @@ END_MESSAGE_MAP()
 #define SETTING_RTF_EDITOR_PATH 99
 #define SETTING_UPDATE_DESC_ON_CLIP_EDIT 100
 #define SETTING_QR_CODE_URL 101
-#define SETTING_APPEND_NAME_IP 120
+#define SETTING_APPEND_NAME_IP 102
+#define SETTING_USE_UTF8_FOR_DIFF 103
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -202,6 +203,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	static TCHAR BASED_CODE szDiffFilter[] = _T("Diff Applications(*.exe)|*.exe||");
 	CMFCPropertyGridFileProperty* pDiffProp = new CMFCPropertyGridFileProperty(_T("Diff application path"), TRUE, CGetSetOptions::GetDiffApp(), _T("exe"), 0, szDiffFilter, (LPCTSTR)0, SETTING_DIFF_APP);
 	pGroupTest->AddSubItem(pDiffProp);
+
+	AddTrueFalse(pGroupTest, _T("Diff save compare files as utf8"), CGetSetOptions::GetPreferUtf8ForCompare(), SETTING_USE_UTF8_FOR_DIFF);
 
 	AddTrueFalse(pGroupTest, _T("Disable friends"), !CGetSetOptions::GetAllowFriends(), SETTING_DISABLE_FRIENDS);
 
@@ -906,6 +909,13 @@ void CAdvGeneral::OnBnClickedOk()
 				{
 					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetAppendRemoveComputerNameAndIPToDescription(val);
+				}
+				break;
+			case SETTING_USE_UTF8_FOR_DIFF:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
+					CGetSetOptions::SetPreferUtf8ForCompare(val);
 				}
 				break;
 			}

@@ -3129,3 +3129,13 @@ BOOL CGetSetOptions::GetAppendRemoveComputerNameAndIPToDescription()
 {
 	return GetProfileLong("AppendRemoveComputerNameAndIPToDescription", TRUE);
 }
+
+void CGetSetOptions::SetPreferUtf8ForCompare(BOOL val)
+{
+	SetProfileLong("PreferUtf8ForCompare", val);
+}
+
+BOOL CGetSetOptions::GetPreferUtf8ForCompare()
+{
+	return GetProfileLong("PreferUtf8ForCompare", TRUE);
+}
