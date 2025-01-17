@@ -23,10 +23,18 @@ void CClipCompare::Compare(int leftId, int rightId)
 		{
 			bool saveW = true;
 			bool saveA = true;
+			bool saveUtf8 = true;
+
+			if (CGetSetOptions::GetPreferUtf8ForCompare() == FALSE)
+			{
+				Log(StrF(_T("CClipCompare::Compare, option is set to not use utf8")));
+				saveUtf8 = false;
+			}
 			
 			if(leftClip.GetUnicodeTextFormat() == _T("") || rightClip.GetUnicodeTextFormat() == _T(""))
 			{
 				saveW = false;
+				saveUtf8 = false;
 			}
 
 			if(leftClip.GetCFTextTextFormat() == "" || rightClip.GetCFTextTextFormat() == "")
@@ -34,10 +42,10 @@ void CClipCompare::Compare(int leftId, int rightId)
 				saveA = false;
 			}
 
-			if(saveW || saveA)
+			if(saveW || saveA || saveUtf8)
 			{
-				CString leftFile = SaveToFile(leftId, &leftClip, saveW, saveA);
-				CString rightFile = SaveToFile(rightId, &rightClip, saveW, saveA);
+				CString leftFile = SaveToFile(leftId, &leftClip, saveW, saveA, saveUtf8);
+				CString rightFile = SaveToFile(rightId, &rightClip, saveW, saveA, saveUtf8);
 
 				CString params = _T("");
 				CString path = GetComparePath(params);
@@ -192,7 +200,7 @@ CString CClipCompare::GetComparePath(CString &params)
 	return _T("");
 }
 
-CString CClipCompare::SaveToFile(int id, CClip *pClip, bool saveW, bool SaveA)
+CString CClipCompare::SaveToFile(int id, CClip *pClip, bool saveW, bool saveA, bool saveUtf8)
 {
 	CString path;
 	CString pathCompare = CGetSetOptions::GetPath(PATH_CLIP_DIFF);
@@ -219,7 +227,7 @@ CString CClipCompare::SaveToFile(int id, CClip *pClip, bool saveW, bool SaveA)
 	if(path != _T("") && 
 		pClip != NULL)
 	{
-		pClip->WriteTextToFile(path, saveW, SaveA, false);
+		pClip->WriteTextToFile(path, saveW, saveA, FALSE, FALSE, saveUtf8);
 	}
 
 	return path;

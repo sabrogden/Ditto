@@ -1734,7 +1734,7 @@ BOOL CClip::ContainsClipFormat(CLIPFORMAT clipFormat)
 	return this->Clips()->FindFormatEx(clipFormat) != NULL;
 }
 
-BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL rtf, BOOL forceUnicode)
+BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL rtf, BOOL forceUnicode, BOOL utf8)
 {
 	BOOL ret = false;
 
@@ -1745,7 +1745,14 @@ BOOL CClip::WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL rtf, BOO
 		CStringA a = GetCFTextTextFormat();
 		CStringA rtfA = GetRTFTextFormat();		
 
-		if(unicode && (w != _T("") || forceUnicode))
+		if (utf8 && w != _T(""))
+		{
+			CStringA utf8Data = CTextConvert::UnicodeToUTF8(w);
+			f.Write(utf8Data.GetBuffer(), utf8Data.GetLength());
+
+			ret = true;
+		}
+		else if(unicode && (w != _T("") || forceUnicode))
 		{
 			std::byte header[2];
 			header[0] = (std::byte)0xFF;

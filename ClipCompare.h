@@ -10,7 +10,7 @@ public:
 	void Compare(int leftId, int rightId);
 
 protected:
-	CString SaveToFile(int id, CClip *clip, bool saveW, bool SaveA);
+	CString SaveToFile(int id, CClip *clip, bool saveW, bool SaveA, bool saveUtf8);
 	CString GetComparePath(CString &params);
 };
 

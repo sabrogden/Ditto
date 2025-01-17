@@ -193,7 +193,7 @@ public:
 
 	BOOL ContainsClipFormat(CLIPFORMAT clipFormat);
 
-	BOOL WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL rtf, BOOL forceUnicode = FALSE);
+	BOOL WriteTextToFile(CString path, BOOL unicode, BOOL asci, BOOL rtf, BOOL forceUnicode = FALSE, BOOL utf8 = FALSE);
 	BOOL WriteImageToFile(CString path);
 	BOOL WriteTextToHtmlFile(CString path);
 

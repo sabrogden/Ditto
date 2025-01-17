@@ -701,6 +701,9 @@ public:
 
 	static void SetAppendRemoveComputerNameAndIPToDescription(BOOL val);
 	static BOOL GetAppendRemoveComputerNameAndIPToDescription();
+
+	static void SetPreferUtf8ForCompare(BOOL val);
+	static BOOL GetPreferUtf8ForCompare();
 };
 
 // global for easy access and for initialization of fast access variables
