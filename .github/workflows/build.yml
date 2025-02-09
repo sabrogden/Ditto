@@ -59,9 +59,9 @@ jobs:
             copy DittoSetup\Output\DittoSetup_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey\tools\DittoSetup_${{env.VERSION_FILENAME}}.exe
             copy DittoSetup\Output\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey\tools\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe
             cd DittoSetup\Chocolatey
-            echo "push --key ${{ secrets.CHOCO_API_KEY}} --source https://push.chocolatey.org/"
+            echo "push --key ${{ secrets.xxx}} --source https://push.chocolatey.org/"
             choco pack     
-            choco push --key ${{ secrets.CHOCO_API_KEY}} --source https://push.chocolatey.org/
+            choco push --source https://push.chocolatey.org/ --key ${{ secrets.CHOCO_API_KEY}}
             cd ..
             cd ..
     
