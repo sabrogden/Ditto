@@ -1,0 +1,44 @@
+<Ditto_Theme_File Version = "3" Author = "Ditto" Notes = "">
+
+	<CaptionLeft>RGB(122, 150, 223)</CaptionLeft>
+	<CaptionRight>RGB(157, 185, 235)</CaptionRight>	
+	
+	<CaptionLeftTopMost>RGB(122, 150, 223)</CaptionLeftTopMost>
+	<CaptionRightTopMost>RGB(157, 185, 235)</CaptionRightTopMost>
+	
+	<CaptionLeftNotConnected>RGB(122, 150, 223)</CaptionLeftNotConnected>
+	<CaptionRightNotConnected>RGB(255, 255, 0)</CaptionRightNotConnected>
+	
+	<CaptionTextColor>RGB(255, 255, 255)</CaptionTextColor>
+	
+	<ListBoxOddRowsBG>RGB(255, 255, 255)</ListBoxOddRowsBG>
+	<ListBoxEvenRowsBG>RGB(240, 240, 240)</ListBoxEvenRowsBG>
+	
+	<ListBoxOddRowsText>RGB(0, 0, 0)</ListBoxOddRowsText>
+	<ListBoxEvenRowsText>RGB(0, 0, 0)</ListBoxEvenRowsText>
+	
+	<ListBoxSelectedBG>RGB(30, 116, 211)</ListBoxSelectedBG>
+	<ListBoxSelectedNoFocusBG>RGB(236, 233, 216)</ListBoxSelectedNoFocusBG>
+	
+	<ListBoxSelectedText>RGB(255, 255, 255)</ListBoxSelectedText>
+	<ListBoxSelectedNoFocusText>RGB(0, 0, 0)</ListBoxSelectedNoFocusText>	
+	
+	<Border>RGB(122, 150, 223)</Border>
+	<BorderTopMost>RGB(122, 150, 223)</BorderTopMost>
+	<BorderNotConnected>RGB(122, 150, 223)</BorderNotConnected>	
+	
+	<GroupTreeBG></GroupTreeBG>
+	<GroupTreeText></GroupTreeText>
+	
+	<CaptionSize>18</CaptionSize>
+	<CaptionFontSize>15</CaptionFontSize>
+
+	<DescriptionWindowBG>RGB(255, 255, 225)</DescriptionWindowBG>
+	<DescriptionWindowText></DescriptionWindowText>
+	
+	<MainWindowBG></MainWindowBG>
+	
+	<SearchTextBoxFocusBG></SearchTextBoxFocusBG>
+	<SearchTextBoxFocusText></SearchTextBoxFocusText>
+	
+</Ditto_Theme_File>

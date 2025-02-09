@@ -1,0 +1,44 @@
+<Ditto_Theme_File Version = "3" Author = "Yaroslav Kargin" Notes = "www.nordtheme.com">
+
+	<CaptionLeft>RGB(46, 52, 64)</CaptionLeft>
+	<CaptionRight>RGB(46, 52, 64)</CaptionRight>	
+	
+	<CaptionLeftTopMost>RGB(46, 52, 64)</CaptionLeftTopMost>
+	<CaptionRightTopMost>RGB(46, 52, 64)</CaptionRightTopMost>
+	
+	<CaptionLeftNotConnected>RGB(49, 55, 66)</CaptionLeftNotConnected>
+	<CaptionRightNotConnected>RGB(49, 55, 66)</CaptionRightNotConnected>
+	
+	<CaptionTextColor>RGB(160, 197, 146)</CaptionTextColor>
+	
+	<ListBoxOddRowsBG>RGB(49, 55, 66)</ListBoxOddRowsBG>
+	<ListBoxEvenRowsBG>RGB(49, 55, 66)</ListBoxEvenRowsBG>
+	
+	<ListBoxOddRowsText>RGB(124, 167, 170)</ListBoxOddRowsText>
+	<ListBoxEvenRowsText>RGB(124, 167, 170)</ListBoxEvenRowsText>
+	
+	<ListBoxSelectedBG>RGB(59, 66, 81)</ListBoxSelectedBG>
+	<ListBoxSelectedNoFocusBG>RGB(61, 71, 89)</ListBoxSelectedNoFocusBG>
+	
+	<ListBoxSelectedText>RGB(214, 221, 232)</ListBoxSelectedText>
+	<ListBoxSelectedNoFocusText>RGB(214, 220, 231)</ListBoxSelectedNoFocusText>	
+	
+	<Border>RGB(49, 55, 66)</Border>
+	<BorderTopMost>RGB(49, 55, 66)</BorderTopMost>
+	<BorderNotConnected>RGB(49, 55, 66)</BorderNotConnected>	
+	
+	<GroupTreeBG>RGB(49, 55, 66)</GroupTreeBG>
+	<GroupTreeText>RGB(214, 221, 232)</GroupTreeText>
+	
+	<CaptionSize>18</CaptionSize>
+	<CaptionFontSize>15</CaptionFontSize>
+
+	<DescriptionWindowBG>RGB(46, 52, 64)</DescriptionWindowBG>
+	<DescriptionWindowText>RGB(214, 221, 232)</DescriptionWindowText>
+	
+	<MainWindowBG>RGB(49, 55, 66)</MainWindowBG>
+	
+	<SearchTextBoxFocusBG>RGB(46, 52, 64)</SearchTextBoxFocusBG>
+	<SearchTextBoxFocusText>RGB(214, 221, 232)</SearchTextBoxFocusText>
+	
+</Ditto_Theme_File>

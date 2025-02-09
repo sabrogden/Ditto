@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ditto_Language_File Version = "1" Author = "Kadir Danış" Notes = "1dakika@gmail.com" LanguageCode = "tur">
+	<Ditto_Right_Click_Menu>
+		<Item English_Text = "Groups" ID = "-1">Gruplar</Item>
+		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Yeni Grup</Item>
+		<Item English_Text = "New Group Selection	F7" ID = "32812">Yeni Grup Seç - F7</Item>
+		<Item English_Text = "Move to Group" ID = "32840">Gruba Taşı</Item>
+		<Item English_Text = "Quick Options" ID = "-1">Hızlı Seçenekler</Item>
+		<Item English_Text = "Lines Per Row" ID = "-1">Satır Yüksekliği</Item>
+		<Item English_Text = "1" ID = "32807"></Item>
+		<Item English_Text = "2" ID = "32786"></Item>
+		<Item English_Text = "3" ID = "32787"></Item>
+		<Item English_Text = "4" ID = "32788"></Item>
+		<Item English_Text = "5" ID = "32789"></Item>
+		<Item English_Text = "Transparency" ID = "-1">Şeffaflık</Item>
+		<Item English_Text = "None" ID = "32800">Hiçbiri</Item>
+		<Item English_Text = "5 " ID = "32808"></Item>
+		<Item English_Text = "10 " ID = "32792"></Item>
+		<Item English_Text = "15 " ID = "32794"></Item>
+		<Item English_Text = "20 " ID = "32796"></Item>
+		<Item English_Text = "25 " ID = "32798"></Item>
+		<Item English_Text = "30 " ID = "32799"></Item>
+		<Item English_Text = "40 " ID = "32790"></Item>
+		<Item English_Text = "Positioning" ID = "-1">Pozisyon</Item>
+		<Item English_Text = "At Caret" ID = "32802">Caret'ta</Item>
+		<Item English_Text = "At Cursor" ID = "32803">İmleç'te</Item>
+		<Item English_Text = "At Previous Position" ID = "32804">Önceki Pozisyonda</Item>
+		<Item English_Text = "First Ten Hot Keys" ID = "-1">İlk On Kısayollar</Item>
+		<Item English_Text = "Use Ctrl - Num" ID = "32777">Ctrl - Num Kullan</Item>
+		<Item English_Text = "Show Hot Key Text" ID = "32778">Kısayol Metnini Göster</Item>
+		<Item English_Text = "View Caption Bar On" ID = "-1">Başlık Çubuğunu Burada Göster</Item>
+		<Item English_Text = "Top" ID = "32783">Üst</Item>
+		<Item English_Text = "Right" ID = "32780">Sağ</Item>
+		<Item English_Text = "Bottom" ID = "32781">Alt</Item>
+		<Item English_Text = "Left" ID = "32782">Sol</Item>
+		<Item English_Text = "Sort" ID = "-1">Sırala</Item>
+		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">Azalan (Yenisi En Üstte)</Item>
+		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">Artan (Yenisi En Altta)</Item>
+		<Item English_Text = "Double Clicking on Caption" ID = "-1">Başlığa Çift Tıkla</Item>
+		<Item English_Text = "Toggles Always on Top" ID = "32814">Her Zaman Üstte</Item>
+		<Item English_Text = "Rolls-up Window" ID = "32815">Pencereyi Sar</Item>
+		<Item English_Text = "Toggles Always Show Description" ID = "32816">İçeriği Her Zaman Göster</Item>
+		<Item English_Text = "Always on Top	Ctrl-Space" ID = "32784">Her Zaman Üstte	Ctrl - Boşluk</Item>
+		<Item English_Text = "Auto Roll-up" ID = "32791">Otomotik Sarma</Item>
+		<Item English_Text = "Always Show Description" ID = "32813">İçeriği Her Zaman Göster</Item>
+		<Item English_Text = "Prompt For New Group Names" ID = "32817">Yeni Grup Adları İçin Uyar</Item>
+		<Item English_Text = "Select Font" ID = "32844">Yazıtipi Seç</Item>
+		<Item English_Text = "Show Thumbnails" ID = "32845">Resim Önizlemeyi Göster</Item>
+		<Item English_Text = "Draw RTF Text" ID = "32846">RTF Metni Göster</Item>
+		<Item English_Text = "Paste Clip after selection" ID = "32847">Seçimden Sonra Klibi Yapıştır</Item>
+		<Item English_Text = "Find As You Type" ID = "32848">Yazılanı Ara</Item>
+		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Tüm Pencerenin Görünmesini Sağla</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Ana Listede Gruplanan Klipleri Göster</Item>
+		<Item English_Text = "Sent To" ID = "-1">Gönder</Item>
+		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">(192.168.1.101) - aynı bilgisayar</Item>
+		<Item English_Text = "View Full Description	F3" ID = "32793">Tam Açıklamayı Göster - F3</Item>
+		<Item English_Text = "View Groups	Ctrl-G" ID = "32819">Grupları Göster - Ctrl-G</Item>
+		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">Yalnız Düz Metin Yapıştır - Shift-Enter</Item>
+		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">HTML içeriği Düz Metin Yapıştır</Item>
+		<Item English_Text = "Delete Entry	Del" ID = "32801">İçeriği Sil - Del</Item>
+		<Item English_Text = "Properties	Alt-Enter" ID = "32776">Özellikler - Alt-Enter</Item>
+		<Item English_Text = "Quick Properties" ID = "-1">Hızlı Seçenekler</Item>
+		<Item English_Text = "Never Auto Delete" ID = "32820">Asla Otomotik Silme</Item>
+		<Item English_Text = "Auto Delete" ID = "32821">Otomotik Sil</Item>
+		<Item English_Text = "Remove Hot Key" ID = "32822">Kısayol Tuşunu Kaldır</Item>
+		<Item English_Text = "Options..." ID = "32805">Seçenekler...</Item>
+		<Item English_Text = "Help" ID = "32842">Yardım</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "32775">Pano Bağlantısını Kes</Item>
+		<Item English_Text = "Exit Program" ID = "32806">Programdan Çık</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt to Delete Clip" ID = "32852">Klibi Silerken Uyar</Item>	
+		<Item English_Text = "Import" ID = "32855">Veri Al</Item>
+		<Item English_Text = "Export" ID = "32853">Veri Gönder</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">Hızlı Yapıştırı Kaldır</Item>	
+		<Item English_Text = "Edit Clip" ID = "32860">Klibi Düzenle</Item>
+		<Item English_Text = "New Clip" ID = "32867">Yeni Klip</Item>	
+		
+		//Added 1/10/15
+		<Item English_Text = "Compare" ID = "-1">Kıyasla</Item>	
+		<Item English_Text = "Select Left Text" ID = "32893">Sol Yazıyı Seç</Item>	
+		<Item English_Text = "Select Right Text And Compare Against Left" ID = "32894">Sağ Yazıyı Seç Ve Soldaki İle Kıyasla</Item>	
+		<Item English_Text = "Compare" ID = "32895">Kıyasla</Item>
+		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "32881">Ayrıcalıklı Uygulamalara Yapıştırmak İçin Yükseltilmiş Ayrıcalıklar</Item>
+		<Item English_Text = "Show In Taskbar" ID = "32885">Görev Çubuğunda Göster</Item>
+		<Item English_Text = "Sticky Clips" ID = "-1">Yapışkan Klipler</Item>	
+		<Item English_Text = "Make Top Sticky Clip" ID = "32878">En Üst Yapışkan Klip Yap</Item>	
+		<Item English_Text = "Make Last Sticky Clip" ID = "32879">Son Yapışkan Klip Yap</Item>	
+		<Item English_Text = "Remove Sticky Setting" ID = "32880">Yapışkan Ayarlarını Kaldır</Item>
+		<Item English_Text = "Import/Export" ID = "-1">İçe Aktar/Dışa Aktar</Item>	
+		<Item English_Text = "View as QRCode" ID = "32887">QRCode Olarak Gör</Item>	
+		<Item English_Text = "Export Clip(s) to Text File" ID = "32889">Klipleri Yazı Dosyası Olarak Çıkar</Item>	
+		//Added 12/17/16
+		<Item English_Text = "Special Paste" ID = "-1">Özel Yapıştır</Item>			
+		<Item English_Text = "UPPER CASE" ID = "32912">BÜYÜK HARF</Item>	
+		<Item English_Text = "lower case" ID = "32913">küçük harf</Item>	
+		<Item English_Text = "Capitalize Case" ID = "32914">Büyük/Küçük Harf</Item>	
+		<Item English_Text = "Sentence case" ID = "32915"></Item>	
+		<Item English_Text = "Remove Line Feeds" ID = "32916"></Item>	
+		<Item English_Text = "Paste + One Line Feed" ID = "32918"></Item>	
+		<Item English_Text = "Paste + Two Line Feeds" ID = "32919"></Item>	
+		<Item English_Text = "Paste + Current Time" ID = "32927"></Item>	
+		<Item English_Text = "Typoglycemia" ID = "32922"></Item>	
+		<Item English_Text = "Filter On" ID = "-1"></Item>			
+		<Item English_Text = "Toggle Last Group Toggle" ID = "32925"></Item>			
+		<Item English_Text = "Clip Order" ID = "-1"></Item>			
+		<Item English_Text = "Move To Top" ID = "32908"></Item>	
+		<Item English_Text = "Move Up" ID = "32906"></Item>	
+		<Item English_Text = "Move Down" ID = "32907"></Item>			
+		<Item English_Text = "Export Clip(s) to Image File" ID = "32902"></Item>	
+		<Item English_Text = "Export to Google Translate" ID = "32900"></Item>	
+		
+		<Item English_Text = "Search Options" ID = "-1"></Item>	
+		<Item English_Text = "Search Description" ID = "32873"></Item>	
+		<Item English_Text = "Search Full Text" ID = "32874"></Item>	
+		<Item English_Text = "Search Quick Paste" ID = "32875"></Item>	
+		<Item English_Text = "Contains Text Search" ID = "32876"></Item>	
+		<Item English_Text = "Regular Expression Search" ID = "32899"></Item>	
+		<Item English_Text = "Wildcard Search" ID = "32903"></Item>	
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "32923"></Item>	
+		<Item English_Text = "Show indicator a clip has been pasted" ID = "32924"></Item>	
+		<Item English_Text = "Global Hot Keys" ID = "32933"></Item>	
+		<Item English_Text = "Delete Clip Data" ID = "32934"></Item>	
+		<Item English_Text = "Import Clip(s)" ID = "32935"></Item>	
+		<Item English_Text = "New Clip" ID = "32937"></Item>	
+		<Item English_Text = "Save Current Clipboard" ID = "32905"></Item>	
+		<Item English_Text = "Import" ID = ""></Item>	
+	</Ditto_Right_Click_Menu>
+	<Ditto_Clip_Properties>
+		<Item English_Text = "Hot Key" ID = "2039">Kısayol Tuşu</Item>
+		<Item English_Text = "Hot Key" ID = "2039">Kısayol Tuşu</Item>
+		<Item English_Text = "Date" ID = "2040">Tarih</Item>
+		<Item English_Text = "&Never Auto Delete" ID = "1025">&Asla Otomotik Silme</Item>
+		<Item English_Text = "Move To Group" ID = "2041">Gruba Taşı</Item>
+		<Item English_Text = "Item Title" ID = "2042">Öğe Başlığı</Item>
+		<Item English_Text = "Copy Formats" ID = "2029">Kopyalama Formatları</Item>
+		<Item English_Text = "Delete" ID = "1021">Sil</Item>
+		
+		<Item English_Text = "OK" ID = "1">Tamam</Item>
+		<Item English_Text = "Cancel" ID = "2">İptal</Item>
+		<Item English_Text = "Copy Properties" ID = "-1">Özellikleri Kopyala</Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Hotkey available globally" ID = "1026"></Item>
+		<Item English_Text = "Last Used" ID = "2043"></Item>
+		<Item English_Text = "Quick Paste Text" ID = "2125"></Item>
+		
+	</Ditto_Clip_Properties>
+	<Ditto_Options_General>
+		<Item English_Text = "Start Ditto on System Startup" ID = "2004">Windows'la Başlat</Item>
+		<Item English_Text = "Display Icon in System Tray" ID = "2003">Sistem Tablasında Göster</Item>
+		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Maksimum Kopyalama</Item>
+		<Item English_Text = "Paste Entries Expire after" ID = "2009">Yapıştırma Sona Erme Süresi</Item>
+		<Item English_Text = "Days" ID = "2043">Gün</Item>
+		<Item English_Text = "Compact and Repair" ID = "1028">Sıkıştır ve Tamir Et</Item>
+		<Item English_Text = "Automatically check for updates online" ID = "1029">Programı Otomotik Güncelle</Item>
+		<Item English_Text = "Check Now" ID = "1030">Şimdi Kontrol Et</Item>
+		<Item English_Text = "Allow Duplicates" ID = "1037">Çift Kayıtlara İzin Ver</Item>
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">Yapıştırırken Klip Tarihini Güncelle</Item>
+		<Item English_Text = "Save Multi-Pastes" ID = "1039">Çoklu Yapıştır</Item>
+		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Ditto Görünürken Kısayol Tuşuyla Gizle</Item>
+		<Item English_Text = "Amount of text to save for description" ID = "2044">Açıklamaya Yazı Miktarını Kaydet</Item>
+		<Item English_Text = "On copy play the sound" ID = "2045">Kopyalarken Ses Çıkar</Item>
+		<Item English_Text = "Play" ID = "2034">Oynat</Item>
+		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">Seçimden Sonra Klibi Aktif Pencereye Yapıştır</Item>
+		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">Maksimum Klip Boyutu -Byte</Item>
+		<Item English_Text = "(Leave blank for no limit)" ID = "2047">(Limitsiz Yapmak İçin Boş Bırak)</Item>
+		<Item English_Text = "Set Database Path" ID = "1034">Veritabanı Yolu</Item>
+		<Item English_Text = "Language" ID = "2069">Dil</Item>
+		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">Son Kopyalamadan X Milisaniye Sonraki Kopyalamayı Dikkate Alma (1000 ms = 1 saniye)</Item>
+		<Item English_Text = "About Language" ID = "2073">Dil Hakkında</Item>
+		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Ditto'nun Her Zaman Panoya Bağlanmasını Sağla</Item>
+		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Genel</Item>
+		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090"></Item>
+		
+		//New item added 3/1/11
+		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098">Kabul Edilen Kopya Başvuruları (; ile ayırarak)</Item>
+		<Item English_Text = "Include" ID = "2095">Dahil Et</Item>
+		<Item English_Text = "Exclude" ID = "2096">Hariç Tut</Item>
+	</Ditto_Options_General>
+	<Ditto_Options_Supported_Types>
+		<Item English_Text = "&Add" ID = "1015">&Ekle</Item>
+		<Item English_Text = "&Delete" ID = "1016">&Kaldır</Item>
+		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">Desteklenen Dosya Türleri</Item>
+		//New item added 12/17/16
+		<Item English_Text = "Current Clipboard Types" ID = "2128"></Item>
+		<Item English_Text = "Primary Clipboard Types" ID = "2145"></Item>
+		<Item English_Text = "Custom Clipboard Type" ID = "2130"></Item>
+	</Ditto_Options_Supported_Types>
+	<Ditto_Options_Shortcuts>
+		<Item English_Text = "Activate Ditto" ID = "2048">Ditto'yu Aktive Et</Item>
+		<Item English_Text = "Win" ID = "2035"></Item>
+		<Item English_Text = "Named Copy" ID = "2049">Adlandırılan Kopyala</Item>
+		<Item English_Text = "Win" ID = "2036"></Item>
+		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">Kopyalanan Son 10 Öğe için Genel Kısayol Tuşları</Item>
+		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Yapışıra Gönder (Veya Sadece Öğeyi Panoya Al)</Item>
+		<Item English_Text = "Position 1" ID = "2052">Pozisyon 1</Item>
+		<Item English_Text = "Position 2" ID = "2053">Pozisyon 2</Item>
+		<Item English_Text = "Position 3" ID = "2054">Pozisyon 3</Item>
+		<Item English_Text = "Position 4" ID = "2055">Pozisyon 4</Item>
+		<Item English_Text = "Position 5" ID = "2056">Pozisyon 5</Item>
+		<Item English_Text = "Position 6" ID = "2057">Pozisyon 6</Item>
+		<Item English_Text = "Position 7" ID = "2058">Pozisyon 7</Item>
+		<Item English_Text = "Position 8" ID = "2059">Pozisyon 8</Item>
+		<Item English_Text = "Position 9" ID = "2060">Pozisyon 9</Item>
+		<Item English_Text = "Position 10" ID = "2061">Pozisyon 10</Item>
+		<Item English_Text = "Win" ID = "2042"></Item>
+		<Item English_Text = "Win" ID = "2043"></Item>
+		<Item English_Text = "Win" ID = "2044"></Item>
+		<Item English_Text = "Win" ID = "2045"></Item>
+		<Item English_Text = "Win" ID = "2046"></Item>
+		<Item English_Text = "Win" ID = "2037"></Item>
+		<Item English_Text = "Win" ID = "2038"></Item>
+		<Item English_Text = "Win" ID = "2039"></Item>
+		<Item English_Text = "Win" ID = "2040"></Item>
+		<Item English_Text = "Win" ID = "2041"></Item>
+		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Windows Kısayolunu Dahil Etmek İçin 'Win' Tuşunu Kontrol Et.</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">Klavye Kısayolları</Item>
+		//New item added in 3.15.1 8/18/07
+		<Item English_Text = "Send custom strokes Per Application" ID = "2091"></Item>
+		//Added 1/10/15
+		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043"></Item>
+		
+		//Added 12/17/16
+		<Item English_Text = "Activate Ditto" ID = "2064"></Item>
+		<Item English_Text = "Activate Ditto" ID = "2066"></Item>
+		
+		<Item English_Text = "Win" ID = "2063"></Item>
+		<Item English_Text = "Win" ID = "2065"></Item>
+		<Item English_Text = "Save Current Clipboard" ID = "2062"></Item>
+		<Item English_Text = "Win" ID = "2047"></Item>
+		
+		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044"></Item>
+	</Ditto_Options_Shortcuts>
+	<Ditto_Options_Quick_Paste>
+		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">Tarihçe Listenin En Başından Başlar (veya altından)</Item>
+		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">İlk 10 Kopya İçin Ctrl - Num Tuşlarını Kullan</Item>
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">İlk 10 Kopya Kısayolu İçin Yazıyı Göster</Item>
+		<Item English_Text = "Show leading whitespace" ID = "2021">Beyaz Başlığı Göster</Item>
+		<Item English_Text = "Text Lines per Row" ID = "2062">Dizi Başına Yazı Satırı</Item>
+		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">Hızlı Yapıştır Şeffaflığına İzin Ver</Item>
+		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">Resim Önizlemeyi Göster (CF_DIB tipleri için) (İşlemci Performansını Etkiler)</Item>
+		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">Zengin Metni Göster (RTF tipi için) (İşlemci Performansını Etkiler)</Item>
+		<Item English_Text = "Find As You Type" ID = "2036">Yazılanı Ara</Item>
+		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">Tüm Pencerenin Görünür Olmasını Sağla</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">Ana Liste Grubundaki Klipleri Göster</Item>
+		<Item English_Text = "Font" ID = "1040">Yazıtipi</Item>
+		<Item English_Text = "Default Font" ID = "2031">Varsayılan Yazıtipi</Item>
+		<Item English_Text = "Popup Positioning" ID = "2063">Açılan Pencere Pozisyonu</Item>
+		<Item English_Text = "At Caret" ID = "2015">Caret'te</Item>
+		<Item English_Text = "At Cursor" ID = "2016">İmleç'te</Item>
+		<Item English_Text = "At Previous Position" ID = "2017">Önceki Pozisyonda</Item>
+		<Item English_Text = "List Item Prefix Legend" ID = "2064">Öğe Ön Eklerini Listele</Item>
+		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">* = Otomotik Silme\n  s = Kısayol Mevcut\n G = Öğe Bir Gruptur\n  ! = Öğe Gruba İlişkilendirildi</Item>
+		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Hızlı Yapıştır</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Klip Öğelerini Silerken Uyar</Item>
+		
+		//New strings added in 3.15.2 10-6-07
+		<Item English_Text = "Theme" ID = "2092"></Item>
+		<Item English_Text = "About Theme" ID = "2094"></Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Always Show Scroll Bar" ID = "2040"></Item>
+		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "2041"></Item>
+		<Item English_Text = "Show In Taskbar" ID = "2042"></Item>
+		<Item English_Text = "Diff Application Path" ID = "2122"></Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Show indicator a clip has been pasted" ID = "2043"></Item>
+	</Ditto_Options_Quick_Paste>	
+	<Ditto_Options_Friends>
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Gönderilen Bir Kopyayı Aldığınız Zaman, Karşındaki IP veya Bilgisayar Adı Bu Listede Kayıtlıysa, Panoya Konacaktır</Item>
+		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP/Bilgisayar Adları Virgülle Ayrılır</Item>
+		<Item English_Text = "Disable Recieving Clips" ID = "2026">Klip Almayı Devre Dışı Bırak</Item>
+		<Item English_Text = "Network Password" ID = "2054">Ağ Şifresi</Item>
+		<Item English_Text = "If you are receiving clips from computers where your network password does not match, enter additional network passwords separated by commas" ID = "2055">Ağ Şifresi Eşleşmeyen Bilgisayardan Klip Alacağınız Zaman, Diğer Ağ Şifrelerini Araya Virgül Koyarak Ekleyin.</Item>
+		<Item English_Text = "Receive Passwords" ID = "2056">Şifreleri Al</Item>
+		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">'Bütün Dosyaları Gönder' Seçiliyse, Kopyalanan Bütün Öğeler Diğer Bilgisayara Gönderilecek. Seçili Değilse, Sağ Tıklayarak 'Kopyayı Diğer Bilgisayara Gönder'i Seçin.</Item>
+		<Item English_Text = "Log Send Receive Commands" ID = "1042">Alınan Kayıtlar için Kayıt Dosyası Gönder</Item>
+		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Arkadaşlar</Item>
+		//Added in 9-11-09
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies"></Item>
+        	<Item English_Text = "IP/Name" ID = "IP_Name"></Item>
+        	<Item English_Text = "Descriptions" ID = "Descriptions"></Item>
+	</Ditto_Options_Friends>
+	<Ditto_Options_Friends_Detail>
+		<Item English_Text = "Send All Copies to this friend" ID = "1015">Bütün Kopyaları Bu Arkadaşına Yolla</Item>
+		<Item English_Text = "IP/Name" ID = "2052">IP/İsim</Item>
+		<Item English_Text = "Description" ID = "2053">Açıklama</Item>
+		<Item English_Text = "Friend Details" ID = "-1">Arkadaş Detayları</Item>
+	</Ditto_Options_Friends_Detail>
+	<Ditto_Options_Stats>
+		<Item English_Text = "Odometer" ID = "2052">Odometre</Item>
+		<Item English_Text = "Trip Odometer" ID = "2053">Odometro Hatası</Item>
+		<Item English_Text = "Copies" ID = "2054">Kopyalar</Item>
+		<Item English_Text = "Pastes" ID = "2055">Yapıştırmalar</Item>
+		<Item English_Text = "Copies" ID = "2056">Kopyalar</Item>
+		<Item English_Text = "Pastes" ID = "2057">Yapıitırmalar</Item>
+		<Item English_Text = "Reset" ID = "1006">Sıfırla</Item>
+		<Item English_Text = "Saved Copies" ID = "2058">Kaydedilen Kopyalar</Item>
+		<Item English_Text = "Saved Copy Data" ID = "2059">Kaydedilen Kopya Verisi</Item>
+		<Item English_Text = "Remove All" ID = "1013">Hepsini Kaldır</Item>
+		<Item English_Text = "Last Started" ID = "2060">Son Başlatılan</Item>
+		<Item English_Text = "Database Size" ID = "2061">Veritabanı Boyutu</Item>
+		<Item English_Text = "Clips Sent" ID = "2066">Gönderilen Klipler</Item>
+		<Item English_Text = "Clips received" ID = "2067">Alınan Klipler</Item>
+		<Item English_Text = "Since Last Start" ID = "2068">Son Başlatmadan Beri</Item>
+		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true">İstatistikler</Item>
+	</Ditto_Options_Stats>
+	<Ditto_Options_Supported_Types_Add>
+		<Item English_Text = "Main Types" ID = "2052">Ana Türler</Item>
+		<Item English_Text = "Custom Type" ID = "2053">Özel Tür</Item>
+		<Item English_Text = "Add" ID = "1020">Ekle</Item>
+		<Item English_Text = "Currently on the Clipboard" ID = "2054">Panoda Geçerli Olan</Item>
+		<Item English_Text = "Add" ID = "1019">Ekle</Item>
+		<Item English_Text = "Add" ID = "1021">Ekle</Item>
+		<Item English_Text = "Cancel" ID = "2">İptal</Item>
+		<Item English_Text = "Add Supported Type" ID = "-1">Desteklenen Tür Ekle</Item>
+	</Ditto_Options_Supported_Types_Add>
+	<Ditto_Move_To_Groups>
+		<Item English_Text = "New Group" ID = "1040">Yeni Grup</Item>
+		<Item English_Text = "OK" ID = "1">Tamam</Item>
+		<Item English_Text = "Cancel" ID = "2">İptal</Item>
+		<Item English_Text = "Move to Group" ID = "-1">Gruba Taşı</Item>
+	</Ditto_Move_To_Groups>
+	
+	<Ditto_String_Table>
+		<Item English_Text = "General" ID = "GeneralTitle">Genel</Item>
+		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">Desteklenen Dosya Türleri</Item>
+		<Item English_Text = "Stats" ID = "StatsTitle">İstatistikler</Item>
+		<Item English_Text = "Friends" ID = "FriendsTitle">Arkadaşlar</Item>
+		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">Hızlı Yapıştır</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">Klavye Kısayolları</Item>
+		<Item English_Text = "About" ID = "AboutTitle">Hakkında</Item>
+		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">Veritabanı Açılırken Hata Oluştu</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">DAO/Jet Motoru Sağlanamıyor.\Seç Evet adresinden indir http://ditto-cp.sourceforge.net/dao_setup.exe\n\nYeniden Başlat Ditto'yu DAO Yüklemesinden Sonra.</Item>
+		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format">Tanınmayan Veritabanı Formatı</Item>
+		<Item English_Text = "the file will be renamed" ID = "File_Renamed">dosya yeniden adlandırıldı</Item>
+		<Item English_Text = "and a new database will be created" ID = "New_Database">ve yeni bir veritabanı oluşturuldu</Item>
+		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">Ditto için yeni sürüm mevcut.\nGit ditto-cp.sourceforge.net bilgi için\n\ngüncelle</Item>
+		<Item English_Text = "Update Version" ID = "Update_Version">Sürümü Güncelle</Item>
+		<Item English_Text = "Download updated version?" ID = "Download_Update">Güncellenmiş sürümü indir?</Item>			
+		<Item English_Text = "No updates available" ID = "No_Updates">Güncelleme Bulunmuyor</Item>			
+		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Kopyalan bütün öğeler silinecek!\n\nDevam?</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Veritabanı Bağlantısını Kes</Item>			
+		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Panoya Bağlan</Item>			
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">DAO/Jet Motoru Sağlanamıyor. DAO Yüklenecek.\n\nYeniden Bailat Ditto'yu DAO Yüklemesinden Sonra.</Item>
+		<Item English_Text = "NO TARGET" ID = "No_Target">HEDEF YOK</Item>	
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Klipleri Silerken Uyar</Item>
+		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">Seçili Klipleri Sil?</Item>
+		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">Klip Alınırken Edilirken Hata Oluştu</Item>
+		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing">Gönderilen Edilen Klip İncelenirken Hata Oluştu</Item>
+		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good">Klip Panoya Yerleştirildi</Item>
+		<Item English_Text = "Successfully imported" ID = "Import_Successfully">Başarıyla Alındı</Item>
+		<Item English_Text = "clip" ID = "Clip">Klip</Item>
+		<Item English_Text = "clips" ID = "Clips">Klipler</Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">Kaydederken Klip Açıklamasını Güncelle?</Item>
+		<Item English_Text = "New Clip" ID = "New_Clip">Yeni Klip</Item>
+		<Item English_Text = "Save" ID = "Save">Kaydet</Item>
+		<Item English_Text = "Save All" ID = "Save_All">Hepsini Kaydet</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">Aktif Sekmeyi Kapat</Item>
+		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable">Geçerli Öğe Düzenlenebilir Değil. Klip Türü Desteklenen Türlerden Olmalı</Item>
+		<Item English_Text = "to be editable" ID = "Editable">düzenlenebilir</Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">Değişiklikleri Kaydetmek İstiyor musunuz</Item>
+		<Item English_Text = "Error saving clip" ID = "ErrorSaving">Klip Kaydedilirken Hata Oluştu</Item>
+		<Item English_Text = "New" ID = "New">Yeni</Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">Kaydet, Kapat ve Panoya Yerleştir</Item>
+		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">Ditto ile Düzenle</Item>
+		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title">Ditto - Adlandırılmış Yapıştır</Item>
+		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">Veri Çağrılırken Hata Oluştu</Item>
+		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2">Hızlı Yapıştırılan Metin Aranırken Hata Oluştu</Item>
+		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">Hariç Tutulan Klip Araması</Item>
+		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title">Ditto - Adlandırılmış Kopyala</Item>
+		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">Veritabanına Adlandırılan Kopya Kaydederken Hata Oluştu</Item>
+		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">Hariç Tutulan Adlandırılan Kopyayı Kaydetme</Item>
+		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">Ditto Kopyayı Alamadı</Item> 
+		
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Add-Ins" ID = "Add_Ins"></Item> 
+		
+		<Item English_Text = "Copy Buffers" ID = "CopyBuffers"></Item>
+		<Item English_Text = "Search Options" ID = "SearchOptionsTooltip"></Item>
+		<Item English_Text = "Groups" ID = "GroupsTooltip"></Item>
+		
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Search" ID = "Search"></Item>
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies"></Item>
+        <Item English_Text = "IP/Name" ID = "IP_Name"></Item>
+        <Item English_Text = "Descriptions" ID = "Descriptions"></Item>
+		
+		<Item English_Text = "Quick Paste Keyboard" ID = "QuickPasteKeyboardTitle"></Item>
+		
+		<Item English_Text = "Hot Key" ID = "QPHotKey"></Item>
+		<Item English_Text = "Command" ID = "QPCommand"></Item>
+		
+		<Item English_Text = "[Top Most Window]" ID = "top_most"></Item>
+		
+				
+	</Ditto_String_Table>
+	<Ditto_Options_Sheet>
+		<Item English_Text = "OK" ID = "1">Tamam</Item>
+		<Item English_Text = "Cancel" ID = "2">İptal</Item>lı
+		<Item English_Text = "Apply" ID = "12321">Uygula</Item>
+	</Ditto_Options_Sheet>
+	<Ditto_Tray_Icon_Menu>
+		<Item English_Text = "Show Quick Paste" ID = "32773">Hızlı Yapıþtırı Göster</Item>
+		<Item English_Text = "Options" ID = "32771">Seçenekler</Item>
+		<Item English_Text = "Help" ID = "32843">Yardım</Item>
+		<Item English_Text = "Exit" ID = "32772">Çıkış</Item>
+
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Import" ID = "32854">Veri Al</Item>
+		<Item English_Text = "New Clip" ID = "32868">Yeni Klip</Item>
+		
+		//Added 12/10/11
+		<Item English_Text = "Global Hot Keys" ID = "32872"></Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Delete Clip Data" ID = "32886"></Item>
+		
+		//Added 12/17/16
+		<Item English_Text = "Fixup Sticky Clip Order" ID = "32909"></Item>		
+		<Item English_Text = "Save Current Clipboard" ID = "32904"></Item>
+	</Ditto_Tray_Icon_Menu>
+	//Added in 9-11-09
+	<Ditto_Options_CopyBuffers>
+		<Item English_Text = "Copy Buffer 1" ID = "2088">Ara Bellek 1i Kopyala</Item>
+		<Item English_Text = "Copy" ID = "2079">Kopyala</Item>
+		<Item English_Text = "Paste" ID = "2080">Yapıştır</Item>
+		<Item English_Text = "Cut" ID = "2081">Kes</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042">Kopyadaki Sesi Oynat</Item>
+		<Item English_Text = "Win" ID = "2085"></Item>
+		<Item English_Text = "Win" ID = "2086"></Item>
+		<Item English_Text = "Win" ID = "2087"></Item>
+		
+		<Item English_Text = "Copy Buffer 2" ID = "2098">Ara Bellek 2yi Kopyala</Item>
+		<Item English_Text = "Copy" ID = "2093">Kopyala</Item>
+		<Item English_Text = "Paste" ID = "2094">Yapıştır</Item>
+		<Item English_Text = "Cut" ID = "2097">Kes</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043">Kopyadaki Sesi Oyna</Item>
+		<Item English_Text = "Win" ID = "2090"></Item>
+		<Item English_Text = "Win" ID = "2092"></Item>
+		<Item English_Text = "Win" ID = "2096"></Item>
+		
+		<Item English_Text = "Copy Buffer 3" ID = "2108">Ara Bellek 3ü Kopyala</Item>
+		<Item English_Text = "Copy" ID = "2103">Kopyala</Item>
+		<Item English_Text = "Paste" ID = "2104">Yapıştı</Item>
+		<Item English_Text = "Cut" ID = "2107">Kes</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044">Kopyadaki Sesi Oyna</Item>
+		<Item English_Text = "Win" ID = "2100"></Item>
+		<Item English_Text = "Win" ID = "2102"></Item>
+		<Item English_Text = "Win" ID = "2106"></Item>
+	</Ditto_Options_CopyBuffers>
+	
+	<Ditto_GlobalHotKeys>
+		<Item English_Text = "Global Hot Keys" ID = "-1"></Item>
+		<Item English_Text = "Close" ID = "2"></Item>
+		<Item English_Text = "(Clip) " ID = "(Clip)"></Item>
+		<Item English_Text = "Error" ID = "Error"></Item>
+		<Item English_Text = "Yes" ID = "Yes"></Item>
+		<Item English_Text = "Description" ID = "Description"></Item>
+		<Item English_Text = "HotKey" ID = "HotKey"></Item>
+		<Item English_Text = "Registered" ID = "Registered"></Item>
+	</Ditto_GlobalHotKeys>
+	//Added 1/10/15
+	<Ditto_Groups_Right_Click_Menu>
+		<Item English_Text = "New Sub Group" ID = "32896"></Item>
+		<Item English_Text = "Delete Group" ID = "32897"></Item>
+		<Item English_Text = "Properties" ID = "32898"></Item>	
+	</Ditto_Groups_Right_Click_Menu>
+	
+	//Added 1/10/15
+	<Ditto_DeleteClipData>
+		<Item English_Text = "Delete Clip Data" ID = "-1"></Item>
+		<Item English_Text = "Each clip in Ditto is made of multiple clipboard items, all clipboard items in Ditto are listed below." ID = "2126"></Item>
+		<Item English_Text = "Search Options" ID = "2120"></Item>
+		<Item English_Text = "Title" ID = "1042"></Item>
+		<Item English_Text = "Create Date Range" ID = "1043"></Item>
+		<Item English_Text = "Format" ID = "1045"></Item>
+		<Item English_Text = "Last Used Range" ID = "1044"></Item>
+		<Item English_Text = "Search" ID = "1040"></Item>
+		<Item English_Text = "Database Size" ID = "2115"></Item>
+		<Item English_Text = "Selected Size" ID = "2116"></Item>
+		<Item English_Text = "Selected Count" ID = "2117"></Item>
+		<Item English_Text = "Delete" ID = "2118"></Item>
+		<Item English_Text = "Cancel" ID = "2"></Item>
+		<Item English_Text = "Title" ID = "Title"></Item>
+		<Item English_Text = "Created" ID = "Created"></Item>
+		<Item English_Text = "Last Used" ID = "LastUsed"></Item>
+		<Item English_Text = "Format" ID = "Format"></Item>
+		<Item English_Text = "Data Size" ID = "DataSize"></Item>
+	</Ditto_DeleteClipData>
+	
+	<Ditto_Options_Quick_Paste_Keyboard>
+		<Item English_Text = "Quick Paste Keyboard" ID = "-1" PropertyPage = "true"></Item>
+		
+		<Item English_Text = "Reset" ID = "2144"></Item>
+		<Item English_Text = "Shortcuts for selected command:" ID = "2148"></Item>
+		<Item English_Text = "Remove" ID = "2124"></Item>
+		<Item English_Text = "Add" ID = "2132"></Item>
+		<Item English_Text = "Enable Second Keypress" ID = "2146"></Item>
+		<Item English_Text = "First Keypress" ID = "2149"></Item>
+		<Item English_Text = "Second Keypress" ID = "2147"></Item>
+		<Item English_Text = "Assign" ID = "1040"></Item>
+		
+		<Item English_Text = "Keyboard Shortcut" ID = "2127"></Item>
+		<Item English_Text = "Mouse Click" ID = "2130"></Item>
+		<Item English_Text = "Keyboard Shortcut" ID = "2133"></Item>
+		<Item English_Text = "Mouse Click" ID = "2136"></Item>
+		<Item English_Text = "Enter Key" ID = "2135"></Item>
+		
+		<Item English_Text = "Enter Key" ID = "2137"></Item>
+		<Item English_Text = "Shift" ID = "1042"></Item>
+		<Item English_Text = "Control" ID = "2139"></Item>
+		<Item English_Text = "Alt" ID = "2140"></Item>
+		<Item English_Text = "Shift" ID = "1043"></Item>
+		<Item English_Text = "Control" ID = "2142"></Item>
+		<Item English_Text = "Alt" ID = "2143"></Item>
+		
+		<Item English_Text = "View Full Description" ID = "1"></Item>
+		<Item English_Text = "Next Full Description" ID = "2"></Item>
+		<Item English_Text = "Previous Full Description" ID = "3"></Item>
+		<Item English_Text = "Show Context Menu" ID = "4"></Item>
+		<Item English_Text = "New Group" ID = "5"></Item>
+		<Item English_Text = "New Group Selection" ID = "6"></Item>
+		<Item English_Text = "Toggle On File Logging" ID = "7"></Item>
+		<Item English_Text = "Toggle OutputDebugString Logging" ID = "8"></Item>
+		<Item English_Text = "Close Window" ID = "9"></Item>
+		<Item English_Text = "NEXTTABCONTROL" ID = "10"></Item>
+		<Item English_Text = "PREVTABCONTROL" ID = "11"></Item>
+		<Item English_Text = "View Groups" ID = "12"></Item>
+		<Item English_Text = "New Clip" ID = "13"></Item>
+		<Item English_Text = "Edit Clip" ID = "14"></Item>
+		<Item English_Text = "MODIFIER_ACTVE_SELECTIONUP" ID = "15"></Item>
+		<Item English_Text = "MODIFIER_ACTVE_SELECTIONDOWN" ID = "16"></Item>
+		<Item English_Text = "MODIFIER_ACTVE_MOVEFIRST" ID = "17"></Item>
+		<Item English_Text = "MODIFIER_ACTVE_MOVELAST" ID = "18"></Item>
+		<Item English_Text = "Cancel Filter" ID = "19"></Item>
+		<Item English_Text = "HOMELIST" ID = "20"></Item>
+		<Item English_Text = "Back Group" ID = "21"></Item>
+		<Item English_Text = "Toggle Show Persistant" ID = "22"></Item>
+		<Item English_Text = "Paste Selected" ID = "23"></Item>
+		<Item English_Text = "Delete Selected" ID = "24"></Item>
+		<Item English_Text = "Clip Properties" ID = "25"></Item>
+		<Item English_Text = "Paste Selected Plain Text" ID = "26"></Item>
+		<Item English_Text = "Move Clip To Group" ID = "27"></Item>
+		<Item English_Text = "Option - Elevate Privleges" ID = "28"></Item>
+		<Item English_Text = "Option - Show In TaskBar" ID = "29"></Item>
+		<Item English_Text = "Compare Selected Clips" ID = "30"></Item>
+		<Item English_Text = "Select Left File For Compare" ID = "31"></Item>
+		<Item English_Text = "Select Right File And Do Compare" ID = "32"></Item>
+		<Item English_Text = "Export To Text File" ID = "33"></Item>
+		<Item English_Text = "Export To QR Code" ID = "34"></Item>
+		<Item English_Text = "Export To Google Translate" ID = "35"></Item>
+		<Item English_Text = "Export To Image File" ID = "36"></Item>
+		<Item English_Text = "Save Current Clipboard" ID = "37"></Item>
+		<Item English_Text = "Move Clip Up" ID = "38"></Item>
+		<Item English_Text = "Move Clip Down" ID = "39"></Item>
+		<Item English_Text = "Move Clip Top" ID = "40"></Item>
+		<Item English_Text = "Filter On Selected Clip" ID = "41"></Item>
+		<Item English_Text = "Paste Upper Case" ID = "42"></Item>
+		<Item English_Text = "Paste Lower Case" ID = "43"></Item>
+		<Item English_Text = "Paste Capitalize" ID = "44"></Item>
+		<Item English_Text = "Paste Sentence Case" ID = "45"></Item>
+		<Item English_Text = "Paste Remove Line Feeds" ID = "46"></Item>
+		<Item English_Text = "Paste Add One Line Feed" ID = "47"></Item>
+		<Item English_Text = "Paste Add Two Line Feeds" ID = "48"></Item>
+		<Item English_Text = "Paste Typoglycemia" ID = "49"></Item>
+		<Item English_Text = "Send to friend 1" ID = "50"></Item>
+		<Item English_Text = "Send to friend 2" ID = "51"></Item>
+		<Item English_Text = "Send to friend 3" ID = "52"></Item>
+		<Item English_Text = "Send to friend 4" ID = "53"></Item>
+		<Item English_Text = "Send to friend 5" ID = "54"></Item>
+		<Item English_Text = "Send to friend 6" ID = "55"></Item>
+		<Item English_Text = "Send to friend 7" ID = "56"></Item>
+		<Item English_Text = "Send to friend 8" ID = "57"></Item>
+		<Item English_Text = "Send to friend 9" ID = "58"></Item>
+		<Item English_Text = "Send to friend 10" ID = "59"></Item>
+		<Item English_Text = "Send to friend 11" ID = "60"></Item>
+		<Item English_Text = "Send to friend 12" ID = "61"></Item>
+		<Item English_Text = "Send to friend 13" ID = "62"></Item>
+		<Item English_Text = "Send to friend 14" ID = "63"></Item>
+		<Item English_Text = "Send to friend 15" ID = "64"></Item>
+		<Item English_Text = "Paste Position 1" ID = "65"></Item>
+		<Item English_Text = "Paste Position 2" ID = "66"></Item>
+		<Item English_Text = "Paste Position 3" ID = "67"></Item>
+		<Item English_Text = "Paste Position 4" ID = "68"></Item>
+		<Item English_Text = "Paste Position 5" ID = "69"></Item>
+		<Item English_Text = "Paste Position 6" ID = "70"></Item>
+		<Item English_Text = "Paste Position 7" ID = "71"></Item>
+		<Item English_Text = "Paste Position 8" ID = "72"></Item>
+		<Item English_Text = "Paste Position 9" ID = "73"></Item>
+		<Item English_Text = "Paste Position 10" ID = "74"></Item>
+		<Item English_Text = "Option - Show text for first ten copy hot keys" ID = "75"></Item>
+		<Item English_Text = "Option - Show indicator a clip has been pasted" ID = "76"></Item>
+		<Item English_Text = "Toggle Last Group Toggle" ID = "77"></Item>
+		<Item English_Text = "Make Top Sticky Clip" ID = "78"></Item>
+		<Item English_Text = "Make Last Sticky Clip" ID = "79"></Item>
+		<Item English_Text = "Remove Sticky Setting" ID = "80"></Item>
+		<Item English_Text = "Paste Add Current Time" ID = "81"></Item>
+		<Item English_Text = "Import Clip" ID = "82"></Item>
+		<Item English_Text = "Global HotKeys" ID = "83"></Item>
+		<Item English_Text = "Delete Clip Data" ID = "84"></Item>
+			
+	</Ditto_Options_Quick_Paste_Keyboard>
+	
+</Ditto_Language_File>

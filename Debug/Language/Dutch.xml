@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ditto_Language_File Version = "2" Author = "RainrooM" Notes = "rainroom69@gmail.com" LanguageCode = "dut">
+	<Ditto_Right_Click_Menu>
+		<Item English_Text = "Groups" ID = "-1">Groepen</Item>		
+		<Item English_Text = "New Group Ctrl-F7" ID = "32811">Nieuwe Groep [Ctrl-F7]</Item>		
+		<Item English_Text = "New Group Selection F7" ID = "32812">Nieuwe Groep selectie [F7]</Item>		
+		<Item English_Text = "Move to Group" ID = "32840">Verplaats naar Groep</Item>		
+		<Item English_Text = "Quick Options" ID = "-1">Spoed Opties</Item>		
+		<Item English_Text = "Lines Per Clip" ID = "-1">Regels per Rij</Item>		
+		<Item English_Text = "1" ID = "32807">1</Item>		
+		<Item English_Text = "2" ID = "32786">2</Item>		
+		<Item English_Text = "3" ID = "32787">3</Item>		
+		<Item English_Text = "4" ID = "32788">4</Item>		
+		<Item English_Text = "5" ID = "32789">5</Item>		
+		<Item English_Text = "Transparency" ID = "-1">Transparantie</Item>		
+		<Item English_Text = "None" ID = "32800">Geen</Item>		
+		<Item English_Text = "5 " ID = "32808">5</Item>		
+		<Item English_Text = "10 " ID = "32792">10</Item>		
+		<Item English_Text = "15 " ID = "32794">15</Item>		
+		<Item English_Text = "20 " ID = "32796">20</Item>		
+		<Item English_Text = "25 " ID = "32798">25</Item>		
+		<Item English_Text = "30 " ID = "32799">30</Item>		
+		<Item English_Text = "40 " ID = "32790">40</Item>		
+		<Item English_Text = "Positioning" ID = "-1">Positie</Item>		
+		<Item English_Text = "At Caret" ID = "32802">Bij letter/leesteken</Item>		
+		<Item English_Text = "At Cursor" ID = "32803">Bij de cursor</Item>		
+		<Item English_Text = "At Previous Position" ID = "32804">Op vorige positie</Item>		
+		<Item English_Text = "First Ten Hot Keys" ID = "-1">Eerste 10 Sneltoetsen</Item>		
+		<Item English_Text = "Use Ctrl - Num" ID = "32777">Gebruik Ctrl - Num</Item>		
+		<Item English_Text = "Show Hot Key Text" ID = "32778">Toon SneltoetsTekst</Item>		
+		<Item English_Text = "View Caption Bar On" ID = "-1">Positie Titelbalk</Item>		
+		<Item English_Text = "Top" ID = "32783">Boven</Item>		
+		<Item English_Text = "Right" ID = "32780">Rechts</Item>		
+		<Item English_Text = "Bottom" ID = "32781">Onder</Item>		
+		<Item English_Text = "Left" ID = "32782">Links</Item>		
+		<Item English_Text = "Order" ID = "-1">Sorteren</Item>		
+		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">Opklimmend (Laatste boven)</Item>		
+		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">Afdalend (Laatste onder)</Item>		
+		<Item English_Text = "Double Clicking on Caption" ID = "-1">Dubbelklik op Titelbalk</Item>		
+		<Item English_Text = "Toggles Always on Top" ID = "32814">Altijd op de Voorgrond: aan/uit</Item>		
+		<Item English_Text = "Rolls-up Window" ID = "32815">Venster omhoog scrollen</Item>		
+		<Item English_Text = "Toggles Always Show Description" ID = "32816">Omschrijving aan/uit</Item>		
+		<Item English_Text = "Always on Top Ctrl-Space" ID = "32784">Altijd op de Voorgrond</Item>		
+		<Item English_Text = "Auto Roll-up" ID = "32791">Altijd naar boven scrollen</Item>		
+		<Item English_Text = "Always Show Description" ID = "32813">Altijd omschrijving tonen</Item>		
+		<Item English_Text = "Prompt For New Group Names" ID = "32817">Naar nieuwe groepnamen vragen</Item>		
+		<Item English_Text = "Select Font" ID = "32844">Lettertype kiezen</Item>		
+		<Item English_Text = "Show Thumbnails" ID = "32845">Miniatuur afbeeldingen tonen</Item>		
+		<Item English_Text = "Draw RTF Text" ID = "32846">Gebruik RTF Tekst</Item>		
+		<Item English_Text = "Paste Clip after selection" ID = "32847">Clip plakken na selecteren</Item>		
+		<Item English_Text = "Find As You Type" ID = "32848">Tijdens invoer gelijkwaardige vinden</Item>		
+		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Gehele venster is zichtbaar</Item>		
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Toon groeps-clip in de gemeenschappelijke lijst </Item>		
+		<Item English_Text = "Send To" ID = "-1">Verzenden naar</Item>		
+		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">(192.168.1.101) - dezelfde computer</Item>		
+		<Item English_Text = "View Full Description	F3" ID = "32793">Complete omschrijving tonen F3</Item>		
+		<Item English_Text = "View Groups Ctrl-G" ID = "32819">Toon groepen</Item>		
+		<Item English_Text = "Paste Plain Text Only Shift-Enter" ID = "32841">Alleen tekst zonder opmaak tonen</Item>		
+		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">HTML als tekst zonder opmaak plakken</Item>		
+		<Item English_Text = "Delete Entry Del" ID = "32801">Wis toegang [DEL]</Item>		
+		<Item English_Text = "Properties Alt-Enter" ID = "32776">Eigenschappen [Alt-Enter]</Item>		
+		<Item English_Text = "Quick Properties" ID = "-1">Snelle instellingen</Item>		
+		<Item English_Text = "Never Auto Delete" ID = "32820">Nooit automatisch wissen aanzetten</Item>		
+		<Item English_Text = "Auto Delete" ID = "32821">Automatisch wissen</Item>		
+		<Item English_Text = "Remove Hot Key" ID = "32822">Sneltoets verwijderen</Item>		
+		<Item English_Text = "Options..." ID = "32805">Opties</Item>		
+		<Item English_Text = "Help" ID = "32842">Help</Item>		
+		<Item English_Text = "Disconnect from Clipboard" ID = "32775">Verbinding met klembord verbreken </Item>		
+		<Item English_Text = "Exit Program" ID = "32806">Programma afsluiten</Item>		
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt to Delete Clip" ID = "32852">Waarschuwen bij wissen</Item>	
+		<Item English_Text = "Import" ID = "32855">Importeren</Item>
+		<Item English_Text = "Export" ID = "32853">Exporteren</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">Verwijder benoemde clips</Item>	
+		<Item English_Text = "Edit Clip" ID = "32860">Clip bewerken</Item>
+		<Item English_Text = "New Clip" ID = "32867">Nieuwe Clip</Item>	
+		
+		//Added 1/10/15
+		<Item English_Text = "Compare" ID = "-1">Vergelijk</Item>	
+		<Item English_Text = "Select Left Text" ID = "32893">Selecteer linker tekst</Item>	
+		<Item English_Text = "Select Right Text And Compare Against Left" ID = "32894">Selecteer rechter tekst en vergelijk met linker tekst</Item>	
+		<Item English_Text = "Compare" ID = "32895">Vergelijk</Item>
+		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "32881">Plakken in toepassingen met verhoogde rechten</Item>
+		<Item English_Text = "Show In Taskbar" ID = "32885">Toon in Taskbar</Item>
+		<Item English_Text = "Sticky Clips" ID = "-1">Verankerde Clips</Item>	
+		<Item English_Text = "Make Top Sticky Clip" ID = "32878">Verankerde Clip Boven</Item>	
+		<Item English_Text = "Make Last Sticky Clip" ID = "32879">Verankerde Clip Onder</Item>	
+		<Item English_Text = "Remove Sticky Setting" ID = "32880">Verwijder Verankering van Clips</Item>
+		<Item English_Text = "Import/Export" ID = "-1">Importeer/Exporteer</Item>	
+		<Item English_Text = "View as QRCode" ID = "32887">Bekijk als QRCode</Item>	
+		<Item English_Text = "Export Clip(s) to Text File" ID = "32889">Exporteer naar Tekstbestand</Item>	
+		//Added 12/17/16
+		<Item English_Text = "Special Paste" ID = "-1">Speciaal plakken</Item>			
+		<Item English_Text = "UPPER CASE" ID = "32912">Hoofdletters</Item>	
+		<Item English_Text = "lower case" ID = "32913">Kleine letters</Item>	
+		<Item English_Text = "Capitalize Case" ID = "32914">Eerste letter = Hoofdletter</Item>	
+		<Item English_Text = "Sentence case" ID = "32915">Zinsweergave</Item>	
+		<Item English_Text = "Remove Line Feeds" ID = "32916">Verwijder regeltoevoeging</Item>	
+		<Item English_Text = "Paste + One Line Feed" ID = "32918">Plakken + 1 regeltoevoeging</Item>	
+		<Item English_Text = "Paste + Two Line Feeds" ID = "32919">Plakken  + 2 regeltoevoegingen</Item>	
+		<Item English_Text = "Paste + Current Time" ID = "32927">Plakken + Huidige Datum</Item>	
+		<Item English_Text = "Typoglycemia" ID = "32922">Typoglycemia</Item>	
+		<Item English_Text = "Filter On" ID = "-1">Filter aan</Item>			
+		<Item English_Text = "Toggle Last Group Toggle" ID = "32925">Naar laatste groep (en terug)</Item>			
+		<Item English_Text = "Clip Order" ID = "-1">Clip volgorde</Item>			
+		<Item English_Text = "Move To Top" ID = "32908">Clip naar Top</Item>	
+		<Item English_Text = "Move Up" ID = "32906">Clip 1 omhoog</Item>	
+		<Item English_Text = "Move Down" ID = "32907">Clip 1 omlaag</Item>			
+		<Item English_Text = "Export Clip(s) to Image File" ID = "32902">Exporteer Clip(s) naar Fotobestand</Item>	
+		<Item English_Text = "Export to Google Translate" ID = "32900">Exporteer naar Google Translate</Item>	
+
+		<Item English_Text = "Search Options" ID = "-1">Zoek opties</Item>	
+		<Item English_Text = "Search Description" ID = "32873">Zoek in Omschrijving</Item>	
+		<Item English_Text = "Search Full Text" ID = "32874">Zoek in Volledige Tekst</Item>	
+		<Item English_Text = "Search Quick Paste" ID = "32875">Zoek in Snel Plakken</Item>	
+		<Item English_Text = "Contains Text Search" ID = "32876">Zoek in Bevat Tekst</Item>	
+		<Item English_Text = "Regular Expression Search" ID = "32899">Zoek in RegExp </Item>	
+		<Item English_Text = "Wildcard Search" ID = "32903">Zoek met Wildcards</Item>	
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "32923">Toon cijfers -voor- 10 eerste clips</Item>	
+		<Item English_Text = "Show indicator a clip has been pasted" ID = "32924">Toon als clip geplakt is</Item>	
+		<Item English_Text = "Global Hot Keys" ID = "32933">Algemene Sneltoetsen</Item>	
+		<Item English_Text = "Delete Clip Data" ID = "32934">Verwijder Clip Data</Item>	
+		<Item English_Text = "Import Clip(s)" ID = "32935">Importeer Clip(s)</Item>	
+		<Item English_Text = "New Clip" ID = "32937">Nieuwe Clip</Item>	
+		<Item English_Text = "Save Current Clipboard" ID = "32905">Bewaar huidige klembord</Item>	
+		<Item English_Text = "Import" ID = "">Importeer</Item>	
+		
+	</Ditto_Right_Click_Menu>
+	<Ditto_Clip_Properties>		
+		<Item English_Text = "Hot Key" ID = "2039">Sneltoets</Item>		
+		<Item English_Text = "Date" ID = "2040">Datum</Item>		
+		<Item English_Text = "Never Auto Delete" ID = "1025">Nooit automatisch wissen</Item>		
+		<Item English_Text = "Move To Group" ID = "2041">Verplaatsen naar Groep</Item>		
+		<Item English_Text = "Item Title" ID = "2042">Titel clip</Item>		
+		<Item English_Text = "Copy Formats" ID = "2029">Kopieer tekstformaat</Item>	
+		<Item English_Text = "Delete" ID = "1021">Wissen</Item>		
+		<Item English_Text = "OK" ID = "1">OK</Item>		
+		<Item English_Text = "Cancel" ID = "2">Annuleer</Item>		
+		<Item English_Text = "Copy Properties" ID = "-1">Kopieer Eigenschappen</Item>	
+
+
+		//Added 1/10/15
+		<Item English_Text = "Hotkey available globally" ID = "1026">Sneltoets algemeen beschikbaar</Item>
+		<Item English_Text = "Last Used" ID = "2043">Laatst gebruikt</Item>
+		<Item English_Text = "Quick Paste Text" ID = "2125">Snel tekst plakken</Item>
+	</Ditto_Clip_Properties>
+	<Ditto_Options_General>			
+		<Item English_Text = "Start Ditto on System Startup" ID = "2004">Start Ditto als systeem start</Item>		
+		<Item English_Text = "Display Icon in Systeem Tray" ID = "2003">Toon pictogram in System Tray </Item>		
+		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Maximum aantal opgeslagen clips</Item>		
+		<Item English_Text = "Paste Entries Expire after" ID = "2009">Opgeslagen clips vervallen na</Item>	
+		<Item English_Text = "Days" ID = "2043">Dagen</Item>		
+		<Item English_Text = "Compact and Repair" ID = "1028">Komprimeren en Repareren</Item>		
+		<Item English_Text = "Check Now" ID = "1030">Check Nu</Item>		
+		<Item English_Text = "Allow Duplicates" ID = "1037">Duplicaten toestaan</Item>		
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">Tijdstip van plakken bepaalt volgorde cliplijst</Item>		
+		<Item English_Text = "Save Multi-Pastes" ID = "1039">Diverse geselecteerde clips gelijktijdig plakken</Item>		
+		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Verberg Ditto met sneltoets</Item>		
+		<Item English_Text = "Amount of text to save for description" ID = "2044">Hoeveel tekst opslaan in de omschrijving? </Item>		
+		<Item English_Text = "On copy play the sound" ID = "2045">Speel geluid af bij kopiëren</Item>		
+		<Item English_Text = "Play" ID = "2034">Speel</Item>		
+		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">Geselecteerde Clip plakken in het actieve venster</Item>		
+		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">Maximale Clipgrootte in Bytes</Item>		
+		<Item English_Text = "(Leave blank for no limit)" ID = "2047">(Onbeperkt: leeg laten)</Item>		
+		<Item English_Text = "Set Database Path" ID = "1034">Pad Database aangeven</Item>		
+		<Item English_Text = "Language" ID = "2069">Taal</Item>		
+		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">Clips negeren, die X Milliseconden (1000 ms = 1 Sec) na de laatste copy optreden</Item>		
+		<Item English_Text = "About Language" ID = "2073">Info vertaling</Item>		
+		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Verkrijg zekerheid dat Ditto altijd verbinding maakt met het klembord</Item>		
+		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Algemeen</Item>	
+		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090">Regelwijziging bij multi-plakken ([LF] = line feed)</Item>
+		
+		//New item added 3/1/11
+		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098">Aanvaarde programma's voor Kopiëren(scheidingsteken= ;)</Item>
+		<Item English_Text = "Include" ID = "2095">Inclusief</Item>
+		<Item English_Text = "Exclude" ID = "2096">Exclusief</Item>
+	</Ditto_Options_General>
+	<Ditto_Options_Supported_Types>
+		<Item English_Text = "&Add" ID = "1015">Toevoegen</Item>		
+		<Item English_Text = "&Delete" ID = "1016">Wissen</Item>		
+		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">Ondersteunde Formaten</Item>
+		
+		//New item added 12/17/16
+		<Item English_Text = "Current Clipboard Types" ID = "2128">Huidige Klembord Types</Item>
+		<Item English_Text = "Primary Clipboard Types" ID = "2145">Standaard Klembord Types</Item>
+		<Item English_Text = "Custom Clipboard Type" ID = "2130">Eigen Klembord Types</Item>
+	</Ditto_Options_Supported_Types>
+	<Ditto_Options_Shortcuts>				
+		<Item English_Text = "Activate Ditto" ID = "2048">Ditto Aktiveren</Item>		
+		<Item English_Text = "Win" ID = "2035">Win</Item>		
+		<Item English_Text = "Named Copy" ID = "2049">Benoemde Clip</Item>		
+		<Item English_Text = "Win" ID = "2036">Win</Item>		
+		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">Globale sneltoetsen voor de laatste tien clips</Item>		
+		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Stuur ''plakken'' (anders wordt alleen de clip op het klembord geladen)</Item>		
+		<Item English_Text = "Position 1" ID = "2052">Positie 1</Item>		
+		<Item English_Text = "Position 2" ID = "2053">Positie 2</Item>		
+		<Item English_Text = "Position 3" ID = "2054">Positie 3</Item>		
+		<Item English_Text = "Position 4" ID = "2055">Positie 4</Item>		
+		<Item English_Text = "Position 5" ID = "2056">Positie 5</Item>		
+		<Item English_Text = "Position 6" ID = "2057">Positie 6</Item>		
+		<Item English_Text = "Position 7" ID = "2058">Positie 7</Item>		
+		<Item English_Text = "Position 8" ID = "2059">Positie 8</Item>
+		<Item English_Text = "Position 9" ID = "2060">Positie 9</Item>
+		<Item English_Text = "Position 10" ID = "2061">Positie 10</Item>	
+		<Item English_Text = "Win" ID = "2042">Win</Item>		
+		<Item English_Text = "Win" ID = "2043">Win</Item>		
+		<Item English_Text = "Win" ID = "2044">Win</Item>		
+		<Item English_Text = "Win" ID = "2045">Win</Item>		
+		<Item English_Text = "Win" ID = "2046">Win</Item>		
+		<Item English_Text = "Win" ID = "2037">Win</Item>		
+		<Item English_Text = "Win" ID = "2038">Win</Item>		
+		<Item English_Text = "Win" ID = "2039">Win</Item>		
+		<Item English_Text = "Win" ID = "2040">Win</Item>		
+		<Item English_Text = "Win" ID = "2041">Win</Item>		
+		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Vink de  Win-knop aan om de windowstoets te betrekken bij de sneltoetsen. </Item>		
+		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">Sneltoetsen</Item>	
+
+		//New item added in 3.15.1 8/18/07
+		<Item English_Text = "Send custom strokes Per Application" ID = "2091">Stuur eigen instructies Per Programma</Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043">Verhuis clip naar top na plakken</Item>
+		
+		//Added 12/17/16
+		<Item English_Text = "Activate Ditto" ID = "2064">Activeer Ditto</Item>
+		<Item English_Text = "Activate Ditto" ID = "2066">Activeer Ditto</Item>
+
+		<Item English_Text = "Win" ID = "2063">Win</Item>
+		<Item English_Text = "Win" ID = "2065">Win</Item>
+		<Item English_Text = "Save Current Clipboard" ID = "2062">Bewaar huidige klembord</Item>
+		<Item English_Text = "Win" ID = "2047">Win</Item>
+		
+		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044">Gebruik huidige groep in Ditto UI voor laatste 10 kopien</Item>
+		
+	</Ditto_Options_Shortcuts>
+	<Ditto_Options_Quick_Paste>			
+		<Item English_Text = "History Starts at the Top of the list (vs. Bottom)" ID = "1042">Overzicht begint bovenaan de lijst (vs. onderaan)</Item>		
+		<Item English_Text = "Use Ctrl - Num for first ten copy hot keys" ID = "1033">Gebruik [Ctrl-Num]  voor de laatste 10 clips</Item>			
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "1034">Toon nummers -voor- de bovenste 10 clips</Item>		
+		<Item English_Text = "Show leading whitespace" ID = "2021">Toon eventuele voorloop spaties</Item>		
+		<Item English_Text = "Text Lines per Row" ID = "2062">Regels per rij</Item>		
+		<Item English_Text = "Enable Quick Paste Transparency" ID = "2006">Transparantie van Cliplijst instellen</Item>		
+		<Item English_Text = "Show thumbnails (for CF_DIB types) (Could Increase Memory Usage and Display Speed)" ID = "2022">Toon miniatuur afbeeldingen (voor CF_DIB types) (kan PC langzamer maken)</Item>		
+		<Item English_Text = "Draw RTF Text in List (for RTF types) (Could Increase Memory Usage an Display Speed)" ID = "2023">Schrijf RTF Tekst in de clips (voor RTF types) (kan PC langzamer maken)</Item>		
+		<Item English_Text = "Find As You Type" ID = "2036">Zoek tijdens ingave</Item>		
+		<Item English_Text = "Ensure Entire Window is Visible" ID = "2037">Gehele venster moet zichtbaar zijn</Item>		
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "2038">Toon Groepclips</Item>		
+		<Item English_Text = "Font" ID = "1040">Letterset</Item>		
+		<Item English_Text = "Default Font" ID = "2031">Vaste letterset</Item>		
+		<Item English_Text = "Popup Positioning" ID = "2063">Popup Positie</Item>		
+		<Item English_Text = "At Caret" ID = "2015">Bij letter/leesteken</Item>		
+		<Item English_Text = "At Cursor" ID = "2016">Bij de cursor</Item>		
+		<Item English_Text = "At Previous Position" ID = "2017">Op vorige positie</Item>		
+		<Item English_Text = "List Item Prefix Legend" ID = "2064">Uitleg van de tekens in het venster</Item>		
+		<Item English_Text = "  * = Don't Auto Delete\\n  s = Shortcut exists\\n G = Item is a Group\\n  ! = Item is attached to a Group" ID = "2065">* = Niet automatisch wissen\\n G = Clip is een groep\\n  ! =Clip behoort tot een groep</Item>		
+		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Snel Menu</Item>	
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Waarschuwen bij wissen clips</Item>
+		
+		//New strings added in 3.15.2 10-6-07
+		<Item English_Text = "Theme" ID = "2092">Thema</Item>
+		<Item English_Text = "About Theme" ID = "2094">Info over Thema</Item>
+		//Added 1/10/15
+		<Item English_Text = "Always Show Scroll Bar" ID = "2040">Toon scroll bar altijd</Item>
+		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "2041">Admin rechten om te plakken</Item>
+		<Item English_Text = "Show In Taskbar" ID = "2042">Toon in Taskbar</Item>
+		<Item English_Text = "Diff Application Path" ID = "2122">Ander Programma Pad</Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Show indicator a clip has been pasted" ID = "2043">Toon wanneer Clip geplakt is</Item>
+		
+		
+	</Ditto_Options_Quick_Paste>	
+	<Ditto_Options_Friends>			
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Bij ontvangst van een IP of een computernaam uit deze lijst, wordt deze op het klembord gezet. In andere gevallen wordt de IP opgeslagen bij de bestaande clips, voor later gebruik.</Item>		
+		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP/Computernamen gescheiden door komma's </Item>	
+		<Item English_Text = "Disable Recieving Clips" ID = "2026">Ontvangst clips uitschakelen </Item>	
+		<Item English_Text = "Group Password" ID = "2054">Groep Wachtwoord </Item>	
+		<Item English_Text = "If you are receiving clips from computers where your group password does not match, enter additional network passwords separated by commas" ID = "2055">Voor extra groepwachtwoorden in,  gescheiden door komma's; bij ontvangst van clips van een PC waarvan het groepwachtwoord niet juist is.</Item>	
+		<Item English_Text = "Receive Passwords" ID = "2056">Wachtwoorden ontvangen</Item>
+		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Als ''Send all Copies'' geselecteerd is, zullen alle clips van deze computer worden verzonden naar de andere computer. Is dat commando niet geselecteerd, dan staat het alsnog in het rechtermuisklikmenu. </Item>	
+		<Item English_Text = "Log Send Receive Commands" ID = "1042">Overzicht (log) van verzonden en ontvangen opdrachten </Item>	
+		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Vrienden</Item>
+			
+		//Added in 12-17-16
+		<Item English_Text = "Request using IP Address" ID = "2127">Aanvraag via IP Adres</Item>
+		<Item English_Text = "Request using Host Name" ID = "2129">Aanvraag via Host Name</Item>
+		<Item English_Text = "Remote Files" ID = "2128">Externe Bestanden</Item>
+			
+	</Ditto_Options_Friends>
+	<Ditto_Options_Friends_Detail>		
+		<Item English_Text =  "Send All Copies to this friend" ID = "1015">Alle clips verzenden</Item>	
+		<Item English_Text =  "IP/Name" ID = "2052">IP/Naam</Item>	
+		<Item English_Text =  "Description" ID = "2053">Omschrijving</Item>	
+		<Item English_Text =  "Friend Details" ID = "-1">Vriend details</Item>	
+	</Ditto_Options_Friends_Detail>
+	<Ditto_Options_Stats>		
+		<Item English_Text =  "Odometer" ID = "2052">Odometer</Item>	
+		<Item English_Text =  "Trip Odometer" ID = "2053">Sessie Odometer</Item>	
+		<Item English_Text =  "Copies" ID = "2054">Clips</Item>	
+		<Item English_Text =  "Pastes" ID = "2055">Plaksels</Item>	
+		<Item English_Text =  "Copies" ID = "2056">Clips</Item>	
+		<Item English_Text =  "Pastes" ID = "2057">Plaksels</Item>	
+		<Item English_Text =  "Reset" ID = "1006">Terugzetten</Item>	
+		<Item English_Text =  "Saved Copies" ID = "2058">Opgeslagen Clips</Item>	
+		<Item English_Text =  "Saved Copy Data" ID = "2059">Data van opgeslagen clips</Item>\f0\fs20		
+        <Item English_Text =  "Remove All" ID = "1013">Alles verwijderen</Item>	
+		<Item English_Text =  "Last Started" ID = "2060">Laatste start</Item>	
+		<Item English_Text =  "Database Size" ID = "2061">Grootte Database</Item>	
+		<Item English_Text =  "Clips Sent" ID = "2066">Clips verzonden</Item>	
+		<Item English_Text =  "Clips received" ID = "2067">Clips ontvangen</Item>	
+		<Item English_Text =  "Since Last Start" ID = "2068">Sinds laatste start</Item>		
+	    <Item English_Text =  "Stats" ID = "-1" PropertyPage = "true">Statistiek</Item>	
+	</Ditto_Options_Stats>
+	<Ditto_Options_Supported_Types_Add>
+		<Item English_Text =  "Main Types" ID = "2052">Hoofd types</Item>	
+		<Item English_Text =  "Custom Type" ID = "2053">Door gebruiker bepaald type</Item>		
+		<Item English_Text =  "Add" ID = "1020"> Toevoegen</Item>	
+		<Item English_Text =  "Currently on the Clipboard" ID = "2054">Momenteel op het klembord</Item>		
+		<Item English_Text =  "Add" ID = "1019">Toevoegen</Item>	
+		<Item English_Text =  "Add" ID = "1021">Toevoegen</Item>	
+		<Item English_Text =  "Cancel" ID = "2">Annuleren</Item>		
+		<Item English_Text =  "Add Supported Type" ID = "-1">Ondersteund type toevoegen</Item>	
+	</Ditto_Options_Supported_Types_Add>
+	<Ditto_Move_To_Groups>		
+		<Item English_Text = "New Group" ID = "1040">Nieuwe groep</Item>		
+		<Item English_Text = "OK" ID = "1">OK</Item>		
+		<Item English_Text = "Cancel" ID = "2">Annuleren</Item>		
+		<Item English_Text = "Move to Group" ID = "-1">Verplaatsen naar groep</Item>
+	</Ditto_Move_To_Groups>
+	
+	<Ditto_String_Table>				
+		<Item English_Text = "General" ID = "GeneralTitle">Algemeen</Item>		
+		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">Ondersteunde formaten</Item>		
+		<Item English_Text = "Stats" ID = "StatsTitle">Statistiek</Item>		
+		<Item English_Text = "Friends" ID = "FriendsTitle">Vrienden</Item>		
+		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">Snel Menu</Item>		
+		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">Sneltoetsen</Item>		
+		<Item English_Text = "About Ditto" ID = "AboutTitle">Over Ditto</Item>		
+		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">Fout bij openen database</Item>		
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.\\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\\n\\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">Niet in staat DAO/Jet te initialiseren\\n Selecteer YES om DAO te downloaden van http://ditto-cp.sourceforge.net/dao_setup.exe\\n\\nHerstart Ditto na installatie van DAO. </Item>		
+		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format">Onbekend database formaat</Item>		
+		<Item English_Text = "the file will be renamed" ID = "File_Renamed">bestand wordt opnieuw benoemd</Item>		
+		<Item English_Text = "and a new database will be created" ID = "New_Database">en een nieuwe database wordt aangemaakt</Item>		
+		<Item English_Text = "Updates available for Ditto.\\nVisit ditto-cp.sourceforge.net for details\\n\\nRunning Version" ID = "Updates_Available">Updates beschikbaar voor Ditto.\\nBezoek ditto-cp.sourceforge.net voor details\\n\\nhuidige versie </Item>		
+		<Item English_Text = "Update Version" ID = "Update_Version">Update Versie</Item>		
+		<Item English_Text = "Download updated version?" ID = "Download_Update">Download nieuwe versie?</Item>		
+		<Item English_Text = "No updates available" ID = "No_Updates">Geen updates beschikbaar</Item>		
+		<Item English_Text = "This will remove all Copy Entries!\\n\\nContinue?" ID = "Remove_All">Alle clip ingangen worden verwijderd</Item>		
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Verbinding met klembord beëindigd</Item>		
+		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Met klembord verbinden</Item>		
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">Niet mogenlijk DAO/Jet db machine te initialiseren. DAO wordt nu geinstalleerd.\\n\\n Herstart Ditto na installatie van DAO.</Item>		
+		<Item English_Text = "NO TARGET" ID = "No_Target">Geen bestemming</Item>	
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Waarschuwen wanneer clips gewist worden</Item>
+		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">Geselecteerde clips wissen?</Item>
+		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">Foute import van geëxporteerde clip</Item>
+		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing">Foute analyse van geëxporteerde clip</Item>
+		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good">Clip op klembord geplaatst </Item>
+		<Item English_Text = "Successfully imported" ID = "Import_Successfully">Importeren geslaagd</Item>
+		<Item English_Text = "clip" ID = "Clip">Clip</Item>
+		<Item English_Text = "clips" ID = "Clips">Clips</Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">Bij opslaan clip-omschrijving aanpassen?</Item>
+		<Item English_Text = "New Clip" ID = "New_Clip">Nieuwe clip</Item>
+		<Item English_Text = "Save" ID = "Save">Opslaan</Item>
+		<Item English_Text = "Save All" ID = "Save_All">Alles opslaan</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">Huidig tabblad sluiten</Item>
+		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable">Deze clip kan niet bewerkt worden. Een clip moet voorkomen in de lijst van ondersteunde formaten</Item>
+		<Item English_Text = "to be editable" ID = "Editable">bewerkbaar</Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">Wijzigingen opslaan?</Item>
+		<Item English_Text = "Error saving clip" ID = "ErrorSaving">Fout tijdens opslaan clip</Item>
+		<Item English_Text = "New" ID = "New">Nieuw</Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">Opslaan, afsluiten en plaatsen op klembord</Item>
+		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">Ditto textverwerker</Item>
+		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title">Ditto - Benoemd plakken</Item>
+		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">Fout tijdens laden van data</Item>
+		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2">Tijdens benoemd plakken, clip onvindbaar</Item>
+		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">Bij uitzondering benoemde clip niet gevonden</Item>
+		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title">Ditto - Clip benoemen</Item>
+		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">Opslaan benoemde clip in database mislukt</Item>
+		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">Bij uitzondering benoemde clip niet opgeslagen</Item>
+		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">Benoemde Clip niet ontvangen</Item>
+
+
+
+
+
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Add-Ins" ID = "Add_Ins">Toevoegingen</Item> 
+		
+		<Item English_Text = "Copy Buffers" ID = "CopyBuffers"></Item>
+		
+		<Item English_Text = "Search Options" ID = "SearchOptionsTooltip">Zoek opties</Item>
+		<Item English_Text = "Groups" ID = "GroupsTooltip">Groepen</Item>
+		
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Search" ID = "Search">Zoeken</Item>
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">Stuur alle clips</Item>
+        <Item English_Text = "IP/Name" ID = "IP_Name">IP/Naam</Item>
+        <Item English_Text = "Descriptions" ID = "Descriptions">Omschrijvingen</Item>
+		
+		<Item English_Text = "Quick Paste Keyboard" ID = "QuickPasteKeyboardTitle"></Item>
+		
+		<Item English_Text = "Hot Key" ID = "QPHotKey"></Item>
+		<Item English_Text = "Command" ID = "QPCommand"></Item>
+		
+		<Item English_Text = "[Top Most Window]" ID = "top_most"></Item>
+		
+				
+	</Ditto_String_Table>
+	<Ditto_Options_Sheet>			
+		<Item English_Text = "OK" ID = "1">OK</Item>		
+		<Item English_Text = "Cancel" ID = "2">Cancel</Item>		
+		<Item English_Text = "Apply" ID = "12321">Toepassen</Item>	
+	</Ditto_Options_Sheet>
+	<Ditto_Tray_Icon_Menu>			
+		<Item English_Text = "Show Quick Paste" ID = "32773">Toon Snelplakken</Item>		
+		<Item English_Text = "Options" ID = "32771">Opties</Item>		
+		<Item English_Text = "Help" ID = "32843">Help</Item>		
+		<Item English_Text = "Exit" ID = "32772">Exit</Item>	
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Import" ID = "32854">Importeren</Item>
+		<Item English_Text = "New Clip" ID = "32868">Nieuwe Clip</Item>
+		
+		//Added 12/10/11
+		<Item English_Text = "Global Hot Keys" ID = "32872">Algemene Sneltoetsen</Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Delete Clip Data" ID = "32886">Verwijder Clip Gegevens</Item>
+		
+		//Added 12/17/16
+		<Item English_Text = "Fixup Sticky Clip Order" ID = "32909">Herorden Vaste Clip Sortering</Item>		
+		<Item English_Text = "Save Current Clipboard" ID = "32904">Bewaar Huidige Clipboard</Item>
+	</Ditto_Tray_Icon_Menu>
+
+	//Added in 9-11-09
+	<Ditto_Options_CopyBuffers>
+		<Item English_Text = "Copy Buffer 1" ID = "2088">Kopieer Buffer 1</Item>
+		<Item English_Text = "Copy" ID = "2079">Kopieer</Item>
+		<Item English_Text = "Paste" ID = "2080">Plakken</Item>
+		<Item English_Text = "Cut" ID = "2081">Knippen</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042">Speel geluid bij kopiëren</Item>
+		<Item English_Text = "Win" ID = "2085">Win</Item>
+		<Item English_Text = "Win" ID = "2086">Win</Item>
+		<Item English_Text = "Win" ID = "2087">Win</Item>
+		
+		<Item English_Text = "Copy Buffer 2" ID = "2098">Kopieer Buffer 2</Item>
+		<Item English_Text = "Copy" ID = "2093">Kopieer</Item>
+		<Item English_Text = "Paste" ID = "2094">Plakken</Item>
+		<Item English_Text = "Cut" ID = "2097">Knippen</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043">Speel geluid bij kopiëren</Item>
+		<Item English_Text = "Win" ID = "2090">Win</Item>
+		<Item English_Text = "Win" ID = "2092">Win</Item>
+		<Item English_Text = "Win" ID = "2096">Win</Item>
+		
+		<Item English_Text = "Copy Buffer 3" ID = "2108">Kopieer Buffer 3</Item>
+		<Item English_Text = "Copy" ID = "2103">Kopieer</Item>
+		<Item English_Text = "Paste" ID = "2104">Plakken</Item>
+		<Item English_Text = "Cut" ID = "2107">Knippen</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044">Speel geluid bij kopiëren</Item>
+		<Item English_Text = "Win" ID = "2100">Win</Item>
+		<Item English_Text = "Win" ID = "2102">Win</Item>
+		<Item English_Text = "Win" ID = "2106">Win</Item>
+	</Ditto_Options_CopyBuffers>
+	
+	<Ditto_GlobalHotKeys>
+		<Item English_Text = "Global Hot Keys" ID = "-1">Algemene Sneltoetsen</Item>
+		<Item English_Text = "Close" ID = "2">Sluiten</Item>
+		<Item English_Text = "(Clip) " ID = "(Clip)">(Clip)</Item>
+		<Item English_Text = "Error" ID = "Error">Fout</Item>
+		<Item English_Text = "Yes" ID = "Yes">Ja</Item>
+		<Item English_Text = "Description" ID = "Description">Omschrijving</Item>
+		<Item English_Text = "HotKey" ID = "HotKey">Sneltoets</Item>
+		<Item English_Text = "Registered" ID = "Registered">Vastgelegd</Item>
+	</Ditto_GlobalHotKeys>
+	//Added 1/10/15
+	<Ditto_Groups_Right_Click_Menu>
+		<Item English_Text = "New Sub Group" ID = "32896">Nieuwe Sub Groep</Item>
+		<Item English_Text = "Delete Group" ID = "32897">Verwijder Groep</Item>
+		<Item English_Text = "Properties" ID = "32898">Eigenschappen</Item>	
+	</Ditto_Groups_Right_Click_Menu>
+	//Added 1/10/15
+	<Ditto_DeleteClipData>
+		<Item English_Text = "Delete Clip Data" ID = "-1">Verwijder Clip Gegevens</Item>
+		<Item English_Text = "Each clip in Ditto is made of multiple clipboard items, all clipboard items in Ditto are listed below." ID = "2126">Elke clip in Ditto is gemaakt uit meerdere clipboard elementen, elk hiervan is onder opgesomd.</Item>
+		<Item English_Text = "Search Options" ID = "2120">Zoek Opties</Item>
+		<Item English_Text = "Title" ID = "1042">Titel</Item>
+		<Item English_Text = "Create Date Range" ID = "1043">Definieer Datum Periode</Item>
+		<Item English_Text = "Format" ID = "1045">Formaat</Item>
+		<Item English_Text = "Last Used Range" ID = "1044">Laatst Gebruikte Periode</Item>
+		<Item English_Text = "Search" ID = "1040">Zoek</Item>
+		<Item English_Text = "Database Size" ID = "2115">Database Grootte</Item>
+		<Item English_Text = "Selected Size" ID = "2116">Geselecteerde Grootte</Item>
+		<Item English_Text = "Selected Count" ID = "2117">Geselecteerd Aantal</Item>
+		<Item English_Text = "Delete" ID = "2118">Verwijder</Item>
+		<Item English_Text = "Cancel" ID = "2">Annuleer</Item>
+		<Item English_Text = "Title" ID = "Title">Titel</Item>
+		<Item English_Text = "Created" ID = "Created">Aangemaakt</Item>
+		<Item English_Text = "Last Used" ID = "LastUsed">Laatst Gebruikt</Item>
+		<Item English_Text = "Format" ID = "Format">Formaat</Item>
+		<Item English_Text = "Data Size" ID = "DataSize">Data Grootte</Item>
+	</Ditto_DeleteClipData>
+	
+	<Ditto_Options_Quick_Paste_Keyboard>
+		<Item English_Text = "Quick Paste Keyboard" ID = "-1" PropertyPage = "true">Toetsenbord Snel Plakken</Item>
+		<Item English_Text = "Reset" ID = "2144">Opnieuw zetten</Item>
+		<Item English_Text = "Shortcuts for selected command:" ID = "2148">Sneltoets voor geselecteerde actie: </Item>
+		<Item English_Text = "Remove" ID = "2124">Verwijder</Item>
+		<Item English_Text = "Add" ID = "2132">Toevoegen</Item>
+		<Item English_Text = "Enable Second Keypress" ID = "2146">Activeer Sneltoets 2</Item>
+		<Item English_Text = "First Keypress" ID = "2149">Eerste Toetsaanslag</Item>
+		<Item English_Text = "Second Keypress" ID = "2147">Tweede Toetsaanslag</Item>
+		<Item English_Text = "Assign" ID = "1040">Toekennen</Item>
+		
+		<Item English_Text = "Keyboard Shortcut" ID = "2127">Toetsenbord Sneltoets</Item>
+		<Item English_Text = "Mouse Click" ID = "2130">Muisklik</Item>
+		<Item English_Text = "Keyboard Shortcut" ID = "2133">Toetsenbord Sneltoets</Item>
+		<Item English_Text = "Mouse Click" ID = "2136">Muisklik</Item>
+		<Item English_Text = "Enter Key" ID = "2135">Enter Toets</Item>
+		
+		<Item English_Text = "Enter Key" ID = "2137">Enter Toets</Item>
+		<Item English_Text = "Shift" ID = "1042">Shift</Item>
+		<Item English_Text = "Control" ID = "2139">Control</Item>
+		<Item English_Text = "Alt" ID = "2140">Alt</Item>
+		<Item English_Text = "Shift" ID = "1043">Shift</Item>
+		<Item English_Text = "Control" ID = "2142">Control</Item>
+		<Item English_Text = "Alt" ID = "2143">Alt</Item>
+		
+		<Item English_Text = "View Full Description" ID = "1">Bekijk Volledige Omschrijving</Item>
+		<Item English_Text = "Next Full Description" ID = "2">Volgende Volledige Omschrijving</Item>
+		<Item English_Text = "Previous Full Description" ID = "3">Vorige Volledige Omschrijving</Item>
+		<Item English_Text = "Show Context Menu" ID = "4">Toon Context Menu</Item>
+		<Item English_Text = "New Group" ID = "5">Nieuwe Groep</Item>
+		<Item English_Text = "New Group Selection" ID = "6">Nieuwe Groep Selectie</Item>
+		<Item English_Text = "Toggle On File Logging" ID = "7">Bestand Logging Aan/Uit</Item>
+		<Item English_Text = "Toggle OutputDebugString Logging" ID = "8">OutputDebugString Logging Aan/Uit</Item>
+		<Item English_Text = "Close Window" ID = "9">Sluit Scherm</Item>
+		<Item English_Text = "NEXTTABCONTROL" ID = "10"></Item>
+		<Item English_Text = "PREVTABCONTROL" ID = "11"></Item>
+		<Item English_Text = "View Groups" ID = "12">Bekijk Groepen</Item>
+		<Item English_Text = "New Clip" ID = "13">Nieuwe Clip</Item>
+		<Item English_Text = "Edit Clip" ID = "14">Bewerk Clip</Item>
+		<Item English_Text = "MODIFIER_ACTVE_SELECTIONUP" ID = "15"></Item>
+		<Item English_Text = "MODIFIER_ACTVE_SELECTIONDOWN" ID = "16"></Item>
+		<Item English_Text = "MODIFIER_ACTVE_MOVEFIRST" ID = "17"></Item>
+		<Item English_Text = "MODIFIER_ACTVE_MOVELAST" ID = "18"></Item>
+		<Item English_Text = "Cancel Filter" ID = "19">Annuleer Filter</Item>
+		<Item English_Text = "HOMELIST" ID = "20"></Item>
+		<Item English_Text = "Back Group" ID = "21">Groep Terug</Item>
+		<Item English_Text = "Toggle Show Persistant" ID = "22">Toon Permanent Aan/Uit</Item>
+		<Item English_Text = "Paste Selected" ID = "23">Geselecteerde Plakken</Item>
+		<Item English_Text = "Delete Selected" ID = "24">Geselecteerde Verwijderen</Item>
+		<Item English_Text = "Clip Properties" ID = "25">Clip Eigenschappen</Item>
+		<Item English_Text = "Paste Selected Plain Text" ID = "26">Geselecteerde plakken in Gewone Tekst</Item>
+		<Item English_Text = "Move Clip To Group" ID = "27">Verplaats Clip naar Groep</Item>
+		<Item English_Text = "Option - Elevate Privleges" ID = "28">Optie - Verhoogde Priveleges</Item>
+		<Item English_Text = "Option - Show In TaskBar" ID = "29">Optie - Toon in Taskbar</Item>
+		<Item English_Text = "Compare Selected Clips" ID = "30">Vergelijk Geselecteerde Clips</Item>
+		<Item English_Text = "Select Left File For Compare" ID = "31">Selecteer linker Bestand om te Vergelijken</Item>
+		<Item English_Text = "Select Right File And Do Compare" ID = "32">Selecteer rechter Bestand en Vergelijk</Item>
+		<Item English_Text = "Export To Text File" ID = "33">Exporteer naar Tekst Bestand</Item>
+		<Item English_Text = "Export To QR Code" ID = "34">Exporteer naar QR Code</Item>
+		<Item English_Text = "Export To Google Translate" ID = "35">Exporteer naar Google Vertaal</Item>
+		<Item English_Text = "Export To Image File" ID = "36">Exporteer naar Foto Bestand</Item>
+		<Item English_Text = "Save Current Clipboard" ID = "37">Bewaar Huidige Klembord</Item>
+		<Item English_Text = "Move Clip Up" ID = "38">Clip Omhoog</Item>
+		<Item English_Text = "Move Clip Down" ID = "39">Clip Omlaag</Item>
+		<Item English_Text = "Move Clip Top" ID = "40">Clip naar Top</Item>
+		<Item English_Text = "Filter On Selected Clip" ID = "41">Filter op Geselecteerde Clip</Item>
+		<Item English_Text = "Paste Upper Case" ID = "42">Plakken in hoofdletters</Item>
+		<Item English_Text = "Paste Lower Case" ID = "43">Plakken in kleine letters</Item>
+		<Item English_Text = "Paste Capitalize" ID = "44">Plakken - Eerste letter hoofdletter</Item>
+		<Item English_Text = "Paste Sentence Case" ID = "45">Plakken Zinsweergave</Item>
+		<Item English_Text = "Paste Remove Line Feeds" ID = "46">Plakken en Verwijder 1 regeltoevoeging</Item>
+		<Item English_Text = "Paste Add One Line Feed" ID = "47">Plakken + 1 regeltoevoeging</Item>
+		<Item English_Text = "Paste Add Two Line Feeds" ID = "48">Plakken + 2 regeltoevoegingen</Item>
+		<Item English_Text = "Paste Typoglycemia" ID = "49">Plakken in Typoglycemia</Item>
+		<Item English_Text = "Send to friend 1" ID = "50">Stuur naar Vriend 1</Item>
+		<Item English_Text = "Send to friend 2" ID = "51">Stuur naar Vriend 2</Item>
+		<Item English_Text = "Send to friend 3" ID = "52">Stuur naar Vriend 3</Item>
+		<Item English_Text = "Send to friend 4" ID = "53">Stuur naar Vriend 4</Item>
+		<Item English_Text = "Send to friend 5" ID = "54">Stuur naar Vriend 5</Item>
+		<Item English_Text = "Send to friend 6" ID = "55">Stuur naar Vriend 6</Item>
+		<Item English_Text = "Send to friend 7" ID = "56">Stuur naar Vriend 7</Item>
+		<Item English_Text = "Send to friend 8" ID = "57">Stuur naar Vriend 8</Item>
+		<Item English_Text = "Send to friend 9" ID = "58">Stuur naar Vriend 9</Item>
+		<Item English_Text = "Send to friend 10" ID = "59">Stuur naar Vriend 10</Item>
+		<Item English_Text = "Send to friend 11" ID = "60">Stuur naar Vriend 11</Item>
+		<Item English_Text = "Send to friend 12" ID = "61">Stuur naar Vriend 12</Item>
+		<Item English_Text = "Send to friend 13" ID = "62">Stuur naar Vriend 13</Item>
+		<Item English_Text = "Send to friend 14" ID = "63">Stuur naar Vriend 14</Item>
+		<Item English_Text = "Send to friend 15" ID = "64">Stuur naar Vriend 15</Item>
+		<Item English_Text = "Paste Position 1" ID = "65">Plakken Positie 1</Item>
+		<Item English_Text = "Paste Position 2" ID = "66">Plakken Positie 2</Item>
+		<Item English_Text = "Paste Position 3" ID = "67">Plakken Positie 3</Item>
+		<Item English_Text = "Paste Position 4" ID = "68">Plakken Positie 4</Item>
+		<Item English_Text = "Paste Position 5" ID = "69">Plakken Positie 5</Item>
+		<Item English_Text = "Paste Position 6" ID = "70">Plakken Positie 6</Item>
+		<Item English_Text = "Paste Position 7" ID = "71">Plakken Positie 7</Item>
+		<Item English_Text = "Paste Position 8" ID = "72">Plakken Positie 8</Item>
+		<Item English_Text = "Paste Position 9" ID = "73">Plakken Positie 9</Item>
+		<Item English_Text = "Paste Position 10" ID = "74">Plakken Positie 10</Item>
+		<Item English_Text = "Option - Show text for first ten copy hot keys" ID = "75">Optie: Toon cijfers -voor- 10 eerste clips</Item>
+		<Item English_Text = "Option - Show indicator a clip has been pasted" ID = "76">Optie: Toon als clip geplakt is</Item>
+		<Item English_Text = "Toggle Last Group Toggle" ID = "77">Naar/Van Laatste Groep</Item>
+		<Item English_Text = "Make Top Sticky Clip" ID = "78">Vastgelegde Clip Boven</Item>
+		<Item English_Text = "Make Last Sticky Clip" ID = "79">Vastgelegde Clip Onder</Item>
+		<Item English_Text = "Remove Sticky Setting" ID = "80">Verwijder Vastgelegde Eigenschappen</Item>
+		<Item English_Text = "Paste Add Current Time" ID = "81">Plakken met toevoeging Huidige Datum</Item>
+		<Item English_Text = "Import Clip" ID = "82">Importeer Clip</Item>
+		<Item English_Text = "Global HotKeys" ID = "83">Algemene Sneltoetsen</Item>
+		<Item English_Text = "Delete Clip Data" ID = "84">Verwijder Clip Gegevens</Item>
+			
+	</Ditto_Options_Quick_Paste_Keyboard>
+	
+</Ditto_Language_File>

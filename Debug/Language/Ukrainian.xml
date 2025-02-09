@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Ditto_Language_File Version = "1.0" Author = "Serg Kruch" Notes = "Slava Ukraini">
+	<Ditto_Right_Click_Menu>
+		<Item English_Text = "Groups" ID = "-1">Групи</Item>
+		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">Створити групу</Item>
+		<Item English_Text = "New Group Selection	F7" ID = "32812">Створити групу з виділеного</Item>
+		<Item English_Text = "Move to Group" ID = "32840">Перемістити в групу</Item>
+		<Item English_Text = "Quick Options" ID = "-1">Швидкі налаштування</Item>
+		<Item English_Text = "Lines Per Clip" ID = "-1">Кількість рядків об'єкту</Item>
+		<Item English_Text = "1" ID = "32807">1</Item>
+		<Item English_Text = "2" ID = "32786">2</Item>
+		<Item English_Text = "3" ID = "32787">3</Item>
+		<Item English_Text = "4" ID = "32788">4</Item>
+		<Item English_Text = "5" ID = "32789">5</Item>
+		<Item English_Text = "Transparency" ID = "-1">Прозорість</Item>
+		<Item English_Text = "None" ID = "32800">Немає</Item>
+		<Item English_Text = "5 " ID = "32808">5%</Item>
+		<Item English_Text = "10 " ID = "32792">10%</Item>
+		<Item English_Text = "15 " ID = "32794">15%</Item>
+		<Item English_Text = "20 " ID = "32796">20%</Item>
+		<Item English_Text = "25 " ID = "32798">25%</Item>
+		<Item English_Text = "30 " ID = "32799">30%</Item>
+		<Item English_Text = "35 " ID = "32950">35%</Item>
+		<Item English_Text = "40 " ID = "32790">40%</Item>
+		<Item English_Text = "Positioning" ID = "-1">Розміщення</Item>
+		<Item English_Text = "At Caret" ID = "32802">Під текст. курсором</Item>
+		<Item English_Text = "At Cursor" ID = "32803">Під вказівником миші</Item>
+		<Item English_Text = "At Previous Position" ID = "32804">В попередньому місці</Item>
+		<Item English_Text = "First Ten Hot Keys" ID = "-1">Перші 10 скорочень</Item>
+		<Item English_Text = "Use Ctrl - Num" ID = "32777">Використовувати Ctrl+Num</Item>
+		<Item English_Text = "Show Hot Key Text" ID = "32778">Показувати скорочення</Item>
+		<Item English_Text = "View Caption Bar On" ID = "-1">Показувати заголовок</Item>
+		<Item English_Text = "Top" ID = "32783">Зверху</Item>
+		<Item English_Text = "Right" ID = "32780">Справа</Item>
+		<Item English_Text = "Bottom" ID = "32781">Знизу</Item>
+		<Item English_Text = "Left" ID = "32782">Зліва</Item>
+		<Item English_Text = "Order" ID = "-1">Сортувати</Item>
+		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">По зростанню (Нові зверху)</Item>
+		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">По спаланню (Нові знизу)</Item>
+		<Item English_Text = "Double Clicking on Caption" ID = "-1">Подвійний клік по заголовку</Item>
+		<Item English_Text = "Toggles Always on Top" ID = "32814">Перемикає "Завжди зверху"</Item>
+		<Item English_Text = "Rolls-up Window" ID = "32815">Згортає вікно</Item>
+		<Item English_Text = "Toggles Always Show Description" ID = "32816">Перемикає "Завжди показувати опис"</Item>
+		<Item English_Text = "Always on Top	Ctrl-Space" ID = "32784">Завжди зверху Ctrl-Space</Item>
+		<Item English_Text = "Auto Roll-up" ID = "32791">Згортати автоматично</Item>
+		<Item English_Text = "Always Show Description" ID = "32813">Завжди показувати опис</Item>
+		<Item English_Text = "Prompt For New Group Names" ID = "32817">Запитувати ім'я нової групи</Item>
+		<Item English_Text = "Select Font" ID = "32844">Шрифт</Item>
+		<Item English_Text = "Show Thumbnails" ID = "32845">Ескізи</Item>
+		<Item English_Text = "Draw RTF Text" ID = "32846">Відображати написання RTF</Item>
+		<Item English_Text = "Paste Clip after selection" ID = "32847">Вставляти об'єкт післе вибору</Item>
+		<Item English_Text = "Find As You Type" ID = "32848">Шукати під час набору</Item>
+		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849">Показувати вікно повністю</Item>
+		<Item English_Text = "Show Clips That are in Groups in Main List" ID = "32850">Показувати в головному списку об'єкт в групах</Item>
+		<Item English_Text = "Send To" ID = "-1">Відправити до</Item>
+		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">(192.168.1.101) - цей компютер</Item>
+		<Item English_Text = "View Full Description	F3" ID = "32793">Повний опис	F3</Item>
+		<Item English_Text = "View Groups	Ctrl-G" ID = "32819">Показати групи	Ctrl-G</Item>
+		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">Вставити лише текст	Shift-Enter</Item>
+		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">Вставити HTML як текст</Item>
+		<Item English_Text = "Delete Entry	Del" ID = "32801">Знищити	Del</Item>
+		<Item English_Text = "Properties	Alt-Enter" ID = "32776">Властивості	Alt-Enter</Item>
+		<Item English_Text = "Quick Properties" ID = "-1">Частовживані властивості</Item>
+		<Item English_Text = "Never Auto Delete" ID = "32820">Не знищувати автоматично</Item>
+		<Item English_Text = "Auto Delete" ID = "32821">Знищувати автоматично</Item>
+		<Item English_Text = "Remove Hot Key" ID = "32822">Стерти скорочення</Item>
+		<Item English_Text = "Options..." ID = "32805">Параметри...</Item>
+		<Item English_Text = "Help" ID = "32842">Довідка</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "32775">Відключити від буферу обміну</Item>
+		<Item English_Text = "Exit Program" ID = "32806">Вихід</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt to Delete Clip" ID = "32852">Підтверджувати знищення</Item>
+		<Item English_Text = "Import Clip(s)" ID = "32855">Імпортувати об'єкти</Item>
+		<Item English_Text = "Export Clip(s)" ID = "32853">Експортувати об'єкти</Item>
+		<Item English_Text = "Remove Quick Paste" ID = "32856">Знищити швидку вставку</Item>
+		<Item English_Text = "Edit Clip" ID = "32860">Редагувати...</Item>
+		<Item English_Text = "New Clip" ID = "32867">Новий...</Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Compare" ID = "-1">Порівняти</Item>	
+		<Item English_Text = "Select Left Text" ID = "32893">Вибрати текст зліва</Item>	
+		<Item English_Text = "Select Right Text And Compare Against Left" ID = "32894">Вибрати текст справа та порівняти з тим, що зліва</Item>	
+		<Item English_Text = "Compare" ID = "32895">Порівняти</Item>
+		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "32881">Підвищені привілеї для вставки в програму з підвищеними правами</Item>
+		<Item English_Text = "Show In Taskbar" ID = "32885">Показати на панелі завдань</Item>
+		<Item English_Text = "Sticky Clips" ID = "-1">Закріплені об'єкти</Item>	
+		<Item English_Text = "Make Top Sticky Clip" ID = "32878">Закріпити об'єкт першим</Item>	
+		<Item English_Text = "Make Last Sticky Clip" ID = "32879">Закріпити об'єкт крайнім</Item>	
+		<Item English_Text = "Remove Sticky Setting" ID = "32880">Звільнити з закріплених</Item>
+		<Item English_Text = "Import/Export" ID = "-1">Імпорт/Експорт</Item>	
+		<Item English_Text = "View as QRCode" ID = "32887">Переглянути у вигляді QR-коду</Item>	
+		<Item English_Text = "Export Clip(s) to Text File" ID = "32889">Експорт об'єкта(ів) в текстовий файл</Item>	
+		
+		//Added 12/17/16
+		<Item English_Text = "Special Paste" ID = "-1">Особлива вставка</Item>			
+		<Item English_Text = "UPPER CASE" ID = "32912">ПРОПИСОМ</Item>	
+		<Item English_Text = "lower case" ID = "32913">малими</Item>	
+		<Item English_Text = "Capitalize Case" ID = "32914">Заголовні літери</Item>	
+		<Item English_Text = "Sentence case" ID = "32915">Перше слово з заголовної</Item>	
+		<Item English_Text = "Remove Line Feeds" ID = "32916">Видалити переведення стрічки</Item>	
+		<Item English_Text = "Paste + One Line Feed" ID = "32918">Вставити + переведення стрічки</Item>	
+		<Item English_Text = "Paste + Two Line Feeds" ID = "32919">Вставити + двіччі переведення стрічки</Item>	
+		<Item English_Text = "Paste + Current Time" ID = "32927">Вставити + поточний час</Item>	
+		<Item English_Text = "Typoglycemia" ID = "32922">Типоглікемія</Item>	
+		<Item English_Text = "Filter On" ID = "-1">Фільтрувати по</Item>			
+		<Item English_Text = "Toggle Last Group Toggle" ID = "32925">Переключитись на крайню групу</Item>			
+		<Item English_Text = "Clip Order" ID = "-1">Порядок об'єкту</Item>			
+		<Item English_Text = "Move To Top" ID = "32908">Перемістити вгору</Item>	
+		<Item English_Text = "Move Up" ID = "32906">На позицію вгору</Item>	
+		<Item English_Text = "Move Down" ID = "32907">На позицію донизу</Item>			
+		<Item English_Text = "Export Clip(s) to Image File" ID = "32902">Експорт об'єкту (ів) у файл зображення</Item>	
+		<Item English_Text = "Export to Google Translate" ID = "32900">Відправити в Google перекладач</Item>	
+		
+		<Item English_Text = "Search Options" ID = "-1">Параметри пошуку</Item>	
+		<Item English_Text = "Search Description" ID = "32873">Пошук по опису</Item>	
+		<Item English_Text = "Search Full Text" ID = "32874">Повнотекстовий пошук</Item>	
+		<Item English_Text = "Search Quick Paste" ID = "32875">Пошук швидкої вставки</Item>	
+		<Item English_Text = "Contains Text Search" ID = "32876">Вміщає текст пошуку</Item>	
+		<Item English_Text = "Regular Expression Search" ID = "32899">Пошук по регулярнив виразам</Item>	
+		<Item English_Text = "Wildcard Search" ID = "32903">Пошук по підстановочних знаках</Item>	
+		<Item English_Text = "Show text for first ten copy hot keys" ID = "32923">Показати текст для перших десяти гарячих клавіш копіювання</Item>	
+		<Item English_Text = "Show indicator a clip has been pasted" ID = "32924">Показати індикатор, що об'єкт було вставлено</Item>	
+		<Item English_Text = "Global Hot Keys" ID = "32933">Глоабальні Гарячі клавіші</Item>	
+		<Item English_Text = "Delete Clip Data" ID = "32934">Видалити дані об'єктів</Item>	
+		<Item English_Text = "Import Clip(s)" ID = "32935">Імпорт об'єкту (ів)</Item>	
+		<Item English_Text = "New Clip" ID = "32937">Новий об'єкт</Item>	
+		<Item English_Text = "Save Current Clipboard" ID = "32905">Записати поточний Буфер обміну</Item>	
+		<Item English_Text = "Import" ID = "">Імпорт</Item>	
+		
+		<Item English_Text = "Show Startup Message" ID = "32959">Показати стартове повідомлення</Item>
+		<Item English_Text = "Filter On Selected Clip" ID = "32910">Фільтр по вибраному об'єкту</Item>		
+		<Item English_Text = "Invert Case" ID = "32958">Інвертувати регістр</Item>
+		<Item English_Text = "Trim White Space" ID = "32946">Обрізати пусті символи</Item>
+		<Item English_Text = "Slugify" ID = " 32954">Людський URL</Item>		
+		<Item English_Text = "Paste, Don't Change Clip Order" ID = " 32945">Вставити не змінюючи порядок об'єктів</Item>		
+		<Item English_Text = "Gmail, Content In Body" ID = "32952">Gmail, вміст в тілі листа</Item>
+		<Item English_Text = "EMail, Clip Export As Attachment" ID = "32953">Email, експорт об'єкту, як вкладення</Item>
+		<Item English_Text = "EMail, Content As Attachment" ID = "32956">Email, зміст як вкладення</Item>
+		<Item English_Text = "EMail, Content In Body" ID = "32951">Email,зміст в тілі листа </Item>		
+		<Item English_Text = "Import File Contents From CF_HDROP" ID = "32941">Імпорт змісту файлу із CF_HDROP</Item>		
+		<Item English_Text = "Move To Last" ID = "32943">Перемістити донизу</Item>
+		
+		<Item English_Text = "Increase" ID = "32947">Збільшити</Item>
+		<Item English_Text = "Decrease" ID = "32948">Зменшити</Item>
+		<Item English_Text = "Toggle Enabled" ID = "32949">Увімкнути попередній режим</Item>
+		
+		<Item English_Text = "Backup Database" ID = "32962">Резервування Бази даних</Item>
+		<Item English_Text = "Restore Dastabase" ID = "32964">Відновлення Бази даних</Item>
+		
+	</Ditto_Right_Click_Menu>
+	<Ditto_Clip_Properties>
+		<Item English_Text = "Hot Key" ID = "2039">Гарячі клавіші</Item>
+		<Item English_Text = "Date" ID = "2040">Дата</Item>
+		<Item English_Text = "Never Auto Delete" ID = "1025">Не знищувати автоматично</Item>
+		<Item English_Text = "Move To Group" ID = "2041">Перемістити в групу</Item>
+		<Item English_Text = "Item Title" ID = "2042">Заголовок</Item>
+		<Item English_Text = "Copy Formats" ID = "2029">Формати копіювання</Item>
+		<Item English_Text = "Delete" ID = "1021">Знищити</Item>
+		<Item English_Text = "OK" ID = "1">ОК</Item>
+		<Item English_Text = "Cancel" ID = "2">Відміна</Item>
+		<Item English_Text = "Copy Properties" ID = "-1">Копіювати властивості</Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Hotkey available globally" ID = "1026">Доступні глобальні Гарячі клавіші</Item>
+		<Item English_Text = "Last Used" ID = "2043">Останє використання</Item>
+		<Item English_Text = "Quick Paste Text" ID = "2125">Швидка вставка тексту</Item>
+
+	</Ditto_Clip_Properties>
+	<Ditto_Options_General>
+		<Item English_Text = "Start Ditto on System Startup" ID = "2004">Запускати Ditto автоматично</Item>
+		<Item English_Text = "Display Icon in System Tray" ID = "2003">Показувати іконку в панелі задач</Item>
+		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Зберігати максимум</Item>
+		<Item English_Text = "Paste Entries Expire after" ID = "2009">Зберігати протягом</Item>
+		<Item English_Text = "Days" ID = "2043">Днів</Item>
+		<Item English_Text = "Compact and Repair" ID = "1028">Виправити</Item>
+		<Item English_Text = "Automatically check for updates online" ID = "1029">Автоматично перевіряти оновлення</Item>
+		<Item English_Text = "Check Now" ID = "1030">Перевірити вже</Item>
+		<Item English_Text = "Allow Duplicates" ID = "1037">Дозволити дублікати</Item>
+		<Item English_Text = "Update Clip Order On Paste" ID = "1038">Оновлювати порядок об'єктів при вставці</Item>
+		<Item English_Text = "Save Multi-Pastes" ID = "1039">Зберігати при повторенні вставки</Item>
+		<Item English_Text = "Hide Ditto on Hot Key if Ditto is Visible" ID = "1040">Сховати Ditto при наборі скорочення</Item>
+		<Item English_Text = "Amount of text to save for description" ID = "2044">Об'єм опису</Item>
+		<Item English_Text = "On copy play the sound" ID = "2045">Програвати при вставці</Item>
+		<Item English_Text = "Play" ID = "2034">Програти</Item>
+		<Item English_Text = "Paste Clip in active window after selection" ID = "1041">Вставляти в активне вікно при виборі</Item>
+		<Item English_Text = "Maximum Clip Size in Bytes" ID = "2046">Максимальний розмір об'єкту в байтах</Item>
+		<Item English_Text = "(Leave blank for no limit)" ID = "2047">(порожньо = без обмежень)</Item>
+		<Item English_Text = "Set Database Path" ID = "1034">Шлях до бази даних</Item>
+		<Item English_Text = "Language" ID = "2069">Мова (Language)</Item>
+		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms = 1 sec)" ID = "2072">Ігнорувати копії, зроблені раніше ніж Х мс після останньої (1000 мс = 1 с)</Item>
+		<Item English_Text = "About Language" ID = "2073">Про мову...</Item>
+		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Перевіряти, щоб Ditto був завжди підключений до буферу обмені</Item>
+		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Загальне</Item>
+		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090">Розділювач при вставці декількох об'єктів ([LF] = розрив стрічки)</Item>
+		
+		//New item added 3/1/11
+		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098">Дозволені програми копіювання (розділяти ;)</Item>
+		<Item English_Text = "Include" ID = "2095">Включати</Item>
+		<Item English_Text = "Exclude" ID = "2096">Виключити</Item>
+		
+		<Item English_Text = "Theme" ID = "2092">Тема</Item>
+		<Item English_Text = "About Theme" ID = "2094">Про тему</Item>
+
+		<Item English_Text = "Popup Position" ID = "2100">Позиція вікна</Item>
+		<Item English_Text = "Display Font" ID = "2101">Шрифт дісплею</Item>
+		<Item English_Text = "Database Path" ID = "2099">Шлях до бази</Item>
+		
+		<Item English_Text = "Environment Variables" ID = "2165">Змінні середовища</Item>
+		
+		<Item English_Text = "Default Font" ID = "2031">Шрифт по замовчуванню</Item>
+	</Ditto_Options_General>
+	<Ditto_Options_Supported_Types> 
+		<Item English_Text = "&amp;Add" ID = "1015">&amp;Додати</Item>
+		<Item English_Text = "&amp;Delete" ID = "1016">&amp;Видалити</Item>
+		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">Пітримувані типи</Item>
+		
+		//New item added 12/17/16
+		<Item English_Text = "Current Clipboard Types" ID = "2128">Поточні типи буферу обміну</Item>
+		<Item English_Text = "Primary Clipboard Types" ID = "2145">Основні типи буферу обміну</Item>
+		<Item English_Text = "Custom Clipboard Type" ID = "2130">Користувацькі типи буферу обміну</Item>
+		
+	</Ditto_Options_Supported_Types>
+	<Ditto_Options_Shortcuts>
+		<Item English_Text = "Activate Ditto" ID = "2048">Вікрити Ditto</Item>
+		<Item English_Text = "Win" ID = "2035">Win</Item>
+		<Item English_Text = "Named Copy" ID = "2049">Іменована копія</Item>
+		<Item English_Text = "Win" ID = "2036">Win</Item>
+		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">Глобальні скорочення для останніх 10 об'єктів</Item>
+		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Відразу вставити (інакше лише завантажити в буфер обміну)</Item>
+		<Item English_Text = "Position 1" ID = "2052">Позиція 1</Item>
+		<Item English_Text = "Position 2" ID = "2053">Позиція 2</Item>
+		<Item English_Text = "Position 3" ID = "2054">Позиція 3</Item>
+		<Item English_Text = "Position 4" ID = "2055">Позиція 4</Item>
+		<Item English_Text = "Position 5" ID = "2056">Позиція 5</Item>
+		<Item English_Text = "Position 6" ID = "2057">Позиція 6</Item>
+		<Item English_Text = "Position 7" ID = "2058">Позиція 7</Item>
+		<Item English_Text = "Position 8" ID = "2059">Позиція 8</Item>
+		<Item English_Text = "Position 9" ID = "2060">Позиція 9</Item>
+		<Item English_Text = "Position 10" ID = "2061">Позиція 10</Item>
+		<Item English_Text = "Win" ID = "2042">Win</Item>
+		<Item English_Text = "Win" ID = "2043">Win</Item>
+		<Item English_Text = "Win" ID = "2044">Win</Item>
+		<Item English_Text = "Win" ID = "2045">Win</Item>
+		<Item English_Text = "Win" ID = "2046">Win</Item>
+		<Item English_Text = "Win" ID = "2037">Win</Item>
+		<Item English_Text = "Win" ID = "2038">Win</Item>
+		<Item English_Text = "Win" ID = "2039">Win</Item>
+		<Item English_Text = "Win" ID = "2040">Win</Item>
+		<Item English_Text = "Win" ID = "2041">Win</Item>
+		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">Встановіть прапорець «Win», щоб включити в скорочення клавішу Windows.</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">Скорочення клавіатури</Item>
+		
+		//New item added in 3.15.1 8/18/07
+		<Item English_Text = "Send custom strokes Per Application" ID = "2091">Особливі послідовності клавіш</Item>
+		
+		//Added 1/10/15
+		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043">Перемістити об'єкт нагору списку вставки</Item>
+		
+		//Added 12/17/16
+		<Item English_Text = "Activate Ditto" ID = "2064">Активувати Ditto</Item>
+		<Item English_Text = "Activate Ditto" ID = "2066">Активувати Ditto</Item>
+		
+		<Item English_Text = "Win" ID = "2063">Win</Item>
+		<Item English_Text = "Win" ID = "2065">Win</Item>
+		<Item English_Text = "Save Current Clipboard" ID = "2062">Зберегти буфер обміну</Item>
+		<Item English_Text = "Win" ID = "2047">Win</Item>
+		
+		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044">Використати поточну вибрану групу в інтерфейсі користувача Ditto's для останніх 10 копій</Item>
+		
+	</Ditto_Options_Shortcuts>
+	<Ditto_Options_Friends>
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Об'єкт буде принйнято в буфер обміну, якщо IP-адреса або ім'я комп'ютера-відправника буде в цієму списку. Інакше об'єкт попаде в список збережених</Item>
+		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP-адреси або імена комп'ютеров (розділювач ,(кома))</Item>
+		<Item English_Text = "Disable Recieving Clips" ID = "2026">Вимкнути приймання об'єктів</Item>
+		<Item English_Text = "Group Password" ID = "2054">Груповий пароль</Item>
+		<Item English_Text = "If you are receiving clips from computers where your group password does not match, enter additional group passwords separated by commas" ID = "2055">Можна вказати декілька групових паролів комп’ютерів (розділювач ,(кома))</Item>
+		<Item English_Text = "Receive Passwords" ID = "2056">Паролі на приймання</Item>
+		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Якщо встановлено «Відпрівляти всі копії» то всі копії будуть відправлені на інший комп'ютер. Інакше їх можна буде відправити з допомогою правої кнопки мишки.</Item>
+		<Item English_Text = "Log Send Receive Commands" ID = "1042">Записувати в журнал команди приймання-передачі</Item>
+		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Друзі</Item>
+		
+			
+		//Added in 12-17-16
+		<Item English_Text = "Request using IP Address" ID = "2127">Запит із використанням IP-адреси</Item>
+		<Item English_Text = "Request using Host Name" ID = "2129">Запит із використанням Імені вузла</Item>
+		<Item English_Text = "Remote Files" ID = "2128">Віддалені файли</Item>
+			
+	</Ditto_Options_Friends>
+	<Ditto_Options_Friends_Detail>
+		<Item English_Text = "Send All Copies to this friend" ID = "1015">Відправляти всі копії</Item>
+		<Item English_Text = "IP/Name" ID = "2052">IP/Ім'я</Item>
+		<Item English_Text = "Description" ID = "2053">Опис</Item>
+		<Item English_Text = "Friend Details" ID = "-1">Деталі друга(подруги)</Item>
+	</Ditto_Options_Friends_Detail>
+	<Ditto_Options_Stats>
+		<Item English_Text = "Odometer" ID = "2052">Статистика</Item>
+		<Item English_Text = "Trip Odometer" ID = "2053">Статистика за день</Item>
+		<Item English_Text = "Copies" ID = "2054">Копіювань</Item>
+		<Item English_Text = "Pastes" ID = "2055">Вставок</Item>
+		<Item English_Text = "Copies" ID = "2056">Копіювань</Item>
+		<Item English_Text = "Pastes" ID = "2057">Вставок</Item>
+		<Item English_Text = "Reset" ID = "1006">Скинути</Item>
+		<Item English_Text = "Saved Copies" ID = "2058">Збережено об'єктів</Item>
+		<Item English_Text = "Saved Copy Data" ID = "2059">Розмір об'єктів</Item>
+		<Item English_Text = "Remove All" ID = "1013">Знищити всі</Item>
+		<Item English_Text = "Last Started" ID = "2060">Останній запуск</Item>
+		<Item English_Text = "Database Size" ID = "2061">Розмір бази даних</Item>
+		<Item English_Text = "Clips Sent" ID = "2066">Відправлено</Item>
+		<Item English_Text = "Clips received" ID = "2067">Прийнято</Item>
+		<Item English_Text = "Since Last Start" ID = "2068">Після останнього запуску</Item>
+		<Item English_Text = "Stats" ID = "-1" PropertyPage = "true">Статистика</Item>
+	</Ditto_Options_Stats>
+	<Ditto_Options_Supported_Types_Add>
+		<Item English_Text = "Main Types" ID = "2052">Основні типи</Item>
+		<Item English_Text = "Custom Type" ID = "2053">Власний тип</Item>
+		<Item English_Text = "Add" ID = "1020">Добавити</Item>
+		<Item English_Text = "Currently on the Clipboard" ID = "2054">Тепер в буфері обміну</Item>
+		<Item English_Text = "Add" ID = "1019">Добавити</Item>
+		<Item English_Text = "Add" ID = "1021">Добавити</Item>
+		<Item English_Text = "Cancel" ID = "2">Відміна</Item>
+		<Item English_Text = "Add Supported Type" ID = "-1">Додати  підтримуваний тип</Item>
+	</Ditto_Options_Supported_Types_Add>
+	<Ditto_Move_To_Groups>
+		<Item English_Text = "New Group" ID = "1040">Нова група</Item>
+		<Item English_Text = "OK" ID = "1">ОК</Item>
+		<Item English_Text = "Cancel" ID = "2">Відміна</Item>
+		<Item English_Text = "Move to Group" ID = "-1">Перемістити в групу</Item>
+	</Ditto_Move_To_Groups>
+	<Ditto_String_Table>
+		<Item English_Text = "General" ID = "GeneralTitle">Загальне</Item>
+		<Item English_Text = "Supported Types" ID = "SupportedTypesTitle">Типи об'єктів</Item>
+		<Item English_Text = "Stats" ID = "StatsTitle">Статистика</Item>
+		<Item English_Text = "Friends" ID = "FriendsTitle">Друзі</Item>
+		<Item English_Text = "Quick Paste" ID = "QuickPasteTitle">Швидка вставка</Item>
+		<Item English_Text = "Keyboard Shortcuts" ID = "KeyboardShortcutsTitle">Скорочення</Item>
+		<Item English_Text = "About" ID = "AboutTitle">Про програму...</Item>
+		<Item English_Text = "Error Opening Database." ID = "Error_Opening_Database">Помилка відкриття бази даних</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.\nSelect YES to download DAO from http://ditto-cp.sourceforge.net/dao_setup.exe\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao">Помилка ініціалізації  DAO с сайта http://ditto-cp.sourceforge.net/dao_setup.exe\nПісля встановлення перезапустіть Ditto</Item>
+		<Item English_Text = "Unrecognized Database Format" ID = "Database_Format">Невідомий тип бази даних</Item>
+		<Item English_Text = "the file will be renamed" ID = "File_Renamed">файл буде перейменовано</Item>
+		<Item English_Text = "and a new database will be created" ID = "New_Database">і буде створено нову базу даних</Item>
+		<Item English_Text = "Updates available for Ditto.\nVisit ditto-cp.sourceforge.net for details\n\nRunning Version" ID = "Updates_Available">Доступна нова версія.\nДеталі: ditto-cp.sourceforge.net\n\nВстановлена версія:</Item>
+		<Item English_Text = "Update Version" ID = "Update_Version">Нова версія:</Item>
+		<Item English_Text = "Download updated version?" ID = "Download_Update">Завантажити нову версію?</Item>
+		<Item English_Text = "No updates available" ID = "No_Updates">У вас найновіша версія</Item>
+		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Це знищить всі скопійовані об'єкти!\n\nПродовжити?</Item>
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Відключитись від буферу обмену</Item>
+		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Підключитись до буферу обмену</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">Помилка ініціалізації БД DAO/Jet.\n Буде встановлено DAO.\nПісля встановлення перезапістіть Ditto.</Item>
+		<Item English_Text = "NO TARGET" ID = "No_Target">НЕМА ЦІЛІ</Item>
+		
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Підтверджувати знищення</Item>
+		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">Знищити виділені об'єкти</Item>
+		<Item English_Text = "Error importing exported clip" ID = "Error_Importing">Помилка імпорту об'єкту</Item>
+		<Item English_Text = "Error parsing exported clip" ID = "Error_Parsing">Помилка анализу експортованого об'єкту</Item>
+		<Item English_Text = "Clip placed on clipboard" ID = "Importing_Good">Об'єкт звантажено в буфер обміну</Item>
+		<Item English_Text = "Successfully imported" ID = "Import_Successfully">Успішно імпортовано</Item>
+		<Item English_Text = "clip" ID = "Clip">об'єкт</Item>
+		<Item English_Text = "clips" ID = "Clips">об'єктів</Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">Оновити опис об'єкту при збереженні?</Item>
+		<Item English_Text = "New Clip" ID = "New_Clip">Новий...</Item>
+		<Item English_Text = "Save" ID = "Save">Зберегти</Item>
+		<Item English_Text = "Save All" ID = "Save_All">Зберегти все</Item>
+		<Item English_Text = "Close Current Tab" ID = "Close">Закрити вкладку</Item>
+		<Item English_Text = "Current Item is not editable.  A clip must have one of the clip types" ID = "NotEditable">Неможливо редагувати. Об'єкт повинен містити один из форматів</Item>
+		<Item English_Text = "to be editable" ID = "Editable">щоб його можна було редагувати</Item>
+		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">Зберегти зміни у</Item>
+		<Item English_Text = "Error saving clip" ID = "ErrorSaving">Помилка збереження об'єкту</Item>
+		<Item English_Text = "New" ID = "New">Новий</Item>
+		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">Зберегти, закрити і завантажити в буфер обміну</Item>
+		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">Редактор Ditto</Item>
+		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title">Ditto — іменована вставка</Item>
+		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">Помилка завантаження</Item>
+		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2">Помилка пошуку об'єкту</Item>
+		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">Помилка пошуку об'єкту</Item>
+		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title">Ditto — Іменована копія</Item>
+		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">Помилка збереження іменованої копії в базі даних</Item>
+		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">Помилка збереження іменованої копії</Item>
+		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">Ditto не отримав об'єкт</Item> 
+
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Add-Ins" ID = "Add_Ins">Додатки</Item> 
+		
+		<Item English_Text = "Copy Buffers" ID = "CopyBuffers">Буфери копіювання</Item>
+		
+		<Item English_Text = "Search Options" ID = "SearchOptionsTooltip">Опції пошуку</Item>
+		<Item English_Text = "Groups" ID = "GroupsTooltip">Групи</Item>
+		
+		//New strings added in 3.17 2-28-10
+		<Item English_Text = "Search" ID = "Search">Пошук</Item>
+		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">Відправити усі копії</Item>
+        <Item English_Text = "IP/Name" ID = "IP_Name">ІР/Ім'я</Item>
+        <Item English_Text = "Descriptions" ID = "Descriptions">Опис</Item>
+		
+		<Item English_Text = "Quick Paste Keyboard" ID = "QuickPasteKeyboardTitle">Гарячі (швидкі) клавіші</Item>
+		
+		<Item English_Text = "Hot Key" ID = "QPHotKey">Гаряча клавіша</Item>
+		<Item English_Text = "Command" ID = "QPCommand">Команда</Item>
+		
+		<Item English_Text = "[Always on top]" ID = "top_most">[Завжди поверх усіх вікон]</Item>
+		
+		<Item English_Text = "[Disconnected]" ID = "disconnected">[Відключено]</Item>
+		<Item English_Text = "Ditto is running minimized, Ditto can be opened by hot keys or by clicking the task tray icon" ID = "StartuMsg">Ditto працює згорнутим, Ditto можна відкрити за допомогою гарячих клавіш або клікнути піктограму на панелі завдань</Item>
+		<Item English_Text = "There are no results for" ID = "NoSearchResults">Немає результатів по пошуку:</Item>
+		<Item English_Text = "Warning this can take quite a long time and require up to double the hard drive space as your current database size, Continue?" ID = "CompactRepairWarning">Попередження, це може зайняти багато часу і вимагати подвоєння місця на жорсткому диску в порівнянні з поточним розміром бази даних. Продовжити?</Item>
+		<Item English_Text = "Prompt For Name" ID = "prompt_for_name">Запит імені</Item>
+		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme">Темна/світла теми, як у системі</Item>
+		
+		<Item English_Text = "Backing up database" ID = "BackupDbMsg">Резервування бази даних</Item>
+		<Item English_Text = "Restoring database" ID = "RestoreDbMsg">Відновлення бази даних</Item>
+		
+		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">Ditto не зміг відкрити базу даних. У разі потреби оновіть шлях у Параметрах. Шлях:</Item>
+				
+		<Item English_Text = "At Caret" ID = "AtCaret">Поряд з текст.курсором</Item>
+		<Item English_Text = "At Cursor" ID = "AtCursor">Під вказівником миші</Item>
+		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition">В попередній позиції</Item>
+				
+	</Ditto_String_Table>
+	<Ditto_Options_Sheet>
+		<Item English_Text = "OK" ID = "1">ОК</Item>
+		<Item English_Text = "Cancel" ID = "2">Відміна</Item>
+		<Item English_Text = "Apply" ID = "12321">Застосувати</Item>
+	</Ditto_Options_Sheet>
+	<Ditto_Tray_Icon_Menu>
+		<Item English_Text = "Show Quick Paste" ID = "32773">Показати швидку вставку</Item>
+		<Item English_Text = "Options" ID = "32771">Параметри</Item>
+		<Item English_Text = "Help" ID = "32843">Довідка</Item>
+		<Item English_Text = "Exit" ID = "32772">Вихід</Item>
+
+		//New strings added in 3.6 6-9-06
+		<Item English_Text = "Import" ID = "32854">Імпортувати</Item>
+		<Item English_Text = "New Clip" ID = "32868">Новий</Item>
+
+		//Added 12/10/11
+		<Item English_Text = "Global Hot Keys" ID = "32872">Глобальні Гарячі клавіші</Item>
+
+		//Added 1/10/15
+		<Item English_Text = "Delete Clip Data" ID = "32886">Видалити дані об'єктів</Item>
+
+		//Added 12/17/16
+		<Item English_Text = "Fixup Sticky Clip Order" ID = "32909">Виправлення порядку закріплених об'єктів</Item>		
+		<Item English_Text = "Save Current Clipboard" ID = "32904">Зберегти поточний буфер обміну</Item>
+		
+		<Item English_Text = "Show Startup Message" ID = "32959">Показати стартове повідомлення</Item>
+		
+		<Item English_Text = "Backup Database" ID = "32960">Резервування бази даних</Item>
+		<Item English_Text = "Restore Database" ID = "32961">Відновлення бази даних</Item>
+		
+	</Ditto_Tray_Icon_Menu>
+
+	//Added in 9-11-09
+	<Ditto_Options_CopyBuffers>
+		<Item English_Text = "Copy Buffer 1" ID = "2088">Буффер 1</Item>
+		<Item English_Text = "Copy" ID = "2079">Копіювати</Item>
+		<Item English_Text = "Paste" ID = "2080">Вставити</Item>
+		<Item English_Text = "Cut" ID = "2081">Вирізати</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1042">Звук при копіюванні</Item>
+		<Item English_Text = "Win" ID = "2085">Win</Item>
+		<Item English_Text = "Win" ID = "2086">Win</Item>
+		<Item English_Text = "Win" ID = "2087">Win</Item>
+
+		<Item English_Text = "Copy Buffer 2" ID = "2098">Буффер 2</Item>
+		<Item English_Text = "Copy" ID = "2093">Копіювати</Item>
+		<Item English_Text = "Paste" ID = "2094">Вставити</Item>
+		<Item English_Text = "Cut" ID = "2097">Вирізати</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1043">Звук при копіюванні</Item>
+		<Item English_Text = "Win" ID = "2090">Win</Item>
+		<Item English_Text = "Win" ID = "2092">Win</Item>
+		<Item English_Text = "Win" ID = "2096">Win</Item>
+		
+		<Item English_Text = "Copy Buffer 3" ID = "2108">Буффер 3</Item>
+		<Item English_Text = "Copy" ID = "2103">Копіювати</Item>
+		<Item English_Text = "Paste" ID = "2104">Вставити</Item>
+		<Item English_Text = "Cut" ID = "2107">Вирізати</Item>
+		<Item English_Text = "Play Sound on Copy" ID = "1044">Звук при копіюванні</Item>
+		<Item English_Text = "Win" ID = "2100">Win</Item>
+		<Item English_Text = "Win" ID = "2102">Win</Item>
+		<Item English_Text = "Win" ID = "2106">Win</Item>
+	</Ditto_Options_CopyBuffers>
+	
+	<Ditto_GlobalHotKeys>
+		<Item English_Text = "Global Hot Keys" ID = "-1">Глобальні скорочення</Item>
+		<Item English_Text = "Close" ID = "2">Закрити</Item>
+		<Item English_Text = "(Clip) " ID = "(Clip)">(Об'єкт)</Item>
+		<Item English_Text = "Error" ID = "Error">Помилка</Item>
+		<Item English_Text = "Yes" ID = "Yes">Так</Item>
+		<Item English_Text = "Description" ID = "Description">Опис</Item>
+		<Item English_Text = "HotKey" ID = "HotKey">Скорочення клавіш</Item>
+		<Item English_Text = "Registered" ID = "Registered">Зареєстровано</Item>
+	</Ditto_GlobalHotKeys>
+
+	//Added 1/10/15
+	<Ditto_Groups_Right_Click_Menu>
+		<Item English_Text = "New Sub Group" ID = "32896">Нова підгрупа</Item>
+		<Item English_Text = "Delete Group" ID = "32897">Видалити групу</Item>
+		<Item English_Text = "Properties" ID = "32898">Налаштування</Item>	
+	</Ditto_Groups_Right_Click_Menu>
+	
+	//Added 1/10/15
+	<Ditto_DeleteClipData>
+		<Item English_Text = "Delete Clip Data" ID = "-1">Видалення даних об'єктів</Item>
+		<Item English_Text = "Each clip in Ditto is made of multiple clipboard items, all clipboard items in Ditto are listed below." ID = "2126">Кожен об'єкт у Ditto складається з кількох елементів буфера обміну, вони перераховані нижче.</Item>
+		<Item English_Text = "Search Options" ID = "2120">Пошук налаштування</Item>
+		<Item English_Text = "Title" ID = "1042">Заголовок</Item>
+		<Item English_Text = "Create Date Range" ID = "1043">Створено (діапазон)</Item>
+		<Item English_Text = "Format" ID = "1045">Форматування</Item>
+		<Item English_Text = "Last Used Range" ID = "1044">Використано (діапазон)</Item>
+		<Item English_Text = "Search" ID = "1040">Пошук</Item>
+		<Item English_Text = "Database Size" ID = "2115">Розмірбази даних</Item>
+		<Item English_Text = "Selected Size" ID = "2116">Вибраний розмір</Item>
+		<Item English_Text = "Selected Count" ID = "2117">Лічильник</Item>
+		<Item English_Text = "Delete" ID = "2118">Видалити</Item>
+		<Item English_Text = "Cancel" ID = "2">Відміна</Item>
+		<Item English_Text = "Title" ID = "Title">Заголовок</Item>
+		<Item English_Text = "Created" ID = "Created">Створено</Item>
+		<Item English_Text = "Last Used" ID = "LastUsed">Крайнє використання</Item>
+		<Item English_Text = "Format" ID = "Format">Форматування</Item>
+		<Item English_Text = "Data Size" ID = "DataSize">Розмір даних</Item>
+	</Ditto_DeleteClipData>
+	
+	<Ditto_Options_Quick_Paste_Keyboard>
+		<Item English_Text = "Quick Paste Keyboard" ID = "-1" PropertyPage = "true">Гарячі (швидкі) клавіші</Item>
+		
+		<Item English_Text = "Reset" ID = "2144">Скинути</Item>
+		<Item English_Text = "Shortcuts for selected command:" ID = "2148">Сполучення клавіш для команди</Item>
+		<Item English_Text = "Remove" ID = "2124">Видалити</Item>
+		<Item English_Text = "Add" ID = "2132">Додати</Item>
+		<Item English_Text = "Enable Second Keypress" ID = "2146">Включити другу комбінацію</Item>
+		<Item English_Text = "First Keypress" ID = "2149">Перша комбінація</Item>
+		<Item English_Text = "Second Keypress" ID = "2147">Друга комбінація </Item>
+		<Item English_Text = "Assign" ID = "1040">Застосувати</Item>
+		
+		<Item English_Text = "Keyboard Shortcut" ID = "2127">Гаряча клавіша</Item>
+		<Item English_Text = "Mouse Click" ID = "2130">Клік мишою</Item>
+		<Item English_Text = "Keyboard Shortcut" ID = "2133">Гаряча клавіша</Item>
+		<Item English_Text = "Mouse Click" ID = "2136">Клік мишою</Item>
+		<Item English_Text = "Enter Key" ID = "2135">Натисніть</Item>
+		
+		<Item English_Text = "Enter Key" ID = "2137">Натисніть</Item>
+		<Item English_Text = "Shift" ID = "1042"></Item>
+		<Item English_Text = "Control" ID = "2139"></Item>
+		<Item English_Text = "Alt" ID = "2140"></Item>
+		<Item English_Text = "Shift" ID = "1043"></Item>
+		<Item English_Text = "Control" ID = "2142"></Item>
+		<Item English_Text = "Alt" ID = "2143"></Item>
+		
+		<Item English_Text = "View Full Description" ID = "1">Переглянути розгорнутий опис</Item>
+		<Item English_Text = "Next Full Description" ID = "2">Наступний розгорнутий опис</Item>
+		<Item English_Text = "Previous Full Description" ID = "3">Попередній розгорнутий опис</Item>
+		<Item English_Text = "Show Context Menu" ID = "4">Показати контекстне меню</Item>
+		<Item English_Text = "New Group" ID = "5">Нова група</Item>
+		<Item English_Text = "New Group Selection" ID = "6">Вибір нової групи</Item>
+		<Item English_Text = "Toggle On File Logging" ID = "7">Включити логування файлу</Item>
+		<Item English_Text = "Toggle OutputDebugString Logging" ID = "8">Включити логування OutputDebugString</Item>
+		<Item English_Text = "Close Window" ID = "9">Закрити вікно</Item>
+		<Item English_Text = "NEXTTABCONTROL" ID = "10">Наступна закладка</Item>
+		<Item English_Text = "PREVTABCONTROL" ID = "11">Попередня закладка</Item>
+		<Item English_Text = "View Groups" ID = "12">Переглянути групи</Item>
+		<Item English_Text = "New Clip" ID = "13">Новий об'єкт</Item>
+		<Item English_Text = "Edit Clip" ID = "14">Редагувати об'єкт</Item>
+		<Item English_Text = "MODIFIER_ACTVE_SELECTIONUP" ID = "15"></Item>
+		<Item English_Text = "MODIFIER_ACTVE_SELECTIONDOWN" ID = "16"></Item>
+		<Item English_Text = "MODIFIER_ACTVE_MOVEFIRST" ID = "17"></Item>
+		<Item English_Text = "MODIFIER_ACTVE_MOVELAST" ID = "18"></Item>
+		<Item English_Text = "Cancel Filter" ID = "19">Відмінити фільтр</Item>
+		<Item English_Text = "HOMELIST" ID = "20"></Item>
+		<Item English_Text = "Back Group" ID = "21">Назад до групи</Item>
+		<Item English_Text = "Toggle Show Persistant" ID = "22">Включити перегляд постійно</Item>
+		<Item English_Text = "Paste Selected" ID = "23">Вставити вибране</Item>
+		<Item English_Text = "Delete Selected" ID = "24">Видалити вибране</Item>
+		<Item English_Text = "Clip Properties" ID = "25">Налаштування об'єкту</Item>
+		<Item English_Text = "Paste Selected Plain Text" ID = "26">Вставити вибране як текст</Item>
+		<Item English_Text = "Move Clip To Group" ID = "27">Перемістити обє'кт до групи</Item>
+		<Item English_Text = "Option - Elevate Privleges" ID = "28">Опція - Підвищити прівілеї</Item>
+		<Item English_Text = "Option - Show In TaskBar" ID = "29">Опція - показати на панелі задач</Item>
+		<Item English_Text = "Compare Selected Clips" ID = "30">Порівняти вибрані об'єкти</Item>
+		<Item English_Text = "Select Left File For Compare" ID = "31">Вибрати лівий файл для порівняння</Item>
+		<Item English_Text = "Select Right File And Do Compare" ID = "32">Вибрати правий файл для порівняння</Item>
+		<Item English_Text = "Export To Text File" ID = "33">Екпорт до текстового файлу</Item>
+		<Item English_Text = "Export To QR Code" ID = "34">Створити QR-код</Item>
+		<Item English_Text = "Export To Google Translate" ID = "35">Відправити до Google перекладача		</Item>
+		<Item English_Text = "Export To Image File" ID = "36">Експорт в файл зображення</Item>
+		<Item English_Text = "Save Current Clipboard" ID = "37">Зберегти поточний буфер обміну</Item>
+		<Item English_Text = "Move Clip Up" ID = "38">Перемістити об'єкт вгору на одну позицію</Item>
+		<Item English_Text = "Move Clip Down" ID = "39">Перемістити об'єкт вниз на одну позицію</Item>
+		<Item English_Text = "Move Clip Top" ID = "40">Перемістити об'єкт нагору</Item>
+		<Item English_Text = "Filter On Selected Clip" ID = "41">Фільтрувати вибрані об'єкти</Item>
+		<Item English_Text = "Paste Upper Case" ID = "42">Вставити ПРОПИСОМ</Item>
+		<Item English_Text = "Paste Lower Case" ID = "43">Вставити малими</Item>
+		<Item English_Text = "Paste Capitalize" ID = "44">Вставити Заголовними</Item>
+		<Item English_Text = "Paste Sentence Case" ID = "45">Вставити перше з Заголовної</Item>
+		<Item English_Text = "Paste Remove Line Feeds" ID = "46">Вставити з видаленням переведення курсору</Item>
+		<Item English_Text = "Paste Add One Line Feed" ID = "47">Вставити з переведенням курсору</Item>
+		<Item English_Text = "Paste Add Two Line Feeds" ID = "48">Вставити з переведенням курсору двіччі</Item>
+		<Item English_Text = "Paste Typoglycemia" ID = "49">Типоглікемія</Item>
+		<Item English_Text = "Send to friend 1" ID = "50">Відправити другу 1</Item>
+		<Item English_Text = "Send to friend 2" ID = "51">Відправити другу 2</Item>
+		<Item English_Text = "Send to friend 3" ID = "52">Відправити другу 3</Item>
+		<Item English_Text = "Send to friend 4" ID = "53">Відправити другу 4</Item>
+		<Item English_Text = "Send to friend 5" ID = "54">Відправити другу 5</Item>
+		<Item English_Text = "Send to friend 6" ID = "55">Відправити другу 6</Item>
+		<Item English_Text = "Send to friend 7" ID = "56">Відправити другу 7</Item>
+		<Item English_Text = "Send to friend 8" ID = "57">Відправити другу 8</Item>
+		<Item English_Text = "Send to friend 9" ID = "58">Відправити другу 9</Item>
+		<Item English_Text = "Send to friend 10" ID = "59">Відправити другу 10</Item>
+		<Item English_Text = "Send to friend 11" ID = "60">Відправити другу 11</Item>
+		<Item English_Text = "Send to friend 12" ID = "61">Відправити другу 12</Item>
+		<Item English_Text = "Send to friend 13" ID = "62">Відправити другу 13</Item>
+		<Item English_Text = "Send to friend 14" ID = "63">Відправити другу 14</Item>
+		<Item English_Text = "Send to friend 15" ID = "64">Відправити другу 15</Item>
+		<Item English_Text = "Paste Position 1" ID = "65">Позиція 1</Item>
+		<Item English_Text = "Paste Position 2" ID = "66">Позиція 2</Item>
+		<Item English_Text = "Paste Position 3" ID = "67">Позиція 3</Item>
+		<Item English_Text = "Paste Position 4" ID = "68">Позиція 4</Item>
+		<Item English_Text = "Paste Position 5" ID = "69">Позиція 5</Item>
+		<Item English_Text = "Paste Position 6" ID = "70">Позиція 6</Item>
+		<Item English_Text = "Paste Position 7" ID = "71">Позиція 7</Item>
+		<Item English_Text = "Paste Position 8" ID = "72">Позиція 8</Item>
+		<Item English_Text = "Paste Position 9" ID = "73">Позиція 9</Item>
+		<Item English_Text = "Paste Position 10" ID = "74">Позиція 10</Item>
+		<Item English_Text = "Option - Show text for first ten copy hot keys" ID = "75">Опція - Показати текст для перших 10 гарячих клавіш копіювання</Item>
+		<Item English_Text = "Option - Show indicator a clip has been pasted" ID = "76">Параметр - Показати індикатор, коли об'єкт було вставлено</Item>
+		<Item English_Text = "Toggle Last Group Toggle" ID = "77">Перключитись на крайню відкриту групу</Item>
+		<Item English_Text = "Make Top Sticky Clip" ID = "78">Закріпити об'єкт вгорі</Item>
+		<Item English_Text = "Make Last Sticky Clip" ID = "79">Закріпити об'єкт внизу</Item>
+		<Item English_Text = "Remove Sticky Setting" ID = "80">Видалити з закріплених</Item>
+		<Item English_Text = "Paste Add Current Time" ID = "81">Вставити + поточні дата, час</Item>
+		<Item English_Text = "Import Clip" ID = "82">Імпорт об'єкту</Item>
+		<Item English_Text = "Global HotKeys" ID = "83">Глоабальні клавіатурні скорочення</Item>
+		<Item English_Text = "Delete Clip Data" ID = "84">Видалити дані об'єкту</Item>
+		<Item English_Text = "Replace Top Sticky Clip" ID = "85">Замініть верхній закріплений об'єкт</Item>
+			
+	</Ditto_Options_Quick_Paste_Keyboard>
+	
+</Ditto_Language_File>
