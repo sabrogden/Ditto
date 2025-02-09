@@ -118,10 +118,10 @@ jobs:
     
       - name: Publish to GitHub
         env:
-          token = test
-          uploadPath = DittoSetup\output\
-          tag = ${{env.VERSION_FILENAME}}
-          previous_tag = 3.24.246.0
+          token: test
+          uploadPath: DittoSetup\output\
+          tag: ${{env.VERSION_FILENAME}}
+          previous_tag: 3.24.246.0
         run: |
              npm install ./DittoSetup/GitHubRelease
              node ./DittoSetup/GitHubRelease/index.js
