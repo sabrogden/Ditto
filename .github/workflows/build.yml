@@ -28,12 +28,12 @@ jobs:
       - name: Set the value
         id: step_one
         run: |
-            echo "action_state=yellow" | Out-File -FilePath $env:GITHUB_ENV -Append # no need for -Encoding utf8
+            echo "VERSION_FILENAME=3_25_${env:BUILD_NUMBER}_0" | Out-File -FilePath $env:GITHUB_ENV -Append # no need for -Encoding utf8
             
       - name: Use the value
         id: step_two
         run: |
-            echo "${{ env.action_state }}" # This will output 'yellow'
+            echo "${{ env.VERSION_FILENAME }}" # This will output 'yellow'
 
 #      - name: Add MSBuild to PATH
 #        uses: microsoft/setup-msbuild@v2
