@@ -46,7 +46,7 @@ UninstallLogMode=overwrite
 ChangesAssociations=yes
 CloseApplications=yes
 ;vista forward
-MinVersion=6.0.6000
+MinVersion=6.1
 SetupLogging=yes
 
 [Languages]
