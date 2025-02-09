@@ -69,7 +69,7 @@ jobs:
         run: |
             (Get-Content 'DittoSetup\Chocolatey.install\ditto.nuspec' -Raw).Replace("%version%", "${{env.VERSION_DOT_FILENAME}}") | Out-File 'DittoSetup\Chocolatey.install\ditto.nuspec'
             copy DittoSetup\output\DittoSetup_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey.install\tools\DittoSetup_${{env.VERSION_FILENAME}}.exe
-            copy DittoSetup\output\DittoSetup_64bit_${{env.VERSION_FILENAME}}%.exe DittoSetup\Chocolatey.install\tools\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe
+            copy DittoSetup\output\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey.install\tools\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe
             cd DittoSetup\Chocolatey.install
             choco pack     
             choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
