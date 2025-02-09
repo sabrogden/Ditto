@@ -7,6 +7,8 @@ on:
 
 env:
   SOLUTION_FILE_PATH: CP_Main_10.sln
+  VERSION_FILENAME: 3_24_x_0  
+  VERSION_DOT_FILENAME: 3.24.x.0  
 
 jobs:
   build:
