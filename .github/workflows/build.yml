@@ -6,7 +6,9 @@ on:
       - 'master'
 
 env:
-  SOLUTION_FILE_PATH: CP_Main_10.sln 
+  SOLUTION_FILE_PATH: CP_Main_10.sln
+  VERSION_FILENAME: 3_24_5_0  
+  VERSION_DOT_FILENAME: 3.24.5.0  
 
 jobs:
   build:
@@ -22,8 +24,17 @@ jobs:
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
-      - name: Build
+      - name: Build 32bit
         run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
+        
+      - name: Build 64bit
+        run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
+        
+      - name: Compile .ISS to .EXE Installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: DittoSetup\DittoSetup_10.iss
+          options: /F"DittoSetup_${{env.VERSION_FILENAME}}"
     
     # - name: Build Setup
       # run: |
