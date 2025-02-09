@@ -118,7 +118,7 @@ async function UpdateReleaseNotes(nightlyRelease) {
 
 async function Run() {
 	
-	console.log(`running publish build: ${env.token}`);
+	console.log(`running publish build: ${env.token}, tag: ${env.tag}, prev tag: ${env.previous_tag}`);
 	
     let nightlyRelease = await GetNightlyRelease();
 
