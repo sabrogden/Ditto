@@ -26,18 +26,18 @@ jobs:
             echo "VERSION_FILENAME=3_25_${env:BUILD_NUMBER}_0" | Out-File -FilePath $env:GITHUB_ENV -Append
             echo "VERSION_DOT_FILENAME=3.25.${env:BUILD_NUMBER}.0" | Out-File -FilePath $env:GITHUB_ENV -Append
             
-#      - name: Add MSBuild to PATH
-#        uses: microsoft/setup-msbuild@v2
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
 
-      #- name: Restore NuGet packages
-      #  working-directory: ${{env.GITHUB_WORKSPACE}}
-      #  run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+      - name: Restore NuGet packages
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
-      #- name: Build 32bit
-      #  run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
+      - name: Build 32bit
+        run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
         
-      #- name: Build 64bit
-      #  run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
+      - name: Build 64bit
+        run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
       - name: Set Versions
         run: |
             DittoSetup\rcedit-x86 Release\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
