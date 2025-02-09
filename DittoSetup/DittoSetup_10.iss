@@ -45,7 +45,6 @@ DirExistsWarning=no
 UninstallLogMode=overwrite
 ChangesAssociations=yes
 CloseApplications=yes
-;vista forward
 MinVersion=6.1
 SetupLogging=yes
 
@@ -104,9 +103,9 @@ Name: AddFireWallException; Description: {cm:AddFirewallException};  Flags: unch
 
 [Files]
 #ifdef bit64
-  Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_64');
-  Source: ..\Release64\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
+  ;Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_64');
+  ;Source: ..\Release64\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
+  ;Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 
   ; "C:\Windows\sysnative" will be converted to "C:\Windows\System32"
   ; System32 stores a 64-bit DLL on x64 system
@@ -116,9 +115,9 @@ Name: AddFireWallException; Description: {cm:AddFirewallException};  Flags: unch
   Source: C:\Windows\sysnative\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
 #endif
 #ifndef bit64
-  Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_32');
-  Source: ..\Release\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
+  ;Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_32');
+  ;Source: ..\Release\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
+  ;Source: ..\Release\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 
   Source: C:\Windows\SysWOW64\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
   Source: C:\Windows\SysWOW64\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion

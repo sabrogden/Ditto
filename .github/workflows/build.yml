@@ -24,11 +24,11 @@ jobs:
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
-      - name: Build 32bit
-        run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
+      #- name: Build 32bit
+      #  run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
         
-      - name: Build 64bit
-        run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
+      #- name: Build 64bit
+      #  run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
         
       - name: Compile 32bit installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
@@ -39,8 +39,8 @@ jobs:
       - name: Compile 64bit installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
         with:
-          path: DittoSetup\DittoSetup_10.iss "/dbit64=1"
-          options: /F"DittoSetup_64bit__${{env.VERSION_FILENAME}}"
+          path: DittoSetup\DittoSetup_10.iss
+          options: /F"DittoSetup_64bit__${{env.VERSION_FILENAME}}" "/dbit64=1"
     
     # - name: Build Setup
       # run: |
