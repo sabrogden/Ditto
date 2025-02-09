@@ -52,19 +52,41 @@ jobs:
             7z a DittoSetup\output\DittoDebug_${{env.VERSION_FILENAME}}.7z *.pdb -r
             7z a DittoSetup\output\DittoDebug_${{env.VERSION_FILENAME}}.7z *.map -r
             
-      - name: Choco
+      - name: Choco - Ditto
         shell: pwsh
         run: |
-            (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "$($env:VERSION_DOT_FILENAME)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
+            (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "${{env.VERSION_DOT_FILENAME}}") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
             copy DittoSetup\Output\DittoSetup_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey\tools\DittoSetup_${{env.VERSION_FILENAME}}.exe
             copy DittoSetup\Output\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey\tools\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe
             cd DittoSetup\Chocolatey
-            echo "push --key ${{ secrets.CHOCO_API_KEY}} --source https://push.chocolatey.org/"
             choco pack     
             choco push --source https://push.chocolatey.org/ --key ${{ secrets.CHOCO_API_KEY}}
             cd ..
             cd ..
+            
+      - name: Choco - Ditto.Install
+        shell: pwsh
+        run: |
+            (Get-Content 'DittoSetup\Chocolatey.install\ditto.nuspec' -Raw).Replace("%version%", "${{env.VERSION_DOT_FILENAME}}") | Out-File 'DittoSetup\Chocolatey.install\ditto.nuspec'
+            copy DittoSetup\output\DittoSetup_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey.install\tools\DittoSetup_${{env.VERSION_FILENAME}}.exe
+            copy DittoSetup\output\DittoSetup_64bit_${{env.VERSION_FILENAME}}%.exe DittoSetup\Chocolatey.install\tools\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe
+            cd DittoSetup\Chocolatey.install
+            choco pack     
+            choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+            cd ..
+            cd ..
     
+      - name: Choco - Ditto.Portable
+        shell: pwsh
+        run: |
+            (Get-Content 'DittoSetup\Chocolatey.portable\ditto.nuspec' -Raw).Replace("%version%", "${{env.VERSION_DOT_FILENAME}}") | Out-File 'DittoSetup\Chocolatey.portable\ditto.nuspec'
+            copy DittoSetup\output\DittoPortable_${{env.VERSION_FILENAME}}.zip DittoSetup\Chocolatey.portable\tools\DittoPortable_${{env.VERSION_FILENAME}}.zip
+            copy DittoSetup\output\DittoPortable_64bit_${{env.VERSION_FILENAME}}.zip DittoSetup\Chocolatey.portable\tools\DittoPortable_64bit_${{env.VERSION_FILENAME}}.zip
+            cd DittoSetup\Chocolatey.portable
+            choco pack     
+            choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+            cd ..
+            cd ..
     # - name: Build Setup
       # run: |
         # "C:\Program Files (x86)\Inno Setup 6\iscc.exe" /F"DittoSetup" DittoSetup\DittoSetup_10.iss
