@@ -117,6 +117,9 @@ async function UpdateReleaseNotes(nightlyRelease) {
 
 
 async function Run() {
+	
+	console.log(`running publish build: ${env.token}`);
+	
     let nightlyRelease = await GetNightlyRelease();
 
     await DeleteOldAssets(nightlyRelease);
