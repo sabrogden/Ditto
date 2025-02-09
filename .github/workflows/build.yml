@@ -72,7 +72,7 @@ jobs:
             copy DittoSetup\output\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey.install\tools\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe
             cd DittoSetup\Chocolatey.install
             choco pack     
-            choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+            choco push --source https://push.chocolatey.org/ --key ${{ secrets.CHOCO_API_KEY}}
             cd ..
             cd ..
     
@@ -84,7 +84,7 @@ jobs:
             copy DittoSetup\output\DittoPortable_64bit_${{env.VERSION_FILENAME}}.zip DittoSetup\Chocolatey.portable\tools\DittoPortable_64bit_${{env.VERSION_FILENAME}}.zip
             cd DittoSetup\Chocolatey.portable
             choco pack     
-            choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+            choco push --source https://push.chocolatey.org/ --key ${{ secrets.CHOCO_API_KEY}}
             cd ..
             cd ..
     # - name: Build Setup
