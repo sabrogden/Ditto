@@ -3,7 +3,7 @@ name: MSBuild
 on:
   pull_request:
     branches:
-      - moved-files
+      branches: [ "moved-files" ]
 
 env:
   SOLUTION_FILE_PATH: CP_Main_10.sln 
@@ -13,17 +13,17 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
 
       - name: Restore NuGet packages
+        working-directory: ${{env.GITHUB_WORKSPACE}}
         run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
       - name: Build
         run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
-        shell: cmd
     
     # - name: Build Setup
       # run: |
