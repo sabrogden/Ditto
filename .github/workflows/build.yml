@@ -39,9 +39,9 @@ jobs:
       #- name: Build 64bit
       #  run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
       - name: Set Versions
-        run |
-           DittoSetup\rcedit-x86 Release\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
-           DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
+        run: |
+            DittoSetup\rcedit-x86 Release\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
+            DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
         
 #      - name: Compile 32bit installer
 #        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
