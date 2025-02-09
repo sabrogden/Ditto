@@ -46,6 +46,11 @@ jobs:
         run: |
             DittoSetup\BuildPortableZIP.bat "DittoPortable_%VERSION_FILENAME%" bit32
             DittoSetup\BuildPortableZIP.bat "DittoPortable_64bit_%VERSION_FILENAME%" bit64
+            
+      - name: Zip Debug Files
+        run: |
+            - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.pdb -r
+            - 7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.map -r
     
     # - name: Build Setup
       # run: |
