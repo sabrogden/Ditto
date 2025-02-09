@@ -25,23 +25,15 @@ jobs:
         #    VERSION_FILENAME = 3_25_${env:BUILD_NUMBER}_0  
         #    VERSION_DOT_FILENAME = 3.25.${env:BUILD_NUMBER}.0  
           
-      - name: Set env
+      - name: Set the value
+        id: step_one
         run: |
-
-            echo "action_state=yellow" | Out-File -FilePath $env:GITHUB_ENV -Append
+            echo "action_state=yellow" | Out-File -FilePath $env:GITHUB_ENV -Append # no need for -Encoding utf8
             
-            echo "${{ env.action_state }}" # This will output 'yellow'
-            # set them as GitHub ENV variables
-            #echo "VERSION_FILENAME=5" >> "${{env:GITHUB_ENV}}"
-            #echo "VERSION_DOT_FILENAME=6" >> "${{GITHUB_ENV}}"
-
-            # retrieve these GitHub ENV variables
-            #echo "${{ env.VERSION_FILENAME }} out of ${{ env.VERSION_DOT_FILENAME }} tests failed on CI"
-      
-      - name: Print new build number
+      - name: Use the value
+        id: step_two
         run: |
-            echo "Build number is ${env:VERSION_FILENAME}"
-            echo "Build number is ${env:VERSION_DOT_FILENAME}"
+            echo "${{ env.action_state }}" # This will output 'yellow'
 
 #      - name: Add MSBuild to PATH
 #        uses: microsoft/setup-msbuild@v2
