@@ -22,8 +22,8 @@ jobs:
         with:
           token: ${{secrets.github_token}}
         env:
-            VERSION_FILENAME: 3_25_${env:BUILD_NUMBER}_0  
-            VERSION_DOT_FILENAME: 3.25.${env:BUILD_NUMBER}.0  
+            VERSION_FILENAME: 3_25_${{env:BUILD_NUMBER}}_0  
+            VERSION_DOT_FILENAME: 3.25.${{env:BUILD_NUMBER}}.0  
           
       - name: Print new build number
         run: |
