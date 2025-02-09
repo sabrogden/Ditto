@@ -7,8 +7,6 @@ on:
 
 env:
   SOLUTION_FILE_PATH: CP_Main_10.sln
-  VERSION_FILENAME: 3_24_5_0  
-  VERSION_DOT_FILENAME: 3.24.5.0  
 
 jobs:
   build:
@@ -20,10 +18,15 @@ jobs:
       - name: Generate build number
         uses: onyxmueller/build-tag-number@v1
         with:
-          token: ${{secrets.github_token}}        
+          token: ${{secrets.github_token}}
+        env:
+            VERSION_FILENAME: 3_25_${env:BUILD_NUMBER}_0  
+            VERSION_DOT_FILENAME: 3.25.${env:BUILD_NUMBER}.0  
           
       - name: Print new build number
-        run: echo "Build number is ${env:BUILD_NUMBER}"
+        run: |
+            echo "Build number is ${env:VERSION_FILENAME}"
+            echo "Build number is ${env:VERSION_DOT_FILENAME}"
 
 #      - name: Add MSBuild to PATH
 #        uses: microsoft/setup-msbuild@v2
