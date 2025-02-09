@@ -28,12 +28,15 @@ jobs:
       - name: Set env
         run: |
 
+            echo "action_state=yellow" | Out-File -FilePath $env:GITHUB_ENV -Append
+            
+            echo "${{ env.action_state }}" # This will output 'yellow'
             # set them as GitHub ENV variables
-            echo "VERSION_FILENAME=5" >> "$GITHUB_ENV"
-            echo "VERSION_DOT_FILENAME=6" >> "$GITHUB_ENV"
+            #echo "VERSION_FILENAME=5" >> "${{env:GITHUB_ENV}}"
+            #echo "VERSION_DOT_FILENAME=6" >> "${{GITHUB_ENV}}"
 
             # retrieve these GitHub ENV variables
-            echo "${{ env.VERSION_FILENAME }} out of ${{ env.VERSION_DOT_FILENAME }} tests failed on CI"
+            #echo "${{ env.VERSION_FILENAME }} out of ${{ env.VERSION_DOT_FILENAME }} tests failed on CI"
       
       - name: Print new build number
         run: |
