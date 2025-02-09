@@ -21,10 +21,22 @@ jobs:
         uses: onyxmueller/build-tag-number@v1
         with:
           token: ${{secrets.github_token}}
-        env:
-            VERSION_FILENAME: 3_25_${{env:BUILD_NUMBER}}_0  
-            VERSION_DOT_FILENAME: 3.25.${{env:BUILD_NUMBER}}.0  
+        #env:
+        #    VERSION_FILENAME = 3_25_${env:BUILD_NUMBER}_0  
+        #    VERSION_DOT_FILENAME = 3.25.${env:BUILD_NUMBER}.0  
           
+      - name: Set env
+        run: |
+            tests=16
+            failures=2
+
+            # set them as GitHub ENV variables
+            echo "Tests=$tests" >> $GITHUB_ENV
+            echo "Failures=$failures" >> $GITHUB_ENV
+
+            # retrieve these GitHub ENV variables
+            echo "${{ env.Failures }} out of ${{ env.Tests }} tests failed on CI"
+      
       - name: Print new build number
         run: |
             echo "Build number is ${env:VERSION_FILENAME}"
