@@ -1,8 +1,7 @@
 name: MSBuild
 
 on:
-  pull_request:
-    branches: [ "moved-files" ]
+
 
 env:
   SOLUTION_FILE_PATH: CP_Main_10.sln 
