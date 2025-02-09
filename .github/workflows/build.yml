@@ -29,8 +29,8 @@ jobs:
         run: |
 
             # set them as GitHub ENV variables
-            echo "VERSION_FILENAME=5" >> $GITHUB_ENV
-            echo "VERSION_DOT_FILENAME=6" >> $GITHUB_ENV
+            echo "VERSION_FILENAME=5" >> "$GITHUB_ENV"
+            echo "VERSION_DOT_FILENAME=6" >> "$GITHUB_ENV"
 
             # retrieve these GitHub ENV variables
             echo "${{ env.VERSION_FILENAME }} out of ${{ env.VERSION_DOT_FILENAME }} tests failed on CI"
