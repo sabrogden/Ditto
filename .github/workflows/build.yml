@@ -56,8 +56,8 @@ jobs:
         shell: pwsh
         run: |
             (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
-            copy DittoSetup\output\DittoSetup_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey\tools\DittoSetup_${{env.VERSION_FILENAME}}.exe
-            copy DittoSetup\output\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey\tools\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe
+            copy DittoSetup\Output\DittoSetup_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey\tools\DittoSetup_${{env.VERSION_FILENAME}}.exe
+            copy DittoSetup\Output\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey\tools\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe
             cd DittoSetup\Chocolatey
             choco pack     
             choco push --key ${{ secrets.CHOCO_API_KEY}} --source https://push.chocolatey.org/
