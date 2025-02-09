@@ -53,15 +53,15 @@ jobs:
             7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.map -r
             
       - name: Choco
-        run: |
-            ps: (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
-            copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\tools\DittoSetup_%VERSION_FILENAME%.exe
-            copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\tools\DittoSetup_64bit_%VERSION_FILENAME%.exe
-            cd DittoSetup\Chocolatey
-            choco pack     
-            choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
-            cd ..
-            cd ..
+        shell: pwsh
+        run: (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
+            #copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\tools\DittoSetup_%VERSION_FILENAME%.exe
+            #copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\tools\DittoSetup_64bit_%VERSION_FILENAME%.exe
+            #cd DittoSetup\Chocolatey
+            #choco pack     
+            #choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+            #cd ..
+            #cd ..
     
     # - name: Build Setup
       # run: |
