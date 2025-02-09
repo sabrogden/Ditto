@@ -117,11 +117,12 @@ jobs:
             copy DittoSetup\appx\Ditto_${{env.VERSION_FILENAME}}.appx DittoSetup\Output\Ditto_${{env.VERSION_FILENAME}}.appx
     
       - name: Publish to GitHub
+        env:
+          token = ${{ secrets.PUBLISH_BUILD_TOKEN }}
+          uploadPath = DittoSetup\output\
+          tag = ${{env.VERSION_FILENAME}}
+          previous_tag = 3.24.246.0
         run: |
-             $env:token = ${{ secrets.PUBLISH_BUILD_TOKEN }}
-             $env:uploadPath = DittoSetup\output\
-             $env:tag = ${{env.VERSION_FILENAME}}
-             $env:previous_tag = 3.24.246.0
              npm install ./DittoSetup/GitHubRelease
              node ./DittoSetup/GitHubRelease/index.js
 
