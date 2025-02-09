@@ -94,6 +94,9 @@ jobs:
             7z x DittoSetup\output\DittoPortable_${{env.VERSION_FILENAME}}.zip -oDittoSetup\appx -r
             (Get-Content 'DittoSetup\appx\appxmanifest.xml' -Raw).Replace("%version%", "${{env.VERSION_DOT_FILENAME}}") | Out-File 'DittoSetup\appx\appxmanifest.xml'  
             cd DittoSetup\appx
+
+            $env:Path += ";C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x86"
+        
             makeappx.exe pack /f files.ini /p Ditto_${{env.VERSION_FILENAME}}.appx
             signtool.exe sign -f my.pfx -fd SHA256 -v Ditto_${{env.VERSION_FILENAME}}.appx
             cd ..
