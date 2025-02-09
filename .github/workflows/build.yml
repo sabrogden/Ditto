@@ -30,11 +30,17 @@ jobs:
       - name: Build 64bit
         run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
         
-      - name: Compile .ISS to .EXE Installer
+      - name: Compile 32bit installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
         with:
           path: DittoSetup\DittoSetup_10.iss
           options: /F"DittoSetup_${{env.VERSION_FILENAME}}"
+          
+      - name: Compile 64bit installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: DittoSetup\DittoSetup_10.iss "/dbit64=1"
+          options: /F"DittoSetup_64bit__${{env.VERSION_FILENAME}}"
     
     # - name: Build Setup
       # run: |
