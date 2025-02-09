@@ -44,23 +44,23 @@ jobs:
           
       - name: Build Portable
         run: |
-            DittoSetup\BuildPortableZIP.bat "DittoPortable_%VERSION_FILENAME%" bit32
-            DittoSetup\BuildPortableZIP.bat "DittoPortable_64bit_%VERSION_FILENAME%" bit64
+            DittoSetup\BuildPortableZIP.bat "DittoPortable_${{env.VERSION_FILENAME}}" bit32
+            DittoSetup\BuildPortableZIP.bat "DittoPortable_64bit_${{env.VERSION_FILENAME}}" bit64
             
       - name: Zip Debug Files
         run: |
-            7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.pdb -r
-            7z a DittoSetup\output\DittoDebug_%VERSION_FILENAME%.7z *.map -r
+            7z a DittoSetup\output\DittoDebug_${{env.VERSION_FILENAME}}.7z *.pdb -r
+            7z a DittoSetup\output\DittoDebug_${{env.VERSION_FILENAME}}.7z *.map -r
             
       - name: Choco
         shell: pwsh
         run: |
             (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "$($env:APPVEYOR_BUILD_VERSION)") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
-            copy DittoSetup\output\DittoSetup_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\tools\DittoSetup_%VERSION_FILENAME%.exe
-            copy DittoSetup\output\DittoSetup_64bit_%VERSION_FILENAME%.exe DittoSetup\Chocolatey\tools\DittoSetup_64bit_%VERSION_FILENAME%.exe
+            copy DittoSetup\output\DittoSetup_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey\tools\DittoSetup_${{env.VERSION_FILENAME}}.exe
+            copy DittoSetup\output\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey\tools\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe
             cd DittoSetup\Chocolatey
             choco pack     
-            choco push --key %CHOCO_API_KEY% --source https://push.chocolatey.org/
+            choco push --key ${{ secrets.CHOCO_API_KEY}} --source https://push.chocolatey.org/
             cd ..
             cd ..
     
