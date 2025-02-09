@@ -87,6 +87,18 @@ jobs:
             choco push --source https://push.chocolatey.org/ --key ${{ secrets.CHOCO_API_KEY}}
             cd ..
             cd ..
+            
+      - name: Build appx
+        shell: pwsh
+        run: |
+            7z x DittoSetup\output\DittoPortable_${{env.VERSION_FILENAME}}.zip -oDittoSetup\appx -r
+            (Get-Content 'DittoSetup\appx\appxmanifest.xml' -Raw).Replace("%version%", "${{env.VERSION_DOT_FILENAME}}") | Out-File 'DittoSetup\appx\appxmanifest.xml'  
+            cd DittoSetup\appx
+            makeappx.exe pack /f files.ini /p Ditto_${{env.VERSION_FILENAME}}.appx
+            signtool.exe sign -f my.pfx -fd SHA256 -v Ditto_${{env.VERSION_FILENAME}}.appx
+            cd ..
+            cd ..
+            copy DittoSetup\appx\Ditto_${{env.VERSION_FILENAME}}.appx DittoSetup\Output\Ditto_${{env.VERSION_FILENAME}}.appx
     # - name: Build Setup
       # run: |
         # "C:\Program Files (x86)\Inno Setup 6\iscc.exe" /F"DittoSetup" DittoSetup\DittoSetup_10.iss
