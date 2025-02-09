@@ -26,12 +26,6 @@ jobs:
             echo "VERSION_FILENAME=3_25_${env:BUILD_NUMBER}_0" | Out-File -FilePath $env:GITHUB_ENV -Append
             echo "VERSION_DOT_FILENAME=3.25.${env:BUILD_NUMBER}.0" | Out-File -FilePath $env:GITHUB_ENV -Append
             
-      - name: Use the value
-        id: step_two
-        run: |
-            echo "${{ env.VERSION_FILENAME }}" # This will output 'yellow'
-            echo "${{ env.VERSION_DOT_FILENAME }}" # This will output 'yellow'
-
 #      - name: Add MSBuild to PATH
 #        uses: microsoft/setup-msbuild@v2
 
@@ -44,6 +38,10 @@ jobs:
         
       #- name: Build 64bit
       #  run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64  
+      - name: Set Versions
+        run |
+           DittoSetup\rcedit-x86 Release\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
+           DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
         
 #      - name: Compile 32bit installer
 #        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
