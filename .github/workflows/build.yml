@@ -6,7 +6,6 @@ on:
       - moved-files
 
 env:
-  Path to the solution file relative to the root of the project.
   SOLUTION_FILE_PATH: CP_Main_10.sln 
 
 jobs:
