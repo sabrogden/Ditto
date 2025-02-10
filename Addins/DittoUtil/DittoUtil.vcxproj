@@ -355,7 +355,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Shared\TextConvert.cpp" />
-    <ClCompile Include="..\..\Shared\Tokenizer.cpp" />
     <ClCompile Include="DialogResizer.cpp" />
     <ClCompile Include="DittoUtil.cpp" />
     <ClCompile Include="Exports.cpp" />

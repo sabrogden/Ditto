@@ -116,7 +116,8 @@ async function UpdateReleaseNotes(nightlyRelease) {
 }
 
 
-async function Run() {
+async function Run() {	
+	
     let nightlyRelease = await GetNightlyRelease();
 
     await DeleteOldAssets(nightlyRelease);
