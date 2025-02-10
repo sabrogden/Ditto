@@ -16,14 +16,15 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Generate build number
+        id: buildnumber
         uses: onyxmueller/build-tag-number@v1
         with:
           token: ${{secrets.GITHUB_TOKEN}} 
           
       - name: Set the value
         run: |
-            $env:VERSION_FILENAME = 3_25_${{env:BUILD_NUMBER}}_0
-            $env:VERSION_DOT_FILENAME = 3.25.${{env:BUILD_NUMBER}}.0
+            $env:VERSION_FILENAME = 3_25_${{ steps.buildnumber.outputs.build_number }}_0
+            $env:VERSION_DOT_FILENAME = 3.25.${{ steps.buildnumber.outputs.build_number }}.0
             
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
