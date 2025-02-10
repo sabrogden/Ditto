@@ -22,8 +22,8 @@ jobs:
           
       - name: Set the value
         run: |
-            $env:VERSION_FILENAME = 3_25_${env:BUILD_NUMBER}_0
-            $env:VERSION_DOT_FILENAME = 3.25.${env:BUILD_NUMBER}.0
+            $env:VERSION_FILENAME = 3_25_${{env:BUILD_NUMBER}}_0
+            $env:VERSION_DOT_FILENAME = 3.25.${{env:BUILD_NUMBER}}.0
             
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
