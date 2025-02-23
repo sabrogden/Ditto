@@ -1027,10 +1027,10 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 			if (q.eof() == false)
 			{
 				CString clipData;
-				COleDateTime time((time_t)q.getIntField(_T("lDate")));
+				COleDateTime time((time_t)q.getInt64Field(_T("lDate")));
 				clipData += "Added: " + time.Format();
 
-				COleDateTime modified((time_t)q.getIntField(_T("lastPasteDate")));
+				COleDateTime modified((time_t)q.getInt64Field(_T("lastPasteDate")));
 				clipData += _T(" | Last Used: ") + modified.Format();
 
 				if (q.getIntField(_T("lDontAutoDelete")) > 0)

@@ -1200,7 +1200,7 @@ LRESULT CQPasteWnd::OnReloadClipInUI(WPARAM wParam, LPARAM lParam)
 	{
 		double order = q.getFloatField(_T("clipOrder"));
 		double orderGroup = q.getFloatField(_T("clipGroupOrder"));
-		int lastPasted = q.getIntField(_T("lastPasteDate"));
+		int lastPasted = q.getInt64Field(_T("lastPasteDate"));
 		CString description = q.getStringField(_T("mText"));
 
 		std::vector<CMainTable>::iterator iter = m_listItems.begin();
@@ -5656,10 +5656,10 @@ void CQPasteWnd::OnGetToolTipText(NMHDR* pNMHDR, LRESULT* pResult)
 
 			clipData += StrF(_T("\r\nDatabase ID: %d"), q.getIntField(_T("lID")));
 
-			COleDateTime time((time_t)q.getIntField(_T("lDate")));
+			COleDateTime time((time_t)q.getInt64Field(_T("lDate")));
 			clipData += "\r\nAdded: " + time.Format();
 
-			COleDateTime modified((time_t)q.getIntField(_T("lastPasteDate")));
+			COleDateTime modified((time_t)q.getInt64Field(_T("lastPasteDate")));
 			clipData += "\r\nLast Used: " + modified.Format();
 
 			if (q.getIntField(_T("lDontAutoDelete")) > 0)
@@ -6181,8 +6181,8 @@ void CQPasteWnd::FillMainTable(CMainTable& table, CppSQLite3Query& q)
 	table.m_clipGroupOrder = q.getFloatField(_T("clipGroupOrder"));
 	table.m_stickyClipOrder = q.getFloatField(_T("stickyClipOrder"));
 	table.m_stickyClipGroupOrder = q.getFloatField(_T("stickyClipGroupOrder"));
-	table.m_dateCopied = q.getIntField(_T("lDate"));
-	table.m_datePasted = q.getIntField(_T("lastPasteDate"));
+	table.m_dateCopied = q.getInt64Field(_T("lDate"));
+	table.m_datePasted = q.getInt64Field(_T("lastPasteDate"));
 }
 
 void CQPasteWnd::OnDestroy()

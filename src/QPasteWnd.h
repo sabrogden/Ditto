@@ -52,8 +52,8 @@ public:
 	double m_clipGroupOrder;
 	double m_stickyClipOrder;
 	double m_stickyClipGroupOrder;
-	int m_dateCopied;
-	int m_datePasted;
+	__int64 m_dateCopied;
+	__int64 m_datePasted;
 
 	static bool SortDesc(const CMainTable& d1, const CMainTable& d2)
 	{
