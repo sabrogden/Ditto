@@ -522,7 +522,7 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 	Log(StrF(_T("End enumerating over supported types, Count: %d"), numTypes));
 	
 	m_Time = CTime::GetCurrentTime();
-	
+			
 	if(!bIsDescSet)
 	{
 		SetDescFromType();
@@ -920,8 +920,8 @@ bool CClip::AddToMainTable()
 
 		CString cs;
 		cs.Format(_T("INSERT into Main (lDate, mText, lShortCut, lDontAutoDelete, CRC, bIsGroup, lParentID, QuickPasteText, clipOrder, clipGroupOrder, globalShortCut, lastPasteDate, stickyClipOrder, stickyClipGroupOrder, MoveToGroupShortCut, GlobalMoveToGroupShortCut) ")
-						_T("values(%d, '%s', %d, %d, %d, %d, %d, '%s', %f, %f, %d, %d, %f, %f, %d, %d);"),
-							(int)m_Time.GetTime(),
+						_T("values(%lld, '%s', %d, %d, %d, %d, %d, '%s', %f, %f, %d, %lld, %f, %f, %d, %d);"),
+							m_Time.GetTime(),
 							m_Desc,
 							m_shortCut,
 							m_dontAutoDelete,
@@ -932,7 +932,7 @@ bool CClip::AddToMainTable()
 							m_clipOrder,
 							m_clipGroupOrder,
 							m_globalShortCut,
-							(int)CTime::GetCurrentTime().GetTime(),
+							CTime::GetCurrentTime().GetTime(),
 							m_stickyClipOrder,
 							m_stickyClipGroupOrder,
 							m_moveToGroupShortCut,
@@ -1527,7 +1527,7 @@ BOOL CClip::LoadMainTable(int id)
 
 		if(q.eof() == false)
 		{
-			m_Time = q.getIntField(_T("lDate"));
+			m_Time = q.getInt64Field(_T("lDate"));
 			m_Desc = q.getStringField(_T("mText"));
 			m_CRC = q.getIntField(_T("CRC"));
 			m_parentId = q.getIntField(_T("lParentID"));
@@ -1538,7 +1538,7 @@ BOOL CClip::LoadMainTable(int id)
 			m_clipOrder = q.getFloatField(_T("clipOrder"));
 			m_clipGroupOrder = q.getFloatField(_T("clipGroupOrder"));
 			m_globalShortCut = q.getIntField(_T("globalShortCut"));
-			m_lastPasteDate = q.getIntField(_T("lastPasteDate"));
+			m_lastPasteDate = q.getInt64Field(_T("lastPasteDate"));
 			m_stickyClipOrder = q.getFloatField(_T("stickyClipOrder"));
 			m_stickyClipGroupOrder = q.getFloatField(_T("stickyClipGroupOrder"));
 			m_moveToGroupShortCut = q.getIntField(_T("MoveToGroupShortCut"));

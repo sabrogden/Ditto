@@ -99,6 +99,9 @@ public:
     int getIntField(int nField, int nNullValue=0);
     int getIntField(const TCHAR* szField, int nNullValue=0);
 
+    __int64 getInt64Field(int nField, __int64 nNullValue=0);
+    __int64 getInt64Field(const TCHAR* szField, __int64 nNullValue=0);
+
     double getFloatField(int nField, double fNullValue=0.0);
     double getFloatField(const TCHAR* szField, double fNullValue=0.0);
 

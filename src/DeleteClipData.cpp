@@ -167,8 +167,8 @@ void CDeleteClipData::LoadItems()
 		CDeleteData data;
 		data.m_lID = q.getIntField(_T("lID"));
 		data.m_Desc = q.getStringField(_T("mText"));
-		data.m_createdDateTime = q.getIntField(_T("lDate"));
-		data.m_lastUsedDateTime = q.getIntField(_T("lastPasteDate"));
+		data.m_createdDateTime = q.getInt64Field(_T("lDate"));
+		data.m_lastUsedDateTime = q.getInt64Field(_T("lastPasteDate"));
 		data.m_clipboardFormat = q.getStringField(_T("strClipBoardFormat"));
 		data.m_dataSize = q.getIntField(_T("DataLength"));
 		data.m_DatalID = q.getIntField(_T("DataID"));

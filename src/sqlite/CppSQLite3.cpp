@@ -253,6 +253,25 @@ int CppSQLite3Query::getIntField(const TCHAR* szField, int nNullValue/*=0*/)
 	return getIntField(nField, nNullValue);
 }
 
+__int64 CppSQLite3Query::getInt64Field(int nField, __int64 nNullValue/*=0*/)
+{
+	if (fieldDataType(nField) == SQLITE_NULL)
+	{
+		return nNullValue;
+	}
+	else
+	{
+		return sqlite3_column_int64(mpVM, nField);
+	}
+}
+
+
+__int64 CppSQLite3Query::getInt64Field(const TCHAR* szField, __int64 nNullValue/*=0*/)
+{
+	int nField = fieldIndex(szField);
+	return getInt64Field(nField, nNullValue);
+}
+
 
 double CppSQLite3Query::getFloatField(int nField, double fNullValue/*=0.0*/)
 {
