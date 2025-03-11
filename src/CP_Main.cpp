@@ -1105,7 +1105,7 @@ bool CCP_MainApp::EditItems(CClipIDs &Ids, bool bShowError, bool forceTextEdit)
 		const int id = Ids[i];		
 
 		CClip clip;
-		if (id >= 0 && clip.LoadFormats(id, true, true) == false)
+		if (id >= 0 && clip.LoadFormats(id) == false)
 		{
 			Log(StrF(_T("Failed to load formats for clipId: %d"), id));
 			continue;
@@ -1114,6 +1114,7 @@ bool CCP_MainApp::EditItems(CClipIDs &Ids, bool bShowError, bool forceTextEdit)
 		bool unicodeFile = false;
 		bool asciFile = false;
 		bool rtfFile = false;
+		bool imageFile = false;
 		CString exePath;
 		CString extension;
 		if (forceTextEdit == false && clip.ContainsClipFormat(theApp.m_RTFFormat))
@@ -1140,6 +1141,18 @@ bool CCP_MainApp::EditItems(CClipIDs &Ids, bool bShowError, bool forceTextEdit)
 			unicodeFile = true;
 			exePath = CGetSetOptions::GetTextEditorPath();
 		}
+		else if (clip.ContainsClipFormat(theApp.m_PNG_Format))
+		{
+			imageFile = true;
+			extension = _T("png");
+			exePath = CGetSetOptions::GetImageEditorPath();
+		}
+		else if (clip.ContainsClipFormat(CF_DIB))
+		{
+			imageFile = true;
+			extension = _T("bmp");
+			exePath = CGetSetOptions::GetImageEditorPath();
+		}		
 		else
 		{
 			continue;
@@ -1175,7 +1188,14 @@ bool CCP_MainApp::EditItems(CClipIDs &Ids, bool bShowError, bool forceTextEdit)
 
 		m_editThread.WatchFile(savePath);
 
-		clip.WriteTextToFile(savePath, unicodeFile, asciFile, rtfFile, (id == -1));
+		if (imageFile)
+		{
+			clip.WriteImageToFile(savePath);
+		}
+		else
+		{
+			clip.WriteTextToFile(savePath, unicodeFile, asciFile, rtfFile, (id == -1));
+		}		
 
 		SHELLEXECUTEINFO sei = { sizeof(sei) };
 		sei.fMask = SEE_MASK_NOCLOSEPROCESS;

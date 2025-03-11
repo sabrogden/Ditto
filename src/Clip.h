@@ -197,7 +197,7 @@ public:
 	BOOL WriteImageToFile(CString path);
 	BOOL WriteTextToHtmlFile(CString path);
 
-	BOOL SaveFormats(CString* unicode, CStringA* asci, CStringA* rtf, BOOL updateDescription);
+	BOOL SaveFormats(CString* unicode, CStringA* asci, CStringA* rtf, BOOL updateDescription, std::vector<BYTE>* cf_dibBytes = nullptr, std::vector<BYTE>* pngBytes = nullptr);
 
 	// Allocates a Global containing the requested Clip's Format Data
 	static HGLOBAL LoadFormat(int id, UINT cfType);

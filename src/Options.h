@@ -693,6 +693,9 @@ public:
 	static BOOL SetTextEditorPath(CString path);
 	static CString GetTextEditorPath();
 
+	static BOOL SetImageEditorPath(CString path);
+	static CString GetImageEditorPath();
+
 	static BOOL SetRTFEditorPath(CString path);
 	static CString GetRTFEditorPath();
 
@@ -704,6 +707,14 @@ public:
 
 	static void SetPreferUtf8ForCompare(BOOL val);
 	static BOOL GetPreferUtf8ForCompare();
+
+	static int	m_clipEditSaveDelayAfterLoadSeconds;
+	static void SetClipEditSaveDelayAfterLoadSeconds(int val);
+	static BOOL GetClipEditSaveDelayAfterLoadSeconds();
+
+	static int	m_clipEditSaveDelayAfterSaveSeconds;
+	static void SetClipEditSaveDelayAfterSaveSeconds(int val);
+	static BOOL GetClipEditSaveDelayAfterSaveSeconds();
 };
 
 // global for easy access and for initialization of fast access variables

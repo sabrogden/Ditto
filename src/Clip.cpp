@@ -160,7 +160,7 @@ void CClipFormat::Free()
 
 Gdiplus::Bitmap *CClipFormat::CreateGdiplusBitmap()
 {
-	if (this->m_cfType != CF_DIB && this->m_cfType == theApp.m_PNG_Format)
+	if (this->m_cfType != CF_DIB && this->m_cfType != theApp.m_PNG_Format)
 		return NULL;
 
 	Gdiplus::Bitmap *gdipBitmap;
@@ -1812,7 +1812,7 @@ BOOL CClip::WriteTextToHtmlFile(CString path)
 	return ret;
 }
 
-BOOL CClip::SaveFormats(CString *unicode, CStringA *asci, CStringA *rtf, BOOL updateDescription)
+BOOL CClip::SaveFormats(CString *unicode, CStringA *asci, CStringA *rtf, BOOL updateDescription, std::vector<BYTE> *cf_dibBytes, std::vector<BYTE>* pngBytes)
 {
 	ARRAY deletedData;
 	for (INT_PTR i = m_Formats.GetSize() - 1; i >= 0; i--)
@@ -1821,6 +1821,16 @@ BOOL CClip::SaveFormats(CString *unicode, CStringA *asci, CStringA *rtf, BOOL up
 	}
 
 	EmptyFormats();
+
+	if (cf_dibBytes != nullptr && cf_dibBytes->size() > 0)
+	{
+		AddFormat(CF_DIB, cf_dibBytes->data(), cf_dibBytes->size(), false);
+	}
+
+	if (pngBytes != nullptr && pngBytes->size() > 0)
+	{
+		AddFormat(theApp.m_PNG_Format, pngBytes->data(), pngBytes->size(), false);
+	}
 
 	if (rtf != nullptr)
 	{

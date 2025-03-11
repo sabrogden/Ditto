@@ -1200,7 +1200,7 @@ LRESULT CQPasteWnd::OnReloadClipInUI(WPARAM wParam, LPARAM lParam)
 	{
 		double order = q.getFloatField(_T("clipOrder"));
 		double orderGroup = q.getFloatField(_T("clipGroupOrder"));
-		int lastPasted = q.getInt64Field(_T("lastPasteDate"));
+		auto lastPasted = q.getInt64Field(_T("lastPasteDate"));
 		CString description = q.getStringField(_T("mText"));
 
 		std::vector<CMainTable>::iterator iter = m_listItems.begin();
@@ -1238,6 +1238,8 @@ LRESULT CQPasteWnd::OnReloadClipInUI(WPARAM wParam, LPARAM lParam)
 					iter->m_Desc = description;
 
 					foundClip = TRUE;
+
+					RemoveFromImageRtfCache(-1, clipId);
 
 					m_lstHeader.RefreshVisibleRows();
 					m_lstHeader.RedrawWindow();
@@ -2782,29 +2784,34 @@ bool CQPasteWnd::DeleteClips(CClipIDs& IDs, ARRAY& Indexs)
 	return true;
 }
 
-void CQPasteWnd::RemoveFromImageRtfCache(int id)
+void CQPasteWnd::RemoveFromImageRtfCache(int row, int id)
 {
 	ATL::CCritSecLock csLock(m_CritSection.m_sect);
 
-	CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(m_lstHeader.GetItemData(id));
+	if (id < 0)
+	{
+		id = m_lstHeader.GetItemData(row);
+	}
+
+	CF_DibTypeMap::iterator iterDib = m_cf_dibCache.find(id);
 	if (iterDib != m_cf_dibCache.end())
 	{
 		m_cf_dibCache.erase(iterDib);
 	}
 
-	CF_NoDibTypeMap::iterator iterNoDib = m_cf_NO_dibCache.find(m_lstHeader.GetItemData(id));
+	CF_NoDibTypeMap::iterator iterNoDib = m_cf_NO_dibCache.find(id);
 	if (iterNoDib != m_cf_NO_dibCache.end())
 	{
 		m_cf_NO_dibCache.erase(iterNoDib);
 	}
 
-	CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(m_lstHeader.GetItemData(id));
+	CF_DibTypeMap::iterator iterRtf = m_cf_rtfCache.find(id);
 	if (iterRtf != m_cf_rtfCache.end())
 	{
 		m_cf_rtfCache.erase(iterRtf);
 	}
 
-	CF_NoDibTypeMap::iterator iterNoRtf = m_cf_NO_rtfCache.find(m_lstHeader.GetItemData(id));
+	CF_NoDibTypeMap::iterator iterNoRtf = m_cf_NO_rtfCache.find(id);
 	if (iterNoRtf != m_cf_NO_rtfCache.end())
 	{
 		m_cf_NO_rtfCache.erase(iterNoRtf);
@@ -7188,7 +7195,7 @@ void CQPasteWnd::OnCustomSendToFriend(UINT idIn)
 void CQPasteWnd::OnChaiScriptPaste(UINT idIn)
 {
 	CSpecialPasteOptions pasteOptions;
-	int index = idIn - ChaiScriptMenuStartId;
+	UINT index = idIn - ChaiScriptMenuStartId;
 
 	if (index >= 0 &&
 		index < CGetSetOptions::m_pasteScripts.m_list.size())
