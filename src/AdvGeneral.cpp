@@ -152,6 +152,9 @@ END_MESSAGE_MAP()
 #define SETTING_QR_CODE_URL 101
 #define SETTING_APPEND_NAME_IP 102
 #define SETTING_USE_UTF8_FOR_DIFF 103
+#define SETTING_IMAGE_EDITOR_PATH 104
+#define SETTING_CLIP_EDIT_SAVE_DELAY_AFTER_LOAD 105
+#define SETTING_ClIP_EDIT_SAVE_DELAY_AFTER_SAVE 106
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -194,6 +197,10 @@ BOOL CAdvGeneral::OnInitDialog()
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Amount of text to save for description"), CGetSetOptions::m_bDescTextSize, _T(""), SETTING_DESC_SIZE));
 	AddTrueFalse(pGroupTest, _T("Center window below cursor or caret"), CGetSetOptions::GetCenterWindowBelowCursorOrCaret(), SETTING_CENTER_WINDOW_BELOW_CURSOR_CARET);
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Copy and save clipboard delay (ms)"), (long)CGetSetOptions::GetCopyAndSveDelay(), _T(""), SETTING_COPY_SAVE_DELAY));
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Clip edit save delay after load"), (long)(CGetSetOptions::GetClipEditSaveDelayAfterLoadSeconds()), _T(""), SETTING_CLIP_EDIT_SAVE_DELAY_AFTER_LOAD));
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Clip edit save delay after Save"), (long)(CGetSetOptions::GetClipEditSaveDelayAfterSaveSeconds()), _T(""), SETTING_ClIP_EDIT_SAVE_DELAY_AFTER_SAVE));
+
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Clipboard restore delay after copy buffer sent paste (ms, default: 750)"), (long)(CGetSetOptions::GetDittoRestoreClipboardDelay()), _T(""), SETTING_CLIPBOARD_RESTORE_AFTER_COPY_BUFFER_DELAY));
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default paste string"), CGetSetOptions::GetDefaultPasteString(), _T(""), SETTING_DEFAULT_PASTE_STRING));
@@ -232,6 +239,10 @@ BOOL CAdvGeneral::OnInitDialog()
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Ignore copies faster than (ms) (default: 500)"), (long)CGetSetOptions::GetSaveClipDelay(), _T(""), SETTING_IGNORE_FALSE_COPIES_DELAY));
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Ignore annoying CF_DIB when a clip is detected as text content"), CGetSetOptions::GetIgnoreAnnoyingCFDIB(), _T("Case insensitive. Recommended option is \"excel.exe; onenote.exe; powerpnt.exe\" "), SETTING_IGNORE_ANNOYING_CF_DIB));
 
+	static TCHAR BASED_CODE szImageEditorFilter[] = _T("Applications(*.exe)|*.exe||");
+	CMFCPropertyGridFileProperty* pImageEditorProp = new CMFCPropertyGridFileProperty(_T("Image editor path (empty for system mapping)"), TRUE, CGetSetOptions::GetImageEditorPath(), _T("exe"), 0, szImageEditorFilter, (LPCTSTR)0, SETTING_IMAGE_EDITOR_PATH);
+	pGroupTest->AddSubItem(pImageEditorProp);
+
 	pGroupTest->AddSubItem( new CMFCPropertyGridProperty(_T("Maximum clip size in bytes (0 for no limit)"), CGetSetOptions::m_lMaxClipSizeInBytes, _T(""), SETTING_MAX_CLIP_SIZE));
 		
 	AddTrueFalse(pGroupTest, _T("Maintain search view"), CGetSetOptions::GetMaintainSearchView(), SETTING_MAINTAIN_SEARCH_VIEW);
@@ -254,7 +265,7 @@ BOOL CAdvGeneral::OnInitDialog()
 	pGroupTest->AddSubItem(pFileProp);
 
 	static TCHAR BASED_CODE szTextEditorFilter[] = _T("Applications(*.exe)|*.exe||");
-	CMFCPropertyGridFileProperty* pTextEditorProp = new CMFCPropertyGridFileProperty(_T("Text editor path"), TRUE, CGetSetOptions::GetTextEditorPath(), _T("exe"), 0, szTextEditorFilter, (LPCTSTR)0, SETTING_TEXT_EDITOR_PATH);
+	CMFCPropertyGridFileProperty* pTextEditorProp = new CMFCPropertyGridFileProperty(_T("Text editor path (empty for system mapping)"), TRUE, CGetSetOptions::GetTextEditorPath(), _T("exe"), 0, szTextEditorFilter, (LPCTSTR)0, SETTING_TEXT_EDITOR_PATH);
 	pGroupTest->AddSubItem(pTextEditorProp);
 
 	AddTrueFalse(pGroupTest, _T("Paste clip in active window after selection"), CGetSetOptions::GetSendPasteAfterSelection(), SETTING_PASTE_IN_ACTIVE_WINDOW);
@@ -885,6 +896,12 @@ void CAdvGeneral::OnBnClickedOk()
 					CGetSetOptions::SetTextEditorPath(pNewValue->bstrVal);
 				}
 				break;
+			case SETTING_IMAGE_EDITOR_PATH:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					CGetSetOptions::SetImageEditorPath(pNewValue->bstrVal);
+				}
+				break;
 			case SETTING_RTF_EDITOR_PATH:
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
@@ -916,6 +933,18 @@ void CAdvGeneral::OnBnClickedOk()
 				{
 					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetPreferUtf8ForCompare(val);
+				}
+				break;
+			case SETTING_CLIP_EDIT_SAVE_DELAY_AFTER_LOAD:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetClipEditSaveDelayAfterLoadSeconds(pNewValue->lVal);
+				}
+				break;
+			case SETTING_ClIP_EDIT_SAVE_DELAY_AFTER_SAVE:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetClipEditSaveDelayAfterSaveSeconds(pNewValue->lVal);
 				}
 				break;
 			}

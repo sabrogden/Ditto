@@ -1,4 +1,5 @@
 #pragma once
+
 #include "EventThread.h"
 #include "Path.h"
 
@@ -18,6 +19,7 @@ private:
 	void OnFileChanged();
 	void OnTimeOut(void* param) override;
 	bool ReadFile(CString filePath, bool& unicode, CString& unicodeText, CStringA& utf8Text);
+	bool ReadImageFile(CString path, std::vector<BYTE>& cf_dibBytes, std::vector<BYTE>& pngBytes);
 	BOOL GetTextFromRTF(CStringA rtf, CString& unicodeText);
 	void RefreshWatch();
 	bool SaveToClip(CString filePath, int id);

@@ -323,7 +323,7 @@ public:
 
 	bool ShowProperties(int id, int row);
 	bool DeleteClips(CClipIDs &IDs, ARRAY &Indexs);
-	void RemoveFromImageRtfCache(int id);
+	void RemoveFromImageRtfCache(int row, int id = -1);
 	bool SyncClipDataToArrayData(CClip &clip);
 	bool SelectIds(ARRAY &ids);
 

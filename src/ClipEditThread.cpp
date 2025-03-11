@@ -163,9 +163,9 @@ void CClipEditThread::OnFileChanged()
 				{
 					auto startEdit = m_fileEditStarts[fileName];
 					auto diff = CTime::GetCurrentTime() - startEdit;
-					if (diff.GetTotalSeconds() < 2)
+					if (diff.GetTotalSeconds() < CGetSetOptions::m_clipEditSaveDelayAfterLoadSeconds)
 					{
-						Log(StrF(_T("%s has changed close to when we started editing the file, diff: %d, not handling change"), fileName, diff.GetTotalSeconds()));
+						Log(StrF(_T("%s has changed close to when we started editing the file, diff: %lld, limit: %d, not handling change"), fileName, diff.GetTotalSeconds(), CGetSetOptions::m_clipEditSaveDelayAfterLoadSeconds));
 						addToChanges = false;
 					}
 				}
@@ -212,7 +212,7 @@ void CClipEditThread::OnFileChanged()
 
 	if (fileModified)
 	{
-		m_waitTimeout = 2000;
+		m_waitTimeout = CGetSetOptions::m_clipEditSaveDelayAfterSaveSeconds * 1000;
 	}
 }
 
@@ -246,30 +246,46 @@ bool CClipEditThread::SaveToClip(CString filePath, int id)
 	CString unicodeText;
 	CStringA utf8Text;
 	bool unicode = false;
+	std::vector<BYTE> cf_dibBytes;
+	std::vector<BYTE> pngBytes;
 	
 	CString editClipFolder = CGetSetOptions::GetPath(PATH_EDIT_CLIPS);
 	CString fullFilePath = editClipFolder + filePath;
-			
-	if (ReadFile(fullFilePath, unicode, unicodeText, utf8Text) == false)
+
+	nsPath::CPath path(filePath);
+	auto extenstion = path.GetExtension().MakeLower();
+
+	if (extenstion == _T("png") || extenstion == _T("bmp"))
 	{
-		Log(StrF(_T("Error reading file %s, clip id: %d, not saving"), fullFilePath, id));
+		if (ReadImageFile(fullFilePath, cf_dibBytes, pngBytes) == false)
+		{
+			Log(StrF(_T("Error reading image file %s, clip id: %d, not saving"), fullFilePath, id));
+			return false;
+		}
+	}
+	else if (ReadFile(fullFilePath, unicode, unicodeText, utf8Text) == false)
+	{
+		Log(StrF(_T("Error reading text file %s, clip id: %d, not saving"), fullFilePath, id));
 		return false;
 	}
 
 	if (id < 0 &&
 		unicodeText == _T("") &&
-		utf8Text == "")
+		utf8Text == "" &&
+		cf_dibBytes.size() <= 0 &&
+		pngBytes.size() <= 0)
 	{
-		Log(StrF(_T("Not saving new clip that is empty, path: %s, clip id: %d, not saving"), fullFilePath, id));
+		Log(StrF(_T("Not saving new clip that is empty, no text or image bytes, path: %s, clip id: %d, not saving"), fullFilePath, id));
 		return false;
 	}	
 
-	nsPath::CPath path(filePath);
-
 	BOOL modifyDescription = CGetSetOptions::GetUpdateDescWhenSavingClip();
-
-	auto extenstion = path.GetExtension().MakeLower();
-	if (extenstion == _T("txt"))
+	
+	if (extenstion == _T("bmp") || extenstion == _T("png"))
+	{		
+		clip.SaveFormats(nullptr, nullptr, nullptr, modifyDescription, &cf_dibBytes, &pngBytes);				
+	}
+	else if (extenstion == _T("txt"))
 	{
 		if (unicode)
 		{
@@ -289,7 +305,7 @@ bool CClipEditThread::SaveToClip(CString filePath, int id)
 		}
 		else
 		{
-			clip.SaveFormats(nullptr, nullptr, &utf8Text, modifyDescription);
+			clip.SaveFormats(nullptr, nullptr, &utf8Text, modifyDescription);			
 		}
 	}
 
@@ -348,6 +364,67 @@ bool CClipEditThread::ReadFile(CString filePath, bool &unicode, CString &unicode
 		file.Read(utf8Text.GetBufferSetLength(bufferSize), bufferSize);
 		utf8Text.ReleaseBuffer();
 	}
+
+	return true;
+}
+
+std::vector<BYTE> CImageToPNGBytes(const CImage& image, REFGUID guidFileType)
+{
+	IStream* pStream = nullptr;
+	HRESULT hr = CreateStreamOnHGlobal(nullptr, TRUE, &pStream);
+	if (FAILED(hr)) {
+		return {};
+	}
+
+	ULARGE_INTEGER ulSize;
+
+	hr = image.Save(pStream, guidFileType);
+	if (FAILED(hr)) {
+		pStream->Release();
+		return {};
+	}
+
+	LARGE_INTEGER liZero = { 0 };
+	hr = pStream->Seek(liZero, STREAM_SEEK_SET, nullptr);
+	if (FAILED(hr)) {
+		pStream->Release();
+		return {};
+	}
+
+	hr = pStream->Seek({ 0 }, STREAM_SEEK_END, &ulSize);
+	if (FAILED(hr)) {
+		pStream->Release();
+		return {};
+	}
+
+	std::vector<BYTE> pngBytes((UINT)ulSize.QuadPart);
+
+	hr = pStream->Seek(liZero, STREAM_SEEK_SET, nullptr);
+	if (FAILED(hr)) {
+		pStream->Release();
+		return {};
+	}
+
+	hr = pStream->Read(pngBytes.data(), (UINT)ulSize.QuadPart, nullptr);
+	pStream->Release();
+
+	if (FAILED(hr)) {
+		return {};
+	}
+	return pngBytes;
+}
+
+bool CClipEditThread::ReadImageFile(CString path, std::vector<BYTE> &cf_dibBytes, std::vector<BYTE> & pngBytes)
+{
+	CImage image;
+	HRESULT hr = image.Load(path);
+	if (FAILED(hr)) 
+	{
+		Log(StrF(_T("Failed to load image, %s"), path));
+		return false;
+	}
+
+	pngBytes = CImageToPNGBytes(image, Gdiplus::ImageFormatPNG);	
 
 	return true;
 }

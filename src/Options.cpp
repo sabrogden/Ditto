@@ -88,6 +88,8 @@ CString CGetSetOptions::m_tempDragFileName = "";
 CTime CGetSetOptions::m_tempDragFileNameSetTime;
 BOOL CGetSetOptions::m_refreshViewAfterPasting = TRUE;
 BOOL CGetSetOptions::m_supportAllTypes = FALSE;
+int CGetSetOptions::m_clipEditSaveDelayAfterLoadSeconds = 3;
+int CGetSetOptions::m_clipEditSaveDelayAfterSaveSeconds = 3;
 
 
 CGetSetOptions::CGetSetOptions()
@@ -290,6 +292,8 @@ void CGetSetOptions::LoadSettings()
 	m_moveSelectionOnOpenHotkey = GetMoveSelectionOnOpenHotkey();
 	m_allowBackToBackDuplicates = GetAllowBackToBackDuplicates();
 	m_maintainSearchView = GetMaintainSearchView();
+	m_clipEditSaveDelayAfterLoadSeconds = GetClipEditSaveDelayAfterLoadSeconds();
+	m_clipEditSaveDelayAfterSaveSeconds = GetClipEditSaveDelayAfterSaveSeconds();
 
 	GetExtraNetworkPassword(true);
 
@@ -3093,6 +3097,16 @@ CString CGetSetOptions::GetTextEditorPath()
 	return GetProfileString("TextEditorPath", _T(""));
 }
 
+BOOL CGetSetOptions::SetImageEditorPath(CString path)
+{
+	return SetProfileString("ImageEditorPath", path);
+}
+
+CString CGetSetOptions::GetImageEditorPath()
+{
+	return GetProfileString("ImageEditorPath", _T(""));
+}
+
 BOOL CGetSetOptions::SetRTFEditorPath(CString path)
 {
 	return SetProfileString("RTFEditorPath", path);
@@ -3138,4 +3152,26 @@ void CGetSetOptions::SetPreferUtf8ForCompare(BOOL val)
 BOOL CGetSetOptions::GetPreferUtf8ForCompare()
 {
 	return GetProfileLong("PreferUtf8ForCompare", TRUE);
+}
+
+void CGetSetOptions::SetClipEditSaveDelayAfterLoadSeconds(int val)
+{
+	m_clipEditSaveDelayAfterLoadSeconds = val;
+	SetProfileLong("ClipEditSaveDelayAfterLoadSeconds", val);
+}
+
+int CGetSetOptions::GetClipEditSaveDelayAfterLoadSeconds()
+{
+	return GetProfileLong("ClipEditSaveDelayAfterLoadSeconds", 3);
+}
+
+void CGetSetOptions::SetClipEditSaveDelayAfterSaveSeconds(int val)
+{
+	m_clipEditSaveDelayAfterSaveSeconds = val;
+	SetProfileLong("ClipEditSaveDelayAfterSaveSeconds", val);
+}
+
+BOOL CGetSetOptions::GetClipEditSaveDelayAfterSaveSeconds()
+{
+	return GetProfileLong("ClipEditSaveDelayAfterSaveSeconds", 3);
 }
