@@ -21,6 +21,7 @@ public:
 	int		m_globalId;
 	HotKeyType m_hkType;
 	static int m_nextId;
+	DWORD m_lastKeyPressTime; // P678d
 	
 	CHotKey( CString name, DWORD defKey = 0, bool bUnregOnShowDitto = false, HotKeyType hkType = PASTE_OPEN_CLIP, CString description = _T(""));
 	~CHotKey();
@@ -47,6 +48,8 @@ public:
 	static UINT GetModifier(DWORD dwHotKey);
 	static CString GetHotKeyDisplayStatic(DWORD dwHotKey);
 	static CString GetVirKeyName(unsigned int virtualKey);
+
+	void HandleRepeatedKeyPresses(); // Ped51
 };
 
 
