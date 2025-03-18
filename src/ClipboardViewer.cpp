@@ -294,7 +294,7 @@ void CClipboardViewer::OnDrawClipboard()
 bool CClipboardViewer::ValidActiveWnd()
 {
 	m_activeWindow = _T("");
-	m_activeWindowTitle = _T("";)
+	m_activeWindowTitle = _T("");
 
 	HWND owner = ::GetClipboardOwner();
 	if (owner != NULL)

@@ -26,23 +26,26 @@ bool CClipboardSaveRestore::Save(BOOL textOnly)
 			if(textOnly == false || (nFormat == CF_TEXT || nFormat == CF_UNICODETEXT || nFormat == CF_HDROP))
 			{
 				HGLOBAL hGlobal = ::GetClipboardData(nFormat);
-				LPVOID pvData = GlobalLock(hGlobal);
-				if(pvData)
+				if(hGlobal && ::GlobalSize(hGlobal) > 0) // Ensure clipboard data is valid
 				{
-					INT_PTR size = GlobalSize(hGlobal);
-					if(size > 0)
+					LPVOID pvData = GlobalLock(hGlobal);
+					if(pvData)
 					{
-						//Copy the data locally
-						cf.m_hgData = NewGlobalP(pvData, size);	
-						cf.m_cfType = nFormat;
+						INT_PTR size = GlobalSize(hGlobal);
+						if(size > 0)
+						{
+							//Copy the data locally
+							cf.m_hgData = NewGlobalP(pvData, size);	
+							cf.m_cfType = nFormat;
 
-						m_Clipboard.Add(cf);
+							m_Clipboard.Add(cf);
 
-						//m_Clipboard owns the data now
-						cf.m_hgData = NULL;
+							//m_Clipboard owns the data now
+							cf.m_hgData = NULL;
+						}
+
+						GlobalUnlock(hGlobal);
 					}
-
-					GlobalUnlock(hGlobal);
 				}
 			}
 			nFormat = EnumClipboardFormats(nFormat);
@@ -69,7 +72,7 @@ bool CClipboardSaveRestore::Restore()
 		for(int nPos = 0; nPos < size; nPos++)
 		{
 			CClipFormat *pCF = &m_Clipboard.ElementAt(nPos);
-			if(pCF && pCF->m_hgData)
+			if(pCF && pCF->m_hgData && ::GlobalSize(pCF->m_hgData) > 0) // Ensure clipboard data is valid
 			{
 				::SetClipboardData(pCF->m_cfType, pCF->m_hgData);
 				pCF->m_hgData = NULL;//clipboard now owns the data
@@ -107,7 +110,7 @@ bool CClipboardSaveRestore::RestoreTextOnly()
 		for(int pos = 0; pos < size; pos++)
 		{
 			CClipFormat *pCF = &m_Clipboard.ElementAt(pos);
-			if(pCF && pCF->m_hgData)
+			if(pCF && pCF->m_hgData && ::GlobalSize(pCF->m_hgData) > 0) // Ensure clipboard data is valid
 			{
 				if(pCF->m_cfType == CF_TEXT || pCF->m_cfType == CF_UNICODETEXT)
 				{
@@ -135,7 +138,7 @@ bool CClipboardSaveRestore::RestoreTextOnly()
 		{
 			CString hDropString;
 			CClipFormat *pCF = &m_Clipboard.ElementAt(hDropIndex);
-			if(pCF && pCF->m_hgData)
+			if(pCF && pCF->m_hgData && ::GlobalSize(pCF->m_hgData) > 0) // Ensure clipboard data is valid
 			{
 				HDROP drop = (HDROP)GlobalLock(pCF->m_hgData);
 				int nNumFiles = DragQueryFile(drop, -1, NULL, 0);
