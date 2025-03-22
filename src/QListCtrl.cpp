@@ -494,49 +494,123 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 }
 
+/////////////////////////////////////////////////////////////////////////////
+// Draw color boxes from copied color codes.
+//
 void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 {
-	if (CGetSetOptions::m_bDrawCopiedColorCode == FALSE)
+	if (!CGetSetOptions::m_bDrawCopiedColorCode)
 		return;
 
-	CString trimmedText = CString(csText).Trim(_T("»")).Trim().Trim(_T("#"));
-	trimmedText = trimmedText.Trim(';');
-	trimmedText = trimmedText.MakeLower();
-
-	// Helper function to draw the color box
+	// Helper function to draw a color box and adjust rcText
 	auto DrawColorBox = [&](COLORREF color)
+	{
+		CRect colorRect(rcText);
+		colorRect.right = colorRect.left + m_windowDpi->Scale(rcText.Height());
+		pDC->FillSolidRect(colorRect, color);
+		rcText.left = colorRect.right + m_windowDpi->Scale(ROW_LEFT_BORDER);
+	};
+
+	// Trim unwanted characters + lowercase
+	CString trimmedText = csText;
+	trimmedText.Trim(_T("»#;"));
+	trimmedText.Trim();
+	trimmedText.MakeLower();
+
+	// Function to convert HSL to RGB
+	auto HSLToRGB = [&](int h, double s, double l)
+	{
+		double r, g, b;
+
+		if (s == 0.0)
 		{
-			CRect pastedRect(rcText);
-			pastedRect.right = pastedRect.left + m_windowDpi->Scale(rcText.Height());
-			pDC->FillSolidRect(pastedRect, color);
-			rcText.left += m_windowDpi->Scale(rcText.Height());
-			rcText.left += m_windowDpi->Scale(ROW_LEFT_BORDER);
+			r = g = b = l; // gray
+		}
+		else
+		{
+			auto hue2rgb = [&](double p, double q, double t)
+			{
+				if (t < 0) t += 1.0;
+				if (t > 1) t -= 1.0;
+				if (t < 1.0 / 6.0) return p + (q - p) * 6.0 * t;
+				if (t < 1.0 / 2.0) return q;
+				if (t < 2.0 / 3.0) return p + (q - p) * (2.0 / 3.0 - t) * 6.0;
+				return p;
+			};
+
+			double q = l < 0.5 ? l * (1.0 + s) : l + s - l * s;
+			double p = 2.0 * l - q;
+			r = hue2rgb(p, q, h / 360.0 + 1.0 / 3.0);
+			g = hue2rgb(p, q, h / 360.0);
+			b = hue2rgb(p, q, h / 360.0 - 1.0 / 3.0);
+		}
+
+		return RGB(static_cast<int>(round(r * 255)), static_cast<int>(round(g * 255)), static_cast<int>(round(b * 255)));
+	};
+
+	// Function to convert OKLCH to RGB
+	auto OKLCHToRGB = [&](double l, double c, double h)
+	{
+		// Convert hue from degrees to radians
+		h = h * 3.14159265358979323846 / 180.0;
+
+		// Convert OKLCH to OKLab
+		double a = c * cos(h);
+		double b = c * sin(h);
+
+		// --- OKLab to Linear sRGB ---
+
+		// Inverse matrix for OKLab -> Linear sRGB conversion
+		auto OKLabToLinearSRGB = [&](double l, double a, double b)
+		{
+			auto srgb_component = [&](double val) {
+				return val > 0.0031308 ? 1.055 * pow(val, 1.0 / 2.4) - 0.055 : 12.92 * val;
+			};
+
+			double l_ = l + 0.3963377774 * a + 0.2158037573 * b;
+			double m_ = l - 0.1055613458 * a - 0.0638541728 * b;
+			double s_ = l - 0.0894841775 * a - 1.2914855480 * b;
+
+			l_ = l_ * l_ * l_;
+			m_ = m_ * m_ * m_;
+			s_ = s_ * s_ * s_;
+
+			double lr =  4.0767416621 * l_ - 3.3077115913 * m_ + 0.2309699292 * s_;
+			double lg = -1.2684380046 * l_ + 2.6097574011 * m_ - 0.3413193965 * s_;
+			double lb = -0.0041960863 * l_ - 0.7034186147 * m_ + 1.7076147010 * s_;
+
+			// --- Linear sRGB to sRGB ---
+			return RGB(
+				static_cast<BYTE>(round(max(0.0, min(255.0, srgb_component(lr) * 255.0)))),
+				static_cast<BYTE>(round(max(0.0, min(255.0, srgb_component(lg) * 255.0)))),
+				static_cast<BYTE>(round(max(0.0, min(255.0, srgb_component(lb) * 255.0))))
+			);
 		};
 
+		return OKLabToLinearSRGB(l, a, b);
+	};
+
+
 	// --- Hex Color Parsing ---
-	if (trimmedText.GetLength() >= 3 && trimmedText.GetLength() <= 10 && // Account for 0x prefix
+	if (trimmedText.GetLength() >= 3 && trimmedText.GetLength() <= 10 &&
 		(trimmedText.GetLength() == 3 || trimmedText.GetLength() == 4 || trimmedText.GetLength() == 6 || trimmedText.GetLength() == 8 || trimmedText.GetLength() == 10))
 	{
-		int r, g, b, a = 255; // Default alpha to fully opaque
-		int scanRet = 0;
-
 		// Handle 0xAARRGGBB format
 		if (trimmedText.GetLength() == 10 && trimmedText.Find(_T("0x")) == 0)
 		{
 			unsigned int colorValue;
-			scanRet = swscanf(trimmedText, _T("0x%x"), &colorValue);
-			if (scanRet == 1)
+			if (swscanf(trimmedText, _T("0x%x"), &colorValue) == 1)
 			{
-				a = (colorValue >> 24) & 0xFF;
-				r = (colorValue >> 16) & 0xFF;
-				g = (colorValue >> 8) & 0xFF;
-				b = colorValue & 0xFF;
+				int a = (colorValue >> 24) & 0xFF;
+				int r = (colorValue >> 16) & 0xFF;
+				int g = (colorValue >> 8) & 0xFF;
+				int b = colorValue & 0xFF;
 
 				DrawColorBox(RGB(r, g, b));
-				return; //exit early
+				return;
 			}
 		}
-		else
+		else // Handle standard hex formats (#RGB, #RRGGBB, #RGBA, #RRGGBBAA)
 		{
 			//expand 3 and 4 value hex to 6 and 8
 			if (trimmedText.GetLength() == 3 || trimmedText.GetLength() == 4)
@@ -550,6 +624,8 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 				trimmedText = expandedText;
 			}
 
+			int r, g, b, a = 255;
+			int scanRet = 0;
 
 			if (trimmedText.GetLength() == 6)
 			{
@@ -563,28 +639,29 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 			if (scanRet >= 3)
 			{
 				DrawColorBox(RGB(r, g, b));
-				return; //exit early
+				return;
 			}
 		}
 	}
 
-	// --- RGB Color Parsing ---
-	if (trimmedText.Find(_T("rgb")) == 0 || trimmedText.Find(',') != -1)
+	// --- RGB and RGBA Color Parsing ---
+	if (trimmedText.Find(_T("rgb")) == 0)
 	{
-		int r, g, b, a = 255; // Default alpha
-		double alpha = 1.0;
+		int r, g, b;
+		double a = 1.0; // Default alpha
+		int scanRet = 0;
 		CString noRGB = trimmedText.Trim(_T("rgb(")).Trim(_T("rgba(")).Trim(')');
 
-		int scanRet = swscanf(noRGB, _T("%d,%d,%d,%lf"), &r, &g, &b, &alpha);
+		// comma and space delimited
+		scanRet = swscanf(noRGB, _T("%d,%d,%d,%lf"), &r, &g, &b, &a);
 		if (scanRet < 3)
 		{
 			scanRet = swscanf(noRGB, _T("%d,%d,%d"), &r, &g, &b);
 		}
 
-		//space separated values, with optional alpha
 		if (scanRet < 3)
 		{
-			scanRet = swscanf(noRGB, _T("%d %d %d / %lf"), &r, &g, &b, &alpha);
+			scanRet = swscanf(noRGB, _T("%d %d %d / %lf"), &r, &g, &b, &a);
 		}
 		if (scanRet < 3)
 		{
@@ -593,59 +670,52 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 
 		if (scanRet >= 3)
 		{
-			if (scanRet == 4) // If alpha was parsed (either comma or slash format)
-			{
-				a = static_cast<int>(alpha * 255);
-			}
 			DrawColorBox(RGB(r, g, b));
 			return;
 		}
 	}
 
-	// --- HSL Color Parsing ---
+	// --- HSL and HSLA Color Parsing ---
 	if (trimmedText.Find(_T("hsl")) == 0)
 	{
 		int h;
-		double s, l, alpha = 1.0; //default to 1.0
+		double s, l, a = 1.0;
 		int scanRet = 0;
-
 		CString noHSL = trimmedText.Trim(_T("hsl(")).Trim(_T("hsla(")).Trim(')');
 
-		//parse with comma separation
-		scanRet = swscanf(noHSL, _T("%d,%lf%%,%lf%%,%lf"), &h, &s, &l, &alpha);
+		//parse with different delimiters, with and without the percent and deg symbols and alpha
+		scanRet = swscanf(noHSL, _T("%d,%lf%%,%lf%%,%lf"), &h, &s, &l, &a);
 
-		//parse with comma and without percent signs
 		if (scanRet < 3)
 		{
-			scanRet = swscanf(noHSL, _T("%d,%lf,%lf,%lf"), &h, &s, &l, &alpha);
+			scanRet = swscanf(noHSL, _T("%d,%lf,%lf,%lf"), &h, &s, &l, &a);
 		}
 
-		//parse with deg, percent and optional alpha
 		if (scanRet < 3)
 		{
-			scanRet = swscanf(noHSL, _T("%ddeg %lf%% %lf%% / %lf"), &h, &s, &l, &alpha);
+			scanRet = swscanf(noHSL, _T("%ddeg %lf%% %lf%% / %lf"), &h, &s, &l, &a);
 		}
 		if (scanRet < 3)
 		{
-			scanRet = swscanf(noHSL, _T("%ddeg, %lf%%, %lf%%, %lf"), &h, &s, &l, &alpha);
+			scanRet = swscanf(noHSL, _T("%ddeg, %lf%%, %lf%%, %lf"), &h, &s, &l, &a);
 		}
-		if (scanRet < 3) //without alpha
+		if (scanRet < 3)
 		{
 			scanRet = swscanf(noHSL, _T("%ddeg %lf%% %lf%%"), &h, &s, &l);
 		}
-		//parse with deg and without percent signs and optional alpha
+
 		if (scanRet < 3)
 		{
-			scanRet = swscanf(noHSL, _T("%ddeg %lf %lf / %lf"), &h, &s, &l, &alpha);
+			scanRet = swscanf(noHSL, _T("%ddeg %lf %lf / %lf"), &h, &s, &l, &a);
 		}
-		if (scanRet < 3) //without alpha
+		if (scanRet < 3)
 		{
 			scanRet = swscanf(noHSL, _T("%ddeg %lf %lf"), &h, &s, &l);
 		}
-		//parse space separated values, optional alpha
+
 		if (scanRet < 3)
 		{
-			scanRet = swscanf(noHSL, _T("%d %lf %lf / %lf"), &h, &s, &l, &alpha);
+			scanRet = swscanf(noHSL, _T("%d %lf %lf / %lf"), &h, &s, &l, &a);
 		}
 		if (scanRet < 3)
 		{
@@ -654,52 +724,67 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 
 		if (scanRet >= 3)
 		{
-			// Normalize HSL values
-			h = h % 360; // Hue: 0-360
-			if (h < 0)
-			{
-				h += 360;
-			}
-			s = s / 100.0; // Saturation: 0.0 - 1.0   (convert percentage)
-			if (s > 1.0)
-			{
-				s = 1.0;
-			}
-			if (s < 0.0)
-			{
-				s = 0.0;
-			}
+			// Normalize values (hue to 0-360, saturation/lightness to 0.0-1.0)
+			h = h % 360;
+			if (h < 0) h += 360;
+			s = max(0.0, min(1.0, s / 100.0));
+			l = max(0.0, min(1.0, l / 100.0));
 
-			l = l / 100.0; // Lightness: 0.0 - 1.0  (convert percentage)
-			if (l > 1.0) l = 1.0;
-			if (l < 0.0) l = 0.0;
+			DrawColorBox(HSLToRGB(h, s, l));
+			return;
+		}
+	}
 
-			// HSL to RGB conversion
-			double r, g, b;
-			if (s == 0)
-			{
-				r = g = b = l; // Achromatic (gray)
-			}
-			else
-			{
-				auto hue2rgb = [&](double p, double q, double t)
-					{
-						if (t < 0) t += 1;
-						if (t > 1) t -= 1;
-						if (t < 1.0 / 6.0) return p + (q - p) * 6 * t;
-						if (t < 1.0 / 2.0) return q;
-						if (t < 2.0 / 3.0) return p + (q - p) * (2.0 / 3.0 - t) * 6;
-						return p;
-					};
+	// --- OKLCH Color Parsing ---
+	if (trimmedText.Find(_T("oklch")) == 0)
+	{
+		double l, c, h, a = 1.0;
+		int scanRet = 0;
+		CString noOKLCH = trimmedText.Trim(_T("oklch(")).Trim(')');
 
-				double q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-				double p = 2 * l - q;
-				r = hue2rgb(p, q, h / 360.0 + 1.0 / 3.0);
-				g = hue2rgb(p, q, h / 360.0);
-				b = hue2rgb(p, q, h / 360.0 - 1.0 / 3.0);
-			}
+		// Parse with different delimiters, including optional 'deg' for hue and '/' for alpha.
+		scanRet = swscanf(noOKLCH, _T("%lf%%, %lf, %lfdeg, %lf"), &l, &c, &h, &a);
 
-			DrawColorBox(RGB((int)std::round(r * 255), (int)std::round(g * 255), (int)std::round(b * 255)));
+		if (scanRet < 3)
+		{
+			scanRet = swscanf(noOKLCH, _T("%lf%%, %lf, %lf, %lf"), &l, &c, &h, &a);
+		}
+
+		if(scanRet < 3)
+		{
+			scanRet = swscanf(noOKLCH, _T("%lf, %lf, %lfdeg, %lf"), &l, &c, &h, &a);
+		}
+		if(scanRet < 3)
+		{
+			scanRet = swscanf(noOKLCH, _T("%lf, %lf, %lf, %lf"), &l, &c, &h, &a);
+		}
+
+		if (scanRet < 3)
+		{
+			scanRet = swscanf(noOKLCH, _T("%lf%% %lf %lfdeg / %lf"), &l, &c, &h, &a);
+		}
+		if (scanRet < 3)
+		{
+			scanRet = swscanf(noOKLCH, _T("%lf%% %lf %lf / %lf"), &l, &c, &h, &a);
+		}
+		if (scanRet < 3)
+		{
+			scanRet = swscanf(noOKLCH, _T("%lf%% %lf %lfdeg"), &l, &c, &h);
+		}
+		if (scanRet < 3)
+		{
+			scanRet = swscanf(noOKLCH, _T("%lf%% %lf %lf"), &l, &c, &h);
+		}
+		if (scanRet >= 3)
+		{
+			// Normalize values (L to 0.0-1.0, C to 0.0-?, H to 0-360)
+			l = max(0.0, min(1.0, l / 100.0));
+			//Chroma can be over 1
+			//c = max(0.0, min(1.0, c / 100.0)); //chroma is not a percentage.
+			h = h % 360;
+			if (h < 0) h += 360;
+
+			DrawColorBox(OKLCHToRGB(l, c, h));
 			return;
 		}
 	}
