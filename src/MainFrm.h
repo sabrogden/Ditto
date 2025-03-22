@@ -77,7 +77,6 @@ public:
 	int m_startupScreenWidth;
 	int m_startupScreenHeight;
     CRichEditCtrlEx m_richEditTextConverter;
-	DWORD m_lastKeyPressTime; // P4998
 
     void DoDittoCopyBufferPaste(int nCopyBuffer);
     void DoFirstTenPositionsPaste(int nPos);
@@ -94,7 +93,6 @@ public:
 
     void ShowEditWnd(CClipIDs &Ids);
 
-	void HandleRepeatedKeyPresses(); // P17c5
 
     // Generated message map functions
 protected:

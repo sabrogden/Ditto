@@ -297,8 +297,6 @@ void CQuickPaste::ShowQPasteWnd(CWnd *pParent, bool bAtPrevPos, bool bFromKeyboa
 	Log(StrF(_T("END of ShowQPasteWnd, AtPrevPos: %d, FromKeyboard: %d, RefillList: %d, Position, %d %d %d %d"), bAtPrevPos, bFromKeyboard, bReFillList, crRect.left, crRect.top, crRect.right, crRect.bottom));
 
 	m_forceResizeOnNextShow = false;
-
-	HandleRepeatedKeyPresses();
 }
 
 void CQuickPaste::MoveSelection(bool down)
@@ -385,15 +383,4 @@ void CQuickPaste::OnScreenResolutionChange()
 	{
 		m_forceResizeOnNextShow = true;
 	}
-}
-
-void CQuickPaste::HandleRepeatedKeyPresses()
-{
-	DWORD currentTime = GetTickCount();
-	if (currentTime - m_lastKeyPressTime < 500) // 500ms threshold for repeated key presses
-	{
-		// Handle repeated key press
-		// Perform the desired action for repeated key presses
-	}
-	m_lastKeyPressTime = currentTime;
 }
