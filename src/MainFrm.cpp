@@ -104,7 +104,6 @@ CMainFrame::CMainFrame()
 	m_pDeleteClips = NULL;
 	m_doubleClickGroupId = -1;
 	m_doubleClickGroupStartTime = 0;
-	m_lastKeyPressTime = 0; // P4998
 }
 
 CMainFrame::~CMainFrame()
@@ -485,8 +484,6 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 			}
 		}
 	}
-
-	HandleRepeatedKeyPresses(); // P17c5
 
     return TRUE;
 }
@@ -1541,15 +1538,4 @@ void CMainFrame::OnSetFocus(CWnd* pOldWnd)
 	//int nRet = MessageBox(_T("focused"), _T("Ditto"), MB_YESNO | MB_TOPMOST);
 
 	// TODO: Add your message handler code here
-}
-
-void CMainFrame::HandleRepeatedKeyPresses()
-{
-	DWORD currentTime = GetTickCount();
-	if (currentTime - m_lastKeyPressTime < 500) // 500ms threshold for repeated key presses
-	{
-		// Handle repeated key press
-		// Perform the desired action for repeated key presses
-	}
-	m_lastKeyPressTime = currentTime;
 }

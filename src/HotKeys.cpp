@@ -14,8 +14,7 @@ CHotKey::CHotKey(CString name, DWORD defKey, bool bUnregOnShowDitto, HotKeyType 
 	m_description(description),
 	m_bIsRegistered(false), 
 	m_bUnRegisterOnShowDitto(bUnregOnShowDitto),
-	m_clipId(0),
-	m_lastKeyPressTime(0)
+	m_clipId(0)
 {
 	m_Atom = ::GlobalAddAtom(StrF(_T("%s_%d"), m_Name, hkType));
 	ASSERT(m_Atom);
@@ -504,15 +503,4 @@ bool CHotKeys::FindFirstConflict(INT_PTR* pX, INT_PTR* pY)
 	ARRAY keys;
 	GetKeys(keys);
 	return FindFirstConflict(keys, pX, pY);
-}
-
-void CHotKey::HandleRepeatedKeyPresses()
-{
-	DWORD currentTime = GetTickCount();
-	if (currentTime - m_lastKeyPressTime < 500) // 500ms threshold for repeated key presses
-	{
-		// Handle repeated key press
-		// Perform the desired action for repeated key presses
-	}
-	m_lastKeyPressTime = currentTime;
 }
