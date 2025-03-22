@@ -249,10 +249,13 @@ bool CTheme::LoadElement(TiXmlElement *pParent, CStringA csNode, COLORREF &Color
 		return false;
 	}
 
-	if (csColor.Find(_T("RGB")) >= 0)
+	// Convert "RGB" to lowercase to handle both "RGB" and "rgb"
+	csColor.MakeLower();
+
+	if (csColor.Find(_T("rgb")) >= 0)
 	{
 		csColor = csColor.Trim();
-		csColor.Replace(_T("RGB("), _T(""));
+		csColor.Replace(_T("rgb("), _T(""));
 		csColor.Replace(_T(")"), _T(""));
 
 		CTokenizer token(csColor, _T(","));
