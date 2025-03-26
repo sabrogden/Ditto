@@ -494,301 +494,291 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 // Draw color boxes from copied color codes.
 //
 void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 {
-	if (!CGetSetOptions::m_bDrawCopiedColorCode)
-		return;
+        if (!CGetSetOptions::m_bDrawCopiedColorCode)
+                return;
 
-	// Helper function to draw a color box and adjust rcText
-	auto DrawColorBox = [&](COLORREF color)
-	{
-		CRect colorRect(rcText);
-		colorRect.right = colorRect.left + m_windowDpi->Scale(rcText.Height());
-		pDC->FillSolidRect(colorRect, color);
-		rcText.left = colorRect.right + m_windowDpi->Scale(ROW_LEFT_BORDER);
-	};
+        // Helper function to draw a color box and adjust rcText
+        auto DrawColorBox = [&](COLORREF color)
+        {
+                CRect colorRect(rcText);
+                colorRect.right = colorRect.left + m_windowDpi->Scale(rcText.Height());
+                pDC->FillSolidRect(colorRect, color);
+                rcText.left = colorRect.right + m_windowDpi->Scale(ROW_LEFT_BORDER);
+        };
 
-	// Trim unwanted characters + lowercase
-	CString trimmedText = csText;
-	trimmedText.Trim(_T("»#;"));
-	trimmedText.Trim();
-	trimmedText.MakeLower();
+        // Function to convert HSL to RGB (implementation assumed correct as provided)
+        auto HSLToRGB = [&](int h, double s, double l)
+        {
+                double r, g, b;
+                if (s == 0.0) { r = g = b = l; } // gray
+                else {
+                        auto hue2rgb = [&](double p, double q, double t) {
+                                if (t < 0) t += 1.0;
+                                if (t > 1) t -= 1.0;
+                                if (t < 1.0 / 6.0) return p + (q - p) * 6.0 * t;
+                                if (t < 1.0 / 2.0) return q;
+                                if (t < 2.0 / 3.0) return p + (q - p) * (2.0 / 3.0 - t) * 6.0;
+                                return p;
+                        };
+                        double q = l < 0.5 ? l * (1.0 + s) : l + s - l * s;
+                        double p = 2.0 * l - q;
+                        r = hue2rgb(p, q, h / 360.0 + 1.0 / 3.0);
+                        g = hue2rgb(p, q, h / 360.0);
+                        b = hue2rgb(p, q, h / 360.0 - 1.0 / 3.0);
+                }
+                return RGB(static_cast<int>(round(r * 255)), static_cast<int>(round(g * 255)), static_cast<int>(round(b * 255)));
+        };
 
-	// Function to convert HSL to RGB
-	auto HSLToRGB = [&](int h, double s, double l)
-	{
-		double r, g, b;
+        // Function to convert OKLCH to RGB (implementation assumed correct as provided)
+        auto OKLCHToRGB = [&](double l, double c, double h)
+        {
+                h = h * 3.14159265358979323846 / 180.0; // degrees to radians
+                double a = c * cos(h);
+                double b = c * sin(h);
+                // OKLab to Linear sRGB conversion
+                auto OKLabToLinearSRGB = [&](double l_ok, double a_ok, double b_ok) {
+                        auto srgb_component = [&](double val) {
+                                return val > 0.0031308 ? 1.055 * pow(val, 1.0 / 2.4) - 0.055 : 12.92 * val;
+                        };
+                        double l_ = l_ok + 0.3963377774 * a_ok + 0.2158037573 * b_ok;
+                        double m_ = l_ok - 0.1055613458 * a_ok - 0.0638541728 * b_ok;
+                        double s_ = l_ok - 0.0894841775 * a_ok - 1.2914855480 * b_ok;
+                        l_ = l_ * l_ * l_; m_ = m_ * m_ * m_; s_ = s_ * s_ * s_;
+                        double lr =  4.0767416621 * l_ - 3.3077115913 * m_ + 0.2309699292 * s_;
+                        double lg = -1.2684380046 * l_ + 2.6097574011 * m_ - 0.3413193965 * s_;
+                        double lb = -0.0041960863 * l_ - 0.7034186147 * m_ + 1.7076147010 * s_;
+                        // Linear sRGB to sRGB
+                        return RGB(
+                                static_cast<BYTE>(round(max(0.0, min(255.0, srgb_component(lr) * 255.0)))),
+                                static_cast<BYTE>(round(max(0.0, min(255.0, srgb_component(lg) * 255.0)))),
+                                static_cast<BYTE>(round(max(0.0, min(255.0, srgb_component(lb) * 255.0))))
+                        );
+                };
+                return OKLabToLinearSRGB(l, a, b);
+        };
 
-		if (s == 0.0)
-		{
-			r = g = b = l; // gray
-		}
-		else
-		{
-			auto hue2rgb = [&](double p, double q, double t)
-			{
-				if (t < 0) t += 1.0;
-				if (t > 1) t -= 1.0;
-				if (t < 1.0 / 6.0) return p + (q - p) * 6.0 * t;
-				if (t < 1.0 / 2.0) return q;
-				if (t < 2.0 / 3.0) return p + (q - p) * (2.0 / 3.0 - t) * 6.0;
-				return p;
-			};
+        // Prepare the text: Trim whitespace, convert to lowercase for case-insensitive prefix checks.
+        CString workingText = csText;
+        workingText.Trim(); // Trim leading/trailing whitespace
+        workingText.MakeLower(); // Convert to lowercase
 
-			double q = l < 0.5 ? l * (1.0 + s) : l + s - l * s;
-			double p = 2.0 * l - q;
-			r = hue2rgb(p, q, h / 360.0 + 1.0 / 3.0);
-			g = hue2rgb(p, q, h / 360.0);
-			b = hue2rgb(p, q, h / 360.0 - 1.0 / 3.0);
-		}
+        if (workingText.IsEmpty())
+                return;
 
-		return RGB(static_cast<int>(round(r * 255)), static_cast<int>(round(g * 255)), static_cast<int>(round(b * 255)));
-	};
+        // --- Check for valid color prefixes and parse accordingly ---
 
-	// Function to convert OKLCH to RGB
-	auto OKLCHToRGB = [&](double l, double c, double h)
-	{
-		// Convert hue from degrees to radians
-		h = h * 3.14159265358979323846 / 180.0;
+        // --- 0x Hex Color Parsing (e.g., 0xAARRGGBB) ---
+        if (workingText.Left(2) == _T("0x"))
+        {
+                // Expecting "0x" followed by 8 hex digits (AARRGGBB) as per original code's successful parse case.
+                if (workingText.GetLength() == 10)
+                {
+                        unsigned int colorValue;
+                        // Scan the hex part after "0x"
+                        if (swscanf(workingText.Mid(2), _T("%x"), &colorValue) == 1)
+                        {
+                                // Original code parsed AARRGGBB from 0x format. Alpha is ignored for solid box.
+                                int r = (colorValue >> 16) & 0xFF;
+                                int g = (colorValue >> 8) & 0xFF;
+                                int b = colorValue & 0xFF;
+                                DrawColorBox(RGB(r, g, b));
+                                return; // Parsed successfully
+                        }
+                }
+                 // Note: Could add support for 0xRRGGBB (length 8) or others if needed.
+        }
+        // --- # Hex Color Parsing (e.g., #RGB, #RRGGBB, #RGBA, #RRGGBBAA) ---
+        else if (workingText.Left(1) == _T("#"))
+        {
+                CString hexPart = workingText.Mid(1); // Get the part after '#'
+                int len = hexPart.GetLength();
 
-		// Convert OKLCH to OKLab
-		double a = c * cos(h);
-		double b = c * sin(h);
+                // Expand 3 and 4 digit hex codes (#RGB -> #RRGGBB, #RGBA -> #RRGGBBAA)
+                if (len == 3 || len == 4)
+                {
+                        CString expandedHex;
+                        for (int i = 0; i < len; i++)
+                        {
+                                expandedHex += hexPart[i];
+                                expandedHex += hexPart[i];
+                        }
+                        hexPart = expandedHex;
+                        len = hexPart.GetLength(); // Update length after expansion
+                }
 
-		// --- OKLab to Linear sRGB ---
+                // Now check for standard 6 or 8 digit hex codes
+                if (len == 6 || len == 8)
+                {
+                        int r, g, b, a = 255; // Default alpha
+                        int scanRet = 0;
 
-		// Inverse matrix for OKLab -> Linear sRGB conversion
-		auto OKLabToLinearSRGB = [&](double l, double a, double b)
-		{
-			auto srgb_component = [&](double val) {
-				return val > 0.0031308 ? 1.055 * pow(val, 1.0 / 2.4) - 0.055 : 12.92 * val;
-			};
+                        if (len == 6)
+                        {
+                                scanRet = swscanf(hexPart, _T("%02x%02x%02x"), &r, &g, &b);
+                        }
+                        else // len == 8
+                        {
+                                scanRet = swscanf(hexPart, _T("%02x%02x%02x%02x"), &r, &g, &b, &a);
+                        }
 
-			double l_ = l + 0.3963377774 * a + 0.2158037573 * b;
-			double m_ = l - 0.1055613458 * a - 0.0638541728 * b;
-			double s_ = l - 0.0894841775 * a - 1.2914855480 * b;
+                        if (scanRet >= 3) // Need at least R, G, B
+                        {
+                                DrawColorBox(RGB(r, g, b)); // Alpha (a) is ignored for solid color box
+                                return; // Parsed successfully
+                        }
+                }
+        }
+        // --- RGB / RGBA Color Parsing (e.g., rgb(r,g,b), rgba(r,g,b,a), rgb(r g b / a)) ---
+        else if (workingText.Left(3) == _T("rgb")) // Matches "rgb(" and "rgba("
+        {
+                int openParen = workingText.Find(_T('('));
+                int closeParen = workingText.ReverseFind(_T(')')); // Use ReverseFind for robustness
 
-			l_ = l_ * l_ * l_;
-			m_ = m_ * m_ * m_;
-			s_ = s_ * s_ * s_;
+                if (openParen != -1 && closeParen > openParen)
+                {
+                        CString content = workingText.Mid(openParen + 1, closeParen - openParen - 1);
+                        content.Trim(); // Trim whitespace within parentheses
 
-			double lr =  4.0767416621 * l_ - 3.3077115913 * m_ + 0.2309699292 * s_;
-			double lg = -1.2684380046 * l_ + 2.6097574011 * m_ - 0.3413193965 * s_;
-			double lb = -0.0041960863 * l_ - 0.7034186147 * m_ + 1.7076147010 * s_;
+                        // Optional: Remove extra chars like » or ; if they can appear inside
+                        // content.Replace(_T("»"), _T(""));
+                        // content.Replace(_T(";"), _T(""));
 
-			// --- Linear sRGB to sRGB ---
-			return RGB(
-				static_cast<BYTE>(round(max(0.0, min(255.0, srgb_component(lr) * 255.0)))),
-				static_cast<BYTE>(round(max(0.0, min(255.0, srgb_component(lg) * 255.0)))),
-				static_cast<BYTE>(round(max(0.0, min(255.0, srgb_component(lb) * 255.0))))
-			);
-		};
+                        int r, g, b;
+                        double a = 1.0; // Default alpha
+                        int scanRet = 0;
 
-		return OKLabToLinearSRGB(l, a, b);
-	};
+                        // Attempt to parse different syntaxes (comma-separated, space-separated, with/without alpha)
+                        scanRet = swscanf(content, _T("%d,%d,%d,%lf"), &r, &g, &b, &a); // r,g,b,a
+                        if (scanRet < 3) scanRet = swscanf(content, _T("%d,%d,%d"), &r, &g, &b); // r,g,b
+                        if (scanRet < 3) scanRet = swscanf(content, _T("%d %d %d / %lf"), &r, &g, &b, &a); // r g b / a
+                        if (scanRet < 3) scanRet = swscanf(content, _T("%d %d %d"), &r, &g, &b); // r g b
+
+                        if (scanRet >= 3)
+                        {
+                                // Clamp values to the valid 0-255 range
+                                r = max(0, min(r, 255));
+                                g = max(0, min(g, 255));
+                                b = max(0, min(b, 255));
+                                DrawColorBox(RGB(r, g, b));
+                                return; // Parsed successfully
+                        }
+                }
+        }
+        // --- HSL / HSLA Color Parsing (e.g., hsl(h,s%,l%), hsla(h,s%,l%,a), hsl(h s% l% / a)) ---
+        else if (workingText.Left(3) == _T("hsl")) // Matches "hsl(" and "hsla("
+        {
+                int openParen = workingText.Find(_T('('));
+                int closeParen = workingText.ReverseFind(_T(')'));
+
+                if (openParen != -1 && closeParen > openParen)
+                {
+                        CString content = workingText.Mid(openParen + 1, closeParen - openParen - 1);
+                        content.Trim();
+
+                        // Optional: Remove extra chars like » or ; if they can appear inside
+                        // content.Replace(_T("»"), _T(""));
+                        // content.Replace(_T(";"), _T(""));
+                        // content.Replace(_T("deg"), _T("")); // Remove 'deg' unit for easier parsing
+
+                        int h_int;
+                        double s_raw, l_raw, a_raw = 1.0; // Use doubles for flexibility with %
+                        int scanRet = 0;
+
+                        // Attempt to parse various syntaxes. Note: swscanf needs literal '%' to match '%'.
+                        // We prioritize formats explicitly mentioned or implied by the original code.
+                        // Comma separated with %
+                        scanRet = swscanf(content, _T("%d,%lf%%,%lf%%,%lf"), &h_int, &s_raw, &l_raw, &a_raw);
+                        if (scanRet < 3) scanRet = swscanf(content, _T("%d,%lf%%,%lf%%"), &h_int, &s_raw, &l_raw); // No alpha
+                        // Space separated with % and / alpha
+                        if (scanRet < 3) scanRet = swscanf(content, _T("%d %lf%% %lf%% / %lf"), &h_int, &s_raw, &l_raw, &a_raw);
+                        if (scanRet < 3) scanRet = swscanf(content, _T("%d %lf%% %lf%%"), &h_int, &s_raw, &l_raw); // No alpha
+                        // Handling units like 'deg' is tricky with swscanf; often requires pre-processing 'content'.
+                        // The original code had many swscanf attempts; add more specific formats if needed, ensuring they match CSS Color specs.
+
+                        // Try formats without explicit % (assuming values are percentages)
+                        if (scanRet < 3) scanRet = swscanf(content, _T("%d,%lf,%lf,%lf"), &h_int, &s_raw, &l_raw, &a_raw);
+                        if (scanRet < 3) scanRet = swscanf(content, _T("%d,%lf,%lf"), &h_int, &s_raw, &l_raw);
+                        if (scanRet < 3) scanRet = swscanf(content, _T("%d %lf %lf / %lf"), &h_int, &s_raw, &l_raw, &a_raw);
+                        if (scanRet < 3) scanRet = swscanf(content, _T("%d %lf %lf"), &h_int, &s_raw, &l_raw);
 
 
-	// --- Hex Color Parsing ---
-	if (trimmedText.GetLength() >= 3 && trimmedText.GetLength() <= 10 &&
-		(trimmedText.GetLength() == 3 || trimmedText.GetLength() == 4 || trimmedText.GetLength() == 6 || trimmedText.GetLength() == 8 || trimmedText.GetLength() == 10))
-	{
-		// Handle 0xAARRGGBB format
-		if (trimmedText.GetLength() == 10 && trimmedText.Find(_T("0x")) == 0)
-		{
-			unsigned int colorValue;
-			if (swscanf(trimmedText, _T("0x%x"), &colorValue) == 1)
-			{
-				int a = (colorValue >> 24) & 0xFF;
-				int r = (colorValue >> 16) & 0xFF;
-				int g = (colorValue >> 8) & 0xFF;
-				int b = colorValue & 0xFF;
+                        if (scanRet >= 3)
+                        {
+                                // Normalize values: hue (0-360), saturation/lightness (0.0-1.0)
+                                int h = h_int % 360;
+                                if (h < 0) h += 360;
+                                // Assume s_raw/l_raw are percentages, convert to 0.0-1.0 range
+                                double s = max(0.0, min(1.0, s_raw / 100.0));
+                                double l = max(0.0, min(1.0, l_raw / 100.0));
 
-				DrawColorBox(RGB(r, g, b));
-				return;
-			}
-		}
-		else // Handle standard hex formats (#RGB, #RRGGBB, #RGBA, #RRGGBBAA)
-		{
-			//expand 3 and 4 value hex to 6 and 8
-			if (trimmedText.GetLength() == 3 || trimmedText.GetLength() == 4)
-			{
-				CString expandedText;
-				for (int i = 0; i < trimmedText.GetLength(); i++)
-				{
-					expandedText += trimmedText[i];
-					expandedText += trimmedText[i];
-				}
-				trimmedText = expandedText;
-			}
+                                DrawColorBox(HSLToRGB(h, s, l));
+                                return; // Parsed successfully
+                        }
+                }
+        }
+        // --- OKLCH Color Parsing (e.g., oklch(l% c h / a)) ---
+        else if (workingText.Left(5) == _T("oklch")) // Matches "oklch("
+        {
+                int openParen = workingText.Find(_T('('));
+                int closeParen = workingText.ReverseFind(_T(')'));
 
-			int r, g, b, a = 255;
-			int scanRet = 0;
+                if (openParen != -1 && closeParen > openParen)
+                {
+                        CString content = workingText.Mid(openParen + 1, closeParen - openParen - 1);
+                        content.Trim();
+                        bool l_is_percent = (content.Find(_T('%')) != -1); // Check if L is specified as percentage
 
-			if (trimmedText.GetLength() == 6)
-			{
-				scanRet = swscanf(trimmedText, _T("%02x%02x%02x"), &r, &g, &b);
-			}
-			else if (trimmedText.GetLength() == 8)
-			{
-				scanRet = swscanf(trimmedText, _T("%02x%02x%02x%02x"), &r, &g, &b, &a);
-			}
+                        // Optional: Remove extra chars like » or ; if they can appear inside
+                        // content.Replace(_T("»"), _T(""));
+                        // content.Replace(_T(";"), _T(""));
+                        // content.Replace(_T("deg"), _T("")); // Remove 'deg' unit
 
-			if (scanRet >= 3)
-			{
-				DrawColorBox(RGB(r, g, b));
-				return;
-			}
-		}
-	}
+                        double l_raw, c_raw, h_raw, a_raw = 1.0;
+                        int scanRet = 0;
 
-	// --- RGB and RGBA Color Parsing ---
-	if (trimmedText.Find(_T("rgb")) == 0)
-	{
-		int r, g, b;
-		double a = 1.0; // Default alpha
-		int scanRet = 0;
-		CString noRGB = trimmedText.Trim(_T("rgb(")).Trim(_T("rgba(")).Trim(')');
+                        // CSS Color 4 primarily uses space separation for oklch: oklch(L C H / A)
+                        // L can be number (0-1) or percentage (0%-100%)
+                        // C is number (typically 0-0.4, but can be higher)
+                        // H is number (0-360) or angle unit (deg, rad, grad, turn)
+                        // A is number (0-1) or percentage (0%-100%)
 
-		// comma and space delimited
-		scanRet = swscanf(noRGB, _T("%d,%d,%d,%lf"), &r, &g, &b, &a);
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noRGB, _T("%d,%d,%d"), &r, &g, &b);
-		}
+                        // Try parsing space-separated format, handling optional % for L and optional / A
+                        scanRet = swscanf(content, _T("%lf%% %lf %lf / %lf"), &l_raw, &c_raw, &h_raw, &a_raw); // L%, C, H / A
+                        if (scanRet < 3) scanRet = swscanf(content, _T("%lf %lf %lf / %lf"), &l_raw, &c_raw, &h_raw, &a_raw); // L, C, H / A
+                        if (scanRet < 3) scanRet = swscanf(content, _T("%lf%% %lf %lf"), &l_raw, &c_raw, &h_raw); // L%, C, H
+                        if (scanRet < 3) scanRet = swscanf(content, _T("%lf %lf %lf"), &l_raw, &c_raw, &h_raw); // L, C, H
 
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noRGB, _T("%d %d %d / %lf"), &r, &g, &b, &a);
-		}
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noRGB, _T("%d %d %d"), &r, &g, &b);
-		}
+                        // The original code had many comma formats; add if strictly needed, but space is standard.
+                        // scanRet = swscanf(noOKLCH, _T("%lf%%, %lf, %lf, %lf"), &l, &c, &h, &a); ... etc.
 
-		if (scanRet >= 3)
-		{
-			DrawColorBox(RGB(r, g, b));
-			return;
-		}
-	}
+                        if (scanRet >= 3)
+                        {
+                                // Normalize L: if percentage was used, divide by 100. Clamp to 0-1.
+                                double l = l_raw;
+                                if (l_is_percent) l /= 100.0;
+                                l = max(0.0, min(1.0, l));
 
-	// --- HSL and HSLA Color Parsing ---
-	if (trimmedText.Find(_T("hsl")) == 0)
-	{
-		int h;
-		double s, l, a = 1.0;
-		int scanRet = 0;
-		CString noHSL = trimmedText.Trim(_T("hsl(")).Trim(_T("hsla(")).Trim(')');
+                                // Normalize C: ensure non-negative. No upper bound specified in general.
+                                double c = max(0.0, c_raw);
 
-		//parse with different delimiters, with and without the percent and deg symbols and alpha
-		scanRet = swscanf(noHSL, _T("%d,%lf%%,%lf%%,%lf"), &h, &s, &l, &a);
+                                // Normalize H: modulo 360 degrees.
+                                double h = fmod(h_raw, 360.0);
+                                if (h < 0) h += 360.0;
 
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%d,%lf,%lf,%lf"), &h, &s, &l, &a);
-		}
+                                DrawColorBox(OKLCHToRGB(l, c, h));
+                                return; // Parsed successfully
+                        }
+                }
+        }
 
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%ddeg %lf%% %lf%% / %lf"), &h, &s, &l, &a);
-		}
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%ddeg, %lf%%, %lf%%, %lf"), &h, &s, &l, &a);
-		}
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%ddeg %lf%% %lf%%"), &h, &s, &l);
-		}
-
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%ddeg %lf %lf / %lf"), &h, &s, &l, &a);
-		}
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%ddeg %lf %lf"), &h, &s, &l);
-		}
-
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%d %lf %lf / %lf"), &h, &s, &l, &a);
-		}
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%d %lf %lf"), &h, &s, &l);
-		}
-
-		if (scanRet >= 3)
-		{
-			// Normalize values (hue to 0-360, saturation/lightness to 0.0-1.0)
-			h = h % 360;
-			if (h < 0) h += 360;
-			s = max(0.0, min(1.0, s / 100.0));
-			l = max(0.0, min(1.0, l / 100.0));
-
-			DrawColorBox(HSLToRGB(h, s, l));
-			return;
-		}
-	}
-
-	// --- OKLCH Color Parsing ---
-	if (trimmedText.Find(_T("oklch")) == 0)
-	{
-		double l, c, h, a = 1.0;
-		int scanRet = 0;
-		CString noOKLCH = trimmedText.Trim(_T("oklch(")).Trim(')');
-
-		// Parse with different delimiters, including optional 'deg' for hue and '/' for alpha.
-		scanRet = swscanf(noOKLCH, _T("%lf%%, %lf, %lfdeg, %lf"), &l, &c, &h, &a);
-
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noOKLCH, _T("%lf%%, %lf, %lf, %lf"), &l, &c, &h, &a);
-		}
-
-		if(scanRet < 3)
-		{
-			scanRet = swscanf(noOKLCH, _T("%lf, %lf, %lfdeg, %lf"), &l, &c, &h, &a);
-		}
-		if(scanRet < 3)
-		{
-			scanRet = swscanf(noOKLCH, _T("%lf, %lf, %lf, %lf"), &l, &c, &h, &a);
-		}
-
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noOKLCH, _T("%lf%% %lf %lfdeg / %lf"), &l, &c, &h, &a);
-		}
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noOKLCH, _T("%lf%% %lf %lf / %lf"), &l, &c, &h, &a);
-		}
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noOKLCH, _T("%lf%% %lf %lfdeg"), &l, &c, &h);
-		}
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noOKLCH, _T("%lf%% %lf %lf"), &l, &c, &h);
-		}
-		if (scanRet >= 3)
-		{
-			// Normalize values (L to 0.0-1.0, C to 0.0-?, H to 0-360)
-			l = max(0.0, min(1.0, l / 100.0));
-			//Chroma can be over 1
-			//c = max(0.0, min(1.0, c / 100.0)); //chroma is not a percentage.
-			h = h % 360;
-			if (h < 0) h += 360;
-
-			DrawColorBox(OKLCHToRGB(l, c, h));
-			return;
-		}
-	}
+        // If none of the formats matched and returned, the function exits without drawing.
 }
+
 
 BOOL CQListCtrl::DrawRtfText(int nItem, CRect& crRect, CDC* pDC)
 {
