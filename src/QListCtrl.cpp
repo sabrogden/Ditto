@@ -12,6 +12,10 @@
 #include "DrawHTML.h"
 #include "..\Shared\TextConvert.h"
 #include <cmath>
+#include <vector>
+#include <string>
+#include <cwchar>   // For swscanf
+#include <algorithm> // For std::round
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -494,215 +498,376 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 }
 
+
+// Helper function implementation to check for valid hex characters
+bool CQListCtrl::IsHexString(const CString& str)
+{
+	if (str.IsEmpty()) {
+		return false;
+	}
+	for (int i = 0; i < str.GetLength(); ++i) {
+		if (!iswxdigit(str[i])) {
+			return false;
+		}
+	}
+	return true;
+}
+
+// Helper function implementation for HSL to RGB conversion
+COLORREF CQListCtrl::HslToRgb(double h, double s, double l)
+{
+	// Input h(0-360), s(0-1), l(0-1)
+	// Output COLORREF (RGB)
+
+	double r, g, b;
+
+	if (s == 0)
+	{
+		r = g = b = l; // Achromatic (gray)
+	}
+	else
+	{
+		auto hue2rgb = [&](double p, double q, double t)
+			{
+				if (t < 0) t += 1;
+				if (t > 1) t -= 1;
+				if (t < 1.0 / 6.0) return p + (q - p) * 6 * t;
+				if (t < 1.0 / 2.0) return q;
+				if (t < 2.0 / 3.0) return p + (q - p) * (2.0 / 3.0 - t) * 6;
+				return p;
+			};
+
+		// Normalize h to 0-1 range
+		double h_norm = h / 360.0;
+
+		double q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+		double p = 2 * l - q;
+		r = hue2rgb(p, q, h_norm + 1.0 / 3.0);
+		g = hue2rgb(p, q, h_norm);
+		b = hue2rgb(p, q, h_norm - 1.0 / 3.0);
+	}
+
+	// Scale RGB values to 0-255 and round
+	int R = static_cast<int>(std::round(r * 255));
+	int G = static_cast<int>(std::round(g * 255));
+	int B = static_cast<int>(std::round(b * 255));
+
+	// Clamp values to 0-255 just in case of floating point inaccuracies
+	R = max(0, min(255, R));
+	G = max(0, min(255, G));
+	B = max(0, min(255, B));
+
+	return RGB(R, G, B);
+}
+
+
 void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 {
-	if (CGetSetOptions::m_bDrawCopiedColorCode == FALSE)
+	if (CGetSetOptions::m_bDrawCopiedColorCode == FALSE || csText.IsEmpty())
 		return;
 
-	CString trimmedText = CString(csText).Trim(_T("»")).Trim().Trim(_T("#"));
-	trimmedText = trimmedText.Trim(';');
-	trimmedText = trimmedText.MakeLower();
+	// 1. Initial Cleaning (Remove specific surrounding chars and leading/trailing whitespace)
+	CString cleanedText = csText;
+	cleanedText.Trim(_T("»")); // Remove potential ditto mark first
+	cleanedText.Trim();        // Trim leading/trailing whitespace
+	cleanedText.TrimRight(_T(";")); // Remove trailing semicolon
+	cleanedText.Trim();        // Trim again in case semicolon had spaces after it
 
-	// Helper function to draw the color box
+	// Store original case potentially for display, but use lower for parsing
+	CString originalCleanedText = cleanedText;
+	CString parseText = cleanedText;
+	parseText.MakeLower(); // Use lower case for keyword matching ('rgb', 'hsl', '0x')
+
+	// 2. Helper function to draw the color box
 	auto DrawColorBox = [&](COLORREF color)
 		{
 			CRect pastedRect(rcText);
-			pastedRect.right = pastedRect.left + m_windowDpi->Scale(rcText.Height());
+			int boxSize = m_windowDpi->Scale(rcText.Height());
+			// Prevent overly large boxes if text rect somehow becomes huge
+			boxSize = min(boxSize, m_windowDpi->Scale(20)); 
+			pastedRect.right = pastedRect.left + boxSize;
+			pastedRect.bottom = pastedRect.top + boxSize; // Make it square
+
 			pDC->FillSolidRect(pastedRect, color);
-			rcText.left += m_windowDpi->Scale(rcText.Height());
+
+			// Adjust text rect to be after the color box + padding
+			rcText.left += boxSize;
 			rcText.left += m_windowDpi->Scale(ROW_LEFT_BORDER);
+			// Restore original (potentially mixed-case) text for drawing
+			csText = originalCleanedText;
 		};
 
-	// --- Hex Color Parsing ---
-	if (trimmedText.GetLength() >= 3 && trimmedText.GetLength() <= 10 && // Account for 0x prefix
-		(trimmedText.GetLength() == 3 || trimmedText.GetLength() == 4 || trimmedText.GetLength() == 6 || trimmedText.GetLength() == 8 || trimmedText.GetLength() == 10))
+	// 3. --- Hex Color Parsing ---
+	CString hexString;
+	bool isHex = false;
+	int hexLength = 0;
+
+	if (parseText.GetLength() >= 2 && parseText.Left(2) == _T("0x"))
 	{
-		int r, g, b, a = 255; // Default alpha to fully opaque
-		int scanRet = 0;
-
-		// Handle 0xAARRGGBB format
-		if (trimmedText.GetLength() == 10 && trimmedText.Find(_T("0x")) == 0)
+		// Format: 0xRRGGBB (8 chars total) or 0xAARRGGBB (10 chars total)
+		hexString = parseText.Mid(2); // Get part after 0x
+		hexLength = hexString.GetLength();
+		if ((hexLength == 6 || hexLength == 8) && IsHexString(hexString))
 		{
-			unsigned int colorValue;
-			scanRet = swscanf(trimmedText, _T("0x%x"), &colorValue);
-			if (scanRet == 1)
+			isHex = true;
+			// Keep hexString as is (6 or 8 hex digits)
+		}
+	}
+	else if (parseText.GetLength() >= 1 && parseText.Left(1) == _T("#"))
+	{
+		// Format: #RGB (4), #RGBA (5), #RRGGBB (7), #RRGGBBAA (9)
+		hexString = parseText.Mid(1); // Get part after #
+		hexLength = hexString.GetLength();
+		if ((hexLength == 3 || hexLength == 4 || hexLength == 6 || hexLength == 8) && IsHexString(hexString))
+		{
+			isHex = true;
+			// Expand #RGB to #RRGGBB and #RGBA to #RRGGBBAA if needed
+			if (hexLength == 3) // RGB -> RRGGBB
 			{
-				a = (colorValue >> 24) & 0xFF;
-				r = (colorValue >> 16) & 0xFF;
-				g = (colorValue >> 8) & 0xFF;
-				b = colorValue & 0xFF;
+				hexString.Format(_T("%c%c%c%c%c%c"), hexString[0], hexString[0], hexString[1], hexString[1], hexString[2], hexString[2]);
+			}
+			else if (hexLength == 4) // RGBA -> RRGGBBAA
+			{
+				hexString.Format(_T("%c%c%c%c%c%c%c%c"), hexString[0], hexString[0], hexString[1], hexString[1], hexString[2], hexString[2], hexString[3], hexString[3]);
+			}
+			// hexString is now 6 or 8 hex digits
+		}
+	}
 
-				DrawColorBox(RGB(r, g, b));
-				return; //exit early
+	if (isHex)
+	{
+		int r = 0, g = 0, b = 0, a = 255; // Default alpha to fully opaque
+		int scanRet = 0;
+		unsigned int hexValue = 0;
+
+		// Use swscanf to parse the final 6 or 8 digit hex string
+		scanRet = swscanf(hexString, _T("%x"), &hexValue);
+
+		if (scanRet == 1)
+		{
+			if (hexString.GetLength() == 8) // RRGGBBAA or AARRGGBB (handle both standards, CSS uses RGBA, some contexts use ARGB)
+			{
+				// Assuming RRGGBBAA based on CSS standard (# format expansion)
+				// If parsing 0x format, the original code assumed ARGB. Let's stick to CSS standard RGBA for consistency here.
+				// If you need strict 0xAARRGGBB, add specific check for "0x" prefix here.
+				r = (hexValue >> 24) & 0xFF;
+				g = (hexValue >> 16) & 0xFF;
+				b = (hexValue >> 8) & 0xFF;
+				a = hexValue & 0xFF;
+				// If input was 0x format AND you require 0xAARRGGBB specifically:
+				// if (parseText.Left(2) == _T("0x")) {
+				//     a = (hexValue >> 24) & 0xFF;
+				//     r = (hexValue >> 16) & 0xFF;
+				//     g = (hexValue >> 8) & 0xFF;
+				//     b = hexValue & 0xFF;
+				// }
+			}
+			else // 6 digits (RRGGBB)
+			{
+				r = (hexValue >> 16) & 0xFF;
+				g = (hexValue >> 8) & 0xFF;
+				b = hexValue & 0xFF;
+				a = 255; // No alpha info
+			}
+
+			// Basic validation on parsed values (should be redundant if IsHexString worked)
+			if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255 && a >= 0 && a <= 255) {
+				DrawColorBox(RGB(r, g, b)); // Draw using RGB, ignore alpha for the solid box
+				return; // Valid hex format found and drawn
 			}
 		}
-		else
-		{
-			//expand 3 and 4 value hex to 6 and 8
-			if (trimmedText.GetLength() == 3 || trimmedText.GetLength() == 4)
-			{
-				CString expandedText;
-				for (int i = 0; i < trimmedText.GetLength(); i++)
+	}
+
+
+	// 4. --- RGB Color Parsing ---
+	// Formats: rgb(R, G, B), rgba(R, G, B, A), rgb(R G B), rgb(R G B / A)
+	// R, G, B are 0-255. A is 0.0-1.0
+	// Percentage formats like rgb(100%, 0%, 0%) are NOT handled by this swscanf logic.
+	if (parseText.StartsWith(_T("rgb")) && parseText.EndsWith(_T(")")))
+	{
+		CString content;
+		bool isRgba = parseText.StartsWith(_T("rgba"));
+		int prefixLen = isRgba ? 5 : 4; // Length of "rgba(" or "rgb("
+		content = parseText.Mid(prefixLen, parseText.GetLength() - prefixLen - 1); // Extract content within ()
+		content.Trim(); // Trim spaces within parentheses
+
+		int r = -1, g = -1, b = -1;
+		double a_double = 1.0; // Default alpha
+		int scanRet = 0;
+		bool parsed = false;
+
+		// Try parsing comma-separated format first (most common)
+		// Check if it contains commas before trying swscanf
+		if (content.Find(',') != -1) {
+			scanRet = swscanf(content, _T("%d ,%d ,%d , %lf"), &r, &g, &b, &a_double); // rgba(R, G, B, A)
+			if (scanRet >= 3) { // Need at least R, G, B
+				parsed = true;
+				if (isRgba && scanRet != 4) parsed = false; // rgba() must have 4 values
+				if (!isRgba && scanRet == 4) parsed = false; // rgb() must not have 4 values
+			}
+		}
+
+		// Try parsing space-separated format if comma parse failed or wasn't attempted
+		// Check for slash for alpha separation
+		if (!parsed && content.Find('/') != -1) {
+			scanRet = swscanf(content, _T("%d %d %d / %lf"), &r, &g, &b, &a_double); // rgb(R G B / A)
+			if (scanRet == 4) { // Must have exactly R G B / A
+			    // This format is valid for both rgb() and rgba() in modern CSS, check values
+				parsed = true;
+			}
+		}
+		else if (!parsed) { // Try space separated without alpha
+			scanRet = swscanf(content, _T("%d %d %d"), &r, &g, &b); // rgb(R G B)
+			if (scanRet == 3) { // Must have exactly R G B
+				// Check for extraneous characters after the numbers
+				CString check_str;
+				check_str.Format(_T("%d %d %d"), r, g, b);
+				if (content == check_str) // Ensure the whole string was consumed
 				{
-					expandedText += trimmedText[i];
-					expandedText += trimmedText[i];
+					parsed = true;
+					a_double = 1.0; // Set default alpha
 				}
-				trimmedText = expandedText;
 			}
+		}
 
-
-			if (trimmedText.GetLength() == 6)
+		if (parsed)
+		{
+			// Validate ranges: R, G, B (0-255), A (0.0-1.0)
+			if (r >= 0 && r <= 255 &&
+				g >= 0 && g <= 255 &&
+				b >= 0 && b <= 255 &&
+				a_double >= 0.0 && a_double <= 1.0)
 			{
-				scanRet = swscanf(trimmedText, _T("%02x%02x%02x"), &r, &g, &b);
-			}
-			else if (trimmedText.GetLength() == 8)
-			{
-				scanRet = swscanf(trimmedText, _T("%02x%02x%02x%02x"), &r, &g, &b, &a);
-			}
-
-			if (scanRet >= 3)
-			{
-				DrawColorBox(RGB(r, g, b));
-				return; //exit early
+				DrawColorBox(RGB(r, g, b)); // Draw using RGB part
+				return; // Valid RGB/RGBA format found and drawn
 			}
 		}
 	}
 
-	// --- RGB Color Parsing ---
-	if (trimmedText.Find(_T("rgb")) == 0 || trimmedText.Find(',') != -1)
+
+	// 5. --- HSL Color Parsing ---
+	// Formats: hsl(H, S%, L%), hsla(H, S%, L%, A), hsl(H S% L%), hsl(H S% L% / A)
+	// Also supports 'deg' suffix for Hue.
+	// H is 0-360, S/L are 0-100%, A is 0.0-1.0
+	if (parseText.StartsWith(_T("hsl")) && parseText.EndsWith(_T(")")))
 	{
-		int r, g, b, a = 255; // Default alpha
-		double alpha = 1.0;
-		CString noRGB = trimmedText.Trim(_T("rgb(")).Trim(_T("rgba(")).Trim(')');
+		CString content;
+		bool isHsla = parseText.StartsWith(_T("hsla"));
+		int prefixLen = isHsla ? 5 : 4; // Length of "hsla(" or "hsl("
+		content = parseText.Mid(prefixLen, parseText.GetLength() - prefixLen - 1); // Extract content within ()
+		content.Trim(); // Trim spaces within parentheses
 
-		int scanRet = swscanf(noRGB, _T("%d,%d,%d,%lf"), &r, &g, &b, &alpha);
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noRGB, _T("%d,%d,%d"), &r, &g, &b);
-		}
-
-		//space separated values, with optional alpha
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noRGB, _T("%d %d %d / %lf"), &r, &g, &b, &alpha);
-		}
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noRGB, _T("%d %d %d"), &r, &g, &b);
-		}
-
-		if (scanRet >= 3)
-		{
-			if (scanRet == 4) // If alpha was parsed (either comma or slash format)
-			{
-				a = static_cast<int>(alpha * 255);
-			}
-			DrawColorBox(RGB(r, g, b));
-			return;
-		}
-	}
-
-	// --- HSL Color Parsing ---
-	if (trimmedText.Find(_T("hsl")) == 0)
-	{
-		int h;
-		double s, l, alpha = 1.0; //default to 1.0
+		int h = -1;
+		double s = -1.0, l = -1.0, a_double = 1.0; // Default alpha
 		int scanRet = 0;
+		bool parsed = false;
+		wchar_t degSuffix[5] = { 0 }; // To capture 'deg' if present
+		wchar_t sPercent = 0, lPercent = 0; // To capture '%' signs
 
-		CString noHSL = trimmedText.Trim(_T("hsl(")).Trim(_T("hsla(")).Trim(')');
-
-		//parse with comma separation
-		scanRet = swscanf(noHSL, _T("%d,%lf%%,%lf%%,%lf"), &h, &s, &l, &alpha);
-
-		//parse with comma and without percent signs
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%d,%lf,%lf,%lf"), &h, &s, &l, &alpha);
-		}
-
-		//parse with deg, percent and optional alpha
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%ddeg %lf%% %lf%% / %lf"), &h, &s, &l, &alpha);
-		}
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%ddeg, %lf%%, %lf%%, %lf"), &h, &s, &l, &alpha);
-		}
-		if (scanRet < 3) //without alpha
-		{
-			scanRet = swscanf(noHSL, _T("%ddeg %lf%% %lf%%"), &h, &s, &l);
-		}
-		//parse with deg and without percent signs and optional alpha
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%ddeg %lf %lf / %lf"), &h, &s, &l, &alpha);
-		}
-		if (scanRet < 3) //without alpha
-		{
-			scanRet = swscanf(noHSL, _T("%ddeg %lf %lf"), &h, &s, &l);
-		}
-		//parse space separated values, optional alpha
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%d %lf %lf / %lf"), &h, &s, &l, &alpha);
-		}
-		if (scanRet < 3)
-		{
-			scanRet = swscanf(noHSL, _T("%d %lf %lf"), &h, &s, &l);
-		}
-
-		if (scanRet >= 3)
-		{
-			// Normalize HSL values
-			h = h % 360; // Hue: 0-360
-			if (h < 0)
-			{
-				h += 360;
-			}
-			s = s / 100.0; // Saturation: 0.0 - 1.0   (convert percentage)
-			if (s > 1.0)
-			{
-				s = 1.0;
-			}
-			if (s < 0.0)
-			{
-				s = 0.0;
+		// --- Try parsing comma-separated formats ---
+		if (!parsed && content.Find(',') != -1) {
+			// hsla(Hdeg, S%, L%, A)
+			scanRet = swscanf(content, _T("%ddeg , %lf %% , %lf %% , %lf"), &h, &s, &l, &a_double);
+			if (scanRet >= 3) { // H, S, L required
+				parsed = true;
+				if (isHsla && scanRet != 4) parsed = false; // hsla requires 4
+				if (!isHsla && scanRet == 4) parsed = false; // hsl requires 3
 			}
 
-			l = l / 100.0; // Lightness: 0.0 - 1.0  (convert percentage)
-			if (l > 1.0) l = 1.0;
-			if (l < 0.0) l = 0.0;
-
-			// HSL to RGB conversion
-			double r, g, b;
-			if (s == 0)
-			{
-				r = g = b = l; // Achromatic (gray)
+			// hsla(H, S%, L%, A) - No 'deg'
+			if (!parsed) {
+				scanRet = swscanf(content, _T("%d , %lf %% , %lf %% , %lf"), &h, &s, &l, &a_double);
+				if (scanRet >= 3) {
+					parsed = true;
+					if (isHsla && scanRet != 4) parsed = false;
+					if (!isHsla && scanRet == 4) parsed = false;
+				}
 			}
-			else
-			{
-				auto hue2rgb = [&](double p, double q, double t)
-					{
-						if (t < 0) t += 1;
-						if (t > 1) t -= 1;
-						if (t < 1.0 / 6.0) return p + (q - p) * 6 * t;
-						if (t < 1.0 / 2.0) return q;
-						if (t < 2.0 / 3.0) return p + (q - p) * (2.0 / 3.0 - t) * 6;
-						return p;
-					};
+		}
 
-				double q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-				double p = 2 * l - q;
-				r = hue2rgb(p, q, h / 360.0 + 1.0 / 3.0);
-				g = hue2rgb(p, q, h / 360.0);
-				b = hue2rgb(p, q, h / 360.0 - 1.0 / 3.0);
+		// --- Try parsing space-separated formats ---
+		if (!parsed && content.Find(',') == -1) { // Only if no commas found
+			// hsl(Hdeg S% L% / A)
+			scanRet = swscanf(content, _T("%ddeg %lf %% %lf %% / %lf"), &h, &s, &l, &a_double);
+			if (scanRet == 4) { // Must match exactly 4 components
+				parsed = true;
 			}
 
-			DrawColorBox(RGB((int)std::round(r * 255), (int)std::round(g * 255), (int)std::round(b * 255)));
-			return;
+			// hsl(H S% L% / A) - No 'deg'
+			if (!parsed) {
+				scanRet = swscanf(content, _T("%d %lf %% %lf %% / %lf"), &h, &s, &l, &a_double);
+				if (scanRet == 4) {
+					parsed = true;
+				}
+			}
+
+			// hsl(Hdeg S% L%) - No alpha
+			if (!parsed) {
+				// Need to ensure the *entire* string is consumed to avoid matching prefix of alpha version
+				// We store the scanned values and reconstruct to compare
+				scanRet = swscanf(content, _T("%ddeg %lf %% %lf %%"), &h, &s, &l);
+				if (scanRet == 3) {
+					CString check_str;
+					// Format considering potential floating point variations slightly
+					// However, simple comparison might be sufficient if input is clean
+					check_str.Format(_T("%ddeg %.0f%% %.0f%%"), h, s, l);
+					// Crude check - might fail if input has different spacing or precision
+					// A better check involves checking remaining chars after scan, but swscanf makes this hard.
+					// Let's try a simpler length/content check for now.
+					CString temp_content = content;
+					temp_content.Remove(' '); // Remove spaces for comparison
+					CString temp_check = check_str;
+					temp_check.Remove(' ');
+					if (temp_content == temp_check) { // Basic check if format matches structure
+						parsed = true;
+						a_double = 1.0; // Set default alpha
+					}
+				}
+			}
+
+			// hsl(H S% L%) - No 'deg', No alpha
+			if (!parsed) {
+				scanRet = swscanf(content, _T("%d %lf %% %lf %%"), &h, &s, &l);
+				if (scanRet == 3) {
+					CString check_str;
+					check_str.Format(_T("%d %.0f%% %.0f%%"), h, s, l);
+					CString temp_content = content;
+					temp_content.Remove(' ');
+					CString temp_check = check_str;
+					temp_check.Remove(' ');
+					if (temp_content == temp_check) {
+						parsed = true;
+						a_double = 1.0;
+					}
+				}
+			}
+		}
+
+		if (parsed)
+		{
+			// Validate ranges: H (any number, will be normalized), S/L (0-100), A (0.0-1.0)
+			// Note: Hue can be negative or > 360, it will be normalized later.
+			if (s >= 0.0 && s <= 100.0 &&
+				l >= 0.0 && l <= 100.0 &&
+				a_double >= 0.0 && a_double <= 1.0)
+			{
+				// Normalize HSL values for conversion
+				h = h % 360; // Hue: Normalize to 0-359
+				if (h < 0) {
+					h += 360;
+				}
+				double s_norm = s / 100.0; // Saturation: 0.0 - 1.0
+				double l_norm = l / 100.0; // Lightness: 0.0 - 1.0
+
+				COLORREF rgbColor = HslToRgb(static_cast<double>(h), s_norm, l_norm);
+				DrawColorBox(rgbColor);
+				return; // Valid HSL/HSLA format found and drawn
+			}
 		}
 	}
+
+	// If we reach here, no valid format was detected or parsed correctly.
+	// The original csText remains unchanged, and no color box is drawn.
 }
 
 BOOL CQListCtrl::DrawRtfText(int nItem, CRect& crRect, CDC* pDC)
