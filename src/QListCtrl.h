@@ -170,6 +170,8 @@ protected:
 	bool MouseInScrollBarArea(CRect crWindow, CPoint point);
 	BOOL DrawRtfText(int nItem, CRect &crRect, CDC *pDC);
 	void StopHideScrollBarTimer();
+	bool IsHexString(const CString& str);
+    COLORREF HslToRgb(double h, double s, double l);
 		
 	WCHAR *m_pwchTip;
 	TCHAR *m_pchTip;
