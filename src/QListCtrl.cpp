@@ -607,9 +607,17 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 		// Format: 0xRRGGBB (8 chars total) or 0xAARRGGBB (10 chars total)
 		hexString = parseText.Mid(2); // Get part after 0x
 		hexLength = hexString.GetLength();
-		if ((hexLength == 6 || hexLength == 8) && IsHexString(hexString))
+		if ((hexLength == 3 || hexLength == 4 || hexLength == 6 || hexLength == 8) && IsHexString(hexString))
 		{
 			isHex = true;
+			if (hexLength == 3) // RGB -> RRGGBB
+			{
+				hexString.Format(_T("%c%c%c%c%c%c"), hexString[0], hexString[0], hexString[1], hexString[1], hexString[2], hexString[2]);
+			}
+			else if (hexLength == 4) // RGBA -> RRGGBBAA
+			{
+				hexString.Format(_T("%c%c%c%c%c%c%c%c"), hexString[0], hexString[0], hexString[1], hexString[1], hexString[2], hexString[2], hexString[3], hexString[3]);
+			}
 			// Keep hexString as is (6 or 8 hex digits)
 		}
 	}
@@ -683,10 +691,10 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 	// Formats: rgb(R, G, B), rgba(R, G, B, A), rgb(R G B), rgb(R G B / A)
 	// R, G, B are 0-255. A is 0.0-1.0
 	// Percentage formats like rgb(100%, 0%, 0%) are NOT handled by this swscanf logic.
-	if (parseText.StartsWith(_T("rgb")) && parseText.EndsWith(_T(")")))
+	if (parseText.Left(3) == _T("rgb") && parseText.Right(1) == _T(")"))
 	{
 		CString content;
-		bool isRgba = parseText.StartsWith(_T("rgba"));
+		bool isRgba = parseText.Left(4) == _T("rgba");
 		int prefixLen = isRgba ? 5 : 4; // Length of "rgba(" or "rgb("
 		content = parseText.Mid(prefixLen, parseText.GetLength() - prefixLen - 1); // Extract content within ()
 		content.Trim(); // Trim spaces within parentheses
@@ -699,11 +707,24 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 		// Try parsing comma-separated format first (most common)
 		// Check if it contains commas before trying swscanf
 		if (content.Find(',') != -1) {
-			scanRet = swscanf(content, _T("%d ,%d ,%d , %lf"), &r, &g, &b, &a_double); // rgba(R, G, B, A)
+			scanRet = swscanf(content, _T("%d , %d ,%d , %lf"), &r, &g, &b, &a_double); // rgba(R, G, B, A)
 			if (scanRet >= 3) { // Need at least R, G, B
 				parsed = true;
 				if (isRgba && scanRet != 4) parsed = false; // rgba() must have 4 values
 				if (!isRgba && scanRet == 4) parsed = false; // rgb() must not have 4 values
+			}
+
+			if (!parsed) {
+				scanRet = swscanf(content, _T("%d %% , %d %% , %d %% , %lf %%"), &r, &g, &b, &a_double);
+				if (scanRet >= 3) {
+					r = ((double)r / 100) * 255;
+					g = ((double)b / 100) * 255;
+					b = ((double)b / 100) * 255;
+					a_double = (a_double / 100) * 1;
+					parsed = true;
+					if (isRgba && scanRet != 4) parsed = false; // rgba() must have 4 values
+					if (!isRgba && scanRet == 4) parsed = false; // rgb() must not have 4 values
+				}
 			}
 		}
 
@@ -749,10 +770,10 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 	// Formats: hsl(H, S%, L%), hsla(H, S%, L%, A), hsl(H S% L%), hsl(H S% L% / A)
 	// Also supports 'deg' suffix for Hue.
 	// H is 0-360, S/L are 0-100%, A is 0.0-1.0
-	if (parseText.StartsWith(_T("hsl")) && parseText.EndsWith(_T(")")))
+	if (parseText.Left(3) == _T("hsl") && parseText.Right(1) == _T(")"))
 	{
 		CString content;
-		bool isHsla = parseText.StartsWith(_T("hsla"));
+		bool isHsla = parseText.Left(4) == _T("hsla");
 		int prefixLen = isHsla ? 5 : 4; // Length of "hsla(" or "hsl("
 		content = parseText.Mid(prefixLen, parseText.GetLength() - prefixLen - 1); // Extract content within ()
 		content.Trim(); // Trim spaces within parentheses
