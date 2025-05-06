@@ -40,6 +40,7 @@ jobs:
         id: upload-unsigned-exe
         uses: actions/upload-artifact@v4
         with: 
+          name: unsigned-exe
           path: |
             Release64\Ditto.exe
             Release64\ICU_Loader.dll
@@ -54,6 +55,7 @@ jobs:
         id: upload-unsigned-artifact
         uses: actions/upload-artifact@v4
         with: 
+          name: unsigned-intaller
           path: DittoSetup\output\DittoSetup_${{env.VERSION_FILENAME}}.exe
           
       - id: optional_step_id
