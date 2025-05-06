@@ -51,7 +51,7 @@ jobs:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
           organization-id: 'fcf33ea4-4343-46b3-be50-f8fe64e1a900'
           project-slug: 'Ditto'
-          artifact-configuration-slug: 'initial'
+          artifact-configuration-slug: 'exe'
           signing-policy-slug: 'test-signing'
           github-artifact-id: '${{ steps.upload-unsigned-exe.outputs.artifact-id }}'
           wait-for-completion: true
