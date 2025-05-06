@@ -35,27 +35,19 @@ jobs:
       - name: Set Versions
         run: |
             DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
-            
-      - name: upload-unsigned-exe
-        id: upload-unsigned-exe
-        uses: actions/upload-artifact@v4
-        with: 
-          path: |
-            Release64\Ditto.exe
-            Release64\ICU_Loader.dll
-                 
+
       - name: 64bit installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
         with:
           path: DittoSetup\DittoSetup_10.iss
           options: /F"DittoSetup_${{env.VERSION_FILENAME}}" "/dbit64=1"
-          
+
       - name: upload-unsigned-installer
         id: upload-unsigned-installer
         uses: actions/upload-artifact@v4
         with: 
           path: DittoSetup\output\DittoSetup_${{env.VERSION_FILENAME}}.exe
-          
+
       - id: optional_step_id
         uses: signpath/github-action-submit-signing-request@v1.1
         with:
