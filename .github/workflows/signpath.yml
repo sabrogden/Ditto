@@ -36,6 +36,14 @@ jobs:
         run: |
             DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
                  
+      - name: upload-unsigned-exe
+        id: upload-unsigned-exe
+        uses: actions/upload-artifact@v4
+        with: 
+          path: |
+            Release64\Ditto.exe
+            Release64\ICU_Loader.dll
+            
       - name: 64bit installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
         with:
@@ -59,4 +67,8 @@ jobs:
           github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
           wait-for-completion: true
           output-artifact-directory: '/DittoSetup/outputSigned'
-
+   
+      - name: list files
+        run: |
+          cd /DittoSetup/outputSigned
+          ls
