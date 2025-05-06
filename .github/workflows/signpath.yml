@@ -82,6 +82,9 @@ jobs:
           wait-for-completion: true
           output-artifact-directory: '/DittoSetup/outputSigned'
    
-      - name: list files
-        run: |
-          ls -d D:\a\Ditto\Ditto\DittoSetup\outputSigned
+      - name: upload-signed-artifact
+        id: upload-signed-artifact
+        uses: actions/upload-artifact@v4
+        with: 
+          name: signed-intaller
+          path: DittoSetup\outputSigned\DittoSetup_${{env.VERSION_FILENAME}}.exe
