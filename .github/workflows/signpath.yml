@@ -35,6 +35,14 @@ jobs:
       - name: Set Versions
         run: |
             DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
+            
+      - name: upload-unsigned-exe
+        id: upload-unsigned-exe
+        uses: actions/upload-artifact@v4
+        with: 
+          path: |
+            Release64\Ditto.exe
+            Release64\ICU_Loader.dll
                  
       - name: 64bit installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
@@ -42,8 +50,8 @@ jobs:
           path: DittoSetup\DittoSetup_10.iss
           options: /F"DittoSetup_${{env.VERSION_FILENAME}}" "/dbit64=1"
           
-      - name: upload-unsigned-artifact
-        id: upload-unsigned-artifact
+      - name: upload-unsigned-installer
+        id: upload-unsigned-installer
         uses: actions/upload-artifact@v4
         with: 
           path: DittoSetup\output\DittoSetup_${{env.VERSION_FILENAME}}.exe
@@ -52,11 +60,11 @@ jobs:
         uses: signpath/github-action-submit-signing-request@v1.1
         with:
           api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
-          organization-id: '11add37b-5875-49ff-a233-919a1833b6d8'
+          organization-id: 'fcf33ea4-4343-46b3-be50-f8fe64e1a900'
           project-slug: 'Ditto'
           artifact-configuration-slug: 'Installer'
           signing-policy-slug: 'test-signing'
-          github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
+          github-artifact-id: '${{ steps.upload-unsigned-installer.outputs.artifact-id }}'
           wait-for-completion: true
           output-artifact-directory: '/DittoSetup/outputSigned'
 
