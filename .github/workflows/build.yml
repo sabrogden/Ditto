@@ -64,11 +64,7 @@ jobs:
           signing-policy-slug: 'test-signing'
           github-artifact-id: '${{ steps.upload-unsigned-exe.outputs.artifact-id }}'
           wait-for-completion: true
-          output-artifact-directory: '/Release64'
-          
-      - name: Copy Signed DittoUtil
-        run: |
-            copy /Release64/DittoUtil.dll /Release64/Addins/DittoUtil.dll
+          output-artifact-directory: '/Release64'      
                    
       - name: Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
