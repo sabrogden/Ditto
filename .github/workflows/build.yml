@@ -52,6 +52,7 @@ jobs:
           path: |
             Release64\Ditto.exe
             Release64\ICU_Loader.dll
+            Release64\Addins\DittoUtil.dll
             
       - id: sign-exe
         uses: signpath/github-action-submit-signing-request@v1.1
@@ -64,6 +65,10 @@ jobs:
           github-artifact-id: '${{ steps.upload-unsigned-exe.outputs.artifact-id }}'
           wait-for-completion: true
           output-artifact-directory: '/Release64'
+          
+      - name: Copy Signed DittoUtil
+        run: |
+            copy /Release64/DittoUtil.dll /Release64/Addins/DittoUtil.dll
                    
       - name: Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
