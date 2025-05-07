@@ -27,6 +27,7 @@ void CAdvGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_MFCPROPERTYGRID1, m_propertyGrid);
+	DDX_Control(pDX, IDC_EDIT_ADV_FILTER, m_editFilter);
 }
 
 
@@ -38,6 +39,7 @@ BEGIN_MESSAGE_MAP(CAdvGeneral, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_PASTE_SCRIPTS, &CAdvGeneral::OnBnClickedButtonPasteScripts2)
 	ON_WM_GETMINMAXINFO()
 	ON_WM_NCLBUTTONDOWN()
+	ON_EN_CHANGE(IDC_EDIT_ADV_FILTER, &CAdvGeneral::OnEnChangeAdvFilter)
 END_MESSAGE_MAP()
 
 
@@ -165,8 +167,12 @@ BOOL CAdvGeneral::OnInitDialog()
 
 	m_propertyGrid.ModifyStyle(0, WS_CLIPCHILDREN);
 
+	// Store all properties for filtering
+	m_allProperties.RemoveAll();
+
 	CMFCPropertyGridProperty * pGroupTest = new CMFCPropertyGridProperty( _T( "Ditto" ) );
-	m_propertyGrid.AddProperty(pGroupTest);	
+	m_propertyGrid.AddProperty(pGroupTest);
+	m_allProperties.Add(pGroupTest);
 
 	m_Resize.SetParent(m_hWnd);
 	m_Resize.AddControl(IDC_MFCPROPERTYGRID1, DR_SizeWidth | DR_SizeHeight);
@@ -322,7 +328,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Write debug to OutputDebugString"), CGetSetOptions::GetEnableDebugLogging(), SETTING_DEBUG_TO_OUTPUT_STRING);
 
 	CMFCPropertyGridProperty * regexFilterGroup = new CMFCPropertyGridProperty(_T("Exclude clips by Regular Expressions"));
-	m_propertyGrid.AddProperty(regexFilterGroup);	
+	m_propertyGrid.AddProperty(regexFilterGroup);
+	m_allProperties.Add(regexFilterGroup);
 
 	CString processFilterDesc = _T("Process making the copy first must match this before the Regex will be applied (empty or * for all processes) (separate multiples by ;)");
 	CString regexFilterDesc = _T("If copied text matches this regular expression then the clip will not be saved to Ditto");
@@ -1043,4 +1050,43 @@ void CAdvGeneral::OnNcLButtonDown(UINT nHitTest, CPoint point)
 	}
 
 	CDialog::OnNcLButtonDown(nHitTest, point);
+}
+
+void CAdvGeneral::OnEnChangeAdvFilter()
+{
+	CString filterText;
+	m_editFilter.GetWindowText(filterText);
+	filterText.MakeLower();
+
+	m_propertyGrid.RemoveAll();
+
+	for (int i = 0; i < m_allProperties.GetSize(); ++i)
+	{
+		CMFCPropertyGridProperty* pProp = m_allProperties[i];
+		CString name = pProp->GetName();
+		name.MakeLower();
+		if (filterText.IsEmpty() || name.Find(filterText) >= 0)
+		{
+			m_propertyGrid.AddProperty(pProp);
+		}
+		else
+		{
+			// Check subitems
+			BOOL found = FALSE;
+			for (int j = 0; j < pProp->GetSubItemsCount(); ++j)
+			{
+				CString subName = pProp->GetSubItem(j)->GetName();
+				subName.MakeLower();
+				if (subName.Find(filterText) >= 0)
+				{
+					found = TRUE;
+					break;
+				}
+			}
+			if (found)
+			{
+				m_propertyGrid.AddProperty(pProp);
+			}
+		}
+	}
 }
