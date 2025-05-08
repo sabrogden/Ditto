@@ -240,6 +240,7 @@
 #define IDR_MENU_NO_DB                  387
 #define IDI_ICON3                       388
 #define IDI_MAINFRAME_NO_DB             388
+#define IDC_EDIT_ADV_FILTER             5001
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002

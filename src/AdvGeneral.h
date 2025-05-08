@@ -1,6 +1,7 @@
 #pragma once
 #include "afxpropertygridctrl.h"
 #include "DialogResizer.h"
+#include <afxcoll.h>
 
 class CAdvGeneral : public CDialogEx
 {
@@ -20,6 +21,11 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 	void AddTrueFalse(CMFCPropertyGridProperty * pGroupTest, CString desc, BOOL value, int settingId);
+
+	CEdit m_editFilter;
+	CArray<CMFCPropertyGridProperty*, CMFCPropertyGridProperty*> m_allProperties;
+
+	afx_msg void OnEnChangeAdvFilter();
 
 	DECLARE_MESSAGE_MAP()
 public:
