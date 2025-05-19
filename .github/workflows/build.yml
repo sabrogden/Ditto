@@ -61,7 +61,7 @@ jobs:
           organization-id: 'fcf33ea4-4343-46b3-be50-f8fe64e1a900'
           project-slug: 'Ditto'
           artifact-configuration-slug: 'exe'
-          signing-policy-slug: 'release-signing'
+          signing-policy-slug: 'test-signing'
           github-artifact-id: '${{ steps.upload-unsigned-exe.outputs.artifact-id }}'
           wait-for-completion: true
           output-artifact-directory: '/Release64'      
@@ -87,7 +87,7 @@ jobs:
           organization-id: 'fcf33ea4-4343-46b3-be50-f8fe64e1a900'
           project-slug: 'Ditto'
           artifact-configuration-slug: 'Installer'
-          signing-policy-slug: 'release-signing'
+          signing-policy-slug: 'test-signing'
           github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
           wait-for-completion: true
           output-artifact-directory: '/DittoSetup/output'          
