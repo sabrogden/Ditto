@@ -34,34 +34,66 @@ jobs:
       - name: Restore NuGet packages
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: nuget restore ${{env.SOLUTION_FILE_PATH}}
-
-      - name: Build 32bit
-        run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=Win32
         
-      - name: Build 64bit
+      - name: Build
         run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
         
       - name: Set Versions
         run: |
-            DittoSetup\rcedit-x86 Release\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
             DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
-        
-      - name: 32bit installer
+
+      - name: upload-unsigned-exe
+        id: upload-unsigned-exe
+        uses: actions/upload-artifact@v4
+        with: 
+          name: unsigned-exe
+          retention-days: 1
+          path: |
+            Release64\Ditto.exe
+            Release64\ICU_Loader.dll
+            Release64\Addins\DittoUtil.dll
+            
+      - id: sign-exe
+        uses: signpath/github-action-submit-signing-request@v1.1
+        with:
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: 'fcf33ea4-4343-46b3-be50-f8fe64e1a900'
+          project-slug: 'Ditto'
+          artifact-configuration-slug: 'exe'
+          signing-policy-slug: 'release-signing'
+          github-artifact-id: '${{ steps.upload-unsigned-exe.outputs.artifact-id }}'
+          wait-for-completion: true
+          output-artifact-directory: '/Release64'      
+                   
+      - name: Installer
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
         with:
           path: DittoSetup\DittoSetup_10.iss
-          options: /F"DittoSetup_${{env.VERSION_FILENAME}}"
+          options: /F"DittoSetup_${{env.VERSION_FILENAME}}" "/dbit64=1"
           
-      - name: 64bit installer
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+      - name: upload-unsigned-artifact
+        id: upload-unsigned-artifact
+        uses: actions/upload-artifact@v4
+        with: 
+          name: unsigned-intaller
+          retention-days: 1
+          path: DittoSetup\output\DittoSetup_${{env.VERSION_FILENAME}}.exe
+          
+      - id: sing-installer
+        uses: signpath/github-action-submit-signing-request@v1.1
         with:
-          path: DittoSetup\DittoSetup_10.iss
-          options: /F"DittoSetup_64bit_${{env.VERSION_FILENAME}}" "/dbit64=1"
+          api-token: '${{ secrets.SIGNPATH_API_TOKEN }}'
+          organization-id: 'fcf33ea4-4343-46b3-be50-f8fe64e1a900'
+          project-slug: 'Ditto'
+          artifact-configuration-slug: 'Installer'
+          signing-policy-slug: 'release-signing'
+          github-artifact-id: '${{ steps.upload-unsigned-artifact.outputs.artifact-id }}'
+          wait-for-completion: true
+          output-artifact-directory: '/DittoSetup/output'          
           
       - name: Build Portable
         run: |
-            DittoSetup\BuildPortableZIP.bat "DittoPortable_${{env.VERSION_FILENAME}}" bit32
-            DittoSetup\BuildPortableZIP.bat "DittoPortable_64bit_${{env.VERSION_FILENAME}}" bit64
+            DittoSetup\BuildPortableZIP.bat "DittoPortable_${{env.VERSION_FILENAME}}" bit64
             
       - name: Zip Debug Files
         run: |
@@ -72,7 +104,6 @@ jobs:
         run: |
             (Get-Content 'DittoSetup\Chocolatey\ditto.nuspec' -Raw).Replace("%version%", "${{env.VERSION_DOT_FILENAME}}") | Out-File 'DittoSetup\Chocolatey\ditto.nuspec'
             copy DittoSetup\Output\DittoSetup_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey\tools\DittoSetup_${{env.VERSION_FILENAME}}.exe
-            copy DittoSetup\Output\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey\tools\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe
             cd DittoSetup\Chocolatey
             choco pack     
             choco push --source https://push.chocolatey.org/ --key ${{ secrets.CHOCO_API_KEY}}
@@ -83,7 +114,6 @@ jobs:
         run: |
             (Get-Content 'DittoSetup\Chocolatey.install\ditto.nuspec' -Raw).Replace("%version%", "${{env.VERSION_DOT_FILENAME}}") | Out-File 'DittoSetup\Chocolatey.install\ditto.nuspec'
             copy DittoSetup\output\DittoSetup_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey.install\tools\DittoSetup_${{env.VERSION_FILENAME}}.exe
-            copy DittoSetup\output\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe DittoSetup\Chocolatey.install\tools\DittoSetup_64bit_${{env.VERSION_FILENAME}}.exe
             cd DittoSetup\Chocolatey.install
             choco pack     
             choco push --source https://push.chocolatey.org/ --key ${{ secrets.CHOCO_API_KEY}}
@@ -94,7 +124,6 @@ jobs:
         run: |
             (Get-Content 'DittoSetup\Chocolatey.portable\ditto.nuspec' -Raw).Replace("%version%", "${{env.VERSION_DOT_FILENAME}}") | Out-File 'DittoSetup\Chocolatey.portable\ditto.nuspec'
             copy DittoSetup\output\DittoPortable_${{env.VERSION_FILENAME}}.zip DittoSetup\Chocolatey.portable\tools\DittoPortable_${{env.VERSION_FILENAME}}.zip
-            copy DittoSetup\output\DittoPortable_64bit_${{env.VERSION_FILENAME}}.zip DittoSetup\Chocolatey.portable\tools\DittoPortable_64bit_${{env.VERSION_FILENAME}}.zip
             cd DittoSetup\Chocolatey.portable
             choco pack     
             choco push --source https://push.chocolatey.org/ --key ${{ secrets.CHOCO_API_KEY}}

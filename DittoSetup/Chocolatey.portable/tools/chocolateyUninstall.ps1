@@ -6,10 +6,6 @@ Get-Process | Where { $_.name -eq 'ditto' } | Where-Object {$_.Path -like "*choc
 $toolsPath = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $fileName  = 'DittoPortable__%versionFileName%.zip'
 
-if (Get-OSArchitectureWidth 64) {
-	$fileName  = 'DittoPortable_64bit_%versionFileName%.zip'	
-}
-
 Write-Host "Removing old Ditto.Portable files"
 Remove-Item $toolsPath\* -Recurse -Force -Exclude $fileName
 

@@ -5,7 +5,6 @@ $packageArgs = @{
   packageName  = $env:ChocolateyPackageName
   fileType     = 'EXE'
   File         = $FileLocations | Where-Object {$_ -notmatch '64bit'}
-  File64       = $FileLocations | Where-Object {$_ -match '64bit'}
   softwareName = $env:ChocolateyPackageName.split('.')[0]
   silentArgs   = '/VERYSILENT /SUPPRESSMSGBOXES /NORESTART /CLOSEAPPLICATIONS /SP-'
   validExitCodes= @(0)
