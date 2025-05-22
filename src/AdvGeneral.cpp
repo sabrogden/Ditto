@@ -40,6 +40,7 @@ BEGIN_MESSAGE_MAP(CAdvGeneral, CDialogEx)
 	ON_WM_GETMINMAXINFO()
 	ON_WM_NCLBUTTONDOWN()
 	ON_EN_CHANGE(IDC_EDIT_ADV_FILTER, &CAdvGeneral::OnEnChangeAdvFilter)
+	ON_BN_CLICKED(IDC_BUTTON_NEXT_MATCH, &CAdvGeneral::OnBnClickedButtonNextMatch)
 END_MESSAGE_MAP()
 
 
@@ -162,17 +163,13 @@ BOOL CAdvGeneral::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
+	m_propertyGrid.ModifyStyle(0, WS_CLIPCHILDREN);
+
 	HICON b = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME), IMAGE_ICON, 64, 64, LR_SHARED);
 	SetIcon(b, TRUE);
 
-	m_propertyGrid.ModifyStyle(0, WS_CLIPCHILDREN);
-
-	// Store all properties for filtering
-	m_allProperties.RemoveAll();
-
 	CMFCPropertyGridProperty * pGroupTest = new CMFCPropertyGridProperty( _T( "Ditto" ) );
 	m_propertyGrid.AddProperty(pGroupTest);
-	m_allProperties.Add(pGroupTest);
 
 	m_Resize.SetParent(m_hWnd);
 	m_Resize.AddControl(IDC_MFCPROPERTYGRID1, DR_SizeWidth | DR_SizeHeight);
@@ -181,6 +178,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	m_Resize.AddControl(IDC_BT_COMPACT_AND_REPAIR, DR_MoveTop);
 	m_Resize.AddControl(IDC_BUTTON_COPY_SCRIPTS, DR_MoveTop);
 	m_Resize.AddControl(IDC_BUTTON_PASTE_SCRIPTS, DR_MoveTop);
+	m_Resize.AddControl(IDC_EDIT_ADV_FILTER, DR_SizeWidth);
+	m_Resize.AddControl(IDC_BUTTON_NEXT_MATCH, DR_MoveTop | DR_MoveLeft);
 
 	HDITEM hdItem;
 	hdItem.mask = HDI_WIDTH; // indicating cxy is width
@@ -329,7 +328,6 @@ BOOL CAdvGeneral::OnInitDialog()
 
 	CMFCPropertyGridProperty * regexFilterGroup = new CMFCPropertyGridProperty(_T("Exclude clips by Regular Expressions"));
 	m_propertyGrid.AddProperty(regexFilterGroup);
-	m_allProperties.Add(regexFilterGroup);
 
 	CString processFilterDesc = _T("Process making the copy first must match this before the Regex will be applied (empty or * for all processes) (separate multiples by ;)");
 	CString regexFilterDesc = _T("If copied text matches this regular expression then the clip will not be saved to Ditto");
@@ -1054,39 +1052,98 @@ void CAdvGeneral::OnNcLButtonDown(UINT nHitTest, CPoint point)
 
 void CAdvGeneral::OnEnChangeAdvFilter()
 {
+	Search(false);
+}
+
+void CAdvGeneral::Search(bool fromSelection)
+{
 	CString filterText;
 	m_editFilter.GetWindowText(filterText);
 	filterText.MakeLower();
 
-	m_propertyGrid.RemoveAll();
-
-	for (int i = 0; i < m_allProperties.GetSize(); ++i)
+	if (filterText == _T(""))
 	{
-		CMFCPropertyGridProperty* pProp = m_allProperties[i];
-		CString name = pProp->GetName();
-		name.MakeLower();
-		if (filterText.IsEmpty() || name.Find(filterText) >= 0)
+		m_propertyGrid.SetCurSel(m_propertyGrid.GetProperty(0));
+		m_propertyGrid.EnsureVisible(m_propertyGrid.GetProperty(0), TRUE);
+		return;
+	}
+
+	auto selection = m_propertyGrid.GetCurSel();
+	bool foundSelection = false;
+
+	for (int i = 0; i < m_propertyGrid.GetPropertyCount(); ++i)
+	{
+		CMFCPropertyGridProperty* pProp = m_propertyGrid.GetProperty(i);
+		if (pProp != nullptr)
 		{
-			m_propertyGrid.AddProperty(pProp);
-		}
-		else
-		{
-			// Check subitems
-			BOOL found = FALSE;
-			for (int j = 0; j < pProp->GetSubItemsCount(); ++j)
+			CString name = pProp->GetName();
+			name.MakeLower();
+
+			for (int row = 0; row < pProp->GetSubItemsCount(); ++row)
 			{
-				CString subName = pProp->GetSubItem(j)->GetName();
-				subName.MakeLower();
-				if (subName.Find(filterText) >= 0)
+				auto pSubItem = pProp->GetSubItem(row);
+				if (pSubItem != nullptr)
 				{
-					found = TRUE;
-					break;
+					if (fromSelection && selection != nullptr && foundSelection == false)
+					{
+						if (selection == pSubItem)
+						{
+							foundSelection = true;
+						}
+						continue;
+					}
+
+					CString subName = pSubItem->GetName();
+					subName.MakeLower();
+					if (subName.Find(filterText) >= 0)
+					{
+						pSubItem->Show();
+						m_propertyGrid.SetCurSel(pSubItem);
+
+						//calling EnsureVisible mutliple times seemed to show it better otherwise it would randomly not work
+						if (row > 2)
+						{
+							m_propertyGrid.EnsureVisible(pProp->GetSubItem(row - 2), TRUE);
+							m_propertyGrid.EnsureVisible(pProp->GetSubItem(row - 2), TRUE);
+							m_propertyGrid.EnsureVisible(pProp->GetSubItem(row - 2), TRUE);
+						}
+						else if (row > 1)
+						{
+							m_propertyGrid.EnsureVisible(pProp->GetSubItem(row - 1), TRUE);
+							m_propertyGrid.EnsureVisible(pProp->GetSubItem(row - 1), TRUE);
+							m_propertyGrid.EnsureVisible(pProp->GetSubItem(row - 1), TRUE);
+						}
+						else
+						{
+							m_propertyGrid.EnsureVisible(pSubItem, TRUE);
+							m_propertyGrid.EnsureVisible(pSubItem, TRUE);
+							m_propertyGrid.EnsureVisible(pSubItem, TRUE);
+						}
+						
+						break;
+					}
 				}
-			}
-			if (found)
-			{
-				m_propertyGrid.AddProperty(pProp);
 			}
 		}
 	}
+}
+
+BOOL CAdvGeneral::PreTranslateMessage(MSG* pMsg)
+{
+	if (pMsg->message == WM_KEYDOWN && pMsg->wParam == VK_RETURN)
+	{
+		int idCtrl = this->GetFocus()->GetDlgCtrlID();
+		if (idCtrl == IDC_EDIT_ADV_FILTER)
+		{
+			Search(true);
+			return TRUE;
+		}
+	}
+
+	return CDialogEx::PreTranslateMessage(pMsg);
+}
+
+void CAdvGeneral::OnBnClickedButtonNextMatch()
+{
+	Search(true);	
 }

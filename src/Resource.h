@@ -241,6 +241,7 @@
 #define IDI_ICON3                       388
 #define IDI_MAINFRAME_NO_DB             388
 #define IDC_EDIT_ADV_FILTER             5001
+#define IDC_NEXT_MATCH_BUTTON           5002
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -559,7 +560,7 @@
 #define IDC_WIN_PASTE_5                 2122
 #define IDC_EDIT_DIFF_PATH              2123
 #define IDC_CUT_5                       2123
-#define IDC_BUTTON2                     2124
+#define IDC_BUTTON_NEXT_MATCH           2124
 #define IDC_BUTTON_DIFF_BROWSE          2124
 #define IDC_BUTTON_REMOVE               2124
 #define IDC_BUTTON_ADVANCED             2124

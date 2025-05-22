@@ -21,9 +21,9 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 	void AddTrueFalse(CMFCPropertyGridProperty * pGroupTest, CString desc, BOOL value, int settingId);
+	void Search(bool fromSelection);
 
 	CEdit m_editFilter;
-	CArray<CMFCPropertyGridProperty*, CMFCPropertyGridProperty*> m_allProperties;
 
 	afx_msg void OnEnChangeAdvFilter();
 
@@ -38,4 +38,6 @@ public:
 	afx_msg void OnBnClickedButtonPasteScripts2();
 	afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
 	afx_msg void OnNcLButtonDown(UINT nHitTest, CPoint point);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	afx_msg void OnBnClickedButtonNextMatch();
 };
