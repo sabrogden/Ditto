@@ -179,7 +179,7 @@ BOOL CAdvGeneral::OnInitDialog()
 	m_Resize.AddControl(IDC_BUTTON_COPY_SCRIPTS, DR_MoveTop);
 	m_Resize.AddControl(IDC_BUTTON_PASTE_SCRIPTS, DR_MoveTop);
 	m_Resize.AddControl(IDC_EDIT_ADV_FILTER, DR_SizeWidth);
-	m_Resize.AddControl(IDC_BUTTON_NEXT_MATCH, DR_MoveTop | DR_MoveLeft);
+	m_Resize.AddControl(IDC_BUTTON_NEXT_MATCH, DR_MoveLeft);
 
 	HDITEM hdItem;
 	hdItem.mask = HDI_WIDTH; // indicating cxy is width
