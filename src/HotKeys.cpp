@@ -86,7 +86,40 @@ CString CHotKey::GetHotKeyDisplayStatic(DWORD dwHotKey)
 //http://www.ffuts.org/blog/mapvirtualkey-getkeynametext-and-a-story-of-how-to/
 CString CHotKey::GetVirKeyName(unsigned int virtualKey)
 {
-	unsigned int scanCode = MapVirtualKey(virtualKey, MAPVK_VK_TO_VSC);
+       // MapVirtualKey/GetKeyNameText does not return a name for F13-F24
+       // even though these keys can be registered as global hotkeys.  If we
+       // detect one of these virtual key codes then manually return the
+       // appropriate string.
+       if(virtualKey >= VK_F13 && virtualKey <= VK_F24)
+       {
+               return StrF(_T("F%d"), (virtualKey - VK_F1) + 1);
+       }
+
+       // Provide friendly names for multimedia and browser keys which
+       // otherwise return an empty string from GetKeyNameText.
+       switch (virtualKey)
+       {
+       case VK_VOLUME_MUTE:       return _T("Volume Mute");
+       case VK_VOLUME_DOWN:       return _T("Volume Down");
+       case VK_VOLUME_UP:         return _T("Volume Up");
+       case VK_MEDIA_NEXT_TRACK:  return _T("Next Track");
+       case VK_MEDIA_PREV_TRACK:  return _T("Prev Track");
+       case VK_MEDIA_PLAY_PAUSE:  return _T("Play/Pause");
+       case VK_MEDIA_STOP:        return _T("Stop");
+       case VK_BROWSER_BACK:      return _T("Browser Back");
+       case VK_BROWSER_FORWARD:   return _T("Browser Forward");
+       case VK_BROWSER_REFRESH:   return _T("Browser Refresh");
+       case VK_BROWSER_STOP:      return _T("Browser Stop");
+       case VK_BROWSER_SEARCH:    return _T("Browser Search");
+       case VK_BROWSER_FAVORITES: return _T("Browser Favorites");
+       case VK_BROWSER_HOME:      return _T("Browser Home");
+       case VK_LAUNCH_MAIL:       return _T("Launch Mail");
+       case VK_LAUNCH_MEDIA_SELECT: return _T("Launch Media");
+       case VK_LAUNCH_APP1:       return _T("Launch App1");
+       case VK_LAUNCH_APP2:       return _T("Launch App2");
+       }
+
+       unsigned int scanCode = MapVirtualKey(virtualKey, MAPVK_VK_TO_VSC);
 
 	// because MapVirtualKey strips the extended bit for some keys
 	switch (virtualKey)
@@ -109,8 +142,8 @@ CString CHotKey::GetVirKeyName(unsigned int virtualKey)
 		}
 	}
 
-	wchar_t keyName[50];
-	if (GetKeyNameText(scanCode << 16, keyName, sizeof(keyName)) != 0)
+       wchar_t keyName[50];
+       if (GetKeyNameText(scanCode << 16, keyName, _countof(keyName)) != 0)
 	{
 		return keyName;
 	}

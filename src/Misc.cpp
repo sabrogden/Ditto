@@ -218,7 +218,7 @@ CString RemoveEscapes( const TCHAR* str )
 		if( *pSrc == '\\' )
 		{
 			pSrc++;
-			*pDest = GetEscapeChar((BYTE)pSrc );
+                       *pDest = GetEscapeChar((BYTE)*pSrc );
 		}
 		else
 			*pDest = *pSrc;
