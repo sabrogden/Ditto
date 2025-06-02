@@ -90,7 +90,7 @@ void CClipCompare::Compare(int leftId, int rightId)
 
 CString CClipCompare::GetComparePath(CString &params)
 {
-	CString path = CGetSetOptions::GetDiffApp();
+	CString path = CGetSetOptions::GetDiffApp().MakeLower();
 
 	if(path != _T(""))
 	{
@@ -98,6 +98,10 @@ CString CClipCompare::GetComparePath(CString &params)
 			path.Find(_T("totalcmd64.exe")) != -1)
 		{
 			params = _T(" /S=C ");
+		}
+		else if (path.Find(_T("code.exe")) != -1)
+		{
+			params = _T(" --diff ");
 		}
 		return path;
 	}
@@ -196,6 +200,26 @@ CString CClipCompare::GetComparePath(CString &params)
 		return path;
 	}
 
+	path = CGetSetOptions::ResolvePath(_T("%localappdata%\\Programs\\Microsoft VS Code\\Code.exe"));
+	if (FileExists(path))
+	{
+		params = _T(" --diff ");
+		return path;
+	}
+
+	path = _T("C:\\Program Files\\Microsoft VS Code\\Code.exe");
+	if (FileExists(path))
+	{
+		params = _T(" --diff ");
+		return path;
+	}
+
+	path = _T("C:\\Program Files (x86)\\Microsoft VS Code\\Code.exe");
+	if (FileExists(path))
+	{
+		params = _T(" --diff ");
+		return path;
+	}
 
 	return _T("");
 }
