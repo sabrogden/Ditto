@@ -30,7 +30,7 @@ private:
 
   enum
   {
-    MaxSendKeysRecs  = 71,
+    MaxSendKeysRecs  = 79,
     MaxExtendedVKeys = 12
   };
 
