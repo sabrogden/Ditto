@@ -582,9 +582,9 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 	auto DrawColorBox = [&](COLORREF color)
 		{
 			CRect pastedRect(rcText);
-			int boxSize = m_windowDpi->Scale(rcText.Height());
+			int boxSize = rcText.Height();
 			// Prevent overly large boxes if text rect somehow becomes huge
-			boxSize = min(boxSize, m_windowDpi->Scale(20));
+			//boxSize = min(boxSize, m_windowDpi->Scale(20));
 			pastedRect.right = pastedRect.left + boxSize;
 			pastedRect.bottom = pastedRect.top + boxSize; // Make it square
 
