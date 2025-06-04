@@ -775,6 +775,18 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 		}
 	}
 
+	//draw hex color copied like #FF0000, FF0000, FF0000 other text with a space before other text
+	if (parseText.GetLength() == 6 ||
+		parseText.Find(' ') == 6)
+	{
+		int r, g, b;
+		int scanRet = swscanf(parseText, _T("%02x%02x%02x"), &r, &g, &b);
+		if (scanRet == 3)
+		{
+			DrawColorBox(RGB(r, g, b)); // Draw using RGB part
+			return; // Valid RGB/RGBA format found and drawn
+		}
+	}
 
 	// 5. --- HSL Color Parsing ---
 	// Formats: hsl(H, S%, L%), hsla(H, S%, L%, A), hsl(H S% L%), hsl(H S% L% / A)
@@ -893,6 +905,28 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 				COLORREF rgbColor = HslToRgb(static_cast<double>(h), s_norm, l_norm);
 				DrawColorBox(rgbColor);
 				return; // Valid HSL/HSLA format found and drawn
+			}
+		}
+	}
+
+	// draw rgb color copied like 255,0,0
+	int firstCommaPos = parseText.Find(',');
+	if (firstCommaPos >= 0)
+	{
+		int secondCommaPos = parseText.Find(',', firstCommaPos + 1);
+		if (secondCommaPos)
+		{
+			int noThirdCommaPos = parseText.Find(',', secondCommaPos + 1);
+
+			if (noThirdCommaPos < 0)
+			{
+				int r, g, b;
+				int scanRet = swscanf(parseText, _T("%d,%d,%d"), &r, &g, &b);
+				if (scanRet == 3)
+				{
+					DrawColorBox(RGB(r, g, b)); // Draw using RGB part
+					return; // Valid RGB/RGBA format found and drawn
+				}
 			}
 		}
 	}
