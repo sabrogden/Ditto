@@ -34,6 +34,161 @@ static char THIS_FILE[] = __FILE__;
 
 #define VALID_TOOLTIP (m_pToolTip && ::IsWindow(m_pToolTip->m_hWnd))
 
+// Static map to hold W3C color names and their RGB values
+static std::map<CString, COLORREF> g_colorNameMap;
+static CMutex g_colorNameMapMutex;
+
+// Initializes the color map on first use
+void InitializeColorNameMap()
+{
+	CSingleLock lock(&g_colorNameMapMutex, TRUE);
+	if (g_colorNameMap.empty())
+	{
+        // Populate the map with W3C named colors
+        // A comprehensive list of 148 colors
+        g_colorNameMap[_T("black")] = RGB(0, 0, 0);
+        g_colorNameMap[_T("silver")] = RGB(192, 192, 192);
+        g_colorNameMap[_T("gray")] = RGB(128, 128, 128);
+        g_colorNameMap[_T("white")] = RGB(255, 255, 255);
+        g_colorNameMap[_T("maroon")] = RGB(128, 0, 0);
+        g_colorNameMap[_T("red")] = RGB(255, 0, 0);
+        g_colorNameMap[_T("purple")] = RGB(128, 0, 128);
+        g_colorNameMap[_T("fuchsia")] = RGB(255, 0, 255);
+        g_colorNameMap[_T("green")] = RGB(0, 128, 0);
+        g_colorNameMap[_T("lime")] = RGB(0, 255, 0);
+        g_colorNameMap[_T("olive")] = RGB(128, 128, 0);
+        g_colorNameMap[_T("yellow")] = RGB(255, 255, 0);
+        g_colorNameMap[_T("navy")] = RGB(0, 0, 128);
+        g_colorNameMap[_T("blue")] = RGB(0, 0, 255);
+        g_colorNameMap[_T("teal")] = RGB(0, 128, 128);
+        g_colorNameMap[_T("aqua")] = RGB(0, 255, 255);
+        g_colorNameMap[_T("aliceblue")] = RGB(240, 248, 255);
+        g_colorNameMap[_T("antiquewhite")] = RGB(250, 235, 215);
+        g_colorNameMap[_T("aquamarine")] = RGB(127, 255, 212);
+        g_colorNameMap[_T("azure")] = RGB(240, 255, 255);
+        g_colorNameMap[_T("beige")] = RGB(245, 245, 220);
+        g_colorNameMap[_T("bisque")] = RGB(255, 228, 196);
+        g_colorNameMap[_T("blanchedalmond")] = RGB(255, 235, 205);
+        g_colorNameMap[_T("blueviolet")] = RGB(138, 43, 226);
+        g_colorNameMap[_T("brown")] = RGB(165, 42, 42);
+        g_colorNameMap[_T("burlywood")] = RGB(222, 184, 135);
+        g_colorNameMap[_T("cadetblue")] = RGB(95, 158, 160);
+        g_colorNameMap[_T("chartreuse")] = RGB(127, 255, 0);
+        g_colorNameMap[_T("chocolate")] = RGB(210, 105, 30);
+        g_colorNameMap[_T("coral")] = RGB(255, 127, 80);
+        g_colorNameMap[_T("cornflowerblue")] = RGB(100, 149, 237);
+        g_colorNameMap[_T("cornsilk")] = RGB(255, 248, 220);
+        g_colorNameMap[_T("crimson")] = RGB(220, 20, 60);
+        g_colorNameMap[_T("cyan")] = RGB(0, 255, 255);
+        g_colorNameMap[_T("darkblue")] = RGB(0, 0, 139);
+        g_colorNameMap[_T("darkcyan")] = RGB(0, 139, 139);
+        g_colorNameMap[_T("darkgoldenrod")] = RGB(184, 134, 11);
+        g_colorNameMap[_T("darkgray")] = RGB(169, 169, 169);
+        g_colorNameMap[_T("darkgreen")] = RGB(0, 100, 0);
+        g_colorNameMap[_T("darkkhaki")] = RGB(189, 183, 107);
+        g_colorNameMap[_T("darkmagenta")] = RGB(139, 0, 139);
+        g_colorNameMap[_T("darkolivegreen")] = RGB(85, 107, 47);
+        g_colorNameMap[_T("darkorange")] = RGB(255, 140, 0);
+        g_colorNameMap[_T("darkorchid")] = RGB(153, 50, 204);
+        g_colorNameMap[_T("darkred")] = RGB(139, 0, 0);
+        g_colorNameMap[_T("darksalmon")] = RGB(233, 150, 122);
+        g_colorNameMap[_T("darkseagreen")] = RGB(143, 188, 143);
+        g_colorNameMap[_T("darkslateblue")] = RGB(72, 61, 139);
+        g_colorNameMap[_T("darkslategray")] = RGB(47, 79, 79);
+        g_colorNameMap[_T("darkturquoise")] = RGB(0, 206, 209);
+        g_colorNameMap[_T("darkviolet")] = RGB(148, 0, 211);
+        g_colorNameMap[_T("deeppink")] = RGB(255, 20, 147);
+        g_colorNameMap[_T("deepskyblue")] = RGB(0, 191, 255);
+        g_colorNameMap[_T("dimgray")] = RGB(105, 105, 105);
+        g_colorNameMap[_T("dodgerblue")] = RGB(30, 144, 255);
+        g_colorNameMap[_T("firebrick")] = RGB(178, 34, 34);
+        g_colorNameMap[_T("floralwhite")] = RGB(255, 250, 240);
+        g_colorNameMap[_T("forestgreen")] = RGB(34, 139, 34);
+        g_colorNameMap[_T("gainsboro")] = RGB(220, 220, 220);
+        g_colorNameMap[_T("ghostwhite")] = RGB(248, 248, 255);
+        g_colorNameMap[_T("gold")] = RGB(255, 215, 0);
+        g_colorNameMap[_T("goldenrod")] = RGB(218, 165, 32);
+        g_colorNameMap[_T("greenyellow")] = RGB(173, 255, 47);
+        g_colorNameMap[_T("honeydew")] = RGB(240, 255, 240);
+        g_colorNameMap[_T("hotpink")] = RGB(255, 105, 180);
+        g_colorNameMap[_T("indianred")] = RGB(205, 92, 92);
+        g_colorNameMap[_T("indigo")] = RGB(75, 0, 130);
+        g_colorNameMap[_T("ivory")] = RGB(255, 255, 240);
+        g_colorNameMap[_T("khaki")] = RGB(240, 230, 140);
+        g_colorNameMap[_T("lavender")] = RGB(230, 230, 250);
+        g_colorNameMap[_T("lavenderblush")] = RGB(255, 240, 245);
+        g_colorNameMap[_T("lawngreen")] = RGB(124, 252, 0);
+        g_colorNameMap[_T("lemonchiffon")] = RGB(255, 250, 205);
+        g_colorNameMap[_T("lightblue")] = RGB(173, 216, 230);
+        g_colorNameMap[_T("lightcoral")] = RGB(240, 128, 128);
+        g_colorNameMap[_T("lightcyan")] = RGB(224, 255, 255);
+        g_colorNameMap[_T("lightgoldenrodyellow")] = RGB(250, 250, 210);
+        g_colorNameMap[_T("lightgray")] = RGB(211, 211, 211);
+        g_colorNameMap[_T("lightgreen")] = RGB(144, 238, 144);
+        g_colorNameMap[_T("lightpink")] = RGB(255, 182, 193);
+        g_colorNameMap[_T("lightsalmon")] = RGB(255, 160, 122);
+        g_colorNameMap[_T("lightseagreen")] = RGB(32, 178, 170);
+        g_colorNameMap[_T("lightskyblue")] = RGB(135, 206, 250);
+        g_colorNameMap[_T("lightslategray")] = RGB(119, 136, 153);
+        g_colorNameMap[_T("lightsteelblue")] = RGB(176, 196, 222);
+        g_colorNameMap[_T("lightyellow")] = RGB(255, 255, 224);
+        g_colorNameMap[_T("limegreen")] = RGB(50, 205, 50);
+        g_colorNameMap[_T("linen")] = RGB(250, 240, 230);
+        g_colorNameMap[_T("magenta")] = RGB(255, 0, 255);
+        g_colorNameMap[_T("mediumaquamarine")] = RGB(102, 205, 170);
+        g_colorNameMap[_T("mediumblue")] = RGB(0, 0, 205);
+        g_colorNameMap[_T("mediumorchid")] = RGB(186, 85, 211);
+        g_colorNameMap[_T("mediumpurple")] = RGB(147, 112, 219);
+        g_colorNameMap[_T("mediumseagreen")] = RGB(60, 179, 113);
+        g_colorNameMap[_T("mediumslateblue")] = RGB(123, 104, 238);
+        g_colorNameMap[_T("mediumspringgreen")] = RGB(0, 250, 154);
+        g_colorNameMap[_T("mediumturquoise")] = RGB(72, 209, 204);
+        g_colorNameMap[_T("mediumvioletred")] = RGB(199, 21, 133);
+        g_colorNameMap[_T("midnightblue")] = RGB(25, 25, 112);
+        g_colorNameMap[_T("mintcream")] = RGB(245, 255, 250);
+        g_colorNameMap[_T("mistyrose")] = RGB(255, 228, 225);
+        g_colorNameMap[_T("moccasin")] = RGB(255, 228, 181);
+        g_colorNameMap[_T("navajowhite")] = RGB(255, 222, 173);
+        g_colorNameMap[_T("oldlace")] = RGB(253, 245, 230);
+        g_colorNameMap[_T("olivedrab")] = RGB(107, 142, 35);
+        g_colorNameMap[_T("orange")] = RGB(255, 165, 0);
+        g_colorNameMap[_T("orangered")] = RGB(255, 69, 0);
+        g_colorNameMap[_T("orchid")] = RGB(218, 112, 214);
+        g_colorNameMap[_T("palegoldenrod")] = RGB(238, 232, 170);
+        g_colorNameMap[_T("palegreen")] = RGB(152, 251, 152);
+        g_colorNameMap[_T("paleturquoise")] = RGB(175, 238, 238);
+        g_colorNameMap[_T("palevioletred")] = RGB(219, 112, 147);
+        g_colorNameMap[_T("papayawhip")] = RGB(255, 239, 213);
+        g_colorNameMap[_T("peachpuff")] = RGB(255, 218, 185);
+        g_colorNameMap[_T("peru")] = RGB(205, 133, 63);
+        g_colorNameMap[_T("pink")] = RGB(255, 192, 203);
+        g_colorNameMap[_T("plum")] = RGB(221, 160, 221);
+        g_colorNameMap[_T("powderblue")] = RGB(176, 224, 230);
+        g_colorNameMap[_T("rebeccapurple")] = RGB(102, 51, 153);
+        g_colorNameMap[_T("rosybrown")] = RGB(188, 143, 143);
+        g_colorNameMap[_T("royalblue")] = RGB(65, 105, 225);
+        g_colorNameMap[_T("saddlebrown")] = RGB(139, 69, 19);
+        g_colorNameMap[_T("salmon")] = RGB(250, 128, 114);
+        g_colorNameMap[_T("sandybrown")] = RGB(244, 164, 96);
+        g_colorNameMap[_T("seagreen")] = RGB(46, 139, 87);
+        g_colorNameMap[_T("seashell")] = RGB(255, 245, 238);
+        g_colorNameMap[_T("sienna")] = RGB(160, 82, 45);
+        g_colorNameMap[_T("skyblue")] = RGB(135, 206, 235);
+        g_colorNameMap[_T("slateblue")] = RGB(106, 90, 205);
+        g_colorNameMap[_T("slategray")] = RGB(112, 128, 144);
+        g_colorNameMap[_T("snow")] = RGB(255, 250, 250);
+        g_colorNameMap[_T("springgreen")] = RGB(0, 255, 127);
+        g_colorNameMap[_T("steelblue")] = RGB(70, 130, 180);
+        g_colorNameMap[_T("tan")] = RGB(210, 180, 140);
+        g_colorNameMap[_T("thistle")] = RGB(216, 191, 216);
+        g_colorNameMap[_T("tomato")] = RGB(255, 99, 71);
+        g_colorNameMap[_T("turquoise")] = RGB(64, 224, 208);
+        g_colorNameMap[_T("violet")] = RGB(238, 130, 238);
+        g_colorNameMap[_T("wheat")] = RGB(245, 222, 179);
+        g_colorNameMap[_T("whitesmoke")] = RGB(245, 245, 245);
+        g_colorNameMap[_T("yellowgreen")] = RGB(154, 205, 50);
+	}
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // CQListCtrl
@@ -76,7 +231,6 @@ CQListCtrl::~CQListCtrl()
 		m_pFormatter = NULL;
 	}
 
-	DeleteObject(m_SmallFont);
 }
 
 // returns the position 1-10 if the index is in the FirstTen block else -1
@@ -561,379 +715,246 @@ COLORREF CQListCtrl::HslToRgb(double h, double s, double l)
 }
 
 
+// Helper function to parse a CSS numeric value which can be a percentage or a number
+static bool ParseCssValue(const CString& token, double& value)
+{
+	CString localToken = token;
+	localToken.Trim();
+	if (localToken.IsEmpty()) return false;
+
+	bool isPercent = (localToken.Right(1) == _T('%'));
+	if (isPercent)
+	{
+		localToken.TrimRight(_T('%'));
+	}
+
+	if (_stscanf(localToken, _T("%lf"), &value) == 1)
+	{
+		return true;
+	}
+	return false;
+}
+
+
 void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 {
 	if (CGetSetOptions::m_bDrawCopiedColorCode == FALSE || csText.IsEmpty())
 		return;
 
-	// 1. Initial Cleaning (Remove specific surrounding chars and leading/trailing whitespace)
+	// 1. Initial Cleaning and Prep
 	CString cleanedText = csText;
-	cleanedText.Trim(_T("»")); // Remove potential ditto mark first
-	cleanedText.Trim();        // Trim leading/trailing whitespace
-	cleanedText.TrimRight(_T(";")); // Remove trailing semicolon
-	cleanedText.Trim();        // Trim again in case semicolon had spaces after it
+	cleanedText.Trim(_T("»"));
+	cleanedText.Trim();
+	cleanedText.TrimRight(_T(";"));
+	cleanedText.Trim();
 
-	// Store original case potentially for display, but use lower for parsing
+	if (cleanedText.IsEmpty())
+		return;
+
 	CString originalCleanedText = cleanedText;
 	CString parseText = cleanedText;
-	parseText.MakeLower(); // Use lower case for keyword matching ('rgb', 'hsl', '0x', '#')
+	parseText.MakeLower();
 
-	// 2. Helper function to draw the color box
+	// 2. Helper lambda to draw the color box
 	auto DrawColorBox = [&](COLORREF color)
-		{
-			CRect pastedRect(rcText);
-			int boxSize = rcText.Height();
-			// Prevent overly large boxes if text rect somehow becomes huge
-			//boxSize = min(boxSize, m_windowDpi->Scale(20));
-			pastedRect.right = pastedRect.left + boxSize;
-			pastedRect.bottom = pastedRect.top + boxSize; // Make it square
-
-			pDC->FillSolidRect(pastedRect, color);
-
-			// Adjust text rect to be after the color box + padding
-			rcText.left += boxSize;
-			rcText.left += m_windowDpi->Scale(ROW_LEFT_BORDER);
-			// Restore original (potentially mixed-case) text for drawing
-			csText = originalCleanedText;
-		};
-
-	// 3. --- Hex Color Parsing ---
-	CString hexString;
-	bool isHex = false;
-	bool is0xPrefix = false; // Flag to track prefix type ('0x' vs '#')
-	int originalHexLength = 0;
-
-	if (parseText.GetLength() >= 2 && parseText.Left(2) == _T("0x"))
 	{
-		hexString = parseText.Mid(2); // Get part after 0x
-		originalHexLength = hexString.GetLength();
-		// Supported lengths for 0x: 3 (RGB -> RRGGBB), 6 (RRGGBB), 8 (AARRGGBB)
-		// Exclude length 4 (0xRGBA) as it's ambiguous/non-standard
-		if ((originalHexLength == 3 || originalHexLength == 6 || originalHexLength == 8) && IsHexString(hexString))
-		{
-			isHex = true;
-			is0xPrefix = true;
-			// Expand 0xRGB -> RRGGBB (will assign Alpha later)
-			if (originalHexLength == 3)
-			{
-				hexString.Format(_T("%c%c%c%c%c%c"), hexString[0], hexString[0], hexString[1], hexString[1], hexString[2], hexString[2]);
-				// Length becomes 6
-			}
-			// No expansion needed for 6 (0xRRGGBB) or 8 (0xAARRGGBB)
-		}
-	}
-	else if (parseText.GetLength() >= 1 && parseText.Left(1) == _T("#"))
+		CRect pastedRect(rcText);
+		int boxSize = rcText.Height();
+		pastedRect.right = pastedRect.left + boxSize;
+		pastedRect.bottom = pastedRect.top + boxSize;
+
+		pDC->FillSolidRect(pastedRect, color);
+
+		rcText.left += boxSize + m_windowDpi->Scale(ROW_LEFT_BORDER);
+		csText = originalCleanedText;
+	};
+
+	// 3. Check for formats with unique signatures FIRST
+	// These are unambiguous because of their prefixes or wrappers.
+
+	// Check for W3C Named Colors
+	InitializeColorNameMap();
+	auto it = g_colorNameMap.find(parseText);
+	if (it != g_colorNameMap.end())
 	{
-		hexString = parseText.Mid(1); // Get part after #
-		originalHexLength = hexString.GetLength();
-		// Supported lengths for #: 3 (RGB), 4 (RGBA), 6 (RRGGBB), 8 (RRGGBBAA)
-		if ((originalHexLength == 3 || originalHexLength == 4 || originalHexLength == 6 || originalHexLength == 8) && IsHexString(hexString))
-		{
-			isHex = true;
-			is0xPrefix = false; // It's a # prefix
-			// Expand #RGB -> RRGGBB
-			if (originalHexLength == 3)
-			{
-				hexString.Format(_T("%c%c%c%c%c%c"), hexString[0], hexString[0], hexString[1], hexString[1], hexString[2], hexString[2]);
-				// Length becomes 6
-			}
-			// Expand #RGBA -> RRGGBBAA
-			else if (originalHexLength == 4)
-			{
-				hexString.Format(_T("%c%c%c%c%c%c%c%c"), hexString[0], hexString[0], hexString[1], hexString[1], hexString[2], hexString[2], hexString[3], hexString[3]);
-				// Length becomes 8
-			}
-			// No expansion needed for 6 (#RRGGBB) or 8 (#RRGGBBAA)
-		}
+		DrawColorBox(it->second);
+		return;
 	}
 
-	if (isHex)
+	// Check for Hex Colors with # or 0x prefix
+	if (parseText.Left(1) == _T('#') || parseText.Left(2) == _T("0x"))
 	{
-		int r = 0, g = 0, b = 0, a = 255; // Default alpha to fully opaque
-		int scanRet = 0;
-		unsigned int hexValue = 0;
-		int finalHexLength = hexString.GetLength(); // Length after potential expansion
+		CString hexString = parseText;
+		if (hexString.Left(1) == _T('#')) hexString.Delete(0, 1);
+		else if (hexString.Left(2) == _T("0x")) hexString.Delete(0, 2);
 
-		// At this point, hexString should contain 6 or 8 hex digits if isHex is true
-		if (finalHexLength != 6 && finalHexLength != 8) {
-			// This case should not be reached if the logic above is correct, but acts as a safeguard
-			isHex = false;
-		}
-		else {
-			// Use swscanf to parse the final 6 or 8 digit hex string
-			scanRet = swscanf(hexString, _T("%x"), &hexValue);
-		}
-
-		if (isHex && scanRet == 1)
+		int len = hexString.GetLength();
+		if (len == 3 || len == 4) // Expand shorthand
 		{
-			if (finalHexLength == 8) // 8 digits: AARRGGBB (for 0x) or RRGGBBAA (for #)
-			{
-				if (is0xPrefix) { // Handle 0xAARRGGBB
-					a = (hexValue >> 24) & 0xFF;
-					r = (hexValue >> 16) & 0xFF;
-					g = (hexValue >> 8) & 0xFF;
-					b = hexValue & 0xFF;
-				} else { // Handle #RRGGBBAA (or expanded #RGBA)
-					r = (hexValue >> 24) & 0xFF;
-					g = (hexValue >> 16) & 0xFF;
-					b = (hexValue >> 8) & 0xFF;
-					a = hexValue & 0xFF;
-				}
-			}
-			else // 6 digits (RRGGBB - from #RGB, 0xRGB, #RRGGBB, 0xRRGGBB)
-			{
-				r = (hexValue >> 16) & 0xFF;
-				g = (hexValue >> 8) & 0xFF;
-				b = hexValue & 0xFF;
-				a = 255; // Explicitly set full opacity for all 6-digit formats
-			}
+			CString expanded;
+			for (int i = 0; i < len; ++i) { expanded += hexString[i]; expanded += hexString[i]; }
+			hexString = expanded;
+		}
 
-			// Basic validation on parsed values (should be redundant if IsHexString worked)
-			if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255 && a >= 0 && a <= 255) {
-				DrawColorBox(RGB(r, g, b)); // Draw using RGB, ignore alpha for the solid box
-				return; // Valid hex format found and drawn
+		if (IsHexString(hexString) && (hexString.GetLength() == 6 || hexString.GetLength() == 8))
+		{
+			unsigned int r = 0, g = 0, b = 0;
+			if (swscanf(hexString, _T("%02x%02x%02x"), &r, &g, &b) == 3)
+			{
+				DrawColorBox(RGB(r, g, b));
+				return;
 			}
 		}
 	}
 
-
-	// 4. --- RGB Color Parsing ---
-	// Formats: rgb(R, G, B), rgba(R, G, B, A), rgb(R G B), rgb(R G B / A)
-	// R, G, B are 0-255. A is 0.0-1.0
-	// Percentage formats like rgb(100%, 0%, 0%) are NOT handled by this swscanf logic.
-	if (parseText.Left(3) == _T("rgb") && parseText.Right(1) == _T(")"))
+	// Check for W3C Functional notations: rgb(...) and hsl(...)
+	if (parseText.Right(1) == _T(")"))
 	{
-		CString content;
-		bool isRgba = parseText.Left(4) == _T("rgba");
-		int prefixLen = isRgba ? 5 : 4; // Length of "rgba(" or "rgb("
-		content = parseText.Mid(prefixLen, parseText.GetLength() - prefixLen - 1); // Extract content within ()
-		content.Trim(); // Trim spaces within parentheses
+		if (parseText.Left(3) == _T("rgb"))
+		{
+			CString content;
+			int prefixLen = (parseText.Left(4) == _T("rgba")) ? 5 : 4;
+			content = parseText.Mid(prefixLen, parseText.GetLength() - prefixLen - 1);
+			content.Replace(_T(','), _T(' '));
+			content.Replace(_T('/'), _T(' '));
 
-		int r = -1, g = -1, b = -1;
-		double a_double = 1.0; // Default alpha
-		int scanRet = 0;
-		bool parsed = false;
-
-		// Try parsing comma-separated format first (most common)
-		// Check if it contains commas before trying swscanf
-		if (content.Find(',') != -1) {
-			scanRet = swscanf(content, _T("%d , %d ,%d , %lf"), &r, &g, &b, &a_double); // rgba(R, G, B, A)
-			if (scanRet >= 3) { // Need at least R, G, B
-				parsed = true;
-				if (isRgba && scanRet != 4) parsed = false; // rgba() must have 4 values
-				if (!isRgba && scanRet == 4) parsed = false; // rgb() must not have 4 values
+			std::vector<CString> tokens;
+			int curPos = 0;
+			CString token;
+			while (!(token = content.Tokenize(_T(" "), curPos)).IsEmpty())
+			{
+				tokens.push_back(token);
 			}
 
-			if (!parsed) {
-				scanRet = swscanf(content, _T("%d %% , %d %% , %d %% , %lf %%"), &r, &g, &b, &a_double);
-				if (scanRet >= 3) {
-					r = ((double)r / 100) * 255;
-					g = ((double)g / 100) * 255;
-					b = ((double)b / 100) * 255;
-					a_double = (a_double / 100) * 1;
-					parsed = true;
-					if (isRgba && scanRet != 4) parsed = false; // rgba() must have 4 values
-					if (!isRgba && scanRet == 4) parsed = false; // rgb() must not have 4 values
-				}
-			}
-		}
-
-		// Try parsing space-separated format if comma parse failed or wasn't attempted
-		// Check for slash for alpha separation
-		if (!parsed && content.Find('/') != -1) {
-			scanRet = swscanf(content, _T("%d %d %d / %lf"), &r, &g, &b, &a_double); // rgb(R G B / A)
-			if (scanRet == 4) { // Must have exactly R G B / A
-			    // This format is valid for both rgb() and rgba() in modern CSS, check values
-				parsed = true;
-			}
-		}
-		else if (!parsed) { // Try space separated without alpha
-			scanRet = swscanf(content, _T("%d %d %d"), &r, &g, &b); // rgb(R G B)
-			if (scanRet == 3) { // Must have exactly R G B
-				// Check for extraneous characters after the numbers
-				CString check_str;
-				check_str.Format(_T("%d %d %d"), r, g, b);
-				if (content == check_str) // Ensure the whole string was consumed
+			if (tokens.size() >= 3)
+			{
+				double r_val, g_val, b_val;
+				if (ParseCssValue(tokens[0], r_val) && ParseCssValue(tokens[1], g_val) && ParseCssValue(tokens[2], b_val))
 				{
-					parsed = true;
-					a_double = 1.0; // Set default alpha
-				}
-			}
-		}
-
-		if (parsed)
-		{
-			// Validate ranges: R, G, B (0-255), A (0.0-1.0)
-			if (r >= 0 && r <= 255 &&
-				g >= 0 && g <= 255 &&
-				b >= 0 && b <= 255 &&
-				a_double >= 0.0 && a_double <= 1.0)
-			{
-				DrawColorBox(RGB(r, g, b)); // Draw using RGB part
-				return; // Valid RGB/RGBA format found and drawn
-			}
-		}
-	}
-
-	//draw hex color copied like #FF0000, FF0000, FF0000 other text with a space before other text
-	if (parseText.GetLength() == 6 ||
-		parseText.Find(' ') == 6)
-	{
-		int r, g, b;
-		int scanRet = swscanf(parseText, _T("%02x%02x%02x"), &r, &g, &b);
-		if (scanRet == 3)
-		{
-			DrawColorBox(RGB(r, g, b)); // Draw using RGB part
-			return; // Valid RGB/RGBA format found and drawn
-		}
-	}
-
-	// 5. --- HSL Color Parsing ---
-	// Formats: hsl(H, S%, L%), hsla(H, S%, L%, A), hsl(H S% L%), hsl(H S% L% / A)
-	// Also supports 'deg' suffix for Hue.
-	// H is 0-360, S/L are 0-100%, A is 0.0-1.0
-	if (parseText.Left(3) == _T("hsl") && parseText.Right(1) == _T(")"))
-	{
-		CString content;
-		bool isHsla = parseText.Left(4) == _T("hsla");
-		int prefixLen = isHsla ? 5 : 4; // Length of "hsla(" or "hsl("
-		content = parseText.Mid(prefixLen, parseText.GetLength() - prefixLen - 1); // Extract content within ()
-		content.Trim(); // Trim spaces within parentheses
-
-		int h = -1;
-		double s = -1.0, l = -1.0, a_double = 1.0; // Default alpha
-		int scanRet = 0;
-		bool parsed = false;
-		wchar_t degSuffix[5] = { 0 }; // To capture 'deg' if present
-		wchar_t sPercent = 0, lPercent = 0; // To capture '%' signs
-
-		// --- Try parsing comma-separated formats ---
-		if (!parsed && content.Find(',') != -1) {
-			// hsla(Hdeg, S%, L%, A)
-			scanRet = swscanf(content, _T("%ddeg , %lf %% , %lf %% , %lf"), &h, &s, &l, &a_double);
-			if (scanRet >= 3) { // H, S, L required
-				parsed = true;
-				if (isHsla && scanRet != 4) parsed = false; // hsla requires 4
-				if (!isHsla && scanRet == 4) parsed = false; // hsl requires 3
-			}
-
-			// hsla(H, S%, L%, A) - No 'deg'
-			if (!parsed) {
-				scanRet = swscanf(content, _T("%d , %lf %% , %lf %% , %lf"), &h, &s, &l, &a_double);
-				if (scanRet >= 3) {
-					parsed = true;
-					if (isHsla && scanRet != 4) parsed = false;
-					if (!isHsla && scanRet == 4) parsed = false;
-				}
-			}
-		}
-
-		// --- Try parsing space-separated formats ---
-		if (!parsed && content.Find(',') == -1) { // Only if no commas found
-			// hsl(Hdeg S% L% / A)
-			scanRet = swscanf(content, _T("%ddeg %lf %% %lf %% / %lf"), &h, &s, &l, &a_double);
-			if (scanRet == 4) { // Must match exactly 4 components
-				parsed = true;
-			}
-
-			// hsl(H S% L% / A) - No 'deg'
-			if (!parsed) {
-				scanRet = swscanf(content, _T("%d %lf %% %lf %% / %lf"), &h, &s, &l, &a_double);
-				if (scanRet == 4) {
-					parsed = true;
-				}
-			}
-
-			// hsl(Hdeg S% L%) - No alpha
-			if (!parsed) {
-				// Need to ensure the *entire* string is consumed to avoid matching prefix of alpha version
-				// We store the scanned values and reconstruct to compare
-				scanRet = swscanf(content, _T("%ddeg %lf %% %lf %%"), &h, &s, &l);
-				if (scanRet == 3) {
-					CString check_str;
-					// Format considering potential floating point variations slightly
-					// However, simple comparison might be sufficient if input is clean
-					check_str.Format(_T("%ddeg %.0f%% %.0f%%"), h, s, l);
-					// Crude check - might fail if input has different spacing or precision
-					// A better check involves checking remaining chars after scan, but swscanf makes this hard.
-					// Let's try a simpler length/content check for now.
-					CString temp_content = content;
-					temp_content.Remove(' '); // Remove spaces for comparison
-					CString temp_check = check_str;
-					temp_check.Remove(' ');
-					if (temp_content == temp_check) { // Basic check if format matches structure
-						parsed = true;
-						a_double = 1.0; // Set default alpha
+					if (tokens[0].Find('%') != -1)
+					{
+						r_val = std::round(r_val * 2.55);
+						g_val = std::round(g_val * 2.55);
+						b_val = std::round(b_val * 2.55);
 					}
-				}
-			}
-
-			// hsl(H S% L%) - No 'deg', No alpha
-			if (!parsed) {
-				scanRet = swscanf(content, _T("%d %lf %% %lf %%"), &h, &s, &l);
-				if (scanRet == 3) {
-					CString check_str;
-					check_str.Format(_T("%d %.0f%% %.0f%%"), h, s, l);
-					CString temp_content = content;
-					temp_content.Remove(' ');
-					CString temp_check = check_str;
-					temp_check.Remove(' ');
-					if (temp_content == temp_check) {
-						parsed = true;
-						a_double = 1.0;
+					if (r_val >= 0 && r_val <= 255 && g_val >= 0 && g_val <= 255 && b_val >= 0 && b_val <= 255)
+					{
+						DrawColorBox(RGB((int)r_val, (int)g_val, (int)b_val));
+						return;
 					}
 				}
 			}
 		}
-
-		if (parsed)
+		else if (parseText.Left(3) == _T("hsl"))
 		{
-			// Validate ranges: H (any number, will be normalized), S/L (0-100), A (0.0-1.0)
-			// Note: Hue can be negative or > 360, it will be normalized later.
-			if (s >= 0.0 && s <= 100.0 &&
-				l >= 0.0 && l <= 100.0 &&
-				a_double >= 0.0 && a_double <= 1.0)
-			{
-				// Normalize HSL values for conversion
-				h = h % 360; // Hue: Normalize to 0-359
-				if (h < 0) {
-					h += 360;
-				}
-				double s_norm = s / 100.0; // Saturation: 0.0 - 1.0
-				double l_norm = l / 100.0; // Lightness: 0.0 - 1.0
+			CString content;
+			int prefixLen = (parseText.Left(4) == _T("hsla")) ? 5 : 4;
+			content = parseText.Mid(prefixLen, parseText.GetLength() - prefixLen - 1);
+			content.Replace(_T(','), _T(' '));
+			content.Replace(_T('/'), _T(' '));
+			content.Replace(_T("deg"), _T(""));
 
-				COLORREF rgbColor = HslToRgb(static_cast<double>(h), s_norm, l_norm);
-				DrawColorBox(rgbColor);
-				return; // Valid HSL/HSLA format found and drawn
+			std::vector<CString> tokens;
+			int curPos = 0;
+			CString token;
+			while (!(token = content.Tokenize(_T(" "), curPos)).IsEmpty())
+			{
+				tokens.push_back(token);
 			}
-		}
-	}
 
-	// draw rgb color copied like 255,0,0
-	int firstCommaPos = parseText.Find(',');
-	if (firstCommaPos >= 0)
-	{
-		int secondCommaPos = parseText.Find(',', firstCommaPos + 1);
-		if (secondCommaPos)
-		{
-			int noThirdCommaPos = parseText.Find(',', secondCommaPos + 1);
-
-			if (noThirdCommaPos < 0)
+			if (tokens.size() >= 3)
 			{
-				int r, g, b;
-				int scanRet = swscanf(parseText, _T("%d,%d,%d"), &r, &g, &b);
-				if (scanRet == 3)
+				double h_val, s_val, l_val;
+				if (ParseCssValue(tokens[0], h_val) && ParseCssValue(tokens[1], s_val) && ParseCssValue(tokens[2], l_val))
 				{
-					DrawColorBox(RGB(r, g, b)); // Draw using RGB part
-					return; // Valid RGB/RGBA format found and drawn
+					if (s_val >= 0 && s_val <= 100 && l_val >= 0 && l_val <= 100)
+					{
+						h_val = fmod(h_val, 360.0);
+						if (h_val < 0) h_val += 360.0;
+						DrawColorBox(HslToRgb(h_val, s_val / 100.0, l_val / 100.0));
+						return;
+					}
 				}
 			}
 		}
 	}
 
-	// If we reach here, no valid format was detected or parsed correctly.
-	// The original csText remains unchanged, and no color box is drawn.
+	// 4. --- Legacy/Ambiguous Format Parsing ---
+	// If no unique signature was found, now we test for the simpler formats.
+	int r, g, b;
+
+	// Check for legacy parenthesized RGB: "(255, 128, 0)"
+	if (parseText.Left(1) == _T("(") && parseText.Right(1) == _T(")"))
+	{
+		// We already know it doesn't start with "rgb(" from the checks above.
+		// Get the content inside the parentheses.
+		CString content = parseText.Mid(1, parseText.GetLength() - 2);
+
+		if (swscanf(content, _T("%d , %d , %d"), &r, &g, &b) == 3)
+		{
+			if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
+			{
+				// To be safe, let's do a quick check that there isn't trailing non-numeric data
+				CString temp;
+				temp.Format(_T("%d"), b);
+				int endPos = content.Find(temp, content.GetLength() - temp.GetLength() - 2);
+				if (endPos != -1)
+				{
+					DrawColorBox(RGB(r, g, b));
+					return;
+				}
+			}
+		}
+	}
+
+	// Check for legacy comma-separated RGB: "255, 0, 0"
+	if (parseText.Find(',') != -1)
+	{
+		if (swscanf(parseText, _T("%d , %d , %d"), &r, &g, &b) == 3)
+		{
+			if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
+			{
+				// A simple check to ensure no extra text is present
+				CString temp;
+				temp.Format(_T("%d"), b);
+				int endPos = parseText.Find(temp, parseText.GetLength() - temp.GetLength() - 2);
+				if (endPos != -1 && (endPos + temp.GetLength()) >= parseText.GetLength() - 1)
+				{
+					DrawColorBox(RGB(r, g, b));
+					return;
+				}
+			}
+		}
+	}
+
+	// Check for legacy space-separated RGB: "255 128 0"
+	if (swscanf(parseText, _T("%d %d %d"), &r, &g, &b) == 3)
+	{
+		// Check that there isn't other text after the numbers.
+		CString temp;
+		temp.Format(_T("%d"), b);
+		int endPos = parseText.Find(temp, parseText.GetLength() - temp.GetLength() - 2);
+		if (endPos != -1 && (endPos + temp.GetLength()) >= parseText.GetLength() - 1)
+		{
+			if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
+			{
+				DrawColorBox(RGB(r, g, b));
+				return;
+			}
+		}
+	}
+
+	// Check for legacy 6-digit hex: "FF00CC"
+	if (parseText.GetLength() == 6 && IsHexString(parseText))
+	{
+		if (swscanf(parseText, _T("%02x%02x%02x"), &r, &g, &b) == 3)
+		{
+			DrawColorBox(RGB(r, g, b));
+			return;
+		}
+	}
 }
+
 
 BOOL CQListCtrl::DrawRtfText(int nItem, CRect& crRect, CDC* pDC)
 {
