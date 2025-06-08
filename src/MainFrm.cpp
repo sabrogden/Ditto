@@ -725,10 +725,13 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
     switch(nIDEvent)
     {
         case HIDE_ICON_TIMER:
-            {
-				m_trayIcon.Hide();
-                KillTimer(nIDEvent);
-            }
+        	{
+            	KillTimer(nIDEvent);
+            	if (!CGetSetOptions::GetShowIconInSysTray())
+            	{
+                	m_trayIcon.Hide();
+            	}
+        }
 			break;
 
         case CLOSE_WINDOW_TIMER:
