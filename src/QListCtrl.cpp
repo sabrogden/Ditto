@@ -34,6 +34,10 @@ static char THIS_FILE[] = __FILE__;
 
 #define VALID_TOOLTIP (m_pToolTip && ::IsWindow(m_pToolTip->m_hWnd))
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 // Static map to hold W3C color names and their RGB values
 static std::map<CString, COLORREF> g_colorNameMap;
 static CMutex g_colorNameMapMutex;
@@ -736,6 +740,61 @@ static bool ParseCssValue(const CString& token, double& value)
 }
 
 
+// Converts a color from OKLCH color space to sRGB.
+// l: 0-1, c: 0-0.4 (theoretically unbounded, but practically small), h: 0-360
+static COLORREF OklchToRgb(double l, double c, double h)
+{
+	// 1. Convert OKLCH to OKLAB
+	double h_rad = h * M_PI / 180.0;
+	double a = c * cos(h_rad);
+	double b = c * sin(h_rad);
+
+	// 2. Convert OKLAB to XYZ
+	// First, convert to an intermediate non-linear LMS-like space
+	double l_ = l + 0.3963377774 * a + 0.2158037573 * b;
+	double m_ = l - 0.1055613458 * a - 0.0638541728 * b;
+	double s_ = l - 0.0894841775 * a - 1.2914855480 * b;
+
+	// Then, convert to linear LMS by undoing the cube-root non-linearity
+	double l_linear = l_ * l_ * l_;
+	double m_linear = m_ * m_ * m_;
+	double s_linear = s_ * s_ * s_;
+
+	// Finally, convert linear LMS to XYZ color space
+	double x = +1.2270138511 * l_linear - 0.5577999807 * m_linear + 0.2812561490 * s_linear;
+	double y = -0.0405801784 * l_linear + 1.1122568696 * m_linear - 0.0716766787 * s_linear;
+	double z = -0.0763812845 * l_linear - 0.4214819784 * m_linear + 1.5861632204 * s_linear;
+
+	// 3. Convert XYZ to linear sRGB
+	double r_linear = +3.2404542 * x - 1.5371385 * y - 0.4985314 * z;
+	double g_linear = -0.9692660 * x + 1.8760108 * y + 0.0415560 * z;
+	double b_linear = +0.0556434 * x - 0.2040259 * y + 1.0572252 * z;
+
+	// 4. Convert linear sRGB to gamma-corrected sRGB
+	auto ToSrgb = [](double val) {
+		if (val <= 0.0031308) {
+			return 12.92 * val;
+		}
+		return 1.055 * pow(val, 1.0 / 2.4) - 0.055;
+	};
+
+	double r_srgb = ToSrgb(r_linear);
+	double g_srgb = ToSrgb(g_linear);
+	double b_srgb = ToSrgb(b_linear);
+
+	// 5. Scale to 0-255 and clamp (for out-of-gamut colors)
+	int R = static_cast<int>(std::round(r_srgb * 255.0));
+	int G = static_cast<int>(std::round(g_srgb * 255.0));
+	int B = static_cast<int>(std::round(b_srgb * 255.0));
+
+	R = max(0, min(255, R));
+	G = max(0, min(255, G));
+	B = max(0, min(255, B));
+
+	return RGB(R, G, B);
+}
+
+
 void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 {
 	if (CGetSetOptions::m_bDrawCopiedColorCode == FALSE || csText.IsEmpty())
@@ -769,8 +828,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 		csText = originalCleanedText;
 	};
 
-	// 3. Check for formats with unique signatures FIRST
-	// These are unambiguous because of their prefixes or wrappers.
+	// 3. Check for formats with unique signatures first
 
 	// Check for W3C Named Colors
 	InitializeColorNameMap();
@@ -807,7 +865,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 		}
 	}
 
-	// Check for W3C Functional notations: rgb(...) and hsl(...)
+	// Check for W3C notations: rgb(...), hsl(...), and oklch(...)
 	if (parseText.Right(1) == _T(")"))
 	{
 		if (parseText.Left(3) == _T("rgb"))
@@ -877,64 +935,54 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 				}
 			}
 		}
+		else if (parseText.Left(5) == _T("oklch"))
+		{
+			CString content;
+			content = parseText.Mid(6, parseText.GetLength() - 7);
+			content.Replace(_T(','), _T(' '));
+			content.Replace(_T('/'), _T(' '));
+
+			std::vector<CString> tokens;
+			int curPos = 0;
+			CString token;
+			while (!(token = content.Tokenize(_T(" "), curPos)).IsEmpty())
+			{
+				tokens.push_back(token);
+			}
+
+			if (tokens.size() >= 3)
+			{
+				double l_val, c_val, h_val;
+				if (ParseCssValue(tokens[0], l_val) && ParseCssValue(tokens[1], c_val) && ParseCssValue(tokens[2], h_val))
+				{
+					bool l_is_percent = tokens[0].Find('%') != -1;
+
+					double l_normalized = l_val;
+					if (l_is_percent)
+					{
+						l_normalized = l_val / 100.0;
+					}
+
+					if (l_normalized >= 0 && l_normalized <= 1.0 && c_val >= 0)
+					{
+						DrawColorBox(OklchToRgb(l_normalized, c_val, h_val));
+						return;
+					}
+				}
+			}
+		}
 	}
 
-	// 4. --- Legacy/Ambiguous Format Parsing ---
-	// If no unique signature was found, now we test for the simpler formats.
-	int r, g, b;
+	// 4. --- Non-W3C Format Parsing ---
+	int r, g, b, chars_consumed = 0;
 
-	// Check for legacy parenthesized RGB: "(255, 128, 0)"
+	// Check for parenthesized RGB: "(255, 128, 0)"
 	if (parseText.Left(1) == _T("(") && parseText.Right(1) == _T(")"))
 	{
-		// We already know it doesn't start with "rgb(" from the checks above.
-		// Get the content inside the parentheses.
 		CString content = parseText.Mid(1, parseText.GetLength() - 2);
+		content.Trim(); // Trim whitespace inside parentheses
 
-		if (swscanf(content, _T("%d , %d , %d"), &r, &g, &b) == 3)
-		{
-			if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
-			{
-				// To be safe, let's do a quick check that there isn't trailing non-numeric data
-				CString temp;
-				temp.Format(_T("%d"), b);
-				int endPos = content.Find(temp, content.GetLength() - temp.GetLength() - 2);
-				if (endPos != -1)
-				{
-					DrawColorBox(RGB(r, g, b));
-					return;
-				}
-			}
-		}
-	}
-
-	// Check for legacy comma-separated RGB: "255, 0, 0"
-	if (parseText.Find(',') != -1)
-	{
-		if (swscanf(parseText, _T("%d , %d , %d"), &r, &g, &b) == 3)
-		{
-			if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
-			{
-				// A simple check to ensure no extra text is present
-				CString temp;
-				temp.Format(_T("%d"), b);
-				int endPos = parseText.Find(temp, parseText.GetLength() - temp.GetLength() - 2);
-				if (endPos != -1 && (endPos + temp.GetLength()) >= parseText.GetLength() - 1)
-				{
-					DrawColorBox(RGB(r, g, b));
-					return;
-				}
-			}
-		}
-	}
-
-	// Check for legacy space-separated RGB: "255 128 0"
-	if (swscanf(parseText, _T("%d %d %d"), &r, &g, &b) == 3)
-	{
-		// Check that there isn't other text after the numbers.
-		CString temp;
-		temp.Format(_T("%d"), b);
-		int endPos = parseText.Find(temp, parseText.GetLength() - temp.GetLength() - 2);
-		if (endPos != -1 && (endPos + temp.GetLength()) >= parseText.GetLength() - 1)
+		if (swscanf(content, _T("%d , %d , %d %n"), &r, &g, &b, &chars_consumed) == 3 && chars_consumed == content.GetLength())
 		{
 			if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
 			{
@@ -944,10 +992,31 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 		}
 	}
 
-	// Check for legacy 6-digit hex: "FF00CC"
+	// Check for comma-separated RGB: "255, 0, 0"
+	if (swscanf(parseText, _T("%d , %d , %d %n"), &r, &g, &b, &chars_consumed) == 3 && chars_consumed == parseText.GetLength())
+	{
+		if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
+		{
+			DrawColorBox(RGB(r, g, b));
+			return;
+		}
+	}
+
+	// Check for space-separated RGB: "255 128 0"
+	if (swscanf(parseText, _T("%d %d %d %n"), &r, &g, &b, &chars_consumed) == 3 && chars_consumed == parseText.GetLength())
+	{
+		if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
+		{
+			DrawColorBox(RGB(r, g, b));
+			return;
+		}
+	}
+
+	// Check for 6-digit hex: "FF00CC"
 	if (parseText.GetLength() == 6 && IsHexString(parseText))
 	{
-		if (swscanf(parseText, _T("%02x%02x%02x"), &r, &g, &b) == 3)
+		// Use %n here as well for consistency, though length check is sufficient.
+		if (swscanf(parseText, _T("%02x%02x%02x%n"), &r, &g, &b, &chars_consumed) == 3 && chars_consumed == 6)
 		{
 			DrawColorBox(RGB(r, g, b));
 			return;
