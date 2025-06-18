@@ -16,6 +16,7 @@
 #include <string>
 #include <cwchar>   // For swscanf
 #include <algorithm> // For std::round
+#include <gdiplus.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -795,6 +796,28 @@ static COLORREF OklchToRgb(double l, double c, double h)
 }
 
 
+void CQListCtrl::DrawCheckerboard(CDC* pDC, CRect rect)
+{
+	COLORREF color1 = RGB(255, 255, 255); // White
+	COLORREF color2 = RGB(204, 204, 204); // Light grey
+	int squareSize = m_windowDpi->Scale(4);
+	if (squareSize <= 0)
+	{
+		squareSize = 4;
+	}
+
+	for (int y = rect.top; y < rect.bottom; y += squareSize)
+	{
+		for (int x = rect.left; x < rect.right; x += squareSize)
+		{
+			COLORREF color = ((( (x - rect.left) / squareSize) + ((y - rect.top) / squareSize)) % 2 == 0) ? color1 : color2;
+			CRect square(x, y, min(x + squareSize, rect.right), min(y + squareSize, rect.bottom));
+			pDC->FillSolidRect(square, color);
+		}
+	}
+}
+
+
 void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 {
 	if (CGetSetOptions::m_bDrawCopiedColorCode == FALSE || csText.IsEmpty())
@@ -815,14 +838,20 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 	parseText.MakeLower();
 
 	// 2. Helper lambda to draw the color box
-	auto DrawColorBox = [&](COLORREF color)
+	auto DrawColorBox = [&](COLORREF color, int alpha = 255)
 	{
 		CRect pastedRect(rcText);
 		int boxSize = rcText.Height();
 		pastedRect.right = pastedRect.left + boxSize;
 		pastedRect.bottom = pastedRect.top + boxSize;
 
-		pDC->FillSolidRect(pastedRect, color);
+		DrawCheckerboard(pDC, pastedRect);
+
+		// Use GDI+ for alpha blending
+		Gdiplus::Graphics graphics(pDC->GetSafeHdc());
+		Gdiplus::Color gdiplusColor(alpha, GetRValue(color), GetGValue(color), GetBValue(color));
+		Gdiplus::SolidBrush brush(gdiplusColor);
+		graphics.FillRectangle(&brush, Gdiplus::Rect(pastedRect.left, pastedRect.top, pastedRect.Width(), pastedRect.Height()));
 
 		rcText.left += boxSize + m_windowDpi->Scale(ROW_LEFT_BORDER);
 		csText = originalCleanedText;
@@ -856,11 +885,22 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 
 		if (IsHexString(hexString) && (hexString.GetLength() == 6 || hexString.GetLength() == 8))
 		{
-			unsigned int r = 0, g = 0, b = 0;
-			if (swscanf(hexString, _T("%02x%02x%02x"), &r, &g, &b) == 3)
+			unsigned int r = 0, g = 0, b = 0, a = 255;
+			if (hexString.GetLength() == 8)
 			{
-				DrawColorBox(RGB(r, g, b));
-				return;
+				if (swscanf(hexString, _T("%02x%02x%02x%02x"), &r, &g, &b, &a) == 4)
+				{
+					DrawColorBox(RGB(r, g, b), a);
+					return;
+				}
+			}
+			else // length is 6
+			{
+				if (swscanf(hexString, _T("%02x%02x%02x"), &r, &g, &b) == 3)
+				{
+					DrawColorBox(RGB(r, g, b)); // default alpha
+					return;
+				}
 			}
 		}
 	}
@@ -895,9 +935,22 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 						g_val = std::round(g_val * 2.55);
 						b_val = std::round(b_val * 2.55);
 					}
+
+					int alpha = 255;
+					double a_val = 1.0;
+					if (tokens.size() >= 4 && ParseCssValue(tokens[3], a_val))
+					{
+						if (tokens[3].Find('%') != -1)
+						{
+							a_val /= 100.0;
+						}
+						a_val = max(0.0, min(1.0, a_val));
+						alpha = static_cast<int>(std::round(a_val * 255.0));
+					}
+
 					if (r_val >= 0 && r_val <= 255 && g_val >= 0 && g_val <= 255 && b_val >= 0 && b_val <= 255)
 					{
-						DrawColorBox(RGB((int)r_val, (int)g_val, (int)b_val));
+						DrawColorBox(RGB((int)r_val, (int)g_val, (int)b_val), alpha);
 						return;
 					}
 				}
@@ -925,11 +978,23 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 				double h_val, s_val, l_val;
 				if (ParseCssValue(tokens[0], h_val) && ParseCssValue(tokens[1], s_val) && ParseCssValue(tokens[2], l_val))
 				{
+					int alpha = 255;
+					double a_val = 1.0;
+					if (tokens.size() >= 4 && ParseCssValue(tokens[3], a_val))
+					{
+						if (tokens[3].Find('%') != -1)
+						{
+							a_val /= 100.0;
+						}
+						a_val = max(0.0, min(1.0, a_val));
+						alpha = static_cast<int>(std::round(a_val * 255.0));
+					}
+
 					if (s_val >= 0 && s_val <= 100 && l_val >= 0 && l_val <= 100)
 					{
 						h_val = fmod(h_val, 360.0);
 						if (h_val < 0) h_val += 360.0;
-						DrawColorBox(HslToRgb(h_val, s_val / 100.0, l_val / 100.0));
+						DrawColorBox(HslToRgb(h_val, s_val / 100.0, l_val / 100.0), alpha);
 						return;
 					}
 				}
@@ -962,10 +1027,22 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 					{
 						l_normalized = l_val / 100.0;
 					}
+					
+					int alpha = 255;
+					double a_val = 1.0;
+					if (tokens.size() >= 4 && ParseCssValue(tokens[3], a_val))
+					{
+						if (tokens[3].Find('%') != -1)
+						{
+							a_val /= 100.0;
+						}
+						a_val = max(0.0, min(1.0, a_val));
+						alpha = static_cast<int>(std::round(a_val * 255.0));
+					}
 
 					if (l_normalized >= 0 && l_normalized <= 1.0 && c_val >= 0)
 					{
-						DrawColorBox(OklchToRgb(l_normalized, c_val, h_val));
+						DrawColorBox(OklchToRgb(l_normalized, c_val, h_val), alpha);
 						return;
 					}
 				}
@@ -976,18 +1053,25 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 	// 4. --- Non-W3C Format Parsing ---
 	int r, g, b, chars_consumed = 0;
 
-	// Check for parenthesized RGB: "(255, 128, 0)"
+	// Check for parenthesized RGB: "(255, 128, 0)" or "(255 128 0)"
 	if (parseText.Left(1) == _T("(") && parseText.Right(1) == _T(")"))
 	{
 		CString content = parseText.Mid(1, parseText.GetLength() - 2);
-		content.Trim(); // Trim whitespace inside parentheses
+		content.Trim();
+		content.Replace(_T(','), _T(' '));
 
-		if (swscanf(content, _T("%d , %d , %d %n"), &r, &g, &b, &chars_consumed) == 3 && chars_consumed == content.GetLength())
+		if (swscanf(content, _T("%d %d %d %n"), &r, &g, &b, &chars_consumed) == 3)
 		{
-			if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
+			CString remainingText = content.Mid(chars_consumed);
+			remainingText.Trim();
+
+			if (remainingText.IsEmpty())
 			{
-				DrawColorBox(RGB(r, g, b));
-				return;
+				if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
+				{
+					DrawColorBox(RGB(r, g, b));
+					return;
+				}
 			}
 		}
 	}

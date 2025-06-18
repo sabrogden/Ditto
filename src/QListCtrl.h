@@ -173,6 +173,7 @@ protected:
 	bool IsHexString(const CString& str);
     COLORREF HslToRgb(double h, double s, double l);
 		
+	void DrawCheckerboard(CDC* pDC, CRect rect);
 	WCHAR *m_pwchTip;
 	TCHAR *m_pchTip;
 	HFONT m_SmallFont;
