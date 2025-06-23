@@ -845,13 +845,21 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 		pastedRect.right = pastedRect.left + boxSize;
 		pastedRect.bottom = pastedRect.top + boxSize;
 
-		DrawCheckerboard(pDC, pastedRect);
+		if (alpha < 255)
+		{
+			DrawCheckerboard(pDC, pastedRect);
 
-		// Use GDI+ for alpha blending
-		Gdiplus::Graphics graphics(pDC->GetSafeHdc());
-		Gdiplus::Color gdiplusColor(alpha, GetRValue(color), GetGValue(color), GetBValue(color));
-		Gdiplus::SolidBrush brush(gdiplusColor);
-		graphics.FillRectangle(&brush, Gdiplus::Rect(pastedRect.left, pastedRect.top, pastedRect.Width(), pastedRect.Height()));
+			// Use GDI+ for alpha blending
+			Gdiplus::Graphics graphics(pDC->GetSafeHdc());
+			Gdiplus::Color gdiplusColor(alpha, GetRValue(color), GetGValue(color), GetBValue(color));
+			Gdiplus::SolidBrush brush(gdiplusColor);
+			graphics.FillRectangle(&brush, Gdiplus::Rect(pastedRect.left, pastedRect.top, pastedRect.Width(), pastedRect.Height()));
+		}
+		else
+		{
+			// Opaque color is faster with FillSolidRect and doesn't need a checkerboard.
+			pDC->FillSolidRect(pastedRect, color);
+		}
 
 		rcText.left += boxSize + m_windowDpi->Scale(ROW_LEFT_BORDER);
 		csText = originalCleanedText;
@@ -888,7 +896,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 			unsigned int r = 0, g = 0, b = 0, a = 255;
 			if (hexString.GetLength() == 8)
 			{
-				if (swscanf(hexString, _T("%02x%02x%02x%02x"), &r, &g, &b, &a) == 4)
+				if (swscanf(hexString, _T("%2x%2x%2x%2x"), &r, &g, &b, &a) == 4)
 				{
 					DrawColorBox(RGB(r, g, b), a);
 					return;
@@ -896,7 +904,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 			}
 			else // length is 6
 			{
-				if (swscanf(hexString, _T("%02x%02x%02x"), &r, &g, &b) == 3)
+				if (swscanf(hexString, _T("%2x%2x%2x"), &r, &g, &b) == 3)
 				{
 					DrawColorBox(RGB(r, g, b)); // default alpha
 					return;
@@ -1100,7 +1108,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 	if (parseText.GetLength() == 6 && IsHexString(parseText))
 	{
 		// Use %n here as well for consistency, though length check is sufficient.
-		if (swscanf(parseText, _T("%02x%02x%02x%n"), &r, &g, &b, &chars_consumed) == 3 && chars_consumed == 6)
+		if (swscanf(parseText, _T("%2x%2x%2x%n"), &r, &g, &b, &chars_consumed) == 3 && chars_consumed == 6)
 		{
 			DrawColorBox(RGB(r, g, b));
 			return;
@@ -1441,24 +1449,34 @@ BOOL CQListCtrl::HandleKeyDown(WPARAM wParam, LPARAM lParam)
 		break;
 
 	case VK_HOME:
-
 		if (GetKeyState(VK_SHIFT) & 0x8000)
 		{
-			int pos = (int)GetFirstSelectedItemPosition();
-			if (pos >= 0 && pos < GetItemCount())
+			int nAnchor = GetSelectionMark();
+			if (nAnchor < 0)
 			{
-				for (int i = 0; i < pos; i++)
-				{
-					SetSelection(i, (i == 0));
-				}
+				nAnchor = GetCaret();
 			}
 
+			if (nAnchor >= 0)
+			{
+				RemoveAllSelection();
+
+				for (int i = 0; i <= nAnchor; i++)
+				{
+					SetSelection(i, TRUE);
+				}
+
+				ListView_SetSelectionMark(m_hWnd, nAnchor);
+				
+				SetCaret(0);
+				EnsureVisible(0, FALSE);
+			}
 		}
 		else
 		{
 			SetListPos(0);
 		}
-		break;
+		return TRUE;
 	} // end switch(vk)
 
 	return FALSE;
