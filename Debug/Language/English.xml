@@ -153,6 +153,7 @@
 		<Item English_Text = "CamelCase" ID = "32971"></Item>
 		<Item English_Text = "Multiple Images Horizontally" ID = "32976"></Item>
 		<Item English_Text = "Multiple Images Vertically" ID = "32978"></Item>
+		<Item English_Text = "Ascii Text Only" ID = "32979"></Item>
 		<Item English_Text = "Replace Top Sticky Clip" ID = "32938"></Item>
 		<Item English_Text = "Set Drag File Name" ID = "32970"></Item>
 		
@@ -332,6 +333,9 @@
 		<Item English_Text = "Add" ID = "1021"></Item>
 		<Item English_Text = "Cancel" ID = "2"></Item>
 		<Item English_Text = "Add Supported Type" ID = "-1"></Item>
+		<Item English_Text = "Current Clipboard Types" ID = "2128"></Item>
+		<Item English_Text = "Primary Clipboard Types" ID = "2145"></Item>
+		<Item English_Text = "Custom Clipboard Type" ID = "2130"></Item>
 	</Ditto_Options_Supported_Types_Add>
 	<Ditto_Move_To_Groups>
 		<Item English_Text = "New Group" ID = "1040"></Item>
@@ -683,6 +687,8 @@
 		<Item English_Text = "Show System Context Menu" ID = "120"></Item>
 		<Item English_Text = "Set Drag File Name" ID = "121"></Item>
 		<Item English_Text = "Paste CamelCase" ID = "122"></Item>
+		<Item English_Text = "Paste Multiple Images Horizontally" ID = "123"></Item>
+		<Item English_Text = "Paste Multiple Images Vertically" ID = "124"></Item>
 
 	</Ditto_Options_Quick_Paste_Keyboard>
 	
