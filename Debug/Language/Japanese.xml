@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Ditto_Language_File Version = "3.24.238" Author = "Nardog, maboroshin" Notes = "Update: 2022/10, errer no honyaku mikakunin, https://pc.genkaku.in/ )" LanguageCode="jpn">
+<Ditto_Language_File Version = "3.25.64" Author = "Nardog, maboroshin" Notes = "Update: 2025/07, errer no honyaku mikakunin, https://pc.genkaku.in/ )" LanguageCode="jpn">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">グループ(&amp;G)</Item>
 		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">グループ作成(&amp;N)...</Item>
@@ -148,10 +148,15 @@
 		<Item English_Text = "Backup Database" ID = "32962">データベースをバックアップ(&amp;B)...</Item>
 		<Item English_Text = "Restore Dastabase" ID = "32964">データベースを復元(&amp;R)...</Item>
 		
-		//Added by maboroshin 2019/11
-		<Item English_Text = "Replace Top Sticky Clip" ID = "32938">クリップ付箋の先頭と入替(&amp;R)</Item>
 		<Item English_Text = "Delete All Non Used Clips" ID = "32968">未使用のクリップをすべて削除</Item>
+		
+		<Item English_Text = "CamelCase" ID = "32971">英単語連結(&amp;M)</Item>
+		<Item English_Text = "Multiple Images Horizontally" ID = "32976">複数の画像 横(&amp;M)</Item>
+		<Item English_Text = "Multiple Images Vertically" ID = "32978">複数の画像 縦(&amp;V)</Item>
+		<Item English_Text = "Ascii Text Only" ID = "32979">英数字記号のみ(ASCII)(&amp;A)</Item>
+		<Item English_Text = "Replace Top Sticky Clip" ID = "32938">クリップ付箋の先頭と入替(&amp;R)</Item>
 		<Item English_Text = "Set Drag File Name" ID = "32970">ドラッグ時のファイル名を設定</Item>
+		
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039">ホットキー</Item>
@@ -168,10 +173,8 @@
 		//Added 1/10/15
 		<Item English_Text = "Hotkey available globally" ID = "1026">ホットキーのグローバル化</Item>
 		<Item English_Text = "Last Used" ID = "2043">最終使用</Item>
-		<Item English_Text = "Quick Paste Text" ID = "2125">クイックペースト文</Item>
-		
-		//Added by maboroshin 2019/11
-		<Item English_Text = "Selected format MD5" ID = "2167">MD&amp;5:選択コピー形式</Item>
+		<Item English_Text = "Quick Paste Text" ID = "2125">クイックペースト名</Item>
+		<Item English_Text = "Selected format MD5" ID = "2167">選択した形式のMD&amp;5:</Item>
 				
 	</Ditto_Clip_Properties>
 	<Ditto_Options_General>
@@ -216,11 +219,7 @@
 		
 		<Item English_Text = "Default Font" ID = "2031">既定のフォント</Item>
 		
-		//Added by maboroshin. 11/2019
 		<Item English_Text = "Advanced" ID = "2124">高度</Item>
-		<Item English_Text = "At Caret" ID = "2015">キャレット</Item>
-		<Item English_Text = "At Cursor" ID = "2016">カーソル</Item>
-		<Item English_Text = "At Previous Position" ID = "2017">前回の位置</Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "Add" ID = "1015">追加</Item>
@@ -277,10 +276,10 @@
 		<Item English_Text = "Win" ID = "2065"></Item>
 		<Item English_Text = "Save Current Clipboard" ID = "2062">現在のクリップボードを保存</Item>
 		<Item English_Text = "Win" ID = "2047"></Item>
-		<Item English_Text = "Copy And Save Current Clipboard" ID = "2068">現在のクリップボードをコピーして保存</Item>
 		
 		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044">現在の選択しているグループの最近の10個を使用</Item>
 		
+		<Item English_Text = "Copy And Save Current Clipboard" ID = "2068">現在のクリップボードをコピーして保存</Item>
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Friends>
 		<Item English_Text = "When you receive a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">送信されたコピーを受信したとき、送信者の IP かコンピュータ名が下記の一覧にある場合に、クリップボードに追加されます。そうでない場合、後で使用する保存されたクリップに追加されます。</Item>
@@ -333,12 +332,9 @@
 		<Item English_Text = "Add" ID = "1021">追加</Item>
 		<Item English_Text = "Cancel" ID = "2">キャンセル</Item>
 		<Item English_Text = "Add Supported Type" ID = "-1">対応形式の追加</Item>
-		
-		//New item added 12/17/16
 		<Item English_Text = "Current Clipboard Types" ID = "2128">現在のクリップボード形式</Item>
 		<Item English_Text = "Primary Clipboard Types" ID = "2145">主なクリップボード形式</Item>
 		<Item English_Text = "Custom Clipboard Type" ID = "2130">独自のクリップボード形式</Item>
-		
 	</Ditto_Options_Supported_Types_Add>
 	<Ditto_Move_To_Groups>
 		<Item English_Text = "New Group" ID = "1040">新規グループ(&amp;N)</Item>
@@ -418,7 +414,7 @@
 		<Item English_Text = "Hot Key" ID = "QPHotKey">ホットキー</Item>
 		<Item English_Text = "Command" ID = "QPCommand">コマンド</Item>
 		
-		//ID chenged from "top_most", by maboroshin. 11/2019
+		//ID changed from "top_most"
 		<Item English_Text = "[Always on top]" ID = "top_window">[前面]</Item>
 		
 		<Item English_Text = "[Disconnected]" ID = "disconnected">[切断]</Item>
@@ -432,7 +428,7 @@
 		<Item English_Text = "Restoring database" ID = "RestoreDbMsg">データベースを復元中</Item>
 		
 		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">Ditto がデータベースを開けないため、可能になるまで待機します。必要であれば、設定からパスを更新してください。パス: </Item>
-			
+				
 		<Item English_Text = "At Caret" ID = "AtCaret">キャレット</Item>
 		<Item English_Text = "At Cursor" ID = "AtCursor">カーソル</Item>
 		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition">前回の位置</Item>
@@ -469,8 +465,9 @@
 		<Item English_Text = "Restore Database" ID = "32961">データベースを復元(&amp;R)...</Item>
 		
 		<Item English_Text = "Delete All Non Used Clips" ID = "32969">未使用のクリップをすべて削除</Item>
+		
 	</Ditto_Tray_Icon_Menu>
-
+		
 	//Added in 9-11-09
 	<Ditto_Options_CopyBuffers>
 		<Item English_Text = "Copy Buffer 1" ID = "2088">コピーバッファー1</Item>
@@ -539,6 +536,7 @@
 		<Item English_Text = "Last Used" ID = "LastUsed">最終使用日時</Item>
 		<Item English_Text = "Format" ID = "Format">形式</Item>
 		<Item English_Text = "Data Size" ID = "DataSize">データ容量</Item>
+		<Item English_Text = "Quick Paste Text" ID = "QuickPasteText">クイックペースト名</Item>
 	</Ditto_DeleteClipData>
 	
 	<Ditto_Options_Quick_Paste_Keyboard>
@@ -651,9 +649,7 @@
 		<Item English_Text = "Import Clip" ID = "82">クリップのインポート</Item>
 		<Item English_Text = "Global HotKeys" ID = "83">グローバルホットキー</Item>
 		<Item English_Text = "Delete Clip Data" ID = "84">クリップデータの削除</Item>
-		<Item English_Text = "Replace Top Sticky Clip" ID = "85">クリップ付箋を最初のものと入替</Item>		
-	
-		//Added by maboroshin. Nothig: 94  11/2019
+		<Item English_Text = "Replace Top Sticky Clip" ID = "85">クリップ付箋を最初のものと入替</Item>	
 		<Item English_Text = "Prompt send to friend" ID = "86">送信/宛先の入力</Item>
 		<Item English_Text = "Save copied file (cf_hdrop) contents into Ditto" ID = "87">CF_HDROP形式からファイルを保存</Item>
 		<Item English_Text = "Toggle clipboard connection" ID = "88">切替/クリップボード接続</Item>
@@ -689,7 +685,9 @@
 		<Item English_Text = "Delete all non used clips" ID = "119">未使用のクリップをすべて削除</Item>
 		<Item English_Text = "Show System Context Menu" ID = "120">システムの右クリックメニューを表示</Item>
 		<Item English_Text = "Set Drag File Name" ID = "121">ドラッグ時のファイル名を設定</Item>
-		<Item English_Text = "Paste CamelCase" ID = "122">貼り付け CamelCase</Item>
+		<Item English_Text = "Paste CamelCase" ID = "122">貼り付け 英単語連結</Item>
+		<Item English_Text = "Paste Multiple Images Horizontally" ID = "123">貼り付け 複数の画像 横</Item>
+		<Item English_Text = "Paste Multiple Images Vertically" ID = "124">貼り付け 複数の画像 縦</Item>
 	</Ditto_Options_Quick_Paste_Keyboard>
 	
 </Ditto_Language_File>
