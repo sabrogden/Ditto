@@ -186,7 +186,7 @@ public:
 
 	BOOL OpenID(int id, CSpecialPasteOptions pasteOptions);
 	BOOL OpenSelection(CSpecialPasteOptions pasteOptions);
-    BOOL OpenIndex(int item);
+    BOOL OpenIndex(int item, bool plainTextOnly = false);
 	BOOL NewGroup(bool bGroupSelection = true, int parentId = -1);
 
     CString LoadDescription(int nItem);

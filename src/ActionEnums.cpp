@@ -392,6 +392,36 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case PASTE_MULTI_IMAGE_VERTICAL:
 		val = "Paste Muliple Images Vertically";
 		break;
+	case PASTE_POSITION_1_PLAIN_TEXT:
+		val = "Paste Position 1 Plain Text Only";
+		break;
+	case PASTE_POSITION_2_PLAIN_TEXT:
+		val = "Paste Position 2 Plain Text Only";
+		break;
+	case PASTE_POSITION_3_PLAIN_TEXT:
+		val = "Paste Position 3 Plain Text Only";
+		break;
+	case PASTE_POSITION_4_PLAIN_TEXT:
+		val = "Paste Position 4 Plain Text Only";
+		break;
+	case PASTE_POSITION_5_PLAIN_TEXT:
+		val = "Paste Position 5 Plain Text Only";
+		break;
+	case PASTE_POSITION_6_PLAIN_TEXT:
+		val = "Paste Position 6 Plain Text Only";
+		break;
+	case PASTE_POSITION_7_PLAIN_TEXT:
+		val = "Paste Position 7 Plain Text Only";
+		break;
+	case PASTE_POSITION_8_PLAIN_TEXT:
+		val = "Paste Position 8 Plain Text Only";
+		break;
+	case PASTE_POSITION_9_PLAIN_TEXT:
+		val = "Paste Position 9 Plain Text Only";
+		break;
+	case PASTE_POSITION_10_PLAIN_TEXT:
+		val = "Paste Position 10 Plain Text Only";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
