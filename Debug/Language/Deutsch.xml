@@ -148,14 +148,21 @@
 		<Item English_Text = "Backup Database" ID = "32962">Datenbank sichern</Item>
 		<Item English_Text = "Restore Dastabase" ID = "32964">Datenbank wiederherstellen</Item>
 
-		<Item English_Text = "Replace Top Sticky Clip" ID = "32938">Ersten Sticky-Clip ersetzen</Item>
 		<Item English_Text = "Delete All Non Used Clips" ID = "32968">Alle ungenutzten Clips löschen</Item>
+
+		<Item English_Text = "CamelCase" ID = "32971">CamelCase</Item>
+		<Item English_Text = "Multiple Images Horizontally" ID = "32976">Mehrere Bilder horizontal</Item>
+		<Item English_Text = "Multiple Images Vertically" ID = "32978">Mehrere Bilder vertikal</Item>
+		<Item English_Text = "Ascii Text Only" ID = "32979">Nur ASCII-Text</Item>
+		<Item English_Text = "Replace Top Sticky Clip" ID = "32938">Ersten Sticky-Clip ersetzen</Item>
 		<Item English_Text = "Set Drag File Name" ID = "32970">Dateiname festlegen</Item>
+
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039">Tastenkürzel</Item>
 		<Item English_Text = "Date" ID = "2040">Datum</Item>
 		<Item English_Text = "Never Auto Delete" ID = "1025">Kein automatisches Löschen</Item>
+		<Item English_Text = "Move To Group" ID = "2041">In Gruppe verschieben</Item>
 		<Item English_Text = "Item Title" ID = "2042">Vorschau</Item>
 		<Item English_Text = "Copy Formats" ID = "2029">Formate kopieren</Item>
 		<Item English_Text = "Delete" ID = "1021">Löschen</Item>
@@ -167,8 +174,8 @@
 		<Item English_Text = "Hotkey available globally" ID = "1026">Global verfügbar</Item>
 		<Item English_Text = "Last Used" ID = "2043">Verwendet</Item>
 		<Item English_Text = "Quick Paste Text" ID = "2125">Schnell-Einfügen</Item>
-
 		<Item English_Text = "Selected format MD5" ID = "2167">Format-Prüfsumme</Item>
+
 	</Ditto_Clip_Properties>
 	<Ditto_Options_General>
 		<Item English_Text = "Start Ditto on System Startup" ID = "2004">Beim Systemstart ausführen</Item>
@@ -211,7 +218,7 @@
 
 		<Item English_Text = "Environment Variables" ID = "2165">Umgebungsvariablen</Item>
 
-		<Item English_Text = "Default Font" ID = "2031">Standard-Schiftart</Item>
+		<Item English_Text = "Default Font" ID = "2031">Standard-Schriftart</Item>
 
 		<Item English_Text = "Advanced" ID = "2124">Erweitert</Item>
 		<Item English_Text = "At Caret" ID = "2015">Beim Cursor</Item>
@@ -261,18 +268,22 @@
 
 		//New item added in 3.15.1 8/18/07
 		<Item English_Text = "Send custom strokes Per Application" ID = "2091">Anwendungsspezifische Tastenkürzel</Item>
+
 		//Added 1/10/15
-		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043">Clips beim Einfügen ganz oben in der Liste plazieren</Item>
+		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043">Clips beim Einfügen am Anfang der Liste einfügen</Item>
+
 		//Added 12/17/16
 		<Item English_Text = "Activate Ditto" ID = "2064">Ditto aktivieren</Item>
 		<Item English_Text = "Activate Ditto" ID = "2066">Ditto aktivieren</Item>
+
 		<Item English_Text = "Win" ID = "2063">Win</Item>
 		<Item English_Text = "Win" ID = "2065">Win</Item>
 		<Item English_Text = "Save Current Clipboard" ID = "2062">Zwischenablage speichern</Item>
 		<Item English_Text = "Win" ID = "2047">Win</Item>
-		<Item English_Text = "Copy And Save Current Clipboard" ID = "2068">Kopieren und aktuelle Zwischenablage speichern</Item>
 
 		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044">Verwende die aktuell ausgewählte Gruppe für die neuesten zehn Clips</Item>
+
+		<Item English_Text = "Copy And Save Current Clipboard" ID = "2068">Kopieren und aktuelle Zwischenablage speichern</Item>
 
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Friends>
@@ -285,6 +296,7 @@
 		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Wenn 'Alle Kopien senden' ausgewählt ist, werden alle Kopien von diesem Computer an andere Computer gesendet. Wenn diese Option nicht ausgewählt ist, können Sie Clips über das Rechtsklickmenü senden.</Item>
 		<Item English_Text = "Log Send Receive Commands" ID = "1042">Senden/Empfangen-Ereignisse speichern</Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">Kontakte</Item>
+
 
 		//Added in 12-17-16
 		<Item English_Text = "Request using IP Address" ID = "2127">Anfrage mit IP-Adresse</Item>
@@ -327,7 +339,7 @@
 		<Item English_Text = "Add Supported Type" ID = "-1">Zu unterstützten Typen hinzufügen</Item>
 		<Item English_Text = "Current Clipboard Types" ID = "2128">Formate in Zwischenablage</Item>
 		<Item English_Text = "Primary Clipboard Types" ID = "2145">Primäre Formate für Zwischenablage</Item>
-		<Item English_Text = "Custom Clipboard Type" ID = "2130">Eigenes Format für Zwiscchenablage</Item>
+		<Item English_Text = "Custom Clipboard Type" ID = "2130">Eigenes Format für Zwischenablage</Item>
 	</Ditto_Options_Supported_Types_Add>
 	<Ditto_Move_To_Groups>
 		<Item English_Text = "New Group" ID = "1040">Neue Gruppe</Item>
@@ -381,8 +393,8 @@
 		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">Ditto Editor</Item>
 		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title">Ditto - genanntes Einfügen</Item>
 		<Item English_Text = "Error loading data" ID = "Named_Paste_Error1">Fehler beim Laden der Daten</Item>
-		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2">Fehler beim finden des Zwischenablageneintrags mit dem Text von</Item>
-		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">Ausnahmefehler beim finden des Clips</Item>
+		<Item English_Text = "Error finding clip with QuickPaste Text of" ID = "Named_Paste_Error2">Fehler beim finden des Eintrags mit dem Text von</Item>
+		<Item English_Text = "Exception finding the clip" ID = "Named_Paste_Error3">Fehler beim finden des Clips</Item>
 		<Item English_Text = "Ditto - Named Copy" ID = "Named_Copy_Title">Benannte Kopie</Item>
 		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">Fehler beim Speichern der benannten Kopie in die Datenbank</Item>
 		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">Exception beim Speichern der benannten Kopie</Item>
@@ -407,7 +419,7 @@
 		<Item English_Text = "Hot Key" ID = "QPHotKey">Tastenkürzel</Item>
 		<Item English_Text = "Command" ID = "QPCommand">Kommando</Item>
 
-		//ID chenged from "top_most"
+		//ID changed from "top_most"
 		<Item English_Text = "[Always on top]" ID = "top_most">[Im Vordergrund]</Item>
 
 		<Item English_Text = "[Disconnected]" ID = "disconnected">[Nicht verbunden]</Item>
@@ -443,7 +455,7 @@
 		<Item English_Text = "New Clip" ID = "32868">Neuer Eintrag...</Item>
 
 		//Added 12/10/11
-		<Item English_Text = "Global Hot Keys" ID = "32872">Systemweite Tastenkürzel...</Item>
+		<Item English_Text = "Global Hot Keys" ID = "32872">Globale Tastenkürzel...</Item>
 
 		//Added 1/10/15
 		<Item English_Text = "Delete Clip Data" ID = "32886">Clip-Daten löschen...</Item>
@@ -457,7 +469,15 @@
 		<Item English_Text = "Backup Database" ID = "32960">Datenbank sichern...</Item>
 		<Item English_Text = "Restore Database" ID = "32961">Datenbank wiederherstellen...</Item>
 
-		<Item English_Text = "Delete All Non Used Clips" ID = "32969">Alle ungenutzten CLips löschen</Item>
+		<Item English_Text = "Delete All Non Used Clips" ID = "32968">Alle ungenutzten Clips löschen</Item>
+
+		<Item English_Text = "CamelCase" ID = "32971">CamelCase</Item>
+		<Item English_Text = "Multiple Images Horizontally" ID = "32976">Mehrere Bilder horizontal</Item>
+		<Item English_Text = "Multiple Images Vertically" ID = "32978">Mehrere Bilder vertikal</Item>
+		<Item English_Text = "Ascii Text Only" ID = "32979">Nur ASCII-Text</Item>
+		<Item English_Text = "Replace Top Sticky Clip" ID = "32938">Ersten Sticky-Clip ersetzen</Item>
+		<Item English_Text = "Set Drag File Name" ID = "32970">Dateiname festlegen</Item>
+
 	</Ditto_Tray_Icon_Menu>
 
 	//Added in 9-11-09
@@ -491,7 +511,7 @@
 	</Ditto_Options_CopyBuffers>
 
 	<Ditto_GlobalHotKeys>
-		<Item English_Text = "Global Hot Keys" ID = "-1">Systemweite Tastenkürzel</Item>
+		<Item English_Text = "Global Hot Keys" ID = "-1">Globale Tastenkürzel</Item>
 		<Item English_Text = "Close" ID = "2">Schließen</Item>
 		<Item English_Text = "(Clip) " ID = "(Clip)">(Clip)</Item>
 		<Item English_Text = "Error" ID = "Error">Fehler</Item>
@@ -500,6 +520,7 @@
 		<Item English_Text = "HotKey" ID = "HotKey">Tastenkürzel</Item>
 		<Item English_Text = "Registered" ID = "Registered">Registriert</Item>
 	</Ditto_GlobalHotKeys>
+
 	//Added 1/10/15
 	<Ditto_Groups_Right_Click_Menu>
 		<Item English_Text = "New Sub Group" ID = "32896">Neue Untergruppe</Item>
@@ -527,11 +548,11 @@
 		<Item English_Text = "Last Used" ID = "LastUsed">Zuletzt verwendet</Item>
 		<Item English_Text = "Format" ID = "Format">Format</Item>
 		<Item English_Text = "Data Size" ID = "DataSize">Datengröße</Item>
+		<Item English_Text = "Quick Paste Text" ID = "QuickPasteText">Text schnell einfügen</Item>
 	</Ditto_DeleteClipData>
 
 	<Ditto_Options_Quick_Paste_Keyboard>
 		<Item English_Text = "Quick Paste Keyboard" ID = "-1" PropertyPage = "true">Schnell-Einfügen-Tastatur</Item>
-
 
 		<Item English_Text = "Reset" ID = "2144">Zurücksetzen</Item>
 		<Item English_Text = "Shortcuts for selected command:" ID = "2148">Tastenkürzel für Befehl:</Item>
@@ -563,7 +584,7 @@
 		<Item English_Text = "New Group" ID = "5">Neuer Gruppe</Item>
 		<Item English_Text = "New Group Selection" ID = "6">Neuer Gruppenauswahl</Item>
 		<Item English_Text = "Toggle On File Logging" ID = "7">Dateilogging aktiveren/deaktivieren</Item>
-		<Item English_Text = "Toggle OutputDebugString Logging" ID = "8">Outputstring-Logging aktivieren/deaktivieren</Item>
+		<Item English_Text = "Toggle OutputDebugString Logging" ID = "8">Ausgabe-Logging aktivieren/deaktivieren</Item>
 		<Item English_Text = "Close Window" ID = "9">Fenster schließen</Item>
 		<Item English_Text = "NEXTTABCONTROL" ID = "10"/>
 		<Item English_Text = "PREVTABCONTROL" ID = "11"/>
@@ -677,6 +698,8 @@
 		<Item English_Text = "Show System Context Menu" ID = "120">Kontextmenü des Systems</Item>
 		<Item English_Text = "Set Drag File Name" ID = "121">Dateiname festlegen</Item>
 		<Item English_Text = "Paste CamelCase" ID = "122">Als CamelCase einfügen</Item>
+		<Item English_Text = "Paste Multiple Images Horizontally" ID = "123">Mehrere Bilder horizontal einfügen</Item>
+		<Item English_Text = "Paste Multiple Images Vertically" ID = "124">Mehrere Bilder vertikal einfügen</Item>
 
 	</Ditto_Options_Quick_Paste_Keyboard>
 
