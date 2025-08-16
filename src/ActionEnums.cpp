@@ -392,6 +392,9 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case PASTE_MULTI_IMAGE_VERTICAL:
 		val = "Paste Muliple Images Vertically";
 		break;
+	case ASCII_TEXT_ONLY:
+		val = "Asci Text Only";
+		break;
 	case PASTE_POSITION_1_PLAIN_TEXT:
 		val = "Paste Position 1 Plain Text Only";
 		break;

@@ -852,6 +852,7 @@
     <ClInclude Include="src\sqlite\sqlite3mc_amalgamation.h">
       <Filter>src\sqlite</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
