@@ -1074,7 +1074,7 @@ BOOL CQPasteWnd::OpenSelection(CSpecialPasteOptions pasteOptions)
 	return TRUE;
 }
 
-BOOL CQPasteWnd::OpenIndex(int item)
+BOOL CQPasteWnd::OpenIndex(int item, bool plainTextOnly)
 {
 	if (item >= m_lstHeader.GetItemCount())
 	{
@@ -1082,6 +1082,7 @@ BOOL CQPasteWnd::OpenIndex(int item)
 	}
 
 	CSpecialPasteOptions pasteOptions;
+	pasteOptions.m_pasteAsPlainText = plainTextOnly;
 	return OpenID(m_lstHeader.GetItemData(item), pasteOptions);
 }
 
@@ -3243,6 +3244,36 @@ bool CQPasteWnd::DoAction(CAccel a)
 		break;
 	case ActionEnums::PASTE_POSITION_10:
 		ret = OpenIndex(9);
+		break;
+	case ActionEnums::PASTE_POSITION_1_PLAIN_TEXT:
+		ret = OpenIndex(0, true);
+		break;
+	case ActionEnums::PASTE_POSITION_2_PLAIN_TEXT:
+		ret = OpenIndex(1, true);
+		break;
+	case ActionEnums::PASTE_POSITION_3_PLAIN_TEXT:
+		ret = OpenIndex(2, true);
+		break;
+	case ActionEnums::PASTE_POSITION_4_PLAIN_TEXT:
+		ret = OpenIndex(3, true);
+		break;
+	case ActionEnums::PASTE_POSITION_5_PLAIN_TEXT:
+		ret = OpenIndex(4, true);
+		break;
+	case ActionEnums::PASTE_POSITION_6_PLAIN_TEXT:
+		ret = OpenIndex(5, true);
+		break;
+	case ActionEnums::PASTE_POSITION_7_PLAIN_TEXT:
+		ret = OpenIndex(6, true);
+		break;
+	case ActionEnums::PASTE_POSITION_8_PLAIN_TEXT:
+		ret = OpenIndex(7, true);
+		break;
+	case ActionEnums::PASTE_POSITION_9_PLAIN_TEXT:
+		ret = OpenIndex(8, true);
+		break;
+	case ActionEnums::PASTE_POSITION_10_PLAIN_TEXT:
+		ret = OpenIndex(9, true);
 		break;
 	case ActionEnums::CONFIG_SHOW_FIRST_TEN_TEXT:
 		ret = OnShowFirstTenText();

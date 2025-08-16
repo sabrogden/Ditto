@@ -36,3 +36,17 @@
 *.exe
 *.out
 *.app
+/.vs
+/packages
+/Debug64
+*.log
+*.recipe
+*.ilk
+*.res
+/enc_temp_folder
+/focusdll/Debug64
+CP_Main.vcxproj.user
+CP_Main_i.c
+CP_Main_i.h
+*.idb
+*.lnk
