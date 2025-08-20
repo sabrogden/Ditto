@@ -1,5 +1,12 @@
+#define bit64
+
 #define MyAppName               "Ditto"
-#define MyAppVersion            GetFileVersion("..\Release\Ditto.exe")
+#ifdef bit64
+  #define MyAppVersion            GetFileVersion("..\Release64\Ditto.exe")
+#endif
+#ifndef bit64
+  #define MyAppVersion            GetFileVersion("..\Release\Ditto.exe")
+#endif
 #define MyAppVerName            MyAppName + " " + MyAppVersion
 #define MyAppPublisher          "Scott Brogden"
 #define MyAppSupportURL         "ditto-cp.sourceforge.net"
