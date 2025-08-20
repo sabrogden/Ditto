@@ -149,7 +149,7 @@ jobs:
           token: ${{secrets.GITHUB_TOKEN}}
           uploadPath: DittoSetup\output\
           tag: ${{env.VERSION_FILENAME}}
-          previous_tag: 3.24.246.0
+          previous_tag: 3.25.73.0
         run: |
              npm install ./DittoSetup/GitHubRelease
              node ./DittoSetup/GitHubRelease/index.js

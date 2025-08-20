@@ -51,3 +51,6 @@ CP_Main_i.h
 *.idb
 *.lnk
 CP_Main.aps
+/focusdll/Release64
+/ICU_Loader/x64
+/Release64
