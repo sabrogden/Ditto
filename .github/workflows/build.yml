@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths-ignore:
-      - '**/README.md'
+      - '**/*.md'
 
 env:
   SOLUTION_FILE_PATH: CP_Main_10.sln
