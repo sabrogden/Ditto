@@ -23,7 +23,7 @@ Ditto is an extension to the standard windows clipboard. It saves each item plac
 
 
 ## Windows Code-Signing Policy
-Free code signing on Windows binaries provided by SignPath.io, certificate by SignPath Foundation.
+Free code signing on Windows binaries provided by [SignPath.io](https://about.signpath.io), certificate by SignPath Foundation.
 <br>
 <br>
 
