@@ -553,6 +553,7 @@
     <ClCompile Include="src\CopyThread.cpp" />
     <ClCompile Include="src\CP_Main.cpp" />
     <ClCompile Include="src\Crc32Dynamic.cpp" />
+    <ClCompile Include="src\CreateQRCodeImage.cpp" />
     <ClCompile Include="src\CustomFriendsHelper.cpp" />
     <ClCompile Include="src\DatabaseUtilities.cpp" />
     <ClCompile Include="src\DeleteClipData.cpp" />
@@ -631,6 +632,73 @@
     <ClCompile Include="src\QPasteWnd.cpp" />
     <ClCompile Include="src\QPasteWndThread.cpp" />
     <ClCompile Include="src\QRCodeViewer.cpp" />
+    <ClCompile Include="src\QRCode\bitstream.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\mask.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\mmask.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\mqrspec.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\qrenc.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\qrencode.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\QRGenerator.cpp" />
+    <ClCompile Include="src\QRCode\qrinput.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\qrspec.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\rscode.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\rsecc.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\split.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\QuickPaste.cpp" />
     <ClCompile Include="src\QuickPasteKeyboard.cpp" />
     <ClCompile Include="src\RecieveFile.cpp" />
@@ -740,6 +808,7 @@
     <ClInclude Include="src\CP_Main.h" />
     <ClInclude Include="src\CP_Main_i.h" />
     <ClInclude Include="src\Crc32Dynamic.h" />
+    <ClInclude Include="src\CreateQRCodeImage.h" />
     <ClInclude Include="src\CustomFriendsHelper.h" />
     <ClInclude Include="src\DatabaseUtilities.h" />
     <ClInclude Include="src\DeleteClipData.h" />
@@ -818,6 +887,18 @@
     <ClInclude Include="src\QPasteWnd.h" />
     <ClInclude Include="src\QPasteWndThread.h" />
     <ClInclude Include="src\QRCodeViewer.h" />
+    <ClInclude Include="src\QRCode\bitstream.h" />
+    <ClInclude Include="src\QRCode\config.h" />
+    <ClInclude Include="src\QRCode\mask.h" />
+    <ClInclude Include="src\QRCode\mmask.h" />
+    <ClInclude Include="src\QRCode\mqrspec.h" />
+    <ClInclude Include="src\QRCode\qrencode.h" />
+    <ClInclude Include="src\QRCode\qrencode_inner.h" />
+    <ClInclude Include="src\QRCode\qrinput.h" />
+    <ClInclude Include="src\QRCode\qrspec.h" />
+    <ClInclude Include="src\QRCode\rscode.h" />
+    <ClInclude Include="src\QRCode\rsecc.h" />
+    <ClInclude Include="src\QRCode\split.h" />
     <ClInclude Include="src\QuickPaste.h" />
     <ClInclude Include="src\QuickPasteKeyboard.h" />
     <ClInclude Include="src\RecieveFile.h" />
@@ -1130,6 +1211,8 @@
   <ImportGroup Label="ExtensionTargets">
     <Import Project="packages\zlib-msvc-x86.1.2.11.8900\build\native\zlib-msvc-x86.targets" Condition="Exists('packages\zlib-msvc-x86.1.2.11.8900\build\native\zlib-msvc-x86.targets')" />
     <Import Project="packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets" Condition="Exists('packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets')" />
+    <Import Project="packages\libpng-msvc-x64.1.6.33.8807\build\native\libpng-msvc-x64.targets" Condition="Exists('packages\libpng-msvc-x64.1.6.33.8807\build\native\libpng-msvc-x64.targets')" />
+    <Import Project="packages\libpng-msvc-x86.1.6.33.8807\build\native\libpng-msvc-x86.targets" Condition="Exists('packages\libpng-msvc-x86.1.6.33.8807\build\native\libpng-msvc-x86.targets')" />
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
@@ -1142,5 +1225,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('packages\zlib-msvc-x86.1.2.11.8900\build\native\zlib-msvc-x86.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\zlib-msvc-x86.1.2.11.8900\build\native\zlib-msvc-x86.targets'))" />
     <Error Condition="!Exists('packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\zlib-msvc-x64.1.2.11.8900\build\native\zlib-msvc-x64.targets'))" />
+    <Error Condition="!Exists('packages\libpng-msvc-x64.1.6.33.8807\build\native\libpng-msvc-x64.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\libpng-msvc-x64.1.6.33.8807\build\native\libpng-msvc-x64.targets'))" />
+    <Error Condition="!Exists('packages\libpng-msvc-x86.1.6.33.8807\build\native\libpng-msvc-x86.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\libpng-msvc-x86.1.6.33.8807\build\native\libpng-msvc-x86.targets'))" />
   </Target>
 </Project>

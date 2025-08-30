@@ -26,6 +26,8 @@
 #include "SendMail.h"
 #include <algorithm>
 #include <signal.h>
+#include "CreateQRCodeImage.h"
+#include "QRCodeViewer.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -4327,22 +4329,45 @@ bool CQPasteWnd::DoExportToQRCode()
 			{
 				CString clipText = clip.GetUnicodeTextFormat();
 
-				CString clipTextUrlEncoded = InternetEncode(clipText);
 				CString qrCodeUrl = CGetSetOptions::GetQRCodeUrl();
-				CString url = StrF(_T("%s%s"), qrCodeUrl, clipTextUrlEncoded);
-
-				Log(StrF(_T("Opening qr code url: %s"), url));
-
-				if (!CGetSetOptions::m_bShowPersistent)
+				if (qrCodeUrl != "")
 				{
-					HideQPasteWindow(false, false);
-				}
-				else if (CGetSetOptions::GetAutoHide())
-				{
-					MinMaxWindow(FORCE_MIN);
-				}
+					CString clipTextUrlEncoded = InternetEncode(clipText);
 
-				CHyperLink::GotoURL(url, SW_SHOW);
+					CString url = StrF(_T("%s%s"), qrCodeUrl, clipTextUrlEncoded);
+
+					Log(StrF(_T("Opening qr code url: %s"), url));
+
+					if (!CGetSetOptions::m_bShowPersistent)
+					{
+						HideQPasteWindow(false, false);
+					}
+					else if (CGetSetOptions::GetAutoHide())
+					{
+						MinMaxWindow(FORCE_MIN);
+					}
+
+					CHyperLink::GotoURL(url, SW_SHOW);
+				}
+				else
+				{
+					CCreateQRCodeImage p;
+					int imageSize = 0;
+					unsigned char* bitmapData = p.CreateImage(clipText, imageSize);
+
+					if (bitmapData != NULL)
+					{
+						QRCodeViewer* viewer = new QRCodeViewer();
+
+						LOGFONT lf;
+						CGetSetOptions::GetFont(lf);
+
+						viewer->CreateEx(this, bitmapData, imageSize, clip.Description(), m_lstHeader.GetRowHeight(), lf);
+						viewer->ShowWindow(SW_SHOW);
+
+						ret = true;
+					}
+				}
 			}
 		}
 	}

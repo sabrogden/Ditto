@@ -54,3 +54,6 @@ CP_Main.aps
 /focusdll/Release64
 /ICU_Loader/x64
 /Release64
+*.db
+*.Settings
+Debug/portable

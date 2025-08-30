@@ -412,6 +412,45 @@
     <ClCompile Include="src\sqlite\sqlite3mc_amalgamation.c">
       <Filter>src\sqlite</Filter>
     </ClCompile>
+    <ClCompile Include="src\CreateQRCodeImage.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\bitstream.c">
+      <Filter>src\QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\mask.c">
+      <Filter>src\QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\mmask.c">
+      <Filter>src\QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\mqrspec.c">
+      <Filter>src\QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\qrenc.c">
+      <Filter>src\QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\qrencode.c">
+      <Filter>src\QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\QRGenerator.cpp">
+      <Filter>src\QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\qrinput.c">
+      <Filter>src\QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\qrspec.c">
+      <Filter>src\QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\rscode.c">
+      <Filter>src\QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\rsecc.c">
+      <Filter>src\QRCode</Filter>
+    </ClCompile>
+    <ClCompile Include="src\QRCode\split.c">
+      <Filter>src\QRCode</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\About.h">
@@ -853,6 +892,45 @@
       <Filter>src\sqlite</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="src\CreateQRCodeImage.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRCode\bitstream.h">
+      <Filter>src\QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRCode\config.h">
+      <Filter>src\QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRCode\mask.h">
+      <Filter>src\QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRCode\mmask.h">
+      <Filter>src\QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRCode\mqrspec.h">
+      <Filter>src\QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRCode\qrencode.h">
+      <Filter>src\QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRCode\qrencode_inner.h">
+      <Filter>src\QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRCode\qrinput.h">
+      <Filter>src\QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRCode\qrspec.h">
+      <Filter>src\QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRCode\rscode.h">
+      <Filter>src\QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRCode\rsecc.h">
+      <Filter>src\QRCode</Filter>
+    </ClInclude>
+    <ClInclude Include="src\QRCode\split.h">
+      <Filter>src\QRCode</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -1336,6 +1414,9 @@
     </Filter>
     <Filter Include="src\sqlite">
       <UniqueIdentifier>{848b5476-81f3-45cf-9d47-96fd4e4f0f2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\QRCode">
+      <UniqueIdentifier>{4651147a-f9c4-41fe-a076-10be8ad8cfbb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

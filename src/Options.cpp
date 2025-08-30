@@ -3124,14 +3124,7 @@ BOOL CGetSetOptions::SetQRCodeUrl(CString path)
 
 CString CGetSetOptions::GetQRCodeUrl()
 {
-	auto defaultUrl = _T("https://zxing.org/w/chart?cht=qr&chs=500x500&chl=");
-	auto url = GetProfileString("QRCodeUrl", defaultUrl);
-	if (url == _T(""))
-	{
-		url = defaultUrl;
-	}
-
-	return url;
+	return GetProfileString("QRCodeUrl", _T(""));
 }
 
 void CGetSetOptions::SetAppendRemoveComputerNameAndIPToDescription(BOOL val)
