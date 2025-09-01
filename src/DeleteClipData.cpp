@@ -8,7 +8,10 @@
 #include "Misc.h"
 #include "ProgressWnd.h"
 #include <algorithm>
-
+#include "../Shared/TextConvert.h"
+#include "../resource.h"
+#include "CopyProperties.h"
+#include "DimWnd.h"
 
 // CDeleteClipData dialog
 
@@ -16,6 +19,7 @@ IMPLEMENT_DYNAMIC(CDeleteClipData, CDialog)
 
 CDeleteClipData::CDeleteClipData(CWnd* pParent /*=NULL*/)
 	: CDialog(CDeleteClipData::IDD, pParent)
+	, m_pDescriptionWindow(NULL)
 	, m_clipTitle(_T(""))
 	, m_filterByClipTitle(FALSE)
 	, m_filterByCreatedDate(FALSE)
@@ -84,6 +88,7 @@ BEGIN_MESSAGE_MAP(CDeleteClipData, CDialog)
 	ON_BN_CLICKED(IDC_CHECK_DATA_FORMAT, &CDeleteClipData::OnBnClickedCheckDataFormat)
 	ON_NOTIFY(HDN_ITEMCLICK, 0, &CDeleteClipData::OnLvnColumnclickList2)
 
+	ON_WM_CONTEXTMENU()
 END_MESSAGE_MAP()
 
 BOOL CDeleteClipData::OnInitDialog()
@@ -184,38 +189,6 @@ void CDeleteClipData::LoadItems()
 	m_List.SetItemCountEx(row, 0);
 }
 
-//void CDeleteClipData::AddRow(CppSQLite3Query& q, int row)
-//{
-//	LVITEM lvi;
-//
-//	lvi.mask = LVIF_TEXT;
-//	lvi.iItem = row;	
-//
-//	lvi.iSubItem = 0;
-//	lvi.pszText = (LPTSTR) (LPCTSTR) (q.getStringField(_T("mText")));
-//	m_List.InsertItem(&lvi);
-//
-//	CTime created = q.getIntField(_T("lDate"));
-//	COleDateTime dtTime(created.GetTime());
-//	
-//	CTime pasted = q.getIntField(_T("lastPasteDate"));
-//	COleDateTime dtPastedTime(pasted.GetTime());
-//
-//	m_List.SetItemText(row, 1, dtTime.Format());
-//	m_List.SetItemText(row, 2, dtPastedTime.Format());
-//	m_List.SetItemText(row, 3, q.getStringField(_T("strClipBoardFormat")));
-//
-//	int dataLength = q.getIntField(_T("DataLength"));
-//
-//	const int MAX_FILE_SIZE_BUFFER = 255;
-//	TCHAR szFileSize[MAX_FILE_SIZE_BUFFER];
-//	StrFormatByteSize(dataLength, szFileSize, MAX_FILE_SIZE_BUFFER);
-//
-//	m_List.SetItemText(row, 4, szFileSize);
-//
-//	m_List.SetItemData(row, ));
-//}
-
 void CDeleteClipData::SetNotifyWnd(HWND hWnd)
 {
 	m_hWndParent = hWnd;
@@ -227,6 +200,9 @@ void CDeleteClipData::OnClose()
 	{
 		return;
 	}
+
+	m_pDescriptionWindow->CloseWindow();
+	m_pDescriptionWindow->DestroyWindow();
 	DestroyWindow();
 }
 
@@ -404,6 +380,7 @@ void CDeleteClipData::OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult)
 	POSITION pos = m_List.GetFirstSelectedItemPosition();
 	__int64 selectedDataSize = 0;
 	int selectedCount = 0;
+	bool setDescriptionWindowText = false;
 
 	if (pos != NULL)
 	{
@@ -415,6 +392,22 @@ void CDeleteClipData::OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult)
 			{
 				selectedDataSize += m_data[row].m_dataSize;
 				selectedCount++;
+
+				if (setDescriptionWindowText == false &&
+					m_pDescriptionWindow != NULL && 
+					m_pDescriptionWindow->IsWindowVisible())
+				{
+					SetDescriptionWindowText(row);
+
+					CRect r;
+					m_pDescriptionWindow->GetWindowRectEx(r);
+					CPoint pt;
+					pt = r.TopLeft();
+
+					m_pDescriptionWindow->Show(pt);
+
+					setDescriptionWindowText = true;
+				}
 			}
 		}
 	}
@@ -807,7 +800,303 @@ BOOL CDeleteClipData::PreTranslateMessage(MSG* pMsg)
 			FilterItems();
 			return TRUE;                // Do not process further
 		}
+		else if (pMsg->wParam == VK_ESCAPE)
+		{
+			if (m_pDescriptionWindow != NULL)
+			{
+				m_pDescriptionWindow->Hide();
+				return TRUE;
+			}
+		}
+		else if (pMsg->wParam == VK_F3)
+		{
+			CreateAndShowDescriptionWindow();
+		}
+		else if (pMsg->wParam == 'N')
+		{
+			int nSelItem = m_List.GetNextItem(-1, LVNI_SELECTED);
+			if (nSelItem != -1 && nSelItem < m_List.GetItemCount() - 1)
+			{
+				SelectRow(nSelItem + 1);
+				CreateAndShowDescriptionWindow();				
+			}
+			return TRUE;
+		}
+		else if (pMsg->wParam == 'P')
+		{
+			int nSelItem = m_List.GetNextItem(-1, LVNI_SELECTED);
+			if (nSelItem != -1 && nSelItem > 0)
+			{
+				SelectRow(nSelItem - 1);
+				CreateAndShowDescriptionWindow();
+			}
+			return TRUE;
+		}
 	}
 
 	return CDialog::PreTranslateMessage(pMsg);
+}
+
+void CDeleteClipData::SelectRow(int selectedRow)
+{
+	RemoveAllSelection();
+	SetCaret(selectedRow);
+	SetSelection(selectedRow);
+	ListView_SetSelectionMark(m_List.GetSafeHwnd(), selectedRow);
+	m_List.EnsureVisible(selectedRow, FALSE);
+}
+
+void CDeleteClipData::RemoveAllSelection()
+{
+	POSITION pos = m_List.GetFirstSelectedItemPosition();
+	while (pos)
+	{
+		SetSelection(m_List.GetNextSelectedItem(pos), FALSE);
+	}
+}
+
+BOOL CDeleteClipData::SetCaret(int nRow, BOOL bFocus)
+{
+	if (bFocus)
+		return m_List.SetItemState(nRow, LVIS_FOCUSED, LVIS_FOCUSED);
+	else
+		return m_List.SetItemState(nRow, ~LVIS_FOCUSED, LVIS_FOCUSED);
+}
+
+BOOL CDeleteClipData::SetSelection(int nRow, BOOL bSelect)
+{
+	if (bSelect)
+		return m_List.SetItemState(nRow, LVIS_SELECTED, LVIS_SELECTED);
+	else
+		return m_List.SetItemState(nRow, ~LVIS_SELECTED, LVIS_SELECTED);
+}
+
+void CDeleteClipData::CreateAndShowDescriptionWindow()
+{
+	if (m_pDescriptionWindow == NULL)
+	{
+		m_pDescriptionWindow = new CToolTipEx;
+		m_pDescriptionWindow->Create(this);
+		m_pDescriptionWindow->SetNotifyWnd(GetParent());
+	}
+
+	POSITION pos = m_List.GetFirstSelectedItemPosition();
+	if (pos != NULL)
+	{
+		INT_PTR row = m_List.GetNextSelectedItem(pos);
+		if (row >= 0 && row < (INT_PTR)m_data.size())
+		{
+			SetDescriptionWindowText(row);
+			m_pDescriptionWindow->SetToolTipText(m_data[row].m_Desc);
+
+			CRect rc;
+			this->GetWindowRect(rc);
+
+			CPoint pt;
+			pt = CPoint(rc.right, rc.top);
+
+			m_pDescriptionWindow->Show(pt);
+		}
+	}
+}
+
+void CDeleteClipData::SetDescriptionWindowText(INT_PTR row)
+{
+	m_pDescriptionWindow->SetGdiplusBitmap(NULL);
+	m_pDescriptionWindow->SetRTFText("");
+	m_pDescriptionWindow->SetToolTipText(_T(""));
+	m_pDescriptionWindow->SetFolderPath(_T(""));
+
+	CClip selectedClip;
+	selectedClip.LoadFormats(m_data[row].m_lID, false, false, m_data[row].m_DatalID);
+
+	IClipFormat* format = selectedClip.Clips()->FindFormatEx(CF_UNICODETEXT);
+	if (format != NULL)
+	{
+		m_pDescriptionWindow->SetToolTipText(format->GetAsCString());
+	}
+	
+	if (format == NULL)
+	{
+		format = selectedClip.Clips()->FindFormatEx(CF_TEXT);
+		if (format != NULL)
+		{
+			CString cs(format->GetAsCStringA());
+			m_pDescriptionWindow->SetToolTipText(cs);
+		}
+	}
+
+	if (format == NULL)
+	{
+		IClipFormat* format = selectedClip.Clips()->FindFormatEx(GetFormatID(CF_RTF));
+		if (format != NULL)
+		{
+			m_pDescriptionWindow->SetRTFText(format->GetAsCStringA());
+		}
+	}
+
+	if (format == NULL)
+	{
+		IClipFormat* format = selectedClip.Clips()->FindFormatEx(GetFormatID(_T("HTML Format")));
+		if (format != NULL)
+		{
+			CString html = CTextConvert::Utf8ToUnicode(format->GetAsCStringA());
+			m_pDescriptionWindow->SetHtmlText(html);
+		}
+	}
+
+	if (format == NULL)
+	{
+		IClipFormat* format = selectedClip.Clips()->FindFormatEx(CF_DIB);
+		if (format != NULL)
+		{
+			m_pDescriptionWindow->SetGdiplusBitmap(format->CreateGdiplusBitmap());
+		}
+	}
+
+	if (format == NULL)
+	{
+		IClipFormat* format = selectedClip.Clips()->FindFormatEx(theApp.m_PNG_Format);
+		if (format != NULL)
+		{
+			m_pDescriptionWindow->SetGdiplusBitmap(format->CreateGdiplusBitmap());
+		}
+	}
+}
+
+void CDeleteClipData::OnContextMenu(CWnd* pWnd, CPoint point)
+{
+	//ClientToScreen(&point); // Convert client coordinates to screen coordinates
+
+	CMenu menu;
+	menu.LoadMenu(IDR_MENU_DELETE_CLIP_DATA); // Load your context menu from resource
+
+	CMenu* pContextMenu = menu.GetSubMenu(0); // Get the first submenu
+
+	if (pContextMenu != NULL)
+	{
+		int nID = pContextMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD, point.x, point.y, this);
+
+		// Handle the selected menu item
+		switch (nID)
+		{
+		case ID__VIEWFULLDESCRIPTION:
+			CreateAndShowDescriptionWindow();
+			break;
+		case ID__SAVETOFILE:
+		{
+			int row = m_List.GetNextItem(-1, LVNI_SELECTED);
+			if (row >= 0 && row < (INT_PTR)m_data.size())
+			{
+				SaveClipDataItemToFile(m_data[row]);
+			}
+		}
+		break;
+			// ...
+		case ID__PROPERTIES:
+		{
+			int row = m_List.GetNextItem(-1, LVNI_SELECTED);
+			if (row >= 0 && row < (INT_PTR)m_data.size())
+			{
+				CDimWnd dimmer(this);
+
+				CCopyProperties props(m_data[row].m_lID, this);
+				INT_PTR doModalRet = props.DoModal();
+			}
+		}
+		break;
+		}
+	}
+}
+
+void CDeleteClipData::SaveClipDataItemToFile(CDeleteData item)
+{
+	bool ret = false;
+
+	CString extension = _T("");
+	CString filter = _T("");
+
+	if (item.m_clipboardFormat == _T("PNG"))
+	{
+		extension = _T("png");
+		filter = _T("PNG Files (*.png)\0*.png\0\0");
+	}
+	else if (item.m_clipboardFormat == _T("CF_DIB"))
+	{
+		extension = _T(".bmp");
+		filter = _T("Bitmap Files (*.bmp)\0*.bmp\0\0");
+	}		
+	else if (item.m_clipboardFormat == _T("CF_UNICODETEXT") || item.m_clipboardFormat == _T("CF_TEXT"))
+	{
+		extension = _T(".txt");
+		filter = _T("Text Files (*.txt)\0*.txt\0\0");
+	}
+	else if (item.m_clipboardFormat == _T("Rich Text Format"))
+	{
+		extension = _T(".rtf");
+		filter = _T("Rich Text Files (*.rtf)\0*.rtf\0\0");
+	}
+	else
+	{
+		return;
+	}
+
+	OPENFILENAME ofn;
+	TCHAR szFile[400];
+	TCHAR szDir[400];
+
+	memset(&szFile, 0, sizeof(szFile));
+	memset(szDir, 0, sizeof(szDir));
+	memset(&ofn, 0, sizeof(ofn));
+
+	CString csInitialDir = CGetSetOptions::GetLastImportDir();
+	STRCPY(szDir, csInitialDir);
+
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.hwndOwner = m_hWnd;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	CString x = _T("Exported Ditto Clips (.txt)\0*.txt\0\0");
+	ofn.lpstrFilter = filter;
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = szDir;
+	ofn.lpstrDefExt = extension;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR;
+
+	if (GetSaveFileName(&ofn))
+	{
+		using namespace nsPath;
+		CString startingFilePath = ofn.lpstrFile;
+		CPath path(ofn.lpstrFile);
+		CString csPath = path.GetPath();
+		CString csExt = path.GetExtension();
+		path.RemoveExtension();
+		CString csFileName = path.GetName();
+
+		CClip selectedClip;
+		selectedClip.LoadFormats(item.m_lID, false, false, item.m_DatalID);
+
+		if (item.m_clipboardFormat == _T("PNG"))
+		{
+			selectedClip.WriteImageToFile(ofn.lpstrFile);
+		}
+		else if (item.m_clipboardFormat == _T("CF_DIB"))
+		{
+			selectedClip.WriteImageToFile(ofn.lpstrFile);
+		}
+		else if (item.m_clipboardFormat == _T("CF_UNICODETEXT"))
+		{
+			selectedClip.WriteTextToFile(ofn.lpstrFile, TRUE, FALSE, FALSE);
+		}
+		else if (item.m_clipboardFormat == _T("CF_TEXT"))
+		{
+			selectedClip.WriteTextToFile(ofn.lpstrFile, FALSE, TRUE, FALSE);
+		}
+		else if (item.m_clipboardFormat == _T("Rich Text Format"))
+		{
+			selectedClip.WriteTextToFile(ofn.lpstrFile, FALSE, FALSE, TRUE);
+		}
+	}
 }

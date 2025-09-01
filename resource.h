@@ -240,6 +240,9 @@
 #define IDR_MENU_NO_DB                  387
 #define IDI_ICON3                       388
 #define IDI_MAINFRAME_NO_DB             388
+#define IDR_MENU2                       390
+#define IDR_MENU_DELETE_CLIP_DATA       390
+#define IDR_MENU3                       391
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -835,14 +838,17 @@
 #define ID_SPECIALPASTE_MULTIPLEIMAGES  32977
 #define ID_SPECIALPASTE_MULTIPLEIMAGESVERTICALLY 32978
 #define ID_SPECIALPASTE_ASCIITEXTONLY   32979
+#define ID__VIEWFULLDESCRIPTION         32980
+#define ID__SAVETOFILE                  32981
+#define ID__PROPERTIES                  32982
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        390
-#define _APS_NEXT_COMMAND_VALUE         32980
+#define _APS_NEXT_RESOURCE_VALUE        392
+#define _APS_NEXT_COMMAND_VALUE         32983
 #define _APS_NEXT_CONTROL_VALUE         2173
 #define _APS_NEXT_SYMED_VALUE           104
 #endif

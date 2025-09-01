@@ -469,6 +469,16 @@ BEGIN
     END
 END
 
+IDR_MENU_DELETE_CLIP_DATA MENU
+BEGIN
+    POPUP ""
+    BEGIN
+        MENUITEM "View Full Description\tF3",   ID__VIEWFULLDESCRIPTION
+        MENUITEM "Save To File",                ID__SAVETOFILE
+        MENUITEM "Properties\tAlt + Enter",     ID__PROPERTIES
+    END
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1057,7 +1067,7 @@ BEGIN
     CONTROL         "ChaiScript (http://chaiscript.com/)",IDC_MFCLINK_CHAISCRIPT,
                     "MfcLink",WS_TABSTOP,142,54,180,18
     CONTROL         "Examples",IDC_MFCLINK2_EXAMPLES,"MfcLink",WS_TABSTOP,341,54,60,18
-    CONTROL         "",IDC_RICHEDIT21,"RichEdit20W",ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | WS_BORDER | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP,100,72,326,99
+    CONTROL         "",IDC_RICHEDIT21,"RichEdit20W",WS_BORDER | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP | 0x10c4,100,72,326,99
     EDITTEXT        IDC_EDIT_ACTIVE_APP,371,196,55,14,ES_AUTOHSCROLL
     EDITTEXT        IDC_EDIT_ACTIVE_APP_TITLE,371,213,55,14,ES_AUTOHSCROLL
 END

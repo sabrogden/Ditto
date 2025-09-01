@@ -59,6 +59,8 @@ protected:
 	bool m_applyingDelete;
 	bool m_cancelDelete;
 
+	CToolTipEx* m_pDescriptionWindow;
+
 
 	void InitListCtrlCols();
 	virtual BOOL OnInitDialog();
@@ -72,6 +74,13 @@ protected:
 	void FilterItems();
 	bool MatchesFilter(CDeleteData *pdata);
 	void ApplyDelete();
+	void RemoveAllSelection();
+	BOOL SetCaret(int nRow, BOOL bFocus = 1);
+	BOOL SetSelection(int nRow, BOOL bSelect = 1);
+	void SelectRow(int selectedRow);
+	void CreateAndShowDescriptionWindow();
+	void SetDescriptionWindowText(INT_PTR row);
+	void SaveClipDataItemToFile(CDeleteData item);
 
 public:
 	CString m_clipTitle;
@@ -105,5 +114,6 @@ public:
 	afx_msg void OnBnClickedCheckLastUseDate();
 	afx_msg void OnBnClickedCheckDataFormat();
 	afx_msg void OnLvnColumnclickList2(NMHDR *pNMHDR, LRESULT *pResult);
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	virtual BOOL PreTranslateMessage(MSG* pMsg);	
+	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 };
