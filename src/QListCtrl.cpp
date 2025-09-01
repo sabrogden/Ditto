@@ -1670,7 +1670,7 @@ bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 		}
 		CATCH_SQLITE_EXCEPTION
 
-			Clip.m_cfType = CF_UNICODETEXT;
+		Clip.m_cfType = CF_UNICODETEXT;
 		if (GetClipData(nItem, Clip) && Clip.m_hgData)
 		{
 			m_pToolTip->SetToolTipText(Clip.GetAsCString());

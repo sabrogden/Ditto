@@ -50,7 +50,7 @@ protected:
 		
 
 	CDialogResizer m_Resize;
-	CListCtrl	m_List;
+	CListCtrl	m_clipList;
 	HWND m_hWndParent;
 	CShowTaskBarIcon m_showTaskbar;
 	std::vector<CDeleteData> m_data;
@@ -116,4 +116,5 @@ public:
 	afx_msg void OnLvnColumnclickList2(NMHDR *pNMHDR, LRESULT *pResult);
 	virtual BOOL PreTranslateMessage(MSG* pMsg);	
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+	void ShowClipPropertiesWindow();
 };
