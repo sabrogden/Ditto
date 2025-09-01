@@ -789,9 +789,6 @@
     <ClInclude Include="src\RegExFilterHelper.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Resource.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="src\RichEditCtrlEx.h">
       <Filter>src</Filter>
     </ClInclude>

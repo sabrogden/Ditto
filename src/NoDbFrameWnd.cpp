@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "NoDbFrameWnd.h"
-#include "resource.h"
+#include "../resource.h"
 #include "OptionsSheet.h"
 #include "DatabaseUtilities.h"
 #include "Options.h"

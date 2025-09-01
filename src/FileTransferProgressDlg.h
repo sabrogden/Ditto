@@ -6,7 +6,7 @@
 #endif // _MSC_VER > 1000
 // FileTransferProgressDlg.h : header file
 //
-#include "Resource.h"
+#include "../resource.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CFileTransferProgressDlg dialog

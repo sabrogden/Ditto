@@ -904,7 +904,6 @@
     <ClInclude Include="src\RecieveFile.h" />
     <ClInclude Include="src\RecieveSocket.h" />
     <ClInclude Include="src\RegExFilterHelper.h" />
-    <ClInclude Include="src\Resource.h" />
     <ClInclude Include="src\RichEditCtrlEx.h" />
     <ClInclude Include="src\RichTextAggregator.h" />
     <ClInclude Include="src\SaveAnimation.h" />

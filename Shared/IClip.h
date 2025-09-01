@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DittoDefines.h"
+#include <gdiplus.h>
 
 //Contains the actual data of a clip format
 // Type is the type of clipboard format
@@ -17,6 +18,7 @@ public:
 	virtual void Free() = 0;
 	virtual CStringA GetAsCStringA() = 0;
 	virtual CString GetAsCString() = 0;
+	virtual Gdiplus::Bitmap* CreateGdiplusBitmap() = 0;
 };
 
 //Contains a list of IClipFormats

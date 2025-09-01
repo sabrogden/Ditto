@@ -7,7 +7,7 @@
 #ifndef __FORMATTEDTEXTDRAW_H_
 #define __FORMATTEDTEXTDRAW_H_
 
-#include "resource.h"       // main symbols
+#include "../resource.h"       // main symbols
 
 // be sure to link this project with riched20.lib
 #include <richedit.h>

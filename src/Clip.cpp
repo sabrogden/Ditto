@@ -1591,7 +1591,7 @@ HGLOBAL CClip::LoadFormat(int id, UINT cfType)
 	return hGlobal;
 }
 
-bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT, bool includeRichTextForTextOnly)
+bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT, bool includeRichTextForTextOnly, int dataId)
 {
 	DWORD startTick = GetTickCount();
 	CClipFormat cf;
@@ -1621,9 +1621,17 @@ bool CClip::LoadFormats(int id, bool bOnlyLoad_CF_TEXT, bool includeRichTextForT
 			}
 		}
 
+		CString dataIdFilter = _T("");
+		if (dataId >= 0)
+		{
+			dataIdFilter.Format(_T("AND lID = %d "), dataId);
+
+
+		}
+
 		csSQL.Format(
 			_T("SELECT lID, lParentID, strClipBoardFormat, ooData FROM Data ")
-			_T("WHERE %s lParentID = %d ORDER BY Data.lID desc"), textFilter, id);
+			_T("WHERE %s lParentID = %d %s ORDER BY Data.lID desc"), textFilter, id, dataIdFilter);
 
 		CppSQLite3Query q = theApp.m_db.execQuery(csSQL);
 
