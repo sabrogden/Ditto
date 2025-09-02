@@ -135,7 +135,7 @@ void COptionsStats::OnResetCounts()
 
 void COptionsStats::OnRemoveAll() 
 {
-	if(MessageBox(theApp.m_Language.GetString("Remove_All", "This will remove all Copy Entries!\n\nContinue?"), _T("Warning"), MB_YESNO) == IDYES)
+	if(MessageBox(theApp.m_Language.GetString("Remove_All", "This will remove all Copy Entries!\n\nContinue?"), _T("Warning"), MB_YESNOCANCEL) == IDYES)
 	{
 		if( DeleteAllIDs() )
 		{
