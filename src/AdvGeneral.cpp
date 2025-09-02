@@ -976,7 +976,7 @@ void CAdvGeneral::OnSize(UINT nType, int cx, int cy)
 void CAdvGeneral::OnBnClickedBtCompactAndRepair()
 {
 	auto msg = theApp.m_Language.GetString("CompactRepairWarning", "Warning this can take quite a long time and require up to double the hard drive space as your current database size, Continue?");
-	int ret = MessageBox(msg, _T("Ditto"), MB_YESNO);
+	int ret = MessageBox(msg, _T("Ditto"), MB_YESNOCANCEL);
 
 	if (ret == IDYES)
 	{

@@ -203,6 +203,7 @@ BEGIN
         MENUITEM "Show Startup Message",        ID_FIRST_SHOWSTARTUPMESSAGE
         MENUITEM "Global Hot Keys",             ID_FIRST_GLOBALHOTKEYS
         MENUITEM "Delete Clip Data",            ID_FIRST_DELETECLIPDATA
+        MENUITEM SEPARATOR
         MENUITEM "Delete All Non Used Clips",   ID_FIRST_DELETEALLNONUSEDCLIPS
         MENUITEM SEPARATOR
         MENUITEM "Backup Database",             ID_FIRST_BACKUPDATABASE
@@ -443,6 +444,7 @@ BEGIN
         MENUITEM "Show Startup Message",        ID_FIRST_SHOWSTARTUPMESSAGE
         MENUITEM "Global Hot Keys",             ID_MENU_GLOBALHOTKEYS32933
         MENUITEM "Delete Clip Data",            ID_MENU_DELETECLIPDATA32934
+        MENUITEM SEPARATOR
         MENUITEM "Delete All Non Used Clips",   ID_MENU_DELETEALLNONUSEDCLIPS
         MENUITEM SEPARATOR
         MENUITEM "Backup Database",             ID_MENU_BACKUPDATABASE

@@ -322,7 +322,7 @@ void CCopyProperties::OnOK()
 
 				if(CheckGlobalHotKey(clip) == FALSE)
 				{
-					if(MessageBox(_T("Error registering global hot key\n\nContinue?"), _T(""), MB_YESNO|MB_ICONWARNING) == IDNO)
+					if(MessageBox(_T("Error registering global hot key\n\nContinue?"), _T(""), MB_YESNOCANCEL |MB_ICONWARNING) != IDYES)
 					{
 						return;
 					}
@@ -330,7 +330,7 @@ void CCopyProperties::OnOK()
 
 				if(CheckMoveToGroupGlobalHotKey(clip) == FALSE)
 				{
-					if(MessageBox(_T("Error registering global move to group hot key\n\nContinue?"), _T(""), MB_YESNO|MB_ICONWARNING) == IDNO)
+					if(MessageBox(_T("Error registering global move to group hot key\n\nContinue?"), _T(""), MB_YESNOCANCEL |MB_ICONWARNING) != IDYES)
 					{
 						return;
 					}
