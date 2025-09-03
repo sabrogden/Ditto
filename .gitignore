@@ -57,3 +57,6 @@ CP_Main.aps
 *.db
 *.Settings
 Debug/portable
+*.exp
+*.map
+*.tlh
