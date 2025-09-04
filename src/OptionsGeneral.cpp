@@ -268,7 +268,7 @@ BOOL COptionsGeneral::OnApply()
 			CString cs;
 			cs.Format(_T("The database %s does not exist.\n\nCreate a new database?"), resolvedPath);
 
-			if(MessageBox(cs, _T("Ditto"), MB_YESNOCANCEL) == IDYES)
+			if(MessageBox(cs, _T("Ditto"), MB_OKCANCEL) == IDOK)
 			{
 				// -- create a new one
 				if(CreateDB(resolvedPath))
