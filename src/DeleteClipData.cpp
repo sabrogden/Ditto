@@ -572,7 +572,7 @@ void CDeleteClipData::ApplyDelete()
 	if (m_applyingDelete)
 		return;
 
-	if (MessageBox(_T("Delete selected items?  This cannot be undone!"), _T(""), MB_YESNOCANCEL | MB_ICONWARNING) == IDYES)
+	if (MessageBox(_T("Delete selected items?  This cannot be undone!"), _T(""), MB_OKCANCEL | MB_ICONWARNING) == IDOK)
 	{
 		m_clipList.EnableWindow(FALSE);
 		m_applyingDelete = true;
