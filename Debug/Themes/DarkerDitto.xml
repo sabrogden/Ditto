@@ -33,8 +33,8 @@
 	<CaptionSize></CaptionSize>
 	<CaptionFontSize></CaptionFontSize>
 
-	<DescriptionWindowBG>RGB(51,51,51)</DescriptionWindowBG>
-	<DescriptionWindowText>RGB(238,238,238)</DescriptionWindowText>
+	<DescriptionWindowBG>RGB(100,100,100)</DescriptionWindowBG>
+	<DescriptionWindowText>RGB(200,200,200)</DescriptionWindowText>
 
 	<MainWindowBG>RGB(0,0,0)</MainWindowBG>
 
