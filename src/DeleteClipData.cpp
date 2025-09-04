@@ -201,10 +201,13 @@ void CDeleteClipData::OnClose()
 		return;
 	}
 
-	m_pDescriptionWindow->CloseWindow();
-	m_pDescriptionWindow->DestroyWindow();
-	delete m_pDescriptionWindow;
-	m_pDescriptionWindow = nullptr;
+	if (m_pDescriptionWindow != nullptr)
+	{
+		m_pDescriptionWindow->CloseWindow();
+		m_pDescriptionWindow->DestroyWindow();
+		delete m_pDescriptionWindow;
+		m_pDescriptionWindow = nullptr;
+	}
 	DestroyWindow();
 }
 
