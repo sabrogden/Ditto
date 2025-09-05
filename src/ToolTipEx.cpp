@@ -1182,7 +1182,7 @@ void CToolTipEx::OnOptions()
 
 		GetCursorPos(&pp);
 
-		//theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
+		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 
 		if(CGetSetOptions::GetRememberDescPos())
 			cmSubMenu->CheckMenuItem(ID_FIRST_REMEMBERWINDOWPOSITION, MF_CHECKED);
