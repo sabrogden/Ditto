@@ -81,7 +81,7 @@ BEGIN_MESSAGE_MAP(CDeleteClipData, CDialog)
 	ON_NOTIFY(LVN_GETDISPINFO, IDC_LIST2, &CDeleteClipData::OnLvnGetdispinfoList2)
 	ON_BN_CLICKED(IDC_CHECK_CLIP_TITLE, &CDeleteClipData::OnBnClickedCheckClipTitle)
 	ON_BN_CLICKED(IDC_BUTTON_APPLY, &CDeleteClipData::OnBnClickedButtonApply)
-	ON_BN_CLICKED(IDCANCEL, &CDeleteClipData::OnBnClickedCancel)
+	ON_BN_CLICKED(IDCLOSE, &CDeleteClipData::OnBnClickedClose)
 	ON_WM_TIMER()
 	ON_BN_CLICKED(IDC_CHECK_CREATE_DATE, &CDeleteClipData::OnBnClickedCheckCreateDate)
 	ON_BN_CLICKED(IDC_CHECK_LAST_USE_DATE, &CDeleteClipData::OnBnClickedCheckLastUseDate)
@@ -201,6 +201,12 @@ void CDeleteClipData::OnClose()
 		return;
 	}
 
+	CloseDescriptionWindow();
+	DestroyWindow();
+}
+
+void CDeleteClipData::CloseDescriptionWindow()
+{
 	if (m_pDescriptionWindow != nullptr)
 	{
 		m_pDescriptionWindow->CloseWindow();
@@ -208,7 +214,6 @@ void CDeleteClipData::OnClose()
 		delete m_pDescriptionWindow;
 		m_pDescriptionWindow = nullptr;
 	}
-	DestroyWindow();
 }
 
 void CDeleteClipData::OnSize(UINT nType, int cx, int cy)
@@ -679,16 +684,16 @@ void CDeleteClipData::ApplyDelete()
 	}
 }
 
-void CDeleteClipData::OnBnClickedCancel()
+void CDeleteClipData::OnBnClickedClose()
 {
 	if (m_applyingDelete)
 	{
 		m_cancelDelete = true;
 		return;
 	}
+	CloseDescriptionWindow();
 	DestroyWindow();
 }
-
 
 void CDeleteClipData::OnTimer(UINT_PTR nIDEvent)
 {
@@ -1191,4 +1196,8 @@ void CDeleteClipData::SaveClipDataItemToFile(CDeleteData item)
 			selectedClip.WriteTextToFile(ofn.lpstrFile, FALSE, FALSE, TRUE);
 		}
 	}
+}
+void CDeleteClipData::OnCancel()
+{
+	//don't close on escape key
 }

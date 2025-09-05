@@ -68,6 +68,7 @@ protected:
 	void SetDbSize();
 
 	afx_msg void OnClose();
+	void CloseDescriptionWindow();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnNcDestroy();
 	void LoadItems();
@@ -108,7 +109,7 @@ public:
 	CString m_toDeleteSize;
 	afx_msg void OnBnClickedCheckClipTitle();
 	afx_msg void OnBnClickedButtonApply();
-	afx_msg void OnBnClickedCancel();
+	afx_msg void OnBnClickedClose();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnBnClickedCheckCreateDate();
 	afx_msg void OnBnClickedCheckLastUseDate();
@@ -117,4 +118,5 @@ public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);	
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	void ShowClipPropertiesWindow();
+	virtual void OnCancel();
 };
