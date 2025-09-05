@@ -99,7 +99,7 @@ BOOL CDeleteClipData::OnInitDialog()
 
 	m_Resize.SetParent(m_hWnd);
 	m_Resize.AddControl(IDC_LIST2, DR_SizeHeight | DR_SizeWidth);
-	m_Resize.AddControl(IDCANCEL, DR_MoveTop | DR_MoveLeft);
+	m_Resize.AddControl(IDCLOSE, DR_MoveTop | DR_MoveLeft);
 	m_Resize.AddControl(IDC_BUTTON_APPLY, DR_MoveTop | DR_MoveLeft);
 	m_Resize.AddControl(IDC_STATIC_TO_DELETE_TEXT, DR_MoveTop);
 	m_Resize.AddControl(IDC_STATIC_TO_DELETE_SIZE, DR_MoveTop);
