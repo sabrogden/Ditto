@@ -437,6 +437,8 @@ void CDeleteClipData::OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult)
 	int selectedCount = 0;
 	bool setDescriptionWindowText = false;
 
+	int nCaretItem = m_clipList.GetNextItem(-1, LVNI_FOCUSED);
+
 	if (pos != nullptr)
 	{
 		while (pos)
@@ -448,7 +450,8 @@ void CDeleteClipData::OnLvnItemchangedList2(NMHDR *pNMHDR, LRESULT *pResult)
 				selectedDataSize += m_data[row].m_dataSize;
 				selectedCount++;
 
-				if (setDescriptionWindowText == false &&
+				if (row == nCaretItem &&
+					setDescriptionWindowText == false &&
 					m_pDescriptionWindow != nullptr && 
 					m_pDescriptionWindow->IsWindowVisible())
 				{
@@ -934,6 +937,7 @@ void CDeleteClipData::SetDescriptionWindowText(INT_PTR row)
 {
 	m_pDescriptionWindow->SetGdiplusBitmap(NULL);
 	m_pDescriptionWindow->SetRTFText("");
+	m_pDescriptionWindow->SetHtmlText("");
 	m_pDescriptionWindow->SetToolTipText(_T(""));
 	m_pDescriptionWindow->SetFolderPath(_T(""));
 
