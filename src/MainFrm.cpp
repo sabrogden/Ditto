@@ -976,6 +976,8 @@ bool CMainFrame::CloseAllOpenDialogs()
     GetWindowThreadProcessId(this->m_hWnd, &dwordProcessId);
     ASSERT(dwordProcessId);
 
+	CArray<CWnd*, CWnd*> openDialogs;
+
     CWnd *pTempWnd = GetDesktopWindow()->GetWindow(GW_CHILD);
     while((pTempWnd = pTempWnd->GetWindow(GW_HWNDNEXT)) != NULL)
     {
@@ -993,11 +995,16 @@ bool CMainFrame::CloseAllOpenDialogs()
             // #32770 is class name for dialogs so don't process the message if it is a dialog
             if(STRCMP(szTemp, _T("#32770")) == 0)
             {
-                pTempWnd->SendMessage(WM_CLOSE, 0, 0);
+				openDialogs.Add(pTempWnd);                
                 bRet = true;
             }
         }
     }
+
+	for (int i = 0; i < openDialogs.GetCount(); i++)
+	{
+		openDialogs[i]->PostMessage(WM_CLOSE, 0, 0);
+	}
 
     MSG msg;
     while(PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
