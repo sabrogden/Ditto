@@ -119,4 +119,5 @@ public:
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	void ShowClipPropertiesWindow();
 	virtual void OnCancel();
+	afx_msg void OnBnClickedBtCompactAndRepair();
 };
