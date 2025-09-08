@@ -1239,6 +1239,7 @@ void CDeleteClipData::OnBnClickedBtCompactAndRepair()
 
 			theApp.m_db.execDML(_T("PRAGMA auto_vacuum = 1"));
 			theApp.m_db.execQuery(_T("VACUUM"));
+			SetDbSize();
 		}
 		CATCH_SQLITE_EXCEPTION
 	}
