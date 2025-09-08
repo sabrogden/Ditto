@@ -89,6 +89,7 @@ BEGIN_MESSAGE_MAP(CDeleteClipData, CDialog)
 	ON_NOTIFY(HDN_ITEMCLICK, 0, &CDeleteClipData::OnLvnColumnclickList2)
 
 	ON_WM_CONTEXTMENU()
+	ON_BN_CLICKED(IDC_BT_COMPACT_AND_REPAIR, &CDeleteClipData::OnBnClickedBtCompactAndRepair)
 END_MESSAGE_MAP()
 
 BOOL CDeleteClipData::OnInitDialog()
@@ -109,6 +110,7 @@ BOOL CDeleteClipData::OnInitDialog()
 	m_Resize.AddControl(IDC_STATIC_DB_SIZE_TEXT, DR_MoveTop);
 	m_Resize.AddControl(IDC_BUTTON_SEARCH, DR_MoveLeft);
 	m_Resize.AddControl(IDC_STATIC_GROUP_SEARCH, DR_SizeWidth);
+	m_Resize.AddControl(IDC_BT_COMPACT_AND_REPAIR, DR_MoveTop | DR_MoveLeft);
 
 	InitListCtrlCols();
 
@@ -135,12 +137,13 @@ void CDeleteClipData::InitListCtrlCols()
 {
 	m_clipList.SetExtendedStyle(LVS_EX_FULLROWSELECT);
 
-	m_clipList.InsertColumn(0, theApp.m_Language.GetDeleteClipDataString("Title", "Title"), LVCFMT_LEFT, 350);
-	m_clipList.InsertColumn(1, theApp.m_Language.GetDeleteClipDataString("QuickPasteText", "Quick Paste Text"), LVCFMT_LEFT, 200);
-	m_clipList.InsertColumn(2, theApp.m_Language.GetDeleteClipDataString("Created", "Created"), LVCFMT_LEFT, 150);
-	m_clipList.InsertColumn(3, theApp.m_Language.GetDeleteClipDataString("LastUsed", "Last Used"), LVCFMT_LEFT, 150);
-	m_clipList.InsertColumn(4, theApp.m_Language.GetDeleteClipDataString("Format", "Format"), LVCFMT_LEFT, 150);
-	m_clipList.InsertColumn(5, theApp.m_Language.GetDeleteClipDataString("DataSize", "Data Size"), LVCFMT_LEFT, 100);
+	m_clipList.InsertColumn(0, theApp.m_Language.GetDeleteClipDataString("ID", "ID"), LVCFMT_LEFT, 50);
+	m_clipList.InsertColumn(1, theApp.m_Language.GetDeleteClipDataString("Title", "Title"), LVCFMT_LEFT, 350);
+	m_clipList.InsertColumn(2, theApp.m_Language.GetDeleteClipDataString("QuickPasteText", "Quick Paste Text"), LVCFMT_LEFT, 200);
+	m_clipList.InsertColumn(3, theApp.m_Language.GetDeleteClipDataString("Created", "Created"), LVCFMT_LEFT, 150);
+	m_clipList.InsertColumn(4, theApp.m_Language.GetDeleteClipDataString("LastUsed", "Last Used"), LVCFMT_LEFT, 150);
+	m_clipList.InsertColumn(5, theApp.m_Language.GetDeleteClipDataString("Format", "Format"), LVCFMT_LEFT, 150);
+	m_clipList.InsertColumn(6, theApp.m_Language.GetDeleteClipDataString("DataSize", "Data Size"), LVCFMT_LEFT, 100);
 }
 
 void CDeleteClipData::LoadItems()
@@ -515,37 +518,43 @@ void CDeleteClipData::OnLvnGetdispinfoList2(NMHDR *pNMHDR, LRESULT *pResult)
 			{
 				case 0:
 				{
+					lstrcpyn(pDispInfo->item.pszText, StrF(_T("%d"), m_data[pDispInfo->item.iItem].m_lID), pDispInfo->item.cchTextMax);
+					pDispInfo->item.pszText[pDispInfo->item.cchTextMax - 1] = '\0';
+				}
+				break;
+				case 1:
+				{
 					  lstrcpyn(pDispInfo->item.pszText, m_data[pDispInfo->item.iItem].m_Desc, pDispInfo->item.cchTextMax);
 					  pDispInfo->item.pszText[pDispInfo->item.cchTextMax - 1] = '\0';
 				}
 				break;
-				case 1:
+				case 2:
 				{
 					lstrcpyn(pDispInfo->item.pszText, m_data[pDispInfo->item.iItem].m_quickPasteText, pDispInfo->item.cchTextMax);
 					pDispInfo->item.pszText[pDispInfo->item.cchTextMax - 1] = '\0';
 				}
 				break;
-				case 2:
+				case 3:
 				{
 					  COleDateTime dtTime(m_data[pDispInfo->item.iItem].m_createdDateTime.GetTime());
 					  lstrcpyn(pDispInfo->item.pszText, dtTime.Format(), pDispInfo->item.cchTextMax);
 					  pDispInfo->item.pszText[pDispInfo->item.cchTextMax - 1] = '\0';
 				}
 				break;
-				case 3:
+				case 4:
 				{	
 					  COleDateTime dtTime(m_data[pDispInfo->item.iItem].m_lastUsedDateTime.GetTime());
 					  lstrcpyn(pDispInfo->item.pszText, dtTime.Format(), pDispInfo->item.cchTextMax);
 					  pDispInfo->item.pszText[pDispInfo->item.cchTextMax - 1] = '\0';
 				}
 				break;
-				case 4:
+				case 5:
 				{
 					  lstrcpyn(pDispInfo->item.pszText, m_data[pDispInfo->item.iItem].m_clipboardFormat, pDispInfo->item.cchTextMax);
 					  pDispInfo->item.pszText[pDispInfo->item.cchTextMax - 1] = '\0';
 				}
 				break;
-				case 5:
+				case 6:
 				{
 					  const int MAX_FILE_SIZE_BUFFER = 255;
 					  TCHAR szFileSize[MAX_FILE_SIZE_BUFFER];
@@ -590,8 +599,6 @@ void CDeleteClipData::ApplyDelete()
 
 		try
 		{
-			theApp.m_db.execDML(_T("PRAGMA auto_vacuum = 2"));
-
 			POSITION pos = m_clipList.GetFirstSelectedItemPosition();
 			std::vector<int> rowsToDelete;
 
@@ -606,7 +613,7 @@ void CDeleteClipData::ApplyDelete()
 
 			CProgressWnd progress;
 			progress.Create(this, _T("Deleting clip items"), TRUE);
-			progress.SetRange(0, (int)rowsToDelete.size() + 4);
+			progress.SetRange(0, (int)rowsToDelete.size() + 2);
 			progress.SetText(_T("Deleting selected items"));
 			progress.SetStep(1);
 
@@ -643,47 +650,29 @@ void CDeleteClipData::ApplyDelete()
 				}
 				CATCH_SQLITE_EXCEPTION
 			}
-
-			progress.StepIt();
-			progress.SetText(_T("Shrinking database"));
-
-			try
-			{
-				for(int i = 0; i < 100; i++)
-				{
-					int toDeleteCount = theApp.m_db.execScalar(_T("SELECT COUNT(clipID) FROM MainDeletes"));
-					if(toDeleteCount <= 0)
-						break;
-
-					RemoveOldEntries(false);
-				}
-			}
-			CATCH_SQLITE_EXCEPTION
-
-			theApp.m_db.execDML(_T("PRAGMA auto_vacuum = 1"));
-			theApp.m_db.execQuery(_T("VACUUM"));
 			
 			progress.StepIt();
 			progress.SetText(_T("Refreshing database size"));
-
-			SetDbSize();
+			SetDbSize();			
 			
 			progress.StepIt();
-			progress.SetText(_T("Reloading list"));
-
-			//LoadItems();
-			
-			progress.StepIt();
-			progress.SetText(_T("Applying filter"));
-			
+			progress.SetText(_T("Applying filter"));			
 			FilterItems();
 
 			m_clipList.SetItemCountEx((int)m_data.size(), 0);
+
+			POSITION selectedPos = m_clipList.GetFirstSelectedItemPosition();
+			if (selectedPos != nullptr)
+			{
+				INT_PTR row = m_clipList.GetNextSelectedItem(selectedPos);
+				SelectRow((int)row);
+			}
 		}
 		CATCH_SQLITE_EXCEPTION
 
 		m_applyingDelete = false;
 		m_clipList.EnableWindow();
+		m_clipList.SetFocus();
 	}
 }
 
@@ -741,10 +730,25 @@ void CDeleteClipData::OnBnClickedCheckDataFormat()
 	::SetFocus(::GetDlgItem(m_hWnd, IDC_COMBO_DATA_FORMAT));
 }
 
+static bool SortByIDDesc(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_lID > a2.m_lID;
+}
+static bool SortByIDAsc(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_lID < a2.m_lID;
+}
+
+
 static bool SortByTitleDesc(const CDeleteData& a1, const CDeleteData& a2)
 {
 	return a1.m_Desc > a2.m_Desc;
 }
+static bool SortByTitleAsc(const CDeleteData& a1, const CDeleteData& a2)
+{
+	return a1.m_Desc < a2.m_Desc;
+}
+
 
 static bool SortByQuickPaste(const CDeleteData& a1, const CDeleteData& a2)
 {
@@ -771,10 +775,7 @@ static bool SortByDataSizeDesc(const CDeleteData& a1, const CDeleteData& a2)
 	return a1.m_dataSize > a2.m_dataSize;
 }
 
-static bool SortByTitleAsc(const CDeleteData& a1, const CDeleteData& a2)
-{
-	return a1.m_Desc < a2.m_Desc;
-}
+
 
 static bool SortByCreatedDateAsc(const CDeleteData& a1, const CDeleteData& a2)
 {
@@ -804,36 +805,42 @@ void CDeleteClipData::OnLvnColumnclickList2(NMHDR *pNMHDR, LRESULT *pResult)
 	switch (phdn->iItem)
 	{
 	case 0:
+		if (desc)
+			std::sort(m_data.begin(), m_data.end(), SortByIDDesc);
+		else
+			std::sort(m_data.begin(), m_data.end(), SortByIDAsc);
+		break;
+	case 1:
 		if(desc)
 			std::sort(m_data.begin(), m_data.end(), SortByTitleDesc);
 		else
 			std::sort(m_data.begin(), m_data.end(), SortByTitleAsc);
 		break;
-	case 1:
+	case 2:
 		if (desc)
 			std::sort(m_data.begin(), m_data.end(), SortByQuickPaste);
 		else
 			std::sort(m_data.begin(), m_data.end(), SortByQuickPaste);
 		break;
-	case 2:
+	case 3:
 		if(desc)
 			std::sort(m_data.begin(), m_data.end(), SortByCreatedDateDesc);
 		else
 			std::sort(m_data.begin(), m_data.end(), SortByCreatedDateAsc);
 		break;
-	case 3:
+	case 4:
 		if(desc)
 			std::sort(m_data.begin(), m_data.end(), SortByLastUsedDateDesc);
 		else
 			std::sort(m_data.begin(), m_data.end(), SortByLastUsedDateAsc);
 		break;
-	case 4:
+	case 5:
 		if(desc)
 			std::sort(m_data.begin(), m_data.end(), SortByFormatDesc);
 		else
 			std::sort(m_data.begin(), m_data.end(), SortByFormatAsc);
 		break;
-	case 5:
+	case 6:
 		if(desc)
 			std::sort(m_data.begin(), m_data.end(), SortByDataSizeDesc);
 		else
@@ -1204,4 +1211,36 @@ void CDeleteClipData::SaveClipDataItemToFile(CDeleteData item)
 void CDeleteClipData::OnCancel()
 {
 	//don't close on escape key
+}
+
+void CDeleteClipData::OnBnClickedBtCompactAndRepair()
+{
+	auto msg = theApp.m_Language.GetString("CompactRepairWarning", "Warning this can take quite a long time and require up to double the hard drive space as your current database size, Continue?");
+	int ret = MessageBox(msg, _T("Ditto"), MB_OKCANCEL);
+
+	if (ret == IDOK)
+	{
+		CWaitCursor wait;
+
+		try
+		{
+			try
+			{
+				for (int i = 0; i < 100; i++)
+				{
+					int toDeleteCount = theApp.m_db.execScalar(_T("SELECT COUNT(clipID) FROM MainDeletes"));
+					if (toDeleteCount <= 0)
+						break;
+
+					RemoveOldEntries(false);
+				}
+			}
+			CATCH_SQLITE_EXCEPTION
+
+			theApp.m_db.execDML(_T("PRAGMA auto_vacuum = 1"));
+			theApp.m_db.execQuery(_T("VACUUM"));
+			SetDbSize();
+		}
+		CATCH_SQLITE_EXCEPTION
+	}
 }
