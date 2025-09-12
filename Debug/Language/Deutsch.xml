@@ -157,6 +157,18 @@
 		<Item English_Text = "Replace Top Sticky Clip" ID = "32938">Ersten Sticky-Clip ersetzen</Item>
 		<Item English_Text = "Set Drag File Name" ID = "32970">Dateiname festlegen</Item>
 
+		//Added 9/4/25 for description window right click menu
+		<Item English_Text = "Remember window position" ID = "32882">Fensterposition merken</Item>
+		<Item English_Text = "Size window to content" ID = "32883">Fenstergröße an Inhalt anpassen</Item>
+		<Item English_Text = "Scale images to fit window" ID = "32884">Bilder an Fenstergröße anpassen</Item>
+		<Item English_Text = "Hide description window on mouse clip selection" ID = "32926">Beschreibung bei Mausklick ausblenden</Item>
+		<Item English_Text = "Wrap Text" ID = "32928">Text umbrechen</Item>
+		<Item English_Text = "Always on top" ID = "32942">Immer im Vordergrund</Item>
+		<Item English_Text = "View as Text" ID = "32972">Als Text anzeigen</Item>
+		<Item English_Text = "View as RTF" ID = "32973">Als RTF anzeigen</Item>
+		<Item English_Text = "View as HTML" ID = "32974">Als HTML anzeigen</Item>
+		<Item English_Text = "View as Image" ID = "32975">Als Bild anzeigen</Item>
+
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039">Tastenkürzel</Item>
@@ -290,7 +302,7 @@
 		<Item English_Text = "When you receive a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Wenn Sie einen Clip von einem Gerät erhalten, dessen IP oder Host-Name sich in dieser Liste befindet, wird er direkt in die Zwischenablage gelegt.  Andernfalls wird er gespeichert und kann zu einem späteren Zeitpunkt verwendet werden:</Item>
 		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">Host-Name oder IP (durch Komma getrennt)</Item>
 		<Item English_Text = "Disable Receiving Clips" ID = "2026">Clip-Empfang deaktivieren</Item>
-		<Item English_Text = "Network Password" ID = "2054">Netzwerkpasswort</Item>
+		<Item English_Text = "Group Password" ID = "2054">Passwort</Item>
 		<Item English_Text = "If you are receiving clips from computers where your group password does not match, enter additional group passwords separated by commas" ID = "2055">Wenn Sie Clips von Geräten erhalten, die andere Netzwerkpasswörter verwenden, geben Sie diese hier mit Komma getrennt an:</Item>
 		<Item English_Text = "Receive Passwords" ID = "2056">Empfangs-Passwörter:</Item>
 		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">Wenn 'Alle Kopien senden' ausgewählt ist, werden alle Kopien von diesem Computer an andere Computer gesendet. Wenn diese Option nicht ausgewählt ist, können Sie Clips über das Rechtsklickmenü senden.</Item>
@@ -429,8 +441,8 @@
 		<Item English_Text = "Prompt For Name" ID = "prompt_for_name">Zielsystem angeben...</Item>
 		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme">(wie Windows-Theme)</Item>
 
-		<Item English_Text = "BackupDbMsg" ID = "Backing up database">Sichere Datenbank</Item>
-		<Item English_Text = "RestoreDbMsg" ID = "Restoring database">Stelle Datenbank wieder her</Item>
+		<Item English_Text = "Backing up database" ID = "Backing up database">Sichere Datenbank</Item>
+		<Item English_Text = "Restoring database" ID = "Restoring database">Stelle Datenbank wieder her</Item>
 
 		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">Ditto konnte die Datenbank nicht öffnen. Aktualisieren Sie den Pfad in den Einstellungen, falls dies erforderlich ist:</Item>
 
