@@ -1092,8 +1092,6 @@ BOOL CCP_MainApp::GetClipData(long parentId, CClipFormat &Clip)
 	return bRet;
 }
 
-
-
 bool CCP_MainApp::EditItems(CClipIDs &Ids, bool bShowError, bool forceTextEdit)
 {
 	bool ret = false;	
@@ -1155,6 +1153,16 @@ bool CCP_MainApp::EditItems(CClipIDs &Ids, bool bShowError, bool forceTextEdit)
 		}		
 		else
 		{
+			continue;
+		}
+
+		if((unicodeFile || asciFile || rtfFile) && exePath == _T(""))
+		{
+			Log(StrF(_T("Clip id %d is a text or rtf file without a specific editor set, using internal editor"), Ids[i]));
+
+			CClipIDs id;
+			id.Add(Ids[i]);
+			m_pMainFrame->ShowEditWnd(id);
 			continue;
 		}
 
@@ -1237,7 +1245,7 @@ bool CCP_MainApp::EditItems(CClipIDs &Ids, bool bShowError, bool forceTextEdit)
 		ret = true;
 	}
 
-	return true;
+	return ret;
 }
 
 void CCP_MainApp::PumpMessageEx(HWND hWnd)

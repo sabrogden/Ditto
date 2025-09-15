@@ -186,6 +186,7 @@ public:
 	DWORD GenerateCRC();
 	void MoveUp(int parentId);
 	void MoveDown(int parentId);
+	bool SaveFromEditWnd(BOOL bUpdateDesc);
 
 	CStringW GetUnicodeTextFormat();
 	CStringA GetCFTextTextFormat();

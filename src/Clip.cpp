@@ -2051,6 +2051,33 @@ Gdiplus::Bitmap *CClip::CreateGdiplusBitmap()
 	return nullptr;
 }
 
+bool CClip::SaveFromEditWnd(BOOL bUpdateDesc)
+{
+	bool bRet = false;
+
+	try
+	{
+		theApp.m_db.execDMLEx(_T("DELETE FROM Data WHERE lParentID = %d;"), m_id);
+
+		DWORD CRC = GenerateCRC();
+
+		AddToDataTable();
+
+		theApp.m_db.execDMLEx(_T("UPDATE Main SET CRC = %d WHERE lID = %d"), CRC, m_id);
+
+		if (bUpdateDesc)
+		{
+			m_Desc.Replace(_T("'"), _T("''"));
+			theApp.m_db.execDMLEx(_T("UPDATE Main SET mText = '%s' WHERE lID = %d"), m_Desc, m_id);
+		}
+
+		bRet = true;
+	}
+	CATCH_SQLITE_EXCEPTION
+
+		return bRet;
+}
+
 /*----------------------------------------------------------------------------*\
 CClipList
 \*----------------------------------------------------------------------------*/

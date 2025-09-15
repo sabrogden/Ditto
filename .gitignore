@@ -60,3 +60,9 @@ Debug/portable
 *.exp
 *.map
 *.tlh
+/Addins/DittoUtil/Win32/Debug
+/Debug/EditClips
+/EncryptDecrypt/Win32/Debug
+/focusdll/Win32/Debug
+/ICU_Loader/Debug
+/Win32/Debug
