@@ -715,6 +715,12 @@ public:
 	static int	m_clipEditSaveDelayAfterSaveSeconds;
 	static void SetClipEditSaveDelayAfterSaveSeconds(int val);
 	static BOOL GetClipEditSaveDelayAfterSaveSeconds();
+
+	static BOOL SetEditWndSize(CSize size);
+	static void GetEditWndSize(CSize& size);
+
+	static BOOL SetEditWndPoint(CPoint point);
+	static void GetEditWndPoint(CPoint& point);
 };
 
 // global for easy access and for initialization of fast access variables

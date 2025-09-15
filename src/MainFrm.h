@@ -8,6 +8,7 @@
 #include "PowerManager.h"
 #include "DittoPopupWindow.h"
 #include "NTray.h"
+#include "EditFrameWnd.h"
 
 #define CLOSE_WINDOW_TIMER				1	
 #define HIDE_ICON_TIMER					2
@@ -92,6 +93,7 @@ public:
 	void RefreshShowInTaskBar();
 
     void ShowEditWnd(CClipIDs &Ids);
+    CEditFrameWnd* m_pEditFrameWnd;
 
 
     // Generated message map functions
@@ -115,6 +117,7 @@ protected:
     afx_msg LRESULT OnAddToDatabaseFromSocket(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnErrorOnSendRecieve(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnErrorMsg(WPARAM wParam, LPARAM lParam);
+    afx_msg LRESULT OnEditWndClose(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnSetConnected(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnOpenCloseWindow(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnLoadClipOnClipboard(WPARAM wParam, LPARAM lParam);

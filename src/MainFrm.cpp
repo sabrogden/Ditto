@@ -49,6 +49,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_SEND_RECIEVE_ERROR, OnErrorOnSendRecieve)
 	ON_MESSAGE(WM_SHOW_ERROR_MSG, OnErrorMsg)
 	ON_COMMAND(ID_FIRST_IMPORT, OnFirstImport)
+	ON_MESSAGE(WM_EDIT_WND_CLOSING, OnEditWndClose)
 	ON_WM_DESTROY()
 	ON_COMMAND(ID_FIRST_NEWCLIP, OnFirstNewclip)
 	ON_MESSAGE(WM_SET_CONNECTED, OnSetConnected)
@@ -95,6 +96,7 @@ END_MESSAGE_MAP()
 
 CMainFrame::CMainFrame()
 {
+	m_pEditFrameWnd = NULL;
     m_keyStateModifiers = 0;
     m_startKeyStateTime = 0;
     m_bMovedSelectionMoveKeyState = false;
@@ -955,6 +957,14 @@ BOOL CMainFrame::PreTranslateMessage(MSG *pMsg)
 
 void CMainFrame::OnClose()
 {
+	if (m_pEditFrameWnd)
+	{
+		if (m_pEditFrameWnd->CloseAll() == false)
+		{
+			return;
+		}
+	}
+
     CloseAllOpenDialogs();
 
     Log(_T("OnClose - before stop MainFrm thread"));
@@ -1140,6 +1150,45 @@ void CMainFrame::OnFirstHelp()
     CHyperLink::GotoURL(_T("https://github.com/sabrogden/Ditto/wiki"), SW_SHOW);
 }
 
+void CMainFrame::ShowEditWnd(CClipIDs& Ids)
+{
+	CWaitCursor wait;
+
+	bool bCreatedWindow = false;
+	if (m_pEditFrameWnd == NULL)
+	{
+		m_pEditFrameWnd = new CEditFrameWnd;
+		m_pEditFrameWnd->LoadFrame(IDR_MAINFRAME);
+		bCreatedWindow = true;
+	}
+	if (m_pEditFrameWnd)
+	{
+		m_pEditFrameWnd->EditIds(Ids);
+		m_pEditFrameWnd->SetNotifyWnd(m_hWnd);
+
+		if (bCreatedWindow)
+		{
+			CSize sz;
+			CPoint pt;
+			CGetSetOptions::GetEditWndSize(sz);
+			CGetSetOptions::GetEditWndPoint(pt);
+			CRect cr(pt, sz);
+			EnsureWindowVisible(&cr);
+			m_pEditFrameWnd->MoveWindow(cr);
+		}
+
+		m_pEditFrameWnd->ShowWindow(SW_SHOW);
+		m_pEditFrameWnd->SetForegroundWindow();
+		m_pEditFrameWnd->SetFocus();
+	}
+}
+
+LRESULT CMainFrame::OnEditWndClose(WPARAM wParam, LPARAM lParam)
+{
+	m_pEditFrameWnd = NULL;
+	return TRUE;
+}
+
 void CMainFrame::ShowErrorMessage(CString csTitle, CString csMessage)
 {
     Log(StrF(_T("ShowErrorMessage %s - %s"), csTitle, csMessage));
@@ -1182,6 +1231,11 @@ LRESULT CMainFrame::OnOpenCloseWindow(WPARAM wParam, LPARAM lParam)
 
 void CMainFrame::OnDestroy()
 {
+	if (m_pEditFrameWnd)
+	{
+		m_pEditFrameWnd->DestroyWindow();
+	}
+
     CFrameWnd::OnDestroy();
 }
 

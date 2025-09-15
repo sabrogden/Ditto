@@ -3168,3 +3168,42 @@ BOOL CGetSetOptions::GetClipEditSaveDelayAfterSaveSeconds()
 {
 	return GetProfileLong("ClipEditSaveDelayAfterSaveSeconds", 3);
 }
+
+BOOL CGetSetOptions::SetEditWndSize(CSize size)
+{
+	BOOL bRet = SetResolutionProfileLong("EditWndCX", size.cx);
+	bRet = SetResolutionProfileLong("EditWndCY", size.cy);
+
+	return bRet;
+}
+
+void CGetSetOptions::GetEditWndSize(CSize& size)
+{
+	size.cx = GetResolutionProfileLong("EditWndCX", 600);
+	size.cy = GetResolutionProfileLong("EditWndCY", 600);
+	if (size.cx <= 0 && size.cy <= 0)
+	{
+		size.cx = 600;
+		size.cy = 600;
+	}
+}
+
+BOOL CGetSetOptions::SetEditWndPoint(CPoint point)
+{
+	BOOL bRet = SetResolutionProfileLong("EditWndX", point.x);
+	bRet = SetResolutionProfileLong("EditWndY", point.y);
+
+	return bRet;
+}
+
+void CGetSetOptions::GetEditWndPoint(CPoint& point)
+{
+	point.x = GetResolutionProfileLong("EditWndX", 100);
+	point.y = GetResolutionProfileLong("EditWndY", 100);
+
+	if (point.x <= 0 && point.y <= 0)
+	{
+		point.x = 100;
+		point.y = 100;
+	}
+}

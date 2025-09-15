@@ -565,6 +565,7 @@
     <ClCompile Include="src\DittoCopyBuffer.cpp" />
     <ClCompile Include="src\DittoDropTarget.cpp" />
     <ClCompile Include="src\DittoPopupWindow.cpp" />
+    <ClCompile Include="src\DittoRulerRichEditCtrl.cpp" />
     <ClCompile Include="src\DittoWindow.cpp" />
     <ClCompile Include="src\DPI.cpp" />
     <ClCompile Include="src\DrawHTML.C">
@@ -573,7 +574,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\EditFrameWnd.cpp" />
     <ClCompile Include="src\EditWithButton.cpp" />
+    <ClCompile Include="src\EditWnd.cpp" />
     <ClCompile Include="src\EventThread.cpp" />
     <ClCompile Include="src\ExternalWindowTracker.cpp" />
     <ClCompile Include="src\FileRecieve.cpp" />
@@ -706,6 +709,17 @@
     <ClCompile Include="src\RegExFilterHelper.cpp" />
     <ClCompile Include="src\RichEditCtrlEx.cpp" />
     <ClCompile Include="src\RichTextAggregator.cpp" />
+    <ClCompile Include="src\RulerRichEditCtrl\External\ColourPicker.cpp" />
+    <ClCompile Include="src\RulerRichEditCtrl\External\ColourPopup.cpp" />
+    <ClCompile Include="src\RulerRichEditCtrl\External\StdioFileEx.cpp" />
+    <ClCompile Include="src\RulerRichEditCtrl\FontComboBox.cpp" />
+    <ClCompile Include="src\RulerRichEditCtrl\RRECRuler.cpp" />
+    <ClCompile Include="src\RulerRichEditCtrl\RRECToolbar.cpp" />
+    <ClCompile Include="src\RulerRichEditCtrl\RulerRichEdit.cpp" />
+    <ClCompile Include="src\RulerRichEditCtrl\RulerRichEditCtrl.cpp" />
+    <ClCompile Include="src\RulerRichEditCtrl\SizeComboBox.cpp" />
+    <ClCompile Include="src\RulerRichEditCtrl\StdGrfx.cpp" />
+    <ClCompile Include="src\RulerRichEditCtrl\TextFile\TextFile.cpp" />
     <ClCompile Include="src\SaveAnimation.cpp" />
     <ClCompile Include="src\ScriptEditor.cpp" />
     <ClCompile Include="src\ScrollHelper.cpp" />
@@ -776,6 +790,18 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NDEBUG;_AFXDLL</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">NDEBUG;_AFXDLL</PreprocessorDefinitions>
     </ResourceCompile>
+    <ResourceCompile Include="src\RulerRichEditCtrl\RulerRichEditCtrl.rc" >
+	  <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
+	</ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -821,9 +847,11 @@
     <ClInclude Include="src\DittoCopyBuffer.h" />
     <ClInclude Include="src\DittoDropTarget.h" />
     <ClInclude Include="src\DittoPopupWindow.h" />
+    <ClInclude Include="src\DittoRulerRichEditCtrl.h" />
     <ClInclude Include="src\DittoWindow.h" />
     <ClInclude Include="src\DPI.h" />
     <ClInclude Include="src\DrawHTML.h" />
+    <ClInclude Include="src\EditFrameWnd.h" />
     <ClInclude Include="src\EditWithButton.h" />
     <ClInclude Include="src\EditWnd.h" />
     <ClInclude Include="src\EventThread.h" />
@@ -906,6 +934,18 @@
     <ClInclude Include="src\RegExFilterHelper.h" />
     <ClInclude Include="src\RichEditCtrlEx.h" />
     <ClInclude Include="src\RichTextAggregator.h" />
+    <ClInclude Include="src\RulerRichEditCtrl\External\ColourPicker.h" />
+    <ClInclude Include="src\RulerRichEditCtrl\External\ColourPopup.h" />
+    <ClInclude Include="src\RulerRichEditCtrl\External\StdioFileEx.h" />
+    <ClInclude Include="src\RulerRichEditCtrl\FontComboBox.h" />
+    <ClInclude Include="src\RulerRichEditCtrl\ids.h" />
+    <ClInclude Include="src\RulerRichEditCtrl\RRECRuler.h" />
+    <ClInclude Include="src\RulerRichEditCtrl\RRECToolbar.h" />
+    <ClInclude Include="src\RulerRichEditCtrl\RulerRichEdit.h" />
+    <ClInclude Include="src\RulerRichEditCtrl\RulerRichEditCtrl.h" />
+    <ClInclude Include="src\RulerRichEditCtrl\SizeComboBox.h" />
+    <ClInclude Include="src\RulerRichEditCtrl\StdGrfx.h" />
+    <ClInclude Include="src\RulerRichEditCtrl\TextFile\TextFile.h" />
     <ClInclude Include="src\SaveAnimation.h" />
     <ClInclude Include="src\ScriptEditor.h" />
     <ClInclude Include="src\ScrollHelper.h" />
@@ -1205,6 +1245,7 @@
     <Image Include="res\system_menu_72.png" />
     <Image Include="res\system_menu_78.png" />
     <Image Include="res\system_menu_84.png" />
+    <Image Include="src\RulerRichEditCtrl\toolbar.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

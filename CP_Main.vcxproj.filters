@@ -451,6 +451,48 @@
     <ClCompile Include="src\QRCode\split.c">
       <Filter>src\QRCode</Filter>
     </ClCompile>
+    <ClCompile Include="src\RulerRichEditCtrl\FontComboBox.cpp">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RulerRichEditCtrl\RRECRuler.cpp">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RulerRichEditCtrl\RRECToolbar.cpp">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RulerRichEditCtrl\RulerRichEdit.cpp">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RulerRichEditCtrl\RulerRichEditCtrl.cpp">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RulerRichEditCtrl\SizeComboBox.cpp">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RulerRichEditCtrl\StdGrfx.cpp">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RulerRichEditCtrl\TextFile\TextFile.cpp">
+      <Filter>src\RulerRichEditCtrl\TextFile</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RulerRichEditCtrl\External\ColourPicker.cpp">
+      <Filter>src\RulerRichEditCtrl\External</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RulerRichEditCtrl\External\ColourPopup.cpp">
+      <Filter>src\RulerRichEditCtrl\External</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RulerRichEditCtrl\External\StdioFileEx.cpp">
+      <Filter>src\RulerRichEditCtrl\External</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DittoRulerRichEditCtrl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EditFrameWnd.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EditWnd.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\About.h">
@@ -928,10 +970,55 @@
     <ClInclude Include="src\QRCode\split.h">
       <Filter>src\QRCode</Filter>
     </ClInclude>
+    <ClInclude Include="src\RulerRichEditCtrl\FontComboBox.h">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RulerRichEditCtrl\ids.h">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RulerRichEditCtrl\RRECRuler.h">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RulerRichEditCtrl\RRECToolbar.h">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RulerRichEditCtrl\RulerRichEdit.h">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RulerRichEditCtrl\RulerRichEditCtrl.h">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RulerRichEditCtrl\SizeComboBox.h">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RulerRichEditCtrl\StdGrfx.h">
+      <Filter>src\RulerRichEditCtrl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RulerRichEditCtrl\TextFile\TextFile.h">
+      <Filter>src\RulerRichEditCtrl\TextFile</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RulerRichEditCtrl\External\ColourPicker.h">
+      <Filter>src\RulerRichEditCtrl\External</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RulerRichEditCtrl\External\ColourPopup.h">
+      <Filter>src\RulerRichEditCtrl\External</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RulerRichEditCtrl\External\StdioFileEx.h">
+      <Filter>src\RulerRichEditCtrl\External</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DittoRulerRichEditCtrl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EditFrameWnd.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
       <Filter>res</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="src\RulerRichEditCtrl\RulerRichEditCtrl.rc">
+      <Filter>src\RulerRichEditCtrl</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1415,6 +1502,15 @@
     <Filter Include="src\QRCode">
       <UniqueIdentifier>{4651147a-f9c4-41fe-a076-10be8ad8cfbb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\RulerRichEditCtrl">
+      <UniqueIdentifier>{f864d5e8-8cca-488e-b506-d8177e85262d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\RulerRichEditCtrl\TextFile">
+      <UniqueIdentifier>{78b7e533-7922-4cc1-82a6-0d14c3b82eba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\RulerRichEditCtrl\External">
+      <UniqueIdentifier>{f6e3888b-0fa5-4ef0-88a0-b280da7bc15a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Midl Include="CP_Main.idl" />
@@ -1581,6 +1677,9 @@
     </Image>
     <Image Include="res\Ditto2_NoDb.ico">
       <Filter>res</Filter>
+    </Image>
+    <Image Include="src\RulerRichEditCtrl\toolbar.bmp">
+      <Filter>src\RulerRichEditCtrl</Filter>
     </Image>
   </ItemGroup>
 </Project>
