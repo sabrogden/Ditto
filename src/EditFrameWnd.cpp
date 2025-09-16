@@ -260,6 +260,7 @@ LRESULT CEditFrameWnd::OnDpiChanged(WPARAM wParam, LPARAM lParam)
 {
 	int dpi = HIWORD(wParam);
 	m_DittoWindow.OnDpiChanged(this, dpi);
+	m_EditWnd.OnDpiChanged(this, dpi);
 
 	RECT* const prcNewWindow = (RECT*)lParam;
 	SetWindowPos(NULL,

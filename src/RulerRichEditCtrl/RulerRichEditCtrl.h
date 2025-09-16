@@ -4,6 +4,7 @@
 #include "RulerRichEdit.h"
 #include "RRECRuler.h"
 #include "RRECToolbar.h"
+#include "../DPI.h"
 
 #include "ids.h"
 
@@ -53,10 +54,8 @@ public:
 	int		GetMode() const;
 
 	void ShowToolbar( BOOL show = TRUE );
-	void ShowRuler( BOOL show = TRUE );
 
 	BOOL IsToolbarVisible() const;
-	BOOL IsRulerVisible() const;
 
 	CRichEditCtrl& GetRichEditCtrl( );
 
@@ -70,6 +69,7 @@ public:
 
 	void SetReadOnly( BOOL readOnly );
 	BOOL GetReadOnly() const;
+	void OnDpiChanged(CWnd* pParent, int dpi);
 
 // Formatting
 	virtual void DoFont();
@@ -120,7 +120,6 @@ protected:
 	afx_msg void OnLink(NMHDR* pnm, LRESULT* pResult);
 	//}}AFX_MSG
 
-	LRESULT OnTrackRuler(WPARAM mode, LPARAM pt);
 	LRESULT OnGetScrollPos(WPARAM, LPARAM);
 	LRESULT OnSetCurrentFontName(WPARAM font, LPARAM size);
 	LRESULT OnSetCurrentFontSize(WPARAM font, LPARAM size);
@@ -130,9 +129,6 @@ protected:
 
 protected:
 	// Internal data
-	int				m_rulerPosition;	// The x-position of the ruler line when dragging a tab
-	CPen			m_pen;				// The pen to use for drawing the XORed ruler line
-
 	CDWordArray		m_tabs;				// An array containing the tab-positions in device pixels
 	int				m_margin;			// The margin to use for the ruler and buttons
 
@@ -141,22 +137,19 @@ protected:
 	int				m_offset;			// Internal offset of the tab-marker being moved.
 
 	BOOL			m_showToolbar;
-	BOOL			m_showRuler;
 	BOOL			m_readOnly;
 
 	BOOL			m_bInWrapMode;
 
 	// Sub-controls
 	CRulerRichEdit	m_rtf;
-	CRRECToolbar	m_toolbar;
-	CRRECRuler		m_ruler;
+	CRRECToolbar	m_toolbar;	
 
 	// Private helpers
 	void	SetTabStops( LPLONG tabs, int size );
 	void	UpdateTabStops();
 
 	BOOL	CreateToolbar();
-	BOOL	CreateRuler();
 	BOOL	CreateRTFControl( BOOL autohscroll );
 	void	CreateMargins();
 
@@ -166,6 +159,8 @@ protected:
 	void	SetAlignment( int alignment );
 
 	void	LayoutControls( int width, int height );
+
+	CDPI m_dpi;
 
 public:
 	virtual BOOL PreTranslateMessage(MSG* pMsg);

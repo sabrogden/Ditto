@@ -1,6 +1,7 @@
 #pragma once
 
 #include <afxtempl.h>
+#include "DPI.h"
 
 #define SHEET_CLASSNAME		_T("_TabCtrlClass_")
 #define SHEET_CLASSTYLE		(CS_DBLCLKS)
@@ -96,6 +97,8 @@ public:
 
 	void SetTabColors(COLORREF Selected, COLORREF NonSelected)	{ m_SelectedColor = Selected; m_NonSelectedColor = NonSelected;}
 
+	void OnDpiChanged(CWnd* pParent, int dpi);
+
 protected:
 	class CTab
 	{
@@ -132,6 +135,7 @@ protected:
 	bool m_bSetFocusToNewlySelectedTab;
 	COLORREF m_SelectedColor;
 	COLORREF m_NonSelectedColor;
+	CDPI m_dpi;
 
 	
 protected:

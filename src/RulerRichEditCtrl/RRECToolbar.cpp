@@ -235,6 +235,8 @@ BOOL CRRECToolbar::Create( CWnd* parent, CRect& rc )
 
 	}
 
+	m_dpi.SetHwnd(m_hWnd);
+
 	return result;
 
 }
@@ -391,3 +393,7 @@ void CRRECToolbar::SetFontColor( COLORREF color )
 
 }
 
+void CRRECToolbar::OnDpiChanged(CWnd* pParent, int dpi)
+{
+	m_dpi.Update(dpi);
+}

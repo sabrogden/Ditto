@@ -3,6 +3,7 @@
 #include "DittoRulerRichEditCtrl.h"
 #include "TabCtrl.h"
 #include "ClipIds.h"
+#include "DPI.h"
 
 class CEditWnd : public CWnd
 {
@@ -15,16 +16,20 @@ public:
 	bool EditIds(CClipIDs &Ids);
 	bool CloseEdits(bool bPrompt);
 
+	void OnDpiChanged(CWnd* pParent, int dpi);
+
 protected:
 	DECLARE_MESSAGE_MAP()
 
 	CTabCtrlEx m_Tabs;
-	CToolBar m_ToolBar;
+	CMFCToolBar m_ToolBar;
 	CToolTipCtrl m_ToolTip;
 	std::vector<CDittoRulerRichEditCtrl*> m_Edits;
 	CButton m_cbUpdateDescription;
 	CFont m_Font;
 	long m_lLastSaveID;
+
+	CDPI m_dpi;
 
 protected:
 	void MoveControls();

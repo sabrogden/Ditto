@@ -35,6 +35,8 @@ int CEditWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
+	m_dpi.SetHwnd(m_hWnd);
+
 	m_ToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD|WS_VISIBLE|CBRS_TOP|CBRS_TOOLTIPS);
 	m_ToolBar.LoadToolBar(IDR_EDIT_WND);
 	m_ToolBar.EnableWindow();
@@ -79,9 +81,36 @@ int CEditWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	return 0;
 }
 
+void CEditWnd::OnDpiChanged(CWnd* pParent, int dpi)
+{
+	m_dpi.Update(dpi);
+	m_Tabs.OnDpiChanged(pParent, dpi);
+
+	m_ToolBar.OnChangeVisualManager();
+	m_ToolBar.AdjustLayout();
+
+	for (int i = 0; i < m_Edits.size(); i++)
+	{
+		CDittoRulerRichEditCtrl* pEdit = m_Edits[i];
+		if (pEdit)
+		{
+			pEdit->OnDpiChanged(pParent, dpi);
+		}
+	}
+
+	MoveControls();
+}
+
 void CEditWnd::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
+
+
+
+	//m_ToolBar.SetSizes(CSize(44, 42), CSize(32, 30));
+
+	/*auto imageSize = m_ToolBar.GetImageSize();
+	auto buttonSize = m_ToolBar.GetButtonSize();*/
 
 	if(::IsWindow(m_ToolBar.GetSafeHwnd()))
 	{
@@ -91,14 +120,18 @@ void CEditWnd::OnSize(UINT nType, int cx, int cy)
 
 void CEditWnd::MoveControls()
 {
-	static int nToolbarHeight = 23;
+	int toolbarHeight = m_dpi.Scale(23);
+	int descriptionHeight = m_dpi.Scale(20);
+
 	CRect rc;
 	GetClientRect(rc);
-	m_ToolBar.MoveWindow(0, 0, rc.Width(), nToolbarHeight);
 
-	m_Tabs.MoveWindow(0, nToolbarHeight, rc.Width(), rc.Height()-nToolbarHeight - 20);
+	CRect toolbarRect(0, 0, rc.Width(), toolbarHeight);
+	m_ToolBar.MoveWindow(toolbarRect);
 
-	m_cbUpdateDescription.MoveWindow(2, rc.Height()-20, rc.Width()-2, 20);
+	m_Tabs.MoveWindow(0, toolbarHeight, rc.Width(), rc.Height() - toolbarHeight - descriptionHeight);
+
+	m_cbUpdateDescription.MoveWindow(2, rc.Height()- descriptionHeight, rc.Width()-m_dpi.Scale(2), descriptionHeight);
 }
 
 void CEditWnd::OnSaveAll() 
@@ -211,7 +244,6 @@ bool CEditWnd::AddItem(int id)
 		}
 
 		pEdit->Create(WS_TABSTOP|WS_CHILD|WS_VISIBLE, CRect(100, 100, 105, 105), this, 100, TRUE);
-		pEdit->ShowRuler();
 		pEdit->ShowToolbar();
 		pEdit->LoadItem(id, csTitle);		
 

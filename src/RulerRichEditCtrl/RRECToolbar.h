@@ -10,6 +10,7 @@
 #include "FontComboBox.h"
 #include "SizeComboBox.h"
 #include "External/ColourPicker.h"
+#include "../DPI.h"
 
 struct CToolBarData
 {
@@ -42,6 +43,7 @@ public:
 	void SetFontName( const CString& font );
 	void SetFontSize( int size );
 	void SetFontColor( COLORREF color );
+	void OnDpiChanged(CWnd* pParent, int dpi);
 
 // Overrides
 	// ClassWizard generated virtual function overrides
@@ -68,6 +70,8 @@ private:
 	CFontComboBox	m_font;
 	CSizeComboBox	m_size;
 	CColourPicker	m_color;
+
+	CDPI m_dpi;
 
 };
 
