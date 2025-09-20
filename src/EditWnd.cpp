@@ -11,7 +11,7 @@
 IMPLEMENT_DYNAMIC(CEditWnd, CWnd)
 CEditWnd::CEditWnd()
 {
-	m_lLastSaveID = -1;
+	m_lastSaveID = -1;
 }
 
 CEditWnd::~CEditWnd()
@@ -37,61 +37,100 @@ int CEditWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 	m_dpi.SetHwnd(m_hWnd);
 
-	m_ToolBar.CreateEx(this, TBSTYLE_FLAT, WS_CHILD|WS_VISIBLE|CBRS_TOP|CBRS_TOOLTIPS);
-	m_ToolBar.LoadToolBar(IDR_EDIT_WND);
-	m_ToolBar.EnableWindow();
+	m_toolBarControl.CreateEx(this, TBSTYLE_FLAT, WS_CHILD|WS_VISIBLE|CBRS_TOP|CBRS_TOOLTIPS);
 	
-	m_Tabs.Create(WS_CHILD|WS_VISIBLE|WS_TABSTOP|SCS_TOP, CRect(0, 0, 0, 0), this, 101);
+	LoadToolbarDPI();
+
+	m_toolBarControl.EnableWindow();
 	
-	m_Font.CreatePointFont(90, _T("Arial Unicode MS"));
-	m_cbUpdateDescription.Create(theApp.m_Language.GetString("Update_Desc", "Update clip description on save?"), WS_CHILD|WS_VISIBLE|BS_AUTOCHECKBOX, CRect(0,0,0,0), this, 101);
-	m_cbUpdateDescription.SetFont(&m_Font);
+	m_tabControl.Create(WS_CHILD|WS_VISIBLE|WS_TABSTOP|SCS_TOP, CRect(0, 0, 0, 0), this, 101);
+	
+	//m_font.CreatePointFont(m_dpi.Scale(90), _T("Arial Unicode MS"), this->GetDC());
+	m_font.CreateFont(-m_dpi.Scale(13), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+	m_updateDescriptionButton.Create(theApp.m_Language.GetString("Update_Desc", "Update clip description on save?"), WS_CHILD|WS_VISIBLE|BS_AUTOCHECKBOX, CRect(0,0,0,0), this, 101);
+	m_updateDescriptionButton.SetFont(&m_font);
 
 	if(CGetSetOptions::GetUpdateDescWhenSavingClip())
 	{
-		m_cbUpdateDescription.SetCheck(BST_CHECKED);
+		m_updateDescriptionButton.SetCheck(BST_CHECKED);
 	}
 
 	MoveControls();
 
-	m_ToolTip.Create(this);
+	m_toolTipControl.Create(this);
 	CRect cr;
 	CString csText;
 
-	m_ToolBar.GetItemRect(m_ToolBar.CommandToIndex(ID_BUTTON_NEW), cr);
+	m_toolBarControl.GetItemRect(m_toolBarControl.CommandToIndex(ID_BUTTON_NEW), cr);
 	csText.Format(_T("%s     Ctrl - N"), theApp.m_Language.GetString("New_Clip", "New Clip"));
-	m_ToolTip.AddTool(&m_ToolBar, csText, cr, 1);
+	m_toolTipControl.AddTool(&m_toolBarControl, csText, cr, 1);
 
-	m_ToolBar.GetItemRect(m_ToolBar.CommandToIndex(ID_BUTTON_SAVE), cr);
+	m_toolBarControl.GetItemRect(m_toolBarControl.CommandToIndex(ID_BUTTON_SAVE), cr);
 	csText.Format(_T("%s    Ctrl - S"), theApp.m_Language.GetString("Save", "Save"));
-	m_ToolTip.AddTool(&m_ToolBar, csText, cr, 2);
+	m_toolTipControl.AddTool(&m_toolBarControl, csText, cr, 2);
 
-	m_ToolBar.GetItemRect(m_ToolBar.CommandToIndex(ID_BUTTON_SAVE_ALL), cr);
+	m_toolBarControl.GetItemRect(m_toolBarControl.CommandToIndex(ID_BUTTON_SAVE_ALL), cr);
 	csText.Format(_T("%s    Ctrl - Shift - S"), theApp.m_Language.GetString("Save_All", "Save All"));
-	m_ToolTip.AddTool(&m_ToolBar, csText, cr, 3);
+	m_toolTipControl.AddTool(&m_toolBarControl, csText, cr, 3);
 
-	m_ToolBar.GetItemRect(m_ToolBar.CommandToIndex(ID_BUTTON_CLOSE), cr);
+	m_toolBarControl.GetItemRect(m_toolBarControl.CommandToIndex(ID_BUTTON_CLOSE), cr);
 	csText.Format(_T("%s    Escape"), theApp.m_Language.GetString("Close", "Close Current Tab"));
-	m_ToolTip.AddTool(&m_ToolBar, csText, cr, 4);
+	m_toolTipControl.AddTool(&m_toolBarControl, csText, cr, 4);
 
-	m_ToolBar.GetItemRect(m_ToolBar.CommandToIndex(ID_BUTTON_SAVE_CLOSE_CLIPBOARD), cr);
+	m_toolBarControl.GetItemRect(m_toolBarControl.CommandToIndex(ID_BUTTON_SAVE_CLOSE_CLIPBOARD), cr);
 	csText.Format(_T("%s    Shift - Escape"), theApp.m_Language.GetString("Save_Close", "Save, Close and place on clipboard"));
-	m_ToolTip.AddTool(&m_ToolBar, csText, cr, 4);
+	m_toolTipControl.AddTool(&m_toolBarControl, csText, cr, 4);
 
 	return 0;
+}
+
+void CEditWnd::LoadToolbarDPI()
+{
+	int scale = m_dpi.Scale(100);
+
+	if (scale >= 225)
+	{
+		m_toolBarControl.LoadToolBar(IDR_EDIT_WND_225);
+	}
+	else if (scale >= 200)
+	{
+		m_toolBarControl.LoadToolBar(IDR_EDIT_WND_200);
+	}
+	else if (scale >= 175)
+	{
+		m_toolBarControl.LoadToolBar(IDR_EDIT_WND_175);
+	}
+	else if (scale >= 150)
+	{
+		m_toolBarControl.LoadToolBar(IDR_EDIT_WND_150);
+	}
+	else if (scale >= 125)
+	{
+		m_toolBarControl.LoadToolBar(IDR_EDIT_WND_125);
+	}	
+	else
+	{
+		m_toolBarControl.LoadToolBar(IDR_EDIT_WND);
+	}
 }
 
 void CEditWnd::OnDpiChanged(CWnd* pParent, int dpi)
 {
 	m_dpi.Update(dpi);
-	m_Tabs.OnDpiChanged(pParent, dpi);
 
-	m_ToolBar.OnChangeVisualManager();
-	m_ToolBar.AdjustLayout();
+	m_font.DeleteObject();
+	auto x = m_dpi.Scale(90);
+	m_font.CreateFont(-m_dpi.Scale(13), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+	
+	m_updateDescriptionButton.SetFont(&m_font);
+	
+	m_tabControl.OnDpiChanged(pParent, dpi);
 
-	for (int i = 0; i < m_Edits.size(); i++)
+	LoadToolbarDPI();
+
+	for (int i = 0; i < m_edits.size(); i++)
 	{
-		CDittoRulerRichEditCtrl* pEdit = m_Edits[i];
+		CDittoRulerRichEditCtrl* pEdit = m_edits[i];
 		if (pEdit)
 		{
 			pEdit->OnDpiChanged(pParent, dpi);
@@ -105,14 +144,7 @@ void CEditWnd::OnSize(UINT nType, int cx, int cy)
 {
 	CWnd::OnSize(nType, cx, cy);
 
-
-
-	//m_ToolBar.SetSizes(CSize(44, 42), CSize(32, 30));
-
-	/*auto imageSize = m_ToolBar.GetImageSize();
-	auto buttonSize = m_ToolBar.GetButtonSize();*/
-
-	if(::IsWindow(m_ToolBar.GetSafeHwnd()))
+	if(::IsWindow(m_toolBarControl.GetSafeHwnd()))
 	{
 		MoveControls();
 	}
@@ -127,17 +159,17 @@ void CEditWnd::MoveControls()
 	GetClientRect(rc);
 
 	CRect toolbarRect(0, 0, rc.Width(), toolbarHeight);
-	m_ToolBar.MoveWindow(toolbarRect);
+	m_toolBarControl.MoveWindow(toolbarRect);
 
-	m_Tabs.MoveWindow(0, toolbarHeight, rc.Width(), rc.Height() - toolbarHeight - descriptionHeight);
+	m_tabControl.MoveWindow(0, toolbarHeight, rc.Width(), rc.Height() - toolbarHeight - descriptionHeight);
 
-	m_cbUpdateDescription.MoveWindow(2, rc.Height()- descriptionHeight, rc.Width()-m_dpi.Scale(2), descriptionHeight);
+	m_updateDescriptionButton.MoveWindow(2, rc.Height()- descriptionHeight, rc.Width()-m_dpi.Scale(2), descriptionHeight);
 }
 
 void CEditWnd::OnSaveAll() 
 {
-	BOOL bUpdateDesc = m_cbUpdateDescription.GetCheck();
-	INT_PTR size = m_Edits.size();
+	BOOL bUpdateDesc = m_updateDescriptionButton.GetCheck();
+	INT_PTR size = m_edits.size();
 	for(int tab = 0; tab < size; tab++)
 	{
 		DoSaveItem(tab);
@@ -152,8 +184,8 @@ void CEditWnd::OnSave()
 bool CEditWnd::DoSave()
 {
 	bool bRet = false;
-	int nTab = m_Tabs.GetActiveTab();
-	if(nTab >= 0 && nTab < (int)m_Edits.size())
+	int nTab = m_tabControl.GetActiveTab();
+	if(nTab >= 0 && nTab < (int)m_edits.size())
 	{
 		bRet = DoSaveItem(nTab);
 	}
@@ -164,9 +196,9 @@ bool CEditWnd::DoSave()
 bool CEditWnd::DoSaveItem(int index)
 {
 	bool bRet = false;
-	BOOL bUpdateDesc = m_cbUpdateDescription.GetCheck();
+	BOOL bUpdateDesc = m_updateDescriptionButton.GetCheck();
 
-	CDittoRulerRichEditCtrl *pEdit = m_Edits[index];
+	CDittoRulerRichEditCtrl *pEdit = m_edits[index];
 	if(pEdit)
 	{
 		int nRet = pEdit->SaveToDB(bUpdateDesc);
@@ -174,7 +206,7 @@ bool CEditWnd::DoSaveItem(int index)
 		{
 			if(bUpdateDesc)
 			{
-				m_Tabs.SetTabTitle(index, pEdit->GetDesc());
+				m_tabControl.SetTabTitle(index, pEdit->GetDesc());
 			}
 
 			if(nRet == SAVED_CLIP_TO_DB)
@@ -183,17 +215,17 @@ bool CEditWnd::DoSaveItem(int index)
 				CRect cr;
 				pEdit->GetWindowRect(cr);
 				CRect crSave;
-				m_ToolBar.GetItemRect(2, crSave);
+				m_toolBarControl.GetItemRect(2, crSave);
 				Ani.DoAnimation(cr, crSave, this);
 			}
 
-			m_lLastSaveID = pEdit->GetDBID();
+			m_lastSaveID = pEdit->GetDBID();
 			bRet = true;
 		}
 		else
 		{
 			CString cs;
-			cs.Format(_T("%s '%s'"), theApp.m_Language.GetString("ErrorSaving", "Error saving clip"), m_Tabs.GetTabTitle(index));
+			cs.Format(_T("%s '%s'"), theApp.m_Language.GetString("ErrorSaving", "Error saving clip"), m_tabControl.GetTabTitle(index));
 			MessageBox(cs, _T("Ditto"), MB_OK);
 		}
 	}
@@ -247,11 +279,11 @@ bool CEditWnd::AddItem(int id)
 		pEdit->ShowToolbar();
 		pEdit->LoadItem(id, csTitle);		
 
-		m_Tabs.AddItem(csTitle, pEdit);
-		int nTab = m_Tabs.GetTabCount();
-		m_Tabs.SetActiveTab(nTab-1);
+		m_tabControl.AddItem(csTitle, pEdit);
+		int nTab = m_tabControl.GetTabCount();
+		m_tabControl.SetActiveTab(nTab-1);
 
-		m_Edits.push_back(pEdit);
+		m_edits.push_back(pEdit);
 		bRet = true;
 	}
 
@@ -261,17 +293,17 @@ bool CEditWnd::AddItem(int id)
 
 int CEditWnd::IsIDAlreadyInEdit(int id, bool bSetFocus)
 {
-	INT_PTR size = m_Edits.size();
+	INT_PTR size = m_edits.size();
 	for(int i = 0; i < size; i++)
 	{
-		CDittoRulerRichEditCtrl *pEdit = m_Edits[i];
+		CDittoRulerRichEditCtrl *pEdit = m_edits[i];
 		if(pEdit)
 		{
 			if(pEdit->GetDBID() == id)
 			{
 				if(bSetFocus)
 				{
-					m_Tabs.SetActiveTab(i);
+					m_tabControl.SetActiveTab(i);
 				}
 				return (int)i;
 			}
@@ -284,10 +316,10 @@ void CEditWnd::OnDestroy()
 {
 	CWnd::OnDestroy();
 
-	INT_PTR size = m_Edits.size();
+	INT_PTR size = m_edits.size();
 	for(int i = 0; i < size; i++)
 	{
-		CDittoRulerRichEditCtrl *pEdit = m_Edits[i];
+		CDittoRulerRichEditCtrl *pEdit = m_edits[i];
 		if(pEdit)
 		{
 			pEdit->DestroyWindow();
@@ -297,19 +329,19 @@ void CEditWnd::OnDestroy()
 		}
 	}
 
-	m_Edits.erase(m_Edits.begin(), m_Edits.end());
+	m_edits.erase(m_edits.begin(), m_edits.end());
 
-	CGetSetOptions::SetUpdateDescWhenSavingClip(m_cbUpdateDescription.GetCheck());
+	CGetSetOptions::SetUpdateDescWhenSavingClip(m_updateDescriptionButton.GetCheck());
 }
 
 void CEditWnd::OnSetFocus(CWnd* pOldWnd)
 {
 	CWnd::OnSetFocus(pOldWnd);
 
-	int nTab = m_Tabs.GetActiveTab();
-	if(nTab >= 0 && nTab < (int)m_Edits.size())
+	int nTab = m_tabControl.GetActiveTab();
+	if(nTab >= 0 && nTab < (int)m_edits.size())
 	{
-		CDittoRulerRichEditCtrl *pEdit = m_Edits[nTab];
+		CDittoRulerRichEditCtrl *pEdit = m_edits[nTab];
 		if(pEdit)
 		{
 			pEdit->SetFocus();
@@ -319,10 +351,10 @@ void CEditWnd::OnSetFocus(CWnd* pOldWnd)
 
 bool CEditWnd::CloseEdits(bool bPrompt)
 {
-	BOOL bUpdateDesc = m_cbUpdateDescription.GetCheck();
+	BOOL bUpdateDesc = m_updateDescriptionButton.GetCheck();
 
 	int nTab = 0;
-	for(std::vector<CDittoRulerRichEditCtrl*>::iterator it = m_Edits.begin(); it != m_Edits.end();)
+	for(std::vector<CDittoRulerRichEditCtrl*>::iterator it = m_edits.begin(); it != m_edits.end();)
 	{
 		CDittoRulerRichEditCtrl *pEdit = *it;
 		if(pEdit)
@@ -330,12 +362,12 @@ bool CEditWnd::CloseEdits(bool bPrompt)
 			if(pEdit->CloseEdit(bPrompt, bUpdateDesc) == false)
 				return false;
 
-			m_Tabs.DeleteItem(nTab);
+			m_tabControl.DeleteItem(nTab);
 			pEdit->DestroyWindow();
 			delete pEdit;
 			pEdit = NULL;
 
-			it = m_Edits.erase(it);
+			it = m_edits.erase(it);
 		}
 		else
 		{
@@ -349,22 +381,22 @@ bool CEditWnd::CloseEdits(bool bPrompt)
 
 void CEditWnd::OnClose()
 {	
-	BOOL bUpdateDesc = m_cbUpdateDescription.GetCheck();
-	int nTab = m_Tabs.GetActiveTab();
-	if(nTab >= 0 && nTab < (int)m_Edits.size())
+	BOOL bUpdateDesc = m_updateDescriptionButton.GetCheck();
+	int activeTab = m_tabControl.GetActiveTab();
+	if(activeTab >= 0 && activeTab < (int)m_edits.size())
 	{
-		CDittoRulerRichEditCtrl *pEdit = m_Edits[nTab];
+		CDittoRulerRichEditCtrl *pEdit = m_edits[activeTab];
 		if(pEdit)
 		{
 			if(pEdit->CloseEdit(true, bUpdateDesc))
 			{
-				m_Tabs.DeleteItem(nTab);
+				m_tabControl.DeleteItem(activeTab);
 				pEdit->DestroyWindow();
 				delete pEdit;
 				pEdit = NULL;
-				m_Edits.erase(m_Edits.begin()+nTab);
+				m_edits.erase(m_edits.begin()+ activeTab);
 
-				if(m_Edits.size() <= 0)
+				if(m_edits.size() <= 0)
 				{
 					CWnd *pParent = GetParent();
 					if(pParent)
@@ -386,10 +418,10 @@ void CEditWnd::OnSaveCloseClipboard()
 {
 	if(DoSave())
 	{
-		if(m_lLastSaveID >= 0)
+		if(m_lastSaveID >= 0)
 		{
 			CProcessPaste Paste;
-			Paste.GetClipIDs().Add(m_lLastSaveID);
+			Paste.GetClipIDs().Add(m_lastSaveID);
 			Paste.m_bSendPaste = false;
 			Paste.DoPaste();
 		}
@@ -400,7 +432,7 @@ void CEditWnd::OnSaveCloseClipboard()
 
 BOOL CEditWnd::PreTranslateMessage(MSG* pMsg)
 {
-	m_ToolTip.RelayEvent(pMsg);
+	m_toolTipControl.RelayEvent(pMsg);
 
 	if(pMsg->message == WM_KEYDOWN)
 	{

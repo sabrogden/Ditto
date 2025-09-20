@@ -1012,6 +1012,7 @@
     <ClInclude Include="src\EditFrameWnd.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\RulerRichEditCtrl\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
@@ -1681,5 +1682,11 @@
     <Image Include="src\RulerRichEditCtrl\toolbar.bmp">
       <Filter>src\RulerRichEditCtrl</Filter>
     </Image>
+    <Image Include="res\edit_wnd.bmp" />
+    <Image Include="res\bmp00004.bmp" />
+    <Image Include="res\bmp00005.bmp" />
+    <Image Include="res\bmp00006.bmp" />
+    <Image Include="res\bmp00007.bmp" />
+    <Image Include="src\RulerRichEditCtrl\toolbar_.bmp" />
   </ItemGroup>
 </Project>

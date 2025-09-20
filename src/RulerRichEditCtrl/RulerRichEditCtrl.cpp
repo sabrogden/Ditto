@@ -267,7 +267,7 @@ BOOL CRulerRichEditCtrl::CreateToolbar()
 	CRect rect;
 	GetClientRect( rect );
 
-	CRect toolbarRect( 0, 0, rect.right, TOOLBAR_HEIGHT );
+	CRect toolbarRect( 0, 0, rect.right, m_dpi.Scale(TOOLBAR_HEIGHT));
 	return m_toolbar.Create( this, toolbarRect );
 }
 

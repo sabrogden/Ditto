@@ -21,13 +21,13 @@ public:
 protected:
 	DECLARE_MESSAGE_MAP()
 
-	CTabCtrlEx m_Tabs;
-	CMFCToolBar m_ToolBar;
-	CToolTipCtrl m_ToolTip;
-	std::vector<CDittoRulerRichEditCtrl*> m_Edits;
-	CButton m_cbUpdateDescription;
-	CFont m_Font;
-	long m_lLastSaveID;
+	CTabCtrlEx m_tabControl;
+	CToolBar m_toolBarControl;
+	CToolTipCtrl m_toolTipControl;
+	std::vector<CDittoRulerRichEditCtrl*> m_edits;
+	CButton m_updateDescriptionButton;
+	CFont m_font;
+	long m_lastSaveID;
 
 	CDPI m_dpi;
 
@@ -37,6 +37,7 @@ protected:
 	bool AddItem(int id);
 	bool DoSave();
 	bool DoSaveItem(int index);
+	void LoadToolbarDPI();
 
 public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);

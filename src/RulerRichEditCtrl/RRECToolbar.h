@@ -67,9 +67,11 @@ protected:
 
 private:
 
-	CFontComboBox	m_font;
+	CFontComboBox	m_fontCombo;
 	CSizeComboBox	m_size;
 	CColourPicker	m_color;
+
+	CFont m_font;
 
 	CDPI m_dpi;
 

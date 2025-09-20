@@ -8,9 +8,15 @@
 #define IDR_CP_MAITYPE                  129
 #define IDR_EDIT_WND                    129
 #define IDR_MENU                        130
+#define IDR_EDIT_WND1                   130
+#define IDR_EDIT_WND_200                130
 #define IDD_SELECT_DB                   131
+#define IDR_EDIT_WND_125                131
 #define IDD_OPTIONS_STATS               132
+#define IDR_EDIT_WND_150                132
+#define IDR_EDIT_WND_175                133
 #define IDD_ADD_TYPE                    134
+#define IDR_EDIT_WND_225                134
 #define IDD_COPY_PROPERTIES             135
 #define IDD_ABOUT                       136
 #define IDD_GROUP_NAME                  138

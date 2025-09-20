@@ -86,6 +86,9 @@ BOOL CRRECToolbar::Create( CWnd* parent, CRect& rc )
 
    ============================================================*/
 {
+	m_dpi.SetHwnd(m_hWnd);
+
+	m_font.CreateFont(-m_dpi.Scale(13), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
 
 	BOOL result = FALSE;
 
@@ -172,7 +175,7 @@ BOOL CRRECToolbar::Create( CWnd* parent, CRect& rc )
 		rect.bottom += COMBO_HEIGHT;
 
 		// The font name combo
-		if( m_font.Create( WS_CHILD | 
+		if(m_fontCombo.Create( WS_CHILD |
 							WS_VSCROLL |
 							WS_VISIBLE |
 							CBS_AUTOHSCROLL | 
@@ -182,8 +185,8 @@ BOOL CRRECToolbar::Create( CWnd* parent, CRect& rc )
 							rect, this, DROPDOWN_FONT ) )
 		{
 
-			m_font.SetFont( CFont::FromHandle( ( HFONT ) ::GetStockObject( ANSI_VAR_FONT ) ) );
-			m_font.FillCombo();
+			m_fontCombo.SetFont(&m_font);
+			m_fontCombo.FillCombo();
 
 			tbi.cx = COMBO_WIDTH;
 			SetButtonInfo( FONT_SIZE_POS, &tbi );
@@ -199,7 +202,7 @@ BOOL CRRECToolbar::Create( CWnd* parent, CRect& rc )
 								rect, this, DROPDOWN_SIZE ) )
 			{
 
-				m_size.SetFont( CFont::FromHandle( ( HFONT ) ::GetStockObject( ANSI_VAR_FONT ) ) );
+				m_size.SetFont(&m_font);
 				m_size.FillCombo();
 				CString color;
 				CString defaultText;
@@ -218,24 +221,17 @@ BOOL CRRECToolbar::Create( CWnd* parent, CRect& rc )
 									WS_CHILD,
 									rect, this, BUTTON_COLOR ) )
 				{
-
 					m_color.SetDefaultText( defaultText );
 					m_color.SetCustomText( customText );
 					m_color.SetSelectionMode( CP_MODE_TEXT );
 					m_color.SetBkColour( RGB( 255, 255, 255 ) );
 
-					m_color.SetFont( CFont::FromHandle( ( HFONT ) ::GetStockObject( ANSI_VAR_FONT ) ) );
+					m_color.SetFont(&m_font);
 					result = TRUE;
-
 				}
-
 			}
-
 		}
-
 	}
-
-	m_dpi.SetHwnd(m_hWnd);
 
 	return result;
 
@@ -270,10 +266,10 @@ void CRRECToolbar::OnSelchangeFont()
 {
 
 	CString font;
-	int index = m_font.GetCurSel();
+	int index = m_fontCombo.GetCurSel();
 	if( index != CB_ERR )
 	{
-		m_font.GetLBText( index, font );
+		m_fontCombo.GetLBText( index, font );
 		GetParent()->SendMessage( urm_SETCURRENTFONTNAME, ( WPARAM ) ( LPCTSTR ) font, 0 );
 
 	}	
@@ -348,8 +344,8 @@ void CRRECToolbar::SetFontName( const CString& font )
    ============================================================*/
 {
 
-	if( m_font.m_hWnd )
-		m_font.SelectFontName( font );
+	if(m_fontCombo.m_hWnd )
+		m_fontCombo.SelectFontName( font );
 
 }
 
@@ -396,4 +392,12 @@ void CRRECToolbar::SetFontColor( COLORREF color )
 void CRRECToolbar::OnDpiChanged(CWnd* pParent, int dpi)
 {
 	m_dpi.Update(dpi);
+
+	m_font.DeleteObject();
+
+	m_font.CreateFont(-m_dpi.Scale(13), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+
+	m_fontCombo.SetFont(&m_font);
+	m_size.SetFont(&m_font);
+	m_color.SetFont(&m_font);
 }
