@@ -23,7 +23,6 @@
    ========================================================================*/
 
 #include "stdafx.h"
-#include "ids.h"
 #include "RulerRichEdit.h"
 
 #ifdef _DEBUG
@@ -133,7 +132,7 @@ void CRulerRichEdit::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 
 	}
 
-	UpdateRuler();
+	//UpdateRuler();
 
 }
 
@@ -152,7 +151,7 @@ void CRulerRichEdit::OnChange()
    ============================================================*/
 {
 
-	UpdateRuler();
+	//UpdateRuler();
 
 }
 
@@ -178,25 +177,25 @@ UINT CRulerRichEdit::OnGetDlgCode()
 /////////////////////////////////////////////////////////////////////////////
 // CRulerRichEdit private helpers
 
-void CRulerRichEdit::UpdateRuler()
-/* ============================================================
-	Function :		CRulerRichEdit::UpdateRuler
-	Description :	Updates the ruler.
-	Access :		Private
-					
-	Return :		void
-	Parameters :	none
-
-	Usage :			Call to update the parent ruler field.
-
-   ============================================================*/
-{
-
-	CRect rect;
-	GetClientRect( rect );
-	rect.top = TOOLBAR_HEIGHT;
-	rect.bottom = rect.top + TOP_HEIGHT;
-	GetParent()->RedrawWindow( rect );
-
-}
+//void CRulerRichEdit::UpdateRuler()
+///* ============================================================
+//	Function :		CRulerRichEdit::UpdateRuler
+//	Description :	Updates the ruler.
+//	Access :		Private
+//					
+//	Return :		void
+//	Parameters :	none
+//
+//	Usage :			Call to update the parent ruler field.
+//
+//   ============================================================*/
+//{
+//
+//	CRect rect;
+//	GetClientRect( rect );
+//	rect.top = TOOLBAR_HEIGHT;
+//	rect.bottom = rect.top + TOP_HEIGHT;
+//	GetParent()->RedrawWindow( rect );
+//
+//}
 

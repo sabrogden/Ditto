@@ -50,9 +50,10 @@
 #include "..\Options.h"
 #include "..\Misc.h"
 #include "..\HyperLink.h"
-
-#include "ids.h"
 #include ".\rulerricheditctrl.h"
+#include "..\..\resource.h"
+
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -68,6 +69,8 @@ UINT urm_GETSCROLLPOS = ::RegisterWindowMessage( _T( "_RULERRICHEDITCTRL_GET_SCR
 UINT urm_SETCURRENTFONTNAME = ::RegisterWindowMessage( _T( "_RULERRICHEDITCTRL_SET_CURRENT_FONT_NAME" ) );
 UINT urm_SETCURRENTFONTSIZE = ::RegisterWindowMessage( _T( "_RULERRICHEDITCTRL_SET_CURRENT_FONT_SIZE" ) );
 UINT urm_SETCURRENTFONTCOLOR = ::RegisterWindowMessage( _T( "_RULERRICHEDITCTRL_SET_CURRENT_FONT_COLOR" ) );
+
+#define TOOLBAR_HEIGHT		28
 
 /////////////////////////////////////////////////////////////////////////////
 // Stream callback functions
@@ -150,7 +153,7 @@ static DWORD CALLBACK StreamIn( DWORD_PTR dwCookie, LPBYTE pbBuff, LONG cb, LONG
 /////////////////////////////////////////////////////////////////////////////
 // CRulerRichEditCtrl
 
-CRulerRichEditCtrl::CRulerRichEditCtrl() : m_pen( PS_DOT, 0, RGB( 0, 0, 0 ) )
+CRulerRichEditCtrl::CRulerRichEditCtrl()
 /* ============================================================
 	Function :		CRulerRichEditCtrl::CRulerRichEditCtrl
 	Description :	constructor
@@ -163,14 +166,12 @@ CRulerRichEditCtrl::CRulerRichEditCtrl() : m_pen( PS_DOT, 0, RGB( 0, 0, 0 ) )
 
    ============================================================*/
 {
-	m_rulerPosition = 0;
 	m_margin = 0;
 	m_movingtab = -1;
 	m_offset = 0;
 	m_readOnly = FALSE;
 	m_bInWrapMode = g_Opt.GetEditWordWrap();
 	ShowToolbar();
-	ShowRuler();
 }
 
 CRulerRichEditCtrl::~CRulerRichEditCtrl()
@@ -185,8 +186,7 @@ CRulerRichEditCtrl::~CRulerRichEditCtrl()
 	Usage :			
 
    ============================================================*/
-{
-	m_pen.DeleteObject();
+{	
 }
 
 
@@ -215,7 +215,6 @@ BOOL CRulerRichEditCtrl::Create( DWORD dwStyle, const RECT &rect, CWnd* pParentW
 	BOOL result = CWnd::Create(NULL, _T( "" ), dwStyle, rect, pParentWnd, nID);
 	if ( result )
 	{
-
 		result = FALSE;
 		// Save screen resolution for
 		// later on.
@@ -228,20 +227,36 @@ BOOL CRulerRichEditCtrl::Create( DWORD dwStyle, const RECT &rect, CWnd* pParentW
 			CreateMargins();
 			if( CreateToolbar() )
 			{
-				if( CreateRuler() )
-				{
-					UpdateToolbarButtons();
-					result = TRUE;
-				}
+				UpdateToolbarButtons();
+				result = TRUE;				
 			}
 
 			//Do wrap will reverse the saved option so initially set it as opposite of what it's saved as
 			m_bInWrapMode = !m_bInWrapMode;
 			DoWrap();
-		}		
+		}
+
+		m_dpi.SetHwnd(m_hWndOwner);
 	}
 
 	return result;
+}
+
+void CRulerRichEditCtrl::OnDpiChanged(CWnd* pParent, int dpi)
+{
+	m_dpi.Update(dpi);
+	
+	m_toolbar.DestroyWindow();
+	CreateToolbar();
+
+	UpdateToolbarButtons();
+
+	m_toolbar.Invalidate();
+	m_toolbar.RedrawWindow();
+
+	CRect rect;
+	GetClientRect(rect);
+	LayoutControls(rect.Width(), rect.Height());
 }
 
 BOOL CRulerRichEditCtrl::CreateToolbar()
@@ -261,28 +276,8 @@ BOOL CRulerRichEditCtrl::CreateToolbar()
 	CRect rect;
 	GetClientRect( rect );
 
-	CRect toolbarRect( 0, 0, rect.right, TOOLBAR_HEIGHT );
-	return m_toolbar.Create( this, toolbarRect );
-}
-
-BOOL CRulerRichEditCtrl::CreateRuler()
-/* ============================================================
-	Function :		CRulerRichEditCtrl::CreateRuler
-	Description :	Creates the ruler control
-	Access :		Private
-
-	Return :		BOOL	-	"TRUE" if created ok.
-	Parameters :	none
-
-	Usage :			Called during control creation
-
-   ============================================================*/
-{
-	CRect rect;
-	GetClientRect( rect );
-
-	CRect rulerRect( 0, TOOLBAR_HEIGHT, rect.right, TOOLBAR_HEIGHT + RULER_HEIGHT );
-	return m_ruler.Create( rulerRect, this, RULER_CONTROL );
+	CRect toolbarRect( 0, 0, rect.right, m_dpi.Scale(TOOLBAR_HEIGHT));
+	return m_toolbar.Create( this, toolbarRect, ToolbarIdPerDPI());
 }
 
 BOOL CRulerRichEditCtrl::CreateRTFControl( BOOL autohscroll )
@@ -306,7 +301,7 @@ BOOL CRulerRichEditCtrl::CreateRTFControl( BOOL autohscroll )
 	CRect rect;
 	GetClientRect( rect );
 
-	int top = TOOLBAR_HEIGHT + RULER_HEIGHT;
+	int top = TOOLBAR_HEIGHT;
 	CRect rtfRect( 0, top, rect.right, rect.bottom );
 	DWORD style = ES_NOHIDESEL|WS_CHILD|WS_VISIBLE|WS_HSCROLL|WS_VSCROLL|ES_WANTRETURN|ES_MULTILINE;
 	if( autohscroll )
@@ -392,7 +387,7 @@ void CRulerRichEditCtrl::CreateMargins()
 	// Create the margin for the toolbar 
 	// controls and the ruler.
 	m_margin = scmargin * 2 + r2.left - r1.left;
-	m_ruler.SetMargin( m_margin );
+	//m_ruler.SetMargin( m_margin );
 }
 
 BEGIN_MESSAGE_MAP(CRulerRichEditCtrl, CWnd)
@@ -416,7 +411,6 @@ BEGIN_MESSAGE_MAP(CRulerRichEditCtrl, CWnd)
 	ON_BN_CLICKED(BUTTON_BULLET, OnButtonBullet)
 	ON_BN_CLICKED(ID_BUTTONWRAP, OnButtonWrap)
 	ON_WM_SETFOCUS()
-	ON_REGISTERED_MESSAGE(urm_RULERACTION, OnTrackRuler)
 	ON_REGISTERED_MESSAGE(urm_GETSCROLLPOS, OnGetScrollPos)
 	ON_REGISTERED_MESSAGE(urm_SETCURRENTFONTNAME, OnSetCurrentFontName)
 	ON_REGISTERED_MESSAGE(urm_SETCURRENTFONTSIZE, OnSetCurrentFontSize)
@@ -514,7 +508,7 @@ BOOL CRulerRichEditCtrl::OnNotify( WPARAM wParam, LPARAM lParam, LRESULT* pResul
 		CRect rect;
 		GetClientRect( rect );
 		rect.top = TOOLBAR_HEIGHT;
-		rect.bottom = rect.top + RULER_HEIGHT;
+		rect.bottom = rect.top;
 
 		RedrawWindow( rect );
 
@@ -590,166 +584,6 @@ LRESULT CRulerRichEditCtrl::OnGetScrollPos(WPARAM, LPARAM)
 {
 
 	return m_rtf.GetScrollPos( SB_HORZ );
-
-}
-
-LRESULT CRulerRichEditCtrl::OnTrackRuler(WPARAM mode, LPARAM pt)
-/* ============================================================
-	Function :		CRulerRichEditCtrl::OnTrackRuler
-	Description :	The function handles the registered message 
-					"urm_RULERACTION", that is sent from the 
-					mouse handling mappings in the ruler control.
-					The function handles dragging of tabulator 
-					points in the ruler.
-	Access :		Protected
-					
-	Return :		LRESULT		-	Not used
-	Parameters :	WPARAM mode	-	The type of mouse operation, 
-									"DOWN", "MOVE" or "UP"
-					LPARAM pt	-	Cursor point for the cursor.
-					
-	Usage :			Called from MFC.
-
-   ============================================================*/
-{
-
-	CPoint* point = ( CPoint* ) pt;
-	int toolbarHeight = 0;
-	if( m_showToolbar )
-		toolbarHeight = TOOLBAR_HEIGHT;
-
-	switch( mode )
-	{
-		case DOWN:
-			// The left mouse button is clicked
-			{
-				// Check if we clicked on a tab-marker.
-				int pos = m_rtf.GetScrollPos( SB_HORZ );
-				m_movingtab = -1;
-				CRect hitRect;
-				int y = RULER_HEIGHT - 9;
-				for( int t = 0 ; t < MAX_TAB_STOPS ; t++ )
-				{
-					int x = m_tabs[ t ] + m_margin - pos;
-					hitRect.SetRect( x - 2, y - 1, x + 3, y + 3 );
-					if( hitRect.PtInRect( *point ) )
-					{
-						// Yes, we did.
-						m_movingtab = t;
-
-						// Calc offset, as the hit area is wider than
-						// the 1 pixel tab line
-						m_offset = point->x - ( m_tabs[ t ] + m_margin - pos );
-					}
-				}
-
-				if( m_movingtab != -1 )
-				{
-
-					// We did click in a tab marker.
-					// Start dragging
-
-					// Find initial ruler position
-					m_rulerPosition = point->x - m_offset;
-					CRect rect;
-					GetClientRect( rect );
-
-					// Draw a new ruler line
-					CClientDC dc( this );
-					dc.SelectObject( &m_pen );
-					dc.SetROP2( R2_XORPEN );
-
-					dc.MoveTo( m_rulerPosition, toolbarHeight + 3 );
-					dc.LineTo( m_rulerPosition, rect.Height() );
-
-					dc.SelectStockObject( BLACK_PEN );
-
-				}
-			}
-			break;
-
-		case MOVE:
-			// The mouse is moved
-			{
-				if( m_movingtab != -1 )
-				{
-					CRect rect;
-					GetClientRect( rect );
-					CClientDC dc( this );
-
-					// Erase previous line
-					dc.SelectObject( &m_pen );
-					dc.SetROP2( R2_XORPEN );
-
-					dc.MoveTo( m_rulerPosition, toolbarHeight + 3 );
-					dc.LineTo( m_rulerPosition, rect.Height() );
-
-					// Set up new line
-					// Calc min and max. We can not place this marker 
-					// before the previous or after the next. Neither 
-					// can we move the marker outside the ruler.
-					int pos = m_rtf.GetScrollPos( SB_HORZ );
-					int min = m_margin + m_offset;
-					if( m_movingtab > 0 )
-						min = ( m_tabs[ m_movingtab - 1 ] + m_margin - pos ) + 3 + m_offset;
-
-					int max = rect.Width() - 5 + m_offset;
-					if( m_movingtab < m_tabs.GetUpperBound() )
-						max = ( m_tabs[ m_movingtab + 1 ] + m_margin - pos ) - 3 + m_offset;
-					max = min( max, rect.Width() - 5 + m_offset );
-
-					// Set new positions
-					m_rulerPosition = max( min, point->x - m_offset );
-					m_rulerPosition = min( m_rulerPosition, max );
-
-					// Draw the new line
-					dc.MoveTo( m_rulerPosition, toolbarHeight + 3 );
-					dc.LineTo( m_rulerPosition, rect.Height() );
-
-					dc.SelectStockObject( BLACK_PEN );
-
-				}
-			}
-			break;
-
-		case UP:
-			// The mouse button is released
-			{
-				if( m_movingtab != -1 )
-				{
-
-					// Set new value for tab position
-					int pos = m_rtf.GetScrollPos( SB_HORZ );
-					m_tabs[ m_movingtab ] = m_rulerPosition - m_margin + pos - m_offset;
-
-					// Get the current tabstops, as we
-					// must set all tabs in one operation
-					ParaFormat para( PFM_TABSTOPS );
-					para.cTabCount = MAX_TAB_STOPS;
-					m_rtf.GetParaFormat( para );
-
-					// Convert current position to twips
-					double twip = ( double )m_physicalInch / 1440;
-					int tabpos = m_tabs[ m_movingtab ];
-					tabpos = ( int ) ( ( double ) tabpos / twip +.5 );
-					para.rgxTabs[ m_movingtab ] = tabpos; 
-
-					// Set tabs to control
-					m_rtf.SetParaFormat( para );
-
-					// Erase the ruler
-					m_ruler.RedrawWindow();
-					m_rtf.RedrawWindow();
-
-					m_movingtab = -1;
-					m_rtf.SetFocus();
-
-				}
-			}
-			break;
-	}
-
-	return 0;
 
 }
 
@@ -1026,7 +860,7 @@ void CRulerRichEditCtrl::SetMode( int mode )
    ============================================================*/
 {
 
-	m_ruler.SetMode( mode );
+	//m_ruler.SetMode( mode );
 
 }
 
@@ -1046,7 +880,8 @@ int CRulerRichEditCtrl::GetMode() const
    ============================================================*/
 {
 
-	return m_ruler.GetMode();
+	return 0;
+	//return m_ruler.GetMode();
 
 }
 
@@ -1121,9 +956,35 @@ void CRulerRichEditCtrl::OnButtonBold()
 
    ============================================================*/
 {
-
 	DoBold();
+}
 
+int CRulerRichEditCtrl::ToolbarIdPerDPI()
+{
+	int scale = m_dpi.Scale(100);
+
+	if (scale >= 225)
+	{
+		return IDR_EDIT_WND_FORMAT_225;
+	}
+	else if (scale >= 200)
+	{
+		return IDR_EDIT_WND_FORMAT_200;
+	}
+	else if (scale >= 175)
+	{
+		return IDR_EDIT_WND_FORMAT_175;
+	}
+	else if (scale >= 150)
+	{
+		return IDR_EDIT_WND_FORMAT_150;
+	}
+	else if (scale >= 125)
+	{
+		return IDR_EDIT_WND_FORMAT_125;
+	}
+	
+	return IDR_EDIT_WND_FORMAT;	
 }
 
 void CRulerRichEditCtrl::OnButtonWrap()
@@ -1308,7 +1169,7 @@ void CRulerRichEditCtrl::SetTabStops( LPLONG tabs, int size )
 
 	}
 
-	m_ruler.SetTabStops( m_tabs );
+	//m_ruler.SetTabStops( m_tabs );
 }
 
 void CRulerRichEditCtrl::UpdateTabStops()
@@ -1985,34 +1846,6 @@ void CRulerRichEditCtrl::ShowToolbar( BOOL show )
 	}
 }
 
-void CRulerRichEditCtrl::ShowRuler( BOOL show )
-/* ============================================================
-	Function :		CRulerRichEditCtrl::ShowRuler
-	Description :	Shows or hides the ruler
-	Access :		Public
-					
-	Return :		void
-	Parameters :	BOOL show	-	"TRUE" to show
-					
-	Usage :			Call to show or hide the ruler subcontrol
-
-   ============================================================*/
-{
-	m_showRuler = show;
-
-	if( m_hWnd )
-	{
-		if( show )
-			m_ruler.ShowWindow( SW_SHOW );
-		else
-			m_ruler.ShowWindow( SW_HIDE );
-
-		CRect rect;
-		GetClientRect( rect );
-		LayoutControls( rect.Width(), rect.Height() );
-	}
-}
-
 void CRulerRichEditCtrl::LayoutControls( int width, int height )
 /* ============================================================
 	Function :		CRulerRichEditCtrl::LayoutControls
@@ -2030,15 +1863,11 @@ void CRulerRichEditCtrl::LayoutControls( int width, int height )
 {
 	int toolbarHeight = 0;
 	if( m_showToolbar )
-		toolbarHeight = TOOLBAR_HEIGHT;
-	int rulerHeight = 0;
-	if( m_showRuler )
-		rulerHeight = RULER_HEIGHT;
+		toolbarHeight = m_dpi.Scale(TOOLBAR_HEIGHT);
 
 	m_toolbar.MoveWindow( 0, 0, width, toolbarHeight );
-	m_ruler.MoveWindow( 0, toolbarHeight, width, rulerHeight );
 
-	int top = toolbarHeight + rulerHeight;
+	int top = toolbarHeight;
 	CRect rect( 0, top, width, height );
 	m_rtf.MoveWindow( rect );
 }
@@ -2057,22 +1886,6 @@ BOOL CRulerRichEditCtrl::IsToolbarVisible() const
    ============================================================*/
 {
 	return m_showToolbar;
-}
-
-BOOL CRulerRichEditCtrl::IsRulerVisible() const
-/* ============================================================
-	Function :		CRulerRichEditCtrl::IsRulerVisible
-	Description :	Returns if the ruler is visible or not
-	Access :		Public
-					
-	Return :		BOOL	-	"TRUE" if visible
-	Parameters :	none
-					
-	Usage :			Call to get the visibility of the ruler
-
-   ============================================================*/
-{
-	return m_showRuler;
 }
 
 void CRulerRichEditCtrl::SetReadOnly( BOOL readOnly )

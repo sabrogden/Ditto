@@ -10,6 +10,7 @@
 #include "FontComboBox.h"
 #include "SizeComboBox.h"
 #include "External/ColourPicker.h"
+#include "../DPI.h"
 
 struct CToolBarData
 {
@@ -31,7 +32,7 @@ class CRRECToolbar : public CToolBarCtrl
 // Construction
 public:
 	CRRECToolbar();
-	BOOL Create( CWnd* parent, CRect& rect );
+	BOOL Create( CWnd* parent, CRect& rect, int resourceId);
 
 // Attributes
 public:
@@ -65,9 +66,13 @@ protected:
 
 private:
 
-	CFontComboBox	m_font;
+	CFontComboBox	m_fontCombo;
 	CSizeComboBox	m_size;
 	CColourPicker	m_color;
+
+	CFont m_font;
+
+	CDPI m_dpi;
 
 };
 

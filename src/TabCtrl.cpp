@@ -119,7 +119,11 @@ BOOL CTabCtrlEx::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT 
 	}
 
 	if (bRet)
+	{
 		bRet = CWnd::Create(SHEET_CLASSNAME, _T(""), dwStyle, rect, pParentWnd, nID);
+	}
+
+	m_dpi.SetHwnd(m_hWnd);
 
 	return bRet;
 }
@@ -135,9 +139,25 @@ int CTabCtrlEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_penGray.CreatePen(PS_SOLID, 1, RGB(172, 168, 153));
 	m_penBlack.CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
 
+	m_nTabHeight = m_dpi.Scale(19);
+
 	SetTabHeight(m_nTabHeight);
 
 	return 0;
+}
+
+void CTabCtrlEx::OnDpiChanged(CWnd* pParent, int dpi)
+{
+	m_dpi.Update(dpi);
+
+	m_nTabHeight = m_dpi.Scale(19);
+
+	SetTabHeight(m_nTabHeight);
+
+	for (int iTab = 0; iTab < m_Tabs.GetSize(); iTab++)
+	{
+		m_Tabs[iTab].lWidth = GetTextWidth(m_Tabs[iTab].csTitle);
+	}
 }
 
 void CTabCtrlEx::SetTabHeight(int nTabHeight)

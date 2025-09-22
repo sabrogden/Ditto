@@ -713,7 +713,6 @@
     <ClCompile Include="src\RulerRichEditCtrl\External\ColourPopup.cpp" />
     <ClCompile Include="src\RulerRichEditCtrl\External\StdioFileEx.cpp" />
     <ClCompile Include="src\RulerRichEditCtrl\FontComboBox.cpp" />
-    <ClCompile Include="src\RulerRichEditCtrl\RRECRuler.cpp" />
     <ClCompile Include="src\RulerRichEditCtrl\RRECToolbar.cpp" />
     <ClCompile Include="src\RulerRichEditCtrl\RulerRichEdit.cpp" />
     <ClCompile Include="src\RulerRichEditCtrl\RulerRichEditCtrl.cpp" />
@@ -790,18 +789,6 @@
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NDEBUG;_AFXDLL</PreprocessorDefinitions>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">NDEBUG;_AFXDLL</PreprocessorDefinitions>
     </ResourceCompile>
-    <ResourceCompile Include="src\RulerRichEditCtrl\RulerRichEditCtrl.rc" >
-	  <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">true</ExcludedFromBuild>
-	</ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -938,8 +925,7 @@
     <ClInclude Include="src\RulerRichEditCtrl\External\ColourPopup.h" />
     <ClInclude Include="src\RulerRichEditCtrl\External\StdioFileEx.h" />
     <ClInclude Include="src\RulerRichEditCtrl\FontComboBox.h" />
-    <ClInclude Include="src\RulerRichEditCtrl\ids.h" />
-    <ClInclude Include="src\RulerRichEditCtrl\RRECRuler.h" />
+    <ClInclude Include="src\RulerRichEditCtrl\resource.h" />
     <ClInclude Include="src\RulerRichEditCtrl\RRECToolbar.h" />
     <ClInclude Include="src\RulerRichEditCtrl\RulerRichEdit.h" />
     <ClInclude Include="src\RulerRichEditCtrl\RulerRichEditCtrl.h" />
@@ -1191,6 +1177,15 @@
     </Midl>
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\bmp00004.bmp" />
+    <Image Include="res\bmp00005.bmp" />
+    <Image Include="res\bmp00006.bmp" />
+    <Image Include="res\bmp00007.bmp" />
+    <Image Include="res\bmp00008.bmp" />
+    <Image Include="res\bmp00009.bmp" />
+    <Image Include="res\bmp00010.bmp" />
+    <Image Include="res\bmp00011.bmp" />
+    <Image Include="res\bmp00012.bmp" />
     <Image Include="res\ChevronLeft_Black_36.png" />
     <Image Include="res\ChevronLeft_Black_40.png" />
     <Image Include="res\ChevronLeft_Black_44.png" />
@@ -1215,6 +1210,7 @@
     <Image Include="res\down_24.png" />
     <Image Include="res\down_28.png" />
     <Image Include="res\down_32.png" />
+    <Image Include="res\edit_wnd.bmp" />
     <Image Include="res\icon3.ico" />
     <Image Include="res\maximize_36.png" />
     <Image Include="res\maximize_40.png" />
@@ -1246,6 +1242,7 @@
     <Image Include="res\system_menu_78.png" />
     <Image Include="res\system_menu_84.png" />
     <Image Include="src\RulerRichEditCtrl\toolbar.bmp" />
+    <Image Include="src\RulerRichEditCtrl\toolbar_.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,6 +8,8 @@
 // CRulerRichEdit window
 #include "../RichEditCtrlEx.h"
 
+#define RTF_CONTROL		12
+
 class CRulerRichEdit : public CRichEditCtrlEx
 {
 public:
@@ -29,7 +31,7 @@ protected:
 
 private:
 // Private helpers
-	void UpdateRuler();
+	//void UpdateRuler();
 
 };
 
