@@ -35,7 +35,7 @@ jobs:
             DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
 
       - name: Installer
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.6
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.7
         with:
           path: DittoSetup\DittoSetup_10.iss
-          options: /F"DittoSetupscott" "/dbit64=1"
+          options: /FDittoSetupscott /dbit64=1
