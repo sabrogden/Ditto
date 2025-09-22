@@ -7,6 +7,7 @@
 #include ".\editwnd.h"
 #include "SaveAnimation.h"
 #include "ProcessPaste.h"
+//test
 
 IMPLEMENT_DYNAMIC(CEditWnd, CWnd)
 CEditWnd::CEditWnd()
