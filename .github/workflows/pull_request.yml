@@ -38,4 +38,3 @@ jobs:
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.7
         with:
           path: DittoSetup\DittoSetup_10.iss
-          options: /FDittoSetupscott /dbit64=1

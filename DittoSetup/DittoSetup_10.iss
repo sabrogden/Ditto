@@ -1,16 +1,13 @@
 #define bit64
 
 #define MyAppName               "Ditto"
-#ifdef bit64
-  #define MyAppVersion            GetFileVersion("..\Release64\Ditto.exe")
-#endif
-#ifndef bit64
-  #define MyAppVersion            GetFileVersion("..\Release\Ditto.exe")
-#endif
+#define MyAppVersion            GetFileVersion("..\Release64\Ditto.exe")
 #define MyAppVerName            MyAppName + " " + MyAppVersion
 #define MyAppPublisher          "Scott Brogden"
 #define MyAppSupportURL         "ditto-cp.sourceforge.net"
 #define MyAppCopyrighEndYear    GetDateTimeString('yyyy','','')
+
+#define MyOutputBaseFilename    "DittoSetup_" + GetEnv('VERSION_FILENAME')
 
 ;#define bit64
  
@@ -37,11 +34,9 @@ VersionInfoProductVersion={#MyAppVersion}
 
 AppCopyright={#MyAppPublisher} {#MyAppCopyrighEndYear}
 
-OutputBaseFilename=DittoSetup_scott
-#ifdef bit64
-  ArchitecturesInstallIn64BitMode=x64compatible
-  ArchitecturesAllowed=x64compatible
-#endif
+OutputBaseFilename={#MyOutputBaseFilename}
+ArchitecturesInstallIn64BitMode=x64compatible
+ArchitecturesAllowed=x64compatible
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 ;UsePreviousTasks=no
@@ -109,27 +104,17 @@ Name: RunAtStartup; Description: {cm:RunDittoOnStartup}
 Name: AddFireWallException; Description: {cm:AddFirewallException};  Flags: unchecked
 
 [Files]
-#ifdef bit64
-  Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_64');
-  Source: ..\Release64\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
+Source: ..\Release64\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_64');
+Source: ..\Release64\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\Release64\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
 
-  ; "C:\Windows\sysnative" will be converted to "C:\Windows\System32"
-  ; System32 stores a 64-bit DLL on x64 system
-  Source: C:\Windows\sysnative\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
-  Source: C:\Windows\sysnative\vcruntime140_1.dll;  DestDir: {app}; Flags: ignoreversion 
-  Source: C:\Windows\sysnative\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion
-  Source: C:\Windows\sysnative\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
-#endif
-#ifndef bit64
-  Source: ..\Release\Ditto.exe; DestDir: {app}; DestName: Ditto.exe; Flags: ignoreversion; AfterInstall: AddProgramToFirewall(ExpandConstant('{app}\Ditto.exe'), 'Ditto_FromInstaller_32');
-  Source: ..\Release\ICU_Loader.dll; DestDir: {app}; Flags: ignoreversion
-  Source: ..\Release\Addins\DittoUtil.dll; DestDir: {app}\Addins; Flags: ignoreversion
+; "C:\Windows\sysnative" will be converted to "C:\Windows\System32"
+; System32 stores a 64-bit DLL on x64 system
+Source: C:\Windows\sysnative\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
+Source: C:\Windows\sysnative\vcruntime140_1.dll;  DestDir: {app}; Flags: ignoreversion 
+Source: C:\Windows\sysnative\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion
+Source: C:\Windows\sysnative\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
 
-  Source: C:\Windows\SysWOW64\vcruntime140.dll;  DestDir: {app}; Flags: ignoreversion
-  Source: C:\Windows\SysWOW64\msvcp140.dll;  DestDir: {app}; Flags: ignoreversion
-  Source: C:\Windows\SysWOW64\mfc140u.dll;  DestDir: {app}; Flags: ignoreversion
-#endif
 
 Source: ..\Debug\Language\*; DestDir: {app}\Language; BeforeInstall: BeforeLanguageInstall()
 Source: ..\Debug\Themes\*; DestDir: {app}\Themes
@@ -249,50 +234,25 @@ begin
   Installed := false
   IsInstalled := 0;
 
-  #ifdef bit64
+  if RegQueryDWordValue(HKLM, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64', 'Installed', IsInstalled) then
+  begin
+    if (IsInstalled = 1) then
+    begin
+      Installed := true;
+    end;
+  end;  
 
-    if RegQueryDWordValue(HKLM, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64', 'Installed', IsInstalled) then
+  //double check the HKLM64 key
+  if (IsInstalled <> 1) and IsWin64() then 
+  begin
+    if RegQueryDWordValue(HKLM64, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64', 'Installed', IsInstalled) then
     begin
       if (IsInstalled = 1) then
       begin
         Installed := true;
       end;
     end;  
-
-    //double check the HKLM64 key
-    if (IsInstalled <> 1) and IsWin64() then 
-    begin
-      if RegQueryDWordValue(HKLM64, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64', 'Installed', IsInstalled) then
-      begin
-        if (IsInstalled = 1) then
-        begin
-          Installed := true;
-        end;
-      end;  
-    end;
-
-  #endif
-  #ifndef bit64
-    if RegQueryDWordValue(HKLM, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86', 'Installed', IsInstalled) then
-    begin
-      if (IsInstalled = 1) then
-      begin
-        Installed := true;
-      end;
-    end;  
-
-    //double check the HKLM64 key
-    if (IsInstalled <> 1) and IsWin64() then 
-    begin
-      if RegQueryDWordValue(HKLM64, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86', 'Installed', IsInstalled) then
-      begin
-        if (IsInstalled = 1) then
-        begin
-          Installed := true;
-        end;
-      end;  
-    end;
-  #endif
+  end;
 
   Result := Installed;
 end;
