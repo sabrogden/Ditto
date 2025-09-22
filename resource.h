@@ -18,8 +18,14 @@
 #define IDD_ADD_TYPE                    134
 #define IDR_EDIT_WND_225                134
 #define IDD_COPY_PROPERTIES             135
+#define IDR_EDIT_WND_FORMAT_200         135
 #define IDD_ABOUT                       136
+#define IDR_EDIT_WND_FORMAT_125         136
+#define IDR_EDIT_WND_FORMAT_150         137
 #define IDD_GROUP_NAME                  138
+#define IDR_EDIT_WND_FORMAT_175         138
+#define IDR_EDIT_WND_FORMAT_201         139
+#define IDR_EDIT_WND_FORMAT_225         139
 #define IDB_CLOSED_FOLDER               141
 #define IDB_CLOSED_FOLDER_PRESSED       142
 #define IDB_CLOSED_FOLDER_FOCUSED       143
@@ -847,14 +853,28 @@
 #define ID__VIEWFULLDESCRIPTION         32980
 #define ID__SAVETOFILE                  32981
 #define ID__PROPERTIES                  32982
+#define ID_BUTTON32983                  32983
+#define IDR_EDIT_WND_FORMAT             32984
+#define BUTTON_FONT                     32985
+#define BUTTON_COLOR                    32986
+#define BUTTON_BOLD                     32987
+#define BUTTON_ITALIC                   32988
+#define BUTTON_UNDERLINE                32989
+#define BUTTON_LEFTALIGN                32990
+#define BUTTON_CENTERALIGN              32991
+#define BUTTON_RIGHTALIGN               32992
+#define BUTTON_INDENT                   32993
+#define BUTTON_OUTDENT                  32994
+#define BUTTON_BULLET                   32995
+#define ID_BUTTONWRAP                   32996
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        392
-#define _APS_NEXT_COMMAND_VALUE         32983
+#define _APS_NEXT_RESOURCE_VALUE        394
+#define _APS_NEXT_COMMAND_VALUE         32997
 #define _APS_NEXT_CONTROL_VALUE         2173
 #define _APS_NEXT_SYMED_VALUE           104
 #endif

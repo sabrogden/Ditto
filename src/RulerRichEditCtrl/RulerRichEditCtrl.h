@@ -2,12 +2,8 @@
 #define AFX_RULERRICHEDITCTRL_H__4CD13283_82E4_484A_83B4_DBAD5B64F17C__INCLUDED_
 
 #include "RulerRichEdit.h"
-#include "RRECRuler.h"
 #include "RRECToolbar.h"
 #include "../DPI.h"
-
-#include "ids.h"
-
 #include "../RichEditCtrlEx.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -159,6 +155,7 @@ protected:
 	void	SetAlignment( int alignment );
 
 	void	LayoutControls( int width, int height );
+	int		ToolbarIdPerDPI();
 
 	CDPI m_dpi;
 

@@ -24,7 +24,7 @@
 
 #include "stdafx.h"
 #include "RRECToolbar.h"
-#include "ids.h"
+#include "..\..\resource.h"
 
 #include <tchar.h>
 
@@ -71,7 +71,7 @@ CRRECToolbar::~CRRECToolbar()
 {
 }
 
-BOOL CRRECToolbar::Create( CWnd* parent, CRect& rc )
+BOOL CRRECToolbar::Create( CWnd* parent, CRect& rc, int resourceId)
 /* ============================================================
 	Function :		CRRECToolbar::Create
 	Description :	Creates the toolbar control
@@ -86,45 +86,47 @@ BOOL CRRECToolbar::Create( CWnd* parent, CRect& rc )
 
    ============================================================*/
 {
-	m_dpi.SetHwnd(m_hWnd);
-
-	m_font.CreateFont(-m_dpi.Scale(13), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
-
 	BOOL result = FALSE;
 
-	HINSTANCE hInstance = AfxFindResourceHandle( MAKEINTRESOURCE( TOOLBAR_CONTROL ), RT_TOOLBAR );
+	HINSTANCE hInstance = AfxFindResourceHandle(MAKEINTRESOURCE(resourceId), RT_TOOLBAR);
 	if(!hInstance)
 		return FALSE;
 
-	HRSRC hRsrc = ::FindResource( hInstance, MAKEINTRESOURCE( TOOLBAR_CONTROL ), RT_TOOLBAR );
-	if( !hRsrc )
+	HRSRC hRsrc = ::FindResource(hInstance, MAKEINTRESOURCE(resourceId), RT_TOOLBAR);
+	if(!hRsrc)
 		return FALSE;
 
-	HGLOBAL hGlobal = LoadResource( hInstance, hRsrc );
+	HGLOBAL hGlobal = LoadResource(hInstance, hRsrc);
 	if (hGlobal == NULL)
 		return FALSE;
 
-	CToolBarData* pData = ( CToolBarData* ) LockResource( hGlobal );
+	CToolBarData* pData = (CToolBarData*) LockResource(hGlobal);
 	if (pData == NULL)
 		return FALSE;
 
-	ASSERT( pData->wVersion == 1 );
+	ASSERT(pData->wVersion == 1);
 
 	TBBUTTON tb, tbSep;
-	memset ( &tb, 0, sizeof( tb ) );
-	memset ( &tbSep, 0, sizeof( tbSep ) );
+	memset(&tb, 0, sizeof(tb));
+	memset(&tbSep, 0, sizeof(tbSep));
 
-	result = CToolBarCtrl::Create(WS_VISIBLE|WS_CHILD, rc, parent, TOOLBAR_CONTROL);
+	result = CToolBarCtrl::Create(WS_VISIBLE|WS_CHILD, rc, parent, resourceId);
 
-	if( result )
+	if(result)
 	{
-		SetButtonStructSize( sizeof ( tb ) );
+		m_dpi.Invalidate();
+		m_dpi.SetHwnd(m_hWnd);
 
-		CSize sz ( pData->wWidth, pData->wHeight );
-		SetBitmapSize( sz );
+		m_font.DeleteObject();
+		m_font.CreateFont(-m_dpi.Scale(12), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
+
+		SetButtonStructSize(sizeof(tb));
+
+		CSize sz(pData->wWidth, pData->wHeight);
+		SetBitmapSize(sz);
 		sz.cx += 4;
 		sz.cy += 4;
-		SetButtonSize( sz );
+		SetButtonSize(sz);
 
 		// Loop through adding buttons.
 		tb.fsState = TBSTATE_ENABLED;
@@ -135,98 +137,75 @@ BOOL CRRECToolbar::Create( CWnd* parent, CRect& rc )
 		tbSep.iString = -1;
 		tbSep.fsStyle = TBSTYLE_SEP;
 
-		for( WORD w = 0; w < pData->wItemCount; w++ )
+		for(WORD w = 0; w < pData->wItemCount; w++)
 		{
-			if ( pData->items()[ w ] == 0 )
-				AddButtons( 1, &tbSep );
+			if (pData->items()[w] == 0)
+			{
+				AddButtons(1, &tbSep);
+			}
 			else
 			{
-				tb.idCommand = pData->items()[ w ];
-				AddButtons( 1, &tb );
+				tb.idCommand = pData->items()[w];
+				AddButtons(1, &tb);
 				tb.iBitmap++;
 			}
 		}
 
-		HBITMAP	hBitmap = (HBITMAP) ::LoadImage( hInstance, MAKEINTRESOURCE( TOOLBAR_CONTROL ), IMAGE_BITMAP, 0,0, LR_LOADMAP3DCOLORS );
+		HBITMAP	hBitmap = (HBITMAP)::LoadImage( hInstance, MAKEINTRESOURCE(resourceId), IMAGE_BITMAP, 0,0, LR_LOADMAP3DCOLORS );
 		if( !hBitmap )
 			return FALSE;
 
 		BITMAP bm;
-		memset( &bm, 0, sizeof ( bm ) );
-		::GetObject( hBitmap, sizeof ( bm ), &bm );
-		AddBitmap( bm.bmWidth / pData->wWidth, CBitmap::FromHandle ( hBitmap ) );
+		memset(&bm, 0, sizeof (bm));
+		::GetObject(hBitmap, sizeof (bm), &bm);
+		AddBitmap(bm.bmWidth / pData->wWidth, CBitmap::FromHandle (hBitmap));
 
-		UnlockResource( hGlobal );
-		FreeResource( hGlobal );
-
-		/////////////////////////////////////
-		// Map in combo boxes
-		//
+		UnlockResource(hGlobal);
+		FreeResource(hGlobal);
 
 		CRect rect;
 
 		TBBUTTONINFO tbi;
 		tbi.cbSize = sizeof( TBBUTTONINFO );
-		tbi.cx = FONT_COMBO_WIDTH;
+		tbi.cx = m_dpi.Scale(100);
 		tbi.dwMask = TBIF_SIZE | 0x80000000;  // By index
 
-		SetButtonInfo( FONT_NAME_POS, &tbi );
-		GetItemRect( FONT_NAME_POS, &rect );
-		rect.bottom += COMBO_HEIGHT;
+		SetButtonInfo(2, &tbi);
+		GetItemRect(2, &rect);
 
 		// The font name combo
-		if(m_fontCombo.Create( WS_CHILD |
-							WS_VSCROLL |
-							WS_VISIBLE |
-							CBS_AUTOHSCROLL | 
-							CBS_DROPDOWN | 
-							CBS_SORT | 
-							CBS_HASSTRINGS, 
-							rect, this, DROPDOWN_FONT ) )
+		if(m_fontCombo.Create(WS_CHILD | WS_VSCROLL | WS_VISIBLE | CBS_AUTOHSCROLL | CBS_DROPDOWN | CBS_SORT | CBS_HASSTRINGS, rect, this, 31))
 		{
-
 			m_fontCombo.SetFont(&m_font);
 			m_fontCombo.FillCombo();
+			
+			tbi.cx = m_dpi.Scale(48);
+			SetButtonInfo(4, &tbi);
+			GetItemRect(4, &rect);
 
-			tbi.cx = COMBO_WIDTH;
-			SetButtonInfo( FONT_SIZE_POS, &tbi );
-			GetItemRect( FONT_SIZE_POS, &rect );
-			rect.bottom += COMBO_HEIGHT;
-
-			// The font size combo
-			if( m_size.Create( WS_CHILD | 
-								WS_VISIBLE | 
-								CBS_AUTOHSCROLL | 
-								CBS_DROPDOWNLIST | 
-								CBS_HASSTRINGS, 
-								rect, this, DROPDOWN_SIZE ) )
+			//The font size combo
+			if( m_size.Create( WS_CHILD | WS_VISIBLE | CBS_AUTOHSCROLL | CBS_DROPDOWNLIST | CBS_HASSTRINGS, rect, this, 32))
 			{
-
 				m_size.SetFont(&m_font);
 				m_size.FillCombo();
-				CString color;
-				CString defaultText;
-				CString customText;
-				color.LoadString( STRING_COLOR );
-				defaultText.LoadString( STRING_DEFAULT );
-				customText.LoadString( STRING_CUSTOM );
 
-				tbi.cx = COLOR_WIDTH;
-				SetButtonInfo( FONT_COLOR_POS, &tbi );
-				GetItemRect( FONT_COLOR_POS, &rect );
+				CString color = _T("Color");
+				CString defaultText = _T("Automatic");
+				CString customText = _T("More Colours...");
+
+				tbi.cx = m_dpi.Scale(64);
+				SetButtonInfo(6, &tbi);
+				GetItemRect(6, &rect);
 
 				// The color picker
-				if( m_color.Create( color,
-									WS_VISIBLE|
-									WS_CHILD,
-									rect, this, BUTTON_COLOR ) )
+				if(m_color.Create(color, WS_VISIBLE | WS_CHILD, rect, this, BUTTON_COLOR))
 				{
-					m_color.SetDefaultText( defaultText );
-					m_color.SetCustomText( customText );
-					m_color.SetSelectionMode( CP_MODE_TEXT );
-					m_color.SetBkColour( RGB( 255, 255, 255 ) );
-
+					m_color.SetDefaultText(defaultText);
+					m_color.SetCustomText(customText);
+					m_color.SetSelectionMode(CP_MODE_TEXT);
+					m_color.SetBkColour(RGB(255, 255, 255 ));
 					m_color.SetFont(&m_font);
+
 					result = TRUE;
 				}
 			}
@@ -240,8 +219,8 @@ BOOL CRRECToolbar::Create( CWnd* parent, CRect& rc )
 BEGIN_MESSAGE_MAP(CRRECToolbar, CToolBarCtrl)
 	//{{AFX_MSG_MAP(CRRECToolbar)
 		// NOTE - the ClassWizard will add and remove mapping macros here.
-	ON_CBN_SELCHANGE(DROPDOWN_FONT, OnSelchangeFont)
-	ON_CBN_SELCHANGE(DROPDOWN_SIZE, OnSelchangeSize)
+	ON_CBN_SELCHANGE(31, OnSelchangeFont)
+	ON_CBN_SELCHANGE(32, OnSelchangeSize)
 	ON_MESSAGE(CPN_SELENDOK, OnColorButton)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -366,7 +345,6 @@ void CRRECToolbar::SetFontSize( int size )
 
 	if( m_size.m_hWnd )
 		m_size.SelectSize( size );
-
 }
 
 void CRRECToolbar::SetFontColor( COLORREF color )
@@ -387,17 +365,4 @@ void CRRECToolbar::SetFontColor( COLORREF color )
 	if( m_color.m_hWnd )
 		m_color.SetColour( color );
 
-}
-
-void CRRECToolbar::OnDpiChanged(CWnd* pParent, int dpi)
-{
-	m_dpi.Update(dpi);
-
-	m_font.DeleteObject();
-
-	m_font.CreateFont(-m_dpi.Scale(13), 0, 0, 0, 400, 0, 0, 0, DEFAULT_CHARSET, 3, 2, 1, 34, _T("Segoe UI"));
-
-	m_fontCombo.SetFont(&m_font);
-	m_size.SetFont(&m_font);
-	m_color.SetFont(&m_font);
 }

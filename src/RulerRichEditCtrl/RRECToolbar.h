@@ -32,7 +32,7 @@ class CRRECToolbar : public CToolBarCtrl
 // Construction
 public:
 	CRRECToolbar();
-	BOOL Create( CWnd* parent, CRect& rect );
+	BOOL Create( CWnd* parent, CRect& rect, int resourceId);
 
 // Attributes
 public:
@@ -43,7 +43,6 @@ public:
 	void SetFontName( const CString& font );
 	void SetFontSize( int size );
 	void SetFontColor( COLORREF color );
-	void OnDpiChanged(CWnd* pParent, int dpi);
 
 // Overrides
 	// ClassWizard generated virtual function overrides

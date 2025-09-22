@@ -50,9 +50,10 @@
 #include "..\Options.h"
 #include "..\Misc.h"
 #include "..\HyperLink.h"
-
-#include "ids.h"
 #include ".\rulerricheditctrl.h"
+#include "..\..\resource.h"
+
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -68,6 +69,8 @@ UINT urm_GETSCROLLPOS = ::RegisterWindowMessage( _T( "_RULERRICHEDITCTRL_GET_SCR
 UINT urm_SETCURRENTFONTNAME = ::RegisterWindowMessage( _T( "_RULERRICHEDITCTRL_SET_CURRENT_FONT_NAME" ) );
 UINT urm_SETCURRENTFONTSIZE = ::RegisterWindowMessage( _T( "_RULERRICHEDITCTRL_SET_CURRENT_FONT_SIZE" ) );
 UINT urm_SETCURRENTFONTCOLOR = ::RegisterWindowMessage( _T( "_RULERRICHEDITCTRL_SET_CURRENT_FONT_COLOR" ) );
+
+#define TOOLBAR_HEIGHT		28
 
 /////////////////////////////////////////////////////////////////////////////
 // Stream callback functions
@@ -242,8 +245,14 @@ BOOL CRulerRichEditCtrl::Create( DWORD dwStyle, const RECT &rect, CWnd* pParentW
 void CRulerRichEditCtrl::OnDpiChanged(CWnd* pParent, int dpi)
 {
 	m_dpi.Update(dpi);
+	
+	m_toolbar.DestroyWindow();
+	CreateToolbar();
 
-	m_toolbar.OnDpiChanged(pParent, dpi);
+	UpdateToolbarButtons();
+
+	m_toolbar.Invalidate();
+	m_toolbar.RedrawWindow();
 
 	CRect rect;
 	GetClientRect(rect);
@@ -268,7 +277,7 @@ BOOL CRulerRichEditCtrl::CreateToolbar()
 	GetClientRect( rect );
 
 	CRect toolbarRect( 0, 0, rect.right, m_dpi.Scale(TOOLBAR_HEIGHT));
-	return m_toolbar.Create( this, toolbarRect );
+	return m_toolbar.Create( this, toolbarRect, ToolbarIdPerDPI());
 }
 
 BOOL CRulerRichEditCtrl::CreateRTFControl( BOOL autohscroll )
@@ -292,7 +301,7 @@ BOOL CRulerRichEditCtrl::CreateRTFControl( BOOL autohscroll )
 	CRect rect;
 	GetClientRect( rect );
 
-	int top = TOOLBAR_HEIGHT + RULER_HEIGHT;
+	int top = TOOLBAR_HEIGHT;
 	CRect rtfRect( 0, top, rect.right, rect.bottom );
 	DWORD style = ES_NOHIDESEL|WS_CHILD|WS_VISIBLE|WS_HSCROLL|WS_VSCROLL|ES_WANTRETURN|ES_MULTILINE;
 	if( autohscroll )
@@ -499,7 +508,7 @@ BOOL CRulerRichEditCtrl::OnNotify( WPARAM wParam, LPARAM lParam, LRESULT* pResul
 		CRect rect;
 		GetClientRect( rect );
 		rect.top = TOOLBAR_HEIGHT;
-		rect.bottom = rect.top + RULER_HEIGHT;
+		rect.bottom = rect.top;
 
 		RedrawWindow( rect );
 
@@ -947,9 +956,35 @@ void CRulerRichEditCtrl::OnButtonBold()
 
    ============================================================*/
 {
-
 	DoBold();
+}
 
+int CRulerRichEditCtrl::ToolbarIdPerDPI()
+{
+	int scale = m_dpi.Scale(100);
+
+	if (scale >= 225)
+	{
+		return IDR_EDIT_WND_FORMAT_225;
+	}
+	else if (scale >= 200)
+	{
+		return IDR_EDIT_WND_FORMAT_200;
+	}
+	else if (scale >= 175)
+	{
+		return IDR_EDIT_WND_FORMAT_175;
+	}
+	else if (scale >= 150)
+	{
+		return IDR_EDIT_WND_FORMAT_150;
+	}
+	else if (scale >= 125)
+	{
+		return IDR_EDIT_WND_FORMAT_125;
+	}
+	
+	return IDR_EDIT_WND_FORMAT;	
 }
 
 void CRulerRichEditCtrl::OnButtonWrap()
