@@ -39,8 +39,8 @@ AppCopyright={#MyAppPublisher} {#MyAppCopyrighEndYear}
 
 OutputBaseFilename=DittoSetup_{#MyAppVersion}
 #ifdef bit64
-  ArchitecturesInstallIn64BitMode=x64
-  ArchitecturesAllowed=x64
+  ArchitecturesInstallIn64BitMode=x64compatible
+  ArchitecturesAllowed=x64compatible
 #endif
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
