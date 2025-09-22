@@ -22,6 +22,11 @@ jobs:
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: nuget restore ${{env.SOLUTION_FILE_PATH}}
         
+      - name: Set the value
+        run: |
+            echo "VERSION_FILENAME=3_25_103_0" | Out-File -FilePath $env:GITHUB_ENV -Append
+            echo "VERSION_DOT_FILENAME=3.25.103.0" | Out-File -FilePath $env:GITHUB_ENV -Append
+        
       - name: Build 64bit
         run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
         

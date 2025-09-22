@@ -37,7 +37,7 @@ VersionInfoProductVersion={#MyAppVersion}
 
 AppCopyright={#MyAppPublisher} {#MyAppCopyrighEndYear}
 
-OutputBaseFilename=DittoSetup_{#MyAppVersion}
+OutputBaseFilename=DittoSetup
 #ifdef bit64
   ArchitecturesInstallIn64BitMode=x64compatible
   ArchitecturesAllowed=x64compatible
