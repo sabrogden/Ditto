@@ -69,7 +69,6 @@ jobs:
         uses: Minionguyjpro/Inno-Setup-Action@v1.2.7
         with:
           path: DittoSetup\DittoSetup_10.iss
-          options: /F"DittoSetup_${{env.VERSION_FILENAME}}" "/dbit64=1"
           
       - name: upload-unsigned-artifact
         id: upload-unsigned-artifact
