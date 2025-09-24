@@ -367,7 +367,9 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 
 	ON_COMMAND(ID_SPECIALPASTE_ASCIITEXTONLY, &CQPasteWnd::OnSpecialpasteAsciitextonly)
 	ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_ASCIITEXTONLY, &CQPasteWnd::OnUpdateSpecialpasteAsciitextonly)
-END_MESSAGE_MAP()
+		ON_COMMAND(ID_IMPORT_EXPORTTOWEBSEARCH, &CQPasteWnd::OnImportExporttowebsearch)
+		ON_UPDATE_COMMAND_UI(ID_IMPORT_EXPORTTOWEBSEARCH, &CQPasteWnd::OnUpdateImportExporttowebsearch)
+		END_MESSAGE_MAP()
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -3415,6 +3417,9 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::ASCII_TEXT_ONLY:
 		ret = DoPasteAsciiOnly();
 		break;
+	case ActionEnums::EXPORT_TO_WEB_SEARCH:
+		ret = DoExportToGoogleTranslate();
+		break;
 	}
 
 	return ret;
@@ -4376,6 +4381,58 @@ bool CQPasteWnd::DoExportToQRCode()
 }
 
 bool CQPasteWnd::DoExportToGoogleTranslate()
+{
+	bool ret = false;
+
+	ARRAY IDs;
+	m_lstHeader.GetSelectionItemData(IDs);
+
+	if (IDs.GetCount() > 0)
+	{
+		int id = IDs[0];
+		CClip clip;
+		if (clip.LoadMainTable(id))
+		{
+			if (clip.LoadFormats(id, true))
+			{
+				CString clipText = clip.GetUnicodeTextFormat();
+				if (clipText == _T(""))
+				{
+					CStringA aText = clip.GetCFTextTextFormat();
+					if (aText != _T(""))
+					{
+						clipText = CTextConvert::AnsiToUnicode(aText);
+					}
+				}
+
+				if (clipText != _T(""))
+				{
+					CString clipTextUrlEncoded = InternetEncode(clipText);
+
+					CString url;
+					url.Format(CGetSetOptions::GetWebSearchUrl(), clipTextUrlEncoded);
+
+					if (!CGetSetOptions::m_bShowPersistent)
+					{
+						HideQPasteWindow(false, false);
+					}
+					else if (CGetSetOptions::GetAutoHide())
+					{
+						MinMaxWindow(FORCE_MIN);
+					}
+
+					CHyperLink::GotoURL(url, SW_SHOW);
+
+					ret = true;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+bool CQPasteWnd::DoExportToWebSearch()
 {
 	bool ret = false;
 
@@ -8142,4 +8199,19 @@ void CQPasteWnd::OnUpdateSpecialpasteAsciitextonly(CCmdUI* pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::ASCII_TEXT_ONLY);
+}
+
+void CQPasteWnd::OnImportExporttowebsearch()
+{
+	DoAction(ActionEnums::EXPORT_TO_WEB_SEARCH);
+}
+
+void CQPasteWnd::OnUpdateImportExporttowebsearch(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::EXPORT_TO_WEB_SEARCH);
 }

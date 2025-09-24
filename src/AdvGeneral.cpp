@@ -158,6 +158,7 @@ END_MESSAGE_MAP()
 #define SETTING_IMAGE_EDITOR_PATH 104
 #define SETTING_CLIP_EDIT_SAVE_DELAY_AFTER_LOAD 105
 #define SETTING_ClIP_EDIT_SAVE_DELAY_AFTER_SAVE 106
+#define SETTING_WEB_SEARCH_URL 107
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -322,6 +323,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Update description on clip edit"), CGetSetOptions::GetUpdateDescWhenSavingClip(), SETTING_UPDATE_DESC_ON_CLIP_EDIT);
 	AddTrueFalse(pGroupTest, _T("Update clip order on paste"), CGetSetOptions::GetUpdateTimeOnPaste(), SETTING_UPDATE_ORDER_ON_PASTE);
 	AddTrueFalse(pGroupTest, _T("Update clip Order on ctrl-c"), CGetSetOptions::GetUpdateClipOrderOnCtrlC(), SETTING_UPDATE_ORDER_ON_CTRL_C);
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Web Search Url"), CGetSetOptions::GetWebSearchUrl(), _T(""), SETTING_WEB_SEARCH_URL));
 
 	AddTrueFalse(pGroupTest, _T("Write debug to file"), CGetSetOptions::GetEnableDebugLogging(), SETTING_DEBUG_TO_FILE);
 	AddTrueFalse(pGroupTest, _T("Write debug to OutputDebugString"), CGetSetOptions::GetEnableDebugLogging(), SETTING_DEBUG_TO_OUTPUT_STRING);
@@ -950,6 +953,12 @@ void CAdvGeneral::OnBnClickedOk()
 				if (pNewValue->lVal != pOrigValue->lVal)
 				{
 					CGetSetOptions::SetClipEditSaveDelayAfterSaveSeconds(pNewValue->lVal);
+				}
+				break;
+			case SETTING_WEB_SEARCH_URL:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					CGetSetOptions::SetWebSearchUrl(pNewValue->bstrVal);
 				}
 				break;
 			}

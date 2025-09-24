@@ -268,6 +268,7 @@ public:
 	bool DoExportToQRCode();
 	bool DoExportToTextFile();
 	bool DoExportToGoogleTranslate();
+	bool DoExportToWebSearch();
 	bool DoExportToBitMapFile();
 	bool DoSaveCurrentClipboard();
 	bool DoMoveClipDown();
@@ -601,4 +602,6 @@ public:
 	afx_msg void OnUpdateSpecialpasteMultipleImagesVert(CCmdUI* pCmdUI);
 	afx_msg void OnSpecialpasteAsciitextonly();
 	afx_msg void OnUpdateSpecialpasteAsciitextonly(CCmdUI* pCmdUI);
+	afx_msg void OnImportExporttowebsearch();
+	afx_msg void OnUpdateImportExporttowebsearch(CCmdUI* pCmdUI);
 };
