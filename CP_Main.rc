@@ -549,6 +549,7 @@ BEGIN
             MENUITEM "Export Clip(s) to Text File(s)", ID_EXPORT_EXPORTTOTEXTFILE
             MENUITEM "Export Clip(s) to Image File(s)", ID_IMPORT_EXPORTCLIP_BITMAP
             MENUITEM "Export to Google Translate",  ID_IMPORT_EXPORTTOGOOGLETRANSLATE
+            MENUITEM "Export to Web Search",        ID_IMPORT_EXPORTTOWEBSEARCH
             MENUITEM "Import File Contents From CF_HDROP", ID_IMPORT_IMPORTCOPIEDFILE
             MENUITEM SEPARATOR
             MENUITEM "EMail, Content In Body",      ID_IMPORT_EMAILTO

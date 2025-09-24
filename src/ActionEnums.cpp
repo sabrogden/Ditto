@@ -425,6 +425,9 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case PASTE_POSITION_10_PLAIN_TEXT:
 		val = "Paste Position 10 Plain Text Only";
 		break;
+	case EXPORT_TO_WEB_SEARCH:
+		val = "Export To Web Search";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
