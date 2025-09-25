@@ -4410,7 +4410,7 @@ bool CQPasteWnd::DoExportToGoogleTranslate()
 					CString clipTextUrlEncoded = InternetEncode(clipText);
 
 					CString url;
-					url.Format(CGetSetOptions::GetWebSearchUrl(), clipTextUrlEncoded);
+					url.Format(CGetSetOptions::GetTranslateUrl(), clipTextUrlEncoded);
 
 					if (!CGetSetOptions::m_bShowPersistent)
 					{
@@ -4462,7 +4462,7 @@ bool CQPasteWnd::DoExportToWebSearch()
 					CString clipTextUrlEncoded = InternetEncode(clipText);
 
 					CString url;
-					url.Format(CGetSetOptions::GetTranslateUrl(), clipTextUrlEncoded);
+					url.Format(CGetSetOptions::GetWebSearchUrl(), clipTextUrlEncoded);
 
 					if (!CGetSetOptions::m_bShowPersistent)
 					{

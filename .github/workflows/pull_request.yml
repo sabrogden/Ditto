@@ -24,13 +24,3 @@ jobs:
         
       - name: Build 64bit
         run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
-        
-      - name: Set Versions
-        run: |
-            DittoSetup\rcedit-x64 Release64\Ditto.exe --set-file-version ${{env.VERSION_DOT_FILENAME}} --set-product-version ${{env.VERSION_DOT_FILENAME}}
-
-      - name: Installer
-        uses: Minionguyjpro/Inno-Setup-Action@v1.2.7
-        with:
-          path: DittoSetup\DittoSetup_10.iss
-          options: /F"DittoSetup_${{env.VERSION_FILENAME}}" "/dbit64=1"
