@@ -3418,7 +3418,7 @@ bool CQPasteWnd::DoAction(CAccel a)
 		ret = DoPasteAsciiOnly();
 		break;
 	case ActionEnums::EXPORT_TO_WEB_SEARCH:
-		ret = DoExportToGoogleTranslate();
+		ret = DoExportToWebSearch();
 		break;
 	}
 
