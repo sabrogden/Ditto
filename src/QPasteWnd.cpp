@@ -4462,6 +4462,7 @@ bool CQPasteWnd::DoExportToWebSearch()
 					CString clipTextUrlEncoded = InternetEncode(clipText);
 
 					CString url;
+
 					url.Format(CGetSetOptions::GetWebSearchUrl(), clipTextUrlEncoded);
 
 					if (!CGetSetOptions::m_bShowPersistent)
