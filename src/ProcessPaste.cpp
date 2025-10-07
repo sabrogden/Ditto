@@ -190,14 +190,8 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 			int clipCount = (int)pData->ids.GetCount();
 
 			if(CGetSetOptions::m_bUpdateTimeOnPaste && 
-				pData->updateClipOrder &&
-				clipCount == 1)
+				pData->updateClipOrder)
 			{
-				if (CGetSetOptions::m_refreshViewAfterPasting)
-				{
-					refreshFlags |= UPDATE_AFTER_PASTE_SELECT_CLIP;
-				}
-
 				for (int i = 0; i < clipCount; i++)
 				{
 					int id = pData->ids.ElementAt(i);
@@ -235,6 +229,10 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 					CATCH_SQLITE_EXCEPTION
 				}
 			}
+			if (CGetSetOptions::m_refreshViewAfterPasting)  
+			{
+				refreshFlags |= UPDATE_AFTER_PASTE_SELECT_CLIP;
+			}
 
 			try
 			{
@@ -251,7 +249,6 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 				int id = pData->ids.ElementAt(i);
 
 				theApp.RefreshClipInUI(id, refreshFlags);
-				break;
 			}			
 
 			delete pData;
