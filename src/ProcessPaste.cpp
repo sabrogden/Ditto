@@ -192,7 +192,7 @@ UINT CProcessPaste::MarkAsPastedThread(LPVOID pParam)
 			if(CGetSetOptions::m_bUpdateTimeOnPaste && 
 				pData->updateClipOrder)
 			{
-				for (int i = 0; i < clipCount; i++)
+				for (int i = clipCount - 1; i >= 0; i--)
 				{
 					int id = pData->ids.ElementAt(i);
 					try
