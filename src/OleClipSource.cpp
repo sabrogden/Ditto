@@ -16,6 +16,7 @@
 #include "ChaiScriptOnCopy.h"
 #include "Slugify.h"
 #include "ImageFormatAggregator.h"
+#include "Misc.h"
 
 /*------------------------------------------------------------------*\
 COleClipSource
@@ -219,7 +220,11 @@ BOOL COleClipSource::DoImmediateRender()
 	{
 		AsciiOnly(clip);
 	}
-	
+	else if (m_pasteOptions.m_pasteGuid)
+	{
+		PutGuidOntoClipboard(clip);
+	}
+
 	SaveDittoFileDataToFile(clip);
 
 	if (m_pasteOptions.m_pasteScriptGuid != _T(""))
@@ -1421,4 +1426,24 @@ void COleClipSource::Slugify(CClip &clip)
 
 		unicodeTextFormat->Data(hGlobal);
 	}
+}
+
+void COleClipSource::PutGuidOntoClipboard(CClip& clip)
+{
+	Log(_T("Start of put Guid on clipboard"));
+
+	clip.m_Formats.RemoveAll();
+
+	CString guid = NewGuidString();
+
+	long len = guid.GetLength();
+	HGLOBAL hGlobal = NewGlobalP(guid.GetBuffer(), ((len + 1) * sizeof(wchar_t)));
+
+	CClipFormat cf(CF_UNICODETEXT, hGlobal);
+	clip.m_Formats.Add(cf);
+
+	//clip.m_Formats now owns the global data
+	cf.m_autoDeleteData = false;
+
+	Log(_T("End of put Guid on clipboard"));
 }
