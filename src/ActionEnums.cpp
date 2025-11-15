@@ -428,6 +428,9 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case EXPORT_TO_WEB_SEARCH:
 		val = "Export To Web Search";
 		break;
+	case GENERATE_GUID:
+		val = "Generate GUID";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);

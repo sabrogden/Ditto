@@ -369,6 +369,8 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_ASCIITEXTONLY, &CQPasteWnd::OnUpdateSpecialpasteAsciitextonly)
 		ON_COMMAND(ID_IMPORT_EXPORTTOWEBSEARCH, &CQPasteWnd::OnImportExporttowebsearch)
 		ON_UPDATE_COMMAND_UI(ID_IMPORT_EXPORTTOWEBSEARCH, &CQPasteWnd::OnUpdateImportExporttowebsearch)
+		ON_COMMAND(ID_SPECIALPASTE_PASTENEWGUID, &CQPasteWnd::OnSpecialpastePastenewguid)
+		ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_PASTENEWGUID, &CQPasteWnd::OnUpdateSpecialpastePastenewguid)
 		END_MESSAGE_MAP()
 
 
@@ -3420,6 +3422,9 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::EXPORT_TO_WEB_SEARCH:
 		ret = DoExportToWebSearch();
 		break;
+	case ActionEnums::GENERATE_GUID:
+		ret = DoActionGenerateGuid();
+		break;
 	}
 
 	return ret;
@@ -4483,6 +4488,19 @@ bool CQPasteWnd::DoExportToWebSearch()
 	}
 
 	return true;
+}
+
+bool CQPasteWnd::DoActionGenerateGuid()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteGuid = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
 }
 
 bool CQPasteWnd::DoSaveCurrentClipboard()
@@ -8215,4 +8233,19 @@ void CQPasteWnd::OnUpdateImportExporttowebsearch(CCmdUI* pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::EXPORT_TO_WEB_SEARCH);
+}
+
+void CQPasteWnd::OnSpecialpastePastenewguid()
+{
+	DoAction(ActionEnums::GENERATE_GUID);
+}
+
+void CQPasteWnd::OnUpdateSpecialpastePastenewguid(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::GENERATE_GUID);
 }

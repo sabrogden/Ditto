@@ -27,6 +27,7 @@ CSpecialPasteOptions::CSpecialPasteOptions()
 	m_pasteImagesHorizontal = false;
 	m_pasteImagesVertically = false;
 	m_pasteAsciiOnly = false;
+	m_pasteGuid = false;
 }
 
 CSpecialPasteOptions::~CSpecialPasteOptions()

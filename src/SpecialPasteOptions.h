@@ -30,6 +30,7 @@ public:
 	bool m_invertCase;
 	bool m_placeCF_HDROP_OnDrag;
 	bool m_pasteAsciiOnly;
+	bool m_pasteGuid;
 
 	bool LimitFormatsToText() 
 	{ 

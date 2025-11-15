@@ -269,6 +269,7 @@ public:
 	bool DoExportToTextFile();
 	bool DoExportToGoogleTranslate();
 	bool DoExportToWebSearch();
+	bool DoActionGenerateGuid();
 	bool DoExportToBitMapFile();
 	bool DoSaveCurrentClipboard();
 	bool DoMoveClipDown();
@@ -604,4 +605,6 @@ public:
 	afx_msg void OnUpdateSpecialpasteAsciitextonly(CCmdUI* pCmdUI);
 	afx_msg void OnImportExporttowebsearch();
 	afx_msg void OnUpdateImportExporttowebsearch(CCmdUI* pCmdUI);
+	afx_msg void OnSpecialpastePastenewguid();
+	afx_msg void OnUpdateSpecialpastePastenewguid(CCmdUI* pCmdUI);
 };
