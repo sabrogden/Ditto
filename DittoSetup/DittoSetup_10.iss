@@ -120,8 +120,8 @@ Name: {group}\{cm:UninstallDitto}; Filename: {uninstallexe}
 
 [Run]
 Filename: {app}\Ditto.exe; Description: {cm:LaunchDitto}; Flags: nowait postinstall
-Filename: https://sourceforge.net/p/ditto-cp/wiki/Getting%20Started; Description: {cm:ViewHelp}; Flags: nowait postinstall skipifsilent shellexec unchecked
-Filename: https://ditto-cp.sourceforge.io/changeHistory.php; Description: {cm:ViewChangeHistory}; Flags: nowait postinstall skipifsilent shellexec unchecked
+Filename: https://github.com/sabrogden/Ditto/wiki; Description: {cm:ViewHelp}; Flags: nowait postinstall skipifsilent shellexec unchecked
+Filename: https://github.com/sabrogden/Ditto/releases; Description: {cm:ViewChangeHistory}; Flags: nowait postinstall skipifsilent shellexec unchecked
 
 [Registry]
 Root: HKCU; Subkey: Software\Ditto; Flags: uninsdeletekey
