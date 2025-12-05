@@ -649,6 +649,7 @@
 #define IDC_MFCLINK2                    2172
 #define IDC_EDIT_ACTIVE_APP             2173
 #define IDC_CHECK_DO_NOT_HIDE_ON_DEACTIVATE 2174
+#define IDC_BUTTON_PREVIEW_THEME        2175
 #define IDC_EDIT_ADV_FILTER             5001
 #define IDC_NEXT_MATCH_BUTTON           5002
 #define ID_FIRST_OPTION                 32771

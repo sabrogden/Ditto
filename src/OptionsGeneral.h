@@ -88,6 +88,9 @@ public:
 	afx_msg void OnBnClickedButtonAdvanced();
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	afx_msg void OnBnClickedButtonTheme();
+	afx_msg void OnBnClickedButtonPreviewTheme();
+	afx_msg void OnCbnSelchangeComboTheme();
+	void ApplySelectedThemeToPreview();
 	afx_msg void OnBnClickedButtonDefaultFault();
 	afx_msg void OnBnClickedButtonFont();
 	CComboBox m_cbTheme;
