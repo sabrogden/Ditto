@@ -159,6 +159,7 @@ END_MESSAGE_MAP()
 #define SETTING_CLIP_EDIT_SAVE_DELAY_AFTER_LOAD 105
 #define SETTING_ClIP_EDIT_SAVE_DELAY_AFTER_SAVE 106
 #define SETTING_WEB_SEARCH_URL 107
+#define SETTING_DO_NOT_HIDE_ON_DEACTIVATE 108
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -222,6 +223,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Disable friends"), !CGetSetOptions::GetAllowFriends(), SETTING_DISABLE_FRIENDS);
 
 	AddTrueFalse(pGroupTest, _T("Display icon in system tray"), CGetSetOptions::GetShowIconInSysTray(), SETTING_SHOW_TASKBAR_ICON);
+
+	AddTrueFalse(pGroupTest, _T("Do not hide Ditto window on deactivate"), CGetSetOptions::GetDoNotHideOnDeactivate(), SETTING_DO_NOT_HIDE_ON_DEACTIVATE);
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Double shortcut keystroke timeout)"), (long)CGetSetOptions::GetDoubleKeyStrokeTimeout(), _T(""), SETTING_DOUBLE_KEYSTROKE_TIMEOUT));
 
@@ -959,6 +962,13 @@ void CAdvGeneral::OnBnClickedOk()
 				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
 				{
 					CGetSetOptions::SetWebSearchUrl(pNewValue->bstrVal);
+				}
+				break;
+			case SETTING_DO_NOT_HIDE_ON_DEACTIVATE:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
+					CGetSetOptions::SetDoNotHideOnDeactivate(val);
 				}
 				break;
 			}

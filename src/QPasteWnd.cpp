@@ -756,7 +756,7 @@ void CQPasteWnd::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 
 		m_bModifersMoveActive = false;
 
-		if (!CGetSetOptions::m_bShowPersistent)
+		if (!CGetSetOptions::m_bShowPersistent && !CGetSetOptions::m_bDoNotHideOnDeactivate)
 		{
 			HideQPasteWindow(false);
 		}

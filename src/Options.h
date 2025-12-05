@@ -199,6 +199,10 @@ public:
 	static void		SetShowPersistent(BOOL bVal);
 	static BOOL		GetShowPersistent();
 
+	static BOOL		m_bHideDittoOnPaste;
+	static void		SetHideDittoOnPaste(BOOL bVal);
+	static BOOL		GetHideDittoOnPaste();
+
 	static void		SetShowTextForFirstTenHotKeys(BOOL bVal);
 	static BOOL		GetShowTextForFirstTenHotKeys();
 
@@ -718,6 +722,10 @@ public:
 	static int	m_clipEditSaveDelayAfterSaveSeconds;
 	static void SetClipEditSaveDelayAfterSaveSeconds(int val);
 	static BOOL GetClipEditSaveDelayAfterSaveSeconds();
+
+	static BOOL m_bDoNotHideOnDeactivate;
+	static void SetDoNotHideOnDeactivate(BOOL val);
+	static BOOL GetDoNotHideOnDeactivate();
 
 	static BOOL SetEditWndSize(CSize size);
 	static void GetEditWndSize(CSize& size);

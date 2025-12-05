@@ -31,6 +31,7 @@ BOOL CGetSetOptions::m_bAllowDuplicates;
 BOOL CGetSetOptions::m_bUpdateTimeOnPaste;
 BOOL CGetSetOptions::m_bSaveMultiPaste;
 BOOL CGetSetOptions::m_bShowPersistent;
+BOOL CGetSetOptions::m_bHideDittoOnPaste;
 long CGetSetOptions::m_bDescTextSize;
 BOOL CGetSetOptions::m_bDescShowLeadingWhiteSpace;
 BOOL CGetSetOptions::m_bAllwaysShowDescription;
@@ -90,6 +91,7 @@ BOOL CGetSetOptions::m_refreshViewAfterPasting = TRUE;
 BOOL CGetSetOptions::m_supportAllTypes = FALSE;
 int CGetSetOptions::m_clipEditSaveDelayAfterLoadSeconds = 3;
 int CGetSetOptions::m_clipEditSaveDelayAfterSaveSeconds = 3;
+BOOL CGetSetOptions::m_bDoNotHideOnDeactivate = FALSE;
 
 
 CGetSetOptions::CGetSetOptions()
@@ -255,6 +257,7 @@ void CGetSetOptions::LoadSettings()
 	m_bUpdateTimeOnPaste = GetUpdateTimeOnPaste();
 	m_bSaveMultiPaste = GetSaveMultiPaste();
 	m_bShowPersistent = GetShowPersistent();
+	m_bHideDittoOnPaste = GetHideDittoOnPaste();
 	m_bDescTextSize = GetDescTextSize();
 	m_bDescShowLeadingWhiteSpace = GetDescShowLeadingWhiteSpace();
 	m_bAllwaysShowDescription = GetAllwaysShowDescription();
@@ -294,6 +297,7 @@ void CGetSetOptions::LoadSettings()
 	m_maintainSearchView = GetMaintainSearchView();
 	m_clipEditSaveDelayAfterLoadSeconds = GetClipEditSaveDelayAfterLoadSeconds();
 	m_clipEditSaveDelayAfterSaveSeconds = GetClipEditSaveDelayAfterSaveSeconds();
+	m_bDoNotHideOnDeactivate = GetDoNotHideOnDeactivate();
 
 	GetExtraNetworkPassword(true);
 
@@ -1259,6 +1263,16 @@ void CGetSetOptions::SetShowPersistent(BOOL bVal)
 BOOL CGetSetOptions::GetShowPersistent()			
 {	
 	return GetProfileLong("ShowPersistent", 0); 
+}
+
+void CGetSetOptions::SetHideDittoOnPaste(BOOL bVal)	
+{	
+	SetProfileLong("HideDittoOnPaste", bVal); 
+	m_bHideDittoOnPaste = bVal; 
+}
+BOOL CGetSetOptions::GetHideDittoOnPaste()			
+{	
+	return GetProfileLong("HideDittoOnPaste", 1); 
 }
 
 void CGetSetOptions::SetShowTextForFirstTenHotKeys(BOOL bVal)	
@@ -2486,12 +2500,12 @@ int CGetSetOptions::GetWindowsResumeDelayReOpenDbMS()
 
 BOOL CGetSetOptions::GetShowMsgWndOnCopyToGroup()
 {
-	return GetProfileLong(_T("ShowMsgWndOnCopyToGroup"), TRUE);
+	return GetProfileLong("ShowMsgWndOnCopyToGroup", TRUE);
 }
 
 void CGetSetOptions::SetShowMsgWndOnCopyToGroup(BOOL val)
 {
-	SetProfileLong(_T("ShowMsgWndOnCopyToGroup"), val);
+	SetProfileLong("ShowMsgWndOnCopyToGroup", val);
 }
 
 int CGetSetOptions::GetActionShortCutA(DWORD action, int pos, CString refData)
@@ -3224,4 +3238,15 @@ void CGetSetOptions::GetEditWndPoint(CPoint& point)
 		point.x = 100;
 		point.y = 100;
 	}
+}
+
+void CGetSetOptions::SetDoNotHideOnDeactivate(BOOL val)
+{
+	SetProfileLong("DoNotHideOnDeactivate", val);
+	m_bDoNotHideOnDeactivate = val;
+}
+
+BOOL CGetSetOptions::GetDoNotHideOnDeactivate()
+{
+	return GetProfileLong("DoNotHideOnDeactivate", FALSE);
 }

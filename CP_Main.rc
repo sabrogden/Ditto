@@ -813,11 +813,11 @@ BEGIN
     CONTROL         "Elevated privileges to paste into elevated apps",IDC_CHECK_ELEVATE_PRIVILEGES,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,129,335,10
     CONTROL         "Show In Taskbar",IDC_CHECK_SHOW_IN_TASKBAR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,140,335,10
+    CONTROL         "Show indicator a clip has been pasted",IDC_CHECK_SHOW_CLIP_WAS_PASTED,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,151,335,10
     EDITTEXT        IDC_EDIT_DIFF_PATH,109,162,218,14,ES_AUTOHSCROLL
     LTEXT           "Diff Application Path",IDC_STATIC_DIFF,25,164,80,8
     PUSHBUTTON      "...",IDC_BUTTON_DIFF_BROWSE,332,162,17,14
-    CONTROL         "Show indicator a clip has been pasted",IDC_CHECK_SHOW_CLIP_WAS_PASTED,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,25,151,335,10
 END
 
 IDD_OPTIONS_KEYSTROKES DIALOGEX 0, 0, 373, 278
