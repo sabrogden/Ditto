@@ -2375,6 +2375,16 @@ BOOL CGetSetOptions::GetShowInTaskBar()
 	return GetProfileLong(_T("ShowInTaskBar"), FALSE);
 }
 
+void CGetSetOptions::SetHideTaskbarIconOnClose(BOOL val)
+{
+	SetProfileLong(_T("HideTaskbarIconOnClose"), val);
+}
+
+BOOL CGetSetOptions::GetHideTaskbarIconOnClose()
+{
+	return GetProfileLong(_T("HideTaskbarIconOnClose"), TRUE);
+}
+
 void CGetSetOptions::SetDiffApp(CString val)
 {
 	SetProfileString(_T("DiffApp"), val);

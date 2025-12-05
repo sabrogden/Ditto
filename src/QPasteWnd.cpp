@@ -851,7 +851,7 @@ BOOL CQPasteWnd::HideQPasteWindow(bool releaseFocus, BOOL clearSearchData)
 	//Save the size
 	SaveWindowSize();
 
-	if (CGetSetOptions::GetShowInTaskBar())
+	if (CGetSetOptions::GetShowInTaskBar() && !CGetSetOptions::GetHideTaskbarIconOnClose())
 	{
 		ShowWindow(SW_MINIMIZE);
 	}

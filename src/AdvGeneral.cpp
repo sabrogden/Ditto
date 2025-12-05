@@ -160,6 +160,7 @@ END_MESSAGE_MAP()
 #define SETTING_ClIP_EDIT_SAVE_DELAY_AFTER_SAVE 106
 #define SETTING_WEB_SEARCH_URL 107
 #define SETTING_DO_NOT_HIDE_ON_DEACTIVATE 108
+#define SETTING_HIDE_TASKBAR_ICON_ON_CLOSE 109
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -302,6 +303,7 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Show clips that are in groups in main list"), CGetSetOptions::GetShowAllClipsInMainList(), SETTING_SHOW_GROUP_CLIPS_IN_LIST);
 	AddTrueFalse(pGroupTest, _T("Show leading whitespace"), CGetSetOptions::GetDescShowLeadingWhiteSpace(), SETTING_SHOW_LEADING_WHITESPACE);
 	AddTrueFalse(pGroupTest, _T("Show in taskbar"), CGetSetOptions::GetShowInTaskBar(), SETTTING_SHOW_IN_TASKBAR);
+	AddTrueFalse(pGroupTest, _T("Hide taskbar icon when Ditto window closes"), CGetSetOptions::GetHideTaskbarIconOnClose(), SETTING_HIDE_TASKBAR_ICON_ON_CLOSE);
 	AddTrueFalse(pGroupTest, _T("Show indicator a clip has been pasted"), CGetSetOptions::GetShowIfClipWasPasted(), SETTING_SHOW_CLIP_PASTED);
 
 	AddTrueFalse(pGroupTest, _T("Show message that we received a manual sent clip"), CGetSetOptions::GetShowMsgWhenReceivingManualSentClip(), SETTING_SHOW_MSG_WHEN_RECEIVING_MANUAL_SENT_CLIP);	
@@ -969,6 +971,13 @@ void CAdvGeneral::OnBnClickedOk()
 				{
 					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetDoNotHideOnDeactivate(val);
+				}
+				break;
+			case SETTING_HIDE_TASKBAR_ICON_ON_CLOSE:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
+					CGetSetOptions::SetHideTaskbarIconOnClose(val);
 				}
 				break;
 			}

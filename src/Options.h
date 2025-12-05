@@ -485,6 +485,9 @@ public:
 	static void		SetShowInTaskBar(BOOL val);
 	static BOOL		GetShowInTaskBar();
 
+	static void		SetHideTaskbarIconOnClose(BOOL val);
+	static BOOL		GetHideTaskbarIconOnClose();
+
 	static void		SetDiffApp(CString val);
 	static CString	GetDiffApp();
 
