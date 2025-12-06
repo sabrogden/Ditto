@@ -223,6 +223,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND_RANGE(3000, 4000, OnAddinSelect)
 	ON_MESSAGE(NM_ALL_SELECTED, OnSelectAll)
 	ON_MESSAGE(NM_SHOW_HIDE_SCROLLBARS, OnShowHideScrollBar)
+	ON_MESSAGE(NM_UPDATE_SCROLLBAR, OnUpdateScrollBar)
 	ON_MESSAGE(NM_CANCEL_SEARCH, OnCancelFilter)
 	ON_MESSAGE(NM_POST_OPTIONS_WINDOW, OnPostOptions)
 	ON_COMMAND(ID_MENU_SEARCHDESCRIPTION, OnMenuSearchDescription)
@@ -418,13 +419,31 @@ int CQPasteWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	//m_search.SetButtonArea(rcCloseArea);
 
 	// Create the header control
-	if (!m_lstHeader.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | LVS_NOCOLUMNHEADER | LVS_REPORT | LVS_SHOWSELALWAYS | LVS_OWNERDATA | LVS_OWNERDRAWFIXED, CRect(0, 0, 0, 0), this, ID_LIST_HEADER))
+	if (!m_lstHeader.Create(WS_TABSTOP | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | LVS_NOCOLUMNHEADER | LVS_REPORT | LVS_SHOWSELALWAYS | LVS_OWNERDATA | LVS_OWNERDRAWFIXED, CRect(0, 0, 0, 0), this, ID_LIST_HEADER))
 	{
 		ASSERT(FALSE);
 		return -1;
 	}
 	m_lstHeader.SetDpiInfo(&m_DittoWindow.m_dpi);
 	m_lstHeader.ShowWindow(SW_SHOW);
+
+	// Create modern scrollbar overlay (vertical)
+	m_modernScrollBar.Create(this, &m_lstHeader, ScrollBarOrientation::Vertical);
+	m_modernScrollBar.SetDPI(&m_DittoWindow.m_dpi);
+	m_modernScrollBar.SetColors(
+		CGetSetOptions::m_Theme.ScrollBarTrack(),
+		CGetSetOptions::m_Theme.ScrollBarThumb(),
+		CGetSetOptions::m_Theme.ScrollBarThumbHover()
+	);
+
+	// Create modern scrollbar overlay (horizontal)
+	m_modernScrollBarHorz.Create(this, &m_lstHeader, ScrollBarOrientation::Horizontal);
+	m_modernScrollBarHorz.SetDPI(&m_DittoWindow.m_dpi);
+	m_modernScrollBarHorz.SetColors(
+		CGetSetOptions::m_Theme.ScrollBarTrack(),
+		CGetSetOptions::m_Theme.ScrollBarThumb(),
+		CGetSetOptions::m_Theme.ScrollBarThumbHover()
+	);
 
 	((CWnd*)&m_GroupTree)->CreateEx(NULL, _T("SysTreeView32"), NULL, TVS_HASLINES | TVS_LINESATROOT | TVS_HASBUTTONS, CRect(0, 0, 100, 100), this, 0);
 	m_GroupTree.ModifyStyle(WS_CAPTION | WS_TABSTOP, 0);
@@ -675,8 +694,11 @@ void CQPasteWnd::MoveControls()
 
 	int extraSize = 0;
 
-	if (m_showScrollBars == false &&
-		CGetSetOptions::m_showScrollBar == false)
+	// Hide native scrollbar if using modern scrollbar OR if scrollbar is set to not always show
+	bool hideNativeScrollbar = CGetSetOptions::m_useModernScrollBar || 
+		(m_showScrollBars == false && CGetSetOptions::m_showScrollBar == false);
+
+	if (hideNativeScrollbar)
 	{
 		extraSize = m_DittoWindow.m_dpi.Scale(::GetSystemMetrics(SM_CXVSCROLL));
 
@@ -684,9 +706,14 @@ void CQPasteWnd::MoveControls()
 		CRect r;
 		m_lstHeader.GetWindowRect(&r);
 
-		rgnRect.CreateRectRgn(0, 0, cx, (cy - listBoxBottomOffset - topOfListBox) + 1);
+		rgnRect.CreateRectRgn(0, 0, cx, (cy - listBoxBottomOffset - topOfListBox) );
 
 		m_lstHeader.SetWindowRgn(rgnRect, TRUE);
+	}
+	else
+	{
+		// Clear region to show native scrollbar
+		m_lstHeader.SetWindowRgn(NULL, TRUE);
 	}
 
 
@@ -695,6 +722,8 @@ void CQPasteWnd::MoveControls()
 	{
 		m_lstHeader.ShowWindow(SW_HIDE);
 		m_noSearchResultsStatic.ShowWindow(SW_SHOW);
+		m_modernScrollBar.ShowWindow(SW_HIDE);
+		m_modernScrollBarHorz.ShowWindow(SW_HIDE);
 
 		auto border = m_DittoWindow.m_dpi.Scale(10);
 		m_noSearchResultsStatic.MoveWindow(border, topOfListBox + border, cx - border, cy - listBoxBottomOffset - topOfListBox + 1 - border);
@@ -705,6 +734,20 @@ void CQPasteWnd::MoveControls()
 		m_noSearchResultsStatic.ShowWindow(SW_HIDE);
 
 		m_lstHeader.MoveWindow(0, topOfListBox, cx + extraSize, cy - listBoxBottomOffset - topOfListBox + extraSize + 1);
+		
+		// Update modern scrollbar position and visibility (only if enabled)
+		if (CGetSetOptions::m_useModernScrollBar)
+		{
+			m_modernScrollBar.UpdateScrollBar();
+			m_modernScrollBar.Show(false);
+			m_modernScrollBarHorz.UpdateScrollBar();
+			m_modernScrollBarHorz.Show(false);
+		}
+		else
+		{
+			m_modernScrollBar.Hide(false);
+			m_modernScrollBarHorz.Hide(false);
+		}
 	}
 	m_search.MoveWindow(m_DittoWindow.m_dpi.Scale(34), cy - m_DittoWindow.m_dpi.Scale(searchRowStart - 5), cx - m_DittoWindow.m_dpi.Scale(70), m_DittoWindow.m_dpi.Scale(25));
 
@@ -6472,6 +6515,17 @@ LRESULT CQPasteWnd::OnShowHideScrollBar(WPARAM wParam, LPARAM lParam)
 	return 1;
 }
 
+LRESULT CQPasteWnd::OnUpdateScrollBar(WPARAM wParam, LPARAM lParam)
+{
+	// Update modern scrollbar position when list scrolls (only if enabled)
+	if (CGetSetOptions::m_useModernScrollBar)
+	{
+		m_modernScrollBar.Show(false);
+		m_modernScrollBarHorz.Show(false);
+	}
+	return 0;
+}
+
 //HBRUSH CQPasteWnd::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 //{
 //	// Call the base class implementation first! Otherwise, it may 
@@ -7741,11 +7795,28 @@ bool CQPasteWnd::DoActionGmail()
 	return true;
 }
 
+void CQPasteWnd::RefreshScrollBarColors()
+{
+	m_modernScrollBar.SetColors(
+		CGetSetOptions::m_Theme.ScrollBarTrack(),
+		CGetSetOptions::m_Theme.ScrollBarThumb(),
+		CGetSetOptions::m_Theme.ScrollBarThumbHover()
+	);
+	m_modernScrollBarHorz.SetColors(
+		CGetSetOptions::m_Theme.ScrollBarTrack(),
+		CGetSetOptions::m_Theme.ScrollBarThumb(),
+		CGetSetOptions::m_Theme.ScrollBarThumbHover()
+	);
+}
+
 void CQPasteWnd::RefreshThemeColors()
 {
 	// Refresh caption bar colors
 	SetCaptionColorActive(CGetSetOptions::m_bShowPersistent, theApp.GetConnectCV());
 	SetCaptionOn(CGetSetOptions::GetCaptionPos(), true, CGetSetOptions::m_Theme.GetCaptionSize(), CGetSetOptions::m_Theme.GetCaptionFontSize());
+	
+	// Refresh scrollbar colors
+	RefreshScrollBarColors();
 	
 	// Force repaint of the entire window including non-client area
 	SetWindowPos(NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);

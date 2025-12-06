@@ -1410,7 +1410,16 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 			return TRUE;
 		break; // end case WM_KEYDOWN
 	case WM_MOUSEWHEEL:
-		break;
+		// Will be handled by default, but ensure scrollbar updates after
+		{
+			BOOL result = CListCtrl::PreTranslateMessage(pMsg);
+			CWnd* pParent = GetParent();
+			if (pParent && pParent->GetSafeHwnd())
+			{
+				pParent->PostMessage(NM_UPDATE_SCROLLBAR, 0, 0);
+			}
+			return result;
+		}
 
 	case WM_VSCROLL:
 		ASSERT(FALSE);
@@ -1925,6 +1934,13 @@ void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 	if ((pnmv->uNewState == 3) ||
 		(pnmv->uNewState == 1))
 	{
+		// Notify parent to update modern scrollbar when selection changes (keyboard navigation)
+		CWnd* pParent = GetParent();
+		if (pParent && pParent->GetSafeHwnd())
+		{
+			pParent->PostMessage(NM_UPDATE_SCROLLBAR, 0, 0);
+		}
+
 		if (VALID_TOOLTIP &&
 			::IsWindowVisible(m_pToolTip->m_hWnd))
 		{
@@ -2045,6 +2061,13 @@ void CQListCtrl::SetLogFont(LOGFONT& font)
 void CQListCtrl::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	CListCtrl::OnVScroll(nSBCode, nPos, pScrollBar);
+	
+	// Notify parent to update modern scrollbar
+	CWnd* pParent = GetParent();
+	if (pParent && pParent->GetSafeHwnd())
+	{
+		pParent->PostMessage(NM_UPDATE_SCROLLBAR, 0, 0);
+	}
 }
 
 BOOL CQListCtrl::OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pLResult)
@@ -2079,27 +2102,37 @@ void CQListCtrl::OnMouseMove(UINT nFlags, CPoint point)
 {
 	if (CGetSetOptions::m_showScrollBar == FALSE)
 	{
-		CPoint cursorPos;
-		GetCursorPos(&cursorPos);
-
 		CRect crWindow;
 		this->GetWindowRect(&crWindow);
 		ScreenToClient(&crWindow);
 
-		crWindow.right -= m_windowDpi->Scale(::GetSystemMetrics(SM_CXVSCROLL));
-		crWindow.bottom -= m_windowDpi->Scale(::GetSystemMetrics(SM_CXHSCROLL));
+		// Don't subtract scrollbar size - detect in the full window area
+		// This prevents flickering when scrollbar appears/disappears
 
 		if (MouseInScrollBarArea(crWindow, point))
 		{
-			if ((GetTickCount() - m_mouseOverScrollAreaStart) > 500)
+			// Show scrollbar immediately when mouse enters scrollbar area
+			if (m_mouseOverScrollAreaStart == 0)
 			{
-				SetTimer(TIMER_SHOW_SCROLL, 500, NULL);
-
 				m_mouseOverScrollAreaStart = GetTickCount();
+				
+				// For modern scrollbar, notify parent
+				if (CGetSetOptions::m_useModernScrollBar)
+				{
+					GetParent()->PostMessage(NM_UPDATE_SCROLLBAR, 0, 0);
+				}
+				else
+				{
+					// For native scrollbar, show immediately and start hide timer
+					m_timerToHideScrollAreaSet = true;
+					GetParent()->SendMessage(NM_SHOW_HIDE_SCROLLBARS, 1, 0);
+					SetTimer(TIMER_HIDE_SCROL, 1000, NULL);
+				}
 			}
 		}
 		else
 		{
+			m_mouseOverScrollAreaStart = 0;
 			if (m_timerToHideScrollAreaSet)
 			{
 				StopHideScrollBarTimer();
@@ -2113,11 +2146,16 @@ void CQListCtrl::OnMouseMove(UINT nFlags, CPoint point)
 
 bool CQListCtrl::MouseInScrollBarArea(CRect crWindow, CPoint point)
 {
+	int scrollBarWidth = m_windowDpi->Scale(::GetSystemMetrics(SM_CXVSCROLL));
+	int scrollBarHeight = m_windowDpi->Scale(::GetSystemMetrics(SM_CYHSCROLL));
+	int extraMargin = m_windowDpi->Scale(6); // Small extra margin for easier detection
+
 	CRect crRight(crWindow);
 	CRect crBottom(crWindow);
 
-	crRight.left = crRight.right - m_windowDpi->Scale(::GetSystemMetrics(SM_CXVSCROLL));
-	crBottom.top = crBottom.bottom - m_windowDpi->Scale(::GetSystemMetrics(SM_CYHSCROLL));
+	// Detect from the right edge of the window (includes scrollbar area when visible)
+	crRight.left = crRight.right - scrollBarWidth - extraMargin;
+	crBottom.top = crBottom.bottom - scrollBarHeight - extraMargin;
 
 	/*CString cs;
 	cs.Format(_T("point.x: %d, Width: %d, Height: %d\n"), point.x, crWindow.Width(), crWindow.Height());
@@ -2283,6 +2321,13 @@ void CQListCtrl::OnMouseHWheel(UINT nFlags, short zDelta, CPoint pt)
 	else
 	{
 		this->SendMessage(WM_HSCROLL, SB_LINELEFT, NULL);
+	}
+
+	// Notify parent to update modern scrollbar
+	CWnd* pParent = GetParent();
+	if (pParent && pParent->GetSafeHwnd())
+	{
+		pParent->PostMessage(NM_UPDATE_SCROLLBAR, 0, 0);
 	}
 
 	//CListCtrl::OnMouseHWheel(nFlags, zDelta, pt);

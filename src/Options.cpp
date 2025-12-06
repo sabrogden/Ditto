@@ -72,6 +72,7 @@ CString CGetSetOptions::m_csIniFileName;
 __int64 CGetSetOptions::nLastDbWriteTime = 0;
 CTheme CGetSetOptions::m_Theme;
 BOOL CGetSetOptions::m_showScrollBar = false;
+BOOL CGetSetOptions::m_useModernScrollBar = TRUE;
 BOOL CGetSetOptions::m_bShowAlwaysOnTopWarning = TRUE;
 CRegExFilterHelper CGetSetOptions::m_regexHelper;
 CString CGetSetOptions::m_ignoreAnnoyingCFDIB = "";
@@ -287,6 +288,7 @@ void CGetSetOptions::LoadSettings()
 	m_outputDebugStringLogging = GetEnableOutputDebugStringLogging();
 	m_bEnsureConnectToClipboard = GetEnsureConnectToClipboard();
 	m_showScrollBar = GetShowScrollBar();
+	m_useModernScrollBar = GetUseModernScrollBar();
 	m_bShowAlwaysOnTopWarning = GetShowAlwaysOnTopWarning();
 	m_ignoreAnnoyingCFDIB = GetIgnoreAnnoyingCFDIB();
 	m_doubleKeyStrokeTimeout = GetDoubleKeyStrokeTimeout();
@@ -2297,6 +2299,17 @@ void CGetSetOptions::SetShowScrollBar(BOOL val)
 BOOL CGetSetOptions::GetShowScrollBar()
 {
 	return GetProfileLong(_T("ShowScrollBar"), 0);
+}
+
+void CGetSetOptions::SetUseModernScrollBar(BOOL val)
+{
+	m_useModernScrollBar = val;
+	SetProfileLong(_T("UseModernScrollBar"), val);
+}
+
+BOOL CGetSetOptions::GetUseModernScrollBar()
+{
+	return GetProfileLong(_T("UseModernScrollBar"), TRUE);
 }
 
 void CGetSetOptions::SetPasteAsAdmin(BOOL val)

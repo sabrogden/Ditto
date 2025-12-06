@@ -161,6 +161,7 @@ END_MESSAGE_MAP()
 #define SETTING_WEB_SEARCH_URL 107
 #define SETTING_DO_NOT_HIDE_ON_DEACTIVATE 108
 #define SETTING_HIDE_TASKBAR_ICON_ON_CLOSE 109
+#define SETTING_USE_MODERN_SCROLLBAR 110
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -200,6 +201,7 @@ BOOL CAdvGeneral::OnInitDialog()
 	AddTrueFalse(pGroupTest, _T("Allow back to back duplicates (if allowing duplicates)"), CGetSetOptions::GetAllowBackToBackDuplicates(), SETTING_ALOW_BACK_TO_BACK_DUPLICATES);
 
 	AddTrueFalse(pGroupTest, _T("Always show scroll bar"), CGetSetOptions::GetShowScrollBar(), SETTING_ALWAYS_SHOW_SCROLL_BAR);
+	AddTrueFalse(pGroupTest, _T("Use modern scroll bar"), CGetSetOptions::GetUseModernScrollBar(), SETTING_USE_MODERN_SCROLLBAR);
 	AddTrueFalse(pGroupTest, _T("Append Computer Name and IP when receiving clips"), CGetSetOptions::GetAppendRemoveComputerNameAndIPToDescription(), SETTING_APPEND_NAME_IP);
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Amount of text to save for description"), CGetSetOptions::m_bDescTextSize, _T(""), SETTING_DESC_SIZE));
@@ -574,6 +576,13 @@ void CAdvGeneral::OnBnClickedOk()
 				{
 					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetShowScrollBar(val);
+				}
+				break;
+			case SETTING_USE_MODERN_SCROLLBAR:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
+					CGetSetOptions::SetUseModernScrollBar(val);
 				}
 				break;
 			case SETTING_PASTE_AS_ADMIN:

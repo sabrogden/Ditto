@@ -62,6 +62,11 @@ void CTheme::LoadDefaults()
 
 	m_descriptionWindowText = RGB(0, 0, 0);
 
+	// Modern scrollbar defaults - rounded look
+	m_scrollBarThumb = RGB(180, 180, 180);
+	m_scrollBarThumbHover = RGB(140, 140, 140);
+	m_scrollBarTrack = RGB(240, 240, 240);
+
 	m_captionSize = 25;
 	m_captionFontSize = 19;
 }
@@ -180,6 +185,11 @@ bool CTheme::Load(CString csTheme, bool bHeaderOnly, bool bCheckLastWriteTime)
 
 	LoadColor(ItemHeader, "DescriptionWindowBG", m_descriptionWindowBG);
 	LoadColor(ItemHeader, "DescriptionWindowText", m_descriptionWindowText);
+
+	// Modern scrollbar colors
+	LoadColor(ItemHeader, "ScrollBarThumb", m_scrollBarThumb);
+	LoadColor(ItemHeader, "ScrollBarThumbHover", m_scrollBarThumbHover);
+	LoadColor(ItemHeader, "ScrollBarTrack", m_scrollBarTrack);
 
 	if (followWindows10Theme)
 	{

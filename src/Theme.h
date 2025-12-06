@@ -48,6 +48,11 @@ public:
 	COLORREF DescriptionWindowBG() const { return m_descriptionWindowBG; }
 	COLORREF DescriptionWindowText() const { return m_descriptionWindowText; }
 
+	// Modern scrollbar colors
+	COLORREF ScrollBarThumb() const { return m_scrollBarThumb; }
+	COLORREF ScrollBarThumbHover() const { return m_scrollBarThumbHover; }
+	COLORREF ScrollBarTrack() const { return m_scrollBarTrack; }
+
 	CString Notes() const { return m_csNotes; }
 	CString Author() const { return m_csAuthor; }
 	long FileVersion() const { return m_lFileVersion; }
@@ -94,6 +99,11 @@ protected:
 
 	COLORREF m_descriptionWindowBG;
 	COLORREF m_descriptionWindowText;
+
+	// Modern scrollbar colors
+	COLORREF m_scrollBarThumb;
+	COLORREF m_scrollBarThumbHover;
+	COLORREF m_scrollBarTrack;
 
 	int m_captionSize;
 	int m_captionFontSize;

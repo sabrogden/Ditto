@@ -464,6 +464,10 @@ public:
 	static BOOL		GetShowScrollBar();
 	static BOOL		m_showScrollBar;
 
+	static void		SetUseModernScrollBar(BOOL val);
+	static BOOL		GetUseModernScrollBar();
+	static BOOL		m_useModernScrollBar;
+
 	static void		SetPasteAsAdmin(BOOL val);
 	static BOOL		GetPasteAsAdmin();
 
