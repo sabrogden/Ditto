@@ -322,6 +322,8 @@ public:
 	bool OnGlobalHotkyes();
 	
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
+	// Refresh all theme colors (caption, scrollbars, etc.)
+	void RefreshThemeColors();
 
 	bool ShowProperties(int id, int row);
 	bool DeleteClips(CClipIDs &IDs, ARRAY &Indexs);

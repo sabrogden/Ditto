@@ -684,26 +684,26 @@ void COptionsGeneral::OnClickedExpireEntries()
 
 void COptionsGeneral::OnBnClickedButtonPreviewTheme()
 {
-	ApplySelectedThemeToPreview();
-	
-	// Show the Ditto window next to the options dialog
 	if (theApp.m_pMainFrame != NULL)
 	{
 		CQPasteWnd* pPasteWnd = theApp.m_pMainFrame->m_quickPaste.m_pwndPaste;
-		
-		// If window already exists, just show it and refresh
+
+		// If the window doesn't exist yet, create/show it first (will load persisted theme)
+		if (pPasteWnd == NULL || IsWindow(pPasteWnd->m_hWnd) == FALSE)
+		{
+			theApp.m_pMainFrame->m_quickPaste.ShowQPasteWnd(theApp.m_pMainFrame, true, false, TRUE);
+			pPasteWnd = theApp.m_pMainFrame->m_quickPaste.m_pwndPaste;
+		}
+
+		// Ensure it is visible before applying preview theme
 		if (pPasteWnd != NULL && IsWindow(pPasteWnd->m_hWnd))
 		{
 			pPasteWnd->ShowWindow(SW_SHOW);
 			pPasteWnd->SetForegroundWindow();
-			pPasteWnd->Invalidate();
-			pPasteWnd->UpdateWindow();
 		}
-		else
-		{
-			// Window doesn't exist, create and show it
-			theApp.m_pMainFrame->m_quickPaste.ShowQPasteWnd(theApp.m_pMainFrame, true, false, TRUE);
-		}
+
+		// Reuse the dropdown-change logic to load/apply the selected theme
+		OnCbnSelchangeComboTheme();
 	}
 }
 
@@ -717,8 +717,7 @@ void COptionsGeneral::OnCbnSelchangeComboTheme()
 		// Refresh the window to apply the new theme
 		if (theApp.m_pMainFrame->m_quickPaste.m_pwndPaste != NULL)
 		{
-			theApp.m_pMainFrame->m_quickPaste.m_pwndPaste->Invalidate();
-			theApp.m_pMainFrame->m_quickPaste.m_pwndPaste->UpdateWindow();
+			theApp.m_pMainFrame->m_quickPaste.m_pwndPaste->RefreshThemeColors();
 		}
 	}
 }
