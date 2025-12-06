@@ -246,6 +246,23 @@ LRESULT CClipboardViewer::OnClipboardChange(WPARAM wParam, LPARAM lPara)
 	return TRUE;
 }
 
+bool CClipboardViewer::GetIgnoreClipboardChange()
+{
+	if(::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
+	{
+		Log(_T("Clipboard Viewer Ignore clipboard format is on the clipboard, ignoring change"));
+		return true;
+	}
+
+	//https://learn.microsoft.com/en-us/windows/win32/dataxchg/clipboard-formats
+	if (::IsClipboardFormatAvailable(theApp.m_excludeClipboardContentFromMonitorProcessing))
+	{
+		Log(_T("ExcludeClipboardContentFromMonitorProcessing clipboard format is on the clipboard, ignoring change"));
+		return true;
+	}
+	return false;
+}
+
 //Message that the clipboard data has changed
 void CClipboardViewer::OnDrawClipboard() 
 {
@@ -260,7 +277,7 @@ void CClipboardViewer::OnDrawClipboard()
 	{
 		if(m_bIsConnected)
 		{
-			if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
+			if(GetIgnoreClipboardChange() == false)
 			{
 				if(ValidActiveWnd())
 				{          
@@ -391,7 +408,7 @@ void CClipboardViewer::OnTimer(UINT_PTR nIDEvent)
 
 			if(dwNow - m_dwLastCopy > CGetSetOptions::m_dwSaveClipDelay || m_dwLastCopy > dwNow)
 			{
-				if(!::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
+				if (GetIgnoreClipboardChange() == false)				
 				{
 					Log(StrF(_T("OnDrawClipboard::OnTimer %d"), dwNow));
 

@@ -164,6 +164,8 @@ public:
 	long	m_lLastGoodIndexForNextworkPassword;
 
 	CLIPFORMAT m_cfIgnoreClipboard; // used by CClip::LoadFromClipboard
+	CLIPFORMAT m_excludeClipboardContentFromMonitorProcessing;
+	CLIPFORMAT m_canIncludeInClipboardHistory;
 	CLIPFORMAT m_cfDelaySavingData;
 	CLIPFORMAT m_PingFormat;
 	CLIPFORMAT m_HTML_Format;

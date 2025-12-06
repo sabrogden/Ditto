@@ -174,6 +174,12 @@ CCP_MainApp::CCP_MainApp()
 	m_DittoFileData = ::RegisterClipboardFormat(_T("Ditto File Data"));
 	m_PNG_Format = GetFormatID(_T("PNG"));
 
+	//https://learn.microsoft.com/en-us/windows/win32/dataxchg/clipboard-formats
+	m_excludeClipboardContentFromMonitorProcessing = RegisterClipboardFormat(L"ExcludeClipboardContentFromMonitorProcessing");
+
+	//https://learn.microsoft.com/en-us/windows/win32/dataxchg/clipboard-formats
+	m_canIncludeInClipboardHistory = RegisterClipboardFormat(L"CanIncludeInClipboardHistory");
+
 	m_pNoDbMainFrame = NULL;
 	m_databaseOnNetworkShare = false;
 
