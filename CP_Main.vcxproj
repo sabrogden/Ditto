@@ -608,6 +608,7 @@
     <ClCompile Include="src\Md5.cpp" />
     <ClCompile Include="src\MessagePumpThread.cpp" />
     <ClCompile Include="src\Misc.cpp" />
+    <ClCompile Include="src\ModernScrollBar.cpp" />
     <ClCompile Include="src\MoveToGroupDlg.cpp" />
     <ClCompile Include="src\MultiLanguage.cpp" />
     <ClCompile Include="src\MyDropTarget.cpp" />
@@ -875,6 +876,7 @@
     <ClInclude Include="src\memdc.h" />
     <ClInclude Include="src\MessagePumpThread.h" />
     <ClInclude Include="src\Misc.h" />
+    <ClInclude Include="src\ModernScrollBar.h" />
     <ClInclude Include="src\MoveToGroupDlg.h" />
     <ClInclude Include="src\MultiLanguage.h" />
     <ClInclude Include="src\MyDropTarget.h" />

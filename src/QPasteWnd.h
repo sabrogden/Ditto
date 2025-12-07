@@ -20,6 +20,7 @@
 #include "SymbolEdit.h"
 #include "Popup.h"
 #include "CustomFriendsHelper.h"
+#include "ModernScrollBar.h"
 
 class CMainTable
 {
@@ -165,6 +166,8 @@ public:
 	CAccels m_toolTipActions;
 	CAccels m_modifierKeyActions;
 	bool m_showScrollBars;
+	CModernScrollBar m_modernScrollBar;       // Vertical scrollbar
+	CModernScrollBar m_modernScrollBarHorz;   // Horizontal scrollbar
 	int m_leftSelectedCompareId;
 	INT64 m_extraDataCounter;
 	CPopup m_popupMsg;
@@ -310,6 +313,11 @@ public:
 	bool DoActionEmailTo();
 	bool DoActionGmail();
 	bool DoActionEmailToAttachExport();
+	
+	// Refresh scrollbar colors from current theme
+	void RefreshScrollBarColors();
+	// Refresh all theme colors (caption, scrollbars, etc.)
+	void RefreshThemeColors();
 	bool DoActionEmailToAttachContent();
 	bool DoActionSlugify();
 	bool DoCopySelection();
@@ -464,6 +472,7 @@ protected:
 	afx_msg void OnChaiScriptPaste(UINT idIn);
     afx_msg LRESULT OnSelectAll(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnShowHideScrollBar(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnUpdateScrollBar(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnMenuSearchDescription();
 	afx_msg void OnMenuSearchFullText();
 	afx_msg void OnMenuSearchQuickPaste();

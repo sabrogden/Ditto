@@ -74,6 +74,8 @@ BEGIN_MESSAGE_MAP(COptionsGeneral, CPropertyPage)
 	ON_BN_CLICKED(IDC_BUTTON_ADVANCED, &COptionsGeneral::OnBnClickedButtonAdvanced)
 	ON_WM_CTLCOLOR()
 	ON_BN_CLICKED(IDC_BUTTON_THEME, &COptionsGeneral::OnBnClickedButtonTheme)
+	ON_BN_CLICKED(IDC_BUTTON_PREVIEW_THEME, &COptionsGeneral::OnBnClickedButtonPreviewTheme)
+	ON_CBN_SELCHANGE(IDC_COMBO_THEME, &COptionsGeneral::OnCbnSelchangeComboTheme)
 	ON_BN_CLICKED(IDC_BUTTON_DEFAULT_FAULT, &COptionsGeneral::OnBnClickedButtonDefaultFault)
 	ON_BN_CLICKED(IDC_BUTTON_FONT, &COptionsGeneral::OnBnClickedButtonFont)
 	ON_EN_CHANGE(IDC_PATH, &COptionsGeneral::OnEnChangePath)
@@ -678,4 +680,59 @@ void COptionsGeneral::OnClickedExpireEntries()
 	{
 		m_eExpireAfter.EnableWindow(FALSE);
 	}
+}
+
+void COptionsGeneral::OnBnClickedButtonPreviewTheme()
+{
+	if (theApp.m_pMainFrame != NULL)
+	{
+		CQPasteWnd* pPasteWnd = theApp.m_pMainFrame->m_quickPaste.m_pwndPaste;
+
+		// If the window doesn't exist yet, create/show it first (will load persisted theme)
+		if (pPasteWnd == NULL || IsWindow(pPasteWnd->m_hWnd) == FALSE)
+		{
+			theApp.m_pMainFrame->m_quickPaste.ShowQPasteWnd(theApp.m_pMainFrame, true, false, TRUE);
+			pPasteWnd = theApp.m_pMainFrame->m_quickPaste.m_pwndPaste;
+		}
+
+		// Ensure it is visible before applying preview theme
+		if (pPasteWnd != NULL && IsWindow(pPasteWnd->m_hWnd))
+		{
+			pPasteWnd->ShowWindow(SW_SHOW);
+			pPasteWnd->SetForegroundWindow();
+		}
+
+		// Reuse the dropdown-change logic to load/apply the selected theme
+		OnCbnSelchangeComboTheme();
+	}
+}
+
+void COptionsGeneral::OnCbnSelchangeComboTheme()
+{
+	// If the Ditto window is currently visible, update the theme live
+	if (theApp.m_pMainFrame != NULL && theApp.m_pMainFrame->m_quickPaste.IsWindowVisibleEx())
+	{
+		ApplySelectedThemeToPreview();
+		
+		// Refresh the window to apply the new theme
+		if (theApp.m_pMainFrame->m_quickPaste.m_pwndPaste != NULL)
+		{
+			theApp.m_pMainFrame->m_quickPaste.m_pwndPaste->RefreshThemeColors();
+		}
+	}
+}
+
+void COptionsGeneral::ApplySelectedThemeToPreview()
+{
+	CString csTheme = _T("");
+	if (m_cbTheme.GetCurSel() >= 0)
+	{
+		if (m_cbTheme.GetItemData(m_cbTheme.GetCurSel()) == 1)
+		{
+			m_cbTheme.GetLBText(m_cbTheme.GetCurSel(), csTheme);
+		}
+	}
+	
+	// Load the selected theme
+	CGetSetOptions::m_Theme.Load(csTheme, false, true);
 }
