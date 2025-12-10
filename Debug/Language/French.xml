@@ -145,7 +145,7 @@
 		<Item English_Text = "Decrease" ID = "32948">Diminuer</Item>
 		<Item English_Text = "Toggle Enabled" ID = "32949">Bascule activée</Item>
 		
-		<Item English_Text = "Backup Database" ID = "32962">Sauver la base de données</Item>
+		<Item English_Text = "Backup Database" ID = "32962">Sauvegarder la base de données</Item>
 		<Item English_Text = "Restore Dastabase" ID = "32964">Restaurer la base de données</Item>
 		
 		<Item English_Text = "Delete All Non Used Clips" ID = "32968">Supprimer tous les clips inutilisés</Item>				
@@ -462,8 +462,8 @@
 				
 		<Item English_Text = "Show Startup Message" ID = "32959">Afficher le message de démarrage</Item>
 		
-		<Item English_Text = "Backup Database" ID = "32960">Sauver la base de données</Item>
-		<Item English_Text = "Restore Database" ID = "32961">Restaurer la base de données</Item>
+		<Item English_Text = "Backup Database" ID = "32960">Sauvegarder la base de données</Item>
+		<Item English_Text = "Restore Database" ID = "32961">Restaurer une base de données</Item>
 		
 		<Item English_Text = "Delete All Non Used Clips" ID = "32969">Supprimer tous les clips inutilisés</Item>
 		
