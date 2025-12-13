@@ -716,7 +716,6 @@ void CQPasteWnd::MoveControls()
 		m_lstHeader.SetWindowRgn(NULL, TRUE);
 	}
 
-
 	if (m_noSearchResults &&
 		m_strSearch != _T(""))
 	{
@@ -738,10 +737,20 @@ void CQPasteWnd::MoveControls()
 		// Update modern scrollbar position and visibility (only if enabled)
 		if (CGetSetOptions::m_useModernScrollBar)
 		{
-			m_modernScrollBar.UpdateScrollBar();
-			m_modernScrollBar.Show(false);
-			m_modernScrollBarHorz.UpdateScrollBar();
-			m_modernScrollBarHorz.Show(false);
+			if (CGetSetOptions::m_showScrollBar)
+			{
+				m_modernScrollBar.UpdateScrollBar();
+				m_modernScrollBar.Show(false);
+				m_modernScrollBarHorz.UpdateScrollBar();
+				m_modernScrollBarHorz.Show(false);
+			}
+			else
+			{
+				m_modernScrollBar.UpdateScrollBar();
+				m_modernScrollBar.Hide(false);
+				m_modernScrollBarHorz.UpdateScrollBar();
+				m_modernScrollBarHorz.Hide(false);
+			}
 		}
 		else
 		{
@@ -6499,9 +6508,7 @@ LRESULT CQPasteWnd::OnShowHideScrollBar(WPARAM wParam, LPARAM lParam)
 	if (wParam == 1)
 	{
 		Log(_T("OnShowHideScrollBar Showing ScrollBars"));
-
 		m_showScrollBars = true;
-
 		MoveControls();
 	}
 	else
@@ -6520,8 +6527,16 @@ LRESULT CQPasteWnd::OnUpdateScrollBar(WPARAM wParam, LPARAM lParam)
 	// Update modern scrollbar position when list scrolls (only if enabled)
 	if (CGetSetOptions::m_useModernScrollBar)
 	{
-		m_modernScrollBar.Show(false);
-		m_modernScrollBarHorz.Show(false);
+		if (wParam == TRUE)
+		{
+			m_modernScrollBar.Show(false);
+			m_modernScrollBarHorz.Show(false);
+		}
+		else
+		{
+			m_modernScrollBar.UpdateScrollBar();
+			m_modernScrollBarHorz.UpdateScrollBar();
+		}
 	}
 	return 0;
 }
