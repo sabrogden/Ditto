@@ -159,11 +159,13 @@ void CModernScrollBar::UpdateScrollBar()
 	if (currentRect != scrollRect)
 	{
 		MoveWindow(&scrollRect);
-	}
-	
+	}	
+
 	// Ensure visible
-	if (!IsWindowVisible())
+	if (CGetSetOptions::m_showScrollBar && !IsWindowVisible())
+	{
 		ShowWindow(SW_SHOWNA);
+	}
 
 	// Redraw
 	Invalidate();

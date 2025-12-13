@@ -1416,7 +1416,7 @@ BOOL CQListCtrl::PreTranslateMessage(MSG* pMsg)
 			CWnd* pParent = GetParent();
 			if (pParent && pParent->GetSafeHwnd())
 			{
-				pParent->PostMessage(NM_UPDATE_SCROLLBAR, 0, 0);
+				pParent->PostMessage(NM_UPDATE_SCROLLBAR, TRUE, 0);
 			}
 			return result;
 		}
@@ -1938,7 +1938,7 @@ void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 		CWnd* pParent = GetParent();
 		if (pParent && pParent->GetSafeHwnd())
 		{
-			pParent->PostMessage(NM_UPDATE_SCROLLBAR, 0, 0);
+			pParent->PostMessage(NM_UPDATE_SCROLLBAR, FALSE, 0);
 		}
 
 		if (VALID_TOOLTIP &&
@@ -2066,7 +2066,7 @@ void CQListCtrl::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	CWnd* pParent = GetParent();
 	if (pParent && pParent->GetSafeHwnd())
 	{
-		pParent->PostMessage(NM_UPDATE_SCROLLBAR, 0, 0);
+		pParent->PostMessage(NM_UPDATE_SCROLLBAR, TRUE, 0);
 	}
 }
 
@@ -2119,7 +2119,7 @@ void CQListCtrl::OnMouseMove(UINT nFlags, CPoint point)
 				// For modern scrollbar, notify parent
 				if (CGetSetOptions::m_useModernScrollBar)
 				{
-					GetParent()->PostMessage(NM_UPDATE_SCROLLBAR, 0, 0);
+					GetParent()->PostMessage(NM_UPDATE_SCROLLBAR, TRUE, 0);
 				}
 				else
 				{
@@ -2327,7 +2327,7 @@ void CQListCtrl::OnMouseHWheel(UINT nFlags, short zDelta, CPoint pt)
 	CWnd* pParent = GetParent();
 	if (pParent && pParent->GetSafeHwnd())
 	{
-		pParent->PostMessage(NM_UPDATE_SCROLLBAR, 0, 0);
+		pParent->PostMessage(NM_UPDATE_SCROLLBAR, TRUE, 0);
 	}
 
 	//CListCtrl::OnMouseHWheel(nFlags, zDelta, pt);
