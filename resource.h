@@ -337,6 +337,7 @@
 #define IDC_CHECK_CLIP_TITLE            1042
 #define IDC_CHECK_SHIFT_1               1042
 #define IDC_CHECK_ACTIVE                1042
+#define IDC_BUTTON_COPY_SCRIPTS2        1042
 #define IDC_PLAY_SOUND_2                1043
 #define IDC_CHECK_MOVE_CLIPS_ON_PASTE   1043
 #define IDC_CHECK_CREATE_DATE           1043

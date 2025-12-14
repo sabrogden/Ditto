@@ -7,9 +7,8 @@
 #include "afxdialogex.h"
 #include "ScriptEditor.h"
 #include "DimWnd.h"
-
-
-// CAdvGeneral dialog
+#include "MoveToGroupDlg.h"
+#include "SQlite/CppSQLite3.h"
 
 IMPLEMENT_DYNAMIC(CAdvGeneral, CDialogEx)
 
@@ -41,6 +40,7 @@ BEGIN_MESSAGE_MAP(CAdvGeneral, CDialogEx)
 	ON_WM_NCLBUTTONDOWN()
 	ON_EN_CHANGE(IDC_EDIT_ADV_FILTER, &CAdvGeneral::OnEnChangeAdvFilter)
 	ON_BN_CLICKED(IDC_BUTTON_NEXT_MATCH, &CAdvGeneral::OnBnClickedButtonNextMatch)
+	ON_BN_CLICKED(IDC_BUTTON_COPY_SCRIPTS2, &CAdvGeneral::OnBnClickedButtonCopyScripts2)
 END_MESSAGE_MAP()
 
 
@@ -1183,4 +1183,62 @@ BOOL CAdvGeneral::PreTranslateMessage(MSG* pMsg)
 void CAdvGeneral::OnBnClickedButtonNextMatch()
 {
 	Search(true);	
+}
+
+void CAdvGeneral::OnBnClickedButtonCopyScripts2()
+{
+	CDimWnd dimmer(this);
+
+	CMoveToGroupDlg dlg(this, _T("Select group to reset clip order"));
+
+	const auto ret = dlg.DoModal();
+	if (ret == IDOK)
+	{
+		CWaitCursor wait;
+
+		const int groupID = dlg.GetSelectedGroup();
+
+		CString reOrderSql = R"(
+
+			WITH OrderedRows AS(
+				SELECT
+					rowid AS original_rowid,
+					ROW_NUMBER() OVER(ORDER BY {orderField} ASC) AS rn
+				FROM
+					Main
+				WHERE lParentID = {parentID}
+			)
+			--Update the main table using the CTE results
+			UPDATE 
+				Main
+			SET {orderField} = (
+					SELECT rn
+					FROM OrderedRows
+					WHERE OrderedRows.original_rowid = Main.rowid
+				)
+			WHERE lParentID = {parentID}
+		)";
+
+		if (groupID == -1)
+		{
+			reOrderSql.Replace(_T("{orderField}"), _T("clipOrder"));
+
+			//reorder all clip
+			reOrderSql.Replace(_T("WHERE lParentID = {parentID}"), _T(""));
+		}
+		else
+		{
+			reOrderSql.Replace(_T("{parentID}"), std::to_wstring(groupID).c_str());
+			reOrderSql.Replace(_T("{orderField}"), _T("clipGroupOrder"));
+		}
+
+		try
+		{
+			theApp.m_db.execDML(reOrderSql);
+		}
+		catch (CppSQLite3Exception& e)
+		{
+			MessageBox(e.errorMessage());
+		}
+	}
 }

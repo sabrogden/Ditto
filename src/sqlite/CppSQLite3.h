@@ -35,11 +35,7 @@
 
 #define CPPSQLITE_ERROR 1000
 
-#ifdef _UNICODE
-	#define SQLITE3_ERRMSG(mpDB) const TCHAR* szError = (const TCHAR*)sqlite3_errmsg16(mpDB)
-#else							
-	#define SQLITE3_ERRMSG(mpDB) const TCHAR* szError = sqlite3_errmsg(mpDB)
-#endif		
+#define SQLITE3_ERRMSG(mpDB) const TCHAR* szError = (const TCHAR*)sqlite3_errmsg16(mpDB)
 
 int sqlite3_encode_binary(const unsigned char *in, int n, unsigned char *out);
 int sqlite3_decode_binary(const unsigned char *in, unsigned char *out);

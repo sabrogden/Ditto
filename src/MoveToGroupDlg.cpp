@@ -17,13 +17,14 @@ static char THIS_FILE[] = __FILE__;
 // CMoveToGroupDlg dialog
 
 
-CMoveToGroupDlg::CMoveToGroupDlg(CWnd* pParent /*=NULL*/)
+CMoveToGroupDlg::CMoveToGroupDlg(CWnd* pParent /*=NULL*/, CString windowTitle /*= _T("")*/)
 	: CDialog(CMoveToGroupDlg::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CMoveToGroupDlg)
 		// NOTE: the ClassWizard will add member initialization here
 	//}}AFX_DATA_INIT
 	m_nSelectedGroup = -1;
+	m_windowTitle = windowTitle;
 }
 
 
@@ -50,6 +51,11 @@ END_MESSAGE_MAP()
 BOOL CMoveToGroupDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
+
+	if(!m_windowTitle.IsEmpty())
+	{
+		SetWindowText(m_windowTitle);
+	}
 	
 	m_Tree.m_selectedFolderID = m_nSelectedGroup;
 	m_Tree.SetNotificationWndEx(m_hWnd);
