@@ -42,6 +42,21 @@ protected:
 	void AddDateTime(CClip &clip);
 	void SaveDittoFileDataToFile(CClip &clip);
 	void TrimWhiteSpace(CClip &clip);
+	void PosixifyPaths(CClip &clip);
+	struct MatchInfoA
+	{
+		size_t pos;
+		char drive;
+	};
+	struct MatchInfoW
+	{
+		size_t pos;
+		wchar_t drive;
+	};
+	void ApplyDriveReplacements(std::string& str, const std::vector<MatchInfoA>& matches);
+	void ApplyDriveReplacements(std::wstring& str, const std::vector<MatchInfoW>& matches);
+	CStringA ConvertDrivesASCII(const CStringA& input);
+	CStringW ConvertDrivesWide(const CStringW& input);
 	void Slugify(CClip &clip);
 	void InvertCase(CClip &clip);
 	void CamelCase(CClip& clip);
