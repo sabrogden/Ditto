@@ -490,6 +490,7 @@ BEGIN
             MENUITEM "Sentence case",               ID_SPECIALPASTE_SENTENCE
             MENUITEM "Invert Case",                 ID_SPECIALPASTE_TOGGLECASE
             MENUITEM "Trim White Space",            ID_SPECIALPASTE_TRIM
+            MENUITEM "Posixify/Paths",              ID_SPECIALPASTE_POSIXIFY_PATHS
             MENUITEM "CamelCase",                   ID_SPECIALPASTE_CAMELCASE
             MENUITEM "Ascii Text Only",             ID_SPECIALPASTE_ASCIITEXTONLY
             MENUITEM SEPARATOR

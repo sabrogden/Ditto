@@ -307,6 +307,7 @@ public:
 	bool DoActionPasteDontMoveClip();
 	bool DoSetDragFileName();
 	bool DoActionPasteTrimWhiteSpace();
+	bool DoActionPastePosixifyPaths();
 	bool DoActionToggleTransparency();
 	bool DoActionIncreaseTransparency();
 	bool DoActionDecreaseTransparency();
@@ -568,7 +569,9 @@ public:
 	afx_msg void OnUpdateOnSpecialPasteDontUpdateOrder(CCmdUI *pCmdUI);
 
 	afx_msg void OnSpecialpasteTrim();
+	afx_msg void OnSpecialpastePosixifyPaths();
 	afx_msg void OnUpdateSpecialpasteTrim(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateSpecialPosixifyPaths(CCmdUI* pCmdUI);
 	afx_msg void OnTransparencyIncrease();
 	afx_msg void OnUpdateTransparencyIncrease(CCmdUI *pCmdUI);
 	afx_msg void OnTransparencyDecrease();

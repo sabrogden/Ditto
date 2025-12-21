@@ -872,6 +872,7 @@
 #define ID_BUTTONWRAP                   32996
 #define ID_IMPORT_EXPORTTOWEBSEARCH     32997
 #define ID_SPECIALPASTE_PASTENEWGUID    32998
+#define ID_SPECIALPASTE_POSIXIFY_PATHS  32999
 
 // Next default values for new objects
 // 

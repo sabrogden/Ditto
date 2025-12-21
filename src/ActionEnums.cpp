@@ -314,6 +314,9 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case PASTE_TRIM_WHITE_SPACE:
 		val = "Paste, Trim White Space";
 		break;
+	case PASTE_POSIXIFY_PATHS:
+		val = "Paste, Posixify Paths";
+		break;
 	case TRANSPARENCY_NONE:
 		val = "Set Transparency None";
 		break;
