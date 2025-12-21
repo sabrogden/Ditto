@@ -174,6 +174,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_UPDATE_COMMAND_UI(ID_MENU_PASTEPLAINTEXTONLY, OnUpdateMenuPasteplaintextonly)
 	ON_UPDATE_COMMAND_UI(ID_MENU_DELETE, OnUpdateMenuDelete)
 	ON_UPDATE_COMMAND_UI(ID_MENU_PROPERTIES, OnUpdateMenuProperties)
+	ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_POSIXIFY_PATHS, &CQPasteWnd::OnUpdateSpecialPosixifyPaths)
 	ON_COMMAND(ID_QUICKOPTIONS_PROMPTTODELETECLIP, OnPromptToDeleteClip)
 	ON_COMMAND(ID_STICKYCLIPS_MAKETOPSTICKYCLIP, OnMakeTopStickyClip)
 	ON_COMMAND(ID_STICKYCLIPS_MAKELASTSTICKYCLIP, OnMakeLastStickyClip)
@@ -320,6 +321,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_SPECIALPASTE_PASTE32945, &CQPasteWnd::OnSpecialpastePasteDontUpdateOrder)
 	ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_PASTE32945, &CQPasteWnd::OnUpdateOnSpecialPasteDontUpdateOrder)
 	ON_COMMAND(ID_SPECIALPASTE_TRIM, &CQPasteWnd::OnSpecialpasteTrim)
+	ON_COMMAND(ID_SPECIALPASTE_POSIXIFY_PATHS , &CQPasteWnd::OnSpecialpastePosixifyPaths)
 	ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_TRIM, &CQPasteWnd::OnUpdateSpecialpasteTrim)
 	ON_COMMAND(ID_TRANSPARENCY_INCREASE, &CQPasteWnd::OnTransparencyIncrease)
 	ON_UPDATE_COMMAND_UI(ID_TRANSPARENCY_INCREASE, &CQPasteWnd::OnUpdateTransparencyIncrease)
@@ -3396,6 +3398,9 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::PASTE_TRIM_WHITE_SPACE:
 		ret = DoActionPasteTrimWhiteSpace();
 		break;
+	case ActionEnums::PASTE_POSIXIFY_PATHS:
+		ret = DoActionPastePosixifyPaths();
+		break;
 	case ActionEnums::TRANSPARENCY_NONE:
 		SetTransparency(0);
 		break;
@@ -3516,6 +3521,15 @@ bool CQPasteWnd::DoActionPasteTrimWhiteSpace()
 {
 	CSpecialPasteOptions pasteOptions;
 	pasteOptions.m_trimWhiteSpace = true;
+	OpenSelection(pasteOptions);
+
+	return true;
+}
+
+bool CQPasteWnd::DoActionPastePosixifyPaths()
+{
+	CSpecialPasteOptions pasteOptions;
+	pasteOptions.m_PosixifyPaths = true;
 	OpenSelection(pasteOptions);
 
 	return true;
@@ -7446,6 +7460,12 @@ void CQPasteWnd::OnSpecialpasteTrim()
 }
 
 
+void CQPasteWnd::OnSpecialpastePosixifyPaths()
+{
+	DoAction(ActionEnums::PASTE_POSIXIFY_PATHS);
+}
+
+
 void CQPasteWnd::OnUpdateSpecialpasteTrim(CCmdUI* pCmdUI)
 {
 	if (!pCmdUI->m_pMenu)
@@ -7454,6 +7474,16 @@ void CQPasteWnd::OnUpdateSpecialpasteTrim(CCmdUI* pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_TRIM_WHITE_SPACE);
+}
+
+void CQPasteWnd::OnUpdateSpecialPosixifyPaths(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_POSIXIFY_PATHS);
 }
 
 void CQPasteWnd::OnMenuTransparencyNone()
