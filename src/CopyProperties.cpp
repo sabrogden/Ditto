@@ -210,7 +210,11 @@ void CCopyProperties::LoadDataFromCClip(CClip &Clip)
 		pCF = &Clip.m_Formats.GetData()[i];
 		if(pCF)
 		{
-			cs.Format(_T("%s, %d"), GetFormatName(pCF->m_cfType), GlobalSize(pCF->m_hgData));
+			const int MAX_SIZE_BUFFER = 255;
+			TCHAR size[MAX_SIZE_BUFFER];
+			StrFormatByteSize(GlobalSize(pCF->m_hgData), size, MAX_SIZE_BUFFER);
+
+			cs.Format(_T("%s, %s"), GetFormatName(pCF->m_cfType), size);
 			int nIndex = m_lCopyData.AddString(cs);
 			
 			if(m_lCopyID == -1 && pCF->m_dataId == -1)
