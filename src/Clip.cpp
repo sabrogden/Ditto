@@ -360,19 +360,22 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 
 	// m_Formats should be empty when this is called.
 	ASSERT(m_Formats.GetSize() == 0);
-	
+
 	// If the data is supposed to be private, then return
-	if(::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
+	if (::IsClipboardFormatAvailable(theApp.m_cfIgnoreClipboard))
 	{
 		Log(_T("Clipboard ignore type is on the clipboard, skipping this clipboard change"));
 		return FALSE;
 	}
-
-	//https://learn.microsoft.com/en-us/windows/win32/dataxchg/clipboard-formats
-	if (::IsClipboardFormatAvailable(theApp.m_excludeClipboardContentFromMonitorProcessing))
+	
+	if (CGetSetOptions::m_enforceClipboardIgnoreFormats)
 	{
-		Log(_T("ExcludeClipboardContentFromMonitorProcessing type is on the clipboard, skipping this clipboard change"));
-		return FALSE;
+		//https://learn.microsoft.com/en-us/windows/win32/dataxchg/clipboard-formats
+		if (::IsClipboardFormatAvailable(theApp.m_excludeClipboardContentFromMonitorProcessing))
+		{
+			Log(_T("ExcludeClipboardContentFromMonitorProcessing type is on the clipboard, skipping this clipboard change"));
+			return FALSE;
+		}
 	}
 
 	//If we are saving a multi paste then delay us connecting to the clipboard
@@ -394,7 +397,8 @@ int CClip::LoadFromClipboard(CClipTypes* pClipTypes, bool checkClipboardIgnore, 
 	oleData.EnsureClipboardObject();
 
 	//https://learn.microsoft.com/en-us/windows/win32/dataxchg/clipboard-formats
-	if (oleData.IsDataAvailable(theApp.m_canIncludeInClipboardHistory))
+	if (CGetSetOptions::m_enforceClipboardIgnoreFormats &&
+		oleData.IsDataAvailable(theApp.m_canIncludeInClipboardHistory))
 	{
 		HGLOBAL includeInHistory = oleData.GetGlobalData(theApp.m_canIncludeInClipboardHistory);
 		if (includeInHistory != nullptr)

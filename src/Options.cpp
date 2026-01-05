@@ -93,6 +93,7 @@ BOOL CGetSetOptions::m_supportAllTypes = FALSE;
 int CGetSetOptions::m_clipEditSaveDelayAfterLoadSeconds = 3;
 int CGetSetOptions::m_clipEditSaveDelayAfterSaveSeconds = 3;
 BOOL CGetSetOptions::m_bDoNotHideOnDeactivate = FALSE;
+BOOL CGetSetOptions::m_enforceClipboardIgnoreFormats = TRUE;
 
 
 CGetSetOptions::CGetSetOptions()
@@ -300,6 +301,7 @@ void CGetSetOptions::LoadSettings()
 	m_clipEditSaveDelayAfterLoadSeconds = GetClipEditSaveDelayAfterLoadSeconds();
 	m_clipEditSaveDelayAfterSaveSeconds = GetClipEditSaveDelayAfterSaveSeconds();
 	m_bDoNotHideOnDeactivate = GetDoNotHideOnDeactivate();
+	m_enforceClipboardIgnoreFormats = GetEnforceClipboardIgnoreFormats();
 
 	GetExtraNetworkPassword(true);
 
@@ -3272,4 +3274,15 @@ void CGetSetOptions::SetDoNotHideOnDeactivate(BOOL val)
 BOOL CGetSetOptions::GetDoNotHideOnDeactivate()
 {
 	return GetProfileLong("DoNotHideOnDeactivate", FALSE);
+}
+
+void CGetSetOptions::SetEnforceClipboardIgnoreFormats(BOOL val)
+{
+	SetProfileLong("EnforceClipboardIgnoreFormats", val);
+	m_enforceClipboardIgnoreFormats = val;
+}
+
+BOOL CGetSetOptions::GetEnforceClipboardIgnoreFormats()
+{
+	return GetProfileLong("EnforceClipboardIgnoreFormats", TRUE);
 }
