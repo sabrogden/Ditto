@@ -6,6 +6,8 @@ public:
 	ActionEnums();
 	~ActionEnums();
 
+	//note these can't change values as they are tied to translation values
+	//add new values at the end
 	enum ActionEnumValues
 	{ 
 		FIRST_ACTION,
@@ -105,8 +107,7 @@ public:
 		PASTE_SCRIPT,
 		MOVE_CLIP_LAST,
 		PASTE_DONT_MOVE_CLIP,
-		PASTE_TRIM_WHITE_SPACE,
-		PASTE_POSIXIFY_PATHS,
+		PASTE_TRIM_WHITE_SPACE,		
 		TRANSPARENCY_NONE,
 		TRANSPARENCY_5,
 		TRANSPARENCY_10,
@@ -147,6 +148,7 @@ public:
 		PASTE_POSITION_10_PLAIN_TEXT,
 		EXPORT_TO_WEB_SEARCH,
 		GENERATE_GUID,
+		PASTE_POSIXIFY_PATHS,
 
 		LAST_ACTION
 	};
