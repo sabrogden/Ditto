@@ -254,12 +254,18 @@ bool CClipboardViewer::GetIgnoreClipboardChange()
 		return true;
 	}
 
+	if (CGetSetOptions::m_enforceClipboardIgnoreFormats == false)
+	{
+		return false;
+	}
+
 	//https://learn.microsoft.com/en-us/windows/win32/dataxchg/clipboard-formats
 	if (::IsClipboardFormatAvailable(theApp.m_excludeClipboardContentFromMonitorProcessing))
 	{
 		Log(_T("ExcludeClipboardContentFromMonitorProcessing clipboard format is on the clipboard, ignoring change"));
 		return true;
 	}
+
 	return false;
 }
 

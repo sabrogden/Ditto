@@ -739,6 +739,10 @@ public:
 
 	static BOOL SetEditWndPoint(CPoint point);
 	static void GetEditWndPoint(CPoint& point);
+
+	static BOOL m_enforceClipboardIgnoreFormats;
+	static void SetEnforceClipboardIgnoreFormats(BOOL val);
+	static BOOL GetEnforceClipboardIgnoreFormats();
 };
 
 // global for easy access and for initialization of fast access variables
