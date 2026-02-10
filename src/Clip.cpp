@@ -220,8 +220,8 @@ CClip - holds multiple CClipFormats and CopyClipboard() statistics
 DWORD CClip::m_LastAddedCRC = 0;
 int CClip::m_lastAddedID = -1;
 
-CClip::CClip() : 
-	m_id(-1), 
+CClip::CClip() :
+	m_id(-1),
 	m_CRC(0),
 	m_parentId(-1),
 	m_dontAutoDelete(FALSE),
@@ -234,7 +234,8 @@ CClip::CClip() :
 	m_clipGroupOrder(0),
 	m_globalShortCut(FALSE),
 	m_moveToGroupShortCut(0),
-	m_globalMoveToGroupShortCut(FALSE)
+	m_globalMoveToGroupShortCut(FALSE),
+	m_bIsTemplate(0)
 {
 	m_copyReason = CopyReasonEnum::COPY_TO_UNKOWN;
 	m_addToDbStickyEnum = AddToDbStickyEnum::INVALID;
@@ -260,6 +261,8 @@ void CClip::Clear()
 	m_globalShortCut = FALSE;
 	m_moveToGroupShortCut = 0;
 	m_globalMoveToGroupShortCut = 0;
+	m_bIsTemplate = 0;
+	m_csTemplateVars = "";
 	
 	EmptyFormats();
 }
@@ -279,9 +282,11 @@ const CClip& CClip::operator=(const CClip &clip)
 	m_csQuickPaste = clip.m_csQuickPaste;
 	m_moveToGroupShortCut = clip.m_moveToGroupShortCut;
 	m_globalMoveToGroupShortCut = clip.m_globalMoveToGroupShortCut;
+	m_bIsTemplate = clip.m_bIsTemplate;
+	m_csTemplateVars = clip.m_csTemplateVars;
 
 	INT_PTR nCount = clip.m_Formats.GetSize();
-	
+
 	for(int i = 0; i < nCount; i++)
 	{
 		pCF = &clip.m_Formats.GetData()[i];
@@ -956,10 +961,11 @@ bool CClip::AddToMainTable()
 	{
 		m_Desc.Replace(_T("'"), _T("''"));
 		m_csQuickPaste.Replace(_T("'"), _T("''"));
+		m_csTemplateVars.Replace(_T("'"), _T("''"));
 
 		CString cs;
-		cs.Format(_T("INSERT into Main (lDate, mText, lShortCut, lDontAutoDelete, CRC, bIsGroup, lParentID, QuickPasteText, clipOrder, clipGroupOrder, globalShortCut, lastPasteDate, stickyClipOrder, stickyClipGroupOrder, MoveToGroupShortCut, GlobalMoveToGroupShortCut) ")
-						_T("values(%lld, '%s', %d, %d, %d, %d, %d, '%s', %f, %f, %d, %lld, %f, %f, %d, %d);"),
+		cs.Format(_T("INSERT into Main (lDate, mText, lShortCut, lDontAutoDelete, CRC, bIsGroup, lParentID, QuickPasteText, clipOrder, clipGroupOrder, globalShortCut, lastPasteDate, stickyClipOrder, stickyClipGroupOrder, MoveToGroupShortCut, GlobalMoveToGroupShortCut, bIsTemplate, TemplateVars) ")
+						_T("values(%lld, '%s', %d, %d, %d, %d, %d, '%s', %f, %f, %d, %lld, %f, %f, %d, %d, %d, '%s');"),
 							m_Time.GetTime(),
 							m_Desc,
 							m_shortCut,
@@ -975,19 +981,21 @@ bool CClip::AddToMainTable()
 							m_stickyClipOrder,
 							m_stickyClipGroupOrder,
 							m_moveToGroupShortCut,
-							m_globalMoveToGroupShortCut);
+							m_globalMoveToGroupShortCut,
+							m_bIsTemplate,
+							m_csTemplateVars);
 
 		theApp.m_db.execDML(cs);
 
 		m_id = (long)theApp.m_db.lastRowId();
 
-		Log(StrF(_T("Added clip to main table, Id: %d, ParentId: %d Desc: %s, Order: %f, GroupOrder: %f"), m_id, m_parentId, m_Desc, m_clipOrder, m_clipGroupOrder));
+		Log(StrF(_T("Added clip to main table, Id: %d, ParentId: %d Desc: %s, Order: %f, GroupOrder: %f, IsTemplate: %d"), m_id, m_parentId, m_Desc, m_clipOrder, m_clipGroupOrder, m_bIsTemplate));
 
 		m_LastAddedCRC = m_CRC;
 		m_lastAddedID = m_id;
 	}
 	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)
-	
+
 	return true;
 }
 
@@ -998,6 +1006,7 @@ bool CClip::ModifyMainTable()
 	{
 		m_Desc.Replace(_T("'"), _T("''"));
 		m_csQuickPaste.Replace(_T("'"), _T("''"));
+		m_csTemplateVars.Replace(_T("'"), _T("''"));
 
 		theApp.m_db.execDMLEx(_T("UPDATE Main SET lShortCut = %d, ")
 			_T("mText = '%s', ")
@@ -1010,12 +1019,14 @@ bool CClip::ModifyMainTable()
 			_T("stickyClipOrder = %f, ")
 			_T("stickyClipGroupOrder = %f, ")
 			_T("MoveToGroupShortCut = %d, ")
-			_T("GlobalMoveToGroupShortCut = %d ")
-			_T("WHERE lID = %d;"), 
-			m_shortCut, 
-			m_Desc, 
-			m_parentId, 
-			m_dontAutoDelete, 
+			_T("GlobalMoveToGroupShortCut = %d, ")
+			_T("bIsTemplate = %d, ")
+			_T("TemplateVars = '%s' ")
+			_T("WHERE lID = %d;"),
+			m_shortCut,
+			m_Desc,
+			m_parentId,
+			m_dontAutoDelete,
 			m_csQuickPaste,
 			m_clipOrder,
 			m_clipGroupOrder,
@@ -1024,6 +1035,8 @@ bool CClip::ModifyMainTable()
 			m_stickyClipGroupOrder,
 			m_moveToGroupShortCut,
 			m_globalMoveToGroupShortCut,
+			m_bIsTemplate,
+			m_csTemplateVars,
 			m_id);
 
 		bRet = true;
@@ -1582,6 +1595,25 @@ BOOL CClip::LoadMainTable(int id)
 			m_stickyClipGroupOrder = q.getFloatField(_T("stickyClipGroupOrder"));
 			m_moveToGroupShortCut = q.getIntField(_T("MoveToGroupShortCut"));
 			m_globalMoveToGroupShortCut = q.getIntField(_T("GlobalMoveToGroupShortCut"));
+
+			// 读取模板字段，如果字段不存在则使用默认值
+			try
+			{
+				m_bIsTemplate = q.getIntField(_T("bIsTemplate"));
+			}
+			catch (...)
+			{
+				m_bIsTemplate = 0;
+			}
+
+			try
+			{
+				m_csTemplateVars = q.getStringField(_T("TemplateVars"));
+			}
+			catch (...)
+			{
+				m_csTemplateVars = _T("");
+			}
 
 			m_id = id;
 

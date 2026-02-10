@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Templates>
+  <!-- MediaWiki 代码片段 -->
+  <Template name="MediaWiki 代码片段" description="在 MediaWiki 中插入内联代码片段">
+    <Content>&lt;code&gt;${code}&lt;/code&gt;</Content>
+    <Variables>
+      <Variable name="code" type="custom" description="代码内容" default="" />
+    </Variables>
+  </Template>
+
+  <!-- 当前日期时间 -->
+  <Template name="当前日期时间" description="插入当前的日期和时间">
+    <Content>当前时间：${datetime}</Content>
+    <Variables>
+      <Variable name="datetime" type="datetime" description="日期时间" format="%Y-%m-%d %H:%M:%S" />
+    </Variables>
+  </Template>
+
+  <!-- 当前日期 -->
+  <Template name="当前日期" description="插入当前日期">
+    <Content>${date}</Content>
+    <Variables>
+      <Variable name="date" type="datetime" description="日期" format="%Y-%m-%d" />
+    </Variables>
+  </Template>
+
+  <!-- HTML 链接 -->
+  <Template name="HTML 链接" description="创建 HTML 链接">
+    <Content>&lt;a href="${url}"&gt;${text}&lt;/a&gt;</Content>
+    <Variables>
+      <Variable name="url" type="custom" description="链接地址" default="" />
+      <Variable name="text" type="custom" description="链接文本" default="" />
+    </Variables>
+  </Template>
+
+  <!-- Markdown 链接 -->
+  <Template name="Markdown 链接" description="创建 Markdown 链接">
+    <Content>[${text}](${url})</Content>
+    <Variables>
+      <Variable name="text" type="custom" description="链接文本" default="" />
+      <Variable name="url" type="custom" description="链接地址" default="" />
+    </Variables>
+  </Template>
+
+  <!-- Markdown 代码块 -->
+  <Template name="Markdown 代码块" description="创建 Markdown 代码块">
+    <Content>```${language}
+${code}
+```</Content>
+    <Variables>
+      <Variable name="language" type="custom" description="编程语言" default="" />
+      <Variable name="code" type="custom" description="代码内容" default="" />
+    </Variables>
+  </Template>
+
+  <!-- SQL INSERT 语句 -->
+  <Template name="SQL INSERT 语句" description="生成 SQL INSERT 语句">
+    <Content>INSERT INTO ${table} (${columns}) VALUES (${values});</Content>
+    <Variables>
+      <Variable name="table" type="custom" description="表名" default="" />
+      <Variable name="columns" type="custom" description="列名（逗号分隔）" default="" />
+      <Variable name="values" type="custom" description="值（逗号分隔）" default="" />
+    </Variables>
+  </Template>
+
+  <!-- GUID 生成 -->
+  <Template name="GUID 生成" description="生成新的 GUID">
+    <Content>${guid}</Content>
+    <Variables>
+      <Variable name="guid" type="system" description="生成的 GUID" subtype="guid" />
+    </Variables>
+  </Template>
+
+  <!-- 用户信息 -->
+  <Template name="用户信息" description="插入当前用户和计算机信息">
+    <Content>用户：${username}
+计算机：${hostname}
+时间：${datetime}</Content>
+    <Variables>
+      <Variable name="username" type="system" description="用户名" subtype="username" />
+      <Variable name="hostname" type="system" description="计算机名" subtype="hostname" />
+      <Variable name="datetime" type="datetime" description="日期时间" format="%Y-%m-%d %H:%M:%S" />
+    </Variables>
+  </Template>
+
+  <!-- 当前剪贴板内容 -->
+  <Template name="当前剪贴板内容" description="插入当前剪贴板的内容">
+    <Content>剪贴板内容：${clipboard}</Content>
+    <Variables>
+      <Variable name="clipboard" type="clipboard" description="剪贴板内容" />
+    </Variables>
+  </Template>
+</Templates>

@@ -471,6 +471,27 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 			e.errorCode();
 		}
 
+		// 添加模板字段支持
+		try
+		{
+			db.execQuery(_T("SELECT bIsTemplate FROM Main"));
+		}
+		catch (CppSQLite3Exception& e)
+		{
+			db.execDML(_T("ALTER TABLE Main ADD bIsTemplate INTEGER DEFAULT 0"));
+			e.errorCode();
+		}
+
+		try
+		{
+			db.execQuery(_T("SELECT TemplateVars FROM Main"));
+		}
+		catch (CppSQLite3Exception& e)
+		{
+			db.execDML(_T("ALTER TABLE Main ADD TemplateVars TEXT"));
+			e.errorCode();
+		}
+
 		db.execDML(_T("DROP INDEX IF EXISTS Main_NoGroup"));
 		db.execDML(_T("DROP INDEX IF EXISTS Main_InGroup"));
 		db.execDML(_T("DROP INDEX IF EXISTS Main_ShortCut"));
@@ -716,7 +737,9 @@ BOOL CreateDB(CString csFile)
 			_T("stickyClipOrder REAL, ")
 			_T("stickyClipGroupOrder REAL, ")
 			_T("MoveToGroupShortCut INTEGER, ")
-			_T("GlobalMoveToGroupShortCut INTEGER);"));
+			_T("GlobalMoveToGroupShortCut INTEGER, ")
+			_T("bIsTemplate INTEGER DEFAULT 0, ")
+			_T("TemplateVars TEXT);"));
 
 		db.execDML(_T("CREATE TABLE Data(")
 			_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")

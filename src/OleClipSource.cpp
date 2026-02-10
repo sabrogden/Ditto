@@ -164,6 +164,15 @@ BOOL COleClipSource::DoImmediateRender()
 		clip.LoadFormats(m_ClipIDs[0], m_pasteOptions.LimitFormatsToText(), m_pasteOptions.IncludeRTFForTextOnly());
 	}
 
+	// 检查是否为模板，处理模板变量
+	if (clip.m_bIsTemplate == 1)
+	{
+		if (!ProcessTemplateVariables(clip))
+		{
+			return FALSE; // 用户取消或处理失败
+		}
+	}
+
 	if (m_pasteOptions.LimitFormatsToText())
 	{
 		PlainTextFilter(clip);
@@ -1570,4 +1579,84 @@ void COleClipSource::PutGuidOntoClipboard(CClip& clip)
 	cf.m_autoDeleteData = false;
 
 	Log(_T("End of put Guid on clipboard"));
+}
+
+BOOL COleClipSource::ProcessTemplateVariables(CClip &clip)
+{
+	// 1. 获取剪贴板的文本内容
+	CStringW csText = clip.GetUnicodeTextFormat();
+	if (csText.IsEmpty())
+	{
+		csText = clip.GetCFTextTextFormat();
+	}
+
+	if (csText.IsEmpty())
+	{
+		Log(_T("ProcessTemplateVariables: 没有找到文本内容"));
+		return FALSE;
+	}
+
+	// 2. 显示变量输入对话框
+	CTemplateVarInputDlg dlg;
+	dlg.m_csTemplateText = csText;
+
+	INT_PTR nResult = dlg.DoModal();
+	if (nResult != IDOK)
+	{
+		Log(_T("ProcessTemplateVariables: 用户取消了输入对话框"));
+		return FALSE; // 用户取消
+	}
+
+	// 3. 获取替换后的文本
+	CStringW csResult = dlg.m_csResultText;
+
+	// 4. 更新剪贴板格式数据
+	// 找到 CF_UNICODETEXT 格式并更新
+	IClipFormat *unicodeTextFormat = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (unicodeTextFormat != NULL)
+	{
+		// 释放旧数据
+		unicodeTextFormat->Free();
+
+		// 分配新数据
+		long len = csResult.GetLength();
+		HGLOBAL hGlobal = NewGlobalP(csResult.GetBuffer(), ((len + 1) * sizeof(wchar_t)));
+		csResult.ReleaseBuffer();
+
+		if (hGlobal == NULL)
+		{
+			Log(_T("ProcessTemplateVariables: 内存分配失败 (CF_UNICODETEXT)"));
+			return FALSE;
+		}
+
+		unicodeTextFormat->Data(hGlobal);
+	}
+
+	// 也更新 CF_TEXT 格式（如果存在）
+	IClipFormat *asciiTextFormat = clip.m_Formats.FindFormatEx(CF_TEXT);
+	if (asciiTextFormat != NULL)
+	{
+		// 释放旧数据
+		asciiTextFormat->Free();
+
+		// 将 Unicode 转换为 ANSI
+		CStringA csResultA = CTextConvert::UnicodeToAnsi(csResult);
+
+		// 分配新数据
+		long len = csResultA.GetLength();
+		HGLOBAL hGlobal = NewGlobalP(csResultA.GetBuffer(), (len + 1));
+		csResultA.ReleaseBuffer();
+
+		if (hGlobal == NULL)
+		{
+			Log(_T("ProcessTemplateVariables: 内存分配失败 (CF_TEXT)"));
+			return FALSE;
+		}
+
+		asciiTextFormat->Data(hGlobal);
+	}
+
+	Log(_T("ProcessTemplateVariables: 模板变量替换完成"));
+
+	return TRUE;
 }

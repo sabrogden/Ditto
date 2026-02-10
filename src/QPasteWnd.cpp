@@ -28,6 +28,8 @@
 #include <signal.h>
 #include "CreateQRCodeImage.h"
 #include "QRCodeViewer.h"
+#include "TemplateEditorDlg.h"
+#include "TemplateManagerDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -370,11 +372,19 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 
 	ON_COMMAND(ID_SPECIALPASTE_ASCIITEXTONLY, &CQPasteWnd::OnSpecialpasteAsciitextonly)
 	ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_ASCIITEXTONLY, &CQPasteWnd::OnUpdateSpecialpasteAsciitextonly)
-		ON_COMMAND(ID_IMPORT_EXPORTTOWEBSEARCH, &CQPasteWnd::OnImportExporttowebsearch)
-		ON_UPDATE_COMMAND_UI(ID_IMPORT_EXPORTTOWEBSEARCH, &CQPasteWnd::OnUpdateImportExporttowebsearch)
-		ON_COMMAND(ID_SPECIALPASTE_PASTENEWGUID, &CQPasteWnd::OnSpecialpastePastenewguid)
-		ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_PASTENEWGUID, &CQPasteWnd::OnUpdateSpecialpastePastenewguid)
-		END_MESSAGE_MAP()
+	ON_COMMAND(ID_IMPORT_EXPORTTOWEBSEARCH, &CQPasteWnd::OnImportExporttowebsearch)
+	ON_UPDATE_COMMAND_UI(ID_IMPORT_EXPORTTOWEBSEARCH, &CQPasteWnd::OnUpdateImportExporttowebsearch)
+	ON_COMMAND(ID_SPECIALPASTE_PASTENEWGUID, &CQPasteWnd::OnSpecialpastePastenewguid)
+	ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_PASTENEWGUID, &CQPasteWnd::OnUpdateSpecialpastePastenewguid)
+	// 模板菜单项
+	ON_COMMAND(ID_MENU_MARK_AS_TEMPLATE, &CQPasteWnd::OnMenuMarkAsTemplate)
+	ON_COMMAND(ID_MENU_UNMARK_TEMPLATE, &CQPasteWnd::OnMenuUnmarkTemplate)
+	ON_COMMAND(ID_MENU_EDIT_TEMPLATE, &CQPasteWnd::OnMenuEditTemplate)
+	ON_COMMAND(ID_MENU_TEMPLATE_MANAGER, &CQPasteWnd::OnMenuTemplateManager)
+	ON_UPDATE_COMMAND_UI(ID_MENU_MARK_AS_TEMPLATE, &CQPasteWnd::OnUpdateMenuMarkAsTemplate)
+	ON_UPDATE_COMMAND_UI(ID_MENU_UNMARK_TEMPLATE, &CQPasteWnd::OnUpdateMenuUnmarkTemplate)
+	ON_UPDATE_COMMAND_UI(ID_MENU_EDIT_TEMPLATE, &CQPasteWnd::OnUpdateMenuEditTemplate)
+	END_MESSAGE_MAP()
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1696,6 +1706,36 @@ void CQPasteWnd::ShowRightClickMenu()
 		}
 
 		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
+
+		// 添加模板相关菜单项
+		int nItem = m_lstHeader.GetCaret();
+		int nID = -1;
+		if (nItem >= 0)
+		{
+			nID = m_lstHeader.GetItemData(nItem);
+		}
+
+		// 在菜单末尾添加分隔线和模板菜单项
+		cmSubMenu->AppendMenu(MF_SEPARATOR);
+
+		if (nID > 0)
+		{
+			CClip clip;
+			clip.LoadMainTable(nID);
+
+			if (clip.m_bIsTemplate == 1)
+			{
+				cmSubMenu->AppendMenu(MF_STRING, ID_MENU_UNMARK_TEMPLATE, _T("取消模板标记"));
+				cmSubMenu->AppendMenu(MF_STRING, ID_MENU_EDIT_TEMPLATE, _T("编辑模板"));
+			}
+			else
+			{
+				cmSubMenu->AppendMenu(MF_STRING, ID_MENU_MARK_AS_TEMPLATE, _T("标记为模板"));
+			}
+		}
+
+		cmSubMenu->AppendMenu(MF_SEPARATOR);
+		cmSubMenu->AppendMenu(MF_STRING, ID_MENU_TEMPLATE_MANAGER, _T("模板管理器..."));
 
 		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
 	}
@@ -8375,4 +8415,159 @@ void CQPasteWnd::OnUpdateSpecialpastePastenewguid(CCmdUI* pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::GENERATE_GUID);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// 模板菜单处理函数
+
+void CQPasteWnd::OnMenuMarkAsTemplate()
+{
+	int nItem = m_lstHeader.GetCaret();
+	if (nItem < 0)
+		return;
+
+	int nID = m_lstHeader.GetItemData(nItem);
+	if (nID <= 0)
+		return;
+
+	CClip clip;
+	clip.LoadMainTable(nID);
+
+	// 标记为模板
+	clip.m_bIsTemplate = 1;
+	if (clip.ModifyMainTable())
+	{
+		// 刷新显示
+		FillList(m_strSQLSearch);
+	}
+}
+
+void CQPasteWnd::OnMenuUnmarkTemplate()
+{
+	int nItem = m_lstHeader.GetCaret();
+	if (nItem < 0)
+		return;
+
+	int nID = m_lstHeader.GetItemData(nItem);
+	if (nID <= 0)
+		return;
+
+	CClip clip;
+	clip.LoadMainTable(nID);
+
+	// 取消模板标记
+	clip.m_bIsTemplate = 0;
+	if (clip.ModifyMainTable())
+	{
+		// 刷新显示
+		FillList(m_strSQLSearch);
+	}
+}
+
+void CQPasteWnd::OnMenuEditTemplate()
+{
+	int nItem = m_lstHeader.GetCaret();
+	if (nItem < 0)
+		return;
+
+	int nID = m_lstHeader.GetItemData(nItem);
+	if (nID <= 0)
+		return;
+
+	// 打开模板编辑器
+	CTemplateEditorDlg dlg;
+	dlg.m_nClipID = nID;
+	dlg.DoModal();
+
+	// 刷新显示
+	FillList(m_strSQLSearch);
+}
+
+void CQPasteWnd::OnMenuTemplateManager()
+{
+	// 打开模板管理器
+	CTemplateManagerDlg dlg;
+	dlg.DoModal();
+
+	// 刷新显示
+	FillList(m_strSQLSearch);
+}
+
+void CQPasteWnd::OnUpdateMenuMarkAsTemplate(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+		return;
+
+	int nItem = m_lstHeader.GetCaret();
+	if (nItem < 0)
+	{
+		pCmdUI->Enable(FALSE);
+		return;
+	}
+
+	int nID = m_lstHeader.GetItemData(nItem);
+	if (nID <= 0)
+	{
+		pCmdUI->Enable(FALSE);
+		return;
+	}
+
+	CClip clip;
+	clip.LoadMainTable(nID);
+
+	// 只有非模板才显示"标记为模板"菜单项
+	pCmdUI->Enable(clip.m_bIsTemplate != 1);
+}
+
+void CQPasteWnd::OnUpdateMenuUnmarkTemplate(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+		return;
+
+	int nItem = m_lstHeader.GetCaret();
+	if (nItem < 0)
+	{
+		pCmdUI->Enable(FALSE);
+		return;
+	}
+
+	int nID = m_lstHeader.GetItemData(nItem);
+	if (nID <= 0)
+	{
+		pCmdUI->Enable(FALSE);
+		return;
+	}
+
+	CClip clip;
+	clip.LoadMainTable(nID);
+
+	// 只有模板才显示"取消模板标记"菜单项
+	pCmdUI->Enable(clip.m_bIsTemplate == 1);
+}
+
+void CQPasteWnd::OnUpdateMenuEditTemplate(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+		return;
+
+	int nItem = m_lstHeader.GetCaret();
+	if (nItem < 0)
+	{
+		pCmdUI->Enable(FALSE);
+		return;
+	}
+
+	int nID = m_lstHeader.GetItemData(nItem);
+	if (nID <= 0)
+	{
+		pCmdUI->Enable(FALSE);
+		return;
+	}
+
+	CClip clip;
+	clip.LoadMainTable(nID);
+
+	// 只有模板才显示"编辑模板"菜单项
+	pCmdUI->Enable(clip.m_bIsTemplate == 1);
+}
 }

@@ -2,6 +2,8 @@
 
 #include "..\Shared\IClip.h"
 #include <string>
+#include <map>
+#include <vector>
 
 
 class CDittoChaiScript
@@ -38,5 +40,26 @@ public:
 	void SetMakeTopSticky();
 	void SetMakeLastSticky();
 	void SetReplaceTopSticky();
+
+	// 模板变量管理
+	std::map<std::string, std::string> GetTemplateVariables();
+	void SetTemplateVariables(std::map<std::string, std::string> vars);
+	std::string ReplaceTemplateVariables(std::string text);
+
+	// 内置变量
+	std::string GetCurrentDate();
+	std::string GetCurrentTime();
+	std::string GetCurrentDateTime();
+	std::string GetUserName();
+	std::string GetComputerName();
+	std::string GenerateGUID();
+	std::string GetClipboardText();
+
+	// 模板检测
+	bool IsTemplate(std::string text);
+	std::vector<std::string> ExtractVariables(std::string text);
+
+private:
+	std::map<std::string, std::string> m_templateVariables;
 };
 

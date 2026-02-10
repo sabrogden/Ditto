@@ -619,4 +619,12 @@ public:
 	afx_msg void OnUpdateImportExporttowebsearch(CCmdUI* pCmdUI);
 	afx_msg void OnSpecialpastePastenewguid();
 	afx_msg void OnUpdateSpecialpastePastenewguid(CCmdUI* pCmdUI);
+	// 模板菜单项处理函数
+	afx_msg void OnMenuMarkAsTemplate();
+	afx_msg void OnMenuUnmarkTemplate();
+	afx_msg void OnMenuEditTemplate();
+	afx_msg void OnMenuTemplateManager();
+	afx_msg void OnUpdateMenuMarkAsTemplate(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateMenuUnmarkTemplate(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateMenuEditTemplate(CCmdUI* pCmdUI);
 };

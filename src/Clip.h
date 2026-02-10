@@ -150,6 +150,8 @@ public:
 	int m_moveToGroupShortCut;
 	BOOL m_globalMoveToGroupShortCut;
 	CopyReasonEnum::CopyReason m_copyReason;
+	int m_bIsTemplate;					// 是否为模板 (0=否, 1=是)
+	CString m_csTemplateVars;			// 模板变量定义（JSON格式）
 
 	virtual CString Description() { return m_Desc; }
 	virtual void Description(CString csValue) { m_Desc = csValue; }

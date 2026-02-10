@@ -54,6 +54,24 @@ bool ChaiScriptOnCopy::ProcessScript(CDittoChaiScript &clipData, std::string scr
 
 		chai.add(chaiscript::fun(&FormatCurrentTime), "FormatCurrentTime");
 
+		// 模板变量管理 API
+		chai.add(chaiscript::fun(&CDittoChaiScript::GetTemplateVariables), "GetTemplateVariables");
+		chai.add(chaiscript::fun(&CDittoChaiScript::SetTemplateVariables), "SetTemplateVariables");
+		chai.add(chaiscript::fun(&CDittoChaiScript::ReplaceTemplateVariables), "ReplaceTemplateVariables");
+
+		// 内置变量 API
+		chai.add(chaiscript::fun(&CDittoChaiScript::GetCurrentDate), "GetCurrentDate");
+		chai.add(chaiscript::fun(&CDittoChaiScript::GetCurrentTime), "GetCurrentTime");
+		chai.add(chaiscript::fun(&CDittoChaiScript::GetCurrentDateTime), "GetCurrentDateTime");
+		chai.add(chaiscript::fun(&CDittoChaiScript::GetUserName), "GetUserName");
+		chai.add(chaiscript::fun(&CDittoChaiScript::GetComputerName), "GetComputerName");
+		chai.add(chaiscript::fun(&CDittoChaiScript::GenerateGUID), "GenerateGUID");
+		chai.add(chaiscript::fun(&CDittoChaiScript::GetClipboardText), "GetClipboardText");
+
+		// 模板检测 API
+		chai.add(chaiscript::fun(&CDittoChaiScript::IsTemplate), "IsTemplate");
+		chai.add(chaiscript::fun(&CDittoChaiScript::ExtractVariables), "ExtractVariables");
+
 		chai.add(chaiscript::var(&clipData), "clip");
 
 		//loop over all scripts

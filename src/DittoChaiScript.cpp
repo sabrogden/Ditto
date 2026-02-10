@@ -7,6 +7,10 @@
 #include "..\Shared\TextConvert.h"
 
 #include <regex>
+#include <sstream>
+#include <iomanip>
+#include <objbase.h>
+#include <Lmcons.h>
 
 CDittoChaiScript::CDittoChaiScript(IClip *pClip, std::string activeApp, std::string activeAppTitle)
 {
@@ -250,4 +254,139 @@ void CDittoChaiScript::DescriptionReplaceRegex(std::string regex, std::string re
 
 		m_pClip->Description(CTextConvert::Utf8ToUnicode(newAscii.c_str()).GetBuffer());
 	}
+}
+
+// 模板变量管理
+std::map<std::string, std::string> CDittoChaiScript::GetTemplateVariables()
+{
+	return m_templateVariables;
+}
+
+void CDittoChaiScript::SetTemplateVariables(std::map<std::string, std::string> vars)
+{
+	m_templateVariables = vars;
+}
+
+std::string CDittoChaiScript::ReplaceTemplateVariables(std::string text)
+{
+	std::string result = text;
+	std::regex pattern(R"(\$\{([^}]+)\})");
+
+	auto it = m_templateVariables.begin();
+	for (; it != m_templateVariables.end(); ++it)
+	{
+		std::string varName = it->first;
+		std::string varValue = it->second;
+		std::string placeholder = "${" + varName + "}";
+
+		size_t pos = 0;
+		while ((pos = result.find(placeholder, pos)) != std::string::npos)
+		{
+			result.replace(pos, placeholder.length(), varValue);
+			pos += varValue.length();
+		}
+	}
+
+	return result;
+}
+
+// 内置变量
+std::string CDittoChaiScript::GetCurrentDate()
+{
+	CTime t = CTime::GetCurrentTime();
+	CStringA date = t.Format("%Y-%m-%d");
+	return std::string(date);
+}
+
+std::string CDittoChaiScript::GetCurrentTime()
+{
+	CTime t = CTime::GetCurrentTime();
+	CStringA time = t.Format("%H:%M:%S");
+	return std::string(time);
+}
+
+std::string CDittoChaiScript::GetCurrentDateTime()
+{
+	CTime t = CTime::GetCurrentTime();
+	CStringA datetime = t.Format("%Y-%m-%d %H:%M:%S");
+	return std::string(datetime);
+}
+
+std::string CDittoChaiScript::GetUserName()
+{
+	CString userName = ::GetUserNameEx();
+	CStringA userNameA = CTextConvert::UnicodeToAnsi(userName);
+	return std::string(userNameA);
+}
+
+std::string CDittoChaiScript::GetComputerName()
+{
+	CString computerName = ::GetComputerName();
+	CStringA computerNameA = CTextConvert::UnicodeToAnsi(computerName);
+	return std::string(computerNameA);
+}
+
+std::string CDittoChaiScript::GenerateGUID()
+{
+	GUID guid;
+	HRESULT hr = CoCreateGuid(&guid);
+	if (SUCCEEDED(hr))
+	{
+		RPC_CSTR str;
+		if (UuidToStringA(&guid, &str) == RPC_S_OK)
+		{
+			std::string result = (char*)str;
+			RpcStringFreeA(&str);
+			return result;
+		}
+	}
+	return "";
+}
+
+std::string CDittoChaiScript::GetClipboardText()
+{
+	if (!::OpenClipboard(NULL))
+		return "";
+
+	HANDLE hData = ::GetClipboardData(CF_UNICODETEXT);
+	if (hData == NULL)
+	{
+		::CloseClipboard();
+		return "";
+	}
+
+	TCHAR* pszText = (TCHAR*)::GlobalLock(hData);
+	std::string result = "";
+	if (pszText != NULL)
+	{
+		CStringA textA = CTextConvert::UnicodeToAnsi(pszText);
+		result = std::string(textA);
+		::GlobalUnlock(hData);
+	}
+
+	::CloseClipboard();
+	return result;
+}
+
+// 模板检测
+bool CDittoChaiScript::IsTemplate(std::string text)
+{
+	std::regex pattern(R"(\$\{[^}]+\})");
+	return std::regex_search(text, pattern);
+}
+
+std::vector<std::string> CDittoChaiScript::ExtractVariables(std::string text)
+{
+	std::vector<std::string> variables;
+	std::regex pattern(R"(\$\{([^}]+)\})");
+	std::sregex_iterator it(text.begin(), text.end(), pattern);
+	std::sregex_iterator end;
+
+	while (it != end)
+	{
+		variables.push_back(it->str(1));
+		++it;
+	}
+
+	return variables;
 }

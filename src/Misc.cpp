@@ -50,6 +50,38 @@ CString GetComputerName()
 	return cs;
 }
 
+CString GetUserNameEx()
+{
+	TCHAR szName[UNLEN + 1];
+	DWORD dwSize = UNLEN + 1;
+	if (::GetUserName(szName, &dwSize))
+	{
+		return CString(szName);
+	}
+	return _T("");
+}
+
+CString FormatDateTimeEx(const CString& csFormat)
+{
+	SYSTEMTIME st;
+	GetLocalTime(&st);
+
+	CString csResult = csFormat;
+
+	// 替换日期部分
+	csResult.Replace(_T("YYYY"), CString().Format(_T("%04d"), st.wYear));
+	csResult.Replace(_T("YY"), CString().Format(_T("%02d"), st.wYear % 100));
+	csResult.Replace(_T("MM"), CString().Format(_T("%02d"), st.wMonth));
+	csResult.Replace(_T("DD"), CString().Format(_T("%02d"), st.wDay));
+
+	// 替换时间部分
+	csResult.Replace(_T("HH"), CString().Format(_T("%02d"), st.wHour));
+	csResult.Replace(_T("mm"), CString().Format(_T("%02d"), st.wMinute));
+	csResult.Replace(_T("ss"), CString().Format(_T("%02d"), st.wSecond));
+
+	return csResult;
+}
+
 void AppendToFile(const TCHAR* fn, const TCHAR* msg)
 {
 #ifdef _UNICODE

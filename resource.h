@@ -201,6 +201,11 @@
 #define IDB_PNG20                       332
 #define down_32                         332
 #define IDD_SCRIPT_EDITOR               333
+#define IDD_TEMPLATE_VAR_INPUT_DLG      334
+#define IDC_STATIC_VARS                 2175
+#define IDC_RICH_PREVIEW                2176
+#define IDC_STATIC_FIRST_VAR            2200
+#define IDC_EDIT_FIRST_VAR              2300
 #define close_36                        340
 #define close_40                        341
 #define close_44                        342
@@ -873,15 +878,37 @@
 #define ID_IMPORT_EXPORTTOWEBSEARCH     32997
 #define ID_SPECIALPASTE_PASTENEWGUID    32998
 #define ID_SPECIALPASTE_POSIXIFY_PATHS  32999
+#define IDD_TEMPLATE_MANAGER_DLG        335
+#define IDC_LIST_TEMPLATES             2400
+#define IDC_BTN_NEW                    2401
+#define IDC_BTN_EDIT                   2402
+#define IDC_BTN_DELETE                 2403
+#define IDC_BTN_PREVIEW                2404
+#define IDC_BTN_CLOSE                  2405
+
+// 模板菜单项 ID
+#define ID_MENU_MARK_AS_TEMPLATE       33000
+#define ID_MENU_UNMARK_TEMPLATE        33001
+#define ID_MENU_EDIT_TEMPLATE          33002
+#define ID_MENU_TEMPLATE_MANAGER       33003
+
+// 模板编辑器子对话框资源 ID
+#define IDD_INPUT_VAR_NAME_DLG         396
+#define IDD_SELECT_VAR_TYPE_DLG        397
+#define IDC_EDIT_VAR_NAME              2406
+#define IDC_COMBO_VAR_TYPE             2407
+#define IDC_EDIT_VAR_DEFAULT           2408
+#define IDC_EDIT_VAR_FORMAT            2409
+#define IDC_STATIC_FORMAT              2410
 
 // Next default values for new objects
-// 
+//
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        394
+#define _APS_NEXT_RESOURCE_VALUE        398
 #define _APS_NEXT_COMMAND_VALUE         32999
-#define _APS_NEXT_CONTROL_VALUE         2174
+#define _APS_NEXT_CONTROL_VALUE         2411
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

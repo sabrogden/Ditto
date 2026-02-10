@@ -75,6 +75,12 @@ public:
 CString GetIPAddress();
 CString GetComputerName();
 
+// 获取当前用户名
+CString GetUserNameEx();
+
+// 格式化日期时间
+CString FormatDateTimeEx(const CString& csFormat);
+
 #define FUNC		__FUNCTION__
 #define FUNCSIG		__FUNCSIG__
 void AppendToFile(const TCHAR* fn, const TCHAR *msg);
