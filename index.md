@@ -5,7 +5,6 @@
 
 Ditto is an extension to the standard windows clipboard. It saves each item placed on the clipboard allowing you access to any of those items at a later time. Ditto allows you to save any type of information that can be put on the clipboard, text, images, html, custom formats.
 
-
 1. [Installer](https://github.com/sabrogden/Ditto/releases/download/3.25.113.0/DittoSetup_3_25_113_0.exe)
 2. [Portable](https://github.com/sabrogden/Ditto/releases/download/3.25.113.0/DittoPortable_3_25_113_0.zip)
 3. [Chocolatey](https://chocolatey.org/packages/ditto/3.23.124.0) ```choco install ditto```
@@ -21,6 +20,10 @@ Ditto is an extension to the standard windows clipboard. It saves each item plac
 3. Open Ditto by clicking its icon in the system tray or by pressing its Hot Key which defaults to Ctrl + ` – i.e. hold down Ctrl and press the back-quote (tilde ~) key.
 4. Double click or press enter on the item to paste it to the previous window.
 
+## Data
+- No accounts
+- No telemetry
+- All data saved locally
 
 ## Windows Code-Signing Policy
 Free code signing on Windows binaries provided by [SignPath.io](https://about.signpath.io), certificate by SignPath Foundation.
