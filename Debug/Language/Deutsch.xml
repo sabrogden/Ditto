@@ -82,7 +82,7 @@
 		<Item English_Text = "Select Left Text" ID = "32893">Text links auswählen</Item>
 		<Item English_Text = "Select Right Text And Compare Against Left" ID = "32894">Text rechts auswählen und mit linker Seite vergleichen</Item>
 		<Item English_Text = "Compare" ID = "32895">Vergleichen</Item>
-		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "32881">Erhöhte Rechte, um in Anwendungen mit erh. Rechte kopieren zu können</Item>
+		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "32881">Erhöhte Rechte, um in Anwendungen mit erh. Rechten kopieren zu können</Item>
 		<Item English_Text = "Show In Taskbar" ID = "32885">In Taskleiste anzeigen</Item>
 		<Item English_Text = "Sticky Clips" ID = "-1">Sticky-Clips</Item>
 		<Item English_Text = "Make Top Sticky Clip" ID = "32878">Als erster Sticky-Clip</Item>
@@ -97,12 +97,12 @@
 		<Item English_Text = "UPPER CASE" ID = "32912">GROßBUCHSTABEN</Item>
 		<Item English_Text = "lower case" ID = "32913">kleinbuchstaben</Item>
 		<Item English_Text = "Capitalize Case" ID = "32914">Erster Buchstabe Groß</Item>
-		<Item English_Text = "Sentence case" ID = "32915">Erstes wort groß</Item>
+		<Item English_Text = "Sentence case" ID = "32915">Erstes Wort groß</Item>
 		<Item English_Text = "Remove Line Feeds" ID = "32916">Zeilenumbrüche entfernen</Item>
 		<Item English_Text = "Paste + One Line Feed" ID = "32918">Einfügen + Zeilenumbruch</Item>
 		<Item English_Text = "Paste + Two Line Feeds" ID = "32919">Einfügen + zwei Zeilenumbrüche</Item>
 		<Item English_Text = "Paste + Current Time" ID = "32927">Einfügen + aktueller Zeitstempel</Item>
-		<Item English_Text = "Typoglycemia" ID = "32922">Typoglycemie</Item>
+		<Item English_Text = "Typoglycemia" ID = "32922">Typoglykämie</Item>
 		<Item English_Text = "Filter On" ID = "-1">Filter aktiv</Item>
 		<Item English_Text = "Toggle Last Group Toggle" ID = "32925">Zuletzt verwendete Gruppe anzeigen</Item>
 		<Item English_Text = "Clip Order" ID = "-1">Clip-Reihenfolge</Item>
@@ -132,8 +132,8 @@
 		<Item English_Text = "Filter On Selected Clip" ID = "32910">Auf gewählten Clip filtern</Item>
 		<Item English_Text = "Invert Case" ID = "32958">Großschreibung umkehren</Item>
 		<Item English_Text = "Trim White Space" ID = "32946">Weißraum löschen</Item>
-		<Item English_Text = "Slugify" ID = " 32954">Verlangsamen</Item>
-		<Item English_Text = "Paste, Don't Change Clip Order" ID = " 32945">Einfügen, Clip-Folge beibehalten</Item>
+		<Item English_Text = "Slugify" ID = "32954">Verlangsamen</Item>
+		<Item English_Text = "Paste, Don't Change Clip Order" ID = "32945">Einfügen, Clip-Folge beibehalten</Item>
 		<Item English_Text = "Gmail, Content In Body" ID = "32952">G-Mail, Inhalt im Textbereich</Item>
 		<Item English_Text = "EMail, Clip Export As Attachment" ID = "32953">E-Mail, Clip als Anhang</Item>
 		<Item English_Text = "EMail, Content As Attachment" ID = "32956">E-Mail, Inhalt als Anhang</Item>
@@ -212,7 +212,7 @@
 		<Item English_Text = "Language" ID = "2069">Sprache</Item>
 		<Item English_Text = "Ignore copies that occur X milliseconds from the last copy (1000 ms  =  1 sec)" ID = "2072">Kopien ignorieren, die X Millisekunden nach der letzten Kopie auftreten (1000 ms  =  1 Sekunde).</Item>
 		<Item English_Text = "About Language" ID = "2073">Über Sprache</Item>
-		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Sicherstellen, dass Dito immer mit der Zwischenablage verbunden ist</Item>
+		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">Sicherstellen, dass Ditto immer mit der Zwischenablage verbunden ist</Item>
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true">Allgemein</Item>
 		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090">Multiple-Einfügen Clip-Separator ([LF] = Zeilenumbruch)</Item>
 
@@ -379,7 +379,7 @@
 		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Sollen wirklich alle Einträge gelöscht werden?</Item>
 		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Verbindung zur Zwischenablage trennen</Item>
 		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Mit Zwischenablage verbinden</Item>
-		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">DAO/Jet db Engine konnte nicht initialisiert werden. DAO wird installiert\n\nBitte starten sie Ditto nach Installation von DAO neu." ID  =  " Error_Init_Dao_Intall"</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">DAO/Jet db Engine konnte nicht initialisiert werden. DAO wird installiert\n\nBitte starten Sie Ditto nach Installation von DAO neu." ID  =  " Error_Init_Dao_Intall"</Item>
 		<Item English_Text = "NO TARGET" ID = "No_Target">Ziel nicht gefunden</Item>
 
 		//New strings added in 3.6 6-9-06
@@ -593,9 +593,9 @@
 		<Item English_Text = "Next Full Description" ID = "2">Nächste komplette Beschreibung</Item>
 		<Item English_Text = "Previous Full Description" ID = "3">Vorherige komplette Beschreibung</Item>
 		<Item English_Text = "Show Context Menu" ID = "4">Kontextmenü anzeigen</Item>
-		<Item English_Text = "New Group" ID = "5">Neuer Gruppe</Item>
-		<Item English_Text = "New Group Selection" ID = "6">Neuer Gruppenauswahl</Item>
-		<Item English_Text = "Toggle On File Logging" ID = "7">Dateilogging aktiveren/deaktivieren</Item>
+		<Item English_Text = "New Group" ID = "5">Neue Gruppe</Item>
+		<Item English_Text = "New Group Selection" ID = "6">Neue Gruppenauswahl</Item>
+		<Item English_Text = "Toggle On File Logging" ID = "7">Datei-Logging aktivieren/deaktivieren</Item>
 		<Item English_Text = "Toggle OutputDebugString Logging" ID = "8">Ausgabe-Logging aktivieren/deaktivieren</Item>
 		<Item English_Text = "Close Window" ID = "9">Fenster schließen</Item>
 		<Item English_Text = "NEXTTABCONTROL" ID = "10"/>
@@ -617,10 +617,10 @@
 		<Item English_Text = "Paste Selected Plain Text" ID = "26">Ausgewähltes als unformatierter Text einfügen</Item>
 		<Item English_Text = "Move Clip To Group" ID = "27">Clip in einer Gruppe verschieben</Item>
 		<Item English_Text = "Option - Elevate Privleges" ID = "28">Option - Erhöhte Rechte</Item>
-		<Item English_Text = "Option - Show In TaskBar" ID = "29">Option - in Task-leiste zeigen</Item>
+		<Item English_Text = "Option - Show In TaskBar" ID = "29">Option - in Taskleiste zeigen</Item>
 		<Item English_Text = "Compare Selected Clips" ID = "30">Ausgewählte Clips vergleichen</Item>
-		<Item English_Text = "Select Left File For Compare" ID = "31">Linker Datei für Vergleich auswählen</Item>
-		<Item English_Text = "Select Right File And Do Compare" ID = "32">Rechter Datei für Vergleich auswählen</Item>
+		<Item English_Text = "Select Left File For Compare" ID = "31">Linke Datei für Vergleich auswählen</Item>
+		<Item English_Text = "Select Right File And Do Compare" ID = "32">Rechte Datei für Vergleich auswählen</Item>
 		<Item English_Text = "Export To Text File" ID = "33">Als Text exportieren</Item>
 		<Item English_Text = "Export To QR Code" ID = "34">Als QR-Code exportieren</Item>
 		<Item English_Text = "Export To Google Translate" ID = "35">An Google-Übersetzer senden</Item>
