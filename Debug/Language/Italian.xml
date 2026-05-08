@@ -104,7 +104,7 @@
 		<Item English_Text = "Paste + Current Time" ID = "32927">Incolla + ora attuale</Item>	
 		<Item English_Text = "Typoglycemia" ID = "32922">Tipoglicemia</Item>	
 		<Item English_Text = "Filter On" ID = "-1">Filtro attivato</Item>			
-		<Item English_Text = "Toggle Last Group Toggle" ID = "32925">attiva/disattiva ultimo gruppo</Item>			
+		<Item English_Text = "Toggle Last Group Toggle" ID = "32925">Attiva/disattiva ultimo gruppo</Item>			
 		<Item English_Text = "Clip Order" ID = "-1">Ordine clip</Item>			
 		<Item English_Text = "Move To Top" ID = "32908">Sposta in alto</Item>	
 		<Item English_Text = "Move Up" ID = "32906">Sposta su</Item>	
@@ -118,7 +118,7 @@
 		<Item English_Text = "Search Quick Paste" ID = "32875">Incolla rapido ricerca</Item>	
 		<Item English_Text = "Contains Text Search" ID = "32876">Contiene ricerca testuale</Item>	
 		<Item English_Text = "Regular Expression Search" ID = "32899">Espressioni regolari ricerca</Item>	
-		<Item English_Text = "Wildcard Search" ID = "32903">carattery jolly ricerca</Item>	
+		<Item English_Text = "Wildcard Search" ID = "32903">Caratteri jolly di ricerca</Item>	
 		<Item English_Text = "Show text for first ten copy hot keys" ID = "32923">Visualizza testo per i primi dieci tasti scelta rapida copia</Item>	
 		<Item English_Text = "Show indicator a clip has been pasted" ID = "32924">Visualizza indicatore che una clip è stata incollata</Item>	
 		<Item English_Text = "Global Hot Keys" ID = "32933">Tasti di scelta rapida globali</Item>	
@@ -268,7 +268,7 @@
 		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044">Usa gruppo selezionato nella UI Ditto per le ultime 10 copie</Item>
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Friends>
-		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Se ricevi una copia inviata da un IP o computer che sono nell'elenco allora copiali begli appunti altrimenti copiali nelle clip salvate per usarle in un secondo momento.</Item>
+		<Item English_Text = "When you recieve a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">Se ricevi una copia inviata da un IP o computer che sono nell'elenco allora copiali negli appunti altrimenti copiali nelle clip salvate per usarle in un secondo momento.</Item>
 		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP/nome computer separati da virgole</Item>
 		<Item English_Text = "Disable Recieving Clips" ID = "2026">Disabilita ricezione clip</Item>
 		<Item English_Text = "Network Password" ID = "2054">Password di rete</Item>
@@ -304,7 +304,7 @@
 		<Item English_Text = "At Cursor" ID = "2016">Al cursore</Item>
 		<Item English_Text = "At Previous Position" ID = "2017">Alla posizione precedente</Item>
 		<Item English_Text = "List Item Prefix Legend" ID = "2064">Legenda elenco prefissi elementi</Item>
-		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">*=no eliminazione automatica\n  s=scorciatoia esistente\n G=oggetto è un gruppo\n !=oggetto attaccato al gruppo</Item>
+		<Item English_Text = "  * = Don't Auto Delete\n  s = Shortcut exists\n G = Item is a Group\n  ! = Item is attached to a Group" ID = "2065">  * = no eliminazione automatica\n  s=scorciatoia esistente\n  G=oggetto è un gruppo\n !=oggetto attaccato al gruppo</Item>
 		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Incolla veloce</Item>
 		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Prompt when deleting clips" ID = "2039">Chiedi prima di eliminare</Item>
@@ -313,7 +313,7 @@
 		<Item English_Text = "Theme" ID = "2092">Tema</Item>
 		<Item English_Text = "About Theme" ID = "2094">Info tema</Item>
 		//Added 1/10/15
-		<Item English_Text = "Always Show Scroll Bar" ID = "2040">Visualizza sempre barar scorrimento</Item>
+		<Item English_Text = "Always Show Scroll Bar" ID = "2040">Visualizza sempre barra di scorrimento</Item>
 		<Item English_Text = "Elevated privileges to paste into elevated apps" ID = "2041">Privilegi elevati per incolla speciali</Item>
 		<Item English_Text = "Show In Taskbar" ID = "2042">Visualizza nella barra attività</Item>
 		<Item English_Text = "Diff Application Path" ID = "2122">Percorso applicazione differenze</Item>
@@ -381,7 +381,7 @@
 		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Rimuovi tutto/i</Item>
 		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Disconnetti dagli appunti</Item>			
 		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Connetti agli appunti</Item>			
-		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">Non è stato possibile inizializare il DAO/Jet db engine</Item>
+		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">Non è stato possibile inizializzare il DAO/Jet db engine</Item>
 		<Item English_Text = "NO TARGET" ID = "No_Target">NESSUN OBIETTIVO</Item>		
 		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Prompt when deleting clips" ID = "2039">Chiedi prima di eliminare le clip</Item>
