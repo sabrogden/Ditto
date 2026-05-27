@@ -1751,6 +1751,14 @@ void CQPasteWnd::AddShowStarredClipsMenuItem(CMenu* pMenu)
 	}
 
 	CString csText = theApp.m_Language.GetString(_T("ShowStarredClips"), _T("Show Starred Clips"));
+	CString shortcutText = m_actions.GetCmdKeyText(ActionEnums::SHOW_STARRED_CLIPS);
+	if (shortcutText != _T("") &&
+		csText.Find(_T("\t")) < 0)
+	{
+		csText += _T("\t");
+		csText += shortcutText;
+	}
+
 	CString csFilterOn(_T("Filter On Selected Clip"));
 	int nPos = -1;
 	CMenu* pParentMenu = CMultiLanguage::GetMenuPos(pMenu, csFilterOn, nPos);
@@ -3557,6 +3565,10 @@ bool CQPasteWnd::DoAction(CAccel a)
 		break;
 	case ActionEnums::PASTE_AS_IMAGE:
 		ret = DoPasteAsImage();
+		break;
+	case ActionEnums::SHOW_STARRED_CLIPS:
+		OnMenuShowStarredClips();
+		ret = true;
 		break;
 	}
 
