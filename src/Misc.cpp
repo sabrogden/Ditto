@@ -417,46 +417,48 @@ std::vector<CLIPFORMAT> GetSystemClipFormats()
 //Do not change these these are stored in the database
 CLIPFORMAT GetFormatID(LPCTSTR cbName)
 {
-	if(STRCMP(cbName, _T("CF_TEXT")) == 0)
+	if (STRCMP(cbName, _T("CF_TEXT")) == 0)
 		return CF_TEXT;
-	else if(STRCMP(cbName, _T("CF_METAFILEPICT")) == 0)
+	else if (STRCMP(cbName, _T("CF_METAFILEPICT")) == 0)
 		return CF_METAFILEPICT;
-	else if(STRCMP(cbName, _T("CF_SYLK")) == 0)
+	else if (STRCMP(cbName, _T("CF_SYLK")) == 0)
 		return CF_SYLK;
-	else if(STRCMP(cbName, _T("CF_DIF")) == 0)
+	else if (STRCMP(cbName, _T("CF_DIF")) == 0)
 		return CF_DIF;
-	else if(STRCMP(cbName, _T("CF_TIFF")) == 0)
+	else if (STRCMP(cbName, _T("CF_TIFF")) == 0)
 		return CF_TIFF;
-	else if(STRCMP(cbName, _T("CF_OEMTEXT")) == 0)
+	else if (STRCMP(cbName, _T("CF_OEMTEXT")) == 0)
 		return CF_OEMTEXT;
-	else if(STRCMP(cbName, _T("CF_DIB")) == 0)
+	else if (STRCMP(cbName, _T("CF_DIB")) == 0)
 		return CF_DIB;
-	else if(STRCMP(cbName, _T("CF_PALETTE")) == 0)
+	else if (STRCMP(cbName, _T("CF_PALETTE")) == 0)
 		return CF_PALETTE;
-	else if(STRCMP(cbName, _T("CF_PENDATA")) == 0)
+	else if (STRCMP(cbName, _T("CF_PENDATA")) == 0)
 		return CF_PENDATA;
-	else if(STRCMP(cbName, _T("CF_RIFF")) == 0)
+	else if (STRCMP(cbName, _T("CF_RIFF")) == 0)
 		return CF_RIFF;
-	else if(STRCMP(cbName, _T("CF_WAVE")) == 0)
+	else if (STRCMP(cbName, _T("CF_WAVE")) == 0)
 		return CF_WAVE;
-	else if(STRCMP(cbName, _T("CF_UNICODETEXT")) == 0)
+	else if (STRCMP(cbName, _T("CF_UNICODETEXT")) == 0)
 		return CF_UNICODETEXT;
-	else if(STRCMP(cbName, _T("CF_ENHMETAFILE")) == 0)
+	else if (STRCMP(cbName, _T("CF_ENHMETAFILE")) == 0)
 		return CF_ENHMETAFILE;
-	else if(STRCMP(cbName, _T("CF_HDROP")) == 0)
+	else if (STRCMP(cbName, _T("CF_HDROP")) == 0)
 		return CF_HDROP;
-	else if(STRCMP(cbName, _T("CF_LOCALE")) == 0)
+	else if (STRCMP(cbName, _T("CF_LOCALE")) == 0)
 		return CF_LOCALE;
-	else if(STRCMP(cbName, _T("CF_OWNERDISPLAY")) == 0)
+	else if (STRCMP(cbName, _T("CF_OWNERDISPLAY")) == 0)
 		return CF_OWNERDISPLAY;
-	else if(STRCMP(cbName, _T("CF_DSPTEXT")) == 0)
+	else if (STRCMP(cbName, _T("CF_DSPTEXT")) == 0)
 		return CF_DSPTEXT;
-	else if(STRCMP(cbName, _T("CF_DSPBITMAP")) == 0)
+	else if (STRCMP(cbName, _T("CF_DSPBITMAP")) == 0)
 		return CF_DSPBITMAP;
-	else if(STRCMP(cbName, _T("CF_DSPMETAFILEPICT")) == 0)
+	else if (STRCMP(cbName, _T("CF_DSPMETAFILEPICT")) == 0)
 		return CF_DSPMETAFILEPICT;
-	else if(STRCMP(cbName, _T("CF_DSPENHMETAFILE")) == 0)
+	else if (STRCMP(cbName, _T("CF_DSPENHMETAFILE")) == 0)
 		return CF_DSPENHMETAFILE;
+	else if (STRCMP(cbName, _T("CF_DIBV5")) == 0)
+		return CF_DIBV5;
 	
 	
 	return ::RegisterClipboardFormat(cbName);
@@ -509,6 +511,8 @@ CString GetFormatName(CLIPFORMAT cbType)
 		return _T("CF_DSPMETAFILEPICT");
 	case CF_DSPENHMETAFILE:
 		return _T("CF_DSPENHMETAFILE");
+	case CF_DIBV5:
+		return _T("CF_DIBV5");
 	default:
 		//Not a default type get the name from the clipboard
 		if (cbType != 0)
