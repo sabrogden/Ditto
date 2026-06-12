@@ -490,6 +490,7 @@
     <ClCompile Include="src\EditWnd.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\ModernScrollBar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\About.h">
@@ -1004,6 +1005,7 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\RulerRichEditCtrl\resource.h" />
+    <ClInclude Include="src\ModernScrollBar.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="CP_Main.rc">
