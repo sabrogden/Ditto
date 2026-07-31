@@ -107,6 +107,7 @@ public:
 	bool ToggleConnectCV();
 	void UpdateMenuConnectCV(CMenu* pMenu, UINT nMenuID);
 	bool ImportClips(HWND hWnd);
+	bool MergeDatabase(HWND hWnd);
 	void LoadGlobalClips();
 
 	void OnDeleteID(long lID);

@@ -681,6 +681,7 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Backup Database",             ID_MENU_BACKUPDATABASE
         MENUITEM "Restore Database",            ID_MENU_RESTOREDATABSAE
+        MENUITEM "Merge Database...",           ID_MENU_MERGEDATABASE
         MENUITEM SEPARATOR
         MENUITEM "Import Clip(s)",              ID_MENU_IMPORTCLIP32935
         MENUITEM "New Clip",                    ID_MENU_NEWCLIP32937
