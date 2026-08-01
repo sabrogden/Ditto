@@ -1076,7 +1076,7 @@ bool CCP_MainApp::MergeDatabase(HWND hWnd)
 
 	using namespace nsPath;
 	CPath path(FileName.lpstrFile);
-	CGetSetOptions::SetLastImportDir(path.GetPath());
+	CGetSetOptions::SetLastImportDir(CString(path.GetPath()));
 
 	CString csMergeFrom(FileName.lpstrFile);
 	CString csCurrentDb = CGetSetOptions::GetDBPath();
