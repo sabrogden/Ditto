@@ -3087,13 +3087,20 @@ BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 		}
 		else if (pMsg->message == WM_CHAR)
 		{
-			auto f = this->GetFocus();
-			if (f != NULL && f->m_hWnd == m_lstHeader.m_hWnd)
+			if (pMsg->hwnd == m_lstHeader.m_hWnd)
 			{
-				CString x((TCHAR)pMsg->wParam);
-				m_search.SetWindowText(x);
+				bool bStartNewSearch = (::GetFocus() != m_search.m_hWnd);
+				TCHAR ch = (TCHAR)pMsg->wParam;
 				m_search.SetFocus();
-				m_search.SetSel(1, 1);
+				CString csSearch;
+				if (bStartNewSearch == false)
+				{
+					m_search.GetWindowText(csSearch);
+				}
+				csSearch += ch;
+				m_search.SetWindowText(csSearch);
+				int nLen = csSearch.GetLength();
+				m_search.SetSel(nLen, nLen);
 
 				OnSearchEditChange();
 
