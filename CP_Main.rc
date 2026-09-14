@@ -480,6 +480,9 @@ BEGIN
             MENUITEM SEPARATOR
         END
         MENUITEM "View Full Description",       32793
+        MENUITEM "Preview Pane",                ID_MENU_PREVIEWPANE
+        MENUITEM "Preview Pane - Golden Ratio", ID_MENU_PREVIEW_GOLDEN
+        MENUITEM "Preview Pane - 5:5",          ID_MENU_PREVIEW_HALF
         POPUP "Special Paste"
         BEGIN
             MENUITEM "Plain Text Only",             32841

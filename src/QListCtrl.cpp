@@ -1939,6 +1939,8 @@ void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 		if (pParent && pParent->GetSafeHwnd())
 		{
 			pParent->PostMessage(NM_UPDATE_SCROLLBAR, FALSE, 0);
+			// Notify parent to update preview pane selection
+			pParent->PostMessage(NM_PREVIEW_SEL_CHANGED, 0, 0);
 		}
 
 		if (VALID_TOOLTIP &&
@@ -2026,11 +2028,20 @@ void CQListCtrl::OnTimer(UINT_PTR nIDEvent)
 		//Check and see if we are still in the cursor area
 		if (MouseInScrollBarArea(crWindow, cursorPos))
 		{
-			m_timerToHideScrollAreaSet = true;
-			GetParent()->SendMessage(NM_SHOW_HIDE_SCROLLBARS, 1, 0);
+			if (CGetSetOptions::m_useModernScrollBar)
+			{
+				// dwell time passed and the cursor is still in the area,
+				// now show the modern scrollbar
+				GetParent()->PostMessage(NM_UPDATE_SCROLLBAR, TRUE, 0);
+			}
+			else
+			{
+				m_timerToHideScrollAreaSet = true;
+				GetParent()->SendMessage(NM_SHOW_HIDE_SCROLLBARS, 1, 0);
 
-			//Start looking to hide the scroll bars
-			SetTimer(TIMER_HIDE_SCROL, 1000, NULL);
+				//Start looking to hide the scroll bars
+				SetTimer(TIMER_HIDE_SCROL, 1000, NULL);
+			}
 		}
 
 		KillTimer(TIMER_SHOW_SCROLL);
@@ -2119,7 +2130,11 @@ void CQListCtrl::OnMouseMove(UINT nFlags, CPoint point)
 				// For modern scrollbar, notify parent
 				if (CGetSetOptions::m_useModernScrollBar)
 				{
-					GetParent()->PostMessage(NM_UPDATE_SCROLLBAR, TRUE, 0);
+					// Delay the show briefly so quickly transiting the edge
+					// (e.g. moving the mouse to the preview pane) doesn't
+					// flash the scrollbar. TIMER_SHOW_SCROLL verifies the
+					// cursor is still in the area before showing.
+					SetTimer(TIMER_SHOW_SCROLL, 200, NULL);
 				}
 				else
 				{

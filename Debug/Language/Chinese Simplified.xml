@@ -434,6 +434,17 @@
 		<Item English_Text = "At Cursor" ID = "AtCursor">光标处</Item>
 		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition">上次打开的位置</Item>
 		
+		<Item English_Text = "Files" ID = "PreviewTypeFiles">文件</Item>
+		<Item English_Text = "Image" ID = "PreviewTypeImage">图片</Item>
+		<Item English_Text = "Rich text" ID = "PreviewTypeRichText">富文本</Item>
+		<Item English_Text = "Web page" ID = "PreviewTypeWebPage">网页</Item>
+		<Item English_Text = "Text" ID = "PreviewTypeText">文本</Item>
+		<Item English_Text = "No item selected" ID = "PreviewNoItemSelected">未选择任何项目</Item>
+		<Item English_Text = "%d files · %s" ID = "PreviewFilesSummary">%d 个文件 · %s</Item>
+		<Item English_Text = "%d characters" ID = "PreviewCharCount">%d 字符</Item>
+		<Item English_Text = "click to zoom" ID = "PreviewZoomHint">点击查看原图</Item>
+		<Item English_Text = "Esc / Space / Click to close" ID = "ImageViewerHint">Esc / 空格 / 点击 关闭</Item>
+
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">确定</Item>
