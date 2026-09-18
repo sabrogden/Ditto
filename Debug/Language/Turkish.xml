@@ -181,7 +181,7 @@
 		//Added 1/10/15
 		<Item English_Text = "Hotkey available globally" ID = "1026">Kısayol genel olarak kullanılabilir</Item>
 		<Item English_Text = "Last Used" ID = "2043">Son Kullanım</Item>
-		<Item English_Text = "Quick Paste Text" ID = "2125">Hızlı Yapıştırma Metni</Item>
+		<Item English_Text = "Quick Paste Text" ID = "2125">Hızlı Yapıştır Metni</Item>
 		
 	
 		<Item English_Text = "Selected format MD5" ID = "2167">Seçili biçim MD5</Item>
@@ -306,7 +306,7 @@
 		<Item English_Text = "Quick Paste" ID = "-1" PropertyPage = "true">Hızlı Yapıştır</Item>
 		
 		//New strings added in 3.6 6-9-06
-		<Item English_Text = "Prompt when deleting clips" ID = "2039">Klip Öğelerini Silerken Uyar</Item>
+		<Item English_Text = "Prompt when deleting clips" ID = "2039">Klipleri Silerken Uyar</Item>
 		
 		//New strings added in 3.15.2 10-6-07
 		<Item English_Text = "Theme" ID = "2092"></Item>
@@ -341,7 +341,7 @@
 		<Item English_Text = "Remote Files" ID = "2128">Uzak Dosyalar</Item>
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
-		<Item English_Text = "Send All Copies to this friend" ID = "1015">Bütün Kopyaları Bu Arkadaşına Yolla</Item>
+		<Item English_Text = "Send All Copies to this friend" ID = "1015">Bütün Kopyaları Bu Arkadaşına Gönder</Item>
 		<Item English_Text = "IP/Name" ID = "2052">IP/İsim</Item>
 		<Item English_Text = "Description" ID = "2053">Açıklama</Item>
 		<Item English_Text = "Friend Details" ID = "-1">Arkadaş Detayları</Item>
@@ -403,7 +403,7 @@
 		<Item English_Text = "Download updated version?" ID = "Download_Update">Güncellenmiş sürümü indir?</Item>			
 		<Item English_Text = "No updates available" ID = "No_Updates">Güncelleme Bulunmuyor</Item>			
 		<Item English_Text = "This will remove all Copy Entries!\n\nContinue?" ID = "Remove_All">Kopyalan bütün öğeler silinecek!\n\nDevam?</Item>
-		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Veritabanı Bağlantısını Kes</Item>			
+		<Item English_Text = "Disconnect from Clipboard" ID = "Disconnect_Clipboard">Pano Bağlantısını Kes</Item>			
 		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">Panoya Bağlan</Item>			
 		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">DAO/Jet Motoru Sağlanamıyor. DAO Yüklenecek.\n\nYeniden Bailat Ditto'yu DAO Yüklemesinden Sonra.</Item>
 		<Item English_Text = "NO TARGET" ID = "No_Target">HEDEF YOK</Item>	
@@ -451,7 +451,7 @@
         <Item English_Text = "IP/Name" ID = "IP_Name">IP/İsim</Item>
         <Item English_Text = "Descriptions" ID = "Descriptions">Açıklamalar</Item>
 		
-		<Item English_Text = "Quick Paste Keyboard" ID = "QuickPasteKeyboardTitle">Hızlı Yapıştırma Klavyesi</Item>
+		<Item English_Text = "Quick Paste Keyboard" ID = "QuickPasteKeyboardTitle">Hızlı Yapıştır Klavyesi</Item>
 		
 		<Item English_Text = "Hot Key" ID = "QPHotKey">Kısayol Tuşu</Item>
 		<Item English_Text = "Command" ID = "QPCommand">Komut</Item>
@@ -572,11 +572,11 @@
 		<Item English_Text = "Format" ID = "Format">Biçim</Item>
 		<Item English_Text = "Data Size" ID = "DataSize">Veri Boyutu</Item>
 	
-		<Item English_Text = "Quick Paste Text" ID = "QuickPasteText">Hızlı Yapıştırma Metni</Item>
+		<Item English_Text = "Quick Paste Text" ID = "QuickPasteText">Hızlı Yapıştır Metni</Item>
 	</Ditto_DeleteClipData>
 	
 	<Ditto_Options_Quick_Paste_Keyboard>
-		<Item English_Text = "Quick Paste Keyboard" ID = "-1" PropertyPage = "true">Hızlı Yapıştırma Klavyesi</Item>
+		<Item English_Text = "Quick Paste Keyboard" ID = "-1" PropertyPage = "true">Hızlı Yapıştır Klavyesi</Item>
 		
 		<Item English_Text = "Reset" ID = "2144">Sıfırla</Item>
 		<Item English_Text = "Shortcuts for selected command:" ID = "2148">Seçili komutun kısayolları:</Item>
@@ -630,9 +630,9 @@
 		<Item English_Text = "Move Clip To Group" ID = "27">Klibi Gruba Taşı</Item>
 		<Item English_Text = "Option - Elevate Privleges" ID = "28">Seçenek - Yetkileri Yükselt</Item>
 		<Item English_Text = "Option - Show In TaskBar" ID = "29">Seçenek - Görev Çubuğunda Göster</Item>
-		<Item English_Text = "Compare Selected Clips" ID = "30">Seçili Klipleri Karşılaştır</Item>
-		<Item English_Text = "Select Left File For Compare" ID = "31">Karşılaştırma İçin Sol Dosyayı Seç</Item>
-		<Item English_Text = "Select Right File And Do Compare" ID = "32">Sağ Dosyayı Seç ve Karşılaştır</Item>
+		<Item English_Text = "Compare Selected Clips" ID = "30">Seçili Klipleri Kıyasla</Item>
+		<Item English_Text = "Select Left File For Compare" ID = "31">Kıyaslama İçin Sol Dosyayı Seç</Item>
+		<Item English_Text = "Select Right File And Do Compare" ID = "32">Sağ Dosyayı Seç ve Kıyasla</Item>
 		<Item English_Text = "Export To Text File" ID = "33">Metin Dosyasına Dışa Aktar</Item>
 		<Item English_Text = "Export To QR Code" ID = "34">QR Koda Dışa Aktar</Item>
 		<Item English_Text = "Export To Google Translate" ID = "35">Google Çeviri'ye Dışa Aktar</Item>
@@ -665,16 +665,16 @@
 		<Item English_Text = "Send to friend 13" ID = "62">Arkadaşa Gönder 13</Item>
 		<Item English_Text = "Send to friend 14" ID = "63">Arkadaşa Gönder 14</Item>
 		<Item English_Text = "Send to friend 15" ID = "64">Arkadaşa Gönder 15</Item>
-		<Item English_Text = "Paste Position 1" ID = "65">Yapıştırma Konumu 1</Item>
-		<Item English_Text = "Paste Position 2" ID = "66">Yapıştırma Konumu 2</Item>
-		<Item English_Text = "Paste Position 3" ID = "67">Yapıştırma Konumu 3</Item>
-		<Item English_Text = "Paste Position 4" ID = "68">Yapıştırma Konumu 4</Item>
-		<Item English_Text = "Paste Position 5" ID = "69">Yapıştırma Konumu 5</Item>
-		<Item English_Text = "Paste Position 6" ID = "70">Yapıştırma Konumu 6</Item>
-		<Item English_Text = "Paste Position 7" ID = "71">Yapıştırma Konumu 7</Item>
-		<Item English_Text = "Paste Position 8" ID = "72">Yapıştırma Konumu 8</Item>
-		<Item English_Text = "Paste Position 9" ID = "73">Yapıştırma Konumu 9</Item>
-		<Item English_Text = "Paste Position 10" ID = "74">Yapıştırma Konumu 10</Item>
+		<Item English_Text = "Paste Position 1" ID = "65">Yapıştır Konumu 1</Item>
+		<Item English_Text = "Paste Position 2" ID = "66">Yapıştır Konumu 2</Item>
+		<Item English_Text = "Paste Position 3" ID = "67">Yapıştır Konumu 3</Item>
+		<Item English_Text = "Paste Position 4" ID = "68">Yapıştır Konumu 4</Item>
+		<Item English_Text = "Paste Position 5" ID = "69">Yapıştır Konumu 5</Item>
+		<Item English_Text = "Paste Position 6" ID = "70">Yapıştır Konumu 6</Item>
+		<Item English_Text = "Paste Position 7" ID = "71">Yapıştır Konumu 7</Item>
+		<Item English_Text = "Paste Position 8" ID = "72">Yapıştır Konumu 8</Item>
+		<Item English_Text = "Paste Position 9" ID = "73">Yapıştır Konumu 9</Item>
+		<Item English_Text = "Paste Position 10" ID = "74">Yapıştır Konumu 10</Item>
 		<Item English_Text = "Option - Show text for first ten copy hot keys" ID = "75">Seçenek - İlk on kopya kısayolu için yazıyı göster</Item>
 		<Item English_Text = "Option - Show indicator a clip has been pasted" ID = "76">Seçenek - Klip yapıştırıldığında gösterge göster</Item>
 		<Item English_Text = "Toggle Last Group Toggle" ID = "77">Son Grup Geçişi</Item>
