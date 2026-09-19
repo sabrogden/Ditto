@@ -21,6 +21,7 @@
 #include "Popup.h"
 #include "CustomFriendsHelper.h"
 #include "ModernScrollBar.h"
+#include "PreviewPane.h"
 
 class CMainTable
 {
@@ -174,6 +175,8 @@ public:
 	CCustomFriendsHelper m_customFriendsHelper;
 	bool m_noSearchResults;
 	bool m_bShowStarredClips;
+	bool m_bShowPreviewPane;
+	CPreviewPane m_previewPane;
 	CAccel m_timerAction;
 	__int64 m_lastDbWrite;
 	bool m_pendingRefresh;
@@ -463,10 +466,20 @@ protected:
     afx_msg LRESULT OnUpDown(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnItemDeleted(WPARAM wParam, LPARAM lParam);
     LRESULT OnToolTipWndInactive(WPARAM wParam, LPARAM lParam);
-    afx_msg void OnTimer(UINT_PTR nIDEvent);
-    afx_msg void OnMenuExport();
-    afx_msg void OnMenuImport();
-    afx_msg void OnQuickpropertiesRemovequickpaste();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnMenuExport();
+	afx_msg void OnMenuImport();
+	afx_msg void OnQuickpropertiesRemovequickpaste();
+
+	void UpdatePreviewPane();
+	afx_msg void OnMenuPreviewPane();
+	afx_msg void OnUpdateMenuPreviewPane(CCmdUI* pCmdUI);
+	afx_msg LRESULT OnPreviewSelChanged(WPARAM wParam, LPARAM lParam);
+	afx_msg void OnMenuPreviewGolden();
+	afx_msg void OnUpdateMenuPreviewGolden(CCmdUI* pCmdUI);
+	afx_msg void OnMenuPreviewHalf();
+	afx_msg void OnUpdateMenuPreviewHalf(CCmdUI* pCmdUI);
+
     afx_msg void OnMenuEdititem();
     afx_msg void OnMenuNewclip();
     afx_msg void OnUpdateMenuEdititem(CCmdUI *pCmdUI);
