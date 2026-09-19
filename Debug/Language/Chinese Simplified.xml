@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Ditto_Language_File Version = "20250821" Author = "iYoung, wevsty, n78, xbeta" Notes = "" LanguageCode = "CHN">
+<Ditto_Language_File Version = "20260726" Author = "iYoung, wevsty, n78, xbeta, EX-XD" Notes = "" LanguageCode = "CHN">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">组</Item>
 		<Item English_Text = "New Group	Ctrl-F7" ID = "32811">新建组</Item>
 		<Item English_Text = "New Group Selection	F7" ID = "32812">新建并选择组</Item>
 		<Item English_Text = "Move to Group" ID = "32840">移动到组</Item>
 		<Item English_Text = "Quick Options" ID = "-1">快速选项</Item>
-		<Item English_Text = "Lines Per Clip" ID = "-1">每剪贴项行数</Item>
-		<Item English_Text = "1" ID = "32807"></Item>
-		<Item English_Text = "2" ID = "32786"></Item>
-		<Item English_Text = "3" ID = "32787"></Item>
-		<Item English_Text = "4" ID = "32788"></Item>
-		<Item English_Text = "5" ID = "32789"></Item>
+		<Item English_Text = "Lines Per Clip" ID = "-1">每个剪贴项显示</Item>
+		<Item English_Text = "1" ID = "32807">1 行</Item>
+		<Item English_Text = "2" ID = "32786">2 行</Item>
+		<Item English_Text = "3" ID = "32787">3 行</Item>
+		<Item English_Text = "4" ID = "32788">4 行</Item>
+		<Item English_Text = "5" ID = "32789">5 行</Item>
 		<Item English_Text = "Transparency" ID = "-1">透明度</Item>
 		<Item English_Text = "None" ID = "32800">无</Item>
 		<Item English_Text = "5 " ID = "32808"></Item>
@@ -23,9 +23,9 @@
 		<Item English_Text = "35 " ID = "32950"></Item>
 		<Item English_Text = "40 " ID = "32790"></Item>
 		<Item English_Text = "Positioning" ID = "-1">窗口弹出位置</Item>
-		<Item English_Text = "At Caret" ID = "32802">插入符号处</Item>
-		<Item English_Text = "At Cursor" ID = "32803">光标处</Item>
-		<Item English_Text = "At Previous Position" ID = "32804">上次打开的位置</Item>
+		<Item English_Text = "At Caret" ID = "32802">插入符的位置</Item>
+		<Item English_Text = "At Cursor" ID = "32803">鼠标指针的位置</Item>
+		<Item English_Text = "At Previous Position" ID = "32804">上次弹出的位置</Item>
 		<Item English_Text = "First Ten Hot Keys" ID = "-1">前十个热键</Item>
 		<Item English_Text = "Use Ctrl - Num" ID = "32777">使用 Ctrl + 数字键</Item>
 		<Item English_Text = "Show Hot Key Text" ID = "32778">显示热键文本</Item>
@@ -38,10 +38,10 @@
 		<Item English_Text = "Ascending (Latest on the Top)" ID = "32795">升序（最新条目位于顶部）</Item>
 		<Item English_Text = "Descending (Latest on the Bottom)" ID = "32797">降序（最新条目位于底部）</Item>
 		<Item English_Text = "Double Clicking on Caption" ID = "-1">双击标题</Item>
-		<Item English_Text = "Toggles Always on Top" ID = "32814">总在最前端</Item>
+		<Item English_Text = "Toggles Always on Top" ID = "32814">保持置顶</Item>
 		<Item English_Text = "Rolls-up Window" ID = "32815">收起窗口</Item>
-		<Item English_Text = "Toggles Always Show Description" ID = "32816">总是显示说明</Item>
-		<Item English_Text = "Always on Top	Ctrl-Space" ID = "32784">总在最前端</Item>
+		<Item English_Text = "Toggles Always Show Description" ID = "32816">始终显示说明</Item>
+		<Item English_Text = "Always on Top	Ctrl-Space" ID = "32784">保持置顶</Item>
 		<Item English_Text = "Auto Roll-up" ID = "32791">自动收起</Item>
 		<Item English_Text = "Always Show Description" ID = "32813">总是显示说明</Item>
 		<Item English_Text = "Prompt For New Group Names" ID = "32817">提示命名新建组</Item>
@@ -65,10 +65,10 @@
 		<Item English_Text = "Auto Delete" ID = "32821">自动删除</Item>
 		<Item English_Text = "Remove Hot Key" ID = "32822">移除热键</Item>
 		<Item English_Text = "Options..." ID = "32805">&O 选项...</Item>
-		<Item English_Text = "Help" ID = "32842">H 帮助</Item>
+		<Item English_Text = "Help" ID = "32842">&H 帮助</Item>
 		<Item English_Text = "Disconnect from Clipboard" ID = "32775">断开剪贴板连接</Item>
 		<Item English_Text = "Exit Program" ID = "32806">&X 退出程序</Item>
-		
+
 		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Prompt to Delete Clip" ID = "32852">删除剪贴项时提示</Item>	
 		<Item English_Text = "Import Clip(s)" ID = "32855">导入剪贴项</Item>
@@ -76,7 +76,7 @@
 		<Item English_Text = "Remove Quick Paste" ID = "32856">移除快速粘贴项</Item>	
 		<Item English_Text = "Edit Clip" ID = "32860">编辑剪贴项</Item>
 		<Item English_Text = "New Clip" ID = "32867">新建剪贴项</Item>	
-		
+
 		//Added 1/10/15
 		<Item English_Text = "Compare" ID = "-1">比较</Item>	
 		<Item English_Text = "Select Left Text" ID = "32893">选择左侧文本</Item>	
@@ -86,12 +86,12 @@
 		<Item English_Text = "Show In Taskbar" ID = "32885">在任务栏显示</Item>
 		<Item English_Text = "Sticky Clips" ID = "-1">固定剪贴项</Item>	
 		<Item English_Text = "Make Top Sticky Clip" ID = "32878">固定到顶部</Item>	
-		<Item English_Text = "Make Last Sticky Clip" ID = "32879">固定到最后</Item>	
-		<Item English_Text = "Remove Sticky Setting" ID = "32880">移除固定设置</Item>
+		<Item English_Text = "Make Last Sticky Clip" ID = "32879">固定到底部</Item>	
+		<Item English_Text = "Remove Sticky Setting" ID = "32880">取消固定设置</Item>
 		<Item English_Text = "Import/Export" ID = "-1">导入/导出</Item>	
 		<Item English_Text = "View as QRCode" ID = "32887">生成二维码</Item>	
 		<Item English_Text = "Export Clip(s) to Text File" ID = "32889">导出为文本文件</Item>	
-		
+
 		//Added 12/17/16
 		<Item English_Text = "Special Paste" ID = "-1">特殊粘贴</Item>			
 		<Item English_Text = "UPPER CASE" ID = "32912">全部大写</Item>	
@@ -111,7 +111,7 @@
 		<Item English_Text = "Move Down" ID = "32907">下移</Item>	
 		<Item English_Text = "Export Clip(s) to Image File" ID = "-32902">将剪贴项导出为图像文件</Item>
 		<Item English_Text = "Export to Google Translate" ID = "32900">导出到谷歌翻译</Item>	
-		
+
 		<Item English_Text = "Search Options" ID = "-1">搜索选项</Item>	
 		<Item English_Text = "Search Description" ID = "32873">搜索说明</Item>	
 		<Item English_Text = "Search Full Text" ID = "32874">全文搜索</Item>	
@@ -127,7 +127,7 @@
 		<Item English_Text = "New Clip" ID = "32937">新建剪贴项</Item>	
 		<Item English_Text = "Save Current Clipboard" ID = "32905">保存当前剪贴板</Item>	
 		<Item English_Text = "Import" ID = "">导入</Item>
-		
+
 		<Item English_Text = "Show Startup Message" ID = "32959">显示启动信息</Item>
 		<Item English_Text = "Filter On Selected Clip" ID = "32910">使用所选剪贴项进行过滤</Item>		
 		<Item English_Text = "Invert Case" ID = "32958">翻转大小写</Item>
@@ -140,23 +140,35 @@
 		<Item English_Text = "EMail, Content In Body" ID = "32951">电子邮件，内容作为正文</Item>		
 		<Item English_Text = "Import File Contents From CF_HDROP" ID = "32941">从CF_HDROP导入文件内容</Item>		
 		<Item English_Text = "Move To Last" ID = "32943">移至底部</Item>
-		
+
 		<Item English_Text = "Increase" ID = "32947">增加</Item>
 		<Item English_Text = "Decrease" ID = "32948">减少</Item>
 		<Item English_Text = "Toggle Enabled" ID = "32949">切换为已启用</Item>
-		
+
 		<Item English_Text = "Backup Database" ID = "32962">备份数据库</Item>
 		<Item English_Text = "Restore Dastabase" ID = "32964">还原数据库</Item>
-		
+
 		<Item English_Text = "Delete All Non Used Clips" ID = "32968">删除所有未使用的剪贴项</Item>
-		
+
 		<Item English_Text = "CamelCase" ID = "32971">驼峰命名法</Item>
 		<Item English_Text = "Multiple Images Horizontally" ID = "32976">水平显示多图</Item>
 		<Item English_Text = "Multiple Images Vertically" ID = "32978">竖直显示多图</Item>
-		<Item English_Text = "Ascii Text Only" ID = "32979">仅Ascii字符</Item>
-		<Item English_Text = "Replace Top Sticky Clip" ID = "32938">替换固定到顶部</Item>
+		<Item English_Text = "Ascii Text Only" ID = "32979">仅 ASCII 字符</Item>
+		<Item English_Text = "Replace Top Sticky Clip" ID = "32938">替换固定顶部剪贴项</Item>
 		<Item English_Text = "Set Drag File Name" ID = "32970">设置拖拽文件名</Item>
-		
+
+		//Added 9/4/25 for description window right click menu
+		<Item English_Text = "Remember window position" ID = "32882">记住窗口位置</Item>
+		<Item English_Text = "Size window to content" ID = "32883">根据内容调整窗口大小</Item>
+		<Item English_Text = "Scale images to fit window" ID = "32884">缩放图像以适应窗口</Item>
+		<Item English_Text = "Hide description window on mouse clip selection" ID = "32926">鼠标选择剪贴项时隐藏说明窗口</Item>
+		<Item English_Text = "Wrap Text" ID = "32928">自动换行</Item>
+		<Item English_Text = "Always on top" ID = "32942">保持置顶</Item>
+		<Item English_Text = "View as Text" ID = "32972">以文本形式查看</Item>
+		<Item English_Text = "View as RTF" ID = "32973">以 RTF 格式查看</Item>
+		<Item English_Text = "View as HTML" ID = "32974">以 HTML 格式查看</Item>
+		<Item English_Text = "View as Image" ID = "32975">以图片形式查看</Item>
+
 	</Ditto_Right_Click_Menu>
 	<Ditto_Clip_Properties>
 		<Item English_Text = "Hot Key" ID = "2039">热键</Item>
@@ -169,13 +181,13 @@
 		<Item English_Text = "OK" ID = "1">确定</Item>
 		<Item English_Text = "Cancel" ID = "2">取消</Item>
 		<Item English_Text = "Copy Properties" ID = "-1">复制项属性</Item>
-		
+
 		//Added 1/10/15
 		<Item English_Text = "Hotkey available globally" ID = "1026">全局可用热键</Item>
 		<Item English_Text = "Last Used" ID = "2043">最后使用</Item>
 		<Item English_Text = "Quick Paste Text" ID = "2125">快速粘贴文本</Item>
-		<Item English_Text = "Selected format MD5" ID = "2167">选择MD5格式</Item>
-				
+		<Item English_Text = "Selected format MD5" ID = "2167">所选格式的 MD5</Item>
+
 	</Ditto_Clip_Properties>
 	<Ditto_Options_General>
 		<Item English_Text = "Start Ditto on System Startup" ID = "2004">系统启动时运行</Item>
@@ -202,35 +214,35 @@
 		<Item English_Text = "Ensure Ditto is always connected to the clipboard" ID = "1042">确保 Ditto 始终连接到剪贴板</Item>
 		<Item English_Text = "General" ID = "-1" PropertyPage = "true">通用</Item>
 		<Item English_Text = "Multi-Paste clip separator ([LF] = line feed)" ID = "2090">多项粘贴剪贴项分隔符（[LF] = 换行）</Item>
-		
+
 		//New item added 3/1/11
 		<Item English_Text = "Accepted Copy Applications (seperate by ;)" ID = "2098">接受复制的应用程序（以 ; 分隔）</Item>
 		<Item English_Text = "Include" ID = "2095">包括</Item>
 		<Item English_Text = "Exclude" ID = "2096">排除</Item>
-		
+
 		<Item English_Text = "Theme" ID = "2092">主题</Item>
 		<Item English_Text = "About Theme" ID = "2094">关于主题</Item>		
-		
+
 		<Item English_Text = "Popup Position" ID = "2100">窗口弹出位置</Item>
 		<Item English_Text = "Display Font" ID = "2101">显示字体</Item>
 		<Item English_Text = "Database Path" ID = "2099">数据库路径</Item>
-		
+
 		<Item English_Text = "Environment Variables" ID = "2165">环境变量</Item>
-		
+
 		<Item English_Text = "Default Font" ID = "2031">默认字体</Item>
-		
+
 		<Item English_Text = "Advanced" ID = "2124">高级</Item>
 	</Ditto_Options_General>
 	<Ditto_Options_Supported_Types>
 		<Item English_Text = "Add" ID = "1015">添加</Item>
 		<Item English_Text = "Delete" ID = "1016">删除</Item>
 		<Item English_Text = "Supported Types" ID = "-1" PropertyPage = "true">支持类型</Item>
-		
+
 		//New item added 12/17/16
 		<Item English_Text = "Current Clipboard Types" ID = "2128">当前剪贴板类型 </Item>
 		<Item English_Text = "Primary Clipboard Types" ID = "2145">主要剪贴板类型 </Item>
 		<Item English_Text = "Custom Clipboard Type" ID = "2130">自定义剪贴板类型 </Item>
-		
+
 	</Ditto_Options_Supported_Types>
 	<Ditto_Options_Shortcuts>
 		<Item English_Text = "Activate Ditto" ID = "2048">激活 Ditto</Item>
@@ -261,44 +273,44 @@
 		<Item English_Text = "Win" ID = "2041"></Item>
 		<Item English_Text = "Check the 'Win' Button to include the windows keyboard key in your hot key." ID = "2050">如果勾选 'Win' 按钮，热键中将包含 Windows 键。</Item>
 		<Item English_Text = "Keyboard Shortcuts" ID = "-1" PropertyPage = "true">键盘快捷键</Item>
-		
+
 		//New item added in 3.15.1 8/18/07
 		<Item English_Text = "Send custom strokes Per Application" ID = "2091">向每个应用程序发送自定义按键</Item>
-		
+
 		//Added 1/10/15
 		<Item English_Text = "Move clips to the top of the list on paste" ID = "1043">粘贴时将剪贴项移动到列表顶部</Item>
-		
+
 		//Added 12/17/16
 		<Item English_Text = "Activate Ditto" ID = "2064">激活 Ditto</Item>
 		<Item English_Text = "Activate Ditto" ID = "2066">激活 Ditto</Item>
-		
+
 		<Item English_Text = "Win" ID = "2063"></Item>
 		<Item English_Text = "Win" ID = "2065"></Item>
 		<Item English_Text = "Save Current Clipboard" ID = "2062">保存当前剪贴板内容</Item>
 		<Item English_Text = "Win" ID = "2047"></Item>
-		
+
 		<Item English_Text = "Use currently selected group in Ditto's UI for last ten copies" ID = "1044">使用当前所选组中的最后十个复制项目</Item>
-		
-		<Item English_Text = "Copy And Save Current Clipboard" ID = "2068">复制并保存至剪贴板</Item>
-		
+
+		<Item English_Text = "Copy And Save Current Clipboard" ID = "2068">复制并保存当前剪贴板</Item>
+
 	</Ditto_Options_Shortcuts>
 	<Ditto_Options_Friends>
 		<Item English_Text = "When you receive a sent copy if their ip or computer name is in this list then it will be put on the clipboard.  Otherwise it will be in the saved clips to use at a later time." ID = "2052">当您收到其他计算机发来的一个复制项时，如果发送者的 IP 地址或计算机名在此列表中，它将被放入剪贴板。否则，将保存剪贴项以供后续使用。</Item>
 		<Item English_Text = "IP/Computer Names seperated by commas" ID = "2053">IP 地址/计算机名称，以逗号分隔</Item>
-		<Item English_Text = "Disable Receiving Clips" ID = "2026">禁止接收剪贴</Item>
-		<Item English_Text = "Group Password" ID = "2054">网络密码</Item>
-		<Item English_Text = "If you are receiving clips from computers where your group password does not match, enter additional group passwords separated by commas" ID = "2055">如果您从网络密码不匹配的计算机接收到剪贴项，请输入以逗号分隔的其他网络密码</Item>
+		<Item English_Text = "Disable Receiving Clips" ID = "2026">禁止接收剪贴项</Item>
+		<Item English_Text = "Group Password" ID = "2054">分组密码</Item>
+		<Item English_Text = "If you are receiving clips from computers where your group password does not match, enter additional group passwords separated by commas" ID = "2055">如果您需要从其他分组密码的计算机接收剪贴项，请输入额外的分组密码，并以逗号分隔</Item>
 		<Item English_Text = "Receive Passwords" ID = "2056">接收密码</Item>
 		<Item English_Text = "If Send All Copies is selected then all copies from this computer will be sent to the other computer.  If that is not selected then it will just be in the right click menu to send a copy to that computer." ID = "2057">如果选择了发送全部复制项，则此计算机中的所有复制项都将被发送到另一台计算机。如果未选择该选项，则只会将右键菜单中选择的某一复制项发送到该计算机。</Item>
 		<Item English_Text = "Log Send Receive Commands" ID = "1042">记录发送接收命令</Item>
 		<Item English_Text = "Friends" ID = "-1" PropertyPage = "true">朋友</Item>
-		
-			
+
+
 		//Added in 12-17-16
 		<Item English_Text = "Request using IP Address" ID = "2127">要求使用 IP 地址</Item>
 		<Item English_Text = "Request using Host Name" ID = "2129">要求使用主机名称</Item>		
 		<Item English_Text = "Remote Files" ID = "2128">远程文件</Item>
-			
+
 	</Ditto_Options_Friends>
 	<Ditto_Options_Friends_Detail>
 		<Item English_Text = "Send All Copies to this friend" ID = "1015">将全部复制项目发送给此朋友</Item>
@@ -365,7 +377,7 @@
 		<Item English_Text = "Connect to Clipboard" ID = "Connect_Clipboard">连接到剪贴板</Item>
 		<Item English_Text = "Unable to initialize DAO/Jet db engine.  DAO will now be installed.\n\nRestart Ditto after installation of DAO." ID = "Error_Init_Dao_Intall">无法初始化 DAO/Jet 数据库引擎。即将安装 DAO。\n\n安装 DAO 后请重新启动 Ditto。</Item>
 		<Item English_Text = "NO TARGET" ID = "No_Target">没有目标</Item>
-		
+
 		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Prompt when deleting clips" ID = "2039">删除剪贴项时提示</Item>
 		<Item English_Text = "Delete Selected Clips?" ID = "Delete_Clip">确定要删除所选剪贴项吗？</Item>
@@ -375,7 +387,7 @@
 		<Item English_Text = "Successfully imported" ID = "Import_Successfully">已成功导入</Item>
 		<Item English_Text = "clip" ID = "Clip">剪贴项</Item>
 		<Item English_Text = "clips" ID = "Clips">剪贴项</Item>
-		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">保存时是否更新剪贴说明？</Item>
+		<Item English_Text = "Update clip description on save?" ID = "Update_Desc">保存时是否更新剪贴项说明？</Item>
 		<Item English_Text = "New Clip" ID = "New_Clip">新建剪贴项</Item>
 		<Item English_Text = "Save" ID = "Save">保存</Item>
 		<Item English_Text = "Save All" ID = "Save_All">全部保存</Item>
@@ -395,45 +407,45 @@
 		<Item English_Text = "Error saving Named Copy to Database" ID = "Named_Copy_Error1">保存已命名的复制项到数据库时出错</Item>
 		<Item English_Text = "Exception saving Named Copy" ID = "Named_Copy_Error2">保存已命名复制项时出现异常</Item>
 		<Item English_Text = "Ditto did not receive a copy" ID = "Named_Copy_Error3">Ditto 未接收到复制项</Item> 
-		
+
 		//New strings added in 3.17 2-28-10
 		<Item English_Text = "Add-Ins" ID = "Add_Ins">加载项</Item>
-		
+
 		<Item English_Text = "Copy Buffers" ID = "CopyBuffers">复制缓冲区</Item>
-		
+
 		<Item English_Text = "Search Options" ID = "SearchOptionsTooltip">搜索选项</Item>
 		<Item English_Text = "Groups" ID = "GroupsTooltip">组</Item>
-		
+
 		//New strings added in 3.17 2-28-10
 		<Item English_Text = "Search" ID = "Search">搜索</Item>
 		<Item English_Text = "Send All Copies" ID = "Send_All_Copies">发送所有复制项</Item>
 		<Item English_Text = "IP/Name" ID = "IP_Name">IP/名称</Item>
 		<Item English_Text = "Descriptions" ID = "Descriptions">说明</Item>
-		
+
 		<Item English_Text = "Quick Paste Keyboard" ID = "QuickPasteKeyboardTitle">快速粘贴按键</Item>
-		
+
 		<Item English_Text = "Hot Key" ID = "QPHotKey">热键</Item>
 		<Item English_Text = "Command" ID = "QPCommand">命令</Item>
-		
+
 		//ID changed from "top_most"
 		<Item English_Text = "[Always on top]" ID = "top_window">窗口置顶</Item>
-		
+
 		<Item English_Text = "[Disconnected]" ID = "disconnected">[已断开连接]</Item>
 		<Item English_Text = "Ditto is running minimized, Ditto can be opened by hot keys or by clicking the task tray icon" ID = "StartupMsg">Ditto 正以最小化方式运行，可通过热键或单击任务栏图标打开</Item>
-		<Item English_Text = "There are no results for" ID = "NoSearchResults">没有任何结果</Item>
+		<Item English_Text = "There are no results for" ID = "NoSearchResults">搜索不到</Item>
 		<Item English_Text = "Warning this can take quite a long time and require up to double the hard drive space as your current database size, Continue?" ID = "CompactRepairWarning">警告，这可能需要相当长的时间，并且需要两倍于你当前数据库大小的硬盘空间，是否继续？</Item>
-		<Item English_Text = "Prompt For Name" ID = "prompt_for_name">提示名字</Item>
+		<Item English_Text = "Prompt For Name" ID = "prompt_for_name">输入名字</Item>
 		<Item English_Text = "(Follow windows light/dark themes)" ID = "FollowWindowsTheme">（遵循 Windows 明/暗主题）</Item>
-		
+
 		<Item English_Text = "Backing up database" ID = "BackupDbMsg">备份数据库信息</Item>
 		<Item English_Text = "Restoring database" ID = "RestoreDbMsg">还原数据库信息</Item>
-		
+
 		<Item English_Text = "Ditto was unable to open its database, waiting until it can be opened. Update the path in Options if needed. Path: " ID = "StartupNoDbMsg">Ditto 无法打开数据库，将等待它可以打开的时候。 如果需要，更新选项中的路径。 路径： </Item>
-				
-		<Item English_Text = "At Caret" ID = "AtCaret">插入符号处</Item>
-		<Item English_Text = "At Cursor" ID = "AtCursor">光标处</Item>
-		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition">上次打开的位置</Item>
-		
+
+		<Item English_Text = "At Caret" ID = "AtCaret">插入符的位置</Item>
+		<Item English_Text = "At Cursor" ID = "AtCursor">鼠标指针的位置</Item>
+		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition">上次弹出的位置</Item>
+
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">确定</Item>
@@ -449,24 +461,24 @@
 		//New strings added in 3.6 6-9-06
 		<Item English_Text = "Import" ID = "32854">导入</Item>
 		<Item English_Text = "New Clip" ID = "32868">新建剪贴项</Item>
-		
+
 		//Added 12/10/11
 		<Item English_Text = "Global Hot Keys" ID = "32872">全局热键</Item>
-		
+
 		//Added 1/10/15
 		<Item English_Text = "Delete Clip Data" ID = "32886">删除剪贴数据</Item>
-		
+
 		//Added 12/17/16
 		<Item English_Text = "Fixup Sticky Clip Order" ID = "32909">修复固定剪贴项顺序</Item>		
 		<Item English_Text = "Save Current Clipboard" ID = "32904">保存当前剪贴板</Item>
-		
+
 		<Item English_Text = "Show Startup Message" ID = "32959">显示启动信息</Item>
-		
+
 		<Item English_Text = "Backup Database" ID = "32960">备份数据库</Item>
 		<Item English_Text = "Restore Database" ID = "32961">还原数据库</Item>
-		
+
 		<Item English_Text = "Delete All Non Used Clips" ID = "32969">删除所有未使用的剪贴项</Item>
-		
+
 	</Ditto_Tray_Icon_Menu>
 
 	//Added in 9-11-09
@@ -479,7 +491,7 @@
 		<Item English_Text = "Win" ID = "2085"></Item>
 		<Item English_Text = "Win" ID = "2086"></Item>
 		<Item English_Text = "Win" ID = "2087"></Item>
-		
+
 		<Item English_Text = "Copy Buffer 2" ID = "2098">复制缓冲区 2</Item>
 		<Item English_Text = "Copy" ID = "2093">复制</Item>
 		<Item English_Text = "Paste" ID = "2094">粘贴</Item>
@@ -488,7 +500,7 @@
 		<Item English_Text = "Win" ID = "2090"></Item>
 		<Item English_Text = "Win" ID = "2092"></Item>
 		<Item English_Text = "Win" ID = "2096"></Item>
-		
+
 		<Item English_Text = "Copy Buffer 3" ID = "2108">复制缓冲区 3</Item>
 		<Item English_Text = "Copy" ID = "2103">复制</Item>
 		<Item English_Text = "Paste" ID = "2104">粘贴</Item>
@@ -498,7 +510,7 @@
 		<Item English_Text = "Win" ID = "2102"></Item>
 		<Item English_Text = "Win" ID = "2106"></Item>
 	</Ditto_Options_CopyBuffers>
-	
+
 	<Ditto_GlobalHotKeys>
 		<Item English_Text = "Global Hot Keys" ID = "-1">全局热键</Item>
 		<Item English_Text = "Close" ID = "2">关闭</Item>
@@ -516,7 +528,7 @@
 		<Item English_Text = "Delete Group" ID = "32897">删除组</Item>
 		<Item English_Text = "Properties" ID = "32898">属性</Item>	
 	</Ditto_Groups_Right_Click_Menu>
-	
+
 	//Added 1/10/15
 	<Ditto_DeleteClipData>
 		<Item English_Text = "Delete Clip Data" ID = "-1">删除剪贴数据</Item>
@@ -539,10 +551,10 @@
 		<Item English_Text = "Data Size" ID = "DataSize">数据大小</Item>
 		<Item English_Text = "Quick Paste Text" ID = "QuickPasteText">快速粘贴文本</Item>
 	</Ditto_DeleteClipData>
-	
+
 	<Ditto_Options_Quick_Paste_Keyboard>
 		<Item English_Text = "Quick Paste Keyboard" ID = "-1" PropertyPage = "true">快速粘贴按键</Item>
-		
+
 		<Item English_Text = "Reset" ID = "2144">重置</Item>
 		<Item English_Text = "Shortcuts for selected command:" ID = "2148">所选命令的快捷键:</Item>
 		<Item English_Text = "Remove" ID = "2124">移除</Item>
@@ -551,13 +563,13 @@
 		<Item English_Text = "First Keypress" ID = "2149">第一组按键</Item>
 		<Item English_Text = "Second Keypress" ID = "2147">第二组按键</Item>
 		<Item English_Text = "Assign" ID = "1040">分配</Item>
-		
+
 		<Item English_Text = "Keyboard Shortcut" ID = "2127">键盘快捷键</Item>
 		<Item English_Text = "Mouse Click" ID = "2130">鼠标点击</Item>
 		<Item English_Text = "Keyboard Shortcut" ID = "2133">键盘快捷键</Item>
 		<Item English_Text = "Mouse Click" ID = "2136">鼠标点击</Item>
 		<Item English_Text = "Enter Key" ID = "2135">回车键</Item>
-		
+
 		<Item English_Text = "Enter Key" ID = "2137">回车键</Item>
 		<Item English_Text = "Shift" ID = "1042">Shift</Item>
 		<Item English_Text = "Control" ID = "2139">Ctrl</Item>
@@ -565,7 +577,7 @@
 		<Item English_Text = "Shift" ID = "1043">Shift</Item>
 		<Item English_Text = "Control" ID = "2142">Ctrl</Item>
 		<Item English_Text = "Alt" ID = "2143">Alt</Item>
-		
+
 		<Item English_Text = "View Full Description" ID = "1">查看完整说明</Item>
 		<Item English_Text = "Next Full Description" ID = "2">下一个完整说明</Item>
 		<Item English_Text = "Previous Full Description" ID = "3">上一个完整说明</Item>
@@ -644,13 +656,13 @@
 		<Item English_Text = "Option - Show indicator a clip has been pasted" ID = "76">选项 - 显示已粘贴剪贴项标志</Item>
 		<Item English_Text = "Toggle Last Group Toggle" ID = "77">上次切换的组</Item>
 		<Item English_Text = "Make Top Sticky Clip" ID = "78">固定到顶部</Item>
-		<Item English_Text = "Make Last Sticky Clip" ID = "79">固定到最后</Item>
-		<Item English_Text = "Remove Sticky Setting" ID = "80">移除固定设置</Item>
+		<Item English_Text = "Make Last Sticky Clip" ID = "79">固定到底部</Item>
+		<Item English_Text = "Remove Sticky Setting" ID = "80">取消固定设置</Item>
 		<Item English_Text = "Paste Add Current Time" ID = "81">粘贴时添加当前时间</Item>
 		<Item English_Text = "Import Clip" ID = "82">导入剪贴项</Item>
 		<Item English_Text = "Global HotKeys" ID = "83">全局热键</Item>
 		<Item English_Text = "Delete Clip Data" ID = "84">删除剪贴数据</Item>
-		<Item English_Text = "Replace Top Sticky Clip" ID = "85">替换置顶剪贴项</Item>
+		<Item English_Text = "Replace Top Sticky Clip" ID = "85">替换固定顶部剪贴项</Item>
 		<Item English_Text = "Prompt send to friend" ID = "86">发送给朋友的提示语</Item>
 		<Item English_Text = "Save copied file (cf_hdrop) contents into Ditto" ID = "87">保存复制文件 (cf_hdrop) 内容到剪贴板</Item>
 		<Item English_Text = "Toggle clipboard connection" ID = "88">切换剪贴板连接</Item>
@@ -689,7 +701,7 @@
 		<Item English_Text = "Paste CamelCase" ID = "122">驼峰式粘贴</Item>
 		<Item English_Text = "Paste Multiple Images Horizontally" ID = "123">水平粘贴多幅图像</Item>
 		<Item English_Text = "Paste Multiple Images Vertically" ID = "124">竖直粘贴多幅图像</Item>
-	
+
 	</Ditto_Options_Quick_Paste_Keyboard>
-	
+
 </Ditto_Language_File>
