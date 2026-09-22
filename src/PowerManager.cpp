@@ -30,11 +30,13 @@ ULONG PowerChanged(PVOID Context, ULONG Type, PVOID Setting)
 CPowerManager::CPowerManager()
 {
 	m_registrationHandle = 0;
+	m_hPowrProf = NULL;
 }
 
 
 CPowerManager::~CPowerManager(void)
 {
+	Close();
 }
 
 
@@ -42,37 +44,40 @@ void CPowerManager::Start(HWND hWnd)
 {
 	s_notifyHwnd = hWnd;
 
-	HMODULE powrprof = LoadLibrary( _T("powrprof.dll") );
-	if( powrprof != NULL )
+	if (m_hPowrProf == NULL)
 	{
-		DWORD (_stdcall*PowerRegisterSuspendResumeNotification)(_In_ DWORD,_In_ HANDLE,_Out_ PHPOWERNOTIFY);
-		PowerRegisterSuspendResumeNotification = (DWORD(_stdcall*)(_In_ DWORD,_In_ HANDLE,_Out_ PHPOWERNOTIFY))GetProcAddress(powrprof, "PowerRegisterSuspendResumeNotification");
-		if(PowerRegisterSuspendResumeNotification)
+		m_hPowrProf = LoadLibrary(_T("powrprof.dll"));
+	}
+
+	if (m_hPowrProf != NULL && m_registrationHandle == 0)
+	{
+		DWORD (_stdcall*PowerRegisterSuspendResumeNotification)(_In_ DWORD, _In_ HANDLE, _Out_ PHPOWERNOTIFY);
+		PowerRegisterSuspendResumeNotification = (DWORD(_stdcall*)(_In_ DWORD, _In_ HANDLE, _Out_ PHPOWERNOTIFY))GetProcAddress(m_hPowrProf, "PowerRegisterSuspendResumeNotification");
+		if (PowerRegisterSuspendResumeNotification)
 		{
 			static _DEVICE_NOTIFY_SUBSCRIBE_PARAMETERS testCallback = {PowerChanged, nullptr};
 
 			PowerRegisterSuspendResumeNotification(DEVICE_NOTIFY_CALLBACK, &testCallback, &m_registrationHandle); 
 		}
-
-		::FreeLibrary(powrprof);
 	}
 }
 
 void CPowerManager::Close()
 {	
-	if(m_registrationHandle != 0)
+	if (m_hPowrProf != NULL)
 	{
-		HMODULE powrprof = LoadLibrary( _T("powrprof.dll") );
-		if( powrprof != NULL )
+		if (m_registrationHandle != 0)
 		{
-			DWORD (_stdcall*PowerUnregisterSuspendResumeNotification)(_Inout_ PHPOWERNOTIFY);
-			PowerUnregisterSuspendResumeNotification = (DWORD(_stdcall*)(_Inout_ PHPOWERNOTIFY))GetProcAddress(powrprof, "PowerUnregisterSuspendResumeNotification");
-			if(PowerUnregisterSuspendResumeNotification)
+			DWORD (_stdcall*PowerUnregisterSuspendResumeNotification)(_Inout_ HPOWERNOTIFY);
+			PowerUnregisterSuspendResumeNotification = (DWORD(_stdcall*)(_Inout_ HPOWERNOTIFY))GetProcAddress(m_hPowrProf, "PowerUnregisterSuspendResumeNotification");
+			if (PowerUnregisterSuspendResumeNotification)
 			{
-				PowerUnregisterSuspendResumeNotification(&m_registrationHandle); 
+				PowerUnregisterSuspendResumeNotification(m_registrationHandle); 
 			}
-
-			::FreeLibrary(powrprof);
+			m_registrationHandle = 0;
 		}
+
+		::FreeLibrary(m_hPowrProf);
+		m_hPowrProf = NULL;
 	}
 }
