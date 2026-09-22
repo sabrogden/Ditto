@@ -72,12 +72,18 @@ void CPowerManager::Close()
 			PowerUnregisterSuspendResumeNotification = (DWORD(_stdcall*)(_Inout_ HPOWERNOTIFY))GetProcAddress(m_hPowrProf, "PowerUnregisterSuspendResumeNotification");
 			if (PowerUnregisterSuspendResumeNotification)
 			{
-				PowerUnregisterSuspendResumeNotification(m_registrationHandle); 
+				DWORD ret = PowerUnregisterSuspendResumeNotification(m_registrationHandle);
+				if (ret == ERROR_SUCCESS)
+				{
+					m_registrationHandle = 0;
+				}
 			}
-			m_registrationHandle = 0;
 		}
 
-		::FreeLibrary(m_hPowrProf);
-		m_hPowrProf = NULL;
+		if (m_registrationHandle == 0)
+		{
+			::FreeLibrary(m_hPowrProf);
+			m_hPowrProf = NULL;
+		}
 	}
 }
