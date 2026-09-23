@@ -4,6 +4,13 @@
 #include "Options.h"
 #include "CP_Main.h"
 #include "client.h"
+#include <thread>
+#include <vector>
+
+namespace
+{
+	CCriticalSection g_sendClientStateCs;
+}
 
 CAutoSendToClientThread::CAutoSendToClientThread(void)
 {
@@ -83,15 +90,37 @@ void CAutoSendToClientThread::OnSendToClient()
 		m_saveClips.RemoveAll();
 	}
 
-	SendToClient(pLocalClips);
-
-	delete pLocalClips;
-	pLocalClips = NULL;
+	// Do not wait for this batch in the event thread. A destination that is
+	// offline can otherwise block the next clipboard change until it times out.
+	std::thread(&CAutoSendToClientThread::SendBatch, pLocalClips).detach();
 }
 
-bool CAutoSendToClientThread::SendToClient(CClipList *pClipList)
+void CAutoSendToClientThread::SendBatch(CClipList *pClipList)
 {
-	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - START OF SendClientThread - @@@@@@@@@@@@@@@");
+	std::vector<std::thread> sendThreads;
+	for(int nClient = 0; nClient < MAX_SEND_CLIENTS; nClient++)
+	{
+		if(CGetSetOptions::m_SendClients[nClient].bSendAll &&
+			CGetSetOptions::m_SendClients[nClient].csIP.GetLength() > 0)
+		{
+			// Each connection can wait independently, so an offline computer does not
+			// delay delivery to the other configured computers.
+			CString clientIp = CGetSetOptions::m_SendClients[nClient].csIP;
+			sendThreads.emplace_back(&CAutoSendToClientThread::SendToClient, pClipList, nClient, clientIp);
+		}
+	}
+
+	for(auto &sendThread : sendThreads)
+	{
+		sendThread.join();
+	}
+
+	delete pClipList;
+}
+
+bool CAutoSendToClientThread::SendToClient(CClipList *pClipList, int nClient, const CString &clientIp)
+{
+	LogSendRecieveInfo(StrF(_T("@@@@@@@@@@@@@@@ - START OF SendClientThread to %s - @@@@@@@@@@@@@@@"), clientIp));
 
 	if(pClipList == NULL)
 	{
@@ -103,62 +132,66 @@ bool CAutoSendToClientThread::SendToClient(CClipList *pClipList)
 
 	LogSendRecieveInfo(StrF(_T("Start of Send ClientThread Count - %d"), lCount));
 
-	for(int nClient = 0; nClient < MAX_SEND_CLIENTS; nClient++)
+	CClient client;
+	if(client.OpenConnection(clientIp) == FALSE)
 	{
-		if(CGetSetOptions::m_SendClients[nClient].bSendAll && 
-			CGetSetOptions::m_SendClients[nClient].csIP.GetLength() > 0)
+		LogSendRecieveInfo(StrF(_T("ERROR opening connection to %s"), clientIp));
+
+		bool showError = false;
 		{
-			CClient client;
-			if(client.OpenConnection(CGetSetOptions::m_SendClients[nClient].csIP) == FALSE)
+			ATL::CCritSecLock csLock(g_sendClientStateCs.m_sect);
+			if(CGetSetOptions::m_SendClients[nClient].bShownFirstError == FALSE)
 			{
-				LogSendRecieveInfo(StrF(_T("ERROR opening connection to %s"), CGetSetOptions::m_SendClients[nClient].csIP));
-
-				if(CGetSetOptions::m_SendClients[nClient].bShownFirstError == FALSE)
-				{
-					CString cs;
-					cs.Format(_T("Error opening connection to %s"), CGetSetOptions::m_SendClients[nClient].csIP);
-					::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
-					cs.ReleaseBuffer();
-
-					CGetSetOptions::m_SendClients[nClient].bShownFirstError = TRUE;
-				}
-
-				continue;
+				CGetSetOptions::m_SendClients[nClient].bShownFirstError = TRUE;
+				showError = true;
 			}
+		}
 
-			//We were connected successfully show an error next time we can't connect
-			CGetSetOptions::m_SendClients[nClient].bShownFirstError = FALSE;
+		if(showError)
+		{
+			CString cs;
+			cs.Format(_T("Error opening connection to %s"), clientIp);
+			::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
+			cs.ReleaseBuffer();
+		}
 
-			CClip* pClip;
-			POSITION pos;
-			pos = pClipList->GetHeadPosition();
-			while(pos)
-			{
-				pClip = pClipList->GetNext(pos);
-				if(pClip == NULL)
-				{
-					ASSERT(FALSE);
-					LogSendRecieveInfo("Error in GetNext");
-					break;
-				}
+		return FALSE;
+	}
 
-				LogSendRecieveInfo(StrF(_T("Sending clip to %s"), CGetSetOptions::m_SendClients[nClient].csIP));
+	//We were connected successfully show an error next time we can't connect.
+	{
+		ATL::CCritSecLock csLock(g_sendClientStateCs.m_sect);
+		CGetSetOptions::m_SendClients[nClient].bShownFirstError = FALSE;
+	}
 
-				if(client.SendItem(pClip, false) == FALSE)
-				{
-					CString cs;
-					cs.Format(_T("Error sending clip to %s"), CGetSetOptions::m_SendClients[nClient].csIP);
-					::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
-					cs.ReleaseBuffer();
-					break;
-				}
-			}
+	CClip* pClip;
+	POSITION pos;
+	pos = pClipList->GetHeadPosition();
+	while(pos)
+	{
+		pClip = pClipList->GetNext(pos);
+		if(pClip == NULL)
+		{
+			ASSERT(FALSE);
+			LogSendRecieveInfo("Error in GetNext");
+			break;
+		}
 
-			client.CloseConnection();
+		LogSendRecieveInfo(StrF(_T("Sending clip to %s"), clientIp));
+
+		if(client.SendItem(pClip, false) == FALSE)
+		{
+			CString cs;
+			cs.Format(_T("Error sending clip to %s"), clientIp);
+			::SendMessage(theApp.m_MainhWnd, WM_SEND_RECIEVE_ERROR, (WPARAM)cs.GetBuffer(cs.GetLength()), 0);
+			cs.ReleaseBuffer();
+			break;
 		}
 	}
 
-	LogSendRecieveInfo("@@@@@@@@@@@@@@@ - END OF SendClientThread - @@@@@@@@@@@@@@@");
+	client.CloseConnection();
+
+	LogSendRecieveInfo(StrF(_T("@@@@@@@@@@@@@@@ - END OF SendClientThread to %s - @@@@@@@@@@@@@@@"), clientIp));
 
 	return TRUE;
 }

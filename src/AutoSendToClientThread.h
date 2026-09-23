@@ -25,7 +25,8 @@ protected:
 	virtual void OnTimeOut(void *param);
 
 	void OnSendToClient();
-	bool SendToClient(CClipList *pClipList);
+	static void SendBatch(CClipList *pClipList);
+	static bool SendToClient(CClipList *pClipList, int nClient, const CString &clientIp);
 
 	CCriticalSection m_cs;
 	CClipList m_saveClips;
