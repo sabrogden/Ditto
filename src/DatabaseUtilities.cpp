@@ -690,6 +690,91 @@ BOOL RestoreDB(CString backupPath)
 	return ret;
 }
 
+//Merges the clips from another ditto database into the currently open database.
+//Clips whose CRC already exists in this database are skipped, groups are always brought over.
+//Shortcuts are cleared on the merged clips so they can't fight with the existing ones.
+BOOL MergeDB(CString csPath, int &mergedCount)
+{
+	mergedCount = 0;
+
+	Log(StrF(_T("Start of MergeDB, from: %s"), csPath));
+
+	csPath.Replace(_T("'"), _T("''"));
+
+	try
+	{
+		theApp.m_db.execDMLEx(_T("ATTACH DATABASE '%s' AS mergeSrc"), csPath);
+	}
+	CATCH_SQLITE_EXCEPTION_AND_RETURN(FALSE)
+
+	BOOL ret = FALSE;
+
+	try
+	{
+		theApp.m_db.execDML(_T("begin transaction;"));
+
+		theApp.m_db.execDML(_T("DROP TABLE IF EXISTS mergeIds"));
+		theApp.m_db.execDML(_T("CREATE TEMP TABLE mergeIds AS ")
+			_T("SELECT lID FROM mergeSrc.Main ")
+			_T("WHERE bIsGroup = 1 OR CRC IS NULL OR ")
+			_T("CRC NOT IN (SELECT CRC FROM Main WHERE bIsGroup = 0 AND CRC IS NOT NULL)"));
+
+		//every id from the other db is shifted above the biggest id in this db, that keeps
+		//the ids unique and lets the group links (lParentID) be shifted by the same amount
+		int offset = theApp.m_db.execScalar(_T("SELECT IFNULL(MAX(lID), 0) FROM Main"));
+
+		theApp.m_db.execDMLEx(_T("INSERT INTO Main(lID, lDate, mText, lShortCut, lDontAutoDelete, CRC, bIsGroup, lParentID, QuickPasteText, clipOrder, clipGroupOrder, globalShortCut, lastPasteDate, stickyClipOrder, stickyClipGroupOrder, MoveToGroupShortCut, GlobalMoveToGroupShortCut) ")
+			_T("SELECT lID + %d, lDate, mText, 0, lDontAutoDelete, CRC, bIsGroup, ")
+			_T("CASE WHEN lParentID < 0 THEN lParentID ELSE lParentID + %d END, ")
+			_T("QuickPasteText, clipOrder, clipGroupOrder, 0, lastPasteDate, ")
+			_T("stickyClipOrder, stickyClipGroupOrder, 0, 0 ")
+			_T("FROM mergeSrc.Main WHERE lID IN (SELECT lID FROM mergeIds)"), offset, offset);
+
+		theApp.m_db.execDMLEx(_T("INSERT INTO Data(lParentID, strClipBoardFormat, ooData) ")
+			_T("SELECT lParentID + %d, strClipBoardFormat, ooData ")
+			_T("FROM mergeSrc.Data WHERE lParentID IN (SELECT lID FROM mergeIds)"), offset);
+
+		mergedCount = theApp.m_db.execScalar(_T("SELECT COUNT(*) FROM mergeIds"));
+
+		theApp.m_db.execDML(_T("DROP TABLE mergeIds"));
+		theApp.m_db.execDML(_T("commit transaction;"));
+
+		ret = TRUE;
+	}
+	catch (CppSQLite3Exception& e)
+	{
+		Log(StrF(_T("MergeDB error: %d - %s"), e.errorCode(), e.errorMessage()));
+
+		try
+		{
+			theApp.m_db.execDML(_T("rollback transaction;"));
+		}
+		catch (CppSQLite3Exception&)
+		{
+		}
+
+		mergedCount = 0;
+	}
+
+	try
+	{
+		theApp.m_db.execDML(_T("DETACH DATABASE mergeSrc"));
+	}
+	catch (CppSQLite3Exception&)
+	{
+	}
+
+	if (ret)
+	{
+		//both databases can hold the same sticky positions, put them back in order
+		ReOrderStickyClips(-1, theApp.m_db);
+	}
+
+	Log(StrF(_T("End of MergeDB, merged: %d, success: %d"), mergedCount, ret));
+
+	return ret;
+}
+
 BOOL CreateDB(CString csFile)
 {
 	try

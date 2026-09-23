@@ -466,6 +466,7 @@ protected:
     afx_msg void OnTimer(UINT_PTR nIDEvent);
     afx_msg void OnMenuExport();
     afx_msg void OnMenuImport();
+	afx_msg void OnMenuMergeDatabase();
     afx_msg void OnQuickpropertiesRemovequickpaste();
     afx_msg void OnMenuEdititem();
     afx_msg void OnMenuNewclip();
