@@ -182,7 +182,7 @@
 		<Item English_Text = "Delete" ID = "1021">Удалить</Item>
 		<Item English_Text = "OK" ID = "1">ОК</Item>
 		<Item English_Text = "Cancel" ID = "2">Отмена</Item>
-		<Item English_Text = "Copy Properties" ID = "-1">Копировать свойства</Item>
+		<Item English_Text = "Copy Properties" ID = "-1">Свойства объекта</Item>
 		//Added 1/10/15
 		<Item English_Text = "Hotkey available globally" ID = "1026">Во всех программах</Item>
 		<Item English_Text = "Last Used" ID = "2043">Вставлен</Item>
@@ -251,7 +251,7 @@
 	<Ditto_Options_Shortcuts>
 		<Item English_Text = "Activate Ditto" ID = "2048">Открыть Ditto</Item>
 		<Item English_Text = "Win" ID = "2035">Win</Item>
-		<Item English_Text = "Named Copy" ID = "2049">Именованная копия</Item>
+		<Item English_Text = "Named Copy" ID = "2049">Только текст</Item>
 		<Item English_Text = "Win" ID = "2036">Win</Item>
 		<Item English_Text = "Global Hot Keys for Last Ten Items Copied" ID = "2051">Горячие клавиши для последних 10 объектов</Item>
 		<Item English_Text = "Send Paste (Otherwise it will just load the item on the clipboard)" ID = "1042">Отправить вставку (иначе объект просто загружается в буфер обмена)</Item>
@@ -359,8 +359,8 @@
 		<Item English_Text = "Friend Details" ID = "-1">Сведения о друге</Item>
 	</Ditto_Options_Friends_Detail>
 	<Ditto_Options_Stats>
-		<Item English_Text = "Odometer" ID = "2052">Статистика</Item>
-		<Item English_Text = "Trip Odometer" ID = "2053">Статистика за день</Item>
+		<Item English_Text = "Odometer" ID = "2052">Всего</Item>
+		<Item English_Text = "Trip Odometer" ID = "2053">С момента сброса</Item>
 		<Item English_Text = "Copies" ID = "2054">Копирований</Item>
 		<Item English_Text = "Pastes" ID = "2055">Вставок</Item>
 		<Item English_Text = "Copies" ID = "2056">Копирований</Item>
@@ -391,7 +391,7 @@
 		<Item English_Text = "Custom Clipboard Type" ID = "2130">Свой тип</Item>
 	</Ditto_Options_Supported_Types_Add>
 	<Ditto_Move_To_Groups>
-		<Item English_Text = "New Group" ID = "1040">Создать группу</Item>
+		<Item English_Text = "New Group" ID = "1040">Новая группа</Item>
 		<Item English_Text = "OK" ID = "1">ОК</Item>
 		<Item English_Text = "Cancel" ID = "2">Отмена</Item>
 		<Item English_Text = "Move to Group" ID = "-1">Переместить в группу</Item>
@@ -437,7 +437,7 @@
 		<Item English_Text = "to be editable" ID = "Editable">для редактирования</Item>
 		<Item English_Text = "Do you want to save changes to" ID = "SaveChanges">Сохранить изменения в</Item>
 		<Item English_Text = "Error saving clip" ID = "ErrorSaving">Ошибка сохранения объекта</Item>
-		<Item English_Text = "New" ID = "New">Создать</Item>
+		<Item English_Text = "New" ID = "New">Новый</Item>
 		<Item English_Text = "Save, Close and place on clipboard" ID = "Save_Close">Сохранить, закрыть и поместить в буфер обмена</Item>
 		<Item English_Text = "Ditto Edit" ID = "Ditto_Edit">Редактор Ditto</Item>
 		<Item English_Text = "Ditto - Named Paste" ID = "Named_Paste_Title">Ditto – именованная вставка</Item>
