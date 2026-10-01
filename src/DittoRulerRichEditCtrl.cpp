@@ -163,9 +163,11 @@ int CDittoRulerRichEditCtrl::SaveToDB(BOOL bUpdateDesc)
 
 		theApp.m_db.execDML(_T("begin transaction;"));
 
+		bool savedExistingClip = false;
 		if(m_lID >= 0)
 		{
 			Clip.SaveFromEditWnd(bUpdateDesc);
+			savedExistingClip = true;
 		}
 		else
 		{
@@ -187,6 +189,11 @@ int CDittoRulerRichEditCtrl::SaveToDB(BOOL bUpdateDesc)
 		nRet = SAVED_CLIP_TO_DB;
 
 		theApp.m_db.execDML(_T("commit transaction;"));
+
+		//the clip data changed, let the list drop its cached rtf / image of this clip
+		//queued before RefreshView, so the clip is reloaded before the list is refilled
+		if(savedExistingClip)
+			theApp.RefreshClipInUI(m_lID, UPDATE_CLIP_DESCRIPTION);
 
 		if(bUpdateDesc)
 			theApp.RefreshView();

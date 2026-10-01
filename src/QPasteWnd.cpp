@@ -1263,6 +1263,13 @@ LRESULT CQPasteWnd::OnReloadClipInUI(WPARAM wParam, LPARAM lParam)
 
 	theApp.m_FocusID = -1;
 
+	//the clip data changed, drop the cached rtf / image even when the clip is not in the loaded list
+	//(RefreshView may have cleared it), otherwise a cached "no rtf" stays until Ditto is restarted
+	if (updateFlags & UPDATE_CLIP_DESCRIPTION)
+	{
+		RemoveFromImageRtfCache(-1, clipId);
+	}
+
 	CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT clipOrder, clipGroupOrder, lastPasteDate, mText FROM Main WHERE lID = %d"), clipId);
 	if (q.eof() == false)
 	{
@@ -1306,8 +1313,6 @@ LRESULT CQPasteWnd::OnReloadClipInUI(WPARAM wParam, LPARAM lParam)
 					iter->m_Desc = description;
 
 					foundClip = TRUE;
-
-					RemoveFromImageRtfCache(-1, clipId);
 
 					m_lstHeader.RefreshVisibleRows();
 					m_lstHeader.RedrawWindow();
