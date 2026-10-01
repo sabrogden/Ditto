@@ -462,6 +462,20 @@
 		<Item English_Text = "[Starred clips]" ID = "starred_clips">[Об’єкти із зірочкою]</Item>
 		<Item English_Text = "There are no starred clips" ID = "NoStarredClips">Немає об’єктів із зірочкою</Item>
 		<Item English_Text = "Description Options" ID = "DescriptionOptionsTooltip">Параметри опису</Item>
+		<Item English_Text = "Font..." ID = "EditToolbarFont">Шрифт...</Item>
+		<Item English_Text = "Font" ID = "EditToolbarFontName">Шрифт</Item>
+		<Item English_Text = "Font Size" ID = "EditToolbarFontSize">Розмір шрифту</Item>
+		<Item English_Text = "Text Color" ID = "EditToolbarColor">Колір тексту</Item>
+		<Item English_Text = "Bold" ID = "EditToolbarBold">Жирний</Item>
+		<Item English_Text = "Italic" ID = "EditToolbarItalic">Курсив</Item>
+		<Item English_Text = "Underline" ID = "EditToolbarUnderline">Підкреслений</Item>
+		<Item English_Text = "Align Left" ID = "EditToolbarAlignLeft">За лівим краєм</Item>
+		<Item English_Text = "Center" ID = "EditToolbarAlignCenter">По центру</Item>
+		<Item English_Text = "Align Right" ID = "EditToolbarAlignRight">За правим краєм</Item>
+		<Item English_Text = "Increase Indent" ID = "EditToolbarIndent">Збільшити відступ</Item>
+		<Item English_Text = "Decrease Indent" ID = "EditToolbarOutdent">Зменшити відступ</Item>
+		<Item English_Text = "Bullets" ID = "EditToolbarBullet">Маркований список</Item>
+		<Item English_Text = "Word Wrap" ID = "EditToolbarWrap">Перенесення за словами</Item>
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1">ОК</Item>

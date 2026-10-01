@@ -44,6 +44,9 @@ public:
 	void SetFontSize( int size );
 	void SetFontColor( COLORREF color );
 
+	void SetButtonToolTip( int command, const CString& text );
+	void SetControlToolTips( const CString& fontName, const CString& fontSize, const CString& color );
+
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CRRECToolbar)
@@ -65,6 +68,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 private:
+
+	void AddWindowToolTip( CToolTipCtrl* tips, CWnd* wnd, const CString& text );
 
 	CFontComboBox	m_fontCombo;
 	CSizeComboBox	m_size;

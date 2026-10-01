@@ -49,6 +49,7 @@
 #include "TextFile/TextFile.h"
 #include "..\Options.h"
 #include "..\Misc.h"
+#include "..\CP_Main.h"
 #include "..\HyperLink.h"
 #include ".\rulerricheditctrl.h"
 #include "..\..\resource.h"
@@ -277,7 +278,55 @@ BOOL CRulerRichEditCtrl::CreateToolbar()
 	GetClientRect( rect );
 
 	CRect toolbarRect( 0, 0, rect.right, m_dpi.Scale(TOOLBAR_HEIGHT));
-	return m_toolbar.Create( this, toolbarRect, ToolbarIdPerDPI());
+	BOOL result = m_toolbar.Create( this, toolbarRect, ToolbarIdPerDPI());
+	if( result )
+		SetToolbarToolTips();
+
+	return result;
+}
+
+void CRulerRichEditCtrl::SetToolbarToolTips()
+/* ============================================================
+	Function :		CRulerRichEditCtrl::SetToolbarToolTips
+	Description :	Sets the tooltip texts of the toolbar buttons
+					and controls, with shortcuts handled in
+					PreTranslateMessage
+	Access :		Private
+
+	Return :		void
+	Parameters :	none
+
+	Usage :			Called from CreateToolbar, also when the
+					toolbar is recreated after a DPI change
+
+   ============================================================*/
+{
+	CString text;
+
+	m_toolbar.SetButtonToolTip( BUTTON_FONT, theApp.m_Language.GetString( "EditToolbarFont", "Font..." ) );
+
+	text.Format( _T( "%s    Ctrl - B" ), theApp.m_Language.GetString( "EditToolbarBold", "Bold" ) );
+	m_toolbar.SetButtonToolTip( BUTTON_BOLD, text );
+
+	text.Format( _T( "%s    Ctrl - I" ), theApp.m_Language.GetString( "EditToolbarItalic", "Italic" ) );
+	m_toolbar.SetButtonToolTip( BUTTON_ITALIC, text );
+
+	text.Format( _T( "%s    Ctrl - U" ), theApp.m_Language.GetString( "EditToolbarUnderline", "Underline" ) );
+	m_toolbar.SetButtonToolTip( BUTTON_UNDERLINE, text );
+
+	m_toolbar.SetButtonToolTip( BUTTON_LEFTALIGN, theApp.m_Language.GetString( "EditToolbarAlignLeft", "Align Left" ) );
+	m_toolbar.SetButtonToolTip( BUTTON_CENTERALIGN, theApp.m_Language.GetString( "EditToolbarAlignCenter", "Center" ) );
+	m_toolbar.SetButtonToolTip( BUTTON_RIGHTALIGN, theApp.m_Language.GetString( "EditToolbarAlignRight", "Align Right" ) );
+	m_toolbar.SetButtonToolTip( BUTTON_INDENT, theApp.m_Language.GetString( "EditToolbarIndent", "Increase Indent" ) );
+	m_toolbar.SetButtonToolTip( BUTTON_OUTDENT, theApp.m_Language.GetString( "EditToolbarOutdent", "Decrease Indent" ) );
+	m_toolbar.SetButtonToolTip( BUTTON_BULLET, theApp.m_Language.GetString( "EditToolbarBullet", "Bullets" ) );
+
+	text.Format( _T( "%s    Ctrl - W" ), theApp.m_Language.GetString( "EditToolbarWrap", "Word Wrap" ) );
+	m_toolbar.SetButtonToolTip( ID_BUTTONWRAP, text );
+
+	m_toolbar.SetControlToolTips( theApp.m_Language.GetString( "EditToolbarFontName", "Font" ),
+		theApp.m_Language.GetString( "EditToolbarFontSize", "Font Size" ),
+		theApp.m_Language.GetString( "EditToolbarColor", "Text Color" ) );
 }
 
 BOOL CRulerRichEditCtrl::CreateRTFControl( BOOL autohscroll )

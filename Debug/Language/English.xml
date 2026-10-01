@@ -446,6 +446,22 @@
 		<Item English_Text = "At Cursor" ID = "AtCursor"></Item>
 		<Item English_Text = "At Previous Position" ID = "AtPreviousPosition"></Item>
 		
+		//Clip edit window, formatting toolbar tooltips
+		<Item English_Text = "Font..." ID = "EditToolbarFont"></Item>
+		<Item English_Text = "Font" ID = "EditToolbarFontName"></Item>
+		<Item English_Text = "Font Size" ID = "EditToolbarFontSize"></Item>
+		<Item English_Text = "Text Color" ID = "EditToolbarColor"></Item>
+		<Item English_Text = "Bold" ID = "EditToolbarBold"></Item>
+		<Item English_Text = "Italic" ID = "EditToolbarItalic"></Item>
+		<Item English_Text = "Underline" ID = "EditToolbarUnderline"></Item>
+		<Item English_Text = "Align Left" ID = "EditToolbarAlignLeft"></Item>
+		<Item English_Text = "Center" ID = "EditToolbarAlignCenter"></Item>
+		<Item English_Text = "Align Right" ID = "EditToolbarAlignRight"></Item>
+		<Item English_Text = "Increase Indent" ID = "EditToolbarIndent"></Item>
+		<Item English_Text = "Decrease Indent" ID = "EditToolbarOutdent"></Item>
+		<Item English_Text = "Bullets" ID = "EditToolbarBullet"></Item>
+		<Item English_Text = "Word Wrap" ID = "EditToolbarWrap"></Item>
+
 	</Ditto_String_Table>
 	<Ditto_Options_Sheet>
 		<Item English_Text = "OK" ID = "1"></Item>

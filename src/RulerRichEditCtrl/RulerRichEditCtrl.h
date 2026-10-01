@@ -146,6 +146,7 @@ protected:
 	void	UpdateTabStops();
 
 	BOOL	CreateToolbar();
+	void	SetToolbarToolTips();
 	BOOL	CreateRTFControl( BOOL autohscroll );
 	void	CreateMargins();
 
