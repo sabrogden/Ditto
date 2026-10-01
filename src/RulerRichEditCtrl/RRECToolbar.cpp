@@ -110,7 +110,7 @@ BOOL CRRECToolbar::Create( CWnd* parent, CRect& rc, int resourceId)
 	memset(&tb, 0, sizeof(tb));
 	memset(&tbSep, 0, sizeof(tbSep));
 
-	result = CToolBarCtrl::Create(WS_VISIBLE|WS_CHILD, rc, parent, resourceId);
+	result = CToolBarCtrl::Create(WS_VISIBLE|WS_CHILD|TBSTYLE_TOOLTIPS, rc, parent, resourceId);
 
 	if(result)
 	{
@@ -303,6 +303,99 @@ LRESULT CRRECToolbar::OnColorButton( WPARAM w, LPARAM l)
 	GetParent()->SendMessage( urm_SETCURRENTFONTCOLOR, 0, ( LPARAM ) w );
 	
 	return 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CRRECToolbar tooltips
+
+void CRRECToolbar::SetButtonToolTip( int command, const CString& text )
+/* ============================================================
+	Function :		CRRECToolbar::SetButtonToolTip
+	Description :	Sets the tooltip text of a toolbar button
+	Access :		Public
+
+	Return :		void
+	Parameters :	int command			-	Button command id
+					CString& text		-	Tooltip text
+
+	Usage :			Called from the parent editor after the
+					toolbar is created. The toolbar registers
+					every button with its tooltip itself
+					(TBSTYLE_TOOLTIPS), this only sets the text.
+
+   ============================================================*/
+{
+	CToolTipCtrl* tips = GetToolTips();
+	if( tips && tips->m_hWnd )
+		tips->UpdateTipText( text, this, command );
+}
+
+void CRRECToolbar::SetControlToolTips( const CString& fontName, const CString& fontSize, const CString& color )
+/* ============================================================
+	Function :		CRRECToolbar::SetControlToolTips
+	Description :	Adds tooltips to the font name and size
+					combos and the color picker, which are child
+					windows over toolbar separators
+	Access :		Public
+
+	Return :		void
+	Parameters :	CString& fontName	-	Font name combo text
+					CString& fontSize	-	Font size combo text
+					CString& color		-	Color picker text
+
+	Usage :			Called from the parent editor after the
+					toolbar is created.
+
+   ============================================================*/
+{
+	CToolTipCtrl* tips = GetToolTips();
+	if( tips == NULL || tips->m_hWnd == NULL )
+		return;
+
+	if( m_fontCombo.m_hWnd )
+	{
+		AddWindowToolTip( tips, &m_fontCombo, fontName );
+
+		// the font name combo is editable, its edit box covers most of it
+		CWnd* edit = m_fontCombo.GetWindow( GW_CHILD );
+		if( edit )
+			AddWindowToolTip( tips, edit, fontName );
+	}
+
+	if( m_size.m_hWnd )
+		AddWindowToolTip( tips, &m_size, fontSize );
+
+	if( m_color.m_hWnd )
+		AddWindowToolTip( tips, &m_color, color );
+}
+
+void CRRECToolbar::AddWindowToolTip( CToolTipCtrl* tips, CWnd* wnd, const CString& text )
+/* ============================================================
+	Function :		CRRECToolbar::AddWindowToolTip
+	Description :	Adds a child window as a tooltip tool
+	Access :		Private
+
+	Return :		void
+	Parameters :	CToolTipCtrl* tips	-	Toolbar tooltip
+					CWnd* wnd			-	Child window
+					CString& text		-	Tooltip text
+
+	Usage :			The toolbar relays only its own mouse
+					messages, so the tool subclasses the child
+					window (TTF_SUBCLASS) to see the mouse over it.
+					CToolTipCtrl::AddTool does not set that flag.
+
+   ============================================================*/
+{
+	TOOLINFO ti;
+	memset( &ti, 0, sizeof( ti ) );
+	ti.cbSize = sizeof( ti );
+	ti.uFlags = TTF_IDISHWND | TTF_SUBCLASS;
+	ti.hwnd = ::GetParent( wnd->m_hWnd );
+	ti.uId = ( UINT_PTR ) wnd->m_hWnd;
+	ti.lpszText = ( LPTSTR ) ( LPCTSTR ) text;
+
+	tips->SendMessage( TTM_ADDTOOL, 0, ( LPARAM ) &ti );
 }
 
 /////////////////////////////////////////////////////////////////////////////
