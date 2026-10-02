@@ -10,6 +10,7 @@
 #include "DittoCopyBuffer.h"
 #include <atlbase.h>
 #include "DrawHTML.h"
+#include "ColorEmojiText.h"
 #include "..\Shared\TextConvert.h"
 #include <cmath>
 #include <vector>
@@ -599,7 +600,11 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			}
 			else
 			{
-				pDC->DrawText(csText, rcText, DT_VCENTER | DT_EXPANDTABS | DT_NOPREFIX);
+				// rows with emoji go through DirectWrite, GDI draws them black and white
+				if (ColorEmojiText::DrawColorText(pDC, csText, rcText) == false)
+				{
+					pDC->DrawText(csText, rcText, DT_VCENTER | DT_EXPANDTABS | DT_NOPREFIX);
+				}
 			}
 		}
 

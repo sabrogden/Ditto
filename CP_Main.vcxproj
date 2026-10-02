@@ -548,6 +548,7 @@
     <ClCompile Include="src\ClipFormatQListCtrl.cpp" />
     <ClCompile Include="src\ClipIds.cpp" />
     <ClCompile Include="src\Clip_ImportExport.cpp" />
+    <ClCompile Include="src\ColorEmojiText.cpp" />
     <ClCompile Include="src\ConvertRTFToText.cpp" />
     <ClCompile Include="src\CopyProperties.cpp" />
     <ClCompile Include="src\CopyThread.cpp" />
@@ -816,6 +817,7 @@
     <ClInclude Include="src\ClipFormatQListCtrl.h" />
     <ClInclude Include="src\ClipIds.h" />
     <ClInclude Include="src\Clip_ImportExport.h" />
+    <ClInclude Include="src\ColorEmojiText.h" />
     <ClInclude Include="src\ConvertRTFToText.h" />
     <ClInclude Include="src\CopyProperties.h" />
     <ClInclude Include="src\CopyThread.h" />

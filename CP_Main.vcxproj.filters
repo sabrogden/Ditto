@@ -55,6 +55,9 @@
     <ClCompile Include="src\ClipboardViewer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\ColorEmojiText.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\ClipCompare.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -548,6 +551,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\ClipboardViewer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ColorEmojiText.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\ClipCompare.h">
