@@ -24,6 +24,10 @@ Ditto is an extension to the standard windows clipboard. It saves each item plac
 3. Open Ditto by clicking its icon in the system tray or by pressing its Hot Key which defaults to Ctrl + ` – i.e. hold down Ctrl and press the back-quote (tilde ~) key.
 4. Double click or press enter on the item to paste it to the previous window.
 
+## Merging Two Databases
+
+If you have clips in a second Ditto database, open Ditto, click the menu button in the bottom right corner and choose **Merge Database...**, then pick the other `.db` file. Its clips and groups are copied into the database you are currently using. Clips you already have are skipped, and shortcuts on the incoming clips are cleared so they can't fight with your existing ones. A backup of your current database is saved next to it as `Ditto.db.merge.bak` before anything is changed.
+
 ## Local First
 - No login
 - No cloud

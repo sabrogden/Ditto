@@ -216,6 +216,7 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_WM_TIMER()
 	ON_COMMAND(ID_MENU_EXPORT, OnMenuExport)
 	ON_COMMAND(ID_MENU_IMPORT, OnMenuImport)
+	ON_COMMAND(ID_MENU_MERGEDATABASE, OnMenuMergeDatabase)
 	ON_COMMAND(ID_QUICKPROPERTIES_REMOVEQUICKPASTE, OnQuickpropertiesRemovequickpaste)
 	ON_COMMAND(ID_MENU_EDITITEM, OnMenuEdititem)
 	ON_COMMAND(ID_MENU_NEWCLIP, OnMenuNewclip)
@@ -2674,6 +2675,13 @@ void CQPasteWnd::OnMenuImport()
 {
 	m_bHideWnd = false;
 	theApp.ImportClips(m_hWnd);
+	m_bHideWnd = true;
+}
+
+void CQPasteWnd::OnMenuMergeDatabase()
+{
+	m_bHideWnd = false;
+	theApp.MergeDatabase(m_hWnd);
 	m_bHideWnd = true;
 }
 

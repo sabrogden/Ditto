@@ -1046,6 +1046,130 @@ bool CCP_MainApp::ImportClips(HWND hWnd)
 	return true;
 }
 
+bool CCP_MainApp::MergeDatabase(HWND hWnd)
+{
+	OPENFILENAME	FileName;
+	TCHAR			szFileName[400];
+	TCHAR			szDir[400];
+
+	memset(&FileName, 0, sizeof(FileName));
+	memset(szFileName, 0, sizeof(szFileName));
+	memset(&szDir, 0, sizeof(szDir));
+
+	CString csInitialDir = CGetSetOptions::GetLastImportDir();
+	STRCPY(szDir, csInitialDir);
+
+	FileName.lStructSize = sizeof(FileName);
+	FileName.lpstrTitle = _T("Merge Database");
+	FileName.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR;
+	FileName.nMaxFile = 400;
+	FileName.lpstrFile = szFileName;
+	FileName.lpstrInitialDir = szDir;
+	FileName.lpstrFilter = _T("Ditto Databases (*.db)\0*.db\0\0");
+	FileName.lpstrDefExt = _T("db");
+	FileName.hwndOwner = hWnd;
+
+	if(GetOpenFileName(&FileName) == 0)
+	{
+		return false;
+	}
+
+	using namespace nsPath;
+	CPath path(FileName.lpstrFile);
+	CGetSetOptions::SetLastImportDir(CString(path.GetPath()));
+
+	CString csMergeFrom(FileName.lpstrFile);
+	CString csCurrentDb = CGetSetOptions::GetDBPath();
+
+	if(csCurrentDb.CompareNoCase(csMergeFrom) == 0)
+	{
+		CShowTaskBarIcon show;
+		MessageBox(hWnd, theApp.m_Language.GetString("Merge_Same_Db", "Can't merge the current database into itself, select a different database."), _T("Ditto"), MB_OK);
+		return false;
+	}
+
+	//also upgrades an older database to the current schema so all the columns exist
+	if(ValidDB(csMergeFrom) == FALSE)
+	{
+		CShowTaskBarIcon show;
+		MessageBox(hWnd, theApp.m_Language.GetString("Invalid_Database", "Invalid Database"), _T("Ditto"), MB_OK);
+		return false;
+	}
+
+	CString csBackup = csCurrentDb + _T(".merge.bak");
+
+	CString csConfirm;
+	csConfirm.Format(_T("%s\n\n%s\n\n%s\n%s"),
+		theApp.m_Language.GetString("Merge_Confirm", "Merge the clips from this database into the current database?"),
+		csMergeFrom,
+		theApp.m_Language.GetString("Merge_Confirm_Backup", "A backup of the current database will be saved to:"),
+		csBackup);
+
+	{
+		CShowTaskBarIcon show;
+		if(MessageBox(hWnd, csConfirm, _T("Ditto"), MB_YESNO | MB_ICONQUESTION) != IDYES)
+		{
+			return false;
+		}
+	}
+
+	int mergedCount = 0;
+	BOOL bMerged = FALSE;
+
+	{
+		CWaitCursor wait;
+
+		try
+		{
+			//VACUUM INTO writes a consistent snapshot, but it won't write over an existing file
+			::DeleteFile(csBackup);
+
+			CString csBackupEscaped = csBackup;
+			csBackupEscaped.Replace(_T("'"), _T("''"));
+
+			theApp.m_db.execDMLEx(_T("VACUUM INTO '%s'"), csBackupEscaped);
+		}
+		catch (CppSQLite3Exception& e)
+		{
+			Log(StrF(_T("Merge backup failed: %d - %s"), e.errorCode(), e.errorMessage()));
+
+			CShowTaskBarIcon show;
+			MessageBox(hWnd, theApp.m_Language.GetString("Merge_Backup_Error", "Could not create a backup of the current database, the merge was canceled."), _T("Ditto"), MB_OK);
+			return false;
+		}
+
+		bMerged = MergeDB(csMergeFrom, mergedCount);
+	}
+
+	CShowTaskBarIcon show;
+
+	if(bMerged)
+	{
+		theApp.RefreshView();
+
+		CString cs;
+		cs.Format(_T("%s %d "), theApp.m_Language.GetString("Merge_Successfully", "Successfully merged"), mergedCount);
+		if(mergedCount == 1)
+			cs += theApp.m_Language.GetString("Clip", "clip");
+		else
+			cs += theApp.m_Language.GetString("Clips", "clips");
+
+		MessageBox(hWnd, cs, _T("Ditto"), MB_OK);
+	}
+	else
+	{
+		CString cs;
+		cs.Format(_T("%s\n\n%s\n%s"),
+			theApp.m_Language.GetString("Merge_Error", "Error merging the database, no clips were added."),
+			theApp.m_Language.GetString("Merge_Error_Backup", "A backup of the current database was saved to:"),
+			csBackup);
+
+		MessageBox(hWnd, cs, _T("Ditto"), MB_OK);
+	}
+
+	return bMerged == TRUE;
+}
+
 void CCP_MainApp::ShowCommandLineError(CString csTitle, CString csMessage)
 {
 	Log(StrF(_T("ShowCommandLineError %s - %s"), csTitle, csMessage));
