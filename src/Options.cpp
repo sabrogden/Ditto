@@ -2936,7 +2936,7 @@ void CGetSetOptions::SetToolTipPreviewWidth(int val)
 
 BOOL CGetSetOptions::GetToolTipPreviewEnabled()
 {
-	return GetProfileLong("ToolTipPreviewEnabled", 1);
+	return GetProfileLong("ToolTipPreviewEnabled", 0);
 }
 
 void CGetSetOptions::SetToolTipPreviewEnabled(BOOL bEnabled)
