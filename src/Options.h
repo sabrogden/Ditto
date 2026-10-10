@@ -635,6 +635,16 @@ public:
 	static int GetMaxToolTipCharacters();
 	static void SetMaxToolTipCharacters(int val);
 
+	// Width of the hover preview popup of the quick paste list, 0 means the
+	// image is shown in its original size.
+	static int GetToolTipPreviewWidth();
+	static void SetToolTipPreviewWidth(int val);
+
+	// When on, the quick paste list shows the hover preview popup instead of
+	// the plain tool tip bubble.
+	static BOOL GetToolTipPreviewEnabled();
+	static void SetToolTipPreviewEnabled(BOOL bEnabled);
+
 	static int m_doubleKeyStrokeTimeout;
 	static int GetDoubleKeyStrokeTimeout();
 	static void SetDoubleKeyStrokeTimeout(int val);

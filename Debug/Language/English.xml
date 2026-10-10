@@ -48,6 +48,14 @@
 		<Item English_Text = "Select Font" ID = "32844"></Item>
 		<Item English_Text = "Show Thumbnails" ID = "32845"></Item>
 		<Item English_Text = "Draw RTF Text" ID = "32846"></Item>
+		<Item English_Text = "Show hover preview" ID = "33020">Show hover preview</Item>
+		<Item English_Text = "Preview window size" ID = "-1">Preview window size</Item>
+		<Item English_Text = "Original Size" ID = "33021">Original Size</Item>
+		<Item English_Text = "200 Pixels" ID = "33022">200 Pixels</Item>
+		<Item English_Text = "300 Pixels" ID = "33023">300 Pixels</Item>
+		<Item English_Text = "400 Pixels" ID = "33024">400 Pixels</Item>
+		<Item English_Text = "600 Pixels" ID = "33025">600 Pixels</Item>
+		<Item English_Text = "800 Pixels" ID = "33026">800 Pixels</Item>
 		<Item English_Text = "Paste Clip after selection" ID = "32847"></Item>
 		<Item English_Text = "Find As You Type" ID = "32848"></Item>
 		<Item English_Text = "Ensure Entire Window Is Visible" ID = "32849"></Item>
