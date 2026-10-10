@@ -671,6 +671,17 @@ BEGIN
             MENUITEM SEPARATOR
             MENUITEM "Show Thumbnails",             32845
             MENUITEM "Draw RTF Text",               32846
+            MENUITEM SEPARATOR
+            MENUITEM "Show hover preview",       ID_MENU_HOVER_PREVIEW_TOGGLE
+            POPUP "Preview window size"
+            BEGIN
+                MENUITEM "Original Size",               ID_MENU_HOVER_PREVIEW_ORIGINAL
+                MENUITEM "200 Pixels",                  ID_MENU_HOVER_PREVIEW_200
+                MENUITEM "300 Pixels",                  ID_MENU_HOVER_PREVIEW_300
+                MENUITEM "400 Pixels",                  ID_MENU_HOVER_PREVIEW_400
+                MENUITEM "600 Pixels",                  ID_MENU_HOVER_PREVIEW_600
+                MENUITEM "800 Pixels",                  ID_MENU_HOVER_PREVIEW_800
+            END
         END
         MENUITEM SEPARATOR
         MENUITEM "Show Startup Message",        ID_FIRST_SHOWSTARTUPMESSAGE

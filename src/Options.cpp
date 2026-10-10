@@ -2924,6 +2924,26 @@ void CGetSetOptions::SetMaxToolTipCharacters(int val)
 	SetProfileLong("MaxToolTipCharacters", val);
 }
 
+int CGetSetOptions::GetToolTipPreviewWidth()
+{
+	return GetProfileLong("ToolTipPreviewWidth", 400);
+}
+
+void CGetSetOptions::SetToolTipPreviewWidth(int val)
+{
+	SetProfileLong("ToolTipPreviewWidth", val);
+}
+
+BOOL CGetSetOptions::GetToolTipPreviewEnabled()
+{
+	return GetProfileLong("ToolTipPreviewEnabled", 0);
+}
+
+void CGetSetOptions::SetToolTipPreviewEnabled(BOOL bEnabled)
+{
+	SetProfileLong("ToolTipPreviewEnabled", bEnabled);
+}
+
 int CGetSetOptions::GetDoubleKeyStrokeTimeout()
 {
 	return GetProfileLong("DoubleKeyStrokeTimeout", 350);

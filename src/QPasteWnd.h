@@ -205,6 +205,7 @@ public:
     void SetMenuChecks(CMenu *pMenu);
     void SetSendToMenu(CMenu *pMenu, int nMenuID, int nArrayPos);
 	void SetFriendChecks(CMenu *pMenu);
+	void SetHoverPreviewWidthChecks(CMenu *pMenu);
 
     BOOL SendToFriendbyPos(int nPos, CString override_IP_Host);
 
@@ -344,6 +345,9 @@ public:
 	void LoadShortcuts();
 
 	void ShowRightClickMenu();
+
+	afx_msg void OnHoverPreviewWidth(UINT nID);
+	afx_msg void OnHoverPreviewToggle();
 
 	void SetCurrentTransparency();
 

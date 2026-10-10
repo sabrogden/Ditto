@@ -178,6 +178,9 @@
     <ClCompile Include="src\HotKeys.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\HoverPreviewWnd.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\HTMLFormatAggregator.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -683,6 +686,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\HotKeys.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HoverPreviewWnd.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\HTMLFormatAggregator.h">

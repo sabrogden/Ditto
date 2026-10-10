@@ -55,6 +55,14 @@
 		<Item English_Text = "Send To" ID = "-1">发送到</Item>
 		<Item English_Text = "(192.168.1.101) - same computer" ID = "32824">(192.168.1.101) - 同一台计算机</Item>
 		<Item English_Text = "View Full Description	F3" ID = "32793">查看完整说明</Item>
+		<Item English_Text = "Show hover preview" ID = "33020">显示悬停预览</Item>
+		<Item English_Text = "Preview window size" ID = "-1">预览窗口大小</Item>
+		<Item English_Text = "Original Size" ID = "33021">原图尺寸</Item>
+		<Item English_Text = "200 Pixels" ID = "33022">200 像素</Item>
+		<Item English_Text = "300 Pixels" ID = "33023">300 像素</Item>
+		<Item English_Text = "400 Pixels" ID = "33024">400 像素</Item>
+		<Item English_Text = "600 Pixels" ID = "33025">600 像素</Item>
+		<Item English_Text = "800 Pixels" ID = "33026">800 像素</Item>
 		<Item English_Text = "View Groups" ID = "32819">查看组</Item>
 		<Item English_Text = "Paste Plain Text Only	Shift-Enter" ID = "32841">仅粘贴纯文本</Item>
 		<Item English_Text = "Paste HTML as Plain Text" ID = "32851">将 HTML 粘贴为纯文本</Item>

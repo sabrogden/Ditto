@@ -319,6 +319,8 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_UPDATE_COMMAND_UI(32775, &CQPasteWnd::OnUpdate32775)
 	ON_COMMAND_RANGE(CustomFriendStartId, (CustomFriendStartId + MaxCustomFriends + 1), OnCustomSendToFriend)
 	ON_COMMAND_RANGE(ChaiScriptMenuStartId, (ChaiScriptMenuStartId + MaxChaiScripts + 1), OnChaiScriptPaste)
+	ON_COMMAND_RANGE(ID_MENU_HOVER_PREVIEW_FIRST, ID_MENU_HOVER_PREVIEW_LAST, OnHoverPreviewWidth)
+	ON_COMMAND(ID_MENU_HOVER_PREVIEW_TOGGLE, OnHoverPreviewToggle)
 	ON_MESSAGE(WM_DPICHANGED, OnDpiChanged)
 	ON_COMMAND(ID_CLIPORDER_MOVETOLAST, &CQPasteWnd::OnCliporderMovetolast)
 	ON_UPDATE_COMMAND_UI(ID_CLIPORDER_MOVETOLAST, &CQPasteWnd::OnUpdateCliporderMovetolast)
@@ -1688,6 +1690,55 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch)
 	Log(StrF(_T("Start Fill List - Count SQL: %s, Query SQL: %s"), countSql, sql));
 
 	return TRUE;
+}
+
+// Width in pixels of the hover preview popup of the quick paste list.  The
+// quick paste menu items ID_MENU_HOVER_PREVIEW_FIRST to
+// ID_MENU_HOVER_PREVIEW_LAST are in this order, 0 shows the image in its
+// original size.
+static const int g_hoverPreviewWidths[] =
+{
+	0,
+	200,
+	300,
+	400,
+	600,
+	800
+};
+
+void CQPasteWnd::OnHoverPreviewWidth(UINT nID)
+{
+	int nIndex = (int)nID - (int)ID_MENU_HOVER_PREVIEW_FIRST;
+
+	if (nIndex < 0 || nIndex >= _countof(g_hoverPreviewWidths))
+	{
+		return;
+	}
+
+	CGetSetOptions::SetToolTipPreviewWidth(g_hoverPreviewWidths[nIndex]);
+}
+
+void CQPasteWnd::OnHoverPreviewToggle()
+{
+	CGetSetOptions::SetToolTipPreviewEnabled(CGetSetOptions::GetToolTipPreviewEnabled() ? FALSE : TRUE);
+}
+
+void CQPasteWnd::SetHoverPreviewWidthChecks(CMenu* pMenu)
+{
+	if (CGetSetOptions::GetToolTipPreviewEnabled())
+	{
+		pMenu->CheckMenuItem(ID_MENU_HOVER_PREVIEW_TOGGLE, MF_CHECKED);
+	}
+
+	int nCurrent = CGetSetOptions::GetToolTipPreviewWidth();
+
+	for (int nIndex = 0; nIndex < _countof(g_hoverPreviewWidths); nIndex++)
+	{
+		if (g_hoverPreviewWidths[nIndex] == nCurrent)
+		{
+			pMenu->CheckMenuItem(ID_MENU_HOVER_PREVIEW_FIRST + nIndex, MF_CHECKED);
+		}
+	}
 }
 
 void CQPasteWnd::ShowRightClickMenu()
@@ -7277,6 +7328,8 @@ void CQPasteWnd::OnSystemButton()
 		theApp.m_Language.UpdateRightClickMenu(cmSubMenu);
 
 		SetMenuChecks(cmSubMenu);
+
+		SetHoverPreviewWidthChecks(cmSubMenu);
 
 		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
 	}

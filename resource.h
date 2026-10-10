@@ -871,7 +871,19 @@
 #define BUTTON_BULLET                   32995
 #define ID_BUTTONWRAP                   32996
 #define ID_IMPORT_EXPORTTOWEBSEARCH     32997
-#define ID_SPECIALPASTE_PASTENEWGUID    32998
+#
+// Hover preview popup of the quick paste list.  The ids start past the range
+// the preview pane work uses (33003 - 33006) so that the two do not clash.
+#define ID_MENU_HOVER_PREVIEW_TOGGLE    33020
+#define ID_MENU_HOVER_PREVIEW_ORIGINAL  33021
+#define ID_MENU_HOVER_PREVIEW_200       33022
+#define ID_MENU_HOVER_PREVIEW_300       33023
+#define ID_MENU_HOVER_PREVIEW_400       33024
+#define ID_MENU_HOVER_PREVIEW_600       33025
+#define ID_MENU_HOVER_PREVIEW_800       33026
+#define ID_MENU_HOVER_PREVIEW_FIRST     ID_MENU_HOVER_PREVIEW_ORIGINAL
+#define ID_MENU_HOVER_PREVIEW_LAST      ID_MENU_HOVER_PREVIEW_800
+define ID_SPECIALPASTE_PASTENEWGUID    32998
 #define ID_SPECIALPASTE_POSIXIFY_PATHS  32999
 #define ID_MENU_SHOWSTARREDCLIPS        33000
 #define ID_SPECIALPASTE_PASTEASIMAGE    33001
@@ -883,7 +895,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
 #define _APS_NEXT_RESOURCE_VALUE        394
-#define _APS_NEXT_COMMAND_VALUE         33002
+#define _APS_NEXT_COMMAND_VALUE         33027
 #define _APS_NEXT_CONTROL_VALUE         2174
 #define _APS_NEXT_SYMED_VALUE           104
 #endif

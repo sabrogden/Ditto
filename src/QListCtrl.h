@@ -134,6 +134,9 @@ public:
 	BOOL SetItemCountEx(int iCount, DWORD dwFlags = 0);
 
 	void HidePopup(bool checkShowPersistant);
+
+	// hides the hover preview popup, see HoverPreviewWnd.h
+	void StopHoverPreview();
 	void ToggleToolTipShowPersistant();
 	bool ToggleToolTipWordWrap();
 	void SetTooltipActions(CAccels *pToolTipActions) { m_pToolTipActions = pToolTipActions; }
@@ -175,6 +178,13 @@ protected:
     COLORREF HslToRgb(double h, double s, double l);
 		
 	void DrawCheckerboard(CDC* pDC, CRect rect);
+
+	// hover preview popup of the row under the mouse pointer
+	void TrackHover(CPoint point);
+	int GetRowFromPoint(CPoint point);
+	void ShowHoverPreview(int nRow);
+	void SuppressStandardToolTip(bool bSuppress);
+
 	WCHAR *m_pwchTip;
 	TCHAR *m_pchTip;
 	HFONT m_SmallFont;
@@ -200,6 +210,10 @@ protected:
 	CAccels *m_pToolTipActions;
 	CRichEditCtrlEx m_rtfFormater;
 	CDPI *m_windowDpi;
+	int m_nHoverRow;
+	bool m_bTrackingMouse;
+	HWND m_hwndStdToolTip;
+	bool m_bStdToolTipSuppressed;
 
 
 	// Generated message map functions
@@ -207,6 +221,9 @@ protected:
 	//{{AFX_MSG(CQListCtrl)
 	afx_msg void OnKeydown(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult);
+	// colour of a colour code clip text, shared by the swatch in the row and
+	// the one in the hover preview popup
+	bool ParseColorCode(const CString& csText, COLORREF& crColor, int& nAlpha, CString& csCleanedText);
 	void DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC);
 	afx_msg void OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
@@ -219,6 +236,7 @@ protected:
 	afx_msg BOOL OnToolTipText(UINT id, NMHDR * pNMHDR, LRESULT * pResult);
 	afx_msg void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnMouseLeave();
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnKillFocus(CWnd* pNewWnd);

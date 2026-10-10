@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "CP_Main.h"
 #include "QListCtrl.h"
+#include "HoverPreviewWnd.h"
 #include "ProcessPaste.h"
 #include "BitmapHelper.h"
 #include "MainTableFunctions.h"
@@ -32,6 +33,10 @@ static char THIS_FILE[] = __FILE__;
 #define TIMER_SHOW_PROPERTIES	1
 #define TIMER_HIDE_SCROL	2
 #define TIMER_SHOW_SCROLL	3
+#define TIMER_HOVER_PREVIEW	4
+
+// delay before the hover preview popup is shown for the row under the pointer
+#define HOVER_PREVIEW_DELAY	300
 
 #define VALID_TOOLTIP (m_pToolTip && ::IsWindow(m_pToolTip->m_hWnd))
 
@@ -213,6 +218,10 @@ CQListCtrl::CQListCtrl()
 	m_showIfClipWasPasted = TRUE;
 	m_bShowTextForFirstTenHotKeys = true;
 	m_pToolTipActions = NULL;
+	m_nHoverRow = -1;
+	m_bTrackingMouse = false;
+	m_hwndStdToolTip = NULL;
+	m_bStdToolTipSuppressed = false;
 }
 
 CQListCtrl::~CQListCtrl()
@@ -273,6 +282,7 @@ BEGIN_MESSAGE_MAP(CQListCtrl, CListCtrl)
 	ON_WM_KILLFOCUS()
 	ON_WM_MEASUREITEM_REFLECT()
 	ON_WM_MOUSEHWHEEL()
+	ON_WM_MOUSELEAVE()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -280,6 +290,8 @@ END_MESSAGE_MAP()
 
 void CQListCtrl::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 {
+	StopHoverPreview();
+
 	LV_KEYDOWN* pLVKeyDown = (LV_KEYDOWN*)pNMHDR;
 
 	*pResult = 0;
@@ -818,10 +830,9 @@ void CQListCtrl::DrawCheckerboard(CDC* pDC, CRect rect)
 }
 
 
-void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
+bool CQListCtrl::ParseColorCode(const CString& csText, COLORREF& crColor, int& nAlpha, CString& csCleanedText)
 {
-	if (CGetSetOptions::m_bDrawCopiedColorCode == FALSE || csText.IsEmpty())
-		return;
+	bool bFound = false;
 
 	// 1. Initial Cleaning and Prep
 	CString cleanedText = csText;
@@ -831,38 +842,18 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 	cleanedText.Trim();
 
 	if (cleanedText.IsEmpty())
-		return;
-
+		return bFound;
 	CString originalCleanedText = cleanedText;
 	CString parseText = cleanedText;
 	parseText.MakeLower();
 
-	// 2. Helper lambda to draw the color box
+	// 2. Helper lambda, records the parsed colour and the cleaned up text
 	auto DrawColorBox = [&](COLORREF color, int alpha = 255)
 	{
-		CRect pastedRect(rcText);
-		int boxSize = rcText.Height();
-		pastedRect.right = pastedRect.left + boxSize;
-		pastedRect.bottom = pastedRect.top + boxSize;
-
-		if (alpha < 255)
-		{
-			DrawCheckerboard(pDC, pastedRect);
-
-			// Use GDI+ for alpha blending
-			Gdiplus::Graphics graphics(pDC->GetSafeHdc());
-			Gdiplus::Color gdiplusColor(alpha, GetRValue(color), GetGValue(color), GetBValue(color));
-			Gdiplus::SolidBrush brush(gdiplusColor);
-			graphics.FillRectangle(&brush, Gdiplus::Rect(pastedRect.left, pastedRect.top, pastedRect.Width(), pastedRect.Height()));
-		}
-		else
-		{
-			// Opaque color is faster with FillSolidRect and doesn't need a checkerboard.
-			pDC->FillSolidRect(pastedRect, color);
-		}
-
-		rcText.left += boxSize + m_windowDpi->Scale(ROW_LEFT_BORDER);
-		csText = originalCleanedText;
+		crColor = color;
+		nAlpha = alpha;
+		csCleanedText = originalCleanedText;
+		bFound = true;
 	};
 
 	// 3. Check for formats with unique signatures first
@@ -873,7 +864,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 	if (it != g_colorNameMap.end())
 	{
 		DrawColorBox(it->second);
-		return;
+		return bFound;
 	}
 
 	// Check for Hex Colors with # or 0x prefix
@@ -899,7 +890,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 				if (swscanf(hexString, _T("%2x%2x%2x%2x"), &r, &g, &b, &a) == 4)
 				{
 					DrawColorBox(RGB(r, g, b), a);
-					return;
+					return bFound;
 				}
 			}
 			else // length is 6
@@ -907,7 +898,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 				if (swscanf(hexString, _T("%2x%2x%2x"), &r, &g, &b) == 3)
 				{
 					DrawColorBox(RGB(r, g, b)); // default alpha
-					return;
+					return bFound;
 				}
 			}
 		}
@@ -959,7 +950,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 					if (r_val >= 0 && r_val <= 255 && g_val >= 0 && g_val <= 255 && b_val >= 0 && b_val <= 255)
 					{
 						DrawColorBox(RGB((int)r_val, (int)g_val, (int)b_val), alpha);
-						return;
+						return bFound;
 					}
 				}
 			}
@@ -1003,7 +994,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 						h_val = fmod(h_val, 360.0);
 						if (h_val < 0) h_val += 360.0;
 						DrawColorBox(HslToRgb(h_val, s_val / 100.0, l_val / 100.0), alpha);
-						return;
+						return bFound;
 					}
 				}
 			}
@@ -1051,7 +1042,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 					if (l_normalized >= 0 && l_normalized <= 1.0 && c_val >= 0)
 					{
 						DrawColorBox(OklchToRgb(l_normalized, c_val, h_val), alpha);
-						return;
+						return bFound;
 					}
 				}
 			}
@@ -1078,7 +1069,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 				if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
 				{
 					DrawColorBox(RGB(r, g, b));
-					return;
+					return bFound;
 				}
 			}
 		}
@@ -1090,7 +1081,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 		if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
 		{
 			DrawColorBox(RGB(r, g, b));
-			return;
+			return bFound;
 		}
 	}
 
@@ -1100,7 +1091,7 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 		if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255)
 		{
 			DrawColorBox(RGB(r, g, b));
-			return;
+			return bFound;
 		}
 	}
 
@@ -1111,12 +1102,51 @@ void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
 		if (swscanf(parseText, _T("%2x%2x%2x%n"), &r, &g, &b, &chars_consumed) == 3 && chars_consumed == 6)
 		{
 			DrawColorBox(RGB(r, g, b));
-			return;
+			return bFound;
 		}
 	}
+
+	return bFound;
 }
 
+void CQListCtrl::DrawCopiedColorCode(CString& csText, CRect& rcText, CDC* pDC)
+{
+	if (CGetSetOptions::m_bDrawCopiedColorCode == FALSE || csText.IsEmpty())
+		return;
 
+	COLORREF color = 0;
+	int alpha = 255;
+	CString cleanedText;
+
+	if (ParseColorCode(csText, color, alpha, cleanedText) == false)
+		return;
+
+	// draw the color box next to the text, this is what the old function did
+	// after it had worked out the color
+	CRect pastedRect(rcText);
+	int boxSize = rcText.Height();
+	pastedRect.right = pastedRect.left + boxSize;
+	pastedRect.bottom = pastedRect.top + boxSize;
+
+	if (alpha < 255)
+	{
+		DrawCheckerboard(pDC, pastedRect);
+
+		// Use GDI+ for alpha blending
+		Gdiplus::Graphics graphics(pDC->GetSafeHdc());
+		Gdiplus::Color gdiplusColor(alpha, GetRValue(color), GetGValue(color), GetBValue(color));
+		Gdiplus::SolidBrush brush(gdiplusColor);
+		graphics.FillRectangle(&brush, Gdiplus::Rect(pastedRect.left, pastedRect.top, pastedRect.Width(), pastedRect.Height()));
+	}
+	else
+	{
+		// Opaque color is faster with FillSolidRect and doesn't need a checkerboard.
+		pDC->FillSolidRect(pastedRect, color);
+	}
+
+	rcText.left += boxSize + m_windowDpi->Scale(ROW_LEFT_BORDER);
+	csText = cleanedText;
+}
 BOOL CQListCtrl::DrawRtfText(int nItem, CRect& crRect, CDC* pDC)
 {
 	if (CGetSetOptions::m_bDrawRTF == FALSE)
@@ -1250,6 +1280,10 @@ BOOL CQListCtrl::OnToolTipText(UINT id, NMHDR* pNMHDR, LRESULT* pResult)
 	if (nID == 0)	  	// Notification in NT from automatically
 		return FALSE;   	// created tooltip
 
+	// keep the tooltip control around, the hover preview popup turns it off
+	// while it shows the same clip
+	m_hwndStdToolTip = pNMHDR->hwndFrom;
+
 	::SendMessage(pNMHDR->hwndFrom, TTM_SETMAXTIPWIDTH, 0, 500);
 
 	if (CGetSetOptions::m_tooltipTimeout > 0)
@@ -1259,7 +1293,24 @@ BOOL CQListCtrl::OnToolTipText(UINT id, NMHDR* pNMHDR, LRESULT* pResult)
 
 	// Use Item's name as the tool tip. Change this for something different.
 	// Like use its file size, etc.
-	GetToolTipText((int)nID - 1, strTipText);
+	const int nRow = (int)nID - 1;
+	const bool bValidRow = (nRow >= 0 && nRow < GetItemCount());
+
+	if (bValidRow && CGetSetOptions::GetToolTipPreviewEnabled())
+	{
+		// the popup shows this clip, and turning the bubble off here is what
+		// keeps it from flashing up before the popup comes along
+		SuppressStandardToolTip(true);
+	}
+	else
+	{
+		SuppressStandardToolTip(false);
+
+		if (bValidRow)
+		{
+			GetToolTipText(nRow, strTipText);
+		}
+	}
 
 	//Replace the tabs with spaces, the tooltip didn't like the \t s
 	strTipText.Replace(_T("\t"), _T("  "));
@@ -1521,6 +1572,9 @@ bool CQListCtrl::PostEventLoadedCheckDescription(int updatedRow)
 
 bool CQListCtrl::ShowFullDescription(bool bFromAuto, bool fromNextPrev)
 {
+	// the description window and the hover preview popup would cover each other
+	StopHoverPreview();
+
 	if (this->GetSelectedCount() == 0)
 	{
 		return false;
@@ -1931,6 +1985,8 @@ void CQListCtrl::OnSelectionChange(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NMLISTVIEW* pnmv = (NMLISTVIEW*)pNMHDR;
 
+	StopHoverPreview();
+
 	if ((pnmv->uNewState == 3) ||
 		(pnmv->uNewState == 1))
 	{
@@ -1985,6 +2041,16 @@ void CQListCtrl::OnTimer(UINT_PTR nIDEvent)
 		if (theApp.m_bShowingQuickPaste)
 			ShowFullDescription(true);
 		KillTimer(TIMER_SHOW_PROPERTIES);
+
+		callBase = false;
+	}
+	break;
+
+	case TIMER_HOVER_PREVIEW:
+	{
+		KillTimer(TIMER_HOVER_PREVIEW);
+
+		ShowHoverPreview(m_nHoverRow);
 
 		callBase = false;
 	}
@@ -2060,6 +2126,8 @@ void CQListCtrl::SetLogFont(LOGFONT& font)
 
 void CQListCtrl::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
+	StopHoverPreview();
+
 	CListCtrl::OnVScroll(nSBCode, nPos, pScrollBar);
 	
 	// Notify parent to update modern scrollbar
@@ -2142,6 +2210,225 @@ void CQListCtrl::OnMouseMove(UINT nFlags, CPoint point)
 	}
 
 	CListCtrl::OnMouseMove(nFlags, point);
+
+	if ((nFlags & (MK_LBUTTON | MK_RBUTTON | MK_MBUTTON)) == 0)
+	{
+		TrackHover(point);
+	}
+	else
+	{
+		// don't pop up a preview while an item is being dragged
+		StopHoverPreview();
+	}
+}
+
+void CQListCtrl::OnMouseLeave()
+{
+	m_bTrackingMouse = false;
+
+	StopHoverPreview();
+
+	Default();
+}
+
+// Returns the row under the given client point or -1, this is the same search
+// the tooltip hit test does.
+int CQListCtrl::GetRowFromPoint(CPoint point)
+{
+	CRect rect;
+	GetClientRect(&rect);
+
+	if (rect.PtInRect(point) == FALSE)
+	{
+		return -1;
+	}
+
+	const int nCount = GetItemCount();
+	if (nCount == 0)
+	{
+		return -1;
+	}
+
+	int nTopIndex = GetTopIndex();
+	int nBottomIndex = nTopIndex + GetCountPerPage();
+	if (nBottomIndex > nCount)
+	{
+		nBottomIndex = nCount;
+	}
+
+	for (int nIndex = nTopIndex; nIndex <= nBottomIndex; nIndex++)
+	{
+		GetItemRect(nIndex, rect, LVIR_BOUNDS);
+		if (rect.PtInRect(point))
+		{
+			return nIndex;
+		}
+	}
+
+	return -1;
+}
+
+// Follows the row under the mouse pointer and starts the delay after which
+// the hover preview popup is shown.
+void CQListCtrl::TrackHover(CPoint point)
+{
+	if (CGetSetOptions::GetToolTipPreviewEnabled() == FALSE)
+	{
+		// the plain tool tip bubble is in charge
+		StopHoverPreview();
+		return;
+	}
+
+	if (m_bTrackingMouse == false)
+	{
+		// ask for a WM_MOUSELEAVE so that the popup is closed the moment the
+		// pointer leaves the list
+		TRACKMOUSEEVENT tme;
+		memset(&tme, 0, sizeof(tme));
+		tme.cbSize = sizeof(TRACKMOUSEEVENT);
+		tme.dwFlags = TME_LEAVE;
+		tme.hwndTrack = m_hWnd;
+		tme.dwHoverTime = HOVER_DEFAULT;
+
+		m_bTrackingMouse = (_TrackMouseEvent(&tme) != FALSE);
+	}
+
+	const int nRow = GetRowFromPoint(point);
+
+	if (nRow != m_nHoverRow)
+	{
+		// another row (or no row at all) is under the pointer now, so drop
+		// what is showing and start the delay again
+		StopHoverPreview();
+
+		m_nHoverRow = nRow;
+
+		if (nRow >= 0)
+		{
+			SetTimer(TIMER_HOVER_PREVIEW, HOVER_PREVIEW_DELAY, NULL);
+		}
+	}
+}
+
+// Shows the hover preview popup of the given row.  Only clips with an image
+// get the popup, every other row keeps the normal tooltip bubble.
+void CQListCtrl::ShowHoverPreview(int nRow)
+{
+	if (theApp.m_bShowingQuickPaste == false)
+	{
+		return;
+	}
+
+	if (nRow < 0 || nRow >= GetItemCount())
+	{
+		return;
+	}
+
+	// the pointer may have moved on while the timer was pending
+	CPoint point;
+	GetCursorPos(&point);
+	ScreenToClient(&point);
+
+	if (GetRowFromPoint(point) != nRow)
+	{
+		return;
+	}
+
+	const long lClipId = (long)GetItemData(nRow);
+	if (lClipId <= 0)
+	{
+		return;
+	}
+
+	CString csInfo;
+	GetToolTipText(nRow, csInfo);
+	csInfo.Replace(_T("\t"), _T("  "));
+
+	// the popup shows a swatch for the colour codes the list draws a swatch
+	// for in the row, the parsing of those codes is shared with that code
+	COLORREF crColor = 0;
+	int nAlpha = 255;
+	bool bHasColorCode = false;
+
+	CClipFormat Clip;
+	Clip.m_cfType = CF_UNICODETEXT;
+	if (GetClipData(nRow, Clip) && Clip.m_hgData)
+	{
+		CString csClipText = Clip.GetAsCString();
+		Clip.Free();
+		Clip.Clear();
+
+		CString csCleaned;
+		bHasColorCode = ParseColorCode(csClipText, crColor, nAlpha, csCleaned);
+	}
+	else
+	{
+		Clip.m_cfType = CF_TEXT;
+		if (GetClipData(nRow, Clip) && Clip.m_hgData)
+		{
+			CString csClipText(Clip.GetAsCStringA());
+			Clip.Free();
+			Clip.Clear();
+
+			CString csCleaned;
+			bHasColorCode = ParseColorCode(csClipText, crColor, nAlpha, csCleaned);
+		}
+	}
+
+	CRect rc;
+	GetItemRect(nRow, rc, LVIR_BOUNDS);
+	ClientToScreen(rc);
+
+	if (CHoverPreviewWnd::ShowForClip(this, lClipId, csInfo, rc, bHasColorCode, crColor, nAlpha))
+	{
+		// the popup shows what the tooltip bubble would show, so turn the
+		// bubble off while the popup is up
+		SuppressStandardToolTip(true);
+	}
+	else
+	{
+		// nothing to preview at all, let the tool tip bubble have this row
+		StopHoverPreview();
+	}
+}
+
+void CQListCtrl::StopHoverPreview()
+{
+	KillTimer(TIMER_HOVER_PREVIEW);
+
+	m_nHoverRow = -1;
+
+	CHoverPreviewWnd::HideIfVisible();
+
+	SuppressStandardToolTip(false);
+}
+
+// Turns the normal tooltip bubble of the list off and on again, it is not
+// needed while the hover preview popup shows the same clip.
+void CQListCtrl::SuppressStandardToolTip(bool bSuppress)
+{
+	if (::IsWindow(m_hwndStdToolTip) == FALSE)
+	{
+		m_bStdToolTipSuppressed = false;
+		return;
+	}
+
+	if (bSuppress == m_bStdToolTipSuppressed)
+	{
+		return;
+	}
+
+	if (bSuppress)
+	{
+		::SendMessage(m_hwndStdToolTip, TTM_POP, 0, 0);
+		::SendMessage(m_hwndStdToolTip, TTM_ACTIVATE, FALSE, 0);
+	}
+	else
+	{
+		::SendMessage(m_hwndStdToolTip, TTM_ACTIVATE, TRUE, 0);
+	}
+
+	m_bStdToolTipSuppressed = bSuppress;
 }
 
 bool CQListCtrl::MouseInScrollBarArea(CRect crWindow, CPoint point)
@@ -2184,6 +2471,8 @@ void CQListCtrl::SetSearchText(CString text)
 
 void CQListCtrl::HidePopup(bool checkShowPersistant)
 {
+	StopHoverPreview();
+
 	if (VALID_TOOLTIP)
 	{
 		if (checkShowPersistant == false ||
@@ -2314,6 +2603,8 @@ void CQListCtrl::CreateSmallFont()
 
 void CQListCtrl::OnMouseHWheel(UINT nFlags, short zDelta, CPoint pt)
 {
+	StopHoverPreview();
+
 	if (zDelta < 0)
 	{
 		this->SendMessage(WM_HSCROLL, SB_LINERIGHT, NULL);
