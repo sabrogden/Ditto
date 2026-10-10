@@ -65,6 +65,7 @@ private:
 	void Layout(const CString& csInfo, const CRect& rcAnchor);
 	int MeasureTextHeight(const CString& csText, int nWidth, int nMaxHeight);
 	int MeasureTextWidth(const CString& csText);
+	int MeasureContentHeight(int nWidth, int nMaxHeight, const CString& csText);
 	// DrawText only breaks lines at spaces, so a single long word (a url, a
 	// path, a line of code) has to be wrapped first or it runs past the edge
 	void WrapTextToWidth(CString& csText, int nWidth);

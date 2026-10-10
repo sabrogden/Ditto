@@ -767,13 +767,55 @@ void CHoverPreviewWnd::BuildImageInfo(long lClipId)
 	}
 }
 
+// Height the preview content needs at the given width: a swatch is sized from
+// the width, text is measured, and rtf asks its renderer but never gets less
+// than the plain text needs (the renderer used to ask for too little and the
+// last lines were cut off).
+int CHoverPreviewWnd::MeasureContentHeight(int nWidth, int nMaxHeight, const CString& csText)
+{
+	if (m_kind == KIND_COLOR)
+	{
+		int nHeight = nWidth / 2;
+		nHeight = max(nHeight, m_dpi.Scale(HOVER_PREVIEW_SWATCH_MIN));
+
+		return min(nHeight, m_dpi.Scale(HOVER_PREVIEW_SWATCH_MAX));
+	}
+
+	if (m_kind == KIND_HTML || m_kind == KIND_TEXT)
+	{
+		return max(MeasureTextHeight(csText, nWidth, nMaxHeight), m_dpi.Scale(20));
+	}
+
+	if (m_kind == KIND_RTF)
+	{
+		int nHeight = MeasureTextHeight(csText, nWidth, nMaxHeight);
+		nHeight += ((nHeight * 40) / 100) + m_dpi.Scale(8);
+
+		long lNatural = 0;
+
+		if (m_pRtfDraw != NULL)
+		{
+			m_pRtfDraw->get_NaturalHeight(nWidth, &lNatural);
+		}
+
+		if (lNatural > nHeight && lNatural <= nMaxHeight)
+		{
+			nHeight = (int)lNatural;
+		}
+
+		return max(min(nHeight, nMaxHeight), m_dpi.Scale(20));
+	}
+
+	return m_dpi.Scale(20);
+}
+
 void CHoverPreviewWnd::Layout(const CString& csInfo, const CRect& rcAnchor)
 {
 	UpdateFont();
 
-	// The information text is the very same text the tool tip bubble shows,
-	// the parent already caps it at the configured line count, so keep it
-	// whole.  Html text has unprintable markers in it, clean those up for
+	// The tool tip text the parent hands over is the clip text, an empty line
+	// and the clip details.  Split the two: a text preview shows the clip text
+	// itself, so only the details belong below the preview.
 	m_csClipText = csInfo;
 	CleanDisplayText(m_csClipText);
 	m_csClipText.TrimRight();
@@ -803,7 +845,7 @@ void CHoverPreviewWnd::Layout(const CString& csInfo, const CRect& rcAnchor)
 		m_csHtmlText = m_csClipText;
 	}
 
-	// what the line below the preview shows
+	// what is drawn below the preview
 	if (m_kind == KIND_IMAGE)
 	{
 		m_csInfo = csInfo;
@@ -843,7 +885,6 @@ void CHoverPreviewWnd::Layout(const CString& csInfo, const CRect& rcAnchor)
 	}
 	else
 	{
-		// text previews only need the details below them
 		m_csInfo = m_csDetails;
 	}
 
@@ -855,8 +896,8 @@ void CHoverPreviewWnd::Layout(const CString& csInfo, const CRect& rcAnchor)
 	CRect rcWork = MonitorRectFromRect(CRect(rcAnchor.left, rcAnchor.top, rcAnchor.left + 1, rcAnchor.top + 1));
 
 	const int nWidth = CGetSetOptions::GetToolTipPreviewWidth();
-	const int nMaxContentHeight = (rcWork.Height() * 3) / 4;
 	const int nMaxContentWidth = rcWork.Width() - (2 * nMargin);
+	const int nMaxContentHeight = (rcWork.Height() * 3) / 4;
 
 	int nContentWidth = 0;
 	int nContentHeight = 0;
@@ -870,13 +911,13 @@ void CHoverPreviewWnd::Layout(const CString& csInfo, const CRect& rcAnchor)
 
 		if (nWidth <= 0)
 		{
-			// "Original size": the image is not scaled at all, it is only
+			// "Original size": only shrink to what fits on the monitor
 			nMaxImageWidth = nMaxContentWidth;
 			nMaxImageHeight = rcWork.Height() - (2 * nMargin);
 		}
 		else
 		{
-			// the width picked in the menu is the box the image has to fit
+			// the width from the menu is the box the image has to fit in
 			nMaxImageWidth = m_dpi.Scale(nWidth);
 			nMaxImageHeight = min(m_dpi.Scale(nWidth), nMaxContentHeight);
 		}
@@ -886,21 +927,19 @@ void CHoverPreviewWnd::Layout(const CString& csInfo, const CRect& rcAnchor)
 
 		if (dBitmapWidth > 0 && dBitmapHeight > 0)
 		{
-			double dScale = min(nMaxImageWidth / dBitmapWidth, nMaxImageHeight / dBitmapHeight);
-
-			// The width picked in the menu is the box a large image has to fit
-			// in, in both directions.  An image that already fits in the box
-			dScale = min(dScale, 1.0);
+			// never scale up: an image that fits the box is shown at its size
+			double dScale = min(min(nMaxImageWidth / dBitmapWidth, nMaxImageHeight / dBitmapHeight), 1.0);
 
 			nImageWidth = (int)((dBitmapWidth * dScale) + 0.5);
 			nImageHeight = (int)((dBitmapHeight * dScale) + 0.5);
 
-			// decode straight to the size that gets drawn: keeping the full
+			// decode to the size that gets drawn, holding the full size decode
+			// while only the scaled copy is drawn wastes a lot of memory
 			ScaleBitmapTo(nImageWidth, nImageHeight);
 		}
 
-		// The image is drawn at its own size inside the content box, so the box
-		// only has to be as wide as the widest thing that gets drawn: the image
+		// the box is only as wide as the widest thing drawn: the image or a
+		// line of the information below it
 		int nInfoWidth = MeasureTextWidth(m_csInfo);
 
 		if (nInfoWidth > 0)
@@ -913,17 +952,15 @@ void CHoverPreviewWnd::Layout(const CString& csInfo, const CRect& rcAnchor)
 	}
 	else
 	{
-		// rtf, html, colour swatch and plain text have no size of their own,
+		// the width is the widest line that is drawn, capped by the width from
+		// the menu; for rtf and colour only the clip text counts, the details
+		// are drawn below and may wrap
 		int nTierWidth = (nWidth > 0) ? m_dpi.Scale(nWidth) : m_dpi.Scale(HOVER_PREVIEW_DEFAULT_WIDTH);
 		nTierWidth = min(nTierWidth, nMaxContentWidth);
 
-		CString csContentText = m_csClipText;
+		CString csContentText = (m_kind == KIND_HTML || m_kind == KIND_TEXT) ? m_csHtmlText : m_csClipText;
 
-		if (m_kind == KIND_HTML)
-		{
-			csContentText = m_csHtmlText;
-		}
-		else if (m_kind == KIND_COLOR)
+		if (m_kind == KIND_COLOR)
 		{
 			int nLineEnd = csContentText.Find(_T("\r\n"));
 			if (nLineEnd > 0)
@@ -932,36 +969,12 @@ void CHoverPreviewWnd::Layout(const CString& csInfo, const CRect& rcAnchor)
 			}
 		}
 
-		// The width is measured from the widest line that gets drawn: the
-		// preview itself and, if there is one, the information below it (the
-		int nNaturalWidth = 0;
-
-		if (m_kind == KIND_HTML)
-		{
-			nNaturalWidth = MeasureTextWidth(m_csHtmlText);
-		}
-		else if (m_kind == KIND_COLOR)
-		{
-			CString csCode = m_csClipText;
-			int nLineEnd = csCode.Find(_T("\r\n"));
-			if (nLineEnd > 0)
-			{
-				csCode = csCode.Left(nLineEnd);
-			}
-
-			nNaturalWidth = MeasureTextWidth(csCode);
-		}
-		else
-		{
-			nNaturalWidth = MeasureTextWidth(m_csClipText);
-		}
-
-		nNaturalWidth = max(nNaturalWidth, MeasureTextWidth(m_csInfo));
+		int nNaturalWidth = max(MeasureTextWidth(csContentText), MeasureTextWidth(m_csInfo));
 
 		if (m_kind == KIND_RTF)
 		{
-			// rich text lays itself out with its own fonts, which are usually
-			// wider than the plain text measurement, and the renderer knows
+			// rich text uses its own fonts, which are usually wider than the
+			// plain text measurement, and the renderer knows what it wants
 			nNaturalWidth += ((nNaturalWidth * 30) / 100);
 
 			long lWantedWidth = 0;
@@ -983,67 +996,21 @@ void CHoverPreviewWnd::Layout(const CString& csInfo, const CRect& rcAnchor)
 		}
 		else
 		{
-			nContentWidth = nNaturalWidth + m_dpi.Scale(HOVER_PREVIEW_WIDTH_SLACK);
-			nContentWidth = max(nContentWidth, nMinWidth);
-			nContentWidth = min(nContentWidth, nTierWidth);
+			nContentWidth = min(max(nNaturalWidth + m_dpi.Scale(HOVER_PREVIEW_WIDTH_SLACK), nMinWidth), nTierWidth);
 		}
 
-		// wrap the text before it is measured: a line with a long word turns
+		// wrap before measuring: one long word turns into several lines
 		if (m_kind == KIND_TEXT || m_kind == KIND_HTML)
 		{
 			WrapTextToWidth(m_csHtmlText, nContentWidth);
 			csContentText = m_csHtmlText;
 		}
 
-		switch (m_kind)
-		{
-		case KIND_COLOR:
-		{
-			nContentHeight = nContentWidth / 2;
-			nContentHeight = max(nContentHeight, m_dpi.Scale(HOVER_PREVIEW_SWATCH_MIN));
-			nContentHeight = min(nContentHeight, m_dpi.Scale(HOVER_PREVIEW_SWATCH_MAX));
-		}
-		break;
-
-		case KIND_RTF:
-		{
-			// the plain text lays out about like the rich text does, but with
-			int nHeight = MeasureTextHeight(csContentText, nContentWidth, nMaxContentHeight);
-			nHeight += ((nHeight * 40) / 100) + m_dpi.Scale(8);
-
-			long lNatural = 0;
-
-			if (m_pRtfDraw != NULL)
-			{
-				m_pRtfDraw->get_NaturalHeight(nContentWidth, &lNatural);
-			}
-
-			// the renderer may ask for more room, but it must never make the
-			if (lNatural > nHeight && lNatural <= nMaxContentHeight)
-			{
-				nHeight = (int)lNatural;
-			}
-
-			nContentHeight = max(min(nHeight, nMaxContentHeight), m_dpi.Scale(20));
-		}
-		break;
-
-		case KIND_HTML:
-		case KIND_TEXT:
-		{
-			nContentHeight = max(MeasureTextHeight(csContentText, nContentWidth, nMaxContentHeight), m_dpi.Scale(20));
-		}
-		break;
-
-		default:
-			nContentHeight = m_dpi.Scale(20);
-			break;
-		}
+		nContentHeight = MeasureContentHeight(nContentWidth, nMaxContentHeight, csContentText);
 	}
 
 	m_rcContent.SetRect(nMargin, nMargin, nMargin + nContentWidth, nMargin + nContentHeight);
 
-	// wrap what is drawn, DrawText alone would cut a long word off at the
 	WrapTextToWidth(m_csInfo, nContentWidth);
 
 	int nTextHeight = 0;
@@ -1059,15 +1026,13 @@ void CHoverPreviewWnd::Layout(const CString& csInfo, const CRect& rcAnchor)
 			dc.SelectObject(pOldFont);
 		}
 
-		// a text preview and the information below it are both text, so keep
+		// a text preview and the information are both text, keep them apart
 		if (m_kind != KIND_IMAGE && m_kind != KIND_COLOR)
 		{
 			nDetailsGap = nGap + (2 * tm.tmHeight);
 		}
 
-		int nMaxTextHeight = rcWork.Height() - (2 * nMargin) - nContentHeight - nDetailsGap;
-		nMaxTextHeight = max(nMaxTextHeight, tm.tmHeight * 3);
-
+		int nMaxTextHeight = max(rcWork.Height() - (2 * nMargin) - nContentHeight - nDetailsGap, tm.tmHeight * 3);
 		const int nMaxLineHeight = tm.tmHeight * max(HOVER_PREVIEW_MIN_TEXT_LINES, CGetSetOptions::GetMaxToolTipLines());
 
 		nTextHeight = MeasureTextHeight(m_csInfo, nContentWidth, min(nMaxTextHeight, nMaxLineHeight));
@@ -1088,7 +1053,8 @@ void CHoverPreviewWnd::Layout(const CString& csInfo, const CRect& rcAnchor)
 	const int nPopupWidth = nContentWidth + (2 * nMargin);
 	const int nPopupHeight = nMargin + nContentHeight + (nTextHeight > 0 ? (nDetailsGap + nTextHeight) : 0) + nMargin;
 
-	// Show up next to the mouse pointer, flipped to the other side of the
+	// next to the mouse pointer, flipped to the other side when it would not
+	// fit on the monitor
 	CPoint ptCursor;
 	GetCursorPos(&ptCursor);
 
@@ -1112,9 +1078,8 @@ void CHoverPreviewWnd::Layout(const CString& csInfo, const CRect& rcAnchor)
 		y = rcWork.top + nMargin;
 	}
 
-	// The popup must never come up under the mouse pointer: the list control
-	// gets a mouse leave when the pointer moves onto the popup, which closes
-	// the popup, which puts the pointer back over the list, and so on.
+	// never under the mouse pointer: a mouse leave would close the popup and
+	// put the pointer back on the list, over and over
 	CRect rcPopup(x, y, x + nPopupWidth, y + nPopupHeight);
 
 	if (rcPopup.PtInRect(ptCursor))
