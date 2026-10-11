@@ -256,8 +256,12 @@ void CSendKeys::AllKeysUp()
 	SendKeyUp(VK_RSHIFT);
 	SendKeyUp(VK_LCONTROL);
 	SendKeyUp(VK_RCONTROL);
-	SendKeyUp(VK_LMENU);
-	SendKeyUp(VK_RMENU);
+	// An unpaired Alt key-up activates access-key hints in applications such as
+	// Windows 11 Notepad. Only release Alt keys that are actually held.
+	if(GetAsyncKeyState(VK_LMENU) & 0x8000)
+		SendKeyUp(VK_LMENU);
+	if(GetAsyncKeyState(VK_RMENU) & 0x8000)
+		SendKeyUp(VK_RMENU);
 }
 
 // Generates KEYUP

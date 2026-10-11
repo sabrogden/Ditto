@@ -541,6 +541,9 @@
     <ClCompile Include="src\ChaiScriptXml.cpp" />
     <ClCompile Include="src\Client.cpp" />
     <ClCompile Include="src\Clip.cpp" />
+    <ClCompile Include="src\ClipboardCarousel.cpp" />
+    <ClCompile Include="src\ClipboardCarouselInput.cpp" />
+    <ClCompile Include="src\ClipboardCarouselWnd.cpp" />
     <ClCompile Include="src\ClipboardSaveRestore.cpp" />
     <ClCompile Include="src\ClipboardViewer.cpp" />
     <ClCompile Include="src\ClipCompare.cpp" />
@@ -618,6 +621,7 @@
     <ClCompile Include="src\OleClipSource.cpp" />
     <ClCompile Include="src\OptionFriends.cpp" />
     <ClCompile Include="src\Options.cpp" />
+    <ClCompile Include="src\OptionsClipboardCarousel.cpp" />
     <ClCompile Include="src\OptionsCopyBuffers.cpp" />
     <ClCompile Include="src\OptionsGeneral.cpp" />
     <ClCompile Include="src\OptionsKeyBoard.cpp" />
@@ -809,6 +813,10 @@
     <ClInclude Include="src\ChaiScriptXml.h" />
     <ClInclude Include="src\Client.h" />
     <ClInclude Include="src\Clip.h" />
+    <ClInclude Include="src\ClipboardCarousel.h" />
+    <ClInclude Include="src\ClipboardCarouselBinding.h" />
+    <ClInclude Include="src\ClipboardCarouselInput.h" />
+    <ClInclude Include="src\ClipboardCarouselWnd.h" />
     <ClInclude Include="src\ClipboardSaveRestore.h" />
     <ClInclude Include="src\ClipboardViewer.h" />
     <ClInclude Include="src\ClipCompare.h" />
@@ -886,6 +894,7 @@
     <ClInclude Include="src\OleClipSource.h" />
     <ClInclude Include="src\OptionFriends.h" />
     <ClInclude Include="src\Options.h" />
+    <ClInclude Include="src\OptionsClipboardCarousel.h" />
     <ClInclude Include="src\OptionsCopyBuffers.h" />
     <ClInclude Include="src\OptionsGeneral.h" />
     <ClInclude Include="src\OptionsKeyBoard.h" />

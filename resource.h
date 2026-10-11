@@ -255,6 +255,20 @@
 #define IDR_MENU2                       390
 #define IDR_MENU_DELETE_CLIP_DATA       390
 #define IDR_MENU3                       391
+#define IDD_OPTIONS_CLIPBOARD_CAROUSEL   394
+#define IDC_CC_ENABLE                   2200
+#define IDC_CC_EDITOR_GROUP             2201
+#define IDC_CC_KEYBOARD                 2202
+#define IDC_CC_MOUSE                    2203
+#define IDC_CC_HOTKEY                   2204
+#define IDC_CC_MOUSE_TRIGGER            2205
+#define IDC_CC_SHIFT                    2206
+#define IDC_CC_CONTROL                  2207
+#define IDC_CC_ALT                      2208
+#define IDC_CC_CLEAR                    2209
+#define IDC_CC_PASTE_CLICK              2210
+#define IDC_CC_HELP                     2211
+#define IDC_CC_MODIFIERS_LABEL          2212
 #define IDC_PATH                        1000
 #define IDC_GET_PATH                    1001
 #define IDC_SELECT_SOUND                1002
@@ -882,9 +896,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        394
+#define _APS_NEXT_RESOURCE_VALUE        395
 #define _APS_NEXT_COMMAND_VALUE         33002
-#define _APS_NEXT_CONTROL_VALUE         2174
+#define _APS_NEXT_CONTROL_VALUE         2213
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif

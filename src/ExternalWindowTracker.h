@@ -16,6 +16,7 @@ public:
 	CString ActiveWndName();
 	CString WndName(HWND hWnd);
 	bool TrackActiveWnd(bool force);
+	bool RestoreTrackedWnd(HWND activeWnd, HWND focusWnd);
 	bool ActivateTarget();
 	bool ReleaseFocus();
 	CPoint FocusCaret();

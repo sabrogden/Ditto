@@ -3286,3 +3286,28 @@ BOOL CGetSetOptions::GetEnforceClipboardIgnoreFormats()
 {
 	return GetProfileLong("EnforceClipboardIgnoreFormats", TRUE);
 }
+
+void CGetSetOptions::SetCarouselEnabled(BOOL value)
+{
+	SetProfileLong("ClipboardCarouselSlimEnabled",value);
+}
+BOOL CGetSetOptions::GetCarouselEnabled()
+{
+	return GetProfileLong("ClipboardCarouselSlimEnabled",FALSE);
+}
+void CGetSetOptions::SetCarouselActivation(DWORD value)
+{
+	SetProfileLong("ClipboardCarouselSlimActivation",value);
+}
+DWORD CGetSetOptions::GetCarouselActivation()
+{
+	return (DWORD)GetProfileLong("ClipboardCarouselSlimActivation",0);
+}
+void CGetSetOptions::SetCarouselPasteAtClick(BOOL value)
+{
+	SetProfileLong("ClipboardCarouselSlimPasteAtClick",value);
+}
+BOOL CGetSetOptions::GetCarouselPasteAtClick()
+{
+	return GetProfileLong("ClipboardCarouselSlimPasteAtClick",TRUE);
+}

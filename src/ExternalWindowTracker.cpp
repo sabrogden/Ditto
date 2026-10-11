@@ -116,6 +116,18 @@ bool ExternalWindowTracker::TrackActiveWnd(bool force)
 	return true;
 }
 
+bool ExternalWindowTracker::RestoreTrackedWnd(HWND activeWnd, HWND focusWnd)
+{
+	if(!IsWindow(activeWnd))
+		return false;
+
+	m_activeWnd = activeWnd;
+	m_focusWnd = IsWindow(focusWnd) && GetAncestor(focusWnd, GA_ROOT) == activeWnd ? focusWnd : activeWnd;
+	m_dittoHasFocus = false;
+	m_desktopHasFocus = false;
+	return true;
+}
+
 bool ExternalWindowTracker::WaitForActiveWnd(HWND activeWnd, int timeout)
 {
 	DWORD start = GetTickCount();

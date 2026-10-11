@@ -46,6 +46,15 @@
     <ClCompile Include="src\Clip.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\ClipboardCarousel.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ClipboardCarouselInput.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ClipboardCarouselWnd.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\Clip_ImportExport.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -242,6 +251,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Options.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OptionsClipboardCarousel.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\OptionsCopyBuffers.cpp">
@@ -541,6 +553,18 @@
     <ClInclude Include="src\Clip.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\ClipboardCarousel.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ClipboardCarouselBinding.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ClipboardCarouselInput.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ClipboardCarouselWnd.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\Clip_ImportExport.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -758,6 +782,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Options.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OptionsClipboardCarousel.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\OptionsCopyBuffers.h">

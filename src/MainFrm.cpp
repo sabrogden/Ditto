@@ -81,6 +81,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_FIRST_DELETEALLNONUSEDCLIPS, &CMainFrame::OnFirstDeleteallnonusedclips)
 	ON_MESSAGE(WM_PASTE_CLIP, OnPasteClip)
 	ON_MESSAGE(WM_EDIT_CLIP, OnEditClip)
+	ON_MESSAGE(WM_CLIPBOARD_CAROUSEL_INPUT, OnClipboardCarouselInput)
+	ON_MESSAGE(WM_CLIPBOARD_CAROUSEL_PREVIEW_READY, OnClipboardCarouselPreviewReady)
 
 	ON_WM_SETFOCUS()
 END_MESSAGE_MAP()
@@ -181,6 +183,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     m_ulCopyGap = CGetSetOptions::GetCopyGap();
 
     theApp.AfterMainCreate();
+	if(!m_clipboardCarousel.Initialize(this))
+	{
+		Log(_T("Unable to initialize Clipboard Carousel"));
+	}
+	if(m_clipboardCarousel.IsEnabled())
+		SetTimer(CLIPBOARD_CAROUSEL_TIMER, 30, NULL);
 
     m_thread.Start(this);
 
@@ -275,6 +283,11 @@ void CMainFrame::OnFirstExit()
 
 LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 {
+	if(m_clipboardCarousel.HandleHotKey(wParam))
+		return TRUE;
+	if(m_clipboardCarousel.IsActive())
+		m_clipboardCarousel.Cancel();
+
     if(theApp.m_pDittoHotKey && wParam == theApp.m_pDittoHotKey->m_Atom ||
 		theApp.m_pDittoHotKey2 && wParam == theApp.m_pDittoHotKey2->m_Atom ||
 		theApp.m_pDittoHotKey3 && wParam == theApp.m_pDittoHotKey3->m_Atom)
@@ -492,6 +505,7 @@ LRESULT CMainFrame::OnHotKey(WPARAM wParam, LPARAM lParam)
 
 void CMainFrame::ShowQPasteWithActiveWindowCheck()
 {
+	m_clipboardCarousel.Cancel();
 	//Before we show our window find the current focused window for paste into
 	theApp.m_activeWnd.TrackActiveWnd(true);
 
@@ -789,7 +803,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 
         case ACTIVE_WINDOW_TIMER:
 			{
-				if(theApp.m_bShowingQuickPaste)
+				if(!m_clipboardCarousel.IsActive() && theApp.m_bShowingQuickPaste)
 				{
 					theApp.m_activeWnd.TrackActiveWnd(false);
 				}
@@ -817,6 +831,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 					{
 						if (theApp.EnterGroupID(m_doubleClickGroupId, FALSE, TRUE))
 						{
+							m_clipboardCarousel.Cancel();
 							theApp.m_activeWnd.TrackActiveWnd(true);
 							StartKeyModifierTimer();
 							m_quickPaste.ShowQPasteWnd(this, false, true, FALSE);
@@ -842,6 +857,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 		case DELAYED_SHOW_DITTO_TIMER:
 		{
 			KillTimer(DELAYED_SHOW_DITTO_TIMER);
+			m_clipboardCarousel.Cancel();
 			m_quickPaste.ShowQPasteWnd(this, false, false, FALSE);
 		}
 		break;
@@ -853,6 +869,7 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 			if (theme == _T(""))
 			{
 				CGetSetOptions::m_Theme.Load(theme);
+				m_clipboardCarousel.RefreshColors();
 
 				auto visible = m_quickPaste.IsWindowVisibleEx();
 				m_quickPaste.CloseQPasteWnd();
@@ -868,6 +885,10 @@ void CMainFrame::OnTimer(UINT_PTR nIDEvent)
 		case CLOSE_NO_DB_WINDOW_TIMER:
 			KillTimer(CLOSE_NO_DB_WINDOW_TIMER);
 			theApp.CloseNoDbWindow();
+			break;
+
+		case CLIPBOARD_CAROUSEL_TIMER:
+			m_clipboardCarousel.Tick();
 			break;
 
     }
@@ -900,6 +921,7 @@ LRESULT CMainFrame::OnShowTrayIcon(WPARAM wParam, LPARAM lParam)
 
 void CMainFrame::OnFirstShowquickpaste()
 {
+	m_clipboardCarousel.Cancel();
     m_quickPaste.ShowQPasteWnd(this, false, false, FALSE);
 }
 
@@ -966,6 +988,8 @@ void CMainFrame::OnClose()
 	}
 
     CloseAllOpenDialogs();
+	KillTimer(CLIPBOARD_CAROUSEL_TIMER);
+	m_clipboardCarousel.Shutdown();
 
     Log(_T("OnClose - before stop MainFrm thread"));
     m_thread.Stop();
@@ -1231,6 +1255,8 @@ LRESULT CMainFrame::OnOpenCloseWindow(WPARAM wParam, LPARAM lParam)
 
 void CMainFrame::OnDestroy()
 {
+	m_clipboardCarousel.Shutdown();
+
 	if (m_pEditFrameWnd)
 	{
 		m_pEditFrameWnd->DestroyWindow();
@@ -1254,14 +1280,23 @@ void CMainFrame::OnFirstOption()
 	}
 	else
 	{
+		m_clipboardCarousel.SuspendInput();
 		m_pOptions = new COptionsSheet(_T(""));
 
 		if(m_pOptions != NULL)
 		{
 			((COptionsSheet*)m_pOptions)->SetNotifyWnd(m_hWnd);
-			m_pOptions->Create();
-			m_pOptions->ShowWindow(SW_SHOW);
+			if(m_pOptions->Create())
+				m_pOptions->ShowWindow(SW_SHOW);
+			else
+			{
+				delete m_pOptions;
+				m_pOptions = NULL;
+				m_clipboardCarousel.ResumeInput();
+			}
 		}
+		else
+			m_clipboardCarousel.ResumeInput();
 	}
 }
 
@@ -1302,10 +1337,16 @@ LRESULT CMainFrame::OnOptionsClosed(WPARAM wParam, LPARAM lParam)
 
 	delete m_pOptions;
 	m_pOptions = NULL;
+	m_clipboardCarousel.ResumeInput();
+	if(m_clipboardCarousel.IsEnabled())
+		SetTimer(CLIPBOARD_CAROUSEL_TIMER, 30, NULL);
+	else
+		KillTimer(CLIPBOARD_CAROUSEL_TIMER);
 
 	if (themeChanged)
 	{
 		CGetSetOptions::m_Theme.Load(CGetSetOptions::GetTheme());
+		m_clipboardCarousel.RefreshColors();
 
 		m_quickPaste.CloseQPasteWnd();
 	}
@@ -1444,6 +1485,7 @@ LRESULT CMainFrame::OnReOpenDatabase(WPARAM wParam, LPARAM lParam)
 	{
 		Sleep(CGetSetOptions::GetWindowsResumeDelayReOpenDbMS());
 		m_quickPaste.CloseQPasteWnd();
+		m_clipboardCarousel.BeforeDatabaseClose();
 		theApp.m_db.close();
 		OpenDatabase(CGetSetOptions::GetDBPath());
 	}
@@ -1452,6 +1494,18 @@ LRESULT CMainFrame::OnReOpenDatabase(WPARAM wParam, LPARAM lParam)
 	Log(StrF(_T("OnReOpenDatabase, End closing and reopening database Delay: %d"), CGetSetOptions::GetWindowsResumeDelayReOpenDbMS()));
 
 	return TRUE;
+}
+
+LRESULT CMainFrame::OnClipboardCarouselInput(WPARAM wParam, LPARAM lParam)
+{
+	m_clipboardCarousel.HandleCommand((ClipboardCarouselCommand)wParam, (UINT_PTR)lParam);
+	return 0;
+}
+
+LRESULT CMainFrame::OnClipboardCarouselPreviewReady(WPARAM wParam, LPARAM)
+{
+	m_clipboardCarousel.HandlePreviewResult((ClipboardCarouselPreviewResult*)wParam);
+	return 0;
 }
 
 LRESULT CMainFrame::OnShowMsgWindow(WPARAM wParam, LPARAM lParam)
