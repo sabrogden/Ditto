@@ -841,6 +841,74 @@ BOOL RepairDatabase()
 	return TRUE;
 }
 
+//Images are by far the largest items in the database, remove the image formats from clips that have not been used
+//in the set number of days.  Other formats of the clip are kept, clips that only had image data are deleted.
+static void RemoveExpiredImages(CppSQLite3DB &db, bool checkIdleTime)
+{
+	long expireDays = CGetSetOptions::GetExpiredImageDays();
+	if (expireDays <= 0)
+		return;
+
+	//deleting large blobs can lock the db for a while, only do it when idle and in batches
+	if (checkIdleTime && IdleSeconds() <= CGetSetOptions::GetIdleSecondsBeforeDelete())
+	{
+		Log(_T("Computer has not been idle long enough to remove expired images"));
+		return;
+	}
+
+	CTime expireTime = CTime::GetCurrentTime();
+	expireTime -= CTimeSpan(expireDays, 0, 0, 0);
+
+	const TCHAR *imageFormats = _T("'CF_DIB', 'CF_DIBV5', 'PNG'");
+
+	std::vector<int> clipIds;
+	{
+		CppSQLite3Query q = db.execQueryEx(_T("SELECT DISTINCT Main.lID FROM Main ")
+			_T("INNER JOIN Data ON Data.lParentID = Main.lID ")
+			_T("WHERE Main.lastPasteDate < %d AND Data.strClipBoardFormat IN (%s) AND ")
+			_T("Main.bIsGroup = 0 AND Main.lShortCut = 0 AND Main.lParentID <= 0 AND Main.lDontAutoDelete = 0 AND Main.stickyClipOrder = -(2147483647) AND Main.stickyClipGroupOrder = -(2147483647) ")
+			_T("LIMIT %d"), (int)expireTime.GetTime(), imageFormats, CGetSetOptions::GetMainDeletesDeleteCount());
+
+		while (q.eof() == false)
+		{
+			clipIds.push_back(q.getIntField(_T("lID")));
+			q.nextRow();
+		}
+	}
+
+	CClipIDs emptyClipIds;
+	std::vector<int> changedClipIds;
+
+	for (int clipId : clipIds)
+	{
+		int deleteCount = db.execDMLEx(_T("DELETE FROM Data WHERE lParentID = %d AND strClipBoardFormat IN (%s)"), clipId, imageFormats);
+
+		Log(StrF(_T("From Images Expire - Deleted %d image formats from Id: %d"), deleteCount, clipId));
+
+		if (db.execScalarEx(_T("SELECT COUNT(lID) FROM Data WHERE lParentID = %d"), clipId) == 0)
+		{
+			emptyClipIds.Add(clipId);
+		}
+		else
+		{
+			//the clip no longer holds everything that was copied, clear the CRC so copying the
+			//same thing again adds a new clip with the image rather than moving this one to the top
+			db.execDMLEx(_T("UPDATE Main SET CRC = 0 WHERE lID = %d"), clipId);
+			changedClipIds.push_back(clipId);
+		}
+	}
+
+	if (emptyClipIds.GetCount() > 0)
+	{
+		emptyClipIds.DeleteIDs(false, db);
+	}
+
+	for (int clipId : changedClipIds)
+	{
+		theApp.RefreshClipInUI(clipId, UPDATE_CLIP_DESCRIPTION);
+	}
+}
+
 BOOL RemoveOldEntries(bool checkIdleTime)
 {
 	Log(StrF(_T("Beginning of RemoveOldEntries MaxEntries: %d - Keep days: %d"), CGetSetOptions::GetMaxEntries(), CGetSetOptions::GetExpiredEntries()));
@@ -920,6 +988,8 @@ BOOL RemoveOldEntries(bool checkIdleTime)
 				}
 			}
 		}
+
+		RemoveExpiredImages(db, checkIdleTime);
 
 		int toDeleteCount = db.execScalar(_T("SELECT COUNT(clipID) FROM MainDeletes"));
 
