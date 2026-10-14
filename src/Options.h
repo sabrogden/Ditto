@@ -743,7 +743,14 @@ public:
 	static BOOL m_enforceClipboardIgnoreFormats;
 	static void SetEnforceClipboardIgnoreFormats(BOOL val);
 	static BOOL GetEnforceClipboardIgnoreFormats();
+
+	static void SetCarouselEnabled(BOOL value);
+	static BOOL GetCarouselEnabled();
+	static void SetCarouselActivation(DWORD value);
+	static DWORD GetCarouselActivation();
+	static void SetCarouselPasteAtClick(BOOL value);
+	static BOOL GetCarouselPasteAtClick();
 };
 
 // global for easy access and for initialization of fast access variables
-extern CGetSetOptions g_Opt; 
+extern CGetSetOptions g_Opt;

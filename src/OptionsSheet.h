@@ -56,6 +56,7 @@ protected:
 	CPropertyPage *m_pFriends;
 	CPropertyPage *m_pCopyBuffers;
 	CPropertyPage *m_pQuickPasteShortCuts;
+	CPropertyPage *m_pClipboardCarousel;
 
 	//CShowTaskBarIcon m_taskBar;
 

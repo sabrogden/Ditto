@@ -9,6 +9,7 @@
 #include "DittoPopupWindow.h"
 #include "NTray.h"
 #include "EditFrameWnd.h"
+#include "ClipboardCarousel.h"
 
 #define CLOSE_WINDOW_TIMER				1	
 #define HIDE_ICON_TIMER					2
@@ -25,6 +26,7 @@
 #define DELAYED_SHOW_DITTO_TIMER		16
 #define SET_WINDOWS_THEME_TIMER			17
 #define CLOSE_NO_DB_WINDOW_TIMER        18
+#define CLIPBOARD_CAROUSEL_TIMER         19
 
 class CMainFrame: public CFrameWnd
 {
@@ -75,6 +77,7 @@ public:
 	int m_doubleClickGroupId;
 	DWORD m_doubleClickGroupStartTime;
 	CPowerManager m_PowerManager;
+	CClipboardCarousel m_clipboardCarousel;
 	int m_startupScreenWidth;
 	int m_startupScreenHeight;
     CRichEditCtrlEx m_richEditTextConverter;
@@ -153,5 +156,7 @@ DECLARE_MESSAGE_MAP()public:
 	afx_msg void OnFirstDeleteallnonusedclips();
     afx_msg LRESULT OnPasteClip(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnEditClip(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnClipboardCarouselInput(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnClipboardCarouselPreviewReady(WPARAM wParam, LPARAM lParam);
     afx_msg void OnSetFocus(CWnd* pOldWnd);
 };
