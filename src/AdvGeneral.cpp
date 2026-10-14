@@ -163,6 +163,7 @@ END_MESSAGE_MAP()
 #define SETTING_HIDE_TASKBAR_ICON_ON_CLOSE 109
 #define SETTING_USE_MODERN_SCROLLBAR 110
 #define SETTING_ENFORCE_CLIPBOARD_IGNORE_FORMATS 111
+#define SETTING_EXPIRED_IMAGE_DAYS 112
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -217,6 +218,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default paste string"), CGetSetOptions::GetDefaultPasteString(), _T(""), SETTING_DEFAULT_PASTE_STRING));
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default copy string"), CGetSetOptions::GetDefaultCopyString(), _T(""), SETTING_DEFAULT_COPY_STRING));
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Default cut string"), CGetSetOptions::GetDefaultCutString(), _T(""), SETTING_DEFAULT_CUT_STRING));
+
+	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Delete images (CF_DIB, PNG) from clips not used in x days (0 = never)"), CGetSetOptions::GetExpiredImageDays(), _T("Removes CF_DIB, CF_DIBV5 and PNG data from clips that have not been used in this many days, other formats of the clip are kept. Clips that only contain image data are deleted. Clips with shortcuts, in groups, sticky or set to never auto delete are not affected."), SETTING_EXPIRED_IMAGE_DAYS));
 	
 	static TCHAR BASED_CODE szDiffFilter[] = _T("Diff Applications(*.exe)|*.exe||");
 	CMFCPropertyGridFileProperty* pDiffProp = new CMFCPropertyGridFileProperty(_T("Diff application path"), TRUE, CGetSetOptions::GetDiffApp(), _T("exe"), 0, szDiffFilter, (LPCTSTR)0, SETTING_DIFF_APP);
@@ -997,6 +1000,12 @@ void CAdvGeneral::OnBnClickedOk()
 				{
 					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetEnforceClipboardIgnoreFormats(val);
+				}
+				break;
+			case SETTING_EXPIRED_IMAGE_DAYS:
+				if (pNewValue->lVal != pOrigValue->lVal)
+				{
+					CGetSetOptions::SetExpiredImageDays(max(pNewValue->lVal, 0));
 				}
 				break;
 			}

@@ -149,6 +149,9 @@ public:
 	static void SetExpiredEntries(long lVal);
 	static long GetExpiredEntries();
 
+	static void SetExpiredImageDays(long lVal);
+	static long GetExpiredImageDays();
+
 	static void SetTripCopyCount(long lVal);
 	static long GetTripCopyCount();
 

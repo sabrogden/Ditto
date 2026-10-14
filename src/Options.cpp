@@ -1089,6 +1089,16 @@ long CGetSetOptions::GetExpiredEntries()
 	return GetProfileLong("ExpiredEntries", 5);
 }
 
+void CGetSetOptions::SetExpiredImageDays(long lVal)
+{
+	SetProfileLong("ExpiredImageDays", lVal);
+}
+
+long CGetSetOptions::GetExpiredImageDays()
+{
+	return GetProfileLong("ExpiredImageDays", 0);
+}
+
 void CGetSetOptions::SetTripCopyCount(long lVal)
 {
 	// negative means a relative offset
