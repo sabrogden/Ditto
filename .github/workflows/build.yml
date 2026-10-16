@@ -21,12 +21,15 @@ jobs:
             echo "VERSION_DOT_FILENAME=3.25.${env:BUILD_NUMBER}.0" | Out-File -FilePath $env:GITHUB_ENV -Append
       
       - name: Diagnose repository files
+        shell: pwsh
         run: |
           Write-Host "Workspace: $env:GITHUB_WORKSPACE"
-          Get-Location
-          Get-ChildItem -Force
-          Get-ChildItem -Path . -Filter "*.sln" -Recurse |
-            Select-Object -ExpandProperty FullName           
+          Write-Host "Root files:"
+          Get-ChildItem $env:GITHUB_WORKSPACE -Force |
+            Format-Table Name, Mode
+          Write-Host "Solution files:"
+          Get-ChildItem $env:GITHUB_WORKSPACE -Filter "*.sln*" -Recurse |
+            Select-Object -ExpandProperty FullName         
       
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
