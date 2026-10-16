@@ -15,13 +15,6 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
-      
-      - name: Generate build number
-        id: buildnumber
-        with:
-          token: ${{secrets.GITHUB_TOKEN}} 
-          
       - name: Set the value
         run: |
             echo "VERSION_FILENAME=3_25_${env:BUILD_NUMBER}_0" | Out-File -FilePath $env:GITHUB_ENV -Append
