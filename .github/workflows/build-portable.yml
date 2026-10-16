@@ -1,0 +1,33 @@
+
+name: Build Ditto Portable
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Restore NuGet packages
+        run: nuget restore CP_Main_10.sln
+
+      - name: Build Ditto x64
+        run: msbuild CP_Main_10.sln /p:Configuration=Release /p:Platform=x64
+
+      - name: Create portable ZIP
+        run: .\DittoSetup\BuildPortableZIP.bat "DittoPortable" bit64
+
+      - name: Upload portable build
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ditto-Portable-x64
+          path: DittoSetup/output/DittoPortable*.zip
+          if-no-files-found: error
+          retention-days: 7
