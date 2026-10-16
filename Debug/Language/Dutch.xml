@@ -150,7 +150,7 @@
 		<Item English_Text = "Display Icon in Systeem Tray" ID = "2003">Toon pictogram in System Tray </Item>		
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Maximum aantal opgeslagen clips</Item>		
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">Opgeslagen clips vervallen na</Item>	
-		<Item English_Text = "Days" ID = "2043">Dagen</Item>		
+		<Item English_Text = "Minutes" ID = "2043">Minuten</Item>		
 		<Item English_Text = "Compact and Repair" ID = "1028">Komprimeren en Repareren</Item>		
 		<Item English_Text = "Check Now" ID = "1030">Check Nu</Item>		
 		<Item English_Text = "Allow Duplicates" ID = "1037">Duplicaten toestaan</Item>		

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "1" Author = "MineTechCode" Notes = "Sugestoes/Bugs na traducao? mntcode (arroba) outlook (ponto) com; ultima atualizacao: 07/2026" LanguageCode = "pt-BR">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Grupos</Item>
@@ -194,7 +194,7 @@
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">Mostrar ícone na bandeja do sistema</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Número máximo de itens salvos</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">Itens copiados expiram após</Item>
-		<Item English_Text = "Days" ID = "2043">Dias</Item>
+		<Item English_Text = "Minutes" ID = "2043">Minutos</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028">Compactar e reparar</Item>
 		<Item English_Text = "Check Now" ID = "1030">Verificar agora</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">Permitir duplicatas</Item>

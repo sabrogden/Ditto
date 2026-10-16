@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "1" Author = "RanSasson" Notes = "Twitter: @RanSasson" LanguageCode = "Heb">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">קבוצות</Item>
@@ -149,7 +149,7 @@
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">הצג צלמית במגש המערכת</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">מספר מקסימלי של העתקים שמורים</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">זמן תפוגת העתקים אחרי</Item>
-		<Item English_Text = "Days" ID = "2043">ימים</Item>
+		<Item English_Text = "Minutes" ID = "2043">דקות</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028">כווץ ותקן</Item>
 		<Item English_Text = "Check Now" ID = "1030">בדוק כעת</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">אפשר כפילויות</Item>

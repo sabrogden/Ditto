@@ -150,7 +150,7 @@
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">Pokaż ikonę w zasobniku systemowym</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Maksymalna ilość skopiowanych elementów</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">Trwałość skopiowanych elementów</Item>
-		<Item English_Text = "Days" ID = "2043">dzień/dni</Item>
+		<Item English_Text = "Minutes" ID = "2043">minut/minuty</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028">Kompaktuj i napraw</Item>
 		<Item English_Text = "Check Now" ID = "1030">Sprawdź teraz</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">Pozwól na duplikaty</Item>

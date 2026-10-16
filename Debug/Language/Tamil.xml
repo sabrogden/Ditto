@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "1" Author = "அனிஷ்பிரபு தி. " Notes = "anishprabu243@gmail.com" LanguageCode = "Tam">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">குழுக்கள்</Item>
@@ -160,7 +160,7 @@
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">கணினி தட்டில் உருவம் காண்பி</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">சேமிக்கப்பட்ட நகல்களின் அதிகபட்ச எண்ணிக்கை</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">ஒட்டு உள்ளீடுகள் இதற்க்குப் பிறகு காலாவதியாகும்</Item>
-		<Item English_Text = "Days" ID = "2043">நாட்கள்</Item>
+		<Item English_Text = "Minutes" ID = "2043">நிமிடங்கள்</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028">சுருக்க மற்றும் பழுதுபார்ப்பு</Item>
 		<Item English_Text = "Check Now" ID = "1030">இப்போது சரிபார்க்கவும்</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">நகல்களை அனுமதி</Item>

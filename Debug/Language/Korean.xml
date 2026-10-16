@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "3.24.246.0" Author = "coreVoid" Notes = "Last updated: 2025.03.18" LanguageCode = "kor">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">그룹</Item>
@@ -181,7 +181,7 @@
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">시스템 트레이 아이콘 표시</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">저장된 복사본 최대 수</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">붙여넣기 항목 만료 기간</Item>
-		<Item English_Text = "Days" ID = "2043">일</Item>
+		<Item English_Text = "Minutes" ID = "2043">분</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028">압축 및 복구</Item>
 		<Item English_Text = "Check Now" ID = "1030">지금 확인</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">중복 허용</Item>

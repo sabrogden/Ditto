@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "3.25.64" Author = "Nardog, maboroshin" Notes = "Update: 2025/07, errer no honyaku mikakunin, https://pc.genkaku.in/ )" LanguageCode="jpn">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">グループ(&amp;G)</Item>
@@ -182,7 +182,7 @@
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">システムトレイにアイコンを表示する</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">コピーを保存する最大数</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">貼り付け項目を期限切れにする</Item>
-		<Item English_Text = "Days" ID = "2043">日後</Item>
+		<Item English_Text = "Minutes" ID = "2043">分</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028">コンパクト化と修復</Item>
 		<Item English_Text = "Check Now" ID = "1030">今すぐチェック</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">重複を許可する</Item>

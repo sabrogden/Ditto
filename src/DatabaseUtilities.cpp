@@ -843,7 +843,7 @@ BOOL RepairDatabase()
 
 BOOL RemoveOldEntries(bool checkIdleTime)
 {
-	Log(StrF(_T("Beginning of RemoveOldEntries MaxEntries: %d - Keep days: %d"), CGetSetOptions::GetMaxEntries(), CGetSetOptions::GetExpiredEntries()));
+	Log(StrF(_T("Beginning of RemoveOldEntries MaxEntries: %d - Keep minutes: %d"), CGetSetOptions::GetMaxEntries(), CGetSetOptions::GetExpiredEntries()));
 
 	try
 	{
@@ -897,7 +897,7 @@ BOOL RemoveOldEntries(bool checkIdleTime)
 			if (lExpire)
 			{
 				CTime now = CTime::GetCurrentTime();
-				now -= CTimeSpan(lExpire, 0, 0, 0);
+				now -= CTimeSpan(0, 0, lExpire, 0);
 
 				CClipIDs IDs;
 

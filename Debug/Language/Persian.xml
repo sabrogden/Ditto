@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "1" Author = "[ iriman *at* chmail * ir ]" Notes = "Please read 'Persian_' help files in folder '\Ditto\Help'" LanguageCode = "fa">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">گروه‌ها</Item>
@@ -171,7 +171,7 @@
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">آیکون برنامه را در سینی سیستم نشان بده</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">بیشترین تعداد بریده‌های ذخیره شده</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">تاریخ انقضای بریده‌ها</Item>
-		<Item English_Text = "Days" ID = "2043">روز</Item>
+		<Item English_Text = "Minutes" ID = "2043">دقیقه</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028">فشرده‌سازی و تعمیر پایگاه داده</Item>
 		<Item English_Text = "Check Now" ID = "1030">الآن بررسی کن</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">تکراری مجاز باشد</Item>

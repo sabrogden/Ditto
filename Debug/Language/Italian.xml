@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "2" Author = "Salvatore Giarratana" Notes = "http://labx.altervista.org" LanguageCode="ita">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Gruppo</Item>
@@ -172,7 +172,7 @@
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">Visualizza icona nella barra di sistema</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Massimo numero copie salvate</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">Incolla voci che scadono dopo</Item>
-		<Item English_Text = "Days" ID = "2043">Giorni</Item>
+		<Item English_Text = "Minutes" ID = "2043">Minuti</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028">Compatta e ripara</Item>
 		<Item English_Text = "Check Now" ID = "1030">Controlla ora</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">Consenti duplicati</Item>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "1" Author = "Alexandru Bogdan Munteanu" Notes = "http://muntealb.bravehost.com/" LanguageCode = "rum">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Grupuri</Item>
@@ -147,7 +147,7 @@
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">Arată iconița softului în sistaler [system tray]</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Numărul maxim de copieri salvate</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">Itemurile ce au fost lipite expiră după</Item>
-		<Item English_Text = "Days" ID = "2043">zile</Item>
+		<Item English_Text = "Minutes" ID = "2043">minute</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028">Compactează și Repară BD</Item>
 		<Item English_Text = "Automatically check for updates online" ID = "1029">Caută automat pe internet actualizări ale softului</Item>
 		<Item English_Text = "Check Now" ID = "1030">Verifică Acum</Item>

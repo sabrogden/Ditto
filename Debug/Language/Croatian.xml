@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "1" Author = "Robert Dragicevic" Notes = "robidragic@gmail.com" LanguageCode = "hrv">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Skupina</Item>
@@ -147,7 +147,7 @@
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">Prikaži ikonu u sistemskoj traci</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Maksimalan broj spremljenih kopija</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">Zaljepljeni objekti se brišu nakon</Item>
-		<Item English_Text = "Days" ID = "2043">Dana</Item>
+		<Item English_Text = "Minutes" ID = "2043">minuta</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028">Sažimaj i popravi</Item>
 		<Item English_Text = "Automatically check for updates online" ID = "1029">Automatski provjeri nove nadogradnje</Item>
 		<Item English_Text = "Check Now" ID = "1030">Provjeri sad</Item>

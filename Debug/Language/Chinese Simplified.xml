@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "20260726" Author = "iYoung, wevsty, n78, xbeta, EX-XD" Notes = "" LanguageCode = "CHN">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">组</Item>
@@ -194,7 +194,7 @@
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">在系统托盘显示图标</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">保存复制项目的最大数量</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">粘贴条目的过期日期</Item>
-		<Item English_Text = "Days" ID = "2043">天</Item>
+		<Item English_Text = "Minutes" ID = "2043">分钟</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028">压缩和修复</Item>
 		<Item English_Text = "Check Now" ID = "1030">立即检查</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">允许重复</Item>

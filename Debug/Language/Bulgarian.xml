@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "1" Author = "Стоян Димитров" Notes = "stoyanster от гмаил" LanguageCode = "bul">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Групи</Item>
@@ -181,7 +181,7 @@
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">Икона в системната лента</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Максимален брой на пазените елементи</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">Елементите губят давност след</Item>
-		<Item English_Text = "Days" ID = "2043">дена</Item>
+		<Item English_Text = "Minutes" ID = "2043">минути</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028"></Item>
 		<Item English_Text = "Check Now" ID = "1030">Проверяване</Item>
 		<Item English_Text = "Allow Duplicates" ID = "1037">Допускане на дублирани</Item>

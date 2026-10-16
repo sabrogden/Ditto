@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Ditto_Language_File Version = "3.24" Author = "Dick Schiferli" Notes = "13.12.2023, based on 28.11.2019. Initially based on 'German.xml' by Guido Schroeder (11.01.2012) and Stephan Jaeger" LanguageCode="ger">
 	<Ditto_Right_Click_Menu>
 		<Item English_Text = "Groups" ID = "-1">Gruppen</Item>
@@ -194,7 +194,7 @@
 		<Item English_Text = "Display Icon in System Tray" ID = "2003">Symbol im Infobereich anzeigen</Item>
 		<Item English_Text = "Maximum Number of Saved Copies" ID = "2008">Maximal gespeicherte Einträge</Item>
 		<Item English_Text = "Paste Entries Expire after" ID = "2009">Einträge löschen nach</Item>
-		<Item English_Text = "Days" ID = "2043">Tagen</Item>
+		<Item English_Text = "Minutes" ID = "2043">Minuten</Item>
 		<Item English_Text = "Compact and Repair" ID = "1028">Komprimieren und reparieren</Item>
 		<Item English_Text = "Automatically check for updates online" ID = "1029">Automatisch auf Updates prüfen</Item>
 		<Item English_Text = "Check Now" ID = "1030">Jetzt prüfen</Item>
