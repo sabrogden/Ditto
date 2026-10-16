@@ -19,7 +19,26 @@ jobs:
         run: |
             echo "VERSION_FILENAME=3_25_${env:BUILD_NUMBER}_0" | Out-File -FilePath $env:GITHUB_ENV -Append
             echo "VERSION_DOT_FILENAME=3.25.${env:BUILD_NUMBER}.0" | Out-File -FilePath $env:GITHUB_ENV -Append
-      
+
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          repository: sabrogden/Ditto
+          ref: master
+          clean: true
+          fetch-depth: 1
+
+      - name: Verify checkout
+        shell: pwsh
+        run: |
+          Write-Host "Workspace: $env:GITHUB_WORKSPACE"
+          Write-Host "GitHub repository: $env:GITHUB_REPOSITORY"
+          git status
+          Get-ChildItem -Force
+          if (!(Test-Path "CP_Main_10.sln")) {
+            throw "CP_Main_10.sln not found after checkout"
+          }
+          
       - name: Diagnose repository files
         shell: pwsh
         run: |
