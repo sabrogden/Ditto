@@ -178,6 +178,7 @@ public:
 	__int64 m_lastDbWrite;
 	bool m_pendingRefresh;
 	DWORD m_lastNonActiveMouseMove;
+	bool m_bSwallowPinUp;
 
     void RefreshNc();
     void UpdateStatus(bool bRepaintImmediately = false); // regenerates the status (caption) text
@@ -346,6 +347,11 @@ public:
 	void ShowRightClickMenu();
 
 	void SetCurrentTransparency();
+
+	// pin (never auto delete) helpers
+	CString GetRowSymbols(int iItem);
+	void SetClipPinned(int nRow, bool bPinned);
+	void TogglePin(int nRow);
 
     // Generated message map functions
 protected:

@@ -87,6 +87,7 @@ CQPasteWnd::CQPasteWnd()
 	m_lastDbWrite = 0;
 	m_pendingRefresh = false;
 	m_lastNonActiveMouseMove = 0;
+	m_bSwallowPinUp = FALSE;
 }
 
 CQPasteWnd::~CQPasteWnd()
@@ -2396,6 +2397,126 @@ void CQPasteWnd::OnMenuQuickpropertiesAutodelete()
 	m_lstHeader.RefreshVisibleRows();
 }
 
+// the symbol part of a row, "<symbol>...<symbol>" - the same text GetDispInfo
+// puts in front of the clip text
+CString CQPasteWnd::GetRowSymbols(int iItem)
+{
+	CString cs;
+
+	if (m_listItems[iItem].m_bDontAutoDelete)
+	{
+		cs += _T("<noautodelete>");
+	}
+
+	if (m_listItems[iItem].m_bHasShortCut)
+	{
+		cs += _T("<shortcut>");
+	}
+
+	if (m_listItems[iItem].m_bIsGroup)
+	{
+		cs += _T("<group>");
+	}
+
+	if (theApp.m_GroupID > 0)
+	{
+		if (m_listItems[iItem].m_stickyClipGroupOrder != INVALID_STICKY)
+		{
+			cs += _T("<sticky>");
+		}
+	}
+	else
+	{
+		if (m_listItems[iItem].m_stickyClipOrder != INVALID_STICKY)
+		{
+			cs += _T("<sticky>");
+		}
+	}
+
+	// attached to a group
+	if (m_listItems[iItem].m_bHasParent)
+	{
+		cs += _T("<ingroup>");
+	}
+
+	if (m_listItems[iItem].m_QuickPaste.IsEmpty() == FALSE)
+	{
+		cs += _T("<qpastetext>");
+	}
+
+	if (m_listItems[iItem].m_dateCopied != m_listItems[iItem].m_datePasted)
+	{
+		cs += "<pasted>";
+	}
+
+	return cs;
+}
+
+// the pin button of a row was clicked, toggle it
+void CQPasteWnd::TogglePin(int nRow)
+{
+	bool bPinned = false;
+
+	{
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
+		if (nRow < 0 || nRow >= (int)m_listItems.size())
+		{
+			return;
+		}
+
+		bPinned = m_listItems[nRow].m_bDontAutoDelete;
+	}
+
+	SetClipPinned(nRow, bPinned == false);
+}
+
+// set or clear the "never auto delete" flag of a single row (the pin button)
+void CQPasteWnd::SetClipPinned(int nRow, bool bPinned)
+{
+	int nID = -1;
+
+	{
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
+		if (nRow < 0 || nRow >= (int)m_listItems.size())
+		{
+			return;
+		}
+
+		nID = m_listItems[nRow].m_lID;
+	}
+
+	if (nID <= 0)
+	{
+		return;
+	}
+
+	try
+	{
+		if (bPinned)
+		{
+			theApp.m_db.execDMLEx(_T("UPDATE Main SET lDontAutoDelete = %d where lID = %d;"), (int)CTime::GetCurrentTime().GetTime(), nID);
+		}
+		else
+		{
+			theApp.m_db.execDMLEx(_T("UPDATE Main SET lDontAutoDelete = 0 where lID = %d;"), nID);
+		}
+	}
+	CATCH_SQLITE_EXCEPTION
+
+	{
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
+		if (nRow < (int)m_listItems.size())
+		{
+			m_listItems[nRow].m_bDontAutoDelete = bPinned;
+		}
+	}
+
+	m_lstHeader.RefreshRow(nRow);
+}
+
 void CQPasteWnd::OnMenuQuickpropertiesRemovehotkey()
 {
 	CWaitCursor wait;
@@ -3045,6 +3166,31 @@ void CQPasteWnd::SetKeyModiferState(bool bActive)
 
 BOOL CQPasteWnd::PreTranslateMessage(MSG* pMsg)
 {
+	if (pMsg->message == WM_LBUTTONDOWN || pMsg->message == WM_LBUTTONUP)
+	{
+		// a click on the pin button of a row pins/unpins the row, the action
+		// that is configured for clicking a clip must not run for it
+		if (pMsg->message == WM_LBUTTONDOWN && pMsg->hwnd == m_lstHeader.m_hWnd)
+		{
+			CPoint point(pMsg->pt);
+			m_lstHeader.ScreenToClient(&point);
+
+			int nPinRow = -1;
+			if (m_lstHeader.HitTestPinButton(point, nPinRow))
+			{
+				TogglePin(nPinRow);
+				m_bSwallowPinUp = TRUE;
+				return TRUE;
+			}
+		}
+		else if (pMsg->message == WM_LBUTTONUP && m_bSwallowPinUp)
+		{
+			// the button up that belongs to the swallowed pin down
+			m_bSwallowPinUp = FALSE;
+			return TRUE;
+		}
+	}
+
 	switch (pMsg->message)
 	{
 	case WM_MBUTTONUP:
@@ -5690,52 +5836,7 @@ void CQPasteWnd::GetDispInfo(NMHDR* pNMHDR, LRESULT* pResult)
 				if ((int)m_listItems.size() > pItem->iItem &&
 					m_listItems[pItem->iItem].m_lID > 0)
 				{
-					CString cs;
-					if (m_listItems[pItem->iItem].m_bDontAutoDelete)
-					{
-						cs += _T("<noautodelete>");
-					}
-
-					if (m_listItems[pItem->iItem].m_bHasShortCut)
-					{
-						cs += _T("<shortcut>");
-					}
-
-					if (m_listItems[pItem->iItem].m_bIsGroup)
-					{
-						cs += _T("<group>");
-					}
-
-					if (theApp.m_GroupID > 0)
-					{
-						if (m_listItems[pItem->iItem].m_stickyClipGroupOrder != INVALID_STICKY)
-						{
-							cs += _T("<sticky>");
-						}
-					}
-					else
-					{
-						if (m_listItems[pItem->iItem].m_stickyClipOrder != INVALID_STICKY)
-						{
-							cs += _T("<sticky>");
-						}
-					}
-
-					// attached to a group
-					if (m_listItems[pItem->iItem].m_bHasParent)
-					{
-						cs += _T("<ingroup>");
-					}
-
-					if (m_listItems[pItem->iItem].m_QuickPaste.IsEmpty() == FALSE)
-					{
-						cs += _T("<qpastetext>");
-					}
-
-					if (m_listItems[pItem->iItem].m_dateCopied != m_listItems[pItem->iItem].m_datePasted)
-					{
-						cs += "<pasted>";
-					}
+					CString cs = GetRowSymbols(pItem->iItem);
 
 					// pipe is the "end of symbols" marker
 					cs += "|" + CMainTableFunctions::GetDisplayText(CGetSetOptions::m_nLinesPerRow, m_listItems[pItem->iItem].m_Desc);
