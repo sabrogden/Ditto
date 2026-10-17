@@ -95,7 +95,7 @@ void CGdiImageDrawer::Draw(CDC* pScreenDC, CDPI &dpi, CWnd *pWnd, CRect rc, bool
 	Draw(pScreenDC, dpi, pWnd, x, y, mouseHover, mouseDown);
 }
 
-void CGdiImageDrawer::Draw(CDC* pScreenDC, CDPI &dpi, CWnd *pWnd, int posX, int posY, bool mouseHover, bool mouseDown, int forceWidth, int forceHeight)
+void CGdiImageDrawer::Draw(CDC* pScreenDC, CDPI &dpi, CWnd *pWnd, int posX, int posY, bool mouseHover, bool mouseDown, int forceWidth, int forceHeight, int opacity)
 {
 	int width = m_pStdImage->m_pBitmap->GetWidth();
 	if (forceWidth != INT_MAX)
@@ -135,7 +135,29 @@ void CGdiImageDrawer::Draw(CDC* pScreenDC, CDPI &dpi, CWnd *pWnd, int posX, int 
 	//ia.SetRemapTable(1, &blackToRed);
 
 	Gdiplus::Graphics graphics(pScreenDC->m_hDC);
-	graphics.DrawImage(*m_pStdImage, posX, posY, width, height);	
+	if (opacity >= 255)
+	{
+		graphics.DrawImage(*m_pStdImage, posX, posY, width, height);
+	}
+	else
+	{
+		// draw the png faded out (the hover only pin button)
+		if (opacity < 0)
+			opacity = 0;
+
+		Gdiplus::ColorMatrix cm = { 0 };
+		cm.m[0][0] = 1.0f;
+		cm.m[1][1] = 1.0f;
+		cm.m[2][2] = 1.0f;
+		cm.m[3][3] = (Gdiplus::REAL)opacity / 255.0f;
+		cm.m[4][4] = 1.0f;
+
+		Gdiplus::ImageAttributes ia;
+		ia.SetColorMatrix(&cm);
+
+		Gdiplus::RectF grect((Gdiplus::REAL)posX, (Gdiplus::REAL)posY, (Gdiplus::REAL)width, (Gdiplus::REAL)height);
+		graphics.DrawImage(*m_pStdImage, grect, 0, 0, (Gdiplus::REAL)width, (Gdiplus::REAL)height, Gdiplus::UnitPixel, &ia);
+	}
 
 	//RectF grect; grect.X = posX, grect.Y = posY; grect.Width = width; grect.Height = height;
 	//graphics.DrawImage(*m_pStdImage, grect, 0, 0, width, height, UnitPixel, &ia);

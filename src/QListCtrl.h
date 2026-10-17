@@ -154,6 +154,8 @@ public:
 
 	int GetRowHeight() { return m_rowHeight; }
 
+	BOOL HitTestPinButton(CPoint point, int& nItem);
+
 	void SetSearchText(CString text);
 
 	void SetDpiInfo(CDPI *dpi);
@@ -195,6 +197,13 @@ protected:
 	CGdiImageDrawer m_shortCutImage;
 	CGdiImageDrawer m_stickyImage;
 	int m_rowHeight;
+	int m_hoverRow;
+	BOOL m_trackingMouseLeave;
+	// rect of the pin star of the hovered row, kept up to date while that row
+	// is painted
+	CRect m_pinButtonRect;
+	int m_pinButtonItem;
+	int GetVisibleRight();
 	CString m_searchText;
 	BOOL m_showIfClipWasPasted;
 	CAccels *m_pToolTipActions;
@@ -219,6 +228,7 @@ protected:
 	afx_msg BOOL OnToolTipText(UINT id, NMHDR * pNMHDR, LRESULT * pResult);
 	afx_msg void MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnMouseLeave();
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnKillFocus(CWnd* pNewWnd);

@@ -178,6 +178,8 @@ public:
 	__int64 m_lastDbWrite;
 	bool m_pendingRefresh;
 	DWORD m_lastNonActiveMouseMove;
+	bool m_bSwallowPinUp;
+	CString m_strDeleteAllClipsText;
 
     void RefreshNc();
     void UpdateStatus(bool bRepaintImmediately = false); // regenerates the status (caption) text
@@ -347,6 +349,11 @@ public:
 
 	void SetCurrentTransparency();
 
+	// pin (never auto delete) helpers
+	CString GetRowSymbols(int iItem);
+	void SetClipPinned(int nRow, bool bPinned);
+	void TogglePin(int nRow);
+
     // Generated message map functions
 protected:
     //{{AFX_MSG(CQPasteWnd)
@@ -460,6 +467,8 @@ protected:
     afx_msg void OnMenuNewGroupSelection();
     afx_msg void OnBackButton();
 	afx_msg void OnSystemButton();
+	afx_msg void OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct);
+	afx_msg void OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct);
     afx_msg LRESULT OnUpDown(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnItemDeleted(WPARAM wParam, LPARAM lParam);
     LRESULT OnToolTipWndInactive(WPARAM wParam, LPARAM lParam);

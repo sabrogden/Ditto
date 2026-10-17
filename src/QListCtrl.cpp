@@ -26,6 +26,9 @@ static char THIS_FILE[] = __FILE__;
 
 #define ROW_BOTTOM_BORDER		4
 #define ROW_LEFT_BORDER			3
+// opacity of the pin button while it is only shown because the row is hovered.
+// keep it far below full so a hovered clip is clearly not a pinned one
+#define PIN_BUTTON_HOVER_ALPHA	60
 #define COLOR_SHADOW			RGB(245, 245, 245)
 #define DUMMY_COL_WIDTH			2
 
@@ -209,6 +212,9 @@ CQListCtrl::CQListCtrl()
 	m_pFormatter = NULL;
 	m_allSelected = false;
 	m_rowHeight = 50;
+	m_hoverRow = -1;
+	m_pinButtonItem = -1;
+	m_trackingMouseLeave = FALSE;
 	m_mouseOverScrollAreaStart = 0;
 	m_showIfClipWasPasted = TRUE;
 	m_bShowTextForFirstTenHotKeys = true;
@@ -259,6 +265,7 @@ BEGIN_MESSAGE_MAP(CQListCtrl, CListCtrl)
 	ON_NOTIFY_REFLECT(LVN_KEYDOWN, OnKeydown)
 	ON_NOTIFY_REFLECT(NM_CUSTOMDRAW, OnCustomdrawList)
 	ON_WM_MOUSEMOVE()
+	ON_WM_MOUSELEAVE()
 	ON_WM_SYSKEYDOWN()
 	ON_WM_ERASEBKGND()
 	ON_WM_CREATE()
@@ -420,11 +427,63 @@ void CQListCtrl::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 	GetTextMetrics(hDC, &tm);
 	if (m_windowDpi != NULL)
 	{
+		// windows list views only support one height for all rows, every row gets
+		// the room of "lines per clip" lines and the wrapped text is drawn into
+		// it. a clip needing more lines is cut off at the bottom of the row.
 		lpMeasureItemStruct->itemHeight = ((tm.tmHeight + tm.tmExternalLeading) * m_linesPerRow) + m_windowDpi->Scale(ROW_BOTTOM_BORDER);
 		m_rowHeight = lpMeasureItemStruct->itemHeight;
 	}
 	SelectObject(hDC, hFontOld);
 	::ReleaseDC(NULL, hDC);
+}
+
+// the right end of the row area that really belongs to the list. The strip the
+// list keeps for its scroll bar is inside the client rect but is not part of
+// the list for the mouse, a click there goes to the window behind it
+int CQListCtrl::GetVisibleRight()
+{
+	CRect rcListClient;
+	GetClientRect(&rcListClient);
+
+	CRect rcWindow;
+	GetWindowRect(&rcWindow);
+
+	int nExtra = rcWindow.Width() - rcListClient.Width();
+	if (nExtra > 0)
+		rcListClient.right -= nExtra;
+
+	return rcListClient.right;
+}
+
+BOOL CQListCtrl::HitTestPinButton(CPoint point, int& nItem)
+{
+	int nRow = HitTest(point);
+	// a pin button only exists for the row the mouse is over, use the rect that
+	// row was last painted with
+	if (nRow < 0 || nRow != m_pinButtonItem)
+		return FALSE;
+
+	CRect rcBtn = m_pinButtonRect;
+	rcBtn.InflateRect(m_windowDpi->Scale(3), m_windowDpi->Scale(2));
+	if (rcBtn.PtInRect(point) == FALSE)
+		return FALSE;
+
+	nItem = nRow;
+
+	return TRUE;
+}
+
+void CQListCtrl::OnMouseLeave()
+{
+	m_trackingMouseLeave = FALSE;
+	m_pinButtonItem = -1;
+
+	if (m_hoverRow >= 0)
+	{
+		int nRow = m_hoverRow;
+		m_hoverRow = -1;
+		RefreshRow(nRow);
+	}
 }
 
 void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
@@ -515,6 +574,10 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		rcText.left += m_windowDpi->Scale(ROW_LEFT_BORDER);
 		rcText.top += m_windowDpi->Scale(1);
 		rcText.bottom -= m_windowDpi->Scale(1);
+		// a row can be wider than the control, keep the text inside the part of
+		// the row that is really visible
+		if (rcText.right > GetVisibleRight())
+			rcText.right = GetVisibleRight();
 
 		if (m_showIfClipWasPasted &&
 			strSymbols.GetLength() > 0 &&
@@ -555,37 +618,57 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		DrawBitMap(nItem, rcText, pDC, csText);
 
 		// draw the symbol box
-		if (strSymbols.GetLength() > 0)
+		if (strSymbols.Find(_T("<group>")) >= 0) //group
 		{
-			if (strSymbols.Find(_T("<group>")) >= 0) //group
+			m_groupFolder.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
+			rcText.left += m_groupFolder.ImageWidth() + m_windowDpi->Scale(2);
+		}
+
+		// the pin button is the "never auto delete" star, so it sits in the slot
+		// that star has always been drawn in and a pinned clip shows one star
+		// and not two. A pinned clip shows it solid, a hovered clip shows it
+		// faint so it can be pinned. The slot is kept free for every row so the
+		// text does not move when the star shows up.
+		int nStarWidth = m_dontDeleteImage.ImageWidth();
+		if (nStarWidth > 0)
+		{
+			CRect rcStar(rcText.left, rcText.top, rcText.left + nStarWidth,
+				rcText.top + m_dontDeleteImage.ImageHeight());
+			bool bPinned = (strSymbols.Find(_T("<noautodelete>")) >= 0);
+			bool bHover = (nItem == m_hoverRow);
+
+			// remember where the star of the hovered row is, the click on it is
+			// handled outside this paint
+			if (bHover)
 			{
-				m_groupFolder.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_groupFolder.ImageWidth() + m_windowDpi->Scale(2);
+				m_pinButtonRect = rcStar;
+				m_pinButtonItem = nItem;
 			}
-			if (strSymbols.Find(_T("<noautodelete>")) >= 0) //don't auto delete
+
+			if (bPinned || bHover)
 			{
-				m_dontDeleteImage.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_dontDeleteImage.ImageWidth() + m_windowDpi->Scale(2);
+				m_dontDeleteImage.Draw(pDC, *m_windowDpi, this, rcStar.left, rcStar.top, false, false,
+					rcStar.Width(), rcStar.Height(), bPinned ? 255 : PIN_BUTTON_HOVER_ALPHA);
 			}
-			if (strSymbols.Find(_T("<shortcut>")) >= 0) // has shortcut
-			{
-				m_shortCutImage.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_shortCutImage.ImageWidth() + m_windowDpi->Scale(2);
-			}
-			if (drawInGroupIcon &&
-				strSymbols.Find(_T("<ingroup>")) >= 0) // in group
-			{
-				m_inFolderImage.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_inFolderImage.ImageWidth() + m_windowDpi->Scale(2);
-			}
-			if (strSymbols.Find(_T("<qpastetext>")) >= 0) // has quick paste text
-			{
-			}
-			if (strSymbols.Find(_T("<sticky>")) >= 0) //sticky clip
-			{
-				m_stickyImage.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
-				rcText.left += m_stickyImage.ImageWidth() + m_windowDpi->Scale(2);
-			}
+
+			rcText.left += nStarWidth + m_windowDpi->Scale(2);
+		}
+
+		if (strSymbols.Find(_T("<shortcut>")) >= 0) // has shortcut
+		{
+			m_shortCutImage.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
+			rcText.left += m_shortCutImage.ImageWidth() + m_windowDpi->Scale(2);
+		}
+		if (drawInGroupIcon &&
+			strSymbols.Find(_T("<ingroup>")) >= 0) // in group
+		{
+			m_inFolderImage.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
+			rcText.left += m_inFolderImage.ImageWidth() + m_windowDpi->Scale(2);
+		}
+		if (strSymbols.Find(_T("<sticky>")) >= 0) //sticky clip
+		{
+			m_stickyImage.Draw(pDC, *m_windowDpi, this, rcText.left, rcText.top, false, false);
+			rcText.left += m_stickyImage.ImageWidth() + m_windowDpi->Scale(2);
 		}
 
 		if (DrawRtfText(nItem, rcText, pDC) == FALSE)
@@ -595,11 +678,21 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			if (m_searchText.GetLength() > 0 &&
 				FindNoCaseAndInsert(csText, m_searchText, StrF(_T("\x01\x04 color='#%02x%02x%02x'\x02"), GetRValue(highlightColor), GetGValue(highlightColor), GetBValue(highlightColor)), _T("\x01\x03\x04\x02"), m_linesPerRow) > 0)
 			{
-				DrawHTML(pDC->m_hDC, csText, csText.GetLength(), rcText, DT_VCENTER | DT_EXPANDTABS | DT_NOPREFIX);
+				DrawHTML(pDC->m_hDC, csText, csText.GetLength(), rcText, DT_WORDBREAK | DT_EXPANDTABS | DT_NOPREFIX);
 			}
 			else
 			{
-				pDC->DrawText(csText, rcText, DT_VCENTER | DT_EXPANDTABS | DT_NOPREFIX);
+				// keep a clip that needs less room than the row has vertically
+				// centered, like it was before the text could wrap
+				CRect rcMeasure = rcText;
+				int nTextHeight = pDC->DrawText(csText, rcMeasure, DT_CALCRECT | DT_WORDBREAK | DT_EXPANDTABS | DT_NOPREFIX);
+				if (nTextHeight > 0 && nTextHeight < rcText.Height())
+				{
+					rcText.top += (rcText.Height() - nTextHeight) / 2;
+					rcText.bottom = rcText.top + nTextHeight;
+				}
+
+				pDC->DrawText(csText, rcText, DT_WORDBREAK | DT_EXPANDTABS | DT_NOPREFIX);
 			}
 		}
 
@@ -2100,6 +2193,32 @@ BOOL CQListCtrl::OnItemDeleted(long lID)
 
 void CQListCtrl::OnMouseMove(UINT nFlags, CPoint point)
 {
+	// highlight the row under the mouse so its pin button shows up
+	int nHover = HitTest(point);
+	if (nHover != m_hoverRow)
+	{
+		int nPrev = m_hoverRow;
+		m_hoverRow = nHover;
+		// the star of the previous row is not a button any more
+		m_pinButtonItem = -1;
+
+		if (nPrev >= 0)
+			RefreshRow(nPrev);
+		if (nHover >= 0)
+			RefreshRow(nHover);
+	}
+
+	if (m_trackingMouseLeave == FALSE)
+	{
+		TRACKMOUSEEVENT tme = { 0 };
+		tme.cbSize = sizeof(TRACKMOUSEEVENT);
+		tme.dwFlags = TME_LEAVE;
+		tme.hwndTrack = m_hWnd;
+
+		if (::TrackMouseEvent(&tme))
+			m_trackingMouseLeave = TRUE;
+	}
+
 	if (CGetSetOptions::m_showScrollBar == FALSE)
 	{
 		CRect crWindow;
