@@ -49,6 +49,16 @@ static char THIS_FILE[] = __FILE__;
 #define ID_SYSTEM_BUTTON		0x210
 #define ID_NO_SEARCH_RESULTS	0x211
 
+// The entry of the system menu that deletes clips is drawn in red to warn
+// about it. Windows draws its menus itself and cannot color a single entry,
+// so this entry is switched to owner draw and painted in OnDrawItem with the
+// size and the colors windows uses for the entries around it (a menu that
+// holds an owner drawn entry is drawn by windows the classic way).
+#define MENU_DANGER_TEXT_COLOR		RGB(200, 0, 0)
+#define MENU_ITEM_HEIGHT			17
+#define MENU_ITEM_TEXT_LEFT			17
+#define MENU_ITEM_RIGHT_MARGIN		20
+
 
 #define QPASTE_WIDTH			200
 #define QPASTE_HEIGHT			200
@@ -209,6 +219,8 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_MESSAGE(NM_GROUP_TREE_MESSAGE, OnGroupTreeMessage)
 	ON_COMMAND(ID_BACK_BUTTON, OnBackButton)
 	ON_COMMAND(ID_SYSTEM_BUTTON, OnSystemButton)
+	ON_WM_DRAWITEM()
+	ON_WM_MEASUREITEM()
 	ON_MESSAGE(CB_UPDOWN, OnUpDown)
 	ON_MESSAGE(NM_INACTIVE_TOOLTIPWND, OnToolTipWndInactive)
 	ON_MESSAGE(NM_SET_LIST_COUNT, OnSetListCount)
@@ -7379,8 +7391,114 @@ void CQPasteWnd::OnSystemButton()
 
 		SetMenuChecks(cmSubMenu);
 
+		// the entry that throws clips away for good is drawn in red. windows
+		// draws menus itself and cannot color one entry, so that entry is made
+		// owner draw and painted in OnDrawItem/OnMeasureItem
+		int nDeleteAllPos = -1;
+		for (int i = 0; i < ::GetMenuItemCount(cmSubMenu->GetSafeHmenu()); i++)
+		{
+			if (::GetMenuItemID(cmSubMenu->GetSafeHmenu(), i) == ID_MENU_DELETEALLNONUSEDCLIPS)
+			{
+				nDeleteAllPos = i;
+				break;
+			}
+		}
+
+		if (nDeleteAllPos >= 0)
+		{
+			TCHAR szDeleteAllText[128] = { 0 };
+			::GetMenuString(cmSubMenu->GetSafeHmenu(), nDeleteAllPos, szDeleteAllText, _countof(szDeleteAllText), MF_BYPOSITION);
+			m_strDeleteAllClipsText = szDeleteAllText;
+
+			MENUITEMINFO mii = { 0 };
+			mii.cbSize = sizeof(MENUITEMINFO);
+			mii.fMask = MIIM_FTYPE | MIIM_DATA;
+			mii.fType = MFT_OWNERDRAW;
+			mii.dwItemData = ID_MENU_DELETEALLNONUSEDCLIPS;
+			::SetMenuItemInfo(cmSubMenu->GetSafeHmenu(), nDeleteAllPos, TRUE, &mii);
+		}
+
 		cmSubMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON, pp.x, pp.y, this, NULL);
 	}
+}
+
+void CQPasteWnd::OnMeasureItem(int nIDCtl, LPMEASUREITEMSTRUCT lpMeasureItemStruct)
+{
+	if (lpMeasureItemStruct->CtlType == ODT_MENU &&
+		lpMeasureItemStruct->itemID == ID_MENU_DELETEALLNONUSEDCLIPS)
+	{
+		// keep the size of the entries windows draws itself. the text is
+		// translated, so the width comes from the text and not from a constant
+		lpMeasureItemStruct->itemHeight = m_DittoWindow.m_dpi.Scale(MENU_ITEM_HEIGHT);
+		lpMeasureItemStruct->itemWidth = m_DittoWindow.m_dpi.Scale(MENU_ITEM_TEXT_LEFT + MENU_ITEM_RIGHT_MARGIN);
+
+		NONCLIENTMETRICS ncm;
+		memset(&ncm, 0, sizeof(ncm));
+		ncm.cbSize = sizeof(ncm);
+		if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0))
+		{
+			CDC* pDC = GetDC();
+			if (pDC != NULL)
+			{
+				CFont font;
+				font.CreateFontIndirect(&ncm.lfMenuFont);
+				CFont* pOldFont = pDC->SelectObject(&font);
+				lpMeasureItemStruct->itemWidth += pDC->GetTextExtent(m_strDeleteAllClipsText).cx;
+				pDC->SelectObject(pOldFont);
+				ReleaseDC(pDC);
+			}
+		}
+		return;
+	}
+
+	CWnd::OnMeasureItem(nIDCtl, lpMeasureItemStruct);
+}
+
+void CQPasteWnd::OnDrawItem(int nIDCtl, LPDRAWITEMSTRUCT lpDrawItemStruct)
+{
+	if (lpDrawItemStruct->CtlType != ODT_MENU ||
+		(lpDrawItemStruct->itemID != ID_MENU_DELETEALLNONUSEDCLIPS &&
+			lpDrawItemStruct->itemData != ID_MENU_DELETEALLNONUSEDCLIPS))
+	{
+		CWnd::OnDrawItem(nIDCtl, lpDrawItemStruct);
+		return;
+	}
+
+	CDC* pDC = CDC::FromHandle(lpDrawItemStruct->hDC);
+	CRect rcItem(lpDrawItemStruct->rcItem);
+	const bool bSelected = (lpDrawItemStruct->itemState & ODS_SELECTED) != 0;
+	const bool bDisabled = (lpDrawItemStruct->itemState & (ODS_DISABLED | ODS_GRAYED)) != 0;
+
+	pDC->FillSolidRect(rcItem, bSelected ? ::GetSysColor(COLOR_HIGHLIGHT) : ::GetSysColor(COLOR_MENU));
+
+	// the font windows uses for its own menu entries
+	NONCLIENTMETRICS ncm;
+	memset(&ncm, 0, sizeof(ncm));
+	ncm.cbSize = sizeof(ncm);
+	if (!SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0))
+	{
+		return;
+	}
+
+	CFont font;
+	font.CreateFontIndirect(&ncm.lfMenuFont);
+	CFont* pOldFont = pDC->SelectObject(&font);
+
+	CRect rcText(rcItem);
+	rcText.left += m_DittoWindow.m_dpi.Scale(MENU_ITEM_TEXT_LEFT);
+
+	pDC->SetBkMode(TRANSPARENT);
+	if (bDisabled)
+	{
+		pDC->SetTextColor(::GetSysColor(COLOR_GRAYTEXT));
+	}
+	else
+	{
+		pDC->SetTextColor(bSelected ? ::GetSysColor(COLOR_HIGHLIGHTTEXT) : MENU_DANGER_TEXT_COLOR);
+	}
+	pDC->DrawText(m_strDeleteAllClipsText, &rcText, DT_SINGLELINE | DT_VCENTER | DT_NOPREFIX);
+
+	pDC->SelectObject(pOldFont);
 }
 
 void CQPasteWnd::OnSpecialpasteRemovelinefeeds()
