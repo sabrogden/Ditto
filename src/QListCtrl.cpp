@@ -427,6 +427,9 @@ void CQListCtrl::MeasureItem(LPMEASUREITEMSTRUCT lpMeasureItemStruct)
 	GetTextMetrics(hDC, &tm);
 	if (m_windowDpi != NULL)
 	{
+		// windows list views only support one height for all rows, every row gets
+		// the room of "lines per clip" lines and the wrapped text is drawn into
+		// it. a clip needing more lines is cut off at the bottom of the row.
 		lpMeasureItemStruct->itemHeight = ((tm.tmHeight + tm.tmExternalLeading) * m_linesPerRow) + m_windowDpi->Scale(ROW_BOTTOM_BORDER);
 		m_rowHeight = lpMeasureItemStruct->itemHeight;
 	}
@@ -571,6 +574,10 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 		rcText.left += m_windowDpi->Scale(ROW_LEFT_BORDER);
 		rcText.top += m_windowDpi->Scale(1);
 		rcText.bottom -= m_windowDpi->Scale(1);
+		// a row can be wider than the control, keep the text inside the part of
+		// the row that is really visible
+		if (rcText.right > GetVisibleRight())
+			rcText.right = GetVisibleRight();
 
 		if (m_showIfClipWasPasted &&
 			strSymbols.GetLength() > 0 &&
@@ -671,11 +678,21 @@ void CQListCtrl::OnCustomdrawList(NMHDR* pNMHDR, LRESULT* pResult)
 			if (m_searchText.GetLength() > 0 &&
 				FindNoCaseAndInsert(csText, m_searchText, StrF(_T("\x01\x04 color='#%02x%02x%02x'\x02"), GetRValue(highlightColor), GetGValue(highlightColor), GetBValue(highlightColor)), _T("\x01\x03\x04\x02"), m_linesPerRow) > 0)
 			{
-				DrawHTML(pDC->m_hDC, csText, csText.GetLength(), rcText, DT_VCENTER | DT_EXPANDTABS | DT_NOPREFIX);
+				DrawHTML(pDC->m_hDC, csText, csText.GetLength(), rcText, DT_WORDBREAK | DT_EXPANDTABS | DT_NOPREFIX);
 			}
 			else
 			{
-				pDC->DrawText(csText, rcText, DT_VCENTER | DT_EXPANDTABS | DT_NOPREFIX);
+				// keep a clip that needs less room than the row has vertically
+				// centered, like it was before the text could wrap
+				CRect rcMeasure = rcText;
+				int nTextHeight = pDC->DrawText(csText, rcMeasure, DT_CALCRECT | DT_WORDBREAK | DT_EXPANDTABS | DT_NOPREFIX);
+				if (nTextHeight > 0 && nTextHeight < rcText.Height())
+				{
+					rcText.top += (rcText.Height() - nTextHeight) / 2;
+					rcText.bottom = rcText.top + nTextHeight;
+				}
+
+				pDC->DrawText(csText, rcText, DT_WORDBREAK | DT_EXPANDTABS | DT_NOPREFIX);
 			}
 		}
 
