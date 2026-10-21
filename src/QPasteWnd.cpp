@@ -1589,7 +1589,7 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch)
 				csSQLSearch = csSQLSearch.Mid(3);
 			}
 
-			fullTextFormat.SetVariable("Data.ooData");
+			fullTextFormat.SetVariable("substr(Data.ooData, 1)");
 			fullTextFormat.Parse(csSQLSearch);
 			fullTextSql = fullTextFormat.GetSQLString();
 
