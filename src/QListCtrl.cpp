@@ -17,6 +17,23 @@
 #include <cwchar>   // For swscanf
 #include <algorithm> // For std::round
 #include <gdiplus.h>
+#include <UIAutomation.h>
+#include "VisibleListProvider.h"
+#pragma comment(lib, "Uiautomationcore.lib")
+
+LRESULT CQListCtrl::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
+{
+    if (message >= WM_VISIBLE_LIST_UIA_ACTION && message <= WM_VISIBLE_LIST_UIA_ACTION + static_cast<UINT>(VisibleListAction::Invoke))
+        return HandleVisibleListAction(m_hWnd, static_cast<VisibleListAction>(message - WM_VISIBLE_LIST_UIA_ACTION), static_cast<int>(wParam), static_cast<LONG>(lParam));
+    if (message == WM_GETOBJECT && static_cast<LONG>(lParam) == UiaRootObjectId)
+    {
+        auto provider = new VisibleListProvider(m_hWnd);
+        LRESULT result = UiaReturnRawElementProvider(m_hWnd, wParam, lParam, static_cast<IRawElementProviderSimple *>(provider));
+        provider->Release();
+        return result;
+    }
+    return CListCtrl::WindowProc(message, wParam, lParam);
+}
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

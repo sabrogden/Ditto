@@ -91,6 +91,7 @@ public:
 	virtual INT_PTR OnToolHitTest(CPoint point, TOOLINFO * pTI) const;
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	virtual BOOL OnChildNotify(UINT message, WPARAM wParam, LPARAM lParam, LRESULT* pLResult);
+	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
 	//}}AFX_VIRTUAL
 
 // Implementation
