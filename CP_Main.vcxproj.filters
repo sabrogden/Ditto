@@ -805,6 +805,9 @@
     <ClInclude Include="src\QListCtrl.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\VisibleListProvider.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\QPasteWnd.h">
       <Filter>src</Filter>
     </ClInclude>
