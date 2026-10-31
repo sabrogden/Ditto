@@ -9,6 +9,7 @@
 #include "CF_UnicodeTextAggregator.h"
 #include "client.h"
 #include "ClipCompare.h"
+#include "ClipEditDialogs.h"
 #include "CopyProperties.h"
 #include "CP_Main.h"
 #include "DimWnd.h"
@@ -122,6 +123,8 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_COMMAND(ID_MENU_EXITPROGRAM, OnMenuExitprogram)
 	ON_COMMAND(ID_MENU_TOGGLECONNECTCV, OnMenuToggleConnectCV)
 	ON_COMMAND(ID_MENU_PROPERTIES, OnMenuProperties)
+	ON_COMMAND(ID_MENU_RENAME_CLIP, OnMenuRenameClip)
+	ON_COMMAND(ID_MENU_ASSIGN_CLIP_HOTKEY, OnMenuAssignClipHotKey)
 	ON_WM_CLOSE()
 	ON_NOTIFY(LVN_BEGINDRAG, ID_LIST_HEADER, OnBegindrag)
 	ON_WM_SYSKEYDOWN()
@@ -175,6 +178,8 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_UPDATE_COMMAND_UI(ID_MENU_PASTEPLAINTEXTONLY, OnUpdateMenuPasteplaintextonly)
 	ON_UPDATE_COMMAND_UI(ID_MENU_DELETE, OnUpdateMenuDelete)
 	ON_UPDATE_COMMAND_UI(ID_MENU_PROPERTIES, OnUpdateMenuProperties)
+	ON_UPDATE_COMMAND_UI(ID_MENU_RENAME_CLIP, OnUpdateMenuRenameClip)
+	ON_UPDATE_COMMAND_UI(ID_MENU_ASSIGN_CLIP_HOTKEY, OnUpdateMenuAssignClipHotKey)
 	ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_POSIXIFY_PATHS, &CQPasteWnd::OnUpdateSpecialPosixifyPaths)
 	ON_COMMAND(ID_QUICKOPTIONS_PROMPTTODELETECLIP, OnPromptToDeleteClip)
 	ON_COMMAND(ID_STICKYCLIPS_MAKETOPSTICKYCLIP, OnMakeTopStickyClip)
@@ -2203,6 +2208,16 @@ void CQPasteWnd::OnMenuProperties()
 	this->DoAction(ActionEnums::CLIP_PROPERTIES);
 }
 
+void CQPasteWnd::OnMenuRenameClip()
+{
+	this->DoAction(ActionEnums::RENAME_CLIP);
+}
+
+void CQPasteWnd::OnMenuAssignClipHotKey()
+{
+	this->DoAction(ActionEnums::ASSIGN_CLIP_HOTKEY);
+}
+
 void CQPasteWnd::UpdateFont()
 {
 	LOGFONT lf;
@@ -3237,6 +3252,12 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::CLIP_PROPERTIES:
 		ret = DoActionClipProperties();
 		break;
+	case ActionEnums::RENAME_CLIP:
+		ret = DoActionRenameClip();
+		break;
+	case ActionEnums::ASSIGN_CLIP_HOTKEY:
+		ret = DoActionAssignClipHotKey();
+		break;
 	case ActionEnums::PASTE_SELECTED_PLAIN_TEXT:
 		ret = DoActionPasteSelectedPlainText();
 		break;
@@ -4171,7 +4192,213 @@ bool CQPasteWnd::DoActionClipProperties()
 		m_lstHeader.SetListPos(row);
 	}
 
-	return false;
+	return ret;
+}
+
+bool CQPasteWnd::GetSelectedClipForCommand(int& id, int& row, CClip& clip)
+{
+	if (::GetFocus() != m_lstHeader.GetSafeHwnd())
+	{
+		return false;
+	}
+
+	ARRAY ids;
+	ARRAY indexes;
+	m_lstHeader.GetSelectionItemData(ids);
+	m_lstHeader.GetSelectionIndexes(indexes);
+
+	if (ids.GetSize() < 1 || indexes.GetSize() < 1)
+	{
+		return false;
+	}
+
+	id = ids[0];
+	row = indexes[0];
+	if (id < 0 || !clip.LoadMainTable(id))
+	{
+		return false;
+	}
+
+	m_bHideWnd = false;
+	m_lstHeader.RemoveAllSelection();
+	m_lstHeader.SetSelection(row);
+	return true;
+}
+
+void CQPasteWnd::RefreshClipRow(int id, int row, bool reloadAccelerators)
+{
+	{
+		ATL::CCritSecLock csLock(m_CritSection.m_sect);
+
+		if (row < 0 || row >= (int)m_listItems.size() || m_listItems[row].m_lID != id)
+		{
+			row = -1;
+			for (int index = 0; index < (int)m_listItems.size(); index++)
+			{
+				if (m_listItems[index].m_lID == id)
+				{
+					row = index;
+					break;
+				}
+			}
+		}
+
+		if (row >= 0 && row < (int)m_listItems.size())
+		{
+			CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), id);
+			if (!q.eof())
+			{
+				FillMainTable(m_listItems[row], q);
+			}
+
+			RemoveFromImageRtfCache(row);
+		}
+	}
+
+	if (reloadAccelerators)
+	{
+		m_extraDataThread.FireLoadAccelerators();
+	}
+
+	m_lstHeader.RefreshVisibleRows();
+}
+
+bool CQPasteWnd::DoActionRenameClip()
+{
+	int id = -1;
+	int row = -1;
+	CClip clip;
+	if (!GetSelectedClipForCommand(id, row, clip))
+	{
+		return false;
+	}
+
+	{
+		CDimWnd dimmer(this);
+		CClipNameDialog dialog(clip.m_Desc, this);
+		if (dialog.DoModal() == IDOK && dialog.GetClipName() != clip.m_Desc)
+		{
+			CString newName = dialog.GetClipName();
+			clip.m_Desc = newName;
+			if (clip.ModifyDescription())
+			{
+				if (clip.m_globalShortCut && clip.m_shortCut > 0)
+				{
+					g_HotKeys.Remove(id, CHotKey::PASTE_OPEN_CLIP);
+					g_HotKeys.ValidateClip(id, clip.m_shortCut, newName, CHotKey::PASTE_OPEN_CLIP);
+				}
+
+				RefreshClipRow(id, row, false);
+			}
+			else
+			{
+				MessageBox(
+					theApp.m_Language.GetString("ClipRenameFailed", "Ditto could not rename this clip."),
+					ActionEnums::EnumDescription(ActionEnums::RENAME_CLIP),
+					MB_OK | MB_ICONERROR);
+			}
+		}
+	}
+
+	m_lstHeader.SetListPos(row);
+	m_lstHeader.SetFocus();
+	m_bHideWnd = true;
+	return true;
+}
+
+bool CQPasteWnd::SaveClipHotKey(CClip& clip, DWORD shortcut, BOOL globalShortcut)
+{
+	ARRAY conflictingIds;
+
+	try
+	{
+		if (shortcut > 0)
+		{
+			{
+				CppSQLite3Query q = theApp.m_db.execQueryEx(
+					_T("SELECT lID FROM Main WHERE lShortCut = %d AND lID <> %d"),
+					shortcut,
+					clip.m_id);
+				while (!q.eof())
+				{
+					conflictingIds.Add(q.getIntField(_T("lID")));
+					q.nextRow();
+				}
+			}
+
+			theApp.m_db.execDMLEx(
+				_T("UPDATE Main SET ")
+				_T("lShortCut = CASE WHEN lID = %d THEN %d ELSE 0 END, ")
+				_T("globalShortCut = CASE WHEN lID = %d THEN %d ELSE 0 END ")
+				_T("WHERE lID = %d OR (lShortCut = %d AND lID <> %d);"),
+				clip.m_id,
+				shortcut,
+				clip.m_id,
+				globalShortcut,
+				clip.m_id,
+				shortcut,
+				clip.m_id);
+		}
+		else
+		{
+			theApp.m_db.execDMLEx(
+				_T("UPDATE Main SET lShortCut = 0, globalShortCut = 0 WHERE lID = %d;"),
+				clip.m_id);
+		}
+	}
+	CATCH_SQLITE_EXCEPTION_AND_RETURN(false)
+
+	for (int index = 0; index < conflictingIds.GetSize(); index++)
+	{
+		g_HotKeys.Remove(conflictingIds[index], CHotKey::PASTE_OPEN_CLIP);
+	}
+
+	g_HotKeys.Remove(clip.m_id, CHotKey::PASTE_OPEN_CLIP);
+	if (shortcut > 0 && globalShortcut)
+	{
+		g_HotKeys.ValidateClip(clip.m_id, shortcut, clip.m_Desc, CHotKey::PASTE_OPEN_CLIP);
+	}
+
+	clip.m_shortCut = shortcut;
+	clip.m_globalShortCut = globalShortcut;
+	return true;
+}
+
+bool CQPasteWnd::DoActionAssignClipHotKey()
+{
+	int id = -1;
+	int row = -1;
+	CClip clip;
+	if (!GetSelectedClipForCommand(id, row, clip))
+	{
+		return false;
+	}
+
+	{
+		CDimWnd dimmer(this);
+		CClipHotKeyDialog dialog(clip.m_shortCut, clip.m_globalShortCut, this);
+		if (dialog.DoModal() == IDOK &&
+			(dialog.GetShortcut() != (DWORD)clip.m_shortCut ||
+			 dialog.GetGlobalShortcut() != clip.m_globalShortCut))
+		{
+			if (SaveClipHotKey(clip, dialog.GetShortcut(), dialog.GetGlobalShortcut()))
+			{
+				RefreshClipRow(id, row, true);
+			}
+			else
+			{
+				MessageBox(
+					theApp.m_Language.GetString("ClipHotKeySaveFailed", "Ditto could not save this clip shortcut."),
+					ActionEnums::EnumDescription(ActionEnums::ASSIGN_CLIP_HOTKEY),
+					MB_OK | MB_ICONERROR);
+			}
+		}
+	}
+
+	m_lstHeader.SetListPos(row);
+	m_lstHeader.SetFocus();
+	m_bHideWnd = true;
+	return true;
 }
 
 bool CQPasteWnd::ShowProperties(int id, int row)
@@ -4190,42 +4417,7 @@ bool CQPasteWnd::ShowProperties(int id, int row)
 
 	if (doModalRet == IDOK)
 	{
-		{
-			ATL::CCritSecLock csLock(m_CritSection.m_sect);
-
-			if (row < 0)
-			{
-				bool selectedItem = false;
-				int index = 0;
-				std::vector<CMainTable>::iterator iter = m_listItems.begin();
-				while (iter != m_listItems.end())
-				{
-					if (iter->m_lID == id)
-					{
-						row = index;
-						break;
-					}
-					iter++;
-					index++;
-				}
-			}
-
-			if (row >= 0 &&
-				row < (int)m_listItems.size())
-			{
-				CppSQLite3Query q = theApp.m_db.execQueryEx(_T("SELECT * FROM Main WHERE lID = %d"), id);
-				if (!q.eof())
-				{
-					FillMainTable(m_listItems[row], q);
-				}
-
-				RemoveFromImageRtfCache(row);
-			}
-		}
-
-		m_extraDataThread.FireLoadAccelerators();
-
-		m_lstHeader.RefreshVisibleRows();
+		RefreshClipRow(id, row, true);
 
 		if (props.m_lGroupChangedTo >= 0)
 		{
@@ -6388,6 +6580,26 @@ void CQPasteWnd::OnUpdateMenuProperties(CCmdUI* pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::CLIP_PROPERTIES);
+}
+
+void CQPasteWnd::OnUpdateMenuRenameClip(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::RENAME_CLIP);
+}
+
+void CQPasteWnd::OnUpdateMenuAssignClipHotKey(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::ASSIGN_CLIP_HOTKEY);
 }
 
 void CQPasteWnd::OnUpdateMenuEdititem(CCmdUI* pCmdUI)

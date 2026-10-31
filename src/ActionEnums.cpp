@@ -440,6 +440,12 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case SHOW_STARRED_CLIPS:
 		val = "Show Starred Clips";
 		break;
+	case RENAME_CLIP:
+		val = "Rename Clip";
+		break;
+	case ASSIGN_CLIP_HOTKEY:
+		val = "Assign Clip Hot Key";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);
@@ -481,6 +487,10 @@ int ActionEnums::GetDefaultShortCutKeyA(ActionEnumValues value, int pos)
 			return ACCEL_MAKEKEY(VK_SPACE, HOTKEYF_CONTROL);
 		case ActionEnums::CLIP_PROPERTIES:
 			return ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_ALT);
+		case ActionEnums::RENAME_CLIP:
+			return VK_F2;
+		case ActionEnums::ASSIGN_CLIP_HOTKEY:
+			return ACCEL_MAKEKEY('S', HOTKEYF_CONTROL | HOTKEYF_SHIFT);
 		case ActionEnums::PASTE_SELECTED_PLAIN_TEXT:
 			return ACCEL_MAKEKEY(VK_RETURN, HOTKEYF_SHIFT);
 		case ActionEnums::COMPARE_SELECTED_CLIPS:

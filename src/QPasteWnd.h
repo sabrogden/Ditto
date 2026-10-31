@@ -263,6 +263,8 @@ public:
 	bool DoActionDeleteSelected();
 	bool DoActionPasteSelected();
 	bool DoActionClipProperties();
+	bool DoActionRenameClip();
+	bool DoActionAssignClipHotKey();
 	bool DoActionPasteSelectedPlainText();
 	bool DoActionMoveClipToGroup();
 	bool DoActionElevatePrivleges();
@@ -336,6 +338,9 @@ public:
 	void UpdateMenuShortCut(CCmdUI *pCmdUI, DWORD action);
 
 	bool ShowProperties(int id, int row);
+	bool GetSelectedClipForCommand(int& id, int& row, CClip& clip);
+	bool SaveClipHotKey(CClip& clip, DWORD shortcut, BOOL globalShortcut);
+	void RefreshClipRow(int id, int row, bool reloadAccelerators);
 	bool DeleteClips(CClipIDs &IDs, ARRAY &Indexs);
 	void RemoveFromImageRtfCache(int row, int id = -1);
 	bool SyncClipDataToArrayData(CClip &clip);
@@ -378,6 +383,8 @@ protected:
     afx_msg void OnMenuExitprogram();
     afx_msg void OnMenuToggleConnectCV();
     afx_msg void OnMenuProperties();
+	afx_msg void OnMenuRenameClip();
+	afx_msg void OnMenuAssignClipHotKey();
     afx_msg void OnClose();
     afx_msg void OnBegindrag(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
@@ -433,6 +440,8 @@ protected:
     afx_msg void OnUpdateMenuPasteplaintextonly(CCmdUI *pCmdUI);
     afx_msg void OnUpdateMenuDelete(CCmdUI *pCmdUI);
     afx_msg void OnUpdateMenuProperties(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateMenuRenameClip(CCmdUI *pCmdUI);
+	afx_msg void OnUpdateMenuAssignClipHotKey(CCmdUI *pCmdUI);
     afx_msg void OnDestroy();
     afx_msg LRESULT OnSearchEnterKeyPressed(WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnListEnd(WPARAM wParam, LPARAM lParam);

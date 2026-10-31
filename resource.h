@@ -201,6 +201,8 @@
 #define IDB_PNG20                       332
 #define down_32                         332
 #define IDD_SCRIPT_EDITOR               333
+#define IDD_RENAME_CLIP                 394
+#define IDD_ASSIGN_CLIP_HOTKEY          395
 #define close_36                        340
 #define close_40                        341
 #define close_44                        342
@@ -651,6 +653,13 @@
 #define IDC_EDIT_ACTIVE_APP             2173
 #define IDC_CHECK_DO_NOT_HIDE_ON_DEACTIVATE 2174
 #define IDC_BUTTON_PREVIEW_THEME        2175
+#define IDC_CLIP_NAME                   2176
+#define IDC_STATIC_CLIP_NAME            2177
+#define IDC_CLIP_HOTKEY                 2178
+#define IDC_STATIC_CLIP_HOTKEY          2179
+#define IDC_CLIP_HOTKEY_WIN             2180
+#define IDC_CLIP_HOTKEY_GLOBAL          2181
+#define IDC_REMOVE_CLIP_HOTKEY          2182
 #define IDC_EDIT_ADV_FILTER             5001
 #define IDC_NEXT_MATCH_BUTTON           5002
 #define ID_FIRST_OPTION                 32771
@@ -876,15 +885,17 @@
 #define ID_MENU_SHOWSTARREDCLIPS        33000
 #define ID_SPECIALPASTE_PASTEASIMAGE    33001
 #define ID_MENU_GOTOENTRY               33002
+#define ID_MENU_RENAME_CLIP             33003
+#define ID_MENU_ASSIGN_CLIP_HOTKEY      33004
 
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        394
-#define _APS_NEXT_COMMAND_VALUE         33002
-#define _APS_NEXT_CONTROL_VALUE         2174
+#define _APS_NEXT_RESOURCE_VALUE        396
+#define _APS_NEXT_COMMAND_VALUE         33005
+#define _APS_NEXT_CONTROL_VALUE         2183
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif
