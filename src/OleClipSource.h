@@ -61,6 +61,7 @@ protected:
 	void InvertCase(CClip &clip);
 	void CamelCase(CClip& clip);
 	void AsciiOnly(CClip& clip);
+	void SnakeCase(CClip& clip);
 	void PutGuidOntoClipboard(CClip& clip);
 	void PasteAsImage(CClip& clip);
 };

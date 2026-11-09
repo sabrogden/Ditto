@@ -33,6 +33,7 @@ public:
 	bool m_pasteAsciiOnly;
 	bool m_pasteGuid;
 	bool m_pasteAsImage;
+	bool m_pasteSnakeCase;
 
 	bool LimitFormatsToText() 
 	{ 
@@ -51,7 +52,8 @@ public:
 			m_pasteSlugify || 
 			m_invertCase ||
 			m_pasteCamelCase ||
-			m_pasteAsciiOnly;
+			m_pasteAsciiOnly ||
+			m_pasteSnakeCase;
 	}
 
 	bool IncludeRTFForTextOnly()

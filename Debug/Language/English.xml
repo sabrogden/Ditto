@@ -151,6 +151,7 @@
 		<Item English_Text = "Delete All Non Used Clips" ID = "32968"></Item>				
 		
 		<Item English_Text = "CamelCase" ID = "32971"></Item>
+		<Item English_Text = "snake_case" ID = "33003"></Item>
 		<Item English_Text = "Multiple Images Horizontally" ID = "32976"></Item>
 		<Item English_Text = "Multiple Images Vertically" ID = "32978"></Item>
 		<Item English_Text = "Ascii Text Only" ID = "32979"></Item>
@@ -701,6 +702,7 @@
 		<Item English_Text = "Paste CamelCase" ID = "122"></Item>
 		<Item English_Text = "Paste Multiple Images Horizontally" ID = "123"></Item>
 		<Item English_Text = "Paste Multiple Images Vertically" ID = "124"></Item>
+		<Item English_Text = "Paste snake_case" ID = "141"></Item>
 
 	</Ditto_Options_Quick_Paste_Keyboard>
 	
