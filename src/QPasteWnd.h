@@ -285,6 +285,7 @@ public:
 	bool DoFilterOnSelectedClip();
 	bool DoPasteUpperCase();
 	bool DoPasteCamelCase();
+	bool DoPasteSnakeCase();
 	bool DoPasteImagesVert();
 	bool DoPasteAsciiOnly();
 	bool DoPasteImagesHorz();
@@ -615,6 +616,8 @@ public:
 	afx_msg void OnUpdateImportSetdragfilename(CCmdUI* pCmdUI);
 	afx_msg void OnSpecialpasteCamelcase();
 	afx_msg void OnUpdateSpecialpasteCamelcase(CCmdUI* pCmdUI);
+	afx_msg void OnSpecialpasteSnakecase();
+	afx_msg void OnUpdateSpecialpasteSnakecase(CCmdUI* pCmdUI);
 	afx_msg void OnSpecialpasteMultipleImagesHorz();
 	afx_msg void OnUpdateSpecialpasteMultipleImagesHorz(CCmdUI* pCmdUI);
 	afx_msg void OnSpecialpasteMultipleImagesVert();

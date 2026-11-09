@@ -227,6 +227,10 @@ BOOL COleClipSource::DoImmediateRender()
 	{
 		AsciiOnly(clip);
 	}
+	else if (m_pasteOptions.m_pasteSnakeCase)
+	{
+		SnakeCase(clip);
+	}
 	else if (m_pasteOptions.m_pasteGuid)
 	{
 		PutGuidOntoClipboard(clip);
@@ -1646,4 +1650,43 @@ void COleClipSource::PasteAsImage(CClip& clip)
 	}
 
 	Log(_T("End of PasteAsImage"));
+}
+
+void COleClipSource::SnakeCase(CClip& clip)
+{
+	IClipFormat* unicodeTextFormat = clip.m_Formats.FindFormatEx(CF_UNICODETEXT);
+	if (unicodeTextFormat != NULL)
+	{
+		CString cs(unicodeTextFormat->GetAsCString());
+
+		//free the old text we are going to replace it below with a lower case, underscored version
+		unicodeTextFormat->Free();
+
+		CString val = theApp.m_icuString.ToLowerStringEx(cs);
+		val.Replace(_T(' '), _T('_'));
+
+		long lLen = val.GetLength();
+		HGLOBAL hGlobal = NewGlobalP(val.GetBuffer(lLen), ((lLen + 1) * sizeof(wchar_t)));
+		val.ReleaseBuffer();
+
+		unicodeTextFormat->Data(hGlobal);
+	}
+
+	IClipFormat* asciiTextFormat = clip.m_Formats.FindFormatEx(CF_TEXT);
+	if (asciiTextFormat != NULL)
+	{
+		CStringA val(asciiTextFormat->GetAsCStringA());
+
+		//free the old text we are going to replace it below with a lower case, underscored version
+		asciiTextFormat->Free();
+
+		val.MakeLower();
+		val.Replace(' ', '_');
+
+		long lLen = val.GetLength();
+		HGLOBAL hGlobal = NewGlobalP(val.GetBuffer(lLen), lLen + sizeof(char));
+		val.ReleaseBuffer();
+
+		asciiTextFormat->Data(hGlobal);
+	}
 }

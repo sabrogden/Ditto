@@ -365,6 +365,8 @@ BEGIN_MESSAGE_MAP(CQPasteWnd, CWndEx)
 	ON_UPDATE_COMMAND_UI(ID_IMPORT_SETDRAGFILENAME, &CQPasteWnd::OnUpdateImportSetdragfilename)
 	ON_COMMAND(ID_SPECIALPASTE_CAMELCASE, &CQPasteWnd::OnSpecialpasteCamelcase)
 	ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_CAMELCASE, &CQPasteWnd::OnUpdateSpecialpasteCamelcase)
+	ON_COMMAND(ID_SPECIALPASTE_SNAKECASE, &CQPasteWnd::OnSpecialpasteSnakecase)
+	ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_SNAKECASE, &CQPasteWnd::OnUpdateSpecialpasteSnakecase)
 
 	ON_COMMAND(ID_SPECIALPASTE_MULTIPLEIMAGESHORIZONTALLY, &CQPasteWnd::OnSpecialpasteMultipleImagesHorz)
 	ON_UPDATE_COMMAND_UI(ID_SPECIALPASTE_MULTIPLEIMAGESHORIZONTALLY, &CQPasteWnd::OnUpdateSpecialpasteMultipleImagesHorz)
@@ -3555,6 +3557,9 @@ bool CQPasteWnd::DoAction(CAccel a)
 	case ActionEnums::PASTE_CAMEL_CASE:
 		ret = DoPasteCamelCase();
 		break;
+	case ActionEnums::PASTE_SNAKE_CASE:
+		ret = DoPasteSnakeCase();
+		break;
 	case ActionEnums::PASTE_MULTI_IMAGE_HORIZONTAL:
 		ret = DoPasteImagesHorz();
 		break;
@@ -4941,6 +4946,19 @@ bool CQPasteWnd::DoPasteCamelCase()
 	{
 		CSpecialPasteOptions pasteOptions;
 		pasteOptions.m_pasteCamelCase = true;
+		OpenSelection(pasteOptions);
+		return true;
+	}
+
+	return false;
+}
+
+bool CQPasteWnd::DoPasteSnakeCase()
+{
+	if (::GetFocus() == m_lstHeader.GetSafeHwnd())
+	{
+		CSpecialPasteOptions pasteOptions;
+		pasteOptions.m_pasteSnakeCase = true;
 		OpenSelection(pasteOptions);
 		return true;
 	}
@@ -8564,6 +8582,21 @@ void CQPasteWnd::OnUpdateSpecialpasteCamelcase(CCmdUI* pCmdUI)
 	}
 
 	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_CAMEL_CASE);
+}
+
+void CQPasteWnd::OnSpecialpasteSnakecase()
+{
+	DoAction(ActionEnums::PASTE_SNAKE_CASE);
+}
+
+void CQPasteWnd::OnUpdateSpecialpasteSnakecase(CCmdUI* pCmdUI)
+{
+	if (!pCmdUI->m_pMenu)
+	{
+		return;
+	}
+
+	UpdateMenuShortCut(pCmdUI, ActionEnums::PASTE_SNAKE_CASE);
 }
 
 void CQPasteWnd::OnSpecialpasteMultipleImagesHorz()

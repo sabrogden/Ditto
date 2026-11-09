@@ -440,6 +440,9 @@ CString ActionEnums::EnumDescription(ActionEnumValues value)
 	case SHOW_STARRED_CLIPS:
 		val = "Show Starred Clips";
 		break;
+	case PASTE_SNAKE_CASE:
+		val = "Paste snake_case";
+		break;
 	}
 
 	CString translatedValue = theApp.m_Language.GetQuickPasteKeyboardString(value, val);

@@ -492,6 +492,7 @@ BEGIN
             MENUITEM "Trim White Space",            ID_SPECIALPASTE_TRIM
             MENUITEM "Posixify/Paths",              ID_SPECIALPASTE_POSIXIFY_PATHS
             MENUITEM "CamelCase",                   ID_SPECIALPASTE_CAMELCASE
+            MENUITEM "snake_case",                  ID_SPECIALPASTE_SNAKECASE
             MENUITEM "Ascii Text Only",             ID_SPECIALPASTE_ASCIITEXTONLY
             MENUITEM SEPARATOR
             MENUITEM "Remove Line Feeds",           ID_SPECIALPASTE_REMOVELINEFEEDS
