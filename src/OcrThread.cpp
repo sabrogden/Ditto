@@ -8,6 +8,10 @@
 #include "Clip.h"
 #include "Misc.h"
 #include <vector>
+// cppwinrt still pulls in <experimental/coroutine> when the project
+// builds as c++17, newer msvc errors on that header unless this is set,
+// this file only, nothing else sees it
+#define _SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Graphics.Imaging.h>
 #include <winrt/Windows.Media.Ocr.h>
