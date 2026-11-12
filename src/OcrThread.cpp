@@ -12,10 +12,16 @@
 // builds as c++17, newer msvc errors on that header unless this is set,
 // this file only, nothing else sees it
 #define _SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS
+// mfc defines TRY as a macro ({ try {), it breaks the winrt headers
+// (windows.globalization has a TRY currency code method), drop it for
+// the winrt includes only, this file does not use mfc TRY/CATCH
+#pragma push_macro("TRY")
+#undef TRY
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Graphics.Imaging.h>
 #include <winrt/Windows.Media.Ocr.h>
 #include <winrt/Windows.Storage.Streams.h>
+#pragma pop_macro("TRY")
 
 // longest edge of the image handed to the ocr engine, bigger images
 // are downscaled first so recognition stays fast
