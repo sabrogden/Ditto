@@ -22,6 +22,9 @@
 #include <winrt/Windows.Media.Ocr.h>
 #include <winrt/Windows.Storage.Streams.h>
 #pragma pop_macro("TRY")
+// cppwinrt calls RoGetActivationFactory / RoOriginateLanguageException,
+// both live in runtimeobject.lib, which ditto does not link yet
+#pragma comment(lib, "runtimeobject.lib")
 
 // longest edge of the image handed to the ocr engine, bigger images
 // are downscaled first so recognition stays fast
