@@ -507,6 +507,7 @@ void CCP_MainApp::AfterMainCreate()
 
 	g_HotKeys.RegisterAll();
 	StartCopyThread();
+	StartStopOcrThread();
 	StartStopServerThread();
 
 #ifdef UNICODE
@@ -590,6 +591,19 @@ void CCP_MainApp::BeforeMainClose()
 	g_HotKeys.UnregisterAll();
 	StopServerThread();
 	StopCopyThread();
+	m_ocrThread.StopOcr();
+}
+
+void CCP_MainApp::StartStopOcrThread()
+{
+	if (CGetSetOptions::GetOcrImageSearch())
+	{
+		m_ocrThread.StartOcr();
+	}
+	else
+	{
+		m_ocrThread.StopOcr();
+	}
 }
 
 void CCP_MainApp::StartCopyThread()

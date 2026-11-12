@@ -1546,6 +1546,8 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch)
 	{
 		CFormatSQL descriptionFormat;
 		CString descriptionSql;
+		CFormatSQL ocrFormat;
+		CString ocrSql;
 		CFormatSQL quickPasteFormat;
 		CString quickPasteSql;
 		CFormatSQL fullTextFormat;
@@ -1559,6 +1561,11 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch)
 
 			descriptionFormat.Parse(csSQLSearch);
 			descriptionSql = descriptionFormat.GetSQLString();
+
+			ocrFormat.SetVariable("Main.ocrText");
+
+			ocrFormat.Parse(csSQLSearch);
+			ocrSql = ocrFormat.GetSQLString();
 		}
 
 		if (csSQLSearch.Left(3) == _T("/q ") ||
@@ -1612,6 +1619,16 @@ BOOL CQPasteWnd::FillList(CString csSQLSearch)
 		if (descriptionSql != _T(""))
 		{
 			strFilter += descriptionSql;
+		}
+
+		if (ocrSql != _T(""))
+		{
+			if (descriptionSql != _T(""))
+			{
+				strFilter += _T(" OR ");
+			}
+
+			strFilter += ocrSql;
 		}
 
 		if (quickPasteSql != _T(""))

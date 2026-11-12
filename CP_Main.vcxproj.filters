@@ -235,6 +235,9 @@
     <ClCompile Include="src\NumberEdit.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\OcrThread.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\OleClipSource.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -749,6 +752,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\NumberEdit.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OcrThread.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\OleClipSource.h">
