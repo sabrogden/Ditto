@@ -173,7 +173,9 @@ Gdiplus::Bitmap* DownscaleBitmap(Gdiplus::Bitmap* bitmap, UINT maxEdge)
 		newHeight = 1;
 	}
 
-	Gdiplus::Bitmap* scaled = new Gdiplus::Bitmap(newWidth, newHeight, Gdiplus::PixelFormat32bppARGB);
+	// PixelFormat32bppARGB is a macro in gdipluspixelformats.h, not an
+	// enum value, so it takes no Gdiplus:: qualifier
+	Gdiplus::Bitmap* scaled = new Gdiplus::Bitmap(newWidth, newHeight, PixelFormat32bppARGB);
 	Gdiplus::Graphics graphics(scaled);
 	graphics.SetInterpolationMode(Gdiplus::InterpolationModeHighQualityBicubic);
 	graphics.DrawImage(bitmap, 0, 0, (INT)newWidth, (INT)newHeight);
