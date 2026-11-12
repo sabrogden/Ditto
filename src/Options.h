@@ -448,6 +448,9 @@ public:
 	static void		SetSearchDescription(BOOL val);
 	static BOOL		GetSearchDescription();
 
+	static void		SetOcrImageSearch(BOOL val);
+	static BOOL		GetOcrImageSearch();
+
 	static void		SetSearchFullText(BOOL val);
 	static BOOL		GetSearchFullText();
 

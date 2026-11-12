@@ -471,6 +471,17 @@ BOOL ValidDB(CString csPath, BOOL bUpgrade)
 			e.errorCode();
 		}
 
+		try
+		{
+			db.execQuery(_T("SELECT ocrText FROM Main"));
+		}
+		catch (CppSQLite3Exception& e)
+		{
+			db.execDML(_T("ALTER TABLE Main ADD ocrText TEXT"));
+
+			e.errorCode();
+		}
+
 		db.execDML(_T("DROP INDEX IF EXISTS Main_NoGroup"));
 		db.execDML(_T("DROP INDEX IF EXISTS Main_InGroup"));
 		db.execDML(_T("DROP INDEX IF EXISTS Main_ShortCut"));
@@ -716,7 +727,8 @@ BOOL CreateDB(CString csFile)
 			_T("stickyClipOrder REAL, ")
 			_T("stickyClipGroupOrder REAL, ")
 			_T("MoveToGroupShortCut INTEGER, ")
-			_T("GlobalMoveToGroupShortCut INTEGER);"));
+			_T("GlobalMoveToGroupShortCut INTEGER, ")
+			_T("ocrText TEXT);"));
 
 		db.execDML(_T("CREATE TABLE Data(")
 			_T("lID INTEGER PRIMARY KEY AUTOINCREMENT, ")

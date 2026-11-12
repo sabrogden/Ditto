@@ -23,6 +23,7 @@
 #include "UAC_Thread.h"
 #include "ICU_String.h"
 #include "ClipEditThread.h"
+#include "OcrThread.h"
 
 
 extern class CCP_MainApp theApp;
@@ -93,6 +94,9 @@ public:
 	ExternalWindowTracker m_activeWnd;
 
 	CClipEditThread m_editThread;
+
+	COcrThread m_ocrThread;
+	void StartStopOcrThread();
 
 	// CopyThread and ClipViewer (Copy and Paste Management)
 	CCopyThread	m_CopyThread;

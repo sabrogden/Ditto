@@ -615,6 +615,7 @@
     <ClCompile Include="src\NoDbFrameWnd.cpp" />
     <ClCompile Include="src\NTray.cpp" />
     <ClCompile Include="src\NumberEdit.cpp" />
+    <ClCompile Include="src\OcrThread.cpp" />
     <ClCompile Include="src\OleClipSource.cpp" />
     <ClCompile Include="src\OptionFriends.cpp" />
     <ClCompile Include="src\Options.cpp" />
@@ -883,6 +884,7 @@
     <ClInclude Include="src\NoDbFrameWnd.h" />
     <ClInclude Include="src\NTray.h" />
     <ClInclude Include="src\NumberEdit.h" />
+    <ClInclude Include="src\OcrThread.h" />
     <ClInclude Include="src\OleClipSource.h" />
     <ClInclude Include="src\OptionFriends.h" />
     <ClInclude Include="src\Options.h" />

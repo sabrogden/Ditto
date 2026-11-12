@@ -2243,6 +2243,16 @@ BOOL CGetSetOptions::GetSearchDescription()
 	return GetProfileLong(_T("SearchDescription"), 1);
 }
 
+void CGetSetOptions::SetOcrImageSearch(BOOL val)
+{
+	SetProfileLong(_T("OcrImageSearch"), val);
+}
+
+BOOL CGetSetOptions::GetOcrImageSearch()
+{
+	return GetProfileLong(_T("OcrImageSearch"), 0);
+}
+
 void CGetSetOptions::SetSearchFullText(BOOL val)
 {
 	SetProfileLong(_T("SearchFullText"), val);

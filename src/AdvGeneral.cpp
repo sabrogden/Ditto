@@ -163,6 +163,7 @@ END_MESSAGE_MAP()
 #define SETTING_HIDE_TASKBAR_ICON_ON_CLOSE 109
 #define SETTING_USE_MODERN_SCROLLBAR 110
 #define SETTING_ENFORCE_CLIPBOARD_IGNORE_FORMATS 111
+#define SETTING_OCR_IMAGE_SEARCH 112
 
 BOOL CAdvGeneral::OnInitDialog()
 {
@@ -299,6 +300,8 @@ BOOL CAdvGeneral::OnInitDialog()
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Save clipboard delay (ms, default: 100)"), (long)(CGetSetOptions::GetProcessDrawClipboardDelay()), _T(""), SETTING_CLIPBOARD_SAVE_DELAY));
 
 	AddTrueFalse(pGroupTest, _T("Save multi-pastes"), CGetSetOptions::GetSaveMultiPaste(), SETTING_SAVE_MULTI_PASTE);
+
+	AddTrueFalse(pGroupTest, _T("Search image clips by the text in them (OCR)"), CGetSetOptions::GetOcrImageSearch(), SETTING_OCR_IMAGE_SEARCH);
 
 	pGroupTest->AddSubItem(new CMFCPropertyGridProperty(_T("Selected index"), (long)(CGetSetOptions::SelectedIndex()+1), _T(""), SETTING_SELECTED_INDEX));
 
@@ -997,6 +1000,14 @@ void CAdvGeneral::OnBnClickedOk()
 				{
 					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
 					CGetSetOptions::SetEnforceClipboardIgnoreFormats(val);
+				}
+				break;
+			case SETTING_OCR_IMAGE_SEARCH:
+				if (wcscmp(pNewValue->bstrVal, pOrigValue->bstrVal) != 0)
+				{
+					BOOL val = wcscmp(pNewValue->bstrVal, L"True") == 0;
+					CGetSetOptions::SetOcrImageSearch(val);
+					theApp.StartStopOcrThread();
 				}
 				break;
 			}
