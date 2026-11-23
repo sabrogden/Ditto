@@ -7,6 +7,7 @@
 #include ".\editwnd.h"
 #include "SaveAnimation.h"
 #include "ProcessPaste.h"
+#include "GroupName.h"
 
 IMPLEMENT_DYNAMIC(CEditWnd, CWnd)
 CEditWnd::CEditWnd()
@@ -27,6 +28,7 @@ BEGIN_MESSAGE_MAP(CEditWnd, CWnd)
 	ON_COMMAND(ID_BUTTON_CLOSE, OnClose)
 	ON_COMMAND(ID_BUTTON_NEW, OnNew)
 	ON_COMMAND(ID_BUTTON_SAVE_CLOSE_CLIPBOARD, OnSaveCloseClipboard)
+	ON_NOTIFY(SN_SETTABRENAME, 101, OnTabRename)
 	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
@@ -347,6 +349,44 @@ void CEditWnd::OnSetFocus(CWnd* pOldWnd)
 			pEdit->SetFocus();
 		}
 	}
+}
+
+void CEditWnd::OnTabRename(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	*pResult = 0;
+
+	NMTABCHANGE *pTabChange = (NMTABCHANGE*)pNMHDR;
+	int index = (int)pTabChange->lNewTab;
+	if(index < 0 || index >= (int)m_edits.size())
+		return;
+
+	CDittoRulerRichEditCtrl *pEdit = m_edits[index];
+	if(pEdit == NULL)
+		return;
+
+	CGroupName Name;
+	Name.m_csName = m_tabControl.GetTabTitle(index);
+	if(Name.DoModal() != IDOK)
+		return;
+
+	CString csTitle = Name.m_csName;
+	csTitle.Trim();
+	if(csTitle.IsEmpty())
+		return;
+
+	long lID = pEdit->GetDBID();
+	if(lID >= 0)
+	{
+		// Save the new title/description for the clip in the DB
+		CClip Clip;
+		Clip.m_id = lID;
+		Clip.m_Desc = csTitle;
+		Clip.ModifyDescription();
+
+		theApp.RefreshView();
+	}
+
+	m_tabControl.SetTabTitle(index, csTitle);
 }
 
 bool CEditWnd::CloseEdits(bool bPrompt)

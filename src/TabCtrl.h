@@ -15,6 +15,7 @@
 #define SCS_BORDER			0x0010
 
 #define SN_SETACTIVETAB		WM_APP + 1122
+#define SN_SETTABRENAME		WM_APP + 1123
 
 typedef struct tagNMTABCHANGE{
     NMHDR hdr;
@@ -169,6 +170,7 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
