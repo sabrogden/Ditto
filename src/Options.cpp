@@ -1810,7 +1810,7 @@ void CGetSetOptions::SetLastExportDir(CString csDir)
 
 BOOL CGetSetOptions::GetUpdateDescWhenSavingClip()
 {
-	return GetProfileLong("UpdateDescWhenSaving", TRUE);
+	return GetProfileLong("UpdateDescWhenSaving", FALSE);
 }
 
 void CGetSetOptions::SetUpdateDescWhenSavingClip(BOOL bSet)

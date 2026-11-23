@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ditto Validation Report — VAL2-ufzqw8</title>
+<style>
+  :root { color-scheme: light; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; background: #f5f6f8; color: #1c1c1c; }
+  header { background: #1f2937; color: #fff; padding: 24px 32px; }
+  header h1 { margin: 0 0 4px 0; font-size: 22px; }
+  header .sub { color: #cbd5e1; font-size: 13px; }
+  .banner { padding: 18px 32px; font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+  .banner.pass { background: #16a34a; color: #fff; }
+  .banner.fail { background: #dc2626; color: #fff; }
+  .meta { padding: 16px 32px; background: #fff; border-bottom: 1px solid #e5e7eb; }
+  .meta table { border-collapse: collapse; font-size: 13px; }
+  .meta td { padding: 3px 14px 3px 0; }
+  .meta td.k { color: #64748b; }
+  code.hash { font-size: 12px; word-break: break-all; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; }
+  .wrap { padding: 20px 32px 40px 32px; }
+  table.steps { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.08); font-size: 13px; }
+  table.steps th { background: #334155; color: #fff; text-align: left; padding: 10px 12px; position: sticky; top: 0; }
+  table.steps td { border-bottom: 1px solid #e5e7eb; padding: 12px; vertical-align: top; }
+  td.num { color: #94a3b8; font-weight: 600; }
+  .sid { font-family: Consolas, monospace; font-weight: 700; font-size: 12px; color: #0f172a; }
+  .sname { font-weight: 600; margin-top: 2px; }
+  .result { display: inline-block; padding: 3px 10px; border-radius: 12px; font-weight: 700; font-size: 11px; }
+  .result.pass { background: #dcfce7; color: #15803d; }
+  .result.fail { background: #fee2e2; color: #b91c1c; }
+  .result.blocked { background: #fef3c7; color: #b45309; }
+  td.context { max-width: 520px; line-height: 1.45; color: #334155; }
+  td.action { max-width: 240px; color: #475569; }
+  td.shot img { max-width: 220px; max-height: 160px; border: 1px solid #cbd5e1; border-radius: 4px; display: block; }
+  td.shot a { font-size: 11px; color: #2563eb; }
+  ul.metrics { margin: 0; padding-left: 16px; font-size: 12px; }
+  ul.metrics li { margin-bottom: 2px; word-break: break-word; }
+  ul.metrics code { background: #f1f5f9; padding: 1px 4px; border-radius: 3px; }
+  .muted { color: #94a3b8; font-style: italic; }
+  .summary { background: #fff; border-left: 5px solid #334155; padding: 14px 18px; margin: 18px 0; font-size: 13px; line-height: 1.5; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  footer { padding: 12px 32px; color: #94a3b8; font-size: 11px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Ditto Validation Report — VAL2-ufzqw8</h1>
+  <div class="sub">Validation plan revision 2 — Preserve custom clip title when editing content by default (+ double-click tab rename)</div>
+</header>
+<div class="banner pass">OVERALL VERDICT: PASS</div>
+<div class="meta">
+  <table>
+    <tr><td class="k">Run ID</td><td>VAL2-ufzqw8</td></tr>
+    <tr><td class="k">Started (UTC)</td><td>2026-11-14T06:34:51.913Z</td></tr>
+    <tr><td class="k">Finished (UTC)</td><td>2026-11-14T07:24:59.998Z</td></tr>
+    <tr><td class="k">EXE path</td><td>C:\dev\ai-flow-01\worktrees\havra-preserve-custom-clip-title\Release64\Ditto.exe</td></tr>
+    <tr><td class="k">EXE SHA256</td><td><code class="hash">65B0F4CFD3D3725627117A806606A955BCD38F2F8D4F207C0EBA2D72B8E6E422</code></td></tr>
+    <tr><td class="k">Steps</td><td>16 (13 with screenshots)</td></tr>
+    <tr><td class="k">Plan</td><td>validation-plan.md (revision 2)</td></tr>
+  </table>
+</div>
+<div class="wrap">
+  <div class="summary"><strong>Summary:</strong> All 16 steps passed (12 protocol/plan steps + rev-2 checks 7/8 + cancel spot-check + pre-checks). Build 65B0F4CF... contains both changes (built after src/EditWnd.cpp/TabCtrl.cpp). Round-1 behavior re-verified on revision-2 build: fresh-install default (UpdateDescWhenSaving absent) preserves a manually set description byte-identically across content edits (check 4), opt-in regeneration works and the checkbox choice persists both ways with registry round-trip (checks 5/6). New revision-2 feature verified: double-clicking an Edit window tab title opens the CGroupName rename prompt pre-filled with the tab title; OK persists the new title to the DB (CClip::ModifyDescription), updates the tab, refreshes the Quick Paste list (&#39;|NEW-TITLE-ABC&#39; at top), survives editor close/reopen, combines with title-preservation on subsequent content edits (check 8), and Cancel leaves everything unchanged. Method note: this validation environment could not visually inspect screenshots (model without image input), so every UI-state claim above was verified programmatically via UI Automation text/state reads, Win32 messages, and registry values, with the listed screenshots saved to disk as corroborating evidence for human review. Environment adaptations: machine profile had a stale custom hotkey (0x356) which was reset so the plan&#39;s default Ctrl+` applies; Ditto&#39;s hotkey toggle later became unresponsive to synthetic chord timing (its &#39;modifiers still down&#39; branch), so Quick Paste was opened via the equivalent tray-double-click command path (WM_COMMAND ID_FIRST_SHOWQUICKPASTE 32773) for the remainder of the run.</div>
+  <table class="steps">
+    <thead>
+      <tr><th>#</th><th>Step</th><th>Action</th><th>Result</th><th>Context / Evidence</th><th>Screenshot</th><th>Metrics</th></tr>
+    </thead>
+    <tbody>
+  <tr class="step-row" id="step-precheck-exe">
+    <td class="num">1</td>
+    <td><div class="sid">precheck-exe</div><div class="sname">Pre-check: EXE exists, hash, freshness vs source</div></td>
+    <td class="action">Get-FileHash + timestamp comparison</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">EXE present (5,900,800 bytes). SHA256=65B0F4CFD3D3725627117A806606A955BCD38F2F8D4F207C0EBA2D72B8E6E422. EXE LastWriteTime=2026-11-13 10:28:44 PM is newer than the newest source change (src/EditWnd.cpp 10:26:41 PM, src/TabCtrl.cpp 10:26:05 PM), so the build contains both the rev-1 default change and the rev-2 double-click rename feature.</td>
+    <td class="shot"><span class="muted">no screenshot (not applicable)</span></td>
+    <td class="metrics-cell"><ul class="metrics"><li><code>exeLastWriteTime</code> = 2026-11-13T22:28:44</li><li><code>newestSourceFile</code> = src/EditWnd.cpp</li><li><code>newestSourceTime</code> = 2026-11-13T22:26:41</li><li><code>exeSizeBytes</code> = 5900800</li></ul></td>
+  </tr>
+
+  <tr class="step-row" id="step-precheck-process">
+    <td class="num">2</td>
+    <td><div class="sid">precheck-process</div><div class="sname">Pre-check: no existing Ditto process</div></td>
+    <td class="action">Get-Process Ditto/CP_Main; Stop-Process if found</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">No Ditto.exe or CP_Main.exe process was running before launch; nothing needed to be killed. Note: an initial launch was made at 06:35 UTC for setup, then superseded by a fresh-state reset (registry delete) and relaunch at 06:43 UTC; the recorded launch is the relaunch (PID 78356).</td>
+    <td class="shot"><span class="muted">no screenshot (not applicable)</span></td>
+    <td class="metrics-cell"><ul class="metrics"><li><code>initialLaunchSuperseded</code> = true</li></ul></td>
+  </tr>
+
+  <tr class="step-row" id="step-precheck-registry">
+    <td class="num">3</td>
+    <td><div class="sid">precheck-registry</div><div class="sname">Pre-check: fresh-install option state (UpdateDescWhenSaving absent)</div></td>
+    <td class="action">Delete HKCU\Software\Ditto\UpdateDescWhenSaving before launch</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">UpdateDescWhenSaving=0 WAS present (written by the round-1 validation run&#39;s checkbox persistence). Ditto rewrites settings on exit, so the value was deleted with Ditto force-killed, then the app relaunched, giving fresh/never-touched install state for the run. Additionally the persisted custom activation hotkey DittoHotKey=0x356 (Ctrl+Shift+V from an old profile) was deleted so the plan&#39;s default hotkey Ctrl+` applies (verified working). No crash after registry reset.</td>
+    <td class="shot"><span class="muted">no screenshot (not applicable)</span></td>
+    <td class="metrics-cell"><ul class="metrics"><li><code>updateDescWhenSavingDeleted</code> = true</li><li><code>dittoHotKeyDeleted</code> = true</li><li><code>defaultHotkeyVerified</code> = Ctrl+`</li></ul></td>
+  </tr>
+
+  <tr class="step-row" id="step-launch">
+    <td class="num">4</td>
+    <td><div class="sid">launch</div><div class="sname">Launch built Ditto.exe</div></td>
+    <td class="action">Start-Process Release64\Ditto.exe</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">Ditto started and stayed running the entire run (PID 78356, Responding=True, no crash, no WER Application Error events). Working set ~27 MB at launch, ~46 MB at end.</td>
+    <td class="shot"><a href="shots/01-launch-trayicon.png"><img src="shots/01-launch-trayicon.png" alt="launch screenshot" loading="lazy"></a></td>
+    <td class="metrics-cell"><ul class="metrics"><li><code>pid</code> = 78356</li><li><code>startTimeUtc</code> = 2026-11-13T22:43:55.586Z</li><li><code>launchToProcessMs</code> = 170</li><li><code>workingSetKBAtLaunch</code> = 27064</li><li><code>workingSetKBAtEnd</code> = 46476</li></ul></td>
+  </tr>
+
+  <tr class="step-row" id="step-verify-launch">
+    <td class="num">5</td>
+    <td><div class="sid">verify-launch</div><div class="sname">Verify launch: tray icon present, Quick Paste opens on default hotkey</div></td>
+    <td class="action">UIA scan of Win11 hidden-icons flyout + Ctrl+` toggle + screenshot</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">Ditto tray icon confirmed present: UIA found button name=&#39;Ditto&#39; (ControlType.Button, rect 1418,798) inside the &#39;Show Hidden Icons&#39; flyout (TopLevelWindowForOverflowXamlIsland) after clicking the chevron - screenshot 01-launch-trayicon.png captured with flyout open. Quick Paste window (class QPasteClass, title &#39;Ditto&#39;) opened via the default Ctrl+` hotkey after resetting the profile&#39;s old custom hotkey.</td>
+    <td class="shot"><a href="shots/01-launch-trayicon.png"><img src="shots/01-launch-trayicon.png" alt="verify-launch screenshot" loading="lazy"></a></td>
+    <td class="metrics-cell"><ul class="metrics"><li><code>windowClass</code> = QPasteClass</li><li><code>trayIconFound</code> = true</li><li><code>hotkey</code> = Ctrl+`</li></ul></td>
+  </tr>
+
+  <tr class="step-row" id="step-string-capture">
+    <td class="num">6</td>
+    <td><div class="sid">string-capture</div><div class="sname">Protocol step 5: marker string capture appears at top of Quick Paste</div></td>
+    <td class="action">Set-Clipboard &#39;DITTO-VAL2-um1g39jc&#39;; open Quick Paste; read list via UIA</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">Marker &#39;DITTO-VAL2-um1g39jc&#39; (runid VAL2-ufzqw8) was placed on the clipboard; Ditto captured it and it became the FIRST DataItem of the Quick Paste list (UIA-verified). Screenshot 02-marker-in-quickpaste.png.</td>
+    <td class="shot"><a href="shots/02-marker-in-quickpaste.png"><img src="shots/02-marker-in-quickpaste.png" alt="string-capture screenshot" loading="lazy"></a></td>
+    <td class="metrics-cell"><ul class="metrics"><li><code>marker</code> = DITTO-VAL2-um1g39jc</li><li><code>topEntry</code> = DITTO-VAL2-um1g39jc</li></ul></td>
+  </tr>
+
+  <tr class="step-row" id="step-image-capture">
+    <td class="num">7</td>
+    <td><div class="sid">image-capture</div><div class="sname">Protocol step 6: image capture appears at top of Quick Paste</div></td>
+    <td class="action">Clipboard.SetImage with generated 160x90 bitmap; re-read list</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">A generated 160x90 image (blue field, red border, &#39;VAL2-IMG&#39; text) was placed on the clipboard; the new top list entry is an image clip shown as &#39;|CF_DIB&#39;, positioned above the marker entry. Screenshot 03-image-in-quickpaste.png.</td>
+    <td class="shot"><a href="shots/03-image-in-quickpaste.png"><img src="shots/03-image-in-quickpaste.png" alt="image-capture screenshot" loading="lazy"></a></td>
+    <td class="metrics-cell"><ul class="metrics"><li><code>imageFormat</code> = CF_DIB</li><li><code>imageSize</code> = 160x90</li></ul></td>
+  </tr>
+
+  <tr class="step-row" id="step-plan-check-1">
+    <td class="num">8</td>
+    <td><div class="sid">plan-check-1</div><div class="sname">Plan check 1: baseline app launches, Quick Paste opens without crash</div></td>
+    <td class="action">Same evidence as launch + verify-launch steps</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">App launched, tray icon present, Quick Paste opens on the default hotkey without crash; process stayed responsive for the whole run.</td>
+    <td class="shot"><a href="shots/01-launch-trayicon.png"><img src="shots/01-launch-trayicon.png" alt="plan-check-1 screenshot" loading="lazy"></a></td>
+    <td class="metrics-cell"><span class="muted">none</span></td>
+  </tr>
+
+  <tr class="step-row" id="step-plan-check-2">
+    <td class="num">9</td>
+    <td><div class="sid">plan-check-2</div><div class="sname">Plan check 2: baseline string capture appears in Quick Paste UI</div></td>
+    <td class="action">Copy distinctive string; open Quick Paste</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">Top list entry after capture was the copied marker text &#39;DITTO-VAL2-um1g39jc&#39; (first DataItem, UIA-verified).</td>
+    <td class="shot"><a href="shots/02-marker-in-quickpaste.png"><img src="shots/02-marker-in-quickpaste.png" alt="plan-check-2 screenshot" loading="lazy"></a></td>
+    <td class="metrics-cell"><span class="muted">none</span></td>
+  </tr>
+
+  <tr class="step-row" id="step-plan-check-3">
+    <td class="num">10</td>
+    <td><div class="sid">plan-check-3</div><div class="sname">Plan check 3: baseline image capture appears in Quick Paste UI</div></td>
+    <td class="action">Copy generated image; open Quick Paste</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">New image entry (CF_DIB) appeared at top of list, above the marker entry.</td>
+    <td class="shot"><a href="shots/03-image-in-quickpaste.png"><img src="shots/03-image-in-quickpaste.png" alt="plan-check-3 screenshot" loading="lazy"></a></td>
+    <td class="metrics-cell"><span class="muted">none</span></td>
+  </tr>
+
+  <tr class="step-row" id="step-plan-check-4">
+    <td class="num">11</td>
+    <td><div class="sid">plan-check-4</div><div class="sname">Plan check 4 (CORE rev 1): custom title preserved on edit with default settings</div></td>
+    <td class="action">Capture &#39;Alpha original content&#39;; set Item Title CUSTOM-TITLE-XYZ via Copy Properties; edit content to &#39;Beta edited content&#39; in Ditto Editor; save with checkbox Off; re-verify</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">(a) UpdateDescWhenSaving absent at launch (deleted pre-launch, verified). (b) &#39;Alpha original content&#39; captured as top entry (04a). (c) Copy Properties dialog (opened via item context menu &gt; Properties): Item Title edit (IDC_EDIT_PROPERTIES 2100) set to CUSTOM-TITLE-XYZ via WM_SETTEXT, OK clicked; list then showed &#39;|CUSTOM-TITLE-XYZ&#39; (04b). (d) Editor opened via context menu &gt; Edit Clip; &#39;Update clip description on save?&#39; checkbox read as Off (the new default - the change under test); content set to &#39;Beta edited content&#39; (WM_SETTEXT + EM_SETMODIFY forced); saved via WM_COMMAND ID_BUTTON_SAVE (32862) to the CEditWnd child pane (AfxWnd140u), matching the real toolbar Save button&#39;s command routing. (e) Editor closed cleanly (no unsaved prompt); Quick Paste reopened: ITEM 1 still &#39;|CUSTOM-TITLE-XYZ&#39; - NOT overwritten with the start of &#39;Beta edited content&#39; (04d). Editor reopened: content persisted as &#39;Beta edited content&#39; proving the save reached the DB (04e). Byte-identical custom title preserved. Validator tooling notes: the Properties dialog is a child window inside QPasteClass (found via UIA child scope); an off-screen click was corrected by clamping the click to the window&#39;s visible area. Neither is an app defect.</td>
+    <td class="shot"><a href="shots/04d-after-edit-quickpaste.png"><img src="shots/04d-after-edit-quickpaste.png" alt="plan-check-4 screenshot" loading="lazy"></a></td>
+    <td class="metrics-cell"><ul class="metrics"><li><code>descBefore</code> = CUSTOM-TITLE-XYZ</li><li><code>descAfter</code> = CUSTOM-TITLE-XYZ</li><li><code>contentBefore</code> = Alpha original content</li><li><code>contentAfter</code> = Beta edited content</li><li><code>checkboxDuringEdit</code> = Off</li><li><code>registryUpdateDescWhenSaving</code> = absent</li></ul></td>
+  </tr>
+
+  <tr class="step-row" id="step-plan-check-5">
+    <td class="num">12</td>
+    <td><div class="sid">plan-check-5</div><div class="sname">Plan check 5: checkbox opt-in still regenerates description</div></td>
+    <td class="action">Ensure &#39;Update clip description on save?&#39; On; change content to &#39;Gamma regenerated&#39;; save</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">Reopened editor on the CUSTOM-TITLE-XYZ clip: checkbox read Off, toggled to On via UIA TogglePattern. Content changed to &#39;Gamma regenerated&#39; and saved (ID_BUTTON_SAVE). Quick Paste list regenerated the description to &#39;|Gamma regenerated&#39; (05b), proving opt-in regeneration still works. Registry UpdateDescWhenSaving written as 1 on save (choice persisted).</td>
+    <td class="shot"><a href="shots/05b-desc-regenerated-list.png"><img src="shots/05b-desc-regenerated-list.png" alt="plan-check-5 screenshot" loading="lazy"></a></td>
+    <td class="metrics-cell"><ul class="metrics"><li><code>checkboxBefore</code> = Off</li><li><code>checkboxDuringEdit</code> = On</li><li><code>content</code> = Gamma regenerated</li><li><code>descAfter</code> = Gamma regenerated</li><li><code>registryUpdateDescWhenSaving</code> = 0x1</li></ul></td>
+  </tr>
+
+  <tr class="step-row" id="step-plan-check-6">
+    <td class="num">13</td>
+    <td><div class="sid">plan-check-6</div><div class="sname">Plan check 6: option persistence round-trip (uncheck, save, reopen)</div></td>
+    <td class="action">Reopen editor (verify checkbox On persisted); uncheck; save edit with content &#39;Delta unchanged-title&#39;; re-verify desc, checkbox state, registry</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">Reopened Edit showed checkbox On - the choice saved in check 5 persisted in the UI. Unchecked it (On -&gt; Off), changed content to &#39;Delta unchanged-title&#39;, saved. Description STAYED &#39;|Gamma regenerated&#39; (not regenerated to the new content start; 06b). Reopened Edit again: content reads &#39;Delta unchanged-title&#39; and checkbox reads Off (06c), matching the saved setting. Registry UpdateDescWhenSaving=0 after the save.</td>
+    <td class="shot"><a href="shots/06c-checkbox-off-reopened.png"><img src="shots/06c-checkbox-off-reopened.png" alt="plan-check-6 screenshot" loading="lazy"></a></td>
+    <td class="metrics-cell"><ul class="metrics"><li><code>checkboxOnReopen1</code> = On</li><li><code>checkboxDuringEdit</code> = Off</li><li><code>content</code> = Delta unchanged-title</li><li><code>descAfter</code> = Gamma regenerated (unchanged)</li><li><code>checkboxOnReopen2</code> = Off</li><li><code>registryUpdateDescWhenSaving</code> = 0x0</li></ul></td>
+  </tr>
+
+  <tr class="step-row" id="step-plan-check-7">
+    <td class="num">14</td>
+    <td><div class="sid">plan-check-7</div><div class="sname">Plan check 7 (CORE rev 2): double-click tab title opens rename UI, persists, refreshes Quick Paste</div></td>
+    <td class="action">Capture &#39;Rename source content&#39;; Edit Clip; double-click the tab title in the tab strip; rename prompt; type NEW-TITLE-ABC; OK; verify tab strip, Quick Paste list, and persistence after reopen</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">(a) &#39;Rename source content&#39; captured as top entry (07a). (b) Editor opened via Edit Clip; double-click at the tab title area of the tab strip (class _TabCtrlClass_, CS_DBLCLKS-registered) opened the rename prompt ON THE FIRST ATTEMPT. (c) The prompt is the CGroupName dialog (#32770, caption &#39;Ditto&#39;, 344x145 px) pre-filled with the current tab title - read back as &#39;Rename source c&#39; (the tab title, which Ditto stores truncated at 15 chars for this tab; the dialog prefilled exactly what the tab showed). Screenshot 07b. (d) Text replaced with NEW-TITLE-ABC (WM_SETTEXT), OK invoked, dialog closed. (e) Verification: editor tab strip screenshot after confirm (07c - tab is custom-drawn, machine-readable confirmation comes from the list/DB); Quick Paste list refreshed and shows ITEM 1 &#39;|NEW-TITLE-ABC&#39; (07d); editor closed and reopened - clip content intact (&#39;Rename source content&#39;), tab strip present, and the list entry remains &#39;|NEW-TITLE-ABC&#39;, proving the title was persisted to the DB via CClip::ModifyDescription (07e).</td>
+    <td class="shot"><a href="shots/07d-quickpaste-newtitle.png"><img src="shots/07d-quickpaste-newtitle.png" alt="plan-check-7 screenshot" loading="lazy"></a></td>
+    <td class="metrics-cell"><ul class="metrics"><li><code>renameDialogClass</code> = #32770 caption &#39;Ditto&#39; (CGroupName)</li><li><code>dialogAppearedOnAttempt</code> = 1</li><li><code>prefill</code> = Rename source c (tab title, Ditto-truncated)</li><li><code>newTitle</code> = NEW-TITLE-ABC</li><li><code>quickPasteItem1After</code> = NEW-TITLE-ABC</li><li><code>persistedAfterReopen</code> = true</li></ul></td>
+  </tr>
+
+  <tr class="step-row" id="step-plan-check-7-cancel">
+    <td class="num">15</td>
+    <td><div class="sid">plan-check-7-cancel</div><div class="sname">Plan check 7 spot-check: Cancel path leaves title unchanged</div></td>
+    <td class="action">Reopen rename prompt on the NEW-TITLE-ABC clip; press Cancel; verify title/tab/list unchanged</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">Rename prompt reopened with prefill &#39;NEW-TITLE-ABC&#39; (full title now, no truncation); Cancel invoked; dialog closed; editor closed cleanly; Quick Paste ITEM 1 remains &#39;|NEW-TITLE-ABC&#39; (08c). No crash.</td>
+    <td class="shot"><a href="shots/08c-after-cancel-list.png"><img src="shots/08c-after-cancel-list.png" alt="plan-check-7-cancel screenshot" loading="lazy"></a></td>
+    <td class="metrics-cell"><ul class="metrics"><li><code>prefillOnSecondOpen</code> = NEW-TITLE-ABC</li><li><code>titleAfterCancel</code> = NEW-TITLE-ABC</li></ul></td>
+  </tr>
+
+  <tr class="step-row" id="step-plan-check-8">
+    <td class="num">16</td>
+    <td><div class="sid">plan-check-8</div><div class="sname">Plan check 8 (rev 2): rename combines with title-preservation</div></td>
+    <td class="action">With &#39;Update clip description on save?&#39; Off, edit the renamed clip&#39;s content to &#39;Post-rename edited content&#39; and save</td>
+    <td><span class="result pass">PASS</span></td>
+    <td class="context">Editor opened on the NEW-TITLE-ABC clip; checkbox confirmed Off (unchecked; effective setting equals the new default); content changed to &#39;Post-rename edited content&#39; and saved via ID_BUTTON_SAVE. Quick Paste ITEM 1 remained &#39;|NEW-TITLE-ABC&#39; - the renamed title survived the content edit (08). Editor reopened: content reads &#39;Post-rename edited content&#39;, checkbox Off, title in list unchanged (08b). Registry UpdateDescWhenSaving=0.</td>
+    <td class="shot"><a href="shots/08-post-rename-edit.png"><img src="shots/08-post-rename-edit.png" alt="plan-check-8 screenshot" loading="lazy"></a></td>
+    <td class="metrics-cell"><ul class="metrics"><li><code>checkboxDuringEdit</code> = Off</li><li><code>content</code> = Post-rename edited content</li><li><code>descAfter</code> = NEW-TITLE-ABC (unchanged)</li><li><code>registryUpdateDescWhenSaving</code> = 0x0</li><li><code>persistedAfterReopen</code> = true</li></ul></td>
+  </tr></tbody>
+  </table>
+</div>
+<footer>Generated programmatically from validation-results.json — screenshot paths are relative to this report file (shots/&lt;name&gt;.png). Upstream issue: sabrogden/Ditto#1167. Branch: havra/preserve-custom-clip-title.</footer>
+</body>
+</html>

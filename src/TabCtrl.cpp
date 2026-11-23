@@ -64,6 +64,7 @@ BEGIN_MESSAGE_MAP(CTabCtrlEx, CWnd)
 	ON_WM_PAINT()
 	ON_WM_CREATE()
 	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONDBLCLK()
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONUP()
 	ON_WM_SIZE()
@@ -885,6 +886,41 @@ void CTabCtrlEx::OnLButtonDown(UINT nFlags, CPoint point)
 	}
 	
 	CWnd::OnLButtonDown(nFlags, point);
+}
+
+void CTabCtrlEx::OnLButtonDblClk(UINT nFlags, CPoint point) 
+{
+	// Adjust for the shift
+	point.Offset(m_nLeftShifted, 0);
+	
+	CRect rcTab;
+	for (int iTab=0; iTab<m_Tabs.GetSize(); iTab++)
+	{
+		GetTabRect(iTab, rcTab);
+		if (rcTab.PtInRect(point))
+		{
+			// Notify the parent window that the tab title was double clicked so
+			// it can prompt the user to rename the tab
+			CWnd *pParentWnd = GetParent();
+			if (pParentWnd && IsWindow(pParentWnd->m_hWnd))
+			{
+				NMTABCHANGE nmTab;
+				ZeroMemory(&nmTab, sizeof(nmTab));
+				nmTab.hdr.code = SN_SETTABRENAME;
+				nmTab.hdr.hwndFrom = GetSafeHwnd();
+				nmTab.hdr.idFrom = GetDlgCtrlID();
+				nmTab.lOldTab = iTab;
+				nmTab.lNewTab = iTab;
+				nmTab.lOldItemData = m_Tabs[iTab].lItemData;
+				nmTab.lNewItemData = m_Tabs[iTab].lItemData;
+				
+				pParentWnd->SendMessage(WM_NOTIFY, (WPARAM) nmTab.hdr.idFrom, (LPARAM) &nmTab);
+			}
+			break;
+		}
+	}
+	
+	CWnd::OnLButtonDblClk(nFlags, point);
 }
 
 void CTabCtrlEx::OnTimer(UINT_PTR nIDEvent) 
